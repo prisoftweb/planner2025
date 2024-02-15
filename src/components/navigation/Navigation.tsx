@@ -37,7 +37,7 @@ export default function Navigation(){
   
   return(
     <>
-      <nav className="bg-blue-950 top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between">
+      <nav className="bg-black top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between">
         <Bars3Icon width={40} height={40} className="md:hidden cursor-pointer ml-2 rounded-md p-1 bg-slate-500 text-white" onClick={toggleNavBar} />
         <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} priority />
         <div className="w-1/12 md:w-9/12 flex justify-end">
@@ -64,7 +64,7 @@ export default function Navigation(){
         )}
       {isOpenP && (
         <div className="flex justify-end">
-          <div className="flex flex-col w-44 absolute z-50 text-xs bg-white border border-white">
+          <div className="flex flex-col w-44 absolute z-50 text-xs bg-white border-2 border-slate-300">
             <Link href={``} className="py-1 hover:text-gray-900 hover:bg-gray-200">
               <div className="flex p-2 items-center">
                 <UserIcon className="w-4 h-4 mr-2 text-slate-500" />

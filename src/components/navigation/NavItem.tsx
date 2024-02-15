@@ -14,7 +14,7 @@ export default function NavItem({name, items}: {name:string, items:NavItem[]}){
   return(
     <>
       <div className="text-sm cursor-pointer lg:text-base w-full mr-2" onClick={() => setIsOpen(!isOpen)}>
-        <p className="p-2 hover:bg-blue-900">{name}</p>
+        <p className="p-2 hover:bg-slate-700 text-center font-semibold">{name}</p>
         {isOpen && dropDownItem}
       </div>
     </>
