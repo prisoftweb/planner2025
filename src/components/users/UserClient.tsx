@@ -24,15 +24,11 @@ export default function UserClient({email, name, photo, token}:
   
   return(
     <>
-      <div className="flex px-5">
+      <div className="flex px-5 bg-white mt-2">
         <div className="w-1/3 md:w-1/2 mt-5">
           <Profile email={email} name={name} photo={photo} setOption={setOpt} />
         </div>
         <div className="w-full">
-          {/* <UpdateProfile departmentU="admin" emailU={email} nameU={name} rolU="user" /> */}
-          {/* <ChangePhoto /> */}
-          {/* <ChangePassword token={token} /> */}
-          {/* <ConfigUser /> */}
           {view}
         </div>
       </div>

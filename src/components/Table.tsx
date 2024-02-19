@@ -47,7 +47,7 @@ export default function Table({data, columns}: {data: any, columns:any}) {
   })
   
   return(
-    <div className="p-10 bg-slate-300">
+    <div className="">
 
       <div className="relative">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -143,7 +143,7 @@ export default function Table({data, columns}: {data: any, columns:any}) {
         </table>
       </div>
 
-      <div className="flex items-center mt-6 flex-wrap gap-4 bg-white px-6">
+      <div className="flex items-center mt-6 flex-wrap gap-4 bg-white px-6 justify-end">
         <p>Numero de filas</p>
         <select
           value={table.getState().pagination.pageSize}

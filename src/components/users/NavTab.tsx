@@ -4,7 +4,7 @@ import { UserCircleIcon, CurrencyDollarIcon, QuestionMarkCircleIcon } from "@her
 export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
   return(
     <>
-      <div className="flex mt-5">
+      <div className="flex mt-5 bg-white py-1">
         <Link href={`/users/${idUser}?tab=1`}>
           <div className={`flex justify-around w-40 items-center border border-slate-400 ${tab==='1'? 'bg-green-500 text-white':''}`}>
             <p>Perfil</p>

@@ -59,55 +59,57 @@ export default function UpdateProfile({emailU, nameU, rolU, departmentU}:
 
   return(
     <>
-      <Alert />
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos personales" 
-        title="Información personal"
-      />
-      <form onSubmit={formik.handleSubmit} className="mt-4">
-        <Label htmlFor="name">Nombre</Label>
-        <Input type="text" name="name" autoFocus 
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
+      <div className="w-full lg:w-3/4 xl:w-1/2">
+        <Alert />
+        <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos personales" 
+          title="Información personal"
         />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-            <p>{formik.errors.name}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="email">Usuario/Email</Label>
-        <Input type="email" name="email" 
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.email && formik.errors.email ? (
+        <form onSubmit={formik.handleSubmit} className="mt-4">
+          <Label htmlFor="name">Nombre</Label>
+          <Input type="text" name="name" autoFocus 
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.name && formik.errors.name ? (
             <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.email}</p>
+              <p>{formik.errors.name}</p>
             </div>
-        ) : null}
-        <Label htmlFor="rol">Rol</Label>
-        <Select name="rol" 
-          value={rol}
-          onChange={(e) => setRol(e.target.value)}
-        >
-          <option value="admin">Administrador</option>
-          <option value="user">Usuario</option>
-          <option value="other">Otro</option>
-        </Select>
-        <Label htmlFor="department">Departamento</Label>
-        <Select name="department" 
-          onChange={(e) => setDepartment(e.target.value)}
-          value={department}  
-        >
-          <option value="rh">Recursos humanos</option>
-          <option value="admin">Administración</option>
-          <option value="count">Contabilidad</option>
-        </Select>
-        <div className="flex justify-center mt-4">
-          <Button type="submit">Guardar cambios</Button>
-        </div>
-      </form>
+          ) : null}
+          <Label htmlFor="email">Usuario/Email</Label>
+          <Input type="email" name="email" 
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.email && formik.errors.email ? (
+              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                  <p>{formik.errors.email}</p>
+              </div>
+          ) : null}
+          <Label htmlFor="rol">Rol</Label>
+          <Select name="rol" 
+            value={rol}
+            onChange={(e) => setRol(e.target.value)}
+          >
+            <option value="admin">Administrador</option>
+            <option value="user">Usuario</option>
+            <option value="other">Otro</option>
+          </Select>
+          <Label htmlFor="department">Departamento</Label>
+          <Select name="department" 
+            onChange={(e) => setDepartment(e.target.value)}
+            value={department}  
+          >
+            <option value="rh">Recursos humanos</option>
+            <option value="admin">Administración</option>
+            <option value="count">Contabilidad</option>
+          </Select>
+          <div className="flex justify-center mt-4">
+            <Button type="submit">Guardar cambios</Button>
+          </div>
+        </form>
+      </div>
     </>
   )
 }

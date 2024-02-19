@@ -33,7 +33,8 @@ export default async function Users() {
 
   return (
     <>
-      <div className="bg-slate-300 h-screen">
+      {/* <div className="h-screen p-10" style={{backgroundColor:'#F8FAFC'}}> */}
+      <div className="bg-slate-300 h-screen p-10">
         <TableUsers data={data} token={token} />
       </div>
     </>

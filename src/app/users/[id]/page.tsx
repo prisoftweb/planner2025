@@ -59,23 +59,25 @@ export default async function Page({ params, searchParams }:
   return(
     <>
       <Navigation />
-      <div className="flex mt-10 justify-around items-center">
-        <div className="flex items-center">
-          <Link href={'/users'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link>
-          <Image 
-            src={photo? photo: '/img/default.jpg'}
-            //src={'/img/default.jpg'}
-            alt="profile"
-            width={50}
-            height={50}
-            className="rounded-full mx-3"
-          />
-          <p className="text-slate-500 mx-3">{name}</p>
+      <div className="p-10">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <Link href={'/users'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link>
+            <Image 
+              src={photo? photo: '/img/default.jpg'}
+              //src={'/img/default.jpg'}
+              alt="profile"
+              width={50}
+              height={50}
+              className="rounded-full mx-3"
+            />
+            <p className="text-slate-500 mx-3">{name}</p>
+          </div>
+          <Selectize options={options} />
         </div>
-        <Selectize options={options} />
+        <NavTab idUser={params.id} tab={searchParams.tab} />
+        {res}
       </div>
-      <NavTab idUser={params.id} tab={searchParams.tab} />
-      {res}
     </>
   )
 }
