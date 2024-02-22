@@ -3,11 +3,11 @@ import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
-//import { getUser, getUsers } from "@/app/api/routeUser";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
 import ProviderClient from "@/components/providers/ProviderClient";
+import { getProvider } from "@/app/api/routeProviders";
 
 interface Options{
   value: string,
@@ -20,16 +20,14 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
   
-  let user;
-  let users;
-
-  // try {
-  //   user = await getUser(params.id, token);
-  //   if(typeof(user) === "string")
-  //     return <h1 className="text-center text-red-500">{user}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>  
-  // }
+  let provider;
+  try {
+    provider = await getProvider(params.id, token);
+    if(typeof(provider) === "string")
+      return <h1 className="text-center text-red-500">{provider}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
+  }
 
   // try {
   //   users = await getUsers(token);
@@ -39,13 +37,6 @@ export default async function Page({ params, searchParams }:
   //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>  
   // }
 
-  // const photo=user.photo
-  // const name=user.name
-  // const email=user.email
-
-  const photo=''
-  const name=''
-  const email=''
 
   let options: Options[] = [];
   
@@ -60,7 +51,7 @@ export default async function Page({ params, searchParams }:
   if(searchParams.tab==='2') res=<></>
   else if(searchParams.tab==='3') res=<></>
   else if(searchParams.tab==='4') res=<></>
-  else res=<ProviderClient email={email} name={name} photo="" token={token} />;
+  else res=<ProviderClient provider={provider} token={token} id={params.id} />;
   
   return(
     <>

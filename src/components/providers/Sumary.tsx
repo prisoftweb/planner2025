@@ -1,7 +1,11 @@
 import Card from "./Card"
 import { EnvelopeIcon, CursorArrowRaysIcon, ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/solid"
+import { Provider } from "@/interfaces/Providers"
 
-export default function Sumary(){
+export default function Sumary({provider}:{provider:Provider}){
+  
+  const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+  
   return(
     <div className="w-full ">
       <div className="mt-5">
@@ -10,7 +14,7 @@ export default function Sumary(){
         <div className="flex items-center mt-5">
           <img src="/nuevoIcono.jpg" alt="profile" className="w-16 h-16" />
           <div className="ml-3">
-            <p className="text-sm text-slate-600 font-semibold">Francisco Lopez Leyva</p>
+            <p className="text-sm text-slate-600 font-semibold">{provider.name}</p>
             <p className="text-xs text-slate-400">pancho.lopez@plaforama.mx</p>
             <p className="text-xs text-slate-400">pancho@gmail.com</p>
             <p className="text-xs text-slate-400">52+ 444 429 7227</p>
@@ -19,22 +23,24 @@ export default function Sumary(){
       </div>
       <div className="flex justify-center flex-wrap">
         <div className="w-1/2 p-5">
-          <Card p1="SALDO ACTUAL (22 DE MAR)" p2="$76,980.54" 
-            p3="Saldo actual calculado solo en facturas pendientes de pago"
+          <Card p1={'SALDO ACTUAL' + ' ( ' + 
+            new Date(provider.tradeline.date? provider.tradeline.date: '').getDay() + ' de ' +
+            months[new Date(provider.tradeline.date? provider.tradeline.date: '').getMonth()] + ')'} 
+            p2={"$" + provider.tradeline.currentbalance?.toLocaleString('en')} p3="Saldo actual calculado solo en facturas pendientes de pago"
             link="" >
               <EnvelopeIcon className="w-8 h-8" />
           </Card>
         </div>
         <div className="w-1/2 p-5">
-          <Card p1="INTERES DE DEUDA VENCIDA" p2="$8,278.44" 
-            p3="intereses cobrados del 5% de la deuda vencida"
+          <Card p1="INTERES DE DEUDA VENCIDA" p2={"$8,278.44"} 
+            p3={`intereses cobrados del ${provider.tradeline.percentoverduedebt}% de la deuda vencida`}
             link="" >
               <CursorArrowRaysIcon className="w-8 h-8" />
           </Card>
         </div>
         <div className="w-1/2">
-          <Card p1="LINEA DISPONIBLE" p2="$423,019.46" 
-            p3="Linea actual disponible con Plaforama "
+          <Card p1="LINEA DISPONIBLE" p2={`$ ${provider.tradeline.creditlimit?.toLocaleString('en')}`}
+            p3={`Linea actual disponible con ${provider.name}`}
             link="" >
               <ChatBubbleBottomCenterTextIcon className="w-8 h-8" />
           </Card>

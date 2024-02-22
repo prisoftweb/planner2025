@@ -1,3 +1,5 @@
+import { Contact } from "./Common"
+
 export interface Provider {
   "_id":string,
   "name":string,
@@ -7,15 +9,9 @@ export interface Provider {
   "email"?:string,
   "phone"?:string,
   "suppliercredit":boolean,
-  "tradeline":{
-    "creditdays"?:number,
-    "creditlimit"?:number,
-    "currentbalance"?:number,
-    "overduedebt"?:boolean,
-    "percentoverduedebt"?:number,
-    "date"?:Date,
-  },
-  "contact"?:string[],
+  // 
+  "tradeline": Tradeline,
+  "contact"?:Contact[],
   "user"?:string,
   "status"?:boolean
 }
@@ -27,4 +23,13 @@ export interface TableProvider{
   "rfc": string,
   "account"?:string,
   "currentbalance"?: number,
+}
+
+export interface Tradeline{
+  "creditdays"?:number,
+  "creditlimit"?:number,
+  "currentbalance"?:number,
+  "overduedebt"?:boolean,
+  "percentoverduedebt"?:number,
+  "date"?:Date
 }

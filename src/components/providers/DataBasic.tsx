@@ -4,20 +4,25 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
+import { Provider } from "@/interfaces/Providers";
+import { useState } from "react";
+import { updateProvider } from "@/app/api/routeProviders";
+import { showToastMessage, showToastMessageError } from "../Alert";
 
-export default function DataBasic(){
+export default function DataBasic({id, token, provider}:{id:string, token:string, provider:Provider}){
   
+  const [suppliercredit, setSuppliercredit] = useState<boolean>(provider.suppliercredit)
+
   const formik = useFormik({
     initialValues: {
-      email:'',
-      name:'',
-      rfc: '',
-      account: ''
+      tradename:provider.tradename,
+      name:provider.name,
+      rfc: provider.rfc,
+      account: provider.account
     }, 
     validationSchema: Yup.object({
-      email: Yup.string()
-                  .email('El email no es valido')
-                  .required('El email no puede ir vacio'),
+      tradename: Yup.string()
+                  .required('El nombre comercial no puede ir vacio'),
       name: Yup.string()
                   .required('El nombre es obligatorio'),
       rfc: Yup.string()
@@ -26,8 +31,27 @@ export default function DataBasic(){
                   .required('El numero de cuenta es obligatorio'),        
     }),
     onSubmit: async (valores) => {            
-      const {email, name} = valores;
-      
+      const {name, tradename, account, rfc} = valores;
+      const data= {
+        name, 
+        tradename,
+        account,
+        rfc,
+        "suppliercredit": suppliercredit
+      }
+
+      try {
+        const res = await updateProvider(id, token, data);
+        if(res===200){
+          showToastMessage('La informacion del proveedor ha sido actualizada!!');
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        console.log(typeof(error))
+        showToastMessageError('Error al actualizar informacion del proveedor!!');
+      }
+
     },       
   });
   
@@ -48,19 +72,19 @@ export default function DataBasic(){
             <p>{formik.errors.name}</p>
           </div>
         ) : null}
-        <Label htmlFor="email">Usuario/Email</Label>
-        <Input type="email" name="email" 
-          value={formik.values.email}
+        <Label htmlFor="email">Nombre comercial</Label>
+        <Input type="text" name="tradename" 
+          value={formik.values.tradename}
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
         />
-        {formik.touched.email && formik.errors.email ? (
+        {formik.touched.tradename && formik.errors.tradename ? (
             <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.email}</p>
+                <p>{formik.errors.tradename}</p>
             </div>
         ) : null}
         <Label htmlFor="name">RFC</Label>
-        <Input type="text" name="rfc" autoFocus 
+        <Input type="text" name="rfc" 
           value={formik.values.rfc}
           onChange={formik.handleChange}
           onBlur={formik.handleChange}

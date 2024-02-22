@@ -6,8 +6,12 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import PhoneContact from "./PhoneContact";
 import { useState, useEffect } from "react";
+import { Provider } from "@/interfaces/Providers";
 
-export default function Contacts(){
+export default function Contacts({id, token, provider}: {id:string, token:string, provider:Provider}){
+  
+  //const emailp = provider.contact
+  
   const formik = useFormik({
     initialValues: {
       email:'',
@@ -25,10 +29,8 @@ export default function Contacts(){
                   .required('El nombre es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      console.log('aaaaaaaa')
       const {email, name, emailCompany} = valores;
       
-      console.log('aquiii');
       const contact = {
         email,
         name,
