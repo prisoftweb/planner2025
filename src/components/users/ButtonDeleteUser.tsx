@@ -1,15 +1,12 @@
 "use client"
 
-import { TrashIcon } from '@heroicons/react/24/solid';
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import { useRouter } from 'next/navigation';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import Alert from '@/components/Alert';
 import { removeUser } from '@/app/api/routeUser';
-import { User } from '@/interfaces/User';
 
-export default function DeleteUser({token, user} : {token : string, user:User}){
+export default function ButtonDeleteUser({token, user} : {token : string, user:any}){
   const router = useRouter()
 
   const deleteUser = async (id:string, name:string)  => {
@@ -27,6 +24,7 @@ export default function DeleteUser({token, user} : {token : string, user:User}){
             case 'user':
               try {
                 res = await removeUser(id, token);
+                console.log(res);
                 if(res === 204) {
                   showToastMessage('Usuario eliminado exitosamente!');
                   setTimeout(() => {
@@ -71,16 +69,11 @@ export default function DeleteUser({token, user} : {token : string, user:User}){
   
     return(
     <>
-      {/* <Alert /> */}
-      <TrashIcon width={30} height={30} className="text-red-700 hover:text-red-500"
-        onClick={() => deleteUser(user.id, user.name)}
-      />
-      {/* <button type="button" className='absolute right-9' onClick={() => {
-        deleteUser(user.id, user.name)
-        router.refresh()
-        }}>
-        <TrashIcon width={30} height={30} className="text-red-700 hover:text-red-500"/>
-      </button> */}
+      <button type="button" 
+        className='bg-red-600 rounded-full text-white w-full py-2 hover:bg-red-400'
+        onClick={() => deleteUser(user._id, user.name)}>
+          ELIMINAR USUARIO
+      </button>
     </>
   )
 }

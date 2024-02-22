@@ -48,7 +48,7 @@ export default function Login({}) {
   
   return (        
     <div>      
-      <Alert></Alert>
+      {/* <Alert></Alert> */}
       <div className="flex justify-center mt-12">
         <div className="w-full max-w-sm">
           <form className="bg-white rounded shadow-md px-3 sm:px-8 pt-2 pb-8 mb-4"

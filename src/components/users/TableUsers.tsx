@@ -9,7 +9,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
-export default function TableUsers({data, token}:{data:User[], token:string}){
+export default function TableUsers({data, token, departments}:{data:User[], token:string, departments:any}){
   
   const columnHelper = createColumnHelper<User>();
   const [newUser, setNewUser] = useState<boolean>(false);
@@ -18,13 +18,10 @@ export default function TableUsers({data, token}:{data:User[], token:string}){
     columnHelper.accessor(row => row.id, {
       id: 'id',
       cell: ({row}) => (
-        <div className="flex">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-          <DeleteUser token={token} user={row.original} />
-        </div>
+        <input type="checkbox" 
+          checked={row.getIsSelected()}
+          onChange={row.getToggleSelectedHandler()}
+        />
       ),
       enableSorting:false,
       header: ({table}:any) => (
@@ -34,6 +31,17 @@ export default function TableUsers({data, token}:{data:User[], token:string}){
             table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
           }}
         />
+      )
+    }),
+    columnHelper.accessor(row => row.id, {
+      id: 'delete',
+      cell: ({row}) => (
+        <DeleteUser token={token} user={row.original} />
+        // <TrashIcon className="w-6 h-6 text-red-400" />
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>accion</p>
       )
     }),
     columnHelper.accessor('photo', {
@@ -91,7 +99,7 @@ export default function TableUsers({data, token}:{data:User[], token:string}){
           <p className="ml-3 text-2xl">Usuarios</p>
         </div>
         <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
-        {newUser && <NewUser showForm={setNewUser} />}
+        {newUser && <NewUser showForm={setNewUser} departments={departments} token={token} />}
       </div>
       <Table columns={columns} data={data} /> 
     </>

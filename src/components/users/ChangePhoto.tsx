@@ -5,13 +5,32 @@ import { useState } from "react"
 import UploadImage from "../UploadImage";
 import Button from "../Button";
 import Label from "../Label";
+import { updateMeUser } from "@/app/api/routeUser";
+import { showToastMessage, showToastMessageError } from "../Alert";
 
-export default function ChangePhoto(){
+export default function ChangePhoto({id, token}: {id:string, token:string}){
   
   const [photo, setPhoto] = useState<File>();
   
-  const onSave = () => {
+  const onSave = async () => {
     console.log('photo', photo);
+    if(photo){
+      try {
+        const data = new FormData();
+        data.append('photo', photo);
+        const res = await updateMeUser(id, data, token);
+        console.log('res from', res);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          showToastMessage('La foto ha sido actualizada!!');
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un error al cambiar foto!!');
+      }
+    }else{
+      showToastMessageError('Debe elegir una foto primero!!!');
+    }
   }
 
   return(

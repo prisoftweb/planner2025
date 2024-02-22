@@ -9,11 +9,16 @@ import { useState } from "react"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { createUserPhoto } from "@/app/api/routeUser"
+import {showToastMessage, showToastMessageError} from "../Alert"
 
-export default function NewUser({showForm}: {showForm:Function}){
+export default function NewUser({showForm, departments, token}: 
+                    {showForm:Function, departments:any, token:string}){
   
   const [file, setFile] = useState<File>();
-  
+  const [department, setDepartment] = useState<string>(departments[0]._id);
+  const [role, setRole] = useState<string>('admin');
+
   const formik = useFormik({
     initialValues: {
       email:'',
@@ -35,8 +40,28 @@ export default function NewUser({showForm}: {showForm:Function}){
     }),
 
     onSubmit: async valores => {
-      // const { email, password } = valores;
-      alert('aquii');
+      const { email, password, confirmpassword, name } = valores;
+      
+      const formdata = new FormData();
+      formdata.append('name',name);
+      formdata.append('email', email);
+      formdata.append('password', password);
+      formdata.append('confirmPassword', confirmpassword);
+      formdata.append('department', department);
+      formdata.append('role', role);
+      if(file){
+        formdata.append('photo', file);
+      }
+
+      try {
+        const res = await createUserPhoto(formdata, '');
+        if(res===201){
+          showForm(false);
+          showToastMessage('Usuario creado exitosamente!!!');
+        }
+      } catch (error) {
+        showToastMessageError('Error al crear usuario!!');
+      }
     }
   });
 
@@ -75,14 +100,19 @@ export default function NewUser({showForm}: {showForm:Function}){
           </div>
         ) : null}
         <Label htmlFor="role">Rol</Label>
-        <Select name="role">
+        <Select name="role" value={role}
+          onChange={(e) => setRole(e.target.value)}
+        >
           <option value={'admin'}>Administrador</option>
           <option value="user">Usuario</option>
         </Select>
         <Label htmlFor="dept">Departamento</Label>
-        <Select name="role">
-          <option value={'rh'}>Recursos humanos</option>
-          <option value="admin">Administracion</option>
+        <Select name="department" value={department}
+          onChange={(e) => setDepartment(e.target.value)}
+        >
+          {departments.map((department:any) => (
+            <option value={department._id}>{department.name}</option>
+          ))}
         </Select>
         <Label htmlFor="password">Contraseña</Label>
         <Input name="password" type="password" 

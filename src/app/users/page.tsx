@@ -2,6 +2,7 @@ import { getUsers } from "../api/routeUser";
 import TableUsers from "@/components/users/TableUsers";
 import { cookies } from "next/headers";
 import { User } from "@/interfaces/User";
+import { getDepartments } from "../api/routeDepartments";
 
 export default async function Users() {  
 
@@ -15,6 +16,16 @@ export default async function Users() {
       return <h1 className="text-center text-red-500">{users}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Error al obtener usuarios!!</h1>
+  }
+
+  let departments;
+  try {
+    //departments = await getDepartments(token);
+    departments = await getDepartments('');
+    if(typeof(departments)==='string') 
+      return <h1 className="text-center text-red-500">{departments}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Error al obtener departamentos!!</h1>
   }
 
   let data:User[] = [];
@@ -35,7 +46,7 @@ export default async function Users() {
     <>
       {/* <div className="h-screen p-10" style={{backgroundColor:'#F8FAFC'}}> */}
       <div className="bg-slate-300 h-screen p-10">
-        <TableUsers data={data} token={token} />
+        <TableUsers data={data} token={token} departments={departments} />
       </div>
     </>
   );

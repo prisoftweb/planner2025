@@ -10,11 +10,11 @@ import Link from "next/link";
 //import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import IconText from "./IconText";
-
-export default function TableProviders({data, token}:{data:any, token:string}){
+import { Provider, TableProvider } from "@/interfaces/Providers";
+export default function TableProviders({data, token}:{data:TableProvider[], token:string}){
   
   const columnHelper = createColumnHelper<any>();
-  const [newUser, setNewUser] = useState<boolean>(false);
+  //const [newUser, setNewUser] = useState<boolean>(false);
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -25,7 +25,6 @@ export default function TableProviders({data, token}:{data:any, token:string}){
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           />
-          {/* <DeleteUser token={token} user={row.original} /> */}
         </div>
       ),
       enableSorting:false,
@@ -67,11 +66,11 @@ export default function TableProviders({data, token}:{data:any, token:string}){
         </Link>
       )
     }),
-    columnHelper.accessor('profile', {
-      header: 'Perfil / Estado',
-      id: 'profile',
+    columnHelper.accessor('suppliercredit', {
+      header: 'Credito',
+      id: 'suppliercredit',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1`}>
+        <Link href={`/providers/${row.original.id}?tab=1`}>
           <div className="flex items-center">
             <div 
               className={`w-6 h-6 mr-3 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
@@ -80,12 +79,12 @@ export default function TableProviders({data, token}:{data:any, token:string}){
         </Link>       
       ),
     }),
-    columnHelper.accessor('RFC', {
+    columnHelper.accessor('rfc', {
       header: 'RFC',
-      id: 'RFC',
+      id: 'rfc',
       cell: ({row}) => (
         <Link href={`/providers/${row.original.id}?tab=1`}>
-          <p className="py-2">{row.original.RFC}</p>
+          <p className="py-2">{row.original.rfc}</p>
         </Link>
       )
     }),
@@ -98,12 +97,12 @@ export default function TableProviders({data, token}:{data:any, token:string}){
         </Link>
       )
     }),
-    columnHelper.accessor('currentmount', {
+    columnHelper.accessor('currentbalance', {
       header: 'Saldo actual',
-      id: 'currentmount',
+      id: 'currentbalance',
       cell: ({row}) => (
         <Link href={`/providers/${row.original.id}?tab=1`}>
-          <p className="py-2">{row.original.currentmount}</p>
+          <p className="py-2">{row.original.currentbalance}</p>
         </Link>
       )
     }),

@@ -1,15 +1,18 @@
 'use client'
 import Label from "../Label"
 import Input from "../Input"
-import Select from "../Select"
 import Button from "../Button"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
-import Alert, {showToastMessage, showToastMessageError} from "@/components/Alert";
-import { useState } from "react"
+import {showToastMessage, showToastMessageError} from "@/components/Alert";
 import HeaderForm from "../HeaderForm"
+import { updateMePassword } from "@/app/api/routeUser"
+import { useRouter } from "next/navigation"
+import RemoveCookies from "@/app/functions/RemoveCookies"
 
-export default function ChangePassword({token}:{token:string}){
+export default function ChangePassword({token, name, id}:{token:string, name:string, id:string}){
+
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -36,29 +39,33 @@ export default function ChangePassword({token}:{token:string}){
       console.log('password', password);
       //validar new password y confirmnewpassword sean iguales
       
-      // let res = await updateMeUser(_id, formData, token);
-      // //console.log('res =>', res)
-      // if(typeof(res) === 'string'){
-      //   showToastMessageError(res);
-      // }else{
-      //   if(res.status === 200) {
-      //     showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-      //     //setCookie('user', res.data.data.user);
-      //     setTimeout(() => {
-      //       //setBandUpdate(true);
-      //       router.refresh();
-      //       router.push('/');
-      //     }, 1000)
-      //   } else {
-      //     showToastMessageError('Error al modificar usuario..');
-      //   }
-      // }
+      //let res = await updateMeUser(id, formData, token);
+      //console.log('res =>', res)
+      let res = await updateMePassword(id, currentPassword, newPassword, confirmNewPassword, token)
+      if(typeof(res) === 'string'){
+        showToastMessageError(res);
+      }else{
+        if(res === 200) {
+          showToastMessage(`Usuario ${name} modificado exitosamente!`);            
+          router.refresh();
+          setTimeout(() => {
+            logOut();
+          }, 2000)
+        } else {
+          showToastMessageError('Error al modificar usuario..');
+        }
+      }
     },       
   });
 
+  function logOut(){
+    RemoveCookies();
+    router.push('/login');
+  }
+
   return(
     <>
-      <Alert />
+      {/* <Alert /> */}
       <HeaderForm img="/nuevoIcono.jpg" subtitle="Contraseña de acceso" 
         title="Cambiar contraseña"
       />

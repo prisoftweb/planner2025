@@ -5,16 +5,20 @@ import Select from "../Select"
 import Button from "../Button"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
-import Alert, {showToastMessage, showToastMessageError} from "@/components/Alert";
+import {showToastMessage, showToastMessageError} from "@/components/Alert";
 import { useState } from "react"
 import HeaderForm from "../HeaderForm"
+import { updateMeUser } from "@/app/api/routeUser"
+import { setCookie } from "cookies-next"
 
-export default function UpdateProfile({emailU, nameU, rolU, departmentU}: 
-                  {emailU:string, nameU:string, rolU:string, departmentU:string}){
+export default function UpdateProfile({user, departments, token}: 
+                  {user:any, departments:any, token:string}){
 
-  const [rol, setRol] = useState<string>(rolU);
-  const [department, setDepartment] = useState<string>(departmentU);
+  const [rol, setRol] = useState<string>(user.role);
+  const [department, setDepartment] = useState<string>(user.department);
 
+  const emailU:string = user.email;
+  const nameU:string = user.name;
   const formik = useFormik({
     initialValues: {
       email:emailU,
@@ -37,30 +41,42 @@ export default function UpdateProfile({emailU, nameU, rolU, departmentU}:
         department
       }
       
-      // let res = await updateMeUser(_id, formData, token);
-      // //console.log('res =>', res)
-      // if(typeof(res) === 'string'){
-      //   showToastMessageError(res);
-      // }else{
-      //   if(res.status === 200) {
-      //     showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-      //     //setCookie('user', res.data.data.user);
-      //     setTimeout(() => {
-      //       //setBandUpdate(true);
-      //       router.refresh();
-      //       router.push('/');
-      //     }, 1000)
-      //   } else {
-      //     showToastMessageError('Error al modificar usuario..');
-      //   }
-      // }
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('role', rol);
+      formData.append('department', department);
+
+      console.log('department', department)
+
+      try {
+        let res = await updateMeUser(user._id, formData, token);
+        //console.log('res =>', res)
+        if(typeof(res) === 'string'){
+          showToastMessageError(res);
+        }else{
+          if(res.status === 200) {
+            showToastMessage(`Usuario ${name} modificado exitosamente!`);            
+            setCookie('user', res.data.data.user);
+            // setTimeout(() => {
+            //   //setBandUpdate(true);
+            //   router.refresh();
+            //   router.push('/');
+            // }, 1000)
+          } else {
+            showToastMessageError('Error al modificar usuario..');
+          }
+        } 
+      } catch (error) {
+        showToastMessageError('Ocurrio un error al modificar usuario..');
+      }
     },       
   });
 
   return(
     <>
       <div className="w-full lg:w-3/4 xl:w-1/2">
-        <Alert />
+        {/* <Alert /> */}
         <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos personales" 
           title="Información personal"
         />
@@ -101,9 +117,9 @@ export default function UpdateProfile({emailU, nameU, rolU, departmentU}:
             onChange={(e) => setDepartment(e.target.value)}
             value={department}  
           >
-            <option value="rh">Recursos humanos</option>
-            <option value="admin">Administración</option>
-            <option value="count">Contabilidad</option>
+            {departments.map((dept:any, index:number) => (
+              <option value={dept._id} key={index}>{dept.name}</option>
+            ))}
           </Select>
           <div className="flex justify-center mt-4">
             <Button type="submit">Guardar cambios</Button>

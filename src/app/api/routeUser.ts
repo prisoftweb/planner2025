@@ -55,15 +55,10 @@ export async function getUser(id:string, auth_token:string) {
   }
 }
 
-export async function updateMeUser(id:string, userData:any, auth_token:string) {
+export async function updateMeUser(id:string, userData:FormData, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/updateMe/${id}`;
-  // const config = {
-  //   headers: { 
-  //     'Content-Type': 'multipart/form-data',
-  //     'Authorization': `Bearer ${auth_token}`
-  //   },
-  // };
-  
+  console.log(url);
+  //console.log(userData.get('photo'));
   try {
     const res = await axios.patch(url, userData, {
       headers: { 
@@ -79,6 +74,28 @@ export async function updateMeUser(id:string, userData:any, auth_token:string) {
   }
 }
 
+export async function updateMePassword(id:string, passwordCurrent:string, password:string, passwordConfirm:string, auth_token:string) {
+    
+  const userData = {
+    passwordCurrent,
+    password,    
+    passwordConfirm    
+  };
+
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/updatePassword/${id}`;
+  try {
+    const res = await axios.patch(url, userData, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth_token}`
+      }});
+      if(res.status===200) return res.status;
+        return res.statusText;    
+  } catch (error:any) {
+    return error.response.data.message;
+  }
+}
+
 export async function setLogin(email:string, password:string) {    
   
   const userData = {
@@ -88,7 +105,6 @@ export async function setLogin(email:string, password:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/login`;
   try {
     const response = await axios.post(url, userData);
-    
     return response.data;
 
   } catch (error:any) {
@@ -136,6 +152,7 @@ export async function resetPassword(id:string, data:any) {
 export async function getUsers(auth_token:string){
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
 
+  //console.log(auth_token);
   try{
     const res = await axios.get(url, {
       headers: {
@@ -143,10 +160,13 @@ export async function getUsers(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     })
+    
     if(res.status===200) return res.data.data.data;
     return res.statusText;
-  }catch{
-    return 'Ocurrion un problema al consultar usuarios!!';
+  }catch(e:any){
+    //console.log(e.response.data.message);
+    //return 'Ocurrio un problema al consultar usuarios!!';
+    return e.response.data.message;
   }
 }
 
@@ -163,5 +183,23 @@ export async function removeUser(id:string, auth_token:string) {
     else return res.statusText;
   } catch (error) {
     return 'Ocurrio un error al eliminar usuario!';
+  }
+}
+
+export async function updateUser(data:any, auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${id}`;
+  try {
+    const res = await axios.patch(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    console.log(res);
+    if(res.status===200) return res.status;
+      return res.statusText;
+  } catch (error) {
+    console.log(error);
+    return 'Error al editar usuario'   
   }
 }

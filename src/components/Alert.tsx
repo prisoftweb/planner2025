@@ -6,15 +6,15 @@ const Alert = () => {
   return (
     <div>
       <ToastContainer
-      position="top-right"
+      position="top-center"
       autoClose={5000}
       hideProgressBar={false}
       newestOnTop={false}
       closeOnClick
       rtl={false}
-      pauseOnFocusLoss
+      //pauseOnFocusLoss
       draggable
-      pauseOnHover
+      //pauseOnHover
       theme="light"
       />            
       <ToastContainer/>
@@ -22,13 +22,19 @@ const Alert = () => {
   );
 }
 export const  showToastMessage = (msg: string) => {
-  toast.success((msg), {
-    //position: toast.POSITION.TOP_CENTER                        
-  });
+  toast(msg);
+  // console.log(toast);
+  // toast.success((msg), {
+  //   //position: toast.POSITION.TOP_CENTER
+  //   closeOnClick:true,
+  // });
 };
 export const showToastMessageError = (msg: string) => {
+  //toast(msg);
+  console.log('toastt', toast);
   toast.error((msg), {
-    //position: toast.POSITION.TOP_CENTER                        
+    //position: toast.POSITION.TOP_CENTER
+    closeOnClick:true
   });
 };
 export const showToastMessageWarning = (msg: string) => {
