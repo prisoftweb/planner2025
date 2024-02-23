@@ -4,21 +4,20 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { Provider } from "@/interfaces/Providers";
 import { useState } from "react";
-import { updateProvider } from "@/app/api/routeProviders";
-import { showToastMessage, showToastMessageError } from "../Alert";
+import { useRegFormContext } from "./StepperProvider";
 
-export default function DataBasic({id, token, provider}:{id:string, token:string, provider:Provider}){
+export default function DataBasicStepper(){
   
-  const [suppliercredit, setSuppliercredit] = useState<boolean>(provider.suppliercredit)
+  const [suppliercredit, setSuppliercredit] = useState<boolean>(false)
+  const [, dispatch] = useRegFormContext();
 
   const formik = useFormik({
     initialValues: {
-      tradename:provider.tradename,
-      name:provider.name,
-      rfc: provider.rfc,
-      account: provider.account
+      tradename:'',
+      name:'',
+      rfc: '',
+      account: ''
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -40,23 +39,14 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
         "suppliercredit": suppliercredit
       }
 
-      try {
-        const res = await updateProvider(id, token, data);
-        if(res===200){
-          showToastMessage('La informacion del proveedor ha sido actualizada!!');
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        console.log(typeof(error))
-        showToastMessageError('Error al actualizar informacion del proveedor!!');
-      }
+      dispatch({ type: 'SET_BASIC_DATA', data: data });
+      dispatch({type: 'INDEX_STEPPER', data: 1})
 
     },       
   });
   
   return(
-    <div className="w-full lg:w-3/4 xl:w-1/2">
+    <div className="w-full">
       <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
       />
@@ -117,7 +107,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           </div>
         </div>
         <div className="flex justify-center mt-4">
-          <Button type="submit">Guardar cambios</Button>
+          <Button type="submit">Siguiente</Button>
         </div>
       </form>  
     </div>

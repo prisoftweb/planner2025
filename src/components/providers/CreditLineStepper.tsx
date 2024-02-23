@@ -4,18 +4,18 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { Provider } from "@/interfaces/Providers";
-import { updateProvider } from "@/app/api/routeProviders";
-import { showToastMessage, showToastMessageError } from "../Alert";
+import { useRegFormContext } from "./StepperProvider";
 
-export default function CreditLine({provider, id, token}: 
-        {provider:Provider, id:string, token:string}){
+export default function CreditLineStepper(){
+  
+  const [, dispatch] = useRegFormContext();
+
   const formik = useFormik({
     initialValues: {
-      creditlimit:provider.tradeline.creditlimit?.toString(),
-      creditdays:provider.tradeline.creditdays?.toString(),
-      currentbalance: provider.tradeline.currentbalance?.toString(),
-      percentoverduedebt: provider.tradeline.percentoverduedebt?.toString()
+      creditlimit:'',
+      creditdays:'',
+      currentbalance: '',
+      percentoverduedebt: ''
     },
     validationSchema: Yup.object({
       creditlimit: Yup.string()
@@ -29,29 +29,20 @@ export default function CreditLine({provider, id, token}:
     }),
     onSubmit: async (valores) => {            
       const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
-      try {
-        const tradeline = {
-          creditdays: parseInt(creditdays? creditdays: '0'), 
-          creditlimit: parseInt(creditlimit? creditlimit: '0'),
-          currentbalance: parseInt(currentbalance? currentbalance: '0'),
-          percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt: '0')
-        }
-        console.log('tradeline', tradeline)
-        const res = await updateProvider(id, token, {tradeline});
-        if(res===200){
-          showToastMessage('Los datos han sido actualizados!!!');
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Error al actualizar informacion!!');
-        console.log(error);
+      
+      const tradeline = {
+        creditdays: parseInt(creditdays? creditdays: '0'), 
+        creditlimit: parseInt(creditlimit? creditlimit: '0'),
+        currentbalance: parseInt(currentbalance? currentbalance: '0'),
+        percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt: '0')
       }
+      dispatch({ type: 'SET_CREDIT_DATA', data: valores });
+      dispatch({type: 'INDEX_STEPPER', data: 2})
     },       
   });
   
   return(
-    <div className="w-full lg:w-3/4 xl:w-1/2">
+    <div className="w-full">
       <HeaderForm img="/nuevoIcono.jpg" subtitle="Linea de credito de proveedor" 
         title="Linea de credito"
       />
@@ -101,7 +92,7 @@ export default function CreditLine({provider, id, token}:
             </div>
         ) : null}
         <div className="flex justify-center mt-4">
-          <Button type="submit">Guardar cambios</Button>
+          <Button type="submit">Siguiente</Button>
         </div>
       </form>  
     </div>

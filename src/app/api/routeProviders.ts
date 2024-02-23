@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Tradeline } from "@/interfaces/Providers";
 
 export async function getProviders(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
@@ -58,6 +57,47 @@ export async function updateProvider(id:string, auth_token:string, data:Object) 
     }else{
       console.log(typeof(error));
       return 'Ocurrio un error al actualizar proveedor';
+    }
+  }
+}
+
+export async function RemoveProvider(id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/${id}`;
+  try {
+    const res = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===204) return res.status;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      console.log(error);
+      return 'Ocurrio un error al eliminar proveedor';
+    }
+  }
+}
+
+export async function createProvider(data:Object, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
+  
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'Application/json',
+      }
+    })
+    if(res.status===201) return res.status;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al crear proveedor!!';
     }
   }
 }

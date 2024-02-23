@@ -6,11 +6,18 @@ import TableProviders from "@/components/providers/TableProviders";
 import HeaderProvider from "@/components/providers/HeaderProvider";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
+import { Usr } from "@/interfaces/User";
 
 export default async function Providers(){
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
+
+  let user = cookieStore.get('user')?.value || '';
+
+  const usr:Usr = JSON.parse(user);
+
+  const id = usr._id;
 
   let providers:Provider[]=[];
   try {
@@ -42,7 +49,7 @@ export default async function Providers(){
       <Navigation />
       
       <div className="p-10" style={{backgroundColor:'#F8FAFC'}}>
-        <HeaderProvider />
+        <HeaderProvider id={id} token={token} />
         {/* <WithOutProvider /> */}
         <div className="mt-10">
           <TableProviders data={data} token={token} />

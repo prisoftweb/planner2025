@@ -1,16 +1,11 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-//import { User } from "@/interfaces/User";
-//import DeleteUser from "./DeleteUser";
-//import NewUser from "./NewUser";
-//import Button from "../Button";
-import { useState } from "react";
 import Link from "next/link";
-//import { ArrowLeftIcon } from "@heroicons/react/24/solid";
-import { TrashIcon } from "@heroicons/react/24/solid";
 import IconText from "./IconText";
 import { Provider, TableProvider } from "@/interfaces/Providers";
+import DeleteProvider from "./DeleteProvider";
+
 export default function TableProviders({data, token}:{data:TableProvider[], token:string}){
   
   const columnHelper = createColumnHelper<any>();
@@ -50,7 +45,8 @@ export default function TableProviders({data, token}:{data:TableProvider[], toke
     columnHelper.accessor(row => row.id, {
       id: 'action',
       cell: ({row}) => (
-        <TrashIcon className="w-6 h-6 text-red-400" />
+        // <TrashIcon className="w-6 h-6 text-red-400" />
+        <DeleteProvider provider={row.original} token={token} />
       ),
       enableSorting:false,
       header: ({table}:any) => (
@@ -110,16 +106,6 @@ export default function TableProviders({data, token}:{data:TableProvider[], toke
   
   return(
     <>
-      {/* <div className="flex justify-between mb-5">
-        <div className="flex items-center">
-          <Link href={'/'}>
-            <ArrowLeftIcon className="w-8 h-8 text-slate-600" />
-          </Link>
-          <p className="ml-3 text-2xl">Usuarios</p>
-        </div>
-        <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
-        {newUser && <NewUser showForm={setNewUser} />}
-      </div> */}
       <Table columns={columns} data={data} /> 
     </>
   )
