@@ -66,6 +66,9 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           console.log(JSON.stringify(data));
           const res = await SaveProvider(data, token);
           showToastMessage(res);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }, 3000);
       }else{
         showToastMessageError('Nombre y RFC son obligatorios');
