@@ -18,7 +18,6 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
       tradename:provider.tradename,
       name:provider.name,
       rfc: provider.rfc,
-      account: provider.account
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -27,15 +26,12 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
                   .required('El nombre es obligatorio'),
       rfc: Yup.string()
                   .required('El rfc no puede ir vacio'),
-      account: Yup.string()
-                  .required('El numero de cuenta es obligatorio'),        
     }),
     onSubmit: async (valores) => {            
-      const {name, tradename, account, rfc} = valores;
+      const {name, tradename, rfc} = valores;
       const data= {
         name, 
         tradename,
-        account,
         rfc,
         "suppliercredit": suppliercredit
       }
@@ -93,17 +89,6 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
             <p>{formik.errors.rfc}</p>
           </div>
-        ) : null}
-        <Label htmlFor="account">Numero de cuenta</Label>
-        <Input type="text" name="account" 
-          value={formik.values.account}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.account && formik.errors.account ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.account}</p>
-            </div>
         ) : null}
         <div className="inline-flex items-center">
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">

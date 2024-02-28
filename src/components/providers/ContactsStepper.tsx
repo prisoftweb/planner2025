@@ -7,124 +7,148 @@ import Button from "../Button";
 import PhoneContact from "./PhoneContact";
 import { useState, useEffect } from "react";
 import { useRegFormContext } from "./StepperProvider";
+import { useRouter } from "next/navigation";
+import SaveProvider from "@/app/functions/SaveProvider";
+import { showToastMessage, showToastMessageError } from "../Alert";
+//import { Contact, PhoneNumber } from "@/interfaces/Common";
+import { Contact } from "@/interfaces/Contacts";
+import FormContact from "./FormContact";
+import BasicBarStepper from "./BasicBarStepper";
+import { createContact } from "@/app/api/routeContacts";
 
-export default function ContactsStepper(){
+export default function ContactsStepper({id, token}: {id:string, token:string}){
   
-  const [, dispatch] = useRegFormContext();
-
-  const formik = useFormik({
-    initialValues: {
-      email:'',
-      name:'',
-      emailCompany: '',
-    }, 
-    validationSchema: Yup.object({
-      email: Yup.string()
-                  .email('El email no es valido'),
-                  //.required('El email no puede ir vacio'),
-      emailCompany: Yup.string()
-                  .email('El email no es valido'),
-                  //.required('El email no puede ir vacio'),
-      name: Yup.string()
-                  //.required('El nombre es obligatorio'),
-    }),
-    onSubmit: async (valores) => {            
-      const {email, name, emailCompany} = valores;
-      
-      const contact = {
-        email,
-        name,
-        emailCompany,
-        phones,
-        typesPhone,
+  const [state, dispatch] = useRegFormContext();
+  //const router = useRouter();
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  
+  const saveContacts = async () => {
+    let idContacts:string[] = [];
+        
+    contacts.map( async (contact) => {
+      console.log('contacts map')
+      console.log(JSON.stringify(contact));
+      const idc = await createContact(token, contact);
+      if(typeof(idc)==='string'){
+        showToastMessageError(idc);
+      }else{
+        console.log('contacto creado');
+        console.log(idc);
+        idContacts.push(idc._id);
       }
+    })
 
-      dispatch({ type: 'SET_CONTACTS', data: contact });
-      dispatch({type: 'INDEX_STEPPER', data: 3})
-
-    },       
-  });
-
-  const [phones, setPhones] = useState<string[]>([])
-  const [typesPhone, setTypesPhone] = useState<string[]>([]);
-  const [countFiles, setCountFiles] = useState(0);
-  const [upPhones, setUpPhones] = useState<any[]>([]);
-  const [indexDelete, setIndexDelete] = useState<number>(-1);
-  const [bandDelete, setBandDelete] = useState<boolean>(false);
-  
-  const pushPhone = (phone: string, typePhone:string) => {
-    setPhones((oldPhone) => [...oldPhone, phone]);
-    setTypesPhone((oldTypesPhone) => [...oldTypesPhone, typePhone]);
+    return idContacts;
   }
   
-  const deletePhone = (index:number) => {
-    setIndexDelete(index);
-  }
-
-  const updateCount = () => {
-    setCountFiles(countFiles + 1);
-  }
-
-  useEffect(() => {
+  const onClickSave = async () => {
+    //const {emailCompany, emailContact, nameContact} = formik.values;
+    console.log(contacts);
+    const {name, rfc, suppliercredit, tradename} = state.databasic;
+    const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
     
-    if((!bandDelete)  || ((phones.length === upPhones.length))){
-                
-      setUpPhones((oldArray) => [...oldArray, <PhoneContact pushPhone={pushPhone} 
-        deletePhone={deletePhone} valuePhone="" bandPlus={true} index={upPhones.length} 
-        key={upPhones.length} updateCount={updateCount} />])
-    }
+    try {
+      if(name && rfc && tradename){
+        
+        let idContacts:string[] = [];
+        
+        contacts.map( async (contact) => {
+          console.log('contacts map')
+          console.log(JSON.stringify(contact));
+          const idc = await createContact(token, contact);
+          if(typeof(idc)==='string'){
+            showToastMessageError(idc);
+          }else{
+            console.log('contacto creado');
+            console.log(idc);
+            idContacts.push(idc._id);
+          }
+        })
 
-    setBandDelete(false);
-  }, [countFiles])
+        setTimeout(async() => {
+          // const idContacts = await saveContacts();
+          // console.log('idcontacts =',idContacts)
+
+          const data = {
+            name,
+            rfc,
+            tradename,
+            suppliercredit,
+            tradeline: {
+              creditdays,
+              creditlimit,
+              currentbalance,
+              percentoverduedebt
+            },
+            contacts: idContacts,
+            user: id,
+          }
+
+          console.log('sendd');
+          console.log(JSON.stringify(data));
+          const res = await SaveProvider(data, token);
+          showToastMessage(res);
+        }, 3000);
+      }else{
+        showToastMessageError('Nombre y RFC son obligatorios');
+      }
+    } catch (error) {
+      showToastMessageError('Error al crear proveedor!!');
+    }
+  }
+
+  const newContact = (newContact:Contact) => {
+    // const {emailCompany, emailContact, nameContact} = formik.values;
+    // if(!emailCompany && !emailContact && !nameContact){
+    //   showToastMessageError('Debe llenar todos los campos antes de agregar un contacto nuevo!!');
+    // }else{
+    //   let phoneNumber: Phone[] = [];
+      
+    //   phones.map((phone:string, index:number) => {
+    //     phoneNumber.push({
+    //       phone,
+    //       type: typesPhone[index],
+    //     })
+    //   })
+
+      // const newContact:Contact ={
+      //   email: emailContact,
+      //   name: nameContact,
+      //   emailcompany: emailCompany,
+      //   phone: phoneNumber,
+      // }
+
+      setContacts((oldContacts) => [...oldContacts, newContact]);
+    //}
+  }
+  const [view, setView] = useState<JSX.Element>(<FormContact addNewContact={newContact} />)
+  // useEffect(() => {
+  //   if(contacts.length > 1){
+  //     setView(<></>);
+  //     setTimeout(() => {
+  //       setView(<FormContact addNewContact={newContact} />)  
+  //     }, 1);
+  //   }
+  // }, [contacts.length])
 
   return(
-    <div className="w-full">
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Agrega 1 o mas contactos" 
-        title="Contacto nuevo"
-      />
-      <form onSubmit={formik.handleSubmit} className="mt-4">
-        <Label htmlFor="name">Nombre</Label>
-        <Input type="text" name="name" autoFocus 
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-            <p>{formik.errors.name}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="email">Correo personal</Label>
-        <Input type="email" name="email" 
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.email && formik.errors.email ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.email}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="emailCompany">Correo de empresa</Label>
-        <Input type="email" name="emailCompany" 
-          value={formik.values.emailCompany}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.emailCompany && formik.errors.emailCompany ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.emailCompany}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="phone">Telefono</Label>
-        {upPhones.map((elements) => (
-          elements
-        ))}
-        {/* <PhoneContact bandPlus={} deleteFeature={} index={} pushText={} updateCount={} valueFeat="" /> */}
-        <div className="flex justify-center mt-4">
-          <Button type="submit">Siguiente</Button>
+    <>
+      <div className="w-full">
+        {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Agrega 1 o mas contactos" 
+          title="Contacto nuevo"
+        /> */}
+        <div className="mx-5">
+          <BasicBarStepper index={2} />
         </div>
-      </form>  
-    </div>
+        <button type="button" 
+          onClick={onClickSave}
+          className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
+              hover:bg-slate-600"
+        >
+          Guardar
+        </button>
+        {view}
+      </div>
+    </>
   )
 }

@@ -11,6 +11,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { createUserPhoto } from "@/app/api/routeUser"
 import {showToastMessage, showToastMessageError} from "../Alert"
+import { useRouter } from "next/navigation"
 
 export default function NewUser({showForm, departments, token}: 
                     {showForm:Function, departments:any, token:string}){
@@ -18,6 +19,8 @@ export default function NewUser({showForm, departments, token}:
   const [file, setFile] = useState<File>();
   const [department, setDepartment] = useState<string>(departments[0]._id);
   const [role, setRole] = useState<string>('admin');
+
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -58,6 +61,11 @@ export default function NewUser({showForm, departments, token}:
         if(res===201){
           showForm(false);
           showToastMessage('Usuario creado exitosamente!!!');
+          router.refresh();
+          router.push('/users');
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }
       } catch (error) {
         showToastMessageError('Error al crear usuario!!');

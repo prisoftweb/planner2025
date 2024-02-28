@@ -29,9 +29,8 @@ export default function DeleteProvider({token, provider} : {token : string, prov
                 if(res === 204) {
                   showToastMessage('Proveedor eliminado exitosamente!');
                   setTimeout(() => {
-                    router.refresh();
-                    router.push('/providers');
-                  }, 2000)
+                    window.location.reload();
+                  }, 500)
                 } else {
                   showToastMessageError('El proveedor no pudo ser eliminado..');
                   //router.refresh()

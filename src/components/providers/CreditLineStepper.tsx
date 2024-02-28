@@ -5,10 +5,15 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import { useRegFormContext } from "./StepperProvider";
+import { useRouter } from "next/navigation";
+import { showToastMessage, showToastMessageError } from "../Alert";
+import SaveProvider from "@/app/functions/SaveProvider";
+import BasicBarStepper from "./BasicBarStepper";
 
-export default function CreditLineStepper(){
+export default function CreditLineStepper({token, id}:{token:string, id:string}){
   
-  const [, dispatch] = useRegFormContext();
+  const [state, dispatch] = useRegFormContext();
+  const router = useRouter();
 
   const formik = useFormik({
     initialValues: {
@@ -28,24 +33,61 @@ export default function CreditLineStepper(){
                   .required('El porcentaje es obligatorio'),        
     }),
     onSubmit: async (valores) => {            
-      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
+      //const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
       
-      const tradeline = {
-        creditdays: parseInt(creditdays? creditdays: '0'), 
-        creditlimit: parseInt(creditlimit? creditlimit: '0'),
-        currentbalance: parseInt(currentbalance? currentbalance: '0'),
-        percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt: '0')
-      }
+      // const tradeline = {
+      //   creditdays: parseInt(creditdays? creditdays: '0'), 
+      //   creditlimit: parseInt(creditlimit? creditlimit: '0'),
+      //   currentbalance: parseInt(currentbalance? currentbalance: '0'),
+      //   percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt: '0')
+      // }
       dispatch({ type: 'SET_CREDIT_DATA', data: valores });
       dispatch({type: 'INDEX_STEPPER', data: 2})
     },       
   });
   
+  const onClickSave = async () => {
+    const {creditdays, creditlimit, currentbalance, percentoverduedebt} = formik.values;
+    const {name, rfc, suppliercredit, tradename} = state.databasic;
+    if(name && rfc && tradename){
+      const data = {
+        name,
+        rfc,
+        tradename,
+        suppliercredit,
+        tradeline: {
+          creditdays,
+          creditlimit,
+          currentbalance,
+          percentoverduedebt
+        },
+        user: id,
+      }
+      const res = await SaveProvider(data, token);
+      showToastMessage(res);
+      // if(res===201){
+      //   router.refresh();
+      // }
+    }else{
+      showToastMessageError('Nombre y RFC son obligatorios');
+    }
+  }
+
   return(
     <div className="w-full">
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Linea de credito de proveedor" 
+      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Linea de credito de proveedor" 
         title="Linea de credito"
-      />
+      /> */}
+      <div className="my-5">
+        <BasicBarStepper index={1} />
+      </div>
+      <button type="button" 
+        onClick={onClickSave}
+        className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
+            hover:bg-slate-600"
+      >
+        Guardar
+      </button>
       <form onSubmit={formik.handleSubmit} className="mt-4">
         <Label htmlFor="creditlimit">Limite de credito</Label>
         <Input type="text" name="creditlimit" autoFocus 

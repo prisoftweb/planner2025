@@ -22,16 +22,12 @@ const Alert = () => {
   );
 }
 export const  showToastMessage = (msg: string) => {
-  toast(msg);
-  // console.log(toast);
-  // toast.success((msg), {
-  //   //position: toast.POSITION.TOP_CENTER
-  //   closeOnClick:true,
-  // });
+  toast.success((msg), {
+    //position: toast.POSITION.TOP_CENTER
+    closeOnClick:true,
+  });
 };
 export const showToastMessageError = (msg: string) => {
-  //toast(msg);
-  console.log('toastt', toast);
   toast.error((msg), {
     //position: toast.POSITION.TOP_CENTER
     closeOnClick:true

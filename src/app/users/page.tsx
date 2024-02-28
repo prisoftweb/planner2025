@@ -3,6 +3,7 @@ import TableUsers from "@/components/users/TableUsers";
 import { cookies } from "next/headers";
 import { User } from "@/interfaces/User";
 import { getDepartments } from "../api/routeDepartments";
+import Navigation from "@/components/navigation/Navigation";
 
 export default async function Users() {  
 
@@ -45,6 +46,7 @@ export default async function Users() {
   return (
     <>
       {/* <div className="h-screen p-10" style={{backgroundColor:'#F8FAFC'}}> */}
+      <Navigation />
       <div className="bg-slate-300 h-screen p-10">
         <TableUsers data={data} token={token} departments={departments} />
       </div>

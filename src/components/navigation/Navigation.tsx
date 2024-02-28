@@ -6,7 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-//import RemoveCookies from "../RemoveCookies"
+import RemoveCookies from "@/app/functions/RemoveCookies"
 import NavItem from "./NavItem"
 
 export default function Navigation(){
@@ -31,7 +31,7 @@ export default function Navigation(){
   const router = useRouter();
   
   function logOut(){
-    //RemoveCookies();
+    RemoveCookies();
     router.push('/login');
   }
   
@@ -104,7 +104,9 @@ export default function Navigation(){
 const NavItems = ({role}: {role:string}) => {
   return(
     <>
-      <NavItem name="Gastos" items={[
+      <NavItem name="Usuarios" link="/users" items={[]}/>
+      <NavItem name="Proveedores" link="/providers" items={[]}/>
+      <NavItem name="Gastos" link="" items={[
           {
             name: 'Costos',
             link: 'link1'
@@ -119,10 +121,8 @@ const NavItems = ({role}: {role:string}) => {
           }
         ]} 
       />
-      <NavItem name="Proyectos" items={[]}/>
-      <NavItem name="Catalogos" items={[]}/>
-      <NavItem name="Informes" items={[]}/>
-      <NavItem name="Dashboard" items={[]}/>
+      <NavItem name="Informes" link="" items={[]}/>
+      <NavItem name="Dashboard" link="" items={[]}/>
     </>
   )
 };

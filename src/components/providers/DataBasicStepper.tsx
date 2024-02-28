@@ -6,8 +6,11 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { useState } from "react";
 import { useRegFormContext } from "./StepperProvider";
+import SaveProvider from "@/app/functions/SaveProvider";
+import { showToastMessage, showToastMessageError } from "../Alert";
+import BasicBarStepper from "./BasicBarStepper";
 
-export default function DataBasicStepper(){
+export default function DataBasicStepper({token, id}: {token:string, id:string}){
   
   const [suppliercredit, setSuppliercredit] = useState<boolean>(false)
   const [, dispatch] = useRegFormContext();
@@ -17,7 +20,6 @@ export default function DataBasicStepper(){
       tradename:'',
       name:'',
       rfc: '',
-      account: ''
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -26,30 +28,56 @@ export default function DataBasicStepper(){
                   .required('El nombre es obligatorio'),
       rfc: Yup.string()
                   .required('El rfc no puede ir vacio'),
-      account: Yup.string()
-                  .required('El numero de cuenta es obligatorio'),        
     }),
     onSubmit: async (valores) => {            
-      const {name, tradename, account, rfc} = valores;
+      const {name, tradename, rfc} = valores;
       const data= {
         name, 
         tradename,
-        account,
         rfc,
         "suppliercredit": suppliercredit
       }
 
       dispatch({ type: 'SET_BASIC_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 1})
-
     },       
   });
   
+  const onClickSave = async () => {
+    const {name, rfc, tradename} = formik.values;
+    if(name && rfc && tradename){
+      const data = {
+        name,
+        rfc,
+        tradename,
+        suppliercredit,
+        user: id,
+      }
+      const res = await SaveProvider(data, token);
+      showToastMessage(res);
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    }else{
+      showToastMessageError('Todos los campos son obligatorios');
+    }
+  }
+
   return(
     <div className="w-full">
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
+      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
-      />
+      /> */}
+      <div className="my-5">
+        <BasicBarStepper index={0} />
+      </div>
+      <button type="button" 
+        onClick={onClickSave}
+        className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
+            hover:bg-slate-600"
+      >
+        Guardar
+      </button>
       <form onSubmit={formik.handleSubmit} className="mt-4">
         <Label htmlFor="name">Nombre</Label>
         <Input type="text" name="name" autoFocus 
@@ -83,17 +111,6 @@ export default function DataBasicStepper(){
           <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
             <p>{formik.errors.rfc}</p>
           </div>
-        ) : null}
-        <Label htmlFor="account">Numero de cuenta</Label>
-        <Input type="text" name="account" 
-          value={formik.values.account}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.account && formik.errors.account ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.account}</p>
-            </div>
         ) : null}
         <div className="inline-flex items-center">
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
