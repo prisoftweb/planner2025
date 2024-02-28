@@ -18,28 +18,9 @@ import { createContact } from "@/app/api/routeContacts";
 
 export default function ContactsStepper({id, token}: {id:string, token:string}){
   
-  const [state, dispatch] = useRegFormContext();
+  const [state,] = useRegFormContext();
   //const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>([]);
-  
-  const saveContacts = async () => {
-    let idContacts:string[] = [];
-        
-    contacts.map( async (contact) => {
-      console.log('contacts map')
-      console.log(JSON.stringify(contact));
-      const idc = await createContact(token, contact);
-      if(typeof(idc)==='string'){
-        showToastMessageError(idc);
-      }else{
-        console.log('contacto creado');
-        console.log(idc);
-        idContacts.push(idc._id);
-      }
-    })
-
-    return idContacts;
-  }
   
   const onClickSave = async () => {
     //const {emailCompany, emailContact, nameContact} = formik.values;
@@ -66,9 +47,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         })
 
         setTimeout(async() => {
-          // const idContacts = await saveContacts();
-          // console.log('idcontacts =',idContacts)
-
           const data = {
             name,
             rfc,
@@ -98,38 +76,10 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
   }
 
   const newContact = (newContact:Contact) => {
-    // const {emailCompany, emailContact, nameContact} = formik.values;
-    // if(!emailCompany && !emailContact && !nameContact){
-    //   showToastMessageError('Debe llenar todos los campos antes de agregar un contacto nuevo!!');
-    // }else{
-    //   let phoneNumber: Phone[] = [];
-      
-    //   phones.map((phone:string, index:number) => {
-    //     phoneNumber.push({
-    //       phone,
-    //       type: typesPhone[index],
-    //     })
-    //   })
-
-      // const newContact:Contact ={
-      //   email: emailContact,
-      //   name: nameContact,
-      //   emailcompany: emailCompany,
-      //   phone: phoneNumber,
-      // }
-
-      setContacts((oldContacts) => [...oldContacts, newContact]);
-    //}
+    setContacts((oldContacts) => [...oldContacts, newContact])
   }
-  const [view, setView] = useState<JSX.Element>(<FormContact addNewContact={newContact} />)
-  // useEffect(() => {
-  //   if(contacts.length > 1){
-  //     setView(<></>);
-  //     setTimeout(() => {
-  //       setView(<FormContact addNewContact={newContact} />)  
-  //     }, 1);
-  //   }
-  // }, [contacts.length])
+  const [view, setView] = useState<JSX.Element>(
+          <FormContact addNewContact={newContact} save={onClickSave} />)
 
   return(
     <>

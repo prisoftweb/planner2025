@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { showToastMessageError } from "../Alert";
 import { Phone, Contact } from "@/interfaces/Contacts";
 
-export default function FormContact({addNewContact}: {addNewContact:Function}){
+export default function FormContact({addNewContact, save}: {addNewContact:Function, save:Function}){
   const formik = useFormik({
     initialValues: {
       emailContact:'',
@@ -160,11 +160,13 @@ export default function FormContact({addNewContact}: {addNewContact:Function}){
           elements
         ))}
         {/* <PhoneContact bandPlus={} deleteFeature={} index={} pushText={} updateCount={} valueFeat="" /> */}
-        <div className="flex justify-center mt-4">
+        {/* <div className="flex justify-center mt-4">
           <Button type="submit">Siguiente</Button>
+        </div> */}
+        <div className="flex justify-center mt-4">
+          <Button onClick={newContact}>Guardar contacto</Button>
         </div>
       </form>
-      <Button onClick={newContact}>New Contact</Button>
     </>
   )
 }
