@@ -11,3 +11,7 @@ export interface PhoneNumber{
   phone:string,
   phoneformat:string
 }
+
+export interface Config{
+  numRows: string;
+}

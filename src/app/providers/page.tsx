@@ -6,22 +6,26 @@ import TableProviders from "@/components/providers/TableProviders";
 import HeaderProvider from "@/components/providers/HeaderProvider";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
-import { Usr } from "@/interfaces/User";
+import { Config } from "@/interfaces/Common";
 
 export default async function Providers(){
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
 
-  let user = cookieStore.get('user')?.value || '';
-
-  const usr:Usr = JSON.parse(user);
-
-  const id = usr._id;
+  let id = cookieStore.get('id')?.value || '';
+  
+  let config = cookieStore.get('config')?.value || '';
+  let numRows = 3;
+  let objectConfig: Config;
+  if(config) {
+    objectConfig = JSON.parse(config);
+    numRows = parseInt(objectConfig.numRows);
+  }
 
   let providers:Provider[]=[];
   try {
-    providers = await getProviders(token);  
+    providers = await getProviders(token);
   } catch (error) {
     console.log(typeof(error));
     console.log(error);
@@ -52,7 +56,7 @@ export default async function Providers(){
         <HeaderProvider id={id} token={token} />
         {/* <WithOutProvider /> */}
         <div className="mt-10">
-          <TableProviders data={data} token={token} />
+          <TableProviders data={data} token={token} numRows={numRows} />
         </div>
       </div>
     </>

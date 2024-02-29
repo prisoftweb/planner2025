@@ -9,7 +9,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
-export default function TableUsers({data, token, departments}:{data:User[], token:string, departments:any}){
+export default function TableUsers({data, token, departments, numRows}:
+                        {data:User[], token:string, departments:any, numRows:number}){
   
   const columnHelper = createColumnHelper<User>();
   const [newUser, setNewUser] = useState<boolean>(false);
@@ -101,7 +102,7 @@ export default function TableUsers({data, token, departments}:{data:User[], toke
         <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
         {newUser && <NewUser showForm={setNewUser} departments={departments} token={token} />}
       </div>
-      <Table columns={columns} data={data} /> 
+      <Table columns={columns} data={data} numRows={numRows} />
     </>
   )
 }

@@ -5,7 +5,6 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import { useRegFormContext } from "./StepperProvider";
-import { useRouter } from "next/navigation";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveProvider from "@/app/functions/SaveProvider";
 import BasicBarStepper from "./BasicBarStepper";
@@ -13,8 +12,7 @@ import BasicBarStepper from "./BasicBarStepper";
 export default function CreditLineStepper({token, id}:{token:string, id:string}){
   
   const [state, dispatch] = useRegFormContext();
-  const router = useRouter();
-
+  
   const formik = useFormik({
     initialValues: {
       creditlimit:'',
@@ -32,7 +30,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
       percentoverduedebt: Yup.string()
                   .required('El porcentaje es obligatorio'),        
     }),
-    onSubmit: async (valores) => {            
+    onSubmit: async (valores) => {
       //const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
       
       // const tradeline = {
@@ -65,9 +63,9 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
       }
       const res = await SaveProvider(data, token);
       showToastMessage(res);
-      // if(res===201){
-      //   router.refresh();
-      // }
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     }else{
       showToastMessageError('Nombre y RFC son obligatorios');
     }

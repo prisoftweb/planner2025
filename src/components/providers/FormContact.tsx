@@ -21,13 +21,13 @@ export default function FormContact({addNewContact, save}: {addNewContact:Functi
     }, 
     validationSchema: Yup.object({
       emailContact: Yup.string()
-                  .email('El email no es valido'),
-                  //.required('El email no puede ir vacio'),
+                  .email('El email no es valido')
+                  .required('El email no puede ir vacio'),
       emailCompany: Yup.string()
-                  .email('El email no es valido'),
-                  //.required('El email no puede ir vacio'),
+                  .email('El email no es valido')
+                  .required('El email no puede ir vacio'),
       nameContact: Yup.string()
-                  //.required('El nombre es obligatorio'),
+                  .required('El nombre es obligatorio'),
     }),
     onSubmit: async (valores) => {            
       //const {emailContact, nameContact, emailCompany} = valores;
@@ -42,6 +42,45 @@ export default function FormContact({addNewContact, save}: {addNewContact:Functi
 
       //dispatch({ type: 'SET_CONTACTS', data: contact });
       //dispatch({type: 'INDEX_STEPPER', data: 3})
+
+      let phoneNumber: Phone[] = [];
+    
+      phones.map((phone:string, index:number) => {
+        let phoneformat = phone.trim();
+        phoneformat = phoneformat.replace(/\s+/g, '');
+        phoneformat = phoneformat.replace('(+52)', '');
+        phoneNumber.push({
+          phone:phoneformat,
+          type: typesPhone[index],
+          phoneformat: phone
+        })
+      })
+      
+      const {emailCompany, emailContact, nameContact} = formik.values;
+      if(!emailCompany || !emailContact || !nameContact){
+        showToastMessageError('Debe llenar todos los campos antes de agregar un nuevo contacto!!');
+        return
+      }
+
+      const newContact:Contact ={
+        email: emailContact,
+        name: nameContact,
+        companyemail: emailCompany,
+        phoneNumber,
+      }
+      addNewContact(newContact);
+      
+      formik.values.emailCompany = '';
+      formik.values.emailContact = '';
+      formik.values.nameContact = '';
+      setPhones([]);
+      setTypesPhone([]);
+      setUpPhones([]);
+      setTimeout(() => {
+        setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
+          deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} 
+          key={0} updateCount={updateCount} />])
+      }, 10);
 
     },       
   });
@@ -77,46 +116,46 @@ export default function FormContact({addNewContact, save}: {addNewContact:Functi
 
   const newContact = () =>{
     
-    let phoneNumber: Phone[] = [];
+    // let phoneNumber: Phone[] = [];
     
-    phones.map((phone:string, index:number) => {
-      let phoneformat = phone.trim();
-      phoneformat = phoneformat.replace(/\s+/g, '');
-      phoneformat = phoneformat.replace('(+52)', '');
-      phoneNumber.push({
-        phone:phoneformat,
-        type: typesPhone[index],
-        phoneformat: phone
-      })
-    })
+    // phones.map((phone:string, index:number) => {
+    //   let phoneformat = phone.trim();
+    //   phoneformat = phoneformat.replace(/\s+/g, '');
+    //   phoneformat = phoneformat.replace('(+52)', '');
+    //   phoneNumber.push({
+    //     phone:phoneformat,
+    //     type: typesPhone[index],
+    //     phoneformat: phone
+    //   })
+    // })
     
 
 
-    const {emailCompany, emailContact, nameContact} = formik.values;
-    if(!emailCompany || !emailContact || !nameContact){
-      showToastMessageError('Debe llenar todos los campos antes de agregar un nuevo contacto!!');
-      return
-    }
+    // const {emailCompany, emailContact, nameContact} = formik.values;
+    // if(!emailCompany || !emailContact || !nameContact){
+    //   showToastMessageError('Debe llenar todos los campos antes de agregar un nuevo contacto!!');
+    //   return
+    // }
 
-    const newContact:Contact ={
-      email: emailContact,
-      name: nameContact,
-      companyemail: emailCompany,
-      phoneNumber,
-    }
-    addNewContact(newContact);
+    // const newContact:Contact ={
+    //   email: emailContact,
+    //   name: nameContact,
+    //   companyemail: emailCompany,
+    //   phoneNumber,
+    // }
+    // addNewContact(newContact);
     
-    formik.values.emailCompany = '';
-    formik.values.emailContact = '';
-    formik.values.nameContact = '';
-    setPhones([]);
-    setTypesPhone([]);
-    setUpPhones([]);
-    setTimeout(() => {
-      setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
-        deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} 
-        key={0} updateCount={updateCount} />])
-    }, 10);
+    // formik.values.emailCompany = '';
+    // formik.values.emailContact = '';
+    // formik.values.nameContact = '';
+    // setPhones([]);
+    // setTypesPhone([]);
+    // setUpPhones([]);
+    // setTimeout(() => {
+    //   setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
+    //     deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} 
+    //     key={0} updateCount={updateCount} />])
+    // }, 10);
   }
 
   return(
@@ -164,7 +203,7 @@ export default function FormContact({addNewContact, save}: {addNewContact:Functi
           <Button type="submit">Siguiente</Button>
         </div> */}
         <div className="flex justify-center mt-4">
-          <Button onClick={newContact}>Guardar contacto</Button>
+          <Button type="button" onClick={newContact}>Guardar contacto</Button>
         </div>
       </form>
     </>

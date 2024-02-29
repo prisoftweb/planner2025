@@ -5,7 +5,6 @@ import { useRegFormContext } from "./StepperProvider";
 import DataBasicStepper from "./DataBasicStepper";
 import CreditLineStepper from "./CreditLineStepper";
 import ContactsStepper from "./ContactsStepper";
-import FinishStepper from "./FInishStepper";
 
 export default function ContainerStepper({token, id}: {token:string, id:string}){
   
@@ -19,20 +18,15 @@ export default function ContainerStepper({token, id}: {token:string, id:string})
 
   try {
     useEffect(() => {
-      console.log('index==', state.indexstepper);
       try {
-        if(state.indexstepper){
+        if(state.indexstepper || state.indexstepper>=0){
           if(state.indexstepper===1){
             setStepForm(<CreditLineStepper token={token} id={id} />)
           }else if(state.indexstepper===2){
-            setStepForm(<ContactsStepper id={id} token={token} />)
-          }else{
-            if(state.indexstepper===3){
-              setStepForm(<FinishStepper token={token} id={id} />)
+              setStepForm(<ContactsStepper id={id} token={token} />)
             }else{
               setStepForm(<DataBasicStepper token={token} id={id} />)
             }
-          }
         }
       } catch (error) {
         setStepForm(<DataBasicStepper token={token} id={id} />)

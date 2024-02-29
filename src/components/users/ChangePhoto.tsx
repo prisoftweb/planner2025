@@ -13,17 +13,18 @@ export default function ChangePhoto({id, token}: {id:string, token:string}){
   const [photo, setPhoto] = useState<File>();
   
   const onSave = async () => {
-    console.log('photo', photo);
     if(photo){
       try {
         const data = new FormData();
         data.append('photo', photo);
         const res = await updateMeUser(id, data, token);
-        console.log('res from', res);
         if(typeof(res)==='string'){
           showToastMessageError(res);
         }else{
           showToastMessage('La foto ha sido actualizada!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al cambiar foto!!');

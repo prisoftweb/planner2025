@@ -14,9 +14,9 @@ export default function ProfileProvider({provider, setOption}:
   return(
     <>
       <div className="flex flex-col items-center w-1/2 mb-2">
-        <IconText text="P" />
+        <IconText text={provider.name.substring(0, 2)} />
         <p className="text-xl text-gray-800 tracking-wide leading-5 md:leading-6">{provider.name}</p>
-        <p className="text-sm text-gray-500 leading-5 md:leading-6">Plaforama SA de CV</p>
+        <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.tradename}</p>
         <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.rfc}</p>
         <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.account}</p>
       </div>

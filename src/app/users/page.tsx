@@ -4,12 +4,21 @@ import { cookies } from "next/headers";
 import { User } from "@/interfaces/User";
 import { getDepartments } from "../api/routeDepartments";
 import Navigation from "@/components/navigation/Navigation";
+import { Config } from "@/interfaces/Common";
 
 export default async function Users() {  
 
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
 
+  let config = cookieStore.get('config')?.value || '';
+  let numRows = 3;
+  let objectConfig: Config;
+  if(config) {
+    objectConfig = JSON.parse(config);
+    numRows = parseInt(objectConfig.numRows);
+  }
+  
   let users;
   try {
     users = await getUsers(token);
@@ -48,7 +57,7 @@ export default async function Users() {
       {/* <div className="h-screen p-10" style={{backgroundColor:'#F8FAFC'}}> */}
       <Navigation />
       <div className="bg-slate-300 h-screen p-10">
-        <TableUsers data={data} token={token} departments={departments} />
+        <TableUsers data={data} token={token} departments={departments} numRows={numRows} />
       </div>
     </>
   );

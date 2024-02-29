@@ -3,18 +3,18 @@ import { useReactTable, getCoreRowModel, flexRender,
           getPaginationRowModel, getSortedRowModel,
           getFilteredRowModel, RowSelectionState } 
 from "@tanstack/react-table"
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, 
   ChevronLeftIcon, ChevronRightIcon, AdjustmentsHorizontalIcon } 
 from "@heroicons/react/24/solid";
+import { setCookie } from "cookies-next";
 
-export default function Table({data, columns}: {data: any, columns:any}) {
+export default function Table({data, columns, numRows}: {data: any, columns:any, numRows:number}) {
 
   const [sorting, setSorting] = useState<any>([]);
   const [filtering, setFiltering] = useState('')
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
   const [showColumns, setShowColumns] = useState<boolean>(false);
-
 
   useEffect(() => {
     //do something when the row selection changes...
@@ -41,7 +41,7 @@ export default function Table({data, columns}: {data: any, columns:any}) {
     onGlobalFilterChange: setFiltering,
     initialState : {
       pagination: {
-        pageSize: 3,
+        pageSize: numRows,
       }
     },
   })
@@ -147,7 +147,10 @@ export default function Table({data, columns}: {data: any, columns:any}) {
         <p>Numero de filas</p>
         <select
           value={table.getState().pagination.pageSize}
-          onChange={e => { table.setPageSize(Number(e.target.value));}}
+          onChange={e => { 
+            table.setPageSize(Number(e.target.value));
+            setCookie('config', {numRows: e.target.value})
+          }}
           className="w-16 p-2 text-lg mt-2 text-gray-900 border border-slate-300 rounded-lg 
           bg-gray-50 focus:border-slate-700 outline-0 my-2"
         >

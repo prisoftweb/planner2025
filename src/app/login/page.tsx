@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { setLogin } from '../api/routeUser';
-import Alert, {showToastMessage, showToastMessageError} from "@/components/Alert";
+import {showToastMessage, showToastMessageError} from "@/components/Alert";
 import 'react-toastify/dist/ReactToastify.css';
 import { setCookie } from 'cookies-next';
 import Link from 'next/link';
@@ -35,6 +35,7 @@ export default function Login({}) {
           setCookie('user', res.data.user);
           const {_id } = res.data.user;
           setCookie('id', _id);
+          setCookie('config', {numRows:3})
           setTimeout(() => {                
             router.push(
               '/'

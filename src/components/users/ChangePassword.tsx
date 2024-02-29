@@ -47,10 +47,10 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
       }else{
         if(res === 200) {
           showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-          router.refresh();
+          //router.refresh();
           setTimeout(() => {
             logOut();
-          }, 2000)
+          }, 600)
         } else {
           showToastMessageError('Error al modificar usuario..');
         }

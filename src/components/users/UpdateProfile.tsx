@@ -34,12 +34,12 @@ export default function UpdateProfile({user, departments, token}:
     onSubmit: async (valores) => {            
       const {email, name} = valores;
       
-      const profile = {
-        name,
-        email,
-        rol,
-        department
-      }
+      // const profile = {
+      //   name,
+      //   email,
+      //   rol,
+      //   department
+      // }
       
       const formData = new FormData();
       formData.append('name', name);
@@ -47,22 +47,17 @@ export default function UpdateProfile({user, departments, token}:
       formData.append('role', rol);
       formData.append('department', department);
 
-      console.log('department', department)
-
       try {
         let res = await updateMeUser(user._id, formData, token);
-        //console.log('res =>', res)
         if(typeof(res) === 'string'){
           showToastMessageError(res);
         }else{
           if(res.status === 200) {
             showToastMessage(`Usuario ${name} modificado exitosamente!`);            
             setCookie('user', res.data.data.user);
-            // setTimeout(() => {
-            //   //setBandUpdate(true);
-            //   router.refresh();
-            //   router.push('/');
-            // }, 1000)
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
           } else {
             showToastMessageError('Error al modificar usuario..');
           }
@@ -76,7 +71,6 @@ export default function UpdateProfile({user, departments, token}:
   return(
     <>
       <div className="w-full lg:w-3/4 xl:w-1/2">
-        {/* <Alert /> */}
         <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos personales" 
           title="Información personal"
         />

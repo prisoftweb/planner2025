@@ -92,6 +92,10 @@ export async function updateMePassword(id:string, passwordCurrent:string, passwo
       if(res.status===200) return res.status;
         return res.statusText;    
   } catch (error:any) {
+    console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message;
+    }
     return error.response.data.message;
   }
 }

@@ -60,8 +60,8 @@ export default async function Page({ params, searchParams }:
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link href={'/providers'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link>
-            <IconText text="P" />
-            <p className="text-slate-500 mx-3">Plaforama</p>
+            <IconText text={provider.name.substring(0, 2)} />
+            <p className="text-slate-500 mx-3">{provider.name}</p>
           </div>
           <Selectize options={options} />
         </div>

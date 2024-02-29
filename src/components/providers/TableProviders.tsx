@@ -6,7 +6,8 @@ import IconText from "./IconText";
 import { Provider, TableProvider } from "@/interfaces/Providers";
 import DeleteProvider from "./DeleteProvider";
 
-export default function TableProviders({data, token}:{data:TableProvider[], token:string}){
+export default function TableProviders({data, token, numRows}:
+          {data:TableProvider[], token:string, numRows:number}){
   
   const columnHelper = createColumnHelper<any>();
   //const [newUser, setNewUser] = useState<boolean>(false);
@@ -69,7 +70,7 @@ export default function TableProviders({data, token}:{data:TableProvider[], toke
         <Link href={`/providers/${row.original.id}?tab=1`}>
           <div className="flex items-center">
             <div 
-              className={`w-6 h-6 mr-3 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
+              className={`w-6 h-6 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
             </div>
           </div>
         </Link>       
@@ -106,7 +107,7 @@ export default function TableProviders({data, token}:{data:TableProvider[], toke
   
   return(
     <>
-      <Table columns={columns} data={data} /> 
+      <Table columns={columns} data={data} numRows={numRows} /> 
     </>
   )
 }

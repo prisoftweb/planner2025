@@ -1,4 +1,15 @@
+import { useRegFormContext } from "./StepperProvider"
+
 export default function BasicBarStepper({index}: {index:number}){
+  
+  const [state, dispatch] = useRegFormContext();
+  
+  const changeTab = (indextab: number) => {
+    if(state.databasic){
+      dispatch({type: 'INDEX_STEPPER', data: indextab})
+    }
+  }
+  
   return(
     <>
       <div>
@@ -6,8 +17,10 @@ export default function BasicBarStepper({index}: {index:number}){
           className="grid grid-cols-1 divide-x divide-gray-100 overflow-hidden rounded-lg 
             border border-gray-100 text-sm text-gray-500 sm:grid-cols-3"
         >
-          <li className={`flex items-center justify-center gap-2 p-4 
-            ${index > 0? 'bg-green-500': ''}`}>
+          <li className={`flex items-center justify-center gap-2 p-4 cursor-pointer
+            ${index > 0? 'bg-green-500': ''}`}
+            onClick={() => changeTab(0)}
+          >
             <svg
               className="size-7 shrink-0"
               xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +42,10 @@ export default function BasicBarStepper({index}: {index:number}){
             </p>
           </li>
 
-          <li className={`relative flex items-center justify-center gap-2 p-4
-            ${index > 1? 'bg-green-500': 'bg-gray-50'}`}>
+          <li className={`relative flex items-center justify-center gap-2 p-4 cursor-pointer
+            ${index > 1? 'bg-green-500': 'bg-gray-50'}`}
+            onClick={() => changeTab(1)}
+          >
             <span
               className="absolute -left-2 top-1/2 hidden size-4 -translate-y-1/2 rotate-45 border border-gray-100 sm:block ltr:border-b-0 ltr:border-s-0 ltr:bg-white rtl:border-e-0 rtl:border-t-0 rtl:bg-gray-50"
             >
@@ -67,8 +82,10 @@ export default function BasicBarStepper({index}: {index:number}){
             </p>
           </li>
 
-          <li className={`flex items-center justify-center gap-2 p-4
-            ${index > 2? 'bg-green-500': ''}`}>
+          <li className={`flex items-center justify-center gap-2 p-4 cursor-pointer
+            ${index > 2? 'bg-green-500': ''}`}
+            onClick={() => changeTab(2)}
+          >
             <svg
               className="size-7 shrink-0"
               xmlns="http://www.w3.org/2000/svg"

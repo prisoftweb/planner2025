@@ -26,7 +26,17 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
     //const {emailCompany, emailContact, nameContact} = formik.values;
     console.log(contacts);
     const {name, rfc, suppliercredit, tradename} = state.databasic;
-    const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+    let tradeline = {};
+
+    if(state.creditLine){
+      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+      tradeline = {
+        creditdays,
+        creditlimit,
+        currentbalance,
+        percentoverduedebt
+      }
+    }
     
     try {
       if(name && rfc && tradename){
@@ -34,8 +44,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         let idContacts:string[] = [];
         
         contacts.map( async (contact) => {
-          console.log('contacts map')
-          console.log(JSON.stringify(contact));
           const idc = await createContact(token, contact);
           if(typeof(idc)==='string'){
             showToastMessageError(idc);
@@ -52,12 +60,7 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
             rfc,
             tradename,
             suppliercredit,
-            tradeline: {
-              creditdays,
-              creditlimit,
-              currentbalance,
-              percentoverduedebt
-            },
+            tradeline,
             contacts: idContacts,
             user: id,
           }
