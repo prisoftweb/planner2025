@@ -11,8 +11,9 @@ import { useState, useEffect } from "react";
 //import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessageError } from "../Alert";
 import { Phone, Contact } from "@/interfaces/Contacts";
+import { createContact } from "@/app/api/routeContacts";
 
-export default function FormContact({addNewContact, save}: {addNewContact:Function, save:Function}){
+export default function FormContact({addNewContact, token}: {addNewContact:Function, token:string}){
   const formik = useFormik({
     initialValues: {
       emailContact:'',
@@ -68,7 +69,21 @@ export default function FormContact({addNewContact, save}: {addNewContact:Functi
         companyemail: emailCompany,
         phoneNumber,
       }
-      addNewContact(newContact);
+      
+      try {
+        const res = await createContact(token, newContact);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          console.log('contacto creado');
+          console.log(res);
+          addNewContact(res._id);
+          //idContacts.push(idc._id);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
+      }
+      //addNewContact(newContact);
       
       formik.values.emailCompany = '';
       formik.values.emailContact = '';
@@ -203,7 +218,8 @@ export default function FormContact({addNewContact, save}: {addNewContact:Functi
           <Button type="submit">Siguiente</Button>
         </div> */}
         <div className="flex justify-center mt-4">
-          <Button type="button" onClick={newContact}>Guardar contacto</Button>
+          {/* <Button type="button" onClick={newContact}>Guardar contacto</Button> */}
+          <Button type="submit">Guardar contacto</Button>
         </div>
       </form>
     </>

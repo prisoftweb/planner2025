@@ -8,6 +8,7 @@ import Contacts from "./Contacts"
 import { useState, useEffect } from "react"
 import { Provider } from "@/interfaces/Providers"
 
+
 export default function ProviderClient({provider, token, id}: 
                             {provider:Provider, token:string, id:string}){
   

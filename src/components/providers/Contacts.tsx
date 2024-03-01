@@ -6,35 +6,45 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import PhoneContact from "./PhoneContact";
 import { useState, useEffect } from "react";
-import { Provider } from "@/interfaces/Providers";
+//import { Provider } from "@/interfaces/Providers";
+import { Contact } from "@/interfaces/Contacts";
 
-export default function Contacts({id, token, provider}: {id:string, token:string, provider:Provider}){
+export default function Contacts({id, token, contact}: {id:string, token:string, contact:(Contact | string)}){
   
-  //const emailp = provider.contact
-  
+  let emailI = '';
+  let nameI = '';
+  let companyemailI = '';
+
+  if(typeof(contact)!== 'string'){
+    emailI = contact.email;
+    nameI = contact.name;
+    companyemailI = contact.companyemail
+  }
+
+
   const formik = useFormik({
     initialValues: {
       email:'',
       name:'',
-      emailCompany: '',
+      companyemail: '',
     }, 
     validationSchema: Yup.object({
       email: Yup.string()
                   .email('El email no es valido')
                   .required('El email no puede ir vacio'),
-      emailCompany: Yup.string()
+      companyemail: Yup.string()
                   .email('El email no es valido')
                   .required('El email no puede ir vacio'),
       name: Yup.string()
                   .required('El nombre es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      const {email, name, emailCompany} = valores;
+      const {email, name, companyemail} = valores;
       
       const contact = {
         email,
         name,
-        emailCompany,
+        companyemail,
         phones,
         typesPhone,
       }
@@ -119,15 +129,15 @@ export default function Contacts({id, token, provider}: {id:string, token:string
                 <p>{formik.errors.email}</p>
             </div>
         ) : null}
-        <Label htmlFor="emailCompany">Correo de empresa</Label>
-        <Input type="email" name="emailCompany" 
-          value={formik.values.emailCompany}
+        <Label htmlFor="companyemail">Correo de empresa</Label>
+        <Input type="email" name="companyemail" 
+          value={formik.values.companyemail}
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
         />
-        {formik.touched.emailCompany && formik.errors.emailCompany ? (
+        {formik.touched.companyemail && formik.errors.companyemail ? (
             <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.emailCompany}</p>
+                <p>{formik.errors.companyemail}</p>
             </div>
         ) : null}
         <Label htmlFor="phone">Telefono</Label>

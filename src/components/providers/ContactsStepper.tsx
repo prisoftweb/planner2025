@@ -20,7 +20,7 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
   
   const [state,] = useRegFormContext();
   //const router = useRouter();
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<string[]>([]);
   
   const onClickSave = async () => {
     //const {emailCompany, emailContact, nameContact} = formik.values;
@@ -41,38 +41,39 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
     try {
       if(name && rfc && tradename){
         
-        let idContacts:string[] = [];
+        //let idContacts:string[] = [];
         
-        contacts.map( async (contact) => {
-          const idc = await createContact(token, contact);
-          if(typeof(idc)==='string'){
-            showToastMessageError(idc);
-          }else{
-            console.log('contacto creado');
-            console.log(idc);
-            idContacts.push(idc._id);
-          }
-        })
+        // contacts.map( async (contact) => {
+        //   const idc = await createContact(token, contact);
+        //   if(typeof(idc)==='string'){
+        //     showToastMessageError(idc);
+        //   }else{
+        //     console.log('contacto creado');
+        //     console.log(idc);
+        //     idContacts.push(idc._id);
+        //   }
+        // })
 
-        setTimeout(async() => {
-          const data = {
-            name,
-            rfc,
-            tradename,
-            suppliercredit,
-            tradeline,
-            contacts: idContacts,
-            user: id,
-          }
+        const data = {
+          name,
+          rfc,
+          tradename,
+          suppliercredit,
+          tradeline,
+          //contacts: idContacts,
+          contact: contacts,
+          user: id,
+        }
 
-          console.log('sendd');
-          console.log(JSON.stringify(data));
-          const res = await SaveProvider(data, token);
-          showToastMessage(res);
+        const res = await SaveProvider(data, token);
+        if(res.status){
+          showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
-        }, 3000);
+        }else{
+          showToastMessageError(res.message);
+        }
       }else{
         showToastMessageError('Nombre y RFC son obligatorios');
       }
@@ -81,11 +82,11 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
     }
   }
 
-  const newContact = (newContact:Contact) => {
+  const newContact = (newContact:string) => {
     setContacts((oldContacts) => [...oldContacts, newContact])
   }
-  const [view, setView] = useState<JSX.Element>(
-          <FormContact addNewContact={newContact} save={onClickSave} />)
+  // const [view, setView] = useState<JSX.Element>(
+  //         <FormContact addNewContact={newContact} token={token} />)
 
   return(
     <>
@@ -103,7 +104,8 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         >
           Guardar
         </button>
-        {view}
+        <FormContact addNewContact={newContact} token={token} />
+        {/* {view} */}
       </div>
     </>
   )

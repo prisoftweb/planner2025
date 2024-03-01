@@ -62,10 +62,14 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
         user: id,
       }
       const res = await SaveProvider(data, token);
-      showToastMessage(res);
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      if(res.status){
+        showToastMessage(res.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }else{
+        showToastMessageError(res.message);
+      }
     }else{
       showToastMessageError('Nombre y RFC son obligatorios');
     }

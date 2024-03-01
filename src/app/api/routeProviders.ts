@@ -84,6 +84,8 @@ export async function RemoveProvider(id:string, auth_token:string) {
 export async function createProvider(data:Object, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
   
+  console.log('create provider!!');
+  console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
