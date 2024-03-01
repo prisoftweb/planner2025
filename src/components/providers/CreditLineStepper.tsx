@@ -47,20 +47,35 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
   const onClickSave = async () => {
     const {creditdays, creditlimit, currentbalance, percentoverduedebt} = formik.values;
     const {name, rfc, suppliercredit, tradename} = state.databasic;
+    
+    let tradeline = {};
+
+    if(suppliercredit){
+      tradeline = {
+        creditdays,
+        creditlimit,
+        currentbalance,
+        percentoverduedebt
+      }
+    }
+
     if(name && rfc && tradename){
       const data = {
         name,
         rfc,
         tradename,
         suppliercredit,
-        tradeline: {
-          creditdays,
-          creditlimit,
-          currentbalance,
-          percentoverduedebt
-        },
+        tradeline,
+        // tradeline: {
+        //   creditdays,
+        //   creditlimit,
+        //   currentbalance,
+        //   percentoverduedebt
+        // },
         user: id,
       }
+      //console.log('credit line provider');
+      //console.log(JSON.stringify(data));
       const res = await SaveProvider(data, token);
       if(res.status){
         showToastMessage(res.message);

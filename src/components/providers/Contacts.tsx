@@ -97,16 +97,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   }, [, filter])
   
   useEffect(() => {
-    // const timer = setTimeout(() => {
-    //   if(index >= contacts.length - 1){
-    //     setIndex(0);
-    //   }else{
-    //     setIndex(index + 1);
-    //   }
-    // }, 5000);
-
-    console.log('useefect index');
-
     let count = contacts.length - (index + numberContacts);
     
     if(count < 0){
@@ -122,12 +112,9 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
       console.log('settiemfilter')
       console.log(filter);
     }, 500);
-    //return () => clearTimeout(timer);
   }, [index])
 
   const Previous = () => {
-    console.log('previous');
-    console.log(index);
     if(index > 0){
       setIndex(index -1);
     }else{
@@ -136,8 +123,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   }
 
   const Next = () => {
-    console.log('next');
-    console.log(index);
     if(index < contacts.length - 1){
       setIndex(index+1)
     }else{

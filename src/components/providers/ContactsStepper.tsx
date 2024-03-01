@@ -24,11 +24,10 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
   
   const onClickSave = async () => {
     //const {emailCompany, emailContact, nameContact} = formik.values;
-    console.log(contacts);
     const {name, rfc, suppliercredit, tradename} = state.databasic;
     let tradeline = {};
 
-    if(state.creditLine){
+    if(suppliercredit){
       const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
       tradeline = {
         creditdays,
@@ -41,30 +40,18 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
     try {
       if(name && rfc && tradename){
         
-        //let idContacts:string[] = [];
-        
-        // contacts.map( async (contact) => {
-        //   const idc = await createContact(token, contact);
-        //   if(typeof(idc)==='string'){
-        //     showToastMessageError(idc);
-        //   }else{
-        //     console.log('contacto creado');
-        //     console.log(idc);
-        //     idContacts.push(idc._id);
-        //   }
-        // })
-
         const data = {
           name,
           rfc,
           tradename,
           suppliercredit,
           tradeline,
-          //contacts: idContacts,
           contact: contacts,
           user: id,
         }
 
+        //console.log('provider contactos');
+        //console.log(JSON.stringify(data));
         const res = await SaveProvider(data, token);
         if(res.status){
           showToastMessage(res.message);
