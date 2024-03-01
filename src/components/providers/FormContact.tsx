@@ -13,12 +13,24 @@ import { showToastMessageError } from "../Alert";
 import { Phone, Contact } from "@/interfaces/Contacts";
 import { createContact } from "@/app/api/routeContacts";
 
-export default function FormContact({addNewContact, token}: {addNewContact:Function, token:string}){
+export default function FormContact({addNewContact, token, contact, updateContact}: 
+                  {addNewContact:Function, token:string, contact:(Contact | string), updateContact:Function}){
+  
+  let emailContactI = '';
+  let nameContactI = '';
+  let emailCompanyI = '';
+
+  if(typeof(contact)!=='string'){
+    emailCompanyI = contact.companyemail;
+    nameContactI = contact.name;
+    emailContactI = contact.email;
+  }
+
   const formik = useFormik({
     initialValues: {
-      emailContact:'',
-      nameContact:'',
-      emailCompany: '',
+      emailContact: emailContactI,
+      nameContact:  nameContactI,
+      emailCompany: emailCompanyI,
     }, 
     validationSchema: Yup.object({
       emailContact: Yup.string()
@@ -173,9 +185,58 @@ export default function FormContact({addNewContact, token}: {addNewContact:Funct
     // }, 10);
   }
 
+  const onUpdateContact = async () => {
+    let phoneNumber: Phone[] = [];
+    
+    phones.map((phone:string, index:number) => {
+      let phoneformat = phone.trim();
+      phoneformat = phoneformat.replace(/\s+/g, '');
+      phoneformat = phoneformat.replace('(+52)', '');
+      phoneNumber.push({
+        phone:phoneformat,
+        type: typesPhone[index],
+        phoneformat: phone
+      })
+    })
+    
+    const {emailCompany, emailContact, nameContact} = formik.values;
+    if(!emailCompany || !emailContact || !nameContact){
+      showToastMessageError('Debe llenar todos los campos antes de actualizar contacto!!');
+      return
+    }
+
+    const newContact:Contact ={
+      email: emailContact,
+      name: nameContact,
+      companyemail: emailCompany,
+      phoneNumber,
+    }
+    
+    if(typeof(contact)!=='string'){
+      updateContact(newContact, contact._id);
+    }
+
+    // try {
+    //   const res = await createContact(token, newContact);
+    //   if(typeof(res)==='string'){
+    //     showToastMessageError(res);
+    //   }else{
+    //     console.log('contacto creado');
+    //     console.log(res);
+    //     addNewContact(res._id);
+    //     //idContacts.push(idc._id);
+    //   }
+    // } catch (error) {
+    //   showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
+    // }
+  }
+  
+  let button = typeof(contact)==='string'? 
+                      <Button type="submit">Guardar contacto</Button> : 
+                      <Button type="button" onClick={() => onUpdateContact()}>Actualizar contacto</Button>
   return(
     <>
-      <form onSubmit={formik.handleSubmit} className="mt-4">
+      <form onSubmit={formik.handleSubmit} className="mt-2">
         <Label htmlFor="nameContact">Nombre</Label>
         <Input type="text" name="nameContact" autoFocus 
           value={formik.values.nameContact}
@@ -219,7 +280,8 @@ export default function FormContact({addNewContact, token}: {addNewContact:Funct
         </div> */}
         <div className="flex justify-center mt-4">
           {/* <Button type="button" onClick={newContact}>Guardar contacto</Button> */}
-          <Button type="submit">Guardar contacto</Button>
+          {/* <Button type="submit">Guardar contacto</Button> */}
+          {button}
         </div>
       </form>
     </>

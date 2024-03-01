@@ -1,154 +1,163 @@
-import HeaderForm from "../HeaderForm"
-import Label from "../Label"
-import Input from "../Input"
-import { useFormik } from "formik"
-import * as Yup from 'yup';
-import Button from "../Button";
-import PhoneContact from "./PhoneContact";
+// import HeaderForm from "../HeaderForm"
+// import Label from "../Label"
+// import Input from "../Input"
+// import { useFormik } from "formik"
+// import * as Yup from 'yup';
+// import Button from "../Button";
+// import PhoneContact from "./PhoneContact";
 import { useState, useEffect } from "react";
 //import { Provider } from "@/interfaces/Providers";
 import { Contact } from "@/interfaces/Contacts";
+import FormContact from "./FormContact";
+import { updateProvider } from "@/app/api/routeProviders";
+import { showToastMessage, showToastMessageError } from "../Alert";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import Button from "../Button";
+import { updateContact } from "@/app/api/routeContacts";
 
-export default function Contacts({id, token, contact}: {id:string, token:string, contact:(Contact | string)}){
+export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
   
-  let emailI = '';
-  let nameI = '';
-  let companyemailI = '';
+  console.log('contacts');
+  console.log(contacts);
+  
+  const [index, setIndex] = useState(0);
+  const numberContacts = 1;
+  const [filter, setFilter] = useState<Contact[]>(contacts);
 
-  if(typeof(contact)!== 'string'){
-    emailI = contact.email;
-    nameI = contact.name;
-    companyemailI = contact.companyemail
-  }
-
-
-  const formik = useFormik({
-    initialValues: {
-      email:'',
-      name:'',
-      companyemail: '',
-    }, 
-    validationSchema: Yup.object({
-      email: Yup.string()
-                  .email('El email no es valido')
-                  .required('El email no puede ir vacio'),
-      companyemail: Yup.string()
-                  .email('El email no es valido')
-                  .required('El email no puede ir vacio'),
-      name: Yup.string()
-                  .required('El nombre es obligatorio'),
-    }),
-    onSubmit: async (valores) => {            
-      const {email, name, companyemail} = valores;
-      
-      const contact = {
-        email,
-        name,
-        companyemail,
-        phones,
-        typesPhone,
+  const newContact = async (newContact:string) => {
+    try {
+      const res = await updateProvider(id, token, {contact: [newContact]});
+      if(res===200){
+        showToastMessage('El proveedor ha sido actualizado!!');
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }else{
+        showToastMessageError(res);
       }
-      console.log(contact);
-    },       
-  });
-  
-  //este se usa cuando se va a modificar
-  //actualizar valores
-  // useEffect(() => {
-  //   if(slider !== ''){
-  //     slider.features.map((feature:string, index:number) => {
-  //       let bandShow = true;
-  //       if(index === 4) bandShow=false;
-  //       setUpFeatures((oldArray) => [...oldArray, <SelectText pushText={pushFeature} index={index} 
-  //         deleteFeature={deleteFeature} updateCount={updateCount} valueFeat={feature} key={index}
-  //         bandPlus={index === slider.features.length-1 ? true: false} bandShow={bandShow} />])
-  //     })
-  //   }
-  // },[])
-
-  const [phones, setPhones] = useState<string[]>([])
-  const [typesPhone, setTypesPhone] = useState<string[]>([]);
-  const [countFiles, setCountFiles] = useState(0);
-  const [upPhones, setUpPhones] = useState<any[]>([]);
-  const [indexDelete, setIndexDelete] = useState<number>(-1);
-  const [bandDelete, setBandDelete] = useState<boolean>(false);
-  //const [bandEdit, setBandEdit] = useState<boolean>(false);
-  
-  const pushPhone = (phone: string, typePhone:string) => {
-    setPhones((oldPhone) => [...oldPhone, phone]);
-    setTypesPhone((oldTypesPhone) => [...oldTypesPhone, typePhone]);
-  }
-  
-  const deletePhone = (index:number) => {
-    setIndexDelete(index);
+    } catch (error) {
+      showToastMessageError('Error al actualizar proveedor');
+    }
   }
 
-  const updateCount = () => {
-    setCountFiles(countFiles + 1);
+  const updateContactt = async (data:Contact, id:string) => {
+    try {
+      const res = await updateContact(id, token, data);
+      if(res===200){
+        showToastMessage('El contacto ha sido actualizado!!');
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }else{
+        showToastMessageError(res);
+      }
+    } catch (error) {
+      showToastMessageError('Error al actualizar proveedor');
+    }
   }
+
+  const [showContacts, setShowContacts] = useState<JSX.Element>(contacts.length > 0? 
+    <FormContact token={token} addNewContact={newContact} contact={contacts[0]} updateContact={updateContactt} /> : 
+    <FormContact token={token} addNewContact={newContact} contact={''} updateContact={updateContactt} /> );
 
   useEffect(() => {
+    if(contacts.length === 0){
+      setShowContacts(<FormContact token={token} addNewContact={newContact} contact={''} updateContact={updateContactt} />);
+    }else{
+      console.log('useefect filter')
+      console.log(filter);
+      setShowContacts(<></>);
+      setTimeout(() => {
+        setShowContacts(
+          <div className="flex items-center">
+            <div className='w-20'>
+              <ChevronLeftIcon onClick={Previous}
+                className="w-12 h-12 cursor-pointer text-yellow-950" />
+            </div>
+  
+            {/* <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mt-10'> */}
+            <div className='grid gap-4 grid-cols-1 mt-10'>
+              {filter.map((contact: Contact, index:number) => (
+                <div className='' key={index}>
+                  <FormContact token={token} addNewContact={newContact} contact={contact} 
+                    updateContact={updateContactt}
+                  />
+                </div>
+              ))}
+            </div>
+  
+            <div className='w-20'>
+              <ChevronRightIcon onClick={Next}
+                className="w-12 h-12 cursor-pointer text-yellow-950" />
+            </div>
+          </div>
+        )
+      }, 100);
+    }
+  }, [, filter])
+  
+  useEffect(() => {
+    // const timer = setTimeout(() => {
+    //   if(index >= contacts.length - 1){
+    //     setIndex(0);
+    //   }else{
+    //     setIndex(index + 1);
+    //   }
+    // }, 5000);
+
+    console.log('useefect index');
+
+    let count = contacts.length - (index + numberContacts);
     
-    if((!bandDelete)  || ((phones.length === upPhones.length))){
-                
-      setUpPhones((oldArray) => [...oldArray, <PhoneContact pushPhone={pushPhone} 
-        deletePhone={deletePhone} valuePhone="" bandPlus={true} index={upPhones.length} 
-        key={upPhones.length} updateCount={updateCount} />])
+    if(count < 0){
+      count = Math.abs(count);
+      const arr1 = contacts.slice(index, index + numberContacts);
+      const arr2 = contacts.slice(0, count);
+      setFilter([...arr1, ...arr2]);
+    }else{
+      setFilter(contacts.slice(index, index + numberContacts));
     }
 
-    setBandDelete(false);
-    //setBandEdit(true);
-  }, [countFiles])
+    setTimeout(() => {
+      console.log('settiemfilter')
+      console.log(filter);
+    }, 500);
+    //return () => clearTimeout(timer);
+  }, [index])
+
+  const Previous = () => {
+    console.log('previous');
+    console.log(index);
+    if(index > 0){
+      setIndex(index -1);
+    }else{
+      setIndex(contacts.length -1);
+    }
+  }
+
+  const Next = () => {
+    console.log('next');
+    console.log(index);
+    if(index < contacts.length - 1){
+      setIndex(index+1)
+    }else{
+      setIndex(0);
+    }
+  }
+
+  const showNewContact = () => {
+    setShowContacts(<FormContact token={token} addNewContact={newContact} contact={''} updateContact={updateContactt} />)
+  }
 
   return(
-    <div className="w-full lg:w-3/4 xl:w-1/2">
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Agrega 1 o mas contactos" 
-        title="Contacto nuevo"
-      />
-      <form onSubmit={formik.handleSubmit} className="mt-4">
-      {/* <form onSubmit={() => console.log('submitttt')} className="mt-4"> */}
-        <Label htmlFor="name">Nombre</Label>
-        <Input type="text" name="name" autoFocus 
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-            <p>{formik.errors.name}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="email">Correo personal</Label>
-        <Input type="email" name="email" 
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.email && formik.errors.email ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.email}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="companyemail">Correo de empresa</Label>
-        <Input type="email" name="companyemail" 
-          value={formik.values.companyemail}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.companyemail && formik.errors.companyemail ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.companyemail}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="phone">Telefono</Label>
-        {upPhones.map((elements) => (
-          elements
-        ))}
-        {/* <PhoneContact bandPlus={} deleteFeature={} index={} pushText={} updateCount={} valueFeat="" /> */}
-        <div className="flex justify-center mt-4">
-          <Button type="submit">Guardar cambios</Button>
-        </div>
-      </form>  
-    </div>
+    <>
+      <div className="px-10 mt-2">
+        <Button onClick={showNewContact}>
+          Nuevo contacto
+        </Button>
+      </div>
+      {showContacts}
+      {/* <FormContact token={token} addNewContact={newContact} /> */}
+    </>
   )
 }

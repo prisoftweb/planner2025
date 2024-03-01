@@ -8,6 +8,9 @@ import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
 import ProviderClient from "@/components/providers/ProviderClient";
 import { getProvider } from "@/app/api/routeProviders";
+import { Provider } from "@/interfaces/Providers";
+import { getContact } from "@/app/api/routeContacts";
+import { Contact } from "@/interfaces/Contacts";
 
 interface Options{
   value: string,
@@ -20,7 +23,7 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
   
-  let provider;
+  let provider: any;
   try {
     provider = await getProvider(params.id, token);
     if(typeof(provider) === "string")

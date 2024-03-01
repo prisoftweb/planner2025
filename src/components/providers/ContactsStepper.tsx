@@ -88,6 +88,8 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
   // const [view, setView] = useState<JSX.Element>(
   //         <FormContact addNewContact={newContact} token={token} />)
 
+  const updateContact = () => {}
+
   return(
     <>
       <div className="w-full">
@@ -104,7 +106,7 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         >
           Guardar
         </button>
-        <FormContact addNewContact={newContact} token={token} />
+        <FormContact addNewContact={newContact} token={token} contact={''} updateContact={updateContact} />
         {/* {view} */}
       </div>
     </>

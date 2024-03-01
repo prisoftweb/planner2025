@@ -73,8 +73,8 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
           <option value="Otro">Otro</option>
         </Select>
         {/* <Input type="tel" /> */}
-        <CheckCircleIcon width={40} height={40} className={`text-red-500 cursor-pointer ${saved? 'invisible': ''}`} onClick={save} />
-        <PlusCircleIcon width={40} height={40} className={`text-green-500 cursor-pointer ${add? 'invisible': ''} ${bandPlus? '': 'invisible'}`} onClick={onPlus} />
+        <CheckCircleIcon width={70} height={70} className={`text-red-500 cursor-pointer ${saved? 'invisible': ''}`} onClick={save} />
+        <PlusCircleIcon width={70} height={70} className={`text-green-500 cursor-pointer ${add? 'invisible': ''} ${bandPlus? '': 'invisible'}`} onClick={onPlus} />
         <TrashIcon width={40} height={40} onClick={deletePhon} className={`text-red-500 cursor-pointer ${saved? '': 'invisible'}`} />
       </div>
       {!ok? (
