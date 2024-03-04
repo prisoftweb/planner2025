@@ -64,8 +64,8 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
     if(contacts.length === 0){
       setShowContacts(<FormContact token={token} addNewContact={newContact} contact={''} updateContact={updateContactt} />);
     }else{
-      console.log('useefect filter')
-      console.log(filter);
+      //console.log('useefect filter')
+      //console.log(filter);
       setShowContacts(<></>);
       setTimeout(() => {
         setShowContacts(
@@ -108,10 +108,10 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
       setFilter(contacts.slice(index, index + numberContacts));
     }
 
-    setTimeout(() => {
-      console.log('settiemfilter')
-      console.log(filter);
-    }, 500);
+    // setTimeout(() => {
+    //   console.log('settiemfilter')
+    //   console.log(filter);
+    // }, 500);
   }, [index])
 
   const Previous = () => {

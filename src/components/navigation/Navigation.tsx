@@ -8,8 +8,9 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import RemoveCookies from "@/app/functions/RemoveCookies"
 import NavItem from "./NavItem"
+import { User } from "@/interfaces/User"
 
-export default function Navigation(){
+export default function Navigation({user}: {user:User}){
   
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenP, setIsOpenP] = useState(false);
@@ -21,13 +22,17 @@ export default function Navigation(){
   const toggleProfile = () => {
     setIsOpenP(!isOpenP);
   }
-  
+
   let name='NOAutorizado', photo='/img/default.jpg', role='', ok=false, id='1234567890'; 
   // let name = user.name;
   // let photo = user.photo;
   // let role = user.role;
-  // let id = user._id;
-  
+  // let id = user._id;  
+
+  if(user.photo){
+    photo = user.photo;
+  }
+
   const router = useRouter();
   
   function logOut(){

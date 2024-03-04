@@ -15,3 +15,8 @@ export interface PhoneNumber{
 export interface Config{
   numRows: string;
 }
+
+export interface Options{
+  value: string,
+  label: string,
+}

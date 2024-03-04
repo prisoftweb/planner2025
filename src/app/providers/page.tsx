@@ -2,11 +2,11 @@ import WithOutProvider from "@/components/providers/WithoutProvider"
 import Navigation from "@/components/navigation/Navigation"
 import { cookies } from "next/headers"
 import TableProviders from "@/components/providers/TableProviders";
-//import HeaderProvider from "./HeaderProvider";
 import HeaderProvider from "@/components/providers/HeaderProvider";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
 import { Config } from "@/interfaces/Common";
+import { User } from "@/interfaces/User";
 
 export default async function Providers(){
   
@@ -15,6 +15,8 @@ export default async function Providers(){
 
   let id = cookieStore.get('id')?.value || '';
   
+  const user: User = JSON.parse(cookieStore.get('user')?.value ||'');
+
   let config = cookieStore.get('config')?.value || '';
   let numRows = 3;
   let objectConfig: Config;
@@ -50,7 +52,7 @@ export default async function Providers(){
   
   return(
     <>
-      <Navigation />
+      <Navigation user={user} />
       
       <div className="p-10" style={{backgroundColor:'#F8FAFC'}}>
         <HeaderProvider id={id} token={token} />

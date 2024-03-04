@@ -7,6 +7,7 @@ import Image from "next/image";
 import { getUser, getUsers } from "@/app/api/routeUser";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
+import { User } from "@/interfaces/User";
 
 interface Options{
   value: string,
@@ -18,6 +19,8 @@ export default async function Page({ params, searchParams }:
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
+
+  const userLog: User = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let user;
   let users;
@@ -56,9 +59,11 @@ export default async function Page({ params, searchParams }:
   else if(searchParams.tab==='3') res=<></>
   else res=<TabUser id={params.id} />;
 
+  //if()
+
   return(
     <>
-      <Navigation />
+      <Navigation user={userLog} />
       <div className="p-10">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -73,7 +78,7 @@ export default async function Page({ params, searchParams }:
             />
             <p className="text-slate-500 mx-3">{name}</p>
           </div>
-          <Selectize options={options} />
+          <Selectize options={options} routePage="users" />
         </div>
         <NavTab idUser={params.id} tab={searchParams.tab} />
         {res}

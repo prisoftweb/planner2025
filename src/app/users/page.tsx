@@ -11,6 +11,8 @@ export default async function Users() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
 
+  const user: User = JSON.parse(cookieStore.get('user')?.value ||'');
+
   let config = cookieStore.get('config')?.value || '';
   let numRows = 3;
   let objectConfig: Config;
@@ -55,7 +57,7 @@ export default async function Users() {
   return (
     <>
       {/* <div className="h-screen p-10" style={{backgroundColor:'#F8FAFC'}}> */}
-      <Navigation />
+      <Navigation user={user} />
       <div className="bg-slate-300 h-screen p-10">
         <TableUsers data={data} token={token} departments={departments} numRows={numRows} />
       </div>

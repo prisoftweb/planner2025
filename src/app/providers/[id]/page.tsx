@@ -7,10 +7,12 @@ import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
 import ProviderClient from "@/components/providers/ProviderClient";
-import { getProvider } from "@/app/api/routeProviders";
+import { getProvider, getProviders } from "@/app/api/routeProviders";
+//import { Provider } from "@/interfaces/Providers";
+//import { getContact } from "@/app/api/routeContacts";
+//import { Contact } from "@/interfaces/Contacts";
+import { User } from "@/interfaces/User";
 import { Provider } from "@/interfaces/Providers";
-import { getContact } from "@/app/api/routeContacts";
-import { Contact } from "@/interfaces/Contacts";
 
 interface Options{
   value: string,
@@ -22,7 +24,9 @@ export default async function Page({ params, searchParams }:
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
-  
+
+  const user: User = JSON.parse(cookieStore.get('user')?.value ||'');
+
   let provider: any;
   try {
     provider = await getProvider(params.id, token);
@@ -32,23 +36,23 @@ export default async function Page({ params, searchParams }:
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
   }
 
-  // try {
-  //   users = await getUsers(token);
-  //   if(typeof(users) === "string")
-  //     return <h1 className="text-center text-red-500">{users}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>  
-  // }
-
+  let providers: Provider[];
+  try {
+    providers = await getProviders(token);
+    if(typeof(providers) === "string")
+      return <h1 className="text-center text-red-500">{providers}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
+  }
 
   let options: Options[] = [];
-  
-  // users.map((usr: any) => {
-  //   options.push({
-  //     value: usr._id,
-  //     label: usr.name,
-  //   })
-  // })
+
+  providers.map((prov: any) => {
+    options.push({
+      value: prov._id,
+      label: prov.name,
+    })
+  })
 
   let res;
   if(searchParams.tab==='2') res=<></>
@@ -58,7 +62,7 @@ export default async function Page({ params, searchParams }:
   
   return(
     <>
-      <Navigation />
+      <Navigation user={user} />
       <div className="p-10">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -66,7 +70,7 @@ export default async function Page({ params, searchParams }:
             <IconText text={provider.name.substring(0, 2)} />
             <p className="text-slate-500 mx-3">{provider.name}</p>
           </div>
-          <Selectize options={options} />
+          <Selectize options={options} routePage="providers" />
         </div>
         <NavTab idProv={params.id} tab={searchParams.tab} />
         {res}

@@ -177,6 +177,8 @@ export async function getUsers(auth_token:string){
 export async function removeUser(id:string, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${id}`;
   
+  console.log(url, url);
+
   try {
     const res = await axios.delete(url, {
       headers: {

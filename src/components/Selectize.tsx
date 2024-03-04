@@ -3,8 +3,9 @@
 import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/navigation'
+import { Options } from '@/interfaces/Common'
 
-export default function Selectize({options}: any){
+export default function Selectize({options, routePage}: {options:Options[], routePage:string}){
   
   const router = useRouter();
 
@@ -26,8 +27,12 @@ export default function Selectize({options}: any){
     }),
   }
 
-  const onChangeUser = (value:string) => {
-    router.push(`/users/${value}?tab=1`)
+  // const onChangeUser = (value:string) => {
+  //   router.push(`/users/${value}?tab=1`)
+  // }
+
+  const onChange = (value:string) => {
+    router.push(`/${routePage}/${value}?tab=1`)
   }
   
   return(
@@ -41,7 +46,7 @@ export default function Selectize({options}: any){
         }}
         placeholder='Buscar ...'
         styles={customStyles}
-        onChange={(value:any) => onChangeUser(value.value)}
+        onChange={(value:any) => onChange(value.value)}
       />
     </>
   )

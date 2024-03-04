@@ -1,4 +1,3 @@
-import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -52,10 +51,10 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
 
     if(suppliercredit){
       tradeline = {
-        creditdays,
-        creditlimit,
-        currentbalance,
-        percentoverduedebt
+        creditdays: parseInt(creditdays),
+        creditlimit: parseInt(creditlimit),
+        currentbalance: parseInt(currentbalance),
+        percentoverduedebt: parseInt(percentoverduedebt)
       }
     }
 
