@@ -10,6 +10,9 @@ export default function Profile({photo, name, email, setOption}:
     setOption(opt);
   }
   
+  // console.log('photo profile');
+  // console.log(photo);
+
   return(
     <>
       <div className="flex flex-col items-center w-1/2 mb-2">

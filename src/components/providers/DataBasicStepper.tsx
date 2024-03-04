@@ -62,13 +62,34 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
   
   const onClickSave = async () => {
     const {name, rfc, tradename} = formik.values;
+    
+    let tradeline = {};
+
+    if(suppliercredit && state.creditline){
+      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+      tradeline = {
+        creditdays: parseInt(creditdays),
+        creditlimit: parseInt(creditlimit),
+        currentbalance: parseInt(currentbalance),
+        percentoverduedebt: parseInt(percentoverduedebt)
+      }
+    }
+    
+    let contact = [];
+    if(state.contacts){
+      contact = state.contacts;
+    }
+
     if(name && rfc && tradename){
+      
       const data = {
         name,
         rfc,
         tradename,
         suppliercredit,
         user: id,
+        tradeline,
+        contact,
       }
       const res = await SaveProvider(data, token);
       if(res.status){

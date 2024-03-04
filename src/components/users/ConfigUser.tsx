@@ -2,21 +2,19 @@ import HeaderForm from "../HeaderForm"
 import CardConfig from "./CardConfig"
 import { updateUser } from "@/app/api/routeUser"
 import { showToastMessage, showToastMessageError } from "../Alert"
-import { useRouter } from "next/navigation"
-//import DeleteUser from "./DeleteUser"
 import ButtonDeleteUser from "./ButtonDeleteUser"
 
 export default function ConfigUser({token, user, status}:{token:string, user:any, status:boolean}){ 
   
-  const router = useRouter();
-
   const changeStatus = async (value:boolean, id:string, token:string) => {
     try{
       const res = await updateUser({status:value}, token, id);
       if(res===200) {
-        status? showToastMessage('El usuario ha sido habilitado!!') : 
+        value? showToastMessage('El usuario ha sido habilitado!!') : 
                 showToastMessage('El usuario ha sido deshabilitado');
-        router.refresh();
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
       }else{
         showToastMessageError(res);
       }
@@ -24,9 +22,6 @@ export default function ConfigUser({token, user, status}:{token:string, user:any
       showToastMessageError('Ocurrio un problema al cambiar el estado del usuario!!');
     }
   }
-  
-  // const deleteUser = (id:string, token:string) => {
-  // }
 
   return(
     <>
@@ -55,9 +50,9 @@ export default function ConfigUser({token, user, status}:{token:string, user:any
             title="Habilitar usuario"
             //styleButton="bg-black rounded-full text-white w-full py-2 hover:bg-slate-700"
           >
-            <button onClick={() => changeStatus(false, user._id, token)}
+            <button onClick={() => changeStatus(true, user._id, token)}
               className="bg-black rounded-full text-white w-full py-2 hover:bg-slate-700"
-            >DESHABILITAR USUARIO</button>
+            >HABILITAR USUARIO</button>
           </CardConfig>
         )}
         <CardConfig 

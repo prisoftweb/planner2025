@@ -8,9 +8,9 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import RemoveCookies from "@/app/functions/RemoveCookies"
 import NavItem from "./NavItem"
-import { User } from "@/interfaces/User"
+import { UsrBack } from "@/interfaces/User"
 
-export default function Navigation({user}: {user:User}){
+export default function Navigation({user}: {user:UsrBack}){
   
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenP, setIsOpenP] = useState(false);
@@ -23,7 +23,7 @@ export default function Navigation({user}: {user:User}){
     setIsOpenP(!isOpenP);
   }
 
-  let name='NOAutorizado', photo='/img/default.jpg', role='', ok=false, id='1234567890'; 
+  let name='NOAutorizado', photo='/img/default.jpg', role='', ok=false, id='';
   // let name = user.name;
   // let photo = user.photo;
   // let role = user.role;
@@ -31,6 +31,10 @@ export default function Navigation({user}: {user:User}){
 
   if(user.photo){
     photo = user.photo;
+  }
+
+  if(user){
+    id = user._id;
   }
 
   const router = useRouter();
@@ -70,25 +74,25 @@ export default function Navigation({user}: {user:User}){
       {isOpenP && (
         <div className="flex justify-end">
           <div className="flex flex-col w-44 absolute z-50 text-xs bg-white border-2 border-slate-300">
-            <Link href={``} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+            <Link href={`/users/${id}?tab=1&&opt=1`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
               <div className="flex p-2 items-center">
                 <UserIcon className="w-4 h-4 mr-2 text-slate-500" />
                 Editar Perfil
               </div>
             </Link>
-            <Link href={``} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+            <Link href={`/users/${id}?tab=1&&opt=4`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
               <div className="flex p-2 items-center">
                 <Cog6ToothIcon className="w-4 h-4 mr-2 text-slate-500" />
                 Configuracion
               </div>
             </Link>
-            <Link href={``} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+            <Link href={`/users/${id}?tab=1&&opt=2`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
               <div className="flex p-2 items-center">
                 <PhotoIcon className="w-4 h-4 mr-2 text-slate-500" />
                 Cambiar foto
               </div>
             </Link>
-            <Link href={``} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+            <Link href={`/users/${id}?tab=1&&opt=3`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
               <div className="flex p-2 items-center">
                 <StarIcon className="w-2 h-2 text-slate-500" />
                 <StarIcon className="w-2 h-2 mr-2 text-slate-500" />

@@ -19,3 +19,16 @@ export interface Usr{
   },
   'email': string
 }
+
+export interface UsrBack{
+  "_id": string,
+  "name": string,
+  "email": string,
+  "photo": string,
+  "role": string,
+  "department": string,
+  "status": boolean,
+  "createAt"?: string,
+  "__v"?: number,
+  "passwordChangedAt"?: string
+}

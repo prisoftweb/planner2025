@@ -11,7 +11,7 @@ import { getProvider, getProviders } from "@/app/api/routeProviders";
 //import { Provider } from "@/interfaces/Providers";
 //import { getContact } from "@/app/api/routeContacts";
 //import { Contact } from "@/interfaces/Contacts";
-import { User } from "@/interfaces/User";
+import { UsrBack } from "@/interfaces/User";
 import { Provider } from "@/interfaces/Providers";
 
 interface Options{
@@ -25,7 +25,7 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  const user: User = JSON.parse(cookieStore.get('user')?.value ||'');
+  const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let provider: any;
   try {

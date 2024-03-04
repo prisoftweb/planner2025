@@ -11,13 +11,22 @@ import BasicBarStepper from "./BasicBarStepper";
 export default function CreditLineStepper({token, id}:{token:string, id:string}){
   
   const [state, dispatch] = useRegFormContext();
-  
+
+  let creditlimitI= '', creditdaysI='', currentbalanceI='', percentoverduedebtI=''; 
+
+  if(state.creditline){
+    creditlimitI= state.creditline.creditlimit;
+    creditdaysI= state.creditline.creditdays;
+    currentbalanceI= state.creditline.currentbalance;
+    percentoverduedebtI= state.creditline.percentoverduedebt;
+  }
+
   const formik = useFormik({
     initialValues: {
-      creditlimit:'',
-      creditdays:'',
-      currentbalance: '',
-      percentoverduedebt: ''
+      creditlimit: creditlimitI,
+      creditdays: creditdaysI,
+      currentbalance: currentbalanceI,
+      percentoverduedebt: percentoverduedebtI
     },
     validationSchema: Yup.object({
       creditlimit: Yup.string()
@@ -47,6 +56,10 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
     const {creditdays, creditlimit, currentbalance, percentoverduedebt} = formik.values;
     const {name, rfc, suppliercredit, tradename} = state.databasic;
     
+    let contact = [];
+    if(state.contacts){
+      contact = state.contacts;
+    }
     let tradeline = {};
 
     if(suppliercredit){
@@ -65,16 +78,9 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
         tradename,
         suppliercredit,
         tradeline,
-        // tradeline: {
-        //   creditdays,
-        //   creditlimit,
-        //   currentbalance,
-        //   percentoverduedebt
-        // },
         user: id,
+        contact,
       }
-      //console.log('credit line provider');
-      //console.log(JSON.stringify(data));
       const res = await SaveProvider(data, token);
       if(res.status){
         showToastMessage(res.message);

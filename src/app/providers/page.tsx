@@ -6,7 +6,7 @@ import HeaderProvider from "@/components/providers/HeaderProvider";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
 import { Config } from "@/interfaces/Common";
-import { User } from "@/interfaces/User";
+import { UsrBack } from "@/interfaces/User";
 
 export default async function Providers(){
   
@@ -15,7 +15,7 @@ export default async function Providers(){
 
   let id = cookieStore.get('id')?.value || '';
   
-  const user: User = JSON.parse(cookieStore.get('user')?.value ||'');
+  const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let config = cookieStore.get('config')?.value || '';
   let numRows = 3;

@@ -1,39 +1,26 @@
-import HeaderForm from "../HeaderForm"
-import Label from "../Label"
-import Input from "../Input"
-import { useFormik } from "formik"
-import * as Yup from 'yup';
-import Button from "../Button";
-import PhoneContact from "./PhoneContact";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRegFormContext } from "./StepperProvider";
-import { useRouter } from "next/navigation";
 import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
-//import { Contact, PhoneNumber } from "@/interfaces/Common";
-import { Contact } from "@/interfaces/Contacts";
 import FormContact from "./FormContact";
 import BasicBarStepper from "./BasicBarStepper";
-import { createContact } from "@/app/api/routeContacts";
 
 export default function ContactsStepper({id, token}: {id:string, token:string}){
   
-  const [state,] = useRegFormContext();
-  //const router = useRouter();
+  const [state, dispatch] = useRegFormContext();
   const [contacts, setContacts] = useState<string[]>([]);
   
   const onClickSave = async () => {
-    //const {emailCompany, emailContact, nameContact} = formik.values;
     const {name, rfc, suppliercredit, tradename} = state.databasic;
     let tradeline = {};
 
     if(suppliercredit){
       const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
       tradeline = {
-        creditdays,
-        creditlimit,
-        currentbalance,
-        percentoverduedebt
+        creditdays: parseInt(creditdays),
+        creditlimit: parseInt(creditlimit),
+        currentbalance: parseInt(currentbalance),
+        percentoverduedebt: parseInt(percentoverduedebt)
       }
     }
     
@@ -50,8 +37,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           user: id,
         }
 
-        //console.log('provider contactos');
-        //console.log(JSON.stringify(data));
         const res = await SaveProvider(data, token);
         if(res.status){
           showToastMessage(res.message);
@@ -71,18 +56,18 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
 
   const newContact = (newContact:string) => {
     setContacts((oldContacts) => [...oldContacts, newContact])
+    if(state.contacts){
+      dispatch({ type: 'SET_CONTACTS', data: [...state.contacts, newContact] });
+    }else{
+      dispatch({ type: 'SET_CONTACTS', data: [newContact] });
+    }
   }
-  // const [view, setView] = useState<JSX.Element>(
-  //         <FormContact addNewContact={newContact} token={token} />)
-
+  
   const updateContact = () => {}
 
   return(
     <>
       <div className="w-full">
-        {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Agrega 1 o mas contactos" 
-          title="Contacto nuevo"
-        /> */}
         <div className="mx-5">
           <BasicBarStepper index={2} />
         </div>
@@ -94,7 +79,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           Guardar
         </button>
         <FormContact addNewContact={newContact} token={token} contact={''} updateContact={updateContact} />
-        {/* {view} */}
       </div>
     </>
   )

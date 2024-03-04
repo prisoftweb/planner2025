@@ -7,20 +7,21 @@ import Image from "next/image";
 import { getUser, getUsers } from "@/app/api/routeUser";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
-import { User } from "@/interfaces/User";
+import { UsrBack } from "@/interfaces/User";
+import { Options } from "@/interfaces/Common";
 
-interface Options{
-  value: string,
-  label: string,
-}
+// interface Options{
+//   value: string,
+//   label: string,
+// }
 
 export default async function Page({ params, searchParams }: 
-                  { params: { id: string }, searchParams: { tab: string } }){
+                  { params: { id: string }, searchParams: { tab: string, opt: string } }){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  const userLog: User = JSON.parse(cookieStore.get('user')?.value ||'');
+  const userLog: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let user;
   let users;
@@ -54,10 +55,16 @@ export default async function Page({ params, searchParams }:
     })
   })
 
+  let opt = 1;
+  if(searchParams.opt==='2') opt = 2;
+  else if(searchParams.opt==='3') opt = 3;
+    else if(searchParams.opt==='4') opt = 4;
+      else opt = 1;
+
   let res;
   if(searchParams.tab==='2') res=<></>
   else if(searchParams.tab==='3') res=<></>
-  else res=<TabUser id={params.id} />;
+    else res=<TabUser id={params.id} opt={opt} />;
 
   //if()
 

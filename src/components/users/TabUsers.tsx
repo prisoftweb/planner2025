@@ -3,7 +3,7 @@ import { getUser } from "@/app/api/routeUser";
 import UserClient from "./UserClient";
 import { getDepartments } from "@/app/api/routeDepartments";
 
-export default async function TabUser({id}: {id:string}){
+export default async function TabUser({id, opt}: {id:string, opt: number}){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
@@ -28,13 +28,9 @@ export default async function TabUser({id}: {id:string}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener los departamentos!!</h1>
   }
 
-  // const photo=user.photo
-  // const name=user.name
-  // const email=user.email
-
   return(
     <>
-      <UserClient user={user} token={token} departments={departments} />
+      <UserClient user={user} token={token} departments={departments} optQuery={opt} />
     </>
   )
 }

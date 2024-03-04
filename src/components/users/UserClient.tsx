@@ -7,13 +7,13 @@ import ChangePhoto from "./ChangePhoto"
 import ChangePassword from "./ChangePassword"
 import { useState, useEffect } from "react"
 
-export default function UserClient({user, token, departments}: 
-                  {user:any, token:string, departments:any}){
+export default function UserClient({user, token, departments, optQuery}: 
+                  {user:any, token:string, departments:any, optQuery: number}){
   
   const [view, setView] = useState<JSX.Element>
                 (<UpdateProfile departments={departments} user={user} token={token} />)
 
-  const [opt, setOpt] = useState<number>(1);
+  const [opt, setOpt] = useState<number>(optQuery);
 
   useEffect(() => {
     opt===2? setView(<ChangePhoto id={user._id} token={token} />) : 
