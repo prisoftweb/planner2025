@@ -12,7 +12,7 @@ export default function Profile({photo, name, email, setOption}:
   
   // console.log('photo profile');
   // console.log(photo);
-
+  console.log('nada');
   return(
     <>
       <div className="flex flex-col items-center w-1/2 mb-2">
