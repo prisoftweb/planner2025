@@ -44,7 +44,7 @@ export default async function Users() {
   users.map((user:any) => {
     data.push({
       'id': user._id,
-      'photo': user.photo,
+      'photo': user.photo? user.photo: '/img/default.jpg',
       'name': user.name,
       'profile': {
         'role': user.role,

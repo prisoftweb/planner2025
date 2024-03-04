@@ -10,16 +10,14 @@ export default function Profile({photo, name, email, setOption}:
     setOption(opt);
   }
   
-  // console.log('photo profile');
-  // console.log(photo);
-  console.log('nada');
+  console.log('photo profile');
+  console.log(photo);
   return(
     <>
       <div className="flex flex-col items-center w-1/2 mb-2">
         <Image    
           className="rounded-full"                      
-          src={photo}
-          //src={'/img/default.jpg'}
+          src={photo? photo: '/img/default.jpg'}
           alt={name}
           width={126}
           height={126}                                    
