@@ -14,11 +14,11 @@ export default function BasicBarStepper({index}: {index:number}){
     <>
       <div>
         <ol
-          className="grid grid-cols-1 divide-x divide-gray-100 overflow-hidden rounded-lg 
-            border border-gray-100 text-sm text-gray-500 sm:grid-cols-3"
+          className="grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 
+            border border-gray-500 text-sm text-gray-500 sm:grid-cols-3"
         >
-          <li className={`flex items-center justify-center gap-2 p-4 cursor-pointer
-            ${index > 0? 'bg-green-500': ''}`}
+          <li className={`flex items-center border-r border-gray-300 justify-center 
+            gap-2 p-4 cursor-pointer ${index > 0? 'bg-green-500': ''}`}
             onClick={() => changeTab(0)}
           >
             <svg
@@ -37,7 +37,7 @@ export default function BasicBarStepper({index}: {index:number}){
             </svg>
 
             <p className="leading-none">
-              <strong className="block font-medium"> Detalles </strong>
+              <strong className="block font-medium"> Nombre </strong>
               <small className="mt-1"> Informacion basica. </small>
             </p>
           </li>
@@ -47,12 +47,12 @@ export default function BasicBarStepper({index}: {index:number}){
             onClick={() => changeTab(1)}
           >
             <span
-              className="absolute -left-2 top-1/2 hidden size-4 -translate-y-1/2 rotate-45 border border-gray-100 sm:block ltr:border-b-0 ltr:border-s-0 ltr:bg-white rtl:border-e-0 rtl:border-t-0 rtl:bg-gray-50"
+              className="absolute -left-2 top-1/2 hidden size-4 -translate-y-1/2 rotate-45 border border-gray-500 sm:block ltr:border-b-0 ltr:border-s-0 ltr:bg-gray-500 rtl:border-e-0 rtl:border-t-0 rtl:bg-gray-500"
             >
             </span>
 
             <span
-              className="absolute -right-2 top-1/2 hidden size-4 -translate-y-1/2 rotate-45 border border-gray-100 sm:block ltr:border-b-0 ltr:border-s-0 ltr:bg-gray-50 rtl:border-e-0 rtl:border-t-0 rtl:bg-white"
+              className="absolute -right-2 top-1/2 hidden size-4 -translate-y-1/2 rotate-45 border border-gray-500 sm:block ltr:border-b-0 ltr:border-s-0 ltr:bg-gray-500 rtl:border-e-0 rtl:border-t-0 rtl:bg-gray-500"
             >
             </span>
 
@@ -82,29 +82,31 @@ export default function BasicBarStepper({index}: {index:number}){
             </p>
           </li>
 
-          <li className={`flex items-center justify-center gap-2 p-4 cursor-pointer
-            ${index > 2? 'bg-green-500': ''}`}
+          <li 
             onClick={() => changeTab(2)}
           >
-            <svg
-              className="size-7 shrink-0"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-              />
-            </svg>
+            <div className={`flex items-center justify-center border-l border-gray-300
+                gap-2 p-4 cursor-pointer ${index > 2? 'bg-green-500': ''}`}>
+              <svg
+                className="size-7 shrink-0"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                />
+              </svg>
 
-            <p className="leading-none">
-              <strong className="block font-medium"> Contacto </strong>
-              <small className="mt-1"> Informacion de contacto. </small>
-            </p>
+              <p className="leading-none">
+                <strong className="block font-medium"> Contacto </strong>
+                <small className="mt-1"> Informacion de contacto. </small>
+              </p>
+            </div>
           </li>
         </ol>
       </div>

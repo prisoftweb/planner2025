@@ -59,7 +59,7 @@ export default async function Page({ params, searchParams }:
   else if(searchParams.tab==='3') res=<></>
   else if(searchParams.tab==='4') res=<></>
   else res=<ProviderClient provider={provider} token={token} id={params.id} />;
-  
+
   return(
     <>
       <Navigation user={user} />
@@ -67,7 +67,7 @@ export default async function Page({ params, searchParams }:
         <div className="flex justify-between items-center">
           <div className="flex items-center">
             <Link href={'/providers'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link>
-            <IconText text={provider.name.substring(0, 2)} />
+            <IconText text={provider.tradename} size="w-8 h-8" sizeText="" />
             <p className="text-slate-500 mx-3">{provider.name}</p>
           </div>
           <Selectize options={options} routePage="providers" />

@@ -25,7 +25,7 @@ export default function ConfigUser({token, user, status}:{token:string, user:any
 
   return(
     <>
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Acceso al sistema" 
+      <HeaderForm img="/img/user.svg" subtitle="Acceso al sistema" 
         title="Configuracion"
       />
       <div>

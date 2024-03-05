@@ -1,17 +1,27 @@
 import Card from "./Card"
 import { EnvelopeIcon, CursorArrowRaysIcon, ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/solid"
 import { Provider } from "@/interfaces/Providers"
+import CardContact from "./CardContact"
 
 export default function Sumary({provider}:{provider:Provider}){
   
   const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
   
+  let showContacts: JSX.Element[] =[];
+  
+  if(provider.contact){
+    provider.contact.map((contact) => {
+      let p = contact.phoneNumber? contact.phoneNumber[0].phoneformat : '';
+      showContacts.push(<CardContact name={contact.name} phone={p} />)
+    })
+  }
+
   return(
     <div className="w-full ">
       <div className="mt-5">
         <h1 className="text-2xl text-slate-600 font-semibold">Resumen de proveedor</h1>
         <p className="text-slate-400 text-sm">Saldos pendientes y linea de credito del proveedor</p>
-        <div className="flex items-center mt-5">
+        {/* <div className="flex items-center mt-5">
           <img src="/nuevoIcono.jpg" alt="profile" className="w-16 h-16" />
           <div className="ml-3">
             <p className="text-sm text-slate-600 font-semibold">{provider.name}</p>
@@ -19,6 +29,9 @@ export default function Sumary({provider}:{provider:Provider}){
             <p className="text-xs text-slate-400">pancho@gmail.com</p>
             <p className="text-xs text-slate-400">52+ 444 429 7227</p>
           </div>
+        </div> */}
+        <div className="flex flex-wrap gap-x-3 mt-3">
+          {showContacts}
         </div>
       </div>
       <div className="flex justify-center flex-wrap">

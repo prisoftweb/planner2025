@@ -11,7 +11,7 @@ export default function NewProvider({showForm, token, id}:
     <>      
       <div className="z-50 absolute top-0 bg-white p-3 right-0 h-full">
         <div className="flex justify-between">
-          <HeaderForm img="/nuevoIcono.jpg" subtitle="Ingresa nuevo proveedor" 
+          <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
             title="Nuevo proveedor"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />

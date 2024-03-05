@@ -66,7 +66,7 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
   return(
     <>
       {/* <Alert /> */}
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Contraseña de acceso" 
+      <HeaderForm img="/img/user.svg" subtitle="Contraseña de acceso" 
         title="Cambiar contraseña"
       />
       <form onSubmit={formik.handleSubmit} className="mt-4">

@@ -8,6 +8,7 @@ import { Provider } from "@/interfaces/Providers";
 import { useState } from "react";
 import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import CardContact from "./CardContact";
 
 export default function DataBasic({id, token, provider}:{id:string, token:string, provider:Provider}){
   
@@ -51,11 +52,23 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
     },       
   });
   
+  let showContacts: JSX.Element[] =[];
+
+  if(provider.contact){
+    provider.contact.map((contact) => {
+      let p = contact.phoneNumber? contact.phoneNumber[0].phoneformat : '';
+      showContacts.push(<CardContact name={contact.name} phone={p} />)
+    })
+  }
+
   return(
     <div className="w-full lg:w-3/4 xl:w-1/2">
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
+      <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
       />
+      <div className="flex flex-wrap gap-x-3 mt-3">
+        {showContacts}
+      </div>
       <form onSubmit={formik.handleSubmit} className="mt-4">
         <Label htmlFor="name">Nombre</Label>
         <Input type="text" name="name" autoFocus 
@@ -91,6 +104,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           </div>
         ) : null}
         <div className="inline-flex items-center">
+        <p className="mr-3">Linea de credito</p>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 peer-checked:border-green-500 peer-checked:before:bg-green-500" />

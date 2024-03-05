@@ -23,6 +23,7 @@ export interface TableProvider{
   "rfc": string,
   "account"?:string,
   "currentbalance"?: number,
+  'contacts': number,
 }
 
 export interface Tradeline{

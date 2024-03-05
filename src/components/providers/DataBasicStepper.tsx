@@ -113,13 +113,6 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
       <div className="my-5">
         <BasicBarStepper index={0} />
       </div>
-      <button type="button" 
-        onClick={onClickSave}
-        className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
-            hover:bg-slate-600"
-      >
-        Guardar
-      </button>
       <form onSubmit={formik.handleSubmit} className="mt-4">
         <Label htmlFor="name">Nombre</Label>
         <Input type="text" name="name" autoFocus 
@@ -155,6 +148,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
           </div>
         ) : null}
         <div className="inline-flex items-center">
+          <p className="mr-3">Linea de credito</p>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} 
               onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
@@ -169,10 +163,23 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
                 data-ripple-dark="true"></div>
             </label>
           </div>
-          <p className="ml-3">Linea de credito</p>
         </div>
-        <div className="flex justify-center mt-4">
-          <Button type="submit">Siguiente</Button>
+        <div className="flex justify-around mt-8">
+          {/* <button type="button" 
+            onClick={onClickSave}
+            className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
+                hover:bg-slate-600"
+          >
+            Guardar
+          </button> */}
+          <Button onClick={onClickSave}>Guardar</Button>
+          <button type="submit"
+            className="border w-40 h-10 bg-white text-slate-900 border-slate-900 rounded-full 
+            hover:bg-slate-200"
+          >
+            Siguiente
+          </button>
+          {/* <Button type="submit">Siguiente</Button> */}
         </div>
       </form>  
     </div>

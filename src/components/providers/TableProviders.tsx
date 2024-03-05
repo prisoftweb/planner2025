@@ -5,6 +5,7 @@ import Link from "next/link";
 import IconText from "./IconText";
 import { Provider, TableProvider } from "@/interfaces/Providers";
 import DeleteProvider from "./DeleteProvider";
+import NumberContacts from "./NumberContacts";
 
 export default function TableProviders({data, token, numRows}:
           {data:TableProvider[], token:string, numRows:number}){
@@ -36,7 +37,7 @@ export default function TableProviders({data, token, numRows}:
     columnHelper.accessor(row => row.id, {
       id: 'icon',
       cell: ({row}) => (
-        <IconText text={row.original.name.substring(0, 2)} />
+        <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
       ),
       enableSorting:false,
       header: ({table}:any) => (
@@ -74,6 +75,13 @@ export default function TableProviders({data, token, numRows}:
             </div>
           </div>
         </Link>       
+      ),
+    }),
+    columnHelper.accessor('contacts', {
+      header: 'Contactos',
+      id: 'contacts',
+      cell: ({row}) => (
+        <NumberContacts numContacts={row.original.contacts} />       
       ),
     }),
     columnHelper.accessor('rfc', {

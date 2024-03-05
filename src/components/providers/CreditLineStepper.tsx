@@ -103,13 +103,13 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
       <div className="my-5">
         <BasicBarStepper index={1} />
       </div>
-      <button type="button" 
+      {/* <button type="button" 
         onClick={onClickSave}
         className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
             hover:bg-slate-600"
       >
         Guardar
-      </button>
+      </button> */}
       <form onSubmit={formik.handleSubmit} className="mt-4">
         <Label htmlFor="creditlimit">Limite de credito</Label>
         <Input type="text" name="creditlimit" autoFocus 
@@ -155,9 +155,18 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
                 <p>{formik.errors.percentoverduedebt}</p>
             </div>
         ) : null}
-        <div className="flex justify-center mt-4">
-          <Button type="submit">Siguiente</Button>
+        <div className="flex justify-around mt-8">
+          <Button onClick={onClickSave}>Guardar</Button>
+          <button type="submit"
+            className="border w-40 h-10 bg-white text-slate-900 border-slate-900 rounded-full 
+            hover:bg-slate-200"
+          >
+            Siguiente
+          </button>
         </div>
+        {/* <div className="flex justify-center mt-4">
+          <Button type="submit">Siguiente</Button>
+        </div> */}
       </form>  
     </div>
   )

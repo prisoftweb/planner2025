@@ -52,7 +52,7 @@ export default function CreditLine({provider, id, token}:
   
   return(
     <div className="w-full lg:w-3/4 xl:w-1/2">
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Linea de credito de proveedor" 
+      <HeaderForm img="/img/provider.svg" subtitle="Linea de credito de proveedor" 
         title="Linea de credito"
       />
       <form onSubmit={formik.handleSubmit} className="mt-4">

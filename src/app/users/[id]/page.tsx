@@ -46,6 +46,8 @@ export default async function Page({ params, searchParams }:
   const name=user.name
   const email=user.email
 
+  
+  
   let options: Options[] = [];
   
   users.map((usr: any) => {
@@ -65,8 +67,6 @@ export default async function Page({ params, searchParams }:
   if(searchParams.tab==='2') res=<></>
   else if(searchParams.tab==='3') res=<></>
     else res=<TabUser id={params.id} opt={opt} />;
-
-  //if()
 
   return(
     <>

@@ -13,8 +13,9 @@ import { showToastMessageError } from "../Alert";
 import { Phone, Contact } from "@/interfaces/Contacts";
 import { createContact } from "@/app/api/routeContacts";
 
-export default function FormContact({addNewContact, token, contact, updateContact}: 
-                  {addNewContact:Function, token:string, contact:(Contact | string), updateContact:Function}){
+export default function FormContact({addNewContact, token, contact, updateContact, children}: 
+                  {addNewContact:Function, token:string, contact:(Contact | string), 
+                  updateContact:Function, children:JSX.Element}){
   
   let emailContactI = '';
   let nameContactI = '';
@@ -43,19 +44,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
                   .required('El nombre es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      //const {emailContact, nameContact, emailCompany} = valores;
-      
-      // const contact = {
-      //   emailContact,
-      //   nameContact,
-      //   emailCompany,
-      //   phones,
-      //   typesPhone,
-      // }
-
-      //dispatch({ type: 'SET_CONTACTS', data: contact });
-      //dispatch({type: 'INDEX_STEPPER', data: 3})
-
       let phoneNumber: Phone[] = [];
     
       phones.map((phone:string, index:number) => {
@@ -90,12 +78,10 @@ export default function FormContact({addNewContact, token, contact, updateContac
           console.log('contacto creado');
           console.log(res);
           addNewContact(res._id);
-          //idContacts.push(idc._id);
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
       }
-      //addNewContact(newContact);
       
       formik.values.emailCompany = '';
       formik.values.emailContact = '';
@@ -112,6 +98,10 @@ export default function FormContact({addNewContact, token, contact, updateContac
     },       
   });
 
+
+  console.log('formContact');
+  console.log(contact);
+
   const [phones, setPhones] = useState<string[]>([])
   const [typesPhone, setTypesPhone] = useState<string[]>([]);
   const [countFiles, setCountFiles] = useState(0);
@@ -119,6 +109,22 @@ export default function FormContact({addNewContact, token, contact, updateContac
   const [indexDelete, setIndexDelete] = useState<number>(-1);
   const [bandDelete, setBandDelete] = useState<boolean>(false);
   
+  //editando...
+  //error en el numero de telefonos
+  // useEffect(() => {
+  //   if(typeof(contact)!=='string' && contact.phoneNumber && contact.phoneNumber?.length>0){
+  //     contact.phoneNumber.map((phonecontact) => {
+  //       setPhones((oldPhone) => [...oldPhone, phonecontact.phone]);
+  //       setTypesPhone((oldTypesPhone) => [...oldTypesPhone, phonecontact.type]);
+  //       setUpPhones((oldArray) => [...oldArray, <PhoneContact pushPhone={pushPhone} 
+  //         deletePhone={deletePhone} valuePhone={phonecontact.phone} bandPlus={true} index={upPhones.length} 
+  //         key={upPhones.length} updateCount={updateCount} />])
+  //     })
+  //   }
+  // }, [])
+
+  //fin editando...
+
   const pushPhone = (phone: string, typePhone:string) => {
     setPhones((oldPhone) => [...oldPhone, phone]);
     setTypesPhone((oldTypesPhone) => [...oldTypesPhone, typePhone]);
@@ -141,49 +147,9 @@ export default function FormContact({addNewContact, token, contact, updateContac
     setBandDelete(false);
   }, [countFiles])
 
-  const newContact = () =>{
+  // const newContact = () =>{
     
-    // let phoneNumber: Phone[] = [];
-    
-    // phones.map((phone:string, index:number) => {
-    //   let phoneformat = phone.trim();
-    //   phoneformat = phoneformat.replace(/\s+/g, '');
-    //   phoneformat = phoneformat.replace('(+52)', '');
-    //   phoneNumber.push({
-    //     phone:phoneformat,
-    //     type: typesPhone[index],
-    //     phoneformat: phone
-    //   })
-    // })
-    
-
-
-    // const {emailCompany, emailContact, nameContact} = formik.values;
-    // if(!emailCompany || !emailContact || !nameContact){
-    //   showToastMessageError('Debe llenar todos los campos antes de agregar un nuevo contacto!!');
-    //   return
-    // }
-
-    // const newContact:Contact ={
-    //   email: emailContact,
-    //   name: nameContact,
-    //   companyemail: emailCompany,
-    //   phoneNumber,
-    // }
-    // addNewContact(newContact);
-    
-    // formik.values.emailCompany = '';
-    // formik.values.emailContact = '';
-    // formik.values.nameContact = '';
-    // setPhones([]);
-    // setTypesPhone([]);
-    // setUpPhones([]);
-    // setTimeout(() => {
-    //   setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
-    //     deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} 
-    //     key={0} updateCount={updateCount} />])
-    // }, 10);
-  }
+  // }
 
   const onUpdateContact = async () => {
     let phoneNumber: Phone[] = [];
@@ -215,20 +181,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
     if(typeof(contact)!=='string'){
       updateContact(newContact, contact._id);
     }
-
-    // try {
-    //   const res = await createContact(token, newContact);
-    //   if(typeof(res)==='string'){
-    //     showToastMessageError(res);
-    //   }else{
-    //     console.log('contacto creado');
-    //     console.log(res);
-    //     addNewContact(res._id);
-    //     //idContacts.push(idc._id);
-    //   }
-    // } catch (error) {
-    //   showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
-    // }
   }
   
   let button = typeof(contact)==='string'? 
@@ -274,14 +226,12 @@ export default function FormContact({addNewContact, token, contact, updateContac
         {upPhones.map((elements) => (
           elements
         ))}
-        {/* <PhoneContact bandPlus={} deleteFeature={} index={} pushText={} updateCount={} valueFeat="" /> */}
         {/* <div className="flex justify-center mt-4">
-          <Button type="submit">Siguiente</Button>
-        </div> */}
-        <div className="flex justify-center mt-4">
-          {/* <Button type="button" onClick={newContact}>Guardar contacto</Button> */}
-          {/* <Button type="submit">Guardar contacto</Button> */}
           {button}
+        </div> */}
+        <div className="flex justify-around mt-8">
+          {button}
+          {children}
         </div>
       </form>
     </>

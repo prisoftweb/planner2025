@@ -36,7 +36,7 @@ export default function ChangePhoto({id, token}: {id:string, token:string}){
 
   return(
     <>
-      <HeaderForm img="/nuevoIcono.jpg" subtitle="Modificar foto de perfil" 
+      <HeaderForm img="/img/user.svg" subtitle="Modificar foto de perfil" 
         title="Fotografia de usuario"
       />
       <div className="mt-4">

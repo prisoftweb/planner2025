@@ -35,18 +35,23 @@ export default async function Providers(){
   }  
 
   if(providers.length === 0){
-    return <WithOutProvider />
+    return <WithOutProvider id={id} token={token} />
   }
 
   let data:TableProvider[] = [];
   providers.map((prov:Provider) => {
+    
+    let nc = 0;
+    if(prov.contact) nc = prov.contact.length;
+    
     data.push({
       'id': prov._id,
-      'name': prov.name,
+      'name': prov.tradename || prov.name,
       rfc: prov.rfc,
       currentbalance: prov.tradeline.currentbalance,
       account: prov.account,
-      suppliercredit: prov.suppliercredit,   
+      suppliercredit: prov.suppliercredit,
+      'contacts': nc
     })
   })
   

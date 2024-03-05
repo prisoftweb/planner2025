@@ -14,6 +14,7 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
+import CardContact from "./CardContact";
 
 export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
   
@@ -56,41 +57,88 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
     }
   }
 
+  const showNewContact = () => {
+    setShowContacts(<FormContact token={token} addNewContact={newContact} 
+        contact={''} updateContact={updateContactt} >
+        <Button onClick={showNewContact}>
+          Nuevo contacto
+        </Button>
+      </FormContact>)
+  }
+  
   const [showContacts, setShowContacts] = useState<JSX.Element>(contacts.length > 0? 
-    <FormContact token={token} addNewContact={newContact} contact={contacts[0]} updateContact={updateContactt} /> : 
-    <FormContact token={token} addNewContact={newContact} contact={''} updateContact={updateContactt} /> );
+    <FormContact token={token} addNewContact={newContact} contact={contacts[0]} 
+      updateContact={updateContactt} >
+        <Button onClick={showNewContact}>
+          Nuevo contacto
+        </Button>
+    </FormContact> : 
+    <FormContact token={token} addNewContact={newContact} contact={''} 
+      updateContact={updateContactt} >
+        <Button onClick={showNewContact}>
+          Nuevo contacto
+        </Button>
+      </FormContact> );
 
   useEffect(() => {
     if(contacts.length === 0){
-      setShowContacts(<FormContact token={token} addNewContact={newContact} contact={''} updateContact={updateContactt} />);
+      setShowContacts(<FormContact token={token} addNewContact={newContact} 
+        contact={''} updateContact={updateContactt} >
+          <button type="button"
+            onClick={showNewContact}
+            className="border w-40 h-10 bg-white text-slate-900 border-slate-900 rounded-full 
+            hover:bg-slate-200"
+          >
+            Nuevo contacto
+          </button>
+        </FormContact>);
     }else{
-      //console.log('useefect filter')
-      //console.log(filter);
+      let showContacts: JSX.Element[] =[];
+      contacts.map((contactm) => {
+        let p = contactm.phoneNumber? contactm.phoneNumber[0].phoneformat : '';
+        showContacts.push(<CardContact name={contactm.name} phone={p} />)
+      })
+
       setShowContacts(<></>);
       setTimeout(() => {
         setShowContacts(
-          <div className="flex items-center">
-            <div className='w-20'>
-              <ChevronLeftIcon onClick={Previous}
-                className="w-12 h-12 cursor-pointer text-yellow-950" />
+          <>
+            <div className="flex flex-wrap gap-x-3 mt-3">
+              {showContacts}
             </div>
-  
-            {/* <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mt-10'> */}
-            <div className='grid gap-4 grid-cols-1 mt-10'>
-              {filter.map((contact: Contact, index:number) => (
-                <div className='' key={index}>
-                  <FormContact token={token} addNewContact={newContact} contact={contact} 
-                    updateContact={updateContactt}
-                  />
-                </div>
-              ))}
+          
+            <div className="flex items-center">
+              <div className='w-20'>
+                <ChevronLeftIcon onClick={Previous}
+                  className="w-12 h-12 cursor-pointer text-yellow-950" />
+              </div>
+    
+              {/* <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mt-10'> */}
+              <div className='grid gap-4 grid-cols-1 mt-10'>
+                {filter.map((contact: Contact, index:number) => (
+                  <div className='' key={index}>
+                    <FormContact token={token} addNewContact={newContact} contact={contact} 
+                      updateContact={updateContactt}
+                    >
+                      <button 
+                        type="button"
+                        onClick={showNewContact}
+                        className="border w-40 h-10 bg-white text-slate-900 border-slate-900 
+                          rounded-full hover:bg-slate-200"  
+                      >
+                        Nuevo contacto
+                      </button>
+                    </FormContact>
+                  </div>
+                ))}
+              </div>
+    
+              <div className='w-20'>
+                <ChevronRightIcon onClick={Next}
+                  className="w-12 h-12 cursor-pointer text-yellow-950" />
+              </div>
             </div>
-  
-            <div className='w-20'>
-              <ChevronRightIcon onClick={Next}
-                className="w-12 h-12 cursor-pointer text-yellow-950" />
-            </div>
-          </div>
+          </>
         )
       }, 100);
     }
@@ -130,17 +178,13 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
     }
   }
 
-  const showNewContact = () => {
-    setShowContacts(<FormContact token={token} addNewContact={newContact} contact={''} updateContact={updateContactt} />)
-  }
-
   return(
     <>
-      <div className="px-10 mt-2">
+      {/* <div className="px-10 mt-2">
         <Button onClick={showNewContact}>
           Nuevo contacto
         </Button>
-      </div>
+      </div> */}
       {showContacts}
       {/* <FormContact token={token} addNewContact={newContact} /> */}
     </>

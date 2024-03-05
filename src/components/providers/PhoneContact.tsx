@@ -2,9 +2,11 @@
 import { useState } from "react"
 import { PlusCircleIcon, CheckCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 //import Input from "../Input";
-import Select from "../Select";
+//import Select from "../Select";
 import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
+import Select, {components} from 'react-select'
+import { Options } from '@/interfaces/Common'
 
 export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePhone, 
                           index, updateCount}: {pushPhone:Function, valuePhone:string, 
@@ -47,6 +49,29 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
     deletePhone(index);
   }
 
+  const options:Options[] = [
+    {
+      value: 'Movil',
+      label: 'Movil'
+    },
+    {
+      value: 'Escuela',
+      label: 'Escuela'
+    },
+    {
+      value: 'Casa',
+      label: 'Casa'
+    },
+    {
+      value: 'Trabajo',
+      label: 'Trabajo'
+    },
+    {
+      value: 'Otro',
+      label: 'Otro'
+    },
+  ]
+
   return(
     <>
       <div className="flex items-center mt-2">
@@ -65,13 +90,21 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
             />
             <DevicePhoneMobileIcon className="h-6 w-6 text-amber-400 hover:text-amber-500 absolute ml-1" />
         </div>
-        <Select value={typePhone} onChange={(e) => setTypePhone(e.target.value)}>
+        <Select
+          className='w-96' 
+          options={options}
+          maxMenuHeight={200}
+          //placeholder='Buscar ...'
+          value={options[0]}
+          onChange={(value:any) => setTypePhone(value.value)}
+        />
+        {/* <Select value={typePhone} onChange={(e) => setTypePhone(e.target.value)}>
           <option value="Movil">Movil</option>
           <option value="Escuela">Escuela</option>
           <option value="Casa">Casa</option>
           <option value="Trabajo">Trabajo</option>
           <option value="Otro">Otro</option>
-        </Select>
+        </Select> */}
         {/* <Input type="tel" /> */}
         <CheckCircleIcon width={70} height={70} className={`text-red-500 cursor-pointer ${saved? 'invisible': ''}`} onClick={save} />
         <PlusCircleIcon width={70} height={70} className={`text-green-500 cursor-pointer ${add? 'invisible': ''} ${bandPlus? '': 'invisible'}`} onClick={onPlus} />

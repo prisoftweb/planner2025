@@ -71,7 +71,7 @@ export default function UpdateProfile({user, departments, token}:
   return(
     <>
       <div className="w-full lg:w-3/4 xl:w-1/2">
-        <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos personales" 
+        <HeaderForm img="/img/user.svg" subtitle="Datos personales" 
           title="Información personal"
         />
         <form onSubmit={formik.handleSubmit} className="mt-4">

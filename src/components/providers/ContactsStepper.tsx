@@ -71,14 +71,23 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         <div className="mx-5">
           <BasicBarStepper index={2} />
         </div>
-        <button type="button" 
+        {/* <button type="button" 
           onClick={onClickSave}
           className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
               hover:bg-slate-600"
         >
           Guardar
-        </button>
-        <FormContact addNewContact={newContact} token={token} contact={''} updateContact={updateContact} />
+        </button> */}
+        <FormContact addNewContact={newContact} token={token} contact={''} 
+            updateContact={updateContact} >
+          <button type="button" 
+            onClick={onClickSave}
+            className="border w-40 h-10 bg-white text-slate-900 border-slate-900 rounded-full 
+              hover:bg-slate-200"
+          >
+            Guardar
+          </button>
+        </FormContact>
       </div>
     </>
   )
