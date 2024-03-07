@@ -71,8 +71,8 @@ export default async function Page({ params, searchParams }:
   return(
     <>
       <Navigation user={userLog} />
-      <div className="p-10">
-        <div className="flex justify-between items-center">
+      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <div className="flex justify-between items-center flex-wrap">
           <div className="flex items-center">
             <Link href={'/users'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link>
             <Image 

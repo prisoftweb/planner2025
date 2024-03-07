@@ -35,7 +35,7 @@ export default function Forgot(){
   });
 
   return (
-    <div className='mt-10 flex flex-col items-center space-y-10'>
+    <div className='p-2 sm:p-3 md-p-5 lg:p-10 mt-10 flex flex-col items-center space-y-10'>
       <Alert></Alert>            
       <form className=" w-11/12 sm:w-2/3  md:w-1/2 lg:w-1/3  bg-white rounded shadow-md px-3 sm:px-8 pt-6 pb-8 mb-4"
         onSubmit={formik.handleSubmit}>                 

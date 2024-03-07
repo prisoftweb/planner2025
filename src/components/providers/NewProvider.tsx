@@ -9,7 +9,7 @@ export default function NewProvider({showForm, token, id}:
 
   return(
     <>      
-      <div className="z-50 absolute top-0 bg-white p-3 right-0 h-full">
+      <div className="z-50 absolute top-0 bg-white p-3 mx-2 right-0 h-full">
         <div className="flex justify-between">
           <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
             title="Nuevo proveedor"

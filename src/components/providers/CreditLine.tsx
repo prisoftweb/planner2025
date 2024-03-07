@@ -36,10 +36,12 @@ export default function CreditLine({provider, id, token}:
           currentbalance: parseInt(currentbalance? currentbalance: '0'),
           percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt: '0')
         }
-        console.log('tradeline', tradeline)
         const res = await updateProvider(id, token, {tradeline});
         if(res===200){
           showToastMessage('Los datos han sido actualizados!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }else{
           showToastMessageError(res);
         }
@@ -51,7 +53,7 @@ export default function CreditLine({provider, id, token}:
   });
   
   return(
-    <div className="w-full lg:w-3/4 xl:w-1/2">
+    <div className="w-full">
       <HeaderForm img="/img/provider.svg" subtitle="Linea de credito de proveedor" 
         title="Linea de credito"
       />

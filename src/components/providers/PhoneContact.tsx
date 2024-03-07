@@ -20,6 +20,8 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
   const [ok, setOk] = useState<boolean>(true);
   const [message, setMessage] = useState<string>('');
 
+  
+
   const onPlus = () =>{
     if(phone !== '' && saved){
       setAdd(true);
@@ -72,10 +74,12 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
     },
   ]
 
+  const [optionsType, setOptionsType] = useState(options[0]);
+
   return(
     <>
-      <div className="flex items-center mt-2">
-        <div className="w-full flex  justify-start items-center relative">
+      <div className="flex items-center mt-2 flex-wrap gap-y-1">
+        <div className="w-48 flex  justify-start items-center relative">
           {/* <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} 
               className="shadow appearance-none border rounded w-full py-4 px-3 text-base
                text-gray-500 leading-tight font-sans font-ligth focus:outline-none focus:shadow-outline"
@@ -91,12 +95,12 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
             <DevicePhoneMobileIcon className="h-6 w-6 text-amber-400 hover:text-amber-500 absolute ml-1" />
         </div>
         <Select
-          className='w-96' 
+          className='w-40' 
           options={options}
           maxMenuHeight={200}
           //placeholder='Buscar ...'
-          value={options[0]}
-          onChange={(value:any) => setTypePhone(value.value)}
+          value={optionsType}
+          onChange={(value:any) => {setTypePhone(value.value); setOptionsType(value)}}
         />
         {/* <Select value={typePhone} onChange={(e) => setTypePhone(e.target.value)}>
           <option value="Movil">Movil</option>
@@ -106,9 +110,9 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
           <option value="Otro">Otro</option>
         </Select> */}
         {/* <Input type="tel" /> */}
-        <CheckCircleIcon width={70} height={70} className={`text-red-500 cursor-pointer ${saved? 'invisible': ''}`} onClick={save} />
-        <PlusCircleIcon width={70} height={70} className={`text-green-500 cursor-pointer ${add? 'invisible': ''} ${bandPlus? '': 'invisible'}`} onClick={onPlus} />
-        <TrashIcon width={40} height={40} onClick={deletePhon} className={`text-red-500 cursor-pointer ${saved? '': 'invisible'}`} />
+        <CheckCircleIcon width={30} height={30} className={`text-red-500 cursor-pointer ${saved? 'invisible': ''}`} onClick={save} />
+        <PlusCircleIcon width={30} height={30} className={`text-green-500 cursor-pointer ${add? 'invisible': ''} ${bandPlus? '': 'invisible'}`} onClick={onPlus} />
+        <TrashIcon width={30} height={30} onClick={deletePhon} className={`text-red-500 cursor-pointer ${saved? '': 'invisible'}`} />
       </div>
       {!ok? (
             <p className="text-red-500">{message}</p>

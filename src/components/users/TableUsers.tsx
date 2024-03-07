@@ -86,13 +86,13 @@ export default function TableUsers({data, token, departments, numRows}:
         <Link href={`/users/${row.original.id}?tab=1`}>
           <p className="py-2">{row.original.email}</p>
         </Link>
-      )
+      ),
     }),
   ]
   
   return(
     <>
-      <div className="flex justify-between mb-5">
+      <div className="flex justify-between mb-5 flex-wrap">
         <div className="flex items-center">
           <Link href={'/'}>
             <ArrowLeftIcon className="w-8 h-8 text-slate-600" />

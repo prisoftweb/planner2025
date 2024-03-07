@@ -65,48 +65,49 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
 
   return(
     <>
-      {/* <Alert /> */}
+      <div className="w-full lg:w-3/4 xl:w-1/2">
       <HeaderForm img="/img/user.svg" subtitle="Contraseña de acceso" 
         title="Cambiar contraseña"
       />
-      <form onSubmit={formik.handleSubmit} className="mt-4">
-        <Label htmlFor="password">Contraseña actual</Label>
-        <Input type="password" name="currentPassword" autoFocus 
-          value={formik.values.currentPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.currentPassword && formik.errors.currentPassword ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-            <p>{formik.errors.currentPassword}</p>
+        <form onSubmit={formik.handleSubmit} className="mt-4">
+          <Label htmlFor="password">Contraseña actual</Label>
+          <Input type="password" name="currentPassword" autoFocus 
+            value={formik.values.currentPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.currentPassword && formik.errors.currentPassword ? (
+            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <p>{formik.errors.currentPassword}</p>
+            </div>
+          ) : null}
+          <Label htmlFor="newPassword">Nueva contraseña</Label>
+          <Input type="password" name="newPassword" 
+            value={formik.values.newPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.newPassword && formik.errors.newPassword ? (
+              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                  <p>{formik.errors.newPassword}</p>
+              </div>
+          ) : null}
+          <Label htmlFor="newPassword">Confirmar nueva contraseña</Label>
+          <Input type="password" name="confirmNewPassword" 
+            value={formik.values.confirmNewPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? (
+              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+                  <p>{formik.errors.confirmNewPassword}</p>
+              </div>
+          ) : null}
+          <div className="flex justify-center mt-4">
+            <Button type="submit">Guardar contraseña</Button>
           </div>
-        ) : null}
-        <Label htmlFor="newPassword">Nueva contraseña</Label>
-        <Input type="password" name="newPassword" 
-          value={formik.values.newPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.newPassword && formik.errors.newPassword ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.newPassword}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="newPassword">Confirmar nueva contraseña</Label>
-        <Input type="password" name="confirmNewPassword" 
-          value={formik.values.confirmNewPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.confirmNewPassword}</p>
-            </div>
-        ) : null}
-        <div className="flex justify-center mt-4">
-          <Button type="submit">Guardar contraseña</Button>
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   )
 }

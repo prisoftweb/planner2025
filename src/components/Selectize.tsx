@@ -40,7 +40,7 @@ export default function Selectize({options, routePage}: {options:Options[], rout
       <Select
         className='w-80' 
         options={options}
-        maxMenuHeight={100}
+        maxMenuHeight={250}
         components={{
           DropdownIndicator
         }}

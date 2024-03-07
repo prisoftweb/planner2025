@@ -10,13 +10,13 @@ export default function NewAccount(){
   
   return(
     <>
-      <Navigation />
+      {/* <Navigation />
       <div className="p-2 md:p-8">
         <ContainerForm img="/img/default.jpg" style="w-full md:w-2/3" subtitle="Creacion de nueva cuenta" 
           title="Nueva Cuenta">
           <FormNewAccount token={token} />
         </ContainerForm>
-      </div>
+      </div> */}
     </>
   )
 }

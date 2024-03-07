@@ -28,11 +28,11 @@ export default async function EditUser({ params }: { params: { id: string } }) {
 
   return(
     <>
-      <Navigation />
+      {/* <Navigation />
       <ContainerHeaderForm email={email} photo={photo} name={name} />
       <ContainerForm img="/img/default.jpg" subtitle="Configuraci&oacute;n de su cuenta" title="Usuario" style="w-full max-w-sm">
             <FormEditUser usr={user} token={token} />        
-      </ContainerForm>
+      </ContainerForm> */}
     </>
   ) 
 }

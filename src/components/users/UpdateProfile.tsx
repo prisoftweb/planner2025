@@ -70,7 +70,7 @@ export default function UpdateProfile({user, departments, token}:
 
   return(
     <>
-      <div className="w-full lg:w-3/4 xl:w-1/2">
+      <div className="w-full">
         <HeaderForm img="/img/user.svg" subtitle="Datos personales" 
           title="Información personal"
         />

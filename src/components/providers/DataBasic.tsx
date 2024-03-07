@@ -41,6 +41,9 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
         const res = await updateProvider(id, token, data);
         if(res===200){
           showToastMessage('La informacion del proveedor ha sido actualizada!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }else{
           showToastMessageError(res);
         }
@@ -62,7 +65,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
   }
 
   return(
-    <div className="w-full lg:w-3/4 xl:w-1/2">
+    <div className="w-full">
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
       />
@@ -104,7 +107,8 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           </div>
         ) : null}
         <div className="inline-flex items-center">
-        <p className="mr-3">Linea de credito</p>
+        {/* <p className="mr-3 text-gray-500 text-sm">Linea de credito</p> */}
+        <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 peer-checked:border-green-500 peer-checked:before:bg-green-500" />

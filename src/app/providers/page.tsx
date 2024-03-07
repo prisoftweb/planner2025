@@ -59,7 +59,7 @@ export default async function Providers(){
     <>
       <Navigation user={user} />
       
-      <div className="p-10" style={{backgroundColor:'#F8FAFC'}}>
+      <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
         <HeaderProvider id={id} token={token} />
         {/* <WithOutProvider /> */}
         <div className="mt-10">

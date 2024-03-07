@@ -46,9 +46,9 @@ export default function Navigation({user}: {user:UsrBack}){
   
   return(
     <>
-      <nav className="bg-black top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between">
+      <nav className="bg-black top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2">
         <Bars3Icon width={40} height={40} className="md:hidden cursor-pointer ml-2 rounded-md p-1 bg-slate-500 text-white" onClick={toggleNavBar} />
-        <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} priority />
+        <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} className="rounded-md" priority />
         <div className="w-1/12 md:w-9/12 flex justify-end">
           <div className="hidden w-full text-white md:flex justify-between ">
             <NavItems role={role} /> 
@@ -62,7 +62,7 @@ export default function Navigation({user}: {user:UsrBack}){
             {/* <Link href={'/issues'}><Cog8ToothIcon width={30} height={30} /></Link> */}
           </div>
           <Image src={photo} alt="profile" width={50} height={50} 
-                  onClick={toggleProfile} className="cursor-pointer"
+                  onClick={toggleProfile} className="cursor-pointer rounded-full"
           />
         </div>
       </nav>

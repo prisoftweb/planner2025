@@ -75,7 +75,7 @@ export default function NewUser({showForm, departments, token}:
 
   return(
     <>
-      <form className="z-50 absolute top-0 bg-white p-3 right-0"
+      <form className="z-50 absolute top-0 bg-white p-3 right-0 h-full"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
@@ -118,8 +118,8 @@ export default function NewUser({showForm, departments, token}:
         <Select name="department" value={department}
           onChange={(e) => setDepartment(e.target.value)}
         >
-          {departments.map((department:any) => (
-            <option value={department._id}>{department.name}</option>
+          {departments.map((department:any, index:number) => (
+            <option value={department._id} key={index}>{department.name}</option>
           ))}
         </Select>
         <Label htmlFor="password">Contraseña</Label>

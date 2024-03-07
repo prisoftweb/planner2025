@@ -148,7 +148,8 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
           </div>
         ) : null}
         <div className="inline-flex items-center">
-          <p className="mr-3">Linea de credito</p>
+          {/* <p className="mr-3">Linea de credito</p> */}
+          <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} 
               onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"

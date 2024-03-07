@@ -28,7 +28,7 @@ export default function ConfigUser({token, user, status}:{token:string, user:any
       <HeaderForm img="/img/user.svg" subtitle="Acceso al sistema" 
         title="Configuracion"
       />
-      <div>
+      <div className="w-full">
         {status? (
           <CardConfig 
             //buttonText="DESHABILITAR USUARIO"

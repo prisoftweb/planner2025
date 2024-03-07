@@ -144,7 +144,7 @@ export default function Table({data, columns, numRows}: {data: any, columns:any,
       </div>
 
       <div className="flex items-center mt-6 flex-wrap gap-4 bg-white px-6 justify-end">
-        <p>Numero de filas</p>
+        <p className="hidden sm:block">Numero de filas</p>
         <select
           value={table.getState().pagination.pageSize}
           onChange={e => { 

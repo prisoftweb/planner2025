@@ -59,7 +59,7 @@ export default async function Users() {
       {/* <div className="h-screen p-10" style={{backgroundColor:'#F8FAFC'}}> */}
       <Navigation user={user} />
       {/* <div className="bg-slate-300 h-screen p-10"> */}
-      <div className="p-10">
+      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <TableUsers data={data} token={token} departments={departments} numRows={numRows} />
       </div>
     </>

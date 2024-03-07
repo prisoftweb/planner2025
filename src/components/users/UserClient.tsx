@@ -24,11 +24,11 @@ export default function UserClient({user, token, departments, optQuery}:
   
   return(
     <>
-      <div className="flex px-5 bg-white mt-2">
-        <div className="w-1/3 md:w-1/2 mt-5">
+      <div className="flex bg-white mt-2 flex-wrap">
+        <div className="w-full p-2 max-w-xs">
           <Profile email={user.email} option={opt} name={user.name} photo={user.photo} setOption={setOpt} />
         </div>
-        <div className="w-full">
+        <div className="w-full p-2 md:max-w-md">
           {view}
         </div>
       </div>

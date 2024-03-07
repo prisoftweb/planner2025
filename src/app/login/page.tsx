@@ -48,7 +48,7 @@ export default function Login({}) {
   });
   
   return (        
-    <div>      
+    <div className='p-2 sm:p-3 md-p-5 lg:p-10'>      
       {/* <Alert></Alert> */}
       <div className="flex justify-center mt-12">
         <div className="w-full max-w-sm">

@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { showToastMessageError } from "../Alert";
 import { Phone, Contact } from "@/interfaces/Contacts";
 import { createContact } from "@/app/api/routeContacts";
+import { contactValidation } from "@/schemas/contact.schema";
 
 export default function FormContact({addNewContact, token, contact, updateContact, children}: 
                   {addNewContact:Function, token:string, contact:(Contact | string), 
@@ -35,11 +36,9 @@ export default function FormContact({addNewContact, token, contact, updateContac
     }, 
     validationSchema: Yup.object({
       emailContact: Yup.string()
-                  .email('El email no es valido')
-                  .required('El email no puede ir vacio'),
+                  .email('El email no es valido'),
       emailCompany: Yup.string()
-                  .email('El email no es valido')
-                  .required('El email no puede ir vacio'),
+                  .email('El email no es valido'),
       nameContact: Yup.string()
                   .required('El nombre es obligatorio'),
     }),
@@ -58,10 +57,10 @@ export default function FormContact({addNewContact, token, contact, updateContac
       })
       
       const {emailCompany, emailContact, nameContact} = formik.values;
-      if(!emailCompany || !emailContact || !nameContact){
-        showToastMessageError('Debe llenar todos los campos antes de agregar un nuevo contacto!!');
-        return
-      }
+      // if(!emailCompany || !emailContact || !nameContact){
+      //   showToastMessageError('Debe llenar todos los campos antes de agregar un nuevo contacto!!');
+      //   return
+      // }
 
       const newContact:Contact ={
         email: emailContact,
@@ -70,37 +69,37 @@ export default function FormContact({addNewContact, token, contact, updateContac
         phoneNumber,
       }
       
-      try {
-        const res = await createContact(token, newContact);
-        if(typeof(res)==='string'){
-          showToastMessageError(res);
-        }else{
-          console.log('contacto creado');
-          console.log(res);
-          addNewContact(res._id);
-        }
-      } catch (error) {
-        showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
+      const validation = contactValidation.safeParse(newContact);
+      if(validation.success){
+        try {
+          const res = await createContact(token, newContact);
+          if(typeof(res)==='string'){
+            showToastMessageError(res);
+          }else{
+            console.log('contacto creado');
+            console.log(res);
+            
+            addNewContact(res._id);
+            formik.values.emailCompany = '';
+            formik.values.emailContact = '';
+            formik.values.nameContact = '';
+            setPhones([]);
+            setTypesPhone([]);
+            setUpPhones([]);
+            setTimeout(() => {
+              setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
+                deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} 
+                key={0} updateCount={updateCount} />])
+            }, 10);
+          }
+        } catch (error) {
+          showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
+        } 
+      }else{
+        showToastMessageError(validation.error.issues[0].message);
       }
-      
-      formik.values.emailCompany = '';
-      formik.values.emailContact = '';
-      formik.values.nameContact = '';
-      setPhones([]);
-      setTypesPhone([]);
-      setUpPhones([]);
-      setTimeout(() => {
-        setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
-          deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} 
-          key={0} updateCount={updateCount} />])
-      }, 10);
-
     },       
   });
-
-
-  console.log('formContact');
-  console.log(contact);
 
   const [phones, setPhones] = useState<string[]>([])
   const [typesPhone, setTypesPhone] = useState<string[]>([]);
@@ -166,10 +165,10 @@ export default function FormContact({addNewContact, token, contact, updateContac
     })
     
     const {emailCompany, emailContact, nameContact} = formik.values;
-    if(!emailCompany || !emailContact || !nameContact){
-      showToastMessageError('Debe llenar todos los campos antes de actualizar contacto!!');
-      return
-    }
+    // if(!emailCompany || !emailContact || !nameContact){
+    //   showToastMessageError('Debe llenar todos los campos antes de actualizar contacto!!');
+    //   return
+    // }
 
     const newContact:Contact ={
       email: emailContact,
@@ -183,9 +182,26 @@ export default function FormContact({addNewContact, token, contact, updateContac
     }
   }
   
+  const validationUpdateContact = () => {
+    //validar cuaando se eliminen  y se editen telefonos (despues de mostrar los telefonos en pantalla)
+    const {emailCompany, emailContact, nameContact} = formik.values;
+    if(emailCompanyI !== emailCompany || emailContact !== emailContactI 
+          || nameContact !== nameContactI || phones.length > 0){
+      console.log('porque entro');
+      console.log(emailCompany, emailCompanyI);
+      console.log(emailContact, emailContactI);
+      console.log(nameContact, nameContactI);
+      console.log('len', phones.length);
+      onUpdateContact();
+    }else{
+      showToastMessageError('Realize un cambio primero!!!');
+    }
+  }
+
   let button = typeof(contact)==='string'? 
                       <Button type="submit">Guardar contacto</Button> : 
-                      <Button type="button" onClick={() => onUpdateContact()}>Actualizar contacto</Button>
+                      <Button type="button" onClick={() => validationUpdateContact()}>Actualizar contacto</Button>
+                      // <Button type="button" onClick={() => onUpdateContact()}>Actualizar contacto</Button>
   return(
     <>
       <form onSubmit={formik.handleSubmit} className="mt-2">
@@ -229,7 +245,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
         {/* <div className="flex justify-center mt-4">
           {button}
         </div> */}
-        <div className="flex justify-around mt-8">
+        <div className="flex flex-wrap gap-y-2 justify-around mt-8">
           {button}
           {children}
         </div>
