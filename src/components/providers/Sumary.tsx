@@ -10,9 +10,9 @@ export default function Sumary({provider}:{provider:Provider}){
   let showContacts: JSX.Element[] =[];
   
   if(provider.contact){
-    provider.contact.map((contact) => {
+    provider.contact.map((contact, index) => {
       let p = contact.phoneNumber? contact.phoneNumber[0].phoneformat : '';
-      showContacts.push(<CardContact name={contact.name} phone={p} />)
+      showContacts.push(<CardContact name={contact.name} phone={p} key={index} />)
     })
   }
 

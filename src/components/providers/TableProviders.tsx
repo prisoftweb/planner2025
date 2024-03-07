@@ -15,13 +15,16 @@ export default function TableProviders({data, token, numRows}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
+      maxSize: 10,
       id: 'id',
       cell: ({row}) => (
-        <div className="flex">
+        <div className="flex gap-x-2">
           <input type="checkbox" 
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           />
+          <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
+          <DeleteProvider provider={row.original} token={token} />
         </div>
       ),
       enableSorting:false,
@@ -32,29 +35,35 @@ export default function TableProviders({data, token, numRows}:
             table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
           }}
         />
-      )
-    }),
-    columnHelper.accessor(row => row.id, {
-      id: 'icon',
-      cell: ({row}) => (
-        <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
       ),
-      enableSorting:false,
-      header: ({table}:any) => (
-        <p>{' '}</p>
-      )
+      //size: 2,
+      //maxSize: 2
     }),
-    columnHelper.accessor(row => row.id, {
-      id: 'action',
-      cell: ({row}) => (
-        // <TrashIcon className="w-6 h-6 text-red-400" />
-        <DeleteProvider provider={row.original} token={token} />
-      ),
-      enableSorting:false,
-      header: ({table}:any) => (
-        <p>Accion</p>
-      )
-    }),
+    // columnHelper.accessor(row => row.id, {
+    //   id: 'icon',
+    //   cell: ({row}) => (
+    //     <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
+    //   ),
+    //   enableSorting:false,
+    //   header: ({table}:any) => (
+    //     <p>{' '}</p>
+    //   ),
+    //   size: 5,
+    //   maxSize: 5
+    // }),
+    // columnHelper.accessor(row => row.id, {
+    //   id: 'action',
+    //   cell: ({row}) => (
+    //     // <TrashIcon className="w-6 h-6 text-red-400" />
+    //     <DeleteProvider provider={row.original} token={token} />
+    //   ),
+    //   enableSorting:false,
+    //   header: ({table}:any) => (
+    //     <p>Accion</p>
+    //   ),
+    //   size: 5,
+    //   maxSize: 5
+    // }),
     columnHelper.accessor('name', {
       header: 'Nombre',
       id: 'name',

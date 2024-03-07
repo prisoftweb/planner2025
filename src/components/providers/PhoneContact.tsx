@@ -9,12 +9,35 @@ import Select, {components} from 'react-select'
 import { Options } from '@/interfaces/Common'
 
 export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePhone, 
-                          index, updateCount}: {pushPhone:Function, valuePhone:string, 
+                          index, updateCount, valueType}: {pushPhone:Function, valuePhone:string, 
                           bandPlus:boolean, deletePhone:Function, index:number, 
-                          updateCount: Function}){
+                          updateCount: Function, valueType:string}){
   
-  const [phone, setPhone] = useState<string>(valuePhone);
-  const [typePhone, setTypePhone] = useState<string>('Movil');
+  const options:Options[] = [
+    {
+      value: 'Movil',
+      label: 'Movil'
+    },
+    {
+      value: 'Escuela',
+      label: 'Escuela'
+    },
+    {
+      value: 'Casa',
+      label: 'Casa'
+    },
+    {
+      value: 'Trabajo',
+      label: 'Trabajo'
+    },
+    {
+      value: 'Otro',
+      label: 'Otro'
+    },
+  ]
+  
+  const [phone, setPhone] = useState<string>(valuePhone===''? '': valuePhone);
+  const [typePhone, setTypePhone] = useState<string>(valueType===''? options[0].value : valueType);
   const [saved, setSaved] = useState(false);
   const [add, setAdd] = useState(false);
   const [ok, setOk] = useState<boolean>(true);
@@ -50,29 +73,6 @@ export default function PhoneContact({pushPhone, valuePhone, bandPlus, deletePho
   const deletePhon = () => {
     deletePhone(index);
   }
-
-  const options:Options[] = [
-    {
-      value: 'Movil',
-      label: 'Movil'
-    },
-    {
-      value: 'Escuela',
-      label: 'Escuela'
-    },
-    {
-      value: 'Casa',
-      label: 'Casa'
-    },
-    {
-      value: 'Trabajo',
-      label: 'Trabajo'
-    },
-    {
-      value: 'Otro',
-      label: 'Otro'
-    },
-  ]
 
   const [optionsType, setOptionsType] = useState(options[0]);
 

@@ -107,9 +107,9 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
         </FormContact>);
     }else{
       let showContacts: JSX.Element[] =[];
-      contacts.map((contactm) => {
+      contacts.map((contactm, index) => {
         let p = contactm.phoneNumber? contactm.phoneNumber[0].phoneformat : '';
-        showContacts.push(<CardContact name={contactm.name} phone={p} />)
+        showContacts.push(<CardContact name={contactm.name} phone={p} key={index} />)
       })
 
       setShowContacts(<></>);

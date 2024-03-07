@@ -1,4 +1,3 @@
-import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -6,9 +5,6 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import PhoneContact from "./PhoneContact";
 import { useState, useEffect } from "react";
-//import { useRegFormContext } from "./StepperProvider";
-//import { useRouter } from "next/navigation";
-//import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessageError } from "../Alert";
 import { Phone, Contact } from "@/interfaces/Contacts";
 import { createContact } from "@/app/api/routeContacts";
@@ -57,11 +53,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
       })
       
       const {emailCompany, emailContact, nameContact} = formik.values;
-      // if(!emailCompany || !emailContact || !nameContact){
-      //   showToastMessageError('Debe llenar todos los campos antes de agregar un nuevo contacto!!');
-      //   return
-      // }
-
+      
       const newContact:Contact ={
         email: emailContact,
         name: nameContact,
@@ -69,6 +61,9 @@ export default function FormContact({addNewContact, token, contact, updateContac
         phoneNumber,
       }
       
+      // console.log('new contact')
+      // console.log(newContact);
+
       const validation = contactValidation.safeParse(newContact);
       if(validation.success){
         try {
@@ -88,7 +83,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
             setUpPhones([]);
             setTimeout(() => {
               setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
-                deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} 
+                deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} valueType=""
                 key={0} updateCount={updateCount} />])
             }, 10);
           }
@@ -107,18 +102,23 @@ export default function FormContact({addNewContact, token, contact, updateContac
   const [upPhones, setUpPhones] = useState<JSX.Element[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
   const [bandDelete, setBandDelete] = useState<boolean>(false);
-  
+  //const [bandupdate, setBandUpdate] = useState<boolean>(false);
   //editando...
   //error en el numero de telefonos
   // useEffect(() => {
   //   if(typeof(contact)!=='string' && contact.phoneNumber && contact.phoneNumber?.length>0){
+  //     setBandDelete(true);
+  //     console.log('contact useefect');
+  //     console.log(contact);
   //     contact.phoneNumber.map((phonecontact) => {
-  //       setPhones((oldPhone) => [...oldPhone, phonecontact.phone]);
-  //       setTypesPhone((oldTypesPhone) => [...oldTypesPhone, phonecontact.type]);
+  //       //setPhones((oldPhone) => [...oldPhone, phonecontact.phone]);
+  //       //setTypesPhone((oldTypesPhone) => [...oldTypesPhone, phonecontact.type]);
   //       setUpPhones((oldArray) => [...oldArray, <PhoneContact pushPhone={pushPhone} 
   //         deletePhone={deletePhone} valuePhone={phonecontact.phone} bandPlus={true} index={upPhones.length} 
-  //         key={upPhones.length} updateCount={updateCount} />])
+  //         key={upPhones.length} updateCount={updateCount} valueType={phonecontact.type} />])
   //     })
+  //   }else{
+  //     setBandUpdate(false);
   //   }
   // }, [])
 
@@ -127,28 +127,46 @@ export default function FormContact({addNewContact, token, contact, updateContac
   const pushPhone = (phone: string, typePhone:string) => {
     setPhones((oldPhone) => [...oldPhone, phone]);
     setTypesPhone((oldTypesPhone) => [...oldTypesPhone, typePhone]);
+    //
+    //setBandUpdate(false);
   }
   
   const deletePhone = (index:number) => {
     setIndexDelete(index);
   }
 
+  useEffect(() => {
+    if(indexDelete !== -1){
+    
+      const arrPhones = phones;
+      arrPhones.splice(indexDelete, 1);
+      setPhones(arrPhones);
+      
+      const arrTypes = typesPhone;
+      arrTypes.splice(indexDelete, 1);
+      setTypesPhone(arrTypes);
+
+      setBandDelete(true);
+      
+      const arrElements = upPhones;
+      arrElements.splice(indexDelete, 1);
+      setUpPhones(arrElements);      
+    }
+  }, [indexDelete])
+
   const updateCount = () => {
     setCountFiles(countFiles + 1);
   }
 
   useEffect(() => {
-    if((!bandDelete)  || ((phones.length === upPhones.length))){
+    if((!bandDelete) || ((phones.length === upPhones.length))){
+      console.log('count fieles no debe entrarrr')
       setUpPhones((oldArray) => [...oldArray, <PhoneContact pushPhone={pushPhone} 
         deletePhone={deletePhone} valuePhone="" bandPlus={true} index={upPhones.length} 
-        key={upPhones.length} updateCount={updateCount} />])
+        key={upPhones.length} updateCount={updateCount} valueType="" />])
     }
     setBandDelete(false);
   }, [countFiles])
-
-  // const newContact = () =>{
-    
-  // }
 
   const onUpdateContact = async () => {
     let phoneNumber: Phone[] = [];
@@ -165,11 +183,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
     })
     
     const {emailCompany, emailContact, nameContact} = formik.values;
-    // if(!emailCompany || !emailContact || !nameContact){
-    //   showToastMessageError('Debe llenar todos los campos antes de actualizar contacto!!');
-    //   return
-    // }
-
+    
     const newContact:Contact ={
       email: emailContact,
       name: nameContact,
@@ -187,11 +201,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
     const {emailCompany, emailContact, nameContact} = formik.values;
     if(emailCompanyI !== emailCompany || emailContact !== emailContactI 
           || nameContact !== nameContactI || phones.length > 0){
-      console.log('porque entro');
-      console.log(emailCompany, emailCompanyI);
-      console.log(emailContact, emailContactI);
-      console.log(nameContact, nameContactI);
-      console.log('len', phones.length);
       onUpdateContact();
     }else{
       showToastMessageError('Realize un cambio primero!!!');
