@@ -9,7 +9,8 @@ import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon,
 from "@heroicons/react/24/solid";
 import { setCookie } from "cookies-next";
 
-export default function Table({data, columns, numRows}: {data: any, columns:any, numRows:number}) {
+export default function Table({data, columns, numRows, placeH}: 
+                              {data: any, columns:any, numRows:number, placeH:string}) {
 
   const [sorting, setSorting] = useState<any>([]);
   const [filtering, setFiltering] = useState('')
@@ -60,7 +61,7 @@ export default function Table({data, columns, numRows}: {data: any, columns:any,
           id="default-search"
           value={filtering}
           onChange={(e) => setFiltering(e.target.value)} 
-          className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Mockups, Logos..." required ></input>
+          className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={placeH} required ></input>
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">

@@ -27,7 +27,7 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
     try {
       if(name && rfc && tradename){
         
-        const data = {
+        const data: any = {
           name,
           rfc,
           tradename,

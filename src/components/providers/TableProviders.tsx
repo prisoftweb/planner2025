@@ -124,7 +124,7 @@ export default function TableProviders({data, token, numRows}:
   
   return(
     <>
-      <Table columns={columns} data={data} numRows={numRows} /> 
+      <Table columns={columns} data={data} numRows={numRows} placeH="Buscar proveedor.." /> 
     </>
   )
 }

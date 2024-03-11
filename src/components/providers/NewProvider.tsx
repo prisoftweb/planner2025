@@ -3,13 +3,14 @@ import { XMarkIcon } from "@heroicons/react/24/solid"
 import HeaderForm from "@/components/HeaderForm";
 import StepperProvider from "./StepperProvider";
 import ContainerStepper from "./ContainerStepper";
+import NewProviderContainer from "./NewProviderContainer";
 
 export default function NewProvider({showForm, token, id}: 
                   {showForm:Function, token:string, id:string}){
 
   return(
     <>      
-      <div className="z-50 absolute top-16 bg-white p-3 right-0 h-full">
+      {/* <div className="z-50 absolute top-16 bg-white p-3 right-0 h-full">
         <div className="flex justify-between">
           <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
             title="Nuevo proveedor"
@@ -19,7 +20,10 @@ export default function NewProvider({showForm, token, id}:
         <StepperProvider>
           <ContainerStepper token={token} id={id} />
         </StepperProvider>
-      </div>
+      </div> */}
+      <StepperProvider >
+        <NewProviderContainer id={id} showForm={showForm} token={token} />
+      </StepperProvider>
     </>
   )
 }

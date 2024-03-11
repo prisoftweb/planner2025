@@ -48,6 +48,10 @@ export default async function Page({ params, searchParams }:
 
   let options: Options[] = [];
 
+  if(providers.length <= 0){
+    return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+  }
+
   providers.map((prov: any) => {
     options.push({
       value: prov._id,
