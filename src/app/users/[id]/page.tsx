@@ -9,6 +9,7 @@ import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
+import ArrowReturn from "@/components/ArrowReturn";
 
 // interface Options{
 //   value: string,
@@ -72,9 +73,10 @@ export default async function Page({ params, searchParams }:
     <>
       <Navigation user={userLog} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <div className="flex justify-between items-center flex-wrap">
+        <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center">
-            <Link href={'/users'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link>
+            <ArrowReturn link="/users" />
+            {/* <Link href={'/users'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link> */}
             <Image 
               src={photo? photo: '/img/default.jpg'}
               //src={'/img/default.jpg'}
@@ -87,7 +89,9 @@ export default async function Page({ params, searchParams }:
           </div>
           <Selectize options={options} routePage="users" />
         </div>
-        <NavTab idUser={params.id} tab={searchParams.tab} />
+        <div className="mt-3">
+          <NavTab idUser={params.id} tab={searchParams.tab} />
+        </div>
         {res}
       </div>
     </>

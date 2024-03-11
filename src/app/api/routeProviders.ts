@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Contact } from "@/interfaces/Common";
 
 export async function getProviders(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
@@ -101,5 +102,26 @@ export async function createProvider(data:Object, auth_token:string) {
     }else{
       return 'Ocurrio un error al crear proveedor!!';
     }
+  }
+}
+
+export async function updateContactProvider(data:Object, id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/insertContactOfProvider/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status===200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+    console.log(typeof(error));
+    console.log(error);
+    return 'Ocurrio un error al actulizar contacto del proveedor!!';
   }
 }

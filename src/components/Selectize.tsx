@@ -38,7 +38,7 @@ export default function Selectize({options, routePage}: {options:Options[], rout
   return(
     <>
       <Select
-        className='w-80' 
+        className='w-full max-w-md' 
         options={options}
         maxMenuHeight={250}
         components={{

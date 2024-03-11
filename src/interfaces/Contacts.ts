@@ -1,8 +1,8 @@
 export interface Contact{
   name:string,
-  email:string,
-  companyemail:string,
-  phoneNumber?: Phone[],
+  email?:string,
+  companyemail?:string,
+  phoneNumber: Phone[],
   _id?: string,
   user?: string,
   status?: boolean,

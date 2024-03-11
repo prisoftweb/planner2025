@@ -13,7 +13,7 @@ export default function ProfileProvider({provider, setOption, option}:
   
   return(
     <>
-      <div className="flex flex-col items-center w-full mb-2">
+      <div className="flex flex-col items-center w-full my-2">
         <div className="flex items-end">
           <IconText text={provider.tradename || ''} size="w-20 h-20" sizeText="text-3xl" />
           <div className={`w-4 h-4 ${provider.suppliercredit? 'bg-green-500': 'bg-red-500'}`} />
@@ -41,28 +41,28 @@ export default function ProfileProvider({provider, setOption, option}:
         </div>
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center mt-2 ${option===1? 'bg-slate-200': ''}`}
+        flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}
         onClick={() => changeOption(1)}
       >
         <Squares2X2Icon className="w-4 h-4 mr-2 text-slate-500" />
         Resumen
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center ${option===2? 'bg-slate-200': ''}`}
+        flex py-2 items-center ${option===2? 'bg-slate-200': ''}`}
         onClick={() => changeOption(2)}  
       >
         <CalendarDaysIcon className="w-4 h-4 mr-2 text-slate-500" />
         Datos basicos
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center ${option===3? 'bg-slate-200': ''}`}
+        flex py-2 items-center ${option===3? 'bg-slate-200': ''}`}
         onClick={() => changeOption(3)}
       >
         <CreditCardIcon className="w-4 h-4 mr-2 text-slate-500" />
         Linea de credito
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center ${option===4? 'bg-slate-200': ''}`}
+        flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
         onClick={() => changeOption(4)}
       >
         <IdentificationIcon className="w-4 h-4 mr-2 text-slate-500" />

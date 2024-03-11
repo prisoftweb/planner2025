@@ -16,8 +16,8 @@ const reducer = (state:any, action:any) => {
             return { ...state, creditline: { ...action.data } };
         }
         case 'SET_CONTACTS': {
-            console.log('set contacts')
-            console.log(action.data);
+            //console.log('set contacts')
+            //console.log(action.data);
             return { ...state, contacts: action.data };
         }
         case 'SET_MORE': {

@@ -24,21 +24,21 @@ export default function Profile({photo, name, email, setOption, option}:
         <p className="text-sm text-gray-500 text-center">{email}</p>
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center mt-2 ${option===1? 'bg-slate-200': ''}`}
+        flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}
         onClick={() => changeOption(1)}
       >
         <UserIcon className="w-4 h-4 mr-2 text-slate-500" />
         Editar Perfil
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center ${option===2? 'bg-slate-200': ''}`}
+        flex py-2 items-center ${option===2? 'bg-slate-200': ''}`}
         onClick={() => changeOption(2)}
       >
         <PhotoIcon className="w-4 h-4 mr-2 text-slate-500" />
         Cambiar foto
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center ${option===3? 'bg-slate-200': ''}`}
+        flex py-2 items-center ${option===3? 'bg-slate-200': ''}`}
         onClick={() => changeOption(3)}
       >
         <StarIcon className="w-2 h-2 text-slate-500" />
@@ -46,7 +46,7 @@ export default function Profile({photo, name, email, setOption, option}:
         Cambiar Contraseña
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex p-2 items-center ${option===4? 'bg-slate-200': ''}`}
+        flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
         onClick={() => changeOption(4)}
       >
         <Cog6ToothIcon className="w-4 h-4 mr-2 text-slate-500" />

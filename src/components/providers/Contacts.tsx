@@ -1,34 +1,26 @@
-// import HeaderForm from "../HeaderForm"
-// import Label from "../Label"
-// import Input from "../Input"
-// import { useFormik } from "formik"
-// import * as Yup from 'yup';
-// import Button from "../Button";
-// import PhoneContact from "./PhoneContact";
 import { useState, useEffect } from "react";
-//import { Provider } from "@/interfaces/Providers";
 import { Contact } from "@/interfaces/Contacts";
 import FormContact from "./FormContact";
-import { updateProvider } from "@/app/api/routeProviders";
+//import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
+import { updateContactProvider } from "@/app/api/routeProviders";
 import CardContact from "./CardContact";
-import { contactValidation } from "@/schemas/contact.schema";
+import { contactUpdateValidation, contactValidation } from "@/schemas/contact.schema";
 
 export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
-  
-  // console.log('contacts');
-  // console.log(contacts);
   
   const [index, setIndex] = useState(0);
   const numberContacts = 1;
   const [filter, setFilter] = useState<Contact[]>(contacts);
 
   const newContact = async (newContact:string) => {
+    console.log('nuevo contacto');
     try {
-      const res = await updateProvider(id, token, {contact: [newContact]});
+      //const res = await updateProvider(id, token, {contact: [newContact]});
+      const res = await updateContactProvider({contact: newContact}, id, token);
       if(res===200){
         showToastMessage('El proveedor ha sido actualizado!!');
         setTimeout(() => {
@@ -43,7 +35,8 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   }
 
   const updateContactt = async (data:Contact, id:string) => {
-    const validation = contactValidation.safeParse(data);
+    //const validation = contactValidation.safeParse(data);
+    const validation = contactUpdateValidation.safeParse(data);
     if(validation.success){
       try {
         const res = await updateContact(id, token, data);
@@ -106,18 +99,21 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
           </button> */}
         </FormContact>);
     }else{
-      let showContacts: JSX.Element[] =[];
+      let showConts: JSX.Element[] =[];
       contacts.map((contactm, index) => {
-        let p = contactm.phoneNumber? contactm.phoneNumber[0].phoneformat : '';
-        showContacts.push(<CardContact name={contactm.name} phone={p} key={index} />)
+        // let listP: string[] = [];
+        // contactm.phoneNumber?.map((pnumber) => {
+        //   listP.push(pnumber.phoneformat);
+        // })
+        showConts.push(<CardContact idProv={id} contact={contactm} token={token} key={index} />)
       })
 
       setShowContacts(<></>);
       setTimeout(() => {
         setShowContacts(
           <>
-            <div className="flex flex-wrap gap-x-3 mt-3">
-              {showContacts}
+            <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3">
+              {showConts}
             </div>
           
             <div className="flex items-center">

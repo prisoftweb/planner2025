@@ -65,7 +65,7 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
 
   return(
     <>
-      <div className="w-full lg:w-3/4 xl:w-1/2">
+      <div className="w-full">
       <HeaderForm img="/img/user.svg" subtitle="Contraseña de acceso" 
         title="Cambiar contraseña"
       />

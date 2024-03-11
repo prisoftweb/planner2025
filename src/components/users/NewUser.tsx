@@ -75,7 +75,7 @@ export default function NewUser({showForm, departments, token}:
 
   return(
     <>
-      <form className="z-50 absolute top-0 bg-white p-3 right-0 h-full"
+      <form className="z-50 absolute top-16 bg-white p-3 right-0 h-full"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">

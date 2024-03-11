@@ -59,8 +59,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
 
   if(provider.contact){
     provider.contact.map((contact) => {
-      let p = contact.phoneNumber? contact.phoneNumber[0].phoneformat : '';
-      showContacts.push(<CardContact name={contact.name} phone={p} />)
+      showContacts.push(<CardContact contact={contact} idProv={provider._id} token={token} />)
     })
   }
 
@@ -69,7 +68,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
       />
-      <div className="flex flex-wrap gap-x-3 mt-3">
+      <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3">
         {showContacts}
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4">

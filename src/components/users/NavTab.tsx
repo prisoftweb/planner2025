@@ -18,7 +18,7 @@ export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
   
   useEffect(() => {
     if(width < 710){
-      const icon = <div className="flex m-2 gap-x-5">
+      const icon = <div className="flex mt-3 gap-x-5 justify-between">
                       <Link href={`/users/${idUser}?tab=1`}>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-10 h-10 text-slate-600 cursor-pointer 

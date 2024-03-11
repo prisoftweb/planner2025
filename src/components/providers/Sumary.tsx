@@ -3,7 +3,7 @@ import { EnvelopeIcon, CursorArrowRaysIcon, ChatBubbleBottomCenterTextIcon } fro
 import { Provider } from "@/interfaces/Providers"
 import CardContact from "./CardContact"
 
-export default function Sumary({provider}:{provider:Provider}){
+export default function Sumary({provider, token}:{provider:Provider, token:string}){
   
   const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
   
@@ -11,8 +11,11 @@ export default function Sumary({provider}:{provider:Provider}){
   
   if(provider.contact){
     provider.contact.map((contact, index) => {
-      let p = contact.phoneNumber? contact.phoneNumber[0].phoneformat : '';
-      showContacts.push(<CardContact name={contact.name} phone={p} key={index} />)
+      // let listP: string[] = [];
+      // contact.phoneNumber.map((pnumber) => {
+      //   listP.push(pnumber.phoneformat);
+      // })
+      showContacts.push(<CardContact token={token} contact={contact} key={index} idProv={provider._id} />)
     })
   }
 
@@ -21,11 +24,11 @@ export default function Sumary({provider}:{provider:Provider}){
       <div className="mt-5">
         <h1 className="text-2xl text-slate-600 font-semibold">Resumen de proveedor</h1>
         <p className="text-slate-400 text-sm">Saldos pendientes y linea de credito del proveedor</p>
-        <div className="flex flex-wrap gap-x-3 mt-3">
+        <div className="flex flex-wrap gap-x-3 mt-3 gap-y-2">
           {showContacts}
         </div>
       </div>
-      <div className="flex justify-center flex-wrap gap-y-2">
+      <div className="flex justify-center flex-wrap gap-y-2 mt-3">
         <div className="w-72 p-1">
           <Card p1={'SALDO ACTUAL' + ' ( ' + 
             new Date(provider.tradeline.date? provider.tradeline.date: '').getDay() + ' de ' +

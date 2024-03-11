@@ -19,7 +19,7 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
   
   useEffect(() => {
     if(width < 710){
-      const icon = <div className="flex m-2 gap-x-5">
+      const icon = <div className="flex justify-between mt-3">
                       <Link href={`/providers/${idProv}?tab=1`}>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-10 h-10 text-slate-600 cursor-pointer 
@@ -28,7 +28,7 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
                       <Link href={`/providers/${idProv}?tab=2`}>
                         <DocumentChartBarIcon
                           className={`w-10 h-10 text-slate-600 cursor-pointer 
-                          ${tab==='2'? 'bg-yellow-950 rounded-lg': ''}`} />
+                          ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>
                       <Link href={`/providers/${idProv}?tab=3`}>
                         <CurrencyDollarIcon
