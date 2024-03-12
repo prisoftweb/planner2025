@@ -82,7 +82,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
 
     if(name && rfc && tradename){
       
-      const data = {
+      const data: any = {
         name,
         rfc,
         tradename,
@@ -173,7 +173,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
           >
             Guardar
           </button> */}
-          <Button onClick={onClickSave}>Guardar</Button>
+          <Button onClick={onClickSave} type="button">Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"

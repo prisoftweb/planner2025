@@ -72,7 +72,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
     }
 
     if(name && rfc && tradename){
-      const data = {
+      const data: any = {
         name,
         rfc,
         tradename,
@@ -155,8 +155,13 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
                 <p>{formik.errors.percentoverduedebt}</p>
             </div>
         ) : null}
+<<<<<<< HEAD
         <div className="flex justify-end space-x-5 mt-8">
           <Button onClick={onClickSave}>Guardar</Button>
+=======
+        <div className="flex justify-around mt-8">
+          <Button onClick={onClickSave} type="button">Guardar</Button>
+>>>>>>> refs/remotes/origin/main
           <button type="submit"
            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
            hover:bg-slate-200">

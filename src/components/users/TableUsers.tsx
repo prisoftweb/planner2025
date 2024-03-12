@@ -102,7 +102,7 @@ export default function TableUsers({data, token, departments, numRows}:
         <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
         {newUser && <NewUser showForm={setNewUser} departments={departments} token={token} />}
       </div>
-      <Table columns={columns} data={data} numRows={numRows} />
+      <Table columns={columns} data={data} numRows={numRows} placeH="Buscar usuario..." />
     </>
   )
 }

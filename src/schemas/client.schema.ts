@@ -60,133 +60,43 @@ export const clientValidation = z.object({
     stret: z.string(),
     cp: z.number(),
     community: z.string(),
-  })
+    municipy: z.string(),
+    state : z.string(),
+    country: z.string(),
+    address: z.string(),
+    description: z.string(),
+    addressref: z.string(),
+    homeref: z.string(),
+  }),
+  tags: z.string().max(35, {
+    message: 'Etiqueta debe tener maximo 35 caracteres',
+  }).min(3, {
+    message: 'Etiqueta debe tener minimo 3 caracteres',
+  }).array().optional(),
+  condition: z.object({
+    type: z.string().optional(),
+    date: z.date(),
+    user: z.string({
+      required_error: 'El status del cliente debe tener un usuario',
+    }).optional(),
+  }),
+  //contact: 
 })
 // const clientSchema = new mongoose.Schema(
-//       location
-// :
-// {
-//           stret:
-// String,
-
-//           cp:
-// Number,
-
-//           community:
-// String,
-//           municipy:
-// String,
-
-//           state:
-// String,
-
-//           country:
-// String,
-
-//           address:
-// String,
-
-//           description:
-// String,
-
-//           addressref:String,
-
-//           homeref:String
-
-//       },
-   
-
-//       tags:
-// [
-
-//           {
-
-//               type:
-// String,
-
-//               required:
-// [false,
-// 'Etiqueta del cliente
-// opcional'],
-                              
-
-//               maxlength:
-// [35,
-// 'Etiqueta debe tener
-// maximo 35 caracteres'],
-
-//               minlength:
-// [3,
-// 'Etiqueta debe tener
-// minimo 3 caracteres']
-          
-
-//           },
-
-//       ],
-
-//       condition:
-// {
-
-//           type:
-// {
-
-//               type:
-// String,
-
-//               enum:
-// ['nuevo',
-// 'activo',
-// 'inacivo'],
-
-//               default:
-// 'nuevo',
-
-//           },
-
-//           date:Date,
-
-//           user:
-// {
-
-//               type:
-// mongoose.Schema.ObjectId,
-
-//               ref:
-// 'User',
-
-//               requiered:
-// [false,
-// 'El status del cliente
-// debe tener un usuario'],
-
-//           },
-
-//       },
-     
-
 //       contact:
 // [
-
 //           {
-
 //               type:
 // mongoose.Schema.ObjectId,
-
 //               ref:
 // 'Contact',
-
 //               requiered:
 // [false,
 // 'Cliente tiene un contacto']
-
 //           }
-
 //       ],
-
 //       user:
 // {
-
 //           type:
 // mongoose.Schema.ObjectId,
 
