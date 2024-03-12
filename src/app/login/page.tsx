@@ -74,7 +74,7 @@ export default function Login({}) {
               />
             </label>
             {formik.touched.email && formik.errors.email ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.email}</p>
               </div>
             ) : null}
@@ -97,7 +97,7 @@ export default function Login({}) {
               </div>
             </div>
             {formik.touched.password && formik.errors.password ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.password}</p>
               </div>
             ) : null}

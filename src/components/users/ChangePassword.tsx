@@ -77,7 +77,7 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
             onBlur={formik.handleChange}
           />
           {formik.touched.currentPassword && formik.errors.currentPassword ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.currentPassword}</p>
             </div>
           ) : null}
@@ -88,7 +88,7 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
             onBlur={formik.handleChange}
           />
           {formik.touched.newPassword && formik.errors.newPassword ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.newPassword}</p>
               </div>
           ) : null}
@@ -99,7 +99,7 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
             onBlur={formik.handleChange}
           />
           {formik.touched.confirmNewPassword && formik.errors.confirmNewPassword ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.confirmNewPassword}</p>
               </div>
           ) : null}

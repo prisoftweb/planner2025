@@ -58,7 +58,7 @@ export default function NewProviderContainer({token, id, showForm}: {token:strin
   }
 
   return(
-    <div className="z-50 absolute top-16 bg-white p-3 right-0 h-full">
+    <div className="z-50 fixed top-2 bg-white p-3 right-0 h-screen">
       <div className="flex justify-between">
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"

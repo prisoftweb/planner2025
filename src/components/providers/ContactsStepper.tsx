@@ -82,9 +82,8 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
             updateContact={updateContact} >
           <button type="button" 
             onClick={onClickSave}
-            className="border w-40 h-10 bg-white text-slate-900 border-slate-900 rounded-full 
-              hover:bg-slate-200"
-          >
+            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
+           hover:bg-slate-200">
             Guardar
           </button>
         </FormContact>

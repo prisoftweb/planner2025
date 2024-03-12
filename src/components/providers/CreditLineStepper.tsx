@@ -96,7 +96,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
   }
 
   return(
-    <div className="w-full">
+    <div className="flex flex-col w-full ">
       {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Linea de credito de proveedor" 
         title="Linea de credito"
       /> */}
@@ -110,7 +110,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
       >
         Guardar
       </button> */}
-      <form onSubmit={formik.handleSubmit} className="mt-4">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-md md:max-w-sm">
         <Label htmlFor="creditlimit">Limite de credito</Label>
         <Input type="text" name="creditlimit" autoFocus 
           value={formik.values.creditlimit}
@@ -118,7 +118,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
           onBlur={formik.handleChange}
         />
         {formik.touched.creditlimit && formik.errors.creditlimit ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.creditlimit}</p>
           </div>
         ) : null}
@@ -129,7 +129,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
           onBlur={formik.handleChange}
         />
         {formik.touched.creditdays && formik.errors.creditdays ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.creditdays}</p>
             </div>
         ) : null}
@@ -140,7 +140,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
           onBlur={formik.handleChange}
         />
         {formik.touched.currentbalance && formik.errors.currentbalance ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.currentbalance}</p>
           </div>
         ) : null}
@@ -151,16 +151,16 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
           onBlur={formik.handleChange}
         />
         {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.percentoverduedebt}</p>
             </div>
         ) : null}
-        <div className="flex justify-around mt-8">
+        <div className="flex justify-end space-x-5 mt-8">
           <Button onClick={onClickSave} type="button">Guardar</Button>
+
           <button type="submit"
-            className="border w-40 h-10 bg-white text-slate-900 border-slate-900 rounded-full 
-            hover:bg-slate-200"
-          >
+           className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
+           hover:bg-slate-200">
             Siguiente
           </button>
         </div>

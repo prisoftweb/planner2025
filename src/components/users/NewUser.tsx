@@ -92,7 +92,7 @@ export default function NewUser({showForm, departments, token}:
           value={formik.values.name}
         />
         {formik.touched.name && formik.errors.name ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.name}</p>
           </div>
         ) : null}
@@ -103,7 +103,7 @@ export default function NewUser({showForm, departments, token}:
           value={formik.values.email}
         />
         {formik.touched.email && formik.errors.email ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.email}</p>
           </div>
         ) : null}
@@ -129,7 +129,7 @@ export default function NewUser({showForm, departments, token}:
           value={formik.values.password}
         />
         {formik.touched.password && formik.errors.password ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.password}</p>
           </div>
         ) : null}
@@ -140,7 +140,7 @@ export default function NewUser({showForm, departments, token}:
           onBlur={formik.handleChange}
         />
         {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.confirmpassword}</p>
           </div>
         ) : null}

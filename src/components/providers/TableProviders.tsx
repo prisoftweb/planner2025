@@ -80,7 +80,7 @@ export default function TableProviders({data, token, numRows}:
         <Link href={`/providers/${row.original.id}?tab=1`}>
           <div className="flex items-center">
             <div 
-              className={`w-6 h-6 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
+              className={`w-4 h-4 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
             </div>
           </div>
         </Link>       
