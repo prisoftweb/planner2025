@@ -22,22 +22,22 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
       const icon = <div className="flex justify-between mt-3">
                       <Link href={`/providers/${idProv}?tab=1`}>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>  
                       <Link href={`/providers/${idProv}?tab=2`}>
                         <DocumentChartBarIcon
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>
                       <Link href={`/providers/${idProv}?tab=3`}>
                         <CurrencyDollarIcon
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>
                       <Link href={`/providers/${idProv}?tab=4`}>
                         <CreditCardIcon
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>
                     </div>                             

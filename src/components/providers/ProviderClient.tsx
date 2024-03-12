@@ -26,11 +26,13 @@ export default function ProviderClient({provider, token, id}:
   
   return(
     <>
-      <div className="flex px-1 bg-white mt-3 flex-wrap gap-x-7">
-        <div className="w-full max-w-xs">
+      <div className="flex px-1 bg-white mt-3 flex-wrap lg:border-r-8 pr-2" style={{borderColor:'#F8FAFC'}}>
+        <div className="w-full max-w-md lg:max-w-xs ">
           <ProfileProvider option={opt} provider={provider} setOption={setOpt} />
         </div>
-        {view}
+        <div className="border-t-8 lg:border-t-0 lg:border-l-8 pl-2" style={{borderColor:'#F8FAFC'}}>
+          {view}
+        </div>        
       </div>
     </>
   )

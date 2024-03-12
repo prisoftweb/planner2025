@@ -57,7 +57,7 @@ export default function CreditLine({provider, id, token}:
       <HeaderForm img="/img/provider.svg" subtitle="Linea de credito de proveedor" 
         title="Linea de credito"
       />
-      <form onSubmit={formik.handleSubmit} className="mt-4">
+      <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 max-w-md">
         <Label htmlFor="creditlimit">Limite de credito</Label>
         <Input type="text" name="creditlimit" autoFocus 
           value={formik.values.creditlimit}

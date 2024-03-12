@@ -70,7 +70,7 @@ export default function DeleteProvider({token, provider} : {token : string, prov
   
     return(
     <>
-      <TrashIcon width={30} height={30} className="text-red-700 hover:text-red-500"
+      <TrashIcon width={21} height={21} className="text-red-700 hover:text-red-500"
         onClick={() => deleteProvider(provider.id, provider.name)}
       />
     </>

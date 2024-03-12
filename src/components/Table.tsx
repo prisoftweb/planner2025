@@ -65,15 +65,15 @@ export default function Table({data, columns, numRows, placeH}:
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="bg-blue-600 mt-4">
+        <div className="flex bg-blue-600 mt-4 justify-end p-1 pr-2">
           <button type="button" onClick={() => {
             console.log(table.getPreSelectedRowModel());
             setShowColumns(!showColumns);
           }}>
-            <AdjustmentsHorizontalIcon className="w-8 h-8 ml-2 mt-1 text-white" />
+            <AdjustmentsHorizontalIcon className="w-5 h-5 ml-2 mt-1 text-white" />
           </button>
           <div className={`${showColumns? 'relative': 'hidden'}`}>
-            <div className="absolute bg-gray-200 pr-6 pl-2 z-50">
+            <div className="absolute bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
               {table.getAllLeafColumns().map(column => {
                 return (
                   <div key={column.id} className="px-1 py-1">
@@ -101,7 +101,7 @@ export default function Table({data, columns, numRows, placeH}:
                   {
                     headerGroup.headers.map(header => (
                       <th key={header.id} 
-                        className="px-6 py-4 text-xs text-white uppercase bg-blue-600 border-b border-blue-400 
+                        className="px-6 py-4 text-xs text-white uppercase bg-gray-400 border-b border-blue-400 
                         dark:text-white"
                         onClick={header.column.getToggleSortingHandler()}
                       >
@@ -145,15 +145,15 @@ export default function Table({data, columns, numRows, placeH}:
       </div>
 
       <div className="flex items-center mt-6 flex-wrap gap-4 bg-white px-6 justify-end">
-        <p className="hidden sm:block">Numero de filas</p>
+        <p className="hidden sm:block font-light text-md">Numero de filas</p>
         <select
           value={table.getState().pagination.pageSize}
           onChange={e => { 
             table.setPageSize(Number(e.target.value));
             setCookie('config', {numRows: e.target.value})
           }}
-          className="w-16 p-2 text-lg mt-2 text-gray-900 border border-slate-300 rounded-lg 
-          bg-gray-50 focus:border-slate-700 outline-0 my-2"
+          className="w-12 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
+          bg-gray-50 focus:border-slate-700 outline-0 my-3"
         >
           {[3, 10, 20, 30, 40, 50].map(pageSize => (
             <option key={pageSize} value={pageSize}>{pageSize}</option>
@@ -165,7 +165,7 @@ export default function Table({data, columns, numRows, placeH}:
           className="border border-slate-300 text-blue-600 bg-white 
             hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
         >
-          <ChevronDoubleLeftIcon className="w-8 h-8" />
+          <ChevronDoubleLeftIcon className="w-5 h-5" />
         </button>
         
         <button type="button" 
@@ -173,7 +173,7 @@ export default function Table({data, columns, numRows, placeH}:
           className="border border-slate-300 text-blue-600 bg-white 
             hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
         >
-          <ChevronLeftIcon className="w-8 h-8" />
+          <ChevronLeftIcon className="w-5 h-5" />
         </button>
         
         <button type="button" 
@@ -181,7 +181,7 @@ export default function Table({data, columns, numRows, placeH}:
           className="border border-slate-300 text-blue-600 bg-white 
             hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
         >
-          <ChevronRightIcon className="w-8 h-8" />
+          <ChevronRightIcon className="w-5 h-5" />
         </button>
         
         <button type="button" 
@@ -189,7 +189,7 @@ export default function Table({data, columns, numRows, placeH}:
           className="border border-slate-300 text-blue-600 bg-white 
             hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
         >
-          <ChevronDoubleRightIcon className="w-8 h-8" />
+          <ChevronDoubleRightIcon className="w-5 h-5" />
         </button>
       </div>
     </div>

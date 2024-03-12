@@ -13,29 +13,31 @@ export default function ProfileProvider({provider, setOption, option}:
   
   return(
     <>
-      <div className="flex flex-col items-center w-full my-2">
-        <div className="flex items-end">
-          <IconText text={provider.tradename || ''} size="w-20 h-20" sizeText="text-3xl" />
-          <div className={`w-4 h-4 ${provider.suppliercredit? 'bg-green-500': 'bg-red-500'}`} />
+      <div className="border-b-8 pb-4 ">
+        <div className="flex flex-col items-center w-full my-2">
+          <div className="flex items-end">
+            <IconText text={provider.tradename || ''} size="w-20 h-20" sizeText="text-3xl" />
+            <div className={`w-4 h-4 ${provider.suppliercredit? 'bg-green-500': 'bg-red-500'}`} />
+          </div>
+          <p className="text-xl text-gray-800 text-center">{provider.name}</p>
+          <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.tradename}</p>
+          <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.rfc}</p>
+          <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.account}</p>
         </div>
-        <p className="text-xl text-gray-800 text-center">{provider.name}</p>
-        <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.tradename}</p>
-        <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.rfc}</p>
-        <p className="text-sm text-gray-500 leading-5 md:leading-6">{provider.account}</p>
-      </div>
-      <div className="flex justify-center">
-        <div className="flex pl-4 text-center">
-          <div className="w-40 border border-slate-300">
-            <div className="flex w-40">
-              <div className="w-1/2 bg-green-600">
-                <p className="text-white">{provider.tradeline.creditdays} days</p>
+        <div className="flex justify-center">
+          <div className="flex pl-4 text-center">
+            <div className="w-40 border border-slate-300">
+              <div className="flex w-40">
+                <div className="w-1/2 bg-green-600">
+                  <p className="text-white">{provider.tradeline.creditdays} days</p>
+                </div>
+                <div className="w-1/2 bg-slate-100">
+                  <p>{provider.tradeline.percentoverduedebt} %</p>
+                </div>
               </div>
-              <div className="w-1/2 bg-slate-100">
-                <p>{provider.tradeline.percentoverduedebt} %</p>
+              <div className="w-40">
+                <p>$ {provider.tradeline.currentbalance}</p>
               </div>
-            </div>
-            <div className="w-40">
-              <p>$ {provider.tradeline.currentbalance}</p>
             </div>
           </div>
         </div>
