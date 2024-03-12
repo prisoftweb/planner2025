@@ -65,7 +65,7 @@ export default function CreditLine({provider, id, token}:
           onBlur={formik.handleChange}
         />
         {formik.touched.creditlimit && formik.errors.creditlimit ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.creditlimit}</p>
           </div>
         ) : null}
@@ -76,7 +76,7 @@ export default function CreditLine({provider, id, token}:
           onBlur={formik.handleChange}
         />
         {formik.touched.creditdays && formik.errors.creditdays ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.creditdays}</p>
             </div>
         ) : null}
@@ -87,7 +87,7 @@ export default function CreditLine({provider, id, token}:
           onBlur={formik.handleChange}
         />
         {formik.touched.currentbalance && formik.errors.currentbalance ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.currentbalance}</p>
           </div>
         ) : null}
@@ -98,7 +98,7 @@ export default function CreditLine({provider, id, token}:
           onBlur={formik.handleChange}
         />
         {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.percentoverduedebt}</p>
             </div>
         ) : null}

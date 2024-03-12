@@ -86,7 +86,7 @@ export default function ResetPassword(){
               </input>
             </div>
             {formik.touched.password && formik.errors.password ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.password}</p>
               </div>
             ) : null}
@@ -106,7 +106,7 @@ export default function ResetPassword(){
               </input>
             </div>
             {formik.touched.confirmPassword && formik.errors.confirmPassword ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.confirmPassword}</p>
               </div>
             ) : null}

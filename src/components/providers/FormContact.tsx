@@ -301,7 +301,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
                       // <Button type="button" onClick={() => onUpdateContact()}>Actualizar contacto</Button>
   return(
     <>
-      <form onSubmit={formik.handleSubmit} className="mt-2">
+      <form onSubmit={formik.handleSubmit} className="mt-2 max-w-sm">
         <Label htmlFor="nameContact">Nombre</Label>
         <Input type="text" name="nameContact" autoFocus 
           value={formik.values.nameContact}
@@ -309,7 +309,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
           onBlur={formik.handleChange}
         />
         {formik.touched.nameContact && formik.errors.nameContact ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.nameContact}</p>
           </div>
         ) : null}
@@ -320,7 +320,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
           onBlur={formik.handleChange}
         />
         {formik.touched.emailContact && formik.errors.emailContact ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.emailContact}</p>
             </div>
         ) : null}
@@ -331,7 +331,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
           onBlur={formik.handleChange}
         />
         {formik.touched.emailCompany && formik.errors.emailCompany ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.emailCompany}</p>
             </div>
         ) : null}

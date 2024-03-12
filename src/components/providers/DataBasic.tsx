@@ -1,6 +1,7 @@
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
+import LabelRed from "../LabelRed";
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
@@ -71,43 +72,50 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
       <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3">
         {showContacts}
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4">
-        <Label htmlFor="name">Nombre</Label>
-        <Input type="text" name="name" autoFocus 
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-            <p>{formik.errors.name}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="email">Nombre comercial</Label>
-        <Input type="text" name="tradename" 
-          value={formik.values.tradename}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.tradename && formik.errors.tradename ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-                <p>{formik.errors.tradename}</p>
+      <form onSubmit={formik.handleSubmit} className="mt-4 bg-white border border-gray-200 rounded-lg shadow p-4 space-y-5">
+        <div className="">
+          <LabelRed htmlFor="name">Nombre</LabelRed>
+          <Input type="text" name="name" autoFocus 
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.name}</p>
             </div>
-        ) : null}
-        <Label htmlFor="name">RFC</Label>
-        <Input type="text" name="rfc" 
-          value={formik.values.rfc}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.rfc && formik.errors.rfc ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-            <p>{formik.errors.rfc}</p>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
+        <div className="">
+          <Label htmlFor="email">Nombre comercial</Label>
+          <Input type="text" name="tradename" 
+            value={formik.values.tradename}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.tradename && formik.errors.tradename ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.tradename}</p>
+              </div>
+          ) : null}
+        </div>
+        <div className="">
+          <Label htmlFor="name">RFC</Label>
+          <Input type="text" name="rfc" 
+            value={formik.values.rfc}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.rfc && formik.errors.rfc ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.rfc}</p>
+            </div>
+          ) : null}
+        </div>
         <div className="inline-flex items-center">
         {/* <p className="mr-3 text-gray-500 text-sm">Linea de credito</p> */}
-        <Label>Linea de credito</Label>
+
+          <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 peer-checked:border-green-500 peer-checked:before:bg-green-500" />

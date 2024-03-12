@@ -136,7 +136,7 @@ export default function FormNewAccount({token}: {token:string}){
               />
             </div>
             {formikPass.touched.name && formikPass.errors.name ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formikPass.errors.name}</p>
               </div>
             ) : null}
@@ -153,7 +153,7 @@ export default function FormNewAccount({token}: {token:string}){
               />
             </div>
             {formikPass.touched.email && formikPass.errors.email ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formikPass.errors.email}</p>
               </div>
             ) : null}
@@ -172,7 +172,7 @@ export default function FormNewAccount({token}: {token:string}){
               />
             </div>
             {formikPass.touched.password && formikPass.errors.password ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formikPass.errors.password}</p>
               </div>
             ) : null}
@@ -190,7 +190,7 @@ export default function FormNewAccount({token}: {token:string}){
               />
             </div>
             {formikPass.touched.passwordConfirm && formikPass.errors.passwordConfirm ? (
-              <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formikPass.errors.passwordConfirm}</p>
               </div>
             ) : null}

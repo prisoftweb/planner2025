@@ -113,7 +113,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
       <div className="my-5">
         <BasicBarStepper index={0} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm">
         <Label htmlFor="name">Nombre</Label>
         <Input type="text" name="name" autoFocus 
           value={formik.values.name}
@@ -121,7 +121,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
           onBlur={formik.handleChange}
         />
         {formik.touched.name && formik.errors.name ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.name}</p>
           </div>
         ) : null}
@@ -132,7 +132,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
           onBlur={formik.handleChange}
         />
         {formik.touched.tradename && formik.errors.tradename ? (
-            <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.tradename}</p>
             </div>
         ) : null}
@@ -143,7 +143,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
           onBlur={formik.handleChange}
         />
         {formik.touched.rfc && formik.errors.rfc ? (
-          <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.rfc}</p>
           </div>
         ) : null}
@@ -165,7 +165,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
             </label>
           </div>
         </div>
-        <div className="flex justify-around mt-8">
+        <div className="flex justify-end mt-8 space-x-5">
           {/* <button type="button" 
             onClick={onClickSave}
             className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
@@ -175,7 +175,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
           </button> */}
           <Button onClick={onClickSave}>Guardar</Button>
           <button type="submit"
-            className="border w-40 h-10 bg-white text-slate-900 border-slate-900 rounded-full 
+            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"
           >
             Siguiente
