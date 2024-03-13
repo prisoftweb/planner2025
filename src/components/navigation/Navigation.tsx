@@ -46,7 +46,7 @@ export default function Navigation({user}: {user:UsrBack}){
   
   return(
     <>
-      <nav className="bg-black top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2">
+      <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2">
         <Bars3Icon width={40} height={40} className="md:hidden cursor-pointer ml-2 rounded-md p-1 bg-slate-500 text-white" onClick={toggleNavBar} />
         <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} className="rounded-md" priority />
         <div className="w-1/12 md:w-9/12 flex justify-end">
@@ -115,6 +115,7 @@ const NavItems = ({role}: {role:string}) => {
     <>
       <NavItem name="Usuarios" link="/users" items={[]}/>
       <NavItem name="Proveedores" link="/providers" items={[]}/>
+      <NavItem name="Clientes" link="/clients" items={[]}/>
       <NavItem name="Gastos" link="" items={[
           {
             name: 'Costos',
@@ -130,7 +131,6 @@ const NavItems = ({role}: {role:string}) => {
           }
         ]} 
       />
-      <NavItem name="Informes" link="" items={[]}/>
       <NavItem name="Dashboard" link="" items={[]}/>
     </>
   )

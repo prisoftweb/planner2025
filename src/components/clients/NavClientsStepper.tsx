@@ -1,6 +1,6 @@
-import { useRegFormContext } from "./StepperProvider"
+import { useRegFormContext } from "./StepperClientProvider";
 
-export default function BasicBarStepper({index}: {index:number}){
+export default function NavClientsStepper({index}: {index:number}){
   
   const [state, dispatch] = useRegFormContext();
   

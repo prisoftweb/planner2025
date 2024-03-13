@@ -72,7 +72,7 @@ export default function DeleteUser({token, user} : {token : string, user:User}){
   
     return(
     <>
-      <TrashIcon width={30} height={30} className="text-red-700 hover:text-red-500"
+      <TrashIcon width={21} height={21} className="text-red-700 hover:text-red-500"
         onClick={() => deleteUser(user.id, user.name)}
       />
       {/* <button type="button" className='absolute right-9' onClick={() => {

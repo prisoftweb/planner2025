@@ -1,0 +1,77 @@
+export interface Client{
+  name:string,
+  tradename:string,
+  rfc:string,
+  //account: string,
+  logo?: string,
+  link?: string,
+  client: string,
+  email?:string,
+  phone?: string,
+  regime: string,
+  source:string,
+  sourceimg:string,
+  haslocation:boolean,
+  location: Location,
+  tags?:string[],
+  condition: Condition,
+  contact:string[],
+  user: string,
+  status?: boolean,
+}
+
+export interface ClientBack{
+  _id:string,
+  name:string,
+  tradename:string,
+  rfc:string,
+  account: string,
+  logo?: string,
+  link?: string,
+  client: string,
+  email?:string,
+  phone?: string,
+  regime: string,
+  source:string,
+  sourceimg:string,
+  haslocation:boolean,
+  location: Location,
+  tags?:string[],
+  condition: Condition,
+  contact:string[],
+  user: string,
+  status: boolean,
+  "createAt"?: string,
+  "__v"?: number,
+}
+
+export interface Location{
+  type:string,
+  coordinates:number[],
+  stret:string,
+  cp:number,
+  community:string,
+  municipy:string,
+  state:string,
+  country:string,
+  address:string,
+  description:string,
+  addressref:string,
+  homeref:string,
+}
+
+export interface Condition{
+  type:string,
+  date:Date,
+  user?:string,
+}
+
+export interface TableClient{
+  "id": string,
+  "name":string,
+  "status":boolean,
+  'contacts': number,
+  "rfc": string,
+  "account":string,
+  "currentbalance": number,
+}

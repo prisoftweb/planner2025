@@ -74,8 +74,9 @@ export default function UpdateProfile({user, departments, token}:
         <HeaderForm img="/img/user.svg" subtitle="Datos personales" 
           title="Información personal"
         />
-        <form onSubmit={formik.handleSubmit} className="mt-4">
-          <Label htmlFor="name">Nombre</Label>
+        {/* <form onSubmit={formik.handleSubmit} className="mt-4"> */}
+        <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 rounded-lg shadow p-4 space-y-5" >  
+          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input type="text" name="name" autoFocus 
             value={formik.values.name}
             onChange={formik.handleChange}
@@ -86,7 +87,7 @@ export default function UpdateProfile({user, departments, token}:
               <p>{formik.errors.name}</p>
             </div>
           ) : null}
-          <Label htmlFor="email">Usuario/Email</Label>
+          <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Usuario/Email</p></Label>
           <Input type="email" name="email" 
             value={formik.values.email}
             onChange={formik.handleChange}

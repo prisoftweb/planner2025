@@ -75,7 +75,7 @@ export default function NewUser({showForm, departments, token}:
 
   return(
     <>
-      <form className="z-50 absolute top-16 bg-white p-3 right-0 h-full"
+      <form className="z-50 top-16 absolute bg-white p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
@@ -85,7 +85,7 @@ export default function NewUser({showForm, departments, token}:
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        <Label htmlFor="name">Nombre</Label>
+        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="name" 
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
@@ -96,7 +96,7 @@ export default function NewUser({showForm, departments, token}:
             <p>{formik.errors.name}</p>
           </div>
         ) : null}
-        <Label htmlFor="email">Usuario/Email</Label>
+        <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Usuario/Email</p></Label>
         <Input type="email" name="email" 
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
@@ -122,7 +122,7 @@ export default function NewUser({showForm, departments, token}:
             <option value={department._id} key={index}>{department.name}</option>
           ))}
         </Select>
-        <Label htmlFor="password">Contraseña</Label>
+        <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Contraseña</p></Label>
         <Input name="password" type="password" 
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
@@ -133,7 +133,7 @@ export default function NewUser({showForm, departments, token}:
             <p>{formik.errors.password}</p>
           </div>
         ) : null}
-        <Label htmlFor="confirmpassword">Confirmar contraseña</Label>
+        <Label htmlFor="confirmpassword"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Confirmar contraseña</p></Label>
         <Input name="confirmpassword" type="password" 
           value={formik.values.confirmpassword}
           onChange={formik.handleChange}

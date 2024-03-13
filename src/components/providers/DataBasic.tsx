@@ -74,7 +74,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 bg-white border border-gray-200 rounded-lg shadow p-4 space-y-5">
         <div className="">
-          <LabelRed htmlFor="name">Nombre</LabelRed>
+          <LabelRed htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></LabelRed>
           <Input type="text" name="name" autoFocus 
             value={formik.values.name}
             onChange={formik.handleChange}
@@ -87,7 +87,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           ) : null}
         </div>
         <div className="">
-          <Label htmlFor="email">Nombre comercial</Label>
+          <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre comercial</p></Label>
           <Input type="text" name="tradename" 
             value={formik.values.tradename}
             onChange={formik.handleChange}
@@ -100,7 +100,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           ) : null}
         </div>
         <div className="">
-          <Label htmlFor="name">RFC</Label>
+          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">RFC</p></Label>
           <Input type="text" name="rfc" 
             value={formik.values.rfc}
             onChange={formik.handleChange}

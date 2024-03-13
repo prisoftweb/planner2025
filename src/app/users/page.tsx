@@ -5,6 +5,8 @@ import { UsrBack, User } from "@/interfaces/User";
 import { getDepartments } from "../api/routeDepartments";
 import Navigation from "@/components/navigation/Navigation";
 import { Config } from "@/interfaces/Common";
+import WithOut from "@/components/WithOut";
+import ButtonNewUser from "@/components/users/ButtonNewUser";
 
 export default async function Users() {  
 
@@ -40,6 +42,12 @@ export default async function Users() {
     return <h1 className="text-center text-red-500">Error al obtener departamentos!!</h1>
   }
 
+  if(users.length === 0 || !users){
+    return <WithOut img="/img/user.svg" subtitle="Usuarios" 
+              text="Aqui puedes gestionar tus usuarios con toda su informacion" title="Usuarios"
+            ><ButtonNewUser departments={departments} id={user._id} token={token} /></WithOut>
+  }
+  
   let data:User[] = [];
   users.map((user:any) => {
     data.push({

@@ -21,22 +21,22 @@ export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
       const icon = <div className="flex mt-3 gap-x-5 justify-between">
                       <Link href={`/users/${idUser}?tab=1`}>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>  
                       <Link href={`/users/${idUser}?tab=2`}>
                         <CurrencyDollarIcon
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='2'? 'bg-yellow-950 rounded-lg': ''}`} />
                       </Link>
                       <Link href={`/users/${idUser}?tab=3`}>
                         <QuestionMarkCircleIcon
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>
                       <Link href={`/users/${idUser}?tab=4`}>
                         <QuestionMarkCircleIcon
-                          className={`w-10 h-10 text-slate-600 cursor-pointer 
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
                       </Link>
                     </div>                             

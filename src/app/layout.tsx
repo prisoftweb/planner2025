@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       {/* <body className={inter.className}> */}
-      <body className={ibm.className}>
+      <body className={`${ibm.className} pt-16 lg:pt-12`}>
         <ToastContainer
           position="top-center"
           autoClose={5000}

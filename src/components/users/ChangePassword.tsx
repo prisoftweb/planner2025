@@ -69,8 +69,9 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
       <HeaderForm img="/img/user.svg" subtitle="Contraseña de acceso" 
         title="Cambiar contraseña"
       />
-        <form onSubmit={formik.handleSubmit} className="mt-4">
-          <Label htmlFor="password">Contraseña actual</Label>
+        {/* <form onSubmit={formik.handleSubmit} className="mt-4"> */}
+        <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 rounded-lg shadow p-4 space-y-5">
+          <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Contraseña actual</p></Label>
           <Input type="password" name="currentPassword" autoFocus 
             value={formik.values.currentPassword}
             onChange={formik.handleChange}
@@ -81,7 +82,7 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
               <p>{formik.errors.currentPassword}</p>
             </div>
           ) : null}
-          <Label htmlFor="newPassword">Nueva contraseña</Label>
+          <Label htmlFor="newPassword"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nueva contraseña</p></Label>
           <Input type="password" name="newPassword" 
             value={formik.values.newPassword}
             onChange={formik.handleChange}
@@ -92,7 +93,7 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
                   <p>{formik.errors.newPassword}</p>
               </div>
           ) : null}
-          <Label htmlFor="newPassword">Confirmar nueva contraseña</Label>
+          <Label htmlFor="newPassword"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Confirmar nueva contraseña</p></Label>
           <Input type="password" name="confirmNewPassword" 
             value={formik.values.confirmNewPassword}
             onChange={formik.handleChange}

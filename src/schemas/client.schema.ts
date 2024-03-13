@@ -80,52 +80,23 @@ export const clientValidation = z.object({
       required_error: 'El status del cliente debe tener un usuario',
     }).optional(),
   }),
-  //contact: 
+  contact: z.string().array().optional(),
+  user: z.string({
+    required_error: 'Falta el usuario que da de alta el cliente!!',
+  }),
+  status: z.boolean().optional(),
 })
 // const clientSchema = new mongoose.Schema(
-//       contact:
-// [
-//           {
-//               type:
-// mongoose.Schema.ObjectId,
-//               ref:
-// 'Contact',
-//               requiered:
-// [false,
-// 'Cliente tiene un contacto']
-//           }
-//       ],
-//       user:
-// {
-//           type:
-// mongoose.Schema.ObjectId,
-
-//           ref:
-// 'User',
-
-//           requiered:
-// [true,
-// 'Cliente lo crea un
-// usuario']
-
-//       },
-
 //       status:
 // {
-
 //           type:
 // Boolean,
-
 //           default:
 // true,
-
 //           select:
 // true,
-
 //       }
-
 //   },
-
 // });
 
 //       source:

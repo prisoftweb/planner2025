@@ -274,9 +274,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
           delete newContact.email;
         }
   
-        console.log('updatecontaccctttt');
-        console.log(JSON.stringify(newContact));
-
         if(typeof(contact)!=='string'){
           updateContact(newContact, contact._id);
         }
@@ -302,7 +299,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
   return(
     <>
       <form onSubmit={formik.handleSubmit} className="mt-2 max-w-sm">
-        <Label htmlFor="nameContact">Nombre</Label>
+        <Label htmlFor="nameContact"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="nameContact" autoFocus 
           value={formik.values.nameContact}
           onChange={formik.handleChange}
@@ -335,7 +332,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
                 <p>{formik.errors.emailCompany}</p>
             </div>
         ) : null}
-        <Label htmlFor="phone">Telefono</Label>
+        <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
         {upPhones.map((elements) => (
           elements
         ))}

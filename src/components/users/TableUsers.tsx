@@ -72,7 +72,7 @@ export default function TableUsers({data, token, departments, numRows}:
         <Link href={`/users/${row.original.id}?tab=1`}>
           <div className="flex items-center">
             <div 
-              className={`w-6 h-6 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
+              className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
             </div>
             <p>{row.original.profile.role}</p>
           </div>

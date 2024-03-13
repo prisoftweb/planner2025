@@ -114,7 +114,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
         <BasicBarStepper index={0} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm">
-        <Label htmlFor="name">Nombre</Label>
+        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="name" autoFocus 
           value={formik.values.name}
           onChange={formik.handleChange}
@@ -125,7 +125,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
             <p>{formik.errors.name}</p>
           </div>
         ) : null}
-        <Label htmlFor="email">Nombre comercial</Label>
+        <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre comercial</p></Label>
         <Input type="text" name="tradename" 
           value={formik.values.tradename}
           onChange={formik.handleChange}
@@ -136,7 +136,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
                 <p>{formik.errors.tradename}</p>
             </div>
         ) : null}
-        <Label htmlFor="name">RFC</Label>
+        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">RFC</p></Label>
         <Input type="text" name="rfc" 
           value={formik.values.rfc}
           onChange={formik.handleChange}

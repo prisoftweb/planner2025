@@ -11,17 +11,19 @@ export default function Profile({photo, name, email, setOption, option}:
   
   return(
     <>
-      <div className="flex flex-col items-center w-full mb-2">
-        <Image    
-          className="rounded-full"                      
-          src={photo? photo: '/img/default.jpg'}
-          alt={name}
-          width={126}
-          height={126}                                    
-          priority={true}                                    
-        />
-        <p className="text-xl text-gray-800 text-center">{name}</p>
-        <p className="text-sm text-gray-500 text-center">{email}</p>
+      <div className="border-b-8 pb-4 ">
+        <div className="flex flex-col items-center w-full mb-2">
+          <Image    
+            className="rounded-full"                      
+            src={photo? photo: '/img/default.jpg'}
+            alt={name}
+            width={126}
+            height={126}                                    
+            priority={true}                                    
+          />
+          <p className="text-xl text-gray-800 text-center">{name}</p>
+          <p className="text-sm text-gray-500 text-center">{email}</p>
+        </div>
       </div>
       <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
         flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}

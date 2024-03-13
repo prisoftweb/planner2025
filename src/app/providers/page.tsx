@@ -34,7 +34,7 @@ export default async function Providers(){
     return <h1 className="text-5xl text-center text-red-500 font-semibold">Error al consultar proveedores!!</h1>
   }  
 
-  if(providers.length === 0){
+  if(providers.length === 0 || !providers){
     return <WithOutProvider id={id} token={token} />
   }
 

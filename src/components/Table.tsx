@@ -73,7 +73,7 @@ export default function Table({data, columns, numRows, placeH}:
             <AdjustmentsHorizontalIcon className="w-5 h-5 ml-2 mt-1 text-white" />
           </button>
           <div className={`${showColumns? 'relative': 'hidden'}`}>
-            <div className="absolute bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
+            <div className="absolute w-40 bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
               {table.getAllLeafColumns().map(column => {
                 return (
                   <div key={column.id} className="px-1 py-1">
