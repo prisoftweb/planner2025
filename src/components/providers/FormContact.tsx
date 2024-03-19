@@ -55,8 +55,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
       
       const {emailCompany, emailContact, nameContact} = formik.values;
       
-      
-
       const newContact:Contact ={
         email: emailContact,
         name: nameContact,
@@ -298,7 +296,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
                       // <Button type="button" onClick={() => onUpdateContact()}>Actualizar contacto</Button>
   return(
     <>
-      <form onSubmit={formik.handleSubmit} className="mt-2 max-w-sm">
+      <form onSubmit={formik.handleSubmit} className="mt-2 space-y-5">
         <Label htmlFor="nameContact"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="nameContact" autoFocus 
           value={formik.values.nameContact}
@@ -336,9 +334,6 @@ export default function FormContact({addNewContact, token, contact, updateContac
         {upPhones.map((elements) => (
           elements
         ))}
-        {/* <div className="flex justify-center mt-4">
-          {button}
-        </div> */}
         <div className="flex flex-wrap gap-y-2 justify-around mt-8">
           {button}
           {children}

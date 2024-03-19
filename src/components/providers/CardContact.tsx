@@ -27,13 +27,6 @@ export default function CardContact({contact, token, idProv}: {contact:Contact, 
           <DeleteContact contact={contact} token={token} idProv={idProv} />
         </div>
         <p className="text-sm text-slate-400">{contact.name}</p>
-        {/* {listP.map((pnumber, index) => (
-          <div className="flex">
-            <DeletePhoneContact idC="" phone={contact.phoneNumber} token={token} />
-            <p className="text-sm text-slate-400" key={index}>{pnumber.pNumber}</p>
-            <Chip label={pnumber.type} />
-          </div>
-        ))} */}
         <div>
           {contact.phoneNumber.map((pnumber, index) => (
             <div className="flex items-center gap-x-2 mt-1" key={index}>

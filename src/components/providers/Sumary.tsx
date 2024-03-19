@@ -11,10 +11,6 @@ export default function Sumary({provider, token}:{provider:Provider, token:strin
   
   if(provider.contact){
     provider.contact.map((contact, index) => {
-      // let listP: string[] = [];
-      // contact.phoneNumber.map((pnumber) => {
-      //   listP.push(pnumber.phoneformat);
-      // })
       showContacts.push(<CardContact token={token} contact={contact} key={index} idProv={provider._id} />)
     })
   }

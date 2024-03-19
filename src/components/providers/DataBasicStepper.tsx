@@ -113,7 +113,7 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
       <div className="my-5">
         <BasicBarStepper index={0} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
         <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="name" autoFocus 
           value={formik.values.name}

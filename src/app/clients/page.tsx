@@ -1,13 +1,13 @@
-import { getClients } from "../api/routeClients"
+import { getClients, getTags } from "../api/routeClients"
 import { cookies } from "next/headers";
 import WithOut from "@/components/WithOut";
 import ButtonNewClient from "@/components/clients/ButtonNewClient";
 import Navigation from "@/components/navigation/Navigation";
-import { ClientBack, TableClient } from "@/interfaces/Clients";
+import { ClientBack, TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
 import Header from "@/components/Header";
 import TableClients from "@/components/clients/TableClients";
-import { Config } from "@/interfaces/Common";
+import { Config, Options } from "@/interfaces/Common";
 
 export default async function clients(){
   
@@ -24,19 +24,41 @@ export default async function clients(){
     numRows = parseInt(objectConfig.numRows);
   }
 
+  let tags;
+  try {
+    tags = await getTags(token);
+    if(typeof(tags)==='string'){
+      return <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+  }
+  
+  let arrTags: Options[] = [];
+  if(tags.length > 0){
+    tags.map((tag:Tag) => {
+      arrTags.push({
+        'label': tag.name,
+        'value': tag._id,
+      })
+    })
+  }else{
+    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+  }
+
   let clients;
   try {
     clients = await getClients(token);
   } catch (error) {
     return <WithOut img="/img/clientes.svg" subtitle="Clientes" 
               text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-              title="Clientes"><ButtonNewClient token={token} id={user._id} /></WithOut>
+              title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
   }
 
   if(!clients || clients.length<= 0){
     return <WithOut img="/img/clientes.svg" subtitle="Clientes" 
               text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-              title="Clientes"><ButtonNewClient token={token} id={user._id} /></WithOut>
+              title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
   }
   
   let data:TableClient[] = [];
@@ -55,9 +77,9 @@ export default async function clients(){
   return (
     <>
       <Navigation user={user} />
-            
+      
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title="Clientes"><ButtonNewClient id={user._id} token={token} /></Header>
+        <Header title="Clientes"><ButtonNewClient id={user._id} token={token} tags={arrTags} /></Header>
         <div className="mt-10">
           <TableClients data={data} token={token} numRows={numRows} />
         </div>

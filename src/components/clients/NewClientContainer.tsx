@@ -4,8 +4,10 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerClientStepper from "./ContainerClientStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
+import { Options } from "@/interfaces/Common";
 
-export default function NewClientContainer({token, id, showForm}: {token:string, id:string, showForm:Function}){
+export default function NewClientContainer({token, id, showForm, tags}: 
+                            {token:string, id:string, showForm:Function, tags:Options[]}){
   const [state] = useRegFormContext();
 
   const closeForm = () => {
@@ -63,7 +65,7 @@ export default function NewClientContainer({token, id, showForm}: {token:string,
         />
         <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />
       </div>
-      <ContainerClientStepper token={token} id={id} />
+      <ContainerClientStepper token={token} id={id} tags={tags} />
     </div>
   )
 }

@@ -110,7 +110,7 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
       >
         Guardar
       </button> */}
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-md md:max-w-sm">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-md space-y-5">
         <Label htmlFor="creditlimit">Limite de credito</Label>
         <Input type="text" name="creditlimit" autoFocus 
           value={formik.values.creditlimit}

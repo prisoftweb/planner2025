@@ -12,7 +12,6 @@ export default function NewProviderContainer({token, id, showForm}: {token:strin
     
     console.log(state.contacts);
     if(state.contacts){
-      console.log('aui')
       confirmAlert({
         title: 'Confirmacion para cerrar formulario?',
         message: `Desea cerrar el formulario y perder los datos guardados?`,
@@ -58,7 +57,7 @@ export default function NewProviderContainer({token, id, showForm}: {token:strin
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-lg fixed top-16 bg-white p-3 right-0 h-screen">
+    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen">
       <div className="flex justify-between">
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"

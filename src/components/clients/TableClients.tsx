@@ -2,10 +2,10 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import Link from "next/link";
-import { TrashIcon } from "@heroicons/react/24/solid";
 import NumberContacts from "../providers/NumberContacts";
 import IconText from "../providers/IconText";
 import { TableClient } from "@/interfaces/Clients";
+import DeleteClient from "./DeleteClient";
 
 export default function TableClients({data, token, numRows}:
                         {data:TableClient[], token:string, numRows:number}){
@@ -37,8 +37,7 @@ export default function TableClients({data, token, numRows}:
     columnHelper.accessor(row => row.id, {
       id: 'action',
       cell: ({row}) => (
-        // <DeleteUser token={token} user={row.original} />
-        <TrashIcon className="w-6 h-6 text-red-400" />
+        <DeleteClient client={row.original} token={token} />
       ),
       enableSorting:false,
       header: () => (

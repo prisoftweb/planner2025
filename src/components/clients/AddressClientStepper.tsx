@@ -1,0 +1,239 @@
+import Button from "../Button";
+import NavClientsStepper from "./NavClientsStepper";
+import { useFormik } from "formik"
+import * as Yup from 'yup';
+import { useRegFormContext } from "./StepperClientProvider";
+import Label from "../Label";
+import Input from "../Input";
+import SaveClient from "@/app/functions/SaveClient";
+import { showToastMessage, showToastMessageError } from "../Alert";
+
+export default function AddressClientStepper({token}:{token:string}){
+  
+  const [state, dispatch] = useRegFormContext();
+
+  let stretI = '';
+  let cpI = '';
+  let municipyI = '';
+  let countryI= '';
+  let communityI = '';
+  let stateSI = '';
+
+  if(state.address){
+    stretI = state.address.stret;
+    cpI = state.address.cp;
+    municipyI = state.address.municipy;
+    countryI = state.address.country? state.address.country : '';
+    communityI = state.address.community;
+    stateSI = state.address.stateS? state.address.stateS: '';
+  }
+  
+  const formik = useFormik({
+    initialValues: {
+      stret:stretI,
+      cp:cpI,
+      municipy: municipyI,
+      country: countryI,
+      community: communityI,
+      stateS: stateSI,
+    }, 
+    validationSchema: Yup.object({
+      stret: Yup.string()
+                  .required('La calle no puede ir vacia'),
+      cp: Yup.string()
+                  .required('El codigo postal es obligatorio'),
+      municipy: Yup.string()
+                  .required('El municipio no puede ir vacio'),
+      country: Yup.string()
+                  .required('El pais no puede ir vacio'),
+      community: Yup.string()
+                    .required('La colonia no puede ir vacia'),
+      stateS: Yup.string()
+                  .required('El estado no puede ir vacio'),
+    }),
+    onSubmit: async (valores) => {            
+      const {country, cp, municipy, stret, community, stateS} = valores;
+      
+      const data = {
+        country,
+        municipy,
+        stret,
+        cp: parseInt(cp),
+        community, 
+        stateS
+      }
+
+      //dispatch({ type: 'SET_ADDRESS_DATA', data: valores });
+      dispatch({ type: 'SET_ADDRESS_DATA', data: data });
+      dispatch({type: 'INDEX_STEPPER', data: 3})
+    },       
+  });
+
+  const onClickSave = async() => {
+    let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+    if(state.databasic){
+      name=state.databasic.name? state.databasic.name : '';
+      tradename=state.databasic.tradename? state.databasic.tradename : '';
+      email=state.databasic.email? state.databasic.email : '';
+      rfc=state.databasic.rfc? state.databasic.rfc : '';
+      phone=state.databasic.phone? state.databasic.phone : '';
+      source=state.databasic.source? state.databasic.source : '';
+      tags=state.databasic.tags? state.databasic.tags : '';
+      user=state.databasic.user? state.databasic.user : '';
+      regime=state.databasic.regime? state.databasic.regime : '';
+    }
+
+    let link='', photo='';
+    if(state.extradata){
+      link = state.extradata.link? state.extradata.link: '';
+      photo = state.extradata.photo? state.extradata.photo: '';
+    }
+
+    let contact = [];
+    if(state.contacts){
+      contact = state.contacts;
+    }
+
+    const {community, country, cp, municipy, stateS, stret} = formik.values;
+
+    const data = {
+      name, 
+      tradename, 
+      email, 
+      rfc, 
+      phone, 
+      source,
+      tags, 
+      user,
+      link,
+      photo,
+      regime,
+      location: {
+        stret,
+        cp: parseInt(cp),
+        municipy, 
+        country,
+        community,
+        state:stateS,
+      },
+      contact
+    }
+
+    console.log('onclick save addresstepper');
+    console.log(JSON.stringify(data));
+
+    try {
+      const res = await SaveClient(data, token);
+      if(res.status){
+        showToastMessage(res.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }else{
+        showToastMessageError(res.message);
+      }
+    } catch (error) {
+      showToastMessageError('Error al crear cliente!!');
+    }
+  }
+
+  return(
+    <div className="w-full">
+      <div className="my-5">
+        <NavClientsStepper index={0} />
+      </div>
+      <form onSubmit={formik.handleSubmit} className="mt-4 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="">
+            <Label htmlFor="stret"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Calle y numero</p></Label>
+            <Input type="text" name="stret" autoFocus 
+              value={formik.values.stret}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.stret && formik.errors.stret ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.stret}</p>
+              </div>
+            ) : null}
+          </div>
+          <div className="">
+            <Label htmlFor="community"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Colonia / Localidad</p></Label>
+            <Input type="text" name="community" autoFocus 
+              value={formik.values.community}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.community && formik.errors.community ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.community}</p>
+              </div>
+            ) : null}
+          </div>
+          <div className="">
+            <Label htmlFor="cp"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Codigo postal</p></Label>
+            <Input type="text" name="cp" autoFocus 
+              value={formik.values.cp}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.cp && formik.errors.cp ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.cp}</p>
+              </div>
+            ) : null}
+          </div>
+          <div className="">
+            <Label htmlFor="municipy"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Municipio / Delegacion</p></Label>
+            <Input type="text" name="municipy" autoFocus 
+              value={formik.values.municipy}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.municipy && formik.errors.municipy ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.municipy}</p>
+              </div>
+            ) : null}
+          </div>
+          <div className="">
+            <Label htmlFor="stateS"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estado</p></Label>
+            <Input type="text" name="stateS" autoFocus 
+              value={formik.values.stateS}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.stateS && formik.errors.stateS ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.stateS}</p>
+              </div>
+            ) : null}
+          </div>
+          <div className="">
+            <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
+            <Input type="text" name="country" autoFocus 
+              value={formik.values.country}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.country && formik.errors.country ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.country}</p>
+              </div>
+            ) : null}
+          </div>
+        </div>
+        
+        <div className="flex justify-center mt-8 space-x-5">
+          <Button onClick={onClickSave} type="button">Guardar</Button>
+          <button type="submit"
+            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
+            hover:bg-slate-200"
+          >
+            Siguiente
+          </button>
+        </div>
+      </form>  
+    </div>
+  )
+}

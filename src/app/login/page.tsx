@@ -35,7 +35,7 @@ export default function Login({}) {
           setCookie('user', res.data.user);
           const {_id } = res.data.user;
           setCookie('id', _id);
-          setCookie('config', {numRows:3})
+          setCookie('config', {numRows:10})
           setTimeout(() => {                
             router.push(
               '/'

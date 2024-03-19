@@ -1,47 +1,27 @@
-import Label from "../Label"
-import Input from "../Input"
-import { useFormik } from "formik"
+import { ClientBack } from "@/interfaces/Clients";
+import { useFormik } from "formik";
 import * as Yup from 'yup';
-import Button from "../Button";
+import Label from "../Label";
+import Input from "../Input";
 import { useState } from "react";
-import { useRegFormContext } from "./StepperClientProvider";
-//import SaveProvider from "@/app/functions/SaveProvider";
-import SaveClient from "@/app/functions/SaveClient";
-import { showToastMessage, showToastMessageError } from "../Alert";
-import NavClientsStepper from "./NavClientsStepper";
-import { Options } from '@/interfaces/Common'
-import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
+import { optionsSource } from "@/interfaces/Clients";
+import { Options } from "@/interfaces/Common";
 import Select from 'react-select';
 import InputMask from 'react-input-mask';
-import { optionsPhone, optionsSource } from "@/interfaces/Clients";
+import Button from "../Button";
+import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
+import { updateClient } from "@/app/api/routeClients";
+import { showToastMessage, showToastMessageError } from "../Alert";
 
-export default function DataBasicStepper({token, id, tags}: 
-                          {token:string, id:string, tags:Options[]}){
+export default function DataBasic({client, tags, id, token}: 
+                          {client:ClientBack, tags:Options[], id:string, token:string}){
   
-  const [state, dispatch] = useRegFormContext();
-
-  let tradenameI = '';
-  let nameI = '';
-  let rfcI = '';
-  //let supplier = false;
-  let emailI= '';
-
-  if(state.databasic){
-    tradenameI = state.databasic.tradename;
-    nameI = state.databasic.name;
-    rfcI = state.databasic.rfc;
-    emailI = state.databasic.email? state.databasic.email : '';
-    //supplier = state.databasic.suppliercredit;
-  }
-
-  //const [suppliercredit, setSuppliercredit] = useState<boolean>(supplier);
-
   const formik = useFormik({
     initialValues: {
-      tradename:tradenameI,
-      name:nameI,
-      rfc: rfcI,
-      email: emailI,
+      tradename:client.tradename,
+      name:client.name,
+      rfc: client.rfc,
+      email: client.email? client.email: '',
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -55,121 +35,57 @@ export default function DataBasicStepper({token, id, tags}:
     onSubmit: async (valores) => {            
       const {name, tradename, rfc, email} = valores;
       
-      let tagsSelected: string[] = [];
+      let tagsSelected: any = [];
+      if(updateTags){
         optsTags.map((optTag) => {
           //tagsSelected.push(optTag.value);
           tagsSelected.push(optTag.label);
-      })
+        })
+      }else{
+        tagsSelected='';
+      }
       
       const data: any = {
         name,
         rfc,
         tradename,
-        phone: phone? parseInt(phone): '',
+        phone,
         source,
         tags:tagsSelected,
-        user: id,
         email,
         regime: regime,
       }
 
-      dispatch({ type: 'SET_BASIC_DATA', data: data });
-      dispatch({type: 'INDEX_STEPPER', data: 1})
+      const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
+
+      console.log('data updatade')
+      console.log(JSON.stringify(newObj));
+
+      try {
+        const res = await updateClient(client._id, token, newObj);
+        if(res === 200){
+          showToastMessage('Cliente actualizado exitosamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Error al actualizar informacion basica del cliente!!');
+      }
     },
   });
-  
-  const onClickSave = async () => {
-    const {name, rfc, tradename, email} = formik.values;
-    
-    let contact = [];
-    if(state.contacts){
-      contact = state.contacts;
-    }
 
-    let tagsSelected: string[] = [];
-      optsTags.map((optTag) => {
-        //tagsSelected.push(optTag.value);
-        tagsSelected.push(optTag.label);
-    })
-
-    if(name && rfc && tradename){
-      
-      let link='', photo='';
-      if(state.extradata){
-        link = state.extradata.link? state.extradata.link: '';
-        photo = state.extradata.photo? state.extradata.photo: '';
-      }
-
-      let contact = [];
-      if(state.contacts){
-        contact = state.contacts;
-      }
-
-      let stret='', cp='', municipy='', country='', stateS='', community='';
-      if(state.address){
-        stret = state.address.stret? state.address.stret: '';
-        cp = state.address.cp? state.address.cp: '';
-        municipy = state.address.municipy? state.address.municipy: '';
-        country = state.address.country? state.address.country: '';
-        community = state.address.community? state.address.community: '';
-        stateS = state.address.stateS? state.address.stateS: '';
-      }
-
-      const data= {
-        name,
-        rfc,
-        tradename,
-        phone: phone? parseInt(phone): '',
-        source,
-        tags:tagsSelected,
-        user: id,
-        email,
-        regime,
-        link,
-        photo,
-        location: {
-          stret,
-          cp,
-          municipy, 
-          country,
-          community,
-          state:stateS,
-        },
-        contact
-      }
-
-      // console.log('tags stepper');
-      // console.log(tagsSelected);
-
-      const res = await SaveClient(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res.message);
-      }
-    }else{
-      showToastMessageError('Llene todos los campos obligatorios!!');
-    }
-  }
-
-  const [phone, setPhone] = useState<string>('');
-  //const [typePhone, setTypePhone] = useState<string>(optionsPhone[0].value);
-  //const [optionsType, setOptionsType] = useState(optionsPhone[0]);
-  const [regime, setRegime] = useState<string>('Fisica');
+  const [phone, setPhone] = useState<string>(client.phone? client.phone: '');
+  const [regime, setRegime] = useState<string>(client.regime);
   const [source, setSource] = useState<string>(optionsSource[0].value);
   const [optsSource, setOptsSource] = useState(optionsSource[0]);
-  //const [tagsSelected, setTagsSelected] = useState<string[]>([tags[0].value]);
   const [optsTags, setOptstags] = useState([tags[0]]);
-
+  const [updateTags, setUpdateTags] = useState<boolean>(false);
 
   return(
-    <div className="w-full">
-      <div className="my-5">
-        <NavClientsStepper index={0} />
-      </div>
+    <>
       <form onSubmit={formik.handleSubmit} className="mt-4 w-full">
         <div className="grid grid-cols-2 gap-4">
           <div className="">
@@ -240,11 +156,10 @@ export default function DataBasicStepper({token, id, tags}:
           <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
             <div className="flex items-center mt-2 flex-wrap gap-y-1">
               <div className="w-full flex  justify-start items-center relative">
-                {/* <InputMask mask='(+52) 999 999 9999' */}
                 <InputMask mask='9999999999'
                   className="shadow appearance-none border border-gray-300 rounded w-full py-2 pl-9 text-base text-gray-500 leading-tight font-sans font-thin focus:ring-1 focus:ring-blue-600"
                   type="phone" 
-                  placeholder="(+52) 444 429 7227"
+                  placeholder="444 429 7227"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
@@ -278,22 +193,22 @@ export default function DataBasicStepper({token, id, tags}:
               options={tags}
               maxMenuHeight={200}
               value={optsTags}
-              onChange={(value:any) => { setOptstags(value)}}
+              onChange={(value:any) => { setOptstags(value); setUpdateTags(true);}}
             />
           </div>
 
         </div>
         
         <div className="flex justify-center mt-8 space-x-5">
-          <Button onClick={onClickSave} type="button">Guardar</Button>
-          <button type="submit"
+          {/* <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"
           >
             Siguiente
-          </button>
+          </button> */}
+          <Button type="submit">Guardar</Button>
         </div>
-      </form>  
-    </div>
+      </form>
+    </>
   )
 }

@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { Contact } from "@/interfaces/Contacts";
-import FormContact from "./FormContact";
-//import { updateProvider } from "@/app/api/routeProviders";
+import FormContact from "../providers/FormContact";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
-import { updateContactProvider } from "@/app/api/routeProviders";
-import CardContact from "./CardContact";
-import { contactUpdateValidation, contactValidation } from "@/schemas/contact.schema";
+import { updateContactClient } from "@/app/api/routeClients";
+import CardContact from "../providers/CardContact";
+import { contactUpdateValidation } from "@/schemas/contact.schema";
 
 export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
   
@@ -19,9 +18,9 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   const newContact = async (newContact:string) => {
     console.log('nuevo contacto');
     try {
-      const res = await updateContactProvider({contact: newContact}, id, token);
+      const res = await updateContactClient({contact: newContact}, id, token);
       if(res===200){
-        showToastMessage('El proveedor ha sido actualizado!!');
+        showToastMessage('El cliente ha sido actualizado!!');
         setTimeout(() => {
           window.location.reload();
         }, 500);
@@ -29,11 +28,12 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
         showToastMessageError(res);
       }
     } catch (error) {
-      showToastMessageError('Error al actualizar proveedor');
+      showToastMessageError('Error al actualizar cliente');
     }
   }
 
   const updateContactt = async (data:Contact, id:string) => {
+    console.log('updatee contact!!')
     const validation = contactUpdateValidation.safeParse(data);
     if(validation.success){
       try {
@@ -99,7 +99,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
                   className="w-8 md:w-12 h-12 cursor-pointer text-yellow-950" />
               </div>
     
-              {/* <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mt-10'> */}
               <div className='grid gap-4 grid-cols-1 mt-3'>
                 {filter.map((contact: Contact, index:number) => (
                   <div className='' key={index}>
@@ -141,11 +140,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
     }else{
       setFilter(contacts.slice(index, index + numberContacts));
     }
-
-    // setTimeout(() => {
-    //   console.log('settiemfilter')
-    //   console.log(filter);
-    // }, 500);
   }, [index])
 
   const Previous = () => {
@@ -166,13 +160,7 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
 
   return(
     <>
-      {/* <div className="px-10 mt-2">
-        <Button onClick={showNewContact}>
-          Nuevo contacto
-        </Button>
-      </div> */}
       {showContacts}
-      {/* <FormContact token={token} addNewContact={newContact} /> */}
     </>
   )
 }

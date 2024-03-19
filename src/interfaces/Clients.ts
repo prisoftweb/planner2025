@@ -1,3 +1,6 @@
+import { Options } from "./Common"
+import { Contact } from "./Contacts"
+
 export interface Client{
   name:string,
   tradename:string,
@@ -38,7 +41,8 @@ export interface ClientBack{
   location: Location,
   tags?:string[],
   condition: Condition,
-  contact:string[],
+  //contact:string[],
+  contact:Contact[],
   user: string,
   status: boolean,
   "createAt"?: string,
@@ -75,3 +79,103 @@ export interface TableClient{
   "account":string,
   "currentbalance": number,
 }
+
+export interface Tag{
+  "id": string,
+  "name":string,
+  '_id': string,
+  '__v':string,
+}
+
+export const optionsPhone:Options[] = [
+  {
+    value: 'Movil',
+    label: 'Movil'
+  },
+  {
+    value: 'Escuela',
+    label: 'Escuela'
+  },
+  {
+    value: 'Casa',
+    label: 'Casa'
+  },
+  {
+    value: 'Trabajo',
+    label: 'Trabajo'
+  },
+  {
+    value: 'Otro',
+    label: 'Otro'
+  },
+]
+
+export const optionsSource:Options[] = [
+  {
+    value: 'landpage',
+    label: 'landpage'
+  },
+  {
+    value: 'facebook',
+    label: 'facebook'
+  },
+  {
+    value: 'instagram',
+    label: 'instagram'
+  },
+  {
+    value: 'whatsapp',
+    label: 'whatsapp'
+  },
+  {
+    value: 'llamada',
+    label: 'llamada'
+  },
+  {
+    value: 'recomendacion',
+    label: 'recomendacion'
+  },
+  {
+    value: 'sucursal',
+    label: 'sucursal'
+  },
+  {
+    value: 'otro',
+    label: 'otro'
+  },
+]
+
+export const optionsTags:Options[] = [
+  {
+    value: 'landpage',
+    label: 'landpage'
+  },
+  {
+    value: 'facebook',
+    label: 'facebook'
+  },
+  {
+    value: 'instagram',
+    label: 'instagram'
+  },
+  {
+    value: 'whatsapp',
+    label: 'whatsapp'
+  },
+  {
+    value: 'llamada',
+    label: 'llamada'
+  },
+  {
+    value: 'recomendacion',
+    label: 'recomendacion'
+  },
+  {
+    value: 'sucursal',
+    label: 'sucursal'
+  },
+  {
+    value: 'otro',
+    label: 'otro'
+  },
+]

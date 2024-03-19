@@ -155,7 +155,7 @@ export default function Table({data, columns, numRows, placeH}:
           className="w-12 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
           bg-gray-50 focus:border-slate-700 outline-0 my-3"
         >
-          {[3, 10, 20, 30, 40, 50].map(pageSize => (
+          {[10, 25, 50, 100, 250].map(pageSize => (
             <option key={pageSize} value={pageSize}>{pageSize}</option>
           ))}
         </select>
