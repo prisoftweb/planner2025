@@ -38,12 +38,14 @@ export default function AddressClient({token, client}:{token:string, client:Clie
       const {country, cp, municipy, stret, community, stateS} = valores;
       
       const data = {
-        country,
-        municipy,
-        stret,
-        cp: parseInt(cp),
-        community, 
-        stateS
+        location: {
+          country,
+          municipy,
+          stret,
+          cp: parseInt(cp),
+          community, 
+          state: stateS
+        }
       }
 
       const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))

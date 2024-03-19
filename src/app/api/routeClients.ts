@@ -74,7 +74,8 @@ export async function getClient(auth_token:string, id:string) {
 
 export async function updateClient(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/${id}`;
-  //console.log(JSON.stringify(data));
+  console.log(id);
+  console.log(JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
@@ -83,6 +84,7 @@ export async function updateClient(id:string, auth_token:string, data:Object) {
       }
     })
     if(res.status===200){
+      //return 'en prueba';
       return res.status;
     }
     return 'Error al actualizar cliente!!';
