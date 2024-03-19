@@ -16,7 +16,7 @@ export default function ClientCli({client, token, id, tags}:
                             {client:ClientBack, token:string, id:string, tags:Options[]}){
 
   const [view, setView] = useState<JSX.Element>
-                (<div className="w-full p-2 md:w-1/2 border-t-8 lg:border-t-0 lg:border-l-8 
+                (<div className="w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
                   pl-2" style={{borderColor:'#F8FAFC'}}>
                     <Sumary client={client} idCli={id} token={token} />
                 </div>)
@@ -25,7 +25,7 @@ export default function ClientCli({client, token, id, tags}:
   
   useEffect(() => {
     console.log('opt == ', opt)
-    opt===2? setView(<div className="mt-3 w-full max-w-md border-t-8 lg:border-t-0 lg:border-l-8 pl-2" 
+    opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
                   <DataBasic token={token} client={client} id={id} tags={tags} />
                 </div>) : 
@@ -50,7 +50,7 @@ export default function ClientCli({client, token, id, tags}:
 
   return(
     <>
-      <div className="flex px-1 bg-white mt-3 flex-wrap lg:border-r-8 pr-2" style={{borderColor:'#F8FAFC'}}>
+      <div className="flex px-2 mt-3 flex-wrap lg:border-r-8 pr-2 space-x-2 bg-slate-200" style={{borderColor:'#F8FAFC'}}>
         <div className={`w-full max-w-md lg:max-w-xs flex ${open? 'flex-wrap': ''}`}>
           <div className={`${open? 'w-full': ''}`}>
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />

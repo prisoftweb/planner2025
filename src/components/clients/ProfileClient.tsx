@@ -7,8 +7,8 @@ export default function ProfileClient({client}:
 
   return(
     <>
-      <div className="border-b-8 pb-4 pl-2">
-        <div className="flex gap-x-2">
+      <div className="border-b-8 pb-4 pl-2 mt-3">
+        <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
             <img src={client.logo? client.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
           </div>
@@ -23,7 +23,7 @@ export default function ProfileClient({client}:
           </div>
         </div>
         
-        <div className="my-4 border-t-4 border-slate-300 py-4">
+        <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
           <div className="">
             <Label>Email</Label>
             <p className="my-1 text-blue-500">{client.email? client.email: ''}</p>
@@ -38,7 +38,7 @@ export default function ProfileClient({client}:
           </div>
         </div>
         
-        <div className="my-4 border-t-4 border-slate-300 py-4">
+        <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
           <Label>Direccion</Label>
           <p className="my-2 text-slate-500">{client.location.address? client.location.address: '' }</p>
           <Label>Colonia</Label>
