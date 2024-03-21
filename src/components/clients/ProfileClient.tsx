@@ -7,7 +7,7 @@ export default function ProfileClient({client}:
 
   return(
     <>
-      <div className="border-b-8 pb-4 pl-2 mt-3">
+      <div className="border-b-8 pb-4 mt-3 w-auto">
         <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
             <img src={client.logo? client.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
@@ -17,9 +17,11 @@ export default function ProfileClient({client}:
             <p className="text-slate-500">{client.tradename}</p>
             <p className="text-slate-500">{client.rfc}</p>
             <p className="text-slate-500">{client.regime==='Moral'? 'Persona Moral': 'Persona Fisica'}</p>
-            {client.tags?.map((tag, index:number) => (
-              <Chip label={tag} key={index} />
-            ))}
+            <div className="flex gap-x-2 gap-y-2">
+              {client.tags?.map((tag, index:number) => (
+                <Chip label={tag} key={index} />
+              ))}
+            </div>
           </div>
         </div>
         
@@ -38,19 +40,31 @@ export default function ProfileClient({client}:
           </div>
         </div>
         
-        <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
-          <Label>Direccion</Label>
-          <p className="my-2 text-slate-500">{client.location.address? client.location.address: '' }</p>
-          <Label>Colonia</Label>
-          <p className="my-2 text-slate-500">{client.location.community? client.location.community: '' }</p>
-          <Label>Municipio</Label>
-          <p className="my-2 text-slate-500">{client.location.municipy? client.location.municipy: '' }</p>
-          <Label>Codigo Postal</Label>
-          <p className="my-2 text-slate-500">{client.location.cp? client.location.cp: '' }</p>
-          <Label>Estado</Label>
-          <p className="my-2 text-slate-500">{client.location.state? client.location.state: '' }</p>
-          <Label>Pais</Label>
-          <p className="my-2 text-slate-500">{client.location.country? client.location.country: '' }</p>
+        <div className="my-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg shadow-md py-2">
+          <div>
+            <Label>Direccion</Label>
+            <p className="my-2 text-slate-700">{client.location.address? client.location.address: '' }</p>
+          </div>
+          <div>
+            <Label>Colonia</Label>
+            <p className="my-2 text-slate-700">{client.location.community? client.location.community: '' }</p>
+          </div>
+          <div>
+            <Label>Municipio</Label>
+            <p className="my-2 text-slate-700">{client.location.municipy? client.location.municipy: '' }</p>
+          </div>
+          <div>
+            <Label>Codigo Postal</Label>
+            <p className="my-2 text-slate-700">{client.location.cp? client.location.cp: '' }</p>
+          </div>
+          <div>
+            <Label>Estado</Label>
+            <p className="my-2 text-slate-700">{client.location.state? client.location.state: '' }</p>
+          </div>
+          <div>
+            <Label>Pais</Label>
+            <p className="my-2 text-slate-700">{client.location.country? client.location.country: '' }</p>
+          </div>
         </div>
       </div>
       {/* <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer

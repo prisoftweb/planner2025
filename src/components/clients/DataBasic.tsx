@@ -153,12 +153,12 @@ export default function DataBasic({client, tags, id, token}:
             ) : null}
           </div>
           <div>
-          <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
+          <Label htmlFor="phone"><p>Telefono</p></Label>
             <div className="flex items-center mt-2 flex-wrap gap-y-1">
               <div className="w-full flex  justify-start items-center relative">
                 <InputMask mask='9999999999'
                   className="shadow appearance-none border border-gray-300 rounded w-full py-2 pl-9 text-base text-gray-500 leading-tight font-sans font-thin focus:ring-1 focus:ring-blue-600"
-                  type="phone" 
+                  type="phone"
                   placeholder="444 429 7227"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
