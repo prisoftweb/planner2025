@@ -6,7 +6,8 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
 import { updateContactClient } from "@/app/api/routeClients";
-import CardContact from "../providers/CardContact";
+//import CardContact from "../providers/CardContact";
+import CardContactClient from "./CardContactClient";
 import { contactUpdateValidation } from "@/schemas/contact.schema";
 
 export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
@@ -47,7 +48,7 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
           showToastMessageError(res);
         }
       } catch (error) {
-        showToastMessageError('Error al actualizar proveedor');
+        showToastMessageError('Error al actualizar cliente');
       }
     }else{
       showToastMessageError(validation.error.issues[0].message);
@@ -82,7 +83,7 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
     }else{
       let showConts: JSX.Element[] =[];
       contacts.map((contactm, index) => {
-        showConts.push(<CardContact idProv={id} contact={contactm} token={token} key={index} />)
+        showConts.push(<CardContactClient idCli={id} contact={contactm} token={token} key={index} />)
       })
 
       setShowContacts(<></>);

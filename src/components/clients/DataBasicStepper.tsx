@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { useState } from "react";
 import { useRegFormContext } from "./StepperClientProvider";
-//import SaveProvider from "@/app/functions/SaveProvider";
 import SaveClient from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavClientsStepper from "./NavClientsStepper";
@@ -13,7 +12,8 @@ import { Options } from '@/interfaces/Common'
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import Select from 'react-select';
 import InputMask from 'react-input-mask';
-import { optionsPhone, optionsSource } from "@/interfaces/Clients";
+import { optionsSource } from "@/interfaces/Clients";
+import { SaveClientLogo } from "@/app/functions/SaveClient";
 
 export default function DataBasicStepper({token, id, tags}: 
                           {token:string, id:string, tags:Options[]}){
@@ -73,38 +73,43 @@ export default function DataBasicStepper({token, id, tags}:
         regime: regime,
       }
 
+      //console.log('data basic', data);
+
       dispatch({ type: 'SET_BASIC_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 1})
     },
   });
   
   const onClickSave = async () => {
-    const {name, rfc, tradename, email} = formik.values;
     
-    let contact = [];
-    if(state.contacts){
-      contact = state.contacts;
-    }
-
-    let tagsSelected: string[] = [];
-      optsTags.map((optTag) => {
-        //tagsSelected.push(optTag.value);
-        tagsSelected.push(optTag.label);
-    })
-
-    if(name && rfc && tradename){
+    if(state.extradata && state.extradata.photo){
+      const data = new FormData();
       
-      let link='', photo='';
-      if(state.extradata){
-        link = state.extradata.link? state.extradata.link: '';
-        photo = state.extradata.photo? state.extradata.photo: '';
+      const {email, name, rfc, tradename} = formik.values;
+      
+      data.append('name', name);
+      data.append('tradename', tradename);
+      if(email && email!==''){
+        data.append('email', email);
       }
-
-      let contact = [];
-      if(state.contacts){
-        contact = state.contacts;
+      data.append('rfc', rfc);
+      data.append('source', source);
+      //data.append('tags', tags);
+      let arrTags: string[]= [];
+      optsTags.map((optTag) => {
+        arrTags.push(optTag.label);
+        //data.append('tags', optTag.label);
+      })
+      data.append('regime', regime);
+      if(id && id!==''){
+        data.append('user', id);
       }
-
+      
+      data.append('logo', state.extradata.photo);
+      if(state.extradata.link){
+        data.append('link', state.extradata.link);
+      }
+      
       let stret='', cp='', municipy='', country='', stateS='', community='';
       if(state.address){
         stret = state.address.stret? state.address.stret: '';
@@ -115,43 +120,102 @@ export default function DataBasicStepper({token, id, tags}:
         stateS = state.address.stateS? state.address.stateS: '';
       }
 
-      const data= {
-        name,
-        rfc,
-        tradename,
-        phone: phone? parseInt(phone): '',
-        source,
-        tags:tagsSelected,
-        user: id,
-        email,
-        regime,
-        link,
-        photo,
-        location: {
-          stret,
-          cp,
-          municipy, 
-          country,
-          community,
-          state:stateS,
-        },
-        contact
+      const location = {
+        community,
+        country,
+        cp: cp,
+        municipy,
+        state: stateS,
+        stret
       }
 
-      // console.log('tags stepper');
-      // console.log(tagsSelected);
-
-      const res = await SaveClient(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res.message);
+      try {
+        const res = await SaveClientLogo(data, token, location, arrTags, 
+                        state.contacts? state.contacts: [], 
+                        phone!==''? parseInt(phone): '');
+        if(res.status){
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        showToastMessageError('Error al crear cliente!!');
       }
     }else{
-      showToastMessageError('Llene todos los campos obligatorios!!');
+      const {name, rfc, tradename, email} = formik.values;
+    
+      let contact = [];
+      if(state.contacts){
+        contact = state.contacts;
+      }
+
+      let tagsSelected: string[] = [];
+      optsTags.map((optTag) => {
+        //tagsSelected.push(optTag.value);
+        tagsSelected.push(optTag.label);
+      })
+
+      if(name && rfc && tradename){
+        
+        let link='', photo='';
+        if(state.extradata){
+          link = state.extradata.link? state.extradata.link: '';
+          photo = state.extradata.photo? state.extradata.photo: '';
+        }
+
+        let contact = [];
+        if(state.contacts){
+          contact = state.contacts;
+        }
+
+        let stret='', cp='', municipy='', country='', stateS='', community='';
+        if(state.address){
+          stret = state.address.stret? state.address.stret: '';
+          cp = state.address.cp? state.address.cp: '';
+          municipy = state.address.municipy? state.address.municipy: '';
+          country = state.address.country? state.address.country: '';
+          community = state.address.community? state.address.community: '';
+          stateS = state.address.stateS? state.address.stateS: '';
+        }
+
+        const data= {
+          name,
+          rfc,
+          tradename,
+          phone: phone? parseInt(phone): '',
+          source,
+          tags:tagsSelected,
+          user: id,
+          email,
+          regime,
+          link,
+          photo,
+          location: {
+            stret,
+            cp,
+            municipy, 
+            country,
+            community,
+            state:stateS,
+          },
+          contact
+        }
+
+        const res = await SaveClient(data, token);
+        if(res.status){
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res.message);
+        }
+      }else{
+        showToastMessageError('Llene todos los campos obligatorios!!');
+      }
     }
   }
 
@@ -237,7 +301,7 @@ export default function DataBasicStepper({token, id, tags}:
             ) : null}
           </div>
           <div>
-          <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
+          <Label htmlFor="phone"><p>Telefono</p></Label>
             <div className="flex items-center mt-2 flex-wrap gap-y-1">
               <div className="w-full flex  justify-start items-center relative">
                 {/* <InputMask mask='(+52) 999 999 9999' */}

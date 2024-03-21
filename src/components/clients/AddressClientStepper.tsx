@@ -5,8 +5,9 @@ import * as Yup from 'yup';
 import { useRegFormContext } from "./StepperClientProvider";
 import Label from "../Label";
 import Input from "../Input";
-import SaveClient from "@/app/functions/SaveClient";
+import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import { clientValidation } from "@/schemas/client.schema";
 
 export default function AddressClientStepper({token}:{token:string}){
   
@@ -70,77 +71,147 @@ export default function AddressClientStepper({token}:{token:string}){
   });
 
   const onClickSave = async() => {
-    let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
-    if(state.databasic){
-      name=state.databasic.name? state.databasic.name : '';
-      tradename=state.databasic.tradename? state.databasic.tradename : '';
-      email=state.databasic.email? state.databasic.email : '';
-      rfc=state.databasic.rfc? state.databasic.rfc : '';
-      phone=state.databasic.phone? state.databasic.phone : '';
-      source=state.databasic.source? state.databasic.source : '';
-      tags=state.databasic.tags? state.databasic.tags : '';
-      user=state.databasic.user? state.databasic.user : '';
-      regime=state.databasic.regime? state.databasic.regime : '';
-    }
-
-    let link='', photo='';
-    if(state.extradata){
-      link = state.extradata.link? state.extradata.link: '';
-      photo = state.extradata.photo? state.extradata.photo: '';
-    }
-
-    let contact = [];
-    if(state.contacts){
-      contact = state.contacts;
-    }
-
-    const {community, country, cp, municipy, stateS, stret} = formik.values;
-
-    const data = {
-      name, 
-      tradename, 
-      email, 
-      rfc, 
-      phone, 
-      source,
-      tags, 
-      user,
-      link,
-      photo,
-      regime,
-      location: {
-        stret,
-        cp: parseInt(cp),
-        municipy, 
-        country,
-        community,
-        state:stateS,
-      },
-      contact
-    }
-
-    console.log('onclick save addresstepper');
-    console.log(JSON.stringify(data));
-
-    try {
-      const res = await SaveClient(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res.message);
+    
+    if(state.extradata.photo){
+      const data = new FormData();
+      if(state.databasic){
+        data.append('name', state.databasic.name);
+        data.append('tradename', state.databasic.tradename);
+        if(state.databasic.email){
+          data.append('email', state.databasic.email);
+        }
+        data.append('rfc', state.databasic.rfc);
+        data.append('source', state.databasic.source);
+        //data.append('tags', state.databasic.tags);
+        // if(state.databasic.tags){
+        //   state.databasic.tags.map((tag: string) => {
+        //     data.append('tags', tag);
+        //   })
+        // }
+        data.append('regime', state.databasic.regime);
+        if(state.databasic.user){
+          data.append('user', state.databasic.user);
+        }
+        // if(state.databasic.phone){
+        //   data.append('phone', state.databasic.phone);
+        // }
       }
-    } catch (error) {
-      showToastMessageError('Error al crear cliente!!');
+      if(state.extradata){
+        data.append('logo', state.extradata.photo);
+        if(state.extradata.link){
+          data.append('link', state.extradata.link);
+        }
+      }
+      
+      const {community, country, cp, municipy, stateS, stret} = formik.values;
+      
+      const location = {
+        community,
+        country,
+        cp: parseInt(cp),
+        municipy,
+        state: stateS,
+        stret
+      }
+
+      // if(state.contacts){
+      //   state.contacts.map((contact: string) => {
+      //     data.append('contact', contact);
+      //   })
+      // }
+
+      try {
+        const res = await SaveClientLogo(data, token, location, 
+                      state.databasic.tags? state.databasic.tags: [], 
+                      state.contacts? state.contacts: [],
+                      state.databasic.phone? state.databasic.phone: '');
+        if(res.status){
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        showToastMessageError('Error al crear cliente!!');
+      }
+      // const newdata = Object.fromEntries(data);
+      // try {
+      //   const res = clientValidation.safeParse(newdata);
+      //   console.log(res);
+      //  } catch (error) {
+      //   console.log(error);
+      //  }
+    }else{
+      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+      if(state.databasic){
+        name=state.databasic.name? state.databasic.name : '';
+        tradename=state.databasic.tradename? state.databasic.tradename : '';
+        email=state.databasic.email? state.databasic.email : '';
+        rfc=state.databasic.rfc? state.databasic.rfc : '';
+        phone=state.databasic.phone? state.databasic.phone : '';
+        source=state.databasic.source? state.databasic.source : '';
+        tags=state.databasic.tags? state.databasic.tags : '';
+        user=state.databasic.user? state.databasic.user : '';
+        regime=state.databasic.regime? state.databasic.regime : '';
+      }
+
+      let link='';
+      if(state.extradata){
+        link = state.extradata.link? state.extradata.link: '';
+      }
+
+      let contact = [];
+      if(state.contacts){
+        contact = state.contacts;
+      }
+
+      const {community, country, cp, municipy, stateS, stret} = formik.values;
+
+      const data = {
+        name, 
+        tradename, 
+        email, 
+        rfc, 
+        phone, 
+        source,
+        tags, 
+        user,
+        link,
+        //photo,
+        regime,
+        location: {
+          stret,
+          cp: parseInt(cp),
+          municipy, 
+          country,
+          community,
+          state:stateS,
+        },
+        contact
+      }
+
+      try {
+        const res = await SaveClient(data, token);
+        if(res.status){
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        showToastMessageError('Error al crear cliente!!');
+      }
     }
   }
 
   return(
     <div className="w-full">
       <div className="my-5">
-        <NavClientsStepper index={0} />
+        <NavClientsStepper index={2} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

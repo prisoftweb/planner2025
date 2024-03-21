@@ -3,27 +3,58 @@ import Label from "../Label"
 import { useState } from "react"
 import UploadImage from "../UploadImage"
 import Button from "../Button"
+import { updateClient, updateClientLogo } from "@/app/api/routeClients"
+import { showToastMessage, showToastMessageError } from "../Alert"
 
-export default function ExtraData({token}: {token:string}){
+export default function ExtraData({token, id, link}: 
+                        {token:string, id:string, link:string}){
   
-  const [page, setPage] = useState('');
+  const [page, setPage] = useState(link);
   const [file, setFile] = useState('');
 
   const onClickSave = async () => {
     
-    // try {
-    //   const res = await SaveClient(data, token);
-    //   if(res.status){
-    //     showToastMessage(res.message);
-    //     setTimeout(() => {
-    //       window.location.reload();
-    //     }, 500);
-    //   }else{
-    //     showToastMessageError(res.message);
-    //   }
-    // } catch (error) {
-    //   showToastMessageError('Error al crear cliente!!');
-    // }
+    if(file){
+      const formdata = new FormData();
+      formdata.append('logo', file);
+      if(page !== link){
+        formdata.append('link', page);
+      }
+      try {
+        const res = await updateClientLogo(formdata, token, id);
+        if(res === 200){
+          showToastMessage('Cliente actualizado exitosamente!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Error al actualizar link del cliente!!');
+      }
+    }else{
+      if(page !== link){
+        const data = {
+          link: page,
+        }
+        try {
+          const res = await updateClient(id, token, data);
+          if(res === 200){
+            showToastMessage('Link del cliente actualizado exitosamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          showToastMessageError('Error al actualizar link del cliente!!');
+        }
+      }else{
+        showToastMessageError('No hay nada que actualizar!!');
+      }
+    }  
   }
 
   return(

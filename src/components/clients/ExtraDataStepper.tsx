@@ -7,6 +7,7 @@ import { useRegFormContext } from "./StepperClientProvider";
 import Button from "../Button"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import SaveClient from "@/app/functions/SaveClient"
+import { SaveClientLogo } from "@/app/functions/SaveClient"
 
 export default function ExtraDataStepper({token}: {token:string}){
   
@@ -16,69 +17,136 @@ export default function ExtraDataStepper({token}: {token:string}){
 
   const onClickSave = async () => {
     
-    let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
-    if(state.databasic){
-      name=state.databasic.name? state.databasic.name : '';
-      tradename=state.databasic.tradename? state.databasic.tradename : '';
-      email=state.databasic.email? state.databasic.email : '';
-      rfc=state.databasic.rfc? state.databasic.rfc : '';
-      phone=state.databasic.phone? state.databasic.phone : '';
-      source=state.databasic.source? state.databasic.source : '';
-      tags=state.databasic.tags? state.databasic.tags : '';
-      user=state.databasic.user? state.databasic.user : '';
-      regime=state.databasic.regime? state.databasic.regime : '';
-    }
-
-    let contact = [];
-    if(state.contacts){
-      contact = state.contacts;
-    }
-
-    let stret='', cp='', municipy='', country='', stateS='', community='';
-    if(state.address){
-      stret = state.address.stret? state.address.stret: '';
-      cp = state.address.cp? state.address.cp: '';
-      municipy = state.address.municipy? state.address.municipy: '';
-      country = state.address.country? state.address.country: '';
-      community = state.address.community? state.address.community: '';
-      stateS = state.address.stateS? state.address.stateS: '';
-    }
-
-    const data = {
-      name, 
-      tradename, 
-      email, 
-      rfc, 
-      phone, 
-      source,
-      tags, 
-      user,
-      link:page,
-      photo: file,
-      regime,
-      location: {
-        stret,
-        cp,
-        municipy, 
-        country,
-        community,
-        state:stateS,
-      },
-      contact
-    }
-
-    try {
-      const res = await SaveClient(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res.message);
+    if(file){
+      const data = new FormData();
+      if(state.databasic){
+        data.append('name', state.databasic.name);
+        data.append('tradename', state.databasic.tradename);
+        if(state.databasic.email){
+          data.append('email', state.databasic.email);
+        }
+        data.append('rfc', state.databasic.rfc);
+        data.append('source', state.databasic.source);
+        data.append('regime', state.databasic.regime);
+        if(state.databasic.user){
+          data.append('user', state.databasic.user);
+        }
+        // if(state.databasic.phone){
+        //   data.append('phone', state.databasic.phone);
+        // }
       }
-    } catch (error) {
-      showToastMessageError('Error al crear cliente!!');
+
+      let stret='', cp='', municipy='', country='', stateS='', community='';
+      if(state.address){
+        stret = state.address.stret? state.address.stret: '';
+        cp = state.address.cp? state.address.cp: '';
+        municipy = state.address.municipy? state.address.municipy: '';
+        country = state.address.country? state.address.country: '';
+        community = state.address.community? state.address.community: '';
+        stateS = state.address.stateS? state.address.stateS: '';
+      }
+
+      const location = {
+        community,
+        country,
+        cp: cp,
+        municipy,
+        state: stateS,
+        stret
+      }
+
+      // if(state.contacts){
+      //   state.contacts.map((contact: string) => {
+      //     data.append('contact', contact);
+      //   })
+      // }
+
+      data.append('logo', file);
+      if(page && page!==''){
+        data.append('link', page);
+      }
+
+      try {
+        const res = await SaveClientLogo(data, token, location, 
+              state.databasic.tags? state.databasic.tags: [], state.contacts? state.contacts: [],
+              state.databasic.phone? state.databasic.phone: '');
+        if(res.status){
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        showToastMessageError('Error al crear cliente!!');
+      }
+
+    }else{
+      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+      if(state.databasic){
+        name=state.databasic.name? state.databasic.name : '';
+        tradename=state.databasic.tradename? state.databasic.tradename : '';
+        email=state.databasic.email? state.databasic.email : '';
+        rfc=state.databasic.rfc? state.databasic.rfc : '';
+        phone=state.databasic.phone? state.databasic.phone : '';
+        source=state.databasic.source? state.databasic.source : '';
+        tags=state.databasic.tags? state.databasic.tags : '';
+        user=state.databasic.user? state.databasic.user : '';
+        regime=state.databasic.regime? state.databasic.regime : '';
+      }
+
+      let contact = [];
+      if(state.contacts){
+        contact = state.contacts;
+      }
+
+      let stret='', cp='', municipy='', country='', stateS='', community='';
+      if(state.address){
+        stret = state.address.stret? state.address.stret: '';
+        cp = state.address.cp? state.address.cp: '';
+        municipy = state.address.municipy? state.address.municipy: '';
+        country = state.address.country? state.address.country: '';
+        community = state.address.community? state.address.community: '';
+        stateS = state.address.stateS? state.address.stateS: '';
+      }
+
+      const data = {
+        name, 
+        tradename, 
+        email, 
+        rfc, 
+        phone, 
+        source,
+        tags, 
+        user,
+        link:page,
+        //photo: file,
+        regime,
+        location: {
+          stret,
+          cp,
+          municipy, 
+          country,
+          community,
+          state:stateS,
+        },
+        contact
+      }
+
+      try {
+        const res = await SaveClient(data, token);
+        if(res.status){
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        showToastMessageError('Error al crear cliente!!');
+      }
     }
   }
 
@@ -106,7 +174,7 @@ export default function ExtraDataStepper({token}: {token:string}){
     <>
       <div className="w-full">
         <div className="my-5">
-          <NavClientsStepper index={0} />
+          <NavClientsStepper index={1} />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>

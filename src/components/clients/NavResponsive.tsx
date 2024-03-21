@@ -9,24 +9,24 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
   //let Nav: JSX.Element = <></>;
 
   const [nav, setNav] = useState<JSX.Element>(<div>
-                          <ArrowDownTrayIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 rotate-90" onClick={() => setOpen(false)} />
-                          <ChartBarIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(1)} />
-                          <AdjustmentsVerticalIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(2)} />
-                          <TableCellsIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(3)} />
-                          <GlobeAmericasIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(4)} />
-                          <UserCircleIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(5)} />
+                          <ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 rotate-90" onClick={() => setOpen(false)} />
+                          <ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(1)} />
+                          <AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(2)} />
+                          <TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(3)} />
+                          <GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(4)} />
+                          <UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(5)} />
                         </div>);
 
   useEffect(() => {
     if(!open){
       setNav (
         <div>
-          <div className="rotate-180"><ArrowDownTrayIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 rotate-90 my-4" onClick={() => setOpen(true)} /></div>
-          <ChartBarIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(1)} />
-          <AdjustmentsVerticalIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(2)} />
-          <TableCellsIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(3)} />
-          <GlobeAmericasIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(4)} />
-          <UserCircleIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(5)} />
+          <div className="rotate-180"><ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 rotate-90 my-4" onClick={() => setOpen(true)} /></div>
+          <ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(1)} />
+          <AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(2)} />
+          <TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(3)} />
+          <GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(4)} />
+          <UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(5)} />
         </div>
       )
     }else{

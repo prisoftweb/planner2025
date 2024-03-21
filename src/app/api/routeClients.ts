@@ -74,8 +74,6 @@ export async function getClient(auth_token:string, id:string) {
 
 export async function updateClient(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/${id}`;
-  console.log(id);
-  console.log(JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
@@ -84,7 +82,6 @@ export async function updateClient(id:string, auth_token:string, data:Object) {
       }
     })
     if(res.status===200){
-      //return 'en prueba';
       return res.status;
     }
     return 'Error al actualizar cliente!!';
@@ -115,7 +112,9 @@ export async function removeClient(id:string, auth_token:string) {
 }
 
 export async function updateContactClient(data:Object, id:string, auth_token:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/insertContactOfClient/${id}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/insertContactOfClient/${id}`;
+  console.log(url);
+  console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -132,5 +131,67 @@ export async function updateContactClient(data:Object, id:string, auth_token:str
     console.log(typeof(error));
     console.log(error);
     return 'Ocurrio un error al actulizar contacto del cliente!!';
+  }
+}
+
+export async function createClientLogo(auth_token:string, data:FormData) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/clientWithLogo`;
+  try {
+    const res = await axios.post(url, data, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+    if(res.status===201) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+    return 'Ocurrio un problema al crear cliente!!!';
+  }  
+}
+
+export async function removeContactClient(idc:string, id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/deleteContactOfClient/${idc}/${id}`;
+  try {
+    const res = await axios.delete(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===204) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+    console.log(typeof(error));
+    console.log(error);
+    return 'Ocurrio un problema al eliminar contacto!!';
+  }
+}
+
+export async function updateClientLogo(data:FormData, auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/updateMeLogo/${id}`;
+  
+  console.log(url);
+  console.log(data.get('link'));
+  console.log(data.get('logo'));
+  try {
+    const res = await axios.patch(url, data, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'multipart/form-data',
+      }
+    })
+    if(res.status===200) return res.status;
+    return 'Error al actualizar logo del cliente!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+    return 'Ocurrio un error al actualizar logo cliente!!';
   }
 }
