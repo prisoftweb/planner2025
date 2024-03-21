@@ -42,7 +42,7 @@ export const clientValidation = z.object({
     message: 'Email debe tener minimo 5 caracteres',
   }).optional(),
   phone: z.number({
-    invalid_type_error: 'Ingrese un numero valido!!',
+    invalid_type_error: 'Ingrese un numero valido en el telefono!!',
   }).optional(),
   // phone: z.number({
   //   invalid_type_error: 'El telefono deben ser puros numeros',

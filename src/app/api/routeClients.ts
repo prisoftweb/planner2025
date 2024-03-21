@@ -136,6 +136,10 @@ export async function updateContactClient(data:Object, id:string, auth_token:str
 
 export async function createClientLogo(auth_token:string, data:FormData) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/clientWithLogo`;
+  
+  console.log('location');
+  console.log(data.get('location'));
+
   try {
     const res = await axios.post(url, data, {
       headers: {
@@ -176,9 +180,6 @@ export async function removeContactClient(idc:string, id:string, auth_token:stri
 export async function updateClientLogo(data:FormData, auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/updateMeLogo/${id}`;
   
-  console.log(url);
-  console.log(data.get('link'));
-  console.log(data.get('logo'));
   try {
     const res = await axios.patch(url, data, {
       headers: {
