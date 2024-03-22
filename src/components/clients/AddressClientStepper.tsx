@@ -230,7 +230,7 @@ export default function AddressClientStepper({token}:{token:string}){
           </div>
           <div className="">
             <Label htmlFor="community"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Colonia / Localidad</p></Label>
-            <Input type="text" name="community" autoFocus 
+            <Input type="text" name="community" 
               value={formik.values.community}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -243,7 +243,7 @@ export default function AddressClientStepper({token}:{token:string}){
           </div>
           <div className="">
             <Label htmlFor="cp"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Codigo postal</p></Label>
-            <Input type="text" name="cp" autoFocus 
+            <Input type="text" name="cp"
               value={formik.values.cp}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -256,7 +256,7 @@ export default function AddressClientStepper({token}:{token:string}){
           </div>
           <div className="">
             <Label htmlFor="municipy"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Municipio / Delegacion</p></Label>
-            <Input type="text" name="municipy" autoFocus 
+            <Input type="text" name="municipy"
               value={formik.values.municipy}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -269,7 +269,7 @@ export default function AddressClientStepper({token}:{token:string}){
           </div>
           <div className="">
             <Label htmlFor="stateS"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estado</p></Label>
-            <Input type="text" name="stateS" autoFocus 
+            <Input type="text" name="stateS"
               value={formik.values.stateS}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -282,7 +282,7 @@ export default function AddressClientStepper({token}:{token:string}){
           </div>
           <div className="">
             <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
-            <Input type="text" name="country" autoFocus 
+            <Input type="text" name="country"
               value={formik.values.country}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}

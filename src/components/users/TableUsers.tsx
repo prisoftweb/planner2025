@@ -49,7 +49,7 @@ export default function TableUsers({data, token, departments, numRows}:
       header: 'Foto',
       id: 'photo',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1`}>
+        <Link href={`/users/${row.original.id}/profile`}>
           <img src={row.original.photo} 
             className="w-12 h-12 rounded-full" 
             onClick={() => console.log(row.original.photo)} alt="profile" />
@@ -60,7 +60,7 @@ export default function TableUsers({data, token, departments, numRows}:
       header: 'Nombre',
       id: 'name',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1`}>
+        <Link href={`/users/${row.original.id}/profile`}>
           <p className="py-2">{row.original.name}</p>
         </Link>
       )
@@ -69,7 +69,7 @@ export default function TableUsers({data, token, departments, numRows}:
       header: 'Perfil / Estado',
       id: 'profile',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1`}>
+        <Link href={`/users/${row.original.id}/profile`}>
           <div className="flex items-center">
             <div 
               className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
@@ -83,7 +83,7 @@ export default function TableUsers({data, token, departments, numRows}:
       header: 'Correo',
       id: 'email',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1`}>
+        <Link href={`/users/${row.original.id}/profile`}>
           <p className="py-2">{row.original.email}</p>
         </Link>
       ),

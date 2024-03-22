@@ -71,6 +71,7 @@ export default async function clients(){
       currentbalance: 0,
       rfc: client.rfc,
       status: client.status,
+      logo: client.logo? client.logo: '/img/clients/default.jpg',
     })
   })
 

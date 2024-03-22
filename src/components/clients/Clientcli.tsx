@@ -69,8 +69,8 @@ export default function ClientCli({client, token, id, tags}:
       </div> */}
 
       <div className={`flex`}>
-        <div className="">
-          <div className={`mt-0 ${open? 'w-full max-w-40': 'w-12'} bg-white`}>
+        <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
+          <div className={`mt-0 ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>

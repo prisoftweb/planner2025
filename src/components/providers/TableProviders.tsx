@@ -68,7 +68,7 @@ export default function TableProviders({data, token, numRows}:
       header: 'Nombre',
       id: 'name',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}?tab=1`}>
+        <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.name}</p>
         </Link>
       )
@@ -77,7 +77,7 @@ export default function TableProviders({data, token, numRows}:
       header: 'Credito',
       id: 'suppliercredit',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}?tab=1`}>
+        <Link href={`/providers/${row.original.id}/profile`}>
           <div className="flex items-center">
             <div 
               className={`w-4 h-4 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
@@ -97,7 +97,7 @@ export default function TableProviders({data, token, numRows}:
       header: 'RFC',
       id: 'rfc',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}?tab=1`}>
+        <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.rfc}</p>
         </Link>
       )
@@ -106,7 +106,7 @@ export default function TableProviders({data, token, numRows}:
       header: 'Cuenta',
       id: 'account',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}?tab=1`}>
+        <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.account}</p>
         </Link>
       )
@@ -115,7 +115,7 @@ export default function TableProviders({data, token, numRows}:
       header: 'Saldo actual',
       id: 'currentbalance',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}?tab=1`}>
+        <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.currentbalance}</p>
         </Link>
       )

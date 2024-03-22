@@ -21,7 +21,8 @@ export default function TableClients({data, token, numRows}:
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           />
-          <IconText size="w-6 h-6" sizeText="text-sm" text={row.original.name} />
+          {/* <IconText size="w-6 h-6" sizeText="text-sm" text={row.original.name} /> */}
+          <img src={row.original.logo} alt="logo" className="w-10 h-10" />
         </div>
       ),
       enableSorting:false,

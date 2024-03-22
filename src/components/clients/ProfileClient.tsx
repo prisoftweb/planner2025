@@ -7,7 +7,7 @@ export default function ProfileClient({client}:
 
   return(
     <>
-      <div className="w-full border-b-8 pb-4 mt-3">
+      <div className="w-full h-full mt-3">
         <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
             <img src={client.logo? client.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
@@ -40,7 +40,7 @@ export default function ProfileClient({client}:
           </div>
         </div>
         
-        <div className="my-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg shadow-md py-2">
+        <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg shadow-md py-2">
           <div>
             <Label>Direccion</Label>
             <p className="my-2 text-slate-700">{client.location.stret? client.location.stret: '' }</p>

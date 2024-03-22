@@ -78,6 +78,7 @@ export interface TableClient{
   "rfc": string,
   "account":string,
   "currentbalance": number,
+  "logo": string,
 }
 
 export interface Tag{
