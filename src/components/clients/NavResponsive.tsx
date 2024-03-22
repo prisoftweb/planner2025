@@ -2,62 +2,86 @@ import { ArrowDownTrayIcon, ChartBarIcon,
         AdjustmentsVerticalIcon, TableCellsIcon, 
         UserCircleIcon, GlobeAmericasIcon } from "@heroicons/react/24/solid"
 import { useEffect, useState } from "react";
+import {Tooltip} from "@nextui-org/react";
+
 
 export default function NavResponsive({open, setOpen, option, changeOption}: 
                       {open:boolean, setOpen:Function, option:number, changeOption:Function}){
   
-  //let Nav: JSX.Element = <></>;
-
   const [nav, setNav] = useState<JSX.Element>(<div>
-                          <ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 rotate-90" onClick={() => setOpen(false)} />
-                          <ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(1)} />
-                          <AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(2)} />
-                          <TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(3)} />
-                          <GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(4)} />
-                          <UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500" onClick={() => changeOption(5)} />
+                          <ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                              text-slate-500 rotate-90 border-b border-slate-200" onClick={() => setOpen(false)} />
+                          <Tooltip content='Resumen'><ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                              text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(1)} />
+                          </Tooltip>
+                          <Tooltip content='Informacion basica'><AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                              text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(2)} />
+                          </Tooltip>
+                          <Tooltip content='Informacion extra'><TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                              text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(3)} />
+                          </Tooltip>
+                          <Tooltip content='Direccion'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                              text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(4)} />
+                          </Tooltip>
+                          <Tooltip content='Contactos'><UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                              text-slate-500 pb-2 sm:pb-4" onClick={() => changeOption(5)} />
+                          </Tooltip>
                         </div>);
 
   useEffect(() => {
     if(!open){
       setNav (
         <div>
-          <div className="rotate-180"><ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 rotate-90 my-4" onClick={() => setOpen(true)} /></div>
-          <ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(1)} />
-          <AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(2)} />
-          <TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(3)} />
-          <GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(4)} />
-          <UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 my-4" onClick={() => changeOption(5)} />
+          <div className="rotate-180"><ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 
+              cursor-pointer text-slate-500 rotate-90 my-4 pb-2 sm:pb-4 border-l border-slate-300" 
+              onClick={() => setOpen(true)} /></div>
+          <Tooltip content='Resumen' className="text-blue-500"><ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
+              my-4 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(1)} />
+          </Tooltip>
+          <Tooltip content='Informacion basica' className="text-blue-500"><AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+              text-slate-500 my-4 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(2)} />
+          </Tooltip>
+          <Tooltip content='Informacion extra' className="text-blue-500"><TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
+              my-4 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(3)} />
+          </Tooltip>
+          <Tooltip content='Direccion' className="text-blue-500"><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
+              my-4 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(4)} />
+          </Tooltip>
+          <Tooltip content='Contactos' className="text-blue-500"><UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
+              my-4 pb-2 sm:pb-4" onClick={() => changeOption(5)} />
+          </Tooltip>
         </div>
       )
     }else{
       setNav (
         <div className="w-full">
-          <div className="flex justify-end">
-            <ArrowDownTrayIcon className="w-4 h-4 sm:w-12 sm:h-12 cursor-pointer text-slate-500 rotate-90" onClick={() => setOpen(false)} />
+          <div className="flex justify-end border-b border-slate-300">
+            <ArrowDownTrayIcon className="w-4 h-4 sm:w-12 sm:h-12 pb-2 sm:pb-4 cursor-pointer 
+                text-slate-500 rotate-90" onClick={() => setOpen(false)} />
           </div>
           <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-            flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}
+            flex py-2 items-center border-b border-slate-300 mt-3 ${option===1? 'bg-slate-200': ''}`}
             onClick={() => changeOption(1)}
           >
             <ChartBarIcon className="w-4 h-4 mr-2 text-slate-500" />
             Resumen
           </div>
           <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-            flex py-2 items-center ${option===2? 'bg-slate-200': ''}`}
+            flex py-2 items-center border-b border-slate-300 ${option===2? 'bg-slate-200': ''}`}
             onClick={() => changeOption(2)}  
           >
             <AdjustmentsVerticalIcon className="w-4 h-4 mr-2 text-slate-500" />
             Datos basicos
           </div>
           <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-            flex py-2 items-center ${option===3? 'bg-slate-200': ''}`}
+            flex py-2 items-center border-b border-slate-300 ${option===3? 'bg-slate-200': ''}`}
             onClick={() => changeOption(3)}
           >
             <TableCellsIcon className="w-4 h-4 mr-2 text-slate-500" />
             Datos extras
           </div>
           <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-            flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
+            flex py-2 items-center border-b border-slate-300 ${option===4? 'bg-slate-200': ''}`}
             onClick={() => changeOption(4)}
           >
             <GlobeAmericasIcon className="w-4 h-4 mr-2 text-slate-500" />
@@ -73,7 +97,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
         </div>
       )
     }
-  }, [open])
+  }, [open, option])
   
   return(
     <>

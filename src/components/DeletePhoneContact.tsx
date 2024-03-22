@@ -7,8 +7,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { Phone } from '@/interfaces/Contacts';
 import { removePhoneContact } from '@/app/api/routeContacts';
 
-export default function DeletePhoneContact({token, phone, idC} : 
-                                {token : string, phone:Phone, idC:string}){
+export default function DeletePhoneContact({token, phone, idC, numContacts} : 
+                                {token : string, phone:Phone, idC:string, numContacts:number}){
   
   const deletePhone = async (id:string, name:string)  => {
   
@@ -71,7 +71,13 @@ export default function DeletePhoneContact({token, phone, idC} :
     return(
     <>
       <XCircleIcon width={20} height={20} className="text-slate-500 hover:text-slate-300 cursor-pointer"
-        onClick={() => deletePhone(phone._id || '', phone.phone)}
+        onClick={() => {
+          if(numContacts > 1){
+            deletePhone(phone._id || '', phone.phone)
+          }else{
+            showToastMessageError('No puedes eliminar el telefono si no hay mas telefonos!!');
+          }
+        }}
       />
     </>
   )

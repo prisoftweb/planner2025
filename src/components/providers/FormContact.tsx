@@ -261,14 +261,13 @@ export default function FormContact({addNewContact, token, contact, updateContac
           email: emailContact,
           name: nameContact,
           companyemail: emailCompany,
-          //phoneNumber,
         }
         
         if(!newContact.companyemail || newContact.companyemail===''){
           delete newContact.companyemail;
         }
   
-        if(!newContact.email || newContact.email){
+        if(!newContact.email || newContact.email===''){
           delete newContact.email;
         }
   

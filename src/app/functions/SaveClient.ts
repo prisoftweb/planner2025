@@ -40,7 +40,9 @@ export async function SaveClientLogo(data:FormData, token:string,
   newObj.location = location;
   newObj.tags = tags;
   newObj.contact = contacts;
-  newObj.phone = phone;
+  if(phone !== ''){
+    newObj.phone = phone;
+  }
   
   const res = clientValidation.safeParse(newObj);
   

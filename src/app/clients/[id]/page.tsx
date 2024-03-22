@@ -10,6 +10,7 @@ import { Options } from "@/interfaces/Common";
 import ClientCli from "@/components/clients/Clientcli";
 import { getTags } from "@/app/api/routeClients";
 import { Tag } from "@/interfaces/Clients";
+import { NextUiProviders } from "@/components/NextUIProviderComponent";
 
 export default async function Page({ params, searchParams }: 
                     { params: { id: string }, searchParams: { tab: string } }){
@@ -76,7 +77,7 @@ export default async function Page({ params, searchParams }:
   if(searchParams.tab==='2') res=<></>
   else if(searchParams.tab==='3') res=<></>
   else if(searchParams.tab==='4') res=<></>
-  else res=<ClientCli client={client} token={token} id={params.id} tags={arrTags} />;
+  else res=<NextUiProviders><ClientCli client={client} token={token} id={params.id} tags={arrTags} /></NextUiProviders>;
 
   return(
     <>
