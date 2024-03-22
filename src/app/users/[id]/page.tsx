@@ -87,7 +87,7 @@ export default async function Page({ params, searchParams }:
             />
             <p className="text-slate-500 mx-3">{name}</p>
           </div>
-          <Selectize options={options} routePage="users" />
+          <Selectize options={options} routePage="users" subpath="" />
         </div>
         <div className="mt-3">
           <NavTab idUser={params.id} tab={searchParams.tab} />

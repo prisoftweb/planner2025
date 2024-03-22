@@ -5,7 +5,8 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/navigation'
 import { Options } from '@/interfaces/Common'
 
-export default function Selectize({options, routePage}: {options:Options[], routePage:string}){
+export default function Selectize({options, routePage, subpath}: 
+                        {options:Options[], routePage:string, subpath:string}){
   
   const router = useRouter();
 
@@ -32,7 +33,7 @@ export default function Selectize({options, routePage}: {options:Options[], rout
   // }
 
   const onChange = (value:string) => {
-    router.push(`/${routePage}/${value}?tab=1`)
+    router.push(`/${routePage}/${value}${subpath}`)
   }
   
   return(

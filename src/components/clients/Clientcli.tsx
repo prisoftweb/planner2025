@@ -23,7 +23,6 @@ export default function ClientCli({client, token, id, tags}:
   const [opt, setOpt] = useState<number>(1);
   
   useEffect(() => {
-    console.log('opt == ', opt)
     opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
                   <DataBasic token={token} client={client} id={id} tags={tags} />
@@ -82,7 +81,6 @@ export default function ClientCli({client, token, id, tags}:
           {view}
         </div>
       </div>
-      
     </>
   )
 }

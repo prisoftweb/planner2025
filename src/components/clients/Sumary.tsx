@@ -1,8 +1,9 @@
 import { ClientBack } from "@/interfaces/Clients";
-//import CardContact from "../providers/CardContact";
-import CardContactClient from "./CardContactClient";
+import CardContacts from "../CardContacts";
 import Card from "../providers/Card";
 import { ChatBubbleBottomCenterIcon, CursorArrowRaysIcon } from "@heroicons/react/24/solid";
+import DeleteContactClient from "./DeleteContactClient";
+
 
 export default function Sumary({client, token, idCli}: 
                             {client:ClientBack, token:string, idCli:string}){
@@ -11,9 +12,13 @@ export default function Sumary({client, token, idCli}:
   
   if(client.contact){
     client.contact.map((contact, index) => {
-      showContacts.push(<CardContactClient token={token} contact={contact} key={index} idCli={idCli} />)
+      showContacts.push(<CardContacts contact={contact} token={token} key={index}>
+                          <DeleteContactClient contact={contact} token={token} idCli={idCli} />
+                        </CardContacts>)
     })
   }
+
+
 
   return(
     <div className="w-full">

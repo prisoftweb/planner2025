@@ -57,10 +57,6 @@ export default function DataBasic({client, tags, id, token}:
       }
 
       const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
-
-      console.log('data updatade')
-      console.log(JSON.stringify(newObj));
-
       try {
         const res = await updateClient(client._id, token, newObj);
         if(res === 200){

@@ -23,12 +23,8 @@ export default function Navigation({user}: {user:UsrBack}){
     setIsOpenP(!isOpenP);
   }
 
-  let name='NOAutorizado', photo='/img/default.jpg', role='', ok=false, id='';
-  // let name = user.name;
-  // let photo = user.photo;
-  // let role = user.role;
-  // let id = user._id;  
-
+  let photo='/img/default.jpg', role='', id='';
+  
   if(user.photo){
     photo = user.photo;
   }

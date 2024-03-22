@@ -76,7 +76,7 @@ export default async function Page({ params, searchParams }:
             <IconText text={provider.tradename} size="w-8 h-8" sizeText="" />
             <p className="text-slate-500 mx-3">{provider.name}</p>
           </div>
-          <Selectize options={options} routePage="providers" />
+          <Selectize options={options} routePage="providers" subpath="" />
         </div>
         <NavTab idProv={params.id} tab={searchParams.tab} />
         {res}

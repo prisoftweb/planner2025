@@ -1,20 +1,18 @@
-import NavTab from "@/components/clients/NavTab";
-import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
-import Selectize from "@/components/Selectize";
-import {getClient, getClients} from "@/app/api/routeClients";
 import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
-import ArrowReturn from "@/components/ArrowReturn";
-import { Options } from "@/interfaces/Common";
-import ClientCli from "@/components/clients/Clientcli";
+import { getClient, getClients } from "@/app/api/routeClients";
 import { getTags } from "@/app/api/routeClients";
+import { Options } from "@/interfaces/Common";
 import { Tag } from "@/interfaces/Clients";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
+import ClientCli from "@/components/clients/Clientcli";
+import Navigation from "@/components/navigation/Navigation";
+import ArrowReturn from "@/components/ArrowReturn";
+import Selectize from "@/components/Selectize";
+import NavTab from "@/components/clients/NavTab";
 
-export default async function Page({ params, searchParams }: 
-                    { params: { id: string }, searchParams: { tab: string } }){
-  
+export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
@@ -73,12 +71,6 @@ export default async function Page({ params, searchParams }:
     })
   })
 
-  let res;
-  if(searchParams.tab==='2') res=<></>
-  else if(searchParams.tab==='3') res=<></>
-  else if(searchParams.tab==='4') res=<></>
-  else res=<NextUiProviders><ClientCli client={client} token={token} id={params.id} tags={arrTags} /></NextUiProviders>;
-
   return(
     <>
       <Navigation user={user} />
@@ -86,15 +78,16 @@ export default async function Page({ params, searchParams }:
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
             <ArrowReturn link="/clients" />
-            {/* <IconText text={provider.tradename} size="w-8 h-8" sizeText="" /> */}
             <img src={client.logo? client.logo: '/img/clients.svg'} 
                       alt="logo cliente" className="w-12 h-12" />
             <p className="text-slate-500 mx-3">{client.name}</p>
           </div>
-          <Selectize options={options} routePage="clients" />
+          <Selectize options={options} routePage="clients" subpath="/profile" />
         </div>
-        <NavTab idCli={params.id} tab={searchParams.tab} />
-        {res}
+        <NavTab idCli={params.id} tab='1' />
+        <NextUiProviders>
+          <ClientCli client={client} token={token} id={params.id} tags={arrTags} />
+        </NextUiProviders>
       </div>
     </>
   )

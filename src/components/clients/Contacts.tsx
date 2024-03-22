@@ -7,8 +7,10 @@ import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
 import { updateContactClient } from "@/app/api/routeClients";
 //import CardContact from "../providers/CardContact";
-import CardContactClient from "./CardContactClient";
+//import CardContactClient from "./CardContactClient";
 import { contactUpdateValidation } from "@/schemas/contact.schema";
+import CardContacts from "../CardContacts";
+import DeleteContactClient from "./DeleteContactClient";
 
 export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
   
@@ -17,7 +19,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   const [filter, setFilter] = useState<Contact[]>(contacts);
 
   const newContact = async (newContact:string) => {
-    console.log('nuevo contacto');
     try {
       const res = await updateContactClient({contact: newContact}, id, token);
       if(res===200){
@@ -34,7 +35,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   }
 
   const updateContactt = async (data:Contact, id:string) => {
-    console.log('updatee contact!!')
     const validation = contactUpdateValidation.safeParse(data);
     if(validation.success){
       try {
@@ -83,7 +83,10 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
     }else{
       let showConts: JSX.Element[] =[];
       contacts.map((contactm, index) => {
-        showConts.push(<CardContactClient idCli={id} contact={contactm} token={token} key={index} />)
+        // showConts.push(<CardContactClient idCli={id} contact={contactm} token={token} key={index} />)
+        showConts.push(<CardContacts contact={contactm} token={token} key={index}>
+                          <DeleteContactClient contact={contactm} token={token} idCli={id} />
+                        </CardContacts>)
       })
 
       setShowContacts(<></>);
