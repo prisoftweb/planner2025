@@ -3,16 +3,15 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import Link from "next/link";
 import IconText from "./IconText";
-import { Provider, TableProvider } from "@/interfaces/Providers";
+import { TableProvider } from "@/interfaces/Providers";
 import DeleteProvider from "./DeleteProvider";
 import NumberContacts from "./NumberContacts";
 
-export default function TableProviders({data, token, numRows}:
-          {data:TableProvider[], token:string, numRows:number}){
+export default function TableProviders({data, token}:
+          {data:TableProvider[], token:string}){
   
   const columnHelper = createColumnHelper<any>();
-  //const [newUser, setNewUser] = useState<boolean>(false);
-
+  
   const columns = [
     columnHelper.accessor(row => row.id, {
       maxSize: 10,
@@ -124,7 +123,7 @@ export default function TableProviders({data, token, numRows}:
   
   return(
     <>
-      <Table columns={columns} data={data} numRows={numRows} placeH="Buscar proveedor.." /> 
+      <Table columns={columns} data={data} placeH="Buscar proveedor.." /> 
     </>
   )
 }

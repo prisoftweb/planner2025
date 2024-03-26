@@ -4,7 +4,6 @@ import { cookies } from "next/headers";
 import { UsrBack, User } from "@/interfaces/User";
 import { getDepartments } from "../api/routeDepartments";
 import Navigation from "@/components/navigation/Navigation";
-import { Config } from "@/interfaces/Common";
 import WithOut from "@/components/WithOut";
 import ButtonNewUser from "@/components/users/ButtonNewUser";
 
@@ -14,14 +13,6 @@ export default async function Users() {
   const token = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  let config = cookieStore.get('config')?.value || '';
-  let numRows = 3;
-  let objectConfig: Config;
-  if(config) {
-    objectConfig = JSON.parse(config);
-    numRows = parseInt(objectConfig.numRows);
-  }
   
   let users;
   try {
@@ -68,7 +59,7 @@ export default async function Users() {
       <Navigation user={user} />
       {/* <div className="bg-slate-300 h-screen p-10"> */}
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <TableUsers data={data} token={token} departments={departments} numRows={numRows} />
+        <TableUsers data={data} token={token} departments={departments} />
       </div>
     </>
   );

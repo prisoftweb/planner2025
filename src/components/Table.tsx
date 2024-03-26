@@ -3,20 +3,22 @@ import { useReactTable, getCoreRowModel, flexRender,
           getPaginationRowModel, getSortedRowModel,
           getFilteredRowModel, RowSelectionState } 
 from "@tanstack/react-table"
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect} from "react";
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, 
   ChevronLeftIcon, ChevronRightIcon, AdjustmentsHorizontalIcon } 
 from "@heroicons/react/24/solid";
-import { setCookie } from "cookies-next";
+import { useRowsCounter } from "@/app/store/rowsStore";
 
-export default function Table({data, columns, numRows, placeH}: 
-                              {data: any, columns:any, numRows:number, placeH:string}) {
+export default function Table({data, columns, placeH}: 
+                              {data: any, columns:any, placeH:string}) {
 
   const [sorting, setSorting] = useState<any>([]);
   const [filtering, setFiltering] = useState('')
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
   const [showColumns, setShowColumns] = useState<boolean>(false);
 
+  const {numRows, changeCounter} = useRowsCounter();
+  
   useEffect(() => {
     //do something when the row selection changes...
     //console.info({ rowSelection });
@@ -150,7 +152,7 @@ export default function Table({data, columns, numRows, placeH}:
           value={table.getState().pagination.pageSize}
           onChange={e => { 
             table.setPageSize(Number(e.target.value));
-            setCookie('config', {numRows: e.target.value})
+            changeCounter(Number(e.target.value));
           }}
           className="w-12 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
           bg-gray-50 focus:border-slate-700 outline-0 my-3"

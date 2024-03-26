@@ -7,8 +7,8 @@ import IconText from "../providers/IconText";
 import { TableClient } from "@/interfaces/Clients";
 import DeleteClient from "./DeleteClient";
 
-export default function TableClients({data, token, numRows}:
-                        {data:TableClient[], token:string, numRows:number}){
+export default function TableClients({data, token}:
+                        {data:TableClient[], token:string}){
   
   const columnHelper = createColumnHelper<TableClient>();
 
@@ -105,7 +105,7 @@ export default function TableClients({data, token, numRows}:
   
   return(
     <>
-      <Table columns={columns} data={data} numRows={numRows} placeH="Buscar cliente.." />
+      <Table columns={columns} data={data} placeH="Buscar cliente.." />
     </>
   )
 }

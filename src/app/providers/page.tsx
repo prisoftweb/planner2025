@@ -5,7 +5,6 @@ import TableProviders from "@/components/providers/TableProviders";
 import HeaderProvider from "@/components/providers/HeaderProvider";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
-import { Config } from "@/interfaces/Common";
 import { UsrBack } from "@/interfaces/User";
 
 export default async function Providers(){
@@ -16,14 +15,6 @@ export default async function Providers(){
   let id = cookieStore.get('id')?.value || '';
   
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  let config = cookieStore.get('config')?.value || '';
-  let numRows = 3;
-  let objectConfig: Config;
-  if(config) {
-    objectConfig = JSON.parse(config);
-    numRows = parseInt(objectConfig.numRows);
-  }
 
   let providers:Provider[]=[];
   try {
@@ -63,7 +54,7 @@ export default async function Providers(){
         <HeaderProvider id={id} token={token} />
         {/* <WithOutProvider /> */}
         <div className="mt-10">
-          <TableProviders data={data} token={token} numRows={numRows} />
+          <TableProviders data={data} token={token} />
         </div>
       </div>
     </>

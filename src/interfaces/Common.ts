@@ -12,10 +12,6 @@ export interface PhoneNumber{
   phoneformat:string
 }
 
-export interface Config{
-  numRows: string;
-}
-
 export interface Options{
   value: string,
   label: string,

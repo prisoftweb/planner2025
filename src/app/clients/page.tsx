@@ -7,7 +7,7 @@ import { ClientBack, TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
 import Header from "@/components/Header";
 import TableClients from "@/components/clients/TableClients";
-import { Config, Options } from "@/interfaces/Common";
+import { Options } from "@/interfaces/Common";
 
 export default async function clients(){
   
@@ -15,14 +15,6 @@ export default async function clients(){
   const token = cookieStore.get('token')?.value || '';
   
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  let config = cookieStore.get('config')?.value || '';
-  let numRows = 3;
-  let objectConfig: Config;
-  if(config) {
-    objectConfig = JSON.parse(config);
-    numRows = parseInt(objectConfig.numRows);
-  }
 
   let tags;
   try {
@@ -50,15 +42,25 @@ export default async function clients(){
   try {
     clients = await getClients(token);
   } catch (error) {
-    return <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-              text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-              title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
+    return <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+            text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
+            title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
+        </div>
+      </>
   }
 
   if(!clients || clients.length<= 0){
-    return <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-              text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-              title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
+    return <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+            text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
+            title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
+        </div>
+      </>
   }
   
   let data:TableClient[] = [];
@@ -82,7 +84,7 @@ export default async function clients(){
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Clientes"><ButtonNewClient id={user._id} token={token} tags={arrTags} /></Header>
         <div className="mt-10">
-          <TableClients data={data} token={token} numRows={numRows} />
+          <TableClients data={data} token={token} />
         </div>
       </div>
     </>

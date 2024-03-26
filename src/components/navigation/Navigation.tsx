@@ -112,6 +112,7 @@ const NavItems = ({role}: {role:string}) => {
       <NavItem name="Usuarios" link="/users" items={[]}/>
       <NavItem name="Proveedores" link="/providers" items={[]}/>
       <NavItem name="Clientes" link="/clients" items={[]}/>
+      <NavItem name="Roles" link="/roles/role" items={[]}/>
       <NavItem name="Gastos" link="" items={[
           {
             name: 'Costos',
