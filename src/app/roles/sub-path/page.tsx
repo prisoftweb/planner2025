@@ -4,17 +4,18 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import ButtonNew from "@/components/roles/ButtonNew";
 import RolesClient from "@/components/roles/RolesClient";
-import { Route, ResourceTable } from "@/interfaces/Roles";
+import { ResourceTable, Resource } from "@/interfaces/Roles";
 import { getRoutes } from "@/app/api/routeRoles";
 import Header from "@/components/Header";
-import TableSubPath from "@/components/roles/TableSubPath";
+//import TableSubPath from "@/components/roles/TableSubPath";
+import TableResource from "@/components/roles/TableResource";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let routes: Route[];
+  let routes: Resource[];
   try {
     routes = await getRoutes(token);
     if(typeof(routes) === 'string'){
@@ -28,7 +29,10 @@ export default async function Page(){
     <RolesClient token={token}>
       <WithOut img="/img/clientes.svg" subtitle="Sub Rutas" 
           text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
-          title="Sub Rutas"><ButtonNew token={token} opt={3} /></WithOut>
+          title="Sub Rutas">
+            <ButtonNew token={token} opt={3} optResources={[]} optRoutes={[]}
+              descComponents={[]} descRoutes={[]} optComponents={[]} />
+      </WithOut>
     </RolesClient>
   }
   
@@ -38,7 +42,7 @@ export default async function Page(){
       description: route.description,
       id: route._id,
       name: route.name,
-      status: true
+      title: route.title
     })
   })
 
@@ -47,9 +51,12 @@ export default async function Page(){
       <Navigation user={user} />
       <RolesClient token={token}>
         <div>
-          <Header title="Rutas"><ButtonNew token={token} opt={3} /></Header>
+          <Header title="Rutas">
+            <ButtonNew token={token} opt={3} optResources={[]} optRoutes={[]}
+              descComponents={[]} descRoutes={[]} optComponents={[]} />
+          </Header>
           <div className="mt-10">
-            <TableSubPath data={data} token={token} />
+            <TableResource data={data} token={token} />
           </div>
         </div>
       </RolesClient>

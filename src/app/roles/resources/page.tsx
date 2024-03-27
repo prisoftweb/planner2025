@@ -28,7 +28,9 @@ export default async function Page(){
     <RolesClient token={token}>
       <WithOut img="/img/clientes.svg" subtitle="Rutas" 
         text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
-        title="Rutas"><ButtonNew token={token} opt={2} /></WithOut>
+        title="Rutas">
+          <ButtonNew token={token} opt={2} optResources={[]} optRoutes={[]}
+            descComponents={[]} descRoutes={[]} optComponents={[]} /></WithOut>
     </RolesClient>
   }
   
@@ -38,7 +40,7 @@ export default async function Page(){
       description: resource.description,
       id: resource._id,
       name: resource.name,
-      status: true
+      title: resource.title
     })
   })
 
@@ -47,7 +49,10 @@ export default async function Page(){
       <Navigation user={user} />
       <RolesClient token={token}>
         <div>
-          <Header title="Rutas"><ButtonNew token={token} opt={2} /></Header>
+          <Header title="Rutas">
+            <ButtonNew token={token} opt={2} optResources={[]} optRoutes={[]}
+              descComponents={[]} descRoutes={[]} optComponents={[]} />
+          </Header>
           <div className="mt-10">
             <TableResource data={data} token={token} />
           </div>

@@ -14,30 +14,20 @@ import { createComponent } from "@/app/api/routeRoles"
 
 export default function NewComponent({showForm, token}: 
                     {showForm:Function, token:string}){
-  
-  // const router = useRouter();
-
-  // const optionsRoute= [
-  //   {
-  //     value: '/clients',
-  //     label: '/clients',
-  //   },
-  //   {
-  //     value: '/users',
-  //     label: '/users',
-  //   }
-  // ]  
 
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
+      title: '',
     }, 
     validationSchema: Yup.object({
       name: Yup.string()
                   .required('El nombre es obligatorio'),
       description: Yup.string()
                   .required('La descripcion es obligatoria!!'),
+      title: Yup.string()
+                  .required('El titulo es obligatorio!!'),
     }),
 
     onSubmit: async valores => {
@@ -68,24 +58,6 @@ export default function NewComponent({showForm, token}:
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        {/* <Label htmlFor="route"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Ruta</p></Label>
-        <Select
-          className='w-full max-w-md' 
-          options={optionsRoute}
-          maxMenuHeight={250}
-          placeholder='Buscar ...'
-          //onChange={(value:any) => onChange(value.value)}
-        />
-
-        <Label htmlFor="subpath"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Subruta</p></Label>
-        <Select
-          className='w-full max-w-md' 
-          options={optionsRoute}
-          maxMenuHeight={250}
-          placeholder='Buscar ...'
-          //onChange={(value:any) => onChange(value.value)}
-        /> */}
-
         <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="name" 
           onChange={formik.handleChange}
@@ -95,6 +67,17 @@ export default function NewComponent({showForm, token}:
         {formik.touched.name && formik.errors.name ? (
           <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.name}</p>
+          </div>
+        ) : null}
+        <Label htmlFor="title"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Titulo</p></Label>
+        <Input type="text" name="title" 
+          onChange={formik.handleChange}
+          onBlur={formik.handleChange}
+          value={formik.values.title}
+        />
+        {formik.touched.title && formik.errors.title ? (
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+            <p>{formik.errors.title}</p>
           </div>
         ) : null}
         <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripci&oacute;n</p></Label>

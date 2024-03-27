@@ -153,3 +153,39 @@ export async function createComponent(auth_token:string, data:NewRole) {
     return 'Ocurrio un error al crear componente!!';
   }
 }
+
+export async function getTrees(auth_token:string) {
+  try {
+    const res = await axiosInstance.get('/trees', {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return 'Error al consultar arboles!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.message;
+    }
+    return 'Ocurrio un error al consultar arboles!!!';
+  }  
+}
+
+export async function getTree(auth_token:string, id:string) {
+  try {
+    const res = await axiosInstance.get(`/trees/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return 'Error al consultar arbol!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.message;
+    }
+    return 'Ocurrio un error al consultar arbol!!!';
+  }  
+}

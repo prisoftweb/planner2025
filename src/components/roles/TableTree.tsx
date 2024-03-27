@@ -2,13 +2,13 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import Link from "next/link";
-import { ResourceTable } from "@/interfaces/Roles";
+import { TreeTable } from "@/interfaces/Roles";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
-export default function TableSubPath({data, token}:
-                        {data:ResourceTable[], token:string}){
+export default function TableTree({data, token}:
+                        {data:TreeTable[], token:string}){
   
-  const columnHelper = createColumnHelper<ResourceTable>();
+  const columnHelper = createColumnHelper<TreeTable>();
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -46,30 +46,28 @@ export default function TableSubPath({data, token}:
       header: 'Status',
       id: 'status',
       cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
-          <div className="flex text-slate-500 items-end">
-            <div 
-              className={`w-4 h-4 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
-            </div>
+        <Link href={`#`}>
+          <div className="flex items-center">
+            <div className={`w-6 h-6 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
           </div>
-        </Link>       
-      ),
-    }),
-    columnHelper.accessor('name', {
-      header: 'Nombre',
-      id: 'name',
-      cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
-          <p className="py-2">{row.original.name}</p>
         </Link>
       )
     }),
-    columnHelper.accessor('description', {
-      header: 'Descripcion',
-      id: 'description',
+    columnHelper.accessor('resource', {
+      header: 'Recurso',
+      id: 'resource',
       cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
-          <p className="py-2">{row.original.description}</p>
+        <Link href={`#`}>
+          <p className="py-2">{row.original.resource}</p>
+        </Link>
+      )
+    }),
+    columnHelper.accessor('routes', {
+      header: 'Rutas',
+      id: 'routes',
+      cell: ({row}) => (
+        <Link href={`#`}>
+          <p className="py-2">{row.original.routes}</p>
         </Link>
       )
     }),
@@ -77,7 +75,7 @@ export default function TableSubPath({data, token}:
   
   return(
     <>
-      <Table columns={columns} data={data} placeH="Buscar ruta.." />
+      <Table columns={columns} data={data} placeH="Buscar rol.." />
     </>
   )
 }

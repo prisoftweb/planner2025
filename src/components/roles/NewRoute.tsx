@@ -16,12 +16,15 @@ export default function NewRoute({showForm, token}:
     initialValues: {
       name: '',
       description: '',
+      title: '',
     }, 
     validationSchema: Yup.object({
       name: Yup.string()
                   .required('El nombre es obligatorio'),
       description: Yup.string()
                   .required('La descripcion es obligatoria!!'),
+      title: Yup.string()
+                  .required('El titulo es obligatorio!!'),
     }),
 
     onSubmit: async valores => {
@@ -47,7 +50,7 @@ export default function NewRoute({showForm, token}:
       >
         <div className="flex justify-between">
           <HeaderForm img="/nuevoIcono.jpg" subtitle="Agregar nueva ruta de segmento" 
-            title="Agregar nueva ruta"
+            title="Agregar nuevo recurso"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
@@ -61,6 +64,17 @@ export default function NewRoute({showForm, token}:
         {formik.touched.name && formik.errors.name ? (
           <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.name}</p>
+          </div>
+        ) : null}
+        <Label htmlFor="title"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Titulo</p></Label>
+        <Input type="text" name="title" 
+          onChange={formik.handleChange}
+          onBlur={formik.handleChange}
+          value={formik.values.title}
+        />
+        {formik.touched.title && formik.errors.title ? (
+          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+            <p>{formik.errors.title}</p>
           </div>
         ) : null}
         <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripci&oacute;n</p></Label>

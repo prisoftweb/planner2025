@@ -2,7 +2,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import Link from "next/link";
-import IconText from "../providers/IconText";
 import { ResourceTable } from "@/interfaces/Roles";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
@@ -43,25 +42,21 @@ export default function TableResource({data, token}:
         <p>accion</p>
       )
     }),
-    columnHelper.accessor('status', {
-      header: 'Status',
-      id: 'status',
-      cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
-          <div className="flex text-slate-500 items-end">
-            <div 
-              className={`w-4 h-4 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
-            </div>
-          </div>
-        </Link>       
-      ),
-    }),
     columnHelper.accessor('name', {
       header: 'Nombre',
       id: 'name',
       cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
+        <Link href={`#`}>
           <p className="py-2">{row.original.name}</p>
+        </Link>
+      )
+    }),
+    columnHelper.accessor('title', {
+      header: 'Titulo',
+      id: 'title',
+      cell: ({row}) => (
+        <Link href={`#`}>
+          <p className="py-2">{row.original.title}</p>
         </Link>
       )
     }),
@@ -69,7 +64,7 @@ export default function TableResource({data, token}:
       header: 'Descripcion',
       id: 'description',
       cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
+        <Link href={`#`}>
           <p className="py-2">{row.original.description}</p>
         </Link>
       )

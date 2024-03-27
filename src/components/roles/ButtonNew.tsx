@@ -5,8 +5,15 @@ import NewRole from "./NewRole";
 import NewRoute from "./NewRoute";
 import NewSubPath from "./NewSubPath";
 import NewComponent from "./NewComponent";
+import NewRouteTree from "./NewRouteTree";
+import { Options } from "@/interfaces/Common";
+import NewCompoentTree from "./NewComponentTree";
 
-export default function ButtonNew({token, opt}: {token:string, opt:number}){
+export default function ButtonNew({token, opt, optResources, optRoutes, 
+                                  descRoutes, descComponents,optComponents}: 
+                        {token:string, opt:number, optResources:Options[], 
+                          optRoutes:Options[], optComponents: Options[]
+                          descRoutes: Options[], descComponents: Options[]}){
   const [newRole, setNewRole] = useState<boolean>(false);
   
   let showButton;
@@ -34,6 +41,24 @@ export default function ButtonNew({token, opt}: {token:string, opt:number}){
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
           {newRole && <NewComponent showForm={setNewRole} token={token} />}
+      </>
+    break;
+    case 5: 
+      showButton = <>
+        <Button type="button" onClick={() => setNewRole(true)}>Asignar ruta</Button>
+          {newRole && 
+            <NewRouteTree showForm={setNewRole} token={token} 
+                    optResources={optResources} optRoutes={optRoutes}
+                    descRoutes={descRoutes} />}
+      </>
+    break;
+    case 6: 
+      showButton = <>
+        <Button type="button" onClick={() => setNewRole(true)}>Asignar componente</Button>
+          {newRole && 
+            <NewCompoentTree showForm={setNewRole} token={token} 
+                    optResources={optResources} optRoutes={optRoutes}
+                    descComponents={descComponents} optComponents={optComponents} />}
       </>
     break;
   }

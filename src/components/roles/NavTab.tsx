@@ -1,8 +1,9 @@
 import { ChartBarIcon, AdjustmentsVerticalIcon, TableCellsIcon, 
-  GlobeAmericasIcon } from "@heroicons/react/24/solid"
-import { useEffect, useState } from "react";
+  GlobeAmericasIcon, AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid"
+import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 import Link from "next/link";
+
 
 export default function NavTab(){
 
@@ -27,53 +28,36 @@ export default function NavTab(){
 
   const [nav, setNav] = useState<JSX.Element>(<div>
                       <Link href='/roles/role'>
-                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Rol'><ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Roles'>
+                          <ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
                         </Tooltip>
                       </Link>
-                      <Link href='/roles/routes'>
-                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Ruta'><AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                      <Link href='/roles/resources'>
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Recursos'>
+                          <AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
                         </Tooltip>
                       </Link>
                       <Link href='/roles/sub-path'>
-                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Sub Ruta'><TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Rutas'>
+                          <TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
                         </Tooltip>
                       </Link>
                       <Link href='/roles/components'>
-                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Components'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Componentes'>
+                          <GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                            text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
+                        </Tooltip>
+                      </Link>
+                      <Link href='/roles/trees'>
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Arboles'>
+                          <AdjustmentsHorizontalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
                         </Tooltip>
                       </Link>
                     </div>);
-
-  // useEffect(() => {
-  //   setNav (
-  //     <div>
-  //       <Link href='/roles/rol'>
-  //         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Rol'><ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-  //             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
-  //         </Tooltip>
-  //       </Link>
-  //       <Link href='/roles/route'>
-  //         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Ruta'><AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-  //             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
-  //         </Tooltip>
-  //       </Link>
-  //       <Link href='/roles/'>
-  //         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Permiso'><TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-  //             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
-  //         </Tooltip>
-  //       </Link>
-  //       <Link href='/roles/components'>
-  //         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Components'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-  //             text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" />
-  //         </Tooltip>
-  //       </Link>
-  //     </div>
-  //   )
-  // }, [option])
 
   return(
     <>
