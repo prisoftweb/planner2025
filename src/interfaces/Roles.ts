@@ -61,33 +61,6 @@ export interface ResourceTable {
   title: string
 }
 
-// export interface Tree {
-//   resources: ResourceTree[]
-//   _id: string
-//   __v: number
-//   id: string
-// }
-
-// export interface ResourceTree {
-//   resource: string
-//   status: boolean
-//   routes: RouteTree[]
-//   _id: string
-// }
-
-// export interface RouteTree {
-//   route: string
-//   status: boolean
-//   components: ComponentTree[]
-//   _id: string
-// }
-
-// export interface ComponentTree {
-//   component: string
-//   status: boolean
-//   _id: string
-// }
-
 export interface Tree {
   _id: string
   resources: Resource2[]

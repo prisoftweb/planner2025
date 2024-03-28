@@ -7,16 +7,17 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { createRoute } from "@/app/api/routeRoles"
+import { createRoute, updateRoute } from "@/app/api/routeRoles"
+import { Resource } from "@/interfaces/Roles"
 
-export default function NewSubPath({showForm, token}: 
-                    {showForm:Function, token:string}){
+export default function NewSubPath({showForm, token, route}: 
+                    {showForm:Function, token:string, route:Resource}){
   
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      title: '',
+      name: route.name,
+      description: route.description,
+      title: route.title,
     }, 
     validationSchema: Yup.object({
       name: Yup.string()
@@ -28,17 +29,32 @@ export default function NewSubPath({showForm, token}:
     }),
 
     onSubmit: async valores => {
-      try {
-        const res = await createRoute(token, valores);
-        if(res===201){
-          showForm(false);
-          showToastMessage('Ruta creada exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+      if(route.id === ''){
+        try {
+          const res = await createRoute(token, valores);
+          if(res===201){
+            showForm(false);
+            showToastMessage('Ruta creada exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }
+        } catch (error) {
+          showToastMessageError('Error al crear Ruta!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear Ruta!!');
+      }else{
+        try {
+          const res = await updateRoute(token, route.id, valores);
+          if(res===200){
+            showForm(false);
+            showToastMessage('Ruta actualizada exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }
+        } catch (error) {
+          showToastMessageError('Error al actualizar Ruta!!');
+        }
       }
     }
   });

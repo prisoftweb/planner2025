@@ -7,16 +7,17 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { createResource } from "@/app/api/routeRoles"
+import { createResource, updateResource } from "@/app/api/routeRoles"
+import { Resource } from "@/interfaces/Roles"
 
-export default function NewRoute({showForm, token}: 
-                    {showForm:Function, token:string}){
-  
+export default function NewRoute({showForm, token, resource}: 
+                    {showForm:Function, token:string, resource:Resource}){
+
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      title: '',
+      name: resource.name,
+      description: resource.description,
+      title: resource.title,
     }, 
     validationSchema: Yup.object({
       name: Yup.string()
@@ -28,17 +29,32 @@ export default function NewRoute({showForm, token}:
     }),
 
     onSubmit: async valores => {
-      try {
-        const res = await createResource(token, valores);
-        if(res===201){
-          showForm(false);
-          showToastMessage('Ruta creada exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+      if(resource.id === ''){
+        try {
+          const res = await createResource(token, valores);
+          if(res===201){
+            showForm(false);
+            showToastMessage('Recurso creada exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }
+        } catch (error) {
+          showToastMessageError('Error al crear Recurso!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear Ruta!!');
+      }else{
+        try {
+          const res = await updateResource(token, resource.id, valores);
+          if(res===200){
+            showForm(false);
+            showToastMessage('Recurso modificado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }
+        } catch (error) {
+          showToastMessageError('Error al actualizar Recurso!!');
+        }
       }
     }
   });

@@ -28,7 +28,7 @@ export default async function Page(){
           text="Aqui puedes gestionar tus roles para usuarios que usen el sistema"
           title="Roles">
             <ButtonNew token={token} opt={1} descComponents={[]} descRoutes={[]} 
-              optComponents={[]} optResources={[]} optRoutes={[]} /></WithOut>
+              optComponents={[]} optResources={[]} optRoutes={[]} idTree="" /></WithOut>
       </RolesClient>
     )
   }
@@ -56,7 +56,7 @@ export default async function Page(){
         <div>
           <Header title="Roles">
             <ButtonNew token={token} opt={1} descComponents={[]} descRoutes={[]} 
-              optComponents={[]} optResources={[]} optRoutes={[]} />
+              optComponents={[]} optResources={[]} optRoutes={[]} idTree="" />
           </Header>
           <div className="mt-10">
             <TableRole data={table} token={token} />

@@ -189,3 +189,115 @@ export async function getTree(auth_token:string, id:string) {
     return 'Ocurrio un error al consultar arbol!!!';
   }  
 }
+
+export async function updateResource(auth_token:string, id:string, data:Object) {
+  try {
+    const res = await axiosInstance.patch(`/resources/${id}`, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar recurso!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.message;
+    }
+    return 'Ocurrio un error al actualizar recurso!!';
+  }
+}
+
+export async function updateRoute(auth_token:string, id:string, data:Object) {
+  try {
+    const res = await axiosInstance.patch(`/routes/${id}`, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar ruta!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.message;
+    }
+    return 'Ocurrio un error al actualizar ruta!!';
+  }
+}
+
+export async function updateComponent(auth_token:string, id:string, data:Object) {
+  try {
+    const res = await axiosInstance.patch(`/components/${id}`, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar componente!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.message;
+    }
+    return 'Ocurrio un error al actualizar componente!!';
+  }
+}
+
+export async function insertResourceTree(auth_token:string, id:string, data:Object) {
+  try {
+    const res = await axiosInstance.post(`/trees/insertResourceInTree/${id}`, JSON.stringify(data), {
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+        "Content-Type": 'application/json'
+      }
+    })
+    if(res.status===200) return res.status;
+    return 'Error al agregar ruta!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message? error.response?.data.message : error.message;
+    }
+    return 'Ocurrio un error al agregar ruta!!';
+  }
+}
+
+export async function insertComponentsTree(auth_token:string, idTree:string, idResource:string, data:Object){
+  const url = `/trees/insertRouteInResourceInTree/${idTree}/${idResource}`;
+  try {
+    const res = await axiosInstance.post(url, JSON.stringify(data), {
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+        "Content-Type": `apllication/json`,
+      }
+    });
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar componentes en el arbol!!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message? error.response?.data.message: error.message;
+    }
+    return 'Ocurrio un error al actualizar componentes en el arbol!!';
+  }
+}
+
+export async function RemoveResourceTree(auth_token:string, idTree:string, idResource:string) {
+  const url = `/trees/deleteResourceInTree/${idTree}/${idResource}`;
+  try {
+    const res = await axiosInstance.delete(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 204) return res.status;
+    return 'Error al elimar recurso del arbol!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message? error.response?.data.message : error.message;
+    }
+    return 'Ocurrion un error al eliminar recurso del arbol!!';
+  }
+}

@@ -6,14 +6,15 @@ import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
-import AddRoutes from "./AddRoutes"
+import AddComponents from "./AddElements"
 import { useState, useEffect } from "react"
+import { insertComponentsTree } from "@/app/api/routeRoles"
 
 export default function NewComponentTree({showForm, token, optResources, 
-                          optRoutes, descComponents, optComponents}: 
+                          optRoutes, descComponents, optComponents, idTree}: 
                         {showForm:Function, token:string, optResources:Options[], 
                         optRoutes:Options[], optComponents: Options[]
-                        descComponents: Options[]}){
+                        descComponents: Options[], idTree:string}){
                           
                           
   const [components, setComponents] = useState<string[]>([]);
@@ -40,10 +41,10 @@ export default function NewComponentTree({showForm, token, optResources,
 
   useEffect(() => {
     if((!bandDelete) || ((components.length === selectComponents.length))){
-      setSelectComponents((oldArray) => [...oldArray, <AddRoutes pushRoute={pushComponent} 
-        DeleteRoute={DeleteComponent}  bandPlus={true} index={selectComponents.length} 
-        key={selectComponents.length} updateCount={updateCount} descRoutes={descComponents} 
-        opts={optRoutes}  />])
+      setSelectComponents((oldArray) => [...oldArray, <AddComponents pushElement={pushComponent} 
+        DeleteElement={DeleteComponent}  bandPlus={true} index={selectComponents.length} 
+        key={selectComponents.length} updateCount={updateCount} descriptions={descComponents} 
+        opts={optComponents}  />])
     }
     setBandDelete(false);
   }, [countFiles])
@@ -67,11 +68,41 @@ export default function NewComponentTree({showForm, token, optResources,
     }
   }, [indexDelete])
 
-  const onclickSave = () => {
-    console.log('componentsss');
-    console.log(components);
-    console.log('resource', resource);
-    console.log('route', route);
+  const onclickSave = async() => {
+    if(!route || route === '' || !resource || resource === '' || !components || components.length <= 0){
+      showToastMessageError('Todos los campos son obligatorios!!!');
+    }else{
+      try {        
+        const arrComponents: Object[] = [];
+        components.map((component) => {
+          arrComponents.push({
+            component
+          })
+        })
+
+        const data = {
+          //resource,
+          routes: {
+            route,
+            components: arrComponents
+          }
+        }
+
+        console.log(JSON.stringify(data));
+
+        const res = await insertComponentsTree(token, idTree, resource, data);
+        if(res === 200){
+          showToastMessage('Recurso agregado a arbol exitosamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un problema al agregar recurso a arbol!!');
+      }
+    }
   }
 
   return(

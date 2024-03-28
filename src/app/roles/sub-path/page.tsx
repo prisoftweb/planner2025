@@ -31,7 +31,7 @@ export default async function Page(){
           text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
           title="Sub Rutas">
             <ButtonNew token={token} opt={3} optResources={[]} optRoutes={[]}
-              descComponents={[]} descRoutes={[]} optComponents={[]} />
+              descComponents={[]} descRoutes={[]} optComponents={[]} idTree="" />
       </WithOut>
     </RolesClient>
   }
@@ -53,10 +53,10 @@ export default async function Page(){
         <div>
           <Header title="Rutas">
             <ButtonNew token={token} opt={3} optResources={[]} optRoutes={[]}
-              descComponents={[]} descRoutes={[]} optComponents={[]} />
+              descComponents={[]} descRoutes={[]} optComponents={[]} idTree="" />
           </Header>
           <div className="mt-10">
-            <TableResource data={data} token={token} />
+            <TableResource data={data} token={token} option={2} />
           </div>
         </div>
       </RolesClient>

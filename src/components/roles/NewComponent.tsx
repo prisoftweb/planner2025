@@ -7,19 +7,17 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { createComponent } from "@/app/api/routeRoles"
-// import { useRouter } from "next/navigation"
-// import Select from 'react-select'
-// import { Options } from "@/interfaces/Common"
+import { createComponent, updateComponent } from "@/app/api/routeRoles"
+import { Resource } from "@/interfaces/Roles"
 
-export default function NewComponent({showForm, token}: 
-                    {showForm:Function, token:string}){
+export default function NewComponent({showForm, token, component}: 
+                    {showForm:Function, token:string, component:Resource}){
 
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: '',
-      title: '',
+      name: component.name,
+      description: component.description,
+      title: component.title,
     }, 
     validationSchema: Yup.object({
       name: Yup.string()
@@ -31,17 +29,32 @@ export default function NewComponent({showForm, token}:
     }),
 
     onSubmit: async valores => {
-      try {
-        const res = await createComponent(token, valores);
-        if(res===201){
-          showForm(false);
-          showToastMessage('Componente creado exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+      if(component.id === ''){
+        try {
+          const res = await createComponent(token, valores);
+          if(res===201){
+            showForm(false);
+            showToastMessage('Componente creado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }
+        } catch (error) {
+          showToastMessageError('Error al crear Componente!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear Componente!!');
+      }else{
+        try {
+          const res = await updateComponent(token, component.id, valores);
+          if(res===200){
+            showForm(false);
+            showToastMessage('Componente actualizado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }
+        } catch (error) {
+          showToastMessageError('Error al actualizar Componente!!');
+        }
       }
     }
   });

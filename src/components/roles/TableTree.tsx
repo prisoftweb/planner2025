@@ -5,8 +5,8 @@ import Link from "next/link";
 import { TreeTable } from "@/interfaces/Roles";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
-export default function TableTree({data, token}:
-                        {data:TreeTable[], token:string}){
+export default function TableTree({data, token, idTree}:
+                        {data:TreeTable[], token:string, idTree:string}){
   
   const columnHelper = createColumnHelper<TreeTable>();
 

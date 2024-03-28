@@ -2,13 +2,33 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import Link from "next/link";
-import { ResourceTable } from "@/interfaces/Roles";
-import { TrashIcon } from "@heroicons/react/24/solid";
+import { Resource, ResourceTable } from "@/interfaces/Roles";
+import { TrashIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import NewRoute from "./NewRoute";
+import NewSubPath from "./NewSubPath";
+import NewComponent from "./NewComponent";
 
-export default function TableResource({data, token}:
-                        {data:ResourceTable[], token:string}){
+export default function TableResource({data, token, option}:
+                        {data:ResourceTable[], token:string, option:number}){
   
+//option 1 resources 2 routes y 3 components
+
   const columnHelper = createColumnHelper<ResourceTable>();
+  const [dataResource, setDataResource] = useState<Resource>({__v: 0,
+                           _id: '', description: '', id: '', name: '', title: ''});
+
+  const updateResource = (row:ResourceTable) => {
+    setDataResource({
+      __v: 0,
+      _id: row.id,
+      description: row.description,
+      id: row.id,
+      name: row.name,
+      title: row.title,
+    })
+    setOpenForm(true);
+  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -35,7 +55,12 @@ export default function TableResource({data, token}:
       id: 'action',
       cell: ({row}) => (
         // <DeleteClient client={row.original} token={token} />
-        <TrashIcon className="text-red-500 w-6 h-6" />
+        <div className="flex">
+          <TrashIcon className="text-red-500 w-6 h-6" />
+          <PencilSquareIcon className="text-slate-500 w-6 h-6 cursor-pointer" 
+            onClick={() => updateResource(row.original)}
+          />
+        </div>
       ),
       enableSorting:false,
       header: () => (
@@ -71,8 +96,17 @@ export default function TableResource({data, token}:
     }),
   ]
   
+  const [openForm, setOpenForm] = useState<boolean>(false);
+
+  const view = (option === 1? 
+                  <NewRoute showForm={setOpenForm} token={token} resource={dataResource} />: 
+                      (option === 2? <NewSubPath showForm={setOpenForm} token={token} route={dataResource} /> : 
+                          (option === 3? <NewComponent showForm={setOpenForm} token={token} component={dataResource} /> :
+                            <NewRoute showForm={setOpenForm} token={token} resource={dataResource} />)) )
+
   return(
     <>
+      {openForm && view}
       <Table columns={columns} data={data} placeH="Buscar rol.." />
     </>
   )

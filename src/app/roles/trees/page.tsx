@@ -1,4 +1,3 @@
-import { getTree } from "@/app/api/routeRoles";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { Tree, TreeTable } from "@/interfaces/Roles";
@@ -7,7 +6,9 @@ import RolesClient from "@/components/roles/RolesClient";
 import Header from "@/components/Header";
 import TableTree from "@/components/roles/TableTree";
 import ButtonNew from "@/components/roles/ButtonNew";
-import { getResources, getRoutes, getComponents } from "@/app/api/routeRoles";
+import { getResources, getRoutes, getComponents,
+        getTree, getTrees
+      } from "@/app/api/routeRoles";
 import { Resource } from "@/interfaces/Roles";
 import { Options } from "@/interfaces/Common";
 
@@ -16,19 +17,23 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let tree: Tree;
+  let trees: Tree[];
   try {
-    tree = await getTree(token, '660342b6e1db4d76e2b99065');
-    if(typeof(tree) === 'string'){
-    return <h1 className="text-center text-red-500">{tree}</h1>
+    trees = await getTrees(token);
+    if(typeof(trees) === 'string'){
+    return <h1 className="text-center text-red-500">{trees}</h1>
     }
   } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar recursos!!</h1>
+    return <h1 className="text-center text-red-500">Error al consultar arboles!!</h1>
   }
-  
+
   const data: TreeTable[] = [];
   
-  tree.resources.map((res) => {
+  if(!trees || trees.length <= 0){
+    <h1 className="text-center text-red-500">Falta crear pantalla de no hay arboles!!</h1>
+  }
+
+  trees[0].resources.map((res) => {
     let str: string = '';
     res.routes.map((route) => {
       str += ' ' + route.route.name;
@@ -118,16 +123,16 @@ export default async function Page() {
             <ButtonNew token={token} opt={5} 
                 optResources={optionsResource} optRoutes={optionsRoutes}
                 descRoutes={titleRoutes} descComponents={[]} 
-                optComponents={[]} />
+                optComponents={[]} idTree={trees[0]._id} />
             
             <ButtonNew token={token} opt={6} 
                 optResources={optionsResource} optRoutes={optionsRoutes}
                 descRoutes={[]} descComponents={descComponents} 
-                optComponents={optionsComponents} />
+                optComponents={optionsComponents} idTree={trees[0]._id} />
             </div>
           </Header>
           <div className="mt-10">
-            <TableTree data={data} token={token} />
+            <TableTree idTree={trees[0]._id} data={data} token={token} />
           </div>
         </div>
       </RolesClient>

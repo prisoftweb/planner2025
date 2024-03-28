@@ -7,13 +7,14 @@ import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
-import AddRoutes from "./AddRoutes"
+import AddRoutes from "./AddElements"
 import { useState, useEffect } from "react"
+import { insertResourceTree } from "@/app/api/routeRoles"
 
 export default function NewRouteTree({showForm, token, optResources, 
-                                        optRoutes, descRoutes}: 
+                                        optRoutes, descRoutes, idTree}: 
                               {showForm:Function, token:string, optResources:Options[], 
-                                optRoutes:Options[], descRoutes: Options[]}){
+                                optRoutes:Options[], descRoutes: Options[], idTree:string}){
 
   const [routes, setRoutes] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
@@ -37,9 +38,9 @@ export default function NewRouteTree({showForm, token, optResources,
 
   useEffect(() => {
     if((!bandDelete) || ((routes.length === selectRoutes.length))){
-      setSelectRoutes((oldArray) => [...oldArray, <AddRoutes pushRoute={pushRoute} 
-        DeleteRoute={DeleteRoute}  bandPlus={true} index={selectRoutes.length} 
-        key={selectRoutes.length} updateCount={updateCount} descRoutes={descRoutes} 
+      setSelectRoutes((oldArray) => [...oldArray, <AddRoutes pushElement={pushRoute} 
+        DeleteElement={DeleteRoute}  bandPlus={true} index={selectRoutes.length} 
+        key={selectRoutes.length} updateCount={updateCount} descriptions={descRoutes} 
         opts={optRoutes}  />])
     }
     setBandDelete(false);
@@ -64,10 +65,39 @@ export default function NewRouteTree({showForm, token, optResources,
     }
   }, [indexDelete])
 
-  const onclickSave = () => {
-    console.log('routesss');
-    console.log(routes);
-    console.log('resource', resource);
+  const onclickSave = async () => {
+    
+    if(!routes || routes.length <= 0 || !resource || resource === ''){
+      showToastMessageError('Todos los campos son obligatorios!!!');
+    }else{
+      try {        
+        const arrRoutes: Object[] = [];
+        routes.map((route) => {
+          arrRoutes.push({
+            route: route
+          })
+        })
+
+        const data = {
+          resources: {
+            resource,
+            routes: arrRoutes
+          }
+        }
+
+        const res = await insertResourceTree(token, idTree, data);
+        if(res === 200){
+          showToastMessage('Recurso agregado a arbol exitosamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un problema al agregar recurso a arbol!!');
+      }
+    }
   }
 
   return(

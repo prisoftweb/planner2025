@@ -8,15 +8,26 @@ import NewComponent from "./NewComponent";
 import NewRouteTree from "./NewRouteTree";
 import { Options } from "@/interfaces/Common";
 import NewCompoentTree from "./NewComponentTree";
+import { Resource } from "@/interfaces/Roles";
 
 export default function ButtonNew({token, opt, optResources, optRoutes, 
-                                  descRoutes, descComponents,optComponents}: 
+                                  descRoutes, descComponents,optComponents, idTree}: 
                         {token:string, opt:number, optResources:Options[], 
                           optRoutes:Options[], optComponents: Options[]
-                          descRoutes: Options[], descComponents: Options[]}){
+                          descRoutes: Options[], descComponents: Options[],
+                          idTree:string}){
   const [newRole, setNewRole] = useState<boolean>(false);
   
   let showButton;
+
+  const dataIni: Resource = {
+    __v: 0,
+    _id: '',
+    description: '',
+    id: '',
+    name: '',
+    title: ''
+  }
 
   switch(opt){
     case 1: 
@@ -28,19 +39,19 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
     case 2: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewRoute showForm={setNewRole} token={token} />}
+          {newRole && <NewRoute showForm={setNewRole} token={token} resource={dataIni} />}
       </>
     break;
     case 3: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewSubPath showForm={setNewRole} token={token} />}
+          {newRole && <NewSubPath showForm={setNewRole} token={token} route={dataIni} />}
       </>
     break;
     case 4: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewComponent showForm={setNewRole} token={token} />}
+          {newRole && <NewComponent showForm={setNewRole} token={token} component={dataIni} />}
       </>
     break;
     case 5: 
@@ -49,7 +60,7 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
           {newRole && 
             <NewRouteTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
-                    descRoutes={descRoutes} />}
+                    descRoutes={descRoutes} idTree={idTree} />}
       </>
     break;
     case 6: 
@@ -58,7 +69,8 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
           {newRole && 
             <NewCompoentTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
-                    descComponents={descComponents} optComponents={optComponents} />}
+                    descComponents={descComponents} optComponents={optComponents} 
+                    idTree={idTree} />}
       </>
     break;
   }
