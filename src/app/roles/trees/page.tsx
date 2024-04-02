@@ -7,10 +7,11 @@ import Header from "@/components/Header";
 import TableTree from "@/components/roles/TableTree";
 import ButtonNew from "@/components/roles/ButtonNew";
 import { getResources, getRoutes, getComponents,
-        getTree, getTrees
+        getTrees
       } from "@/app/api/routeRoles";
 import { Resource } from "@/interfaces/Roles";
 import { Options } from "@/interfaces/Common";
+import WithOut from "@/components/WithOut";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -30,7 +31,16 @@ export default async function Page() {
   const data: TreeTable[] = [];
   
   if(!trees || trees.length <= 0){
-    <h1 className="text-center text-red-500">Falta crear pantalla de no hay arboles!!</h1>
+    return <div className="p-10">
+              <WithOut img="/img/clientes.svg" subtitle="Arboles" 
+                text="Aqui puedes gestionar tu arbol con toda su informacion relevante"
+                title="Arboles">
+                  <ButtonNew token={token} opt={7} 
+                        optResources={[]} optRoutes={[]}
+                        descRoutes={[]} descComponents={[]} 
+                        optComponents={[]} idTree='' />
+              </WithOut>  
+            </div>
   }
 
   trees[0].resources.map((res) => {
@@ -85,6 +95,15 @@ export default async function Page() {
     })
   })
 
+  let optionsResourceComponents: Options[] = [];
+
+  trees[0].resources.map((resource) => {
+    optionsResourceComponents.push({
+      label: resource.resource.name,
+      value: resource._id,
+    })
+  })
+
   let optionsRoutes: Options[] = [];
   let titleRoutes: Options[] = [];
 
@@ -99,26 +118,43 @@ export default async function Page() {
     })
   })
 
+  let optionsRoutesComponents: Options[] = [];
+  //let titleRoutesComponents: Options[] = [];
+
+  trees[0].resources.map((resources) => {
+    resources.routes.map((route) => {
+      optionsRoutesComponents.push({
+        label: route.route.name,
+        value: route._id
+      })
+      // titleRoutes.push({
+      //   label: route.route.description,
+      //   value: route._id
+      // })
+    })
+  })
+
   let optionsComponents: Options[] = [];
   let descComponents: Options[] = [];
 
-  routes.map((route) => {
+  components.map((component) => {
     optionsComponents.push({
-      label: route.name,
-      value: route._id
+      label: component.name,
+      value: component._id
     })
     descComponents.push({
-      label: route.description,
-      value: route._id
+      label: component.description,
+      value: component._id
     })
   })
 
   return(
     <>
       <Navigation user={user} />
+      
       <RolesClient token={token}>
         <div>
-          <Header title="Rutas">
+          <Header title="Arbol">
             <div className="flex gap-x-2">
             <ButtonNew token={token} opt={5} 
                 optResources={optionsResource} optRoutes={optionsRoutes}
@@ -126,7 +162,7 @@ export default async function Page() {
                 optComponents={[]} idTree={trees[0]._id} />
             
             <ButtonNew token={token} opt={6} 
-                optResources={optionsResource} optRoutes={optionsRoutes}
+                optResources={optionsResourceComponents} optRoutes={optionsRoutesComponents}
                 descRoutes={[]} descComponents={descComponents} 
                 optComponents={optionsComponents} idTree={trees[0]._id} />
             </div>

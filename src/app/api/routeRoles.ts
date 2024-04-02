@@ -24,6 +24,25 @@ export async function getRoles(auth_token:string) {
   }
 }
 
+export async function getRole(auth_token:string, id:string) {
+  try {
+    const res = await axiosInstance.get(`/roles/${id}`, {
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      //console.log(error.response?.data);
+      //return error.message;
+      return error.response?.data.message? error.response?.data.message : error.message; 
+    }
+    return 'Error al obtener rol';
+  }
+}
+
 export async function createRole(auth_token:string, data:NewRole) {
   try {
     const res = await axiosInstance.post('/roles', JSON.stringify(data), {
@@ -265,8 +284,14 @@ export async function insertResourceTree(auth_token:string, id:string, data:Obje
   }
 }
 
-export async function insertComponentsTree(auth_token:string, idTree:string, idResource:string, data:Object){
-  const url = `/trees/insertRouteInResourceInTree/${idTree}/${idResource}`;
+export async function insertComponentsTree(auth_token:string, idTree:string, 
+            idResource:string, idRoute:string, data:Object){
+  const url = `/trees/insertComponentInRouteInResourceInTreeArrTRIDIM/${idTree}/${idResource}/${idRoute}`
+  console.log(url);
+  console.log(idTree);
+  console.log(idResource);
+  console.log(idRoute);
+  console.log(JSON.stringify(data));
   try {
     const res = await axiosInstance.post(url, JSON.stringify(data), {
       headers: {
@@ -274,7 +299,7 @@ export async function insertComponentsTree(auth_token:string, idTree:string, idR
         "Content-Type": `apllication/json`,
       }
     });
-    if(res.status === 200) return res.status;
+    if(res.status === 200) {console.log('res'); console.log(res); return res.status};
     return 'Error al actualizar componentes en el arbol!!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -299,5 +324,22 @@ export async function RemoveResourceTree(auth_token:string, idTree:string, idRes
       return error.response?.data.message? error.response?.data.message : error.message;
     }
     return 'Ocurrion un error al eliminar recurso del arbol!!';
+  }
+}
+
+export async function CreateTree(auth_token:string){
+  try {
+    const res = await axiosInstance.post('/trees', {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 201) return res.status;
+    return 'Error al crear arbol!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message? error.response?.data.message : error.message;
+    }
   }
 }

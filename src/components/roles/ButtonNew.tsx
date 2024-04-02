@@ -9,6 +9,8 @@ import NewRouteTree from "./NewRouteTree";
 import { Options } from "@/interfaces/Common";
 import NewCompoentTree from "./NewComponentTree";
 import { Resource } from "@/interfaces/Roles";
+import { CreateTree } from "@/app/api/routeRoles";
+import { showToastMessage, showToastMessageError } from "../Alert";
 
 export default function ButtonNew({token, opt, optResources, optRoutes, 
                                   descRoutes, descComponents,optComponents, idTree}: 
@@ -27,6 +29,20 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
     id: '',
     name: '',
     title: ''
+  }
+
+  const onCreateTree = async () => {
+    try {
+      const res = await CreateTree(token);
+      if(res === 201){
+        showToastMessage('Arbol creado exitosamente!!!');
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un problema al crear arbol!!');
+    }
   }
 
   switch(opt){
@@ -71,6 +87,11 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
                     optResources={optResources} optRoutes={optRoutes}
                     descComponents={descComponents} optComponents={optComponents} 
                     idTree={idTree} />}
+      </>
+    break;
+    case 7: 
+      showButton = <>
+        <Button type="button" onClick={onCreateTree}>Crear Arbol</Button>
       </>
     break;
   }

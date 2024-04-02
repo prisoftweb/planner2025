@@ -45,6 +45,16 @@ export interface NewRole {
   description: string,
 }
 
+export interface RoleUser {
+  _id: string
+  name: string
+  description: string
+  tree: string
+  status: boolean
+  createAt: string
+  __v: number
+}
+
 export interface Resource {
   _id: string
   name: string

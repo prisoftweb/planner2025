@@ -35,11 +35,50 @@ export default function Login({}) {
           setCookie('user', res.data.user);
           const {_id } = res.data.user;
           setCookie('id', _id);
+          setCookie('resources', {
+            "resources": [
+                {
+                    "resource": {
+                        "name": "clients",
+                    },
+                    "routes": [],
+                },
+                {
+                    "resource": {
+                        "name": "roles",
+                    },
+                    "routes": [
+                        {
+                            "route": {
+                                "name": "components",
+                            },
+                        },
+                        {
+                            "route": {
+                                "name": "resources",
+                            },
+                        },
+                        {
+                            "route": {
+                                "name": "role",
+                            },
+                        },
+                        {
+                          "route": {
+                              "name": "trees",
+                          },
+                      }
+                    ],
+                }
+            ],
+        })
+
+          
           setTimeout(() => {                
             router.push(
               '/'
             );
-          }, 1000);
+          }, 500);
         } else {
           showToastMessageError(res);
         }
@@ -48,7 +87,6 @@ export default function Login({}) {
   
   return (        
     <div className='p-2 sm:p-3 md-p-5 lg:p-10'>      
-      {/* <Alert></Alert> */}
       <div className="flex justify-center mt-12">
         <div className="w-full max-w-sm">
           <form className="bg-white rounded shadow-md px-3 sm:px-8 pt-2 pb-8 mb-4"

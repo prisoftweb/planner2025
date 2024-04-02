@@ -22,9 +22,9 @@ export default function NewComponentTree({showForm, token, optResources,
   const [bandDelete, setBandDelete] = useState<boolean>(false);
   const [countFiles, setCountFiles] = useState(0);
   const [selectComponents, setSelectComponents] = useState<JSX.Element[]>([]);
-  const [resource, setResource] = useState<string>(optResources[0].value);
+  const [resource, setResource] = useState<string>(optResources[0]?.value? optResources[0].value: '');
   const [resourceSel, setResourceSel] = useState(optResources[0]);
-  const [route, setRoute] = useState<string>(optResources[0].value);
+  const [route, setRoute] = useState<string>(optRoutes[0]?.value? optRoutes[0].value: '');
   const [routeSel, setRouteSel] = useState(optResources[0]);
 
   const pushComponent = (route: string) => {
@@ -81,20 +81,16 @@ export default function NewComponentTree({showForm, token, optResources,
         })
 
         const data = {
-          //resource,
-          routes: {
-            route,
-            components: arrComponents
-          }
+          components: arrComponents
         }
 
         console.log(JSON.stringify(data));
 
-        const res = await insertComponentsTree(token, idTree, resource, data);
+        const res = await insertComponentsTree(token, idTree, resource, route, data);
         if(res === 200){
           showToastMessage('Recurso agregado a arbol exitosamente!!!');
           setTimeout(() => {
-            window.location.reload();
+            //window.location.reload();
           }, 500);
         }else{
           showToastMessageError(res);
