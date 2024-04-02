@@ -296,7 +296,7 @@ export async function insertComponentsTree(auth_token:string, idTree:string,
     const res = await axiosInstance.post(url, JSON.stringify(data), {
       headers: {
         Authorization: `Bearer ${auth_token}`,
-        "Content-Type": `apllication/json`,
+        "Content-Type": `application/json`,
       }
     });
     if(res.status === 200) {console.log('res'); console.log(res); return res.status};
