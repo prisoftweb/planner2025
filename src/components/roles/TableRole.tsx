@@ -5,6 +5,8 @@ import Link from "next/link";
 import IconText from "../providers/IconText";
 import { RoleTable } from "@/interfaces/Roles";
 import { TrashIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { RemoveRole } from "@/app/api/routeRoles";
+import DeleteElement from "../DeleteElement";
 
 export default function TableRole({data, token}:
                         {data:RoleTable[], token:string}){
@@ -36,8 +38,7 @@ export default function TableRole({data, token}:
     columnHelper.accessor(row => row.id, {
       id: 'action',
       cell: ({row}) => (
-        // <DeleteClient client={row.original} token={token} />
-        <TrashIcon className="text-red-500 w-6 h-6" />
+        <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveRole} token={token} />
       ),
       enableSorting:false,
       header: () => (

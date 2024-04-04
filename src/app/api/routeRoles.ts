@@ -18,8 +18,7 @@ export async function getRoles(auth_token:string) {
   } catch (error) {
     if(axios.isAxiosError(error)){
       console.log(error.response?.data);
-      return error.message;
-      //return error.response?.data
+      return error.response?.data.message || error.message;
     }
   }
 }
@@ -43,7 +42,7 @@ export async function getRole(auth_token:string, id:string) {
   }
 }
 
-export async function createRole(auth_token:string, data:NewRole) {
+export async function createRole(auth_token:string, data:NewRole, idTree:string) {
   try {
     const res = await axiosInstance.post('/roles', JSON.stringify(data), {
       headers: {
@@ -51,7 +50,16 @@ export async function createRole(auth_token:string, data:NewRole) {
         "Content-Type": 'application/json'  
       }
     })
-    if(res.status===201) return res.status;
+    if(res.status===201) {
+      const tree = await CopyTree(idTree, auth_token);
+      if(tree !== ''){
+        const role = await updateRole(res.data.data.data._id, {'tree': tree}, auth_token );
+        if(role === 200) return 201;
+        return 'Error al actualizar role!!';
+      }else{
+        return 'Ocurrio un error al crear copia del arbol!!';
+      }
+    }
     return 'Error al crear rol!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -59,6 +67,23 @@ export async function createRole(auth_token:string, data:NewRole) {
       return error.message;
     }
     return 'Ocurrio un error al crear rol!!';
+  }
+}
+
+export async function RemoveRole(auth_token: string, id:string) {
+  try {
+    const res = await axiosInstance.delete(`/roles/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 204) return res.status;
+    return 'Error al eliminar role!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Ocurrio un error al eliminar un role!!';
   }
 }
 
@@ -287,11 +312,6 @@ export async function insertResourceTree(auth_token:string, id:string, data:Obje
 export async function insertComponentsTree(auth_token:string, idTree:string, 
             idResource:string, idRoute:string, data:Object){
   const url = `/trees/insertComponentInRouteInResourceInTreeArrTRIDIM/${idTree}/${idResource}/${idRoute}`
-  console.log(url);
-  console.log(idTree);
-  console.log(idResource);
-  console.log(idRoute);
-  console.log(JSON.stringify(data));
   try {
     const res = await axiosInstance.post(url, JSON.stringify(data), {
       headers: {
@@ -299,7 +319,7 @@ export async function insertComponentsTree(auth_token:string, idTree:string,
         "Content-Type": `application/json`,
       }
     });
-    if(res.status === 200) {console.log('res'); console.log(res); return res.status};
+    if(res.status === 200) return res.status
     return 'Error al actualizar componentes en el arbol!!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -341,5 +361,101 @@ export async function CreateTree(auth_token:string){
     if(axios.isAxiosError(error)){
       return error.response?.data.message? error.response?.data.message : error.message;
     }
+  }
+}
+
+export async function updateStatusComponentTree(auth_token:string, idT:string, idRes:string, idRou:string, idComp:string, data:Object) {
+  const url = `/trees/updateComponentInRouteInResourceInTreeArrTRIDIM/${idT}/${idRes}/${idRou}/${idComp}`;
+  try {
+    const res = await axiosInstance.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar status!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.message;
+    }
+    return 'Ocurrio un error al actualizar status!!';
+  }
+}
+
+export async function updateAllComponentsRouteTree(auth_token:string, idT:string, idRes:string, idRou:string, data:Object) {
+  const url = `/trees/updateAllsComponentsInRouteInResourceInTreeArrTRIDIM/${idT}/${idRes}/${idRou}`;
+  try {
+    const res = await axiosInstance.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar permisos!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.message;
+    }
+    return 'Ocurrio un error al actualizar permisos!!';
+  }
+}
+
+export async function updatePermissionResourceTree(auth_token:string, idT:string, idRes:string, data:Object) {
+  const url = `/trees/updateResourcePermissionInTree/${idT}/${idRes}`;
+  try {
+    console.log(axiosInstance.getUri());
+    console.log(url);
+    console.log(JSON.stringify(data));
+    const res = await axiosInstance.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar permisos!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      console.log(error);
+      return error.message;
+    }
+    return 'Ocurrio un error al actualizar permisos!!';
+  }
+}
+
+export async function CopyTree(idT:string, auth_token:string){
+  try {
+    const res = await axiosInstance.post(`/trees/copyTree/${idT}`, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status === 200) return res.data.data.data;
+    return '';
+  } catch (error) {
+    return '';
+  }
+}
+
+export async function updateRole(idRole:string, data:Object, auth_token:string){
+  try {
+    const res = await axiosInstance.patch(`/roles/${idRole}`, JSON.stringify(data), {
+      headers: {
+        'Authorization' : `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    if(res.status === 200) return res.status;
+    return 'Error al actualizar arbol del rol!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Ocurrio un error al actualizar arbol en el rol!!';
   }
 }

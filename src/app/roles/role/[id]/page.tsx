@@ -55,18 +55,6 @@ export default async function Page({ params, searchParams }:
     return <h1 className="text-ccenter text-lg text-red-500">Ocurrio un error al obter arbol!!</h1>
   }
 
-  // let resource: JSX.Element = <></>;  
-
-  // if(!searchParams.rs || searchParams.rs===''){
-  //   <PermissionResource resource={tree.resources[0]} />
-  // }else{
-  //   tree.resources.map((rs) => {
-  //     if(rs.resource.id === searchParams.rs){
-  //       <PermissionResource resource={rs} />
-  //     }
-  //   })
-  // }
-
   return(
     <>
       <Navigation user={user} />
@@ -84,7 +72,7 @@ export default async function Page({ params, searchParams }:
             <RoleProfile role={rol} resources={tree.resources} idRole={params.id} />
           </div>
           <div className="w-full max-w-md">
-            <PermissionResource rs={searchParams.rs} tree={tree} />
+            <PermissionResource rs={searchParams.rs} tree={tree} token={token} />
           </div>
         </div>
       </div>

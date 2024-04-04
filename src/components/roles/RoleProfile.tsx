@@ -6,6 +6,7 @@ import { Options } from "@/interfaces/Common"
 import IconText from "../providers/IconText"
 import { Resource2 } from "@/interfaces/Roles"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export default function RoleProfile({role, resources, idRole}: 
                                 {role:RoleUser, resources:Resource2[], idRole:string}){
@@ -14,8 +15,8 @@ export default function RoleProfile({role, resources, idRole}:
 
   resources.map((resource) => {
     options.push({
-      label: resource.resource.name,
-      value: resource.resource._id
+      label: resource.resource?.name,
+      value: resource.resource?._id
     })
   })
 
@@ -51,21 +52,22 @@ export default function RoleProfile({role, resources, idRole}:
         <Select options={options} className="mt-2" onChange={(value:any) => onChange(value.value)} />
         
         {resources.map((resource, index:number) => (
-          <div className="flex items-center gap-x-2" key={index}>
-            <IconText size="w-12 h-12" sizeText="" text={resource.resource.name} />
-            <div className="">
-              <p>{resource.resource.name}</p>
-              <p>{resource.resource.description}</p>
-            </div>
-            <div className="">
-              <p>Comp</p>
-              <div className="bg-blue-500 text-white text-center rounded-full p-2">
-                5
+          <Link href={`/roles/role/${idRole}?rs=${resource.resource?._id}`} key={index}>
+            <div className="flex items-center gap-x-2">
+              <IconText size="w-12 h-12" sizeText="" text={resource.resource?.name || 'NA'} />
+              <div className="">
+                <p>{resource.resource?.name}</p>
+                <p>{resource.resource?.description}</p>
+              </div>
+              <div className="">
+                <p>Comp</p>
+                <div className="bg-blue-500 text-white text-center rounded-full p-2">
+                  5
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
-
       </div>
     </>
   )

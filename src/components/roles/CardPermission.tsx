@@ -1,11 +1,11 @@
-export default function CardPermission({text, value, setValue}: 
-                            {text:string, value:boolean, setValue:Function}){
+export default function CardPermission({text, value, setValue, updatePermission}: 
+                            {text:string, value:boolean, setValue:Function, updatePermission:Function}){
   return(
     <div className="flex items-center gap-x-2">
-      {text}
+      <p className="text-slate-500">{text}</p>
       <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
         <input checked={value} 
-          onClick={() => setValue(!value)} id={`${text}`} type="checkbox"
+          onClick={() => {updatePermission(true); setValue(!value)}} id={`${text}`} type="checkbox"
           onChange={() => console.log('')}
           // onClick={() => console.log('')} id="switch-3" type="checkbox"
           // onChange={() => setValue(!value)}

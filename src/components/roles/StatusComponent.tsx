@@ -1,17 +1,59 @@
 import { Component } from "@/interfaces/Roles"
+import { useEffect, useState } from "react"
+import { updateStatusComponentTree } from "@/app/api/routeRoles"
 
-export default function StatusComponent({component, value, setValue}: {component: Component, value:boolean, setValue:Function}){
+export default function StatusComponent({component, value, token, idRes, idRou, idT, decrement, 
+                              increment, indexComp}: 
+                            {component: Component, value:boolean, token:string, indexComp:number 
+                              idT:string, idRes:string, idRou:string, increment:Function, decrement:Function}){
+  
+  const [status, setStatus] = useState<boolean>(value);
+  const [bandStart, setBandStart] =useState<boolean>(true);
+  
+  useEffect(() => {
+    setStatus(value);
+  }, [])
+
+  useEffect(() => {
+    if(!bandStart){
+      const request = async() => {
+        try {
+          const res = await updateStatusComponentTree(token, idT, idRes, idRou, component._id, {status});
+          //updateValue(status);
+          //console.log(res);
+          if(res===200){
+            console.log('update value', status);
+            //updateValue(status? (1) : -1);
+            (status)? increment(indexComp) : decrement(indexComp);
+          }else{
+            setStatus(!status);
+          }
+        } catch (error) {
+          
+        }
+      }
+      request();
+    }else{
+      setBandStart(false);
+    }
+
+  }, [status]);
+
   return(
     <>
       <div className="flex justify-between">
         <div>
-          <p>{component.component.name}</p>
-          <p className="text-blue-500 text-sm">{component.component.description}</p>
+          <p>{component.component.name || ''}</p>
+          <p className="text-blue-500 text-sm">{component.component.description || ''}</p>
         </div>
         <div>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-            <input checked={value} 
-              onClick={() => setValue(!value)} id={`${component.component.name}`} type="checkbox"
+            <input checked={status} 
+              onClick={() => {
+                // console.log('update value', status);
+                // updateValue(status? (-1) : 1);
+                setStatus(!status);
+              }} id={`${component.component.name || ''}`} type="checkbox"
               onChange={() => console.log('')}
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 

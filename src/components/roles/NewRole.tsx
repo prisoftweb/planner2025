@@ -9,11 +9,25 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useRouter } from "next/navigation"
 import { createRole } from "@/app/api/routeRoles"
+import { useState, useEffect } from "react"
+import { getTrees } from "@/app/api/routeRoles"
 
 export default function NewRole({showForm, token}: 
                     {showForm:Function, token:string}){
   
   const router = useRouter();
+
+  const [idTree, setIdTree] = useState<string>('');
+  useEffect(() => {
+    const getTree = async() => {
+      const res = await getTrees(token);
+      if(typeof(res)==='string'){
+        return <h1 className="text-red-500 text-center text-lg">{res}</h1>
+      }
+      setIdTree(res[0]._id);
+    }
+    getTree();
+  }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -29,7 +43,7 @@ export default function NewRole({showForm, token}:
 
     onSubmit: async valores => {
       try {
-        const res = await createRole(token, valores);
+        const res = await createRole(token, valores, idTree);
         if(res===201){
           showForm(false);
           showToastMessage('Rol creado exitosamente!!!');

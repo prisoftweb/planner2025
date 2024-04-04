@@ -48,12 +48,14 @@ export default async function Page() {
     res.routes.map((route) => {
       str += ' ' + route.route.name;
     })
-    data.push({
-      id: res._id,
-      status: res.status,
-      resource: res.resource.name,
-      routes: str,
-    })
+    if(res.resource){
+      data.push({
+        id: res._id,
+        status: res.status,
+        resource: res.resource.name,
+        routes: str,
+      })
+    }
   })
 
   let resources: Resource[];
@@ -98,10 +100,12 @@ export default async function Page() {
   let optionsResourceComponents: Options[] = [];
 
   trees[0].resources.map((resource) => {
-    optionsResourceComponents.push({
-      label: resource.resource.name,
-      value: resource._id,
-    })
+    if(resource.resource){
+      optionsResourceComponents.push({
+        label: resource.resource.name,
+        value: resource._id,
+      })
+    }
   })
 
   let optionsRoutes: Options[] = [];
