@@ -19,6 +19,12 @@ export default function Table({data, columns, placeH}:
 
   const {numRows, changeCounter} = useRowsCounter();
   
+  const [rowsTable, setRowsTable] = useState<number>(10);
+
+  useEffect(() => {
+    setRowsTable(numRows);
+  })
+
   useEffect(() => {
     //do something when the row selection changes...
     //console.info({ rowSelection });
@@ -44,7 +50,8 @@ export default function Table({data, columns, placeH}:
     onGlobalFilterChange: setFiltering,
     initialState : {
       pagination: {
-        pageSize: numRows,
+        // pageSize: numRows,
+        pageSize: rowsTable,
       }
     },
   })

@@ -19,28 +19,6 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
   
   useEffect(() => {
     if(width < 710){
-      // const icon = <div className="flex justify-between mt-3">
-      //                 <Link href={`/clients/${idCli}?tab=1`}>
-      //                   <UserCircleIcon data-tooltip-target="tooltip-dark"
-      //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-      //                     ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
-      //                 </Link>  
-      //                 <Link href={`/clients/${idCli}?tab=2`}>
-      //                   <DocumentChartBarIcon
-      //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-      //                     ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
-      //                 </Link>
-      //                 <Link href={`/clients/${idCli}?tab=3`}>
-      //                   <CurrencyDollarIcon
-      //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-      //                     ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
-      //                 </Link>
-      //                 <Link href={`/clients/${idCli}?tab=4`}>
-      //                   <CreditCardIcon
-      //                     className={`w-6 h-6 text-slate-600 cursor-pointer 
-      //                     ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
-      //                 </Link>
-      //               </div>
       const icon = <div className="flex justify-between mt-3">
                       <Link href={`/clients/${idCli}/profile`}>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
@@ -66,28 +44,6 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
       setTabCli(icon)
     }else{
       setTabCli(
-        // <div className="flex mt-5 bg-white py-1">
-        //   <Link href={`/clients/${idCli}?tab=1`}>
-        //     <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
-        //       <p>Perfil cliente</p>
-        //     </div>
-        //   </Link>
-        //   <Link href={`/clients/${idCli}?tab=2`}>
-        //     <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
-        //       <p>Proyectos</p>
-        //     </div>
-        //   </Link>
-        //   <Link href={`/clients/${idCli}?tab=3`}>
-        //     <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
-        //       <p>Estimaciones</p>
-        //     </div>
-        //   </Link>
-        //   <Link href={`/clients/${idCli}?tab=4`}>
-        //     <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
-        //       <p>Cartera</p>
-        //     </div>
-        //   </Link>
-        // </div>
         <div className="flex mt-5 bg-white py-1">
           <Link href={`/clients/${idCli}/profile`}>
             <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>

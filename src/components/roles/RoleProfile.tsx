@@ -28,7 +28,7 @@ export default function RoleProfile({role, resources, idRole}:
 
   return(
     <>
-      <div className="flex gap-x-1">
+      <div className="flex gap-x-1 mt-3 bg-white rounded-lg shadow-md p-2">
         <div className="w-14">
           <img src={'/img/default.jpg'} alt="logo role" className="w-12 h-12" />
         </div>
@@ -37,7 +37,7 @@ export default function RoleProfile({role, resources, idRole}:
           <p>{role.description}</p>
         </div>
       </div>
-      <div className="mt-5">
+      <div className="mt-5 bg-white rounded-lg shadow-md p-2">
         <p>Usuarios con este perfil</p>
         <p>10 Usuarios</p>
         <div className="flex gap-x-1">
@@ -46,8 +46,8 @@ export default function RoleProfile({role, resources, idRole}:
           <img src={'/img/default.jpg'} alt="3" className="w-12 h-12" />
         </div>
       </div>
-      <div className="mt-5">
-        <HeaderForm img="/img/default.jpg" subtitle="Recursos disponibles" title="Recursos al perfil de Residente" />
+      <div className="mt-5 bg-white rounded-lg shadow-md p-2">
+        <HeaderForm img="/img/default.jpg" subtitle="Recursos disponibles" title={`Recursos al perfil de ${role.name}`} />
 
         <Select options={options} className="mt-2" onChange={(value:any) => onChange(value.value)} />
         

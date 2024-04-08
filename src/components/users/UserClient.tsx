@@ -6,12 +6,15 @@ import UpdateProfile from "./UpdateProfile"
 import ChangePhoto from "./ChangePhoto"
 import ChangePassword from "./ChangePassword"
 import { useState, useEffect } from "react"
+import { Options } from "@/interfaces/Common"
 
-export default function UserClient({user, token, departments, optQuery}: 
-                  {user:any, token:string, departments:any, optQuery: number}){
+export default function UserClient({user, token, departments, optQuery, optsRole}: 
+                  {user:any, token:string, departments:any, 
+                    optQuery: number, optsRole:Options[]}){
   
   const [view, setView] = useState<JSX.Element>
-                (<UpdateProfile departments={departments} user={user} token={token} />)
+                (<UpdateProfile departments={departments} user={user} 
+                      token={token} optsRoles={optsRole} />)
 
   const [opt, setOpt] = useState<number>(optQuery);
 
@@ -19,7 +22,8 @@ export default function UserClient({user, token, departments, optQuery}:
     opt===2? setView(<ChangePhoto id={user._id} token={token} />) : 
       (opt===3? setView(<ChangePassword token={token} name={user.name} id={user._id} />): 
         (opt===4? setView(<ConfigUser token={token} user={user} status={user.status} />): 
-          setView(<UpdateProfile departments={departments} user={user} token={token} />) ))
+          setView(<UpdateProfile departments={departments} user={user} 
+                      token={token} optsRoles={optsRole} />) ))
   }, [opt])
   
   return(

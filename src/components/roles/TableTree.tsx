@@ -71,6 +71,15 @@ export default function TableTree({data, token, idTree}:
         </Link>
       )
     }),
+    columnHelper.accessor('components', {
+      header: 'Componentes',
+      id: 'components',
+      cell: ({row}) => (
+        <Link href={`#`}>
+          <p className="py-2">{row.original.components}</p>
+        </Link>
+      )
+    }),
   ]
   
   return(

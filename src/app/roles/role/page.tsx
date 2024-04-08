@@ -23,13 +23,17 @@ export default async function Page(){
 
   if(!roles || roles.length <= 0){
     return (
-      <RolesClient token={token}>
-        <WithOut img="/img/clientes.svg" subtitle="Roles" 
-          text="Aqui puedes gestionar tus roles para usuarios que usen el sistema"
-          title="Roles">
-            <ButtonNew token={token} opt={1} descComponents={[]} descRoutes={[]} 
-              optComponents={[]} optResources={[]} optRoutes={[]} idTree="" /></WithOut>
-      </RolesClient>
+      <div>
+        <Navigation user={user} />
+        <RolesClient token={token} option={1}>
+          <WithOut img="/img/clientes.svg" subtitle="Roles" 
+            text="Aqui puedes gestionar tus roles para usuarios que usen el sistema"
+            title="Roles">
+              <ButtonNew token={token} opt={1} descComponents={[]} descRoutes={[]} 
+                optComponents={[]} optResources={[]} optRoutes={[]} 
+                idTree="" routesPerResource={[]} /></WithOut>
+        </RolesClient>
+      </div>
     )
   }
 
@@ -52,11 +56,12 @@ export default async function Page(){
   return(
     <>
       <Navigation user={user} />      
-      <RolesClient token={token}>
+      <RolesClient token={token} option={1}>
         <div>
           <Header title="Roles">
             <ButtonNew token={token} opt={1} descComponents={[]} descRoutes={[]} 
-              optComponents={[]} optResources={[]} optRoutes={[]} idTree="" />
+              optComponents={[]} optResources={[]} optRoutes={[]} 
+              idTree="" routesPerResource={[]} />
           </Header>
           <div className="mt-10">
             <TableRole data={table} token={token} />

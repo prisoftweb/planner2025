@@ -13,11 +13,12 @@ import { CreateTree } from "@/app/api/routeRoles";
 import { showToastMessage, showToastMessageError } from "../Alert";
 
 export default function ButtonNew({token, opt, optResources, optRoutes, 
-                                  descRoutes, descComponents,optComponents, idTree}: 
+                                  descRoutes, descComponents,optComponents, 
+                                  idTree, routesPerResource}: 
                         {token:string, opt:number, optResources:Options[], 
                           optRoutes:Options[], optComponents: Options[]
                           descRoutes: Options[], descComponents: Options[],
-                          idTree:string}){
+                          idTree:string, routesPerResource:Options[]}){
   const [newRole, setNewRole] = useState<boolean>(false);
   
   let showButton;
@@ -86,7 +87,7 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
             <NewCompoentTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
                     descComponents={descComponents} optComponents={optComponents} 
-                    idTree={idTree} />}
+                    idTree={idTree} routesPerResource={routesPerResource} />}
       </>
     break;
     case 7: 

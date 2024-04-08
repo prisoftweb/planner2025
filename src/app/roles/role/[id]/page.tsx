@@ -67,11 +67,11 @@ export default async function Page({ params, searchParams }:
           </div>
           <Selectize options={options} routePage="roles/role" subpath="" />
         </div>
-        <div className="flex gap-x-5 mt-5">
+        <div className="flex gap-x-5 mt-5 w-full max-w-5xl px-2 flex-wrap bg-slate-200">
           <div className="w-full max-w-sm">
             <RoleProfile role={rol} resources={tree.resources} idRole={params.id} />
           </div>
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-md mt-3 pl-2 px-3">
             <PermissionResource rs={searchParams.rs} tree={tree} token={token} />
           </div>
         </div>

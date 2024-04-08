@@ -32,29 +32,43 @@ export default async function Page() {
   
   if(!trees || trees.length <= 0){
     return <div className="p-10">
+              <Navigation user={user} />
               <WithOut img="/img/clientes.svg" subtitle="Arboles" 
                 text="Aqui puedes gestionar tu arbol con toda su informacion relevante"
                 title="Arboles">
                   <ButtonNew token={token} opt={7} 
                         optResources={[]} optRoutes={[]}
                         descRoutes={[]} descComponents={[]} 
-                        optComponents={[]} idTree='' />
+                        optComponents={[]} idTree='' routesPerResource={[]} />
               </WithOut>  
             </div>
   }
 
   trees[0].resources.map((res) => {
-    let str: string = '';
-    res.routes.map((route) => {
-      str += ' ' + route.route.name;
-    })
     if(res.resource){
-      data.push({
-        id: res._id,
-        status: res.status,
-        resource: res.resource.name,
-        routes: str,
-      })
+      if(res.routes.length > 0){
+        res.routes.map((route) => {
+          let strComp: string = '';
+          route.components.map((comp) => {
+            strComp += ' ' + comp.component.name;
+          })
+          data.push({
+            id: res._id,
+            status: res.status,
+            resource: res.resource.name,
+            routes: route.route.name,
+            components: strComp,
+          })
+        })  
+      }else{
+        data.push({
+          id: res._id,
+          status: res.status,
+          resource: res.resource.name,
+          routes: '',
+          components: ''
+        })
+      }
     }
   })
 
@@ -123,18 +137,21 @@ export default async function Page() {
   })
 
   let optionsRoutesComponents: Options[] = [];
-  //let titleRoutesComponents: Options[] = [];
+  
+  let routesPerResource: Options[] = [];
 
   trees[0].resources.map((resources) => {
     resources.routes.map((route) => {
+      
+      routesPerResource.push({
+        label: resources._id,
+        value: route._id
+      })
+
       optionsRoutesComponents.push({
         label: route.route.name,
         value: route._id
       })
-      // titleRoutes.push({
-      //   label: route.route.description,
-      //   value: route._id
-      // })
     })
   })
 
@@ -156,19 +173,20 @@ export default async function Page() {
     <>
       <Navigation user={user} />
       
-      <RolesClient token={token}>
+      <RolesClient token={token} option={5}>
         <div>
           <Header title="Arbol">
             <div className="flex gap-x-2">
             <ButtonNew token={token} opt={5} 
                 optResources={optionsResource} optRoutes={optionsRoutes}
                 descRoutes={titleRoutes} descComponents={[]} 
-                optComponents={[]} idTree={trees[0]._id} />
+                optComponents={[]} idTree={trees[0]._id} routesPerResource={[]} />
             
             <ButtonNew token={token} opt={6} 
                 optResources={optionsResourceComponents} optRoutes={optionsRoutesComponents}
                 descRoutes={[]} descComponents={descComponents} 
-                optComponents={optionsComponents} idTree={trees[0]._id} />
+                optComponents={optionsComponents} idTree={trees[0]._id} 
+                routesPerResource={routesPerResource} />
             </div>
           </Header>
           <div className="mt-10">

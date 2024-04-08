@@ -1,21 +1,44 @@
 'use client'
 import Label from "../Label"
 import Input from "../Input"
-import Select from "../Select"
+//import Select from "../Select"
 import Button from "../Button"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "@/components/Alert";
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import HeaderForm from "../HeaderForm"
 import { updateMeUser } from "@/app/api/routeUser"
 import { setCookie } from "cookies-next"
+import { Options } from "@/interfaces/Common"
+import Select from 'react-select'
+//import { UserBack } from "@/interfaces/User"
 
-export default function UpdateProfile({user, departments, token}: 
-                  {user:any, departments:any, token:string}){
+export default function UpdateProfile({user, departments, token, optsRoles}: 
+                  {user:any, departments:any, token:string, optsRoles:Options[]}){
 
-  const [rol, setRol] = useState<string>(user.role);
-  const [department, setDepartment] = useState<string>(user.department);
+  const [rol, setRol] = useState<string>(optsRoles[0].value);
+  const [optRole, setOptRole] = useState<Options>(optsRoles[0]);
+  const [department, setDepartment] = useState<string>(departments[0]._id);
+  
+  // useEffect(() => {
+  //   optsRoles.map((opRole) => {
+  //     if(opRole.value === user.rol){
+  //       setRol(opRole.value);
+  //       setOptRole(opRole);
+  //     }
+  //   })
+  // })
+
+  let optionsDepartments:Options[] = [];
+  departments.map((dept:any) => (
+    optionsDepartments.push({
+      label: dept.name,
+      value: dept._id
+    })
+  ))
+
+  const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
 
   const emailU:string = user.email;
   const nameU:string = user.name;
@@ -33,13 +56,6 @@ export default function UpdateProfile({user, departments, token}:
     }),
     onSubmit: async (valores) => {            
       const {email, name} = valores;
-      
-      // const profile = {
-      //   name,
-      //   email,
-      //   rol,
-      //   department
-      // }
       
       const formData = new FormData();
       formData.append('name', name);
@@ -74,7 +90,6 @@ export default function UpdateProfile({user, departments, token}:
         <HeaderForm img="/img/user.svg" subtitle="Datos personales" 
           title="Información personal"
         />
-        {/* <form onSubmit={formik.handleSubmit} className="mt-4"> */}
         <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 rounded-lg shadow p-4 space-y-5" >  
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input type="text" name="name" autoFocus 
@@ -99,23 +114,17 @@ export default function UpdateProfile({user, departments, token}:
               </div>
           ) : null}
           <Label htmlFor="rol">Rol</Label>
-          <Select name="rol" 
-            value={rol}
-            onChange={(e) => setRol(e.target.value)}
-          >
-            <option value="admin">Administrador</option>
-            <option value="user">Usuario</option>
-            <option value="other">Otro</option>
-          </Select>
+          <Select 
+            options={optsRoles}
+            onChange={(e: any) => {setRol(e.value); setOptRole(e)}}
+            value={optRole}
+          />
           <Label htmlFor="department">Departamento</Label>
-          <Select name="department" 
-            onChange={(e) => setDepartment(e.target.value)}
-            value={department}  
-          >
-            {departments.map((dept:any, index:number) => (
-              <option value={dept._id} key={index}>{dept.name}</option>
-            ))}
-          </Select>
+          <Select 
+            options={optionsDepartments}
+            onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
+            value={optDepts}
+          />
           <div className="flex justify-center mt-4">
             <Button type="submit">Guardar cambios</Button>
           </div>

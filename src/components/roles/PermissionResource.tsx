@@ -8,7 +8,6 @@ import { updatePermissionResourceTree } from "@/app/api/routeRoles"
 
 export default function PermissionResource({tree, rs, token}:
                                {tree:Tree, rs:string, token:string}){
-  //const [permission, setPermission] = useState<JSX.Element>(<></>);
   const [bandChangePermission, setBandChangePermission] = useState<boolean>(false);
   const [resource, setResource] = useState<Resource2>();
 
@@ -27,52 +26,66 @@ export default function PermissionResource({tree, rs, token}:
   const [showPermissionComponents, setShowPermissionComponents] = useState<JSX.Element>(<></>);
   
   const [arrConts, setArrConts] = useState<number[]>([]);
-
-  const [bandTimer, setBandTimer] = useState<boolean>(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      console.log(arrConts);
-      setBandTimer(!bandTimer);
-    }, 500);
-
-    //timer;
-    return () => clearTimeout(timer);
-  }, [bandTimer])
+  //const [StatusRouteComps, setStatusRouteComps] = useState<boolean>(false);
+  const [bandInc, setBandInc] = useState<boolean>(false);
+  const [bandDec, setBandDec] = useState<boolean>(false);
+  const [indexArr, setIndexArr] = useState<number>(-1);
 
   const increment = (indexCont:number) => {
     console.log('increment ', arrConts);
-    
-    // const arr = arrConts.map((count, index:number) => {
-    //   if(indexCont === index){
-    //     console.log('count if ', count);
-    //     return count + 1;
-    //   }else{
-    //     return count
-    //   }
-    // })
-    // setArrConts(arr);
+    console.log('index inc = ', arrConts[indexCont]);
+    // if(arrConts[indexCont] === 1){
+    //   window.location.reload();
+    // }
+    setBandInc(true);
+    setIndexArr(indexCont);
   }
 
   const decrement = (indexCont:number) => {
     console.log('decrement ', arrConts);
-    // const arr = arrConts.map((count, index:number) => {
-    //   if(indexCont === index){
-    //     console.log('coutn if ', count);
-    //     return count - 1;
-    //   }else{
-    //     return count
-    //   }
-    // })
-    // setArrConts(arr);
+    console.log('index dec = ', arrConts[indexCont]);
+    // if(arrConts[indexCont] <= 0){
+    //   window.location.reload();
+    // }
+    setBandDec(true);
+    setIndexArr(indexCont);
   }
 
+  useEffect(() => {
+    if(indexArr !== -1 && bandDec){
+      console.log('band aux ', arrConts);
+      const arr = arrConts.map((count, index:number) => {
+        if(indexArr === index){
+          console.log('coutn if ', count);
+          return count - 1;
+        }else{
+          return count
+        }
+      })
+      setIndexArr(-1);
+      setBandDec(false);
+      setArrConts(arr);
+    }
+  }, [bandDec])
+
+  useEffect(() => {
+    if(indexArr !== -1 && bandInc){
+      console.log('band aux ', arrConts);
+      const arr = arrConts.map((count, index:number) => {
+        if(indexArr === index){
+          console.log('coutn if ', count);
+          return count + 1;
+        }else{
+          return count
+        }
+      })
+      setIndexArr(-1);
+      setBandInc(false);
+      setArrConts(arr);
+    }
+  }, [bandInc])
+
   const updateArrConts = (value:number, indexRoute:number) => {
-    console.log('update, value ', value);
-    console.log('indes', indexRoute);
-
-    console.log(arrConts);
-
     const aux: number[] = [];
     for(let i =0; i <= indexRoute; i++){
       if(arrConts[i]){
@@ -85,28 +98,27 @@ export default function PermissionResource({tree, rs, token}:
         }
       }
     }
-    console.log('aux ', aux);
     setArrConts(aux);
-    // if(arrConts.length > 0){
-    //   const arr = arrConts.map((count, index:number) => {
-    //     console.log('mapp');
-    //     if(indexRoute === index){
-    //       console.log('aquiii');
-    //       return value;
-    //     }else{
-    //       console.log('elsee');
-    //       return count
-    //     }
-    //   })
-    //   console.log('arr ', arr);
-    //   setArrConts(arr);
-    // }else{
-
-    // }
   }
 
   useEffect(() => {
     console.log('arr conts ', arrConts);
+    
+    setShowPermissionComponents(<></>);
+    setTimeout(() => {
+      setShowPermissionComponents(<div className="mt-5">
+                          {resource?.routes.map((route, index:number) => (
+                            <div className="mt-5 bg-white rounded-lg shadow-md p-2" key={index}>
+                              <ComponentsResource resource={resource?.resource.name || ''} 
+                                route={route} idRes={resource._id} token={token} 
+                                idTree={tree._id} decrement={decrement} increment={increment} 
+                                indexComp={index}
+                                countPermissions={arrConts[index]} 
+                                stateComponents={(arrConts[index]>0)? true: false}  />
+                            </div>
+                          ))}
+                        </div>)
+    }, 100);
   }, [arrConts])
 
   useEffect(() => {
@@ -128,19 +140,28 @@ export default function PermissionResource({tree, rs, token}:
 
   useEffect(() => {    
     setShowPermissionComponents(<></>);
-    resource?.routes.map(() => {
-      setArrConts((oldArray) => [...oldArray, 0]);
+    let arrAux: number[] = [];
+    resource?.routes.map((route) => {
+      //setArrConts((oldArray) => [...oldArray, 0]);
+      let contAux = 0;
+      route.components.map((comp) => {
+        if(comp.status) contAux++;
+      })
+      arrAux.push(contAux);
+      console.log('contAux = ', contAux);
     })
-
+    console.log('arr aux = ', arrAux);
+    setArrConts(arrAux);
     setTimeout(() => {
-      console.log('settime ', arrConts);
-      setShowPermissionComponents(<div className="mt-5 bg-white p-2">
+      setShowPermissionComponents(<div className="mt-5">
                                   {resource?.routes.map((route, index:number) => (
-                                    <div className="mt-5" key={index}>
+                                    <div className="mt-5 bg-white rounded-lg shadow-md p-2" key={index}>
                                       <ComponentsResource resource={resource?.resource.name || ''} 
                                         route={route} idRes={resource._id} token={token} 
                                         idTree={tree._id} decrement={decrement} increment={increment} 
-                                        indexComp={index} updateArrConts={updateArrConts} />
+                                        indexComp={index} 
+                                        countPermissions={arrConts[index]} 
+                                        stateComponents={(arrAux[index]>0)? true: false}  />
                                     </div>
                                   ))}
                                 </div>)
@@ -185,7 +206,6 @@ export default function PermissionResource({tree, rs, token}:
         }
         
         const res = await updatePermissionResourceTree(token, tree._id, resource._id, data);
-        console.log('change permission ', res);
       }
       changePermissions();
     }
@@ -193,11 +213,11 @@ export default function PermissionResource({tree, rs, token}:
 
   return(
     <>
-      <div className="flex">
+      <div className="flex bg-white p-2 items-center rounded-lg shadow-md">
         <IconText size="w-12 h-12" sizeText="" text={resource?.resource.name || ''} />
         <p className="text-lg text-blue-500">{resource?.resource.name}</p>
       </div>
-      <div className="bg-white p-2">
+      <div className="bg-white rounded-lg shadow-md p-2 mt-2">
         <p>Permisos asignados a ruta</p>
         <p>ruta {resource?.resource.name}</p>
         <div className="flex gap-x-2 gap-y-2 flex-wrap mt-5">

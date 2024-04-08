@@ -145,4 +145,5 @@ export interface TreeTable{
   status: boolean,
   resource: string,
   routes: string,
+  components: string,
 }

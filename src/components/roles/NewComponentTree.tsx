@@ -11,10 +11,11 @@ import { useState, useEffect } from "react"
 import { insertComponentsTree } from "@/app/api/routeRoles"
 
 export default function NewComponentTree({showForm, token, optResources, 
-                          optRoutes, descComponents, optComponents, idTree}: 
+                          optRoutes, descComponents, optComponents, idTree, routesPerResource}: 
                         {showForm:Function, token:string, optResources:Options[], 
                         optRoutes:Options[], optComponents: Options[]
-                        descComponents: Options[], idTree:string}){
+                        descComponents: Options[], idTree:string,
+                        routesPerResource:Options[]}){
                           
                           
   const [components, setComponents] = useState<string[]>([]);
@@ -26,6 +27,8 @@ export default function NewComponentTree({showForm, token, optResources,
   const [resourceSel, setResourceSel] = useState(optResources[0]);
   const [route, setRoute] = useState<string>(optRoutes[0]?.value? optRoutes[0].value: '');
   const [routeSel, setRouteSel] = useState(optResources[0]);
+  const [routesFilter, setRoutesFilter] = useState<Options[]>([]);
+  const [changeResource, setChangeResource] = useState<boolean>(false);
 
   const pushComponent = (route: string) => {
     setComponents((oldComponents) => [...oldComponents, route]);
@@ -38,6 +41,12 @@ export default function NewComponentTree({showForm, token, optResources,
   const updateCount = () => {
     setCountFiles(countFiles + 1);
   }
+
+  useEffect(() => {
+    const res = routesPerResource.filter((routeRes) => routeRes.label === resource);
+    const res2 = optRoutes.filter(optRou => res.some(value => optRou.value.includes(value.value)));
+    setRoutesFilter(res2);
+  }, [, changeResource])
 
   useEffect(() => {
     if((!bandDelete) || ((components.length === selectComponents.length))){
@@ -84,13 +93,11 @@ export default function NewComponentTree({showForm, token, optResources,
           components: arrComponents
         }
 
-        console.log(JSON.stringify(data));
-
         const res = await insertComponentsTree(token, idTree, resource, route, data);
         if(res === 200){
           showToastMessage('Recurso agregado a arbol exitosamente!!!');
           setTimeout(() => {
-            //window.location.reload();
+            window.location.reload();
           }, 500);
         }else{
           showToastMessageError(res);
@@ -111,9 +118,10 @@ export default function NewComponentTree({showForm, token, optResources,
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>
-        <Select options={optResources} value={resourceSel} onChange={(e:any) => {setResource(e.value); setResourceSel(e)}} />
+        <Select options={optResources} value={resourceSel} onChange={(e:any) => {setResource(e.value); 
+                                        setResourceSel(e); setChangeResource(!changeResource)}} />
         <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Ruta</p></Label>
-        <Select options={optRoutes} value={routeSel} onChange={(e:any) => {setRoute(e.value); setRouteSel(e)}} />
+        <Select options={routesFilter} value={routeSel} onChange={(e:any) => {setRoute(e.value); setRouteSel(e)}} />
         <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Componente</p></Label>        
         {selectComponents.map((elements) => (
           elements

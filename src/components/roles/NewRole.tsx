@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation"
 import { createRole } from "@/app/api/routeRoles"
 import { useState, useEffect } from "react"
 import { getTrees } from "@/app/api/routeRoles"
+import TextArea from "../TextArea"
 
 export default function NewRole({showForm, token}: 
                     {showForm:Function, token:string}){
@@ -47,8 +48,6 @@ export default function NewRole({showForm, token}:
         if(res===201){
           showForm(false);
           showToastMessage('Rol creado exitosamente!!!');
-          // router.refresh();
-          // router.push('/users');
           setTimeout(() => {
             window.location.reload();
           }, 500);
@@ -83,7 +82,7 @@ export default function NewRole({showForm, token}:
           </div>
         ) : null}
         <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripci&oacute;n</p></Label>
-        <Input type="description" name="description" 
+        <TextArea name="description"
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
           value={formik.values.description}

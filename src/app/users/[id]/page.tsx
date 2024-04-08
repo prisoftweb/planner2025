@@ -1,8 +1,6 @@
 import TabUser from "@/components/users/TabUsers";
 import NavTab from "@/components/users/NavTab";
 import Navigation from "@/components/navigation/Navigation";
-import Link from "next/link";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import { getUser, getUsers } from "@/app/api/routeUser";
 import { cookies } from "next/headers";
@@ -10,11 +8,6 @@ import Selectize from "@/components/Selectize";
 import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
-
-// interface Options{
-//   value: string,
-//   label: string,
-// }
 
 export default async function Page({ params, searchParams }: 
                   { params: { id: string }, searchParams: { tab: string, opt: string } }){
@@ -47,8 +40,6 @@ export default async function Page({ params, searchParams }:
   const name=user.name
   const email=user.email
 
-  
-  
   let options: Options[] = [];
   
   users.map((usr: any) => {

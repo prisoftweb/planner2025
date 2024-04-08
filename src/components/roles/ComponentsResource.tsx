@@ -4,24 +4,30 @@ import StatusComponent from "./StatusComponent";
 import { updateAllComponentsRouteTree } from "@/app/api/routeRoles";
 
 export default function ComponentsResource({route, resource, token, idRes, idTree, 
-                        increment, decrement, indexComp, updateArrConts}: 
+                        increment, decrement, indexComp, countPermissions, 
+                        stateComponents }: 
                       {route:Route, resource:string, increment:Function, decrement:Function
                         token:string, idRes:string, idTree:string, indexComp:number,
-                        updateArrConts:Function}){
+                        countPermissions:number, stateComponents:boolean}){
   
   const [showComponents, setShowComponents] = useState<JSX.Element[]>([]);
   const [stateAllComp, setStateAllComp] = useState<boolean>(false);
 
-  //const [cont, setCont] = useState<number>(0);
-  const [stateComp, setStateComp] = useState<boolean>(false);
+  const [stateComp, setStateComp] = useState<boolean>(stateComponents);
   
   const inc = (index: number) => {
-    console.log('inc', index);
     increment(index);
+    route.components.map((component) => {
+      console.log('inc = ', component.status);
+      //console.log(component);
+    })
   }
 
+  useEffect(() => {
+    console.log('count comp res', countPermissions);
+  }, [countPermissions]);
+
   const dec = (index: number) => {
-    console.log('dec', index);
     decrement(index);
   }
 
@@ -30,18 +36,16 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
     
     route.components.map((component) => {
       if(component.component){
-        //console.log(component);
         if(component.status){
           contStat++;
         }
+        
         setShowComponents((oldArray) => [...oldArray, <StatusComponent component={component} 
                                         decrement={dec} increment={inc} indexComp={indexComp}
                                         value={component.status} idRes={idRes} idRou={route._id} 
                                         idT={idTree} token={token} />] )
       }
     })
-    //setCont(contStat);
-    updateArrConts(contStat, indexComp);
   }, [])
 
   useEffect(() => {
@@ -53,11 +57,9 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
             setShowComponents([]);
 
             setTimeout(() => {
+              console.log('useefect change all ', stateComp);
               route.components.map((component) => {
                 if(component.component){
-                  if(component.status){
-                    //setCont(cont + 1);
-                  }
                   setShowComponents((oldArray) => [...oldArray, <StatusComponent indexComp={indexComp} component={component} 
                                                   decrement={dec} increment={inc}
                                                   value={stateComp} idRes={idRes} idRou={route._id} 
@@ -74,15 +76,6 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
       setStateAllComp(false);
     }
   }, [stateComp])
-
-  // useEffect(() => {
-  //   console.log('usefect cont ', cont);
-  //   if(cont <= 0){
-  //     setStateComp(false);
-  //   }else{
-  //     setStateComp(true);
-  //   }
-  // }, [cont])
 
   return(
     <>

@@ -107,7 +107,9 @@ export default function TableResource({data, token, option}:
   return(
     <>
       {openForm && view}
-      <Table columns={columns} data={data} placeH="Buscar rol.." />
+      <Table columns={columns} data={data} placeH={`${option=== 2? 'Buscar ruta..': 
+                                                        (option===3? 'Buscar componente..': 
+                                                          'Buscar recurso..')}`} />
     </>
   )
 }

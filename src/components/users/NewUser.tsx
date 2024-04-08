@@ -3,7 +3,6 @@ import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import Select from "../Select"
 import UploadImage from "../UploadImage"
 import { useState } from "react"
 import Button from "../Button"
@@ -11,16 +10,27 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { createUserPhoto } from "@/app/api/routeUser"
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useRouter } from "next/navigation"
+import { Options } from "@/interfaces/Common"
+import Select from 'react-select'
 
-export default function NewUser({showForm, departments, token}: 
-                    {showForm:Function, departments:any, token:string}){
+export default function NewUser({showForm, departments, token, roles}: 
+                    {showForm:Function, departments:any, token:string
+                    roles:Options[]}){
   
   const [file, setFile] = useState<File>();
   const [department, setDepartment] = useState<string>(departments[0]._id);
-  const [role, setRole] = useState<string>('admin');
+  const [role, setRole] = useState<string>(roles[0].value);
+  const [optsRoles, setOptsRoles] = useState<Options>(roles[0]);
 
-  const router = useRouter();
+  let optionsDepartments:Options[] = [];
+  departments.map((dept:any) => (
+    optionsDepartments.push({
+      label: dept.name,
+      value: dept._id
+    })
+  ))
+
+  const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
 
   const formik = useFormik({
     initialValues: {
@@ -51,7 +61,7 @@ export default function NewUser({showForm, departments, token}:
       formdata.append('password', password);
       formdata.append('confirmPassword', confirmpassword);
       formdata.append('department', department);
-      formdata.append('role', role);
+      formdata.append('rol', role);
       if(file){
         formdata.append('photo', file);
       }
@@ -61,11 +71,9 @@ export default function NewUser({showForm, departments, token}:
         if(res===201){
           showForm(false);
           showToastMessage('Usuario creado exitosamente!!!');
-          router.refresh();
-          router.push('/users');
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }
       } catch (error) {
         showToastMessageError('Error al crear usuario!!');
@@ -108,20 +116,17 @@ export default function NewUser({showForm, departments, token}:
           </div>
         ) : null}
         <Label htmlFor="role">Rol</Label>
-        <Select name="role" value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value={'admin'}>Administrador</option>
-          <option value="user">Usuario</option>
-        </Select>
+        <Select 
+          options={roles}
+          onChange={(e: any) => {setRole(e.value); setOptsRoles(e)}}
+          value={optsRoles}
+        />
         <Label htmlFor="dept">Departamento</Label>
-        <Select name="department" value={department}
-          onChange={(e) => setDepartment(e.target.value)}
-        >
-          {departments.map((department:any, index:number) => (
-            <option value={department._id} key={index}>{department.name}</option>
-          ))}
-        </Select>
+        <Select 
+          options={optionsDepartments}
+          onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
+          value={optDepts}
+        />
         <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Contraseña</p></Label>
         <Input name="password" type="password" 
           onChange={formik.handleChange}

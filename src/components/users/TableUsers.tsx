@@ -8,9 +8,11 @@ import Button from "../Button";
 import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import { Options } from "@/interfaces/Common";
 
-export default function TableUsers({data, token, departments}:
-                        {data:User[], token:string, departments:any}){
+export default function TableUsers({data, token, departments, roles}:
+                        {data:User[], token:string, 
+                          departments:any, roles:Options[]}){
   
   const columnHelper = createColumnHelper<User>();
   const [newUser, setNewUser] = useState<boolean>(false);
@@ -49,7 +51,7 @@ export default function TableUsers({data, token, departments}:
       header: 'Foto',
       id: 'photo',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile`}>
+        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
           <img src={row.original.photo} 
             className="w-12 h-12 rounded-full" 
             onClick={() => console.log(row.original.photo)} alt="profile" />
@@ -60,7 +62,7 @@ export default function TableUsers({data, token, departments}:
       header: 'Nombre',
       id: 'name',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile`}>
+        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
           <p className="py-2">{row.original.name}</p>
         </Link>
       )
@@ -69,7 +71,7 @@ export default function TableUsers({data, token, departments}:
       header: 'Perfil / Estado',
       id: 'profile',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile`}>
+        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
           <div className="flex items-center">
             <div 
               className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
@@ -83,7 +85,7 @@ export default function TableUsers({data, token, departments}:
       header: 'Correo',
       id: 'email',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile`}>
+        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
           <p className="py-2">{row.original.email}</p>
         </Link>
       ),
@@ -100,7 +102,8 @@ export default function TableUsers({data, token, departments}:
           <p className="ml-3 text-2xl">Usuarios</p>
         </div>
         <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
-        {newUser && <NewUser showForm={setNewUser} departments={departments} token={token} />}
+        {newUser && <NewUser showForm={setNewUser} departments={departments} 
+                        token={token} roles={roles} />}
       </div>
       <Table columns={columns} data={data} placeH="Buscar usuario..." />
     </>

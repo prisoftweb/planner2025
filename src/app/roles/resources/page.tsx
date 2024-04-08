@@ -25,13 +25,19 @@ export default async function Page(){
   }
   
   if(!resources || resources.length <= 0){
-    <RolesClient token={token}>
-      <WithOut img="/img/clientes.svg" subtitle="Rutas" 
-        text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
-        title="Rutas">
-          <ButtonNew token={token} opt={2} optResources={[]} optRoutes={[]}
-            descComponents={[]} descRoutes={[]} optComponents={[]} idTree="" /></WithOut>
-    </RolesClient>
+    return(
+      <div>
+        <Navigation user={user} />
+        <RolesClient token={token} option={2}>
+          <WithOut img="/img/clientes.svg" subtitle="Rutas" 
+            text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
+            title="Rutas">
+              <ButtonNew token={token} opt={2} optResources={[]} optRoutes={[]}
+                descComponents={[]} descRoutes={[]} optComponents={[]} 
+                idTree="" routesPerResource={[]} /></WithOut>
+        </RolesClient>
+      </div>
+    )
   }
   
   const data: ResourceTable[] = [];
@@ -47,11 +53,12 @@ export default async function Page(){
   return(
     <>
       <Navigation user={user} />
-      <RolesClient token={token}>
+      <RolesClient token={token} option={2}>
         <div>
           <Header title="Recursos">
             <ButtonNew token={token} opt={2} optResources={[]} optRoutes={[]}
-              descComponents={[]} descRoutes={[]} optComponents={[]} idTree="" />
+              descComponents={[]} descRoutes={[]} optComponents={[]} 
+              idTree="" routesPerResource={[]} />
           </Header>
           <div className="mt-10">
             <TableResource data={data} token={token} option={1} />

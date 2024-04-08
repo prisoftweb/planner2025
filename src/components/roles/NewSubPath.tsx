@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { createRoute, updateRoute } from "@/app/api/routeRoles"
 import { Resource } from "@/interfaces/Roles"
+import TextArea from "../TextArea"
 
 export default function NewSubPath({showForm, token, route}: 
                     {showForm:Function, token:string, route:Resource}){
@@ -75,6 +76,7 @@ export default function NewSubPath({showForm, token, route}:
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
           value={formik.values.name}
+          autoFocus
         />
         {formik.touched.name && formik.errors.name ? (
           <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -93,11 +95,16 @@ export default function NewSubPath({showForm, token, route}:
           </div>
         ) : null}
         <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripci&oacute;n</p></Label>
-        <Input type="description" name="description" 
+        <TextArea name="description"
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
           value={formik.values.description}
         />
+        {/* <Input type="description" name="description" 
+          onChange={formik.handleChange}
+          onBlur={formik.handleChange}
+          value={formik.values.description}
+        /> */}
         {formik.touched.description && formik.errors.description ? (
           <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.description}</p>

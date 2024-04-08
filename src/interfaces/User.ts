@@ -32,3 +32,15 @@ export interface UsrBack{
   "__v"?: number,
   "passwordChangedAt"?: string
 }
+
+export interface UserBack {
+  _id: string
+  name: string
+  email: string
+  photo: string
+  department: string
+  rol: string
+  status: boolean
+  createAt: string
+  __v: number
+}
