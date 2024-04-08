@@ -32,8 +32,8 @@ export default function PermissionResource({tree, rs, token}:
   const [indexArr, setIndexArr] = useState<number>(-1);
 
   const increment = (indexCont:number) => {
-    console.log('increment ', arrConts);
-    console.log('index inc = ', arrConts[indexCont]);
+    //console.log('increment ', arrConts);
+    //console.log('index inc = ', arrConts[indexCont]);
     // if(arrConts[indexCont] === 1){
     //   window.location.reload();
     // }
@@ -42,8 +42,8 @@ export default function PermissionResource({tree, rs, token}:
   }
 
   const decrement = (indexCont:number) => {
-    console.log('decrement ', arrConts);
-    console.log('index dec = ', arrConts[indexCont]);
+    //console.log('decrement ', arrConts);
+    //console.log('index dec = ', arrConts[indexCont]);
     // if(arrConts[indexCont] <= 0){
     //   window.location.reload();
     // }
@@ -53,10 +53,10 @@ export default function PermissionResource({tree, rs, token}:
 
   useEffect(() => {
     if(indexArr !== -1 && bandDec){
-      console.log('band aux ', arrConts);
+      //console.log('band aux ', arrConts);
       const arr = arrConts.map((count, index:number) => {
         if(indexArr === index){
-          console.log('coutn if ', count);
+          //console.log('coutn if ', count);
           return count - 1;
         }else{
           return count
@@ -70,7 +70,7 @@ export default function PermissionResource({tree, rs, token}:
 
   useEffect(() => {
     if(indexArr !== -1 && bandInc){
-      console.log('band aux ', arrConts);
+      //console.log('band aux ', arrConts);
       const arr = arrConts.map((count, index:number) => {
         if(indexArr === index){
           console.log('coutn if ', count);
@@ -85,40 +85,40 @@ export default function PermissionResource({tree, rs, token}:
     }
   }, [bandInc])
 
-  const updateArrConts = (value:number, indexRoute:number) => {
-    const aux: number[] = [];
-    for(let i =0; i <= indexRoute; i++){
-      if(arrConts[i]){
-        aux.push(arrConts[i]);
-      }else{
-        if(i < indexRoute){
-          aux.push(0);
-        }else{
-          aux.push(value);
-        }
-      }
-    }
-    setArrConts(aux);
-  }
+  // const updateArrConts = (value:number, indexRoute:number) => {
+  //   const aux: number[] = [];
+  //   for(let i =0; i <= indexRoute; i++){
+  //     if(arrConts[i]){
+  //       aux.push(arrConts[i]);
+  //     }else{
+  //       if(i < indexRoute){
+  //         aux.push(0);
+  //       }else{
+  //         aux.push(value);
+  //       }
+  //     }
+  //   }
+  //   setArrConts(aux);
+  // }
 
   useEffect(() => {
-    console.log('arr conts ', arrConts);
+    // console.log('arr conts ', arrConts);
     
-    setShowPermissionComponents(<></>);
-    setTimeout(() => {
-      setShowPermissionComponents(<div className="mt-5">
-                          {resource?.routes.map((route, index:number) => (
-                            <div className="mt-5 bg-white rounded-lg shadow-md p-2" key={index}>
-                              <ComponentsResource resource={resource?.resource.name || ''} 
-                                route={route} idRes={resource._id} token={token} 
-                                idTree={tree._id} decrement={decrement} increment={increment} 
-                                indexComp={index}
-                                countPermissions={arrConts[index]} 
-                                stateComponents={(arrConts[index]>0)? true: false}  />
-                            </div>
-                          ))}
-                        </div>)
-    }, 100);
+    // setShowPermissionComponents(<></>);
+    // setTimeout(() => {
+    //   setShowPermissionComponents(<div className="mt-5">
+    //                       {resource?.routes.map((route, index:number) => (
+    //                         <div className="mt-5 bg-white rounded-lg shadow-md p-2" key={index}>
+    //                           <ComponentsResource resource={resource?.resource.name || ''} 
+    //                             route={route} idRes={resource._id} token={token} 
+    //                             idTree={tree._id} decrement={decrement} increment={increment} 
+    //                             indexComp={index}
+    //                             countPermissions={arrConts[index]} 
+    //                             stateComponents={(arrConts[index]>0)? true: false}  />
+    //                         </div>
+    //                       ))}
+    //                     </div>)
+    // }, 100);
   }, [arrConts])
 
   useEffect(() => {
