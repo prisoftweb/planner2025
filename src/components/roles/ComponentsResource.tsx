@@ -34,7 +34,7 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
   useEffect(() => {
     let contStat = 0;
     
-    route.components.map((component) => {
+    route.components.map((component, index:number) => {
       if(component.component){
         if(component.status){
           contStat++;
@@ -43,7 +43,7 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
         setShowComponents((oldArray) => [...oldArray, <StatusComponent component={component} 
                                         decrement={dec} increment={inc} indexComp={indexComp}
                                         value={component.status} idRes={idRes} idRou={route._id} 
-                                        idT={idTree} token={token} />] )
+                                        idT={idTree} token={token} idC={index} />] )
       }
     })
   }, [])
@@ -58,12 +58,12 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
 
             setTimeout(() => {
               console.log('useefect change all ', stateComp);
-              route.components.map((component) => {
+              route.components.map((component, index:number) => {
                 if(component.component){
                   setShowComponents((oldArray) => [...oldArray, <StatusComponent indexComp={indexComp} component={component} 
                                                   decrement={dec} increment={inc}
                                                   value={stateComp} idRes={idRes} idRou={route._id} 
-                                                  idT={idTree} token={token} />] )
+                                                  idT={idTree} token={token} idC={index} />] )
                 }
               })
             }, 500);
