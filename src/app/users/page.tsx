@@ -70,7 +70,9 @@ export default async function Users() {
         'role': user.role,
         'status': user.status
       },
-      'email': user.email
+      'email': user.email,
+      'department': user.department.name,
+      'role': user.rol? user.rol.name : 'sin rol'
     })
   })
 

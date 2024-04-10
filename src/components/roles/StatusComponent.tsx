@@ -51,8 +51,6 @@ export default function StatusComponent({component, value, token, idRes, idRou, 
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={status} 
               onClick={() => {
-                // console.log('update value', status);
-                // updateValue(status? (-1) : 1);
                 setStatus(!status);
               }} 
               id={`${name}`} 

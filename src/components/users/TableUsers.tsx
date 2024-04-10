@@ -81,6 +81,24 @@ export default function TableUsers({data, token, departments, roles}:
         </Link>       
       ),
     }),
+    columnHelper.accessor('department', {
+      header: 'Departamento',
+      id: 'department',
+      cell: ({row}) => (
+        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+          <p className="py-2">{row.original.department}</p>
+        </Link>
+      ),
+    }),
+    columnHelper.accessor('role', {
+      header: 'Rol',
+      id: 'role',
+      cell: ({row}) => (
+        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+          <p className="py-2">{row.original.role}</p>
+        </Link>
+      ),
+    }),
     columnHelper.accessor('email', {
       header: 'Correo',
       id: 'email',

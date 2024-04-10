@@ -6,7 +6,9 @@ export interface User{
     'status': boolean,
     'role': string, 
   },
-  'email': string
+  'email': string,
+  'role': string,
+  'department': string
 }
 
 export interface Usr{

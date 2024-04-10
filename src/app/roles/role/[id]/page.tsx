@@ -6,7 +6,7 @@ import Selectize from "@/components/Selectize";
 import { Options } from "@/interfaces/Common";
 import RoleProfile from "@/components/roles/RoleProfile";
 import { getRole, getRoles, getTree } from "@/app/api/routeRoles";
-import { Resource2, RoleUser } from "@/interfaces/Roles";
+import { RoleUser } from "@/interfaces/Roles";
 import { Tree } from "@/interfaces/Roles";
 import PermissionResource from "@/components/roles/PermissionResource";
 
