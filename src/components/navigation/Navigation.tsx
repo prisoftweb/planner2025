@@ -128,7 +128,8 @@ const NavItems = ({role}: {role:string}) => {
           }
         ]} 
       />
-      <NavItem name="Dashboard" link="" items={[]}/>
+      <NavItem name="Departamentos" link="/departments" items={[]}/>
+      {/* <NavItem name="Compañia" link="/companies" items={[]}/> */}
     </>
   )
 };
