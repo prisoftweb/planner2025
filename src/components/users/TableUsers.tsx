@@ -51,7 +51,7 @@ export default function TableUsers({data, token, departments, roles}:
       header: 'Foto',
       id: 'photo',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+        <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <img src={row.original.photo} 
             className="w-12 h-12 rounded-full" 
             onClick={() => console.log(row.original.photo)} alt="profile" />
@@ -62,7 +62,7 @@ export default function TableUsers({data, token, departments, roles}:
       header: 'Nombre',
       id: 'name',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+        <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <p className="py-2">{row.original.name}</p>
         </Link>
       )
@@ -71,7 +71,7 @@ export default function TableUsers({data, token, departments, roles}:
       header: 'Perfil / Estado',
       id: 'profile',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+        <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <div className="flex items-center">
             <div 
               className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
@@ -85,7 +85,7 @@ export default function TableUsers({data, token, departments, roles}:
       header: 'Departamento',
       id: 'department',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+        <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <p className="py-2">{row.original.department}</p>
         </Link>
       ),
@@ -94,7 +94,7 @@ export default function TableUsers({data, token, departments, roles}:
       header: 'Rol',
       id: 'role',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+        <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <p className="py-2">{row.original.role}</p>
         </Link>
       ),
@@ -103,7 +103,7 @@ export default function TableUsers({data, token, departments, roles}:
       header: 'Correo',
       id: 'email',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}?tab=1&&opt=1`}>
+        <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <p className="py-2">{row.original.email}</p>
         </Link>
       ),

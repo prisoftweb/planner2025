@@ -41,7 +41,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
       name: Yup.string()
                   .required('El nombre es obligatorio'),
       abbr: Yup.string()
-                  .required('La direccion es obligatoria'),
+                  .required('La abreviacion es obligatoria'),
     }),
 
     onSubmit: async valores => {
