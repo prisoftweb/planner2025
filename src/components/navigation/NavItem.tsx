@@ -3,9 +3,9 @@
 import { useState } from "react"
 import DropDownItem from "./DropDownItem"
 import { useRouter } from "next/navigation";
-import { NavItem } from "@/interfaces/NavItem";
+import  { NavItem } from "@/interfaces/NavItem";
 
-export default function NavItem({name, items, link}: {name:string, items:NavItem[], link:string}){
+export default function NavItemComponent({name, items, link}: {name:string, items:NavItem[], link:string}){
   
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();

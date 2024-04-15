@@ -73,3 +73,60 @@ export async function UpdateCatalog(auth_token:string, id:string, data:Object) {
     return 'Error al actualizar catalogo!!';
   }
 }
+
+export async function InsertConditionInCatalog(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/catalogs/insertConditionInCatalog/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al insertar condicion en catalogo!!';
+  }
+}
+
+export async function InsertCategoryInCatalog(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/catalogs/insertCategoryInCatalog/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al insertar category en catalogo!!';
+  }
+}
+
+export async function InsertTypeInCatalog(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/catalogs/insertTypeInCatalog/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status === 200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al insertar category en catalogo!!';
+  }
+}

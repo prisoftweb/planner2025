@@ -128,8 +128,31 @@ const NavItems = ({role}: {role:string}) => {
           }
         ]} 
       />
-      <NavItem name="Departamentos" link="/departments" items={[]}/>
+      {/* <NavItem name="Departamentos" link="/departments" items={[]}/> */}
       {/* <NavItem name="Compañia" link="/companies" items={[]}/> */}
+      <NavItem name="Compañias" link="" items={[
+          {
+            name: 'Compañias',
+            link: '/companies'
+          },
+          {
+            name: 'Departamentos',
+            link: '/departments'
+          },
+          {
+            name: 'Catalogos',
+            link: '/catalogs'
+          },
+          {
+            name: 'Glosarios',
+            link: '/glossary'
+          },
+          {
+            name: 'Estatus',
+            link: '/status'
+          }
+        ]} 
+      />
     </>
   )
 };

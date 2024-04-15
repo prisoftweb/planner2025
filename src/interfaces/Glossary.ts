@@ -9,7 +9,7 @@ export interface Glossary {
   _id: string
   name: string
   description: string
-  color: string
+  color?: string
   status: boolean
   __v: number
   id: string

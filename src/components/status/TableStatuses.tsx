@@ -2,12 +2,12 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
-import { PencilIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { StatusTable } from "@/interfaces/Status";
 import { RemoveGlossary } from "@/app/api/routeGlossary";
 
-export default function TableLists({data, token}:
+export default function TableStatus({data, token}:
                         {data:StatusTable[], token:string}){
   
   const columnHelper = createColumnHelper<StatusTable>();
@@ -44,7 +44,8 @@ export default function TableLists({data, token}:
           <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
             //onClick={() => {setGlossEdit(row.original); setEditGloss(true);}}
           />
-          <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveGlossary} token={token} />
+          <TrashIcon className="w-5 h-5 text-red-500 hover:text-red-400 cursor-pointer"/>
+          {/* <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveGlossary} token={token} /> */}
         </div>
       ),
       enableSorting:false,
@@ -67,10 +68,24 @@ export default function TableLists({data, token}:
       ),
     }),
     columnHelper.accessor('statuses', {
-      header: 'Status',
+      header: 'Estatus',
       id: 'statuses',
       cell: ({row}) => (
         <p className="">{row.original.statuses}</p>
+      ),
+    }),
+    columnHelper.accessor('categories', {
+      header: 'Categorias',
+      id: 'categories',
+      cell: ({row}) => (
+        <p className="">{row.original.categories}</p>
+      ),
+    }),
+    columnHelper.accessor('types', {
+      header: 'Tipos',
+      id: 'types',
+      cell: ({row}) => (
+        <p className="">{row.original.types}</p>
       ),
     }),
   ]

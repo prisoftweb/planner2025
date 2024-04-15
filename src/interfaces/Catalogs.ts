@@ -1,3 +1,5 @@
+import { Glossary } from "./Glossary"
+
 export interface CatalogTable{
   id: string,
   name: string,
@@ -9,9 +11,16 @@ export interface Catalog {
   name: string
   collection: string
   status: boolean
-  condition: any[]
-  categorys: any[]
-  types: any[]
+  condition: GlossaryComponent[]
+  categorys: GlossaryComponent[]
+  types: GlossaryComponent[]
   __v: number
+  id: string
+}
+
+export interface GlossaryComponent {
+  glossary: Glossary
+  status: boolean
+  _id: string
   id: string
 }
