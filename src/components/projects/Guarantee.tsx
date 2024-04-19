@@ -10,8 +10,9 @@ import { useRegFormContext } from "./StepperProjectProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
+import { useNewProject } from "@/app/store/newProject";
 
-export default function Guarantee({token, user}:{token:string, user:string}){
+export default function Guarantee({token}:{token:string}){
   
   const [state, dispatch] = useRegFormContext();
 
@@ -33,16 +34,20 @@ export default function Guarantee({token, user}:{token:string, user:string}){
   const formik = useFormik({
     initialValues: {
       percentage:percentageI,
+      amountG: ''
     }, 
     validationSchema: Yup.object({
       percentage: Yup.string()
-                  .required('El porcentaje de avance es obligatorio'),
+                  .required('El porcentaje es obligatorio'),
+      amountG: Yup.string()
+                  .required('El monto es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      const {percentage} = valores;
+      const {percentage, amountG} = valores;
       const data= {
         percentage,
-        date: startDate
+        date: startDate,
+        amountG
       }
 
       dispatch({ type: 'SET_GUARANTEE', data: data });
@@ -50,64 +55,26 @@ export default function Guarantee({token, user}:{token:string, user:string}){
     },       
   });
   
+  const {amount, category, client, code, community, company, country, cp, date, description, hasguaranteefund,
+    haveAddress, municipy, stateA, street, title, type, user
+  } = useNewProject();
   const onClickSave = async () => {
-    if(state.extradata && state.databasic){
-      
-      let amount, dateExtra, category, type, client, company;
-
-      amount = state.extradata.amount;
-      dateExtra = state.extradata.date;
-      category = state.extradata.category;
-      type = state.extradata.type;
-      client = state.extradata.client;
-      company = state.extradata.company;
-
-      let street = '';
-      let community = '';
-      let cp = '';
-      let municipy = '';
-      let stateA = '';
-      let country = '';
-      if(state.address){
-        street = state.address.street;
-        community = state.address.community;
-        cp = state.address.cp;
-        municipy = state.address.municipy;
-        stateA = state.address.state;
-        country = state.address.country;
+    const {amountG, percentage} = formik.values;
+    const data = {
+      amount, category, client, code, company, date, description, 
+      hasguaranteefund, haveAddress, title, type, user,
+      location: {
+        community, country, cp, municipy, 
+        state: stateA, 
+        street
+      },
+      guaranteefund: {
+        amount:amountG,
+        date: startDate,
+        porcentage:percentage
       }
-      const {percentage} = formik.values;
-      let title, description, code;
-      title = state.databasic.title;
-      description = state.databasic.description;
-      code = state.databasic.code;  
-      const data= {
-        amount: parseFloat(amount),
-        date: dateExtra,
-        category,
-        type,
-        client,
-        user,
-        title,
-        description,
-        code,
-        company,
-        location: {
-          street,
-          community,
-          cp,
-          municipy,
-          state : stateA,
-          country
-        },
-        guaranteefund: {
-          porcentage: percentage,
-          date: startDate,
-        }
-        // condition: [
-        //   {glossary:"661964a1ca3bfa35200c1628", user}
-        // ],
-      }
+    }
+    try {
       const res = await SaveProject(data, token);
       if(res.status){
         showToastMessage(res.message);
@@ -117,21 +84,86 @@ export default function Guarantee({token, user}:{token:string, user:string}){
       }else{
         showToastMessageError(res.message);
       }
-    }else{
-      showToastMessageError('No hay informacion extra!!'); 
+    } catch (error) {
+      showToastMessageError('Ocurrio un problema al crear proyecto!!');
     }
+    // if(state.extradata && state.databasic){
+      
+    //   let amount, dateExtra, category, type, client, company;
+
+    //   amount = state.extradata.amount;
+    //   dateExtra = state.extradata.date;
+    //   category = state.extradata.category;
+    //   type = state.extradata.type;
+    //   client = state.extradata.client;
+    //   company = state.extradata.company;
+
+    //   let street = '';
+    //   let community = '';
+    //   let cp = '';
+    //   let municipy = '';
+    //   let stateA = '';
+    //   let country = '';
+    //   if(state.address){
+    //     street = state.address.street;
+    //     community = state.address.community;
+    //     cp = state.address.cp;
+    //     municipy = state.address.municipy;
+    //     stateA = state.address.state;
+    //     country = state.address.country;
+    //   }
+    //   const {percentage} = formik.values;
+    //   let title, description, code;
+    //   title = state.databasic.title;
+    //   description = state.databasic.description;
+    //   code = state.databasic.code;  
+    //   const data= {
+    //     amount: parseFloat(amount),
+    //     date: dateExtra,
+    //     category,
+    //     type,
+    //     client,
+    //     title,
+    //     description,
+    //     code,
+    //     company,
+    //     location: {
+    //       street,
+    //       community,
+    //       cp,
+    //       municipy,
+    //       state : stateA,
+    //       country
+    //     },
+    //     guaranteefund: {
+    //       porcentage: percentage,
+    //       date: startDate,
+    //     }
+    //     // condition: [
+    //     //   {glossary:"661964a1ca3bfa35200c1628", user}
+    //     // ],
+    //   }
+    //   const res = await SaveProject(data, token);
+    //   if(res.status){
+    //     showToastMessage(res.message);
+    //     setTimeout(() => {
+    //       window.location.reload();
+    //     }, 500);
+    //   }else{
+    //     showToastMessageError(res.message);
+    //   }
+    // }else{
+    //   showToastMessageError('No hay informacion extra!!'); 
+    // }
   }
 
   return(
     <div className="w-full">
-      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
-        title="Información basica"
-      /> */}
       <div className="my-5">
         <NavProjectStepper index={3} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
-        <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje</p></Label>
+        <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje de fondo</p></Label>
         <Input type="text" name="percentage" 
           value={formik.values.percentage}
           onChange={formik.handleChange}
@@ -140,6 +172,17 @@ export default function Guarantee({token, user}:{token:string, user:string}){
         {formik.touched.percentage && formik.errors.percentage ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.percentage}</p>
+            </div>
+        ) : null}
+        <Label htmlFor="amountG"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto de fondo</p></Label>
+        <Input type="text" name="amountG" 
+          value={formik.values.amountG}
+          onChange={formik.handleChange}
+          onBlur={formik.handleChange}
+        />
+        {formik.touched.amountG && formik.errors.amountG ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.amountG}</p>
             </div>
         ) : null}
         <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de pago</p></Label>

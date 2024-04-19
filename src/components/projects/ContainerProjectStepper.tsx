@@ -32,9 +32,9 @@ export default function ContainerProjectStepper({token, optClients, optCategorie
                             optCategories={optCategories} user={user} 
                             optTypes={optTypes} optCompanies={optCompanies} />)
           }else if(state.indexstepper===2){
-            setStepForm(<AddressStepper token={token} user={user} />)
+            setStepForm(<AddressStepper token={token} />)
             }else if(state.indexstepper===3){
-              setStepForm(<Guarantee token={token} user={user} />)
+              setStepForm(<Guarantee token={token} />)
               }else{
                 setStepForm(<DataBasicStepper user={user} token={token} />)
               }

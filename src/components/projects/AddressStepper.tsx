@@ -9,11 +9,19 @@ import { useRegFormContext } from "./StepperProjectProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
+import { useNewProject } from "@/app/store/newProject";
 
-export default function AddressStepper({token, user}: {token:string, user:string}){
+export default function AddressStepper({token}: {token:string}){
+  
+  const {amount, category, client, code, company, date, description, 
+    hasguaranteefund, haveAddress, title, type, user} = useNewProject();
   
   const [state, dispatch] = useRegFormContext();
-  const [guarantee, setGuarantee] = useState<boolean>(state.extradata? state.extradata.guarantee: false);
+  const [guarantee, setGuarantee] = useState<boolean>(hasguaranteefund);
+
+  const {updateAddress} = useNewProject();
+
+  //console.log('addres stepper = ', amount, category, client, code, company, date, description, title);
 
   let streetI = '';
   let communityI = '';
@@ -54,7 +62,7 @@ export default function AddressStepper({token, user}: {token:string, user:string
                   .required('El estado es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      // const {name, description, keyProject} = valores;
+      const {community, country, cp, municipy, stateA, street} = valores;
       // const data= {
       //   name, 
       //   description,
@@ -63,77 +71,104 @@ export default function AddressStepper({token, user}: {token:string, user:string
 
       // dispatch({ type: 'SET_BASIC_DATA', data: data });
       // dispatch({type: 'INDEX_STEPPER', data: 1})
-      dispatch({ type: 'SET_ADDRESS_DATA', data: valores });
+      //dispatch({ type: 'SET_ADDRESS_DATA', data: valores });
+      updateAddress(community, country, cp, municipy, stateA, street);
       dispatch({type: 'INDEX_STEPPER', data: 3})
     },       
   });
   
   const onClickSave = async () => {
-    if(state.databasic){
-      if(state.extradata){
-        let amount, dateExtra, category, type, client, company;
-
-        amount = state.extradata.amount;
-        dateExtra = state.extradata.date;
-        category = state.extradata.category;
-        type = state.extradata.type;
-        client = state.extradata.client;
-        company = state.extradata.company;
-
-        let percentage, dateGuarantee;
-
-        if(state.guarantee){
-          percentage = state.guarantee.percentage;
-          dateGuarantee = state.guarantee.date;
-        }
-
-        const {community, country, cp, municipy, stateA, street} = formik.values;
-        let title, description, code;
-        title = state.databasic.title;
-        description = state.databasic.description;
-        code = state.databasic.code;  
-        const data= {
-          amount: parseFloat(amount),
-          date: dateExtra,
-          category,
-          type,
-          client,
-          user,
-          title,
-          description,
-          code,
-          company,
-          location: {
-            street,
-            community,
-            cp,
-            municipy,
-            state : stateA,
-            country
-          },
-          guaranteefund: {
-            porcentage: percentage,
-            date: dateGuarantee,
-          }
-          // condition: [
-          //   {glossary:"661964a1ca3bfa35200c1628", user}
-          // ],
-        }
-        const res = await SaveProject(data, token);
-        if(res.status){
-          showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res.message);
-        }
-      }else{
-        showToastMessageError('No hay informacion extra!!')
+    const {community, country, cp, municipy, stateA, street} = formik.values;
+    updateAddress(community, country, cp, municipy, stateA, street);
+    
+    const data = {
+      amount, category, client, code, company, date, description, 
+      hasguaranteefund, haveAddress, title, type, user,
+      location: {
+        community, country, cp, municipy, 
+        state: stateA, 
+        street
       }
-    }else{
-      showToastMessageError('No hay informacion basica!!'); 
     }
+    console.log(JSON.stringify(data));
+    try {
+      const res = await SaveProject(data, token);
+      if(res.status){
+        showToastMessage(res.message);
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      }else{
+        showToastMessageError(res.message);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un problema al crear proyecto!!');
+    }
+    // if(state.databasic){
+    //   if(state.extradata){
+    //     let amount, dateExtra, category, type, client, company;
+
+    //     amount = state.extradata.amount;
+    //     dateExtra = state.extradata.date;
+    //     category = state.extradata.category;
+    //     type = state.extradata.type;
+    //     client = state.extradata.client;
+    //     company = state.extradata.company;
+
+    //     let percentage, dateGuarantee;
+
+    //     if(state.guarantee){
+    //       percentage = state.guarantee.percentage;
+    //       dateGuarantee = state.guarantee.date;
+    //     }
+
+    //     const {community, country, cp, municipy, stateA, street} = formik.values;
+    //     let title, description, code;
+    //     title = state.databasic.title;
+    //     description = state.databasic.description;
+    //     code = state.databasic.code;  
+    //     const data= {
+    //       amount: parseFloat(amount),
+    //       date: dateExtra,
+    //       category,
+    //       type,
+    //       client,
+    //       user,
+    //       title,
+    //       description,
+    //       code,
+    //       company,
+    //       location: {
+    //         street,
+    //         community,
+    //         cp,
+    //         municipy,
+    //         state : stateA,
+    //         country
+    //       },
+    //       guaranteefund: {
+    //         porcentage: percentage,
+    //         date: dateGuarantee,
+    //       }
+    //       // condition: [
+    //       //   {glossary:"661964a1ca3bfa35200c1628", user}
+    //       // ],
+    //     }
+    //     const res = await SaveProject(data, token);
+    //     if(res.status){
+    //       showToastMessage(res.message);
+    //       setTimeout(() => {
+    //         window.location.reload();
+    //       }, 500);
+    //     }else{
+    //       showToastMessageError(res.message);
+    //     }
+    //   }else{
+    //     showToastMessageError('No hay informacion extra!!')
+    //   }
+    // }else{
+    //   showToastMessageError('No hay informacion basica!!'); 
+    // }
   }
 
   return(

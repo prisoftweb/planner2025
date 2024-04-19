@@ -21,9 +21,8 @@ export const projectValidation = z.object({
     message: 'Descripcion debe tener maximo 250 caracteres'
   }).optional(),
   date: z.string().optional(),
-  amount: z.number({
+  amount: z.string({
     required_error: 'Monto del proyecto es obligatorio',
-    invalid_type_error: 'El monto debe ser un numero'
   }),
   photo: z.string().optional(),
   category: z.string({

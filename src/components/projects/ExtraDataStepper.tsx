@@ -10,6 +10,7 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import NavProjectStepper from "./NavProjectStepper";
+import { useNewProject } from "@/app/store/newProject";
 
 export default function ExtraDataStepper({token, optClients, optCategories, 
                           optTypes, user, optCompanies}:
@@ -18,6 +19,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   
   const [state, dispatch] = useRegFormContext();
   
+  const {updateExtraData, title, description, code} = useNewProject();
+
   const [client, setClient] = useState<string>(optClients[0].value);
   const [type, setType] = useState<string>(optTypes[0].value);
   const [category, setCategory] = useState<string>(optCategories[0].value);
@@ -63,7 +66,9 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         hasguaranteefund: guarantee
       };
 
-      dispatch({ type: 'SET_EXTRA_DATA', data: data });
+      updateExtraData(amount, startDate, category, type, client, user, haveAddress, company, guarantee)
+
+      //dispatch({ type: 'SET_EXTRA_DATA', data: data });
       if(haveAddress){
         dispatch({type: 'INDEX_STEPPER', data: 2})
       }else{
@@ -74,62 +79,25 @@ export default function ExtraDataStepper({token, optClients, optCategories,
     },       
   });
   
-  const onClickSave = async () => {
-    let title, description, code;
-    if(state.databasic){
-      title = state.databasic.title;
-      description = state.databasic.description;
-      code = state.databasic.code;     
-      const {amount} = formik.values;
-      let street = '';
-      let community = '';
-      let cp = '';
-      let municipy = '';
-      let stateA = '';
-      let country = '';
-      if(state.address){
-        street = state.address.street;
-        community = state.address.community;
-        cp = state.address.cp;
-        municipy = state.address.municipy;
-        stateA = state.address.state;
-        country = state.address.country;
-      }
-      
-      let percentage, dateGuarantee;
 
-      if(state.guarantee){
-        percentage = state.guarantee.percentage;
-        dateGuarantee = state.guarantee.date;
-      }
-      
-      const data= {
-        amount: parseFloat(amount),
-        date: startDate,
-        category,
-        type,
-        client,
-        user,
-        title,
-        description,
-        code,
-        company,
-        location: {
-          street,
-          community,
-          cp,
-          municipy,
-          state : stateA,
-          country
-        },
-        guaranteefund: {
-          porcentage: percentage,
-          date: dateGuarantee,
-        }
-        // condition: [
-        //   {glossary:"661964a1ca3bfa35200c1628", user}
-        // ],
-      }
+
+  const onClickSave = async () => {
+    const {amount} = formik.values;
+    const data= {
+      amount,
+      date: startDate,
+      category,
+      type,
+      client,
+      user,
+      haveAddress,
+      company,
+      hasguaranteefund: guarantee,
+      title,
+      description,
+      code
+    };
+    try {
       const res = await SaveProject(data, token);
       if(res.status){
         showToastMessage(res.message);
@@ -139,9 +107,76 @@ export default function ExtraDataStepper({token, optClients, optCategories,
       }else{
         showToastMessageError(res.message);
       }
-    }else{
-      showToastMessageError('No hay informacion basica!!'); 
+    } catch (error) {
+      showToastMessageError('Ocurrio un problema al crear proyecto!!');
     }
+    // let title, description, code;
+    // if(state.databasic){
+    //   title = state.databasic.title;
+    //   description = state.databasic.description;
+    //   code = state.databasic.code;     
+    //   const {amount} = formik.values;
+    //   let street = '';
+    //   let community = '';
+    //   let cp = '';
+    //   let municipy = '';
+    //   let stateA = '';
+    //   let country = '';
+    //   if(state.address){
+    //     street = state.address.street;
+    //     community = state.address.community;
+    //     cp = state.address.cp;
+    //     municipy = state.address.municipy;
+    //     stateA = state.address.state;
+    //     country = state.address.country;
+    //   }
+      
+    //   let percentage, dateGuarantee;
+
+    //   if(state.guarantee){
+    //     percentage = state.guarantee.percentage;
+    //     dateGuarantee = state.guarantee.date;
+    //   }
+      
+    //   const data= {
+    //     amount: parseFloat(amount),
+    //     date: startDate,
+    //     category,
+    //     type,
+    //     client,
+    //     user,
+    //     title,
+    //     description,
+    //     code,
+    //     company,
+    //     location: {
+    //       street,
+    //       community,
+    //       cp,
+    //       municipy,
+    //       state : stateA,
+    //       country
+    //     },
+    //     guaranteefund: {
+    //       porcentage: percentage,
+    //       date: dateGuarantee,
+    //     }
+    //     // condition: [
+    //     //   {glossary:"661964a1ca3bfa35200c1628", user}
+    //     // ],
+    //   }
+    //   const res = await SaveProject(data, token);
+    //   if(res.status){
+    //     showToastMessage(res.message);
+    //     setTimeout(() => {
+    //       window.location.reload();
+    //     }, 500);
+    //   }else{
+    //     showToastMessageError(res.message);
+    //   }
+    // }else{
+    //   showToastMessageError('No hay informacion basica!!'); 
+    // }
   }
 
   return(
