@@ -11,16 +11,21 @@ const reducer = (state:any, action:any) => {
       case 'SET_BASIC_DATA': {
           return { ...state, databasic: { ...action.data } };
       }
+      break;
       case 'SET_EXTRA_DATA': {
-            console.log('helppp')
+            console.log('helppp');
+            console.log(action.data);
           return { ...state, extradata: { ...action.data } };
       }
+      break;
       case 'SET_ADDRESS_DATA': {
           return { ...state, address: action.data };
       }
+      break;
       case 'SET_GUARANTEE': {
           return { ...state, guarantee: action.data };
       }
+      break;
       case 'INDEX_STEPPER': {
         return { ...state, indexstepper: action.data };
     }

@@ -14,7 +14,14 @@ import SaveProject from "@/app/functions/SaveProject";
 export default function Guarantee({token, user}:{token:string, user:string}){
   
   const [state, dispatch] = useRegFormContext();
-  const [startDate, setStartDate] = useState(new Date());
+
+  let year = new Date().getFullYear().toString();
+  let month = (new Date().getMonth() + 1).toString();
+  let day = new Date().getDate().toString();
+  if(month.length ===1) month = '0'+month;
+  if(day.length ===1) day = '0'+day;
+
+  const [startDate, setStartDate] = useState<string>(year+'-'+month+'-'+day);
 
   let percentageI = '';
   
@@ -136,7 +143,11 @@ export default function Guarantee({token, user}:{token:string, user:string}){
             </div>
         ) : null}
         <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de pago</p></Label>
-        <DatePicker selected={startDate} onChange={(date: Date) => setStartDate(date)} />
+        <input type="date" value={startDate} onChange={(e) => {setStartDate(e.target.value); console.log('new fecha ', e.target.value)}}  
+          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                focus:border-slate-700 outline-0"
+        />
+        {/* <DatePicker selected={startDate} onChange={(date: Date) => setStartDate(date)} /> */}
         <div className="flex justify-end mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
           {/* <button type="submit"

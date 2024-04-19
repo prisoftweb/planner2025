@@ -94,7 +94,7 @@ export default function TableProjects({data, token}:
       id: 'date',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="">{row.original.date}</p>
+          <p className="">{row.original.date.substring(0, 10)}</p>
         </Link>
       ),
     }),

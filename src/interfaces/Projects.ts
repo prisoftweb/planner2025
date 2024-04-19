@@ -1,6 +1,7 @@
 import { UserBack } from "./User"
 import { Company } from "./Companies"
-import { Client } from "./Clients"
+import { ClientBack } from "./Clients"
+import { Glossary } from "./Glossary"
 
 export interface ProjectsTable{
   id: string,
@@ -28,7 +29,7 @@ export interface Project {
   hasguaranteefund: boolean
   user: UserBack
   company: Company
-  client: Client
+  client: ClientBack
   status: boolean
   datets: string
   condition: any[]
@@ -36,18 +37,22 @@ export interface Project {
   account: string
   __v: number
   id: string
+  type: Glossary
 }
 
 export interface Location {
-  cp: any
+  cp: number
   community: string
   municipy: string
   state: string
   country: string
   type: string
-  coordinates: any[]
+  coordinates: any[],
+  street: string
 }
 
 export interface Guaranteefund {
   date: string
+  porcentage: string
+  amount: string
 }

@@ -6,18 +6,17 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { useState } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import { Project } from "@/interfaces/Projects";
+import { UpdateProject } from "@/app/api/routeProjects";
 
-export default function DataBasic({token}: {token:string}){
+export default function DataBasic({token, id, project}: 
+                                  {token:string, id:string, project:Project}){
   
-  let nameI = '';
-  let keyProjectI = '';
-  let descriptionI = '';
-
   const formik = useFormik({
     initialValues: {
-      name:nameI,
-      keyProject: keyProjectI,
-      description: descriptionI,
+      name: project.title,
+      keyProject: project.code,
+      description: project.description,
     }, 
     validationSchema: Yup.object({
       description: Yup.string()
@@ -28,100 +27,33 @@ export default function DataBasic({token}: {token:string}){
                   .required('La clave es obligatoria'),
     }),
     onSubmit: async (valores) => {            
-      // const {name, description, keyProject} = valores;
-      // const data= {
-      //   title: name, 
-      //   description,
-      //   code: keyProject,
-      // }
-
-      // dispatch({ type: 'SET_BASIC_DATA', data: data });
-      // dispatch({type: 'INDEX_STEPPER', data: 1})
+      const {name, description, keyProject} = valores;
+      const data= {
+        title: name, 
+        description,
+        code: keyProject,
+      }
+      try {
+        const res = await UpdateProject(token, id, data);
+        if(res===200){
+          showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un problema al actualizar proyecto!!');
+      }
     },       
   });
-  
-  const onClickSave = async () => {
-    const {name, description, keyProject} = formik.values;
-
-    // if(state.extradata){
-      
-    //   let amount, dateExtra, category, type, client, company;
-
-    //   amount = state.extradata.amount;
-    //   dateExtra = state.extradata.date;
-    //   category = state.extradata.category;
-    //   type = state.extradata.type;
-    //   client = state.extradata.client;
-    //   company = state.extradata.company;
-
-    //   let street = '';
-    //   let community = '';
-    //   let cp = '';
-    //   let municipy = '';
-    //   let stateA = '';
-    //   let country = '';
-    //   if(state.address){
-    //     street = state.address.street;
-    //     community = state.address.community;
-    //     cp = state.address.cp;
-    //     municipy = state.address.municipy;
-    //     stateA = state.address.state;
-    //     country = state.address.country;
-    //   }
-      
-    //   let percentage, dateGuarantee;
-
-    //   if(state.guarantee){
-    //     percentage = state.guarantee.percentage;
-    //     dateGuarantee = state.guarantee.date;
-    //   }
-      
-    //   const data= {
-    //     amount: parseFloat(amount),
-    //     date: dateExtra,
-    //     category,
-    //     type,
-    //     client,
-    //     user,
-    //     title: name,
-    //     description,
-    //     code: keyProject,
-    //     company,
-    //     location: {
-    //       street,
-    //       community,
-    //       cp,
-    //       municipy,
-    //       state : stateA,
-    //       country
-    //     },
-    //     guaranteefund: {
-    //       porcentage: percentage,
-    //       date: dateGuarantee,
-    //     }
-    //     // condition: [
-    //     //   {glossary:"661964a1ca3bfa35200c1628", user}
-    //     // ],
-    //   }
-    //   const res = await SaveProject(data, token);
-    //   if(res.status){
-    //     showToastMessage(res.message);
-    //     setTimeout(() => {
-    //       window.location.reload();
-    //     }, 500);
-    //   }else{
-    //     showToastMessageError(res.message);
-    //   }
-    // }else{
-    //   showToastMessageError('No hay informacion extra!!'); 
-    // }
-  }
 
   return(
     <div className="w-full">
-      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
-        title="Información basica"
-      /> */}
+      <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del proyecto" 
+        title="Modificar proyecto"
+      />
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
         <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="name" autoFocus 
@@ -159,9 +91,8 @@ export default function DataBasic({token}: {token:string}){
             <p>{formik.errors.description}</p>
           </div>
         ) : null}
-        <div className="flex justify-end mt-8 space-x-5">
-          <Button onClick={onClickSave} type="button">Guardar</Button>
-          
+        <div className="flex justify-center mt-8 space-x-5">
+          <Button type="submit">Guardar</Button>         
         </div>
       </form>  
     </div>

@@ -63,7 +63,7 @@ export default function NewProjectContainer({token, showForm, optClients,
   return(
     <div className="z-50 w-full sm:max-w-2xl absolute top-16 bg-white p-3 right-0 h-screen">
       <div className="flex justify-between">
-        <HeaderForm img="/img/clientes.svg" subtitle="Ingresa datos del nuevo proyecto" 
+        <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 
           title="Nuevo proyecto"
         />
         <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />

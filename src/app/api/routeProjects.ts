@@ -65,12 +65,33 @@ export async function GetProject(auth_token:string, id:string) {
         'Authorization': `Bearer ${auth_token}`
       }
     })
-    if(res.status === 200) return res.status;
+    if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message;
     }
     return 'Error al consultar proyecto!!';
+  }
+}
+
+export async function UpdateProject(auth_token:string, id:string, data:Object){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`;
+  try {
+    console.log('url', url);
+    console.log('data ', JSON.stringify(data));
+    const res = await axios.patch(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if(res.status===200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al actualizar proyecto!!'
   }
 }

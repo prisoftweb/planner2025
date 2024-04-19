@@ -1,24 +1,26 @@
 'use client'
 
-//import Contacts from "./Contacts"
 import { useState, useEffect } from "react"
-import { ClientBack } from "@/interfaces/Clients"
-//import ProfileClient from "./ProfileClient"
-//import Sumary from "./Sumary"
 import { Options } from "@/interfaces/Common"
-// import ExtraData from "./ExtraData"
-// import AddressClient from "./AddressClient"
 import { Project } from "@/interfaces/Projects"
 import DataBasic from "./DataBasic"
 import NavResponsive from "./NavResponsive"
+import ExtraData from "./ExtraData"
+import Address from "./Address"
+import GuaranteeProject from "./GuaranteeProject"
+import ProfileProject from "./ProfileProject"
 
-export default function ProjectCli({project, token, id}: 
-                            {project:Project, token:string, id:string}){
+export default function ProjectCli({project, token, id, optCategories, optClients, 
+                              optCompanies, optTypes}: 
+                            {project:Project, token:string, id:string,
+                              optClients:Options[], optCategories:Options[], 
+                              optTypes:Options[], optCompanies: Options[]
+                            }){
 
   const [view, setView] = useState<JSX.Element>
                 (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
                   pl-2" style={{borderColor:'#F8FAFC'}}>
-                    <DataBasic token={token} />
+                    <DataBasic token={token} id={id} project={project} />
                 </div>)
 
   const [opt, setOpt] = useState<number>(1);
@@ -26,22 +28,24 @@ export default function ProjectCli({project, token, id}:
   useEffect(() => {
     opt===1? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <DataBasic token={token} />
+                  <DataBasic token={token} id={id} project={project} />
                 </div>) : 
       (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                    <h1>En construccion!!</h1>
+                    <ExtraData optCategories={optCategories} optClients={optClients} 
+                        optCompanies={optCompanies} id={id} 
+                        optTypes={optTypes} token={token} project={project} />
                   </div>): 
         (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                             style={{borderColor:'#F8FAFC'}}>
-                      <h1>En construccion!!</h1>
+                      <Address token={token} id={id} project={project} />
                     </div>): 
           (opt===4? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                               style={{borderColor:'#F8FAFC'}}>
-                        <h1>En construccion!!</h1>
+                        <GuaranteeProject id={id} token={token} project={project} />
                       </div>):  setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                                           style={{borderColor:'#F8FAFC'}}>
-                                    <DataBasic token={token} />
+                                    <DataBasic token={token} id={id} project={project} />
                                 </div>)) ))
   }, [opt, ])
   
@@ -57,8 +61,7 @@ export default function ProjectCli({project, token, id}:
         </div>
         <div className="flex w-full max-w-5xl px-2 flex-wrap lg:border-r-8 pr-2 space-x-2 bg-slate-200" style={{borderColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            {/* <ProfileClient client={client} /> */}
-            <h1>Perfil del proyecto</h1>
+            <ProfileProject project={project} />
           </div>
           {view}
         </div>

@@ -93,7 +93,7 @@ export default async function Page(){
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/clientes.svg" subtitle="Proyectos"
+          <WithOut img="/img/projects.jpg" subtitle="Proyectos"
             text="Aqui puedes agregar nuevos proyectos
                     para la gestion desde Planner"
             title="Proyectos">
@@ -123,17 +123,7 @@ export default async function Page(){
   return(
     <>
       <Navigation user={user} />
-      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <WithOut img="/img/clientes.svg" subtitle="Proyectos"
-          text="Aqui puedes agregar nuevos proyectos
-                  para la gestion desde Planner"
-          title="Proyectos">
-            <ButtonNew token={token} optClients={optClients} 
-                    optCategories={optCategories} optTypes={optTypes}
-                    user={user._id} optCompanies={optCompanies} />
-        </WithOut>
-      </div> */}
-      <div>
+      <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <Header title="Catalogos" >
             <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
