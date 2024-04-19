@@ -4,6 +4,8 @@ import { useState } from "react";
 import NewStatus from "./NewStatus";
 import { Options } from "@/interfaces/Common";
 import { InsertCategoryInCatalog, InsertConditionInCatalog, InsertTypeInCatalog } from "@/app/api/routeCatalogs";
+import { FireIcon, TagIcon, Battery50Icon } from "@heroicons/react/24/solid";
+import {Tooltip} from "@nextui-org/react";
 
 export default function ButtonNew({token, catalogOptions, descGlossaries, glosariesOptions, opt}:
                                   {token:string, catalogOptions:Options[], glosariesOptions:Options[], 
@@ -12,17 +14,56 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
   const [newType, setNewType] = useState<boolean>(false);
   const [newCategory, setNewCategory] = useState<boolean>(false);
 
+  let props = {
+    variants: {
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: 0.1,
+        ease: "easeIn",
+      }
+    },
+    enter: {
+      opacity: 1,
+      transition: {
+        duration: 0.15,
+        ease: "easeOut",
+      }
+    },
+    },
+  }
+
   let button;
 
   switch(opt){
     case 1: 
-      button = <Button type="button" onClick={() => setNewType(true)}>Nuevo tipo</Button>
+      button = (
+        <>
+          <div className=" hidden sm:block"><Button type="button" onClick={() => setNewType(true)}>Nuevo tipo</Button></div>
+          <Tooltip closeDelay={0} delay={100} motionProps={props} 
+            className="text-blue-500 bg-white" content='Estatus'
+            placement="right"  
+          >
+              <FireIcon className="w-10 h-10 sm:hidden cursor-pointer" onClick={() => setNewType(true)} />
+          </Tooltip>
+        </>
+      )
     break;
     case 2: 
-      button = <Button type="button" onClick={() => setNewCategory(true)}>Nueva categoria</Button>
+      button = (
+        <>
+          <div className=" hidden sm:block"><Button type="button" onClick={() => setNewCategory(true)}>Nueva categoria</Button></div>
+          <TagIcon className="w-10 h-10 sm:hidden cursor-pointer" onClick={() => setNewCategory(true)} />
+        </>
+      )
     break;
     case 3: 
-      button = <Button type="button" onClick={() => setNewStatus(true)}>Nuevo status</Button>
+      button = (
+        <>
+          <div className=" hidden sm:block"><Button type="button" onClick={() => setNewStatus(true)}>Nuevo status</Button></div>
+          <Battery50Icon className="w-10 h-10 sm:hidden cursor-pointer" onClick={() => setNewStatus(true)} />
+        </>
+      )
     break;
   }
 

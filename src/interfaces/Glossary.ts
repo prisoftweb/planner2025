@@ -14,3 +14,22 @@ export interface Glossary {
   __v: number
   id: string
 }
+
+export interface GlossaryCatalog {
+  _id: string
+  name: string
+  collection: string
+  status: boolean
+  condition: GlossaryType[]
+  categorys: GlossaryType[]
+  types: GlossaryType[]
+  __v: number
+  id: string
+}
+
+export interface GlossaryType {
+  glossary: Glossary
+  status: boolean
+  _id: string
+  id: string
+}

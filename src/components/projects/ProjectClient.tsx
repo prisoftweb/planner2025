@@ -1,0 +1,68 @@
+'use client'
+
+//import Contacts from "./Contacts"
+import { useState, useEffect } from "react"
+import { ClientBack } from "@/interfaces/Clients"
+//import ProfileClient from "./ProfileClient"
+//import Sumary from "./Sumary"
+import { Options } from "@/interfaces/Common"
+// import ExtraData from "./ExtraData"
+// import AddressClient from "./AddressClient"
+import { Project } from "@/interfaces/Projects"
+import DataBasic from "./DataBasic"
+import NavResponsive from "./NavResponsive"
+
+export default function ProjectCli({project, token, id}: 
+                            {project:Project, token:string, id:string}){
+
+  const [view, setView] = useState<JSX.Element>
+                (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
+                  pl-2" style={{borderColor:'#F8FAFC'}}>
+                    <DataBasic token={token} />
+                </div>)
+
+  const [opt, setOpt] = useState<number>(1);
+  
+  useEffect(() => {
+    opt===1? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                style={{borderColor:'#F8FAFC'}}>
+                  <DataBasic token={token} />
+                </div>) : 
+      (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                          style={{borderColor:'#F8FAFC'}}>
+                    <h1>En construccion!!</h1>
+                  </div>): 
+        (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                            style={{borderColor:'#F8FAFC'}}>
+                      <h1>En construccion!!</h1>
+                    </div>): 
+          (opt===4? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+                              style={{borderColor:'#F8FAFC'}}>
+                        <h1>En construccion!!</h1>
+                      </div>):  setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+                                          style={{borderColor:'#F8FAFC'}}>
+                                    <DataBasic token={token} />
+                                </div>)) ))
+  }, [opt, ])
+  
+  const [open, setOpen] = useState<boolean>(false);
+
+  return(
+    <>
+      <div className={`flex`}>
+        <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
+          <div className={`mt-0 ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
+            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
+          </div>
+        </div>
+        <div className="flex w-full max-w-5xl px-2 flex-wrap lg:border-r-8 pr-2 space-x-2 bg-slate-200" style={{borderColor:'#F8FAFC'}}>
+          <div className={`w-full max-w-md`}>
+            {/* <ProfileClient client={client} /> */}
+            <h1>Perfil del proyecto</h1>
+          </div>
+          {view}
+        </div>
+      </div>
+    </>
+  )
+}

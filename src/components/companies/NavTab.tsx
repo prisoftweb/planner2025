@@ -32,7 +32,9 @@ export default function NavTab({option}: {option:number}){
                 <div className="bg-slate-300 p-1">
                   <Link href='/departments'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Departamentos'>
+                      className="text-blue-500 bg-white" content='Departamentos'
+                      placement="right" 
+                    >
                       <BuildingOffice2Icon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
@@ -43,7 +45,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/companies'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Compañia'>
+                      className="text-blue-500 bg-white" content='Compañia'
+                      placement="right"
+                    >
                       <BuildingOfficeIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
@@ -54,7 +58,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/catalogs'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Catalogos'>
+                      className="text-blue-500 bg-white" content='Catalogos'
+                      placement="right"
+                    >
                       <NewspaperIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
@@ -65,7 +71,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/glossary'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Glosarios'>
+                      className="text-blue-500 bg-white" content='Glosarios'
+                      placement="right"
+                    >
                       <FolderOpenIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
@@ -76,7 +84,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/status'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Estatus'>
+                      className="text-blue-500 bg-white" content='Estatus'
+                      placement="right"  
+                    >
                       <Battery50Icon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(5)} onMouseLeave={() => setIsHover(-1)}

@@ -9,6 +9,10 @@ import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon,
 from "@heroicons/react/24/solid";
 import { useRowsCounter } from "@/app/store/rowsStore";
 
+type MyData = {
+  numRows: string
+}
+
 export default function Table({data, columns, placeH}: 
                               {data: any, columns:any, placeH:string}) {
 
@@ -17,13 +21,16 @@ export default function Table({data, columns, placeH}:
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
   const [showColumns, setShowColumns] = useState<boolean>(false);
 
-  const {numRows, changeCounter} = useRowsCounter();
+  //const {numRows, changeCounter} = useRowsCounter();
   
-  const [rowsTable, setRowsTable] = useState<number>(10);
-
-  useEffect(() => {
-    setRowsTable(numRows);
-  })
+  // Retrieving data from local storage
+  const storedData = localStorage.getItem('myData');
+  let parsedData: (MyData | undefined);
+  if(storedData){
+    parsedData = JSON.parse(storedData);
+  }
+    
+  const [rowsTable, setRowsTable] = useState<number>(parsedData? parseInt(parsedData.numRows): 10);
 
   useEffect(() => {
     //do something when the row selection changes...
@@ -159,7 +166,9 @@ export default function Table({data, columns, placeH}:
           value={table.getState().pagination.pageSize}
           onChange={e => { 
             table.setPageSize(Number(e.target.value));
-            changeCounter(Number(e.target.value));
+            //changeCounter(Number(e.target.value));
+            const dataToStore = { numRows: e.target.value};
+            localStorage.setItem('myData', JSON.stringify(dataToStore));
           }}
           className="w-12 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
           bg-gray-50 focus:border-slate-700 outline-0 my-3"

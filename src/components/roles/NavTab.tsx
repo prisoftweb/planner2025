@@ -32,7 +32,9 @@ export default function NavTab({option}: {option:number}){
                 <div className="bg-slate-300 p-1">
                   <Link href='/roles/role'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Roles'>
+                      className="text-blue-500 bg-white" content='Roles'
+                      placement="right"
+                    >
                       <ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
@@ -43,7 +45,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/resources'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Recursos'>
+                      className="text-blue-500 bg-white" content='Recursos'
+                      placement="right"  
+                    >
                       <AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
@@ -54,7 +58,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/sub-path'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Rutas'>
+                      className="text-blue-500 bg-white" content='Rutas'
+                      placement="right"
+                    >
                       <TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
@@ -65,7 +71,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/components'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Componentes'>
+                      className="text-blue-500 bg-white" content='Componentes'
+                      placement="right"
+                    >
                       <GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
@@ -76,7 +84,9 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/trees'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500" content='Arboles'>
+                      className="text-blue-500 bg-white" content='Arboles'
+                      placement="right"
+                    >
                       <AdjustmentsHorizontalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(5)} onMouseLeave={() => setIsHover(-1)}

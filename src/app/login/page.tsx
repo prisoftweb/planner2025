@@ -30,6 +30,9 @@ export default function Login({}) {
         const { email, password } = valores;
         let res = await setLogin(email, password);
         if(res.status === 'success') {
+          const dataToStore = { numRows: '10'};
+          localStorage.setItem('myData', JSON.stringify(dataToStore));
+          
           showToastMessage(`Ha iniciado sesion exitosamente ${email}!`);            
           setCookie('token', res.token);
           setCookie('user', res.data.user);
