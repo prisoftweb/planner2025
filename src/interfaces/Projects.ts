@@ -50,7 +50,7 @@ export interface Location {
   country: string
   type: string
   coordinates: any[],
-  street: string
+  stret: string
 }
 
 export interface Guaranteefund {

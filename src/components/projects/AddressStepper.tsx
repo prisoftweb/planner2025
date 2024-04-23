@@ -84,6 +84,12 @@ export default function AddressStepper({token}: {token:string}){
     const {community, country, cp, municipy, stateA, street} = formik.values;
     updateAddress(community, country, cp, municipy, stateA, street);
     
+    const location = {
+      community, country, cp, municipy, 
+      state: stateA, 
+      stret: street
+    }
+
     let data;
     const guaranteeData = {
       amount:amountG,
@@ -207,7 +213,7 @@ export default function AddressStepper({token}: {token:string}){
             <p>{formik.errors.country}</p>
           </div>
         ) : null}
-        <div className="flex justify-end mt-8 space-x-5">
+        <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
           {guarantee && (
                   <button type="submit"

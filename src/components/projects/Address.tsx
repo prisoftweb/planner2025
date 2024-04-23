@@ -14,7 +14,7 @@ export default function Address({token, id, project}:
   
   const formik = useFormik({
     initialValues: {
-      street: project.location?.street || '',
+      street: project.location?.stret || '',
       community: project.location?.community || '',
       cp: project.location?.cp?.toString() || '',
       municipy: project.location?.municipy,

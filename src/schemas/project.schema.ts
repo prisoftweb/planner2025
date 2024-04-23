@@ -32,7 +32,7 @@ export const projectValidation = z.object({
     required_error: 'El tipo del proyecto es obligatorio'
   }),
   location: z.object({
-    street: z.string().optional(),
+    stret: z.string().optional(),
     cp: z.string().optional(),
     community: z.string().optional(),
     municipy: z.string().optional(),

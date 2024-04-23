@@ -74,7 +74,7 @@ export default function ProfileProject({project}:
             shadow-md py-2">
           <div>
             <Label>Direccion</Label>
-            <p className="my-2 text-slate-700">{project.location?.street? project.location?.street: '' }</p>
+            <p className="my-2 text-slate-700">{project.location?.stret? project.location?.stret: '' }</p>
           </div>
           <div>
             <Label>Colonia</Label>

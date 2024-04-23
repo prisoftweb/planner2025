@@ -57,7 +57,7 @@ export default function Guarantee({token}:{token:string}){
     const location = {
       community, country, cp, municipy, 
       state: stateA, 
-      street
+      stret: street
     }
     const guaranteeData = {
       amount:amountG.replace(/[$,]/g, ""),
@@ -167,7 +167,7 @@ export default function Guarantee({token}:{token:string}){
                 focus:border-slate-700 outline-0"
         /> */}
         {/* <DatePicker selected={startDate} onChange={(date: Date) => setStartDate(date)} /> */}
-        <div className="flex justify-end mt-8 space-x-5">
+        <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
           {/* <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
