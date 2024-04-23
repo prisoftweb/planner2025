@@ -73,13 +73,13 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1>Error al consultar catalogos!!</h1>
   }
   
-  let companies: Company[];
-  try {
-    companies = await getCompanies(token);
-    if(typeof(companies)==='string') return <h1 className="text-red-500 text-center text-lg">{companies}</h1>
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al consultar compañias!!</h1>
-  }
+  // let companies: Company[];
+  // try {
+  //   companies = await getCompanies(token);
+  //   if(typeof(companies)==='string') return <h1 className="text-red-500 text-center text-lg">{companies}</h1>
+  // } catch (error) {
+  //   return <h1 className="text-red-500 text-center text-lg">Error al consultar compañias!!</h1>
+  // }
 
   const optClients: Options[] = [];
   clients.map((client) => {
@@ -105,17 +105,17 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
-  if(companies.length <= 0){
-    <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
-  }
+  // if(companies.length <= 0){
+  //   <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
+  // }
 
-  const optCompanies: Options[] = [];
-  companies.map((company) => {
-    optCompanies.push({
-      label: company.name,
-      value: company._id
-    })
-  })
+  // const optCompanies: Options[] = [];
+  // companies.map((company) => {
+  //   optCompanies.push({
+  //     label: company.name,
+  //     value: company._id
+  //   })
+  // })
 
   return(
     <>
@@ -128,13 +128,13 @@ export default async function Page({ params }: { params: { id: string }}){
                       alt="logo cliente" className="w-12 h-12" />
             <p className="text-slate-500 mx-3">{project.title}</p>
           </div>
-          <Selectize options={options} routePage="projects" subpath="/projects" />
+          <Selectize options={options} routePage="projects" subpath="/profile" />
         </div>
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>
           <ProjectCli token={token} id={params.id} project={project}
             optCategories={optCategories} optClients={optClients} 
-            optCompanies={optCompanies} optTypes={optTypes} />
+            optTypes={optTypes} />
         </NextUiProviders>
       </div>
     </>

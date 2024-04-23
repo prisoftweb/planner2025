@@ -5,14 +5,18 @@ export default function NavProjectStepper({index}: {index:number}){
   const [state, dispatch] = useRegFormContext();
   
   const changeTab = (indextab: number) => {
-    if(state.databasic){
+    // if(state.databasic){
+    //   dispatch({type: 'INDEX_STEPPER', data: indextab})
+    // }
+    if(state.indexstepper !== 0){
       dispatch({type: 'INDEX_STEPPER', data: indextab})
     }
   }
   
   return(
     <>
-      <div>
+      {/* <div className="max-w-md"> */}
+      <div className="max-w-lg">
         <ol
           className="grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 
             border border-gray-500 text-sm text-gray-500 sm:grid-cols-4"

@@ -11,11 +11,11 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
 import { useNewProject } from "@/app/store/newProject";
+import CurrencyInput from 'react-currency-input-field';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Guarantee({token}:{token:string}){
   
-  const [state, dispatch] = useRegFormContext();
-
   let year = new Date().getFullYear().toString();
   let month = (new Date().getMonth() + 1).toString();
   let day = new Date().getDate().toString();
@@ -24,16 +24,9 @@ export default function Guarantee({token}:{token:string}){
 
   const [startDate, setStartDate] = useState<string>(year+'-'+month+'-'+day);
 
-  let percentageI = '';
-  
-  if(state.guarantee){
-    percentageI = state.guarantee.percentage;
-    //setGuarantee(state.guarantee.guarantee);
-  }
-
   const formik = useFormik({
     initialValues: {
-      percentage:percentageI,
+      percentage:'',
       amountG: ''
     }, 
     validationSchema: Yup.object({
@@ -43,14 +36,14 @@ export default function Guarantee({token}:{token:string}){
                   .required('El monto es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      const {percentage, amountG} = valores;
-      const data= {
-        percentage,
-        date: startDate,
-        amountG
-      }
+      // const {percentage, amountG} = valores;
+      // const data= {
+      //   percentage,
+      //   date: startDate,
+      //   amountG
+      // }
 
-      dispatch({ type: 'SET_GUARANTEE', data: data });
+      //dispatch({ type: 'SET_GUARANTEE', data: data });
       //dispatch({type: 'INDEX_STEPPER', data: 4})
     },       
   });
@@ -60,18 +53,45 @@ export default function Guarantee({token}:{token:string}){
   } = useNewProject();
   const onClickSave = async () => {
     const {amountG, percentage} = formik.values;
-    const data = {
-      amount, category, client, code, company, date, description, 
-      hasguaranteefund, haveAddress, title, type, user,
-      location: {
-        community, country, cp, municipy, 
-        state: stateA, 
-        street
-      },
-      guaranteefund: {
-        amount:amountG,
-        date: startDate,
-        porcentage:percentage
+    let data;
+    const location = {
+      community, country, cp, municipy, 
+      state: stateA, 
+      street
+    }
+    const guaranteeData = {
+      amount:amountG.replace(/[$,]/g, ""),
+      date: startDate,
+      porcentage:percentage
+    };
+
+    if(haveAddress && hasguaranteefund){
+      data = {
+        amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+        hasguaranteefund, title, types:type, user,
+        location,
+        guaranteefund: guaranteeData
+      }
+    }else{
+      if(haveAddress){
+        data = {
+          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+          hasguaranteefund, title, types:type, user,
+          location
+        }
+      }else{
+        if(hasguaranteefund){
+          data = {
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+            guaranteefund: guaranteeData
+          }
+        }else{
+          data = {
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+          }
+        }
       }
     }
     try {
@@ -87,74 +107,6 @@ export default function Guarantee({token}:{token:string}){
     } catch (error) {
       showToastMessageError('Ocurrio un problema al crear proyecto!!');
     }
-    // if(state.extradata && state.databasic){
-      
-    //   let amount, dateExtra, category, type, client, company;
-
-    //   amount = state.extradata.amount;
-    //   dateExtra = state.extradata.date;
-    //   category = state.extradata.category;
-    //   type = state.extradata.type;
-    //   client = state.extradata.client;
-    //   company = state.extradata.company;
-
-    //   let street = '';
-    //   let community = '';
-    //   let cp = '';
-    //   let municipy = '';
-    //   let stateA = '';
-    //   let country = '';
-    //   if(state.address){
-    //     street = state.address.street;
-    //     community = state.address.community;
-    //     cp = state.address.cp;
-    //     municipy = state.address.municipy;
-    //     stateA = state.address.state;
-    //     country = state.address.country;
-    //   }
-    //   const {percentage} = formik.values;
-    //   let title, description, code;
-    //   title = state.databasic.title;
-    //   description = state.databasic.description;
-    //   code = state.databasic.code;  
-    //   const data= {
-    //     amount: parseFloat(amount),
-    //     date: dateExtra,
-    //     category,
-    //     type,
-    //     client,
-    //     title,
-    //     description,
-    //     code,
-    //     company,
-    //     location: {
-    //       street,
-    //       community,
-    //       cp,
-    //       municipy,
-    //       state : stateA,
-    //       country
-    //     },
-    //     guaranteefund: {
-    //       porcentage: percentage,
-    //       date: startDate,
-    //     }
-    //     // condition: [
-    //     //   {glossary:"661964a1ca3bfa35200c1628", user}
-    //     // ],
-    //   }
-    //   const res = await SaveProject(data, token);
-    //   if(res.status){
-    //     showToastMessage(res.message);
-    //     setTimeout(() => {
-    //       window.location.reload();
-    //     }, 500);
-    //   }else{
-    //     showToastMessageError(res.message);
-    //   }
-    // }else{
-    //   showToastMessageError('No hay informacion extra!!'); 
-    // }
   }
 
   return(
@@ -162,12 +114,13 @@ export default function Guarantee({token}:{token:string}){
       <div className="my-5">
         <NavProjectStepper index={3} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
         <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje de fondo</p></Label>
         <Input type="text" name="percentage" 
           value={formik.values.percentage}
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
+          autoFocus
         />
         {formik.touched.percentage && formik.errors.percentage ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -175,21 +128,44 @@ export default function Guarantee({token}:{token:string}){
             </div>
         ) : null}
         <Label htmlFor="amountG"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto de fondo</p></Label>
-        <Input type="text" name="amountG" 
-          value={formik.values.amountG}
+        <CurrencyInput
+          id="amountG"
+          name="amountG"
+          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            focus:border-slate-700 outline-0"
+          //value={formik.values.amount}
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
+          //placeholder="Please enter a number"
+          defaultValue={0}
+          decimalsLimit={2}
+          prefix="$"
+          onValueChange={(value) =>formik.values.amountG=value || ''}
+          // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
         />
         {formik.touched.amountG && formik.errors.amountG ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.amountG}</p>
             </div>
         ) : null}
+        {/* <Input type="text" name="amountG" 
+          value={formik.values.amountG}
+          onChange={formik.handleChange}
+          onBlur={formik.handleChange}
+        />*/}
         <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de pago</p></Label>
-        <input type="date" value={startDate} onChange={(e) => {setStartDate(e.target.value); console.log('new fecha ', e.target.value)}}  
+        <DatePicker
+          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            focus:border-slate-700 outline-0" 
+          //showIcon
+          selected={new Date(startDate)} onChange={(date:Date) => {
+              setStartDate(date.toDateString()) 
+              console.log(date); console.log(date.toDateString())}} 
+        />
+        {/* <input type="date" value={startDate} onChange={(e) => {setStartDate(e.target.value); console.log('new fecha ', e.target.value)}}  
           className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
                 focus:border-slate-700 outline-0"
-        />
+        /> */}
         {/* <DatePicker selected={startDate} onChange={(date: Date) => setStartDate(date)} /> */}
         <div className="flex justify-end mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>

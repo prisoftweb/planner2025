@@ -13,22 +13,25 @@ import { useNewProject } from "@/app/store/newProject";
 
 export default function AddressStepper({token}: {token:string}){
   
-  const {amount, category, client, code, company, date, description, 
-    hasguaranteefund, haveAddress, title, type, user} = useNewProject();
+  const {updateAddress, amount, code, community, country, cp, date, description, hasguaranteefund,
+    municipy, stateA, street, title, category, client, type, haveAddress, 
+    company, amountG, dateG, percentage, user} = useNewProject();
+  // const {amount, category, client, code, company, date, description, 
+  //   hasguaranteefund, haveAddress, title, type, user} = useNewProject();
   
   const [state, dispatch] = useRegFormContext();
   const [guarantee, setGuarantee] = useState<boolean>(hasguaranteefund);
 
-  const {updateAddress} = useNewProject();
-
+  //const {updateAddress} = useNewProject();
+  
   //console.log('addres stepper = ', amount, category, client, code, company, date, description, title);
 
-  let streetI = '';
-  let communityI = '';
-  let cpI = '';
-  let municipyI = '';
-  let stateI = '';
-  let countryI = '';
+  // let streetI = '';
+  // let communityI = '';
+  // let cpI = '';
+  // let municipyI = '';
+  // let stateI = '';
+  // let countryI = '';
 
   // if(state.address){
   //   streetI = state.address.street? state.address.street: '';
@@ -42,12 +45,12 @@ export default function AddressStepper({token}: {token:string}){
 
   const formik = useFormik({
     initialValues: {
-      street: streetI,
-      community: communityI,
-      cp: cpI,
-      municipy: municipyI,
-      stateA: stateI,
-      country: countryI,
+      street: street,
+      community: community,
+      cp: cp,
+      municipy: municipy,
+      stateA: stateA,
+      country: country,
     }, 
     validationSchema: Yup.object({
       // street: Yup.string()
@@ -81,16 +84,42 @@ export default function AddressStepper({token}: {token:string}){
     const {community, country, cp, municipy, stateA, street} = formik.values;
     updateAddress(community, country, cp, municipy, stateA, street);
     
-    const data = {
-      amount, category, client, code, company, date, description, 
-      hasguaranteefund, haveAddress, title, type, user,
-      location: {
-        community, country, cp, municipy, 
-        state: stateA, 
-        street
+    let data;
+    const guaranteeData = {
+      amount:amountG,
+      date: dateG,
+      porcentage:percentage
+    };
+
+    if(haveAddress && hasguaranteefund){
+      data = {
+        amount, categorys:category, client, code, company, date: date, description, 
+        hasguaranteefund, title, types:type, user,
+        location,
+        guaranteefund: guaranteeData
+      }
+    }else{
+      if(haveAddress){
+        data = {
+          amount, categorys:category, client, code, company, date, description, 
+          hasguaranteefund, title, types:type, user,
+          location
+        }
+      }else{
+        if(hasguaranteefund){
+          data = {
+            amount, categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+            guaranteefund: guaranteeData
+          }
+        }else{
+          data = {
+            amount, categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+          }
+        }
       }
     }
-    console.log(JSON.stringify(data));
     try {
       const res = await SaveProject(data, token);
       if(res.status){
@@ -104,71 +133,6 @@ export default function AddressStepper({token}: {token:string}){
     } catch (error) {
       showToastMessageError('Ocurrio un problema al crear proyecto!!');
     }
-    // if(state.databasic){
-    //   if(state.extradata){
-    //     let amount, dateExtra, category, type, client, company;
-
-    //     amount = state.extradata.amount;
-    //     dateExtra = state.extradata.date;
-    //     category = state.extradata.category;
-    //     type = state.extradata.type;
-    //     client = state.extradata.client;
-    //     company = state.extradata.company;
-
-    //     let percentage, dateGuarantee;
-
-    //     if(state.guarantee){
-    //       percentage = state.guarantee.percentage;
-    //       dateGuarantee = state.guarantee.date;
-    //     }
-
-    //     const {community, country, cp, municipy, stateA, street} = formik.values;
-    //     let title, description, code;
-    //     title = state.databasic.title;
-    //     description = state.databasic.description;
-    //     code = state.databasic.code;  
-    //     const data= {
-    //       amount: parseFloat(amount),
-    //       date: dateExtra,
-    //       category,
-    //       type,
-    //       client,
-    //       user,
-    //       title,
-    //       description,
-    //       code,
-    //       company,
-    //       location: {
-    //         street,
-    //         community,
-    //         cp,
-    //         municipy,
-    //         state : stateA,
-    //         country
-    //       },
-    //       guaranteefund: {
-    //         porcentage: percentage,
-    //         date: dateGuarantee,
-    //       }
-    //       // condition: [
-    //       //   {glossary:"661964a1ca3bfa35200c1628", user}
-    //       // ],
-    //     }
-    //     const res = await SaveProject(data, token);
-    //     if(res.status){
-    //       showToastMessage(res.message);
-    //       setTimeout(() => {
-    //         window.location.reload();
-    //       }, 500);
-    //     }else{
-    //       showToastMessageError(res.message);
-    //     }
-    //   }else{
-    //     showToastMessageError('No hay informacion extra!!')
-    //   }
-    // }else{
-    //   showToastMessageError('No hay informacion basica!!'); 
-    // }
   }
 
   return(
@@ -176,7 +140,7 @@ export default function AddressStepper({token}: {token:string}){
       <div className="my-5">
         <NavProjectStepper index={2} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
         <Label htmlFor="street"><p className="">Calle y numero</p></Label>
         <Input type="text" name="street" autoFocus 
           value={formik.values.street}

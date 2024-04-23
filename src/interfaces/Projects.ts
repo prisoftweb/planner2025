@@ -11,7 +11,8 @@ export interface ProjectsTable{
   category:string, 
   client:string, 
   date:string,
-  amount:string
+  amount:string,
+  percentage: string
 }
 
 export interface Project {
@@ -37,7 +38,8 @@ export interface Project {
   account: string
   __v: number
   id: string
-  type: Glossary
+  types: Glossary
+  categorys: Glossary
 }
 
 export interface Location {

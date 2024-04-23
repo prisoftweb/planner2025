@@ -14,6 +14,7 @@ import { Company } from "@/interfaces/Companies";
 import { getProjects } from "../api/routeProjects";
 import { ProjectsTable, Project } from "@/interfaces/Projects";
 import TableProjects from "@/components/projects/TableProjects";
+import { CurrencyFormatter } from "../functions/Globals";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -108,15 +109,37 @@ export default async function Page(){
 
   const table: ProjectsTable[] = [];
   projects.map((project) => {
+    let p: string;
+    if(project.guaranteefund){
+      if(project.guaranteefund.porcentage){
+        p = project.guaranteefund.porcentage.toString() + '%';
+      }else{
+        p = '0%';
+      }
+    }else{
+      p = '0%';
+    }
+    //La moneda mexicana lleva el mx antes del $
+    const dollar = CurrencyFormatter({
+      currency: "MXN",
+      value: project.amount
+    })
+    //se puede usar dolares si no se quiere el mx antes del $
+    // const dollar = CurrencyFormatter({
+    //   currency: "USD",
+    //   value: project.amount
+    // })
     table.push({
-      amount: project.amount.toString(),
-      category: 'sin categoria',
+      //amount: project.amount.toString(),
+      amount: dollar,
+      category: project.categorys?.name || 'Sin Categoria',
       client: project.client.name,
       code: project.code,
       date: project.date,
       id: project._id,
       project:project.title,
-      status: project.status
+      status: project.status,
+      percentage: p
     })
   });
   

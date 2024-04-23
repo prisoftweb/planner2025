@@ -13,25 +13,27 @@ import { useNewProject } from "@/app/store/newProject";
 
 export default function DataBasicStepper({token, user}: {token:string, user:string}){
   
-  const [state, dispatch] = useRegFormContext();
+  const [,dispatch] = useRegFormContext();
 
-  const {updateBasicData} = useNewProject();
+  const {updateBasicData, amount, code, community, country, cp, date, description, hasguaranteefund,
+    municipy, stateA, street, title, category, client, type, haveAddress, 
+    company, amountG, dateG, percentage} = useNewProject();
 
-  let nameI = '';
-  let keyProjectI = '';
-  let descriptionI = '';
+  // let nameI = '';
+  // let keyProjectI = '';
+  // let descriptionI = '';
 
-  if(state.databasic){
-    nameI = state.databasic.name;
-    keyProjectI = state.databasic.keyProject;
-    descriptionI = state.databasic.description;
-  }
+  // if(state.databasic){
+  //   nameI = state.databasic.name;
+  //   keyProjectI = state.databasic.keyProject;
+  //   descriptionI = state.databasic.description;
+  // }
 
   const formik = useFormik({
     initialValues: {
-      name:nameI,
-      keyProject: keyProjectI,
-      description: descriptionI,
+      name:title,
+      keyProject: code,
+      description: description,
     }, 
     validationSchema: Yup.object({
       description: Yup.string()
@@ -43,15 +45,15 @@ export default function DataBasicStepper({token, user}: {token:string, user:stri
     }),
     onSubmit: async (valores) => {            
       const {name, description, keyProject} = valores;
-      const data= {
-        title: name, 
-        description,
-        code: keyProject,
-      }
+      // const data= {
+      //   title: name, 
+      //   description,
+      //   code: keyProject,
+      // }
 
       updateBasicData(name, keyProject, description);
 
-      dispatch({ type: 'SET_BASIC_DATA', data: data });
+      //dispatch({ type: 'SET_BASIC_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 1})
     },       
   });
@@ -59,10 +61,47 @@ export default function DataBasicStepper({token, user}: {token:string, user:stri
   const onClickSave = async () => {
     const {description, keyProject, name} = formik.values;
     updateBasicData(name, keyProject, description);
-    const data = {
-      title:name,
-      code: keyProject,
-      description
+    
+    const location = {
+      community, country, cp, municipy, 
+      state: stateA, 
+      street
+    }
+    let data;
+    const guaranteeData = {
+      amount:amountG,
+      date: dateG,
+      porcentage:percentage
+    };
+
+    if(haveAddress && hasguaranteefund){
+      data = {
+        amount, categorys:category, client, code, company, date, description, 
+        hasguaranteefund, title, types:type, user,
+        location,
+        guaranteefund: guaranteeData
+      }
+    }else{
+      if(haveAddress){
+        data = {
+          amount, categorys:category, client, code, company, date, description, 
+          hasguaranteefund, title, types:type, user,
+          location
+        }
+      }else{
+        if(hasguaranteefund){
+          data = {
+            amount, categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+            guaranteefund: guaranteeData
+          }
+        }else{
+          data = {
+            amount, categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+          }
+        }
+      }
     }
     try {
       const res = await SaveProject(data, token);
@@ -77,91 +116,14 @@ export default function DataBasicStepper({token, user}: {token:string, user:stri
     } catch (error) {
       showToastMessageError('Ocurrio un problema al crear proyecto!!');
     }
-    // const {name, description, keyProject} = formik.values;
-
-    // if(state.extradata){
-      
-    //   let amount, dateExtra, category, type, client, company;
-
-    //   amount = state.extradata.amount;
-    //   dateExtra = state.extradata.date;
-    //   category = state.extradata.category;
-    //   type = state.extradata.type;
-    //   client = state.extradata.client;
-    //   company = state.extradata.company;
-
-    //   let street = '';
-    //   let community = '';
-    //   let cp = '';
-    //   let municipy = '';
-    //   let stateA = '';
-    //   let country = '';
-    //   if(state.address){
-    //     street = state.address.street;
-    //     community = state.address.community;
-    //     cp = state.address.cp;
-    //     municipy = state.address.municipy;
-    //     stateA = state.address.state;
-    //     country = state.address.country;
-    //   }
-      
-    //   let percentage, dateGuarantee;
-
-    //   if(state.guarantee){
-    //     percentage = state.guarantee.percentage;
-    //     dateGuarantee = state.guarantee.date;
-    //   }
-      
-    //   const data= {
-    //     amount: parseFloat(amount),
-    //     date: dateExtra,
-    //     category,
-    //     type,
-    //     client,
-    //     user,
-    //     title: name,
-    //     description,
-    //     code: keyProject,
-    //     company,
-    //     location: {
-    //       street,
-    //       community,
-    //       cp,
-    //       municipy,
-    //       state : stateA,
-    //       country
-    //     },
-    //     guaranteefund: {
-    //       porcentage: percentage,
-    //       date: dateGuarantee,
-    //     }
-    //     // condition: [
-    //     //   {glossary:"661964a1ca3bfa35200c1628", user}
-    //     // ],
-    //   }
-    //   const res = await SaveProject(data, token);
-    //   if(res.status){
-    //     showToastMessage(res.message);
-    //     setTimeout(() => {
-    //       window.location.reload();
-    //     }, 500);
-    //   }else{
-    //     showToastMessageError(res.message);
-    //   }
-    // }else{
-    //   showToastMessageError('No hay informacion extra!!'); 
-    // }
   }
 
   return(
     <div className="w-full">
-      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
-        title="Información basica"
-      /> */}
       <div className="my-5">
         <NavProjectStepper index={0} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
         <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="name" autoFocus 
           value={formik.values.name}

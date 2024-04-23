@@ -11,11 +11,10 @@ import GuaranteeProject from "./GuaranteeProject"
 import ProfileProject from "./ProfileProject"
 
 export default function ProjectCli({project, token, id, optCategories, optClients, 
-                              optCompanies, optTypes}: 
+                             optTypes}: 
                             {project:Project, token:string, id:string,
                               optClients:Options[], optCategories:Options[], 
-                              optTypes:Options[], optCompanies: Options[]
-                            }){
+                              optTypes:Options[]}){
 
   const [view, setView] = useState<JSX.Element>
                 (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
@@ -33,8 +32,8 @@ export default function ProjectCli({project, token, id, optCategories, optClient
       (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
                     <ExtraData optCategories={optCategories} optClients={optClients} 
-                        optCompanies={optCompanies} id={id} 
-                        optTypes={optTypes} token={token} project={project} />
+                        // optCompanies={optCompanies} 
+                        id={id} optTypes={optTypes} token={token} project={project} />
                   </div>): 
         (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                             style={{borderColor:'#F8FAFC'}}>

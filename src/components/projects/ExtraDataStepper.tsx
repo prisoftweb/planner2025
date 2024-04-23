@@ -11,6 +11,9 @@ import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import NavProjectStepper from "./NavProjectStepper";
 import { useNewProject } from "@/app/store/newProject";
+import CurrencyInput from 'react-currency-input-field';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function ExtraDataStepper({token, optClients, optCategories, 
                           optTypes, user, optCompanies}:
@@ -19,7 +22,9 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   
   const [state, dispatch] = useRegFormContext();
   
-  const {updateExtraData, title, description, code} = useNewProject();
+  const {updateExtraData, amount, code, community, country, cp, date, description, hasguaranteefund,
+    municipy, stateA, street, title, amountG, percentage, dateG} = useNewProject();
+
 
   const [client, setClient] = useState<string>(optClients[0].value);
   const [type, setType] = useState<string>(optTypes[0].value);
@@ -34,19 +39,15 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   if(month.length ===1) month = '0'+month;
   if(day.length ===1) day = '0'+day;
 
-  const [startDate, setStartDate] = useState<string>(year+'-'+month+'-'+day);
+  const d = (date === '')? year+'-'+month+'-'+day: date;
 
-  let amountI = '';
-  
-  if(state.extradata){
-    amountI = state.extradata.amount;
-    setStartDate(state.extradata.date);
-    setGuarantee(state.extradata.guarantee);
-  }
-  
+  const [startDate, setStartDate] = useState<string>(d);
+
+  const [dateM, setDateM] = useState(new Date());
+
   const formik = useFormik({
     initialValues: {
-      amount:amountI,
+      amount:amount,
     }, 
     validationSchema: Yup.object({
       amount: Yup.string()
@@ -54,21 +55,9 @@ export default function ExtraDataStepper({token, optClients, optCategories,
     }),
     onSubmit: async (valores) => {            
       const {amount} = valores;
-      const data= {
-        amount,
-        date: startDate,
-        category,
-        type,
-        client,
-        user,
-        haveAddress,
-        company,
-        hasguaranteefund: guarantee
-      };
+      
+      updateExtraData(amount.replace(/[$,]/g, ""), startDate, category, type, client, user, haveAddress, company, guarantee)
 
-      updateExtraData(amount, startDate, category, type, client, user, haveAddress, company, guarantee)
-
-      //dispatch({ type: 'SET_EXTRA_DATA', data: data });
       if(haveAddress){
         dispatch({type: 'INDEX_STEPPER', data: 2})
       }else{
@@ -79,24 +68,51 @@ export default function ExtraDataStepper({token, optClients, optCategories,
     },       
   });
   
-
-
   const onClickSave = async () => {
     const {amount} = formik.values;
-    const data= {
-      amount,
-      date: startDate,
-      category,
-      type,
-      client,
-      user,
-      haveAddress,
-      company,
-      hasguaranteefund: guarantee,
-      title,
-      description,
-      code
+    
+    const location = {
+      community, country, cp, municipy, 
+      state: stateA, 
+      street
+    }
+    let data;
+    const guaranteeData = {
+      amount:amountG,
+      date: dateG,
+      porcentage:percentage
     };
+
+    if(haveAddress && hasguaranteefund){
+      data = {
+        amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
+        hasguaranteefund, title, types:type, user,
+        location,
+        guaranteefund: guaranteeData
+      }
+    }else{
+      if(haveAddress){
+        data = {
+          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+          hasguaranteefund, title, types:type, user,
+          location
+        }
+      }else{
+        if(hasguaranteefund){
+          data = {
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+            guaranteefund: guaranteeData
+          }
+        }else{
+          data = {
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user,
+          }
+        }
+      }
+    }
+    
     try {
       const res = await SaveProject(data, token);
       if(res.status){
@@ -110,73 +126,6 @@ export default function ExtraDataStepper({token, optClients, optCategories,
     } catch (error) {
       showToastMessageError('Ocurrio un problema al crear proyecto!!');
     }
-    // let title, description, code;
-    // if(state.databasic){
-    //   title = state.databasic.title;
-    //   description = state.databasic.description;
-    //   code = state.databasic.code;     
-    //   const {amount} = formik.values;
-    //   let street = '';
-    //   let community = '';
-    //   let cp = '';
-    //   let municipy = '';
-    //   let stateA = '';
-    //   let country = '';
-    //   if(state.address){
-    //     street = state.address.street;
-    //     community = state.address.community;
-    //     cp = state.address.cp;
-    //     municipy = state.address.municipy;
-    //     stateA = state.address.state;
-    //     country = state.address.country;
-    //   }
-      
-    //   let percentage, dateGuarantee;
-
-    //   if(state.guarantee){
-    //     percentage = state.guarantee.percentage;
-    //     dateGuarantee = state.guarantee.date;
-    //   }
-      
-    //   const data= {
-    //     amount: parseFloat(amount),
-    //     date: startDate,
-    //     category,
-    //     type,
-    //     client,
-    //     user,
-    //     title,
-    //     description,
-    //     code,
-    //     company,
-    //     location: {
-    //       street,
-    //       community,
-    //       cp,
-    //       municipy,
-    //       state : stateA,
-    //       country
-    //     },
-    //     guaranteefund: {
-    //       porcentage: percentage,
-    //       date: dateGuarantee,
-    //     }
-    //     // condition: [
-    //     //   {glossary:"661964a1ca3bfa35200c1628", user}
-    //     // ],
-    //   }
-    //   const res = await SaveProject(data, token);
-    //   if(res.status){
-    //     showToastMessage(res.message);
-    //     setTimeout(() => {
-    //       window.location.reload();
-    //     }, 500);
-    //   }else{
-    //     showToastMessageError(res.message);
-    //   }
-    // }else{
-    //   showToastMessageError('No hay informacion basica!!'); 
-    // }
   }
 
   return(
@@ -184,16 +133,27 @@ export default function ExtraDataStepper({token, optClients, optCategories,
       <div className="my-5">
         <NavProjectStepper index={1} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
         <SelectReact opts={optCategories} setValue={setCategory} index={0} />
         <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
         <SelectReact opts={optClients} setValue={setClient} index={0} />
         <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
-        <Input type="text" name="amount" 
-          value={formik.values.amount}
+        <CurrencyInput
+          id="amount"
+          name="amount"
+          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            focus:border-slate-700 outline-0"
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
+          defaultValue={0}
+          decimalsLimit={2}
+          prefix="$"
+          onValueChange={(value) => {try {
+            formik.values.amount=value || '0';
+          } catch (error) {
+            formik.values.amount='0';
+          }}}
         />
         {formik.touched.amount && formik.errors.amount ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -202,12 +162,20 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         ) : null}
         <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
         <SelectReact opts={optTypes} setValue={setType} index={0} />
-        <Label htmlFor="company"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañia</p></Label>
-        <SelectReact opts={optCompanies} setValue={setCompany} index={0} />
+        {/* <Label htmlFor="company"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañia</p></Label>
+        <SelectReact opts={optCompanies} setValue={setCompany} index={0} /> */}
         <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-        <input type="date" value={startDate} onChange={(e) => {setStartDate(e.target.value); console.log('new fecha ', e.target.value)}}  
+        {/* <input type="date" value={startDate} onChange={(e) => {setStartDate(e.target.value); console.log('new fecha ', e.target.value)}}  
           className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
                 focus:border-slate-700 outline-0"
+        /> */}
+        <DatePicker
+          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            focus:border-slate-700 outline-0" 
+          //showIcon
+          selected={new Date(startDate)} onChange={(date:Date) => {setDateM(date);
+              setStartDate(date.toDateString()) 
+              console.log(date); console.log(date.toDateString())}} 
         />
         <div className=" flex gap-x-3">
           <div>

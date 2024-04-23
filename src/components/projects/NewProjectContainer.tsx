@@ -61,7 +61,7 @@ export default function NewProjectContainer({token, showForm, optClients,
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-2xl absolute top-16 bg-white p-3 right-0 h-screen">
+    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen">
       <div className="flex justify-between">
         <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 
           title="Nuevo proyecto"

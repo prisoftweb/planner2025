@@ -44,6 +44,22 @@ export default function TableProjects({data, token}:
         <p>accion</p>
       )
     }),
+    columnHelper.accessor(row => row.percentage, {
+      id: 'advance',
+      cell: ({row}) => (
+        <div className="">
+          <p>{row.original.percentage}</p>
+          <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+            <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
+              style={{"width": row.original.percentage}}></div>
+          </div>
+        </div>
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>Avance</p>
+      )
+    }),
     columnHelper.accessor('code', {
       header: 'Clave',
       id: 'code',
@@ -94,7 +110,7 @@ export default function TableProjects({data, token}:
       id: 'date',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="">{row.original.date.substring(0, 10)}</p>
+          <p className="">{row.original.date?.substring(0, 10) || ''}</p>
         </Link>
       ),
     }),

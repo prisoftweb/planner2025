@@ -25,10 +25,10 @@ export const projectValidation = z.object({
     required_error: 'Monto del proyecto es obligatorio',
   }),
   photo: z.string().optional(),
-  category: z.string({
+  categorys: z.string({
     required_error: 'La categoria del proyecto es obligatoria'
   }),
-  type: z.string({
+  types: z.string({
     required_error: 'El tipo del proyecto es obligatorio'
   }),
   location: z.object({

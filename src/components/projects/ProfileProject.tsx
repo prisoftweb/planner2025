@@ -1,8 +1,19 @@
 import Label from "../Label";
 import { Project } from "@/interfaces/Projects";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function ProfileProject({project}: 
                         {project:Project}){
+
+  const amount = CurrencyFormatter({
+    currency: "MXN",
+    value: project.amount
+  });
+
+  const amountGuarantee = CurrencyFormatter({
+    currency: "MXN",
+    value: project.guaranteefund.amount? parseFloat(project.guaranteefund.amount): 0
+  })
 
   return(
     <>
@@ -14,7 +25,7 @@ export default function ProfileProject({project}:
           <div>
             <p className="text-blue-500">{project.title}</p>
             <p className="text-slate-500">{project.code}</p>
-            <p className="text-slate-500">{project.type? project.type.name: ''}</p>
+            <p className="text-slate-500">{project.types? project.types.name: ''}</p>
             <p className="text-slate-500">{project.account}</p>
           </div>
         </div>
@@ -33,7 +44,7 @@ export default function ProfileProject({project}:
           <div className="grid grid-cols-2 gap-x-2 my-2">
             <div className="">
               <p className="text-slate-500">Monto de obra</p>
-              <p className="text-green-600">${project.amount}</p>
+              <p className="text-green-600">{amount}</p>
             </div>
             <div className="">
               <p className="text-slate-500">Costo de obra</p>
@@ -43,22 +54,24 @@ export default function ProfileProject({project}:
           <div className="my-2">
             <p className="text-slate-500">Fecha ({project.datets.substring(0, 10)})</p>
           </div>
-
-          <div className="my-2">
-            <div className="grid grid-cols-2 gap-x-2">
-              <div>
-                <p className="text-slate-500">Fondo de garantia</p>
-                <p className="text-blue-600">{project.guaranteefund.porcentage? project.guaranteefund.porcentage: ''}</p>
-              </div>
-              <div>
-                <p className="text-slate-500">Monto</p>
-                <p className="text-blue-600">{project.guaranteefund.amount? project.guaranteefund.amount: ''}</p>
-              </div>
+        </div>
+        
+        <div className="my-2 mt-2 bg-white p-3 rounded-lg 
+            shadow-md py-2">
+          <div className="grid grid-cols-2 gap-x-2">
+            <div className="border-r-1 border-gray-700">
+              <p className="text-slate-500">Fondo de garantia</p>
+              <p className="text-blue-600">{project.guaranteefund.porcentage? project.guaranteefund.porcentage: ''}</p>
+            </div>
+            <div>
+              <p className="text-slate-500">Monto</p>
+              <p className="text-blue-600">{amountGuarantee}</p>
             </div>
           </div>
         </div>
-        
-        <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg shadow-md py-2">
+
+        <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg 
+            shadow-md py-2">
           <div>
             <Label>Direccion</Label>
             <p className="my-2 text-slate-700">{project.location?.street? project.location?.street: '' }</p>

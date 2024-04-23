@@ -11,8 +11,10 @@ export default function SelectReact({opts, setValue, index}:
       value={selOpt}
       options={opts}
       onChange={(e:any) => {setSelOpt(e); setValue(e.value)}} 
-      className="w-full p-2 text-lg mt-2 text-gray-900 border border-slate-300 rounded-lg 
-        bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0 my-2"
+      // className="w-full p-2 text-lg mt-2 text-gray-900 border border-slate-300 rounded-lg 
+      //   bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0 my-2"
+      className="w-full text-lg mt-2 text-gray-900  rounded-lg 
+        bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
     />
   )
 }
