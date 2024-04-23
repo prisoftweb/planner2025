@@ -33,7 +33,7 @@ export default function GuaranteeProject({token, id, project}:
       const amo = amount.toString().replace(/[$,]/g, "");
       const data = {
         guaranteefund: {
-          porcentaje: percentage,
+          porcentage: percentage,
           date: startDate,
           amount: amo
         }
