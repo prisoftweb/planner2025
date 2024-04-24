@@ -2,7 +2,8 @@
 
 import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, StarIcon, ArrowRightStartOnRectangleIcon } 
   from "@heroicons/react/24/solid"
-import Image from "next/image"
+import { MdPassword } from "react-icons/md";
+  import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
@@ -90,8 +91,8 @@ export default function Navigation({user}: {user:UsrBack}){
             </Link>
             <Link href={`/users/${id}?tab=1&&opt=3`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
               <div className="flex p-2 items-center">
-                <StarIcon className="w-2 h-2 text-slate-500" />
-                <StarIcon className="w-2 h-2 mr-2 text-slate-500" />
+                <MdPassword className="w-2 h-2 text-slate-500" />
+                <MdPassword className="w-2 h-2 mr-2 text-slate-500" />
                 Cambiar Contrasena
               </div>
             </Link>

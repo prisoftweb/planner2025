@@ -11,9 +11,9 @@ export default function IconText({text, size, sizeText}: {text:string, size:stri
   return(
     <>
       <div 
-        className={`rounded-md text-white bg-blue-600 text-center
+        className={`rounded-md text-white bg-gray-600 text-center
         uppercase ${size} flex items-center justify-center`}>
-        <p className={sizeText}>{strIni}</p>
+        <p className={`${sizeText} uppercase text-2xl `} >{strIni}</p>
       </div>
     </>
   )

@@ -82,7 +82,7 @@ export default function DataBasic({client, tags, id, token}:
 
   return(
     <>
-      <form onSubmit={formik.handleSubmit} className="mt-4 w-full">
+      <form id="basicdata" onSubmit={formik.handleSubmit} className="mt-4 w-full">
         <div className="grid grid-cols-2 gap-4">
           <div className="">
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>

@@ -213,9 +213,9 @@ export default function PermissionResource({tree, rs, token}:
 
   return(
     <>
-      <div className="flex bg-white p-2 items-center rounded-lg shadow-md">
-        <IconText size="w-12 h-12" sizeText="" text={resource?.resource.name || ''} />
-        <p className="text-lg text-blue-500">{resource?.resource.name}</p>
+      <div className="flex bg-white p-2 items-center rounded-lg shadow-md space-x-2">
+        <IconText size="w-12 h-12" sizeText="font" text={resource?.resource.name || ''} />
+        <p className="text-lg uppercase text-blue-500 ">{resource?.resource.name}</p>
       </div>
       <div className="bg-white rounded-lg shadow-md p-2 mt-2">
         <p>Permisos asignados a ruta</p>

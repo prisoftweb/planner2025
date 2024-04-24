@@ -1,6 +1,11 @@
 'use client'
 import { BuildingOffice2Icon, BuildingOfficeIcon, 
   NewspaperIcon, FolderOpenIcon, Battery50Icon } from "@heroicons/react/24/solid"
+import  { SiAwsorganizations } from "react-icons/si"
+import  { GoOrganization } from "react-icons/go"
+import { LiaListAlt } from "react-icons/lia";
+import { GrCatalog } from "react-icons/gr";
+import { TfiLayoutAccordionList } from "react-icons/tfi";
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 import Link from "next/link";
@@ -29,13 +34,13 @@ export default function NavTab({option}: {option:number}){
   const [isHover, setIsHover] = useState<number>(-1);
 
   const nav =(<div>
-                <div className="bg-slate-300 p-1">
+                <div className="bg-white fixed top-12 left-0  p-3 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md ">
                   <Link href='/departments'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Departamentos'
+                      className="text-blue-500 text-sm font-thin bg-white mx-3" content='Departamentos'
                       placement="right" 
                     >
-                      <BuildingOffice2Icon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                      <SiAwsorganizations className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
                         style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
@@ -45,10 +50,10 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/companies'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Compañia'
+                      className="text-blue-500 text-sm font-thin bg-white rounded-md" content='Compañia'
                       placement="right"
                     >
-                      <BuildingOfficeIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                      <GoOrganization className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
                         style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
@@ -58,10 +63,10 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/catalogs'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Catalogos'
+                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md" content='Catalogos'
                       placement="right"
                     >
-                      <NewspaperIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                      <GrCatalog className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
                         style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
@@ -71,10 +76,10 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/glossary'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Glosarios'
+                      className="text-blue-500 text-sm font-thin bg-white mx-3" content='Glosarios'
                       placement="right"
                     >
-                      <FolderOpenIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                      <LiaListAlt className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
                         style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
@@ -84,10 +89,10 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/status'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Estatus'
+                      className="text-blue-500 text-sm font-thin bg-white" content='Estatus'
                       placement="right"  
                     >
-                      <Battery50Icon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                      <TfiLayoutAccordionList className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md" 
                         onMouseEnter={() => setIsHover(5)} onMouseLeave={() => setIsHover(-1)}
                         style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 

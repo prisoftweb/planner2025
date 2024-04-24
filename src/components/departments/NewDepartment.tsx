@@ -49,7 +49,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
         if(company || company!==''){
           const {abbr, name} = valores;
           const data = {
-            abbr,
+            ascabbr,
             name,
             company
           }

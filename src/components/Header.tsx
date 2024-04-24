@@ -1,15 +1,16 @@
 import Link from "next/link"
 import { ArrowLeftIcon } from "@heroicons/react/24/solid"
+import { TbArrowNarrowLeft } from "react-icons/tb";
 
 export default function Header({children, title}: {children:JSX.Element, title:string}){
   return(
     <>
       <div className="flex justify-between items-center">
-        <div className="flex">
+        <div className="flex items-center">
           <Link href={'/'}>
-            <ArrowLeftIcon className="w-8 h-8 text-slate-600" />
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
-          <p className="text-2xl ml-3 font-semibold">{title}</p>
+          <p className="text-xl ml-4 font-medium">{title}</p>
         </div>
         {/* <ButtonNewProvider id={id} token={token} /> */}
         {children}
