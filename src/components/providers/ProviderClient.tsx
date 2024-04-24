@@ -21,27 +21,27 @@ export default function ProviderClient({provider, token, id}:
   //const [arrContacts, setArrContacts] = useState<Contact[]>([]);
   
   useEffect(() => {
-    opt===2? setView(<div className="mt-3 w-full max-w-md border-t-8 lg:border-t-0 lg:border-l-8 pl-2" 
+    opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
                   <DataBasic id={id} provider={provider} token={token} />
                 </div>) : 
-      (opt===3? setView(<div className="mt-3 w-full max-w-md border-t-8 lg:border-t-0 lg:border-l-8 
-                  pl-2" style={{borderColor:'#F8FAFC'}}>
+      (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                  style={{borderColor:'#F8FAFC'}}>
                     <CreditLine provider={provider} id={id} token={token} />
                   </div>): 
-        (opt===4? setView(<div className="mt-3 w-full max-w-md border-t-8 lg:border-t-0 lg:border-l-8 
-                    pl-2" style={{borderColor:'#F8FAFC'}}>
+        (opt===4? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                    style={{borderColor:'#F8FAFC'}}>
                       <Contacts id={id} contacts={provider.contact || []} token={token} />
                     </div>): 
-          setView(<div className="mt-3 w-full md:w-1/2 xl:w-1/2 border-t-8 lg:border-t-0 lg:border-l-8 
-            pl-2" style={{borderColor:'#F8FAFC'}}>
+          setView(<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+            style={{borderColor:'#F8FAFC'}}>
               <Sumary provider={provider} token={token} />
             </div>) ))
   }, [opt, ])
   
   return(
     <>
-      <div className="flex px-1 bg-white mt-3 flex-wrap lg:border-r-8 pr-2" style={{borderColor:'#F8FAFC'}}>
+      <div className="flex space-x-2 px-1 bg-slate-200 mt-3 flex-wrap">
         <div className="w-full max-w-md lg:max-w-xs ">
           <ProfileProvider option={opt} provider={provider} setOption={setOpt} />
         </div>
