@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const inter = Inter({ subsets: ["latin"] });
-const ibm = IBM_Plex_Sans({subsets: ['latin'], weight: "500"})
+const ibm = IBM_Plex_Sans({subsets: ['latin'], weight: "200"})
 
 export const metadata: Metadata = {
   //#F8FAFC

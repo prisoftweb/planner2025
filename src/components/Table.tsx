@@ -7,7 +7,6 @@ import { useState, useEffect} from "react";
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, 
   ChevronLeftIcon, ChevronRightIcon, AdjustmentsHorizontalIcon } 
 from "@heroicons/react/24/solid";
-import { useRowsCounter } from "@/app/store/rowsStore";
 
 type MyData = {
   numRows: string

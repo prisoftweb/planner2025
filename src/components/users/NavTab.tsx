@@ -2,9 +2,29 @@
 import Link from "next/link"
 import { UserCircleIcon, CurrencyDollarIcon, QuestionMarkCircleIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
+import {Tooltip} from "@nextui-org/react";
 
 export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
   
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   const [tabUser, setTabUser] = useState<JSX.Element>(<></>);
   const [width, setWidth] = useState<number>(0);
   const handleResize = () => {
@@ -20,24 +40,36 @@ export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
     if(width < 710){
       const icon = <div className="flex mt-3 gap-x-5 justify-between">
                       <Link href={`/users/${idUser}/profile?opt=1`}>
-                        <UserCircleIcon data-tooltip-target="tooltip-dark"
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                          placement="bottom" className="bg-white text-blue-500" content='Perfil'>
+                          <UserCircleIcon data-tooltip-target="tooltip-dark"
+                            className={`w-6 h-6 text-slate-600 cursor-pointer 
+                            ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
+                        </Tooltip>
                       </Link>  
                       <Link href={`/users/${idUser}/costs`}>
-                        <CurrencyDollarIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='2'? 'bg-yellow-950 rounded-lg': ''}`} />
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                          placement="bottom" className="bg-white text-blue-500" content='Costos'>
+                          <CurrencyDollarIcon
+                            className={`w-6 h-6 text-slate-600 cursor-pointer 
+                            ${tab==='2'? 'bg-yellow-950 rounded-lg': ''}`} />
+                        </Tooltip>
                       </Link>
                       <Link href={`/users/${idUser}/statistics`}>
-                        <QuestionMarkCircleIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                          placement="bottom" className="bg-white text-blue-500" content='Estadisticas'>
+                          <QuestionMarkCircleIcon
+                            className={`w-6 h-6 text-slate-600 cursor-pointer 
+                            ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
+                        </Tooltip>
                       </Link>
                       <Link href={`/users/${idUser}/logs`}>
-                        <QuestionMarkCircleIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                          placement="bottom" className="bg-white text-blue-500" content='Logs'>
+                          <QuestionMarkCircleIcon
+                            className={`w-6 h-6 text-slate-600 cursor-pointer 
+                            ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
+                        </Tooltip>
                       </Link>
                     </div>                             
       setTabUser(icon)

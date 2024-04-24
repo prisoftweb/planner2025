@@ -147,7 +147,7 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <Header title="Catalogos" >
+          <Header title="Proyectos" >
             <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
                       user={user._id} optCompanies={optCompanies} />

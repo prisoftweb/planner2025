@@ -4,7 +4,6 @@ import { ArrowDownTrayIcon, ChartBarIcon,
 import { useEffect, useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 
-
 export default function NavResponsive({open, setOpen, option, changeOption}: 
                       {open:boolean, setOpen:Function, option:number, changeOption:Function}){
   
@@ -32,19 +31,24 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
   const [nav, setNav] = useState<JSX.Element>(<div>
                           <ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                               text-slate-500 rotate-90 border-b border-slate-200" onClick={() => setOpen(false)} />
-                          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen'><ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          <Tooltip closeDelay={0} delay={100} motionProps={props} placement="right" className="bg-white" 
+                            content='Resumen'><ChartBarIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                               text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(1)} />
                           </Tooltip>
-                          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica'><AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' placement="right" className="bg-white">
+                              <AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                               text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(2)} />
                           </Tooltip>
-                          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra'><TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          <Tooltip closeDelay={0} delay={100} motionProps={props} placement="right" className="bg-white" 
+                            content='Informacion extra'><TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                               text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(3)} />
                           </Tooltip>
-                          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          <Tooltip closeDelay={0} delay={100} motionProps={props} placement="right" className="bg-white" 
+                            content='Direccion'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                               text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(4)} />
                           </Tooltip>
-                          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Contactos'><UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          <Tooltip closeDelay={0} delay={100} motionProps={props} placement="right" className="bg-white"
+                            content='Contactos'><UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                               text-slate-500 pb-2 sm:pb-4" onClick={() => changeOption(5)} />
                           </Tooltip>
                         </div>);
@@ -58,7 +62,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               border-slate-300 hover:bg-blue-500 hover:text-white" 
               onClick={() => setOpen(true)} /></div>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen' 
-              className="text-blue-500">
+              placement="right" className="text-blue-500 bg-white"> 
                 <ChartBarIcon 
                   style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
                           color: isHover===1 || option===1 ? 'white' : '',}}
@@ -70,7 +74,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                 />
             </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
-            className="text-blue-500">
+            placement="right" className="text-blue-500 bg-white">
               <AdjustmentsVerticalIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
                  hover:text-white bg-white my-1 py-1
                 ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
@@ -80,7 +84,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
-            className="text-blue-500">
+            placement="right" className="text-blue-500 bg-white">
               <TableCellsIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
                  hover:text-white bg-white my-1 py-1
                 ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
@@ -90,7 +94,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
-            className="text-blue-500">
+            placement="right" className="text-blue-500 bg-white">
               <GlobeAmericasIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
                  hover:text-white bg-white my-1 py-1
                 ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
@@ -100,7 +104,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Contactos' 
-            className="text-blue-500">
+            placement="right" className="text-blue-500 bg-white">
               <UserCircleIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
                 hover:text-white bg-white my-1 py-1 ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
                   onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
