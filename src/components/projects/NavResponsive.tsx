@@ -49,48 +49,56 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
   useEffect(() => {
     if(!open){
       setNav (
-        <div className="bg-white top-52 left-4 p-3 space-y-4 flex flex-col items-center rounded-md h-full shadow-md">
-          <div className="rotate-180"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+        <div className="bg-white top-52 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
+          <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md rotate-90" 
               onClick={() => setOpen(true)} /></div>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
             className="text-blue-500 bg-white" placement="right">
-              <AdjustmentsVerticalIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                  text-slate-500 my-1 bg-white rounded-md
-                ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
-                onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
-                    color: isHover===1 || option===1 ? 'white' : '',}}  
-              />
+              <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
+                <AdjustmentsVerticalIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                    text-slate-500 my-1 bg-white rounded-md
+                  ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
+                  onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
+                  style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
+                      color: isHover===1 || option===1 ? 'white' : '',}}  
+                />
+              </div>
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
             className="text-blue-500 bg-white" placement="right">
-              <TableCellsIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                  text-slate-500 my-1 bg-white rounded-md
-                ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
-                onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
-                  color: isHover===2 || option===2 ? 'white' : '',}}  
-              />
+              <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
+                <TableCellsIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                    text-slate-500 my-1 bg-white rounded-md
+                  ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
+                  onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
+                  style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
+                    color: isHover===2 || option===2 ? 'white' : '',}}  
+                />
+              </div>
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
             className="text-blue-500 bg-white" placement="right">
-              <GlobeAmericasIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                  text-slate-500 my-1 bg-white rounded-md
-                ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
-                onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-                  color: isHover===3 || option===3 ? 'white' : '',}}  
-              />
+              <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
+                <GlobeAmericasIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                    text-slate-500 my-1 bg-white rounded-md
+                  ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
+                  onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
+                  style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
+                    color: isHover===3 || option===3 ? 'white' : '',}}  
+                />
+              </div>
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Garantia' 
             className="text-blue-500 bg-white" placement="right">
-              <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+              <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
+                <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
                   onMouseEnter={() => {setIsHover(4)} } onMouseLeave={() => setIsHover(-1)}
                   style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
                     color: isHover===4 || option===4 ? 'white' : '',}}
-                />              
+                />
+              </div>
           </Tooltip>
         </div>
       )
