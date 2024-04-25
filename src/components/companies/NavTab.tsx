@@ -1,6 +1,6 @@
 'use client'
-import { BuildingOffice2Icon, BuildingOfficeIcon, 
-  NewspaperIcon, FolderOpenIcon, Battery50Icon } from "@heroicons/react/24/solid"
+// import { BuildingOffice2Icon, BuildingOfficeIcon, 
+//   NewspaperIcon, FolderOpenIcon, Battery50Icon } from "@heroicons/react/24/solid"
 import  { SiAwsorganizations } from "react-icons/si"
 import  { GoOrganization } from "react-icons/go"
 import { LiaListAlt } from "react-icons/lia";
@@ -34,7 +34,7 @@ export default function NavTab({option}: {option:number}){
   const [isHover, setIsHover] = useState<number>(-1);
 
   const nav =(<div>
-                <div className="bg-white fixed top-12 left-0  p-3 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md ">
+                <div className="bg-white fixed top-12 left-0  p-3 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
                   <Link href='/departments'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
                       className="text-blue-500 text-sm font-thin bg-white mx-3" content='Departamentos'

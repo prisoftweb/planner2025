@@ -49,15 +49,14 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
   useEffect(() => {
     if(!open){
       setNav (
-        <div className="bg-slate-300">
-          <div className="rotate-180"><ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 
-              cursor-pointer bg-white text-slate-500 rotate-90 mt-2 pb-2 sm:pb-4 border-l 
-              border-slate-300 hover:bg-blue-500 hover:text-white" 
+        <div className="bg-white top-52 left-4 p-3 space-y-4 flex flex-col items-center rounded-md h-full shadow-md">
+          <div className="rotate-180"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md rotate-90" 
               onClick={() => setOpen(true)} /></div>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
             className="text-blue-500 bg-white" placement="right">
-              <AdjustmentsVerticalIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
-                hover:text-white bg-white my-1 py-1
+              <AdjustmentsVerticalIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md
                 ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
                 onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
                 style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
@@ -66,8 +65,8 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
             className="text-blue-500 bg-white" placement="right">
-              <TableCellsIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
-                hover:text-white bg-white my-1 py-1
+              <TableCellsIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md
                 ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
                 onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
                 style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
@@ -76,8 +75,8 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
             className="text-blue-500 bg-white" placement="right">
-              <GlobeAmericasIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
-                hover:text-white bg-white my-1 py-1
+              <GlobeAmericasIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md
                 ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
                 onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
                 style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
@@ -86,8 +85,8 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Garantia' 
             className="text-blue-500 bg-white" placement="right">
-              <UserCircleIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer text-slate-500 
-                hover:text-white bg-white my-1 py-1 ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
+              <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
                   onMouseEnter={() => {setIsHover(4)} } onMouseLeave={() => setIsHover(-1)}
                   style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
                     color: isHover===4 || option===4 ? 'white' : '',}}

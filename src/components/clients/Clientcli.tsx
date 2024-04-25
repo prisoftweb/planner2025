@@ -74,7 +74,8 @@ export default function ClientCli({client, token, id, tags}:
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap lg:border-r-8 pr-2 space-x-2 bg-slate-200" style={{borderColor:'#F8FAFC'}}>
+        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+          style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileClient client={client} />
           </div>

@@ -31,28 +31,30 @@ export default function TableTree({data, token, idTree}:
         />
       )
     }),
-    columnHelper.accessor(row => row.id, {
-      id: 'action',
+    columnHelper.accessor('status', {
+      id: 'accion',
       cell: ({row}) => (
-        // <DeleteClient client={row.original} token={token} />
-        <TrashIcon className="text-red-500 w-6 h-6" />
+        <div className="flex items-center">
+          <div className={`w-6 h-6 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
+          <TrashIcon className="text-red-500 w-6 h-6" />
+        </div>
       ),
       enableSorting:false,
       header: () => (
         <p>accion</p>
       )
     }),
-    columnHelper.accessor('status', {
-      header: 'Status',
-      id: 'status',
-      cell: ({row}) => (
-        <Link href={`#`}>
-          <div className="flex items-center">
-            <div className={`w-6 h-6 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
-          </div>
-        </Link>
-      )
-    }),
+    // columnHelper.accessor('status', {
+    //   header: 'Status',
+    //   id: 'status',
+    //   cell: ({row}) => (
+    //     <Link href={`#`}>
+    //       <div className="flex items-center">
+    //         <div className={`w-6 h-6 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
+    //       </div>
+    //     </Link>
+    //   )
+    // }),
     columnHelper.accessor('resource', {
       header: 'Recurso',
       id: 'resource',

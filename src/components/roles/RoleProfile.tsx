@@ -53,11 +53,13 @@ export default function RoleProfile({role, resources, idRole}:
         
         {resources.map((resource, index:number) => (
           <Link href={`/roles/role/${idRole}?rs=${resource.resource?._id}`} key={index}>
-            <div className="flex items-center gap-x-2">
-              <IconText size="w-12 h-12" sizeText="" text={resource.resource?.name || 'NA'} />
-              <div className="">
-                <p>{resource.resource?.name}</p>
-                <p>{resource.resource?.description}</p>
+            <div className="flex items-center gap-x-2 justify-between">
+              <div className="flex items-center gap-x-2">
+                <IconText size="w-12 h-12" sizeText="" text={resource.resource?.name || 'NA'} />
+                <div className="">
+                  <p>{resource.resource?.name}</p>
+                  <p>{resource.resource?.description}</p>
+                </div>
               </div>
               <div className="">
                 <p>Comp</p>

@@ -36,11 +36,15 @@ export default function TableUsers({data, token, departments, roles}:
         />
       )
     }),
-    columnHelper.accessor(row => row.id, {
-      id: 'delete',
+    columnHelper.accessor('profile', {
+      id: 'action',
       cell: ({row}) => (
-        <DeleteUser token={token} user={row.original} />
-        // <TrashIcon className="w-6 h-6 text-red-400" />
+        <div className="flex items-center">
+          <div 
+            className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
+          </div>
+          <DeleteUser token={token} user={row.original} />
+        </div>
       ),
       enableSorting:false,
       header: () => (
@@ -67,20 +71,20 @@ export default function TableUsers({data, token, departments, roles}:
         </Link>
       )
     }),
-    columnHelper.accessor('profile', {
-      header: 'Perfil / Estado',
-      id: 'profile',
-      cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile?opt=1`}>
-          <div className="flex items-center">
-            <div 
-              className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
-            </div>
-            <p>{row.original.profile.role}</p>
-          </div>
-        </Link>       
-      ),
-    }),
+    // columnHelper.accessor('profile', {
+    //   header: 'Perfil / Estado',
+    //   id: 'profile',
+    //   cell: ({row}) => (
+    //     <Link href={`/users/${row.original.id}/profile?opt=1`}>
+    //       <div className="flex items-center">
+    //         <div 
+    //           className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
+    //         </div>
+    //         <p>{row.original.profile.role}</p>
+    //       </div>
+    //     </Link>       
+    //   ),
+    // }),
     columnHelper.accessor('department', {
       header: 'Departamento',
       id: 'department',

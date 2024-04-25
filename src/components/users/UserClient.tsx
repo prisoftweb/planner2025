@@ -31,7 +31,8 @@ export default function UserClient({user, token, departments, optQuery, optsRole
       
 
       <div className={``}>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2 bg-slate-200">
+        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+            style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <Profile email={user.email} option={opt} name={user.name} photo={user.photo} setOption={setOpt} />
           </div>

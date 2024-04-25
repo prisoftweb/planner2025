@@ -142,10 +142,13 @@ export default function Table({data, columns, placeH}:
           </thead>
           <tbody>
             {
-              table.getRowModel().rows.map((row) => (
+              table.getRowModel().rows.map((row, index:number) => (
                 <tr key={row.id}
-                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 
-                    hover:bg-gray-200 dark:hover:bg-gray-600"
+                  className="border-b dark:border-gray-700 
+                  hover:bg-gray-200 dark:hover:bg-gray-600"
+                  style={{'backgroundColor': `${index%2==0? '#fff': '#F8FAFC'}`}}
+                  // className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 
+                    // hover:bg-gray-200 dark:hover:bg-gray-600"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <td key={cell.id} className="px-6 py-4 text-slate-900">
@@ -156,59 +159,63 @@ export default function Table({data, columns, placeH}:
               ))
             }
           </tbody>
+          <tfoot>
+            <th colSpan={table.getAllColumns().length} className="m-0 p-0 bg-white">
+              <div className="flex items-center mt-6 flex-wrap gap-4 bg-white px-6 justify-end">
+                <p className="hidden sm:block text-slate-700 text-md">Numero de filas</p>
+                <select
+                  value={table.getState().pagination.pageSize}
+                  onChange={e => { 
+                    table.setPageSize(Number(e.target.value));
+                    //changeCounter(Number(e.target.value));
+                    const dataToStore = { numRows: e.target.value};
+                    localStorage.setItem('myData', JSON.stringify(dataToStore));
+                  }}
+                  className="w-12 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
+                  bg-gray-50 focus:border-slate-700 outline-0 my-3"
+                >
+                  {[10, 25, 50, 100, 250].map(pageSize => (
+                    <option key={pageSize} value={pageSize}>{pageSize}</option>
+                  ))}
+                </select>
+
+                <button type="button"
+                  onClick={() => table.setPageIndex(0)} 
+                  className="border border-slate-300 text-blue-600 bg-white 
+                    hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
+                >
+                  <ChevronDoubleLeftIcon className="w-5 h-5" />
+                </button>
+                
+                <button type="button" 
+                  onClick={() => table.previousPage()}
+                  className="border border-slate-300 text-blue-600 bg-white 
+                    hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
+                >
+                  <ChevronLeftIcon className="w-5 h-5" />
+                </button>
+                
+                <button type="button" 
+                  onClick={() => table.nextPage()}
+                  className="border border-slate-300 text-blue-600 bg-white 
+                    hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
+                >
+                  <ChevronRightIcon className="w-5 h-5" />
+                </button>
+                
+                <button type="button" 
+                  onClick={() => table.setPageIndex(table.getPageCount()-1)}
+                  className="border border-slate-300 text-blue-600 bg-white 
+                    hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
+                >
+                  <ChevronDoubleRightIcon className="w-5 h-5" />
+                </button>
+              </div>  
+            </th>
+          </tfoot>
         </table>
       </div>
-
-      <div className="flex items-center mt-6 flex-wrap gap-4 bg-white px-6 justify-end">
-        <p className="hidden sm:block font-light text-md">Numero de filas</p>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={e => { 
-            table.setPageSize(Number(e.target.value));
-            //changeCounter(Number(e.target.value));
-            const dataToStore = { numRows: e.target.value};
-            localStorage.setItem('myData', JSON.stringify(dataToStore));
-          }}
-          className="w-12 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
-          bg-gray-50 focus:border-slate-700 outline-0 my-3"
-        >
-          {[10, 25, 50, 100, 250].map(pageSize => (
-            <option key={pageSize} value={pageSize}>{pageSize}</option>
-          ))}
-        </select>
-
-        <button type="button"
-          onClick={() => table.setPageIndex(0)} 
-          className="border border-slate-300 text-blue-600 bg-white 
-            hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
-        >
-          <ChevronDoubleLeftIcon className="w-5 h-5" />
-        </button>
-        
-        <button type="button" 
-          onClick={() => table.previousPage()}
-          className="border border-slate-300 text-blue-600 bg-white 
-            hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
-        >
-          <ChevronLeftIcon className="w-5 h-5" />
-        </button>
-        
-        <button type="button" 
-          onClick={() => table.nextPage()}
-          className="border border-slate-300 text-blue-600 bg-white 
-            hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
-        >
-          <ChevronRightIcon className="w-5 h-5" />
-        </button>
-        
-        <button type="button" 
-          onClick={() => table.setPageIndex(table.getPageCount()-1)}
-          className="border border-slate-300 text-blue-600 bg-white 
-            hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
-        >
-          <ChevronDoubleRightIcon className="w-5 h-5" />
-        </button>
-      </div>
+      
     </div>
   )
 }

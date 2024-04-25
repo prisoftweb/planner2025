@@ -37,24 +37,29 @@ export default function TableCompany({data, token}:
     columnHelper.accessor(row => row.id, {
       id: 'action',
       cell: ({row}) => (
-        <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveCompany} token={token} />
+        <div className="flex text-slate-500 items-center">
+          <div 
+            className={`w-4 h-4 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
+          </div>
+          <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveCompany} token={token} />
+        </div>
       ),
       enableSorting:false,
       header: () => (
         <p>accion</p>
       )
     }),
-    columnHelper.accessor('status', {
-      header: 'Status',
-      id: 'status',
-      cell: ({row}) => (
-        <div className="flex text-slate-500 items-end">
-          <div 
-            className={`w-4 h-4 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
-          </div>
-        </div>       
-      ),
-    }),
+    // columnHelper.accessor('status', {
+    //   header: 'Status',
+    //   id: 'status',
+    //   cell: ({row}) => (
+    //     <div className="flex text-slate-500 items-end">
+    //       <div 
+    //         className={`w-4 h-4 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
+    //       </div>
+    //     </div>       
+    //   ),
+    // }),
     columnHelper.accessor('name', {
       header: 'Nombre',
       id: 'name',

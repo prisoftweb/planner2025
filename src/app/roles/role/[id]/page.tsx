@@ -67,7 +67,8 @@ export default async function Page({ params, searchParams }:
           </div>
           <Selectize options={options} routePage="roles/role" subpath="" />
         </div>
-        <div className="flex gap-x-5 mt-5 w-full max-w-5xl px-2 flex-wrap bg-slate-200">
+        <div className="flex gap-x-5 mt-5 w-full max-w-5xl px-2 flex-wrap" 
+          style={{'backgroundColor': '#F8FAFC'}}>
           <div className="w-full max-w-sm">
             <RoleProfile role={rol} resources={tree.resources} idRole={params.id} />
           </div>

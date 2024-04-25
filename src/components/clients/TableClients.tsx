@@ -35,10 +35,16 @@ export default function TableClients({data, token}:
         />
       )
     }),
-    columnHelper.accessor(row => row.id, {
-      id: 'action',
+    columnHelper.accessor('status', {
+      id: 'accion',
       cell: ({row}) => (
-        <DeleteClient client={row.original} token={token} />
+        <div className="flex items-center gap-x-1">
+          <div 
+            className={`w-4 h-4  ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
+          </div>
+          <DeleteClient client={row.original} token={token} />
+          <NumberContacts numContacts={row.original.contacts} />
+        </div>
       ),
       enableSorting:false,
       header: () => (
@@ -54,26 +60,26 @@ export default function TableClients({data, token}:
         </Link>
       )
     }),
-    columnHelper.accessor('status', {
-      header: 'Status',
-      id: 'status',
-      cell: ({row}) => (
-        <Link href={`/clients/${row.original.id}/profile`}>
-          <div className="flex items-center">
-            <div 
-              className={`w-4 h-4 mr-3 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
-            </div>
-          </div>
-        </Link>       
-      ),
-    }),
-    columnHelper.accessor('contacts', {
-      header: 'Contactos',
-      id: 'contacts',
-      cell: ({row}) => (
-        <NumberContacts numContacts={row.original.contacts} />       
-      ),
-    }),
+    // columnHelper.accessor('status', {
+    //   header: 'Status',
+    //   id: 'status',
+    //   cell: ({row}) => (
+    //     <Link href={`/clients/${row.original.id}/profile`}>
+    //       <div className="flex items-center">
+    //         <div 
+    //           className={`w-4 h-4 mr-3 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
+    //         </div>
+    //       </div>
+    //     </Link>       
+    //   ),
+    // }),
+    // columnHelper.accessor('contacts', {
+    //   header: 'Contactos',
+    //   id: 'contacts',
+    //   cell: ({row}) => (
+    //     <NumberContacts numContacts={row.original.contacts} />       
+    //   ),
+    // }),
     columnHelper.accessor('rfc', {
       header: 'RFC',
       id: 'rfc',

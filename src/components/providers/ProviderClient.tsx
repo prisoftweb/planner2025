@@ -41,7 +41,8 @@ export default function ProviderClient({provider, token, id}:
   
   return(
     <>
-      <div className="flex space-x-2 px-1 bg-slate-200 mt-3 flex-wrap">
+      <div className="flex space-x-2 px-1 mt-3 flex-wrap" 
+        style={{'backgroundColor': '#F8FAFC'}}>
         <div className="w-full max-w-md lg:max-w-xs ">
           <ProfileProvider option={opt} provider={provider} setOption={setOpt} />
         </div>

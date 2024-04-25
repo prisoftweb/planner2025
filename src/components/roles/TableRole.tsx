@@ -35,10 +35,22 @@ export default function TableRole({data, token}:
         />
       )
     }),
-    columnHelper.accessor(row => row.id, {
-      id: 'action',
+    columnHelper.accessor('status', {
+      id: 'accion',
       cell: ({row}) => (
-        <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveRole} token={token} />
+        <div className="flex items-center gap-x-1">
+          <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveRole} token={token} />
+          <div className="flex text-slate-500 items-end">
+            <div 
+              className={`w-4 h-4 ${row.original.status.status? 'bg-green-500': 'bg-red-500'}`}>
+            </div>
+            <p><sub>{row.original.status.routes}</sub></p>
+          </div>
+          <div className="flex text-slate-500 items-end">
+            <UserCircleIcon className="w-6 h-6 text-slate-500" />
+            <p><sub>{row.original.status.routes}</sub></p>
+          </div>
+        </div>
       ),
       enableSorting:false,
       header: () => (
@@ -54,32 +66,32 @@ export default function TableRole({data, token}:
         </Link>
       )
     }),
-    columnHelper.accessor('status', {
-      header: 'Status',
-      id: 'status',
-      cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
-          <div className="flex text-slate-500 items-end">
-            <div 
-              className={`w-4 h-4 ml-5 ${row.original.status.status? 'bg-green-500': 'bg-red-500'}`}>
-            </div>
-            <p><sub>{row.original.status.routes}</sub></p>
-          </div>
-        </Link>       
-      ),
-    }),
-    columnHelper.accessor('users', {
-      header: 'Usuarios',
-      id: 'users',
-      cell: ({row}) => (
-        <Link href={`/roles/role/${row.original.id}`}>
-          <div className="flex text-slate-500 items-end">
-            <UserCircleIcon className="w-6 h-6 text-slate-500" />
-            <p><sub>{row.original.status.routes}</sub></p>
-          </div>
-        </Link>
-      ),
-    }),
+    // columnHelper.accessor('status', {
+    //   header: 'Status',
+    //   id: 'status',
+    //   cell: ({row}) => (
+    //     <Link href={`/roles/role/${row.original.id}`}>
+    //       <div className="flex text-slate-500 items-end">
+    //         <div 
+    //           className={`w-4 h-4 ml-5 ${row.original.status.status? 'bg-green-500': 'bg-red-500'}`}>
+    //         </div>
+    //         <p><sub>{row.original.status.routes}</sub></p>
+    //       </div>
+    //     </Link>       
+    //   ),
+    // }),
+    // columnHelper.accessor('users', {
+    //   header: 'Usuarios',
+    //   id: 'users',
+    //   cell: ({row}) => (
+    //     <Link href={`/roles/role/${row.original.id}`}>
+    //       <div className="flex text-slate-500 items-end">
+    //         <UserCircleIcon className="w-6 h-6 text-slate-500" />
+    //         <p><sub>{row.original.status.routes}</sub></p>
+    //       </div>
+    //     </Link>
+    //   ),
+    // }),
     columnHelper.accessor('components', {
       header: 'Componentes',
       id: 'components',
