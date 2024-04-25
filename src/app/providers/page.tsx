@@ -6,6 +6,8 @@ import HeaderProvider from "@/components/providers/HeaderProvider";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
 import { UsrBack } from "@/interfaces/User";
+import Header from "@/components/HeaderPage";
+import ButtonNewProvider from "@/components/providers/ButtonNewProvider";
 
 export default async function Providers(){
   
@@ -51,7 +53,10 @@ export default async function Providers(){
       <Navigation user={user} />
       
       <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
-        <HeaderProvider id={id} token={token} />
+        {/* <HeaderProvider id={id} token={token} /> */}
+        <Header previousPage="/" title="Proveedores">
+          <ButtonNewProvider id={id} token={token} />    
+        </Header>
         {/* <WithOutProvider /> */}
         <div className="mt-10">
           <TableProviders data={data} token={token} />

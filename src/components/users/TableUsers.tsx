@@ -9,6 +9,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { Options } from "@/interfaces/Common";
+import Header from "../HeaderPage";
 
 export default function TableUsers({data, token, departments, roles}:
                         {data:User[], token:string, 
@@ -116,7 +117,7 @@ export default function TableUsers({data, token, departments, roles}:
   
   return(
     <>
-      <div className="flex justify-between mb-5 flex-wrap">
+      {/* <div className="flex justify-between mb-5 flex-wrap">
         <div className="flex items-center">
           <Link href={'/'}>
             <ArrowLeftIcon className="w-8 h-8 text-slate-600" />
@@ -126,8 +127,17 @@ export default function TableUsers({data, token, departments, roles}:
         <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
         {newUser && <NewUser showForm={setNewUser} departments={departments} 
                         token={token} roles={roles} />}
+      </div> */}
+      <Header title="Usuarios" previousPage="/">
+        <>
+          <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
+            {newUser && <NewUser showForm={setNewUser} departments={departments} 
+                        token={token} roles={roles} />}
+        </>
+      </Header>
+      <div className="mt-5">
+        <Table columns={columns} data={data} placeH="Buscar usuario..." />
       </div>
-      <Table columns={columns} data={data} placeH="Buscar usuario..." />
     </>
   )
 }

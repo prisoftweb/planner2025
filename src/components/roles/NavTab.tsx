@@ -29,7 +29,7 @@ export default function NavTab({option}: {option:number}){
   const [isHover, setIsHover] = useState<number>(-1);
 
   const nav =(<div>
-                <div className="bg-white fixed top-12 left-0 p-2 space-y-0 flex flex-col items-center align-top rounded-md h-full shadow-md">
+                <div className="bg-white fixed top-12 left-0 p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
                   <Link href='/roles/role'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
                       className="text-blue-500 bg-white" content='Roles'

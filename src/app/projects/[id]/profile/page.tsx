@@ -1,24 +1,20 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
-import { getClient, getClients } from "@/app/api/routeClients";
+import { getClients } from "@/app/api/routeClients";
 import { GetProject, getProjects } from "@/app/api/routeProjects";
 import { Project } from "@/interfaces/Projects";
-import { getTags } from "@/app/api/routeClients";
 import { Options } from "@/interfaces/Common";
-import { Tag } from "@/interfaces/Clients";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
-import ClientCli from "@/components/clients/Clientcli";
 import Navigation from "@/components/navigation/Navigation";
 import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTabProject from "@/components/projects/NavTabProject";
 import ProjectCli from "@/components/projects/ProjectClient";
+import Header from "@/components/HeaderPage";
 
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { getCompanies } from "@/app/api/routeCompany";
-import { Company } from "@/interfaces/Companies";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -121,7 +117,10 @@ export default async function Page({ params }: { params: { id: string }}){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <div className="flex justify-between items-center flex-wrap gap-y-3">
+        <Header title={project.title} previousPage="/projects">
+          <Selectize options={options} routePage="projects" subpath="/profile" />
+        </Header>
+        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
             <ArrowReturn link="/projects" />
             <img src={project.photo? project.photo: '/img/projects.svg'} 
@@ -129,7 +128,7 @@ export default async function Page({ params }: { params: { id: string }}){
             <p className="text-slate-500 mx-3">{project.title}</p>
           </div>
           <Selectize options={options} routePage="projects" subpath="/profile" />
-        </div>
+        </div> */}
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>
           <ProjectCli token={token} id={params.id} project={project}

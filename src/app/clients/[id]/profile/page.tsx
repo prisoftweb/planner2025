@@ -11,6 +11,7 @@ import Navigation from "@/components/navigation/Navigation";
 import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/clients/NavTab";
+import HeaderImage from "@/components/HeaderImage";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -75,7 +76,11 @@ export default async function Page({ params }: { params: { id: string }}){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <div className="flex justify-between items-center flex-wrap gap-y-3">
+        <HeaderImage image={client.logo? client.logo: '/img/clients.svg'} 
+              previousPage="/clients" title={client.name}>
+          <Selectize options={options} routePage="clients" subpath="/profile" />
+        </HeaderImage>
+        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
             <ArrowReturn link="/clients" />
             <img src={client.logo? client.logo: '/img/clients.svg'} 
@@ -83,7 +88,7 @@ export default async function Page({ params }: { params: { id: string }}){
             <p className="text-slate-500 mx-3">{client.name}</p>
           </div>
           <Selectize options={options} routePage="clients" subpath="/profile" />
-        </div>
+        </div> */}
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
           <ClientCli client={client} token={token} id={params.id} tags={arrTags} />

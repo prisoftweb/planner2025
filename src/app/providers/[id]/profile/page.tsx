@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: { id: string }}){
           <div className="flex items-center my-2">
             <ArrowReturn link="/providers" />
             <IconText text={provider.tradename} size="w-8 h-8" sizeText="" />
-            <p className="text-slate-500 mx-3">{provider.name}</p>
+            <p className="text-xl ml-4 font-medium">{provider.name}</p>
           </div>
           <Selectize options={options} routePage="providers" subpath="/profile" />
         </div>

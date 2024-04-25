@@ -28,7 +28,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
 
   const [isHover, setIsHover] = useState<number>(-1);
   
-  const [nav, setNav] = useState<JSX.Element>(<div className="bg-white top-52 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
+  const [nav, setNav] = useState<JSX.Element>(<div className="bg-white top-52 space-y-4 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
                                     <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                                             text-slate-500 my-1 bg-white rounded-md rotate-90" 
                                         onClick={() => setOpen(true)} /></div>
@@ -98,7 +98,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
   useEffect(() => {
     if(!open){
       setNav (
-        <div className="bg-white top-52 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
+        <div className="bg-white top-52 space-y-4 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
           <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md rotate-90" 
               onClick={() => setOpen(true)} /></div>

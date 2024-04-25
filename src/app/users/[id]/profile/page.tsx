@@ -8,6 +8,7 @@ import Selectize from "@/components/Selectize";
 import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
+import HeaderImage from "@/components/HeaderImage";
 
 export default async function Page({ params, searchParams }: 
                   { params: { id: string }, searchParams: { opt: string } }){
@@ -58,7 +59,7 @@ export default async function Page({ params, searchParams }:
     <>
       <Navigation user={userLog} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <div className="flex justify-between items-center flex-wrap gap-y-3">
+        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center">
             <ArrowReturn link="/users" />
             <Image 
@@ -71,7 +72,10 @@ export default async function Page({ params, searchParams }:
             <p className="text-slate-500 mx-3">{name}</p>
           </div>
           <Selectize options={options} routePage="users" subpath="profile?opt=1" />
-        </div>
+        </div> */}
+        <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
+          <Selectize options={options} routePage="users" subpath="profile?opt=1" />
+        </HeaderImage>
         <div className="mt-3">
           <NavTab idUser={params.id} tab={'1'} />
         </div>
