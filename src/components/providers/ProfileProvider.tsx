@@ -7,9 +7,9 @@ import { Provider } from "@/interfaces/Providers";
 export default function ProfileProvider({provider, setOption, option}: 
                         {provider:Provider, setOption:Function, option:number}){
   
-  const changeOption = (opt:number) => {
-    setOption(opt);
-  }
+  // const changeOption = (opt:number) => {
+  //   setOption(opt);
+  // }
   
   return(
     <>
@@ -42,7 +42,7 @@ export default function ProfileProvider({provider, setOption, option}:
           </div>
         </div>
       </div>
-      <div className="bg-white p-3 rounded-lg shadow-md mt-3">
+      {/* <div className="bg-white p-3 rounded-lg shadow-md mt-3">
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
           flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}
           onClick={() => changeOption(1)}
@@ -71,7 +71,7 @@ export default function ProfileProvider({provider, setOption, option}:
           <IdentificationIcon className="w-4 h-4 mr-2 text-slate-500" />
           Contactos
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

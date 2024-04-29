@@ -91,40 +91,48 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
           title="Información personal"
         />
         <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 rounded-lg shadow p-4 space-y-5" >  
-          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-          <Input type="text" name="name" autoFocus 
-            value={formik.values.name}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.name && formik.errors.name ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.name}</p>
-            </div>
-          ) : null}
-          <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Usuario/Email</p></Label>
-          <Input type="email" name="email" 
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.email && formik.errors.email ? (
+          <div>
+            <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+            <Input type="text" name="name" autoFocus 
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.name && formik.errors.name ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.email}</p>
+                <p>{formik.errors.name}</p>
               </div>
-          ) : null}
-          <Label htmlFor="rol">Rol</Label>
-          <Select 
-            options={optsRoles}
-            onChange={(e: any) => {setRol(e.value); setOptRole(e)}}
-            value={optRole}
-          />
-          <Label htmlFor="department">Departamento</Label>
-          <Select 
-            options={optionsDepartments}
-            onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
-            value={optDepts}
-          />
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Usuario/Email</p></Label>
+            <Input type="email" name="email" 
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.email && formik.errors.email ? (
+                <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                    <p>{formik.errors.email}</p>
+                </div>
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="rol">Rol</Label>
+            <Select 
+              options={optsRoles}
+              onChange={(e: any) => {setRol(e.value); setOptRole(e)}}
+              value={optRole}
+            />
+          </div>
+          <div>
+            <Label htmlFor="department">Departamento</Label>
+            <Select 
+              options={optionsDepartments}
+              onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
+              value={optDepts}
+            />
+          </div>
           <div className="flex justify-center mt-4">
             <Button type="submit">Guardar cambios</Button>
           </div>

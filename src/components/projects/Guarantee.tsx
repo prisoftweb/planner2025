@@ -115,58 +115,59 @@ export default function Guarantee({token}:{token:string}){
         <NavProjectStepper index={3} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
-        <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje de fondo</p></Label>
-        <Input type="text" name="percentage" 
-          value={formik.values.percentage}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          autoFocus
-        />
-        {formik.touched.percentage && formik.errors.percentage ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.percentage}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="amountG"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto de fondo</p></Label>
-        <CurrencyInput
-          id="amountG"
-          name="amountG"
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0"
-          //value={formik.values.amount}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          //placeholder="Please enter a number"
-          defaultValue={0}
-          decimalsLimit={2}
-          prefix="$"
-          onValueChange={(value) =>formik.values.amountG=value || ''}
-          // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
-        />
-        {formik.touched.amountG && formik.errors.amountG ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.amountG}</p>
-            </div>
-        ) : null}
+        <div>
+          <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje de fondo</p></Label>
+          <Input type="text" name="percentage" 
+            value={formik.values.percentage}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            autoFocus
+          />
+          {formik.touched.percentage && formik.errors.percentage ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.percentage}</p>
+              </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="amountG"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto de fondo</p></Label>
+          <CurrencyInput
+            id="amountG"
+            name="amountG"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={0}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) =>formik.values.amountG=value || ''}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {formik.touched.amountG && formik.errors.amountG ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.amountG}</p>
+              </div>
+          ) : null}
+        </div>
         {/* <Input type="text" name="amountG" 
           value={formik.values.amountG}
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
         />*/}
-        <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de pago</p></Label>
-        <DatePicker
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0" 
-          //showIcon
-          selected={new Date(startDate)} onChange={(date:Date) => {
-              setStartDate(date.toDateString()) 
-              console.log(date); console.log(date.toDateString())}} 
-        />
-        {/* <input type="date" value={startDate} onChange={(e) => {setStartDate(e.target.value); console.log('new fecha ', e.target.value)}}  
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                focus:border-slate-700 outline-0"
-        /> */}
-        {/* <DatePicker selected={startDate} onChange={(date: Date) => setStartDate(date)} /> */}
+        <div>
+          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de pago</p></Label>
+          <DatePicker
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0" 
+            //showIcon
+            selected={new Date(startDate)} onChange={(date:Date) => {
+                setStartDate(date.toDateString()) 
+                console.log(date); console.log(date.toDateString())}} 
+          />
+        </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
           {/* <button type="submit"

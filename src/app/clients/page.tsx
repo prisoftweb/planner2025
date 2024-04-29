@@ -82,9 +82,9 @@ export default async function clients(){
     <>
       <Navigation user={user} />
       
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+      <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <Header title="Clientes" previousPage="/"><ButtonNewClient id={user._id} token={token} tags={arrTags} /></Header>
-        <div className="mt-10">
+        <div className="mt-5">
           <TableClients data={data} token={token} />
         </div>
       </div>

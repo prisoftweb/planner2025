@@ -112,8 +112,9 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
                       <button 
                         type="button"
                         onClick={showNewContact}
-                        className="border w-40 h-10 bg-white text-slate-900 border-slate-900 
-                          rounded-full hover:bg-slate-200"  
+                        className="font-normal text-sm rounded-xl w-36 h-9 py-2
+                        border bg-white text-slate-900 border-slate-900 
+                          hover:bg-slate-200"  
                       >
                         Nuevo contacto
                       </button>

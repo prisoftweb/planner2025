@@ -104,17 +104,25 @@ export default function NewRouteTree({showForm, token, optResources,
     <>
       <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen">
       <div className="flex justify-between">
-        <HeaderForm img="/nuevoIcono.jpg" subtitle="Crea un arbol inicial agregando rutas" 
+        <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando rutas" 
           title="Agregar ruta a nuevo arbol"
         />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
-        <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>
-        <Select options={optResources} value={resourceSel} onChange={(e:any) => {setResource(e.value); setResourceSel(e)}} />
-        <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Ruta</p></Label>        
-        {selectRoutes.map((elements) => (
-          elements
-        ))}
+        <div>
+          <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>
+          <div className="mt-1">
+            <Select options={optResources} value={resourceSel} onChange={(e:any) => {setResource(e.value); setResourceSel(e)}} />
+          </div>
+        </div>
+        <div>
+          <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Ruta</p></Label>        
+          <div className="mt-1">
+            {selectRoutes.map((elements) => (
+              elements
+            ))}
+          </div>
+        </div>
         <div className="flex justify-center mt-2">
           <Button type="button" onClick={onclickSave}>Guardar</Button>
         </div>

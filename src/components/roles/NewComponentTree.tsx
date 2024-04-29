@@ -11,12 +11,12 @@ import { useState, useEffect } from "react"
 import { insertComponentsTree } from "@/app/api/routeRoles"
 
 export default function NewComponentTree({showForm, token, optResources, 
-                          optRoutes, descComponents, optComponents, idTree, routesPerResource}: 
+                          optRoutes, descComponents, optComponents, idTree, 
+                          routesPerResource, descRoutes}: 
                         {showForm:Function, token:string, optResources:Options[], 
                         optRoutes:Options[], optComponents: Options[]
                         descComponents: Options[], idTree:string,
-                        routesPerResource:Options[]}){
-                          
+                        routesPerResource:Options[], descRoutes: Options[]}){
                           
   const [components, setComponents] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
@@ -29,6 +29,7 @@ export default function NewComponentTree({showForm, token, optResources,
   const [routeSel, setRouteSel] = useState(optResources[0]);
   const [routesFilter, setRoutesFilter] = useState<Options[]>([]);
   const [changeResource, setChangeResource] = useState<boolean>(false);
+  const [descRoute, setDescRoute] = useState<string>('');
 
   const pushComponent = (route: string) => {
     setComponents((oldComponents) => [...oldComponents, route]);
@@ -108,24 +109,45 @@ export default function NewComponentTree({showForm, token, optResources,
     }
   }
 
+  useEffect(() => {
+    descRoutes.map((desc) => {
+      if(desc.value === route){
+        setDescRoute(desc.label);
+      }
+    })
+  }, [route]);
+
   return(
     <>
       <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen">
       <div className="flex justify-between">
-        <HeaderForm img="/nuevoIcono.jpg" subtitle="Crea un arbol inicial agregando componentes" 
+        <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando componentes" 
           title="Agregar componente a nuevo arbol"
         />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
-        <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>
-        <Select options={optResources} value={resourceSel} onChange={(e:any) => {setResource(e.value); 
+        <div>
+          <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>
+          <div className="mt-1">
+            <Select options={optResources} value={resourceSel} onChange={(e:any) => {setResource(e.value); 
                                         setResourceSel(e); setChangeResource(!changeResource)}} />
-        <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Ruta</p></Label>
-        <Select options={routesFilter} value={routeSel} onChange={(e:any) => {setRoute(e.value); setRouteSel(e)}} />
-        <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Componente</p></Label>        
-        {selectComponents.map((elements) => (
-          elements
-        ))}
+          </div>
+        </div>
+        <div>
+          <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Ruta</p></Label>
+          <div className="mt-1">
+            <Select options={routesFilter} value={routeSel} onChange={(e:any) => {setRoute(e.value); setRouteSel(e)}} />
+            <p className="text-xs text-slate-400 m-0">{descRoute}</p>
+          </div>
+        </div>
+        <div>
+          <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Componente</p></Label>        
+          <div className="mt-1">
+            {selectComponents.map((elements) => (
+              elements
+            ))}
+          </div>
+        </div>
         <div className="flex justify-center mt-2">
           <Button type="button" onClick={onclickSave}>Guardar</Button>
         </div>

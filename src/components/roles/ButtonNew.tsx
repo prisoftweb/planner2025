@@ -87,7 +87,8 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
             <NewCompoentTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
                     descComponents={descComponents} optComponents={optComponents} 
-                    idTree={idTree} routesPerResource={routesPerResource} />}
+                    idTree={idTree} routesPerResource={routesPerResource}
+                    descRoutes={descRoutes} />}
       </>
     break;
     case 7: 

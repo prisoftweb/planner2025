@@ -60,7 +60,7 @@ export default async function Page(){
               descComponents={[]} descRoutes={[]} optComponents={[]} 
               idTree="" routesPerResource={[]} />
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableResource data={data} token={token} option={1} />
           </div>
         </div>

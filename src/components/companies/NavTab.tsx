@@ -97,7 +97,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/status'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white" content='Estatus'
+                      className="text-blue-500 text-sm font-thin bg-white" content='Catalogos'
                       placement="right"  
                     >
                       <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>

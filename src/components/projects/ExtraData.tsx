@@ -90,55 +90,56 @@ export default function ExtraData({token, optClients, optCategories,
         title="Modificar proyecto"
       />
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
-        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact opts={optCategories} setValue={setCategory} index={idCategory} />
-        <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
-        <SelectReact opts={optClients} setValue={setClient} index={idCli} />
-        <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
-        <CurrencyInput
-          id="amount"
-          name="amount"
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0"
-          //value={formik.values.amount}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          //placeholder="Please enter a number"
-          defaultValue={project.guaranteefund?.amount || 0}
-          decimalsLimit={2}
-          prefix="$"
-          onValueChange={(value) => {try {
-            formik.values.amount=parseFloat(value || '0');
-          } catch (error) {
-            formik.values.amount=0;
-          }}}
-          // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
-        />
-        {/* <Input type="text" name="amount" 
-          value={formik.values.amount}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        /> */}
-        {formik.touched.amount && formik.errors.amount ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.amount}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-        <SelectReact opts={optTypes} setValue={setType} index={idType} />
-        <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-        {/* <input type="date" value={startDate} onChange={(e) => {setStartDate(e.target.value); console.log('new fecha ', e.target.value)}}  
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                focus:border-slate-700 outline-0"
-        /> */}
-        <DatePicker
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-          focus:border-slate-700 outline-0 outline-none" 
-          //showIcon
-          selected={new Date(startDate)} onChange={(date:Date) => {
-              setStartDate(date.toDateString()) 
-              console.log(date); console.log(date.toDateString())}} 
-        />
+        <div>
+          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+          <SelectReact opts={optCategories} setValue={setCategory} index={idCategory} />
+        </div>
+        <div>
+          <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
+          <SelectReact opts={optClients} setValue={setClient} index={idCli} />
+        </div>        
+        <div>
+          <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
+          <CurrencyInput
+            id="amount"
+            name="amount"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={project.guaranteefund?.amount || 0}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) => {try {
+              formik.values.amount=parseFloat(value || '0');
+            } catch (error) {
+              formik.values.amount=0;
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {formik.touched.amount && formik.errors.amount ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.amount}</p>
+              </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
+          <SelectReact opts={optTypes} setValue={setType} index={idType} />
+        </div>
+        <div>
+          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
+          <DatePicker
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            focus:border-slate-700 outline-0 outline-none" 
+            //showIcon
+            selected={new Date(startDate)} onChange={(date:Date) => {
+                setStartDate(date.toDateString()) 
+                console.log(date); console.log(date.toDateString())}} 
+          />
+        </div>
         <div className=" flex gap-x-3">
           <div>
             <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>

@@ -139,6 +139,7 @@ export default async function Page() {
   let optionsRoutesComponents: Options[] = [];
   
   let routesPerResource: Options[] = [];
+  let descRoutes:Options[] = [];
 
   trees[0].resources.map((resources) => {
     resources.routes.map((route) => {
@@ -150,6 +151,11 @@ export default async function Page() {
 
       optionsRoutesComponents.push({
         label: route.route.name,
+        value: route._id
+      })
+
+      descRoutes.push({
+        label: route.route.description,
         value: route._id
       })
     })
@@ -184,12 +190,12 @@ export default async function Page() {
             
             <ButtonNew token={token} opt={6} 
                 optResources={optionsResourceComponents} optRoutes={optionsRoutesComponents}
-                descRoutes={[]} descComponents={descComponents} 
+                descRoutes={descRoutes} descComponents={descComponents} 
                 optComponents={optionsComponents} idTree={trees[0]._id} 
                 routesPerResource={routesPerResource} />
             </div>
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableTree idTree={trees[0]._id} data={data} token={token} />
           </div>
         </div>

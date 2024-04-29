@@ -63,7 +63,7 @@ export default async function Page(){
               optComponents={[]} optResources={[]} optRoutes={[]} 
               idTree="" routesPerResource={[]} />
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableRole data={table} token={token} />
           </div>
         </div>

@@ -74,7 +74,7 @@ export default async function Page({ params, searchParams }:
           <Selectize options={options} routePage="users" subpath="profile?opt=1" />
         </div> */}
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
-          <Selectize options={options} routePage="users" subpath="profile?opt=1" />
+          <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
         </HeaderImage>
         <div className="mt-3">
           <NavTab idUser={params.id} tab={'1'} />

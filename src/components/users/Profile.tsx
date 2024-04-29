@@ -5,9 +5,9 @@ import { UserIcon, Cog6ToothIcon, PhotoIcon, StarIcon}
 export default function Profile({photo, name, email, setOption, option}: 
               {photo:string, name:string, email:string, setOption:Function, option:number}){
   
-  const changeOption = (opt:number) => {
-    setOption(opt);
-  }
+  // const changeOption = (opt:number) => {
+  //   setOption(opt);
+  // }
   
   return(
     <>
@@ -25,7 +25,7 @@ export default function Profile({photo, name, email, setOption, option}:
           <p className="text-sm text-gray-500 text-center">{email}</p>
         </div>
       </div>
-      <div className="bg-white lg:h-80 p-3 rounded-lg shadow-md mt-2">
+      {/* <div className="bg-white lg:h-80 p-3 rounded-lg shadow-md mt-2">
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
           flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}
           onClick={() => changeOption(1)}
@@ -55,7 +55,7 @@ export default function Profile({photo, name, email, setOption, option}:
           <Cog6ToothIcon className="w-4 h-4 mr-2 text-slate-500" />
           Configuracion
         </div>
-      </div>
+      </div> */}
       {/* <div className="bg-white p-3 rounded-lg shadow-md mt-2 h-40">
 
       </div> */}

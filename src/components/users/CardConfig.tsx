@@ -9,7 +9,7 @@ export default function CardConfig({title, text, children}:
           <div className="flex items-center flex-wrap gap-y-2">
             <div className="flex items-center w-full">
               <LockClosedIcon className="w-8 h-8 mx-2" />
-              <p className="text-slate-400 text-sm pr-3">{text}</p>
+              <p className="text-slate-400 text-xs pr-3">{text}</p>
             </div>
             {children}
           </div>

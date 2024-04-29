@@ -296,43 +296,53 @@ export default function FormContact({addNewContact, token, contact, updateContac
   return(
     <>
       <form onSubmit={formik.handleSubmit} className="mt-2 space-y-5">
-        <Label htmlFor="nameContact"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-        <Input type="text" name="nameContact" autoFocus 
-          value={formik.values.nameContact}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.nameContact && formik.errors.nameContact ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.nameContact}</p>
+        <div>
+          <Label htmlFor="nameContact"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+          <Input type="text" name="nameContact" autoFocus 
+            value={formik.values.nameContact}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.nameContact && formik.errors.nameContact ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.nameContact}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="emailContact">Correo personal</Label>
+          <Input type="email" name="emailContact" 
+            value={formik.values.emailContact}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.emailContact && formik.errors.emailContact ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.emailContact}</p>
+              </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="emailCompany">Correo de empresa</Label>
+          <Input type="email" name="emailCompany" 
+            value={formik.values.emailCompany}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.emailCompany && formik.errors.emailCompany ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.emailCompany}</p>
+              </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
+          <div className="mt-1">
+            {upPhones.map((elements) => (
+              elements
+            ))}
           </div>
-        ) : null}
-        <Label htmlFor="emailContact">Correo personal</Label>
-        <Input type="email" name="emailContact" 
-          value={formik.values.emailContact}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.emailContact && formik.errors.emailContact ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.emailContact}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="emailCompany">Correo de empresa</Label>
-        <Input type="email" name="emailCompany" 
-          value={formik.values.emailCompany}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.emailCompany && formik.errors.emailCompany ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.emailCompany}</p>
-            </div>
-        ) : null}
-        <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
-        {upPhones.map((elements) => (
-          elements
-        ))}
+        </div>
         <div className="flex flex-wrap gap-y-2 justify-around mt-8">
           {button}
           {children}

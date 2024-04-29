@@ -44,7 +44,7 @@ export default async function Page(){
 
   glossaries.map((gloss) => {
     table.push({
-      color: gloss.color,
+      color: gloss.color || '#fff',
       description: gloss.description,
       id: gloss._id,
       name: gloss.name  
@@ -59,7 +59,7 @@ export default async function Page(){
           <Header title="Glosarios" >
             <ButtonNew token={token} glossary={''} />
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableGlossary data={table} token={token} />
           </div>
         </div>

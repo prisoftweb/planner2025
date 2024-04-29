@@ -20,7 +20,8 @@ export default function ProfileProject({project}:
       <div className="w-full h-full mt-3">
         <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
-            <img src={project.photo? project.photo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
+            <img src={project.photo? project.photo : '/img/projects/default.svg'} alt="logo" 
+              className="max-w-28 h-auto" />
           </div>
           <div>
             <p className="text-blue-500">{project.title}</p>
@@ -72,29 +73,29 @@ export default function ProfileProject({project}:
 
         <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg 
             shadow-md py-2">
-          <div>
+          <div className="mt-3">
             <Label>Direccion</Label>
-            <p className="my-2 text-slate-700">{project.location?.stret? project.location?.stret: '' }</p>
+            <p className="my-0 text-slate-700">{project.location?.stret? project.location?.stret: '' }</p>
           </div>
-          <div>
+          <div className="mt-3">
             <Label>Colonia</Label>
-            <p className="my-2 text-slate-700">{project.location?.community? project.location?.community: '' }</p>
+            <p className="my-0 text-slate-700">{project.location?.community? project.location?.community: '' }</p>
           </div>
-          <div>
+          <div className="mt-3">
             <Label>Municipio</Label>
-            <p className="my-2 text-slate-700">{project.location?.municipy? project.location?.municipy: '' }</p>
+            <p className="my-0 text-slate-700">{project.location?.municipy? project.location?.municipy: '' }</p>
           </div>
-          <div>
+          <div className="mt-3">
             <Label>Codigo Postal</Label>
-            <p className="my-2 text-slate-700">{project.location?.cp? project.location?.cp: '' }</p>
+            <p className="my-0 text-slate-700">{project.location?.cp? project.location?.cp: '' }</p>
           </div>
-          <div>
+          <div className="mt-3">
             <Label>Estado</Label>
-            <p className="my-2 text-slate-700">{project.location?.state? project.location?.state: '' }</p>
+            <p className="my-0 text-slate-700">{project.location?.state? project.location?.state: '' }</p>
           </div>
-          <div>
+          <div className="mt-3">
             <Label>Pais</Label>
-            <p className="my-2 text-slate-700">{project.location?.country? project.location?.country: '' }</p>
+            <p className="my-0 text-slate-700">{project.location?.country? project.location?.country: '' }</p>
           </div>
         </div>
       </div>

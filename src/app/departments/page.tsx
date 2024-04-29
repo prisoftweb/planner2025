@@ -86,7 +86,7 @@ export default async function Page(){
           <Header title="Departamentos" >
             <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} />
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableDepartments data={table} optionsCompany={optsCompanies} token={token} />
           </div>
         </div>

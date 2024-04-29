@@ -76,36 +76,42 @@ export default function NewGlossary({showForm, token, glossary}:
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-        <Input type="text" name="name" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.name}
-          autoFocus
-        />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.name}</p>
+        <div>
+          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+          <Input type="text" name="name" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.name}
+            autoFocus
+          />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.name}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
+          <textarea name="description" 
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                focus:border-slate-700 outline-0 overflow-hidden resize-none"
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.description}
+            rows={2}
+          />
+          {formik.touched.description && formik.errors.description ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.description}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="color"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Color</p></Label>
+          <div className="flex gap-x-1" >
+            <HexColorPicker color={color} onChange={setColor} />
+            <div className="w-12 h-12" style={{backgroundColor:color}}></div>
           </div>
-        ) : null}
-        <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
-        <textarea name="description" 
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              focus:border-slate-700 outline-0 overflow-hidden resize-none"
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.description}
-          rows={2}
-        />
-        {formik.touched.description && formik.errors.description ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.description}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="color"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Color</p></Label>
-        <div className="flex gap-x-1" >
-          <HexColorPicker color={color} onChange={setColor} />
-          <div className="w-12 h-12" style={{backgroundColor:color}}></div>
         </div>
         {/* <div className="flex items-center gap-x-1" >
           <div className="w-12 h-12" style={{backgroundColor:color}}></div>

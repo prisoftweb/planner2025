@@ -61,7 +61,7 @@ export default async function Page(){
             <ButtonNew token={token} opt={4} optResources={[]} optRoutes={[]} descComponents={[]} 
             descRoutes={[]} optComponents={[]} idTree="" routesPerResource={[]}  />
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableResource data={data} token={token} option={3} />
           </div>
         </div>

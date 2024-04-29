@@ -98,53 +98,63 @@ export default function NewCompany({showForm, token}:
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-        <Input type="text" name="name" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.name}
-          autoFocus
-        />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.name}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="address"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Dirección</p></Label>
-        <Input type="text" name="address" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.address}
-        />
-        {formik.touched.address && formik.errors.address ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.address}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Email</p></Label>
-        <Input type="email" name="email" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.email}
-        />
-        {formik.touched.email && formik.errors.email ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.email}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="phoneNumber"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
-        <div className="w-full flex  justify-start items-center relative">
-          <InputMask mask='9999999999'
-            className="shadow appearance-none border border-gray-300 rounded w-full py-2 pl-9 text-base text-gray-500 leading-tight font-sans font-thin focus:ring-1 focus:ring-blue-600"
-            type="phone" 
-            placeholder="444 429 7227"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+        <div>
+          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+          <Input type="text" name="name" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.name}
+            autoFocus
           />
-          <DevicePhoneMobileIcon className="h-6 w-6 text-amber-400 hover:text-amber-500 absolute ml-1" />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.name}</p>
+            </div>
+          ) : null}
         </div>
-        <Label htmlFor="logo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Logotipo</p></Label>
-        <UploadImage setFile={setFile} />
+        <div>
+          <Label htmlFor="address"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Dirección</p></Label>
+          <Input type="text" name="address" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.address}
+          />
+          {formik.touched.address && formik.errors.address ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.address}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Email</p></Label>
+          <Input type="email" name="email" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.email}
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.email}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="phoneNumber"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
+          <div className="w-full flex  justify-start items-center relative">
+            <InputMask mask='9999999999'
+              className="shadow appearance-none border border-gray-300 rounded w-full py-2 pl-9 text-base text-gray-500 leading-tight font-sans font-thin focus:ring-1 focus:ring-blue-600"
+              type="phone" 
+              placeholder="444 429 7227"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+            <DevicePhoneMobileIcon className="h-6 w-6 text-amber-400 hover:text-amber-500 absolute ml-1" />
+          </div>
+        </div>
+        <div>
+          <Label htmlFor="logo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Logotipo</p></Label>
+          <UploadImage setFile={setFile} />
+        </div>
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>
         </div>

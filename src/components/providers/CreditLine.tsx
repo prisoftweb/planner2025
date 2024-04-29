@@ -58,50 +58,58 @@ export default function CreditLine({provider, id, token}:
         title="Linea de credito"
       />
       <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 rounded-lg shadow p-4 space-y-5">
-        <Label htmlFor="creditlimit">Limite de credito</Label>
-        <Input type="text" name="creditlimit" autoFocus 
-          value={formik.values.creditlimit}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.creditlimit && formik.errors.creditlimit ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.creditlimit}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="creditdays">Dias de credito</Label>
-        <Input type="text" name="creditdays" 
-          value={formik.values.creditdays}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.creditdays && formik.errors.creditdays ? (
+        <div>
+          <Label htmlFor="creditlimit">Limite de credito</Label>
+          <Input type="text" name="creditlimit" autoFocus 
+            value={formik.values.creditlimit}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.creditlimit && formik.errors.creditlimit ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.creditdays}</p>
+              <p>{formik.errors.creditlimit}</p>
             </div>
-        ) : null}
-        <Label htmlFor="currentmount">Saldo actual</Label>
-        <Input type="text" name="currentbalance" 
-          value={formik.values.currentbalance}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.currentbalance && formik.errors.currentbalance ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.currentbalance}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="account">Comision por deuda vencida</Label>
-        <Input type="text" name="percentoverduedebt" 
-          value={formik.values.percentoverduedebt}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="creditdays">Dias de credito</Label>
+          <Input type="text" name="creditdays" 
+            value={formik.values.creditdays}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.creditdays && formik.errors.creditdays ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.creditdays}</p>
+              </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="currentmount">Saldo actual</Label>
+          <Input type="text" name="currentbalance" 
+            value={formik.values.currentbalance}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.currentbalance && formik.errors.currentbalance ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.percentoverduedebt}</p>
+              <p>{formik.errors.currentbalance}</p>
             </div>
-        ) : null}
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="account">Comision por deuda vencida</Label>
+          <Input type="text" name="percentoverduedebt" 
+            value={formik.values.percentoverduedebt}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.percentoverduedebt}</p>
+              </div>
+          ) : null}
+        </div>
         <div className="flex justify-center mt-4">
           <Button type="submit">Guardar cambios</Button>
         </div>

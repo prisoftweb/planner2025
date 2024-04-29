@@ -153,7 +153,7 @@ export default async function Page(){
                       optCategories={optCategories} optTypes={optTypes}
                       user={user._id} optCompanies={optCompanies} />
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableProjects  data={table}  token={token} />
           </div>
         </div>

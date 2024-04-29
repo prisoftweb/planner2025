@@ -136,18 +136,24 @@ export default function NewStatus({showForm, token, catalogOptions,
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
-        <Label htmlFor="catalogs"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Catalogo</p></Label>
-        <Select
-          name="catalogs"
-          options={catalogOptions}
-          value={optCat}
-          onChange={(e:any) => {setCatalog(e.value); setOptCat(e)}}
-        />
+        <div>
+          <Label htmlFor="catalogs"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Catalogo</p></Label>
+          <Select
+            name="catalogs"
+            options={catalogOptions}
+            value={optCat}
+            onChange={(e:any) => {setCatalog(e.value); setOptCat(e)}}
+          />
+        </div>
 
-        <Label htmlFor="catalogs"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Glosario</p></Label>
-        {selectStatus.map((elements) => (
-          elements
-        ))}
+        <div>
+          <Label htmlFor="catalogs"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Glosario</p></Label>
+          <div className="mt-1">
+            {selectStatus.map((elements) => (
+              elements
+            ))}
+          </div>
+        </div>
 
         <div className="flex justify-center mt-2">
           <Button type="button" onClick={onclickSave}>Guardar</Button>

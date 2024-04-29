@@ -147,72 +147,84 @@ export default function AddressStepper({token}: {token:string}){
         <NavProjectStepper index={2} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
-        <Label htmlFor="street"><p className="">Calle y numero</p></Label>
-        <Input type="text" name="street" autoFocus 
-          value={formik.values.street}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.street && formik.errors.street ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.street}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="community"><p className="">Comunidad</p></Label>
-        <Input type="text" name="community" 
-          value={formik.values.community}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.community && formik.errors.community ? (
+        <div>
+          <Label htmlFor="street"><p className="">Calle y numero</p></Label>
+          <Input type="text" name="street" autoFocus 
+            value={formik.values.street}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.street && formik.errors.street ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.community}</p>
+              <p>{formik.errors.street}</p>
             </div>
-        ) : null}
-        <Label htmlFor="cp"><p className="">Codigo Postal</p></Label>
-        <Input type="text" name="cp" 
-          value={formik.values.cp}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.cp && formik.errors.cp ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.cp}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="municipy"><p className="">Municipio</p></Label>
-        <Input type="text" name="municipy" 
-          value={formik.values.municipy}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.municipy && formik.errors.municipy ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.municipy}</p>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="community"><p className="">Comunidad</p></Label>
+          <Input type="text" name="community" 
+            value={formik.values.community}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.community && formik.errors.community ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.community}</p>
+              </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="cp"><p className="">Codigo Postal</p></Label>
+          <Input type="text" name="cp" 
+            value={formik.values.cp}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.cp && formik.errors.cp ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.cp}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="municipy"><p className="">Municipio</p></Label>
+          <Input type="text" name="municipy" 
+            value={formik.values.municipy}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.municipy && formik.errors.municipy ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.municipy}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
         <Label htmlFor="stateA"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estado</p></Label>
-        <Input type="text" name="stateA" 
-          value={formik.values.stateA}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.stateA && formik.errors.stateA ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.stateA}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
-        <Input type="text" name="country" 
-          value={formik.values.country}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.country && formik.errors.country ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.country}</p>
-          </div>
-        ) : null}
+          <Input type="text" name="stateA" 
+            value={formik.values.stateA}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.stateA && formik.errors.stateA ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.stateA}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
+          <Input type="text" name="country" 
+            value={formik.values.country}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.country && formik.errors.country ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.country}</p>
+            </div>
+          ) : null}
+        </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
           {guarantee && (

@@ -38,43 +38,43 @@ export default function Login({}) {
           setCookie('user', res.data.user);
           const {_id } = res.data.user;
           setCookie('id', _id);
-          setCookie('resources', {
-            "resources": [
-                {
-                    "resource": {
-                        "name": "clients",
-                    },
-                    "routes": [],
-                },
-                {
-                    "resource": {
-                        "name": "roles",
-                    },
-                    "routes": [
-                        {
-                            "route": {
-                                "name": "components",
-                            },
-                        },
-                        {
-                            "route": {
-                                "name": "resources",
-                            },
-                        },
-                        {
-                            "route": {
-                                "name": "role",
-                            },
-                        },
-                        {
-                          "route": {
-                              "name": "trees",
-                          },
-                      }
-                    ],
-                }
-            ],
-        })
+        //   setCookie('resources', {
+        //     "resources": [
+        //         {
+        //             "resource": {
+        //                 "name": "clients",
+        //             },
+        //             "routes": [],
+        //         },
+        //         {
+        //             "resource": {
+        //                 "name": "roles",
+        //             },
+        //             "routes": [
+        //                 {
+        //                     "route": {
+        //                         "name": "components",
+        //                     },
+        //                 },
+        //                 {
+        //                     "route": {
+        //                         "name": "resources",
+        //                     },
+        //                 },
+        //                 {
+        //                     "route": {
+        //                         "name": "role",
+        //                     },
+        //                 },
+        //                 {
+        //                   "route": {
+        //                       "name": "trees",
+        //                   },
+        //               }
+        //             ],
+        //         }
+        //     ],
+        // })
 
           
           setTimeout(() => {                
@@ -89,8 +89,8 @@ export default function Login({}) {
   });
   
   return (        
-    <div className='p-2 sm:p-3 md-p-5 lg:p-10'>      
-      <div className="flex justify-center mt-12">
+    <div className='p-2 sm:p-3 md-p-5 lg:p-0'>      
+      <div className="flex justify-center mt-0">
         <div className="w-full max-w-sm">
           <form className="bg-white rounded shadow-md px-3 sm:px-8 pt-2 pb-8 mb-4"
             onSubmit={formik.handleSubmit}>
@@ -99,9 +99,10 @@ export default function Login({}) {
             target="_blank"
             rel="noopener noreferrer"
             >
-              <img src='/logoActualizado.jpg' alt='Logo' className='' />         
+              <img src='/img/Palaciosconstrucciones horizontal.svg' alt='Logo' 
+                className='h-60' />         
             </a>
-            <label htmlFor="email" className="relative block mt-10 pb-2 border-b-2 border-gray-400">
+            <label htmlFor="email" className="relative block mt-0 pb-0 border-b-2 border-gray-400">
               <EnvelopeIcon className="pointer-events-none w-8 h-8 absolute top-1/2 transform -translate-y-1/2 left-1 text-gray-400" />
               <input 
                 type="email" 

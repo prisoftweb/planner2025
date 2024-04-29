@@ -86,7 +86,7 @@ export default function TableTree({data, token, idTree}:
   
   return(
     <>
-      <Table columns={columns} data={data} placeH="Buscar rol.." />
+      <Table columns={columns} data={data} placeH="Buscar arbol.." />
     </>
   )
 }

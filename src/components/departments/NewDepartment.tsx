@@ -49,7 +49,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
         if(company || company!==''){
           const {abbr, name} = valores;
           const data = {
-            ascabbr,
+            abbr,
             name,
             company
           }
@@ -97,36 +97,42 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-        <Input type="text" name="name" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.name}
-          autoFocus
-        />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.name}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="abbr"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Abreviacion</p></Label>
-        <Input type="text" name="abbr" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.abbr}
-        />
-        {formik.touched.abbr && formik.errors.abbr ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.abbr}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="companies"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañias</p></Label>
-        <Select
-          name="companies"
-          options={OptionsCompany}
-          value={optCompany}
-          onChange={(e:any) => {setCompany(e.value); setOptCompany(e)}}
-        />
+        <div>
+          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+          <Input type="text" name="name" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.name}
+            autoFocus
+          />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.name}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="abbr"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Abreviacion</p></Label>
+          <Input type="text" name="abbr" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.abbr}
+          />
+          {formik.touched.abbr && formik.errors.abbr ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.abbr}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="companies"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañias</p></Label>
+          <Select
+            name="companies"
+            options={OptionsCompany}
+            value={optCompany}
+            onChange={(e:any) => {setCompany(e.value); setOptCompany(e)}}
+          />
+        </div>
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>
         </div>

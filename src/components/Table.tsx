@@ -171,7 +171,7 @@ export default function Table({data, columns, placeH}:
                     const dataToStore = { numRows: e.target.value};
                     localStorage.setItem('myData', JSON.stringify(dataToStore));
                   }}
-                  className="w-12 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
+                  className="w-16 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
                   bg-gray-50 focus:border-slate-700 outline-0 my-3"
                 >
                   {[10, 25, 50, 100, 250].map(pageSize => (

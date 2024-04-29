@@ -28,7 +28,9 @@ export default async function Providers(){
   }  
 
   if(providers.length === 0 || !providers){
-    return <WithOutProvider id={id} token={token} />
+    return <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
+              <WithOutProvider id={id} token={token} />
+            </div>
   }
 
   let data:TableProvider[] = [];
@@ -52,13 +54,13 @@ export default async function Providers(){
     <>
       <Navigation user={user} />
       
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
+      <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
         {/* <HeaderProvider id={id} token={token} /> */}
         <Header previousPage="/" title="Proveedores">
           <ButtonNewProvider id={id} token={token} />    
         </Header>
         {/* <WithOutProvider /> */}
-        <div className="mt-10">
+        <div className="mt-5">
           <TableProviders data={data} token={token} />
         </div>
       </div>

@@ -25,45 +25,45 @@ export default function ProfileClient({client}:
           </div>
         </div>
         
-        <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
+        <div className="mt-2 bg-white p-3 rounded-lg shadow-md py-2">
           <div className="">
             <Label>Email</Label>
-            <p className="my-1 text-blue-500">{client.email? client.email: ''}</p>
+            <p className="my-0 text-blue-500">{client.email? client.email: ''}</p>
           </div>
           <div className="mt-3">
             <Label>Telefono</Label>
-            <p className="my-1 text-blue-500">{client.phone? client.phone: ''}</p>
+            <p className="my-0 text-blue-500">{client.phone? client.phone: ''}</p>
           </div>
           <div className="mt-3">
             <Label>Web</Label>
-            <p className="my-1 text-blue-500">{client.link? client.link: ''}</p>
+            <p className="my-0 text-blue-500">{client.link? client.link: ''}</p>
           </div>
         </div>
         
-        <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg shadow-md py-2">
+        <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-3 bg-white p-3 rounded-lg shadow-md py-2">
           <div>
             <Label>Direccion</Label>
-            <p className="my-2 text-slate-700">{client.location.stret? client.location.stret: '' }</p>
+            <p className="my-0 text-slate-700">{client.location.stret? client.location.stret: '' }</p>
           </div>
           <div>
             <Label>Colonia</Label>
-            <p className="my-2 text-slate-700">{client.location.community? client.location.community: '' }</p>
+            <p className="my-0 text-slate-700">{client.location.community? client.location.community: '' }</p>
           </div>
           <div>
             <Label>Municipio</Label>
-            <p className="my-2 text-slate-700">{client.location.municipy? client.location.municipy: '' }</p>
+            <p className="my-0 text-slate-700">{client.location.municipy? client.location.municipy: '' }</p>
           </div>
           <div>
             <Label>Codigo Postal</Label>
-            <p className="my-2 text-slate-700">{client.location.cp? client.location.cp: '' }</p>
+            <p className="my-0 text-slate-700">{client.location.cp? client.location.cp: '' }</p>
           </div>
           <div>
             <Label>Estado</Label>
-            <p className="my-2 text-slate-700">{client.location.state? client.location.state: '' }</p>
+            <p className="my-0 text-slate-700">{client.location.state? client.location.state: '' }</p>
           </div>
           <div>
             <Label>Pais</Label>
-            <p className="my-2 text-slate-700">{client.location.country? client.location.country: '' }</p>
+            <p className="my-0 text-slate-700">{client.location.country? client.location.country: '' }</p>
           </div>
         </div>
       </div>

@@ -93,66 +93,84 @@ export default function NewUser({showForm, departments, token, roles}:
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-        <Input type="text" name="name" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.name}
-        />
-        {formik.touched.name && formik.errors.name ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.name}</p>
+        <div>
+          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+          <Input type="text" name="name" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.name}
+          />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.name}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Usuario/Email</p></Label>
+          <Input type="email" name="email" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.email}
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.email}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="role">Rol</Label>
+          <div className="mt-1">
+            <Select 
+              options={roles}
+              onChange={(e: any) => {setRole(e.value); setOptsRoles(e)}}
+              value={optsRoles}
+            />
           </div>
-        ) : null}
-        <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Usuario/Email</p></Label>
-        <Input type="email" name="email" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.email}
-        />
-        {formik.touched.email && formik.errors.email ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.email}</p>
+        </div>
+        <div>
+          <Label htmlFor="dept">Departamento</Label>
+          <div className="mt-1">
+            <Select 
+              options={optionsDepartments}
+              onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
+              value={optDepts}
+            />
           </div>
-        ) : null}
-        <Label htmlFor="role">Rol</Label>
-        <Select 
-          options={roles}
-          onChange={(e: any) => {setRole(e.value); setOptsRoles(e)}}
-          value={optsRoles}
-        />
-        <Label htmlFor="dept">Departamento</Label>
-        <Select 
-          options={optionsDepartments}
-          onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
-          value={optDepts}
-        />
-        <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Contraseña</p></Label>
-        <Input name="password" type="password" 
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          value={formik.values.password}
-        />
-        {formik.touched.password && formik.errors.password ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.password}</p>
+        </div>
+        <div>
+          <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Contraseña</p></Label>
+          <Input name="password" type="password" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.password}
+          />
+          {formik.touched.password && formik.errors.password ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.password}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="confirmpassword"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Confirmar contraseña</p></Label>
+          <Input name="confirmpassword" type="password" 
+            value={formik.values.confirmpassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.confirmpassword}</p>
+            </div>
+          ) : null}
+        </div>
+        <div>
+          <Label htmlFor="photo">Foto</Label>
+          <div className="my-2 flex items-center">
+            {file && <img src={URL.createObjectURL(file)} alt="" className="w-11 h-11" />}
+            <UploadImage setFile={setFile} />
           </div>
-        ) : null}
-        <Label htmlFor="confirmpassword"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Confirmar contraseña</p></Label>
-        <Input name="confirmpassword" type="password" 
-          value={formik.values.confirmpassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />
-        {formik.touched.confirmpassword && formik.errors.confirmpassword ? (
-          <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-            <p>{formik.errors.confirmpassword}</p>
-          </div>
-        ) : null}
-        <Label htmlFor="photo">Foto</Label>
-        <div className="my-2 flex items-center">
-          {file && <img src={URL.createObjectURL(file)} alt="" className="w-11 h-11" />}
-          <UploadImage setFile={setFile} />
         </div>
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>

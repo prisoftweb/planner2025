@@ -48,26 +48,6 @@ export default function ClientCli({client, token, id, tags}:
 
   return(
     <>
-      {/* <div className="flex px-2 mt-3 flex-wrap lg:border-r-8 pr-2 space-x-2 bg-slate-200" style={{borderColor:'#F8FAFC'}}>
-        <div className={`w-full max-w-md lg:max-w-xs flex ${open? 'flex-wrap': ''}`}>
-          <div className={`mt-3 bg-white rounded-lg shadow-md pl-2 px-3 ${open? 'w-full': ''}`}>
-            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
-          </div>
-          <ProfileClient client={client} />
-        </div>
-        {view}
-      </div> */}
-
-      {/* <div className="flex px-2 mt-3 flex-wrap lg:border-r-8 pr-2 space-x-2 bg-slate-200" style={{borderColor:'#F8FAFC'}}>
-        <div className={`w-full max-w-lg flex ${open? 'flex-wrap md:flex-nowrap': ''}`}>
-          <div className={`mt-3 mr-2 bg-white rounded-lg shadow-md pl-2 px-3 ${open? 'w-full max-w-40': ''}`}>
-            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
-          </div>
-          <ProfileClient client={client} />
-        </div>
-        {view}
-      </div> */}
-
       <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 ${open? 'w-full max-w-60': 'w-12'} bg-white`}>

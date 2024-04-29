@@ -58,7 +58,7 @@ export default async function Page(){
           <Header title="Catalogos" >
             <ButtonNew token={token} catalog={''} />
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableCatalogs  data={table}  token={token} />
           </div>
         </div>

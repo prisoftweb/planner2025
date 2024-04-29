@@ -105,7 +105,7 @@ export default async function Page() {
       <Navigation user={user} />
       <CompanyClient option={5}>
       <div>
-          <Header title="Estatus" >
+          <Header title="Catalogos" >
             <div className="flex gap-x-2">
               <ButtonNew catalogOptions={catalogOptions} token={token} opt={1}
                 descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
@@ -115,7 +115,7 @@ export default async function Page() {
                 descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
             </div>
           </Header>
-          <div className="mt-10">
+          <div className="mt-5">
             <TableStatus  data={table}  token={token} />
           </div>
         </div>
