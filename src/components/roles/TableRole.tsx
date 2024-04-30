@@ -15,7 +15,7 @@ export default function TableRole({data, token}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -59,7 +59,7 @@ export default function TableRole({data, token}:
     }),
     columnHelper.accessor('name', {
       header: 'Nombre',
-      id: 'name',
+      id: 'nombre',
       cell: ({row}) => (
         <Link href={`/roles/role/${row.original.id}`}>
           <p className="py-2">{row.original.name}</p>
@@ -94,7 +94,7 @@ export default function TableRole({data, token}:
     // }),
     columnHelper.accessor('components', {
       header: 'Componentes',
-      id: 'components',
+      id: 'componentes',
       cell: ({row}) => (
         <Link href={`/roles/role/${row.original.id}`}>
           <p className="py-2 text-center">{row.original.components}</p>
@@ -103,7 +103,7 @@ export default function TableRole({data, token}:
     }),
     columnHelper.accessor('description', {
       header: 'Descripcion',
-      id: 'description',
+      id: 'descripcion',
       cell: ({row}) => (
         <Link href={`/roles/role/${row.original.id}`}>
           <p className="py-2">{row.original.description}</p>

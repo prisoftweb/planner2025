@@ -12,7 +12,7 @@ export default function TableTree({data, token, idTree}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -57,7 +57,7 @@ export default function TableTree({data, token, idTree}:
     // }),
     columnHelper.accessor('resource', {
       header: 'Recurso',
-      id: 'resource',
+      id: 'recurso',
       cell: ({row}) => (
         <Link href={`#`}>
           <p className="py-2">{row.original.resource}</p>
@@ -66,7 +66,7 @@ export default function TableTree({data, token, idTree}:
     }),
     columnHelper.accessor('routes', {
       header: 'Rutas',
-      id: 'routes',
+      id: 'rutas',
       cell: ({row}) => (
         <Link href={`#`}>
           <p className="py-2">{row.original.routes}</p>
@@ -75,7 +75,7 @@ export default function TableTree({data, token, idTree}:
     }),
     columnHelper.accessor('components', {
       header: 'Componentes',
-      id: 'components',
+      id: 'componentes',
       cell: ({row}) => (
         <Link href={`#`}>
           <p className="py-2">{row.original.components}</p>

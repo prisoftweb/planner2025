@@ -13,7 +13,7 @@ export default function TableProjects({data, token}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -46,7 +46,7 @@ export default function TableProjects({data, token}:
       )
     }),
     columnHelper.accessor(row => row.percentage, {
-      id: 'advance',
+      id: 'avance',
       cell: ({row}) => (
         <div className="">
           <p>{row.original.percentage}</p>
@@ -63,7 +63,7 @@ export default function TableProjects({data, token}:
     }),
     columnHelper.accessor('code', {
       header: 'Clave',
-      id: 'code',
+      id: 'clave',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
           <p className="py-2 font-semibold">{row.original.code}</p>
@@ -72,7 +72,7 @@ export default function TableProjects({data, token}:
     }),
     columnHelper.accessor('project', {
       header: 'Proyecto',
-      id: 'project',
+      id: 'proyecto',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
           <p className="">{row.original.project}</p>
@@ -90,7 +90,7 @@ export default function TableProjects({data, token}:
     // }),
     columnHelper.accessor('category', {
       header: 'Categoria',
-      id: 'category',
+      id: 'categoria',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
           <p className="">{row.original.category}</p>
@@ -99,7 +99,7 @@ export default function TableProjects({data, token}:
     }),
     columnHelper.accessor('client', {
       header: 'Cliente',
-      id: 'client',
+      id: 'cliente',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
           <p className="">{row.original.client}</p>
@@ -108,7 +108,7 @@ export default function TableProjects({data, token}:
     }),
     columnHelper.accessor('date', {
       header: 'Fecha',
-      id: 'date',
+      id: 'fecha',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
           <p className="">{row.original.date?.substring(0, 10) || ''}</p>
@@ -117,7 +117,7 @@ export default function TableProjects({data, token}:
     }),
     columnHelper.accessor('amount', {
       header: 'Monto',
-      id: 'amount',
+      id: 'monto',
       cell: ({row}) => (
         <Link href={`/projects/${row.original.id}/profile`}>
           <p className="">{row.original.amount}</p>

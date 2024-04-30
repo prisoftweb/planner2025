@@ -18,7 +18,7 @@ export default function TableLists({data, token}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -38,7 +38,7 @@ export default function TableLists({data, token}:
       )
     }),
     columnHelper.accessor(row => row.id, {
-      id: 'action',
+      id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <div className="w-5 h-5" style={{backgroundColor: row.original.color}}></div>
@@ -55,14 +55,14 @@ export default function TableLists({data, token}:
     }),
     columnHelper.accessor('name', {
       header: 'Glosario',
-      id: 'name',
+      id: 'glosario',
       cell: ({row}) => (
         <p className="py-2 font-semibold">{row.original.name}</p>
       )
     }),
     columnHelper.accessor('description', {
       header: 'Descripcion',
-      id: 'description',
+      id: 'descripcion',
       cell: ({row}) => (
         <p className="">{row.original.description}</p>
       ),

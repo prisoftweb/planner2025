@@ -14,7 +14,7 @@ export default function TableClients({data, token}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -22,7 +22,7 @@ export default function TableClients({data, token}:
             onChange={row.getToggleSelectedHandler()}
           />
           {/* <IconText size="w-6 h-6" sizeText="text-sm" text={row.original.name} /> */}
-          <img src={row.original.logo} alt="logo" className="w-10 h-10" />
+          <img src={row.original.logo} alt="logo" className="w-10 h-auto" />
         </div>
       ),
       enableSorting:false,
@@ -53,7 +53,7 @@ export default function TableClients({data, token}:
     }),
     columnHelper.accessor('name', {
       header: 'Nombre',
-      id: 'name',
+      id: 'nombre',
       cell: ({row}) => (
         <Link href={`/clients/${row.original.id}/profile`}>
           <p className="py-2">{row.original.name}</p>
@@ -91,7 +91,7 @@ export default function TableClients({data, token}:
     }),
     columnHelper.accessor('account', {
       header: 'Cuenta',
-      id: 'account',
+      id: 'cuenta',
       cell: ({row}) => (
         <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.account}</p>
@@ -100,7 +100,7 @@ export default function TableClients({data, token}:
     }),
     columnHelper.accessor('currentbalance', {
       header: 'Saldo actual',
-      id: 'currentbalance',
+      id: 'saldo',
       cell: ({row}) => (
         <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.currentbalance}</p>

@@ -20,7 +20,7 @@ export default function TableUsers({data, token, departments, roles}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'Seleccion',
       cell: ({row}) => (
         <input type="checkbox" 
           checked={row.getIsSelected()}
@@ -38,7 +38,7 @@ export default function TableUsers({data, token, departments, roles}:
       )
     }),
     columnHelper.accessor('profile', {
-      id: 'action',
+      id: 'accion',
       cell: ({row}) => (
         <div className="flex items-center">
           <div 
@@ -54,18 +54,18 @@ export default function TableUsers({data, token, departments, roles}:
     }),
     columnHelper.accessor('photo', {
       header: 'Foto',
-      id: 'photo',
+      id: 'foto',
       cell: ({row}) => (
         <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <img src={row.original.photo} 
-            className="w-12 h-12 rounded-full" 
+            className="w-12 h-auto rounded-full" 
             onClick={() => console.log(row.original.photo)} alt="profile" />
         </Link>
       ),
     }),
     columnHelper.accessor('name', {
       header: 'Nombre',
-      id: 'name',
+      id: 'nombre',
       cell: ({row}) => (
         <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <p className="py-2">{row.original.name}</p>
@@ -88,7 +88,7 @@ export default function TableUsers({data, token, departments, roles}:
     // }),
     columnHelper.accessor('department', {
       header: 'Departamento',
-      id: 'department',
+      id: 'departamento',
       cell: ({row}) => (
         <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <p className="py-2">{row.original.department}</p>
@@ -97,7 +97,7 @@ export default function TableUsers({data, token, departments, roles}:
     }),
     columnHelper.accessor('role', {
       header: 'Rol',
-      id: 'role',
+      id: 'rol',
       cell: ({row}) => (
         <Link href={`/users/${row.original.id}/profile?opt=1`}>
           <p className="py-2">{row.original.role}</p>

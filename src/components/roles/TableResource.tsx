@@ -32,7 +32,7 @@ export default function TableResource({data, token, option}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -52,7 +52,7 @@ export default function TableResource({data, token, option}:
       )
     }),
     columnHelper.accessor(row => row.id, {
-      id: 'action',
+      id: 'accion',
       cell: ({row}) => (
         // <DeleteClient client={row.original} token={token} />
         <div className="flex">
@@ -69,7 +69,7 @@ export default function TableResource({data, token, option}:
     }),
     columnHelper.accessor('name', {
       header: 'Nombre',
-      id: 'name',
+      id: 'nombre',
       cell: ({row}) => (
         <Link href={`#`}>
           <p className="py-2">{row.original.name}</p>
@@ -78,7 +78,7 @@ export default function TableResource({data, token, option}:
     }),
     columnHelper.accessor('title', {
       header: 'Titulo',
-      id: 'title',
+      id: 'titulo',
       cell: ({row}) => (
         <Link href={`#`}>
           <p className="py-2">{row.original.title}</p>
@@ -87,7 +87,7 @@ export default function TableResource({data, token, option}:
     }),
     columnHelper.accessor('description', {
       header: 'Descripcion',
-      id: 'description',
+      id: 'descripcion',
       cell: ({row}) => (
         <Link href={`#`}>
           <p className="py-2">{row.original.description}</p>

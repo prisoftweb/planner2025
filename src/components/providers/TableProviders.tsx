@@ -15,7 +15,7 @@ export default function TableProviders({data, token}:
   const columns = [
     columnHelper.accessor(row => row.id, {
       maxSize: 10,
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex items-center gap-x-2">
           <input type="checkbox" 
@@ -52,7 +52,7 @@ export default function TableProviders({data, token}:
     }),
     columnHelper.accessor('name', {
       header: 'Nombre',
-      id: 'name',
+      id: 'nombre',
       cell: ({row}) => (
         <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.name}</p>
@@ -77,7 +77,7 @@ export default function TableProviders({data, token}:
     }),
     columnHelper.accessor('account', {
       header: 'Cuenta',
-      id: 'account',
+      id: 'cuenta',
       cell: ({row}) => (
         <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.account}</p>
@@ -86,7 +86,7 @@ export default function TableProviders({data, token}:
     }),
     columnHelper.accessor('currentbalance', {
       header: 'Saldo actual',
-      id: 'currentbalance',
+      id: 'saldo',
       cell: ({row}) => (
         <Link href={`/providers/${row.original.id}/profile`}>
           <p className="py-2">{row.original.currentbalance}</p>

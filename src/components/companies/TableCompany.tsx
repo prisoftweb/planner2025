@@ -12,7 +12,7 @@ export default function TableCompany({data, token}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -20,7 +20,7 @@ export default function TableCompany({data, token}:
             onChange={row.getToggleSelectedHandler()}
           />
           <img src={row.original.logo} 
-            className="w-16 h-16 rounded-full" 
+            className="w-12 h-auto rounded-full" 
             alt="logo" />
         </div>
       ),
@@ -35,7 +35,7 @@ export default function TableCompany({data, token}:
       )
     }),
     columnHelper.accessor(row => row.id, {
-      id: 'action',
+      id: 'accion',
       cell: ({row}) => (
         <div className="flex text-slate-500 items-center">
           <div 
@@ -62,14 +62,14 @@ export default function TableCompany({data, token}:
     // }),
     columnHelper.accessor('name', {
       header: 'Nombre',
-      id: 'name',
+      id: 'nombre',
       cell: ({row}) => (
         <p className="py-2 font-semibold">{row.original.name}</p>
       )
     }),
     columnHelper.accessor('phoneNumber', {
       header: 'Telefono | Correo',
-      id: 'phoneNumber',
+      id: 'telefono',
       cell: ({row}) => (
         <div className=" text-slate-500">
           <p className="">{row.original.phoneNumber}</p>
@@ -79,7 +79,7 @@ export default function TableCompany({data, token}:
     }),
     columnHelper.accessor('address', {
       header: 'Direccion',
-      id: 'address',
+      id: 'direccion',
       cell: ({row}) => (
         <p className="py-2 text-center text-slate-500">{row.original.address}</p>
       )

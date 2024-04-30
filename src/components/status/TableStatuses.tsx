@@ -17,7 +17,7 @@ export default function TableStatus({data, token}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -37,7 +37,7 @@ export default function TableStatus({data, token}:
       )
     }),
     columnHelper.accessor(row => row.id, {
-      id: 'action',
+      id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <div className="w-5 h-5 bg-blue-700"></div>
@@ -55,35 +55,35 @@ export default function TableStatus({data, token}:
     }),
     columnHelper.accessor('catalog', {
       header: 'Catalogo',
-      id: 'catalog',
+      id: 'catalogo',
       cell: ({row}) => (
         <p className="py-2 font-semibold">{row.original.catalog}</p>
       )
     }),
     columnHelper.accessor('collection', {
       header: 'Coleccion',
-      id: 'collection',
+      id: 'coleccion',
       cell: ({row}) => (
         <p className="">{row.original.collection}</p>
       ),
     }),
     columnHelper.accessor('statuses', {
       header: 'Estatus',
-      id: 'statuses',
+      id: 'estatus',
       cell: ({row}) => (
         <p className="">{row.original.statuses}</p>
       ),
     }),
     columnHelper.accessor('categories', {
       header: 'Categorias',
-      id: 'categories',
+      id: 'categorias',
       cell: ({row}) => (
         <p className="">{row.original.categories}</p>
       ),
     }),
     columnHelper.accessor('types', {
       header: 'Tipos',
-      id: 'types',
+      id: 'tipos',
       cell: ({row}) => (
         <p className="">{row.original.types}</p>
       ),

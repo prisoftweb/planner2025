@@ -18,7 +18,7 @@ export default function TableCatalogs({data, token}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -38,7 +38,7 @@ export default function TableCatalogs({data, token}:
       )
     }),
     columnHelper.accessor(row => row.id, {
-      id: 'action',
+      id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
@@ -54,14 +54,14 @@ export default function TableCatalogs({data, token}:
     }),
     columnHelper.accessor('name', {
       header: 'Catalogo',
-      id: 'name',
+      id: 'catalogo',
       cell: ({row}) => (
         <p className="py-2 font-semibold">{row.original.name}</p>
       )
     }),
     columnHelper.accessor('collection', {
       header: 'Coleccion',
-      id: 'collection',
+      id: 'coleccion',
       cell: ({row}) => (
         <p className="">{row.original.collection}</p>
       ),

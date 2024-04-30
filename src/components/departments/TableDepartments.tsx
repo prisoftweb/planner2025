@@ -19,7 +19,7 @@ export default function TableDepartments({data, token, optionsCompany}:
 
   const columns = [
     columnHelper.accessor(row => row.id, {
-      id: 'id',
+      id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <input type="checkbox" 
@@ -39,7 +39,7 @@ export default function TableDepartments({data, token, optionsCompany}:
       )
     }),
     columnHelper.accessor(row => row.id, {
-      id: 'action',
+      id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
@@ -53,28 +53,28 @@ export default function TableDepartments({data, token, optionsCompany}:
         <p>accion</p>
       )
     }),
+    columnHelper.accessor('company', {
+      header: 'Compañia',
+      id: 'compañia',
+      cell: ({row}) => (
+        <img src={row.original.company.logo} 
+            className="w-12 h-auto rounded-full" 
+            alt="logo" />
+      )
+    }),
     columnHelper.accessor('name', {
       header: 'Departamento',
-      id: 'name',
+      id: 'departamento',
       cell: ({row}) => (
         <p className="py-2 font-semibold">{row.original.name}</p>
       )
     }),
     columnHelper.accessor('abbreviation', {
       header: 'Abreviacion',
-      id: 'abbreviation',
+      id: 'abreviacion',
       cell: ({row}) => (
         <p className="">{row.original.abbreviation}</p>
       ),
-    }),
-    columnHelper.accessor('company', {
-      header: 'Compañia',
-      id: 'company',
-      cell: ({row}) => (
-        <img src={row.original.company.logo} 
-            className="w-16 h-16 rounded-full" 
-            alt="logo" />
-      )
     }),
   ]
   
