@@ -14,7 +14,7 @@ export default async function Page(){
   return(
     <>
       <Navigation user={user} />
-      <RolesClient token={token}>
+      <RolesClient token={token} option={1}>
         <>Esta pagina no va</>
       </RolesClient>
       {/* <div className="flex">

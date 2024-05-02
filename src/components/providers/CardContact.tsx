@@ -30,7 +30,8 @@ export default function CardContact({contact, token, idProv}: {contact:Contact, 
         <div>
           {contact.phoneNumber.map((pnumber, index) => (
             <div className="flex items-center gap-x-2 mt-1" key={index}>
-              <DeletePhoneContact idC={contact._id || ''} phone={pnumber} token={token} />
+              <DeletePhoneContact idC={contact._id || ''} phone={pnumber} 
+                    token={token} numContacts={contact.phoneNumber.length} />
               <p className="text-xs font-thin text-slate-400" key={index}>{pnumber.phoneformat}</p>
               <Chip label={pnumber.type} />
             </div>

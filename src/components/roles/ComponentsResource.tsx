@@ -40,7 +40,7 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
           contStat++;
         }
         
-        setShowComponents((oldArray) => [...oldArray, <StatusComponent component={component} 
+        setShowComponents((oldArray) => [...oldArray, <StatusComponent key={index} component={component} 
                                         decrement={dec} increment={inc} indexComp={indexComp}
                                         value={component.status} idRes={idRes} idRou={route._id} 
                                         idT={idTree} token={token} idC={index} />] )
@@ -57,11 +57,11 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
             setShowComponents([]);
 
             setTimeout(() => {
-              console.log('useefect change all ', stateComp);
+              //console.log('useefect change all ', stateComp);
               route.components.map((component, index:number) => {
                 if(component.component){
                   setShowComponents((oldArray) => [...oldArray, <StatusComponent indexComp={indexComp} component={component} 
-                                                  decrement={dec} increment={inc}
+                                                  decrement={dec} increment={inc} key={index}
                                                   value={stateComp} idRes={idRes} idRou={route._id} 
                                                   idT={idTree} token={token} idC={index} />] )
                 }
