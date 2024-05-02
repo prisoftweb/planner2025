@@ -111,9 +111,9 @@ export default async function Page(){
   const table: ProjectsTable[] = [];
   projects.map((project) => {
     let p: string;
-    if(project.guaranteefund){
-      if(project.guaranteefund.porcentage){
-        p = project.guaranteefund.porcentage.toString() + '%';
+    if(project.progress && project.progress.length > 0){
+      if(project.progress[project.progress.length - 1].progress){
+        p = project.progress[project.progress.length - 1].progress.toString() + '%';
       }else{
         p = '0%';
       }

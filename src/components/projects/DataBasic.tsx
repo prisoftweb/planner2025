@@ -76,7 +76,7 @@ export default function DataBasic({token, id, project}:
 
   return(
     <div className="w-full">
-      <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del proyecto" 
+      <HeaderForm img="/img/projects.svg" subtitle="Ingresa datos del proyecto" 
         title="Modificar proyecto"
       />
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">

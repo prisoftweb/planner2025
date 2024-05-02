@@ -14,7 +14,7 @@ export default function Address({token, id, project}:
   
   const formik = useFormik({
     initialValues: {
-      street: project.location?.stret || '',
+      stret: project.location?.stret || '',
       community: project.location?.community || '',
       cp: project.location?.cp?.toString() || '',
       municipy: project.location?.municipy,
@@ -22,7 +22,7 @@ export default function Address({token, id, project}:
       country: project.location?.country,
     }, 
     validationSchema: Yup.object({
-      // street: Yup.string()
+      // stret: Yup.string()
       //             .required('La calle y numero son obligatorios!!'),
       // community: Yup.string()
       //             .required('El colonia es obligatoria'),
@@ -34,7 +34,7 @@ export default function Address({token, id, project}:
                   .required('El estado es obligatorio'),
     }),
     onSubmit: async (valores) => {         
-      const {community, country, cp, municipy, stateA, street} = valores;
+      const {community, country, cp, municipy, stateA, stret} = valores;
       const data = {
         location: {
           community, 
@@ -42,7 +42,7 @@ export default function Address({token, id, project}:
           cp,
           municipy, 
           state: stateA,
-          street
+          stret
         }
       }
       try {
@@ -68,15 +68,15 @@ export default function Address({token, id, project}:
       />
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
         <div>
-          <Label htmlFor="street"><p className="">Calle y numero</p></Label>
-          <Input type="text" name="street" autoFocus 
-            value={formik.values.street}
+          <Label htmlFor="stret"><p className="">Calle y numero</p></Label>
+          <Input type="text" name="stret" autoFocus 
+            value={formik.values.stret}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
           />
-          {formik.touched.street && formik.errors.street ? (
+          {formik.touched.stret && formik.errors.stret ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.street}</p>
+              <p>{formik.errors.stret}</p>
             </div>
           ) : null}
         </div>

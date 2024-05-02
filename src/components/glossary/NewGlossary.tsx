@@ -70,7 +70,7 @@ export default function NewGlossary({showForm, token, glossary}:
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
-          <HeaderForm img="/nuevoIcono.jpg" subtitle="Agregar nuevos status, categorys, types" 
+          <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevos status, categorys, types" 
             title="Agregar nuevo glosario"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />

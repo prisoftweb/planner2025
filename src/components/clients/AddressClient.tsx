@@ -72,7 +72,7 @@ export default function AddressClient({token, client}:{token:string, client:Clie
     <div className="w-full">
       <form onSubmit={formik.handleSubmit} className="mt-4 w-full h-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="">
+          <div className="sm:col-span-2">
             <Label htmlFor="stret"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Calle y numero</p></Label>
             <Input type="text" name="stret" autoFocus 
               value={formik.values.stret}
@@ -85,7 +85,7 @@ export default function AddressClient({token, client}:{token:string, client:Clie
               </div>
             ) : null}
           </div>
-          <div className="">
+          <div className="sm:col-span-2">
             <Label htmlFor="community"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Colonia / Localidad</p></Label>
             <Input type="text" name="community"
               value={formik.values.community}

@@ -7,7 +7,6 @@ import { Project } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
-import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTabProject from "@/components/projects/NavTabProject";
 import ProjectCli from "@/components/projects/ProjectClient";

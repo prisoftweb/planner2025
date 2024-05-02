@@ -13,7 +13,7 @@ export default function ProfileProvider({provider, setOption, option}:
   
   return(
     <>
-      <div className="">
+      <div className="h-full">
         <div className="bg-white p-3 rounded-lg shadow-md mt-3 flex flex-col items-center w-full">
           <div className="flex items-end">
             <IconText text={provider.tradename || ''} size="w-20 h-20" sizeText="text-3xl" />

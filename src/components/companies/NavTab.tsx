@@ -35,6 +35,21 @@ export default function NavTab({option}: {option:number}){
 
   const nav =(<div>
                 <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
+                <Link href='/catalogs'>
+                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md" content='Catalogos'
+                      placement="right"
+                    >
+                      <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
+                        <GrCatalog className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                          text-slate-500 my-1 bg-white rounded-md" 
+                          onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
+                          style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
+                                  color: isHover===3 || option===3 ? 'white' : '',}}
+                        />
+                      </div>
+                    </Tooltip>
+                  </Link>
                   <Link href='/departments'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
                       className="text-blue-500 text-sm font-thin bg-white mx-3" content='Departamentos'
@@ -61,21 +76,6 @@ export default function NavTab({option}: {option:number}){
                           onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
                           style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
                                   color: isHover===2 || option===2 ? 'white' : '',}}
-                        />
-                      </div>
-                    </Tooltip>
-                  </Link>
-                  <Link href='/catalogs'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md" content='Catalogos'
-                      placement="right"
-                    >
-                      <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
-                        <GrCatalog className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                          text-slate-500 my-1 bg-white rounded-md" 
-                          onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-                          style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-                                  color: isHover===3 || option===3 ? 'white' : '',}}
                         />
                       </div>
                     </Tooltip>

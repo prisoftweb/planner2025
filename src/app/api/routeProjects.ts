@@ -95,7 +95,7 @@ export async function UpdateProject(auth_token:string, id:string, data:Object){
 }
 
 export async function UpdateProjectPhoto(auth_token:string, id:string, data:FormData) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/updateMeLogo/${id}`;
   try {
     const res = await axios.patch(url, data, {
       headers: {

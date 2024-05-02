@@ -92,7 +92,7 @@ export default function NewCompany({showForm, token}:
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
-          <HeaderForm img="/nuevoIcono.jpg" subtitle="Ingresa los datos de la nueva empresa" 
+          <HeaderForm img="/img/company.svg" subtitle="Ingresa los datos de la nueva empresa" 
             title="Nueva compañia"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />

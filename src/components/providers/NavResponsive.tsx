@@ -82,7 +82,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           placement="right" className="text-blue-500 bg-white">
             <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
               <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                      text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
+                      text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
                 onMouseEnter={() => {setIsHover(4)} } onMouseLeave={() => setIsHover(-1)}
                 style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
                   color: isHover===4 || option===4 ? 'white' : '',}}
@@ -142,7 +142,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           Linea de credito
         </div>        
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer pl-2
-          flex py-2 items-center ${option===5? 'bg-slate-200': ''}`}
+          flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
           onClick={() => changeOption(4)}
         >
           <UserCircleIcon 

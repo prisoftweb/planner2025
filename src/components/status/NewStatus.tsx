@@ -131,7 +131,7 @@ export default function NewStatus({showForm, token, catalogOptions,
     <>
       <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen">
         <div className="flex justify-between">
-          <HeaderForm img="/nuevoIcono.jpg" subtitle="Agregar nuevos status, categorys, types" 
+          <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevos status, categorys, types" 
             title={`Agregar ${opt===2? 'nueva categoria': (opt===3? 'nuevo status' : 'nuevo tipo')}`}
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />

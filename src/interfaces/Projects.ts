@@ -34,7 +34,7 @@ export interface Project {
   status: boolean
   datets: string
   condition: any[]
-  progress: any[]
+  progress: Progress[]
   account: string
   __v: number
   id: string
@@ -57,4 +57,12 @@ export interface Guaranteefund {
   date: string
   porcentage: string
   amount: string
+}
+
+export interface Progress {
+  progress: number
+  date: string
+  notes: string
+  _id: string
+  id: string
 }

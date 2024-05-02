@@ -21,7 +21,18 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
   const [company, setCompany] = useState(OptionsCompany[0].value);
   const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
 
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(window.outerHeight);
+  }
+  
   useEffect (() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(window.outerHeight);
+    console.log('useefect');
+    console.log(heightPage, '   ', window.outerHeight );
+
     if(typeof(dept) !== 'string'){
       OptionsCompany.map((optC) => {
         if(optC.value === dept.company.id){
@@ -32,6 +43,10 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
     }
   }, [])
   
+  useEffect(() => {
+    console.log('inner ', window.outerHeight)
+  }, [window.outerHeight]);
+
   const formik = useFormik({
     initialValues: {
       name: (typeof(dept)==='string')? '': dept.name,
@@ -87,17 +102,18 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
 
   return(
     <>
-      <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className={`z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-[${heightPage}px]`}
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
-          <HeaderForm img="/nuevoIcono.jpg" subtitle="Agregar nuevos departamentos de compañias" 
+          <HeaderForm img="/img/department.svg" subtitle="Agregar nuevos departamentos de compañias" 
             title="Agregar nuevo departamento"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>
+          {heightPage}
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input type="text" name="name" 
             onChange={formik.handleChange}

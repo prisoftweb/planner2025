@@ -72,7 +72,7 @@ export default function TableLists({data, token}:
   return(
     <>
       {editGloss && <NewGlossary token={token} glossary={glossEdit || ''} showForm={setEditGloss} />}
-      <Table columns={columns} data={data} placeH="Buscar lista.." />
+      <Table columns={columns} data={data} placeH="Buscar glosario.." />
     </>
   )
 }

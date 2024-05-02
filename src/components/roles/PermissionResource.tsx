@@ -123,13 +123,13 @@ export default function PermissionResource({tree, rs, token}:
 
   useEffect(() => {
     //console.log('aquii');
-    console.log(rs);
+    //console.log(rs);
     if(!rs || rs===''){
       setResource(tree.resources[0])
     }else{
       tree.resources.map((res) => {
         if(res.resource){
-          console.log(res.resource.id);
+          //console.log(res.resource.id);
           if(res.resource.id === rs){
             setResource(res);
           }
@@ -148,9 +148,9 @@ export default function PermissionResource({tree, rs, token}:
         if(comp.status) contAux++;
       })
       arrAux.push(contAux);
-      console.log('contAux = ', contAux);
+      //console.log('contAux = ', contAux);
     })
-    console.log('arr aux = ', arrAux);
+    //console.log('arr aux = ', arrAux);
     setArrConts(arrAux);
     setTimeout(() => {
       setShowPermissionComponents(<div className="mt-5">
@@ -220,7 +220,7 @@ export default function PermissionResource({tree, rs, token}:
       <div className="bg-white rounded-lg shadow-md p-2 mt-2">
         <p>Permisos asignados a ruta</p>
         <p>ruta {resource?.resource.name}</p>
-        <div className="flex gap-x-2 gap-y-2 flex-wrap mt-5">
+        <div className="flex gap-x-6 gap-y-4 flex-wrap mt-5">
           <CardPermission setValue={setCreate} updatePermission={setBandChangePermission} text="Agregar" value={create} />
           <CardPermission setValue={setDelet} updatePermission={setBandChangePermission} text="Eliminar" value={delet} />
           <CardPermission setValue={setExpor} updatePermission={setBandChangePermission} text="Exportar" value={expor} />

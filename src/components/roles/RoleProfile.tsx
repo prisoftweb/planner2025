@@ -30,7 +30,7 @@ export default function RoleProfile({role, resources, idRole}:
     <>
       <div className="flex gap-x-1 mt-3 bg-white rounded-lg shadow-md p-2">
         <div className="w-14">
-          <img src={'/img/default.jpg'} alt="logo role" className="w-12 h-12" />
+          <img src={'/img/role.svg'} alt="logo role" className="w-12 h-12" />
         </div>
         <div>
           <p className="text-blue-500">{role.name}</p>

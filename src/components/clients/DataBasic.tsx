@@ -84,7 +84,7 @@ export default function DataBasic({client, tags, id, token}:
     <>
       <form id="basicdata" onSubmit={formik.handleSubmit} className="mt-4 w-full">
         <div className="grid grid-cols-2 gap-4">
-          <div className="">
+          <div className="col-span-2">
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
             <Input type="text" name="name" autoFocus 
               value={formik.values.name}
@@ -97,7 +97,7 @@ export default function DataBasic({client, tags, id, token}:
               </div>
             ) : null}
           </div>
-          <div>
+          <div className="col-span-2">
             <Label htmlFor="tradename"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre comercial</p></Label>
             <Input type="text" name="tradename" 
               value={formik.values.tradename}

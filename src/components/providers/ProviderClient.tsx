@@ -45,7 +45,7 @@ export default function ProviderClient({provider, token, id}:
     <>
       <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
-          <div className={`mt-0 ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
+          <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>

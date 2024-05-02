@@ -110,12 +110,41 @@ export default function Navigation({user}: {user:UsrBack}){
 const NavItems = ({role}: {role:string}) => {
   return(
     <>
-      <NavItem name="Usuarios" link="/users" items={[]}/>
+      <NavItem name="Usuarios" link="" items={[
+        {
+          name: 'Usuarios',
+          link: '/users'
+        },
+        {
+          name: 'Roles',
+          link: '/roles/role'
+        },
+        {
+          name: 'Recursos',
+          link: '/roles/resources'
+        },
+        {
+          name: 'Rutas',
+          link: '/roles/sub-path'
+        },
+        {
+          name: 'Componentes',
+          link: '/roles/components'
+        },
+        {
+          name: 'Arboles',
+          link: '/roles/trees'
+        }
+      ]}/>
       <NavItem name="Proveedores" link="/providers" items={[]}/>
       <NavItem name="Clientes" link="/clients" items={[]}/>
-      <NavItem name="Roles" link="/roles/role" items={[]}/>
+      {/* <NavItem name="Roles" link="/roles/role" items={[]}/> */}
       <NavItem name="Proyectos" link="/projects" items={[]}/>
       <NavItem name="Catalogos" link="" items={[
+          {
+            name: 'Catalogos',
+            link: '/catalogs'
+          },
           {
             name: 'Compañias',
             link: '/companies'
@@ -123,10 +152,6 @@ const NavItems = ({role}: {role:string}) => {
           {
             name: 'Departamentos',
             link: '/departments'
-          },
-          {
-            name: 'Catalogos',
-            link: '/catalogs'
           },
           {
             name: 'Glosarios',
