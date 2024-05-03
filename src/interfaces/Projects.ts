@@ -7,7 +7,8 @@ export interface ProjectsTable{
   id: string,
   code: string, 
   project:string,
-  status:boolean, 
+  //status:boolean, 
+  condition: string,
   category:string, 
   client:string, 
   date:string,
@@ -33,7 +34,7 @@ export interface Project {
   client: ClientBack
   status: boolean
   datets: string
-  condition: any[]
+  condition: Condition[]
   progress: Progress[]
   account: string
   __v: number
@@ -63,6 +64,15 @@ export interface Progress {
   progress: number
   date: string
   notes: string
+  _id: string
+  id: string
+}
+
+export interface Condition {
+  glossary: Glossary
+  date: string
+  user: string
+  status: boolean
   _id: string
   id: string
 }

@@ -130,6 +130,15 @@ export default async function Page(){
     //   currency: "USD",
     //   value: project.amount
     // })
+
+    let cond: string;
+
+    if(project.condition.length > 0){
+      cond = project.condition[project.condition.length - 1].glossary.color || '#f00';
+    }else{
+      cond = '#f00';
+    }
+
     table.push({
       //amount: project.amount.toString(),
       amount: dollar,
@@ -139,7 +148,8 @@ export default async function Page(){
       date: project.date,
       id: project._id,
       project:project.title,
-      status: project.status,
+      // status: project.status,
+      condition: cond,
       percentage: p
     })
   });

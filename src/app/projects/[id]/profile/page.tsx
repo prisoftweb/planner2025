@@ -100,6 +100,14 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
+  const optConditions: Options[] = [];
+  catalogs[0].condition.map((condition) => {
+    optConditions.push({
+      label: condition.glossary.name,
+      value: condition.glossary._id
+    })
+  })
+
   // if(companies.length <= 0){
   //   <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
   // }
@@ -132,7 +140,9 @@ export default async function Page({ params }: { params: { id: string }}){
         <NextUiProviders>
           <ProjectCli token={token} id={params.id} project={project}
             optCategories={optCategories} optClients={optClients} 
-            optTypes={optTypes} />
+            optTypes={optTypes} optConditions={optConditions} 
+            user={user._id}
+          />
         </NextUiProviders>
       </div>
     </>

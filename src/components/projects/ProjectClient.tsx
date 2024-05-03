@@ -11,15 +11,17 @@ import GuaranteeProject from "./GuaranteeProject"
 import ProfileProject from "./ProfileProject"
 
 export default function ProjectCli({project, token, id, optCategories, optClients, 
-                             optTypes}: 
+                             optTypes, optConditions, user}: 
                             {project:Project, token:string, id:string,
                               optClients:Options[], optCategories:Options[], 
-                              optTypes:Options[]}){
+                              optTypes:Options[], optConditions:Options[],
+                              user:string}){
 
   const [view, setView] = useState<JSX.Element>
                 (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
                   pl-2" style={{borderColor:'#F8FAFC'}}>
-                    <DataBasic token={token} id={id} project={project} />
+                    <DataBasic token={token} id={id} project={project}
+                      optConditions={optConditions} user={user} />
                 </div>)
 
   const [opt, setOpt] = useState<number>(1);
@@ -27,7 +29,8 @@ export default function ProjectCli({project, token, id, optCategories, optClient
   useEffect(() => {
     opt===1? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <DataBasic token={token} id={id} project={project} />
+                  <DataBasic token={token} id={id} project={project} 
+                    optConditions={optConditions} user={user} />
                 </div>) : 
       (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
@@ -44,7 +47,8 @@ export default function ProjectCli({project, token, id, optCategories, optClient
                         <GuaranteeProject id={id} token={token} project={project} />
                       </div>):  setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                                           style={{borderColor:'#F8FAFC'}}>
-                                    <DataBasic token={token} id={id} project={project} />
+                                    <DataBasic token={token} id={id} project={project} 
+                                      optConditions={optConditions} user={user} />
                                 </div>)) ))
   }, [opt, ])
   

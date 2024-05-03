@@ -32,11 +32,11 @@ export default function TableProjects({data, token}:
         />
       )
     }),
-    columnHelper.accessor('status', {
+    columnHelper.accessor('condition', {
       id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          <div className={`w-5 h-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
+          <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
           <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />
         </div>
       ),

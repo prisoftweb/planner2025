@@ -142,7 +142,7 @@ const NavItems = ({role}: {role:string}) => {
       <NavItem name="Proyectos" link="/projects" items={[]}/>
       <NavItem name="Catalogos" link="" items={[
           {
-            name: 'Catalogos',
+            name: 'Listas',
             link: '/catalogs'
           },
           {
@@ -158,7 +158,7 @@ const NavItems = ({role}: {role:string}) => {
             link: '/glossary'
           },
           {
-            name: 'Estatus',
+            name: 'Catalogos',
             link: '/status'
           }
         ]} 

@@ -7,14 +7,40 @@ import Button from "../Button";
 import { useState } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { Project } from "@/interfaces/Projects";
-import { UpdateProject, UpdateProjectPhoto } from "@/app/api/routeProjects";
+import { UpdateProject, UpdateProjectPhoto, InsertConditionInProject } from "@/app/api/routeProjects";
 import UploadImage from "../UploadImage";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
+import { useEffect } from "react";
 
-export default function DataBasic({token, id, project}: 
-                                  {token:string, id:string, project:Project}){
+export default function DataBasic({token, id, project, optConditions, user}: 
+                                  {token:string, id:string, 
+                                    project:Project, optConditions:Options[],
+                                    user:string}){
   
   const [file, setFile] = useState();
+  const [condition, setCondition] = useState<string>();
+  let indexCond = 0;
+  const [showConditions, setShowConditions] = useState<JSX.Element>(<></>);
 
+  useEffect(() => {
+    if(project.condition.length > 0){
+      optConditions.map((cond, index:number) => {
+        //console.log('condicion ', cond.value, 'value ', project.condition[project.condition.length - 1].glossary._id);
+        if(cond.value === project.condition[project.condition.length - 1].glossary._id){
+          indexCond = index;
+          setCondition(cond.value);
+        }
+      });
+    }else{
+      setCondition(optConditions[0].value);
+    }
+    setShowConditions(<div>
+                        <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
+                        <SelectReact index={indexCond} opts={optConditions} setValue={setCondition} />
+                      </div>)
+  }, []);
+  
   const formik = useFormik({
     initialValues: {
       name: project.title,
@@ -31,6 +57,15 @@ export default function DataBasic({token, id, project}:
     }),
     onSubmit: async (valores) => {            
       const {name, description, keyProject} = valores;
+      
+      if(project.condition.length===0 || project.condition[project.condition.length -1].glossary._id !== condition){
+        //showToastMessage('condicion con cambios');
+        UpdateCondition();
+      }
+      // }else{
+      //   showToastMessageError('Condicion sin cambios');
+      // }
+      
       if(!file){
         const data= {
           title: name, 
@@ -74,6 +109,27 @@ export default function DataBasic({token, id, project}:
     },       
   });
 
+  const UpdateCondition = async () => {
+    const data = {
+      condition: [
+        {
+          glossary: condition,
+          user
+        }
+      ]
+    }
+    try {
+      const res = await InsertConditionInProject(token, project._id, data);
+      if(res === 200){
+        showToastMessage('Condicion del proyecto actualizada satisfactoriamente!!');
+      }else{
+        showToastMessageError(res);
+      }
+    } catch (error) {
+      showToastMessageError('Error al actualizar condicion del proyecto!!!');
+    }
+  }
+
   return(
     <div className="w-full">
       <HeaderForm img="/img/projects.svg" subtitle="Ingresa datos del proyecto" 
@@ -106,6 +162,7 @@ export default function DataBasic({token, id, project}:
               </div>
           ) : null}
         </div>
+        {showConditions}
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"

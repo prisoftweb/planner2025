@@ -112,3 +112,22 @@ export async function UpdateProjectPhoto(auth_token:string, id:string, data:Form
     return 'Error al actualizar proyecto!!'
   }
 }
+
+export async function InsertConditionInProject(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/insertConditionInProject/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    if(res.status === 200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al actualizar condicion del proyecto!!';
+    }
+    return 'Error al actualizar condicion del proyecto!!';
+  }
+}

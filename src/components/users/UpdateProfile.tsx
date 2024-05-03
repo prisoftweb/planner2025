@@ -20,15 +20,6 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
   const [rol, setRol] = useState<string>(optsRoles[0].value);
   const [optRole, setOptRole] = useState<Options>(optsRoles[0]);
   const [department, setDepartment] = useState<string>(departments[0]._id);
-  
-  // useEffect(() => {
-  //   optsRoles.map((opRole) => {
-  //     if(opRole.value === user.rol){
-  //       setRol(opRole.value);
-  //       setOptRole(opRole);
-  //     }
-  //   })
-  // })
 
   let optionsDepartments:Options[] = [];
   departments.map((dept:any) => (
@@ -39,6 +30,24 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
   ))
 
   const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
+
+  useEffect(() => {
+    optsRoles.map((optRol) => {
+      if(user.rol){
+        if(user.rol._id === optRol.value){
+          setOptRole(optRol);
+          setRol(optRol.value);
+        }
+      }
+    });
+
+    optionsDepartments.map((dept) => {
+      if(dept.value === user.department._id){
+        setDepartment(dept.value);
+        setOptDepts(dept);
+      }
+    });
+  }, []);
 
   const emailU:string = user.email;
   const nameU:string = user.name;

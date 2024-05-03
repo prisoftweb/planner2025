@@ -37,7 +37,7 @@ export default function NavTab({option}: {option:number}){
                 <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
                 <Link href='/catalogs'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md" content='Catalogos'
+                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md" content='Listas'
                       placement="right"
                     >
                       <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
