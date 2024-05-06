@@ -4,13 +4,26 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerStepper from "./ContainerStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
+import { useState, useEffect } from "react";
 
 export default function NewProviderContainer({token, id, showForm}: {token:string, id:string, showForm:Function}){
   const [state] = useRegFormContext();
 
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(window.outerHeight);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 110);
+    //console.log('useefect');
+    //console.log(heightPage, '   ', window.outerHeight );
+  }, []);
+  
   const closeForm = () => {
     
-    console.log(state.contacts);
     if(state.contacts){
       confirmAlert({
         title: 'Confirmacion para cerrar formulario?',
@@ -57,7 +70,9 @@ export default function NewProviderContainer({token, id, showForm}: {token:strin
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen">
+    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen"
+      style={{height: `${heightPage}px`}}
+    >
       <div className="flex justify-between">
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"

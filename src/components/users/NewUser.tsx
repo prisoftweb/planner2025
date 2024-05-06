@@ -4,7 +4,7 @@ import Input from "../Input"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import UploadImage from "../UploadImage"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -22,6 +22,19 @@ export default function NewUser({showForm, departments, token, roles}:
   const [role, setRole] = useState<string>(roles[0].value);
   const [optsRoles, setOptsRoles] = useState<Options>(roles[0]);
 
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(window.outerHeight);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 110);
+    //console.log('useefect');
+    //console.log(heightPage, '   ', window.outerHeight );
+  }, []);
+  
   let optionsDepartments:Options[] = [];
   departments.map((dept:any) => (
     optionsDepartments.push({
@@ -83,8 +96,9 @@ export default function NewUser({showForm, departments, token, roles}:
 
   return(
     <>
-      <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
+        style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/nuevoIcono.jpg" subtitle="Creacion de nueva cuenta de usuario" 

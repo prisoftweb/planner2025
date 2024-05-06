@@ -3,6 +3,8 @@ import { Inter, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Suspense } from "react";
+import Loading from "./Loading";
 
 const inter = Inter({ subsets: ["latin"] });
 const ibm = IBM_Plex_Sans({subsets: ['latin'], weight: "300"})
@@ -37,7 +39,9 @@ export default function RootLayout({
           //pauseOnHover
           theme="light"
         />
-          {children}            
+          <Suspense fallback={<Loading />}>
+            {children}  
+          </Suspense>            
         <ToastContainer/>
       </body>
     </html>

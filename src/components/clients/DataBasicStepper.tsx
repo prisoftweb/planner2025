@@ -230,7 +230,7 @@ export default function DataBasicStepper({token, id, tags}:
 
 
   return(
-    <div className="w-full">
+    <div className="w-full h-full">
       <div className="my-5">
         <NavClientsStepper index={0} />
       </div>

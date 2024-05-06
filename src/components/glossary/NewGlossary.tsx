@@ -7,7 +7,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { HexColorPicker } from "react-colorful";
 import { CreateGlossary, UpdateGlossary } from "@/app/api/routeGlossary"
 import { GlossaryTable } from "@/interfaces/Glossary"
@@ -16,6 +16,19 @@ export default function NewGlossary({showForm, token, glossary}:
                     {showForm:Function, token:string, glossary: (GlossaryTable | string)}){
   
   const [color, setColor] = useState(typeof(glossary)==='string'? "#b32aa9": glossary.color);
+
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(document.body.offsetHeight);
+  }
+  
+  useEffect (() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 70);
+    // console.log('useefect');
+    // console.log(heightPage, '   ', window.outerHeight );
+  }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -68,6 +81,7 @@ export default function NewGlossary({showForm, token, glossary}:
     <>
       <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
+        style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevos status, categorys, types" 

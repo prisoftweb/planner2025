@@ -7,7 +7,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, InputHTMLAttributes } from "react"
+import { useState, useEffect } from "react"
 import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import UploadImage from "../UploadImage"
@@ -18,6 +18,20 @@ export default function NewCompany({showForm, token}:
 
   const [file, setFile] = useState<any>();
   const [phoneNumber, setPhoneNumber] = useState('');
+  
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(document.body.offsetHeight);
+  }
+  
+  useEffect (() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 70);
+    // console.log('useefect');
+    // console.log(heightPage, '   ', window.outerHeight );
+  }, [])
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -90,6 +104,7 @@ export default function NewCompany({showForm, token}:
     <>
       <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
+        style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/company.svg" subtitle="Ingresa los datos de la nueva empresa" 

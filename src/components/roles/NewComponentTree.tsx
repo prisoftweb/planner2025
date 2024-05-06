@@ -31,6 +31,19 @@ export default function NewComponentTree({showForm, token, optResources,
   const [changeResource, setChangeResource] = useState<boolean>(false);
   const [descRoute, setDescRoute] = useState<string>('');
 
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(window.outerHeight);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 70);
+    //console.log('useefect');
+    //console.log(heightPage, '   ', window.outerHeight );
+  }, []);
+
   const pushComponent = (route: string) => {
     setComponents((oldComponents) => [...oldComponents, route]);
   }
@@ -119,7 +132,9 @@ export default function NewComponentTree({showForm, token, optResources,
 
   return(
     <>
-      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen">
+      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0"
+        style={{height: `${heightPage}px`}}
+      >
       <div className="flex justify-between">
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando componentes" 
           title="Agregar componente a nuevo arbol"

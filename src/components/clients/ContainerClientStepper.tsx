@@ -43,7 +43,9 @@ export default function ContainerClientStepper({token, id, tags}: {token:string,
 
   return(
     <>
-      {stepform}
+      <div className='h-screen'>
+        {stepform}
+      </div>
     </>
   )
 }

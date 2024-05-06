@@ -5,6 +5,7 @@ import ContainerProjectStepper from "./ContainerProjectStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
+import { useState, useEffect } from "react";
 
 export default function NewProjectContainer({token, showForm, optClients, 
                               optCategories, optTypes, user, optCompanies}: 
@@ -12,6 +13,19 @@ export default function NewProjectContainer({token, showForm, optClients,
                               optCategories:Options[], optTypes:Options[], user:string,
                               optCompanies: Options[] }){
   const [state] = useRegFormContext();
+
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(window.outerHeight);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 110);
+    //console.log('useefect');
+    //console.log(heightPage, '   ', window.outerHeight );
+  }, []);
 
   const closeForm = () => {
     
@@ -61,7 +75,9 @@ export default function NewProjectContainer({token, showForm, optClients,
   }
 
   return(
-    <div className="z-50 w-full h-screen sm:max-w-lg absolute top-16 bg-white p-3 right-0">
+    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
+      style={{height: `${heightPage}px`}}
+    >
       <div className="h-full">
         <div className="flex justify-between">
           <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 

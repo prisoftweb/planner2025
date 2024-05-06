@@ -25,6 +25,19 @@ export default function NewStatus({showForm, token, catalogOptions,
   const [countStatus, setCountStatus] = useState(0);
   const [selectStatus, setSelectStatus] = useState<JSX.Element[]>([]);
 
+  const [heightPage, setHeightPage] = useState<number>(900);
+  
+  const handleResize = () => {
+    setHeightPage(document.body.offsetHeight);
+  }
+  
+  useEffect (() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 70);
+    // console.log('useefect');
+    // console.log(heightPage, '   ', window.outerHeight );
+  }, [])
+
   const pushStatus = (route: string) => {
     setStatuses((oldStatuses) => [...oldStatuses, route]);
   }
@@ -129,7 +142,9 @@ export default function NewStatus({showForm, token, catalogOptions,
   
   return(
     <>
-      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen">
+      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+        style={{height: `${heightPage}px`}}
+      >
         <div className="flex justify-between">
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevos status, categorys, types" 
             title={`Agregar ${opt===2? 'nueva categoria': (opt===3? 'nuevo status' : 'nuevo tipo')}`}

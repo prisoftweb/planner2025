@@ -164,7 +164,7 @@ export default async function Page(){
                       user={user._id} optCompanies={optCompanies} />
           </Header>
           <div className="mt-5">
-            <TableProjects  data={table}  token={token} />
+            <TableProjects data={table} token={token} projects={projects} />
           </div>
         </div>
     </>

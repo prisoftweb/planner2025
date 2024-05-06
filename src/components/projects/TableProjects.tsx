@@ -3,11 +3,13 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
 import { RemoveProject } from "@/app/api/routeProjects";
-import { ProjectsTable } from "@/interfaces/Projects";
+import { ProjectsTable, Project } from "@/interfaces/Projects";
 import Link from "next/link";
+import CardProject from "./CardProject";
+import { useState, useEffect } from "react";
 
-export default function TableProjects({data, token}:
-                        {data:ProjectsTable[], token:string}){
+export default function TableProjects({data, token, projects}:
+                        {data:ProjectsTable[], token:string, projects: Project[]}){
   
   const columnHelper = createColumnHelper<ProjectsTable>();
 
@@ -126,9 +128,46 @@ export default function TableProjects({data, token}:
     }),
   ]
   
+  const [isTable, setIsTable] = useState<boolean>(true);
+  const [view, setView] = useState<JSX.Element>(<></>);
+
+  useEffect(() => {
+    if(isTable){
+      setView(<Table columns={columns} data={data} placeH="Buscar proyecto.." />);
+    }else{
+      setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
+                {projects.map((project, index:number) => (
+                  <CardProject project={project} token={token} key={index} />
+                ))}
+              </div>)
+    }
+  }, [ , isTable]);
+
   return(
     <>
-      <Table columns={columns} data={data} placeH="Buscar proyecto.." />
+      <div className="flex justify-end mb-5">
+        <div className="inline-flex rounded-md shadow-sm mx-2">
+          <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                    ${isTable? 'bg-green-500 text-white': ''}`}
+            onClick={() => setIsTable(true)}
+          >
+            Tabla
+          </button>
+          <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                    ${!isTable? 'bg-red-500 text-white': ''}`}
+            onClick={() => setIsTable(false)}
+          >
+            Tarjetas
+          </button>
+        </div>
+      </div>
+      {view}
+      {/* <Table columns={columns} data={data} placeH="Buscar proyecto.." /> */}
+      {/* <div className="grid grid-cols-3 gap-x-4 gap-y-3">
+        {projects.map((project, index:number) => (
+          <CardProject project={project} token={token} key={index} />
+        ))}
+      </div> */}
     </>
   )
 }

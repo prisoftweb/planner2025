@@ -24,14 +24,14 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
   const [heightPage, setHeightPage] = useState<number>(900);
   
   const handleResize = () => {
-    setHeightPage(window.outerHeight);
+    setHeightPage(document.body.offsetHeight);
   }
   
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
-    setHeightPage(window.outerHeight);
-    console.log('useefect');
-    console.log(heightPage, '   ', window.outerHeight );
+    setHeightPage(document.body.offsetHeight - 70);
+    // console.log('useefect');
+    // console.log(heightPage, '   ', window.outerHeight );
 
     if(typeof(dept) !== 'string'){
       OptionsCompany.map((optC) => {
@@ -43,9 +43,9 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
     }
   }, [])
   
-  useEffect(() => {
-    console.log('inner ', window.outerHeight)
-  }, [window.outerHeight]);
+  // useEffect(() => {
+  //   console.log('inner ', window.outerHeight)
+  // }, [window.outerHeight]);
 
   const formik = useFormik({
     initialValues: {
@@ -102,7 +102,8 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
 
   return(
     <>
-      <form className={`z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-[${heightPage}px]`}
+      <form className={`z-50 top-16 absolute bg-white space-y-5 p-3 right-0`}
+        style={{height: `${heightPage}px`}}
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
@@ -113,7 +114,6 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
         </div>
         
         <div>
-          {heightPage}
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input type="text" name="name" 
             onChange={formik.handleChange}

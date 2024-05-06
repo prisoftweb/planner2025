@@ -9,9 +9,23 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { CreateCatalog, UpdateCatalog } from "@/app/api/routeCatalogs"
 import { CatalogTable } from "@/interfaces/Catalogs"
+import { useState, useEffect } from "react"
 
 export default function NewCatalog({showForm, token, catalog}: 
                     {showForm:Function, token:string, catalog:(CatalogTable | string)}){
+  
+  const [heightPage, setHeightPage] = useState<number>(900);
+
+  const handleResize = () => {
+    setHeightPage(document.body.offsetHeight);
+  }
+  
+  useEffect (() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(document.body.offsetHeight - 70);
+    // console.log('useefect');
+    // console.log(heightPage, '   ', window.outerHeight );
+  }, [])
   
   const formik = useFormik({
     initialValues: {
@@ -58,6 +72,7 @@ export default function NewCatalog({showForm, token, catalog}:
     <>
       <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
+        style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevo catalogo" 
