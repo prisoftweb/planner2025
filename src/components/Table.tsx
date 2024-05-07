@@ -82,9 +82,11 @@ export default function Table({data, columns, placeH}:
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div className="flex bg-blue-600 mt-4 justify-end p-1 pr-2">
           <button type="button" onClick={() => {
-            console.log(table.getPreSelectedRowModel());
-            setShowColumns(!showColumns);
-          }}>
+              console.log(table.getPreSelectedRowModel());
+              setShowColumns(!showColumns);
+            }}
+            onBlur={() => setShowColumns(false)}
+          >
             <AdjustmentsHorizontalIcon className="w-5 h-5 ml-2 mt-1 text-white" />
           </button>
           <div className={`${showColumns? 'relative': 'hidden'}`}>
