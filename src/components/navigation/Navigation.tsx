@@ -160,7 +160,11 @@ const NavItems = ({role}: {role:string}) => {
           {
             name: 'Catalogos',
             link: '/status'
-          }
+          },
+          {
+            name: 'Centro de costos',
+            link: '/costcenter'
+          },
         ]} 
       />
     </>

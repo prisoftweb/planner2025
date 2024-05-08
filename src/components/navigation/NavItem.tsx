@@ -18,7 +18,9 @@ export default function NavItemComponent({name, items, link}: {name:string, item
         onClick={() => {
           link===''? setIsOpen(!isOpen) : router.push(link);
         }}
-        onBlur={() => {setIsOpen(false); console.log('onblur ', isOpen)}}
+        onBlur={() => {setTimeout(() => {
+          setIsOpen(false);
+        }, 1000);}}
       >
         <p className="p-2 hover:bg-slate-700 text-center font-semibold">{name}</p>
         {isOpen && dropDownItem}
