@@ -9,18 +9,30 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect } from "react"
 import AddConcept from "./AddConcept"
+import { CreateCostCenter, UpdateCostCenter, 
+  InsertCategoryInCostCenter, getCostCenter, DeleteCategoryInCostCenter } from "@/app/api/routeCostCenter"
+import { CostCenter, CostCenterTable } from "@/interfaces/CostCenter"
+//import DeleteElement from "../DeleteElement"
+import DeleteConceptCC from "./DeleteConcept"
 
-export default function NewCostCenter({showForm, token}: 
-                    {showForm:Function, token:string}){
+interface CategoryCostCenter {
+  "name": string,
+  "account": string
+}
+
+export default function NewCostCenter({showForm, token, costCenter}: 
+                    {showForm:Function, token:string, costCenter:(CostCenterTable | string)}){
 
   const [heightPage, setHeightPage] = useState<number>(900);
   
   const [concepts, setConcepts] = useState<string[]>([]);
   const [accounts, setAccounts] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
+  const [indexDeleteConcept, setIndexDeleteConcept] = useState<number>(-1);
   const [bandDelete, setBandDelete] = useState<boolean>(false);
   const [countFiles, setCountFiles] = useState(0);
   const [addConcepts, setAddConcepts] = useState<JSX.Element[]>([]);
+  const [concetpsCostCenter, setConceptsCostCenter] = useState<JSX.Element[]>([]);
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -29,6 +41,30 @@ export default function NewCostCenter({showForm, token}:
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
+
+    if(typeof(costCenter)!=='string'){
+      const getCostC = async () => {
+        const res:CostCenter = await getCostCenter(token, costCenter.id);
+        if(typeof(res)!== 'string'){
+          let aux:JSX.Element[] = [];
+          res.categorys.map((category, index:number) => {
+            aux.push(
+              <div className="p-2 flex space-x-2 items-center" key={index}>
+              <DeleteConceptCC id={res._id+'/'+category._id} name={category.name} 
+                  remove={DeleteCategoryInCostCenter} token={token}
+                  DeleteElement={DeleteConceptCostC} indexConcept={index} />
+              <p>{category.account}</p>
+              <p>{category.name}</p>
+            </div>
+            );
+          });
+          setConceptsCostCenter(aux);
+        }else{
+          setConceptsCostCenter([<p>{res}</p>]);
+        }
+      }
+      getCostC();
+    }
   }, [])
 
   const pushConcept = (concept: string, account:string) => {
@@ -42,6 +78,10 @@ export default function NewCostCenter({showForm, token}:
   
   const updateCount = () => {
     setCountFiles(countFiles + 1);
+  }
+
+  const DeleteConceptCostC= (indexConcept: number) => {
+    setIndexDeleteConcept(indexConcept);
   }
 
   useEffect(() => {
@@ -76,10 +116,22 @@ export default function NewCostCenter({showForm, token}:
     }
   }, [indexDelete])
 
+  useEffect(() => {
+    if(indexDeleteConcept !== -1){
+      console.log('index del => ', indexDeleteConcept);
+      console.log('leng => ', concetpsCostCenter.length);
+      const arrConcepts = concetpsCostCenter;
+      arrConcepts.splice(indexDeleteConcept, 1);
+      console.log('res => ', arrConcepts.length);
+      setConceptsCostCenter(arrConcepts);
+      console.log(arrConcepts);
+    }
+  }, [indexDeleteConcept]);
+  
   const formik = useFormik({
     initialValues: {
-      category: '',
-      code: '',
+      category: (typeof(costCenter)!== 'string')? costCenter.category: '',
+      code: (typeof(costCenter)!== 'string')? costCenter.code: '',
     }, 
     validationSchema: Yup.object({
       category: Yup.string()
@@ -89,26 +141,55 @@ export default function NewCostCenter({showForm, token}:
     }),
 
     onSubmit: async valores => {
-      // try {
-      //   const {address, email, name} = valores;
-      //   const data = {
-      //     address,
-      //     email,
-      //     name,
-      //   }
-      //   const res = await CreateCompany(token, data);
-      //   if(res===201){
-      //     showForm(false);
-      //     showToastMessage('Compañia creada exitosamente!!!');
-      //     setTimeout(() => {
-      //       window.location.reload();
-      //     }, 500);
-      //   }else{
-      //     showToastMessageError(res);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al crear Compañia!!');
-      // }
+      try {
+        const categorys: CategoryCostCenter[] = []; 
+        concepts.map((concept, index:number) => {
+          categorys.push({
+            account: accounts[index],
+            name: concept
+          })
+        });
+
+        if(typeof(costCenter)==='string'){
+          const {category, code} = valores;
+          const data = {
+            name: category,
+            code,
+            categorys
+          }
+          const res = await CreateCostCenter(token, data);
+          if(res===201){
+            showForm(false);
+            showToastMessage('Centro de costos creado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            showToastMessageError(res);
+          }
+        }else{
+          const data = {
+            categorys
+          }
+          const res = await UpdateCostCenter(token, costCenter.id, valores);
+          if(res===200){
+            const resInsert = await InsertCategoryInCostCenter(token, costCenter.id, data);
+            if(resInsert===200){
+              showForm(false);
+              showToastMessage('Centro de costos actualizado exitosamente!!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              showToastMessageError(res + 'insert cost');
+            }
+          }else{
+            showToastMessageError(res + 'update cost');
+          }
+        }
+      } catch (error) {
+        showToastMessageError('Error al crear Centro de costos!!');
+      }
     }
   });
 
@@ -151,6 +232,11 @@ export default function NewCostCenter({showForm, token}:
               <p>{formik.errors.code}</p>
             </div>
           ) : null}
+        </div>
+        <div>
+          {concetpsCostCenter.map((conceptCC) => (
+            conceptCC
+          ))}
         </div>
         <div>
           {/* <div className=" flex justify-around">

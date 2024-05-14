@@ -4,18 +4,13 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 //import Header from "@/components/Header";
 import Header from "@/components/HeaderPage";
-import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
-import { ClientBack } from "@/interfaces/Clients";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
-import { getCompanies } from "../api/routeCompany";
-import { Company } from "@/interfaces/Companies";
-import { getProjects } from "../api/routeProjects";
-import { ProjectsTable, Project } from "@/interfaces/Projects";
-import TableProjects from "@/components/projects/TableProjects";
-import { CurrencyFormatter } from "../functions/Globals";
 import ButtonNew from "@/components/costcenter/ButtonNew";
+import { CostCenterTable, CostCenter } from "@/interfaces/CostCenter";
+import { getCostCenters } from "../api/routeCostCenter";
+import TableCostCenter from "@/components/costcenter/TableCostCenter";
 
 export default async function Page(){
   
@@ -39,9 +34,17 @@ export default async function Page(){
     })
   })
 
-  let costs;
+  let costs: CostCenter[];
+  try {
+    costs = await getCostCenters(token);
+    if(typeof(costs)=== 'string')
+      return <h1 className="text-lg text-red-500 text-center">{costs}</h1>
+  } catch (error) {
+    return <h1 className="text-lg text-red-500 text-center">Error al obtener centro de costos!!</h1>
+  }
+
   
-  if(!costs || costs){
+  if(!costs || costs.length <= 0){
     return (
       <>
         <Navigation user={user} />
@@ -57,9 +60,33 @@ export default async function Page(){
     )
   }
 
+  const table: CostCenterTable[] = [];
+  costs.map((cost) => {
+    let concept = '';
+    cost.categorys.map((conc) => {
+      concept += conc.name + ', ';
+    })
+    table.push({
+      category: cost.name,
+      code: cost.code,
+      id: cost._id,
+      status: cost.status,
+      concept 
+    })
+  })
+  
   return(
     <>
-      haber haber que paso aqui!!
+      <Navigation user={user} />
+      
+      <div className="p-2 sm:p-3 md:p-5 lg:p-10">
+        <Header title="Centro de costos" previousPage="/">
+          <ButtonNew token={token} id="" /></Header>
+        <div className="mt-5">
+          {/* <TableClients data={data} token={token} /> */}
+          <TableCostCenter data={table} token={token} />
+        </div>
+      </div>
     </>
   )
 }

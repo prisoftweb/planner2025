@@ -7,11 +7,22 @@ import { ProjectsTable, Project } from "@/interfaces/Projects";
 import Link from "next/link";
 import CardProject from "./CardProject";
 import { useState, useEffect } from "react";
+import Filtering from "./Filtering";
+import Button from "../Button";
+import { Options } from "@/interfaces/Common";
+import { ProjectDataToTableData } from "@/app/functions/SaveProject";
 
-export default function TableProjects({data, token, projects}:
-                        {data:ProjectsTable[], token:string, projects: Project[]}){
+export default function TableProjects({data, token, projects, optCategories, 
+                          optTypes, optConditions}:
+                        {data:ProjectsTable[], token:string, 
+                          projects: Project[], optCategories: Options[], 
+                          optTypes: Options[], optConditions: Options[]}){
   
   const columnHelper = createColumnHelper<ProjectsTable>();
+
+  const [filtering, setFiltering] = useState<boolean>(false);
+  const [filter, setFilter] = useState<boolean>(false);
+  const [dataProjects, setDataProjects] = useState(data);
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -128,12 +139,21 @@ export default function TableProjects({data, token, projects}:
     }),
   ]
   
+  const [maxAmount, setMaxAmount] = useState<number>(0);
+  useEffect(() => {
+    projects.map((project) => {
+      if(project.amount > maxAmount){
+        setMaxAmount(project.amount);
+      }
+    })
+  }, [])
+
   const [isTable, setIsTable] = useState<boolean>(true);
   const [view, setView] = useState<JSX.Element>(<></>);
 
   useEffect(() => {
     if(isTable){
-      setView(<Table columns={columns} data={data} placeH="Buscar proyecto.." />);
+      setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
     }else{
       setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
                 {projects.map((project, index:number) => (
@@ -142,6 +162,102 @@ export default function TableProjects({data, token, projects}:
               </div>)
     }
   }, [ , isTable]);
+
+  useEffect(() => {
+    if(filter){
+      setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+      setFilter(false);
+    }
+  }, [filter]);
+  
+  const filterData = (conditions:string[], types:string[], 
+      categories:string[], startDate:string, endDate:string) => {
+    
+    console.log('filtrar');
+    console.log('conditions', conditions);
+    console.log('types ', types);
+    console.log('categories ', categories);
+    console.log('startdate ', startDate);
+    console.log('endDate ', endDate);
+    
+    let filtered: Project[] = [];
+    projects.map((project) => {
+      console.log('pro', project)
+      if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+        console.log('condition');
+        if(project.types){
+          if(types.includes(project.types._id)){
+            console.log('types');
+            if(project.categorys){
+              if(categories.includes(project.categorys._id)){
+                console.log('categories');
+                filtered.push(project);
+              }
+            }
+          }
+        }
+      }
+    });
+
+    console.log(filtered);
+    //setDataProjects(filtered);
+    setFilter(true);
+  }
+
+  const filterCondition = (conditions:string[]) => {
+    let filtered: Project[] = [];
+    if(conditions.includes('all')){
+      setDataProjects(ProjectDataToTableData(projects));
+    }else{
+      projects.map((project) => {
+        if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+          filtered.push(project);
+        }
+      });
+      setDataProjects(ProjectDataToTableData(filtered));
+    }
+    setFilter(true);
+  }
+
+  const filterCategory = (categories:string[]) => {
+    if(categories.includes('all')){
+      setDataProjects(ProjectDataToTableData(projects));
+    }else{
+      let filtered: Project[] = [];
+      projects.map((project) => {
+        if(project.types){
+          if(project.categorys){
+            if(categories.includes(project.categorys._id)){
+              console.log('categories');
+              filtered.push(project);
+            }
+          }
+        }
+      });
+      
+      setDataProjects(ProjectDataToTableData(filtered));
+    }
+    setFilter(true);
+  }
+
+  const filterType = (types:string[]) => {
+    if(types.includes('all')){
+      setDataProjects(ProjectDataToTableData(projects));
+    }else{
+      let filtered: Project[] = [];
+      projects.map((project) => {
+        if(project.types){
+          if(types.includes(project.types._id)){
+            console.log('types');
+            filtered.push(project);
+          }
+        }
+      });
+      setDataProjects(ProjectDataToTableData(filtered));
+    }
+    
+    setFilter(true);
+  }
 
   return(
     <>
@@ -160,6 +276,12 @@ export default function TableProjects({data, token, projects}:
             Tarjetas
           </button>
         </div>
+        <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
+        {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
+                          optTypes={optTypes} optConditions={optConditions} 
+                          FilterData={filterData} filterCondition={filterCondition} 
+                          filterType={filterType} filterCategory={filterCategory} 
+                          maxAmount={maxAmount}  />}
       </div>
       {view}
       {/* <Table columns={columns} data={data} placeH="Buscar proyecto.." /> */}

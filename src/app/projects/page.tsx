@@ -16,6 +16,7 @@ import { getProjects } from "../api/routeProjects";
 import { ProjectsTable, Project } from "@/interfaces/Projects";
 import TableProjects from "@/components/projects/TableProjects";
 import { CurrencyFormatter } from "../functions/Globals";
+import { ProjectDataToTableData } from "../functions/SaveProject";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -62,7 +63,10 @@ export default async function Page(){
     })
   })
 
-  const optCategories: Options[] = [];
+  const optCategories: Options[] = [{
+    label: 'Todas',
+    value: 'all'
+  }];
   catalogs[0].categorys.map((category) => {
     optCategories.push({
       label: category.glossary.name,
@@ -70,11 +74,25 @@ export default async function Page(){
     })
   })
 
-  const optTypes: Options[] = [];
+  const optTypes: Options[] = [{
+    label: 'Todos',
+    value: 'all'
+  }];
   catalogs[0].types.map((type) => {
     optTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
+    })
+  })
+
+  const optConditions: Options[] = [{
+    label: 'Todos',
+    value: 'all'
+  }];
+  catalogs[0].condition.map((condition) => {
+    optConditions.push({
+      label: condition.glossary.name,
+      value: condition.glossary._id
     })
   })
 
@@ -108,65 +126,70 @@ export default async function Page(){
     )
   }
 
-  const table: ProjectsTable[] = [];
-  projects.map((project) => {
-    let p: string;
-    if(project.progress && project.progress.length > 0){
-      if(project.progress[project.progress.length - 1].progress){
-        p = project.progress[project.progress.length - 1].progress.toString() + '%';
-      }else{
-        p = '0%';
-      }
-    }else{
-      p = '0%';
-    }
-    //La moneda mexicana lleva el mx antes del $
-    const dollar = CurrencyFormatter({
-      currency: "MXN",
-      value: project.amount
-    })
-    //se puede usar dolares si no se quiere el mx antes del $
-    // const dollar = CurrencyFormatter({
-    //   currency: "USD",
-    //   value: project.amount
-    // })
+  const table: ProjectsTable[] = ProjectDataToTableData(projects);
+  
+  // const table: ProjectsTable[] = [];
+  // projects.map((project) => {
+  //   let p: string;
+  //   if(project.progress && project.progress.length > 0){
+  //     if(project.progress[project.progress.length - 1].progress){
+  //       p = project.progress[project.progress.length - 1].progress.toString() + '%';
+  //     }else{
+  //       p = '0%';
+  //     }
+  //   }else{
+  //     p = '0%';
+  //   }
+  //   //La moneda mexicana lleva el mx antes del $
+  //   const dollar = CurrencyFormatter({
+  //     currency: "MXN",
+  //     value: project.amount
+  //   })
+  //   //se puede usar dolares si no se quiere el mx antes del $
+  //   // const dollar = CurrencyFormatter({
+  //   //   currency: "USD",
+  //   //   value: project.amount
+  //   // })
 
-    let cond: string;
+  //   let cond: string;
 
-    if(project.condition.length > 0){
-      cond = project.condition[project.condition.length - 1].glossary.color || '#f00';
-    }else{
-      cond = '#f00';
-    }
+  //   if(project.condition.length > 0){
+  //     cond = project.condition[project.condition.length - 1].glossary.color || '#f00';
+  //   }else{
+  //     cond = '#f00';
+  //   }
 
-    table.push({
-      //amount: project.amount.toString(),
-      amount: dollar,
-      category: project.categorys?.name || 'Sin Categoria',
-      client: project.client.name,
-      code: project.code,
-      date: project.date,
-      id: project._id,
-      project:project.title,
-      // status: project.status,
-      condition: cond,
-      percentage: p
-    })
-  });
+  //   table.push({
+  //     //amount: project.amount.toString(),
+  //     amount: dollar,
+  //     category: project.categorys?.name || 'Sin Categoria',
+  //     client: project.client.name,
+  //     code: project.code,
+  //     date: project.date,
+  //     id: project._id,
+  //     project:project.title,
+  //     // status: project.status,
+  //     condition: cond,
+  //     percentage: p
+  //   })
+  // });
   
   return(
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <Header title="Proyectos" previousPage="/" >
-            <ButtonNew token={token} optClients={optClients} 
-                      optCategories={optCategories} optTypes={optTypes}
-                      user={user._id} optCompanies={optCompanies} />
-          </Header>
-          <div className="mt-5">
-            <TableProjects data={table} token={token} projects={projects} />
-          </div>
+        <Header title="Proyectos" previousPage="/" >
+          <ButtonNew token={token} optClients={optClients} 
+                    optCategories={optCategories} optTypes={optTypes}
+                    user={user._id} optCompanies={optCompanies} />
+        </Header>
+        <div className="mt-5">
+          <TableProjects data={table} token={token} projects={projects} 
+            optCategories={optCategories} optTypes={optTypes}
+            optConditions={optConditions}
+          />
         </div>
+      </div>
     </>
   )
 }

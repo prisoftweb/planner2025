@@ -42,7 +42,7 @@ export default function AddConcept({bandPlus, DeleteElement, index,
   const save = () => {
     if(concept !== '' && account !== ''){
       setSaved(true);
-      pushElement(concept);
+      pushElement(concept, account);
     }else{
       setMessage('* Todos los campos son obligatorios!!');
       setOk(false);
