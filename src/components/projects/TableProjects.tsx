@@ -194,13 +194,13 @@ export default function TableProjects({data, token, projects, optCategories,
         if(types.includes('all')){
           if(categories.includes('all')){
             if(project.amount >= minAmount && project.amount <= maxAmount){
-              filtered.push(project);
-              // console.log(project.title, ' => ', project.date);
-              // let d = new Date(project.date).getTime();
-              // console.log('get time ', d);
-              // if(d >= startDate && d <= endDate){
-              //   filtered.push(project);
-              // }
+              //filtered.push(project);
+              console.log(project.title, ' => ', project.date);
+              let d = new Date(project.date).getTime();
+              console.log('get time ', d);
+              if(d >= startDate && d <= endDate){
+                filtered.push(project);
+              }
             }
           }else{
             if(project.categorys){

@@ -5,10 +5,11 @@ import { Options } from "@/interfaces/Common"
 import NavResponsive from "../projects/NavResponsive"
 import ProfileExpense from "./ProfileExpense"
 import { Expense } from "@/interfaces/Expenses"
+import UpdateExpense from "@/components/expenses/UpdateExpense";
 
-export default function ExpenseClient({token, user, id, expense}: 
-                            { token:string, id:string,
-                              user:string, expense:Expense}){
+export default function ExpenseClient({token, user, id, expense, optCostCenter}: 
+                            { token:string, id:string, user:string, 
+                              expense:Expense, optCostCenter:Options[]}){
 
   const [view, setView] = useState<JSX.Element>
                 (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
@@ -21,7 +22,10 @@ export default function ExpenseClient({token, user, id, expense}:
   useEffect(() => {
     opt===1? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <p>Data</p>
+                  <div className=" max-w-md">
+                    <UpdateExpense id={id} optCostCenter={optCostCenter} 
+                      token={token} user={user} expense={expense} />
+                  </div>
                 </div>) : 
       (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>

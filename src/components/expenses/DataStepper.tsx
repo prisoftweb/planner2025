@@ -29,7 +29,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       taxFolio: '',
       description: '',
       discount: '',
-      amount: ''
+      amount: '',
+      vat: '0'
     }, 
     validationSchema: Yup.object({
       description: Yup.string()
@@ -41,11 +42,12 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       discount: Yup.string()
                   .required('El descuento es obligatorio'),
       amount: Yup.string()
-                  .required('El importe es obligatorio!!!')
+                  .required('El importe es obligatorio!!!'),
+      vat: Yup.string()
+                  .required('El iba es obligatorio!!!')
     }),
     onSubmit: async (valores) => {            
-      const {description, folio, taxFolio, discount, amount} = valores;
-      console.log('next!!');
+      const {description, folio, taxFolio, discount, amount, vat} = valores;
       updateBasicData(costcenter, folio, description, amount, 
           startDate, taxFolio, vat, discount, provider, responsible, 
           typeCFDI, typeExpense, category, project, condition);
@@ -67,7 +69,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [typeCFDI, setTypeCFDI] = useState<string>(optCostCenter[0].value);
   const [provider, setProvider] = useState<string>(optProviders[0].value);
   const [responsible, setResponsible] = useState<string>(optResponsibles[0].value);
-  const [vat, setVat] = useState<string>(optResponsibles[0].value);
+  // const [vat, setVat] = useState<string>(optResponsibles[0].value);
   //const [discount, setDiscount] = useState<string>(optResponsibles[0].value);
   const [category, setCategory] = useState<string>(optGlossaries[0].value);
   const [project, setProject] = useState<string>(optProjects[0].value);
@@ -75,14 +77,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const SaveData = async() => {
     console.log('save data!!');
-    const {description, folio, taxFolio, discount, amount} = formik.values
+    const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount, 
         startDate, taxFolio, vat, discount, provider, responsible, 
         typeCFDI, typeExpense, category, project, condition);
     
     const data = {
       subtotal:amount, costcenter, date:startDate, description, discount, folio, provider, 
-      user:responsible, taxFolio, typeCFDI, category, project,
+      user:responsible, taxFolio, typeCFDI, category, project, vat,
       condition: {
         glossary:condition, user:user
       }
@@ -137,7 +139,17 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         </div>
         <div>
           <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
-          <SelectReact index={0} opts={optResponsibles} setValue={setVat} />
+          <Input type="text" name="vat" 
+            value={formik.values.vat}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.vat && formik.errors.vat ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.vat}</p>
+              </div>
+          ) : null}
+          {/* <SelectReact index={0} opts={optResponsibles} setValue={setVat} /> */}
         </div>
         <div>
           <Label htmlFor="discount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descuento</p></Label>

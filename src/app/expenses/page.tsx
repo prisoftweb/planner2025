@@ -5,7 +5,6 @@ import WithOut from "@/components/WithOut";
 import { getCostCenters } from "../api/routeCostCenter";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
-import UpdateExpense from "@/components/expenses/UpdateExpense";
 import ButtonNew from "@/components/expenses/ButtonNew";
 import { getProviders } from "../api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
@@ -139,10 +138,6 @@ export default async function Page() {
                   optProviders={optProviders} optResponsibles={optResponsibles}
                   optGlossaries={optGlossaries} optProjects={optProjects} />
           </WithOut>
-          {/* <div className=" max-w-md">
-            <UpdateExpense id="" optCostCenter={optCostCenter} 
-              token={token} user={user._id} />
-          </div> */}
         </div>
       </>
     )

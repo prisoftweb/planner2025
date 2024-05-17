@@ -1,60 +1,80 @@
 import Label from "../Label";
 import { Expense } from "@/interfaces/Expenses";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import Chip from "../providers/Chip";
 
 export default function ProfileExpense({expense}: 
                         {expense:Expense}){
 
   const amount = CurrencyFormatter({
     currency: "MXN",
-    value: expense.project.amount
+    value: expense.subtotal
   });
 
-  const amountGuarantee = CurrencyFormatter({
+  const discount = CurrencyFormatter({
     currency: "MXN",
-    value: 0
-    //value: expense.project.guaranteefund.amount? parseFloat(expense.project.guaranteefund.amount): 0
-  })
+    value: expense.discount
+  });
 
   return(
     <>
       <div className="w-full h-full mt-3">
-        <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
-          <div>
-            <img src={expense.project.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo" 
-              className="max-w-28 h-auto" />
+        <div className="bg-white p-3 rounded-lg shadow-md">
+          <div className="flex gap-x-2">
+            <div>
+              <img src={expense.project.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo" 
+                className="w-28 h-auto" />
+            </div>
+            <div>
+              <p className="text-blue-500">{expense.project.title}</p>
+              <p className="text-slate-500">{expense.project.code}</p>
+              <p className="text-slate-500">{expense.project.types? expense.project.types.name: ''}</p>
+              <p className="text-slate-500">{expense.project.account}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-blue-500">{expense.project.title}</p>
-            <p className="text-slate-500">{expense.project.code}</p>
-            <p className="text-slate-500">{expense.project.types? expense.project.types.name: ''}</p>
-            <p className="text-slate-500">{expense.project.account}</p>
+          <div className=" flex gap-x-2 items-center">
+            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
+                style={{"width": expense.project.progress.length > 0? 
+                            expense.project.progress[expense.project.progress.length-1].progress : 0}}></div>
+            </div>
+            <p>{expense.project.progress.length > 0?
+                      expense.project.progress[expense.project.progress.length-1].progress : 0}%</p>
           </div>
         </div>
         
         <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
-          <div className="flex gap-x-2">
-            <div>
-              <img src={expense.project.client? expense.project.client.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
+          <div className="">
+            <div className="flex gap-x-2">
+              <div>
+                <img src={'/img/clients.svg'} alt="logo" className="w-20 h-20" />
+              </div>
+              <div className="flex justify-between w-full">
+                <div>
+                  <p className="text-slate-500">{expense.category.name}</p>
+                  <p className="text-blue-500">{expense.provider.name}</p>
+                </div>
+                <div className="h-6">
+                  <Chip label={expense.condition[expense.condition.length-1].glossary.name} />
+                </div>
+              </div>
             </div>
-            <div>
-              <p className="text-slate-500">{'Cliente'}</p>
-              <p className="text-blue-500">{expense.project.client? expense.project.client.name: ''}</p>
-            </div>
+            <Label>{expense.taxfolio}</Label>
           </div>
           
           <div className="grid grid-cols-2 gap-x-2 my-2">
             <div className="">
-              <p className="text-slate-500">Monto de obra</p>
-              <p className="text-green-600">{amount}</p>
+              <p className="text-slate-500">Importe</p>
+              <p className="text-green-600 font-semibold">{amount}</p>
             </div>
             <div className="">
-              <p className="text-slate-500">Costo de obra</p>
-              <p>{''}</p>
+              <p className="text-slate-500">Descuento</p>
+              <p className="text-red-600 font-semibold">{discount}</p>
             </div>
           </div>
           <div className="my-2">
-            <p className="text-slate-500">Fecha ({expense.project.datets.substring(0, 10)})</p>
+            <p className="text-slate-500">IVA</p>
+            <p className="text-blue-600 font-semibold">$70 (16%)</p>
           </div>
         </div>
         
@@ -62,12 +82,12 @@ export default function ProfileExpense({expense}:
             shadow-md py-2">
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
-              <p className="text-slate-500">Fondo de garantia</p>
-              {/* <p className="text-blue-600">{expense.project.guaranteefund.porcentage? expense.project.guaranteefund.porcentage: ''}</p> */}
+              <p className="text-slate-500">Tipo de CFDI</p>
+              <p className="text-blue-600 font-semibold">{expense.typeCFDI.name}</p>
             </div>
             <div>
-              <p className="text-slate-500">Monto</p>
-              <p className="text-blue-600">{amountGuarantee}</p>
+              <p className="text-slate-500">Fecha</p>
+              <p className="text-blue-600 font-semibold">{expense.date.substring(0, 10)}</p>
             </div>
           </div>
         </div>
@@ -75,28 +95,16 @@ export default function ProfileExpense({expense}:
         <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg 
             shadow-md py-2">
           <div className="mt-3">
-            <Label>Direccion</Label>
-            <p className="my-0 text-slate-700">{expense.project.location?.stret? expense.project.location?.stret: '' }</p>
+            <Label>Proveedor</Label>
+            <p className="my-0 text-slate-700">{expense.provider.name}</p>
           </div>
           <div className="mt-3">
-            <Label>Colonia</Label>
-            <p className="my-0 text-slate-700">{expense.project.location?.community? expense.project.location?.community: '' }</p>
+            <Label>Responsable</Label>
+            <p className="my-0 text-slate-700">{expense.user.name}</p>
           </div>
           <div className="mt-3">
-            <Label>Municipio</Label>
-            <p className="my-0 text-slate-700">{expense.project.location?.municipy? expense.project.location?.municipy: '' }</p>
-          </div>
-          <div className="mt-3">
-            <Label>Codigo Postal</Label>
-            <p className="my-0 text-slate-700">{expense.project.location?.cp? expense.project.location?.cp: '' }</p>
-          </div>
-          <div className="mt-3">
-            <Label>Estado</Label>
-            <p className="my-0 text-slate-700">{expense.project.location?.state? expense.project.location?.state: '' }</p>
-          </div>
-          <div className="mt-3">
-            <Label>Pais</Label>
-            <p className="my-0 text-slate-700">{expense.project.location?.country? expense.project.location?.country: '' }</p>
+            <Label>Descripcion</Label>
+            <p className="my-0 text-slate-700">{expense.description}</p>
           </div>
         </div>
       </div>

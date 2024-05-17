@@ -153,12 +153,16 @@ export default function Filtering({showForm, optCategories, optTypes,
         <div>
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
           <Calendar
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0"
             value={values}
             //onChange={setValues}
             onChange={(e: any) => setValues(e)}
             range
             numberOfMonths={2}
             showOtherDays
+            style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
+              'height': '35px', 'width': '330px'}}
           /> 
         </div>
         {/* <div className="flex justify-center mt-2">

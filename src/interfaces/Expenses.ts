@@ -23,6 +23,7 @@ export interface ExpensesTable {
 export interface Expense {
   _id: string
   folio: string
+  taxfolio: string
   subtotal: number
   discount: number
   description: string

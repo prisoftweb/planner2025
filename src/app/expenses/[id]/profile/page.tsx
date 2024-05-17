@@ -18,6 +18,9 @@ import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { GetCost, GetCosts } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
 import { Expense } from "@/interfaces/Expenses";
+import NavTabExpense from "@/components/expenses/NavTabExpense";
+import { CostCenter } from "@/interfaces/CostCenter";
+import { getCostCenters } from "@/app/api/routeCostCenter";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -87,6 +90,24 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
+  let costcenters: CostCenter[];
+  try {
+    costcenters = await getCostCenters(token);
+    if(typeof(costcenters)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+    }    
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+  }
+
+  const optCostCenter:Options[]= [];
+  costcenters.map((costcenter) => {
+    optCostCenter.push({
+      label: costcenter.name,
+      value: costcenter._id
+    });
+  });
+
   // let clients: ClientBack[];
   // try {
   //   clients = await getClients(token);
@@ -142,9 +163,10 @@ export default async function Page({ params }: { params: { id: string }}){
         <Header title={cost.subtotal.toString()} previousPage="/expenses">
           <Selectize options={options} routePage="expenses" subpath="/profile" />
         </Header>
-        <NavTabProject idPro={params.id} tab='1' />
+        <NavTabExpense idExp={params.id} tab="1" />
         <NextUiProviders>
-          <ExpenseClient expense={cost} id={params.id} token={token} user={user._id} />
+          <ExpenseClient expense={cost} id={params.id} token={token} 
+              user={user._id} optCostCenter={optCostCenter} />
         </NextUiProviders>
       </div>
     </>
