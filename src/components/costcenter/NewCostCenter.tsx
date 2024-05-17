@@ -60,7 +60,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
           });
           setConceptsCostCenter(aux);
         }else{
-          setConceptsCostCenter([<p>{res}</p>]);
+          setConceptsCostCenter([<p key={0}>{res}</p>]);
         }
       }
       getCostC();

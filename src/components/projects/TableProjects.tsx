@@ -171,7 +171,7 @@ export default function TableProjects({data, token, projects, optCategories,
   }, [filter]);
   
   const filterData = (conditions:string[], types:string[], 
-      categories:string[], startDate:string, endDate:string) => {
+      categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
     
     console.log('filtrar');
     console.log('conditions', conditions);
@@ -179,19 +179,89 @@ export default function TableProjects({data, token, projects, optCategories,
     console.log('categories ', categories);
     console.log('startdate ', startDate);
     console.log('endDate ', endDate);
+    console.log('min amount ', minAmount);
+    console.log('max amount ', maxAmount);
     
     let filtered: Project[] = [];
     projects.map((project) => {
-      console.log('pro', project)
-      if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-        console.log('condition');
-        if(project.types){
-          if(types.includes(project.types._id)){
-            console.log('types');
+      // if(project.date){
+      //   console.log('date project => ', project.date);
+      //   console.log('fechaa ', new Date(project.date));
+      //   console.log('timee ', new Date(project.date).getTime());
+      // }
+      //console.log('pro', project)
+      if(conditions.includes('all')){
+        if(types.includes('all')){
+          if(categories.includes('all')){
+            if(project.amount >= minAmount && project.amount <= maxAmount){
+              filtered.push(project);
+              // console.log(project.title, ' => ', project.date);
+              // let d = new Date(project.date).getTime();
+              // console.log('get time ', d);
+              // if(d >= startDate && d <= endDate){
+              //   filtered.push(project);
+              // }
+            }
+          }else{
             if(project.categorys){
               if(categories.includes(project.categorys._id)){
-                console.log('categories');
+                if(project.amount >= minAmount && project.amount <= maxAmount){
+                  filtered.push(project);
+                }
+              }
+            }
+          }
+        }else{
+          if(project.types){
+            if(types.includes(project.types._id)){
+              if(categories.includes('all')){
+                if(project.amount >= minAmount && project.amount <= maxAmount){
+                  filtered.push(project);
+                }
+              }else{
+                if(project.categorys){
+                  if(categories.includes(project.categorys._id)){
+                    if(project.amount >= minAmount && project.amount <= maxAmount){
+                      filtered.push(project);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }else{
+        if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+          if(types.includes('all')){
+            if(categories.includes('all')){
+              if(project.amount >= minAmount && project.amount <= maxAmount){
                 filtered.push(project);
+              }
+            }else{
+              if(project.categorys){
+                if(categories.includes(project.categorys._id)){
+                  if(project.amount >= minAmount && project.amount <= maxAmount){
+                    filtered.push(project);
+                  }
+                }
+              }
+            }
+          }else{
+            if(project.types){
+              if(types.includes(project.types._id)){
+                if(categories.includes('all')){
+                  if(project.amount >= minAmount && project.amount <= maxAmount){
+                    filtered.push(project);
+                  }
+                }else{
+                  if(project.categorys){
+                    if(categories.includes(project.categorys._id)){
+                      if(project.amount >= minAmount && project.amount <= maxAmount){
+                        filtered.push(project);
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -201,62 +271,63 @@ export default function TableProjects({data, token, projects, optCategories,
 
     console.log(filtered);
     //setDataProjects(filtered);
+    setDataProjects(ProjectDataToTableData(filtered));
     setFilter(true);
   }
 
   const filterCondition = (conditions:string[]) => {
-    let filtered: Project[] = [];
-    if(conditions.includes('all')){
-      setDataProjects(ProjectDataToTableData(projects));
-    }else{
-      projects.map((project) => {
-        if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-          filtered.push(project);
-        }
-      });
-      setDataProjects(ProjectDataToTableData(filtered));
-    }
-    setFilter(true);
+    // let filtered: Project[] = [];
+    // if(conditions.includes('all')){
+    //   setDataProjects(ProjectDataToTableData(projects));
+    // }else{
+    //   projects.map((project) => {
+    //     if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+    //       filtered.push(project);
+    //     }
+    //   });
+    //   setDataProjects(ProjectDataToTableData(filtered));
+    // }
+    // setFilter(true);
   }
 
   const filterCategory = (categories:string[]) => {
-    if(categories.includes('all')){
-      setDataProjects(ProjectDataToTableData(projects));
-    }else{
-      let filtered: Project[] = [];
-      projects.map((project) => {
-        if(project.types){
-          if(project.categorys){
-            if(categories.includes(project.categorys._id)){
-              console.log('categories');
-              filtered.push(project);
-            }
-          }
-        }
-      });
+    // if(categories.includes('all')){
+    //   setDataProjects(ProjectDataToTableData(projects));
+    // }else{
+    //   let filtered: Project[] = [];
+    //   projects.map((project) => {
+    //     if(project.types){
+    //       if(project.categorys){
+    //         if(categories.includes(project.categorys._id)){
+    //           console.log('categories');
+    //           filtered.push(project);
+    //         }
+    //       }
+    //     }
+    //   });
       
-      setDataProjects(ProjectDataToTableData(filtered));
-    }
-    setFilter(true);
+    //   setDataProjects(ProjectDataToTableData(filtered));
+    // }
+    // setFilter(true);
   }
 
   const filterType = (types:string[]) => {
-    if(types.includes('all')){
-      setDataProjects(ProjectDataToTableData(projects));
-    }else{
-      let filtered: Project[] = [];
-      projects.map((project) => {
-        if(project.types){
-          if(types.includes(project.types._id)){
-            console.log('types');
-            filtered.push(project);
-          }
-        }
-      });
-      setDataProjects(ProjectDataToTableData(filtered));
-    }
+    // if(types.includes('all')){
+    //   setDataProjects(ProjectDataToTableData(projects));
+    // }else{
+    //   let filtered: Project[] = [];
+    //   projects.map((project) => {
+    //     if(project.types){
+    //       if(types.includes(project.types._id)){
+    //         console.log('types');
+    //         filtered.push(project);
+    //       }
+    //     }
+    //   });
+    //   setDataProjects(ProjectDataToTableData(filtered));
+    // }
     
-    setFilter(true);
+    // setFilter(true);
   }
 
   return(

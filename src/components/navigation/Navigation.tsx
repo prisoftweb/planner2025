@@ -165,6 +165,10 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Centro de costos',
             link: '/costcenter'
           },
+          {
+            name: 'Gastos',
+            link: '/expenses'
+          },
         ]} 
       />
     </>
