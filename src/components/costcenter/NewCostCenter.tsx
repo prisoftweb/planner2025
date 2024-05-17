@@ -234,8 +234,8 @@ export default function NewCostCenter({showForm, token, costCenter}:
           ) : null}
         </div>
         <div>
-          {concetpsCostCenter.map((conceptCC) => (
-            conceptCC
+          {concetpsCostCenter.map((conceptCC, index:number) => (            
+            <div key={index}>conceptCC</div>
           ))}
         </div>
         <div>
@@ -244,8 +244,8 @@ export default function NewCostCenter({showForm, token, costCenter}:
             <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cuenta</p></Label>
           </div> */}
           <div className="mt-1">
-            {addConcepts.map((concept) => (
-              concept
+            {addConcepts.map((concept, index:number) => (
+              <div key={index}>concept</div>
             ))}
           </div>
         </div>
