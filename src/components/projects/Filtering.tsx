@@ -10,6 +10,7 @@ import SelectMultipleReact from "../SelectMultipleReact"
 import { Options } from "@/interfaces/Common";
 import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function Filtering({showForm, optCategories, optTypes, 
                       optConditions, FilterData, filterCondition, 
@@ -27,8 +28,8 @@ export default function Filtering({showForm, optCategories, optTypes,
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
 
-  const [firstDate, setFirstDate] = useState<Date>();
-  const [secondDate, setSecondDate] = useState<Date>();
+  const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
+  const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
   
   
   const [values, setValues] = useState([
@@ -52,8 +53,7 @@ export default function Filtering({showForm, optCategories, optTypes,
 
   useEffect(() => {
     // console.log('usefect');
-    // console.log(values);
-
+    console.log(values);
     if(values.length > 1){
       setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
       setEndDate(getFormatDate(values[1].day, values[1].month.number, values[1].year));
@@ -96,7 +96,13 @@ export default function Filtering({showForm, optCategories, optTypes,
 
   useEffect(() => {
     FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  }, [categories, types, conditions, minValue, maxValue]);
+  }, [ categories, types, conditions, minValue, maxValue]);
+
+  useEffect (() => {
+    console.log('useefect');
+    console.log(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
+    FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
+  }, []);
 
   useEffect(() => {
     console.log('first date => ', firstDate);
@@ -116,11 +122,11 @@ export default function Filtering({showForm, optCategories, optTypes,
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        <div>
+        <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
           <SelectMultipleReact index={0} opts={optConditions} setValue={setConditions} />
         </div>
-        <div>
+        <div className="">
           <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
           <SelectMultipleReact index={0} opts={optTypes} setValue={setTypes} />
         </div>
@@ -128,7 +134,9 @@ export default function Filtering({showForm, optCategories, optTypes,
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectMultipleReact index={0} opts={optCategories} setValue={setCategories} />
         </div>
-        <div className="pt-9">
+        {/* <div className="pt-9"> */}
+        <div className="pt-0">
+          <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
             min={0}
             max={maxAmount}
@@ -138,9 +146,10 @@ export default function Filtering({showForm, optCategories, optTypes,
             onInput={(e) => {
               handleInput(e);
             }}
-            baseClassName='multi-range-slider-black'
+            //baseClassName='multi-range-slider-black'
             //style={{" border: 'none', boxShadow: 'none', padding: '15px 10px' "}}
-            style={{border: 'none', boxShadow: 'none', padding: '15px 10px', backgroundColor: 'white'}}
+            style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
+                backgroundColor: 'white', 'zIndex': '0'}}
             label='false'
             ruler='false'
             barLeftColor='red'
@@ -149,6 +158,16 @@ export default function Filtering({showForm, optCategories, optTypes,
             thumbLeftColor='lime'
             thumbRightColor='lime'
           />
+          <div className="flex justify-between">
+            <p>{CurrencyFormatter({
+                  currency: "MXN",
+                  value: minValue
+                })}</p>
+            <p>{CurrencyFormatter({
+                  currency: "MXN",
+                  value: maxValue
+                })}</p>
+          </div>
         </div>
         <div>
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>

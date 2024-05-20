@@ -150,6 +150,7 @@ export default function TableProjects({data, token, projects, optCategories,
 
   const [isTable, setIsTable] = useState<boolean>(true);
   const [view, setView] = useState<JSX.Element>(<></>);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     if(isTable){
@@ -165,7 +166,16 @@ export default function TableProjects({data, token, projects, optCategories,
 
   useEffect(() => {
     if(filter){
-      setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+      if(isTable){
+        setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+      }
+      else{
+        setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
+                  {filteredProjects.map((project, index:number) => (
+                    <CardProject project={project} token={token} key={index} />
+                  ))}
+                </div>)
+      }
       setFilter(false);
     }
   }, [filter]);
@@ -206,7 +216,12 @@ export default function TableProjects({data, token, projects, optCategories,
             if(project.categorys){
               if(categories.includes(project.categorys._id)){
                 if(project.amount >= minAmount && project.amount <= maxAmount){
-                  filtered.push(project);
+                  //filtered.push(project);
+                  let d = new Date(project.date).getTime();
+                  console.log('get time ', d);
+                  if(d >= startDate && d <= endDate){
+                    filtered.push(project);
+                  }
                 }
               }
             }
@@ -216,13 +231,23 @@ export default function TableProjects({data, token, projects, optCategories,
             if(types.includes(project.types._id)){
               if(categories.includes('all')){
                 if(project.amount >= minAmount && project.amount <= maxAmount){
-                  filtered.push(project);
+                  //filtered.push(project);
+                  let d = new Date(project.date).getTime();
+                  console.log('get time ', d);
+                  if(d >= startDate && d <= endDate){
+                    filtered.push(project);
+                  }
                 }
               }else{
                 if(project.categorys){
                   if(categories.includes(project.categorys._id)){
                     if(project.amount >= minAmount && project.amount <= maxAmount){
-                      filtered.push(project);
+                      //filtered.push(project);
+                      let d = new Date(project.date).getTime();
+                      console.log('get time ', d);
+                      if(d >= startDate && d <= endDate){
+                        filtered.push(project);
+                      }
                     }
                   }
                 }
@@ -235,13 +260,23 @@ export default function TableProjects({data, token, projects, optCategories,
           if(types.includes('all')){
             if(categories.includes('all')){
               if(project.amount >= minAmount && project.amount <= maxAmount){
-                filtered.push(project);
+                //filtered.push(project);
+                let d = new Date(project.date).getTime();
+                console.log('get time ', d);
+                if(d >= startDate && d <= endDate){
+                  filtered.push(project);
+                }
               }
             }else{
               if(project.categorys){
                 if(categories.includes(project.categorys._id)){
                   if(project.amount >= minAmount && project.amount <= maxAmount){
-                    filtered.push(project);
+                    //filtered.push(project);
+                    let d = new Date(project.date).getTime();
+                    console.log('get time ', d);
+                    if(d >= startDate && d <= endDate){
+                      filtered.push(project);
+                    }
                   }
                 }
               }
@@ -251,13 +286,23 @@ export default function TableProjects({data, token, projects, optCategories,
               if(types.includes(project.types._id)){
                 if(categories.includes('all')){
                   if(project.amount >= minAmount && project.amount <= maxAmount){
-                    filtered.push(project);
+                    //filtered.push(project);
+                    let d = new Date(project.date).getTime();
+                    console.log('get time ', d);
+                    if(d >= startDate && d <= endDate){
+                      filtered.push(project);
+                    }
                   }
                 }else{
                   if(project.categorys){
                     if(categories.includes(project.categorys._id)){
                       if(project.amount >= minAmount && project.amount <= maxAmount){
-                        filtered.push(project);
+                        //filtered.push(project);
+                        let d = new Date(project.date).getTime();
+                        console.log('get time ', d);
+                        if(d >= startDate && d <= endDate){
+                          filtered.push(project);
+                        }
                       }
                     }
                   }
@@ -271,6 +316,7 @@ export default function TableProjects({data, token, projects, optCategories,
 
     console.log(filtered);
     //setDataProjects(filtered);
+    setFilteredProjects(filtered);
     setDataProjects(ProjectDataToTableData(filtered));
     setFilter(true);
   }

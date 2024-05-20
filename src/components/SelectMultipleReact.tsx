@@ -5,7 +5,7 @@ import { useState } from 'react'
 export default function SelectMultipleReact({opts, setValue, index}: 
                           {opts:Options[], setValue:Function, index:number}){
   //const [selOpt, setSelOpt] = useState<Options[]>([opts[index]]);
-  const [selOpt, setSelOpt] = useState<Options[]>();
+  const [selOpt, setSelOpt] = useState<Options[]>([opts[index]]);
 
   return(
     <Select
