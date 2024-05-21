@@ -10,6 +10,7 @@ import SelectMultipleReact from "../SelectMultipleReact"
 import { Options } from "@/interfaces/Common";
 import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function Filtering({showForm, optCategories, optTypes, 
                       optConditions, FilterData, filterCondition, 
@@ -24,9 +25,13 @@ export default function Filtering({showForm, optCategories, optTypes,
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
 
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  // const [startDate, setStartDate] = useState<string>('');
+  // const [endDate, setEndDate] = useState<string>('');
 
+  const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
+  const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
+  
+  
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
     new DateObject().setDay(4).add(1, "month")
@@ -40,22 +45,22 @@ export default function Filtering({showForm, optCategories, optTypes,
     set_maxValue(e.maxValue);
   };
 
-  function getFormatDate(day:number, month:number, year:number){
-    return year.toString() + '-' + (month.toString().length < 2? 
-              '0' + month.toString(): month.toString()) + '-' + 
-                (day.toString().length < 2? '0' + day.toString(): day.toString())
-  }
+  // function getFormatDate(day:number, month:number, year:number){
+  //   return year.toString() + '-' + (month.toString().length < 2? 
+  //             '0' + month.toString(): month.toString()) + '-' + 
+  //               (day.toString().length < 2? '0' + day.toString(): day.toString())
+  // }
 
   useEffect(() => {
-    // console.log('usefect');
-    // console.log(values);
-
     if(values.length > 1){
-      setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
-      setEndDate(getFormatDate(values[1].day, values[1].month.number, values[1].year));
+      // setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
+      // setEndDate(getFormatDate(values[1].day, values[1].month.number, values[1].year));
+      setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+      setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
     }else{
       if(values.length > 0){
-        setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
+        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+        //setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
       }
     }
     
@@ -67,25 +72,17 @@ export default function Filtering({showForm, optCategories, optTypes,
     //console.log('new date ', new Date(2024, 2, 1));
   }, [values]);
 
-  // useEffect(() => {
-  //   console.log('start ', startDate);
-  //   console.log('end ', endDate);
-  // }, [startDate, endDate]);
+  useEffect(() => {
+    FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
+  }, [ categories, types, conditions, minValue, maxValue]);
 
-  const onChangeConditions = (values: string[]) => {
-    setConditions(values);
-    filterCondition(values);
-  }
+  useEffect (() => {
+    FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
+  }, []);
 
-  const onChangeTypes = (values: string[]) => {
-    setTypes(values);
-    filterType(values);
-  }
-
-  const onChangeCategories = (values: string[]) => {
-    setCategories(values);
-    filterCategory(values);
-  }
+  useEffect(() => {
+    FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
+  }, [firstDate, secondDate]);
 
   return(
     <>
@@ -97,19 +94,21 @@ export default function Filtering({showForm, optCategories, optTypes,
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
-        <div>
+        <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          <SelectMultipleReact index={0} opts={optConditions} setValue={onChangeConditions} />
+          <SelectMultipleReact index={0} opts={optConditions} setValue={setConditions} />
         </div>
-        <div>
+        <div className="">
           <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-          <SelectMultipleReact index={0} opts={optTypes} setValue={onChangeTypes} />
+          <SelectMultipleReact index={0} opts={optTypes} setValue={setTypes} />
         </div>
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectMultipleReact index={0} opts={optCategories} setValue={onChangeCategories} />
+          <SelectMultipleReact index={0} opts={optCategories} setValue={setCategories} />
         </div>
-        <div className="pt-9">
+        {/* <div className="pt-9"> */}
+        <div className="pt-0">
+          <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
             min={0}
             max={maxAmount}
@@ -119,9 +118,10 @@ export default function Filtering({showForm, optCategories, optTypes,
             onInput={(e) => {
               handleInput(e);
             }}
-            baseClassName='multi-range-slider-black'
+            //baseClassName='multi-range-slider-black'
             //style={{" border: 'none', boxShadow: 'none', padding: '15px 10px' "}}
-            style={{border: 'none', boxShadow: 'none', padding: '15px 10px', backgroundColor: 'white'}}
+            style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
+                backgroundColor: 'white', 'zIndex': '0'}}
             label='false'
             ruler='false'
             barLeftColor='red'
@@ -130,27 +130,32 @@ export default function Filtering({showForm, optCategories, optTypes,
             thumbLeftColor='lime'
             thumbRightColor='lime'
           />
+          <div className="flex justify-between">
+            <p>{CurrencyFormatter({
+                  currency: "MXN",
+                  value: minValue
+                })}</p>
+            <p>{CurrencyFormatter({
+                  currency: "MXN",
+                  value: maxValue
+                })}</p>
+          </div>
         </div>
         <div>
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
           <Calendar
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0"
             value={values}
             //onChange={setValues}
             onChange={(e: any) => setValues(e)}
             range
             numberOfMonths={2}
             showOtherDays
+            style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
+              'height': '35px', 'width': '330px'}}
           /> 
         </div>
-        {/* <div className="flex justify-center mt-2">
-          <Button type="button" 
-            onClick={() => 
-              {
-                FilterData(conditions, types, categories, startDate, endDate); 
-                showForm(false)
-              }
-            }>Guardar</Button>
-        </div> */}
       </form>
     </>
   )
