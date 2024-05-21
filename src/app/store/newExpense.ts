@@ -21,16 +21,19 @@ interface NewExpenseState {
   CFDI: (File | null)
 
   indexStepper: number
+}
 
+interface Actions {
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
     typeCFDI:string, typeExpense:string, category:string, project:string, condition:string) => void,
   updateVoucher: (file: File) => void,
   updateCDFI: (CFDI: File) => void,
   updateIndexStepper: (index: number) => void,
+  reset: () => void,
 }
 
-export const useNewExpense = create<NewExpenseState>((set) => ({
+const initialState: NewExpenseState = {
   costCenter: '',
   folio: '', 
   description: '',
@@ -48,7 +51,11 @@ export const useNewExpense = create<NewExpenseState>((set) => ({
   indexStepper: 0,
   category: '',
   project: '',
-  condition: '',
+  condition: ''
+}
+
+export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
+  ...initialState,
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
       typeCFDI:string, typeExpense:string, category:string, project:string, condition:string) => set(state => ({
@@ -81,4 +88,7 @@ export const useNewExpense = create<NewExpenseState>((set) => ({
     ...state,
     indexStepper: index
   })),
+  reset: () => {
+    set(initialState)
+  },
 }))

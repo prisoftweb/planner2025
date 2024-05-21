@@ -95,3 +95,26 @@ export async function UpdateCost(auth_token:string, id:string, data:Object) {
     return 'Error al actualizar costo!!';
   }
 }
+
+export async function CreateCostWithFiles(auth_token:string, data:FormData) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/costWithFILES`;
+  console.log(url);
+  console.log('files => ', data.getAll('files'));
+  console.log('types => ', data.getAll('types'));
+  //console.log(JSON.stringify(data));
+  try {
+    const res = await axios.post(url, data, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'multipart/form-data',
+      }
+    });
+    if(res.status === 201) return res.status;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al crear costo!!';
+    }
+    return 'Error al crear costo!!';
+  }
+}

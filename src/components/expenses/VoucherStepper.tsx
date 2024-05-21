@@ -8,23 +8,35 @@ import Button from "../Button";
 import { useNewExpense } from "@/app/store/newExpense";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
+import { CreateCostWithFiles } from "@/app/api/routeCost";
 
 export default function VoucherStepper({token}: {token:string}) {
   
   const {updateIndexStepper, updateVoucher, amount, category, condition, 
     costCenter, date, description, discount, folio, indexStepper, project, proveedor, 
-    responsible, taxFolio, typeCFDI, typeExpense, vat} = useNewExpense();
+    responsible, taxFolio, typeCFDI, typeExpense, vat, CFDI, reset} = useNewExpense();
 
   const [file, setFile] = useState<File>();
 
+  // usar esto en componente upload file drop zone
+  // generar funcion que reciba parametros[] de tipos a validar 
+  //para que funcione en todos los casos
   // useEffect(() => {
   //   console.log('file usefect => ', file);
+  //   console.log('type ', file?.type);
+  //   if(file){
+  //     if((file.type !== 'application/pdf') && (!file.type.includes('jpg')
+  //         && !file.type.includes('JPG') && !file.type.includes('jpeg') && 
+  //         !file.type.includes('JPEG') && !file.type.includes('png') && !file.type.includes('PNG'))){
+  //       setFile(undefined);
+  //       alert('tipo equivocado');
+  //       alert(file?.type);
+  //     }
+  //   }
   // }, [file]);
   
   const SaveData = async () => {
-    console.log('save data!!');
-    if(file){
-      updateVoucher(file);
+    if(file || CFDI){
       const formdata = new FormData();
       formdata.append('subtotal', amount);
       formdata.append('costcenter', costCenter);
@@ -42,9 +54,25 @@ export default function VoucherStepper({token}: {token:string}) {
       formdata.append('condition', JSON.stringify({
           glossary:condition, user:responsible
         }))
-      formdata.append('voucher', file);
-      console.log('guardar voucher!!');
-      console.log(formdata.get('voucher'));
+      if(file){
+        updateVoucher(file);
+        formdata.append('files', file);
+        formdata.append('types', file.type);
+      }
+      if(CFDI){
+        formdata.append('files', CFDI);
+        formdata.append('types', CFDI.type);
+      }
+      try {
+        const res = await CreateCostWithFiles(token, formdata);
+        if(res === 201){
+          showToastMessage('Costo creado satisfactoriamente!!!');
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un error al guardar costo!!');
+      }
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
@@ -56,7 +84,11 @@ export default function VoucherStepper({token}: {token:string}) {
   
       try {
         const res = await SaveExpense(data, token);
-        if(res===201) showToastMessage('Costo creado satisfactoriamente!!!');
+        if(res===201) {
+          reset();
+          showToastMessage('Costo creado satisfactoriamente!!!');
+          updateIndexStepper(0);
+        }
         else{
           showToastMessageError(res);
         }

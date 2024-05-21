@@ -103,6 +103,27 @@ export async function createProvider(data:Object, auth_token:string) {
   }
 }
 
+export async function createNewProvider(data:Object, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
+  
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'Application/json',
+      }
+    })
+    if(res.status===201) return res.data.data.data;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al crear proveedor!!';
+    }
+  }
+}
+
 export async function updateContactProvider(data:Object, id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/insertContactOfProvider/${id}`;
   try {

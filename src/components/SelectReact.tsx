@@ -1,10 +1,16 @@
 import Select from 'react-select'
 import { Options } from '@/interfaces/Common'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function SelectReact({opts, setValue, index}: 
                           {opts:Options[], setValue:Function, index:number}){
   const [selOpt, setSelOpt] = useState<Options>(opts[index]);
+
+  useEffect(() => {
+    if(index > 0){
+      console.log(opts[index]);
+    }
+  }, []);
 
   return(
     <Select

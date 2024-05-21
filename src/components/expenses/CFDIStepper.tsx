@@ -5,6 +5,7 @@ import Button from "../Button";
 import { useNewExpense } from "@/app/store/newExpense";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
+import { CreateCostWithFiles } from "@/app/api/routeCost";
 
 export default function CFDIStepper({token} : {token: string}) {
   
@@ -39,16 +40,24 @@ export default function CFDIStepper({token} : {token: string}) {
           glossary:condition, user:responsible
         }))
       if(voucher){
-        formdata.append('voucher', voucher);
+        formdata.append('files', voucher);
+        formdata.append('types', voucher.type);
       }
       if(file){
         updateCDFI(file);
-        formdata.append('CFDI', file);
+        formdata.append('files', file);
+        formdata.append('types', file.type);
       }
-      console.log('guardar Voucher!!');
-      console.log(formdata.get('voucher'));
-      console.log('guardar CFDI!!');
-      console.log(formdata.get('CFDI'));
+      try {
+        const res = await CreateCostWithFiles(token, formdata);
+        if(res === 201){
+          showToastMessage('Costo creado satisfactoriamente!!!');
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un error al guardar costo!!');
+      }
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
