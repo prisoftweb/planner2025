@@ -25,8 +25,8 @@ export default function Filtering({showForm, optCategories, optTypes,
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
 
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  // const [startDate, setStartDate] = useState<string>('');
+  // const [endDate, setEndDate] = useState<string>('');
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -45,24 +45,22 @@ export default function Filtering({showForm, optCategories, optTypes,
     set_maxValue(e.maxValue);
   };
 
-  function getFormatDate(day:number, month:number, year:number){
-    return year.toString() + '-' + (month.toString().length < 2? 
-              '0' + month.toString(): month.toString()) + '-' + 
-                (day.toString().length < 2? '0' + day.toString(): day.toString())
-  }
+  // function getFormatDate(day:number, month:number, year:number){
+  //   return year.toString() + '-' + (month.toString().length < 2? 
+  //             '0' + month.toString(): month.toString()) + '-' + 
+  //               (day.toString().length < 2? '0' + day.toString(): day.toString())
+  // }
 
   useEffect(() => {
-    // console.log('usefect');
-    console.log(values);
     if(values.length > 1){
-      setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
-      setEndDate(getFormatDate(values[1].day, values[1].month.number, values[1].year));
-      setFirstDate(new Date(values[0].year, values[0].month.number, values[0].day));
-      setSecondDate(new Date(values[1].year, values[1].month.number, values[1].day));
+      // setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
+      // setEndDate(getFormatDate(values[1].day, values[1].month.number, values[1].year));
+      setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+      setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
     }else{
       if(values.length > 0){
-        setFirstDate(new Date(values[0].year, values[0].month.number, values[0].day));
-        setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
+        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+        //setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
       }
     }
     
@@ -74,41 +72,15 @@ export default function Filtering({showForm, optCategories, optTypes,
     //console.log('new date ', new Date(2024, 2, 1));
   }, [values]);
 
-  // useEffect(() => {
-  //   console.log('start ', startDate);
-  //   console.log('end ', endDate);
-  // }, [startDate, endDate]);
-
-  // const onChangeConditions = (values: string[]) => {
-  //   setConditions(values);
-  //   filterCondition(values);
-  // }
-
-  // const onChangeTypes = (values: string[]) => {
-  //   setTypes(values);
-  //   filterType(values);
-  // }
-
-  // const onChangeCategories = (values: string[]) => {
-  //   setCategories(values);
-  //   filterCategory(values);
-  // }
-
   useEffect(() => {
     FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
   }, [ categories, types, conditions, minValue, maxValue]);
 
   useEffect (() => {
-    console.log('useefect');
-    console.log(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
     FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
   }, []);
 
   useEffect(() => {
-    console.log('first date => ', firstDate);
-    console.log('second date => ', secondDate);
-    console.log('get first ', firstDate?.getTime());
-    console.log('get second ', secondDate?.getTime());
     FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
   }, [firstDate, secondDate]);
 
@@ -184,15 +156,6 @@ export default function Filtering({showForm, optCategories, optTypes,
               'height': '35px', 'width': '330px'}}
           /> 
         </div>
-        {/* <div className="flex justify-center mt-2">
-          <Button type="button" 
-            onClick={() => 
-              {
-                FilterData(conditions, types, categories, startDate, endDate); 
-                showForm(false)
-              }
-            }>Guardar</Button>
-        </div> */}
       </form>
     </>
   )

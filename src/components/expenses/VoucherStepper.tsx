@@ -1,43 +1,68 @@
 'use client'
 import { useState, useEffect } from "react";
-import { useCallback } from 'react';
-import { useDropzone} from 'react-dropzone';
+// import { useCallback } from 'react';
+// import { useDropzone} from 'react-dropzone';
 import NavExpenseStepper from "./NavExpenseStepper";
 import UploadFileDropZone from "../UploadFileDropZone";
 import Button from "../Button";
 import { useNewExpense } from "@/app/store/newExpense";
+import { showToastMessage, showToastMessageError } from "../Alert";
+import SaveExpense from "@/app/functions/SaveExpense";
 
-export default function VoucherStepper() {
+export default function VoucherStepper({token}: {token:string}) {
   
-  // const onDrop = useCallback((acceptedFiles: Array<File>) => {
-  //   const file = new FileReader;
-  //   file.readAsDataURL(acceptedFiles[0])
-  // }, [])
-
-  // const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
-  //   onDrop
-  // });
-
-  // useEffect(() => {
-  //   if ( typeof acceptedFiles[0] !== 'undefined' ){
-  //     setPre(acceptedFiles[0]);
-  //   }
-  // }, [acceptedFiles]);
-
-  // const [pre, setPre] = useState<(File | undefined)>();
-
-  const {updateIndexStepper, updateVoucher} = useNewExpense();
+  const {updateIndexStepper, updateVoucher, amount, category, condition, 
+    costCenter, date, description, discount, folio, indexStepper, project, proveedor, 
+    responsible, taxFolio, typeCFDI, typeExpense, vat} = useNewExpense();
 
   const [file, setFile] = useState<File>();
 
-  useEffect(() => {
-    console.log('file usefect => ', file);
-  }, [file]);
+  // useEffect(() => {
+  //   console.log('file usefect => ', file);
+  // }, [file]);
   
-  const SaveData = () => {
+  const SaveData = async () => {
     console.log('save data!!');
     if(file){
       updateVoucher(file);
+      const formdata = new FormData();
+      formdata.append('subtotal', amount);
+      formdata.append('costcenter', costCenter);
+      formdata.append('date', date);
+      formdata.append('description', description);
+      formdata.append('discount', discount);
+      formdata.append('folio', folio);
+      formdata.append('provider', proveedor);
+      formdata.append('user', responsible);
+      formdata.append('taxFolio', taxFolio);
+      formdata.append('typeCFDI', typeCFDI);
+      formdata.append('category', category);
+      formdata.append('project', project);
+      formdata.append('vat', vat);
+      formdata.append('condition', JSON.stringify({
+          glossary:condition, user:responsible
+        }))
+      formdata.append('voucher', file);
+      console.log('guardar voucher!!');
+      console.log(formdata.get('voucher'));
+    }else{
+      const data = {
+        subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
+        provider: proveedor, user:responsible, taxFolio, typeCFDI, category, project, vat,
+        condition: {
+          glossary:condition, user:responsible
+        }
+      }
+  
+      try {
+        const res = await SaveExpense(data, token);
+        if(res===201) showToastMessage('Costo creado satisfactoriamente!!!');
+        else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un error al guardar costo!!');
+      }
     }
   }
 

@@ -67,6 +67,7 @@ export default async function Page(){
     label: 'Todas',
     value: 'all'
   }];
+  //const optCategories: Options[] = [];
   catalogs[0].categorys.map((category) => {
     optCategories.push({
       label: category.glossary.name,
@@ -78,6 +79,7 @@ export default async function Page(){
     label: 'Todos',
     value: 'all'
   }];
+  //const optTypes: Options[] = [];
   catalogs[0].types.map((type) => {
     optTypes.push({
       label: type.glossary.name,
@@ -89,6 +91,7 @@ export default async function Page(){
     label: 'Todos',
     value: 'all'
   }];
+  //const optConditions: Options[] = [];
   catalogs[0].condition.map((condition) => {
     optConditions.push({
       label: condition.glossary.name,

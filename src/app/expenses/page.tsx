@@ -163,7 +163,7 @@ export default async function Page() {
         responsible: expense.user.name,
         photo: expense.user.photo
       },
-      condition: expense.condition[expense.condition.length -1].glossary.name
+      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
     })
   })
 

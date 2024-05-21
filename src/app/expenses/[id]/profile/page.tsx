@@ -1,19 +1,12 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { ClientBack } from "@/interfaces/Clients";
-import { getClients } from "@/app/api/routeClients";
-import { GetProject, getProjects } from "@/app/api/routeProjects";
+import { getProjects } from "@/app/api/routeProjects";
 import { Project } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
-import NavTabProject from "@/components/projects/NavTabProject";
-import ProjectCli from "@/components/projects/ProjectClient";
 import Header from "@/components/HeaderPage";
-
-import { GlossaryCatalog } from "@/interfaces/Glossary";
-import { getCatalogsByName } from "@/app/api/routeCatalogs";
 
 import { GetCost, GetCosts } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
@@ -21,43 +14,17 @@ import { Expense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { getCostCenters } from "@/app/api/routeCostCenter";
+import { Glossary } from "@/interfaces/Glossary";
+import { getGlossaries } from "@/app/api/routeGlossary";
+import { Provider } from "@/interfaces/Providers";
+import { getProviders } from "@/app/api/routeProviders";
+import { getUsers } from "@/app/api/routeUser";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: Project;
-  // try {
-  //   project = await GetProject(token, params.id);
-  //   if(typeof(project) === "string")
-  //     return <h1 className="text-center text-red-500">{project}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
-  // }
-
-  // let projects: Project[];
-  // try {
-  //   projects = await getProjects(token);
-  //   if(typeof(projects) === "string")
-  //     return <h1 className="text-center text-red-500">{projects}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proyectos!!</h1>  
-  // }
-
-  // let options: Options[] = [];
-
-  // if(projects.length <= 0){
-  //   return <h1 className="text-center text-red-500">Error al obtener proyectos...</h1>
-  // }
-
-  // projects.map((proj) => {
-  //   options.push({
-  //     value: proj._id,
-  //     label: proj.title,
-  //   })
-  // })
 
   let cost: Expense;
   try {
@@ -108,53 +75,77 @@ export default async function Page({ params }: { params: { id: string }}){
     });
   });
 
-  // let clients: ClientBack[];
-  // try {
-  //   clients = await getClients(token);
-  //   if(typeof(clients)==='string') return <h1 className="text-red-500 text-center text-lg">{clients}</h1>
-  // } catch (error) {
-  //   return <h1>Error al consultar clientes!!</h1>
-  // }
+  let glossaries: Glossary[];
+  try {
+    glossaries = await getGlossaries(token);
+    if(typeof(glossaries)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
+    }    
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
+  }
 
-  // let catalogs: GlossaryCatalog[];
-  // try {
-  //   catalogs = await getCatalogsByName(token, 'projects');
-  //   if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  // } catch (error) {
-  //   return <h1>Error al consultar catalogos!!</h1>
-  // }
+  const optGlossaries:Options[]= [];
+  glossaries.map((glossary) => {
+    optGlossaries.push({
+      label: glossary.name,
+      value: glossary._id
+    });
+  });
 
-  // const optClients: Options[] = [];
-  // clients.map((client) => {
-  //   optClients.push({
-  //     label: client.name,
-  //     value: client._id
-  //   })
-  // })
+  let projects: Project[];
+  try {
+    projects = await getProjects(token);
+    if(typeof(projects)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{projects}</h1>
+    }    
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+  }
 
-  // const optCategories: Options[] = [];
-  // catalogs[0].categorys.map((category) => {
-  //   optCategories.push({
-  //     label: category.glossary.name,
-  //     value: category.glossary._id
-  //   })
-  // })
+  const optProjects:Options[]= [];
+  projects.map((project) => {
+    optProjects.push({
+      label: project.title,
+      value: project._id
+    });
+  });
 
-  // const optTypes: Options[] = [];
-  // catalogs[0].types.map((type) => {
-  //   optTypes.push({
-  //     label: type.glossary.name,
-  //     value: type.glossary._id
-  //   })
-  // })
+  let responsibles: UsrBack[];
+  try {
+    responsibles = await getUsers(token);
+    if(typeof(responsibles)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{responsibles}</h1>
+    }    
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+  }
 
-  // const optConditions: Options[] = [];
-  // catalogs[0].condition.map((condition) => {
-  //   optConditions.push({
-  //     label: condition.glossary.name,
-  //     value: condition.glossary._id
-  //   })
-  // })
+  const optResponsibles:Options[]= [];
+  responsibles.map((responsible) => {
+    optResponsibles.push({
+      label: responsible.name,
+      value: responsible._id
+    });
+  });
+
+  let providers: Provider[];
+  try {
+    providers = await getProviders(token);
+    if(typeof(providers)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{providers}</h1>
+    }    
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+  }
+
+  const optProviders:Options[]= [];
+  providers.map((provider) => {
+    optProviders.push({
+      label: provider.name,
+      value: provider._id
+    });
+  });
 
   return(
     <>
@@ -166,7 +157,9 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTabExpense idExp={params.id} tab="1" />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 
-              user={user._id} optCostCenter={optCostCenter} />
+              user={user._id} optCostCenter={optCostCenter} optGlossaries={optGlossaries} 
+              optProjects={optProjects} optProviders={optProviders} optResponsibles={optResponsibles}
+          />
         </NextUiProviders>
       </div>
     </>

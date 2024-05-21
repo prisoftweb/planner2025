@@ -88,9 +88,9 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       try {
         if(indexStepper || indexStepper>=0){
           if(indexStepper===1){
-            setStepForm(<VoucherStepper />)
+            setStepForm(<VoucherStepper token={token} />)
           }else if(indexStepper===2){
-            setStepForm(<CFDIStepper />)
+            setStepForm(<CFDIStepper token={token} />)
             }else {
               setStepForm(<DataStepper optCostCenter={optCostCenter} 
                   optProviders={optProviders} optGlossaries={optGlossaries} 

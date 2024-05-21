@@ -141,11 +141,10 @@ export default function TableProjects({data, token, projects, optCategories,
   
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
-    projects.map((project) => {
-      if(project.amount > maxAmount){
-        setMaxAmount(project.amount);
-      }
-    })
+    const projectM = projects.reduce((previous, current) => {
+      return current.amount > previous.amount ? current : previous;
+    });
+    setMaxAmount(projectM.amount);
   }, [])
 
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -200,6 +199,7 @@ export default function TableProjects({data, token, projects, optCategories,
       //   console.log('timee ', new Date(project.date).getTime());
       // }
       //console.log('pro', project)
+      console.log('proyect => ', project);
       if(conditions.includes('all')){
         if(types.includes('all')){
           if(categories.includes('all')){
