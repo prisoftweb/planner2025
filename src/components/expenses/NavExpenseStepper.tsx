@@ -13,7 +13,7 @@ export default function NavExpenseStepper({index}: {index:number}){
   return(
     <>
       {/* <div className="max-w-md"> */}
-      <div className="max-w-lg">
+      <div className="max-w-3xl">
         <ol
           className="grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 
             border border-gray-500 text-sm text-gray-500 sm:grid-cols-3"

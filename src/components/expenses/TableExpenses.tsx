@@ -8,6 +8,10 @@ import Button from "../Button";
 import { ExpensesTable } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { RemoveCost } from "@/app/api/routeCost";
+import { useNewExpense } from "@/app/store/newExpense";
+import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
+import { GetCosts } from "@/app/api/routeCost";
+import { showToastMessage, showToastMessageError } from "../Alert";
 
 export default function TableExpenses({data, token}:
                         {data:ExpensesTable[], token:string}){
@@ -17,6 +21,8 @@ export default function TableExpenses({data, token}:
   const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
+
+  const {refresh, updateRefresh} = useNewExpense();
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -120,115 +126,32 @@ export default function TableExpenses({data, token}:
     }),
   ]
   
-  const [maxAmount, setMaxAmount] = useState<number>(0);
-  // useEffect(() => {
-  //   projects.map((project) => {
-  //     if(project.amount > maxAmount){
-  //       setMaxAmount(project.amount);
-  //     }
-  //   })
-  // }, [])
-
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
 
-  // useEffect(() => {
-  //   if(filter){
-  //     setView(<Table columns={columns} data={dataProjects} placeH="Buscar gasto.." />);
-  //     setFilter(false);
-  //   }
-  // }, [filter]);
-  
-  // const filterData = (conditions:string[], types:string[], 
-  //     categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
-    
-  //   console.log('filtrar');
-  //   console.log('conditions', conditions);
-  //   console.log('types ', types);
-  //   console.log('categories ', categories);
-  //   console.log('startdate ', startDate);
-  //   console.log('endDate ', endDate);
-  //   console.log('min amount ', minAmount);
-  //   console.log('max amount ', maxAmount);
-    
-  //   let filtered: Project[] = [];
-  //   projects.map((project) => {
-  //     if(conditions.includes('all')){
-  //       if(types.includes('all')){
-  //         if(categories.includes('all')){
-  //           if(project.amount >= minAmount && project.amount <= maxAmount){
-  //             filtered.push(project);
-  //           }
-  //         }else{
-  //           if(project.categorys){
-  //             if(categories.includes(project.categorys._id)){
-  //               if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                 filtered.push(project);
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }else{
-  //         if(project.types){
-  //           if(types.includes(project.types._id)){
-  //             if(categories.includes('all')){
-  //               if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                 filtered.push(project);
-  //               }
-  //             }else{
-  //               if(project.categorys){
-  //                 if(categories.includes(project.categorys._id)){
-  //                   if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                     filtered.push(project);
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }else{
-  //       if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-  //         if(types.includes('all')){
-  //           if(categories.includes('all')){
-  //             if(project.amount >= minAmount && project.amount <= maxAmount){
-  //               filtered.push(project);
-  //             }
-  //           }else{
-  //             if(project.categorys){
-  //               if(categories.includes(project.categorys._id)){
-  //                 if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                   filtered.push(project);
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }else{
-  //           if(project.types){
-  //             if(types.includes(project.types._id)){
-  //               if(categories.includes('all')){
-  //                 if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                   filtered.push(project);
-  //                 }
-  //               }else{
-  //                 if(project.categorys){
-  //                   if(categories.includes(project.categorys._id)){
-  //                     if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                       filtered.push(project);
-  //                     }
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   });
-
-  //   console.log(filtered);
-  //   setDataProjects(ProjectDataToTableData(filtered));
-  //   setFilter(true);
-  // }
+  useEffect(() => {
+    if(refresh){
+      const aux = async () =>{
+        try {
+          const res = await GetCosts(token);
+          //console.log('res');
+          if(typeof(res) !== 'string'){
+            const d = ExpenseDataToTableData(res);
+            setDataExpenses(d);
+            setView(<></>);
+            setTimeout(() => {
+              setView(<Table columns={columns} data={d} placeH="Buscar gasto.." />);
+            }, 500);
+          }else{
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          showToastMessageError('Error al actualizar tabla!!');
+        }
+      }
+      aux();
+      updateRefresh(false);
+    }
+  }, [refresh]);
 
   return(
     <>

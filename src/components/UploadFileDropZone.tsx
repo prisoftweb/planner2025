@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import { useCallback } from 'react';
 import { useDropzone} from 'react-dropzone';
 import Label from "./Label";
+import { showToastMessageError } from "./Alert";
 
-export default function UploadFileDropZone({label, setFile}: {label:string, setFile:Function}) {
+export default function UploadFileDropZone({label, setFile, Validation}: 
+            {label:string, setFile:Function, Validation:Function}) {
   
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
     const file = new FileReader;
@@ -17,8 +19,14 @@ export default function UploadFileDropZone({label, setFile}: {label:string, setF
 
   useEffect(() => {
     if ( typeof acceptedFiles[0] !== 'undefined' ){
-      setFile(acceptedFiles[0]);
-      setPre(acceptedFiles[0]);
+      const res: (boolean | string) = Validation(acceptedFiles[0]);
+      if(typeof(res) === 'boolean'){
+        setFile(acceptedFiles[0]);
+        setPre(acceptedFiles[0]);
+      }else{
+        setFile(undefined);
+        setPre(undefined);
+      }
     }
   }, [acceptedFiles]);
 

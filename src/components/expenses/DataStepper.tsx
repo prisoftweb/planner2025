@@ -17,6 +17,7 @@ import { showToastMessage, showToastMessageError } from "../Alert"
 import { PlusCircleIcon } from "@heroicons/react/24/solid"
 import AddProvider from "./AddProvider"
 import { CreateCostWithFiles } from "@/app/api/routeCost"
+import CurrencyInput from 'react-currency-input-field';
 
 export default function DataStepper({token, user, optCostCenter, optProviders, 
                                       optResponsibles, optGlossaries, optProjects}: 
@@ -27,7 +28,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     category, condition, costCenter, date, description, discount, 
     folio, indexStepper, project, proveedor, responsible, taxFolio, 
-    typeCFDI, typeExpense, vat, reset} = useNewExpense();
+    typeCFDI, typeExpense, vat, reset, updateRefresh} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -45,17 +46,17 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                   .required('El folio es obligatorio'),
       taxFolio: Yup.string()
                   .required('El folio fiscal es obligatorio'),
-      discount: Yup.string()
-                  .required('El descuento es obligatorio'),
+      discount: Yup.string(),
+                  //.required('El descuento es obligatorio'),
       amount: Yup.string()
                   .required('El importe es obligatorio!!!'),
       vat: Yup.string()
-                  .required('El iba es obligatorio!!!')
+                  //.required('El iva es obligatorio!!!')
     }),
     onSubmit: async (valores) => {            
       const {description, folio, taxFolio, discount, amount, vat} = valores;
-      updateBasicData(costcenter, folio, description, amount, 
-          startDate, taxFolio, vat, discount, provider, responsibleS, 
+      updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
+          startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
           typeCFDIS, typeExpenseS, categoryS, projectS, conditionS);
       updateIndexStepper(1);
     },       
@@ -88,17 +89,17 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   
   const SaveData = async() => {
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
-    updateBasicData(costcenter, folio, description, amount, 
-        startDate, taxFolio, vat, discount, provider, responsibleS, 
+    updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
+        startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
         typeCFDIS, typeExpenseS, categoryS, projectS, conditionS);
     
     if(voucher || CFDI){
       const formdata = new FormData();
-      formdata.append('subtotal', amount);
+      formdata.append('subtotal', amount.replace(/[$,]/g, ""));
       formdata.append('costcenter', costcenter);
       formdata.append('date', startDate);
       formdata.append('description', description);
-      formdata.append('discount', discount);
+      formdata.append('discount', discount.replace(/[$,]/g, ""));
       formdata.append('folio', folio);
       formdata.append('provider', provider);
       formdata.append('user', responsibleS);
@@ -107,9 +108,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('category', categoryS);
       formdata.append('project', projectS);
       formdata.append('vat', vat);
-      formdata.append('condition', JSON.stringify({
-          glossary:conditionS, user:responsible
-        }))
+      // formdata.append('condition', JSON.stringify({
+      //   glossary:conditionS, user:responsible
+      // }))
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -121,7 +122,21 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       try {
         const res = await CreateCostWithFiles(token, formdata);
         if(res === 201){
+          // showToastMessage('Costo creado satisfactoriamente!!!');
+          // updateRefresh(true);
+          setView(<></>);
+          reset();
+          formik.values.amount = '';
+          formik.values.description = '';
+          formik.values.discount = '';
+          formik.values.folio = '';
+          formik.values.taxFolio = '';
+          formik.values.vat = '';
           showToastMessage('Costo creado satisfactoriamente!!!');
+          updateRefresh(true);
+          setTimeout(() => {
+            setResetBand(true);
+          }, 300);
         }else{
           showToastMessageError(res);
         }
@@ -130,7 +145,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       }
     }else{
       const data = {
-        subtotal:amount, costcenter, date:startDate, description, discount, folio, provider, 
+        subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, discount: discount.replace(/[$,]/g, ""), folio, provider, 
         user:responsibleS, taxFolio, typeCFDI: typeCFDIS, category: categoryS, project: projectS, vat,
         condition: {
           glossary:conditionS, user:user
@@ -149,6 +164,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           formik.values.taxFolio = '';
           formik.values.vat = '';
           showToastMessage('Costo creado satisfactoriamente!!!');
+          updateRefresh(true);
           setTimeout(() => {
             setResetBand(true);
           }, 300);
@@ -167,7 +183,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     console.log('optProviders => ', optProviders);
     setProvider(newProvider.value);
     console.log('prov length => ', optProviders.length)
-    setIndexProv(optProviders.length);
+    setIndexProv(optProviders.length - 1);
   }
 
   const [selectProvider, setSelectProviders] = useState<JSX.Element>(
@@ -175,11 +191,21 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [indexProv, setIndexProv] = useState<number>(0);
 
   useEffect(() => {
-    console.log('useefect => ', optProviders);
-    console.log('index prov => ', indexProv);
+    //console.log('useefect => ', optProviders);
+    //console.log('index prov => ', indexProv);
     setSelectProviders(<></>);
     setTimeout(() => {
-      setSelectProviders(<SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />)
+      // setSelectProviders(<SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />)
+      setSelectProviders(
+        <div>
+          <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+          <div className="flex gap-x-2 items-center">
+            <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
+            <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+              onClick={() => setShowProvider(true)} />
+          </div>
+        </div>
+      )
     }, 1000);
   }, [indexProv]);
   
@@ -192,7 +218,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    console.log('const cc => ', costCenter);
+    //console.log('const cc => ', costCenter);
     if(date !== ''){
       setStartDate(date);
     }
@@ -205,7 +231,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    console.log('const ty e => ', typeExpense);
+    //console.log('const ty e => ', typeExpense);
 
     let indexTypeCFDI = 0;
     if(typeCFDIS !== ''){
@@ -215,17 +241,17 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    console.log('const ty cf => ', typeCFDI);
+    //console.log('const ty cf => ', typeCFDI);
 
-    let indexProvider = 0;
-    if(proveedor !== ''){
-      optProviders.map((opt, index:number) => {
-        if(opt.value === proveedor){
-          indexProvider = index;
-        }
-      });      
-    }
-    console.log('const prov => ', proveedor);
+    // let indexProvider = 0;
+    // if(proveedor !== ''){
+    //   optProviders.map((opt, index:number) => {
+    //     if(opt.value === proveedor){
+    //       indexProvider = index;
+    //     }
+    //   });      
+    // }
+    //console.log('const prov => ', proveedor);
     
     let indexResp = 0;
     if(responsibleS !== ''){
@@ -235,7 +261,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    console.log('const resp => ', responsible);
+    //console.log('const resp => ', responsible);
     
     let indexCate = 0;
     if(categoryS !== ''){
@@ -245,7 +271,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    console.log('const cate => ', category);
+    //console.log('const cate => ', category);
     
     let indexProject = 0;
     if(projectS !== ''){
@@ -255,7 +281,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    console.log('const proj => ', project);
+    //console.log('const proj => ', project);
     
     let indexCond = 0;
     if(conditionS !== ''){
@@ -265,11 +291,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    console.log('const cond => ', condition);
+    //console.log('const cond => ', condition);
 
-    console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
-    ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
-    ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
+    // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
+    // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
+    // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
     setView(<>
       <div>
         <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
@@ -287,14 +313,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
         <SelectReact index={indexCate} opts={optGlossaries} setValue={setCategoryS} />
       </div>
-      <div>
+      {/* <div>
         <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
         <div className="flex gap-x-2 items-center">
           <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
           <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
             onClick={() => setShowProvider(true)} />
         </div>
-      </div>
+      </div> */}
       <div>
         <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
         <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
@@ -321,7 +347,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const cc => ', costCenter);
+      //console.log('const cc => ', costCenter);
       if(date !== ''){
         setStartDate(date);
       }
@@ -334,7 +360,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const ty e => ', typeExpense);
+      //console.log('const ty e => ', typeExpense);
 
       let indexTypeCFDI = 0;
       if(typeCFDIS !== ''){
@@ -344,7 +370,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const ty cf => ', typeCFDI);
+      //console.log('const ty cf => ', typeCFDI);
 
       let indexProvider = 0;
       if(proveedor !== ''){
@@ -354,7 +380,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const prov => ', proveedor);
+      //console.log('const prov => ', proveedor);
       
       let indexResp = 0;
       if(responsibleS !== ''){
@@ -364,7 +390,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const resp => ', responsible);
+      //console.log('const resp => ', responsible);
       
       let indexCate = 0;
       if(categoryS !== ''){
@@ -374,7 +400,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const cate => ', category);
+      //console.log('const cate => ', category);
       
       let indexProject = 0;
       if(projectS !== ''){
@@ -384,7 +410,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const proj => ', project);
+      //console.log('const proj => ', project);
       
       let indexCond = 0;
       if(conditionS !== ''){
@@ -394,11 +420,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      console.log('const cond => ', condition);
+      //console.log('const cond => ', condition);
 
-      console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
-      ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
-      ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
+      // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
+      // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
+      // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
       setView(<>
         <div>
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
@@ -416,14 +442,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectReact index={indexCate} opts={optGlossaries} setValue={setCategoryS} />
         </div>
-        <div>
+        {/* <div>
           <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
           <div className="flex gap-x-2 items-center">
             <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
             <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
               onClick={() => setShowProvider(true)} />
           </div>
-        </div>
+        </div> */}
         <div>
           <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
           <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
@@ -446,85 +472,121 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       <div className="mt-2">
         <NavExpenseStepper index={0} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
-        <div>
-          <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
-          <Input type="text" name="folio" autoFocus 
-            value={formik.values.folio}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.folio && formik.errors.folio ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.folio}</p>
-            </div>
-          ) : null}
-        </div>
-        <div>
-          <Label htmlFor="taxFolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio Fiscal</p></Label>
-          <Input type="text" name="taxFolio" 
-            value={formik.values.taxFolio}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.taxFolio && formik.errors.taxFolio ? (
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg space-y-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3">
+          <div>
+            <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
+            <Input type="text" name="folio" autoFocus 
+              value={formik.values.folio}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.folio && formik.errors.folio ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.taxFolio}</p>
+                <p>{formik.errors.folio}</p>
               </div>
-          ) : null}
-        </div>
-        <div>
-          <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
-          <Input type="text" name="vat" 
-            value={formik.values.vat}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.vat && formik.errors.vat ? (
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="taxFolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio Fiscal</p></Label>
+            <Input type="text" name="taxFolio" 
+              value={formik.values.taxFolio}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.taxFolio && formik.errors.taxFolio ? (
+                <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                    <p>{formik.errors.taxFolio}</p>
+                </div>
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="vat">Iva</Label>
+            <Input type="text" name="vat" 
+              value={formik.values.vat}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.vat && formik.errors.vat ? (
+                <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                    <p>{formik.errors.vat}</p>
+                </div>
+            ) : null}
+            {/* <SelectReact index={0} opts={optResponsibles} setValue={setVat} /> */}
+          </div>
+          <div>
+            <Label htmlFor="discount">Descuento</Label>
+            <CurrencyInput
+              id="discount"
+              name="discount"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                focus:border-slate-700 outline-0"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              defaultValue={0}
+              decimalsLimit={2}
+              prefix="$"
+              onValueChange={(value) => {try {
+                formik.values.discount=value || '0';
+              } catch (error) {
+                formik.values.discount='0';
+              }}}
+            />
+            {/* <Input type="text" name="discount" 
+              value={formik.values.discount}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            /> */}
+            {formik.touched.discount && formik.errors.discount ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.vat}</p>
+                <p>{formik.errors.discount}</p>
               </div>
-          ) : null}
-          {/* <SelectReact index={0} opts={optResponsibles} setValue={setVat} /> */}
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
+            <CurrencyInput
+              id="amount"
+              name="amount"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                focus:border-slate-700 outline-0"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              defaultValue={0}
+              decimalsLimit={2}
+              prefix="$"
+              onValueChange={(value) => {try {
+                formik.values.amount=value || '0';
+              } catch (error) {
+                formik.values.amount='0';
+              }}}
+            />
+            {/* <Input type="text" name="amount" 
+              value={formik.values.amount}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            /> */}
+            {formik.touched.amount && formik.errors.amount ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.amount}</p>
+              </div>
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
+            <DatePicker
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0 outline-none" 
+              //showIcon
+              selected={new Date(startDate)} onChange={(date:Date) => {
+                  setStartDate(date.toDateString()) 
+                  console.log(date); console.log(date.toDateString())}} 
+            />
+          </div>
+          {view}
+          {selectProvider}
         </div>
-        <div>
-          <Label htmlFor="discount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descuento</p></Label>
-          <Input type="text" name="discount" 
-            value={formik.values.discount}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.discount && formik.errors.discount ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.discount}</p>
-            </div>
-          ) : null}
-        </div>
-        <div>
-          <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
-          <Input type="text" name="amount" 
-            value={formik.values.amount}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.amount && formik.errors.amount ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.amount}</p>
-            </div>
-          ) : null}
-        </div>
-        <div>
-          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-          <DatePicker
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0 outline-none" 
-            //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {
-                setStartDate(date.toDateString()) 
-                console.log(date); console.log(date.toDateString())}} 
-          />
-        </div>
-        {view}
+
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"

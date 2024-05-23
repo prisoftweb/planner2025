@@ -20,6 +20,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   
   const [heightPage, setHeightPage] = useState<number>(900);
   
+  // const [deductible, setDeductible] = useState<boolean>(true);
+
   const [stepform, setStepForm] = useState<JSX.Element>(
                           <DataStepper optCostCenter={optCostCenter} 
                             optProviders={optProviders} optResponsibles={optResponsibles}
@@ -83,6 +85,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     // });
   }
 
+
   try {
     useEffect(() => {
       try {
@@ -107,7 +110,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
+    <div className="z-50 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">

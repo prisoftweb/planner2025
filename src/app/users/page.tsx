@@ -54,10 +54,16 @@ export default async function Users() {
   }
 
   if(users.length === 0 || !users){
-    return <WithOut img="/img/user.svg" subtitle="Usuarios" 
-              text="Aqui puedes gestionar tus usuarios con toda su informacion" title="Usuarios"
-            ><ButtonNewUser departments={departments} id={user._id} token={token} 
-                roles={optionsRoles} /></WithOut>
+    return (
+      <>
+        <Navigation user={user} />
+        <WithOut img="/img/user.svg" subtitle="Usuarios" 
+            text="Aqui puedes gestionar tus usuarios con toda su informacion" title="Usuarios"
+          ><ButtonNewUser departments={departments} id={user._id} token={token} 
+              roles={optionsRoles} />
+        </WithOut>
+      </>
+    )
   }
   
   let data:User[] = [];

@@ -21,6 +21,7 @@ interface NewExpenseState {
   CFDI: (File | null)
 
   indexStepper: number
+  refresh: boolean
 }
 
 interface Actions {
@@ -31,6 +32,7 @@ interface Actions {
   updateCDFI: (CFDI: File) => void,
   updateIndexStepper: (index: number) => void,
   reset: () => void,
+  updateRefresh: (value: boolean) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -51,7 +53,8 @@ const initialState: NewExpenseState = {
   indexStepper: 0,
   category: '',
   project: '',
-  condition: ''
+  condition: '',
+  refresh: false
 }
 
 export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
@@ -87,6 +90,10 @@ export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
   updateIndexStepper: (index: number) => set(state => ({
     ...state,
     indexStepper: index
+  })),
+  updateRefresh: (value: boolean) => set(state => ({
+    ...state,
+    refresh: value
   })),
   reset: () => {
     set(initialState)

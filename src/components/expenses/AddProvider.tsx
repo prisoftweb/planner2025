@@ -6,9 +6,10 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { useState, useEffect } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { createProvider, createNewProvider } from "@/app/api/routeProviders";
+import { createNewProvider } from "@/app/api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
+import { useOutsideClick } from "@/app/functions/useOutsideClick";
 
 export default function AddProvider({token, setShowForm, addProv}: 
           {token:string, setShowForm:Function, addProv:Function}){
@@ -24,6 +25,11 @@ export default function AddProvider({token, setShowForm, addProv}:
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 110);
   }, []);
+
+  const ref = useOutsideClick(() => {
+    console.log('Clicked outside of MyComponent');
+    setShowForm(false);
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -68,7 +74,7 @@ export default function AddProvider({token, setShowForm, addProv}:
 
   return(
     <div className="w-full z-50 sm:max-w-lg absolute top-0 bg-white p-3 right-0"
-      style={{height: `${heightPage}px`}}
+      style={{height: `${heightPage}px`}} ref={ref}
     >
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"

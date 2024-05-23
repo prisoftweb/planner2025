@@ -14,27 +14,21 @@ export default function VoucherStepper({token}: {token:string}) {
   
   const {updateIndexStepper, updateVoucher, amount, category, condition, 
     costCenter, date, description, discount, folio, indexStepper, project, proveedor, 
-    responsible, taxFolio, typeCFDI, typeExpense, vat, CFDI, reset} = useNewExpense();
+    responsible, taxFolio, typeCFDI, typeExpense, vat, CFDI, reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
-
-  // usar esto en componente upload file drop zone
-  // generar funcion que reciba parametros[] de tipos a validar 
-  //para que funcione en todos los casos
-  // useEffect(() => {
-  //   console.log('file usefect => ', file);
-  //   console.log('type ', file?.type);
-  //   if(file){
-  //     if((file.type !== 'application/pdf') && (!file.type.includes('jpg')
-  //         && !file.type.includes('JPG') && !file.type.includes('jpeg') && 
-  //         !file.type.includes('JPEG') && !file.type.includes('png') && !file.type.includes('PNG'))){
-  //       setFile(undefined);
-  //       alert('tipo equivocado');
-  //       alert(file?.type);
-  //     }
-  //   }
-  // }, [file]);
   
+  const validationType = (f: File) => {
+    if((f.type !== 'application/pdf') && (!f.type.includes('jpg')
+        && !f.type.includes('JPG') && !f.type.includes('jpeg') && 
+        !f.type.includes('JPEG') && !f.type.includes('png') && !f.type.includes('PNG'))){
+      showToastMessageError('Seleccione un archivo pdf o una imagen con la extension jpg o png!!!');
+      return 'Seleccione un archivo pdf o una imagen con la extension jpg o png!!!';
+    }else{
+      return true;
+    }
+  }
+
   const SaveData = async () => {
     if(file || CFDI){
       const formdata = new FormData();
@@ -51,9 +45,9 @@ export default function VoucherStepper({token}: {token:string}) {
       formdata.append('category', category);
       formdata.append('project', project);
       formdata.append('vat', vat);
-      formdata.append('condition', JSON.stringify({
-          glossary:condition, user:responsible
-        }))
+      // formdata.append('condition', JSON.stringify({
+      //     glossary:condition, user:responsible
+      //   }))
       if(file){
         updateVoucher(file);
         formdata.append('files', file);
@@ -66,7 +60,12 @@ export default function VoucherStepper({token}: {token:string}) {
       try {
         const res = await CreateCostWithFiles(token, formdata);
         if(res === 201){
+          reset();
+          updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
+          setTimeout(() => {
+            updateIndexStepper(0);
+          }, 200);
         }else{
           showToastMessageError(res);
         }
@@ -86,8 +85,11 @@ export default function VoucherStepper({token}: {token:string}) {
         const res = await SaveExpense(data, token);
         if(res===201) {
           reset();
+          updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
-          updateIndexStepper(0);
+          setTimeout(() => {
+            updateIndexStepper(0);
+          }, 200);
         }
         else{
           showToastMessageError(res);
@@ -108,7 +110,7 @@ export default function VoucherStepper({token}: {token:string}) {
   return (
     <div className="mt-2">
       <NavExpenseStepper index={1} />
-      <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} />
+      <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} Validation={validationType} />
       {/* <div className="mt-4">
         <Label>Subir PDF o imagen</Label>
         <div {...getRootProps()} className="flex flex-col items-center justify-center w-full p-4 h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">

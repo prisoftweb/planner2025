@@ -24,7 +24,8 @@ export default function Forgot(){
 			const { email } = valores;
 				
 			let res = await forgotPassword(email);
-			resetForm();            
+			console.log(res);
+      resetForm();            
 			if(res != undefined)
 				if(res === 201) {
 					showToastMessage('Varifica tu correo para reestablecer el password');                
@@ -36,7 +37,7 @@ export default function Forgot(){
 
   return (
     <div className='p-2 sm:p-3 md-p-5 lg:p-10 mt-10 flex flex-col items-center space-y-10'>
-      <Alert></Alert>            
+      {/* <Alert></Alert>             */}
       <form className=" w-11/12 sm:w-2/3  md:w-1/2 lg:w-1/3  bg-white rounded shadow-md px-3 sm:px-8 pt-6 pb-8 mb-4"
         onSubmit={formik.handleSubmit}>                 
         <div className='flex rounded-full'>

@@ -157,7 +157,7 @@ export default async function Page() {
       Fecha: expense.date,
       Importe: dollar,
       Informe: expense.folio,
-      Proveedor: expense.provider.name,
+      Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project.title,
       Responsable: {
         responsible: expense.user.name,

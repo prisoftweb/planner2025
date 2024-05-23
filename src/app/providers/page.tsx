@@ -2,7 +2,6 @@ import WithOutProvider from "@/components/providers/WithoutProvider"
 import Navigation from "@/components/navigation/Navigation"
 import { cookies } from "next/headers"
 import TableProviders from "@/components/providers/TableProviders";
-import HeaderProvider from "@/components/providers/HeaderProvider";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
 import { UsrBack } from "@/interfaces/User";
@@ -28,9 +27,14 @@ export default async function Providers(){
   }  
 
   if(providers.length === 0 || !providers){
-    return <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
-              <WithOutProvider id={id} token={token} />
-            </div>
+    return (
+      <div>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
+          <WithOutProvider id={id} token={token} />
+        </div>
+      </div>
+    )      
   }
 
   let data:TableProvider[] = [];
