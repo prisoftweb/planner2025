@@ -38,10 +38,17 @@ export interface Expense {
   project: Project
   status: boolean
   condition: Condition[]
-  files: any[]
+  files: File[]
   total: number
   iva: number
   __v: number
+  id: string
+}
+
+export interface File {
+  file: string
+  types: string
+  _id: string
   id: string
 }
 

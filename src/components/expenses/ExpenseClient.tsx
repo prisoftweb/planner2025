@@ -50,11 +50,11 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                   </div>): 
         (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                             style={{borderColor:'#F8FAFC'}}>
-                              <UpdateVoucher id={id} token={token} />
+                              <UpdateVoucher id={id} token={token} expense={expense} />
                             </div>): 
             (opt===4? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                                 style={{borderColor:'#F8FAFC'}}>
-                                    <UpdateCFDI id={id} token={token} />
+                                    <UpdateCFDI id={id} token={token} expense={expense} />
                               </div>): 
                     setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                               style={{borderColor:'#F8FAFC'}}>

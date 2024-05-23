@@ -47,15 +47,16 @@ export default function ProfileExpense({expense}:
           <div className="">
             <div className="flex gap-x-2">
               <div>
-                <img src={'/img/clients.svg'} alt="logo" className="w-20 h-20" />
+                <img src={'/img/provider.svg'} alt="logo" className="w-20 h-20" />
               </div>
               <div className="flex justify-between w-full">
                 <div>
                   <p className="text-slate-500">{expense.category.name}</p>
-                  <p className="text-blue-500">{expense.provider.name}</p>
+                  <p className="text-blue-500">{expense.provider?.name || 'Sin proveedor'}</p>
                 </div>
                 <div className="h-6">
-                  <Chip label={expense.condition[expense.condition.length-1].glossary.name} />
+                  <Chip label={expense.condition.length >0? 
+                      expense.condition[expense.condition.length-1].glossary.name: 'sin status'} />
                 </div>
               </div>
             </div>
@@ -96,7 +97,7 @@ export default function ProfileExpense({expense}:
             shadow-md py-2">
           <div className="mt-3">
             <Label>Proveedor</Label>
-            <p className="my-0 text-slate-700">{expense.provider.name}</p>
+            <p className="my-0 text-slate-700">{expense.provider?.name || 'Sin proveedor'}</p>
           </div>
           <div className="mt-3">
             <Label>Responsable</Label>

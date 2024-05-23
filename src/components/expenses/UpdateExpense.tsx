@@ -24,7 +24,7 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
       folio: expense.folio,
       taxFolio: expense.taxfolio,
       vat: '0',
-      discount: expense.discount.toString(),
+      discount: expense.discount? expense.discount.toString(): '0',
       amount: expense.subtotal.toString(),
       description: expense.description
     }, 

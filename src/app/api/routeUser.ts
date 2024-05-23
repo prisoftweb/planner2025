@@ -127,7 +127,7 @@ export async function forgotPassword(email:string) {
   const userData = {
     email,
   };
-  const url=`${process.env.NEXT_PUBLIC_API_URL}/forgotPassword`;
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/forgotPassword`;
   try {
     const res = await axios.post(url, userData);    
     return res.data;    
