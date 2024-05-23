@@ -1,13 +1,15 @@
 import HeaderForm from "../HeaderForm";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
-import {confirmAlert} from 'react-confirm-alert';
+//import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
+//import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
 import { useNewExpense } from "@/app/store/newExpense";
 import DataStepper from "./DataStepper";
 import VoucherStepper from "./VoucherStepper";
 import CFDIStepper from "./CFDIStepper";
+import TabDeductible from "./TabDeductible";
+import DataNoDeductibleStepper from "./DataNoDeductibleStepper";
 
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
                                 optProviders, optResponsibles, optGlossaries, 
@@ -20,15 +22,13 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   
   const [heightPage, setHeightPage] = useState<number>(900);
   
-  // const [deductible, setDeductible] = useState<boolean>(true);
-
   const [stepform, setStepForm] = useState<JSX.Element>(
                           <DataStepper optCostCenter={optCostCenter} 
                             optProviders={optProviders} optResponsibles={optResponsibles}
                             token={token} user={user} optGlossaries={optGlossaries} 
                             optProjects={optProjects}  />)
 
-  const {indexStepper} = useNewExpense();
+  const {indexStepper, isDeductible} = useNewExpense();
 
   const handleResize = () => {
     setHeightPage(window.outerHeight);
@@ -89,22 +89,33 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   try {
     useEffect(() => {
       try {
-        if(indexStepper || indexStepper>=0){
-          if(indexStepper===1){
-            setStepForm(<VoucherStepper token={token} />)
-          }else if(indexStepper===2){
-            setStepForm(<CFDIStepper token={token} />)
+        if(isDeductible){
+          if(indexStepper || indexStepper>=0){
+            if(indexStepper===1){
+              setStepForm(<VoucherStepper token={token} />)
+            }else if(indexStepper===2){
+              setStepForm(<CFDIStepper token={token} />)
+              }else {
+                setStepForm(<DataStepper optCostCenter={optCostCenter} 
+                    optProviders={optProviders} optGlossaries={optGlossaries} 
+                  optResponsibles={optResponsibles}
+                  token={token} user={user} optProjects={optProjects} />)
+              }
+          }
+        }else{
+          if(indexStepper || indexStepper>=0){
+            if(indexStepper===1){
+              setStepForm(<VoucherStepper token={token} />)
             }else {
-              setStepForm(<DataStepper optCostCenter={optCostCenter} 
-                  optProviders={optProviders} optGlossaries={optGlossaries} 
-                optResponsibles={optResponsibles}
-                token={token} user={user} optProjects={optProjects} />)
-            }
+                setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
+                              optResponsibles={optResponsibles} token={token} user={user} />)
+              }
+          }
         }
       } catch (error) {
         setStepForm(<></>)
       }
-    }, [indexStepper])
+    }, [indexStepper, isDeductible]);
   } catch (error) {
     console.log(error);
   }
@@ -120,6 +131,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />
         </div>
+        <TabDeductible />
         {stepform}
       </div>
     </div>

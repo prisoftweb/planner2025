@@ -22,6 +22,7 @@ interface NewExpenseState {
 
   indexStepper: number
   refresh: boolean
+  isDeductible: boolean
 }
 
 interface Actions {
@@ -33,6 +34,7 @@ interface Actions {
   updateIndexStepper: (index: number) => void,
   reset: () => void,
   updateRefresh: (value: boolean) => void,
+  updateDeductible: (value: boolean) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -54,7 +56,8 @@ const initialState: NewExpenseState = {
   category: '',
   project: '',
   condition: '',
-  refresh: false
+  refresh: false,
+  isDeductible: true
 }
 
 export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
@@ -94,6 +97,10 @@ export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
   updateRefresh: (value: boolean) => set(state => ({
     ...state,
     refresh: value
+  })),
+  updateDeductible: (value: boolean) => set(state => ({
+    ...state,
+    isDeductible: value
   })),
   reset: () => {
     set(initialState)
