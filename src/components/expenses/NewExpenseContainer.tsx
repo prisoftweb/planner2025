@@ -20,6 +20,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   
   const [heightPage, setHeightPage] = useState<number>(900);
   
+  // const [deductible, setDeductible] = useState<boolean>(true);
+
   const [stepform, setStepForm] = useState<JSX.Element>(
                           <DataStepper optCostCenter={optCostCenter} 
                             optProviders={optProviders} optResponsibles={optResponsibles}
@@ -82,6 +84,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     //   overlayClassName: "overlay-custom-class-name"
     // });
   }
+
 
   try {
     useEffect(() => {

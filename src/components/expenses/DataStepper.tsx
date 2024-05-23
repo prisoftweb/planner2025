@@ -191,8 +191,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [indexProv, setIndexProv] = useState<number>(0);
 
   useEffect(() => {
-    console.log('useefect => ', optProviders);
-    console.log('index prov => ', indexProv);
+    //console.log('useefect => ', optProviders);
+    //console.log('index prov => ', indexProv);
     setSelectProviders(<></>);
     setTimeout(() => {
       // setSelectProviders(<SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />)
