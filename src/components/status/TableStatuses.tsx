@@ -2,10 +2,11 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+//import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
+//import { useState } from "react";
 import { StatusTable } from "@/interfaces/Status";
-import { RemoveGlossary } from "@/app/api/routeGlossary";
+//import { RemoveGlossary } from "@/app/api/routeGlossary";
+import { RemoveCatalog } from "@/app/api/routeCatalogs";
 
 export default function TableStatus({data, token}:
                         {data:StatusTable[], token:string}){
@@ -41,10 +42,11 @@ export default function TableStatus({data, token}:
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <div className="w-5 h-5 bg-blue-700"></div>
-          <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
+          {/* <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
             //onClick={() => {setGlossEdit(row.original); setEditGloss(true);}}
-          />
-          <TrashIcon className="w-5 h-5 text-red-500 hover:text-red-400 cursor-pointer"/>
+          /> */}
+          <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveCatalog} token={token} />
+          {/* <TrashIcon className="w-5 h-5 text-red-500 hover:text-red-400 cursor-pointer"/> */}
           {/* <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveGlossary} token={token} /> */}
         </div>
       ),

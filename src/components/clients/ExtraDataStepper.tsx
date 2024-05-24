@@ -176,10 +176,13 @@ export default function ExtraDataStepper({token}: {token:string}){
         <div className="my-5">
           <NavClientsStepper index={1} />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
+        <div className="grid grid-cols-1 gap-4">
           <div>
             <Label>Pagina</Label>
-            <Input type="text" value={page} onChange={(e) => setPage(e.target.value)} />
+            <Input type="text" value={page} onChange={(e) => setPage(e.target.value)} 
+              autoFocus
+            />
           </div>
           <div>
             <Label>Logotipo</Label>

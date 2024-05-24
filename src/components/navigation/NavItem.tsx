@@ -14,7 +14,7 @@ export default function NavItemComponent({name, items, link}: {name:string, item
 
   return(
     <>
-      <button type="button" className="text-sm cursor-pointer lg:text-base w-full mr-2" 
+      <button type="button" className="text-sm cursor-pointer lg:text-base w-full mr-2 z-50" 
         onClick={() => {
           link===''? setIsOpen(!isOpen) : router.push(link);
         }}

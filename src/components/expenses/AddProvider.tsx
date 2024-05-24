@@ -22,8 +22,11 @@ export default function AddProvider({token, setShowForm, addProv}:
   }
 
   useEffect(() => {
+    console.log('hei => ', window.outerHeight);
+    console.log('hei body => ', document.body.offsetHeight);
     window.addEventListener("resize", handleResize, false);
-    setHeightPage(document.body.offsetHeight - 110);
+    // setHeightPage(document.body.offsetHeight - 110);
+    setHeightPage(document.body.offsetHeight);
   }, []);
 
   const ref = useOutsideClick(() => {
@@ -73,8 +76,9 @@ export default function AddProvider({token, setShowForm, addProv}:
   });
 
   return(
-    <div className="w-full z-50 sm:max-w-lg absolute top-0 bg-white p-3 right-0"
-      style={{height: `${heightPage}px`}} ref={ref}
+    <div className="w-full z-50 sm:max-w-lg absolute top-0 bg-white p-3 right-0 h-screen"
+      //style={{height: `${heightPage}px`}} 
+      ref={ref}
     >
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"

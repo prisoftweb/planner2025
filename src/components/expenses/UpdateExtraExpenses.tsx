@@ -189,7 +189,7 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
 
   return(
     <div className="w-full">
-      <HeaderForm img="/img/projects.svg" subtitle="Modifica los datos basicos de un gasto" 
+      <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
         title="Modificar gasto"
       />
       <form className="mt-4 max-w-sm rounded-lg space-y-5">

@@ -62,7 +62,7 @@ export default function NewSubPath({showForm, token, route}:
 
   return(
     <>
-      <form className="z-50 top-16 fixed bg-white space-y-5 p-3 right-0 h-full"
+      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-full"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">

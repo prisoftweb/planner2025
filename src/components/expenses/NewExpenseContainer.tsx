@@ -14,11 +14,13 @@ import VoucherNoDeductibleStepper from "./VoucherNoDeductibleStepper";
 
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
                                 optProviders, optResponsibles, optGlossaries, 
-                                optProjects }: 
+                                optProjects, optCategories, optConditions, optTypes }: 
                             {token:string, showForm:Function, user:string, 
                               optCostCenter:Options[],
                               optProviders:Options[], optResponsibles:Options[],
-                              optGlossaries:Options[], optProjects:Options[]
+                              optGlossaries:Options[], optProjects:Options[], 
+                              optCategories:Options[], optTypes:Options[], 
+                              optConditions:Options[]
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -27,7 +29,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                           <DataStepper optCostCenter={optCostCenter} 
                             optProviders={optProviders} optResponsibles={optResponsibles}
                             token={token} user={user} optGlossaries={optGlossaries} 
-                            optProjects={optProjects}  />)
+                            optProjects={optProjects} optCategories={optCategories} 
+                            optConditions={optConditions} optTypes={optTypes}  />)
 
   const {indexStepper, isDeductible} = useNewExpense();
 
@@ -98,9 +101,12 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
               setStepForm(<CFDIStepper token={token} />)
               }else {
                 setStepForm(<DataStepper optCostCenter={optCostCenter} 
-                    optProviders={optProviders} optGlossaries={optGlossaries} 
-                  optResponsibles={optResponsibles}
-                  token={token} user={user} optProjects={optProjects} />)
+                          optProviders={optProviders} optGlossaries={optGlossaries} 
+                        optResponsibles={optResponsibles}
+                        token={token} user={user} optProjects={optProjects}
+                        optCategories={optCategories} optConditions={optConditions}
+                        optTypes={optTypes}
+                  />)
               }
           }
         }else{
@@ -122,12 +128,12 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
+    <div className="z-10 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">
         <div className="flex justify-between">
-          <HeaderForm img="/img/projects.jpg" subtitle="Ingresa los gastos del proyecto" 
+          <HeaderForm img="/img/costs/costs.svg" subtitle="Ingresa los gastos del proyecto" 
             title="Nuevo gasto"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />

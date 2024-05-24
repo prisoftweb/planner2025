@@ -19,6 +19,7 @@ import { getGlossaries } from "@/app/api/routeGlossary";
 import { Provider } from "@/interfaces/Providers";
 import { getProviders } from "@/app/api/routeProviders";
 import { getUsers } from "@/app/api/routeUser";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -147,11 +148,16 @@ export default async function Page({ params }: { params: { id: string }}){
     });
   });
 
+  const subTotal = CurrencyFormatter({
+    currency: "MXN",
+    value: cost.subtotal
+  });
+
   return(
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title={cost.subtotal.toString()} previousPage="/expenses">
+        <Header title={subTotal} previousPage="/expenses">
           <Selectize options={options} routePage="expenses" subpath="/profile" />
         </Header>
         <NavTabExpense idExp={params.id} tab="1" />

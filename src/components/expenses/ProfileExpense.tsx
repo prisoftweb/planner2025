@@ -16,6 +16,11 @@ export default function ProfileExpense({expense}:
     value: expense.discount
   });
 
+  const vat = CurrencyFormatter({
+    currency: "MXN",
+    value: expense.iva
+  });
+
   return(
     <>
       <div className="w-full h-full mt-3">
@@ -75,7 +80,8 @@ export default function ProfileExpense({expense}:
           </div>
           <div className="my-2">
             <p className="text-slate-500">IVA</p>
-            <p className="text-blue-600 font-semibold">$70 (16%)</p>
+            <p className="text-blue-600 font-semibold">{vat}</p>
+            {/* <p className="text-blue-600 font-semibold">${expense.iva? expense.iva : 0} (16%)</p> */}
           </div>
         </div>
         

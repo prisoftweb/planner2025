@@ -195,7 +195,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
 
   return(
     <>
-      <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >

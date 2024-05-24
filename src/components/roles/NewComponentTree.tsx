@@ -132,7 +132,7 @@ export default function NewComponentTree({showForm, token, optResources,
 
   return(
     <>
-      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0"
+      <div className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
         style={{height: `${heightPage}px`}}
       >
       <div className="flex justify-between">

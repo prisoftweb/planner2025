@@ -79,7 +79,7 @@ export default function NewGlossary({showForm, token, glossary}:
 
   return(
     <>
-      <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >
@@ -112,7 +112,7 @@ export default function NewGlossary({showForm, token, glossary}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.description}
-            rows={2}
+            rows={4}
           />
           {formik.touched.description && formik.errors.description ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">

@@ -60,7 +60,7 @@ export default function NewRole({showForm, token}:
 
   return(
     <>
-      <form className="z-50 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">

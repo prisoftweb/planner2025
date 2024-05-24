@@ -70,7 +70,7 @@ export default function NewProviderContainer({token, id, showForm}: {token:strin
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen"
+    <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen"
       style={{height: `${heightPage}px`}}
     >
       <div className="flex justify-between">

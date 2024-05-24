@@ -142,7 +142,7 @@ export default function NewStatus({showForm, token, catalogOptions,
   
   return(
     <>
-      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <div className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">

@@ -75,7 +75,7 @@ export default function NewProjectContainer({token, showForm, optClients,
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
+    <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">

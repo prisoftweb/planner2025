@@ -60,7 +60,7 @@ export default function ExtraData({token, id, link}:
   return(
     <>
       <div className="w-full">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <div>
             <Label>Pagina</Label>
             <Input type="text" value={page} onChange={(e) => setPage(e.target.value)} />

@@ -93,10 +93,11 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
 
   return(
     <div className="w-full">
-      <HeaderForm img="/img/projects.svg" subtitle="Modifica los datos basicos de un gasto" 
+      <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
         title="Modificar gasto"
       />
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} 
+        className="mt-4 max-w-sm rounded-lg space-y-5 grid grid-cols-3">
         {/* <div>
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
           <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
