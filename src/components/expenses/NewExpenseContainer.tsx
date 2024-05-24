@@ -10,6 +10,7 @@ import VoucherStepper from "./VoucherStepper";
 import CFDIStepper from "./CFDIStepper";
 import TabDeductible from "./TabDeductible";
 import DataNoDeductibleStepper from "./DataNoDeductibleStepper";
+import VoucherNoDeductibleStepper from "./VoucherNoDeductibleStepper";
 
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
                                 optProviders, optResponsibles, optGlossaries, 
@@ -105,7 +106,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
         }else{
           if(indexStepper || indexStepper>=0){
             if(indexStepper===1){
-              setStepForm(<VoucherStepper token={token} />)
+              setStepForm(<VoucherNoDeductibleStepper token={token} />)
             }else {
                 setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
                               optResponsibles={optResponsibles} token={token} user={user} />)

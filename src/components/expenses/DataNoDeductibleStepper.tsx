@@ -64,7 +64,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   //const [projectS, setProjectS] = useState<string>(optProjects[0].value);
   //const [conditionS, setConditionS] = useState<string>(optGlossaries[0].value);
 
-  const [showProvider, setShowProvider] = useState<boolean>(false);
+  //const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
 
@@ -142,7 +142,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
   // const [selectProvider, setSelectProviders] = useState<JSX.Element>(
   //             <SelectReact index={0} opts={optProviders} setValue={setProvider} />)
-  const [indexProv, setIndexProv] = useState<number>(0);
+  //const [indexProv, setIndexProv] = useState<number>(0);
   
   useEffect(() => {
     let indexCC = 0;

@@ -18,6 +18,7 @@ import TableExpenses from "@/components/expenses/TableExpenses";
 import { GetCosts } from "../api/routeCost";
 import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
+import { getCatalogsByName } from "../api/routeCatalogs";
 
 export default async function Page() {
   

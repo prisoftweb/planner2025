@@ -15,7 +15,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
     //   Fecha: expense.date,
     //   Importe: dollar,
     //   Informe: expense.folio,
-    //   Proveedor: expense.provider.name,
+    //   Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
     //   Proyecto: expense.project.title,
     //   Responsable: {
     //     responsible: expense.user.name,
@@ -31,7 +31,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Importe: dollar,
       Informe: expense.folio,
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
-      Proyecto: expense.project.title,
+      Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
         responsible: expense.user.name,
         photo: expense.user.photo

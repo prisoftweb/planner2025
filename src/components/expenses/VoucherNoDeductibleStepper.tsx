@@ -8,11 +8,10 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
 import { CreateCostWithFiles } from "@/app/api/routeCost";
 
-export default function VoucherStepper({token}: {token:string}) {
+export default function VoucherNoDeductibleStepper({token}: {token:string}) {
   
-  const {updateIndexStepper, updateVoucher, amount, category, condition, 
-    costCenter, date, description, discount, folio, indexStepper, project, proveedor, 
-    responsible, taxFolio, typeCFDI, typeExpense, vat, CFDI, reset, updateRefresh} = useNewExpense();
+  const {updateIndexStepper, updateVoucher, amount, costCenter, date, description, 
+    responsible, reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   
@@ -34,18 +33,7 @@ export default function VoucherStepper({token}: {token:string}) {
       formdata.append('costcenter', costCenter);
       formdata.append('date', date);
       formdata.append('description', description);
-      formdata.append('discount', discount);
-      formdata.append('folio', folio);
-      formdata.append('provider', proveedor);
       formdata.append('user', responsible);
-      formdata.append('taxFolio', taxFolio);
-      formdata.append('typeCFDI', typeCFDI);
-      formdata.append('category', category);
-      formdata.append('project', project);
-      formdata.append('vat', vat);
-      // formdata.append('condition', JSON.stringify({
-      //     glossary:condition, user:responsible
-      //   }))
       if(file){
         updateVoucher(file);
         formdata.append('files', file);
@@ -68,11 +56,7 @@ export default function VoucherStepper({token}: {token:string}) {
       }
     }else{
       const data = {
-        subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
-        provider: proveedor, user:responsible, taxFolio, typeCFDI, category, project, vat,
-        condition: {
-          glossary:condition, user:responsible
-        }
+        subtotal:amount, costcenter: costCenter, date:date, description, user:responsible,
       }
   
       try {
@@ -94,12 +78,12 @@ export default function VoucherStepper({token}: {token:string}) {
     }
   }
 
-  const Next = () => {
-    if(file){
-      updateVoucher(file);
-    }
-    updateIndexStepper(2);
-  }
+  // const Next = () => {
+  //   if(file){
+  //     updateVoucher(file);
+  //   }
+  //   updateIndexStepper(2);
+  // }
 
   return (
     <div className="mt-2">
@@ -122,13 +106,13 @@ export default function VoucherStepper({token}: {token:string}) {
       {pre && <iframe className="w-full h-auto mt-4" src={URL.createObjectURL(pre)} />} */}
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" onClick={SaveData}>Guardar</Button>
-        <button type="button"
+        {/* <button type="button"
           onClick={Next}
           className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
             border-slate-900 rounded-xl hover:bg-slate-200"
         >
           Siguiente
-        </button>         
+        </button>          */}
       </div>
     </div>
   );
