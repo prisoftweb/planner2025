@@ -67,6 +67,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   //const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
+  const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
 
   
   const SaveData = async() => {
@@ -170,14 +171,15 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     
     setView(<>
       <div>
-        <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-        <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-      </div>
-      <div>
         <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
         <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
       </div>
     </>)
+
+    setViewCC(<div className=" col-span-2">
+          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+        </div>)
 
   }, []);
 
@@ -208,14 +210,15 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       
       setView(<>
         <div>
-          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-        </div>
-        <div>
           <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
           <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
         </div>
       </>)
+
+      setViewCC(<div className=" col-span-2">
+              <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+              <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+            </div>)
       setResetBand(false);
     }
   }, [resetBand]);
@@ -226,7 +229,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         <NavExpenseNoDeductibleStepper index={0} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-3">
+          {viewCC}
           <div>
             <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
             <CurrencyInput

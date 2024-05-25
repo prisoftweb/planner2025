@@ -20,6 +20,8 @@ import { Provider } from "@/interfaces/Providers";
 import { getProviders } from "@/app/api/routeProviders";
 import { getUsers } from "@/app/api/routeUser";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import { getCatalogsByName } from "@/app/api/routeCatalogs";
+import { GlossaryCatalog } from "@/interfaces/Glossary";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -148,6 +150,41 @@ export default async function Page({ params }: { params: { id: string }}){
     });
   });
 
+  let catalogs: GlossaryCatalog[];
+  try {
+    catalogs = await getCatalogsByName(token, 'cost');
+    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+  } catch (error) {
+    return <h1>Error al consultar catalogos!!</h1>
+  }
+
+  const optCategories: Options[] = [];
+  //const optCategories: Options[] = [];
+  catalogs[0].categorys.map((category) => {
+    optCategories.push({
+      label: category.glossary.name,
+      value: category.glossary._id
+    })
+  })
+
+  const optTypes: Options[] = [];
+  //const optTypes: Options[] = [];
+  catalogs[0].types.map((type) => {
+    optTypes.push({
+      label: type.glossary.name,
+      value: type.glossary._id
+    })
+  })
+
+  const optConditions: Options[] = [];
+  //const optConditions: Options[] = [];
+  catalogs[0].condition.map((condition) => {
+    optConditions.push({
+      label: condition.glossary.name,
+      value: condition.glossary._id
+    })
+  })
+
   const subTotal = CurrencyFormatter({
     currency: "MXN",
     value: cost.subtotal
@@ -165,6 +202,7 @@ export default async function Page({ params }: { params: { id: string }}){
           <ExpenseClient expense={cost} id={params.id} token={token} 
               user={user._id} optCostCenter={optCostCenter} optGlossaries={optGlossaries} 
               optProjects={optProjects} optProviders={optProviders} optResponsibles={optResponsibles}
+              optCategories={optCategories} optConditions={optConditions} optTypes={optTypes}
           />
         </NextUiProviders>
       </div>

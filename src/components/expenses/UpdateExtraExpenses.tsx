@@ -14,20 +14,22 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 export default function UpdateExtraExpense({token, id, user, optCostCenter, expense, 
                                         optGlossaries, optProviders, optResponsibles, 
-                                        optProjects }: 
+                                        optProjects, optCategories, optConditions, optTypes }: 
                                   {token:string, id:string, user:string, 
                                     optCostCenter:Options[], expense:Expense, 
                                     optGlossaries:Options[], optProviders:Options[], 
-                                    optResponsibles:Options[], optProjects:Options[]}){
+                                    optResponsibles:Options[], optProjects:Options[], 
+                                    optCategories:Options[], optTypes:Options[], 
+                                    optConditions:Options[]}){
   
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   //const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-  const [typeExpense, setTypeExpense] = useState<string>(optCostCenter[0].value);
-  const [typeCFDI, setTypeCFDI] = useState<string>(optCostCenter[0].value);
+  const [typeExpense, setTypeExpense] = useState<string>(optTypes[0].value);
+  const [typeCFDI, setTypeCFDI] = useState<string>(optTypes[0].value);
   const [provider, setProvider] = useState<string>(optProviders[0]?.value);
   const [responsible, setResponsible] = useState<string>(optResponsibles[0].value);
-  const [category, setCategory] = useState<string>(optGlossaries[0].value);
+  const [category, setCategory] = useState<string>(optCategories[0].value);
   const [project, setProject] = useState<string>(optProjects[0].value);
   
   const [optionsProviders, setOptionProviders] = useState<Options[]>(optProviders);
@@ -91,24 +93,24 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
       });
     }
     setViewCC(<>
-                <div>
+                <div className=" col-span-1 sm:col-span-2">
                   <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
                   <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
                 </div>
 
                 <div>
                   <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
-                  <SelectReact index={0} opts={optGlossaries} setValue={setTypeExpense} />
+                  <SelectReact index={0} opts={optTypes} setValue={setTypeExpense} />
                 </div>
                 
                 <div>
                   <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-                  <SelectReact index={indexCFDI} opts={optGlossaries} setValue={setTypeCFDI} />
+                  <SelectReact index={indexCFDI} opts={optTypes} setValue={setTypeCFDI} />
                 </div>
                 
                 <div>
                   <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-                  <SelectReact index={indexCategory} opts={optGlossaries} setValue={setCategory} />
+                  <SelectReact index={indexCategory} opts={optCategories} setValue={setCategory} />
                 </div>
                 
                 {/* <div>
@@ -177,7 +179,7 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
     //   <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
     //   <SelectReact index={optProviders.length -1} opts={optProviders} setValue={setProvider} />
     // </div>)
-    setSelectProviders(<div>
+    setSelectProviders(<div className="">
             <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
             <div className="flex gap-x-2 items-center">
               <SelectReact index={indexProv} opts={optionsProviders} setValue={setProvider} />
@@ -192,7 +194,7 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
       <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
         title="Modificar gasto"
       />
-      <form className="mt-4 max-w-sm rounded-lg space-y-5">
+      <form className="mt-4 w-full rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-5">
         {viewCC}
         {selectProvider}
         <div className="flex justify-center mt-8 space-x-5">

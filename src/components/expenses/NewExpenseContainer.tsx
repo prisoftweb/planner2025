@@ -35,12 +35,22 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   const {indexStepper, isDeductible} = useNewExpense();
 
   const handleResize = () => {
-    setHeightPage(window.outerHeight);
+    //setHeightPage(window.outerHeight);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
   }
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
-    setHeightPage(document.body.offsetHeight - 110);
+    //setHeightPage(document.body.offsetHeight - 110);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
     //console.log('useefect');
     //console.log(heightPage, '   ', window.outerHeight );
   }, []);
@@ -131,12 +141,13 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     <div className="z-10 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}}
     >
-      <div className="h-full">
+      <div className="h-full p-1 sm:p-3">
         <div className="flex justify-between">
           <HeaderForm img="/img/costs/costs.svg" subtitle="Ingresa los gastos del proyecto" 
             title="Nuevo gasto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />
+          <XMarkIcon className="w-6 h-6 text-slate-500 
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
         </div>
         <TabDeductible />
         {stepform}

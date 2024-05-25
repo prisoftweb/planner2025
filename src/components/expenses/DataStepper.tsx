@@ -93,7 +93,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
-
+  const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
+  const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
   const SaveData = async() => {
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
@@ -344,11 +345,13 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
     // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
     // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
+    
+    setViewCC(<div className=" col-span-3">
+          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+        </div>)
+    
     setView(<>
-      <div>
-        <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-        <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-      </div>
       <div>
         <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
         <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
@@ -385,10 +388,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
         <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
       </div>
-      <div>
-        <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-        <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-      </div>
       {/* <div>
         <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
         <SelectReact index={indexCond} opts={optGlossaries} setValue={setConditionS} />
@@ -398,6 +397,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <SelectReact index={indexCond} opts={optConditions} setValue={setConditionS} />
       </div>
     </>)
+
+    setViewResponsible(<div>
+              <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+              <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+            </div>)
 
   }, []);
 
@@ -519,14 +523,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
         </div>
         <div>
-          <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-          <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-        </div>
-        <div>
           <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
           <SelectReact index={indexCond} opts={optConditions} setValue={setConditionS} />
         </div>
       </>)
+      setViewResponsible(<div>
+              <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+              <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+            </div>)
       setResetBand(false);
     }
   }, [resetBand]);
@@ -536,8 +540,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       <div className="mt-2">
         <NavExpenseStepper index={0} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-5">
+          {viewCC}
           <div>
             <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
             <Input type="text" name="folio" autoFocus 
@@ -551,7 +556,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
               </div>
             ) : null}
           </div>
-          <div>
+          <div className=" col-span-1 sm:col-span-2">
             <Label htmlFor="taxFolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio Fiscal</p></Label>
             <Input type="text" name="taxFolio" 
               value={formik.values.taxFolio}
@@ -648,7 +653,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             />
           </div>
           {view}
-          {selectProvider}
+          <div className=" col-span-3 grid grid-cols-2 gap-x-3">
+            {selectProvider}
+            {viewResponsible}
+          </div>
+          
         </div>
 
         <div>
