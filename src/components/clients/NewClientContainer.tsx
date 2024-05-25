@@ -72,13 +72,14 @@ export default function NewClientContainer({token, id, showForm, tags}:
   }
 
   return(
-    <div className={`z-50 w-full sm:max-w-2xl absolute top-16 bg-white p-3 right-0`}
+    <div className={`z-10 w-full sm:max-w-2xl absolute top-16 bg-white p-3 right-0`}
       style={{height: `${heightPage}px`}} >
       <div className="flex justify-between">
         <HeaderForm img="/img/clientes.svg" subtitle="Ingresa nuevo cliente" 
           title="Nuevo cliente"
         />
-        <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />
+        <XMarkIcon className="w-6 h-6 text-slate-500
+          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
       </div>
       <ContainerClientStepper token={token} id={id} tags={tags} />
     </div>

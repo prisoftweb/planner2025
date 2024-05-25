@@ -70,14 +70,15 @@ export default function NewProviderContainer({token, id, showForm}: {token:strin
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen"
+    <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0 h-screen"
       style={{height: `${heightPage}px`}}
     >
       <div className="flex justify-between">
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"
         />
-        <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />
+        <XMarkIcon className="w-6 h-6 text-slate-500
+          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
       </div>
       <ContainerStepper token={token} id={id} />
     </div>

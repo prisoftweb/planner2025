@@ -115,14 +115,15 @@ export default function NewRouteTree({showForm, token, optResources,
 
   return(
     <>
-      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0"
+      <div className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
         style={{height: `${heightPage}px`}}
       >
       <div className="flex justify-between">
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando rutas" 
           title="Agregar ruta a nuevo arbol"
         />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         <div>
           <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>

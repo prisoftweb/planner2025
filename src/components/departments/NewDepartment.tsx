@@ -102,7 +102,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
 
   return(
     <>
-      <form className={`z-50 top-16 absolute bg-white space-y-5 p-3 right-0`}
+      <form className={`z-10 top-16 absolute bg-white space-y-5 p-3 right-0`}
         style={{height: `${heightPage}px`}}
         onSubmit={formik.handleSubmit}
       >
@@ -110,7 +110,8 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
           <HeaderForm img="/img/department.svg" subtitle="Agregar nuevos departamentos de compañias" 
             title="Agregar nuevo departamento"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>

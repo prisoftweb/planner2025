@@ -20,10 +20,14 @@ import { CreateCostWithFiles } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
 
 export default function DataStepper({token, user, optCostCenter, optProviders, 
-                                      optResponsibles, optGlossaries, optProjects}: 
+                                      optResponsibles, optGlossaries, optProjects, 
+                                      optCategories, optConditions, optTypes
+                                    }: 
                                   {token:string, user:string, optCostCenter:Options[],
                                     optProviders:Options[], optResponsibles:Options[],
-                                    optGlossaries:Options[], optProjects:Options[] }){
+                                    optGlossaries:Options[], optProjects:Options[], 
+                                    optCategories:Options[], optTypes:Options[], 
+                                    optConditions:Options[] }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     category, condition, costCenter, date, description, discount, 
@@ -72,20 +76,25 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
-  const [typeExpenseS, setTypeExpenseS] = useState<string>(optCostCenter[0].value);
-  const [typeCFDIS, setTypeCFDIS] = useState<string>(optCostCenter[0].value);
+  // const [typeExpenseS, setTypeExpenseS] = useState<string>(optCostCenter[0].value);
+  // const [typeCFDIS, setTypeCFDIS] = useState<string>(optCostCenter[0].value);
+  const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
+  const [typeCFDIS, setTypeCFDIS] = useState<string>(optTypes[0].value);
   const [provider, setProvider] = useState<string>(optProviders[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
   // const [vat, setVat] = useState<string>(optResponsibles[0].value);
   //const [discount, setDiscount] = useState<string>(optResponsibles[0].value);
-  const [categoryS, setCategoryS] = useState<string>(optGlossaries[0].value);
+  // const [categoryS, setCategoryS] = useState<string>(optGlossaries[0].value);
+  const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
   const [projectS, setProjectS] = useState<string>(optProjects[0].value);
-  const [conditionS, setConditionS] = useState<string>(optGlossaries[0].value);
+  // const [conditionS, setConditionS] = useState<string>(optGlossaries[0].value);
+  const [conditionS, setConditionS] = useState<string>(optConditions[0].value);
 
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
-
+  const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
+  const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
   const SaveData = async() => {
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
@@ -223,24 +232,44 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       setStartDate(date);
     }
     
+    // let indexTypeExpense = 0;
+    // if(typeExpenseS !== ''){
+    //   optGlossaries.map((opt, index:number) => {
+    //     if(opt.value === typeExpense){
+    //       indexTypeExpense = index;
+    //     }
+    //   });      
+    // }
+
     let indexTypeExpense = 0;
     if(typeExpenseS !== ''){
-      optGlossaries.map((opt, index:number) => {
+      optTypes.map((opt, index:number) => {
         if(opt.value === typeExpense){
           indexTypeExpense = index;
         }
       });      
     }
+
     //console.log('const ty e => ', typeExpense);
+
+    // let indexTypeCFDI = 0;
+    // if(typeCFDIS !== ''){
+    //   optGlossaries.map((opt, index:number) => {
+    //     if(opt.value === typeCFDI){
+    //       indexTypeCFDI = index;
+    //     }
+    //   });      
+    // }
 
     let indexTypeCFDI = 0;
     if(typeCFDIS !== ''){
-      optGlossaries.map((opt, index:number) => {
+      optTypes.map((opt, index:number) => {
         if(opt.value === typeCFDI){
           indexTypeCFDI = index;
         }
       });      
     }
+
     //console.log('const ty cf => ', typeCFDI);
 
     // let indexProvider = 0;
@@ -263,14 +292,24 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     }
     //console.log('const resp => ', responsible);
     
+    // let indexCate = 0;
+    // if(categoryS !== ''){
+    //   optGlossaries.map((opt, index:number) => {
+    //     if(opt.value === category){
+    //       indexCate = index;
+    //     }
+    //   });      
+    // }
+
     let indexCate = 0;
     if(categoryS !== ''){
-      optGlossaries.map((opt, index:number) => {
+      optCategories.map((opt, index:number) => {
         if(opt.value === category){
           indexCate = index;
         }
       });      
     }
+
     //console.log('const cate => ', category);
     
     let indexProject = 0;
@@ -283,35 +322,59 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     }
     //console.log('const proj => ', project);
     
+    // let indexCond = 0;
+    // if(conditionS !== ''){
+    //   optGlossaries.map((opt, index:number) => {
+    //     if(opt.value === condition){
+    //       indexCond = index;
+    //     }
+    //   });      
+    // }
+
     let indexCond = 0;
     if(conditionS !== ''){
-      optGlossaries.map((opt, index:number) => {
+      optConditions.map((opt, index:number) => {
         if(opt.value === condition){
           indexCond = index;
         }
       });      
     }
+
     //console.log('const cond => ', condition);
 
     // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
     // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
     // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
+    
+    setViewCC(<div className=" col-span-1 md:col-span-3">
+          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+        </div>)
+    
     setView(<>
       <div>
-        <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-        <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+        <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
+        <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
       </div>
-      <div>
+      {/* <div>
         <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
         <SelectReact index={indexTypeExpense} opts={optGlossaries} setValue={setTypeExpenseS} />
-      </div>
-      <div>
+      </div> */}
+      {/* <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
         <SelectReact index={indexTypeCFDI} opts={optGlossaries} setValue={setTypeCFDIS} />
-      </div>
+      </div> */}
       <div>
+        <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
+        <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
+      </div>
+      {/* <div>
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
         <SelectReact index={indexCate} opts={optGlossaries} setValue={setCategoryS} />
+      </div> */}
+      <div>
+        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+        <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
       </div>
       {/* <div>
         <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
@@ -325,15 +388,20 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
         <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
       </div>
-      <div>
-        <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-        <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-      </div>
-      <div>
+      {/* <div>
         <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
         <SelectReact index={indexCond} opts={optGlossaries} setValue={setConditionS} />
+      </div> */}
+      <div>
+        <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
+        <SelectReact index={indexCond} opts={optConditions} setValue={setConditionS} />
       </div>
     </>)
+
+    setViewResponsible(<div>
+              <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+              <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+            </div>)
 
   }, []);
 
@@ -354,7 +422,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       
       let indexTypeExpense = 0;
       if(typeExpenseS !== ''){
-        optGlossaries.map((opt, index:number) => {
+        optTypes.map((opt, index:number) => {
           if(opt.value === typeExpense){
             indexTypeExpense = index;
           }
@@ -364,7 +432,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
       let indexTypeCFDI = 0;
       if(typeCFDIS !== ''){
-        optGlossaries.map((opt, index:number) => {
+        optTypes.map((opt, index:number) => {
           if(opt.value === typeCFDI){
             indexTypeCFDI = index;
           }
@@ -394,7 +462,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       
       let indexCate = 0;
       if(categoryS !== ''){
-        optGlossaries.map((opt, index:number) => {
+        optCategories.map((opt, index:number) => {
           if(opt.value === category){
             indexCate = index;
           }
@@ -414,7 +482,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       
       let indexCond = 0;
       if(conditionS !== ''){
-        optGlossaries.map((opt, index:number) => {
+        optConditions.map((opt, index:number) => {
           if(opt.value === condition){
             indexCond = index;
           }
@@ -425,22 +493,23 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
       // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
       // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
+      setViewCC(<div className=" col-span-1 md:col-span-3">
+              <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+              <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+            </div>)
+
       setView(<>
         <div>
-          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-        </div>
-        <div>
           <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
-          <SelectReact index={indexTypeExpense} opts={optGlossaries} setValue={setTypeExpenseS} />
+          <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
         </div>
         <div>
           <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-          <SelectReact index={indexTypeCFDI} opts={optGlossaries} setValue={setTypeCFDIS} />
+          <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
         </div>
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectReact index={indexCate} opts={optGlossaries} setValue={setCategoryS} />
+          <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
         </div>
         {/* <div>
           <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
@@ -455,14 +524,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
         </div>
         <div>
-          <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-          <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-        </div>
-        <div>
           <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
-          <SelectReact index={indexCond} opts={optGlossaries} setValue={setConditionS} />
+          <SelectReact index={indexCond} opts={optConditions} setValue={setConditionS} />
         </div>
       </>)
+      setViewResponsible(<div>
+              <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+              <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+            </div>)
       setResetBand(false);
     }
   }, [resetBand]);
@@ -472,8 +541,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       <div className="mt-2">
         <NavExpenseStepper index={0} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg space-y-5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-5">
+          {viewCC}
           <div>
             <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
             <Input type="text" name="folio" autoFocus 
@@ -487,7 +557,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
               </div>
             ) : null}
           </div>
-          <div>
+          <div className=" col-span-1 sm:col-span-2">
             <Label htmlFor="taxFolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio Fiscal</p></Label>
             <Input type="text" name="taxFolio" 
               value={formik.values.taxFolio}
@@ -519,7 +589,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             <CurrencyInput
               id="discount"
               name="discount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              //   focus:border-slate-700 outline-0"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -548,7 +620,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             <CurrencyInput
               id="amount"
               name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              //   focus:border-slate-700 outline-0"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -574,23 +648,41 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-            <DatePicker
+            {/* <DatePicker
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0 outline-none" 
               //showIcon
               selected={new Date(startDate)} onChange={(date:Date) => {
                   setStartDate(date.toDateString()) 
                   console.log(date); console.log(date.toDateString())}} 
+            /> */}
+            <Input 
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
+            {/* <input 
+              className="w-full h-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                focus:border-slate-700 outline-0"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+            /> */}
           </div>
           {view}
-          {selectProvider}
+          <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
+            {selectProvider}
+            {viewResponsible}
+          </div>
+          
         </div>
 
-        <div>
+        <div className="mt-5">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            // focus:border-slate-700 outline-0 overflow-hidden resize-none"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
             focus:border-slate-700 outline-0 overflow-hidden resize-none"
             rows={4} 
             value={formik.values.description}

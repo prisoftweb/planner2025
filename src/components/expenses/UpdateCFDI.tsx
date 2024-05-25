@@ -78,7 +78,7 @@ export default function UpdateCFDI({id, token, expense}:
     <div className="mt-2">
       {urlFile && (
         <iframe src={urlFile} 
-          className="w-full"
+          className="w-full h-96"
         ></iframe>
       )}
       <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} Validation={validationType} />

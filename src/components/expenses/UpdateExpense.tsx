@@ -19,6 +19,10 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
                                   {token:string, id:string, user:string, 
                                     optCostCenter:Options[], expense:Expense}){
   
+  const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
+  const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
+  const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
+
   const formik = useFormik({
     initialValues: {
       folio: expense.folio,
@@ -70,10 +74,6 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
 
   // const d = year+'-'+month+'-'+day;
 
-  const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
-  const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
-  const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-
   useEffect(() => {
     let indexCC = 0;
     if(expense.costcenter){
@@ -84,7 +84,7 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
         }
       });
     }
-    setViewCC(<div>
+    setViewCC(<div className=" col-span-1 sm:col-span-2">
                 <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
                 <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
               </div>);
@@ -93,25 +93,38 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
 
   return(
     <div className="w-full">
-      <HeaderForm img="/img/projects.svg" subtitle="Modifica los datos basicos de un gasto" 
+      <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
         title="Modificar gasto"
       />
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-sm rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} 
+        className="mt-4 w-full rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-x-3 gap-y-5">
         {/* <div>
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
           <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
         </div> */}
         {viewCC}
-        <div>
+        <div className="mt-0">
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-          <DatePicker
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+          {/* <Input 
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          /> */}
+          <input 
+            className="w-full h-10 border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+              focus:border-slate-700 outline-0"
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          {/* <DatePicker
+            className="w-full h-10 border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
             focus:border-slate-700 outline-0 outline-none" 
             //showIcon
             selected={new Date(startDate)} onChange={(date:Date) => {
                 setStartDate(date.toDateString()) 
                 console.log(date); console.log(date.toDateString())}} 
-          />
+          /> */}
         </div>
         <div>
           <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
@@ -126,7 +139,7 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
             </div>
           ) : null}
         </div>
-        <div>
+        <div className=" col-span-1 sm:col-span-2">
           <Label htmlFor="taxFolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio Fiscal</p></Label>
           <Input type="text" name="taxFolio" 
             value={formik.values.taxFolio}
@@ -157,7 +170,9 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
           <CurrencyInput
             id="discount"
             name="discount"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            //   focus:border-slate-700 outline-0"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
             //value={formik.values.amount}
             onChange={formik.handleChange}
@@ -199,7 +214,9 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
           <CurrencyInput
             id="amount"
             name="amount"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            //   focus:border-slate-700 outline-0"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
             //value={formik.values.amount}
             onChange={formik.handleChange}
@@ -221,7 +238,7 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
               </div>
           ) : null}
         </div>
-        <div>
+        <div className=" col-span-1 sm:col-span-3">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 

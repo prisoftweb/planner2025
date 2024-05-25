@@ -142,14 +142,15 @@ export default function NewStatus({showForm, token, catalogOptions,
   
   return(
     <>
-      <div className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <div className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevos status, categorys, types" 
             title={`Agregar ${opt===2? 'nueva categoria': (opt===3? 'nuevo status' : 'nuevo tipo')}`}
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         <div>
           <Label htmlFor="catalogs"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Catalogo</p></Label>

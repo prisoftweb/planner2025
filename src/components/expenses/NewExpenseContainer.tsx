@@ -1,42 +1,56 @@
 import HeaderForm from "../HeaderForm";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
-import {confirmAlert} from 'react-confirm-alert';
+//import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
+//import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
 import { useNewExpense } from "@/app/store/newExpense";
 import DataStepper from "./DataStepper";
 import VoucherStepper from "./VoucherStepper";
 import CFDIStepper from "./CFDIStepper";
+import TabDeductible from "./TabDeductible";
+import DataNoDeductibleStepper from "./DataNoDeductibleStepper";
+import VoucherNoDeductibleStepper from "./VoucherNoDeductibleStepper";
 
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
                                 optProviders, optResponsibles, optGlossaries, 
-                                optProjects }: 
+                                optProjects, optCategories, optConditions, optTypes }: 
                             {token:string, showForm:Function, user:string, 
                               optCostCenter:Options[],
                               optProviders:Options[], optResponsibles:Options[],
-                              optGlossaries:Options[], optProjects:Options[]
+                              optGlossaries:Options[], optProjects:Options[], 
+                              optCategories:Options[], optTypes:Options[], 
+                              optConditions:Options[]
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   
-  // const [deductible, setDeductible] = useState<boolean>(true);
-
   const [stepform, setStepForm] = useState<JSX.Element>(
                           <DataStepper optCostCenter={optCostCenter} 
                             optProviders={optProviders} optResponsibles={optResponsibles}
                             token={token} user={user} optGlossaries={optGlossaries} 
-                            optProjects={optProjects}  />)
+                            optProjects={optProjects} optCategories={optCategories} 
+                            optConditions={optConditions} optTypes={optTypes}  />)
 
-  const {indexStepper} = useNewExpense();
+  const {indexStepper, isDeductible} = useNewExpense();
 
   const handleResize = () => {
-    setHeightPage(window.outerHeight);
+    //setHeightPage(window.outerHeight);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
   }
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
-    setHeightPage(document.body.offsetHeight - 110);
+    //setHeightPage(document.body.offsetHeight - 110);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
     //console.log('useefect');
     //console.log(heightPage, '   ', window.outerHeight );
   }, []);
@@ -89,37 +103,53 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   try {
     useEffect(() => {
       try {
-        if(indexStepper || indexStepper>=0){
-          if(indexStepper===1){
-            setStepForm(<VoucherStepper token={token} />)
-          }else if(indexStepper===2){
-            setStepForm(<CFDIStepper token={token} />)
+        if(isDeductible){
+          if(indexStepper || indexStepper>=0){
+            if(indexStepper===1){
+              setStepForm(<VoucherStepper token={token} />)
+            }else if(indexStepper===2){
+              setStepForm(<CFDIStepper token={token} />)
+              }else {
+                setStepForm(<DataStepper optCostCenter={optCostCenter} 
+                          optProviders={optProviders} optGlossaries={optGlossaries} 
+                        optResponsibles={optResponsibles}
+                        token={token} user={user} optProjects={optProjects}
+                        optCategories={optCategories} optConditions={optConditions}
+                        optTypes={optTypes}
+                  />)
+              }
+          }
+        }else{
+          if(indexStepper || indexStepper>=0){
+            if(indexStepper===1){
+              setStepForm(<VoucherNoDeductibleStepper token={token} />)
             }else {
-              setStepForm(<DataStepper optCostCenter={optCostCenter} 
-                  optProviders={optProviders} optGlossaries={optGlossaries} 
-                optResponsibles={optResponsibles}
-                token={token} user={user} optProjects={optProjects} />)
-            }
+                setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
+                              optResponsibles={optResponsibles} token={token} user={user} />)
+              }
+          }
         }
       } catch (error) {
         setStepForm(<></>)
       }
-    }, [indexStepper])
+    }, [indexStepper, isDeductible]);
   } catch (error) {
     console.log(error);
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
+    <div className="z-10 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}}
     >
-      <div className="h-full">
+      <div className="h-full p-1 sm:p-3">
         <div className="flex justify-between">
-          <HeaderForm img="/img/projects.jpg" subtitle="Ingresa los gastos del proyecto" 
+          <HeaderForm img="/img/costs/costs.svg" subtitle="Ingresa los gastos del proyecto" 
             title="Nuevo gasto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />
+          <XMarkIcon className="w-6 h-6 text-slate-500 
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
         </div>
+        <TabDeductible />
         {stepform}
       </div>
     </div>

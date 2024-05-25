@@ -13,12 +13,15 @@ import UpdateCFDI from "./UpdateCFDI"
 
 export default function ExpenseClient({token, user, id, expense, optCostCenter, 
                                         optGlossaries, optProjects, optProviders, 
-                                        optResponsibles
+                                        optResponsibles, optCategories, optConditions,
+                                        optTypes
                                       }: 
                             { token:string, id:string, user:string, 
                               expense:Expense, optCostCenter:Options[],
                               optGlossaries:Options[], optProviders:Options[], 
-                              optResponsibles:Options[], optProjects:Options[]}){
+                              optResponsibles:Options[], optProjects:Options[], 
+                              optTypes:Options[], optCategories:Options[], 
+                              optConditions:Options[] }){
 
   const [view, setView] = useState<JSX.Element>
                 (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
@@ -32,20 +35,23 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
   const [opt, setOpt] = useState<number>(1);
   
   useEffect(() => {
-    opt===1? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+    opt===1? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <div className=" max-w-md">
+                  <div className=" max-w-lg">
                     <UpdateExpense id={id} optCostCenter={optCostCenter} 
                       token={token} user={user} expense={expense} />
                   </div>
                 </div>) : 
-      (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+      (opt===2? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                            <div className=" max-w-md">
+                            <div className=" max-w-lg">
                               <UpdateExtraExpense expense={expense} id={id} 
                                 optCostCenter={optCostCenter} optGlossaries={optGlossaries} 
                                 optProjects={optProjects} optProviders={optProviders} 
-                                optResponsibles={optResponsibles} token={token} user={user} />
+                                optResponsibles={optResponsibles} token={token} user={user} 
+                                optCategories={optCategories} optConditions={optConditions}
+                                optTypes={optTypes}
+                              />
                             </div>
                   </div>): 
         (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
@@ -56,9 +62,9 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                                 style={{borderColor:'#F8FAFC'}}>
                                     <UpdateCFDI id={id} token={token} expense={expense} />
                               </div>): 
-                    setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+                    setView(<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                               style={{borderColor:'#F8FAFC'}}>
-                                <div className=" max-w-md">
+                                <div className=" max-w-lg">
                                   <UpdateExpense id={id} optCostCenter={optCostCenter} 
                                     token={token} user={user} expense={expense} />
                                 </div>

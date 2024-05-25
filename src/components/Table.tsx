@@ -7,6 +7,7 @@ import { useState, useEffect} from "react";
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, 
   ChevronLeftIcon, ChevronRightIcon, AdjustmentsHorizontalIcon } 
 from "@heroicons/react/24/solid";
+import { useOutsideClickButton, useOutsideClick } from "@/app/functions/useOutsideClick";
 
 type MyData = {
   numRows: string
@@ -29,6 +30,18 @@ export default function Table({data, columns, placeH}:
     parsedData = JSON.parse(storedData);
   }
     
+  // const ref = useOutsideClickButton(() => {
+  //   console.log('Clicked outside of MyComponent');
+  //   setShowColumns(false);
+  // });
+
+  const ref = useOutsideClick(() => {
+    //console.log('Clicked outside of MyComponent');
+    if(showColumns){
+      setShowColumns(false);
+    }
+  });
+
   const [rowsTable, setRowsTable] = useState<number>(parsedData? parseInt(parsedData.numRows): 10);
 
   useEffect(() => {
@@ -85,11 +98,11 @@ export default function Table({data, columns, placeH}:
               console.log(table.getPreSelectedRowModel());
               setShowColumns(!showColumns);
             }}
-            onBlur={() => setShowColumns(false)}
+            //onBlur={() => {setShowColumns(false); console.log('on blur')}}
           >
             <AdjustmentsHorizontalIcon className="w-5 h-5 ml-2 mt-1 text-white" />
           </button>
-          <div className={`${showColumns? 'relative': 'hidden'}`}>
+          <div className={`${showColumns? 'relative': 'hidden'}`} ref={ref} >
             <div className="absolute w-40 bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
               {table.getAllLeafColumns().map(column => {
                 return (
@@ -101,6 +114,7 @@ export default function Table({data, columns, placeH}:
                           checked: column.getIsVisible(),
                           onChange: column.getToggleVisibilityHandler(),
                         }}
+                        onClick={() => console.log('clic')}
                       />{' '}
                       {column.id}
                     </label>

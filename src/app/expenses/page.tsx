@@ -18,6 +18,8 @@ import TableExpenses from "@/components/expenses/TableExpenses";
 import { GetCosts } from "../api/routeCost";
 import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
+import { getCatalogsByName } from "../api/routeCatalogs";
+import { GlossaryCatalog } from "@/interfaces/Glossary";
 
 export default async function Page() {
   
@@ -124,19 +126,62 @@ export default async function Page() {
     });
   });
 
+  let catalogs: GlossaryCatalog[];
+  try {
+    catalogs = await getCatalogsByName(token, 'cost');
+    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+  } catch (error) {
+    return <h1>Error al consultar catalogos!!</h1>
+  }
+
+  const optCategories: Options[] = [];
+  //const optCategories: Options[] = [];
+  catalogs[0].categorys.map((category) => {
+    optCategories.push({
+      label: category.glossary.name,
+      value: category.glossary._id
+    })
+  })
+
+  const optTypes: Options[] = [];
+  //const optTypes: Options[] = [];
+  catalogs[0].types.map((type) => {
+    optTypes.push({
+      label: type.glossary.name,
+      value: type.glossary._id
+    })
+  })
+
+  const optConditions: Options[] = [];
+  //const optConditions: Options[] = [];
+  catalogs[0].condition.map((condition) => {
+    optConditions.push({
+      label: condition.glossary.name,
+      value: condition.glossary._id
+    })
+  })
+
+  // console.log('catalogs => ', catalogs);
+  // console.log('types => ', optTypes);
+  // console.log('conditions => ', optConditions);
+  // console.log('categories => ', optCategories);
+
   if(!expenses || expenses.length <= 0){
     return (
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/projects.jpg" subtitle="Gastos"
+          <WithOut img="/img/costs/costs.svg" subtitle="Gastos"
             text="Agrega el costo de mano de obra,
                   caja chica o proveedor desde esta
                   seccion a un determinado proyecto"
             title="Gastos">
               <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
                   optProviders={optProviders} optResponsibles={optResponsibles}
-                  optGlossaries={optGlossaries} optProjects={optProjects} />
+                  optGlossaries={optGlossaries} optProjects={optProjects} 
+                  optCategories={optCategories} optConditions={optConditions}
+                  optTypes={optTypes}
+              />
           </WithOut>
         </div>
       </>
@@ -158,7 +203,7 @@ export default async function Page() {
       Importe: dollar,
       Informe: expense.folio,
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
-      Proyecto: expense.project.title,
+      Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
         responsible: expense.user.name,
         photo: expense.user.photo
@@ -174,7 +219,10 @@ export default async function Page() {
         <Header title="Gastos" >
         <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
                     optProviders={optProviders} optResponsibles={optResponsibles}
-                    optGlossaries={optGlossaries} optProjects={optProjects} />
+                    optGlossaries={optGlossaries} optProjects={optProjects} 
+                    optCategories={optCategories} optConditions={optConditions}
+                    optTypes={optTypes}
+        />
         </Header>
         <TableExpenses data={table} token={token} />
       </div>

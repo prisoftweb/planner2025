@@ -1,14 +1,26 @@
-'use client'
+import { useNewExpense } from "@/app/store/newExpense"
 
-export default function NavDeductible(){
+export default function TabDeductible(){
+  
+  const {isDeductible, updateDeductible, updateIndexStepper} = useNewExpense();
+  
+  const onClick = (value: boolean) => {
+    updateDeductible(value);
+    updateIndexStepper(0);
+  }
+
   return(
-    <div className="flex mt-5 bg-white py-1">
-      {/* <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
-          <p>Resumen</p>
-        </div>
-        <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
-          <p>Presupuesto</p>
-        </div> */}
+    <div className="grid grid-cols-2 w-full gap-x-3 mt-5 bg-white py-1 cursor-pointer">
+      <div className={`w-full px-5 ${isDeductible? 'border-b-4 border-blue-600':''}`}
+        onClick={() => onClick(true)}
+      >
+        <p className="text-center">Deducible</p>
+      </div>
+      <div className={`w-full px-5 ${!isDeductible? 'border-b-4 border-blue-600':''}`}
+        onClick={() => onClick(false)}
+      >
+        <p className="text-center">No deducible</p>
+      </div>
     </div>
   )
 }

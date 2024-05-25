@@ -75,7 +75,7 @@ export default function NewProjectContainer({token, showForm, optClients,
   }
 
   return(
-    <div className="z-50 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
+    <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">
@@ -83,7 +83,8 @@ export default function NewProjectContainer({token, showForm, optClients,
           <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 
             title="Nuevo proyecto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={closeForm} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
         </div>
         <ContainerProjectStepper token={token} optClients={optClients} 
             optCategories={optCategories} optTypes={optTypes} 

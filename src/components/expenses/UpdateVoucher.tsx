@@ -83,7 +83,8 @@ export default function UpdateVoucher({id, token, expense}:
     <div className="mt-2">
       {urlFile && (
         <iframe src={urlFile} 
-          className="w-full"
+          //className="w-full h-80"
+          className="w-full h-96"
         ></iframe>
       )}
       <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} Validation={validationType} />

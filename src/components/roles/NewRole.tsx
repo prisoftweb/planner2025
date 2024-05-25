@@ -60,14 +60,15 @@ export default function NewRole({showForm, token}:
 
   return(
     <>
-      <form className="z-50 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/role.svg" subtitle="Ingresa nuevo rol para usuarios" 
             title="Nuevo rol"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>

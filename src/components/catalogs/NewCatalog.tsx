@@ -70,7 +70,7 @@ export default function NewCatalog({showForm, token, catalog}:
 
   return(
     <>
-      <form className="z-50 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >
@@ -78,7 +78,8 @@ export default function NewCatalog({showForm, token, catalog}:
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevo catalogo" 
             title="Agregar nuevo catalogo"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>
