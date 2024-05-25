@@ -16,6 +16,7 @@ import SaveExpense from "@/app/functions/SaveExpense"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import { CreateCostWithFiles } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
+import Input from "../Input";
 
 export default function DataNoDeductibleStepper({token, user, optCostCenter, optResponsibles}: 
                                   {token:string, user:string, optCostCenter:Options[],
@@ -170,13 +171,13 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     //console.log('const resp => ', responsible);
     
     setView(<>
-      <div>
+      <div className="col-span-1 sm:col-span-2">
         <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
         <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
       </div>
     </>)
 
-    setViewCC(<div className=" col-span-2">
+    setViewCC(<div className="col-span-1 sm:col-span-2">
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
           <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
         </div>)
@@ -209,13 +210,13 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       //console.log('const resp => ', responsible);
       
       setView(<>
-        <div>
+        <div className="col-span-1 sm:col-span-2">
           <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
           <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
         </div>
       </>)
 
-      setViewCC(<div className=" col-span-2">
+      setViewCC(<div className="col-span-1 sm:col-span-2">
               <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
               <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
             </div>)
@@ -236,7 +237,9 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
             <CurrencyInput
               id="amount"
               name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              //   focus:border-slate-700 outline-0"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -257,14 +260,19 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           </div>
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-            <DatePicker
+            <Input 
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+            {/* <DatePicker
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0 outline-none" 
               //showIcon
               selected={new Date(startDate)} onChange={(date:Date) => {
                   setStartDate(date.toDateString()) 
                   console.log(date); console.log(date.toDateString())}} 
-            />
+            /> */}
           </div>
           {view}
         </div>
@@ -272,8 +280,10 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0 overflow-hidden resize-none"
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            // focus:border-slate-700 outline-0 overflow-hidden resize-none"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+              focus:border-slate-700 outline-0 overflow-hidden resize-none"
             rows={4} 
             value={formik.values.description}
             onChange={formik.handleChange}
