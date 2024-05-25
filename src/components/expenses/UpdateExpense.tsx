@@ -105,14 +105,26 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
         {viewCC}
         <div className="mt-0">
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-          <DatePicker
+          {/* <Input 
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          /> */}
+          <input 
+            className="w-full h-10 border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+              focus:border-slate-700 outline-0"
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          {/* <DatePicker
             className="w-full h-10 border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
             focus:border-slate-700 outline-0 outline-none" 
             //showIcon
             selected={new Date(startDate)} onChange={(date:Date) => {
                 setStartDate(date.toDateString()) 
                 console.log(date); console.log(date.toDateString())}} 
-          />
+          /> */}
         </div>
         <div>
           <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
@@ -158,7 +170,9 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
           <CurrencyInput
             id="discount"
             name="discount"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            //   focus:border-slate-700 outline-0"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
             //value={formik.values.amount}
             onChange={formik.handleChange}
@@ -200,7 +214,9 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
           <CurrencyInput
             id="amount"
             name="amount"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            //   focus:border-slate-700 outline-0"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
             //value={formik.values.amount}
             onChange={formik.handleChange}

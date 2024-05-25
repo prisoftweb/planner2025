@@ -203,7 +203,8 @@ export default function NewCostCenter({showForm, token, costCenter}:
           <HeaderForm img="/img/company.svg" subtitle="Ingresa nueva categoria y concepto" 
             title="Nuevo centro de costo"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>

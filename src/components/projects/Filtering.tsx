@@ -91,7 +91,8 @@ export default function Filtering({showForm, optCategories, optTypes,
           <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
             title="Filtrar proyecto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div className="">

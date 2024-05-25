@@ -69,7 +69,8 @@ export default function NewRoute({showForm, token, resource}:
           <HeaderForm img="/img/resource.svg" subtitle="Agregar nueva ruta de segmento" 
             title="Agregar nuevo recurso"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>

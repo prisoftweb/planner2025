@@ -18,11 +18,11 @@ export default function AddProvider({token, setShowForm, addProv}:
   const [heightPage, setHeightPage] = useState<number>(900);
 
   const handleResize = () => {
-    console.log(Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    ));
+    // console.log(Math.max(
+    //   document.body.scrollHeight, document.documentElement.scrollHeight,
+    //   document.body.offsetHeight, document.documentElement.offsetHeight,
+    //   document.body.clientHeight, document.documentElement.clientHeight
+    // ));
     //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -32,8 +32,8 @@ export default function AddProvider({token, setShowForm, addProv}:
   }
 
   useEffect(() => {
-    console.log('hei => ', window.outerHeight);
-    console.log('hei body => ', document.body.offsetHeight);
+    // console.log('hei => ', window.outerHeight);
+    // console.log('hei body => ', document.body.offsetHeight);
     window.addEventListener("resize", handleResize, false);
     // setHeightPage(document.body.offsetHeight - 110);
     setHeightPage(Math.max(
@@ -41,15 +41,15 @@ export default function AddProvider({token, setShowForm, addProv}:
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
-    console.log('new val => ', Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    ));
+    // console.log('new val => ', Math.max(
+    //   document.body.scrollHeight, document.documentElement.scrollHeight,
+    //   document.body.offsetHeight, document.documentElement.offsetHeight,
+    //   document.body.clientHeight, document.documentElement.clientHeight
+    // ));
   }, []);
 
   const ref = useOutsideClick(() => {
-    console.log('Clicked outside of MyComponent');
+    //console.log('Clicked outside of MyComponent');
     setShowForm(false);
   });
 

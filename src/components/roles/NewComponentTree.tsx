@@ -139,7 +139,8 @@ export default function NewComponentTree({showForm, token, optResources,
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando componentes" 
           title="Agregar componente a nuevo arbol"
         />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         <div>
           <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>

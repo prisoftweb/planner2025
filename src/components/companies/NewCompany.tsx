@@ -110,7 +110,8 @@ export default function NewCompany({showForm, token}:
           <HeaderForm img="/img/company.svg" subtitle="Ingresa los datos de la nueva empresa" 
             title="Nueva compañia"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>

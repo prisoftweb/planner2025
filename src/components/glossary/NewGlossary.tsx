@@ -87,7 +87,8 @@ export default function NewGlossary({showForm, token, glossary}:
           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevos status, categorys, types" 
             title="Agregar nuevo glosario"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>

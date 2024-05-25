@@ -346,7 +346,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
     // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
     
-    setViewCC(<div className=" col-span-3">
+    setViewCC(<div className=" col-span-1 md:col-span-3">
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
           <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
         </div>)
@@ -493,11 +493,12 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
       // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
       // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
+      setViewCC(<div className=" col-span-1 md:col-span-3">
+              <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+              <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+            </div>)
+
       setView(<>
-        <div>
-          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-        </div>
         <div>
           <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
           <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
@@ -588,7 +589,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             <CurrencyInput
               id="discount"
               name="discount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              //   focus:border-slate-700 outline-0"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -617,7 +620,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             <CurrencyInput
               id="amount"
               name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              //   focus:border-slate-700 outline-0"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -643,17 +648,29 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-            <DatePicker
+            {/* <DatePicker
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0 outline-none" 
               //showIcon
               selected={new Date(startDate)} onChange={(date:Date) => {
                   setStartDate(date.toDateString()) 
                   console.log(date); console.log(date.toDateString())}} 
+            /> */}
+            <Input 
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
+            {/* <input 
+              className="w-full h-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                focus:border-slate-700 outline-0"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+            /> */}
           </div>
           {view}
-          <div className=" col-span-3 grid grid-cols-2 gap-x-3">
+          <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
             {selectProvider}
             {viewResponsible}
           </div>

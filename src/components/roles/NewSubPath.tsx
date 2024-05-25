@@ -69,7 +69,8 @@ export default function NewSubPath({showForm, token, route}:
           <HeaderForm img="/img/route.svg" subtitle="Agregar nueva ruta de hoja de segmento" 
             title="Agregar nueva ruta"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         <div>
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>

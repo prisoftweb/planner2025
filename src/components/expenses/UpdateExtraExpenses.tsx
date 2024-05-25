@@ -61,7 +61,7 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
       });
     }
     if(expense.typeCFDI){
-      optGlossaries.map((optCFDI, index:number) => {
+      optTypes.map((optCFDI, index:number) => {
         if(optCFDI.value === expense.typeCFDI._id){
           setTypeCFDI(optCFDI.value);
           indexCFDI = index;
@@ -69,7 +69,7 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
       });
     }
     if(expense.category){
-      optGlossaries.map((optCat, index:number) => {
+      optCategories.map((optCat, index:number) => {
         if(optCat.value === expense.category._id){
           setCategory(optCat.value);
           indexCategory = index;

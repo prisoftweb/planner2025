@@ -110,7 +110,8 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
           <HeaderForm img="/img/department.svg" subtitle="Agregar nuevos departamentos de compañias" 
             title="Agregar nuevo departamento"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 cursor-pointer" onClick={() => showForm(false)} />
+          <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         
         <div>

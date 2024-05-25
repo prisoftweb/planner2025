@@ -36,8 +36,10 @@ export default function Table({data, columns, placeH}:
   // });
 
   const ref = useOutsideClick(() => {
-    console.log('Clicked outside of MyComponent');
-    setShowColumns(false);
+    //console.log('Clicked outside of MyComponent');
+    if(showColumns){
+      setShowColumns(false);
+    }
   });
 
   const [rowsTable, setRowsTable] = useState<number>(parsedData? parseInt(parsedData.numRows): 10);
