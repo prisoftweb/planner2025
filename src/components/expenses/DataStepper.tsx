@@ -595,7 +595,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
-              defaultValue={0}
+              //defaultValue={0}
+              defaultValue={discount}
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {
@@ -626,7 +627,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
-              defaultValue={0}
+              //defaultValue={0}
+              defaultValue={amount}
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {

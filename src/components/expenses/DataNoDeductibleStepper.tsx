@@ -243,7 +243,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
-              defaultValue={0}
+              //defaultValue={0}
+              defaultValue={amount}
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {

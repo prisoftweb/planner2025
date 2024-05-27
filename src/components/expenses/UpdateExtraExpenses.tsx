@@ -36,6 +36,20 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const [indexProv, setIndexProv] = useState<number>(0);
 
+  // const [selectProvider, setSelectProviders] = useState<JSX.Element>(<div>
+  //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+  //     <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
+  //   </div>);
+  // const [selectProvider, setSelectProviders] = useState<JSX.Element>(<div>
+  //   <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+  //   <div className="flex gap-x-2 items-center">
+  //     <SelectReact index={indexProv} opts={optionsProviders} setValue={setProvider} />
+  //     <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+  //       onClick={() => setShowProvider(true)} />
+  //   </div>
+  // </div>);
+  const [selectProvider, setSelectProviders] = useState<JSX.Element>(<></>);
+
   useEffect(() => {
     let indexCC = 0;
     let indexCFDI = 0;
@@ -129,20 +143,16 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
                 </div>
               </>);
     setCostCenter(optCostCenter[indexCC].value);
-  }, []);
 
-  // const [selectProvider, setSelectProviders] = useState<JSX.Element>(<div>
-  //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //     <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
-  //   </div>);
-  const [selectProvider, setSelectProviders] = useState<JSX.Element>(<div>
+    setSelectProviders(<div className="">
             <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
             <div className="flex gap-x-2 items-center">
-              <SelectReact index={indexProv} opts={optionsProviders} setValue={setProvider} />
+              <SelectReact index={indexProvider} opts={optionsProviders} setValue={setProvider} />
               <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
                 onClick={() => setShowProvider(true)} />
             </div>
-          </div>);
+          </div>)
+  }, []);
 
   // useEffect(() => {
   //   <div>
