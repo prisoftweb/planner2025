@@ -40,8 +40,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       const {description, amount} = valores;
       updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
-          '', '', '', '', '');
-      updateIndexStepper(1);
+          '', '', '');
+      updateIndexStepper(2);
     },       
   });
 
@@ -55,17 +55,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
-  //const [typeExpenseS, setTypeExpenseS] = useState<string>(optCostCenter[0].value);
-  //const [typeCFDIS, setTypeCFDIS] = useState<string>(optCostCenter[0].value);
-  //const [provider, setProvider] = useState<string>(optProviders[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
-  // const [vat, setVat] = useState<string>(optResponsibles[0].value);
-  //const [discount, setDiscount] = useState<string>(optResponsibles[0].value);
-  //const [categoryS, setCategoryS] = useState<string>(optGlossaries[0].value);
-  //const [projectS, setProjectS] = useState<string>(optProjects[0].value);
-  //const [conditionS, setConditionS] = useState<string>(optGlossaries[0].value);
-
-  //const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -74,7 +64,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   const SaveData = async() => {
     const {description, amount} = formik.values
     updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', '', '', '');
+        startDate, '', '', '', '', '', '', '', '');
     
     if(voucher){
       const formdata = new FormData();
@@ -90,8 +80,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       try {
         const res = await CreateCostWithFiles(token, formdata);
         if(res === 201){
-          // showToastMessage('Costo creado satisfactoriamente!!!');
-          // updateRefresh(true);
           setView(<></>);
           reset();
           formik.values.amount = '';
@@ -134,18 +122,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }
   }
 
-  // const addProvider = (newProvider:Options) => {
-  //   optProviders.push(newProvider);
-  //   console.log('optProviders => ', optProviders);
-  //   setProvider(newProvider.value);
-  //   console.log('prov length => ', optProviders.length)
-  //   setIndexProv(optProviders.length - 1);
-  // }
-
-  // const [selectProvider, setSelectProviders] = useState<JSX.Element>(
-  //             <SelectReact index={0} opts={optProviders} setValue={setProvider} />)
-  //const [indexProv, setIndexProv] = useState<number>(0);
-  
   useEffect(() => {
     let indexCC = 0;
     if(costCenter !== ''){
@@ -155,7 +131,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         }
       });      
     }
-    //console.log('const cc => ', costCenter);
     if(date !== ''){
       setStartDate(date);
     }
@@ -168,7 +143,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         }
       });      
     }
-    //console.log('const resp => ', responsible);
     
     setView(<>
       <div className="col-span-1 sm:col-span-2">
@@ -194,7 +168,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           }
         });      
       }
-      //console.log('const cc => ', costCenter);
       if(date !== ''){
         setStartDate(date);
       }
@@ -207,7 +180,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           }
         });      
       }
-      //console.log('const resp => ', responsible);
       
       setView(<>
         <div className="col-span-1 sm:col-span-2">
@@ -227,7 +199,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   return(
     <div className="w-full bg-white">
       <div className="mt-2">
-        <NavExpenseNoDeductibleStepper index={0} />
+        <NavExpenseNoDeductibleStepper index={1} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-3">
@@ -266,14 +238,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-            {/* <DatePicker
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              focus:border-slate-700 outline-0 outline-none" 
-              //showIcon
-              selected={new Date(startDate)} onChange={(date:Date) => {
-                  setStartDate(date.toDateString()) 
-                  console.log(date); console.log(date.toDateString())}} 
-            /> */}
           </div>
           {view}
         </div>

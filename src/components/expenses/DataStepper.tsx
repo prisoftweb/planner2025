@@ -30,8 +30,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                                     optConditions:Options[] }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
-    category, condition, costCenter, date, description, discount, 
-    folio, indexStepper, project, proveedor, responsible, taxFolio, 
+    category, costCenter, date, description, discount, 
+    folio, project, proveedor, responsible, taxFolio, 
     typeCFDI, typeExpense, vat, reset, updateRefresh} = useNewExpense();
 
   const formik = useFormik({
@@ -61,8 +61,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       const {description, folio, taxFolio, discount, amount, vat} = valores;
       updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, typeExpenseS, categoryS, projectS, conditionS);
-      updateIndexStepper(1);
+          typeCFDIS, typeExpenseS, categoryS);
+      updateIndexStepper(2);
     },       
   });
 
@@ -76,20 +76,12 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
-  // const [typeExpenseS, setTypeExpenseS] = useState<string>(optCostCenter[0].value);
-  // const [typeCFDIS, setTypeCFDIS] = useState<string>(optCostCenter[0].value);
   const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(optTypes[0].value);
   const [provider, setProvider] = useState<string>(optProviders[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
-  // const [vat, setVat] = useState<string>(optResponsibles[0].value);
-  //const [discount, setDiscount] = useState<string>(optResponsibles[0].value);
-  // const [categoryS, setCategoryS] = useState<string>(optGlossaries[0].value);
   const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
-  const [projectS, setProjectS] = useState<string>(optProjects[0].value);
-  // const [conditionS, setConditionS] = useState<string>(optGlossaries[0].value);
-  const [conditionS, setConditionS] = useState<string>(optConditions[0].value);
-
+  
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
@@ -100,7 +92,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, typeExpenseS, categoryS, projectS, conditionS);
+        typeCFDIS, typeExpenseS, categoryS);
     
     if(voucher || CFDI){
       const formdata = new FormData();
@@ -112,14 +104,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('folio', folio);
       formdata.append('provider', provider);
       formdata.append('user', responsibleS);
-      formdata.append('taxFolio', taxFolio);
+      formdata.append('taxfolio', taxFolio);
       formdata.append('typeCFDI', typeCFDIS);
       formdata.append('category', categoryS);
-      formdata.append('project', projectS);
+      formdata.append('project', project);
       formdata.append('vat', vat);
-      // formdata.append('condition', JSON.stringify({
-      //   glossary:conditionS, user:responsible
-      // }))
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -131,8 +120,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       try {
         const res = await CreateCostWithFiles(token, formdata);
         if(res === 201){
-          // showToastMessage('Costo creado satisfactoriamente!!!');
-          // updateRefresh(true);
           setView(<></>);
           reset();
           formik.values.amount = '';
@@ -155,10 +142,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     }else{
       const data = {
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, discount: discount.replace(/[$,]/g, ""), folio, provider, 
-        user:responsibleS, taxFolio, typeCFDI: typeCFDIS, category: categoryS, project: projectS, vat,
-        condition: {
-          glossary:conditionS, user:user
-        }
+        user:responsibleS, taxfolio:taxFolio, typeCFDI: typeCFDIS, category: categoryS, project, vat,
       }
   
       try {
@@ -189,9 +173,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const addProvider = (newProvider:Options) => {
     optProviders.push(newProvider);
-    console.log('optProviders => ', optProviders);
+    //console.log('optProviders => ', optProviders);
     setProvider(newProvider.value);
-    console.log('prov length => ', optProviders.length)
+    //console.log('prov length => ', optProviders.length)
     setIndexProv(optProviders.length - 1);
   }
 
@@ -200,11 +184,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [indexProv, setIndexProv] = useState<number>(0);
 
   useEffect(() => {
-    //console.log('useefect => ', optProviders);
-    //console.log('index prov => ', indexProv);
     setSelectProviders(<></>);
     setTimeout(() => {
-      // setSelectProviders(<SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />)
       setSelectProviders(
         <div>
           <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
@@ -227,19 +208,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    //console.log('const cc => ', costCenter);
     if(date !== ''){
       setStartDate(date);
     }
-    
-    // let indexTypeExpense = 0;
-    // if(typeExpenseS !== ''){
-    //   optGlossaries.map((opt, index:number) => {
-    //     if(opt.value === typeExpense){
-    //       indexTypeExpense = index;
-    //     }
-    //   });      
-    // }
 
     let indexTypeExpense = 0;
     if(typeExpenseS !== ''){
@@ -250,17 +221,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       });      
     }
 
-    //console.log('const ty e => ', typeExpense);
-
-    // let indexTypeCFDI = 0;
-    // if(typeCFDIS !== ''){
-    //   optGlossaries.map((opt, index:number) => {
-    //     if(opt.value === typeCFDI){
-    //       indexTypeCFDI = index;
-    //     }
-    //   });      
-    // }
-
     let indexTypeCFDI = 0;
     if(typeCFDIS !== ''){
       optTypes.map((opt, index:number) => {
@@ -269,18 +229,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-
-    //console.log('const ty cf => ', typeCFDI);
-
-    // let indexProvider = 0;
-    // if(proveedor !== ''){
-    //   optProviders.map((opt, index:number) => {
-    //     if(opt.value === proveedor){
-    //       indexProvider = index;
-    //     }
-    //   });      
-    // }
-    //console.log('const prov => ', proveedor);
     
     let indexResp = 0;
     if(responsibleS !== ''){
@@ -290,16 +238,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         }
       });      
     }
-    //console.log('const resp => ', responsible);
-    
-    // let indexCate = 0;
-    // if(categoryS !== ''){
-    //   optGlossaries.map((opt, index:number) => {
-    //     if(opt.value === category){
-    //       indexCate = index;
-    //     }
-    //   });      
-    // }
 
     let indexCate = 0;
     if(categoryS !== ''){
@@ -310,42 +248,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       });      
     }
 
-    //console.log('const cate => ', category);
-    
-    let indexProject = 0;
-    if(projectS !== ''){
-      optProjects.map((opt, index:number) => {
-        if(opt.value === project){
-          indexProject = index;
-        }
-      });      
-    }
-    //console.log('const proj => ', project);
-    
-    // let indexCond = 0;
-    // if(conditionS !== ''){
-    //   optGlossaries.map((opt, index:number) => {
-    //     if(opt.value === condition){
-    //       indexCond = index;
-    //     }
-    //   });      
-    // }
-
-    let indexCond = 0;
-    if(conditionS !== ''){
-      optConditions.map((opt, index:number) => {
-        if(opt.value === condition){
-          indexCond = index;
-        }
-      });      
-    }
-
-    //console.log('const cond => ', condition);
-
-    // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
-    // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
-    // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
-    
     setViewCC(<div className=" col-span-1 md:col-span-3">
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
           <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
@@ -356,45 +258,13 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
         <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
       </div>
-      {/* <div>
-        <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
-        <SelectReact index={indexTypeExpense} opts={optGlossaries} setValue={setTypeExpenseS} />
-      </div> */}
-      {/* <div>
-        <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-        <SelectReact index={indexTypeCFDI} opts={optGlossaries} setValue={setTypeCFDIS} />
-      </div> */}
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
         <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
       </div>
-      {/* <div>
-        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact index={indexCate} opts={optGlossaries} setValue={setCategoryS} />
-      </div> */}
       <div>
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
         <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-      </div>
-      {/* <div>
-        <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-        <div className="flex gap-x-2 items-center">
-          <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
-          <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-            onClick={() => setShowProvider(true)} />
-        </div>
-      </div> */}
-      <div>
-        <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
-        <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
-      </div>
-      {/* <div>
-        <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
-        <SelectReact index={indexCond} opts={optGlossaries} setValue={setConditionS} />
-      </div> */}
-      <div>
-        <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
-        <SelectReact index={indexCond} opts={optConditions} setValue={setConditionS} />
       </div>
     </>)
 
@@ -415,7 +285,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('const cc => ', costCenter);
       if(date !== ''){
         setStartDate(date);
       }
@@ -428,8 +297,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('const ty e => ', typeExpense);
-
+      
       let indexTypeCFDI = 0;
       if(typeCFDIS !== ''){
         optTypes.map((opt, index:number) => {
@@ -438,8 +306,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('const ty cf => ', typeCFDI);
-
+      
       let indexProvider = 0;
       if(proveedor !== ''){
         optProviders.map((opt, index:number) => {
@@ -448,7 +315,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('const prov => ', proveedor);
       
       let indexResp = 0;
       if(responsibleS !== ''){
@@ -458,7 +324,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('const resp => ', responsible);
       
       let indexCate = 0;
       if(categoryS !== ''){
@@ -468,31 +333,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('const cate => ', category);
       
-      let indexProject = 0;
-      if(projectS !== ''){
-        optProjects.map((opt, index:number) => {
-          if(opt.value === project){
-            indexProject = index;
-          }
-        });      
-      }
-      //console.log('const proj => ', project);
-      
-      let indexCond = 0;
-      if(conditionS !== ''){
-        optConditions.map((opt, index:number) => {
-          if(opt.value === condition){
-            indexCond = index;
-          }
-        });      
-      }
-      //console.log('const cond => ', condition);
-
-      // console.log('indexCC => ', indexCC, ' indexTE => ', indexTypeExpense, 
-      // ' indexTCF => ', indexTypeCFDI, 'indexProv => ', indexProvider, ' indexResp => ', indexResp, 
-      // ' indexCat => ', indexCate, ' indexProject => ', indexProject, ' indexCond => ', indexCond);
       setViewCC(<div className=" col-span-1 md:col-span-3">
               <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
               <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
@@ -511,22 +352,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
         </div>
-        {/* <div>
-          <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-          <div className="flex gap-x-2 items-center">
-            <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
-            <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-              onClick={() => setShowProvider(true)} />
-          </div>
-        </div> */}
-        <div>
-          <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
-          <SelectReact index={indexProject} opts={optProjects} setValue={setProjectS} />
-        </div>
-        <div>
-          <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estatus</p></Label>
-          <SelectReact index={indexCond} opts={optConditions} setValue={setConditionS} />
-        </div>
       </>)
       setViewResponsible(<div>
               <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
@@ -539,7 +364,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   return(
     <div className="w-full bg-white">
       <div className="mt-2">
-        <NavExpenseStepper index={0} />
+        <NavExpenseStepper index={1} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-5">
@@ -650,14 +475,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-            {/* <DatePicker
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              focus:border-slate-700 outline-0 outline-none" 
-              //showIcon
-              selected={new Date(startDate)} onChange={(date:Date) => {
-                  setStartDate(date.toDateString()) 
-                  console.log(date); console.log(date.toDateString())}} 
-            /> */}
             <Input 
               type="date"
               value={startDate}

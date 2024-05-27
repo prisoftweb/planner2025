@@ -2,11 +2,15 @@ import { useNewExpense } from "@/app/store/newExpense"
 
 export default function TabDeductible(){
   
-  const {isDeductible, updateDeductible, updateIndexStepper} = useNewExpense();
+  const {isDeductible, updateDeductible, updateIndexStepper, project} = useNewExpense();
   
   const onClick = (value: boolean) => {
     updateDeductible(value);
-    updateIndexStepper(0);
+    if(project === ''){
+      updateIndexStepper(0);
+    }else{
+      updateIndexStepper(1);
+    }
   }
 
   return(

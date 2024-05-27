@@ -14,27 +14,30 @@ interface NewExpenseState {
   proveedor: string
   responsible: string
   category:string
-  project: string
-  condition: string
-
+  
   voucher: (File | null),
   CFDI: (File | null)
 
-  indexStepper: number
   refresh: boolean
   isDeductible: boolean
+}
+
+interface ProjectState{
+  project: string,
+  indexStepper: number
 }
 
 interface Actions {
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-    typeCFDI:string, typeExpense:string, category:string, project:string, condition:string) => void,
+    typeCFDI:string, typeExpense:string, category:string) => void,
   updateVoucher: (file: File) => void,
   updateCDFI: (CFDI: File) => void,
   updateIndexStepper: (index: number) => void,
   reset: () => void,
   updateRefresh: (value: boolean) => void,
   updateDeductible: (value: boolean) => void,
+  updateProject: (value:string) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -52,19 +55,22 @@ const initialState: NewExpenseState = {
   typeExpense: '',
   CFDI : null,
   voucher: null,
-  indexStepper: 0,
   category: '',
-  project: '',
-  condition: '',
   refresh: false,
   isDeductible: true
 }
 
-export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
+const projectInitial: ProjectState = {
+  project: '',
+  indexStepper: 0,
+}
+
+export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((set) => ({
   ...initialState,
+  ...projectInitial,
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-      typeCFDI:string, typeExpense:string, category:string, project:string, condition:string) => set(state => ({
+      typeCFDI:string, typeExpense:string, category:string) => set(state => ({
     ...state,
     costCenter: costCenter,
     folio: folio,
@@ -79,8 +85,6 @@ export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
     typeCFDI: typeCFDI,
     typeExpense: typeExpense,
     category: category,
-    project: project,
-    condition: condition
   })),
   updateVoucher: (file: File) => set (state => ({
     ...state,
@@ -101,6 +105,10 @@ export const useNewExpense = create<NewExpenseState & Actions>((set) => ({
   updateDeductible: (value: boolean) => set(state => ({
     ...state,
     isDeductible: value
+  })),
+  updateProject: (value:string) => set(state => ({
+    ...state,
+    project: value
   })),
   reset: () => {
     set(initialState)

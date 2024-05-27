@@ -12,7 +12,7 @@ export default function CFDIStepper({token} : {token: string}) {
   const {updateCDFI} = useNewExpense();
   const [file, setFile] = useState<File>();
   
-  const { amount, category, condition, costCenter, date, description, discount, 
+  const { amount, category, costCenter, date, description, discount, 
     folio, indexStepper, project, proveedor, responsible, taxFolio, typeCFDI, 
     typeExpense, vat, voucher, reset, updateRefresh, updateIndexStepper} = useNewExpense();
   
@@ -36,14 +36,11 @@ export default function CFDIStepper({token} : {token: string}) {
       formdata.append('folio', folio);
       formdata.append('provider', proveedor);
       formdata.append('user', responsible);
-      formdata.append('taxFolio', taxFolio);
+      formdata.append('taxfolio', taxFolio);
       formdata.append('typeCFDI', typeCFDI);
       formdata.append('category', category);
       formdata.append('project', project);
       formdata.append('vat', vat);
-      // formdata.append('condition', JSON.stringify({
-      //     glossary:condition, user:responsible
-      //   }))
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -60,7 +57,7 @@ export default function CFDIStepper({token} : {token: string}) {
           updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           setTimeout(() => {
-            updateIndexStepper(0);
+            updateIndexStepper(1);
           }, 200);
         }else{
           showToastMessageError(res);
@@ -71,10 +68,7 @@ export default function CFDIStepper({token} : {token: string}) {
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
-        provider: proveedor, user:responsible, taxFolio, typeCFDI, category, project, vat,
-        condition: {
-          glossary:condition, user:responsible
-        }
+        provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, category, project, vat,
       }
   
       try {
@@ -84,7 +78,7 @@ export default function CFDIStepper({token} : {token: string}) {
           updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           setTimeout(() => {
-            updateIndexStepper(0);
+            updateIndexStepper(1);
           }, 200);
         }
         else{
@@ -98,7 +92,7 @@ export default function CFDIStepper({token} : {token: string}) {
 
   return (
     <div className="mt-2">
-      <NavExpenseStepper index={2} />
+      <NavExpenseStepper index={3} />
       <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} Validation={validationType} />
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" onClick={SaveData}>Guardar</Button>

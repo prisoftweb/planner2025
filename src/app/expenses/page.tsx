@@ -198,7 +198,7 @@ export default async function Page() {
                   optProviders={optProviders} optResponsibles={optResponsibles}
                   optGlossaries={optGlossaries} optProjects={optProjects} 
                   optCategories={optCategories} optConditions={optConditions}
-                  optTypes={optTypes}
+                  optTypes={optTypes} projects={projects}
               />
           </WithOut>
         </div>
@@ -239,7 +239,7 @@ export default async function Page() {
                     optProviders={optProviders} optResponsibles={optResponsibles}
                     optGlossaries={optGlossaries} optProjects={optProjects} 
                     optCategories={optCategories} optConditions={optConditions}
-                    optTypes={optTypes}
+                    optTypes={optTypes} projects={projects}
         />
         </Header>
         <TableExpenses data={table} token={token} 

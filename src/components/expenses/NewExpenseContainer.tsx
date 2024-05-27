@@ -11,19 +11,25 @@ import CFDIStepper from "./CFDIStepper";
 import TabDeductible from "./TabDeductible";
 import DataNoDeductibleStepper from "./DataNoDeductibleStepper";
 import VoucherNoDeductibleStepper from "./VoucherNoDeductibleStepper";
+import SelectProjectStepper from "./SelectProyectStepper";
+import { Project } from "@/interfaces/Projects";
+import Select, {components} from 'react-select'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
                                 optProviders, optResponsibles, optGlossaries, 
-                                optProjects, optCategories, optConditions, optTypes }: 
+                                optProjects, optCategories, optConditions, optTypes, 
+                                projects }: 
                             {token:string, showForm:Function, user:string, 
                               optCostCenter:Options[],
                               optProviders:Options[], optResponsibles:Options[],
                               optGlossaries:Options[], optProjects:Options[], 
                               optCategories:Options[], optTypes:Options[], 
-                              optConditions:Options[]
+                              optConditions:Options[], projects:Project[]
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
+  const [optSelectize, setOptSelectize] = useState<Options>();
   
   const [stepform, setStepForm] = useState<JSX.Element>(
                           <DataStepper optCostCenter={optCostCenter} 
@@ -32,7 +38,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                             optProjects={optProjects} optCategories={optCategories} 
                             optConditions={optConditions} optTypes={optTypes}  />)
 
-  const {indexStepper, isDeductible} = useNewExpense();
+  const {indexStepper, isDeductible, project, updateProject} = useNewExpense();
 
   const handleResize = () => {
     //setHeightPage(window.outerHeight);
@@ -43,60 +49,36 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     ));
   }
 
+  const selectProject = () => {
+    if(project === ''){
+      setOptSelectize(optProjects[0]);
+    }else{
+      let aux = 0;
+      optProjects.map((optP, index:number) => {
+        if(optP.value === project){
+          aux = index;
+        }
+      });
+      setOptSelectize(optProjects[aux]);
+    }
+  }
+
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
-    //setHeightPage(document.body.offsetHeight - 110);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
-    //console.log('useefect');
-    //console.log(heightPage, '   ', window.outerHeight );
+    selectProject();
   }, []);
 
-  const closeForm = () => {
-    
-    showForm(false);
-    // confirmAlert({
-    //   title: 'Confirmacion para cerrar formulario?',
-    //   message: `Desea cerrar el formulario y perder los datos guardados?`,
-    //   buttons: [
-    //   {
-    //     label: 'Si',
-    //     onClick: () => {
-    //       //let res = undefined;
+  useEffect(() => {
+    selectProject();
+  }, [project]);
 
-    //       switch('user'){
-    //         case 'user':
-    //           showForm(false);
-    //         break;
-    //       }
-    //     }           
-    //   },
-    //   {
-    //     label: 'No',
-    //     onClick: () => {
-    //       showToastMessageInfo('Se ha cancelado el cierre!');            
-    //     }
-    //   }
-    //   ],
-    //   closeOnEscape: true,
-    //   closeOnClickOutside: true,
-    //   keyCodeForClose: [8, 32],
-    //   willUnmount: () => {},
-    //   //afterClose: () => {},
-    //   onClickOutside: () => {
-    //     showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
-    //   },
-    //   onkeyPress: () => {
-    //     showToastMessageInfo('Favor de seleccionar SI o NO');
-    //   },
-    //   onKeypressEscape: () => {
-    //     showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
-    //   },
-    //   overlayClassName: "overlay-custom-class-name"
-    // });
+  const closeForm = () => {
+    showForm(false);
   }
 
 
@@ -106,26 +88,30 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
         if(isDeductible){
           if(indexStepper || indexStepper>=0){
             if(indexStepper===1){
-              setStepForm(<VoucherStepper token={token} />)
+              setStepForm(<DataStepper optCostCenter={optCostCenter} 
+                optProviders={optProviders} optGlossaries={optGlossaries} 
+                optResponsibles={optResponsibles}
+                token={token} user={user} optProjects={optProjects}
+                optCategories={optCategories} optConditions={optConditions}
+                optTypes={optTypes}
+              />)
             }else if(indexStepper===2){
-              setStepForm(<CFDIStepper token={token} />)
-              }else {
-                setStepForm(<DataStepper optCostCenter={optCostCenter} 
-                          optProviders={optProviders} optGlossaries={optGlossaries} 
-                        optResponsibles={optResponsibles}
-                        token={token} user={user} optProjects={optProjects}
-                        optCategories={optCategories} optConditions={optConditions}
-                        optTypes={optTypes}
-                  />)
+                setStepForm(<VoucherStepper token={token} />)
+              }else if(indexStepper===3){
+                  setStepForm(<CFDIStepper token={token} />)
+                }else {
+                  setStepForm(<SelectProjectStepper projects={projects} optProjects={optProjects} />)
               }
           }
         }else{
           if(indexStepper || indexStepper>=0){
             if(indexStepper===1){
-              setStepForm(<VoucherNoDeductibleStepper token={token} />)
-            }else {
-                setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
-                              optResponsibles={optResponsibles} token={token} user={user} />)
+              setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
+                optResponsibles={optResponsibles} token={token} user={user} />)
+            }else if(indexStepper===2){
+                setStepForm(<VoucherNoDeductibleStepper token={token} />)  
+              }else {
+                  setStepForm(<SelectProjectStepper projects={projects} optProjects={optProjects} />)
               }
           }
         }
@@ -137,17 +123,51 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     console.log(error);
   }
 
+  const DropdownIndicator = (props: any) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <MagnifyingGlassIcon className='w-6 h-6 text-slate-400' />
+        </components.DropdownIndicator>
+      )
+    )
+  }
+
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      flexDirection: 'row-reverse',
+      borderRadius: "9px",
+    }),
+  }
+
   return(
     <div className="z-10 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full p-1 sm:p-3">
-        <div className="flex justify-between">
+        <div className="flex justify-end">
+          <XMarkIcon className="w-6 h-6 text-slate-500 
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+        </div>
+        <div className="flex justify-between items-center flex-wrap sm:flex-nowrap gap-x-3 gap-y-3">
           <HeaderForm img="/img/costs/costs.svg" subtitle="Ingresa los gastos del proyecto" 
             title="Nuevo gasto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500 
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+          
+          <Select
+            className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
+            value={optSelectize}
+            options={optProjects}
+            maxMenuHeight={250}
+            components={{
+              DropdownIndicator
+            }}
+            placeholder='Buscar ...'
+            styles={customStyles}
+            onChange={(value:any) => updateProject(value.value)}
+          />
+        
         </div>
         <TabDeductible />
         {stepform}
