@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useCallback } from 'react';
 import { useDropzone} from 'react-dropzone';
 import Label from "./Label";
-import { showToastMessageError } from "./Alert";
 
 export default function UploadFileDropZone({label, setFile, Validation}: 
             {label:string, setFile:Function, Validation:Function}) {

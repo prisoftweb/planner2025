@@ -48,8 +48,12 @@ export default async function Page() {
 
   const optCostCenter:Options[]= [];
   costcenters.map((costcenter) => {
+    let cat = '';
+    costcenter.categorys.map((category) => {
+      cat += category.name + ', ';
+    })
     optCostCenter.push({
-      label: costcenter.name,
+      label: costcenter.name + ' ( ' + cat + ' ) ',
       value: costcenter._id
     });
   });
@@ -244,7 +248,7 @@ export default async function Page() {
         </Header>
         <TableExpenses data={table} token={token} 
           optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
-          optTypes={optTypeFilter}
+          optTypes={optTypeFilter} expenses={expenses}
         />
       </div>
     </>
