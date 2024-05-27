@@ -47,7 +47,8 @@ export default function UploadFileDropZone({label, setFile, Validation}:
           }
         </div>
       </div>
-      {pre && <iframe className="w-full h-auto mt-4" src={URL.createObjectURL(pre)} />}
+      {pre && <iframe className="w-full h-80 mt-4" src={URL.createObjectURL(pre)} />}
+      {/* {pre && <iframe className="w-full h-auto mt-4" src={URL.createObjectURL(pre)} />} */}
     </>
   );
 }

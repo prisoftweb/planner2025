@@ -13,12 +13,12 @@ export default function ProfileExpense({expense}:
 
   const discount = CurrencyFormatter({
     currency: "MXN",
-    value: expense.discount
+    value: Number(expense.discount)
   });
 
   const vat = CurrencyFormatter({
     currency: "MXN",
-    value: expense.iva
+    value: expense.iva? expense.iva : 0
   });
 
   return(
@@ -27,23 +27,24 @@ export default function ProfileExpense({expense}:
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>
-              <img src={expense.project.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo" 
+              {/* <img src={expense.project.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo"  */}
+              <img src={expense.project?.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo"              
                 className="w-28 h-auto" />
             </div>
             <div>
-              <p className="text-blue-500">{expense.project.title}</p>
-              <p className="text-slate-500">{expense.project.code}</p>
-              <p className="text-slate-500">{expense.project.types? expense.project.types.name: ''}</p>
-              <p className="text-slate-500">{expense.project.account}</p>
+              <p className="text-blue-500">{expense.project?.title || 'Sin proyecto'}</p>
+              <p className="text-slate-500">{expense.project?.code || ''}</p>
+              <p className="text-slate-500">{expense.project?.types? expense.project.types.name: ''}</p>
+              <p className="text-slate-500">{expense.project?.account || ''}</p>
             </div>
           </div>
           <div className=" flex gap-x-2 items-center">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-                style={{"width": expense.project.progress.length > 0? 
+                style={{"width": expense.project?.progress.length > 0? 
                             expense.project.progress[expense.project.progress.length-1].progress : 0}}></div>
             </div>
-            <p>{expense.project.progress.length > 0?
+            <p>{expense.project?.progress.length > 0?
                       expense.project.progress[expense.project.progress.length-1].progress : 0}%</p>
           </div>
         </div>
@@ -56,7 +57,7 @@ export default function ProfileExpense({expense}:
               </div>
               <div className="flex justify-between w-full">
                 <div>
-                  <p className="text-slate-500">{expense.category.name}</p>
+                  <p className="text-slate-500">{expense.category?.name || 'Sin categoria'}</p>
                   <p className="text-blue-500">{expense.provider?.name || 'Sin proveedor'}</p>
                 </div>
                 <div className="h-6">
@@ -90,7 +91,7 @@ export default function ProfileExpense({expense}:
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Tipo de CFDI</p>
-              <p className="text-blue-600 font-semibold">{expense.typeCFDI.name}</p>
+              <p className="text-blue-600 font-semibold">{expense.typeCFDI?.name}</p>
             </div>
             <div>
               <p className="text-slate-500">Fecha</p>

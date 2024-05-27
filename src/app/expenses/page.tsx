@@ -135,30 +135,48 @@ export default async function Page() {
   }
 
   const optCategories: Options[] = [];
+  const optCategoriesFilter: Options[] = [{
+    label: 'Todos',
+    value: 'all'
+  }];
   //const optCategories: Options[] = [];
   catalogs[0].categorys.map((category) => {
-    optCategories.push({
+    const c = {
       label: category.glossary.name,
       value: category.glossary._id
-    })
+    }
+    optCategories.push(c);
+    optCategoriesFilter.push(c);
   })
 
   const optTypes: Options[] = [];
+  const optTypeFilter: Options[] = [{
+    label: 'Todos',
+    value: 'all'
+  }];
   //const optTypes: Options[] = [];
   catalogs[0].types.map((type) => {
-    optTypes.push({
+    const t = {
       label: type.glossary.name,
       value: type.glossary._id
-    })
+    };
+    optTypes.push(t);
+    optTypeFilter.push(t);
   })
 
   const optConditions: Options[] = [];
+  const optConditionsFilter: Options[] = [{
+    label: 'Todos',
+    value: 'all'
+  }];
   //const optConditions: Options[] = [];
   catalogs[0].condition.map((condition) => {
-    optConditions.push({
+    const c:Options = {
       label: condition.glossary.name,
       value: condition.glossary._id
-    })
+    }
+    optConditions.push(c);
+    optConditionsFilter.push(c);
   })
 
   // console.log('catalogs => ', catalogs);
@@ -180,7 +198,7 @@ export default async function Page() {
                   optProviders={optProviders} optResponsibles={optResponsibles}
                   optGlossaries={optGlossaries} optProjects={optProjects} 
                   optCategories={optCategories} optConditions={optConditions}
-                  optTypes={optTypes}
+                  optTypes={optTypes} projects={projects}
               />
           </WithOut>
         </div>
@@ -221,10 +239,13 @@ export default async function Page() {
                     optProviders={optProviders} optResponsibles={optResponsibles}
                     optGlossaries={optGlossaries} optProjects={optProjects} 
                     optCategories={optCategories} optConditions={optConditions}
-                    optTypes={optTypes}
+                    optTypes={optTypes} projects={projects}
         />
         </Header>
-        <TableExpenses data={table} token={token} />
+        <TableExpenses data={table} token={token} 
+          optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
+          optTypes={optTypeFilter}
+        />
       </div>
     </>
   )

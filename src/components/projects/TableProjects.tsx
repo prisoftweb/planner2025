@@ -394,11 +394,11 @@ export default function TableProjects({data, token, projects, optCategories,
           </button>
         </div>
         <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
-        {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
-                          optTypes={optTypes} optConditions={optConditions} 
-                          FilterData={filterData} filterCondition={filterCondition} 
-                          filterType={filterType} filterCategory={filterCategory} 
-                          maxAmount={maxAmount}  />}
+          {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
+                            optTypes={optTypes} optConditions={optConditions} 
+                            FilterData={filterData} filterCondition={filterCondition} 
+                            filterType={filterType} filterCategory={filterCategory} 
+                            maxAmount={maxAmount}  />}
       </div>
       {view}
       {/* <Table columns={columns} data={data} placeH="Buscar proyecto.." /> */}
