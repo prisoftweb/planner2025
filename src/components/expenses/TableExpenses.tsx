@@ -322,11 +322,11 @@ export default function TableExpenses({data, token, expenses,
 
   return(
     <>
-      <div className="flex justify-end mb-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
-        {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
+      <div className="flex justify-end my-5">
+        <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
+          {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
-                          FilterData={filterData} maxAmount={maxAmount}  />} */}
+                          FilterData={filterData} maxAmount={maxAmount}  />}
       </div>
       {view}
     </>
