@@ -5,7 +5,7 @@ import DeleteElement from "../DeleteElement";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Button from "../Button";
-import { ExpensesTable } from "@/interfaces/Expenses";
+import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { RemoveCost } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
@@ -15,15 +15,18 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
 
-export default function TableExpenses({data, token}:
-                        {data:ExpensesTable[], token:string, optCategories:Options[], 
-                        optTypes:Options[], optConditions:Options[]}){
+export default function TableExpenses({data, token, expenses, 
+                            optCategories, optConditions, optTypes}:
+                        {data:ExpensesTable[], token:string, 
+                        optCategories:Options[], optTypes:Options[], 
+                        optConditions:Options[], expenses:Expense[]}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
   const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
+  const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
 
   const {refresh, updateRefresh} = useNewExpense();
 
@@ -130,6 +133,15 @@ export default function TableExpenses({data, token}:
   ]
   
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
+  const [maxAmount, setMaxAmount] = useState<number>(0);
+  
+  useEffect(() => {
+    const expenseM = expenses.reduce((previous, current) => {
+      return current.subtotal > previous.subtotal ? current : previous;
+    });
+    setMaxAmount(expenseM.subtotal);
+  }, [])
+
 
   useEffect(() => {
     if(refresh){
@@ -163,157 +175,158 @@ export default function TableExpenses({data, token}:
     }
   }, [filter]);
 
-  // const filterData = (conditions:string[], types:string[], 
-  //   categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
+  const filterData = (conditions:string[], types:string[], 
+    categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
   
-  //   console.log('filtrar');
-  //   console.log('conditions', conditions);
-  //   console.log('types ', types);
-  //   console.log('categories ', categories);
-  //   console.log('startdate ', startDate);
-  //   console.log('endDate ', endDate);
-  //   console.log('min amount ', minAmount);
-  //   console.log('max amount ', maxAmount);
+    console.log('filtrar');
+    console.log('conditions', conditions);
+    console.log('types ', types);
+    console.log('categories ', categories);
+    console.log('startdate ', startDate);
+    console.log('endDate ', endDate);
+    console.log('min amount ', minAmount);
+    console.log('max amount ', maxAmount);
     
-  //   let filtered: Project[] = [];
-  //   projects.map((project) => {
-  //     // if(project.date){
-  //     //   console.log('date project => ', project.date);
-  //     //   console.log('fechaa ', new Date(project.date));
-  //     //   console.log('timee ', new Date(project.date).getTime());
-  //     // }
-  //     //console.log('pro', project)
-  //     console.log('proyect => ', project);
-  //     if(conditions.includes('all')){
-  //       if(types.includes('all')){
-  //         if(categories.includes('all')){
-  //           if(project.amount >= minAmount && project.amount <= maxAmount){
-  //             //filtered.push(project);
-  //             console.log(project.title, ' => ', project.date);
-  //             let d = new Date(project.date).getTime();
-  //             console.log('get time ', d);
-  //             if(d >= startDate && d <= endDate){
-  //               filtered.push(project);
-  //             }
-  //           }
-  //         }else{
-  //           if(project.categorys){
-  //             if(categories.includes(project.categorys._id)){
-  //               if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                 //filtered.push(project);
-  //                 let d = new Date(project.date).getTime();
-  //                 console.log('get time ', d);
-  //                 if(d >= startDate && d <= endDate){
-  //                   filtered.push(project);
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }else{
-  //         if(project.types){
-  //           if(types.includes(project.types._id)){
-  //             if(categories.includes('all')){
-  //               if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                 //filtered.push(project);
-  //                 let d = new Date(project.date).getTime();
-  //                 console.log('get time ', d);
-  //                 if(d >= startDate && d <= endDate){
-  //                   filtered.push(project);
-  //                 }
-  //               }
-  //             }else{
-  //               if(project.categorys){
-  //                 if(categories.includes(project.categorys._id)){
-  //                   if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                     //filtered.push(project);
-  //                     let d = new Date(project.date).getTime();
-  //                     console.log('get time ', d);
-  //                     if(d >= startDate && d <= endDate){
-  //                       filtered.push(project);
-  //                     }
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }else{
-  //       if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-  //         if(types.includes('all')){
-  //           if(categories.includes('all')){
-  //             if(project.amount >= minAmount && project.amount <= maxAmount){
-  //               //filtered.push(project);
-  //               let d = new Date(project.date).getTime();
-  //               console.log('get time ', d);
-  //               if(d >= startDate && d <= endDate){
-  //                 filtered.push(project);
-  //               }
-  //             }
-  //           }else{
-  //             if(project.categorys){
-  //               if(categories.includes(project.categorys._id)){
-  //                 if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                   //filtered.push(project);
-  //                   let d = new Date(project.date).getTime();
-  //                   console.log('get time ', d);
-  //                   if(d >= startDate && d <= endDate){
-  //                     filtered.push(project);
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }else{
-  //           if(project.types){
-  //             if(types.includes(project.types._id)){
-  //               if(categories.includes('all')){
-  //                 if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                   //filtered.push(project);
-  //                   let d = new Date(project.date).getTime();
-  //                   console.log('get time ', d);
-  //                   if(d >= startDate && d <= endDate){
-  //                     filtered.push(project);
-  //                   }
-  //                 }
-  //               }else{
-  //                 if(project.categorys){
-  //                   if(categories.includes(project.categorys._id)){
-  //                     if(project.amount >= minAmount && project.amount <= maxAmount){
-  //                       //filtered.push(project);
-  //                       let d = new Date(project.date).getTime();
-  //                       console.log('get time ', d);
-  //                       if(d >= startDate && d <= endDate){
-  //                         filtered.push(project);
-  //                       }
-  //                     }
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   });
+    let filtered: Expense[] = [];
+    expenses.map((expense) => {
+      // if(project.date){
+      //   console.log('date project => ', project.date);
+      //   console.log('fechaa ', new Date(project.date));
+      //   console.log('timee ', new Date(project.date).getTime());
+      // }
+      //console.log('pro', project)
+      //console.log('proyect => ', project);
+      if(conditions.includes('all')){
+        if(types.includes('all')){
+          if(categories.includes('all')){
+            if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+              //filtered.push(expense);
+              //console.log(expense.title, ' => ', expense.date);
+              let d = new Date(expense.date).getTime();
+              console.log('get time ', d);
+              if(d >= startDate && d <= endDate){
+                filtered.push(expense);
+              }
+            }
+          }else{
+            if(expense.category){
+              if(categories.includes(expense.category._id)){
+                if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+                  //filtered.push(expense);
+                  let d = new Date(expense.date).getTime();
+                  //console.log('get time ', d);
+                  if(d >= startDate && d <= endDate){
+                    filtered.push(expense);
+                  }
+                }
+              }
+            }
+          }
+        }else{
+          if(expense.typeCFDI){
+            if(types.includes(expense.typeCFDI._id)){
+              if(categories.includes('all')){
+                if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+                  //filtered.push(expense);
+                  let d = new Date(expense.date).getTime();
+                  //console.log('get time ', d);
+                  if(d >= startDate && d <= endDate){
+                    filtered.push(expense);
+                  }
+                }
+              }else{
+                if(expense.category){
+                  if(categories.includes(expense.category._id)){
+                    if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+                      //filtered.push(expense);
+                      let d = new Date(expense.date).getTime();
+                      //console.log('get time ', d);
+                      if(d >= startDate && d <= endDate){
+                        filtered.push(expense);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }else{
+        if(!expense.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+          if(types.includes('all')){
+            if(categories.includes('all')){
+              if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+                //filtered.push(expense);
+                let d = new Date(expense.date).getTime();
+                //console.log('get time ', d);
+                if(d >= startDate && d <= endDate){
+                  filtered.push(expense);
+                }
+              }
+            }else{
+              if(expense.category){
+                if(categories.includes(expense.category._id)){
+                  if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+                    //filtered.push(expense);
+                    let d = new Date(expense.date).getTime();
+                    //console.log('get time ', d);
+                    if(d >= startDate && d <= endDate){
+                      filtered.push(expense);
+                    }
+                  }
+                }
+              }
+            }
+          }else{
+            if(expense.typeCFDI){
+              if(types.includes(expense.typeCFDI._id)){
+                if(categories.includes('all')){
+                  if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+                    //filtered.push(expense);
+                    let d = new Date(expense.date).getTime();
+                    //console.log('get time ', d);
+                    if(d >= startDate && d <= endDate){
+                      filtered.push(expense);
+                    }
+                  }
+                }else{
+                  if(expense.category){
+                    if(categories.includes(expense.category._id)){
+                      if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
+                        //filtered.push(expense);
+                        let d = new Date(expense.date).getTime();
+                        //console.log('get time ', d);
+                        if(d >= startDate && d <= endDate){
+                          filtered.push(expense);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
 
-  //   console.log(filtered);
-  //   //setDataProjects(filtered);
-  //   setFilteredProjects(filtered);
-  //   setDataProjects(ProjectDataToTableData(filtered));
-  //   setFilter(true);
-  // }
+    console.log(filtered);
+    //setDataProjects(filtered);
+    //setFilteredProjects(filtered);
+    setFilteredExpenses(filtered);
+    
+    //setDataProjects(ProjectDataToTableData(filtered));
+    setDataExpenses(ExpenseDataToTableData(filtered));
+    setFilter(true);
+  }
 
   return(
     <>
-      <div className="flex justify-end mb-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
-        {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
+      <div className="flex justify-end my-5">
+        <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
+          {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
-                          FilterData={filterData} filterCondition={filterCondition} 
-                          filterType={filterType} filterCategory={filterCategory} 
-                          maxAmount={maxAmount}  />} */}
+                          FilterData={filterData} maxAmount={maxAmount}  />}
       </div>
       {view}
     </>

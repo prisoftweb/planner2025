@@ -88,6 +88,26 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
+  const [viewAmount, setViewAmount] = useState<JSX.Element>(<CurrencyInput
+    id="amount"
+    name="amount"
+    // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+    //   focus:border-slate-700 outline-0"
+    className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+      focus:border-slate-700 outline-0"
+    onChange={formik.handleChange}
+    onBlur={formik.handleChange}
+    //defaultValue={0}
+    defaultValue={amount}
+    decimalsLimit={2}
+    prefix="$"
+    onValueChange={(value) => {try {
+      formik.values.amount=value || '0';
+    } catch (error) {
+      formik.values.amount='0';
+    }}}
+  />)
+
   const SaveData = async() => {
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
@@ -361,6 +381,43 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     }
   }, [resetBand]);
 
+  useEffect(() => {
+    //console.log('CFDI ', typeCFDIS);
+    if(typeCFDIS !== ''){
+      const found = optTypes.find((type) => type.value === typeCFDIS);
+      if(found){
+        //console.log({found});
+        if(found.label.toLowerCase().includes('egreso')){
+          setViewAmount(<></>);
+          setTimeout(() => {
+            let num = Number(formik.values.amount.replace(/[$,]/g, ""));
+            if(num > 0){
+              num = num * -1;
+              formik.values.amount = num.toString();
+            }
+            
+            setViewAmount(<CurrencyInput
+              id="amount"
+              name="amount"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                focus:border-slate-700 outline-0"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              defaultValue={num}
+              decimalsLimit={2}
+              prefix="$"
+              onValueChange={(value) => {try {
+                formik.values.amount=value || '0';
+              } catch (error) {
+                formik.values.amount='0';
+              }}}
+            />)
+          }, 30);
+        }
+      }
+    }
+  }, [typeCFDIS]);
+
   return(
     <div className="w-full bg-white">
       <div className="mt-2">
@@ -443,7 +500,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>
           <div>
             <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
-            <CurrencyInput
+            {viewAmount}
+            {/* <CurrencyInput
               id="amount"
               name="amount"
               // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
@@ -461,7 +519,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
               } catch (error) {
                 formik.values.amount='0';
               }}}
-            />
+            /> */}
             {/* <Input type="text" name="amount" 
               value={formik.values.amount}
               onChange={formik.handleChange}
