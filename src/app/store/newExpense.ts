@@ -24,7 +24,8 @@ interface NewExpenseState {
 
 interface ProjectState{
   project: string,
-  indexStepper: number
+  indexStepper: number,
+  report: string,
 }
 
 interface Actions {
@@ -38,6 +39,7 @@ interface Actions {
   updateRefresh: (value: boolean) => void,
   updateDeductible: (value: boolean) => void,
   updateProject: (value:string) => void,
+  updateReport: (value: string) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -63,6 +65,7 @@ const initialState: NewExpenseState = {
 const projectInitial: ProjectState = {
   project: '',
   indexStepper: 0,
+  report: '',
 }
 
 export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((set) => ({
@@ -109,6 +112,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((s
   updateProject: (value:string) => set(state => ({
     ...state,
     project: value
+  })),
+  updateReport: (value:string) => set(state => ({
+    ...state, 
+    report: value,
   })),
   reset: () => {
     set(initialState)

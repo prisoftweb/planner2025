@@ -15,31 +15,70 @@ import SelectProjectStepper from "./SelectProyectStepper";
 import { Project } from "@/interfaces/Projects";
 import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { Report } from "@/interfaces/Reports";
 
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
                                 optProviders, optResponsibles, optGlossaries, 
                                 optProjects, optCategories, optConditions, optTypes, 
-                                projects }: 
+                                projects, reports, optReports }: 
                             {token:string, showForm:Function, user:string, 
                               optCostCenter:Options[],
                               optProviders:Options[], optResponsibles:Options[],
                               optGlossaries:Options[], optProjects:Options[], 
                               optCategories:Options[], optTypes:Options[], 
-                              optConditions:Options[], projects:Project[]
+                              optConditions:Options[], projects:Project[], 
+                              reports:Report[], optReports: Options[]
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [optSelectize, setOptSelectize] = useState<Options>();
   
-  const [stepform, setStepForm] = useState<JSX.Element>(
-                          <DataStepper optCostCenter={optCostCenter} 
-                            optProviders={optProviders} optResponsibles={optResponsibles}
-                            token={token} user={user} optGlossaries={optGlossaries} 
-                            optProjects={optProjects} optCategories={optCategories} 
-                            optConditions={optConditions} optTypes={optTypes}  />)
+  // const [stepform, setStepForm] = useState<JSX.Element>(
+  //                         <DataStepper optCostCenter={optCostCenter} 
+  //                           optProviders={optProviders} optResponsibles={optResponsibles}
+  //                           token={token} user={user} optGlossaries={optGlossaries} 
+  //                           optProjects={optProjects} optCategories={optCategories} 
+  //                           optConditions={optConditions} optTypes={optTypes}  />)
+  const [stepform, setStepForm] = useState<JSX.Element>(<></>)
+  const [isPettyCash, setIsPettyCash] = useState<boolean>(false);
 
-  const {indexStepper, isDeductible, project, updateProject} = useNewExpense();
+  const {indexStepper, isDeductible, project, updateProject, 
+    report, updateReport, updateIndexStepper} = useNewExpense();
 
+  const DropdownIndicator = (props: any) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <MagnifyingGlassIcon className='w-6 h-6 text-slate-400' />
+        </components.DropdownIndicator>
+      )
+    )
+  }
+
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      flexDirection: 'row-reverse',
+      borderRadius: "9px",
+    }),
+  }
+
+  const [viewSelectProject, setViewSelectProject] = useState<JSX.Element>(
+  <Select
+    className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
+    value={optSelectize}
+    options={optProjects}
+    isDisabled={isPettyCash}
+    //isDisabled={true}
+    maxMenuHeight={250}
+    components={{
+      DropdownIndicator
+    }}
+    placeholder='Buscar ...'
+    styles={customStyles}
+    onChange={(value:any) => updateProject(value.value)}
+  />);
+  
   const handleResize = () => {
     //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
@@ -64,6 +103,29 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   }
 
   useEffect(() => {
+    if(report !== ''){
+      const r = reports.find((rep) => rep._id === report);
+      setIsPettyCash(r?.ispettycash || false);
+      updateProject(r?.project._id || '');
+      setViewSelectProject(
+        <Select
+          className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
+          value={optSelectize}
+          options={optProjects}
+          isDisabled={isPettyCash}
+          //isDisabled={true}
+          maxMenuHeight={250}
+          components={{
+            DropdownIndicator
+          }}
+          placeholder='Buscar ...'
+          styles={customStyles}
+          onChange={(value:any) => updateProject(value.value)}
+        />)
+    }
+  }, [report]);
+
+  useEffect(() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -78,6 +140,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   }, [project]);
 
   const closeForm = () => {
+    updateReport('');
+    updateIndexStepper(0);    
     showForm(false);
   }
 
@@ -100,7 +164,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
               }else if(indexStepper===3){
                   setStepForm(<CFDIStepper token={token} />)
                 }else {
-                  setStepForm(<SelectProjectStepper projects={projects} optProjects={optProjects} />)
+                  setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
+                              />)
               }
           }
         }else{
@@ -111,7 +176,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
             }else if(indexStepper===2){
                 setStepForm(<VoucherNoDeductibleStepper token={token} />)  
               }else {
-                  setStepForm(<SelectProjectStepper projects={projects} optProjects={optProjects} />)
+                  setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
+                              />)
               }
           }
         }
@@ -121,24 +187,6 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     }, [indexStepper, isDeductible]);
   } catch (error) {
     console.log(error);
-  }
-
-  const DropdownIndicator = (props: any) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <MagnifyingGlassIcon className='w-6 h-6 text-slate-400' />
-        </components.DropdownIndicator>
-      )
-    )
-  }
-
-  const customStyles = {
-    control: (base: any) => ({
-      ...base,
-      flexDirection: 'row-reverse',
-      borderRadius: "9px",
-    }),
   }
 
   return(
@@ -154,11 +202,12 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
           <HeaderForm img="/img/costs/costs.svg" subtitle="Ingresa los gastos del proyecto" 
             title="Nuevo gasto"
           />
-          
-          <Select
+          {viewSelectProject}
+          {/* <Select
             className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
             value={optSelectize}
             options={optProjects}
+            isDisabled={isPettyCash}
             maxMenuHeight={250}
             components={{
               DropdownIndicator
@@ -166,7 +215,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
             placeholder='Buscar ...'
             styles={customStyles}
             onChange={(value:any) => updateProject(value.value)}
-          />
+          /> */}
         
         </div>
         <TabDeductible />

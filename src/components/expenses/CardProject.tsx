@@ -1,10 +1,11 @@
-import { Project } from "@/interfaces/Projects";
+//import { Project } from "@/interfaces/Projects";
 import { useNewExpense } from "@/app/store/newExpense";
+import { Report } from "@/interfaces/Reports";
 
-export default function CardProject({project}:
-                      {project:Project}){
+export default function CardProject({report}:
+                      {report:Report}){
   
-  const {updateIndexStepper, updateProject} = useNewExpense();
+  const {updateIndexStepper, updateReport} = useNewExpense();
 
   return(
     <>
@@ -12,24 +13,24 @@ export default function CardProject({project}:
             rounded-xl bg-white shadow-md shadow-slate-500 hover:shadow-xl 
             hover:shadow-slate-600"
         onClick={ () => {
-          updateProject(project._id);
+          updateReport(report._id);
           updateIndexStepper(1);
         }}
       >
         <div className="col-span-2">
           <div className="flex items-center justify-between">
             <div className="flex flex-col items-center gap-y-1">
-              <img src={project.photo} alt="logo" className="w-8 h-auto rounded-full" />
-              <div className={`w-3 h-3 ${project.status? 'bg-green-500': 'bg-red-500'}`}></div>
+              <img src={report.user.photo || '/img/users/default.jpg'} alt="logo" className="w-8 h-auto rounded-full" />
+              {/* <div className={`w-3 h-3 ${project.status? 'bg-green-500': 'bg-red-500'}`}></div> */}
             </div>
             <div>
-              <p>{project.title}</p>
-              <p>{project.account}</p>
+              <p>{report.name}</p>
+              <p>{report.project.title}</p>
             </div>
             <div>
             </div>
           </div>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
                 style={{"width": project.progress.length > 0? 
@@ -37,7 +38,7 @@ export default function CardProject({project}:
             </div>
             <p>{project.progress.length > 0? 
                       project.progress[project.progress.length - 1].progress : 0}%</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

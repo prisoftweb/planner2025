@@ -4,15 +4,18 @@ import { useState } from "react";
 import NewExpenseContainer from "./NewExpenseContainer";
 import { Options } from "@/interfaces/Common";
 import { Project } from "@/interfaces/Projects";
+import { Report } from "@/interfaces/Reports";
 
 export default function ButtonNew({token, user, optCostCenter, optProviders, 
                               optResponsibles, optGlossaries, optProjects, 
-                              optCategories, optConditions, optTypes, projects}: 
+                              optCategories, optConditions, optTypes, projects, 
+                              reports, optReports}: 
                           {token:string, user:string, optCostCenter:Options[],
                             optProviders:Options[], optResponsibles:Options[],
                             optGlossaries:Options[], optProjects:Options[], 
                             optCategories:Options[], optTypes:Options[], 
-                            optConditions:Options[], projects:Project[]}){
+                            optConditions:Options[], projects:Project[], 
+                            reports:Report[], optReports:Options[]}){
   const [newExpense, setNewExpense] = useState<boolean>(false);
   
   return(
@@ -23,7 +26,8 @@ export default function ButtonNew({token, user, optCostCenter, optProviders,
                             optProviders={optProviders} optResponsibles={optResponsibles}
                             optGlossaries={optGlossaries} optProjects={optProjects} 
                             optCategories={optCategories} optConditions={optConditions}
-                            optTypes={optTypes}  projects={projects}
+                            optTypes={optTypes} projects={projects} reports={reports}
+                            optReports={optReports}
                         />}
     </>
   )

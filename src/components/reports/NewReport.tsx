@@ -78,6 +78,7 @@ export default function NewReport({showForm, token, companies,
           company,
           department,
           project,
+          ispettycash: imprest,
           moves: [{
             user,
             department,

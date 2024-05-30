@@ -43,6 +43,7 @@ export interface Expense {
   iva: number
   __v: number
   id: string
+  report: string
 }
 
 export interface File {

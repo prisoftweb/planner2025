@@ -32,7 +32,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     category, costCenter, date, description, discount, 
     folio, project, proveedor, responsible, taxFolio, 
-    typeCFDI, typeExpense, vat, reset, updateRefresh} = useNewExpense();
+    typeCFDI, typeExpense, vat, reset, updateRefresh, 
+    report} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -61,7 +62,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       const {description, folio, taxFolio, discount, amount, vat} = valores;
       updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, typeExpenseS, categoryS);
+          typeCFDIS, typeExpenseS, '');
       updateIndexStepper(2);
     },       
   });
@@ -80,7 +81,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [typeCFDIS, setTypeCFDIS] = useState<string>(optTypes[0].value);
   const [provider, setProvider] = useState<string>(optProviders[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
-  const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
+  //const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
@@ -112,7 +113,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, typeExpenseS, categoryS);
+        typeCFDIS, typeExpenseS, '');
     
     if(voucher || CFDI){
       const formdata = new FormData();
@@ -126,9 +127,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('user', responsibleS);
       formdata.append('taxfolio', taxFolio);
       formdata.append('typeCFDI', typeCFDIS);
-      formdata.append('category', categoryS);
+      //formdata.append('category', categoryS);
       formdata.append('project', project);
       formdata.append('vat', vat);
+      formdata.append('report', report);
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -161,8 +163,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       }
     }else{
       const data = {
-        subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, discount: discount.replace(/[$,]/g, ""), folio, provider, 
-        user:responsibleS, taxfolio:taxFolio, typeCFDI: typeCFDIS, category: categoryS, project, vat,
+        subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
+        discount: discount.replace(/[$,]/g, ""), folio, provider, user:responsibleS, 
+        taxfolio:taxFolio, typeCFDI: typeCFDIS, project, vat,
+        report
       }
   
       try {
@@ -259,14 +263,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       });      
     }
 
-    let indexCate = 0;
-    if(categoryS !== ''){
-      optCategories.map((opt, index:number) => {
-        if(opt.value === category){
-          indexCate = index;
-        }
-      });      
-    }
+    // let indexCate = 0;
+    // if(categoryS !== ''){
+    //   optCategories.map((opt, index:number) => {
+    //     if(opt.value === category){
+    //       indexCate = index;
+    //     }
+    //   });      
+    // }
 
     setViewCC(<div className=" col-span-1 md:col-span-3">
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
@@ -282,10 +286,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
         <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
       </div>
-      <div>
+      {/* <div>
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
         <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-      </div>
+      </div> */}
     </>)
 
     setViewResponsible(<div>
@@ -345,14 +349,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         });      
       }
       
-      let indexCate = 0;
-      if(categoryS !== ''){
-        optCategories.map((opt, index:number) => {
-          if(opt.value === category){
-            indexCate = index;
-          }
-        });      
-      }
+      // let indexCate = 0;
+      // if(categoryS !== ''){
+      //   optCategories.map((opt, index:number) => {
+      //     if(opt.value === category){
+      //       indexCate = index;
+      //     }
+      //   });      
+      // }
       
       setViewCC(<div className=" col-span-1 md:col-span-3">
               <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
@@ -368,10 +372,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
           <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
         </div>
-        <div>
+        {/* <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-        </div>
+        </div> */}
       </>)
       setViewResponsible(<div>
               <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>

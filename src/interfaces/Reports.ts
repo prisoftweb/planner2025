@@ -32,6 +32,7 @@ export interface Report {
   account: string
   __v: number
   id: string
+  ispettycash: boolean
 }
 
 export interface Mfe {

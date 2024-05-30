@@ -29,7 +29,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Estatus: 'condition',
       Fecha: expense.date,
       Importe: dollar,
-      Informe: expense.folio,
+      Informe: expense.report || 'sin informe',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {

@@ -22,7 +22,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
                                   {token:string, user:string, optCostCenter:Options[],
                                     optResponsibles:Options[]}){
   
-  const {updateIndexStepper, updateBasicData, voucher, amount, 
+  const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, reset, updateRefresh} = useNewExpense();
 
   const formik = useFormik({
@@ -73,6 +73,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       formdata.append('date', startDate);
       formdata.append('description', description);
       formdata.append('user', responsibleS);
+      formdata.append('report', report);
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -97,7 +98,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       }
     }else{
       const data = {
-        subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, user:responsibleS,
+        subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
+        user:responsibleS, report,
       }
   
       try {
