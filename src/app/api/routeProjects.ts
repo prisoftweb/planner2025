@@ -78,6 +78,8 @@ export async function GetProject(auth_token:string, id:string) {
 export async function UpdateProject(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`;
   try {
+    console.log(url);
+    console.log(JSON.stringify(data))
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,

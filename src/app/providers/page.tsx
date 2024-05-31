@@ -7,6 +7,7 @@ import { Provider, TableProvider } from "@/interfaces/Providers";
 import { UsrBack } from "@/interfaces/User";
 import Header from "@/components/HeaderPage";
 import ButtonNewProvider from "@/components/providers/ButtonNewProvider";
+import { CurrencyFormatter } from "../functions/Globals";
 
 export default async function Providers(){
   
@@ -43,11 +44,17 @@ export default async function Providers(){
     let nc = 0;
     if(prov.contact) nc = prov.contact.length;
     
+    const dollar = CurrencyFormatter({
+      currency: "MXN",
+      value: prov.tradeline.currentbalance || 0
+    })
+
     data.push({
       'id': prov._id,
       'name': prov.tradename || prov.name,
       rfc: prov.rfc,
-      currentbalance: prov.tradeline.currentbalance,
+      //currentbalance: prov.tradeline.currentbalance,
+      currentbalance: dollar,
       account: prov.account,
       suppliercredit: prov.suppliercredit,
       'contacts': nc

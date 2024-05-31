@@ -7,14 +7,14 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
 import { CreateCostWithFiles } from "@/app/api/routeCost";
 
-export default function CFDIStepper({token} : {token: string}) {
+export default function CFDIStepper({token, user} : {token: string, user:string}) {
   
   const {updateCDFI} = useNewExpense();
   const [file, setFile] = useState<File>();
   
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
-    vat, voucher, 
+    vat, voucher, condition,
     reset, updateRefresh, updateIndexStepper} = useNewExpense();
   
   const validationType = (f: File) => {
@@ -43,6 +43,10 @@ export default function CFDIStepper({token} : {token: string}) {
       formdata.append('vat', vat);
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(false));
+      formdata.append('condition', JSON.stringify([{
+        glossary: condition,
+        user
+      }]))
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -71,7 +75,10 @@ export default function CFDIStepper({token} : {token: string}) {
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
         provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project, vat,
-        report, isticket:false
+        report, isticket:false, condition: [{
+          glossary: condition,
+          user
+        }]
       }
   
       try {

@@ -113,7 +113,7 @@ export default async function Page() {
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title="Gastos" >
+        <Header title="Informes" >
           <ButtonNew companies={optCompanies} departments={optDepartments} 
               projects={optProjects} token={token} condition={condition} user={user._id}
           />

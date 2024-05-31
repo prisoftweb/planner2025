@@ -71,11 +71,20 @@ export default async function Page({ params }: { params: { id: string }}){
   }
 
   const optCostCenter:Options[]= [];
+  // costcenters.map((costcenter) => {
+  //   optCostCenter.push({
+  //     label: costcenter.name,
+  //     value: costcenter._id
+  //   });
+  // });
   costcenters.map((costcenter) => {
-    optCostCenter.push({
-      label: costcenter.name,
-      value: costcenter._id
-    });
+    costcenter.categorys.map((category) => {
+      optCostCenter.push({
+        label: category.name + ' ( ' + costcenter.name + ' ) ',
+        value: category._id
+      });
+      //cat += category.name + ', ';
+    })
   });
 
   let glossaries: Glossary[];

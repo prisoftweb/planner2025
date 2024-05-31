@@ -27,7 +27,7 @@ export default function NavExpenseStepper({index}: {index:number}){
             </span>
 
             <p className="leading-none">
-              <strong className="block font-medium"> Proyecto </strong>
+              <strong className="block font-medium"> Informe </strong>
               <small className="mt-1"> </small>
             </p>
           </li>

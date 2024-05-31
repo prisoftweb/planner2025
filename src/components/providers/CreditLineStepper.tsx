@@ -7,6 +7,7 @@ import { useRegFormContext } from "./StepperProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveProvider from "@/app/functions/SaveProvider";
 import BasicBarStepper from "./BasicBarStepper";
+import CurrencyInput from "react-currency-input-field";
 
 export default function CreditLineStepper({token, id}:{token:string, id:string}){
   
@@ -39,15 +40,15 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
                   .required('El porcentaje es obligatorio'),        
     }),
     onSubmit: async (valores) => {
-      //const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
+      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
       
-      // const tradeline = {
-      //   creditdays: parseInt(creditdays? creditdays: '0'), 
-      //   creditlimit: parseInt(creditlimit? creditlimit: '0'),
-      //   currentbalance: parseInt(currentbalance? currentbalance: '0'),
-      //   percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt: '0')
-      // }
-      dispatch({ type: 'SET_CREDIT_DATA', data: valores });
+      const tradeline = {
+        creditdays: parseInt(creditdays? creditdays: '0'), 
+        creditlimit: parseInt(creditlimit? creditlimit.replace(/[$,%,]/g, ""): '0'),
+        currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
+        percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
+      }
+      dispatch({ type: 'SET_CREDIT_DATA', data: tradeline });
       dispatch({type: 'INDEX_STEPPER', data: 2})
     },       
   });
@@ -65,9 +66,9 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
     if(suppliercredit){
       tradeline = {
         creditdays: parseInt(creditdays),
-        creditlimit: parseInt(creditlimit),
-        currentbalance: parseInt(currentbalance),
-        percentoverduedebt: parseInt(percentoverduedebt)
+        creditlimit: parseInt(creditlimit.replace(/[$,%,]/g, "")),
+        currentbalance: parseInt(currentbalance.replace(/[$,%,]/g, "")),
+        percentoverduedebt: parseInt(percentoverduedebt.replace(/[$,%,]/g, ""))
       }
     }
 
@@ -113,11 +114,30 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-md space-y-5">
         <div>
           <Label htmlFor="creditlimit">Limite de credito</Label>
-          <Input type="text" name="creditlimit" autoFocus 
+          <CurrencyInput
+            id="creditlimit"
+            name="creditlimit"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={creditlimitI || 0}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) => {try {
+              formik.values.creditlimit=parseFloat(value || '0').toString();
+            } catch (error) {
+              formik.values.creditlimit='0';
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {/* <Input type="text" name="creditlimit" autoFocus 
             value={formik.values.creditlimit}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-          />
+          /> */}
           {formik.touched.creditlimit && formik.errors.creditlimit ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.creditlimit}</p>
@@ -139,11 +159,30 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
         </div>
         <div>
           <Label htmlFor="currentmount">Saldo actual</Label>
-          <Input type="text" name="currentbalance" 
+          <CurrencyInput
+            id="currentbalance"
+            name="currentbalance"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={currentbalanceI || 0}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) => {try {
+              formik.values.currentbalance=parseFloat(value || '0').toString();
+            } catch (error) {
+              formik.values.currentbalance='0';
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {/* <Input type="text" name="currentbalance" 
             value={formik.values.currentbalance}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-          />
+          /> */}
           {formik.touched.currentbalance && formik.errors.currentbalance ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.currentbalance}</p>
@@ -152,11 +191,31 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
         </div>
         <div>
           <Label htmlFor="account">Comision por deuda vencida</Label>
-          <Input type="text" name="percentoverduedebt" 
+          <CurrencyInput
+            id="percentoverduedebt"
+            name="percentoverduedebt"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={percentoverduedebtI || 0}
+            decimalsLimit={2}
+            //prefix="%"
+            suffix="%"
+            onValueChange={(value) => {try {
+              formik.values.percentoverduedebt=parseFloat(value || '0').toString();
+            } catch (error) {
+              formik.values.percentoverduedebt='0';
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {/* <Input type="text" name="percentoverduedebt" 
             value={formik.values.percentoverduedebt}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-          />
+          /> */}
           {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentoverduedebt}</p>

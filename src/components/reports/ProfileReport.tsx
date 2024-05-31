@@ -3,14 +3,15 @@ import { Report } from "@/interfaces/Reports";
 
 export default function ProfileReport({report}: 
                         {report:Report}){
-
+// console.log('report ', report);
   return(
     <>
       <div className="w-full h-full mt-3">
         <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
+            {/* <p>{report.project.photo? report.project.photo: '/img/projects/default.svg'}</p> */}
             <img src={ report.project.photo? report.project.photo: '/img/projects/default.svg'} alt="logo" 
-              className="max-w-28 h-auto" />
+              className="w-28 h-auto" />
           </div>
           <div>
             <p className="text-blue-500">{report.project.title}</p>

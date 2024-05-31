@@ -102,11 +102,20 @@ export default function NewRoute({showForm, token, resource}:
         </div>
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripci&oacute;n</p></Label>
-          <TextArea name="description"
+          <textarea 
+            name="description"
+            className="border border-gray-200 rounded-lg w-full px-0 text-sm text-gray-900 bg-white dark:bg-gray-800 
+              focus:ring-0 dark:text-white dark:placeholder-gray-400 my-2"
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.description}
+            rows={4}
           />
+          {/* <TextArea name="description"
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.description}
+          /> */}
           {formik.touched.description && formik.errors.description ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.description}</p>

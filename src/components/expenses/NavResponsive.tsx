@@ -33,11 +33,13 @@ export default function NavResponsive({open, setOpen, option,
   const [nav, setNav] = useState<JSX.Element>(<div>
                       <ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                           text-slate-500 rotate-90 border-b border-slate-200" onClick={() => setOpen(false)} />
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica'><AdjustmentsVerticalIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(1)} />
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                          content='Informacion basica'><AdjustmentsVerticalIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          text-slate-500 pb-2 sm:pb-4 border-b border-slate-300`} onClick={() => changeOption(1)} />
                       </Tooltip>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra'><TableCellsIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(2)} />
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                          content='Informacion extra'><TableCellsIcon className={`${isticket? 'hidden': ''} w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          text-slate-500 pb-2 sm:pb-4 border-b border-slate-300`} onClick={() => changeOption(2)} />
                       </Tooltip>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} content='Comprobante'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                           text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(3)} />
@@ -69,7 +71,7 @@ export default function NavResponsive({open, setOpen, option,
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
             className="text-blue-500 bg-white" placement="right">
-              <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
+              <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
                 <TableCellsIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                     text-slate-500 my-1 bg-white rounded-md
                   ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 

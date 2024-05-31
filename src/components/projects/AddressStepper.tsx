@@ -161,7 +161,7 @@ export default function AddressStepper({token}: {token:string}){
           ) : null}
         </div>
         <div>
-          <Label htmlFor="community"><p className="">Comunidad</p></Label>
+          <Label htmlFor="community"><p className="">Colonia</p></Label>
           <Input type="text" name="community" 
             value={formik.values.community}
             onChange={formik.handleChange}

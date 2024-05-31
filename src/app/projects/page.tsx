@@ -67,8 +67,12 @@ export default async function Page(){
     label: 'Todas',
     value: 'all'
   }];
-  //const optCategories: Options[] = [];
+  const optsCategories: Options[] = [];
   catalogs[0].categorys.map((category) => {
+    optsCategories.push({
+      label: category.glossary.name,
+      value: category.glossary._id
+    })
     optCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -79,8 +83,12 @@ export default async function Page(){
     label: 'Todos',
     value: 'all'
   }];
-  //const optTypes: Options[] = [];
+  const optsTypes: Options[] = [];
   catalogs[0].types.map((type) => {
+    optsTypes.push({
+      label: type.glossary.name,
+      value: type.glossary._id
+    })
     optTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -91,8 +99,12 @@ export default async function Page(){
     label: 'Todos',
     value: 'all'
   }];
-  //const optConditions: Options[] = [];
+  const optsConditions: Options[] = [];
   catalogs[0].condition.map((condition) => {
+    optsConditions.push({
+      label: condition.glossary.name,
+      value: condition.glossary._id
+    })
     optConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id
@@ -183,7 +195,7 @@ export default async function Page(){
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <Header title="Proyectos" previousPage="/" >
           <ButtonNew token={token} optClients={optClients} 
-                    optCategories={optCategories} optTypes={optTypes}
+                    optCategories={optsCategories} optTypes={optsTypes}
                     user={user._id} optCompanies={optCompanies} />
         </Header>
         <div className="mt-5">

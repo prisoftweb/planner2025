@@ -29,6 +29,7 @@ export async function CreateCost(auth_token:string, data:Object) {
         'Content-Type': 'application/json'
       }
     });
+    console.log(res);
     if(res.status === 201) return res.status;
     return res.statusText
   } catch (error) {
