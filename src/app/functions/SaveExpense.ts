@@ -7,7 +7,7 @@ export default async function SaveExpense(data: Object, token:string){
   console.log('new obj = ',  newObj);
 
   try {
-    const res = await CreateCost(token, data);
+    const res = await CreateCost(token, newObj);
     return res;
   } catch (error) {
     return 'Error al guardar costo!!';

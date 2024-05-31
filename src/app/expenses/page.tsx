@@ -226,7 +226,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/costs/costs.svg" subtitle="Gastos"
+          <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
             text="Agrega el costo de mano de obra,
                   caja chica o proveedor desde esta
                   seccion a un determinado proyecto"

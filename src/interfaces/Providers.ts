@@ -22,7 +22,7 @@ export interface TableProvider{
   "suppliercredit": boolean,
   "rfc": string,
   "account"?:string,
-  "currentbalance"?: number,
+  "currentbalance"?: string,
   'contacts': number,
 }
 

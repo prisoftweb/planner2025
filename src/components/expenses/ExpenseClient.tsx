@@ -28,7 +28,8 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                   pl-2" style={{borderColor:'#F8FAFC'}}>
                     <div className=" max-w-md">
                       <UpdateExpense id={id} optCostCenter={optCostCenter} 
-                        token={token} user={user} expense={expense} />
+                        token={token} user={user} expense={expense} 
+                        isticket={expense.isticket}  />
                     </div>
                 </div>)
 
@@ -40,7 +41,8 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                 style={{borderColor:'#F8FAFC'}}>
                   <div className=" max-w-lg">
                     <UpdateExpense id={id} optCostCenter={optCostCenter} 
-                      token={token} user={user} expense={expense} />
+                      token={token} user={user} expense={expense} 
+                      isticket={expense.isticket}  />
                   </div>
                 </div>) : 
       (opt===2? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
@@ -67,7 +69,8 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                               style={{borderColor:'#F8FAFC'}}>
                                 <div className=" max-w-lg">
                                   <UpdateExpense id={id} optCostCenter={optCostCenter} 
-                                    token={token} user={user} expense={expense} />
+                                    token={token} user={user} expense={expense} 
+                                    isticket={expense.isticket}  />
                                 </div>
                             </div>))))
   }, [opt, ])

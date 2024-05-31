@@ -62,8 +62,8 @@ export default function Filtering({showForm, optCategories, optTypes,
     <>
       <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
         <div className="flex justify-between">
-          <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
-            title="Filtrar proyecto"
+          <HeaderForm img="/img/role.svg" subtitle="Filtra gastos por diferentes caracteristicas" 
+            title="Filtrar gasto"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />

@@ -43,7 +43,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   const [isPettyCash, setIsPettyCash] = useState<boolean>(false);
 
   const {indexStepper, isDeductible, project, updateProject, 
-    report, updateReport, updateIndexStepper} = useNewExpense();
+    report, updateReport, updateIndexStepper, updateCondition} = useNewExpense();
 
   const DropdownIndicator = (props: any) => {
     return (
@@ -126,7 +126,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       const r = reports.find((rep) => rep._id === report);
       
       setIsPettyCash(r?.ispettycash || false);
-      console.log('petty ', r);
+      //console.log('petty ', r);
       updateProject(r?.project._id || '');
       setViewSelectProject(<></>);
     }
@@ -139,6 +139,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
+    updateCondition(optConditions[0].value);
     selectProject();
   }, []);
 
@@ -166,9 +167,9 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                 optTypes={optTypes}
               />)
             }else if(indexStepper===2){
-                setStepForm(<VoucherStepper token={token} />)
+                setStepForm(<VoucherStepper token={token} user={user} />)
               }else if(indexStepper===3){
-                  setStepForm(<CFDIStepper token={token} />)
+                  setStepForm(<CFDIStepper token={token} user={user} />)
                 }else {
                   setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
                               />)
@@ -180,7 +181,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
               setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
                 optResponsibles={optResponsibles} token={token} user={user} />)
             }else if(indexStepper===2){
-                setStepForm(<VoucherNoDeductibleStepper token={token} />)  
+                setStepForm(<VoucherNoDeductibleStepper token={token} user={user} />)  
               }else {
                   setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
                               />)
@@ -205,7 +206,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
               hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
         </div>
         <div className="flex justify-between items-center flex-wrap sm:flex-nowrap gap-x-3 gap-y-3">
-          <HeaderForm img="/img/costs/costs.svg" subtitle="Ingresa los gastos del proyecto" 
+          <HeaderForm img="/img/gastos.svg" subtitle="Ingresa los gastos del informe" 
             title="Nuevo gasto"
           />
           {viewSelectProject}

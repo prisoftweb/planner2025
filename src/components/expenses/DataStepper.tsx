@@ -33,7 +33,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     costCenter, date, description, discount, 
     folio, project, proveedor, responsible, taxFolio, 
     typeCFDI, typeExpense, vat, reset, updateRefresh, 
-    report} = useNewExpense();
+    report, condition} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -132,6 +132,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('vat', vat);
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(false));
+      formdata.append('condition', JSON.stringify([{
+        glossary: condition,
+        user
+      }]))
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -167,7 +171,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
         discount: discount.replace(/[$,]/g, ""), folio, provider, user:responsibleS, 
         taxfolio:taxFolio, typeCFDI: typeCFDIS, project, vat,
-        report, isticket:false
+        report, isticket:false, condition: [{
+          glossary: condition,
+          user
+        }]
       }
   
       try {

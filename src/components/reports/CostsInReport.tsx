@@ -25,7 +25,7 @@ export default function CostsInReport({report}: {report:Report}) {
           <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
             <div>
               <img src={ report.project.photo? report.project.photo: '/img/projects/default.svg'} alt="logo" 
-                className="max-w-28 h-auto" />
+                className="w-28 h-auto" />
             </div>
             <div>
               <p className="text-blue-500">{report.project.title}</p>

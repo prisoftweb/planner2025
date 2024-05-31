@@ -7,6 +7,7 @@ import Button from "../Button";
 import { Provider } from "@/interfaces/Providers";
 import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import CurrencyInput from "react-currency-input-field";
 
 export default function CreditLine({provider, id, token}: 
         {provider:Provider, id:string, token:string}){
@@ -32,9 +33,9 @@ export default function CreditLine({provider, id, token}:
       try {
         const tradeline = {
           creditdays: parseInt(creditdays? creditdays: '0'), 
-          creditlimit: parseInt(creditlimit? creditlimit: '0'),
-          currentbalance: parseInt(currentbalance? currentbalance: '0'),
-          percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt: '0')
+          creditlimit: parseInt(creditlimit? creditlimit.replace(/[$,%,]/g, ""): '0'),
+          currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
+          percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
         }
         const res = await updateProvider(id, token, {tradeline});
         if(res===200){
@@ -60,11 +61,30 @@ export default function CreditLine({provider, id, token}:
       <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 rounded-lg shadow p-4 space-y-5">
         <div>
           <Label htmlFor="creditlimit">Limite de credito</Label>
-          <Input type="text" name="creditlimit" autoFocus 
+          <CurrencyInput
+            id="creditlimit"
+            name="creditlimit"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={provider.tradeline.creditlimit?.toString() || 0}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) => {try {
+              formik.values.creditlimit=parseFloat(value || '0').toString();
+            } catch (error) {
+              formik.values.creditlimit='0';
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {/* <Input type="text" name="creditlimit" autoFocus 
             value={formik.values.creditlimit}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-          />
+          /> */}
           {formik.touched.creditlimit && formik.errors.creditlimit ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.creditlimit}</p>
@@ -86,11 +106,30 @@ export default function CreditLine({provider, id, token}:
         </div>
         <div>
           <Label htmlFor="currentmount">Saldo actual</Label>
-          <Input type="text" name="currentbalance" 
+          <CurrencyInput
+            id="currentbalance"
+            name="currentbalance"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={provider.tradeline.currentbalance?.toString() || 0}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) => {try {
+              formik.values.currentbalance=parseFloat(value || '0').toString();
+            } catch (error) {
+              formik.values.currentbalance='0';
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {/* <Input type="text" name="currentbalance" 
             value={formik.values.currentbalance}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-          />
+          /> */}
           {formik.touched.currentbalance && formik.errors.currentbalance ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.currentbalance}</p>
@@ -99,11 +138,31 @@ export default function CreditLine({provider, id, token}:
         </div>
         <div>
           <Label htmlFor="account">Comision por deuda vencida</Label>
-          <Input type="text" name="percentoverduedebt" 
+          <CurrencyInput
+            id="percentoverduedebt"
+            name="percentoverduedebt"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={provider.tradeline.percentoverduedebt?.toString() || 0}
+            decimalsLimit={2}
+            //prefix="%"
+            suffix="%"
+            onValueChange={(value) => {try {
+              formik.values.percentoverduedebt=parseFloat(value || '0').toString();
+            } catch (error) {
+              formik.values.percentoverduedebt='0';
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {/* <Input type="text" name="percentoverduedebt" 
             value={formik.values.percentoverduedebt}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-          />
+          /> */}
           {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentoverduedebt}</p>

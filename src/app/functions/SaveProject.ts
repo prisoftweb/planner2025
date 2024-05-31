@@ -80,7 +80,7 @@ export function ProjectDataToTableData(projects:Project[]){
       //amount: project.amount.toString(),
       amount: dollar,
       category: project.categorys?.name || 'Sin Categoria',
-      client: project.client?.name || 'Sin cliente',
+      client: project.client?.tradename || 'Sin cliente',
       code: project.code,
       date: project.date,
       id: project._id,

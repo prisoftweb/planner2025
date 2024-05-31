@@ -101,11 +101,20 @@ export default function NewSubPath({showForm, token, route}:
         </div>
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripci&oacute;n</p></Label>
-          <TextArea name="description"
+          <textarea 
+            name="description"
+            className="border border-gray-200 rounded-lg w-full px-0 text-sm text-gray-900 bg-white dark:bg-gray-800 
+              focus:ring-0 dark:text-white dark:placeholder-gray-400 my-2"
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.description}
+            rows={4}
           />
+          {/* <TextArea name="description"
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.description}
+          /> */}
           {/* <Input type="description" name="description" 
             onChange={formik.handleChange}
             onBlur={formik.handleChange}

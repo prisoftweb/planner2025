@@ -60,9 +60,9 @@ export default function Guarantee({token}:{token:string}){
       stret: street
     }
     const guaranteeData = {
-      amount:amountG.replace(/[$,]/g, ""),
+      amount:amountG.replace(/[$,%,]/g, ""),
       date: startDate,
-      porcentage:percentage
+      porcentage:percentage.replace(/[$,%,]/g, ""),
     };
 
     if(haveAddress && hasguaranteefund){
@@ -117,12 +117,27 @@ export default function Guarantee({token}:{token:string}){
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
         <div>
           <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje de fondo</p></Label>
-          <Input type="text" name="percentage" 
+          <CurrencyInput
+            id="percentage"
+            name="percentage"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={0}
+            decimalsLimit={2}
+            prefix="%"
+            onValueChange={(value) =>formik.values.percentage=value || ''}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {/* <Input type="text" name="percentage" 
             value={formik.values.percentage}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             autoFocus
-          />
+          /> */}
           {formik.touched.percentage && formik.errors.percentage ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentage}</p>
@@ -158,7 +173,7 @@ export default function Guarantee({token}:{token:string}){
           onBlur={formik.handleChange}
         />*/}
         <div>
-          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de pago</p></Label>
+          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
           <DatePicker
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0" 

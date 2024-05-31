@@ -8,16 +8,18 @@ import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { useEffect, useState } from "react";
-import DatePicker from 'react-datepicker'
+//import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import { Expense } from "@/interfaces/Expenses"
 import { UpdateCost } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
 import { showToastMessage, showToastMessageError } from "../Alert"
 
-export default function UpdateExpense({token, id, user, optCostCenter, expense}: 
+export default function UpdateExpense({token, id, user, optCostCenter, 
+                                      expense, isticket}: 
                                   {token:string, id:string, user:string, 
-                                    optCostCenter:Options[], expense:Expense}){
+                                    optCostCenter:Options[], expense:Expense, 
+                                    isticket:boolean}){
   
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
@@ -35,10 +37,6 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
     validationSchema: Yup.object({
       description: Yup.string()
                   .required('La descripcion es obligatoria!!'),
-      folio: Yup.string()
-                  .required('El folio es obligatorio'),
-      taxFolio: Yup.string()
-                  .required('El folio fiscal es obligatorio'),
       vat: Yup.string()
                   .required('El iva es obligatorio'),
       discount: Yup.string()
@@ -126,7 +124,7 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
                 console.log(date); console.log(date.toDateString())}} 
           /> */}
         </div>
-        <div>
+        <div className={`${isticket? 'hidden': ''}`}>
           <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
           <Input type="text" name="folio" autoFocus 
             value={formik.values.folio}
@@ -139,7 +137,7 @@ export default function UpdateExpense({token, id, user, optCostCenter, expense}:
             </div>
           ) : null}
         </div>
-        <div className=" col-span-1 sm:col-span-2">
+        <div className={`${isticket? 'hidden': ''} col-span-1 sm:col-span-2`}>
           <Label htmlFor="taxFolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio Fiscal</p></Label>
           <Input type="text" name="taxFolio" 
             value={formik.values.taxFolio}

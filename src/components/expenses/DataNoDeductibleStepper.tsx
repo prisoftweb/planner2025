@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseNoDeductibleStepper from "./NavExpenseNoDeductibleStepper";
@@ -23,7 +23,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
                                     optResponsibles:Options[]}){
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
-    costCenter, date, description, responsible, reset, updateRefresh} = useNewExpense();
+    costCenter, date, description, responsible, project, condition, 
+    reset, updateRefresh} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -75,6 +76,11 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       formdata.append('user', responsibleS);
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(true));
+      formdata.append('project', project);
+      formdata.append('condition', JSON.stringify([{
+        glossary: condition,
+        user
+      }]));
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -100,7 +106,10 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }else{
       const data = {
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
-        user:responsibleS, report, isticket:true
+        user:responsibleS, report, isticket:true, project, condition: [{
+          glossary: condition,
+          user
+        }]
       }
   
       try {

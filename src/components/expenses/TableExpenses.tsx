@@ -170,7 +170,7 @@ export default function TableExpenses({data, token, expenses,
 
   useEffect(() => {
     if(filter){
-      setView(<Table columns={columns} data={dataExpenses} placeH="Buscar proyecto.." />);
+      setView(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
       setFilter(false);
     }
   }, [filter]);

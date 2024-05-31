@@ -8,10 +8,10 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
 import { CreateCostWithFiles } from "@/app/api/routeCost";
 
-export default function VoucherNoDeductibleStepper({token}: {token:string}) {
+export default function VoucherNoDeductibleStepper({token, user}: {token:string, user:string}) {
   
   const {updateIndexStepper, updateVoucher, amount, costCenter, date, description, 
-    responsible, report, reset, updateRefresh} = useNewExpense();
+    responsible, report, project, condition, reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   
@@ -36,6 +36,11 @@ export default function VoucherNoDeductibleStepper({token}: {token:string}) {
       formdata.append('user', responsible);
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(true));
+      formdata.append('project', project);
+      formdata.append('condition', JSON.stringify([{
+        glossary: condition,
+        user
+      }]))
       if(file){
         updateVoucher(file);
         formdata.append('files', file);
@@ -59,7 +64,10 @@ export default function VoucherNoDeductibleStepper({token}: {token:string}) {
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, 
-        user:responsible, report, isticket:true
+        user:responsible, report, isticket:true, project, condition: {
+          glossary: condition,
+          user
+        }
       }
   
       try {

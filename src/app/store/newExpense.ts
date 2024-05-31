@@ -14,6 +14,7 @@ interface NewExpenseState {
   proveedor: string
   responsible: string
   category:string
+  condition: string
   
   voucher: (File | null),
   CFDI: (File | null)
@@ -40,6 +41,7 @@ interface Actions {
   updateDeductible: (value: boolean) => void,
   updateProject: (value:string) => void,
   updateReport: (value: string) => void,
+  updateCondition: (value:string) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -59,7 +61,8 @@ const initialState: NewExpenseState = {
   voucher: null,
   category: '',
   refresh: false,
-  isDeductible: true
+  isDeductible: true,
+  condition: ''
 }
 
 const projectInitial: ProjectState = {
@@ -116,6 +119,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((s
   updateReport: (value:string) => set(state => ({
     ...state, 
     report: value,
+  })),
+  updateCondition: (value:string) => set(state => ({
+    ...state,
+    condition: value,
   })),
   reset: () => {
     set(initialState)

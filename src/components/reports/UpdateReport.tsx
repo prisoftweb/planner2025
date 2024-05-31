@@ -18,11 +18,11 @@ export default function UpdateReport({companies, departments, projects, token, r
                           projects:Options[], report:Report}) {
   
   //const [heightPage, setHeightPage] = useState<number>(900);
-  const [project, setProject] = useState<string>('');
-  const [company, setCompany] = useState<string>('');
-  const [department, setDepartment] = useState<string>('');
+  const [project, setProject] = useState<string>(report.project._id);
+  const [company, setCompany] = useState<string>(report.company._id);
+  const [department, setDepartment] = useState<string>(report.department._id);
   const [startDate, setStartDate] = useState<string>(report.date.substring(0, 10));
-  const [imprest, setImprest] = useState<boolean>(false);
+  const [imprest, setImprest] = useState<boolean>(report.ispettycash);
   const [viewSelects, setViewSelects] = useState<JSX.Element>(<></>);
   const [viewProject, setViewProject] = useState<JSX.Element>(<></>);
 
@@ -91,6 +91,7 @@ export default function UpdateReport({companies, departments, projects, token, r
           company,
           department,
           project,
+          ispettycash: imprest
           // moves: [{
           //   user,
           //   department,
