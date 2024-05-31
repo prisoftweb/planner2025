@@ -4,8 +4,10 @@ import { ArrowDownTrayIcon, ChartBarIcon,
 import { useEffect, useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 
-export default function NavResponsive({open, setOpen, option, changeOption}: 
-                {open:boolean, setOpen:Function, option:number, changeOption:Function}){
+export default function NavResponsive({open, setOpen, option, 
+                  changeOption, isticket}: 
+                {open:boolean, setOpen:Function, option:number, 
+                  changeOption:Function, isticket:boolean}){
 
   let props = {
   variants: {
@@ -40,8 +42,9 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                       <Tooltip closeDelay={0} delay={100} motionProps={props} content='Comprobante'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
                           text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(3)} />
                       </Tooltip>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='CFDI'><UserCircleIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 pb-2 sm:pb-4" onClick={() => changeOption(4)} />
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                          content='CFDI'><UserCircleIcon className={`${isticket? 'hidden': ''} w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+                          text-slate-500 pb-2 sm:pb-4`} onClick={() => changeOption(4)} />
                       </Tooltip>
                     </div>);
 
@@ -89,8 +92,8 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               </div>
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='CFDI' 
-            className="text-blue-500 bg-white" placement="right">
-              <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
+            className={`text-blue-500 bg-white`} placement="right">
+              <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
                 <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
                   onMouseEnter={() => {setIsHover(4)} } onMouseLeave={() => setIsHover(-1)}

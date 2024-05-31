@@ -12,9 +12,10 @@ export default function CFDIStepper({token} : {token: string}) {
   const {updateCDFI} = useNewExpense();
   const [file, setFile] = useState<File>();
   
-  const { amount, category, costCenter, date, description, discount, 
-    folio, indexStepper, project, proveedor, responsible, taxFolio, typeCFDI, 
-    typeExpense, vat, voucher, reset, updateRefresh, updateIndexStepper} = useNewExpense();
+  const { amount, costCenter, date, description, discount, report, 
+    folio, project, proveedor, responsible, taxFolio, typeCFDI, 
+    vat, voucher, 
+    reset, updateRefresh, updateIndexStepper} = useNewExpense();
   
   const validationType = (f: File) => {
     if(!f.type.includes('xml') && !f.type.includes('XML')){
@@ -38,9 +39,10 @@ export default function CFDIStepper({token} : {token: string}) {
       formdata.append('user', responsible);
       formdata.append('taxfolio', taxFolio);
       formdata.append('typeCFDI', typeCFDI);
-      formdata.append('category', category);
       formdata.append('project', project);
       formdata.append('vat', vat);
+      formdata.append('report', report);
+      formdata.append('isticket', JSON.stringify(false));
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -68,7 +70,8 @@ export default function CFDIStepper({token} : {token: string}) {
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
-        provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, category, project, vat,
+        provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project, vat,
+        report, isticket:false
       }
   
       try {

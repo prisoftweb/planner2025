@@ -35,6 +35,7 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
   const [opt, setOpt] = useState<number>(1);
   
   useEffect(() => {
+    console.log('expensee ', expense );
     opt===1? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
                   <div className=" max-w-lg">
@@ -78,7 +79,8 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
       <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
-            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
+            <NavResponsive open={open} setOpen={setOpen} 
+                  changeOption={setOpt} option={opt} isticket={expense.isticket} />
           </div>
         </div>
         <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 

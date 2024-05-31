@@ -20,6 +20,8 @@ import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
+import { GetReports } from "../api/routeReports";
+import { Report } from "@/interfaces/Reports";
 
 export default async function Page() {
   
@@ -47,15 +49,28 @@ export default async function Page() {
   }
 
   const optCostCenter:Options[]= [];
+  // costcenters.map((costcenter) => {
+  //   let cat = '';
+  //   costcenter.categorys.map((category) => {
+  //     cat += category.name + ', ';
+  //   })
+  //   optCostCenter.push({
+  //     label: costcenter.name + ' ( ' + cat + ' ) ',
+  //     value: costcenter._id
+  //   });
+  // });
   costcenters.map((costcenter) => {
-    let cat = '';
     costcenter.categorys.map((category) => {
-      cat += category.name + ', ';
+      optCostCenter.push({
+        label: category.name + ' ( ' + costcenter.name + ' ) ',
+        value: category._id
+      });
+      //cat += category.name + ', ';
     })
-    optCostCenter.push({
-      label: costcenter.name + ' ( ' + cat + ' ) ',
-      value: costcenter._id
-    });
+    // optCostCenter.push({
+    //   label: costcenter.name + ' ( ' + cat + ' ) ',
+    //   value: costcenter._id
+    // });
   });
 
   let providers: Provider[];
@@ -112,6 +127,24 @@ export default async function Page() {
     });
   });
 
+  let reports: Report[];
+  try {
+    reports = await GetReports(token);
+    if(typeof(reports)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{reports}</h1>
+    }    
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los reportes!!</h1>
+  }
+
+  const optReports:Options[]= [];
+  reports.map((rep) => {
+    optReports.push({
+      label: rep.name,
+      value: rep._id
+    });
+  });
+
   let projects: Project[];
   try {
     projects = await getProjects(token);
@@ -140,7 +173,7 @@ export default async function Page() {
 
   const optCategories: Options[] = [];
   const optCategoriesFilter: Options[] = [{
-    label: 'Todos',
+    label: 'TODOS',
     value: 'all'
   }];
   //const optCategories: Options[] = [];
@@ -155,7 +188,7 @@ export default async function Page() {
 
   const optTypes: Options[] = [];
   const optTypeFilter: Options[] = [{
-    label: 'Todos',
+    label: 'TODOS',
     value: 'all'
   }];
   //const optTypes: Options[] = [];
@@ -170,7 +203,7 @@ export default async function Page() {
 
   const optConditions: Options[] = [];
   const optConditionsFilter: Options[] = [{
-    label: 'Todos',
+    label: 'TODOS',
     value: 'all'
   }];
   //const optConditions: Options[] = [];
@@ -202,7 +235,8 @@ export default async function Page() {
                   optProviders={optProviders} optResponsibles={optResponsibles}
                   optGlossaries={optGlossaries} optProjects={optProjects} 
                   optCategories={optCategories} optConditions={optConditions}
-                  optTypes={optTypes} projects={projects}
+                  optTypes={optTypes} projects={projects} reports={reports}
+                  optReports={optReports}
               />
           </WithOut>
         </div>
@@ -223,7 +257,7 @@ export default async function Page() {
       Estatus: 'condition',
       Fecha: expense.date,
       Importe: dollar,
-      Informe: expense.folio,
+      Informe: expense.report || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
@@ -243,7 +277,8 @@ export default async function Page() {
                     optProviders={optProviders} optResponsibles={optResponsibles}
                     optGlossaries={optGlossaries} optProjects={optProjects} 
                     optCategories={optCategories} optConditions={optConditions}
-                    optTypes={optTypes} projects={projects}
+                    optTypes={optTypes} projects={projects} reports={reports}
+                    optReports={optReports}
         />
         </Header>
         <TableExpenses data={table} token={token} 

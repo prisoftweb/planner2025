@@ -12,9 +12,10 @@ import { CreateCostWithFiles } from "@/app/api/routeCost";
 
 export default function VoucherStepper({token}: {token:string}) {
   
-  const {updateIndexStepper, updateVoucher, amount, category, costCenter, 
-    date, description, discount, folio, project, proveedor, 
-    responsible, taxFolio, typeCFDI, vat, CFDI, reset, updateRefresh} = useNewExpense();
+  const {updateIndexStepper, updateVoucher, amount, costCenter, 
+    date, description, discount, folio, project, proveedor, report, 
+    responsible, taxFolio, typeCFDI, vat, CFDI, 
+    reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   
@@ -42,9 +43,10 @@ export default function VoucherStepper({token}: {token:string}) {
       formdata.append('user', responsible);
       formdata.append('taxfolio', taxFolio);
       formdata.append('typeCFDI', typeCFDI);
-      formdata.append('category', category);
       formdata.append('project', project);
       formdata.append('vat', vat);
+      formdata.append('report', report);
+      formdata.append('isticket', JSON.stringify(false));
       if(file){
         updateVoucher(file);
         formdata.append('files', file);
@@ -72,7 +74,8 @@ export default function VoucherStepper({token}: {token:string}) {
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
-        provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, category, project, vat,
+        provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project, vat,
+        report, isticket:false
       }
   
       try {
