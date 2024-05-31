@@ -89,6 +89,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   }
 
   const selectProject = () => {
+    let ind = 0;
     if(project === ''){
       setOptSelectize(optProjects[0]);
     }else{
@@ -98,19 +99,14 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
           aux = index;
         }
       });
+      ind = aux;
       setOptSelectize(optProjects[aux]);
     }
-  }
-
-  useEffect(() => {
-    if(report !== ''){
-      const r = reports.find((rep) => rep._id === report);
-      setIsPettyCash(r?.ispettycash || false);
-      updateProject(r?.project._id || '');
+    setTimeout(() => {
       setViewSelectProject(
         <Select
           className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
-          value={optSelectize}
+          value={optProjects[ind]}
           options={optProjects}
           isDisabled={isPettyCash}
           //isDisabled={true}
@@ -122,6 +118,17 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
           styles={customStyles}
           onChange={(value:any) => updateProject(value.value)}
         />)
+    }, 500);
+  }
+
+  useEffect(() => {
+    if(report !== ''){
+      const r = reports.find((rep) => rep._id === report);
+      
+      setIsPettyCash(r?.ispettycash || false);
+      console.log('petty ', r);
+      updateProject(r?.project._id || '');
+      setViewSelectProject(<></>);
     }
   }, [report]);
 
@@ -144,7 +151,6 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     updateIndexStepper(0);    
     showForm(false);
   }
-
 
   try {
     useEffect(() => {

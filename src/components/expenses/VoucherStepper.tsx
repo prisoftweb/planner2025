@@ -46,6 +46,7 @@ export default function VoucherStepper({token}: {token:string}) {
       formdata.append('project', project);
       formdata.append('vat', vat);
       formdata.append('report', report);
+      formdata.append('isticket', JSON.stringify(false));
       if(file){
         updateVoucher(file);
         formdata.append('files', file);
@@ -74,7 +75,7 @@ export default function VoucherStepper({token}: {token:string}) {
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
         provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project, vat,
-        report
+        report, isticket:false
       }
   
       try {

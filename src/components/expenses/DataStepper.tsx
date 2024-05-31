@@ -30,7 +30,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                                     optConditions:Options[] }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
-    category, costCenter, date, description, discount, 
+    costCenter, date, description, discount, 
     folio, project, proveedor, responsible, taxFolio, 
     typeCFDI, typeExpense, vat, reset, updateRefresh, 
     report} = useNewExpense();
@@ -131,6 +131,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('project', project);
       formdata.append('vat', vat);
       formdata.append('report', report);
+      formdata.append('isticket', JSON.stringify(false));
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -166,7 +167,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
         discount: discount.replace(/[$,]/g, ""), folio, provider, user:responsibleS, 
         taxfolio:taxFolio, typeCFDI: typeCFDIS, project, vat,
-        report
+        report, isticket:false
       }
   
       try {

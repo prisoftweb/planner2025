@@ -74,6 +74,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       formdata.append('description', description);
       formdata.append('user', responsibleS);
       formdata.append('report', report);
+      formdata.append('isticket', JSON.stringify(true));
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -99,7 +100,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }else{
       const data = {
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
-        user:responsibleS, report,
+        user:responsibleS, report, isticket:true
       }
   
       try {

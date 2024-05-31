@@ -35,6 +35,7 @@ export default function VoucherNoDeductibleStepper({token}: {token:string}) {
       formdata.append('description', description);
       formdata.append('user', responsible);
       formdata.append('report', report);
+      formdata.append('isticket', JSON.stringify(true));
       if(file){
         updateVoucher(file);
         formdata.append('files', file);
@@ -58,7 +59,7 @@ export default function VoucherNoDeductibleStepper({token}: {token:string}) {
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, 
-        user:responsible, report,
+        user:responsible, report, isticket:true
       }
   
       try {

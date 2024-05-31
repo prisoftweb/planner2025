@@ -44,6 +44,7 @@ export interface Expense {
   __v: number
   id: string
   report: string
+  isticket: boolean
 }
 
 export interface File {
