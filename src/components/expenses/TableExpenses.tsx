@@ -16,17 +16,19 @@ import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
 
 export default function TableExpenses({data, token, expenses, 
-                            optCategories, optConditions, optTypes}:
+                            optCategories, optConditions, optTypes, 
+                            optProjects, optReports}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
-                        optConditions:Options[], expenses:Expense[]}){
+                        optConditions:Options[], expenses:Expense[], 
+                        optReports:Options[], optProjects:Options[]}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
   const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
-  const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
+  const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
 
   const {refresh, updateRefresh} = useNewExpense();
 
@@ -170,13 +172,17 @@ export default function TableExpenses({data, token, expenses,
 
   useEffect(() => {
     if(filter){
-      setView(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
+      setView(<></>);
+      setTimeout(() => {
+        setView(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
+      }, 100);
       setFilter(false);
     }
   }, [filter]);
 
   const filterData = (conditions:string[], types:string[], 
-    categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
+    categories:string[], minAmount:number, maxAmount:number, 
+    reports:string[], projects:string[], startDate:number, endDate:number) => {
   
     console.log('filtrar');
     console.log('conditions', conditions);
@@ -189,13 +195,6 @@ export default function TableExpenses({data, token, expenses,
     
     let filtered: Expense[] = [];
     expenses.map((expense) => {
-      // if(project.date){
-      //   console.log('date project => ', project.date);
-      //   console.log('fechaa ', new Date(project.date));
-      //   console.log('timee ', new Date(project.date).getTime());
-      // }
-      //console.log('pro', project)
-      //console.log('proyect => ', project);
       if(conditions.includes('all')){
         if(types.includes('all')){
           if(categories.includes('all')){
@@ -311,7 +310,7 @@ export default function TableExpenses({data, token, expenses,
     });
 
     console.log(filtered);
-    //setDataProjects(filtered);
+    //setDataExpenses(filtered);
     //setFilteredProjects(filtered);
     setFilteredExpenses(filtered);
     
@@ -326,7 +325,8 @@ export default function TableExpenses({data, token, expenses,
         <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
           {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
-                          FilterData={filterData} maxAmount={maxAmount}  />}
+                          FilterData={filterData} maxAmount={maxAmount} 
+                          optProjects={optProjects} optReports={optReports} />}
       </div>
       {view}
     </>

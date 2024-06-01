@@ -74,6 +74,8 @@ export default function UpdateExpense({token, id, user, optCostCenter,
 
   useEffect(() => {
     let indexCC = 0;
+    console.log('options => ', optCostCenter);
+    console.log('value ', expense.costcenter);
     if(expense.costcenter){
       optCostCenter.map((optCC, index:number) => {
         if(optCC.value===expense.costcenter._id){
@@ -150,7 +152,7 @@ export default function UpdateExpense({token, id, user, optCostCenter,
               </div>
           ) : null}
         </div>
-        <div>
+        <div className={`${isticket? 'hidden': ''}`}>
           <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
           <Input type="text" name="vat" 
             value={formik.values.vat}
@@ -163,7 +165,7 @@ export default function UpdateExpense({token, id, user, optCostCenter,
               </div>
           ) : null}
         </div>
-        <div>
+        <div className={`${isticket? 'hidden': ''}`}>
           <Label htmlFor="discount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descuento</p></Label>
           <CurrencyInput
             id="discount"

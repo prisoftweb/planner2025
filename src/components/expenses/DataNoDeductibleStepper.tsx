@@ -60,7 +60,25 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-
+  const [clearAmount, setClearAmount] = useState<boolean>(false);
+  const [viewAmount, setViewAmount] = useState<JSX.Element>(
+                                          <CurrencyInput
+                                            id="amount"
+                                            name="amount"
+                                            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                                              focus:border-slate-700 outline-0"
+                                            onChange={formik.handleChange}
+                                            onBlur={formik.handleChange}
+                                            //defaultValue={0}
+                                            defaultValue={amount}
+                                            decimalsLimit={2}
+                                            prefix="$"
+                                            onValueChange={(value) => {try {
+                                              formik.values.amount=value || '0';
+                                            } catch (error) {
+                                              formik.values.amount='0';
+                                            }}}
+                                          />);
   
   const SaveData = async() => {
     const {description, amount} = formik.values
@@ -93,6 +111,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           formik.values.amount = '';
           formik.values.description = '';
           showToastMessage('Costo creado satisfactoriamente!!!');
+          setClearAmount(true);
           updateRefresh(true);
           setTimeout(() => {
             setResetBand(true);
@@ -120,6 +139,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           formik.values.amount = '';
           formik.values.description = '';
           showToastMessage('Costo creado satisfactoriamente!!!');
+          setClearAmount(true);
           updateRefresh(true);
           setTimeout(() => {
             setResetBand(true);
@@ -133,6 +153,36 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       }
     }
   }
+
+  useEffect(() => {
+    if(clearAmount){
+      setViewAmount(<></>);
+      setTimeout(() => {
+        setViewAmount(
+          <CurrencyInput
+            id="amount"
+            name="amount"
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+            //   focus:border-slate-700 outline-0"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+              focus:border-slate-700 outline-0"
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //defaultValue={0}
+            defaultValue={amount}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) => {try {
+              formik.values.amount=value || '0';
+            } catch (error) {
+              formik.values.amount='0';
+            }}}
+          />
+        )
+      }, 100);
+      setClearAmount(false);
+    }
+  }, [clearAmount]);
 
   useEffect(() => {
     let indexCC = 0;
@@ -218,25 +268,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           {viewCC}
           <div>
             <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
-            <CurrencyInput
-              id="amount"
-              name="amount"
-              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              //   focus:border-slate-700 outline-0"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                focus:border-slate-700 outline-0"
-              onChange={formik.handleChange}
-              onBlur={formik.handleChange}
-              //defaultValue={0}
-              defaultValue={amount}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => {try {
-                formik.values.amount=value || '0';
-              } catch (error) {
-                formik.values.amount='0';
-              }}}
-            />
+            {viewAmount}
             {formik.touched.amount && formik.errors.amount ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.amount}</p>

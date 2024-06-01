@@ -14,19 +14,19 @@ interface NewExpenseState {
   proveedor: string
   responsible: string
   category:string
-  condition: string
   
   voucher: (File | null),
   CFDI: (File | null)
 
   refresh: boolean
-  isDeductible: boolean
 }
 
 interface ProjectState{
   project: string,
   indexStepper: number,
   report: string,
+  condition: string,
+  isDeductible: boolean
 }
 
 interface Actions {
@@ -61,14 +61,14 @@ const initialState: NewExpenseState = {
   voucher: null,
   category: '',
   refresh: false,
-  isDeductible: true,
-  condition: ''
 }
 
 const projectInitial: ProjectState = {
   project: '',
   indexStepper: 0,
   report: '',
+  condition: '',
+  isDeductible: true
 }
 
 export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((set) => ({
