@@ -269,7 +269,7 @@ export default async function Page() {
       Estatus: 'condition',
       Fecha: expense.date,
       Importe: dollar,
-      Informe: expense.report || 'sin reporte',
+      Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {

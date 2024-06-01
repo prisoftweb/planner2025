@@ -74,20 +74,23 @@ export default function UpdateExpense({token, id, user, optCostCenter,
 
   useEffect(() => {
     let indexCC = 0;
-    console.log('options => ', optCostCenter);
-    console.log('value ', expense.costcenter);
     if(expense.costcenter){
       optCostCenter.map((optCC, index:number) => {
-        if(optCC.value===expense.costcenter._id){
+        if(optCC.value===expense.costcenter){
+          //alert('aquiii');
           setCostCenter(optCostCenter[index].value);
           indexCC = index;
         }
       });
     }
-    setViewCC(<div className=" col-span-1 sm:col-span-2">
+    //alert('index '+ indexCC);
+    setViewCC(<></>);
+    setTimeout(() => {
+      setViewCC(<div className=" col-span-1 sm:col-span-2">
                 <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
                 <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
               </div>);
+    }, 50);
     setCostCenter(optCostCenter[indexCC].value);
   }, []);
 
