@@ -172,6 +172,7 @@ export default function TableExpenses({data, token, expenses,
 
   useEffect(() => {
     if(filter){
+      console.log('data exp ', dataExpenses);
       setView(<></>);
       setTimeout(() => {
         setView(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
@@ -184,14 +185,14 @@ export default function TableExpenses({data, token, expenses,
     categories:string[], minAmount:number, maxAmount:number, 
     reports:string[], projects:string[], startDate:number, endDate:number) => {
   
-    console.log('filtrar');
-    console.log('conditions', conditions);
-    console.log('types ', types);
-    console.log('categories ', categories);
-    console.log('startdate ', startDate);
-    console.log('endDate ', endDate);
-    console.log('min amount ', minAmount);
-    console.log('max amount ', maxAmount);
+    // console.log('filtrar');
+    // console.log('conditions', conditions);
+    // console.log('types ', types);
+    // console.log('categories ', categories);
+    // console.log('startdate ', startDate);
+    // console.log('endDate ', endDate);
+    // console.log('min amount ', minAmount);
+    // console.log('max amount ', maxAmount);
     
     let filtered: Expense[] = [];
     expenses.map((expense) => {
@@ -641,7 +642,7 @@ export default function TableExpenses({data, token, expenses,
     //setFilteredProjects(filtered);
     setFilteredExpenses(filtered);
     
-    //setDataProjects(ProjectDataToTableData(filtered));
+    // //setDataProjects(ProjectDataToTableData(filtered));
     setDataExpenses(ExpenseDataToTableData(filtered));
     setFilter(true);
   }

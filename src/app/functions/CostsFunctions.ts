@@ -7,7 +7,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
     const dollar = CurrencyFormatter({
           currency: "MXN",
           value: expense.subtotal
-        })
+        });
     // table.push({
     //   id: expense._id,
     //   Descripcion: expense.description,
@@ -29,7 +29,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Estatus: 'condition',
       Fecha: expense.date,
       Importe: dollar,
-      Informe: expense.report || 'sin informe',
+      Informe: expense.report?.name || 'sin informe',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {

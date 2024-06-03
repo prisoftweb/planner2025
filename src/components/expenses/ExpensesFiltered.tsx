@@ -65,7 +65,7 @@ export default function Filtering({showForm, optCategories, optTypes,
   }
 
   const handleProjects = (value: string[]) => {
-    setConditions(value);
+    setProjects(value);
   }
 
   useEffect(() => {
