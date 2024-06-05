@@ -9,13 +9,16 @@ import { Report } from "@/interfaces/Reports";
 export default function ButtonNew({token, user, optCostCenter, optProviders, 
                               optResponsibles, optGlossaries, optProjects, 
                               optCategories, optConditions, optTypes, projects, 
-                              reports, optReports}: 
+                              reports, optReports, optCostCenterDeductible, 
+                              idLabour, idTicket}: 
                           {token:string, user:string, optCostCenter:Options[],
                             optProviders:Options[], optResponsibles:Options[],
                             optGlossaries:Options[], optProjects:Options[], 
                             optCategories:Options[], optTypes:Options[], 
                             optConditions:Options[], projects:Project[], 
-                            reports:Report[], optReports:Options[]}){
+                            reports:Report[], optReports:Options[], 
+                            optCostCenterDeductible:Options[], idLabour:string, 
+                            idTicket:string }){
   const [newExpense, setNewExpense] = useState<boolean>(false);
   
   return(
@@ -27,7 +30,8 @@ export default function ButtonNew({token, user, optCostCenter, optProviders,
                             optGlossaries={optGlossaries} optProjects={optProjects} 
                             optCategories={optCategories} optConditions={optConditions}
                             optTypes={optTypes} projects={projects} reports={reports}
-                            optReports={optReports}
+                            optReports={optReports} idLabour={idLabour} idTicket={idTicket}
+                            optCostCenterDeductible={optCostCenterDeductible}
                         />}
     </>
   )

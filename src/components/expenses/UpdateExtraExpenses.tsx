@@ -59,7 +59,7 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
     let indexResponsible = 0;
     if(expense.costcenter){
       optCostCenter.map((optCC, index:number) => {
-        if(optCC.value===expense.costcenter._id){
+        if(optCC.value===expense.costcenter){
           setCostCenter(optCostCenter[index].value);
           indexCC = index;
         }

@@ -49,28 +49,23 @@ export default async function Page() {
   }
 
   const optCostCenter:Options[]= [];
-  // costcenters.map((costcenter) => {
-  //   let cat = '';
-  //   costcenter.categorys.map((category) => {
-  //     cat += category.name + ', ';
-  //   })
-  //   optCostCenter.push({
-  //     label: costcenter.name + ' ( ' + cat + ' ) ',
-  //     value: costcenter._id
-  //   });
-  // });
+  const optCostCenterDeductible:Options[] = [];
   costcenters.map((costcenter) => {
+    //console.log(costcenter);
+    if(costcenter.isnormal){
+      costcenter.categorys.map((category) => {
+        optCostCenterDeductible.push({
+          label: category.name + ' ( ' + costcenter.name + ' ) ',
+          value: category._id
+        });
+      })
+    }
     costcenter.categorys.map((category) => {
       optCostCenter.push({
         label: category.name + ' ( ' + costcenter.name + ' ) ',
         value: category._id
       });
-      //cat += category.name + ', ';
     })
-    // optCostCenter.push({
-    //   label: costcenter.name + ' ( ' + cat + ' ) ',
-    //   value: costcenter._id
-    // });
   });
 
   let providers: Provider[];
@@ -189,7 +184,15 @@ export default async function Page() {
     value: 'all'
   }];
   //const optCategories: Options[] = [];
+  let labour:string = '';
+  let ticket:string = '';
   catalogs[0].categorys.map((category) => {
+    if(category.glossary.name.toLowerCase().includes('mano de obra')){
+      labour = category.glossary._id;
+    }
+    if(category.glossary.name.toLowerCase().includes('ticket')){
+      ticket = category.glossary._id;
+    }
     const c = {
       label: category.glossary.name,
       value: category.glossary._id
@@ -248,7 +251,8 @@ export default async function Page() {
                   optGlossaries={optGlossaries} optProjects={optProjects} 
                   optCategories={optCategories} optConditions={optConditions}
                   optTypes={optTypes} projects={projects} reports={reports}
-                  optReports={optReports}
+                  optReports={optReports} idLabour={labour} idTicket={ticket}
+                  optCostCenterDeductible={optCostCenterDeductible}
               />
           </WithOut>
         </div>
@@ -290,7 +294,8 @@ export default async function Page() {
                     optGlossaries={optGlossaries} optProjects={optProjects} 
                     optCategories={optCategories} optConditions={optConditions}
                     optTypes={optTypes} projects={projects} reports={reports}
-                    optReports={optReports}
+                    optReports={optReports} idLabour={labour} idTicket={ticket}
+                    optCostCenterDeductible={optCostCenterDeductible}
         />
         </Header>
         <TableExpenses data={table} token={token} 

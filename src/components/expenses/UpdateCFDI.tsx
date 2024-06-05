@@ -17,6 +17,7 @@ export default function UpdateCFDI({id, token, expense}:
     expense.files.map((f) => {
       if(f.types.includes('xml') || f.types.includes('XML')){
           //console.log('aqui entro => ', f);
+          
           setIdFile(f._id);
           setUrlFile(f.file);
       }

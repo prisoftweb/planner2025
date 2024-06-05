@@ -33,7 +33,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     costCenter, date, description, discount, 
     folio, project, proveedor, responsible, taxFolio, 
     typeCFDI, typeExpense, vat, reset, updateRefresh, 
-    report, condition} = useNewExpense();
+    report, condition, category} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -62,7 +62,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       const {description, folio, taxFolio, discount, amount, vat} = valores;
       updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, typeExpenseS, '');
+          typeCFDIS, typeExpenseS, categoryS);
       updateIndexStepper(2);
     },       
   });
@@ -81,7 +81,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [typeCFDIS, setTypeCFDIS] = useState<string>(optTypes[0].value);
   const [provider, setProvider] = useState<string>(optProviders[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
-  //const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
+  const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const [resetBand, setResetBand] = useState<boolean>(false);
@@ -115,7 +115,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, typeExpenseS, '');
+        typeCFDIS, typeExpenseS, categoryS);
     
     if(voucher || CFDI){
       const formdata = new FormData();
@@ -129,7 +129,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('user', responsibleS);
       formdata.append('taxfolio', taxFolio);
       formdata.append('typeCFDI', typeCFDIS);
-      //formdata.append('category', categoryS);
+      formdata.append('category', categoryS);
       formdata.append('project', project);
       formdata.append('vat', vat);
       formdata.append('report', report);
@@ -174,7 +174,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
         discount: discount.replace(/[$,]/g, ""), folio, provider, user:responsibleS, 
         taxfolio:taxFolio, typeCFDI: typeCFDIS, project, vat,
-        report, isticket:false, condition: [{
+        report, isticket:false, category:categoryS, condition: [{
           glossary: condition,
           user
         }]
@@ -275,14 +275,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       });      
     }
 
-    // let indexCate = 0;
-    // if(categoryS !== ''){
-    //   optCategories.map((opt, index:number) => {
-    //     if(opt.value === category){
-    //       indexCate = index;
-    //     }
-    //   });      
-    // }
+    let indexCate = 0;
+    if(categoryS !== ''){
+      optCategories.map((opt, index:number) => {
+        if(opt.value === category){
+          indexCate = index;
+        }
+      });      
+    }
 
     setViewCC(<div className=" col-span-1 md:col-span-3">
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
@@ -290,18 +290,18 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         </div>)
     
     setView(<>
-      <div>
+      {/* <div>
         <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
         <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
+      </div> */}
+      <div>
+        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+        <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
       </div>
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
         <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
       </div>
-      {/* <div>
-        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-      </div> */}
     </>)
 
     setViewResponsible(<div>

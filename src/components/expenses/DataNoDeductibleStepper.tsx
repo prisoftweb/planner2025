@@ -18,13 +18,16 @@ import { CreateCostWithFiles } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
 import Input from "../Input";
 
-export default function DataNoDeductibleStepper({token, user, optCostCenter, optResponsibles}: 
+export default function DataNoDeductibleStepper({token, user, optCostCenter, optResponsibles,
+                                                 idLabour, idTicket }: 
                                   {token:string, user:string, optCostCenter:Options[],
-                                    optResponsibles:Options[]}){
+                                    optResponsibles:Options[], idLabour:string, idTicket:string}){
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
-    costCenter, date, description, responsible, project, condition, 
-    reset, updateRefresh} = useNewExpense();
+    costCenter, date, description, responsible, project, condition, category, 
+    reset, updateRefresh, updateCategory} = useNewExpense();
+
+  const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +44,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       const {description, amount} = valores;
       updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
-          '', '', '');
+          '', '', categoryS);
       updateIndexStepper(2);
     },       
   });
@@ -83,7 +86,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   const SaveData = async() => {
     const {description, amount} = formik.values
     updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', '');
+        startDate, '', '', '', '', '', '', '', categoryS);
     
     if(voucher){
       const formdata = new FormData();
@@ -95,6 +98,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(true));
       formdata.append('project', project);
+      formdata.append('category', categoryS);
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -125,7 +129,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }else{
       const data = {
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
-        user:responsibleS, report, isticket:true, project, condition: [{
+        user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
           glossary: condition,
           user
         }]
@@ -184,6 +188,22 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }
   }, [clearAmount]);
 
+  const handleCostCenter = (value:string) => {
+    setCostCenter(value);
+    const cc = optCostCenter.find((costC) => costC.value === value);
+    if(cc){
+      if(cc.label.toLowerCase().includes('mano de obra')){
+        console.log('idlabour ');
+        setCategoryS(idLabour);
+        updateCategory(idLabour);
+      }else{
+        console.log('id ticket ');
+        setCategoryS(idTicket);
+        updateCategory(idTicket);
+      }
+    }
+  }
+
   useEffect(() => {
     let indexCC = 0;
     if(costCenter !== ''){
@@ -205,7 +225,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         }
       });      
     }
-    
+
     setView(<>
       <div className="col-span-1 sm:col-span-2">
         <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
@@ -215,7 +235,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
     setViewCC(<div className="col-span-1 sm:col-span-2">
           <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+          <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
         </div>)
 
   }, []);
@@ -252,7 +272,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
       setViewCC(<div className="col-span-1 sm:col-span-2">
               <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-              <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+              <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
             </div>)
       setResetBand(false);
     }

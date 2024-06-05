@@ -6,12 +6,13 @@ import { Options } from "@/interfaces/Common"
 import DataReports from "./DataReports"
 import { Report } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
+import { Expense } from "@/interfaces/Expenses"
 
 export default function ReportClient({report, token, id, companies, 
-                                departments, projects}: 
+                                departments, projects, expenses}: 
                             {report:Report, token:string, id:string, 
                               departments:Options[], companies:Options[], 
-                              projects:Options[]
+                              projects:Options[], expenses:Expense[]
                             }){
   
   const [view, setView] = useState<JSX.Element>(<></>)
@@ -19,7 +20,7 @@ export default function ReportClient({report, token, id, companies,
   const [opt, setOpt] = useState<number>(1);
   
   useEffect(() => {
-    opt===2? setView(<CostsInReport report={report} />) : 
+    opt===2? setView(<CostsInReport report={report} costs={expenses} />) : 
                   setView(<DataReports companies={companies} departments={departments} projects={projects} 
                     token={token} report={report} />)
                   // setView(<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 

@@ -92,15 +92,6 @@ export default function TableProjects({data, token, projects, optCategories,
         </Link>
       ),
     }),
-    // columnHelper.accessor('status', {
-    //   header: 'Estatus',
-    //   id: 'statuses',
-    //   cell: ({row}) => (
-    //     <Link href={`/projects/${row.original.id}/profile`}>
-    //       <div className={`w-5 h-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
-    //     </Link> 
-    //   ),
-    // }),
     columnHelper.accessor('category', {
       header: 'Categoria',
       id: 'categoria',
@@ -179,201 +170,83 @@ export default function TableProjects({data, token, projects, optCategories,
     }
   }, [filter]);
   
+  const dateValidation = (date:string, startDate:number, endDate:number) => {
+    let d = new Date(date).getTime();
+    if(d >= startDate && d <= endDate){
+      return true;
+    }
+    return false;
+  }
+
+  const amountValidation = (project:Project, startDate:number, endDate:number, 
+                              minAmount:number, maxAmount:number) => {
+    if(project.amount >= minAmount && project.amount <= maxAmount){
+      if(dateValidation(project.date, startDate, endDate)){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const categoriesValidation = (project:Project, startDate:number, endDate:number, 
+                  minAmount:number, maxAmount:number, categories:string[]) => {
+    if(categories.includes('all')){
+      if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
+        return true
+      return false;
+    }else{
+      if(project.categorys)
+        if(categories.includes(project.categorys._id))
+          if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
+            return true
+      return false;
+    }
+  }
+
+  const typesValidation = (project:Project, startDate:number, endDate:number, 
+    minAmount:number, maxAmount:number, categories:string[], types:string[]) => {
+    if(types.includes('all')){
+      if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
+        return true;
+      return false;
+    }else{
+      if(project.types)
+        if(types.includes(project.types._id))
+          if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
+            return true;
+      return false;
+    }
+  }
+
+  const conditionsValidation = (project:Project, startDate:number, endDate:number, 
+              minAmount:number, maxAmount:number, categories:string[], 
+              types:string[], conditions:string[]) => {
+    if(conditions.includes('all')){
+      if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
+        return true;
+      return false;
+    }else{
+      if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id)))
+        if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
+          return true;
+      return false;
+    }
+  }
+
   const filterData = (conditions:string[], types:string[], 
       categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
     
-    console.log('filtrar');
-    console.log('conditions', conditions);
-    console.log('types ', types);
-    console.log('categories ', categories);
-    console.log('startdate ', startDate);
-    console.log('endDate ', endDate);
-    console.log('min amount ', minAmount);
-    console.log('max amount ', maxAmount);
-    
     let filtered: Project[] = [];
     projects.map((project) => {
-      // if(project.date){
-      //   console.log('date project => ', project.date);
-      //   console.log('fechaa ', new Date(project.date));
-      //   console.log('timee ', new Date(project.date).getTime());
-      // }
-      //console.log('pro', project)
-      console.log('proyect => ', project);
-      if(conditions.includes('all')){
-        if(types.includes('all')){
-          if(categories.includes('all')){
-            if(project.amount >= minAmount && project.amount <= maxAmount){
-              //filtered.push(project);
-              console.log(project.title, ' => ', project.date);
-              let d = new Date(project.date).getTime();
-              console.log('get time ', d);
-              if(d >= startDate && d <= endDate){
-                filtered.push(project);
-              }
-            }
-          }else{
-            if(project.categorys){
-              if(categories.includes(project.categorys._id)){
-                if(project.amount >= minAmount && project.amount <= maxAmount){
-                  //filtered.push(project);
-                  let d = new Date(project.date).getTime();
-                  console.log('get time ', d);
-                  if(d >= startDate && d <= endDate){
-                    filtered.push(project);
-                  }
-                }
-              }
-            }
-          }
-        }else{
-          if(project.types){
-            if(types.includes(project.types._id)){
-              if(categories.includes('all')){
-                if(project.amount >= minAmount && project.amount <= maxAmount){
-                  //filtered.push(project);
-                  let d = new Date(project.date).getTime();
-                  console.log('get time ', d);
-                  if(d >= startDate && d <= endDate){
-                    filtered.push(project);
-                  }
-                }
-              }else{
-                if(project.categorys){
-                  if(categories.includes(project.categorys._id)){
-                    if(project.amount >= minAmount && project.amount <= maxAmount){
-                      //filtered.push(project);
-                      let d = new Date(project.date).getTime();
-                      console.log('get time ', d);
-                      if(d >= startDate && d <= endDate){
-                        filtered.push(project);
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }else{
-        if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-          if(types.includes('all')){
-            if(categories.includes('all')){
-              if(project.amount >= minAmount && project.amount <= maxAmount){
-                //filtered.push(project);
-                let d = new Date(project.date).getTime();
-                console.log('get time ', d);
-                if(d >= startDate && d <= endDate){
-                  filtered.push(project);
-                }
-              }
-            }else{
-              if(project.categorys){
-                if(categories.includes(project.categorys._id)){
-                  if(project.amount >= minAmount && project.amount <= maxAmount){
-                    //filtered.push(project);
-                    let d = new Date(project.date).getTime();
-                    console.log('get time ', d);
-                    if(d >= startDate && d <= endDate){
-                      filtered.push(project);
-                    }
-                  }
-                }
-              }
-            }
-          }else{
-            if(project.types){
-              if(types.includes(project.types._id)){
-                if(categories.includes('all')){
-                  if(project.amount >= minAmount && project.amount <= maxAmount){
-                    //filtered.push(project);
-                    let d = new Date(project.date).getTime();
-                    console.log('get time ', d);
-                    if(d >= startDate && d <= endDate){
-                      filtered.push(project);
-                    }
-                  }
-                }else{
-                  if(project.categorys){
-                    if(categories.includes(project.categorys._id)){
-                      if(project.amount >= minAmount && project.amount <= maxAmount){
-                        //filtered.push(project);
-                        let d = new Date(project.date).getTime();
-                        console.log('get time ', d);
-                        if(d >= startDate && d <= endDate){
-                          filtered.push(project);
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+      if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
+        filtered.push(project);
       }
     });
 
     console.log(filtered);
-    //setDataProjects(filtered);
     setFilteredProjects(filtered);
     setDataProjects(ProjectDataToTableData(filtered));
     setFilter(true);
-  }
-
-  const filterCondition = (conditions:string[]) => {
-    // let filtered: Project[] = [];
-    // if(conditions.includes('all')){
-    //   setDataProjects(ProjectDataToTableData(projects));
-    // }else{
-    //   projects.map((project) => {
-    //     if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-    //       filtered.push(project);
-    //     }
-    //   });
-    //   setDataProjects(ProjectDataToTableData(filtered));
-    // }
-    // setFilter(true);
-  }
-
-  const filterCategory = (categories:string[]) => {
-    // if(categories.includes('all')){
-    //   setDataProjects(ProjectDataToTableData(projects));
-    // }else{
-    //   let filtered: Project[] = [];
-    //   projects.map((project) => {
-    //     if(project.types){
-    //       if(project.categorys){
-    //         if(categories.includes(project.categorys._id)){
-    //           console.log('categories');
-    //           filtered.push(project);
-    //         }
-    //       }
-    //     }
-    //   });
-      
-    //   setDataProjects(ProjectDataToTableData(filtered));
-    // }
-    // setFilter(true);
-  }
-
-  const filterType = (types:string[]) => {
-    // if(types.includes('all')){
-    //   setDataProjects(ProjectDataToTableData(projects));
-    // }else{
-    //   let filtered: Project[] = [];
-    //   projects.map((project) => {
-    //     if(project.types){
-    //       if(types.includes(project.types._id)){
-    //         console.log('types');
-    //         filtered.push(project);
-    //       }
-    //     }
-    //   });
-    //   setDataProjects(ProjectDataToTableData(filtered));
-    // }
-    
-    // setFilter(true);
   }
 
   return(
@@ -396,9 +269,7 @@ export default function TableProjects({data, token, projects, optCategories,
         <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
           {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
                             optTypes={optTypes} optConditions={optConditions} 
-                            FilterData={filterData} filterCondition={filterCondition} 
-                            filterType={filterType} filterCategory={filterCategory} 
-                            maxAmount={maxAmount}  />}
+                            FilterData={filterData} maxAmount={maxAmount}  />}
       </div>
       {view}
       {/* <Table columns={columns} data={data} placeH="Buscar proyecto.." /> */}

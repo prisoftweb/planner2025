@@ -11,7 +11,7 @@ import { CreateCostWithFiles } from "@/app/api/routeCost";
 export default function VoucherNoDeductibleStepper({token, user}: {token:string, user:string}) {
   
   const {updateIndexStepper, updateVoucher, amount, costCenter, date, description, 
-    responsible, report, project, condition, reset, updateRefresh} = useNewExpense();
+    responsible, report, project, condition, category, reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   
@@ -37,6 +37,7 @@ export default function VoucherNoDeductibleStepper({token, user}: {token:string,
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(true));
       formdata.append('project', project);
+      formdata.append('category', category);
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -64,7 +65,7 @@ export default function VoucherNoDeductibleStepper({token, user}: {token:string,
     }else{
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, 
-        user:responsible, report, isticket:true, project, condition: {
+        user:responsible, report, isticket:true, project, category, condition: {
           glossary: condition,
           user
         }

@@ -20,14 +20,17 @@ import { Report } from "@/interfaces/Reports";
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
                                 optProviders, optResponsibles, optGlossaries, 
                                 optProjects, optCategories, optConditions, optTypes, 
-                                projects, reports, optReports }: 
+                                projects, reports, optReports, idLabour, 
+                                idTicket, optCostCenterDeductible }: 
                             {token:string, showForm:Function, user:string, 
                               optCostCenter:Options[],
                               optProviders:Options[], optResponsibles:Options[],
                               optGlossaries:Options[], optProjects:Options[], 
                               optCategories:Options[], optTypes:Options[], 
                               optConditions:Options[], projects:Project[], 
-                              reports:Report[], optReports: Options[]
+                              reports:Report[], optReports: Options[],
+                              optCostCenterDeductible:Options[], idLabour:string, 
+                              idTicket:string
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -159,7 +162,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
         if(isDeductible){
           if(indexStepper || indexStepper>=0){
             if(indexStepper===1){
-              setStepForm(<DataStepper optCostCenter={optCostCenter} 
+              setStepForm(<DataStepper optCostCenter={optCostCenterDeductible} 
                 optProviders={optProviders} optGlossaries={optGlossaries} 
                 optResponsibles={optResponsibles}
                 token={token} user={user} optProjects={optProjects}
@@ -179,7 +182,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
           if(indexStepper || indexStepper>=0){
             if(indexStepper===1){
               setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
-                optResponsibles={optResponsibles} token={token} user={user} />)
+                optResponsibles={optResponsibles} token={token} user={user}
+                idLabour={idLabour} idTicket={idTicket} />)
             }else if(indexStepper===2){
                 setStepForm(<VoucherNoDeductibleStepper token={token} user={user} />)  
               }else {
