@@ -3,6 +3,7 @@ import { UsrBack } from "./User"
 import { Provider } from "./Providers"
 import { CostCenter } from "./CostCenter"
 import { Project } from "./Projects"
+import { Report } from "./Reports"
 
 export interface ExpensesTable {
   id: string
@@ -34,7 +35,8 @@ export interface Expense {
   typeCFDI: Glossary
   user: UsrBack
   provider: Provider
-  costcenter: CostCenter
+  //costcenter: CostCenter
+  costcenter:string
   project: Project
   status: boolean
   condition: Condition[]
@@ -43,7 +45,8 @@ export interface Expense {
   iva: number
   __v: number
   id: string
-  report: string
+  //report: string
+  report: Report
   isticket: boolean
 }
 

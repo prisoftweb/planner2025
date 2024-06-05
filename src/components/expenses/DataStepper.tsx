@@ -89,6 +89,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
+  const [clearAmountm, setClearAmount] = useState<boolean>(false);
+
   const [viewAmount, setViewAmount] = useState<JSX.Element>(<CurrencyInput
     id="amount"
     name="amount"
@@ -155,6 +157,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           formik.values.folio = '';
           formik.values.taxFolio = '';
           formik.values.vat = '';
+          setClearAmount(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           updateRefresh(true);
           setTimeout(() => {
@@ -189,6 +192,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           formik.values.taxFolio = '';
           formik.values.vat = '';
           showToastMessage('Costo creado satisfactoriamente!!!');
+          setClearAmount(true);
           updateRefresh(true);
           setTimeout(() => {
             setResetBand(true);
@@ -429,6 +433,34 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       }
     }
   }, [typeCFDIS]);
+
+  useEffect(() => {
+    if(clearAmountm){
+      setViewAmount(<></>);
+      setTimeout(() => {
+        setViewAmount(<CurrencyInput
+          id="amount"
+          name="amount"
+          // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+          //   focus:border-slate-700 outline-0"
+          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+            focus:border-slate-700 outline-0"
+          onChange={formik.handleChange}
+          onBlur={formik.handleChange}
+          //defaultValue={0}
+          defaultValue={amount}
+          decimalsLimit={2}
+          prefix="$"
+          onValueChange={(value) => {try {
+            formik.values.amount=value || '0';
+          } catch (error) {
+            formik.values.amount='0';
+          }}}
+        />);
+      }, 100);
+      setClearAmount(false);
+    }
+  }, [clearAmountm]);
 
   return(
     <div className="w-full bg-white">

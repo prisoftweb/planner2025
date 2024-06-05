@@ -10,14 +10,19 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function Filtering({showForm, optCategories, optTypes, 
-                      optConditions, FilterData, maxAmount }: 
+                      optConditions, FilterData, maxAmount, 
+                      optProjects, optReports }: 
                     {showForm:Function, optCategories: Options[],
                       optTypes: Options[], optConditions: Options[],
-                      FilterData:Function, maxAmount:number  }){
+                      FilterData:Function, maxAmount:number, 
+                      optProjects:Options[], optReports:Options[]}){
   
   const [types, setTypes] = useState<string[]>([optTypes[0].value]);
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
+  const [projects, setProjects] = useState<string[]>([optProjects[0].value]);
+  const [reports, setReports] = useState<string[]>([optReports[0].value]);
+  const [heightPage, setHeightPage] = useState<number>(900);
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -35,6 +40,43 @@ export default function Filtering({showForm, optCategories, optTypes,
     set_maxValue(e.maxValue);
   };
 
+  const handleResize = () => {
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+  }
+
+  const handleConditions = (value: string[]) => {
+    setConditions(value);
+  }
+
+  const handleTypes = (value: string[]) => {
+    setTypes(value);
+  }
+
+  const handleCategories = (value: string[]) => {
+    setCategories(value);
+  }
+
+  const handleReports = (value: string[]) => {
+    setReports(value);
+  }
+
+  const handleProjects = (value: string[]) => {
+    setProjects(value);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+  }, []);
+
   useEffect(() => {
     if(values.length > 1){
       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
@@ -47,20 +89,22 @@ export default function Filtering({showForm, optCategories, optTypes,
   }, [values]);
 
   useEffect(() => {
-    FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  }, [ categories, types, conditions, minValue, maxValue]);
+    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, firstDate?.getTime(), secondDate?.getTime());
+  }, [ categories, types, conditions, minValue, maxValue, firstDate, secondDate, projects, reports]);
 
   useEffect (() => {
-    FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
+    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
   }, []);
 
-  useEffect(() => {
-    FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  }, [firstDate, secondDate]);
+  // useEffect(() => {
+  //   FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
+  // }, [firstDate, secondDate]);
 
   return(
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
+      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
+        style={{height: `${heightPage}px`}}
+      >
         <div className="flex justify-between">
           <HeaderForm img="/img/role.svg" subtitle="Filtra gastos por diferentes caracteristicas" 
             title="Filtrar gasto"
@@ -71,15 +115,23 @@ export default function Filtering({showForm, optCategories, optTypes,
         
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          <SelectMultipleReact index={0} opts={optConditions} setValue={setConditions} />
+          <SelectMultipleReact index={0} opts={optConditions} setValue={handleConditions} />
         </div>
         <div className="">
           <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-          <SelectMultipleReact index={0} opts={optTypes} setValue={setTypes} />
+          <SelectMultipleReact index={0} opts={optTypes} setValue={handleTypes} />
         </div>
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectMultipleReact index={0} opts={optCategories} setValue={setCategories} />
+          <SelectMultipleReact index={0} opts={optCategories} setValue={handleCategories} />
+        </div>
+        <div>
+          <Label htmlFor="reports"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Reporte</p></Label>
+          <SelectMultipleReact index={0} opts={optReports} setValue={handleReports} />
+        </div>
+        <div>
+          <Label htmlFor="projects"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyectos</p></Label>
+          <SelectMultipleReact index={0} opts={optProjects} setValue={handleProjects} />
         </div>
         {/* <div className="pt-9"> */}
         <div className="pt-0">

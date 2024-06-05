@@ -51,7 +51,7 @@ export default function ProfileReport({report}:
               <p className="text-blue-600">{report.date.substring(0, 10)}</p>
             </div>
             <div>
-              <p className="text-slate-500">Tipo de CFDI</p>
+              <p className="text-slate-500">Comentarios</p>
               <p className="text-blue-600">{report.comment}
               </p>
             </div>

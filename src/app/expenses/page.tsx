@@ -138,11 +138,17 @@ export default async function Page() {
   }
 
   const optReports:Options[]= [];
+  const optReportsFilter:Options[] = [{
+    label: 'TODOS',
+    value: 'all'
+  }]
   reports.map((rep) => {
-    optReports.push({
+    const r = {
       label: rep.name,
       value: rep._id
-    });
+    }
+    optReports.push(r);
+    optReportsFilter.push(r);
   });
 
   let projects: Project[];
@@ -156,11 +162,17 @@ export default async function Page() {
   }
 
   const optProjects:Options[]= [];
+  const optProjectFilter: Options[] = [{
+    label: 'TODOS',
+    value: 'all'
+  }]
   projects.map((project) => {
-    optProjects.push({
+    const p = {
       label: project.title,
       value: project._id
-    });
+    }
+    optProjects.push(p);
+    optProjectFilter.push(p);
   });
 
   let catalogs: GlossaryCatalog[];
@@ -257,7 +269,7 @@ export default async function Page() {
       Estatus: 'condition',
       Fecha: expense.date,
       Importe: dollar,
-      Informe: expense.report || 'sin reporte',
+      Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
@@ -283,7 +295,8 @@ export default async function Page() {
         </Header>
         <TableExpenses data={table} token={token} 
           optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
-          optTypes={optTypeFilter} expenses={expenses}
+          optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
+          optReports={optReportsFilter}
         />
       </div>
     </>
