@@ -181,6 +181,97 @@ export default function TableExpenses({data, token, expenses,
     }
   }, [filter]);
 
+  const dateValidation = (exp:Expense, startDate:number, endDate:number) => {
+    let d = new Date(exp.date).getTime();
+    //console.log('get time ', d);
+    if(d >= startDate && d <= endDate){
+      return true;
+    }
+    return false;
+  }
+
+  const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                              startDate:number, endDate:number) => {
+    if(exp.subtotal >= minAmount && exp.subtotal <= maxAmount){
+      return dateValidation(exp, startDate, endDate);
+    }
+    return false;
+  }
+
+  const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                      startDate:number, endDate:number, projects:string[]) => {
+    if(projects.includes('all')){
+      return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+    }else{
+      if(exp.project){
+        if(projects.includes(exp.project._id)){
+          return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+        }
+      }
+    }
+    return false;
+  }
+
+  const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+              startDate:number, endDate:number, projects:string[], reports:string[]) => {
+    if(reports.includes('all')){
+      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects); 
+    }else{
+      if(exp.report){
+        if(reports.includes(exp.report._id)){
+          return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
+        }
+      }
+    }
+    return false;
+  }
+
+  const categoriesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                startDate:number, endDate:number, projects:string[], 
+                reports:string[], categories:string[]) => {
+    
+    if(categories.includes('all')){
+      return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports);
+    }else{
+      if(exp.category){
+        if(categories.includes(exp.category._id)){
+          return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports);
+        }
+      }
+    }
+    return false;
+  }
+
+  const typesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                  startDate:number, endDate:number, projects:string[], 
+                  reports:string[], categories:string[], types:string[]) => {
+    
+    if(types.includes('all')){
+      return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories);
+    }else{
+      if(exp.typeCFDI){
+        if(types.includes(exp.typeCFDI._id)){
+          return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories);
+        }
+      }
+    }
+    return false;
+  }
+
+  const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                  startDate:number, endDate:number, projects:string[], 
+                  reports:string[], categories:string[], types:string[], conditions:string[]) => {
+
+    if(conditions.includes('all')){
+      return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories, types);
+    }else{
+      if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+        return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories, types);
+      }
+    }
+    return false;
+  }
+
   const filterData = (conditions:string[], types:string[], 
     categories:string[], minAmount:number, maxAmount:number, 
     reports:string[], projects:string[], startDate:number, endDate:number) => {
@@ -196,453 +287,15 @@ export default function TableExpenses({data, token, expenses,
     
     let filtered: Expense[] = [];
     expenses.map((expense) => {
-      if(conditions.includes('all')){
-        if(types.includes('all')){
-          if(categories.includes('all')){
-            if(reports.includes('all')){
-              if(projects.includes('all')){
-                if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                  let d = new Date(expense.date).getTime();
-                  console.log('get time ', d);
-                  if(d >= startDate && d <= endDate){
-                    filtered.push(expense);
-                  }
-                }
-              }else{
-                if(expense.project){
-                  if(projects.includes(expense.project._id)){
-                    if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                      let d = new Date(expense.date).getTime();
-                      console.log('get time ', d);
-                      if(d >= startDate && d <= endDate){
-                        filtered.push(expense);
-                      }
-                    }
-                  }
-                }
-              }
-            }else{
-              if(expense.report){
-                if(reports.includes(expense.report._id)){
-                  if(projects.includes('all')){
-                    if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                      let d = new Date(expense.date).getTime();
-                      console.log('get time ', d);
-                      if(d >= startDate && d <= endDate){
-                        filtered.push(expense);
-                      }
-                    }
-                  }else{
-                    if(expense.project){
-                      if(projects.includes(expense.project._id)){
-                        if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                          let d = new Date(expense.date).getTime();
-                          console.log('get time ', d);
-                          if(d >= startDate && d <= endDate){
-                            filtered.push(expense);
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }else{
-            if(expense.category){
-              if(categories.includes(expense.category._id)){
-                if(reports.includes('all')){
-                  if(projects.includes('all')){
-                    if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                      let d = new Date(expense.date).getTime();
-                      console.log('get time ', d);
-                      if(d >= startDate && d <= endDate){
-                        filtered.push(expense);
-                      }
-                    }
-                  }else{
-                    if(expense.project){
-                      if(projects.includes(expense.project._id)){
-                        if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                          let d = new Date(expense.date).getTime();
-                          console.log('get time ', d);
-                          if(d >= startDate && d <= endDate){
-                            filtered.push(expense);
-                          }
-                        }
-                      }
-                    }
-                  }
-                }else{
-                  if(expense.report){
-                    if(reports.includes(expense.report._id)){
-                      if(projects.includes('all')){
-                        if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                          let d = new Date(expense.date).getTime();
-                          console.log('get time ', d);
-                          if(d >= startDate && d <= endDate){
-                            filtered.push(expense);
-                          }
-                        }
-                      }else{
-                        if(expense.project){
-                          if(projects.includes(expense.project._id)){
-                            if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                              let d = new Date(expense.date).getTime();
-                              console.log('get time ', d);
-                              if(d >= startDate && d <= endDate){
-                                filtered.push(expense);
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }else{
-          if(expense.typeCFDI){
-            if(types.includes(expense.typeCFDI._id)){
-              if(categories.includes('all')){
-                if(reports.includes('all')){
-                  if(projects.includes('all')){
-                    if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                      let d = new Date(expense.date).getTime();
-                      console.log('get time ', d);
-                      if(d >= startDate && d <= endDate){
-                        filtered.push(expense);
-                      }
-                    }
-                  }else{
-                    if(expense.project){
-                      if(projects.includes(expense.project._id)){
-                        if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                          let d = new Date(expense.date).getTime();
-                          console.log('get time ', d);
-                          if(d >= startDate && d <= endDate){
-                            filtered.push(expense);
-                          }
-                        }
-                      }
-                    }
-                  }
-                }else{
-                  if(expense.report){
-                    if(reports.includes(expense.report._id)){
-                      if(projects.includes('all')){
-                        if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                          let d = new Date(expense.date).getTime();
-                          console.log('get time ', d);
-                          if(d >= startDate && d <= endDate){
-                            filtered.push(expense);
-                          }
-                        }
-                      }else{
-                        if(expense.project){
-                          if(projects.includes(expense.project._id)){
-                            if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                              let d = new Date(expense.date).getTime();
-                              console.log('get time ', d);
-                              if(d >= startDate && d <= endDate){
-                                filtered.push(expense);
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }else{
-                if(expense.category){
-                  if(categories.includes(expense.category._id)){
-                    if(reports.includes('all')){
-                      if(projects.includes('all')){
-                        if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                          let d = new Date(expense.date).getTime();
-                          console.log('get time ', d);
-                          if(d >= startDate && d <= endDate){
-                            filtered.push(expense);
-                          }
-                        }
-                      }else{
-                        if(expense.project){
-                          if(projects.includes(expense.project._id)){
-                            if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                              let d = new Date(expense.date).getTime();
-                              console.log('get time ', d);
-                              if(d >= startDate && d <= endDate){
-                                filtered.push(expense);
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }else{
-                      if(expense.report){
-                        if(reports.includes(expense.report._id)){
-                          if(projects.includes('all')){
-                            if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                              let d = new Date(expense.date).getTime();
-                              console.log('get time ', d);
-                              if(d >= startDate && d <= endDate){
-                                filtered.push(expense);
-                              }
-                            }
-                          }else{
-                            if(expense.project){
-                              if(projects.includes(expense.project._id)){
-                                if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                                  let d = new Date(expense.date).getTime();
-                                  console.log('get time ', d);
-                                  if(d >= startDate && d <= endDate){
-                                    filtered.push(expense);
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }else{
-        if(!expense.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-          if(types.includes('all')){
-            if(categories.includes('all')){
-              if(reports.includes('all')){
-                if(projects.includes('all')){
-                  if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                    let d = new Date(expense.date).getTime();
-                    console.log('get time ', d);
-                    if(d >= startDate && d <= endDate){
-                      filtered.push(expense);
-                    }
-                  }
-                }else{
-                  if(expense.project){
-                    if(projects.includes(expense.project._id)){
-                      if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                        let d = new Date(expense.date).getTime();
-                        console.log('get time ', d);
-                        if(d >= startDate && d <= endDate){
-                          filtered.push(expense);
-                        }
-                      }
-                    }
-                  }
-                }
-              }else{
-                if(expense.report){
-                  if(reports.includes(expense.report._id)){
-                    if(projects.includes('all')){
-                      if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                        let d = new Date(expense.date).getTime();
-                        console.log('get time ', d);
-                        if(d >= startDate && d <= endDate){
-                          filtered.push(expense);
-                        }
-                      }
-                    }else{
-                      if(expense.project){
-                        if(projects.includes(expense.project._id)){
-                          if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                            let d = new Date(expense.date).getTime();
-                            console.log('get time ', d);
-                            if(d >= startDate && d <= endDate){
-                              filtered.push(expense);
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }else{
-              if(expense.category){
-                if(categories.includes(expense.category._id)){
-                  if(reports.includes('all')){
-                    if(projects.includes('all')){
-                      if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                        let d = new Date(expense.date).getTime();
-                        console.log('get time ', d);
-                        if(d >= startDate && d <= endDate){
-                          filtered.push(expense);
-                        }
-                      }
-                    }else{
-                      if(expense.project){
-                        if(projects.includes(expense.project._id)){
-                          if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                            let d = new Date(expense.date).getTime();
-                            console.log('get time ', d);
-                            if(d >= startDate && d <= endDate){
-                              filtered.push(expense);
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }else{
-                    if(expense.report){
-                      if(reports.includes(expense.report._id)){
-                        if(projects.includes('all')){
-                          if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                            let d = new Date(expense.date).getTime();
-                            console.log('get time ', d);
-                            if(d >= startDate && d <= endDate){
-                              filtered.push(expense);
-                            }
-                          }
-                        }else{
-                          if(expense.project){
-                            if(projects.includes(expense.project._id)){
-                              if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                                let d = new Date(expense.date).getTime();
-                                console.log('get time ', d);
-                                if(d >= startDate && d <= endDate){
-                                  filtered.push(expense);
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }else{
-            if(expense.typeCFDI){
-              if(types.includes(expense.typeCFDI._id)){
-                if(categories.includes('all')){
-                  if(reports.includes('all')){
-                    if(projects.includes('all')){
-                      if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                        let d = new Date(expense.date).getTime();
-                        console.log('get time ', d);
-                        if(d >= startDate && d <= endDate){
-                          filtered.push(expense);
-                        }
-                      }
-                    }else{
-                      if(expense.project){
-                        if(projects.includes(expense.project._id)){
-                          if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                            let d = new Date(expense.date).getTime();
-                            console.log('get time ', d);
-                            if(d >= startDate && d <= endDate){
-                              filtered.push(expense);
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }else{
-                    if(expense.report){
-                      if(reports.includes(expense.report._id)){
-                        if(projects.includes('all')){
-                          if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                            let d = new Date(expense.date).getTime();
-                            console.log('get time ', d);
-                            if(d >= startDate && d <= endDate){
-                              filtered.push(expense);
-                            }
-                          }
-                        }else{
-                          if(expense.project){
-                            if(projects.includes(expense.project._id)){
-                              if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                                let d = new Date(expense.date).getTime();
-                                console.log('get time ', d);
-                                if(d >= startDate && d <= endDate){
-                                  filtered.push(expense);
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }else{
-                  if(expense.category){
-                    if(categories.includes(expense.category._id)){
-                      if(reports.includes('all')){
-                        if(projects.includes('all')){
-                          if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                            let d = new Date(expense.date).getTime();
-                            console.log('get time ', d);
-                            if(d >= startDate && d <= endDate){
-                              filtered.push(expense);
-                            }
-                          }
-                        }else{
-                          if(expense.project){
-                            if(projects.includes(expense.project._id)){
-                              if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                                let d = new Date(expense.date).getTime();
-                                console.log('get time ', d);
-                                if(d >= startDate && d <= endDate){
-                                  filtered.push(expense);
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }else{
-                        if(expense.report){
-                          if(reports.includes(expense.report._id)){
-                            if(projects.includes('all')){
-                              if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                                let d = new Date(expense.date).getTime();
-                                console.log('get time ', d);
-                                if(d >= startDate && d <= endDate){
-                                  filtered.push(expense);
-                                }
-                              }
-                            }else{
-                              if(expense.project){
-                                if(projects.includes(expense.project._id)){
-                                  if(expense.subtotal >= minAmount && expense.subtotal <= maxAmount){
-                                    let d = new Date(expense.date).getTime();
-                                    console.log('get time ', d);
-                                    if(d >= startDate && d <= endDate){
-                                      filtered.push(expense);
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+      if(conditionValidation(expense, minAmount, maxAmount, startDate, 
+          endDate, projects, reports, categories, types, conditions)){
+        filtered.push(expense);
       }
     });
 
     console.log(filtered);
-    //setDataExpenses(filtered);
-    //setFilteredProjects(filtered);
     setFilteredExpenses(filtered);
     
-    // //setDataProjects(ProjectDataToTableData(filtered));
     setDataExpenses(ExpenseDataToTableData(filtered));
     setFilter(true);
   }

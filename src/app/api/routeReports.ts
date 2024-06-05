@@ -93,3 +93,21 @@ export async function updateReport(auth_token:string, id:string, data:Object) {
     return 'Error al actualizar reporte!!';
   }
 }
+
+export async function getCostByReport(id:string, auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByReport/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos del reporte!!';
+    }
+    return 'Error al consultar costos del reporte!!';
+  }
+}

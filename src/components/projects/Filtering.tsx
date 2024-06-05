@@ -2,31 +2,22 @@
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import Button from "../Button"
-import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "../SelectMultipleReact"
-//import DatePicker from 'react-datepicker'
 import { Options } from "@/interfaces/Common";
 import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function Filtering({showForm, optCategories, optTypes, 
-                      optConditions, FilterData, filterCondition, 
-                      filterType, filterCategory, maxAmount }: 
+                      optConditions, FilterData, maxAmount }: 
                     {showForm:Function, optCategories: Options[],
                       optTypes: Options[], optConditions: Options[],
-                      FilterData:Function, filterCondition:Function,
-                      filterType:Function, filterCategory:Function,
-                      maxAmount:number  }){
+                      FilterData:Function, maxAmount:number  }){
   
   const [types, setTypes] = useState<string[]>([optTypes[0].value]);
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
-
-  // const [startDate, setStartDate] = useState<string>('');
-  // const [endDate, setEndDate] = useState<string>('');
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -45,31 +36,15 @@ export default function Filtering({showForm, optCategories, optTypes,
     set_maxValue(e.maxValue);
   };
 
-  // function getFormatDate(day:number, month:number, year:number){
-  //   return year.toString() + '-' + (month.toString().length < 2? 
-  //             '0' + month.toString(): month.toString()) + '-' + 
-  //               (day.toString().length < 2? '0' + day.toString(): day.toString())
-  // }
-
   useEffect(() => {
     if(values.length > 1){
-      // setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
-      // setEndDate(getFormatDate(values[1].day, values[1].month.number, values[1].year));
       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
       setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
     }else{
       if(values.length > 0){
         setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-        //setStartDate(getFormatDate(values[0].day, values[0].month.number, values[0].year));
       }
     }
-    
-    //https://www.npmjs.com/package/react-multi-date-picker
-    //https://shahabyazdi.github.io/react-multi-date-picker/multiple-months/
-    
-    //"date": "2024-05-02T00:00:00.000Z"
-    //new Date(year, monthIndex, day)
-    //console.log('new date ', new Date(2024, 2, 1));
   }, [values]);
 
   useEffect(() => {
@@ -84,6 +59,18 @@ export default function Filtering({showForm, optCategories, optTypes,
     FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
   }, [firstDate, secondDate]);
 
+  const handleCondition = (value:string[]) => {
+    setConditions(value);
+  }
+
+  const handleTypes = (value:string[]) => {
+    setTypes(value);
+  }
+
+  const handleCategories = (value:string[]) => {
+    setCategories(value);
+  }
+
   return(
     <>
       <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
@@ -97,15 +84,15 @@ export default function Filtering({showForm, optCategories, optTypes,
         
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          <SelectMultipleReact index={0} opts={optConditions} setValue={setConditions} />
+          <SelectMultipleReact index={0} opts={optConditions} setValue={handleCondition} />
         </div>
         <div className="">
           <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-          <SelectMultipleReact index={0} opts={optTypes} setValue={setTypes} />
+          <SelectMultipleReact index={0} opts={optTypes} setValue={handleTypes} />
         </div>
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectMultipleReact index={0} opts={optCategories} setValue={setCategories} />
+          <SelectMultipleReact index={0} opts={optCategories} setValue={handleCategories} />
         </div>
         {/* <div className="pt-9"> */}
         <div className="pt-0">

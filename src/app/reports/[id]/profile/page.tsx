@@ -14,6 +14,8 @@ import NavTab from "@/components/reports/NavTab";
 import ReportClient from "@/components/reports/ReportClient";
 import { GetReport, GetReports } from "@/app/api/routeReports";
 import { Report } from "@/interfaces/Reports";
+import { getCostByReport } from "@/app/api/routeReports";
+import { Expense } from "@/interfaces/Expenses";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -93,6 +95,17 @@ export default async function Page({ params }: { params: { id: string }}){
       value: department._id
     });
   });
+
+  let costs:Expense[] = [];
+  try {
+    costs = await getCostByReport(params.id, token);
+    if(typeof(costs)==='string') 
+      return <h1 className="text-center text-lg text-red">{costs}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red">Error al consultar los costos del reporte!</h1>
+  }
+
+  //console.log('costos del reporte!! ', costs);
   
   return(
     <>
@@ -108,7 +121,7 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTab idRep={params.id} tab='1' />
         <ReportClient report={report} token={token} id={params.id} 
           companies={optCompanies} departments={optDepartments}
-          projects={optProjects}
+          projects={optProjects} expenses={costs}
         />
       </div>
     </>

@@ -42,6 +42,7 @@ interface Actions {
   updateProject: (value:string) => void,
   updateReport: (value: string) => void,
   updateCondition: (value:string) => void,
+  updateCategory: (value:string) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -123,6 +124,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((s
   updateCondition: (value:string) => set(state => ({
     ...state,
     condition: value,
+  })),
+  updateCategory: (value:string) => set(state => ({
+    ...state,
+    category: value,
   })),
   reset: () => {
     set(initialState)
