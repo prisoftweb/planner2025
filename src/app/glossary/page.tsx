@@ -56,7 +56,7 @@ export default async function Page(){
       <Navigation user={user} />
       <CompanyClient option={4} >
         <div>
-          <Header title="Glosarios" >
+          <Header title="Glosarios" placeHolder="Buscar glosario.." >
             <ButtonNew token={token} glossary={''} />
           </Header>
           <div className="mt-5">

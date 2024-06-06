@@ -5,7 +5,8 @@ import TableProviders from "@/components/providers/TableProviders";
 import {getProviders} from "../api/routeProviders";
 import { Provider, TableProvider } from "@/interfaces/Providers";
 import { UsrBack } from "@/interfaces/User";
-import Header from "@/components/HeaderPage";
+//import Header from "@/components/HeaderPage";
+import Header from "@/components/Header";
 import ButtonNewProvider from "@/components/providers/ButtonNewProvider";
 import { CurrencyFormatter } from "../functions/Globals";
 
@@ -67,7 +68,7 @@ export default async function Providers(){
       
       <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
         {/* <HeaderProvider id={id} token={token} /> */}
-        <Header previousPage="/" title="Proveedores">
+        <Header title="Proveedores" placeHolder="Buscar proveedor..">
           <ButtonNewProvider id={id} token={token} />    
         </Header>
         {/* <WithOutProvider /> */}

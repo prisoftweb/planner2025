@@ -55,7 +55,7 @@ export default async function Page(){
       <Navigation user={user} />
       <RolesClient token={token} option={2}>
         <div>
-          <Header title="Recursos">
+          <Header title="Recursos" placeHolder="Buscar recurso..">
             <ButtonNew token={token} opt={2} optResources={[]} optRoutes={[]}
               descComponents={[]} descRoutes={[]} optComponents={[]} 
               idTree="" routesPerResource={[]} />

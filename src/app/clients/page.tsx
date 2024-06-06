@@ -5,8 +5,8 @@ import ButtonNewClient from "@/components/clients/ButtonNewClient";
 import Navigation from "@/components/navigation/Navigation";
 import { ClientBack, TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
-//import Header from "@/components/Header";
-import Header from "@/components/HeaderPage";
+import Header from "@/components/Header";
+//import Header from "@/components/HeaderPage";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 
@@ -83,7 +83,7 @@ export default async function clients(){
       <Navigation user={user} />
       
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <Header title="Clientes" previousPage="/"><ButtonNewClient id={user._id} token={token} tags={arrTags} /></Header>
+        <Header title="Clientes" placeHolder="Buscar cliente.."><ButtonNewClient id={user._id} token={token} tags={arrTags} /></Header>
         <div className="mt-5">
           <TableClients data={data} token={token} />
         </div>

@@ -181,7 +181,7 @@ export default async function Page() {
       
       <RolesClient token={token} option={5}>
         <div>
-          <Header title="Arbol">
+          <Header title="Arbol" placeHolder="Buscar arbol..">
             <div className="flex gap-x-2">
             <ButtonNew token={token} opt={5} 
                 optResources={optionsResource} optRoutes={optionsRoutes}

@@ -4,6 +4,12 @@ import { ArrowDownTrayIcon, ChartBarIcon,
 import { useEffect, useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 
+//import { PiInvoiceFill } from "react-icons/pi";
+import { FaFileInvoiceDollar } from "react-icons/fa6";
+import { FaFilePdf } from "react-icons/fa6";
+import { BsFiletypeXml } from "react-icons/bs";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
+
 export default function NavResponsive({open, setOpen, option, 
                   changeOption, isticket}: 
                 {open:boolean, setOpen:Function, option:number, 
@@ -29,26 +35,26 @@ export default function NavResponsive({open, setOpen, option,
   }
 
   const [isHover, setIsHover] = useState<number>(-1);
-
-  const [nav, setNav] = useState<JSX.Element>(<div>
-                      <ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 rotate-90 border-b border-slate-200" onClick={() => setOpen(false)} />
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                          content='Informacion basica'><AdjustmentsVerticalIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 pb-2 sm:pb-4 border-b border-slate-300`} onClick={() => changeOption(1)} />
-                      </Tooltip>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                          content='Informacion extra'><TableCellsIcon className={`${isticket? 'hidden': ''} w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 pb-2 sm:pb-4 border-b border-slate-300`} onClick={() => changeOption(2)} />
-                      </Tooltip>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Comprobante'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(3)} />
-                      </Tooltip>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                          content='CFDI'><UserCircleIcon className={`${isticket? 'hidden': ''} w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
-                          text-slate-500 pb-2 sm:pb-4`} onClick={() => changeOption(4)} />
-                      </Tooltip>
-                    </div>);
+  const [nav, setNav] = useState<JSX.Element>(<></>);
+  // const [nav, setNav] = useState<JSX.Element>(<div>
+  //                     <ArrowDownTrayIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+  //                         text-slate-500 rotate-90 border-b border-slate-200" onClick={() => setOpen(false)} />
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
+  //                         content='Informacion basica'><AdjustmentsVerticalIcon className={`w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+  //                         text-slate-500 pb-2 sm:pb-4 border-b border-slate-300`} onClick={() => changeOption(1)} />
+  //                     </Tooltip>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
+  //                         content='Informacion extra'><TableCellsIcon className={`${isticket? 'hidden': ''} w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+  //                         text-slate-500 pb-2 sm:pb-4 border-b border-slate-300`} onClick={() => changeOption(2)} />
+  //                     </Tooltip>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} content='Comprobante'><GlobeAmericasIcon className="w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+  //                         text-slate-500 pb-2 sm:pb-4 border-b border-slate-300" onClick={() => changeOption(3)} />
+  //                     </Tooltip>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
+  //                         content='CFDI'><UserCircleIcon className={`${isticket? 'hidden': ''} w-8 h-8 sm:w-12 sm:h-12 cursor-pointer 
+  //                         text-slate-500 pb-2 sm:pb-4`} onClick={() => changeOption(4)} />
+  //                     </Tooltip>
+  //                   </div>);
 
   useEffect(() => {
     if(!open){
@@ -60,7 +66,7 @@ export default function NavResponsive({open, setOpen, option,
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
             className="text-blue-500 bg-white" placement="right">
               <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
-                <AdjustmentsVerticalIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                <FaMoneyCheckDollar className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                     text-slate-500 my-1 bg-white rounded-md
                   ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
                   onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
@@ -72,7 +78,7 @@ export default function NavResponsive({open, setOpen, option,
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
             className="text-blue-500 bg-white" placement="right">
               <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
-                <TableCellsIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                <FaFileInvoiceDollar className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                     text-slate-500 my-1 bg-white rounded-md
                   ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
                   onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
@@ -84,7 +90,7 @@ export default function NavResponsive({open, setOpen, option,
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Comprobante' 
             className="text-blue-500 bg-white" placement="right">
               <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
-                <GlobeAmericasIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                <FaFilePdf className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                     text-slate-500 my-1 bg-white rounded-md
                   ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
                   onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
@@ -96,7 +102,7 @@ export default function NavResponsive({open, setOpen, option,
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='CFDI' 
             className={`text-blue-500 bg-white`} placement="right">
               <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
-                <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                <BsFiletypeXml className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
                   onMouseEnter={() => {setIsHover(4)} } onMouseLeave={() => setIsHover(-1)}
                   style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
@@ -117,28 +123,28 @@ export default function NavResponsive({open, setOpen, option,
             flex py-2 items-center border-b border-slate-300 mt-3 ${option===1? 'bg-slate-200': ''}`}
             onClick={() => changeOption(1)}
           >
-            <ChartBarIcon className="w-4 h-4 mr-2 text-slate-500" />
+            <FaMoneyCheckDollar className="w-4 h-4 mr-2 text-slate-500" />
             Datos basicos
           </div>
           <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
             flex py-2 items-center border-b border-slate-300 ${option===2? 'bg-slate-200': ''}`}
             onClick={() => changeOption(2)}
           >
-            <TableCellsIcon className="w-4 h-4 mr-2 text-slate-500" />
+            <FaFileInvoiceDollar className="w-4 h-4 mr-2 text-slate-500" />
             Datos extras
           </div>
           <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
             flex py-2 items-center border-b border-slate-300 ${option===3? 'bg-slate-200': ''}`}
             onClick={() => changeOption(3)}
           >
-            <GlobeAmericasIcon className="w-4 h-4 mr-2 text-slate-500" />
+            <FaFilePdf className="w-4 h-4 mr-2 text-slate-500" />
             Comprobante
           </div>
           <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
             flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
             onClick={() => changeOption(4)}
           >
-            <UserCircleIcon className="w-4 h-4 mr-2 text-slate-500" />
+            <BsFiletypeXml className="w-4 h-4 mr-2 text-slate-500" />
             CFDI
           </div>
         </div>

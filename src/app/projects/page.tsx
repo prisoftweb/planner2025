@@ -3,7 +3,8 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 //import Header from "@/components/Header";
-import Header from "@/components/HeaderPage";
+//import Header from "@/components/HeaderPage";
+import Header from "@/components/Header";
 import ButtonNew from "@/components/projects/ButtonNew";
 import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
@@ -193,7 +194,7 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <Header title="Proyectos" previousPage="/" >
+        <Header title="Proyectos" placeHolder="Buscar proyecto.." >
           <ButtonNew token={token} optClients={optClients} 
                     optCategories={optsCategories} optTypes={optsTypes}
                     user={user._id} optCompanies={optCompanies} />

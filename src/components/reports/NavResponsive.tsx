@@ -1,8 +1,9 @@
-import { ArrowDownTrayIcon, ChartBarIcon, 
-  AdjustmentsVerticalIcon, TableCellsIcon, 
-  UserCircleIcon } from "@heroicons/react/24/solid"
+import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
 import { useEffect, useState } from "react";
 import {Tooltip} from "@nextui-org/react";
+
+import { TbReportAnalytics } from "react-icons/tb";
+import { TbReportMoney } from "react-icons/tb";
 
 export default function NavResponsive({open, setOpen, option, changeOption}: 
                 {open:boolean, setOpen:Function, option:number, changeOption:Function}){
@@ -43,7 +44,15 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
             placement="right" className="text-blue-500 bg-white"> 
               <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
-                <ChartBarIcon 
+                <TbReportAnalytics
+                  style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
+                          color: isHover===1 || option===1 ? 'white' : '',}}
+                  className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md
+                    ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
+                    onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)} 
+                />
+                {/* <ChartBarIcon 
                   style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
                           color: isHover===1 || option===1 ? 'white' : '',}}
                   className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -51,13 +60,13 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                     ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
                     onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
                     
-                />
+                /> */}
               </div>
           </Tooltip>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen' 
           placement="right" className="text-blue-500 bg-white">
             <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
-              <AdjustmentsVerticalIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+              <TbReportMoney className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md
                 ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
                 onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
@@ -82,21 +91,28 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           flex py-2 items-center border-b border-slate-300 mt-3 ${option===1? 'bg-slate-200': ''}`}
           onClick={() => changeOption(1)}
         >
-          <ChartBarIcon 
+          <TbReportAnalytics 
+            style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
+                        color: isHover===1 || option===1 ? 'white' : '',}}
+            className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+              text-slate-500 my-1 bg-white rounded-md mr-2
+              ${option===1? 'bg-blue-500': ''}`}
+          />
+          {/* <ChartBarIcon 
             // className="w-4 h-4 mr-2 text-slate-500" 
             style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
                             color: isHover===1 || option===1 ? 'white' : '',}}
               className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
               text-slate-500 my-1 bg-white rounded-md mr-2
                 ${option===1? 'bg-blue-500': ''}`} 
-          />
+          /> */}
           Informacion basica
         </div>
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer pl-2
           flex py-2 items-center border-b border-slate-300 ${option===2? 'bg-slate-200': ''}`}
           onClick={() => changeOption(2)}  
         >
-          <AdjustmentsVerticalIcon 
+          <TbReportMoney 
             style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
                 color: isHover===2 || option===2 ? 'white' : '',}}
             className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
