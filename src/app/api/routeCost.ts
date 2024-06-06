@@ -100,9 +100,8 @@ export async function UpdateCost(auth_token:string, id:string, data:Object) {
 export async function CreateCostWithFiles(auth_token:string, data:FormData) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/costWithFILES`;
   console.log(url);
-  console.log('folio ', data.get('taxFolio'));
-  // console.log('files => ', data.getAll('files'));
-  // console.log('types => ', data.getAll('types'));
+  console.log('files => ', data.getAll('files'));
+  console.log('types => ', data.getAll('types'));
   //console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, data, {

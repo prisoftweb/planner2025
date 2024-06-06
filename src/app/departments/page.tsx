@@ -83,7 +83,7 @@ export default async function Page(){
       <Navigation user={user} />
       <CompanyClient option={1} >
         <div>
-          <Header title="Departamentos" >
+          <Header title="Departamentos" placeHolder="Buscar departamento.." >
             <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} />
           </Header>
           <div className="mt-5">

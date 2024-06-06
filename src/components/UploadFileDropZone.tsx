@@ -32,6 +32,7 @@ export default function UploadFileDropZone({label, setFile, Validation}:
 
   useEffect(() => {
     if ( typeof acceptedFiles[0] !== 'undefined' ){
+      console.log(acceptedFiles[0]);
       setAmounts([]);
       setDescriptions([]);
       setPrices([]);

@@ -20,7 +20,7 @@ import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
-import { GetReports } from "../api/routeReports";
+import { GetReports, getReportsByUser } from "../api/routeReports";
 import { Report } from "@/interfaces/Reports";
 
 export default async function Page() {
@@ -124,7 +124,12 @@ export default async function Page() {
 
   let reports: Report[];
   try {
-    reports = await GetReports(token);
+    if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
+      reports = await GetReports(token);
+    }else{
+      reports = await getReportsByUser(token, user._id);
+    }
+    
     if(typeof(reports)==='string'){
       return <h1 className="text-center text-lg text-red-500">{reports}</h1>
     }    
@@ -288,7 +293,7 @@ export default async function Page() {
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title="Gastos" >
+        <Header title="Gastos" placeHolder="Buscar gasto.." >
         <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
                     optProviders={optProviders} optResponsibles={optResponsibles}
                     optGlossaries={optGlossaries} optProjects={optProjects} 

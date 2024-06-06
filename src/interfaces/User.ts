@@ -1,3 +1,5 @@
+import { Role } from "./Roles"
+
 export interface User{
   'id': string,
   'photo': string,
@@ -32,7 +34,8 @@ export interface UsrBack{
   "status": boolean,
   "createAt"?: string,
   "__v"?: number,
-  "passwordChangedAt"?: string
+  "passwordChangedAt"?: string,
+  "rol"? : Role
 }
 
 export interface UserBack {

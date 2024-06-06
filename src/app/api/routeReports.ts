@@ -111,3 +111,21 @@ export async function getCostByReport(id:string, auth_token:string){
     return 'Error al consultar costos del reporte!!';
   }
 }
+
+export async function getReportsByUser(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsByUser/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || "Error al consultar reportes del usuario!!";
+    }
+    return "Error al consultar reportes del usuario!!";
+  }
+}

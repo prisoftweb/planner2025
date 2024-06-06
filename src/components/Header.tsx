@@ -1,8 +1,9 @@
 import Link from "next/link"
-import { ArrowLeftIcon } from "@heroicons/react/24/solid"
 import { TbArrowNarrowLeft } from "react-icons/tb";
+import SearchInTable from "./SearchInTable";
 
-export default function Header({children, title}: {children:JSX.Element, title:string}){
+export default function Header({children, title, placeHolder}: 
+          {children:JSX.Element, title:string, placeHolder:string}){
   return(
     <>
       <div className="flex justify-between items-center">
@@ -13,7 +14,12 @@ export default function Header({children, title}: {children:JSX.Element, title:s
           <p className="text-xl ml-4 font-medium">{title}</p>
         </div>
         {/* <ButtonNewProvider id={id} token={token} /> */}
-        {children}
+        <div className="flex gap-x-3">
+          <SearchInTable placeH={placeHolder} />
+          <div className="w-36">
+            {children}
+          </div>
+        </div>
       </div>
     </>
   )

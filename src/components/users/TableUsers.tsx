@@ -7,9 +7,9 @@ import NewUser from "./NewUser";
 import Button from "../Button";
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { Options } from "@/interfaces/Common";
-import Header from "../HeaderPage";
+//import Header from "../HeaderPage";
+import Header from "../Header";
 
 export default function TableUsers({data, token, departments, roles}:
                         {data:User[], token:string, 
@@ -128,7 +128,7 @@ export default function TableUsers({data, token, departments, roles}:
         {newUser && <NewUser showForm={setNewUser} departments={departments} 
                         token={token} roles={roles} />}
       </div> */}
-      <Header title="Usuarios" previousPage="/">
+      <Header title="Usuarios" placeHolder="Buscar usuario..">
         <>
           <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
             {newUser && <NewUser showForm={setNewUser} departments={departments} 
