@@ -56,11 +56,17 @@ export default async function Page() {
   }
 
   const optProjects: Options[] = [];
+  const optProjectsFilter: Options[] = [{
+    label: 'Todos',
+    value: 'all'
+  }];
   projects.map((project) => {
-    optProjects.push({
+    let p = {
       label: project.title,
       value: project._id
-    });
+    }
+    optProjects.push(p);
+    optProjectsFilter.push(p);
   });
 
   let catalogs: GlossaryCatalog[];
@@ -73,20 +79,42 @@ export default async function Page() {
 
   const condition = catalogs[0].condition[0].glossary._id;
 
+  const optConditions:Options[] = [];
+  const optConditionsFilter: Options[] = [{
+    label: 'Todos',
+    value: 'all'
+  }];
+  catalogs[0].condition.map((cond) => {
+    let c = {
+      label: cond.glossary.name,
+      value: cond.glossary._id
+    }
+    optConditions.push(c);
+    optConditionsFilter.push(c);
+  });
+
   const optCompanies: Options[] = [];
+  const optCompaniesFilter: Options[] = [{
+    label: 'Todas',
+    value: 'all'
+  }];
   companies.map((company) => {
-    optCompanies.push({
+    let c = {
       label: company.name,
       value: company._id
-    });
+    };
+    optCompanies.push(c);
+    optCompaniesFilter.push(c);
   });
 
   const optDepartments: Options[] = [];
+
   departments.map((department) => {
-    optDepartments.push({
+    let d = {
       label: department.name,
       value: department._id
-    });
+    }
+    optDepartments.push(d);
   });
 
   if(!reports || reports.length <= 0){
@@ -119,8 +147,9 @@ export default async function Page() {
           />
         </Header>
         <div className="mt-5">
-          <TableReports data={table} optCategories={[]} optConditions={[]} 
-              optTypes={[]} reports={reports} token={token} />
+          <TableReports data={table} optConditions={optConditionsFilter} 
+              reports={reports} token={token} optCompanies={optCompaniesFilter} 
+              optProjects={optProjectsFilter} />
         </div>
       </div>
     </>

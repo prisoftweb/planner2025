@@ -112,10 +112,13 @@ export default function VoucherStepper({token, user}: {token:string, user:string
     updateIndexStepper(3);
   }
 
+  const handle = () => {}
+
   return (
     <div className="mt-2">
       <NavExpenseStepper index={2} />
-      <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} Validation={validationType} />
+      <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} 
+          Validation={validationType} getData={handle} />
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" onClick={SaveData}>Guardar</Button>
         <button type="button"

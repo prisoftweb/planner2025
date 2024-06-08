@@ -10,21 +10,16 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 
-export default function Filtering({showForm, optCategories, optTypes, 
-                      optConditions, FilterData, maxAmount, 
-                      optProjects, optReports }: 
-                    {showForm:Function, optCategories: Options[],
-                      optTypes: Options[], optConditions: Options[],
-                      FilterData:Function, maxAmount:number, 
-                      optProjects:Options[], optReports:Options[]}){
+export default function Filtering({showForm, optCompanies, 
+                      optConditions, FilterData, maxAmount, optProjects }: 
+                    {showForm:Function, optCompanies: Options[],
+                      optConditions: Options[], optProjects:Options[],
+                      FilterData:Function, maxAmount:number  }){
   
-  const [types, setTypes] = useState<string[]>([optTypes[0].value]);
-  const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
+  const [companies, setCompanies] = useState<string[]>([optCompanies[0].value]);
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
   const [projects, setProjects] = useState<string[]>([optProjects[0].value]);
-  const [reports, setReports] = useState<string[]>([optReports[0].value]);
-  const [heightPage, setHeightPage] = useState<number>(900);
-
+  const [isPettyCash, setIsPettyCash] = useState<boolean>(false);
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
   
@@ -41,43 +36,6 @@ export default function Filtering({showForm, optCategories, optTypes,
     set_maxValue(e.maxValue);
   };
 
-  const handleResize = () => {
-    setHeightPage(Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    ));
-  }
-
-  const handleConditions = (value: string[]) => {
-    setConditions(value);
-  }
-
-  const handleTypes = (value: string[]) => {
-    setTypes(value);
-  }
-
-  const handleCategories = (value: string[]) => {
-    setCategories(value);
-  }
-
-  const handleReports = (value: string[]) => {
-    setReports(value);
-  }
-
-  const handleProjects = (value: string[]) => {
-    setProjects(value);
-  }
-
-  useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-    setHeightPage(Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    ));
-  }, []);
-
   useEffect(() => {
     if(values.length > 1){
       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
@@ -90,56 +48,73 @@ export default function Filtering({showForm, optCategories, optTypes,
   }, [values]);
 
   useEffect(() => {
-    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, firstDate?.getTime(), secondDate?.getTime());
-  }, [ categories, types, conditions, minValue, maxValue, firstDate, secondDate, projects, reports]);
+    FilterData(conditions, minValue, maxValue, companies, projects, firstDate?.getTime(), secondDate?.getTime(), isPettyCash);
+  }, [ companies, projects, conditions, minValue, maxValue, isPettyCash]);
 
-  useEffect (() => {
-    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
-  }, []);
+  // useEffect (() => {
+  //   FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
+  // }, []);
 
-  // useEffect(() => {
-  //   FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  // }, [firstDate, secondDate]);
+  const handleCondition = (value:string[]) => {
+    setConditions(value);
+  }
+
+  const handleProjects = (value:string[]) => {
+    setProjects(value);
+  }
+
+  const handleCompanies = (value:string[]) => {
+    setCompanies(value);
+  }
 
   return(
     <>
-      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
-        style={{height: `${heightPage}px`}}
-      >
+      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
         <div className="flex justify-between">
-          {/* <HeaderForm img="/img/role.svg" subtitle="Filtra gastos por diferentes caracteristicas" 
-            title="Filtrar gasto"
+          {/* <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
+            title="Filtrar informe"
           /> */}
           <div className="flex mt-2">
             {/* <img src={img} alt="logo" className="rounded-full w-14 h-auto" /> */}
             <GiSettingsKnobs className="w-12 h-12 text-slate-600" />
             <div className="ml-2">
-              <p className="text-xl">Filtrar gasto</p>
-              <p className="text-gray-500 text-sm">Filtra gastos por diferentes caracteristicas</p>
+              <p className="text-xl">Filtrar informe</p>
+              <p className="text-gray-500 text-sm">Filtra informes de gastos por diferentes caracteristicas</p>
             </div>
           </div>
           <XMarkIcon className="w-6 h-6 text-slate-500
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
-        
+        <div className="flex justify-end px-5">
+          <div className="inline-flex items-center">
+            {/* <p className="mr-3">Linea de credito</p> */}
+            <Label>Es Fondo fijo? </Label>
+            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+              <input checked={isPettyCash} 
+                //onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
+                onChange={() => setIsPettyCash(!isPettyCash)} id="switch-3" type="checkbox"
+                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                  peer-checked:border-green-500 peer-checked:before:bg-green-500
+                  border border-slate-300" />
+              <label htmlFor="switch-3"
+                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                  data-ripple-dark="true"></div>
+              </label>
+            </div>
+          </div>
+        </div>
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          <SelectMultipleReact index={0} opts={optConditions} setValue={handleConditions} />
+          <SelectMultipleReact index={0} opts={optConditions} setValue={handleCondition} />
+        </div>
+        <div>
+          <Label htmlFor="company"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañia</p></Label>
+          <SelectMultipleReact index={0} opts={optCompanies} setValue={handleCompanies} />
         </div>
         <div className="">
-          <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-          <SelectMultipleReact index={0} opts={optTypes} setValue={handleTypes} />
-        </div>
-        <div>
-          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectMultipleReact index={0} opts={optCategories} setValue={handleCategories} />
-        </div>
-        <div>
-          <Label htmlFor="reports"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Reporte</p></Label>
-          <SelectMultipleReact index={0} opts={optReports} setValue={handleReports} />
-        </div>
-        <div>
-          <Label htmlFor="projects"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyectos</p></Label>
+          <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyectos</p></Label>
           <SelectMultipleReact index={0} opts={optProjects} setValue={handleProjects} />
         </div>
         {/* <div className="pt-9"> */}
@@ -178,7 +153,7 @@ export default function Filtering({showForm, optCategories, optTypes,
           </div>
         </div>
         <div>
-          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Rango de fechas</p></Label>
+          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
           <Calendar
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"

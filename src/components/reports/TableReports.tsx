@@ -10,17 +10,20 @@ import { Options } from "@/interfaces/Common";
 import { Report, ReportTable } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
 import { RemoveReport } from "@/app/api/routeReports";
+import { ReportDataToTableData } from "@/app/functions/ReportsFunctions";
+import { GiSettingsKnobs } from "react-icons/gi";
+import Filtering from "./FilteringReports";
 
-export default function TableReports({data, token, reports, optCategories, 
-                          optTypes, optConditions}:
+export default function TableReports({data, token, reports, 
+                          optCompanies, optConditions, optProjects}:
                         {data:ReportTable[], token:string, 
-                          reports: Report[], optCategories: Options[], 
-                          optTypes: Options[], optConditions: Options[]}){
+                          reports: Report[], optCompanies: Options[], 
+                          optProjects: Options[], optConditions: Options[]}){
   
   const columnHelper = createColumnHelper<ReportTable>();
 
-  // const [filtering, setFiltering] = useState<boolean>(false);
-  // const [filter, setFilter] = useState<boolean>(false);
+  const [filtering, setFiltering] = useState<boolean>(false);
+  const [filter, setFilter] = useState<boolean>(false);
   const [dataReports, setDataReports] = useState(data);
 
   const columns = [
@@ -134,8 +137,139 @@ export default function TableReports({data, token, reports, optCategories,
   
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataReports} placeH="Buscar informe.." />);
   
+  useEffect(() => {
+    if(filter){
+      console.log('data rep ', dataReports);
+      setView(<></>);
+      setTimeout(() => {
+        setView(<Table columns={columns} data={dataReports} placeH="Buscar reporte.." />);
+      }, 100);
+      setFilter(false);
+    }
+  }, [filter]);
+
+  const [maxAmount, setMaxAmount] = useState<number>(0);
+  useEffect(() => {
+    const repAmount = reports.reduce((previous, current) => {
+      return current.total > previous.total ? current : previous;
+    });
+    setMaxAmount(repAmount.total || 100);
+  }, [])
+
+  const dateValidation = (rep:Report, startDate:number, endDate:number) => {
+    let d = new Date(rep.date).getTime();
+    //console.log('get time ', d);
+    if(d >= startDate && d <= endDate){
+      return true;
+    }
+    return false;
+  }
+
+  const amountValidation = (rep:Report, minAmount:number, maxAmount:number, 
+                              startDate:number, endDate:number) => {
+    // if(rep.total){
+    //   if(rep.total >= minAmount && rep.total <= maxAmount){
+    //     return dateValidation(rep, startDate, endDate);
+    //   }
+    // }
+    // return false;
+    return dateValidation(rep, startDate, endDate);
+  }
+
+  const projectValidation = (rep:Report, minAmount:number, maxAmount:number, 
+                      startDate:number, endDate:number, projects:string[]) => {
+    if(projects.includes('all')){
+      return amountValidation(rep, minAmount, maxAmount, startDate, endDate);
+    }else{
+      if(rep.project){
+        if(projects.includes(rep.project._id)){
+          return amountValidation(rep, minAmount, maxAmount, startDate, endDate);
+        }
+      }
+    }
+    return false;
+  }
+
+  const companyValidation = (rep:Report, minAmount:number, maxAmount:number, 
+              startDate:number, endDate:number, projects:string[], companies:string[]) => {
+    if(companies.includes('all')){
+      return projectValidation(rep, minAmount, maxAmount, startDate, endDate, projects); 
+    }else{
+      if(rep.company){
+        if(companies.includes(rep.company._id)){
+          return projectValidation(rep, minAmount, maxAmount, startDate, endDate, projects);
+        }
+      }
+    }
+    return false;
+  }
+
+  const conditionValidation = (rep:Report, minAmount:number, maxAmount:number, 
+                  startDate:number, endDate:number, projects:string[], 
+                  companies:string[], conditions:string[]) => {
+
+    if(conditions.includes('all')){
+      return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
+    }else{
+      if(conditions.includes(rep.moves[rep.moves.length-1].condition._id)){
+        return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
+      }
+      // if(!rep.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+      //   return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
+      // }
+    }
+    return false;
+  }
+
+  const pettyCashValidation = (rep:Report, minAmount:number, maxAmount:number, 
+      startDate:number, endDate:number, projects:string[], 
+      companies:string[], conditions:string[], isPettyCash:boolean) => {
+
+    if(isPettyCash === rep.ispettycash){
+      return conditionValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies, conditions);
+    }
+    return false;
+  }
+
+  const filterData = (conditions:string[], minAmount:number, 
+    maxAmount:number, companies:string[], projects:string[], 
+    startDate:number, endDate:number, isPettyCash:boolean) => {
+  
+    // console.log('filtrar');
+    // console.log('conditions', conditions);
+    // console.log('types ', types);
+    // console.log('categories ', categories);
+    // console.log('startdate ', startDate);
+    // console.log('endDate ', endDate);
+    // console.log('min amount ', minAmount);
+    // console.log('max amount ', maxAmount);
+    
+    let filtered: Report[] = [];
+    reports.map((report) => {
+      if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
+          endDate, projects, companies, conditions, isPettyCash)){
+        filtered.push(report);
+      }
+    });
+
+    console.log(filtered);
+    //setFilteredReports(filtered);
+    
+    setDataReports(ReportDataToTableData(filtered));
+    setFilter(true);
+  }
+
   return(
     <>
+      <div className="flex justify-end my-5">
+        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
+        <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
+          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+        />
+          {filtering && <Filtering showForm={setFiltering} optConditions={optConditions} 
+                          FilterData={filterData} maxAmount={maxAmount} 
+                          optProjects={optProjects} optCompanies={optCompanies} />}
+      </div>
       {view}
     </>
   )

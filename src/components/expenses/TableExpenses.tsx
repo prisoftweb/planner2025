@@ -14,6 +14,7 @@ import { GetCosts } from "@/app/api/routeCost";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
+import { GiSettingsKnobs } from "react-icons/gi";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
@@ -303,7 +304,10 @@ export default function TableExpenses({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-        <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button>
+        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
+        <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
+          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+        />
           {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} 

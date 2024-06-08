@@ -129,3 +129,22 @@ export async function getReportsByUser(auth_token:string, id:string) {
     return "Error al consultar reportes del usuario!!";
   }
 }
+
+export async function insertMovementsInReport(auth_token:string, id:string, data:object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/insertConditionInReport/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    if(res.status === 201) return res.status
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al realizar movimiento!!!';
+    }
+    return 'Error al realizar movimiento!!!';
+  }
+}
