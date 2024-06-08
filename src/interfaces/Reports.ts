@@ -30,6 +30,7 @@ export interface Report {
   project: Project
   status: boolean
   account: string
+  total: number
   __v: number
   id: string
   ispettycash: boolean

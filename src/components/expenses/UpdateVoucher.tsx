@@ -79,6 +79,8 @@ export default function UpdateVoucher({id, token, expense}:
     }
   }
 
+  const handle = () => {}
+
   return (
     <div className="mt-2">
       {urlFile && (
@@ -87,7 +89,8 @@ export default function UpdateVoucher({id, token, expense}:
           className="w-full h-96"
         ></iframe>
       )}
-      <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} Validation={validationType} />
+      <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} 
+          Validation={validationType} getData={handle} />
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" onClick={SaveData}>Guardar</Button>
       </div>

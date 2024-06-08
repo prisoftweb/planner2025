@@ -25,7 +25,7 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   //const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-  const [typeExpense, setTypeExpense] = useState<string>(optTypes[0].value);
+  //const [typeExpense, setTypeExpense] = useState<string>(optTypes[0].value);
   const [typeCFDI, setTypeCFDI] = useState<string>(optTypes[0].value);
   const [provider, setProvider] = useState<string>(optProviders[0]?.value);
   const [responsible, setResponsible] = useState<string>(optResponsibles[0].value);
@@ -112,10 +112,10 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
                   <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
                 </div>
 
-                <div>
+                {/* <div>
                   <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
                   <SelectReact index={0} opts={optTypes} setValue={setTypeExpense} />
-                </div>
+                </div> */}
                 
                 <div>
                   <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
@@ -204,9 +204,11 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
       <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
         title="Modificar gasto"
       />
-      <form className="mt-4 w-full rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-5">
-        {viewCC}
-        {selectProvider}
+      <form>
+        <div className="mt-4 w-full rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-5">
+          {viewCC}
+          {selectProvider}
+        </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button type="button" onClick={updateExpense}>Guardar</Button>         
         </div>

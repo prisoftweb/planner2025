@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { Expense } from "@/interfaces/Expenses";
 import { showToastMessageError, showToastMessage } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
+import { CFDIValidation } from "@/interfaces/Expense";
+import { Provider } from "@/interfaces/Providers";
+import { getProvider } from "@/app/api/routeProviders";
 
 export default function UpdateCFDI({id, token, expense}: 
                   {token: string, id:string, expense:Expense}){
@@ -11,6 +14,7 @@ export default function UpdateCFDI({id, token, expense}:
   const [file, setFile] = useState<File | null>();
   const [urlFile, setUrlFile] = useState<string>();
   const [idFile, setIdFile] = useState<string>('');
+  const [dataCFDI, setDataCFDI] = useState<CFDIValidation>();
 
   useEffect(() => {
     //console.log('expense', expense);
@@ -32,15 +36,19 @@ export default function UpdateCFDI({id, token, expense}:
         data.append('file', file);
         data.append('types', file.type);
         //console.log('append => ', data.get('file'));
-        const res = await ADDNewFILE(token, id, data);
-        if(res === 200){
-          showToastMessage('Archivo agregado satisfactoriamente');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+        if(dataCFDIValidation()){
+          //showToastMessage('validado!!')
+          const res = await ADDNewFILE(token, id, data);
+          if(res === 200){
+            showToastMessage('Archivo agregado satisfactoriamente');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            showToastMessageError(res);
+          }
         }
+        //showToastMessageError('No validado!!');
       } catch (error) {
         showToastMessageError('Ocurrio un error al ingresar archivo!!');
       }
@@ -75,6 +83,31 @@ export default function UpdateCFDI({id, token, expense}:
     }
   }
 
+  const handleCFDI = (value:CFDIValidation) => {
+    console.log('handle cfdi ', value);
+    setDataCFDI(value);
+  }
+
+  const dataCFDIValidation = () => {
+    if(expense.subtotal.toString() !== dataCFDI?.amount){
+      showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
+      return false;
+    }
+    if(expense.date.substring(0, 10) !== dataCFDI?.date.substring(0, 10)){
+      showToastMessageError('La fecha ingresada no coincide con la del CFDI!!');
+      return false;
+    }
+    if(expense.taxfolio !== dataCFDI?.taxFolio){
+      showToastMessageError('El folio fiscal ingresado no coincide con el del CFDI!!');
+      return false;
+    }
+    if(expense.provider.rfc !== dataCFDI.RFCProvider){
+      showToastMessageError('El rfc del proveedor no coincide con el del CFDI!!');
+      return false;
+    }
+    return true;
+  }
+
   return (
     <div className="mt-2">
       {urlFile && (
@@ -82,7 +115,8 @@ export default function UpdateCFDI({id, token, expense}:
           className="w-full h-96"
         ></iframe>
       )}
-      <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} Validation={validationType} />
+      <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} 
+          Validation={validationType} getData={handleCFDI} />
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" onClick={SaveData}>Guardar</Button>
       </div>

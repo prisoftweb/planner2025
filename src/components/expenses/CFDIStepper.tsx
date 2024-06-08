@@ -6,11 +6,15 @@ import { useNewExpense } from "@/app/store/newExpense";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
 import { CreateCostWithFiles } from "@/app/api/routeCost";
+import { CFDIValidation } from "@/interfaces/Expense";
+import { getProvider } from "@/app/api/routeProviders";
+import { Provider } from "@/interfaces/Providers";
 
 export default function CFDIStepper({token, user} : {token: string, user:string}) {
   
   const {updateCDFI} = useNewExpense();
   const [file, setFile] = useState<File>();
+  const [dataCFDI, setDataCFDI] = useState<CFDIValidation>();
   
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
@@ -54,23 +58,27 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       }
       if(file){
         updateCDFI(file);
+
         formdata.append('files', file);
         formdata.append('types', file.type);
       }
-      try {
-        const res = await CreateCostWithFiles(token, formdata);
-        if(res === 201){
-          reset();
-          updateRefresh(true);
-          showToastMessage('Costo creado satisfactoriamente!!!');
-          setTimeout(() => {
-            updateIndexStepper(1);
-          }, 200);
-        }else{
-          showToastMessageError(res);
+      if(await dataCFDIValidation()){
+        //showToastMessage('todo coincide !!');
+        try {
+          const res = await CreateCostWithFiles(token, formdata);
+          if(res === 201){
+            reset();
+            updateRefresh(true);
+            showToastMessage('Costo creado satisfactoriamente!!!');
+            setTimeout(() => {
+              updateIndexStepper(1);
+            }, 200);
+          }else{
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          showToastMessageError('Ocurrio un error al guardar costo!!');
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }else{
       const data = {
@@ -101,10 +109,46 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
     }
   }
 
+  const handleCFDI = (value:CFDIValidation) => {
+    console.log('handle cfdi ', value);
+    setDataCFDI(value);
+  }
+
+  const dataCFDIValidation = async() => {
+    if(amount !== dataCFDI?.amount){
+      showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
+      return false;
+    }
+    if(date.substring(0, 10) !== dataCFDI.date.substring(0, 10)){
+      showToastMessageError('La fecha ingresada no coincide con la del CFDI!!');
+      return false;
+    }
+    if(taxFolio !== dataCFDI.taxFolio){
+      showToastMessageError('El folio fiscal ingresado no coincide con el del CFDI!!');
+      return false;
+    }
+    try {
+      const res:Provider = await getProvider(proveedor, token);
+      if(typeof(res)==='string'){
+        showToastMessageError('Error al validar proveedor!!');
+        return false
+      }
+      if(res.rfc !== dataCFDI.RFCProvider){
+        showToastMessageError('El rfc del proveedor no coincide con el del CFDI!!');
+        return false;
+      }
+    } catch (error) {
+      showToastMessageError('Error al validar proveedor!!');
+      return false
+    }
+    return true;
+  }
+
   return (
     <div className="mt-2">
       <NavExpenseStepper index={3} />
-      <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} Validation={validationType} />
+      <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} 
+          Validation={validationType} getData={handleCFDI} />
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" onClick={SaveData}>Guardar</Button>
       </div>

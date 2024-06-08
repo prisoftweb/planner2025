@@ -5,9 +5,11 @@ import { useDropzone} from 'react-dropzone';
 import Label from "./Label";
 import {xml2json, xml2js} from 'xml-js'
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import { XMLCFDI, Element3 } from "@/interfaces/Expense";
+import { CFDIValidation } from "@/interfaces/Expense";
 
-export default function UploadFileDropZone({label, setFile, Validation}: 
-            {label:string, setFile:Function, Validation:Function}) {
+export default function UploadFileDropZone({label, setFile, Validation, getData}: 
+            {label:string, setFile:Function, Validation:Function, getData:Function}) {
   
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
     const file = new FileReader;
@@ -45,7 +47,6 @@ export default function UploadFileDropZone({label, setFile, Validation}:
         if(acceptedFiles[0].type.includes('xml') || acceptedFiles[0].type.includes('XML')){
           const readXML = async () => {
             const t = await acceptedFiles[0].text();
-            //console.log(t);
             
             // const res = xml2json(t, {compact: true, spaces: 4});
             // console.log(res);
@@ -53,11 +54,26 @@ export default function UploadFileDropZone({label, setFile, Validation}:
             const res2: (XMLCFDI | any) = xml2js(t);
             console.log(res2);
 
+            let CFDIObj:CFDIValidation = {
+              amount: '',
+              date: '',
+              RFCProvider: '',
+              taxFolio: ''
+            }
+
+            try {
+              CFDIObj.date = res2.elements[0].attributes.Fecha;
+              CFDIObj.RFCProvider = res2.elements[0].elements[0].attributes?.Rfc;
+              CFDIObj.amount = res2.elements[0].attributes.SubTotal;
+              CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID;
+            } catch (error) {
+              
+            }
+
+
+            getData(CFDIObj);
             setDate(res2.elements[0].attributes.Fecha);
-            //console.log('total', res2.elements[0].attributes.Total);
-            //setTotal(res2.elements[0].attributes.Total);
             setRfc(res2.elements[0].elements[0].attributes?.Rfc || 'sin rfc');
-            //console.log('proveedor ', res2.elements[0].elements[0].attributes?.Nombre );
             setProvider(res2.elements[0].elements[0].attributes?.Nombre);
             try {
               const dollar = CurrencyFormatter({
@@ -76,9 +92,7 @@ export default function UploadFileDropZone({label, setFile, Validation}:
                 setDescriptions((oldValue) => [...oldValue, concept.attributes?.Descripcion || '']);
                 setPrices((oldValue) => [...oldValue, concept.attributes?.ValorUnitario || '']);
               })
-              //setDescription(res2.elements[0]?.elements[2]?.elements[0].attributes?.Descripcion || 'sin concepto');
             } catch (error) {
-              //setDescription('sin concepto');
               setAmounts(['error al leer conceptos']);
               setQuantities(['error al leer conceptos']);
               setDescriptions(['error al leer conceptos']);
@@ -163,127 +177,4 @@ export default function UploadFileDropZone({label, setFile, Validation}:
       {/* {pre && <iframe className="w-full h-auto mt-4" src={URL.createObjectURL(pre)} />} */}
     </>
   );
-}
-
-export interface XMLCFDI {
-  declaration: Declaration
-  elements: Element[]
-}
-
-export interface Declaration {
-  attributes: Attributes
-}
-
-export interface Attributes {
-  version: string
-  encoding: string
-}
-
-export interface Element {
-  type: string
-  name: string
-  attributes: Attributes2
-  elements: Element2[]
-}
-
-export interface Attributes2 {
-  "xsi:schemaLocation": string
-  Version: string
-  Serie: string
-  Folio: string
-  Fecha: string
-  FormaPago: string
-  NoCertificado: string
-  Certificado: string
-  SubTotal: string
-  Moneda: string
-  Exportacion: string
-  Total: string
-  TipoDeComprobante: string
-  MetodoPago: string
-  LugarExpedicion: string
-  "xmlns:xs": string
-  "xmlns:cfdi": string
-  "xmlns:xsi": string
-  Sello: string
-}
-
-export interface Element2 {
-  type: string
-  name: string
-  attributes?: Attributes3
-  elements?: Element3[]
-}
-
-export interface Attributes3 {
-  TotalImpuestosTrasladados?: string
-  Rfc?: string
-  Nombre?: string
-  RegimenFiscal?: string
-  DomicilioFiscalReceptor?: string
-  RegimenFiscalReceptor?: string
-  UsoCFDI?: string
-}
-
-export interface Element3 {
-  type: string
-  name: string
-  attributes?: Attributes4
-  elements?: Element4[]
-}
-
-export interface Attributes4 {
-  SelloSAT?: string
-  NoCertificadoSAT?: string
-  SelloCFD?: string
-  FechaTimbrado?: string
-  UUID?: string
-  Version?: string
-  RfcProvCertif?: string
-  "xsi:schemaLocation"?: string
-  "xmlns:tfd"?: string
-  "xmlns:xsi"?: string
-  ObjetoImp?: string
-  ClaveProdServ?: string
-  Cantidad?: string
-  ClaveUnidad?: string
-  Unidad?: string
-  Descripcion?: string
-  ValorUnitario?: string
-  Importe?: string
-}
-
-export interface Element4 {
-  type: string
-  name: string
-  attributes?: Attributes5
-  elements?: Element5[]
-}
-
-export interface Attributes5 {
-  Base: string
-  Impuesto: string
-  TipoFactor: string
-  TasaOCuota: string
-  Importe: string
-}
-
-export interface Element5 {
-  type: string
-  name: string
-  elements: Element6[]
-}
-
-export interface Element6 {
-  type: string
-  name: string
-  attributes: Attributes6
-}
-
-export interface Attributes6 {
-  Base: string
-  Impuesto: string
-  TipoFactor: string
-  TasaOCuota: string
-  Importe: string
 }

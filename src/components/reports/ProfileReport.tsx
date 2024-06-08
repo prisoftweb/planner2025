@@ -1,8 +1,9 @@
 import Chip from "../providers/Chip";
 import { Report } from "@/interfaces/Reports";
+import Button from "../Button";
 
-export default function ProfileReport({report}: 
-                        {report:Report}){
+export default function ProfileReport({report, send}: 
+                        {report:Report, send:Function}){
 // console.log('report ', report);
   return(
     <>
@@ -63,7 +64,7 @@ export default function ProfileReport({report}:
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Enviar informe</p>
-              <p className="text-blue-600">{''}</p>
+              <Button type="button" onClick={() => send(true)}>Enviar</Button>
             </div>
             <div>
               <p className="text-slate-500">Descargar</p>
