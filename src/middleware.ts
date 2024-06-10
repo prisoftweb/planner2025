@@ -35,6 +35,8 @@ export const config = {
   matcher: ['/', '/users/:path*', '/providers/:path*', '/clients/:path*',
     '/catalogs/:path*', '/companies/:path*', '/departments/:path*',
     '/glossary/:path*', '/projects/:path*', '/providers/:path*',
-    '/roles/:path*', '/status/:path*'
+    '/roles/:path*', '/status/:path*', '/expenses/:path*', '/reports/:path*',
+    '/costcenter/:path*', '/catalogs/:path*', '/nodes/:path*', '/relations/:path*',
+    '/workflows/:path*'
   ],
 }

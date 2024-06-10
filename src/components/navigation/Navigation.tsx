@@ -186,6 +186,21 @@ const NavItems = ({role}: {role:string}) => {
           // },
         ]} 
       />
+      <NavItem name="Workflow" link="" items={[
+          {
+            name: 'Workflow',
+            link: '/workflows'
+          },
+          {
+            name: 'Nodos',
+            link: '/nodes'
+          },
+          {
+            name: 'Relaciones',
+            link: '/relations'
+          },
+        ]} 
+      />
     </>
   )
 };

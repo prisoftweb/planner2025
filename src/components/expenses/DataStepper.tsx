@@ -325,14 +325,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         setStartDate(date);
       }
       
-      let indexTypeExpense = 0;
-      if(typeExpenseS !== ''){
-        optTypes.map((opt, index:number) => {
-          if(opt.value === typeExpense){
-            indexTypeExpense = index;
-          }
-        });      
-      }
+      // let indexTypeExpense = 0;
+      // if(typeExpenseS !== ''){
+      //   optTypes.map((opt, index:number) => {
+      //     if(opt.value === typeExpense){
+      //       indexTypeExpense = index;
+      //     }
+      //   });      
+      // }
       
       let indexTypeCFDI = 0;
       if(typeCFDIS !== ''){
@@ -361,14 +361,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         });      
       }
       
-      // let indexCate = 0;
-      // if(categoryS !== ''){
-      //   optCategories.map((opt, index:number) => {
-      //     if(opt.value === category){
-      //       indexCate = index;
-      //     }
-      //   });      
-      // }
+      let indexCate = 0;
+      if(categoryS !== ''){
+        optCategories.map((opt, index:number) => {
+          if(opt.value === category){
+            indexCate = index;
+          }
+        });      
+      }
       
       setViewCC(<div className=" col-span-1 md:col-span-3">
               <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
@@ -376,18 +376,18 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             </div>)
 
       setView(<>
-        <div>
+        {/* <div>
           <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
           <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
+        </div> */}
+        <div>
+          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+          <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
         </div>
         <div>
           <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
           <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
         </div>
-        {/* <div>
-          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-        </div> */}
       </>)
       setViewResponsible(<div>
               <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
