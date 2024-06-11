@@ -90,6 +90,11 @@ export default async function page() {
   const tableData: NodeTable[] = [];
   nodes.map((node) => {
     
+    // let walk = '';
+    // node.relations.map((rel) => {
+    //   rel.relation.
+    // });
+
     tableData.push({
       caminos: '', 
       department: node.department.name,

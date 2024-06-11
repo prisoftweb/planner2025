@@ -3,10 +3,11 @@ import { Glossary } from "./Glossary"
 import { Workflow } from "./Workflows"
 
 export interface Node {
+  ohter: boolean
   _id: string
   department: Department
   glossary: Glossary
-  relations: any[]
+  relations: Relation[]
   workflow: Workflow
   status: boolean
   __v: number
@@ -19,4 +20,18 @@ export interface NodeTable {
   department: string,
   caminos: string,
   condition: string
+}
+
+export interface Relation {
+  relation: Relation2
+  _id: string
+  id: string
+}
+
+export interface Relation2 {
+  _id: string
+  glossary: Glossary
+  description: string
+  status: boolean
+  id: string
 }

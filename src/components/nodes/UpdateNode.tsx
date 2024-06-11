@@ -6,7 +6,7 @@ import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { getNode, updateNode } from "@/app/api/routeNodes"
+import { insertRelationsInNode } from "@/app/api/routeNodes"
 import SelectReact from "../SelectReact"
 import { Node, NodeTable } from "@/interfaces/Nodes"
 import AddElements from "../roles/AddElements"
@@ -166,9 +166,9 @@ export default function UpdateNode({showForm, token, departments, glossaries,
           //   relation: node
           // }]
       }
-      const res = await updateNode(token, data, id);
-      if(res === 201){
-        showToastMessage('Nodo creado satisfactoriamente!!');
+      const res = await insertRelationsInNode(token, data, id);
+      if(res === 200){
+        showToastMessage('Relaciones insertadas satisfactoriamente!!');
         setTimeout(() => {
           window.location.reload();
         }, 500);
