@@ -15,6 +15,10 @@ export async function createUserPhoto(user:FormData, auth_token:string){
       return res.statusText;
     }
   } catch (error) {
+    //console.log('error api ', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al crear usuario con foto';
+    }
     return 'Ocurrio un problema al crear usuario con foto';
   }
 }

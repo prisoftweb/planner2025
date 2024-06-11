@@ -9,7 +9,7 @@ export function ReportDataToTableData(reports:Report[]){
   reports.map((report) => {
     const dollar = CurrencyFormatter({
       currency: "MXN",
-      value: 0
+      value: report.total
     })
     
     table.push({
@@ -17,7 +17,7 @@ export function ReportDataToTableData(reports:Report[]){
       Total: dollar,
       Depto: report.department.name,
       Fecha: report.date,
-      NºGastos: report.moves.length.toString(),
+      NºGastos: report.quantity.toString(),
       Project: report.project.title,
       Report: report.name,
       Responsible: report.user.photo,

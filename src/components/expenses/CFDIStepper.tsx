@@ -115,6 +115,9 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   }
 
   const dataCFDIValidation = async() => {
+    console.log('amount ', amount, ' = subtotal cfdi ', dataCFDI?.amount);
+    console.log('date ', date.substring(0, 10), ' = date cfdi ', dataCFDI?.date.substring(0, 10));
+    console.log('folio fis ', taxFolio, ' = folio fis cfdi ', dataCFDI?.taxFolio);
     if(amount !== dataCFDI?.amount){
       showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
       return false;
@@ -133,6 +136,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         showToastMessageError('Error al validar proveedor!!');
         return false
       }
+      console.log('rfc pro ', res.rfc, ' = subtotal cfdi ', dataCFDI?.RFCProvider);
       if(res.rfc !== dataCFDI.RFCProvider){
         showToastMessageError('El rfc del proveedor no coincide con el del CFDI!!');
         return false;
