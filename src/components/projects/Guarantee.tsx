@@ -128,7 +128,8 @@ export default function Guarantee({token}:{token:string}){
             //placeholder="Please enter a number"
             defaultValue={0}
             decimalsLimit={2}
-            prefix="%"
+            //prefix="%"
+            suffix="%"
             onValueChange={(value) =>formik.values.percentage=value || ''}
             // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />

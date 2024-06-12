@@ -16,14 +16,15 @@ import { VscListUnordered } from "react-icons/vsc";
 import { PiTableThin } from "react-icons/pi";
 
 export default function TableProjects({data, token, projects, optCategories, 
-                          optTypes, optConditions}:
+                          optTypes, optConditions, isFilter, setIsFilter, isTable}:
                         {data:ProjectsTable[], token:string, 
                           projects: Project[], optCategories: Options[], 
-                          optTypes: Options[], optConditions: Options[]}){
+                          optTypes: Options[], optConditions: Options[], 
+                          isFilter:boolean, setIsFilter:Function, isTable:boolean}){
   
   const columnHelper = createColumnHelper<ProjectsTable>();
 
-  const [filtering, setFiltering] = useState<boolean>(false);
+  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataProjects, setDataProjects] = useState(data);
 
@@ -141,7 +142,7 @@ export default function TableProjects({data, token, projects, optCategories,
     setMaxAmount(projectM.amount);
   }, [])
 
-  const [isTable, setIsTable] = useState<boolean>(true);
+  //const [isTable, setIsTable] = useState<boolean>(true);
   const [view, setView] = useState<JSX.Element>(<></>);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
 
@@ -255,31 +256,31 @@ export default function TableProjects({data, token, projects, optCategories,
   return(
     <>
       <div className="flex justify-end mb-5">
-        <div className="inline-flex rounded-md shadow-sm mx-2">
+        {/* <div className="inline-flex rounded-md shadow-sm mx-2">
           <VscListUnordered className="text-red-600 w-8 h-8 cursor-pointer hover:text-red-300" 
             onClick={() => setIsTable(true)}
           />
-          {/* <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+          <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
                     ${isTable? 'bg-green-500 text-white': ''}`}
             onClick={() => setIsTable(true)}
           >
             Tabla
-          </button> */}
+          </button>
           <PiTableThin onClick={() => setIsTable(false)} 
             className="text-red-600 w-8 h-8 cursor-pointer hover:text-red-300"
           />
-          {/* <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+          <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
                     ${!isTable? 'bg-red-500 text-white': ''}`}
             onClick={() => setIsTable(false)}
           >
             Tarjetas
-          </button> */}
-        </div>
+          </button>
+        </div> */}
         {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-          <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
+          {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
             className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-          />
-          {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
+          /> */}
+          {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
                             optTypes={optTypes} optConditions={optConditions} 
                             FilterData={filterData} maxAmount={maxAmount}  />}
       </div>

@@ -18,15 +18,16 @@ import { GiSettingsKnobs } from "react-icons/gi";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
-                            optProjects, optReports}:
+                            optProjects, optReports, isFilter, setIsFilter}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
-                        optReports:Options[], optProjects:Options[]}){
+                        optReports:Options[], optProjects:Options[], 
+                        isFilter:boolean, setIsFilter:Function }){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
-  const [filtering, setFiltering] = useState<boolean>(false);
+  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
@@ -305,10 +306,10 @@ export default function TableExpenses({data, token, expenses,
     <>
       <div className="flex justify-end my-5">
         {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
+        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
           className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        />
-          {filtering && <Filtering showForm={setFiltering} optCategories={optCategories} 
+        /> */}
+          {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} 
                           optProjects={optProjects} optReports={optReports} />}

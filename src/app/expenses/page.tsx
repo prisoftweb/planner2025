@@ -22,6 +22,7 @@ import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { GetReports, getReportsByUser } from "../api/routeReports";
 import { Report } from "@/interfaces/Reports";
+import ContainerClient from "@/components/expenses/ContainerClient";
 
 export default async function Page() {
   
@@ -272,6 +273,35 @@ export default async function Page() {
           currency: "MXN",
           value: expense.subtotal
         })
+    
+    if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
+
+    }else{
+      if(expense.category.name.toLowerCase().includes('xml')){
+
+      }else{
+        if(expense.category.name.toLowerCase().includes('xml')){
+
+        }else{
+          //sin archivos
+        }
+      }
+    }
+    // expense.files.map((f) => {
+    //   if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
+    //     || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
+    //     || f.types.includes('PNG')){
+    //       //console.log('aqui entro => ', f);
+    //       //tiene factura
+    //   }
+    // });
+    
+    // expense.files.map((f) => {
+    //   if(f.types.includes('xml') || f.types.includes('XML')){
+    //       //console.log('aqui entro => ', f);
+    //     //tiene xml    
+    //   }
+    // });
     table.push({
       id: expense._id,
       Descripcion: expense.description,
@@ -285,14 +315,23 @@ export default async function Page() {
         responsible: expense.user.name,
         photo: expense.user.photo
       },
-      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
+      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+      archivos: ['']
     })
-  })
+  });
 
   return(
     <>
       <Navigation user={user} />
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+      <ContainerClient data={table} expenses={expenses} idLabour={labour} idTicket={ticket}
+        optCategories={optCategories} optCategoriesFilter={optCategoriesFilter} optConditions={optConditions}
+        optConditionsFilter={optConditionsFilter} optCostCenter={optCostCenter} 
+        optCostCenterDeductible={optCostCenterDeductible} optGlossaries={optGlossaries} 
+        optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
+        optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
+        optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
+        token={token} user={user._id} />
+      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Gastos" placeHolder="Buscar gasto.." >
         <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
                     optProviders={optProviders} optResponsibles={optResponsibles}
@@ -308,7 +347,7 @@ export default async function Page() {
           optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
           optReports={optReportsFilter}
         />
-      </div>
+      </div> */}
     </>
   )
 }

@@ -18,6 +18,7 @@ import { ProjectsTable, Project } from "@/interfaces/Projects";
 import TableProjects from "@/components/projects/TableProjects";
 import { CurrencyFormatter } from "../functions/Globals";
 import { ProjectDataToTableData } from "../functions/SaveProject";
+import ContainerClient from "@/components/projects/ContainerClient";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -193,7 +194,10 @@ export default async function Page(){
   return(
     <>
       <Navigation user={user} />
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+      <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
+        optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
+        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user._id}  />
+      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <Header title="Proyectos" placeHolder="Buscar proyecto.." >
           <ButtonNew token={token} optClients={optClients} 
                     optCategories={optsCategories} optTypes={optsTypes}
@@ -205,7 +209,7 @@ export default async function Page(){
             optConditions={optConditions}
           />
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

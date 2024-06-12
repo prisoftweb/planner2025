@@ -104,7 +104,7 @@ export default async function Page() {
     <>
       <Navigation user={user} />
       <CompanyClient option={5}>
-      <div>
+        <div>
           <Header title="Catalogos" placeHolder="Buscar catalogo.." >
             <div className="flex gap-x-2">
               <ButtonNew catalogOptions={catalogOptions} token={token} opt={1}

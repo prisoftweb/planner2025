@@ -2,7 +2,7 @@ import { CostsTable, Report } from "@/interfaces/Reports"
 import Chip from "../providers/Chip"
 import Label from "../Label"
 import Table from "../Table"
-
+import { CurrencyFormatter } from "@/app/functions/Globals"
 import { createColumnHelper } from "@tanstack/react-table"
 import { Expense } from "@/interfaces/Expenses"
 import { CostsDataToTableData } from "@/app/functions/ReportsFunctions"
@@ -13,6 +13,10 @@ export default function CostsInReport({report, costs}:
     {report:Report, costs:Expense[]}) {
   
   //const costs: Expense[] = getCosts();
+  const total = CurrencyFormatter({
+    currency: "MXN",
+    value: report.total
+  });
   const data = CostsDataToTableData(costs);
   
   return (
@@ -30,6 +34,10 @@ export default function CostsInReport({report, costs}:
               <p className="text-slate-500">{report.project.code}</p>
               <p className="text-slate-500">{report.project.types.name}</p>
               <p className="text-slate-500">{report.project.account}</p>
+              <div className="mt-3 border-t border-slate-500 pt-2">
+                <p className="text-blue-500">{report.name}</p>
+                <p className="text-slate-500">{report.account}</p>
+              </div>
             </div>
           </div>
           
@@ -50,11 +58,11 @@ export default function CostsInReport({report, costs}:
             <div className="grid grid-cols-2 gap-x-2 my-2">
               <div className="">
                 <p className="text-slate-500">Total</p>
-                <p className="text-green-600 font-semibold">{'$8,934.22'}</p>
+                <p className="text-green-600 font-semibold">{total}</p>
               </div>
               <div className="">
                 <p className="text-slate-500">Nº gastos</p>
-                <p className="text-red-500 font-semibold">{'22'}</p>
+                <p className="text-red-500 font-semibold">{report.quantity}</p>
               </div>
             </div>
           </div>

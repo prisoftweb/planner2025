@@ -17,6 +17,7 @@ import TableReports from "@/components/reports/TableReports";
 import { ReportDataToTableData } from "../functions/ReportsFunctions";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
+import ContainerClient from "@/components/reports/ContainerClient";
 
 export default async function Page() {
   
@@ -140,7 +141,11 @@ export default async function Page() {
   return (
     <>
       <Navigation user={user} />
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+      <ContainerClient data={table} condition={condition} optCompanies={optCompanies} 
+          optCompaniesFilter={optCompaniesFilter} optConditionsFilter={optConditionsFilter}
+          optDepartments={optDepartments} optProjects={optProjects} 
+          optProjectsFilter={optProjectsFilter} reports={reports} token={token} user={user._id} />
+      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Informes" placeHolder="Buscar Informe.." >
           <ButtonNew companies={optCompanies} departments={optDepartments} 
               projects={optProjects} token={token} condition={condition} user={user._id}
@@ -151,7 +156,7 @@ export default async function Page() {
               reports={reports} token={token} optCompanies={optCompaniesFilter} 
               optProjects={optProjectsFilter} />
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

@@ -18,7 +18,8 @@ export interface ExpensesTable {
   Estatus: string 
   Fecha: string 
   Importe: string
-  condition: string
+  condition: string,
+  archivos: string[],
 }
 
 export interface Expense {

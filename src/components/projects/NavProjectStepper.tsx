@@ -22,7 +22,7 @@ export default function NavProjectStepper({index}: {index:number}){
             border border-gray-500 text-sm text-gray-500 sm:grid-cols-4"
         >
           <li className={`flex items-center border-b sm:border-b-0 sm:border-r border-gray-300 justify-center 
-            gap-2 p-4 cursor-pointer ${index > 0? 'bg-green-500': ''}`}
+            gap-2 p-4 cursor-pointer ${index === 0? 'bg-blue-500': (index > 0? 'bg-green-500': '')}`}
             onClick={() => changeTab(0)}
           >
             <span className="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
@@ -36,7 +36,7 @@ export default function NavProjectStepper({index}: {index:number}){
           </li>
 
           <li className={`relative flex items-center justify-center gap-2 p-4 cursor-pointer
-            ${index > 1? 'bg-green-500': 'bg-gray-50'}`}
+            ${index === 1? 'bg-blue-500': (index > 1? 'bg-green-500': 'bg-gray-50')}`}
             onClick={() => changeTab(1)}
           >
             <span
@@ -60,7 +60,7 @@ export default function NavProjectStepper({index}: {index:number}){
           </li>
 
           <li className={`relative flex items-center justify-center gap-2 p-4 cursor-pointer
-            ${index > 2? 'bg-green-500': 'bg-gray-50'}`}
+            ${index === 2? 'bg-blue-500': (index > 2? 'bg-green-500': '')}`}
             onClick={() => changeTab(2)}
           >
             <span
@@ -87,7 +87,7 @@ export default function NavProjectStepper({index}: {index:number}){
             onClick={() => changeTab(3)}
           >
             <div className={`flex items-center justify-center border-t sm:border-t-0 sm:border-l border-gray-300
-                gap-2 p-4 cursor-pointer ${index > 3? 'bg-green-500': ''}`}>
+                gap-2 p-4 cursor-pointer ${index === 3? 'bg-blue-500': (index > 3? 'bg-green-500': '')}`}>
 
               <span className="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
                 4

@@ -74,15 +74,15 @@ export default function Filtering({showForm, optCompanies,
           {/* <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
             title="Filtrar informe"
           /> */}
-          <div className="flex mt-2">
+          <div className="flex mt-2 items-center">
             {/* <img src={img} alt="logo" className="rounded-full w-14 h-auto" /> */}
-            <GiSettingsKnobs className="w-12 h-12 text-slate-600" />
-            <div className="ml-2">
+            <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
+            <div className="ml-3">
               <p className="text-xl">Filtrar informe</p>
               <p className="text-gray-500 text-sm">Filtra informes de gastos por diferentes caracteristicas</p>
             </div>
           </div>
-          <XMarkIcon className="w-6 h-6 text-slate-500
+          <XMarkIcon className="w-8 h-8 text-slate-500
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
         <div className="flex justify-end px-5">
