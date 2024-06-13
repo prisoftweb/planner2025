@@ -62,22 +62,6 @@ export default function ContainerClient({token, optClients, optCategories,
           </div>
         </div>
       </div>
-      {/* <Header title="Proyectos" placeHolder="Buscar proyecto.." >
-        <div className="flex gap-x-4 items-center">
-          <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-            onClick={() => setIsTable(true)}
-          />
-          <PiTableThin onClick={() => setIsTable(false)} 
-            className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
-          />
-          <GiSettingsKnobs onClick={() => handleFilter(true)}
-            className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-          />
-          <ButtonNew token={token} optClients={optClients} 
-                  optCategories={optCategories} optTypes={optTypes}
-                  user={user} optCompanies={optCompanies} />
-        </div>
-      </Header> */}
       <div className="mt-5">
         <TableProjects data={data} token={token} projects={projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}
