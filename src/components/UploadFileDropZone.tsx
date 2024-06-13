@@ -64,8 +64,10 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
             try {
               CFDIObj.date = res2.elements[0].attributes.Fecha;
               //console.log('rfc 1 ', res2.elements[0].elements[1].attributes?.Rfc);
-              //console.log('rfc 2 ', res2.elements[0].elements[0].attributes?.Rfc);
-              CFDIObj.RFCProvider = res2.elements[0].elements[1].attributes?.Rfc || res2.elements[0].elements[0].attributes?.Rfc 
+              console.log('rfc 2 ', res2.elements[0].elements[0].attributes?.Rfc);
+              const emisor = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('emisor'));
+              console.log('emisor');
+              CFDIObj.RFCProvider = emisor?.attributes?.Rfc || 'sin rfc de proveedor';
               CFDIObj.amount = res2.elements[0].attributes.SubTotal;
               CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID;
             } catch (error) {
