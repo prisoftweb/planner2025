@@ -39,7 +39,7 @@ export default function ContainerClient({token, optClients, optCategories,
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
-          <p className="text-xl ml-4 font-medium">"Proyectos"</p>
+          <p className="text-xl ml-4 font-medium">Proyectos</p>
         </div>
         <div className="flex gap-x-3">
           <SearchInTable placeH="Buscar proyecto.." />
