@@ -9,6 +9,7 @@ import { useNewExpense } from "@/app/store/newExpense";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
 import { CreateCostWithFiles } from "@/app/api/routeCost";
+import { getSupplierCreditProv } from "@/app/functions/CostsFunctions";
 
 export default function VoucherStepper({token, user}: {token:string, user:string}) {
   
@@ -31,6 +32,13 @@ export default function VoucherStepper({token, user}: {token:string, user:string
   }
 
   const SaveData = async () => {
+    let supplierCredit: boolean;
+    try {
+      supplierCredit = await getSupplierCreditProv(token, proveedor);
+    } catch (error) {
+      supplierCredit = false;
+    }
+
     if(file || CFDI){
       const formdata = new FormData();
       formdata.append('subtotal', amount);
@@ -48,6 +56,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
       formdata.append('report', report);
       formdata.append('category', category);
       formdata.append('isticket', JSON.stringify(false));
+      formdata.append('ispaid', JSON.stringify(supplierCredit));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -80,7 +89,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
       const data = {
         subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
         provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project, vat,
-        report, isticket:false, category, condition: [{
+        report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
         }]

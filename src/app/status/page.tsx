@@ -12,6 +12,10 @@ import { Glossary } from "@/interfaces/Glossary";
 import Header from "@/components/Header";
 import { StatusTable } from "@/interfaces/Status";
 import TableStatus from "@/components/status/TableStatuses";
+import NavTab from "@/components/companies/NavTab";
+import Link from "next/link";
+import { TbArrowNarrowLeft } from "react-icons/tb";
+import SearchInTable from "@/components/SearchInTable";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -103,8 +107,8 @@ export default async function Page() {
   return(
     <>
       <Navigation user={user} />
-      <CompanyClient option={5}>
-      <div>
+      {/* <CompanyClient option={5}>
+        <div>
           <Header title="Catalogos" placeHolder="Buscar catalogo.." >
             <div className="flex gap-x-2">
               <ButtonNew catalogOptions={catalogOptions} token={token} opt={1}
@@ -119,7 +123,50 @@ export default async function Page() {
             <TableStatus  data={table}  token={token} />
           </div>
         </div>
-      </CompanyClient>
+      </CompanyClient> */}
+      <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">  
+        <div className="flex mt-5 gap-x-3">
+          <NavTab option={5} />
+          <div className="">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center">
+                <Link href={'/'}>
+                  <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+                </Link>
+                <p className="text-xl ml-4 font-medium">Catalogos</p>
+              </div>
+              {/* <ButtonNewProvider id={id} token={token} /> */}
+              <div className="flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap">
+                <SearchInTable placeH='Buscar catalogo..' />
+                <div >
+                  {/* {children} */}
+                  <div className="flex gap-x-2">
+                    <ButtonNew catalogOptions={catalogOptions} token={token} opt={1}
+                      descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+                    <ButtonNew catalogOptions={catalogOptions} token={token} opt={2}
+                      descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+                    <ButtonNew catalogOptions={catalogOptions} token={token} opt={3}
+                      descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* <Header title="Catalogos" placeHolder="Buscar catalogo.." >
+              <div className="flex gap-x-2">
+                <ButtonNew catalogOptions={catalogOptions} token={token} opt={1}
+                  descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+                <ButtonNew catalogOptions={catalogOptions} token={token} opt={2}
+                  descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+                <ButtonNew catalogOptions={catalogOptions} token={token} opt={3}
+                  descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+              </div>
+            </Header> */}
+            <div className="mt-5">
+              <TableStatus  data={table}  token={token} />
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

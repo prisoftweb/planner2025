@@ -21,17 +21,22 @@ export default function Table({data, columns, placeH}:
   const [filtering, setFiltering] = useState('')
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
   const [showColumns, setShowColumns] = useState<boolean>(false);
+  const [startPage, setStarPage] = useState<number>(1);
+  const [endPage, setEndPage] = useState<number>(25);
 
   const {search} = useTableStates();
   //const {numRows, changeCounter} = useRowsCounter();
   
-  // Retrieving data from local storage
-  const storedData = localStorage.getItem('myData');
   let parsedData: (MyData | undefined);
-  if(storedData){
-    parsedData = JSON.parse(storedData);
-  }
     
+  useEffect(() => {
+    // Retrieving data from local storage
+    const storedData = localStorage.getItem('myData');
+    if(storedData){
+      parsedData = JSON.parse(storedData);
+    }
+    setEndPage(Number(parsedData?.numRows || 25));
+  }, []);
   // const ref = useOutsideClickButton(() => {
   //   console.log('Clicked outside of MyComponent');
   //   setShowColumns(false);
@@ -80,6 +85,25 @@ export default function Table({data, columns, placeH}:
       }
     },
   })
+
+  const updateLabelRowsPage = () => {
+    //setStarPage()
+    setTimeout(() => {
+      //console.log('page count ', table.getPageCount());
+      //console.log('size page ', table.getState().pagination.pageSize);
+      //console.log('index size ', table.getState().pagination.pageIndex);
+      const indexPagination = table.getState().pagination.pageIndex * table.getState().pagination.pageSize;
+      setStarPage(indexPagination + 1);
+      if((indexPagination + table.getState().pagination.pageSize) > data.length){
+        //alert(`${inde}`);
+        setEndPage(data.length);
+      }else{
+        setEndPage(indexPagination + table.getState().pagination.pageSize );
+      }
+      
+    }, 100);
+    //setStarPage()
+  }
   
   return(
     <div className="">
@@ -192,6 +216,7 @@ export default function Table({data, columns, placeH}:
                     //changeCounter(Number(e.target.value));
                     const dataToStore = { numRows: e.target.value};
                     localStorage.setItem('myData', JSON.stringify(dataToStore));
+                    updateLabelRowsPage();
                   }}
                   className="w-16 p-1 text-sm mt-2 text-gray-900 border border-slate-300 rounded-lg 
                   bg-gray-50 focus:border-slate-700 outline-0 my-3"
@@ -201,8 +226,10 @@ export default function Table({data, columns, placeH}:
                   ))}
                 </select>
 
+                <p className="hidden sm:block text-md text-slate-700">{startPage} - {endPage} de {data.length} </p>
+
                 <button type="button"
-                  onClick={() => table.setPageIndex(0)} 
+                  onClick={() => {table.setPageIndex(0); updateLabelRowsPage()}} 
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >
@@ -210,7 +237,7 @@ export default function Table({data, columns, placeH}:
                 </button>
                 
                 <button type="button" 
-                  onClick={() => table.previousPage()}
+                  onClick={() => {table.previousPage(); updateLabelRowsPage()}}
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >
@@ -218,7 +245,7 @@ export default function Table({data, columns, placeH}:
                 </button>
                 
                 <button type="button" 
-                  onClick={() => table.nextPage()}
+                  onClick={() => {table.nextPage(); updateLabelRowsPage()}}
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >
@@ -226,7 +253,7 @@ export default function Table({data, columns, placeH}:
                 </button>
                 
                 <button type="button" 
-                  onClick={() => table.setPageIndex(table.getPageCount()-1)}
+                  onClick={() => {table.setPageIndex(table.getPageCount()-1); updateLabelRowsPage()}}
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >

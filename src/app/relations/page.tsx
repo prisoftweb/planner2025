@@ -38,10 +38,22 @@ export default async function Page() {
     return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar glosarios!!</h1>
   }
 
+  // const optGlossaries: Options[] = [];
+  // glossaries.map(glossary => {
+  //   optGlossaries.push({
+  //     label: glossary.name,
+  //     value: glossary._id
+  //   });
+  // });
   const optGlossaries: Options[] = [];
+  const optDescGlossaries: Options[] = [];
   glossaries.map(glossary => {
     optGlossaries.push({
       label: glossary.name,
+      value: glossary._id
+    });
+    optDescGlossaries.push({
+      label: glossary.description,
       value: glossary._id
     });
   });
@@ -59,7 +71,7 @@ export default async function Page() {
   const optNodes: Options[] = [];
   nodes.map(node => {
     optNodes.push({
-      label: node.glossary.name,
+      label: node.department.name,
       value: node._id
     });
   });
@@ -73,7 +85,8 @@ export default async function Page() {
             text="Agrega relacion, para el control del flujo de los nodos"
             title="Relaciones">
               <ButtonNewRelation glossaries={optGlossaries} 
-                  nodes={optNodes} token={token} user={user._id} />
+                  nodes={optNodes} token={token} user={user._id}
+                  descGlossaries={optDescGlossaries} />
           </WithOut>
         </div>
       </>
@@ -96,7 +109,7 @@ export default async function Page() {
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Nodos" placeHolder="Buscar nodo.." >
         <ButtonNewRelation glossaries={optGlossaries} nodes={optNodes} 
-            token={token} user={user._id} />
+            token={token} user={user._id} descGlossaries={optDescGlossaries} />
         </Header>
         <div className="mt-5">
           <TableRelations data={dataTable} token={token} />

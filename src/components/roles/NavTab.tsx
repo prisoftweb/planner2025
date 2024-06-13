@@ -3,7 +3,12 @@ import { ChartBarIcon, AdjustmentsVerticalIcon, TableCellsIcon,
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 import Link from "next/link";
-
+import { MdAdminPanelSettings } from "react-icons/md"; //Roles
+import { GrResources } from "react-icons/gr"; //Recursos
+import { TbRoute } from "react-icons/tb"; //Rutas
+import { BsWindowStack } from "react-icons/bs"; //Componentes
+//import { PiTreeViewDuotone } from "react-icons/pi"; //Arbol
+import { PiTreeDuotone } from "react-icons/pi";
 
 export default function NavTab({option}: {option:number}){
 
@@ -36,7 +41,7 @@ export default function NavTab({option}: {option:number}){
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
-                        <ChartBarIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                        <MdAdminPanelSettings className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md" 
                           onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
                           style={{ backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''),
@@ -51,7 +56,7 @@ export default function NavTab({option}: {option:number}){
                       placement="right"  
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
-                        <AdjustmentsVerticalIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                        <GrResources className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md" 
                           onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
                           style={{ backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''),
@@ -66,7 +71,7 @@ export default function NavTab({option}: {option:number}){
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
-                        <TableCellsIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                        <TbRoute className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md" 
                           onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
                           style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''),
@@ -81,7 +86,7 @@ export default function NavTab({option}: {option:number}){
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
-                        <GlobeAmericasIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                        <BsWindowStack className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md" 
                           onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
                           style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''),
@@ -96,7 +101,7 @@ export default function NavTab({option}: {option:number}){
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
-                        <AdjustmentsHorizontalIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                        <PiTreeDuotone className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md" 
                           onMouseEnter={() => setIsHover(5)} onMouseLeave={() => setIsHover(-1)}
                           style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 

@@ -8,10 +8,13 @@ import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import { createNode } from "@/app/api/routeNodes"
 import SelectReact from "../SelectReact"
+import SelectReactWithDescription from "../SelectReactWithDescription"
 
-export default function NewNode({showForm, token, departments, glossaries, workFlows}: 
+export default function NewNode({showForm, token, departments, glossaries, 
+                          workFlows, descGlossaries}: 
                     {showForm:Function, token:string, glossaries:Options[], 
-                      departments:Options[], workFlows:Options[]}){
+                      departments:Options[], workFlows:Options[], 
+                      descGlossaries:Options[]}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [department, setDepartment] = useState<string>(departments[0].value);
@@ -81,9 +84,14 @@ export default function NewNode({showForm, token, departments, glossaries, workF
           <Label htmlFor="department"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Departamento</p></Label>
           <SelectReact index={0} opts={departments} setValue={handleDepartment} />
         </div>
-        <div>
+        {/* <div>
           <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
           <SelectReact index={0} opts={glossaries} setValue={handleGlossary} />
+        </div> */}
+        <div>
+          <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
+          <SelectReactWithDescription index={0} opts={glossaries} 
+              setValue={handleGlossary} descriptions={descGlossaries} />
         </div>
         <div className="flex justify-center mt-2">
           <Button type="button" onClick={saveNode}>Guardar</Button>

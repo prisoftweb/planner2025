@@ -14,14 +14,16 @@ import { Glossary } from "@/interfaces/Glossary";
 import { getProjects } from "../api/routeProjects";
 import { Project } from "@/interfaces/Projects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import TableExpenses from "@/components/expenses/TableExpenses";
+//import TableExpenses from "@/components/expenses/TableExpenses";
 import { GetCosts } from "../api/routeCost";
-import Header from "@/components/Header";
+//import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { GetReports, getReportsByUser } from "../api/routeReports";
 import { Report } from "@/interfaces/Reports";
+import ContainerClient from "@/components/expenses/ContainerClient";
+import { getTypeFiles } from "../functions/CostsFunctions";
 
 export default async function Page() {
   
@@ -272,6 +274,43 @@ export default async function Page() {
           currency: "MXN",
           value: expense.subtotal
         })
+    const elements: string[] = [];
+    if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
+      const typeFiles = getTypeFiles(expense);
+      if(typeFiles.includes('xml')){
+        elements.push('xml');
+      }else{
+        elements.push('none');
+      }
+
+      if(typeFiles.includes('pdf')){
+        elements.push('pdf');
+      }else{
+        elements.push('none');
+      }
+    }else{
+      if(expense.category.name.toLowerCase().includes('xml')){
+        const typeFiles = getTypeFiles(expense);
+        if(typeFiles.includes('xml')){
+          elements.push('xml');
+        }else{
+          elements.push('none');
+        }
+      }else{
+        if(expense.category.name.toLowerCase().includes('pdf')){
+          const typeFiles = getTypeFiles(expense);
+          if(typeFiles.includes('pdf')){
+            elements.push('pdf');
+          }else{
+            elements.push('none');
+          }
+        }else{
+          //sin archivos
+          elements.push('none');
+        }
+      }
+    }
+    
     table.push({
       id: expense._id,
       Descripcion: expense.description,
@@ -285,14 +324,23 @@ export default async function Page() {
         responsible: expense.user.name,
         photo: expense.user.photo
       },
-      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
-    })
-  })
+      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+      archivos: elements
+    });
+  });
 
   return(
     <>
       <Navigation user={user} />
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+      <ContainerClient data={table} expenses={expenses} idLabour={labour} idTicket={ticket}
+        optCategories={optCategories} optCategoriesFilter={optCategoriesFilter} optConditions={optConditions}
+        optConditionsFilter={optConditionsFilter} optCostCenter={optCostCenter} 
+        optCostCenterDeductible={optCostCenterDeductible} optGlossaries={optGlossaries} 
+        optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
+        optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
+        optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
+        token={token} user={user._id} />
+      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Gastos" placeHolder="Buscar gasto.." >
         <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
                     optProviders={optProviders} optResponsibles={optResponsibles}
@@ -308,7 +356,7 @@ export default async function Page() {
           optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
           optReports={optReportsFilter}
         />
-      </div>
+      </div> */}
     </>
   )
 }

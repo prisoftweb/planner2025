@@ -10,10 +10,13 @@ import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import { createRelation } from "@/app/api/routeRelations"
 import SelectReact from "../SelectReact"
+import SelectReactWithDescription from "../SelectReactWithDescription"
 
-export default function NewRelation({showForm, token, glossaries, nodes}: 
+export default function NewRelation({showForm, token, glossaries, 
+                      nodes, descGlossaries}: 
                     {showForm:Function, token:string, 
-                      glossaries:Options[], nodes:Options[]}){
+                      glossaries:Options[], nodes:Options[], 
+                      descGlossaries:Options[]}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [glossary, setGlossary] = useState<string>(glossaries[0].value);
@@ -85,9 +88,14 @@ export default function NewRelation({showForm, token, glossaries, nodes}:
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
 
-        <div>
+        {/* <div>
           <Label htmlFor="condicion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
           <SelectReact index={0} opts={glossaries} setValue={handleGlossary} />
+        </div> */}
+        <div>
+          <Label htmlFor="condicion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
+          <SelectReactWithDescription index={0} opts={glossaries} 
+              setValue={handleGlossary} descriptions={descGlossaries} />
         </div>
 
         <div>

@@ -1,5 +1,7 @@
 import { Expense, ExpensesTable } from "@/interfaces/Expenses";
 import { CurrencyFormatter } from "./Globals";
+import { getProvider } from "../api/routeProviders";
+import { Provider } from "@/interfaces/Providers";
 
 export function ExpenseDataToTableData(expenses:Expense[]){
   const table: ExpensesTable[] = [];
@@ -8,21 +10,42 @@ export function ExpenseDataToTableData(expenses:Expense[]){
           currency: "MXN",
           value: expense.subtotal
         });
-    // table.push({
-    //   id: expense._id,
-    //   Descripcion: expense.description,
-    //   Estatus: 'condition',
-    //   Fecha: expense.date,
-    //   Importe: dollar,
-    //   Informe: expense.folio,
-    //   Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
-    //   Proyecto: expense.project.title,
-    //   Responsable: {
-    //     responsible: expense.user.name,
-    //     photo: expense.user.photo
-    //   },
-    //   condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
-    // })
+    const elements: string[] = [];
+    if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
+      const typeFiles = getTypeFiles(expense);
+      if(typeFiles.includes('xml')){
+        elements.push('xml');
+      }else{
+        elements.push('none');
+      }
+
+      if(typeFiles.includes('pdf')){
+        elements.push('pdf');
+      }else{
+        elements.push('none');
+      }
+    }else{
+      if(expense.category.name.toLowerCase().includes('xml')){
+        const typeFiles = getTypeFiles(expense);
+        if(typeFiles.includes('xml')){
+          elements.push('xml');
+        }else{
+          elements.push('none');
+        }
+      }else{
+        if(expense.category.name.toLowerCase().includes('pdf')){
+          const typeFiles = getTypeFiles(expense);
+          if(typeFiles.includes('pdf')){
+            elements.push('pdf');
+          }else{
+            elements.push('none');
+          }
+        }else{
+          //sin archivos
+          elements.push('none');
+        }
+      }
+    }
     table.push({
       id: expense._id,
       Descripcion: expense.description,
@@ -36,9 +59,43 @@ export function ExpenseDataToTableData(expenses:Expense[]){
         responsible: expense.user.name,
         photo: expense.user.photo
       },
-      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
+      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+      archivos: elements
     })
   });
 
   return table;
+}
+
+export function getTypeFiles(expense:Expense) {
+  const typeFiles: string[] = [];
+  expense.files.map((f) => {
+      if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
+        || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
+        || f.types.includes('PNG')){
+          typeFiles.push('pdf');
+          //console.log('aqui entro => ', f);
+          //tiene factura
+      }else{
+        if(f.types.includes('xml') || f.types.includes('XML')){
+          typeFiles.push('xml');
+          //console.log('aqui entro => ', f);
+          //tiene xml    
+        }
+      }
+    });
+  
+  return typeFiles;
+}
+
+export async function getSupplierCreditProv(token:string, id:string) {
+  try {
+    const res:Provider = await getProvider(id, token);
+    if(typeof(res)==='string'){
+      return false;
+    }
+    return !res.suppliercredit;
+  } catch (error) {
+    return false;
+  }
 }

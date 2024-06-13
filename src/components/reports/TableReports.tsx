@@ -15,10 +15,12 @@ import { GiSettingsKnobs } from "react-icons/gi";
 import Filtering from "./FilteringReports";
 
 export default function TableReports({data, token, reports, 
-                          optCompanies, optConditions, optProjects}:
+                          optCompanies, optConditions, optProjects, 
+                          isFilter, setIsFilter}:
                         {data:ReportTable[], token:string, 
                           reports: Report[], optCompanies: Options[], 
-                          optProjects: Options[], optConditions: Options[]}){
+                          optProjects: Options[], optConditions: Options[], 
+                          isFilter:boolean, setIsFilter:Function}){
   
   const columnHelper = createColumnHelper<ReportTable>();
 
@@ -148,6 +150,17 @@ export default function TableReports({data, token, reports,
     }
   }, [filter]);
 
+  // useEffect(() => {
+  //   if(isFilter){
+  //     console.log('data rep ', dataReports);
+  //     setView(<></>);
+  //     setTimeout(() => {
+  //       setView(<Table columns={columns} data={dataReports} placeH="Buscar reporte.." />);
+  //     }, 100);
+  //     setIsFilter(false);
+  //   }
+  // }, [isFilter]);
+
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const repAmount = reports.reduce((previous, current) => {
@@ -167,13 +180,16 @@ export default function TableReports({data, token, reports,
 
   const amountValidation = (rep:Report, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
-    // if(rep.total){
-    //   if(rep.total >= minAmount && rep.total <= maxAmount){
-    //     return dateValidation(rep, startDate, endDate);
-    //   }
-    // }
-    // return false;
-    return dateValidation(rep, startDate, endDate);
+    if(rep.total >= 0){
+      //console.log('total ', rep.total, ' >= ', minAmount);
+      //console.log('total ', rep.total, ' <= ', maxAmount)
+      if(rep.total >= minAmount && rep.total <= maxAmount){
+        //console.log('date ?');
+        return dateValidation(rep, startDate, endDate);
+      }
+    }
+    return false;
+    //return dateValidation(rep, startDate, endDate);
   }
 
   const projectValidation = (rep:Report, minAmount:number, maxAmount:number, 
@@ -243,7 +259,6 @@ export default function TableReports({data, token, reports,
     // console.log('endDate ', endDate);
     // console.log('min amount ', minAmount);
     // console.log('max amount ', maxAmount);
-    
     let filtered: Report[] = [];
     reports.map((report) => {
       if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
@@ -252,7 +267,7 @@ export default function TableReports({data, token, reports,
       }
     });
 
-    console.log(filtered);
+    //console.log(filtered);
     //setFilteredReports(filtered);
     
     setDataReports(ReportDataToTableData(filtered));
@@ -263,12 +278,15 @@ export default function TableReports({data, token, reports,
     <>
       <div className="flex justify-end my-5">
         {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
+        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
           className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        />
-          {filtering && <Filtering showForm={setFiltering} optConditions={optConditions} 
+        /> */}
+          {/* {filtering && <Filtering showForm={setFiltering} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} 
-                          optProjects={optProjects} optCompanies={optCompanies} />}
+                          optProjects={optProjects} optCompanies={optCompanies} />} */}
+        {isFilter && <Filtering showForm={setIsFilter} optConditions={optConditions} 
+                        FilterData={filterData} maxAmount={maxAmount} 
+                        optProjects={optProjects} optCompanies={optCompanies} />}
       </div>
       {view}
     </>
