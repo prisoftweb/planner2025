@@ -40,10 +40,11 @@ export default function ContainerClient({token, optClients, optCategories,
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
           <p className="text-xl ml-4 font-medium">Proyectos</p>
+
         </div>
         <div className="flex gap-x-3">
           <SearchInTable placeH="Buscar proyecto.." />
-          <div className="">
+          <div>
             <div className="flex gap-x-3 items-center">
               <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
                 onClick={() => setIsTable(true)}
