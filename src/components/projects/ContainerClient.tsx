@@ -66,8 +66,8 @@ export default function ContainerClient({token, optClients, optCategories,
         <TableProjects data={data} token={token} projects={projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}
           optConditions={optConditionsFilter} isFilter={isFilter} 
-          setIsFilter={handleFilter} isTable={isTable}
-        />
+          setIsFilter={handleFilter} isTable={isTable}>            
+        </TableProjects>        
       </div>
     </div>
   )
