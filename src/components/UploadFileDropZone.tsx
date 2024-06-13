@@ -51,7 +51,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
             // const res = xml2json(t, {compact: true, spaces: 4});
             // console.log(res);
             
-            const res2: (XMLCFDI | any) = xml2js(t);
+            const res2: (XMLCFDI | any ) = xml2js(t);
             console.log(res2);
 
             let CFDIObj:CFDIValidation = {
@@ -63,9 +63,11 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
 
             try {
               CFDIObj.date = res2.elements[0].attributes.Fecha;
-              CFDIObj.RFCProvider = res2.elements[0].elements[0].attributes?.Rfc;
+              //console.log('rfc 1 ', res2.elements[0].elements[1].attributes?.Rfc);
+              //console.log('rfc 2 ', res2.elements[0].elements[0].attributes?.Rfc);
+              CFDIObj.RFCProvider = res2.elements[0].elements[1].attributes?.Rfc || res2.elements[0].elements[0].attributes?.Rfc 
               CFDIObj.amount = res2.elements[0].attributes.SubTotal;
-              CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID;
+              CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID;
             } catch (error) {
               
             }
@@ -73,7 +75,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
 
             getData(CFDIObj);
             setDate(res2.elements[0].attributes.Fecha);
-            setRfc(res2.elements[0].elements[0].attributes?.Rfc || 'sin rfc');
+            setRfc(CFDIObj.RFCProvider !== ''?  CFDIObj.RFCProvider: 'sin rfc');
             setProvider(res2.elements[0].elements[0].attributes?.Nombre);
             try {
               const dollar = CurrencyFormatter({
@@ -83,6 +85,12 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
               setTotal(dollar);
             } catch (error) {
               setTotal('$0');
+            }
+
+            try {
+              setFolio(res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID || 'No se pudo leer el folio');
+            } catch (error) {
+              setFolio('No se pudo leer el folio');
             }
             
             try {
@@ -99,12 +107,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
               setPrices(['error al leer conceptos']);
             }
             
-            try {
-              setFolio(res2.elements[0].elements[4].elements[0].attributes?.UUID);
-            } catch (error) {
-              setFolio('No se pudo leer el folio');
-            }
-
             setIsCFDI(true);
 
           }

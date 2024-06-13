@@ -15,6 +15,9 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
 import { GiSettingsKnobs } from "react-icons/gi";
+import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
+import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
+import { IoAlert } from "react-icons/io5"; // No hay archivo
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
@@ -61,6 +64,9 @@ export default function TableExpenses({data, token, expenses,
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
           <DeleteElement id={row.original.id} name={row.original.Descripcion} remove={RemoveCost} token={token} />
+          {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-slate-500" />}
+          {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />}
+          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-slate-500" />}
         </div>
       ),
       enableSorting:false,

@@ -14,15 +14,16 @@ import { Glossary } from "@/interfaces/Glossary";
 import { getProjects } from "../api/routeProjects";
 import { Project } from "@/interfaces/Projects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import TableExpenses from "@/components/expenses/TableExpenses";
+//import TableExpenses from "@/components/expenses/TableExpenses";
 import { GetCosts } from "../api/routeCost";
-import Header from "@/components/Header";
+//import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { GetReports, getReportsByUser } from "../api/routeReports";
 import { Report } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
+import { getTypeFiles } from "../functions/CostsFunctions";
 
 export default async function Page() {
   
@@ -273,35 +274,43 @@ export default async function Page() {
           currency: "MXN",
           value: expense.subtotal
         })
-    
+    const elements: string[] = [];
     if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
+      const typeFiles = getTypeFiles(expense);
+      if(typeFiles.includes('xml')){
+        elements.push('xml');
+      }else{
+        elements.push('none');
+      }
 
+      if(typeFiles.includes('pdf')){
+        elements.push('pdf');
+      }else{
+        elements.push('none');
+      }
     }else{
       if(expense.category.name.toLowerCase().includes('xml')){
-
+        const typeFiles = getTypeFiles(expense);
+        if(typeFiles.includes('xml')){
+          elements.push('xml');
+        }else{
+          elements.push('none');
+        }
       }else{
-        if(expense.category.name.toLowerCase().includes('xml')){
-
+        if(expense.category.name.toLowerCase().includes('pdf')){
+          const typeFiles = getTypeFiles(expense);
+          if(typeFiles.includes('pdf')){
+            elements.push('pdf');
+          }else{
+            elements.push('none');
+          }
         }else{
           //sin archivos
+          elements.push('none');
         }
       }
     }
-    // expense.files.map((f) => {
-    //   if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
-    //     || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-    //     || f.types.includes('PNG')){
-    //       //console.log('aqui entro => ', f);
-    //       //tiene factura
-    //   }
-    // });
     
-    // expense.files.map((f) => {
-    //   if(f.types.includes('xml') || f.types.includes('XML')){
-    //       //console.log('aqui entro => ', f);
-    //     //tiene xml    
-    //   }
-    // });
     table.push({
       id: expense._id,
       Descripcion: expense.description,
@@ -316,8 +325,8 @@ export default async function Page() {
         photo: expense.user.photo
       },
       condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
-      archivos: ['']
-    })
+      archivos: elements
+    });
   });
 
   return(

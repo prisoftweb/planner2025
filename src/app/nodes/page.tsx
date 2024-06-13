@@ -72,9 +72,14 @@ export default async function page() {
   });
 
   const optGlossaries: Options[] = [];
+  const optDescGlossaries: Options[] = [];
   glossaries.map(glossary => {
     optGlossaries.push({
       label: glossary.name,
+      value: glossary._id
+    });
+    optDescGlossaries.push({
+      label: glossary.description,
       value: glossary._id
     });
   });
@@ -136,7 +141,7 @@ export default async function page() {
             title="Nodos">
               <ButtonNewNode token={token} user={user._id} 
                 departments={optDepartments} glossaries={optGlossaries} 
-                workFlows={optWorkFlows} />
+                workFlows={optWorkFlows} descGlossaries={optDescGlossaries} />
           </WithOut>
         </div>
       </>
@@ -150,7 +155,7 @@ export default async function page() {
         <Header title="Nodos" placeHolder="Buscar nodo.." >
         <ButtonNewNode token={token} user={user._id} 
                 departments={optDepartments} glossaries={optGlossaries} 
-                workFlows={optWorkFlows} />
+                workFlows={optWorkFlows} descGlossaries={optDescGlossaries} />
         </Header>
         <div className="mt-5">
           <TableNode data={tableData} token={token} departments={optDepartments} 

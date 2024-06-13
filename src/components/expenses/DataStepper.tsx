@@ -18,6 +18,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid"
 import AddProvider from "./AddProvider"
 import { CreateCostWithFiles } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
+import { getSupplierCreditProv } from "@/app/functions/CostsFunctions"
 
 export default function DataStepper({token, user, optCostCenter, optProviders, 
                                       optResponsibles, optGlossaries, optProjects, 
@@ -117,6 +118,12 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
         typeCFDIS, typeExpenseS, categoryS);
     
+    let supplierCredit: boolean;
+    try {
+      supplierCredit = await getSupplierCreditProv(token, provider);
+    } catch (error) {
+      supplierCredit = false;
+    }
     if(voucher || CFDI){
       const formdata = new FormData();
       formdata.append('subtotal', amount.replace(/[$,]/g, ""));
@@ -147,6 +154,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         formdata.append('types', CFDI.type);
       }
       try {
+        formdata.append('ispaid', JSON.stringify(supplierCredit));
         const res = await CreateCostWithFiles(token, formdata);
         if(res === 201){
           setView(<></>);
@@ -173,7 +181,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       const data = {
         subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
         discount: discount.replace(/[$,]/g, ""), folio, provider, user:responsibleS, 
-        taxfolio:taxFolio, typeCFDI: typeCFDIS, project, vat,
+        taxfolio:taxFolio, typeCFDI: typeCFDIS, project, vat, ispaid:supplierCredit,
         report, isticket:false, category:categoryS, condition: [{
           glossary: condition,
           user
@@ -222,6 +230,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   useEffect(() => {
     setSelectProviders(<></>);
     setTimeout(() => {
+      //console.log('index prov ', indexProv);
       setSelectProviders(
         <div>
           <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
@@ -232,7 +241,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>
         </div>
       )
-    }, 1000);
+    }, 100);
   }, [indexProv]);
   
   useEffect(() => {
@@ -248,14 +257,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       setStartDate(date);
     }
 
-    let indexTypeExpense = 0;
-    if(typeExpenseS !== ''){
-      optTypes.map((opt, index:number) => {
-        if(opt.value === typeExpense){
-          indexTypeExpense = index;
-        }
-      });      
-    }
+    // let indexTypeExpense = 0;
+    // if(typeExpenseS !== ''){
+    //   optTypes.map((opt, index:number) => {
+    //     if(opt.value === typeExpense){
+    //       indexTypeExpense = index;
+    //     }
+    //   });      
+    // }
 
     let indexTypeCFDI = 0;
     if(typeCFDIS !== ''){
@@ -284,30 +293,58 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       });      
     }
 
-    setViewCC(<div className=" col-span-1 md:col-span-3">
-          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-        </div>)
-    
-    setView(<>
-      {/* <div>
-        <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
-        <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
-      </div> */}
-      <div>
-        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-      </div>
-      <div>
-        <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-        <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
-      </div>
-    </>)
+    let indexProvider = 0;
+      if(proveedor !== ''){
+        optProviders.map((opt, index:number) => {
+          if(opt.value === proveedor){
+            indexProvider = index;
+          }
+        });      
+      }
+      //console.log('index provider = ', indexProvider);
+      //setIndexProv(indexProvider);
 
-    setViewResponsible(<div>
-              <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-              <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-            </div>)
+    setView(<></>);
+    setViewCC(<></>);
+    setViewResponsible(<></>);
+    setSelectProviders(<></>);
+    setTimeout(() => {
+      setSelectProviders(
+        <div>
+          <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+          <div className="flex gap-x-2 items-center">
+            <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
+            <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+              onClick={() => setShowProvider(true)} />
+          </div>
+        </div>
+      )
+      
+      setViewCC(<div className=" col-span-1 md:col-span-3">
+            <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+            <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+          </div>)
+      
+      setView(<>
+        {/* <div>
+          <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
+          <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
+        </div> */}
+        <div>
+          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+          <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
+        </div>
+        <div>
+          <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
+          <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
+        </div>
+      </>)
+
+      setViewResponsible(<div>
+                <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+                <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+              </div>)
+    }, 10);
 
   }, []);
 
@@ -351,7 +388,19 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      
+      //console.log('index provider = ', indexProvider);
+      setIndexProv(indexProvider);
+      // setSelectProviders(
+      //   <div>
+      //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+      //     <div className="flex gap-x-2 items-center">
+      //       <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
+      //       <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+      //         onClick={() => setShowProvider(true)} />
+      //     </div>
+      //   </div>
+      // )
+
       let indexResp = 0;
       if(responsibleS !== ''){
         optResponsibles.map((opt, index:number) => {
@@ -408,6 +457,32 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           setTimeout(() => {
             let num = Number(formik.values.amount.replace(/[$,]/g, ""));
             if(num > 0){
+              num = num * -1;
+              formik.values.amount = num.toString();
+            }
+            
+            setViewAmount(<CurrencyInput
+              id="amount"
+              name="amount"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                focus:border-slate-700 outline-0"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              defaultValue={num}
+              decimalsLimit={2}
+              prefix="$"
+              onValueChange={(value) => {try {
+                formik.values.amount=value || '0';
+              } catch (error) {
+                formik.values.amount='0';
+              }}}
+            />)
+          }, 30);
+        }else{
+          setViewAmount(<></>);
+          setTimeout(() => {
+            let num = Number(formik.values.amount.replace(/[$,]/g, ""));
+            if(num < 0){
               num = num * -1;
               formik.values.amount = num.toString();
             }
