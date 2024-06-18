@@ -95,16 +95,16 @@ export default async function page() {
   const tableData: NodeTable[] = [];
   nodes.map((node) => {
     
-    // let walk = '';
-    // node.relations.map((rel) => {
-    //   rel.relation.
-    // });
+    let walk = '';
+    node.relations.map((rel) => {
+      walk += rel.relation?.glossary.name + ", "
+    });
 
     tableData.push({
-      caminos: '', 
+      caminos: walk, 
       department: node.department.name,
       id: node._id,
-      workflow: node.workflow.title,
+      workflow: node.workflow?.title || node.workflow?.description || 'sin workflow',
       condition: node.glossary.name
     })
   });
@@ -169,3 +169,4 @@ export default async function page() {
     </>
   )
 }
+

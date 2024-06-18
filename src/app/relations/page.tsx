@@ -99,8 +99,8 @@ export default async function Page() {
       condition: relation.glossary.name,
       description: relation.description,
       id: relation._id,
-      nextNode: relation.nextnodo
-    })
+      nextNode: typeof(relation.nextnodo)=== 'string'? relation.nextnodo : relation.nextnodo.department.name,
+    });
   });
 
   return (

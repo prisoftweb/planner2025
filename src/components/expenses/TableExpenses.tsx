@@ -64,9 +64,9 @@ export default function TableExpenses({data, token, expenses,
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
           <DeleteElement id={row.original.id} name={row.original.Descripcion} remove={RemoveCost} token={token} />
-          {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-slate-500" />}
-          {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />}
-          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-slate-500" />}
+          {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
+          {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
+          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
         </div>
       ),
       enableSorting:false,
@@ -142,7 +142,8 @@ export default function TableExpenses({data, token, expenses,
     }),
   ]
   
-  const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
+  const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} 
+                placeH="Buscar gasto.." typeTable='cost' />);
   const [maxAmount, setMaxAmount] = useState<number>(0);
   
   useEffect(() => {
@@ -164,7 +165,8 @@ export default function TableExpenses({data, token, expenses,
             setDataExpenses(d);
             setView(<></>);
             setTimeout(() => {
-              setView(<Table columns={columns} data={d} placeH="Buscar gasto.." />);
+              setView(<Table columns={columns} data={d} 
+                    placeH="Buscar gasto.." typeTable='cost' />);
             }, 500);
           }else{
             showToastMessageError(res);
@@ -183,7 +185,9 @@ export default function TableExpenses({data, token, expenses,
       console.log('data exp ', dataExpenses);
       setView(<></>);
       setTimeout(() => {
-        setView(<Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />);
+        // const total = da
+        setView(<Table columns={columns} data={dataExpenses} 
+          placeH="Buscar gasto.." typeTable='cost' />);
       }, 100);
       setFilter(false);
     }

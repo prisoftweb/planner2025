@@ -9,13 +9,15 @@ import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon,
 from "@heroicons/react/24/solid";
 import { useOutsideClick } from "@/app/functions/useOutsideClick";
 import { useTableStates } from "@/app/store/tableStates";
+import { ExpensesTable } from "@/interfaces/Expenses";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 type MyData = {
   numRows: string
 }
 
-export default function Table({data, columns, placeH}: 
-                              {data: any, columns:any, placeH:string}) {
+export default function Table({data, columns, placeH, typeTable=''}: 
+                              {data: any[], columns:any, placeH:string, typeTable?:string}) {
 
   const [sorting, setSorting] = useState<any>([]);
   const [filtering, setFiltering] = useState('')
@@ -50,6 +52,20 @@ export default function Table({data, columns, placeH}:
   });
 
   const [rowsTable, setRowsTable] = useState<number>(parsedData? parseInt(parsedData.numRows): 10);
+
+  let total: number = 0;
+  let labelJSX : JSX.Element = <div></div>;
+  if(typeTable === 'cost'){
+    data.map((exp:ExpensesTable) => total += Number(exp.Importe.replace(/[$, M, X, N,]/g, "")));
+    const t = CurrencyFormatter({
+      currency: 'MXN',
+      value: total
+    });
+    labelJSX = <div className="flex gap-x-5 text-white pl-5">
+          <p>Cantidad: {data.length}</p>
+          <p>Total de informes: {t}</p>
+        </div>
+  }
 
   useEffect(() => {
     setFiltering(search);
@@ -123,34 +139,37 @@ export default function Table({data, columns, placeH}:
       </div> */}
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <div className="flex bg-blue-600 mt-4 justify-end p-1 pr-2">
-          <button type="button" onClick={() => {
-              console.log(table.getPreSelectedRowModel());
-              setShowColumns(!showColumns);
-            }}
-            //onBlur={() => {setShowColumns(false); console.log('on blur')}}
-          >
-            <AdjustmentsHorizontalIcon className="w-5 h-5 ml-2 mt-1 text-white" />
-          </button>
-          <div className={`${showColumns? 'relative': 'hidden'}`} ref={ref} >
-            <div className="absolute w-40 bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
-              {table.getAllLeafColumns().map(column => {
-                return (
-                  <div key={column.id} className="px-1 py-1">
-                    <label>
-                      <input
-                        {...{
-                          type: 'checkbox',
-                          checked: column.getIsVisible(),
-                          onChange: column.getToggleVisibilityHandler(),
-                        }}
-                        onClick={() => console.log('clic')}
-                      />{' '}
-                      {column.id}
-                    </label>
-                  </div>
-                )
-              })}
+        <div className="flex items-center justify-between bg-blue-600 mt-4  p-1 pr-2">
+          {labelJSX}
+          <div className="flex justify-end">
+            <button type="button" onClick={() => {
+                console.log(table.getPreSelectedRowModel());
+                setShowColumns(!showColumns);
+              }}
+              //onBlur={() => {setShowColumns(false); console.log('on blur')}}
+            >
+              <AdjustmentsHorizontalIcon className="w-5 h-5 ml-2 mt-1 text-white" />
+            </button>
+            <div className={`${showColumns? 'relative': 'hidden'}`} ref={ref} >
+              <div className="absolute w-40 bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
+                {table.getAllLeafColumns().map(column => {
+                  return (
+                    <div key={column.id} className="px-1 py-1">
+                      <label>
+                        <input
+                          {...{
+                            type: 'checkbox',
+                            checked: column.getIsVisible(),
+                            onChange: column.getToggleVisibilityHandler(),
+                          }}
+                          onClick={() => console.log('clic')}
+                        />{' '}
+                        {column.id}
+                      </label>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>

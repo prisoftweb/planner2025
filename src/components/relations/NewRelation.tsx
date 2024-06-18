@@ -76,7 +76,7 @@ export default function NewRelation({showForm, token, glossaries,
 
   return(
     <>
-      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-md top-16 absolute bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >

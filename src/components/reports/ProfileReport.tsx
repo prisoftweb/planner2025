@@ -3,8 +3,8 @@ import { Report } from "@/interfaces/Reports";
 import Button from "../Button";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
-export default function ProfileReport({report, send}: 
-                        {report:Report, send:Function}){
+export default function ProfileReport({report, send, token}: 
+                        {report:Report, send:Function, token: string}){
 // console.log('report ', report);
   const total = CurrencyFormatter({
     currency: "MXN",
@@ -23,8 +23,8 @@ export default function ProfileReport({report, send}:
           <div>
             <p className="text-blue-500">{report.project.title}</p>
             <p className="text-slate-500">{report.project.code}</p>
-            <p className="text-slate-500">{report.project.types.name}</p>
-            <p className="text-slate-500">{report.project.account}</p>
+            {/* <p className="text-slate-500">{report.project.types.name}</p>
+            <p className="text-slate-500">{report.project.account}</p> */}
             <div className="mt-3 border-t border-slate-500 pt-2">
               <p className="text-blue-500">{report.name}</p>
               <p className="text-slate-500">{report.account}</p>

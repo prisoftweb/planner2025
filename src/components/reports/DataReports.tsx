@@ -4,10 +4,13 @@ import { Options } from "@/interfaces/Common"
 import { Report } from "@/interfaces/Reports"
 import { useState } from "react"
 import SendReport from "./SendReport"
+import { Node } from "@/interfaces/Nodes"
 
-export default function DataReports({companies, departments, projects, token, report}:
+export default function DataReports({companies, departments, projects, token,
+                                 report, user, node}:
                               {departments:Options[], companies:Options[], 
-                                  projects:Options[], token:string, report:Report}) {
+                                projects:Options[], token:string, report:Report, 
+                                user:string, node:Node}) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
 
@@ -20,7 +23,7 @@ export default function DataReports({companies, departments, projects, token, re
       <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
         style={{'backgroundColor': '#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
-          <ProfileReport report={report} send={handleSend} />
+          <ProfileReport report={report} send={handleSend} token={token} />
         </div>
         <div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>
@@ -28,7 +31,8 @@ export default function DataReports({companies, departments, projects, token, re
                   projects={projects} token={token} report={report} />
         </div>
       </div>
-      {isSend && <SendReport report={report} send={handleSend} />}
+      {isSend && <SendReport report={report} send={handleSend} 
+                    token={token} user={user} node={node} />}
     </>
   )
 }
