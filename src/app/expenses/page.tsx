@@ -40,6 +40,8 @@ export default async function Page() {
     return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
   }
 
+  console.log('costos => ', expenses);
+
   let costcenters: CostCenter[];
   try {
     costcenters = await getCostCenters(token);
