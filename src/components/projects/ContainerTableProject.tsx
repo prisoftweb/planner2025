@@ -10,6 +10,7 @@ export default function ContainerTableProject({data, token, projects, optCategor
                                         projects: Project[], optCategories: Options[], 
                                         optTypes: Options[], optConditions: Options[]}){
   
+<<<<<<< HEAD
     const [isFilter, setIsFilter] = useState<boolean>(false);
     const [isTable, setIsTable] = useState<boolean>(true);
     
@@ -27,6 +28,14 @@ export default function ContainerTableProject({data, token, projects, optCategor
                                           setIsFilter={handleFilter} isTable={isTable}
                                         />
                                       </div>);
+=======
+  // const [table, setTable] = useState<JSX.Element>(<div className="mt-5">
+  //                                       <TableProjects data={data} token={token} projects={projects} 
+  //                                         optCategories={optCategories} optTypes={optTypes}
+  //                                         optConditions={optConditions} isTable={true} isFilter={false}
+  //                                       />
+  //                                     </div>);
+>>>>>>> origin/main
 
   useEffect(() => {
 
@@ -35,7 +44,7 @@ export default function ContainerTableProject({data, token, projects, optCategor
   return(
     
     <>
-      {table}
+      {/* {table} */}
     </>
   )
 }
