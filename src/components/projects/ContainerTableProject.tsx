@@ -10,12 +10,12 @@ export default function ContainerTableProject({data, token, projects, optCategor
                                         projects: Project[], optCategories: Options[], 
                                         optTypes: Options[], optConditions: Options[]}){
   
-  const [table, setTable] = useState<JSX.Element>(<div className="mt-5">
-                                        <TableProjects data={data} token={token} projects={projects} 
-                                          optCategories={optCategories} optTypes={optTypes}
-                                          optConditions={optConditions}
-                                        />
-                                      </div>);
+  // const [table, setTable] = useState<JSX.Element>(<div className="mt-5">
+  //                                       <TableProjects data={data} token={token} projects={projects} 
+  //                                         optCategories={optCategories} optTypes={optTypes}
+  //                                         optConditions={optConditions} isTable={true} isFilter={false}
+  //                                       />
+  //                                     </div>);
 
   useEffect(() => {
 
@@ -23,7 +23,7 @@ export default function ContainerTableProject({data, token, projects, optCategor
 
   return(
     <>
-      {table}
+      {/* {table} */}
     </>
   )
 }
