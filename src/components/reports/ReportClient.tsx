@@ -7,13 +7,15 @@ import DataReports from "./DataReports"
 import { Report } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
 import { Expense } from "@/interfaces/Expenses"
+import { Node } from "@/interfaces/Nodes"
 
 export default function ReportClient({report, token, id, companies, 
-                                departments, projects, expenses}: 
+                                departments, projects, expenses, user, 
+                                node}: 
                             {report:Report, token:string, id:string, 
                               departments:Options[], companies:Options[], 
-                              projects:Options[], expenses:Expense[]
-                            }){
+                              projects:Options[], expenses:Expense[], 
+                              user:string, node:Node }){
   
   const [view, setView] = useState<JSX.Element>(<></>)
 
@@ -22,7 +24,7 @@ export default function ReportClient({report, token, id, companies,
   useEffect(() => {
     opt===2? setView(<CostsInReport report={report} costs={expenses} />) : 
                   setView(<DataReports companies={companies} departments={departments} projects={projects} 
-                    token={token} report={report} />)
+                    token={token} report={report} user={user} node={node} />)
                   // setView(<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                   //   style={{borderColor:'#F8FAFC'}}>
                   //     <UpdateReport companies={companies} departments={departments} 

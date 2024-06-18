@@ -16,6 +16,8 @@ import { GetReport, GetReports } from "@/app/api/routeReports";
 import { Report } from "@/interfaces/Reports";
 import { getCostByReport } from "@/app/api/routeReports";
 import { Expense } from "@/interfaces/Expenses";
+import { getNode, getNodesByDepto } from "@/app/api/routeNodes";
+import { Node } from "@/interfaces/Nodes";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -106,6 +108,37 @@ export default async function Page({ params }: { params: { id: string }}){
   }
 
   //console.log('costos del reporte!! ', costs);
+  let node:(Node | null) = null;
+  // try {
+  //   node = await getNode(token, '666de2aef1ac5120b2982e01');
+  //   if(typeof(node)==='string'){
+  //     return <h1 className="text-lg text-red-500 text-center">{node}</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
+  // }
+
+  let nodes:(Node[] | null) = null;
+  try {
+    //console.log('dept, ', user.department);
+    nodes = await getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id);
+    if(typeof(nodes)==='string'){
+      return <h1 className="text-lg text-red-500 text-center">{nodes}</h1>
+    }
+  } catch (error) {
+    //console.log('error ', error);
+    return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
+  }
+
+  if(!nodes || nodes.length <= 0){
+    return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
+  }
+
+  node = nodes[0];
+
+  // if(!node){
+  //   return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
+  // }
   
   return(
     <>
@@ -121,7 +154,8 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTab idRep={params.id} tab='1' />
         <ReportClient report={report} token={token} id={params.id} 
           companies={optCompanies} departments={optDepartments}
-          projects={optProjects} expenses={costs}
+          projects={optProjects} expenses={costs} user={user._id}
+          node={node}
         />
       </div>
     </>

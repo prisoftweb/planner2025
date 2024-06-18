@@ -176,7 +176,7 @@ export default function UpdateNode({showForm, token, departments, glossaries,
         showToastMessageError(res);
       }
     } catch (error) {
-      showToastMessageError('Error al crear workflow!!!');
+      showToastMessageError('Error al insertar relaciones en el nodo!!!');
     }
   }
 

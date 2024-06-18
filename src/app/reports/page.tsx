@@ -10,10 +10,10 @@ import { Company } from "@/interfaces/Companies";
 import { Project } from "@/interfaces/Projects";
 import { getProjects } from "../api/routeProjects";
 import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReports } from "../api/routeReports";
+import { GetReports, GetReportsByUser, GetReportsByDept } from "../api/routeReports";
 import { Report, ReportTable } from "@/interfaces/Reports";
-import Header from "@/components/Header";
-import TableReports from "@/components/reports/TableReports";
+//import Header from "@/components/Header";
+//import TableReports from "@/components/reports/TableReports";
 import { ReportDataToTableData } from "../functions/ReportsFunctions";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
@@ -27,13 +27,43 @@ export default async function Page() {
 
   let reports: Report[] = [];
   try {
-    reports = await GetReports(token);
+    //console.log(user.department.name.toLowerCase());
+    if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
+      reports = await GetReportsByUser(token, user._id);
+      //console.log('by user');
+    }else{
+      if(user.department.name.toLowerCase().includes('direccion')){
+        reports = await GetReports(token);
+      }else{
+        //console.log('by dept');
+        reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
+      }
+    }
+    //reports = await GetReports(token);
     if(typeof(reports)==='string'){
       return <h1 className="text-lg text-center text-red-500">{reports}</h1>
     }
   } catch (error) {
     return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
   }
+  
+  // try {
+  //   reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
+  //   if(typeof(reports)==='string'){
+  //     return <h1 className="text-lg text-center text-red-500">{reports}</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar informes!!</h1>
+  // }
+
+  // try {
+  //   reports = await GetReportsByUser(token, user._id);
+  //   if(typeof(reports)==='string'){
+  //     return <h1 className="text-lg text-center text-red-500">{reports}</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar informes!!</h1>
+  // }
   
   let companies: Company[] = [];
   try {

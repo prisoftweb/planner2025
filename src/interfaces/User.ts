@@ -1,4 +1,5 @@
 import { Role } from "./Roles"
+import { Department } from "./Departments"
 
 export interface User{
   'id': string,
@@ -30,7 +31,7 @@ export interface UsrBack{
   "email": string,
   "photo": string,
   "role": string,
-  "department": string,
+  "department": (string | Department),
   "status": boolean,
   "createAt"?: string,
   "__v"?: number,

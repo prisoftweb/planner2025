@@ -1,6 +1,7 @@
 import { Department } from "./Departments"
 import { Glossary } from "./Glossary"
 import { Workflow } from "./Workflows"
+import { Relation as Rel } from "./Relation"
 
 export interface Node {
   ohter: boolean
@@ -23,15 +24,8 @@ export interface NodeTable {
 }
 
 export interface Relation {
-  relation: Relation2
+  //relation: Relation2
+  relation: Rel,
   _id: string
-  id: string
-}
-
-export interface Relation2 {
-  _id: string
-  glossary: Glossary
-  description: string
-  status: boolean
   id: string
 }

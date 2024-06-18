@@ -40,9 +40,9 @@ export default function TableWorkflows({data, token}:
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
+          {/* <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
             onClick={() => {setWorkflowEdit(row.original); setEditWorkflow(true);}}
-          />
+          /> */}
           <DeleteElement id={row.original.id} name={row.original.title} remove={removeWorkFlow} token={token} />
         </div>
       ),

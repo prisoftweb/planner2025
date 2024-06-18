@@ -1,4 +1,5 @@
 import { Glossary } from "./Glossary"
+import { Node } from "./Nodes"
 
 export interface Relation {
   _id: string
@@ -7,7 +8,7 @@ export interface Relation {
   status: boolean
   __v: number
   id: string
-  nextnodo: string
+  nextnodo: (string | Node);
 }
 
 export interface RelationTable {
