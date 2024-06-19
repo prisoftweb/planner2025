@@ -15,6 +15,7 @@ export interface ReportTable{
   NºGastos: string 
   Total: string 
   Fecha: string
+  color:string
 }
 
 export interface Report {

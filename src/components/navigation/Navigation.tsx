@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import RemoveCookies from "@/app/functions/RemoveCookies"
 import NavItem from "./NavItem"
 import { UsrBack } from "@/interfaces/User"
+import { useOutsideClickButton, useOutsideClick } from "@/app/functions/useOutsideClick";
 
 export default function Navigation({user}: {user:UsrBack}){
   
@@ -34,9 +35,17 @@ export default function Navigation({user}: {user:UsrBack}){
     id = user._id;
   }
 
+  const ref = useOutsideClick(() => {
+    //console.log('Clicked outside of MyComponent');
+    if(isOpenP){
+      setIsOpenP(false);
+    }
+  });
+
   const router = useRouter();
   
   function logOut(){
+    console.log('logout ');
     RemoveCookies();
     router.push('/login');
   }
@@ -69,7 +78,7 @@ export default function Navigation({user}: {user:UsrBack}){
           </div>
         )}
       {isOpenP && (
-        <div className="flex justify-end">
+        <div className="flex justify-end" ref={ref}>
           <div className="flex flex-col w-44 absolute z-50 text-xs bg-white border-2 border-slate-300">
             <Link href={`/users/${id}?tab=1&&opt=1`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
               <div className="flex p-2 items-center">
@@ -96,9 +105,11 @@ export default function Navigation({user}: {user:UsrBack}){
                 Cambiar Contrasena
               </div>
             </Link>
-            <div className="flex p-2 items-center hover:text-gray-900 hover:bg-gray-200 cursor-pointer">
+            <div className="flex p-2 items-center hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
+              onClick={() => logOut()}
+            >
                 <ArrowRightStartOnRectangleIcon className="w-4 h-4 mr-2 text-slate-500" />
-              <p className="py-1" onClick={logOut}>Salir</p>
+              <p className="py-1" >Salir</p>
             </div>
           </div>
         </div>
