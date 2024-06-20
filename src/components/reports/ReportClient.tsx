@@ -23,7 +23,8 @@ export default function ReportClient({report, token, id, companies,
   
   useEffect(() => {
     opt===2? setView(<CostsInReport report={report} costs={expenses} />) : 
-                  setView(<DataReports companies={companies} departments={departments} projects={projects} 
+                  setView(<DataReports companies={companies} costs={expenses}
+                              departments={departments} projects={projects} 
                     token={token} report={report} user={user} node={node} />)
                   // setView(<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                   //   style={{borderColor:'#F8FAFC'}}>

@@ -2,9 +2,15 @@ import Chip from "../providers/Chip";
 import { Report } from "@/interfaces/Reports";
 import Button from "../Button";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import {PDFDownloadLink} from '@react-pdf/renderer'
+import ReportPDF from "../ReportPDF";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import { Expense } from "@/interfaces/Expenses";
+import AttachedPDF from "../AttachedPDF";
 
-export default function ProfileReport({report, send, token}: 
-                        {report:Report, send:Function, token: string}){
+export default function ProfileReport({report, send, token, costs}: 
+                        {report:Report, send:Function, 
+                          token: string, costs:Expense[]}){
 // console.log('report ', report);
   const total = CurrencyFormatter({
     currency: "MXN",
@@ -78,8 +84,18 @@ export default function ProfileReport({report, send, token}:
             </div>
             <div>
               <p className="text-slate-500">Descargar</p>
-              <p className="text-blue-600">{"PDF"}
-              </p>
+              {/* <p className="text-blue-600">{"PDF"}</p> */}
+              <PDFDownloadLink document={<ReportPDF report={report} costs={costs} />} fileName="report" >
+              {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName="report" > */}
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    // <button type="button">Loading document...</button>
+                  ) : (
+                    <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    // <button type="button">Download now!</button>
+                  ) }
+              </PDFDownloadLink>
             </div>
           </div>
         </div>
