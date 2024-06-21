@@ -18,15 +18,15 @@ export default function ReportPDF({report, costs}:
       borderTop: '1px solid gray'
     },
     header: {
-      flex: 1,
-      fontSize: '10px',
+      //flex: 1,
+      fontSize: '8px',
       //textAlign: 'center',
       padding: '2px',
       borderBottom: '1px solid black',
     },
     element: {
-      flex: 1,
-      fontSize: '10px',
+      //flex: 1,
+      fontSize: '8px',
       //textAlign: 'center',
       padding: '4px',
       //border: '1px solid black',
@@ -90,7 +90,7 @@ export default function ReportPDF({report, costs}:
     <Document>
       <Page>
         <View style={style.headerPage}>
-          <Image src={'/nuevoIcono.jpg'} style={{width: '40px'}} />
+          <Image src={'/isologo_palacios.png'} style={{width: '40px'}} />
           <Text style={style.subTitle}>Informe de gastos</Text>
           <Text style={style.title}>{report.name}</Text>
         </View>
@@ -130,26 +130,26 @@ export default function ReportPDF({report, costs}:
         
         <View style={style.containerTable}>
           <View style={style.table}>
-            <View style={style.header}><Text>PROYECTO</Text></View>
-            <View style={style.header}><Text>CENTRO DE COSTO</Text></View>
-            <View style={style.header}><Text>PROVEEDOR</Text></View>
-            <View style={style.header}><Text>DESCRIPCION</Text></View>
-            <View style={style.header}><Text>TOTAL</Text></View>
-            <View style={style.header}><Text>FECHA</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>PROYECTO</Text></View>
+            <View style={[style.header, {flex: 2}]}><Text>CENTRO DE COSTO</Text></View>
+            <View style={[style.header, {flex: 2}]}><Text>PROVEEDOR</Text></View>
+            <View style={[style.header, {flex: 3}]}><Text>DESCRIPCION</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>TOTAL</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>FECHA</Text></View>
           </View>
           {costs.map((cost) => (
             <View style={style.table}>
-              <View style={style.element}><Text>{cost.project?.title}</Text></View>
-              <View style={style.element}><Text>{cost.costcenter}</Text></View>
-              <View style={style.element}><Text>{cost.provider?.name || 'NA'}</Text></View>
-              <View style={style.element}><Text>{cost.description}</Text></View>
-              <View style={style.element}>
+              <View style={[style.element, {flex: 1}]}><Text>{cost.project?.title}</Text></View>
+              <View style={[style.element, {flex: 2}]}><Text>{cost.costcenter}</Text></View>
+              <View style={[style.element, {flex: 2}]}><Text>{cost.provider?.name || 'NA'}</Text></View>
+              <View style={[style.element, {flex: 3}]}><Text>{cost.description}</Text></View>
+              <View style={[style.element, {flex: 1}]}>
                 <Text>{CurrencyFormatter({
                     currency: 'MXN',
                     value: cost.total
                   })}</Text>
               </View>
-              <View style={style.element}><Text>{cost.date.substring(0, 10)}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{cost.date.substring(0, 10)}</Text></View>
             </View>
           ) )}
         </View>

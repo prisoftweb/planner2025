@@ -75,11 +75,20 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   useEffect(() => {
     let indexCC = 0;
     if(expense.costcenter){
+      console.log('expense cc ', expense.costcenter);
       optCostCenter.map((optCC, index:number) => {
-        if(optCC.value===expense.costcenter){
-          //alert('aquiii');
-          setCostCenter(optCostCenter[index].value);
-          indexCC = index;
+        if(typeof(expense.costcenter)==='string'){
+          if(optCC.value===expense.costcenter){
+            //alert('aquiii');
+            setCostCenter(optCostCenter[index].value);
+            indexCC = index;
+          }
+        }else{
+          if(optCC.value===expense.costcenter.categorys[0]._id){
+            //alert('aquiii');
+            setCostCenter(optCostCenter[index].value);
+            indexCC = index;
+          }
         }
       });
     }
