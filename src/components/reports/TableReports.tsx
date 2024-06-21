@@ -104,7 +104,7 @@ export default function TableReports({data, token, reports,
       id: 'Estatus',
       cell: ({row}) => (
         <Link href={`/reports/${row.original.id}/profile`}>
-          <Chip label={row.original.Status} />
+          <Chip label={row.original.Status} color={row.original.color} />
         </Link>
       ),
     }),

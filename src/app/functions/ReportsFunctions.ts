@@ -22,7 +22,8 @@ export function ReportDataToTableData(reports:Report[]){
       Report: report.name,
       Responsible: report.user.photo,
       Status: report.moves[report.moves.length - 1]?.condition?.name || 'Sin status',
-      id: report._id
+      id: report._id,
+      color: report.moves[report.moves.length - 1].condition.color || '',
     })
   });
 

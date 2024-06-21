@@ -40,7 +40,7 @@ export default function SendReport({send, report, node,
   }, []);
 
   const sendReport = async (relation:Relation) => {
-    console.log(relation);
+    //console.log(relation);
     if(notes && notes !== ''){
       if(typeof(relation.relation.nextnodo)==='string'){
         try {
@@ -61,6 +61,9 @@ export default function SendReport({send, report, node,
               const res = await insertMovementsInReport(token, report._id, data);
               if(res === 200){
                 showToastMessage('Movimiento hecho correctamente!!');
+                setTimeout(() => {
+                  window.location.replace("/reports");
+                }, 500);
               }else{
                 showToastMessageError(res);
               }
@@ -72,51 +75,7 @@ export default function SendReport({send, report, node,
           showToastMessageError("Ocurrio un problema al consultar siguiente departamento!!");
         }
       }
-    //   if(typeof(relation.relation.nextnodo)!=='string'){
-    //     console.log('relation ', relation);
-    //     console.log('mov ', {
-    //       condition:relation.relation.nextnodo.glossary._id,
-    //       notes,
-    //       user,
-    //       department: relation.relation.nextnodo.department._id
-    //   })
-    //     const data = {
-    //       moves: [{
-    //           condition:relation.relation.nextnodo.glossary._id,
-    //           notes,
-    //           user,
-    //           department: relation.relation.nextnodo.department._id
-    //       }]
-    //     };
-
-    //     try {
-    //       const res = await insertMovementsInReport(token, report._id, data);
-    //       if(res === 200){
-    //         showToastMessage('Movimiento hecho correctamente!!');
-    //       }else{
-    //         showToastMessageError(res);
-    //       }
-    //     } catch (error) {
-          
-    //     }
-    //   }else{
-    //     showToastMessageError('Ocurrio un problema al enviar reporte a su siguiente destino!!');
-    //     setIsSend(false);
-    //     setTimeout(() => {
-    //       setIsSend(true);
-    //     }, (1000));
-    //   }
-      
-    //   //   "moves": [
-    // //     {
-    // //         "condition":"66577d59f7e6e81cfa148471",
-    // //         "notes":"Informe del mes de Junio",
-    // //         "user":"65d3836974045152c0c4378c",
-    // //         "department":"664ff820a957fe1fdd07f25e"
-    // //     }
-    // // ]
     }else{
-      //alert('false');
       setIsSend(false);
       setTimeout(() => {
         setIsSend(true);
@@ -248,14 +207,14 @@ export default function SendReport({send, report, node,
 }
 
 function Card(relation: Relation){
-  console.log('relation card ', relation);
+  //console.log('relation card ', relation);
   return(
     <div className="mt-2 p-3 flex flex-col items-center">
       <p className="text-xs">Enviar informe a:</p>
       <p className="text-xs">{typeof(relation.relation.nextnodo)=== 'string'? '': relation.relation.nextnodo?.department.name || 'Depto'}</p>
       <img src={typeof(relation.relation.nextnodo)==='string'? "/img/users/default.jpg": relation.relation.nextnodo?.department.company.logo || "/img/users/default.jpg"}
        className="w-12 h-auto rounded-full" alt="responsable" />
-      <p className="text-xs text-center">Diana Camacho</p>
+      <p className="text-xs text-center">{typeof(relation.relation.nextnodo)=== 'string'? '': relation.relation.nextnodo?.department.name || 'Depto'}</p>
       <Chip label={relation.relation.glossary.name} />
       {/* <Chip label={report.moves[report.moves.length-1].condition.name} /> */}
     </div>

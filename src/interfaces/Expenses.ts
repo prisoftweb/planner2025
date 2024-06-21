@@ -37,7 +37,7 @@ export interface Expense {
   user: UsrBack
   provider: Provider
   //costcenter: CostCenter
-  costcenter:string
+  costcenter:(string | CostCenter)
   project: Project
   status: boolean
   condition: Condition[]

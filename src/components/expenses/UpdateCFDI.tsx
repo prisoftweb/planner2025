@@ -19,7 +19,7 @@ export default function UpdateCFDI({id, token, expense}:
   useEffect(() => {
     //console.log('expense', expense);
     expense.files.map((f) => {
-      if(f.types.includes('xml') || f.types.includes('XML')){
+      if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
           //console.log('aqui entro => ', f);
           
           setIdFile(f._id);
