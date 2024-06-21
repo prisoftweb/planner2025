@@ -138,9 +138,9 @@ export default function ReportPDF({report, costs}:
             <View style={[style.header, {flex: 1}]}><Text>FECHA</Text></View>
           </View>
           {costs.map((cost) => (
-            <View style={style.table}>
+            <View style={style.table} key={cost._id}>
               <View style={[style.element, {flex: 1}]}><Text>{cost.project?.title}</Text></View>
-              <View style={[style.element, {flex: 2}]}><Text>{cost.costcenter}</Text></View>
+              <View style={[style.element, {flex: 2}]}><Text>{typeof(cost.costcenter)==='string'? cost.costcenter: cost.costcenter.name}</Text></View>
               <View style={[style.element, {flex: 2}]}><Text>{cost.provider?.name || 'NA'}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 1}]}>

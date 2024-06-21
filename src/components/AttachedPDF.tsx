@@ -53,7 +53,8 @@ export default function AttachedPDF({report} :{report:Report}){
             <Text>SAN LUIS POTOSI S.L.P. </Text>
             <Text style={style.textBlue}>a {date.getDate()} DE {months[date.getMonth()]} DE {date.getFullYear()}</Text>
           </View>
-          <Text style={{fontSize: '11px', marginTop: '18px'}}>C. DIANA CAMACHO PALACIOS</Text>
+          {/* <Text style={{fontSize: '11px', marginTop: '18px'}}>C. DIANA CAMACHO PALACIOS</Text> */}
+          <Text style={{fontSize: '11px', marginTop: '18px'}}>C. {process.env.NEXT_PUBLIC_ADMINISTRATION_USER}</Text>
           <Text style={{fontSize: '11px'}}>DEPARTAMENTO DE ADMINISTRACION</Text>
           <View style={style.textFlex}>
             <Text>EMPRESA</Text>
