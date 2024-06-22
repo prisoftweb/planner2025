@@ -30,8 +30,8 @@ export default function UpdateExpense({token, id, user, optCostCenter,
       folio: expense.folio,
       taxFolio: expense.taxfolio,
       vat: '0',
-      discount: expense.discount? expense.discount.toString(): '0',
-      amount: expense.subtotal.toString(),
+      discount: expense.cost.discount? expense.cost.discount.toString(): '0',
+      amount: expense.cost.subtotal.toString(),
       description: expense.description
     }, 
     validationSchema: Yup.object({
@@ -190,7 +190,7 @@ export default function UpdateExpense({token, id, user, optCostCenter,
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             //placeholder="Please enter a number"
-            defaultValue={expense.discount || 0}
+            defaultValue={expense.cost.discount || 0}
             decimalsLimit={2}
             prefix="$"
             onValueChange={(value) => {try {
@@ -234,7 +234,7 @@ export default function UpdateExpense({token, id, user, optCostCenter,
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             //placeholder="Please enter a number"
-            defaultValue={expense.subtotal || 0}
+            defaultValue={expense.cost.subtotal || 0}
             decimalsLimit={2}
             prefix="$"
             onValueChange={(value) => {try {

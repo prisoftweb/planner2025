@@ -8,7 +8,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.subtotal
+          value: expense.cost.subtotal
         });
     const elements: string[] = [];
     if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){

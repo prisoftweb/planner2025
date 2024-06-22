@@ -8,7 +8,8 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveExpense from "@/app/functions/SaveExpense";
 import { CreateCostWithFiles } from "@/app/api/routeCost";
 
-export default function VoucherNoDeductibleStepper({token, user}: {token:string, user:string}) {
+export default function VoucherNoDeductibleStepper({token, user, idVat}: 
+                                    {token:string, user:string, idVat:string}) {
   
   const {updateIndexStepper, updateVoucher, amount, costCenter, date, description, 
     responsible, report, project, condition, category, reset, updateRefresh} = useNewExpense();
@@ -29,7 +30,7 @@ export default function VoucherNoDeductibleStepper({token, user}: {token:string,
   const SaveData = async () => {
     if(file){
       const formdata = new FormData();
-      formdata.append('subtotal', amount);
+      //formdata.append('subtotal', amount);
       formdata.append('costcenter', costCenter);
       formdata.append('date', date);
       formdata.append('description', description);
@@ -38,6 +39,14 @@ export default function VoucherNoDeductibleStepper({token, user}: {token:string,
       formdata.append('isticket', JSON.stringify(true));
       formdata.append('project', project);
       formdata.append('category', category);
+      formdata.append('cost', JSON.stringify({
+        discount: 0,
+        subtotal:amount.replace(/[$,]/g, ""),
+        iva: 0,
+        vat: idVat, 
+        // vatvalue: number no se usa 
+        // total: number no se usa 
+      }));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -64,7 +73,15 @@ export default function VoucherNoDeductibleStepper({token, user}: {token:string,
       }
     }else{
       const data = {
-        subtotal:amount, costcenter: costCenter, date:date, description, 
+        costcenter: costCenter, date:date, description, 
+        cost: {
+          discount: 0,
+          subtotal:amount.replace(/[$,]/g, ""),
+          iva: 0,
+          vat: idVat,
+          // vatvalue: number no se usa 
+          // total: number no se usa 
+        },
         user:responsible, report, isticket:true, project, category, condition: {
           glossary: condition,
           user

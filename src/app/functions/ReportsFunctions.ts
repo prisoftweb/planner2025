@@ -35,7 +35,7 @@ export function CostsDataToTableData(expenses:Expense[]){
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.subtotal
+          value: expense.cost.subtotal
         })
     table.push({
       id: expense._id,

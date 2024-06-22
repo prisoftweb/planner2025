@@ -21,7 +21,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                                 optProviders, optResponsibles, optGlossaries, 
                                 optProjects, optCategories, optConditions, optTypes, 
                                 projects, reports, optReports, idLabour, 
-                                idTicket, optCostCenterDeductible }: 
+                                idTicket, optCostCenterDeductible, optVats }: 
                             {token:string, showForm:Function, user:string, 
                               optCostCenter:Options[],
                               optProviders:Options[], optResponsibles:Options[],
@@ -30,7 +30,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                               optConditions:Options[], projects:Project[], 
                               reports:Report[], optReports: Options[],
                               optCostCenterDeductible:Options[], idLabour:string, 
-                              idTicket:string
+                              idTicket:string, optVats:Options[]
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -48,6 +48,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   const {indexStepper, isDeductible, project, updateProject, 
     report, updateReport, updateIndexStepper, updateCondition} = useNewExpense();
 
+  const idVat = optVats.find((vat) => vat.label === '0')?.value || '';
+  
   const DropdownIndicator = (props: any) => {
     return (
       components.DropdownIndicator && (
@@ -167,7 +169,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                 optResponsibles={optResponsibles}
                 token={token} user={user} optProjects={optProjects}
                 optCategories={optCategories} optConditions={optConditions}
-                optTypes={optTypes}
+                optTypes={optTypes} optVats={optVats}
               />)
             }else if(indexStepper===2){
                 setStepForm(<VoucherStepper token={token} user={user} />)
@@ -183,9 +185,9 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
             if(indexStepper===1){
               setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
                 optResponsibles={optResponsibles} token={token} user={user}
-                idLabour={idLabour} idTicket={idTicket} />)
+                idLabour={idLabour} idTicket={idTicket} idVat={idVat} />)
             }else if(indexStepper===2){
-                setStepForm(<VoucherNoDeductibleStepper token={token} user={user} />)  
+                setStepForm(<VoucherNoDeductibleStepper token={token} user={user} idVat={idVat} />)  
               }else {
                   setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
                               />)

@@ -23,11 +23,12 @@ export interface ExpensesTable {
 }
 
 export interface Expense {
+  cost: Cost
   _id: string
   folio: string
   taxfolio: string
-  subtotal: number
-  discount: number
+  //subtotal: number
+  //discount: number
   description: string
   date: string
   taxapply: boolean
@@ -43,7 +44,7 @@ export interface Expense {
   condition: Condition[]
   files: File[]
   total: number
-  iva: number
+  //iva: number
   __v: number
   id: string
   //report: string
@@ -65,4 +66,24 @@ export interface Condition {
   status: boolean
   _id: string
   id: string
+}
+
+export interface Vat {
+  _id: string
+  base: number
+  value: number
+  amount: number
+  type: string
+  status: boolean
+  __v: number
+  id: string
+}
+
+export interface Cost {
+  subtotal: number
+  discount: number
+  iva: number
+  vat: Vat
+  vatvalue: number
+  total: number
 }

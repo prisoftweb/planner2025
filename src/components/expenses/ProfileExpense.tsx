@@ -8,17 +8,17 @@ export default function ProfileExpense({expense}:
 
   const amount = CurrencyFormatter({
     currency: "MXN",
-    value: expense.subtotal
+    value: expense.cost.subtotal
   });
 
   const discount = CurrencyFormatter({
     currency: "MXN",
-    value: Number(expense.discount)
+    value: Number(expense.cost.discount)
   });
 
   const vat = CurrencyFormatter({
     currency: "MXN",
-    value: expense.iva? expense.iva : 0
+    value: expense.cost.iva? expense.cost.iva : 0
   });
 
   return(
