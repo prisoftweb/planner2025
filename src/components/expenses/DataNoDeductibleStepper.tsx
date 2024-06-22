@@ -7,8 +7,8 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { use, useEffect, useState } from "react";
-import DatePicker from 'react-datepicker'
+import { useEffect, useState } from "react";
+//import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseNoDeductibleStepper from "./NavExpenseNoDeductibleStepper";
 import { useNewExpense } from "@/app/store/newExpense"
@@ -19,9 +19,10 @@ import CurrencyInput from 'react-currency-input-field';
 import Input from "../Input";
 
 export default function DataNoDeductibleStepper({token, user, optCostCenter, optResponsibles,
-                                                 idLabour, idTicket }: 
+                                                 idLabour, idTicket, idVat }: 
                                   {token:string, user:string, optCostCenter:Options[],
-                                    optResponsibles:Options[], idLabour:string, idTicket:string}){
+                                    optResponsibles:Options[], idLabour:string, 
+                                    idTicket:string, idVat:string}){
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, project, condition, category, 
@@ -44,7 +45,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       const {description, amount} = valores;
       updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
-          '', '', categoryS);
+          '', '', categoryS, '');
       updateIndexStepper(2);
     },       
   });
@@ -86,11 +87,11 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   const SaveData = async() => {
     const {description, amount} = formik.values
     updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', categoryS);
+        startDate, '', '', '', '', '', '', '', categoryS, '');
     
     if(voucher){
       const formdata = new FormData();
-      formdata.append('subtotal', amount.replace(/[$,]/g, ""));
+      //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
       formdata.append('costcenter', costcenter);
       formdata.append('date', startDate);
       formdata.append('description', description);
@@ -99,6 +100,14 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       formdata.append('isticket', JSON.stringify(true));
       formdata.append('project', project);
       formdata.append('category', categoryS);
+      formdata.append('cost', JSON.stringify({
+        discount: 0,
+        subtotal:amount.replace(/[$,]/g, ""),
+        iva: 0,
+        vat: idVat, 
+        // vatvalue: number no se usa 
+        // total: number no se usa 
+      }));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -128,7 +137,15 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       }
     }else{
       const data = {
-        subtotal:amount.replace(/[$,]/g, ""), costcenter, date:startDate, description, 
+        costcenter, date:startDate, description, 
+        cost: {
+          discount: 0,
+          subtotal:amount.replace(/[$,]/g, ""),
+          iva: 0,
+          vat: idVat,
+          // vatvalue: number no se usa 
+          // total: number no se usa 
+        },
         user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
           glossary: condition,
           user

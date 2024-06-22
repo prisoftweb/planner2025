@@ -14,6 +14,7 @@ interface NewExpenseState {
   proveedor: string
   responsible: string
   category:string
+  idVat: string
   
   voucher: (File | null),
   CFDI: (File | null)
@@ -32,7 +33,7 @@ interface ProjectState{
 interface Actions {
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-    typeCFDI:string, typeExpense:string, category:string) => void,
+    typeCFDI:string, typeExpense:string, category:string, idVat:string) => void,
   updateVoucher: (file: File) => void,
   updateCDFI: (CFDI: File) => void,
   updateIndexStepper: (index: number) => void,
@@ -62,6 +63,7 @@ const initialState: NewExpenseState = {
   voucher: null,
   category: '',
   refresh: false,
+  idVat: '',
 }
 
 const projectInitial: ProjectState = {
@@ -77,7 +79,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((s
   ...projectInitial,
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-      typeCFDI:string, typeExpense:string, category:string) => set(state => ({
+      typeCFDI:string, typeExpense:string, category:string, idVat:string) => set(state => ({
     ...state,
     costCenter: costCenter,
     folio: folio,
@@ -92,6 +94,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((s
     typeCFDI: typeCFDI,
     typeExpense: typeExpense,
     category: category,
+    idVat: idVat
   })),
   updateVoucher: (file: File) => set (state => ({
     ...state,

@@ -13,9 +13,9 @@ import { getGlossaries } from "../api/routeGlossary";
 import { Glossary } from "@/interfaces/Glossary";
 import { getProjects } from "../api/routeProjects";
 import { Project } from "@/interfaces/Projects";
-import { ExpensesTable, Expense } from "@/interfaces/Expenses";
+import { ExpensesTable, Expense, Vat } from "@/interfaces/Expenses";
 //import TableExpenses from "@/components/expenses/TableExpenses";
-import { GetCosts } from "../api/routeCost";
+import { GetCosts, GetVats } from "../api/routeCost";
 //import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
@@ -240,10 +240,23 @@ export default async function Page() {
     optConditionsFilter.push(c);
   })
 
-  // console.log('catalogs => ', catalogs);
-  // console.log('types => ', optTypes);
-  // console.log('conditions => ', optConditions);
-  // console.log('categories => ', optCategories);
+  let vats: Vat[];
+  try {
+    vats = await GetVats(token);
+    if(typeof(vats)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{vats}</h1>
+    }    
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
+  }
+
+  const optVats:Options[]= [];
+  vats.map((vat) => {
+    optVats.push({
+      label: vat.value.toString(),
+      value: vat._id
+    });
+  });
 
   if(!expenses || expenses.length <= 0){
     return (
@@ -261,7 +274,7 @@ export default async function Page() {
                   optCategories={optCategories} optConditions={optConditions}
                   optTypes={optTypes} projects={projects} reports={reports}
                   optReports={optReports} idLabour={labour} idTicket={ticket}
-                  optCostCenterDeductible={optCostCenterDeductible}
+                  optCostCenterDeductible={optCostCenterDeductible} optVats={optVats}
               />
           </WithOut>
         </div>
@@ -274,7 +287,7 @@ export default async function Page() {
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.subtotal
+          value: expense.cost.subtotal
         })
     const elements: string[] = [];
     if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
@@ -341,7 +354,7 @@ export default async function Page() {
         optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
-        token={token} user={user._id} />
+        token={token} user={user._id} optVats={optVats} />
       {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Gastos" placeHolder="Buscar gasto.." >
         <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 

@@ -19,7 +19,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
-    vat, voucher, condition, category,
+    vat, voucher, condition, category, idVat,
     reset, updateRefresh, updateIndexStepper} = useNewExpense();
   
   const validationType = (f: File) => {
@@ -41,18 +41,18 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
     
     if(file || voucher){
       const formdata = new FormData();
-      formdata.append('subtotal', amount);
+      //formdata.append('subtotal', amount);
       formdata.append('costcenter', costCenter);
       formdata.append('date', date);
       formdata.append('description', description);
-      formdata.append('discount', discount);
+      //formdata.append('discount', discount);
       formdata.append('folio', folio);
       formdata.append('provider', proveedor);
       formdata.append('user', responsible);
       formdata.append('taxfolio', taxFolio);
       formdata.append('typeCFDI', typeCFDI);
       formdata.append('project', project);
-      formdata.append('vat', vat);
+      //formdata.append('vat', vat);
       formdata.append('report', report);
       formdata.append('category', category);
       formdata.append('isticket', JSON.stringify(false));
@@ -60,7 +60,15 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
-      }]))
+      }]));
+      formdata.append('cost', JSON.stringify({
+        discount: discount.replace(/[$,]/g, ""),
+        subtotal:amount.replace(/[$,]/g, ""),
+        iva:vat,
+        vat: idVat
+        // vatvalue: number no se usa 
+        // total: number no se usa 
+      }));
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -91,12 +99,20 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       }
     }else{
       const data = {
-        subtotal:amount, costcenter: costCenter, date:date, description, discount, folio, 
-        provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project, vat,
+        costcenter: costCenter, date:date, description, folio, 
+        cost: {
+          discount,
+          subtotal:amount.replace(/[$,]/g, ""),
+          iva:vat,
+          vat: idVat 
+          // vatvalue: number no se usa 
+          // total: number no se usa 
+        },
+        provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project,
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
-        }]
+        }],
       }
   
       try {

@@ -6,12 +6,13 @@ import { useState } from "react"
 import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
 import { Expense } from "@/interfaces/Expenses"
+import { UsrBack } from "@/interfaces/User"
 
 export default function DataReports({companies, departments, projects, token,
                                  report, user, node, costs}:
                               {departments:Options[], companies:Options[], 
                                 projects:Options[], token:string, report:Report, 
-                                user:string, node:Node, costs:Expense[] }) {
+                                user:UsrBack, node:Node, costs:Expense[] }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
 
@@ -25,7 +26,7 @@ export default function DataReports({companies, departments, projects, token,
         style={{'backgroundColor': '#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
           <ProfileReport report={report} send={handleSend} token={token}
-            costs={costs} />
+            costs={costs} user={user} />
         </div>
         <div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>
@@ -34,7 +35,7 @@ export default function DataReports({companies, departments, projects, token,
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 
-                    token={token} user={user} node={node} />}
+                    token={token} user={user._id} node={node} />}
     </>
   )
 }

@@ -154,7 +154,7 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTab idRep={params.id} tab='1' />
         <ReportClient report={report} token={token} id={params.id} 
           companies={optCompanies} departments={optDepartments}
-          projects={optProjects} expenses={costs} user={user._id}
+          projects={optProjects} expenses={costs} user={user}
           node={node}
         />
       </div>

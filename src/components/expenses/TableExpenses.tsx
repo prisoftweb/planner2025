@@ -148,9 +148,9 @@ export default function TableExpenses({data, token, expenses,
   
   useEffect(() => {
     const expenseM = expenses.reduce((previous, current) => {
-      return current.subtotal > previous.subtotal ? current : previous;
+      return current.cost.subtotal > previous.cost.subtotal ? current : previous;
     });
-    setMaxAmount(expenseM.subtotal);
+    setMaxAmount(expenseM.cost.subtotal);
   }, [])
 
 
@@ -204,7 +204,7 @@ export default function TableExpenses({data, token, expenses,
 
   const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
-    if(exp.subtotal >= minAmount && exp.subtotal <= maxAmount){
+    if(exp.cost.subtotal >= minAmount && exp.cost.subtotal <= maxAmount){
       return dateValidation(exp, startDate, endDate);
     }
     return false;

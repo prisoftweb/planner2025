@@ -156,3 +156,21 @@ export async function DeleteFILE(auth_token:string, id:string, idFile:string) {
     return 'Error al eliminar el archivo anterior!!';
   }
 }
+
+export async function GetVats(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/vats`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar ivas!!';
+    }
+    return 'Error al consultar ivas!!';
+  }
+}

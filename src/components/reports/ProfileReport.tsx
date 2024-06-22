@@ -7,15 +7,36 @@ import ReportPDF from "../ReportPDF";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import { Expense } from "@/interfaces/Expenses";
 import AttachedPDF from "../AttachedPDF";
+import { UsrBack } from "@/interfaces/User";
+import {Tooltip} from "@nextui-org/react";
 
-export default function ProfileReport({report, send, token, costs}: 
+export default function ProfileReport({report, send, token, costs, user}: 
                         {report:Report, send:Function, 
-                          token: string, costs:Expense[]}){
+                          token: string, costs:Expense[], user:UsrBack}){
 // console.log('report ', report);
   const total = CurrencyFormatter({
     currency: "MXN",
     value: report.total
   });
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
 
   return(
     <>
@@ -85,17 +106,41 @@ export default function ProfileReport({report, send, token, costs}:
             <div>
               <p className="text-slate-500">Descargar</p>
               {/* <p className="text-blue-600">{"PDF"}</p> */}
-              <PDFDownloadLink document={<ReportPDF report={report} costs={costs} />} fileName="report" >
-              {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName="report" > */}
-                {({loading, url, error, blob}) => 
-                  loading? (
-                    <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                    // <button type="button">Loading document...</button>
-                  ) : (
-                    <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                    // <button type="button">Download now!</button>
-                  ) }
-              </PDFDownloadLink>
+              <div className="flex justify-center gap-x-5 mt-2">
+                <PDFDownloadLink document={<ReportPDF report={report} costs={costs} />} fileName={report.name} >
+                {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                        {/* // <button type="button">Loading document...</button> */}
+                      </Tooltip>
+                    ) : (
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </Tooltip>
+                      // <button type="button">Download now!</button>
+                    ) }
+                </PDFDownloadLink>
+                {typeof(user.department)!== 'string' && (user.department.name.toLowerCase().includes('soporte') || 
+                    user.department.name.toLowerCase().includes('administracion')) && (
+                  <Tooltip closeDelay={0} delay={100} motionProps={props} content='Anexo' 
+                      placement="top" className="text-blue-500 bg-white">
+                    <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} >
+                      {({loading, url, error, blob}) => 
+                        loading? (
+                          <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                          // <button type="button">Loading document...</button>
+                        ) : (
+                          <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+                          // <button type="button">Download now!</button>
+                        ) }
+                    </PDFDownloadLink>
+                  </Tooltip>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { Report } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
 import { Expense } from "@/interfaces/Expenses"
 import { Node } from "@/interfaces/Nodes"
+import { UsrBack } from "@/interfaces/User"
 
 export default function ReportClient({report, token, id, companies, 
                                 departments, projects, expenses, user, 
@@ -15,7 +16,7 @@ export default function ReportClient({report, token, id, companies,
                             {report:Report, token:string, id:string, 
                               departments:Options[], companies:Options[], 
                               projects:Options[], expenses:Expense[], 
-                              user:string, node:Node }){
+                              user:UsrBack, node:Node }){
   
   const [view, setView] = useState<JSX.Element>(<></>)
 

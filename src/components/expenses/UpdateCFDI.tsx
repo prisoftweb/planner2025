@@ -94,7 +94,7 @@ export default function UpdateCFDI({id, token, expense}:
     // console.log('expense', expense.taxfolio);
     // console.log('expense', expense.provider.rfc);
     // console.log('data dfdi ', dataCFDI);
-    if(expense.subtotal.toString() !== dataCFDI?.amount){
+    if(expense.cost.subtotal.toString() !== dataCFDI?.amount){
       showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
       return false;
     }

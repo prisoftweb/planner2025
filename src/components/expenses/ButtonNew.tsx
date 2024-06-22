@@ -10,7 +10,7 @@ export default function ButtonNew({token, user, optCostCenter, optProviders,
                               optResponsibles, optGlossaries, optProjects, 
                               optCategories, optConditions, optTypes, projects, 
                               reports, optReports, optCostCenterDeductible, 
-                              idLabour, idTicket}: 
+                              idLabour, idTicket, optVats}: 
                           {token:string, user:string, optCostCenter:Options[],
                             optProviders:Options[], optResponsibles:Options[],
                             optGlossaries:Options[], optProjects:Options[], 
@@ -18,7 +18,7 @@ export default function ButtonNew({token, user, optCostCenter, optProviders,
                             optConditions:Options[], projects:Project[], 
                             reports:Report[], optReports:Options[], 
                             optCostCenterDeductible:Options[], idLabour:string, 
-                            idTicket:string }){
+                            idTicket:string, optVats:Options[] }){
   const [newExpense, setNewExpense] = useState<boolean>(false);
   
   return(
@@ -31,7 +31,7 @@ export default function ButtonNew({token, user, optCostCenter, optProviders,
                             optCategories={optCategories} optConditions={optConditions}
                             optTypes={optTypes} projects={projects} reports={reports}
                             optReports={optReports} idLabour={idLabour} idTicket={idTicket}
-                            optCostCenterDeductible={optCostCenterDeductible}
+                            optCostCenterDeductible={optCostCenterDeductible} optVats={optVats}
                         />}
     </>
   )
