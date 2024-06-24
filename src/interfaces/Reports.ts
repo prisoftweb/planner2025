@@ -36,6 +36,7 @@ export interface Report {
   id: string
   ispettycash: boolean
   quantity: number
+  wached: boolean
 }
 
 export interface Mfe {

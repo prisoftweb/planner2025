@@ -125,7 +125,7 @@ export default function ProfileReport({report, send, token, costs, user}:
                     ) }
                 </PDFDownloadLink>
                 {typeof(user.department)!== 'string' && (user.department.name.toLowerCase().includes('soporte') || 
-                    user.department.name.toLowerCase().includes('administracion')) && (
+                    user.department.name.toLowerCase().includes('direccion')) && (
                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Anexo' 
                       placement="top" className="text-blue-500 bg-white">
                     <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} >

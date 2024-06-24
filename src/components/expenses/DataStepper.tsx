@@ -1,5 +1,5 @@
 "use client"
-import HeaderForm from "../HeaderForm"
+//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -8,7 +8,7 @@ import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { useEffect, useState } from "react";
-import DatePicker from 'react-datepicker'
+//import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseStepper from "./NavExpenseStepper"
 import { useNewExpense } from "@/app/store/newExpense"
@@ -62,7 +62,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     onSubmit: async (valores) => {            
       const {description, folio, taxFolio, discount, amount, vat} = valores;
       updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
-          startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
+          startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
           typeCFDIS, typeExpenseS, categoryS, idVat);
       updateIndexStepper(2);
     },       
@@ -90,6 +90,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   const [idVat, setIdVat] = useState<string>(optVats[0].value);
+  const [vatValue, setVatValue] = useState<string>('0');
   
   const [clearAmountm, setClearAmount] = useState<boolean>(false);
 
@@ -117,7 +118,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, typeExpenseS, categoryS, idVat);
+        typeCFDIS, typeExpenseS, categoryS, idVat.replace(/[$,]/g, ""));
     
     let supplierCredit: boolean;
     try {
@@ -149,7 +150,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('cost', JSON.stringify({
         discount: discount.replace(/[$,]/g, ""),
         subtotal:amount.replace(/[$,]/g, ""),
-        iva:vat,
+        iva:vat.replace(/[$,]/g, ""),
         vat: idVat, 
         // vatvalue: number no se usa 
         // total: number no se usa 
@@ -192,7 +193,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         cost: {
           discount: discount.replace(/[$,]/g, ""),
           subtotal:amount.replace(/[$,]/g, ""),
-          iva:vat,
+          iva:vat.replace(/[$,]/g, ""),
           vat: idVat,
           // vatvalue: number no se usa 
           // total: number no se usa 
@@ -556,16 +557,17 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   useEffect(() => {
     try {
-      //console.log('id vat => ', idVat);
+      console.log('id vat => ', idVat);
       const foundVat = optVats.find((vat) => vat.value === idVat);
-      //console.log('found vat => ', foundVat);
+      console.log('found vat => ', foundVat);
       const vatvalue = foundVat?.label || '0';
-      //console.log('vat value =>', vatvalue);
+      console.log('vat value =>', vatvalue);
       const operation = 
         (Number(formik.values.amount.replace(/[$,]/g, "")) - 
           Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-      //console.log('operation => ', operation)
+      console.log('operation => ', operation)
       formik.values.vat = operation.toString();
+      setVatValue(operation.toString());
     } catch (error) {
       console.log(error);
       formik.values.vat = '0';
@@ -620,7 +622,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             ) : null}
           </div>
           <div>
-            <Label htmlFor="discount">Descuento</Label>
+            <Label htmlFor="discount">Descuento / Iva excento</Label>
             <CurrencyInput
               id="discount"
               name="discount"
@@ -654,10 +656,29 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <div>
             <Label htmlFor="vat">Iva</Label>
             <div className="flex gap-x-3">
-              <Input type="text" name="vat" 
+              {/* <Input type="text" name="vat" 
                 value={formik.values.vat}
                 onChange={formik.handleChange}
                 onBlur={formik.handleChange}
+              /> */}
+              <CurrencyInput
+                id="vat"
+                name="vat"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                  focus:border-slate-700 outline-0"
+                onChange={formik.handleChange}
+                onBlur={formik.handleChange}
+                //defaultValue={0}
+                //defaultValue={formik.values.vat}
+                decimalsLimit={2}
+                value={vatValue}
+                //value={formik.values.vat}
+                prefix="$"
+                onValueChange={(value) => {try {
+                  formik.values.vat=value || '0';
+                } catch (error) {
+                  formik.values.vat='0';
+                }}}
               />
               {formik.touched.vat && formik.errors.vat ? (
                   <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">

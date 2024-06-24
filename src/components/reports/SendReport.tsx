@@ -11,6 +11,7 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import ButtonColor from "../ButtonColor";
 import { getNode } from "@/app/api/routeNodes";
+import { updateReport } from "@/app/api/routeReports";
 
 export default function SendReport({send, report, node, 
               user, token}: 
@@ -44,13 +45,32 @@ export default function SendReport({send, report, node,
     if(notes && notes !== ''){
       if(typeof(relation.relation.nextnodo)==='string'){
         try {
+          if(!relation.relation.glossary.name.toLowerCase().includes('pagado')){
+            const data = {wached: false};
+            const res = await updateReport(token, report._id, data);
+            if(res !== 200){
+              showToastMessageError(res);
+            }
+          }
+        } catch (error) {
+          showToastMessageError('Ocurrio un problema al actualizar estado visto!!');
+        }
+        try {
           const res: Node = await getNode(token, relation.relation.nextnodo);
           if(typeof(res)=== 'string'){
             showToastMessageError(res);
           }else{
+            // const data = {
+            //   moves: [{
+            //       condition:res.glossary._id,
+            //       notes,
+            //       user,
+            //       department: res.department._id
+            //   }]
+            // };
             const data = {
               moves: [{
-                  condition:res.glossary._id,
+                  condition: relation.relation.glossary._id,
                   notes,
                   user,
                   department: res.department._id

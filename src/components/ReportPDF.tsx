@@ -146,7 +146,8 @@ export default function ReportPDF({report, costs}:
               <View style={[style.element, {flex: 1}]}>
                 <Text>{CurrencyFormatter({
                     currency: 'MXN',
-                    value: cost.total
+                    value: cost.cost.subtotal + cost.cost.iva
+                    //value: cost.total
                   })}</Text>
               </View>
               <View style={[style.element, {flex: 1}]}><Text>{cost.date.substring(0, 10)}</Text></View>
