@@ -30,6 +30,7 @@ export default async function Page() {
     //console.log(user.department.name.toLowerCase());
     if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
       reports = await GetReportsByUser(token, user._id);
+      //consultar por usuario y por departamento
       //console.log('by user');
     }else{
       if(user.department.name.toLowerCase().includes('direccion')){

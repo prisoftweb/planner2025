@@ -12,7 +12,7 @@ import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/reports/NavTab";
 import ReportClient from "@/components/reports/ReportClient";
-import { GetReport, GetReports } from "@/app/api/routeReports";
+import { GetReport, GetReports, updateReport, insertMovementsInReport } from "@/app/api/routeReports";
 import { Report } from "@/interfaces/Reports";
 import { getCostByReport } from "@/app/api/routeReports";
 import { Expense } from "@/interfaces/Expenses";
@@ -29,10 +29,10 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     report = await GetReport(token, params.id);
     if(typeof(report)==='string'){
-      return <h1 className="text-center text-lg text-red">{report}</h1>
+      return <h1 className="text-center text-lg text-red-500">{report}</h1>
     }
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar reporte!!</h1>
+    return <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
   }
   
   let reports: Report[] = [];
@@ -57,21 +57,21 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     companies = await getCompanies(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+    return <h1 className="text-center text-lg text-red-500">Error al consultar las compañias</h1>
   }
 
   let departments: Department[] = [];
   try {
     departments = await getDepartments(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los departamentos</h1>
   }
 
   let projects:Project[] = [];
   try {
     projects = await getProjects(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar los proyectos</h1>
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos</h1>
   }
 
   const optProjects: Options[] = [];
@@ -102,9 +102,9 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     costs = await getCostByReport(params.id, token);
     if(typeof(costs)==='string') 
-      return <h1 className="text-center text-lg text-red">{costs}</h1>
+      return <h1 className="text-center text-lg text-red-500">{costs}</h1>
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar los costos del reporte!</h1>
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
   }
 
   //console.log('costos del reporte!! ', costs);
@@ -123,11 +123,11 @@ export default async function Page({ params }: { params: { id: string }}){
     //console.log('dept, ', user.department);
     nodes = await getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id);
     if(typeof(nodes)==='string'){
-      return <h1 className="text-lg text-red-500 text-center">{nodes}</h1>
+      return <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1>
     }
   } catch (error) {
     //console.log('error ', error);
-    return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
+    return <h1 className="text-lg text-red-500 text-center-500">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
   }
 
   if(!nodes || nodes.length <= 0){
@@ -135,6 +135,36 @@ export default async function Page({ params }: { params: { id: string }}){
   }
 
   node = nodes[0];
+
+  if(!report.wached){
+    console.log('reporte no visto!!');
+    try {
+      const data = {wached: true};
+      const res = await updateReport(token, params.id, data);
+      if(typeof(res)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{res}</h1>
+      }
+    } catch (error) {
+      return <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1>
+    }
+
+    try {
+      const data = {
+        moves: [{
+            condition: node.glossary._id,
+            notes: 'El informe ha sido visto por el usuario ' + user.name,
+            user: user._id,
+            department: typeof(user.department)==='string'? user.department : user.department._id
+        }]
+      };
+      const res = await insertMovementsInReport(token, report._id, data);
+      if(res !== 200){
+        return <h1 className="text-center text-lg text-red-500">{res}</h1>
+      }
+    } catch (error) {
+      return <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1>
+    }
+  }
 
   // if(!node){
   //   return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
