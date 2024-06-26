@@ -12,11 +12,12 @@ import { GiSettingsKnobs } from "react-icons/gi"
 
 export default function Filtering({showForm, optCategories, optTypes, 
                       optConditions, FilterData, maxAmount, 
-                      optProjects, optReports }: 
+                      optProjects, optReports, optCostCenterFilter }: 
                     {showForm:Function, optCategories: Options[],
                       optTypes: Options[], optConditions: Options[],
                       FilterData:Function, maxAmount:number, 
-                      optProjects:Options[], optReports:Options[]}){
+                      optProjects:Options[], optReports:Options[], 
+                      optCostCenterFilter:Options[]}){
   
   const [types, setTypes] = useState<string[]>([optTypes[0].value]);
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
@@ -24,6 +25,7 @@ export default function Filtering({showForm, optCategories, optTypes,
   const [projects, setProjects] = useState<string[]>([optProjects[0].value]);
   const [reports, setReports] = useState<string[]>([optReports[0].value]);
   const [heightPage, setHeightPage] = useState<number>(900);
+  const [costcenters, setCostCenters] = useState<string[]>([optCostCenterFilter[0].value]);
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -69,6 +71,10 @@ export default function Filtering({showForm, optCategories, optTypes,
     setProjects(value);
   }
 
+  const handleCostCenters = (value: string[]) => {
+    setCostCenters(value);
+  }
+
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(Math.max(
@@ -90,11 +96,13 @@ export default function Filtering({showForm, optCategories, optTypes,
   }, [values]);
 
   useEffect(() => {
-    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, firstDate?.getTime(), secondDate?.getTime());
-  }, [ categories, types, conditions, minValue, maxValue, firstDate, secondDate, projects, reports]);
+    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, 
+      firstDate?.getTime(), secondDate?.getTime(), costcenters);
+  }, [ categories, types, conditions, minValue, maxValue, firstDate, secondDate, projects, reports, costcenters]);
 
   useEffect (() => {
-    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
+    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, 
+      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcenters);
   }, []);
 
   // useEffect(() => {
@@ -141,6 +149,10 @@ export default function Filtering({showForm, optCategories, optTypes,
         <div>
           <Label htmlFor="projects"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyectos</p></Label>
           <SelectMultipleReact index={0} opts={optProjects} setValue={handleProjects} />
+        </div>
+        <div>
+          <Label htmlFor="costcenters"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+          <SelectMultipleReact index={0} opts={optCostCenterFilter} setValue={handleCostCenters} />
         </div>
         {/* <div className="pt-9"> */}
         <div className="pt-0">

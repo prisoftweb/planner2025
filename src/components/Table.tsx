@@ -16,8 +16,9 @@ type MyData = {
   numRows: string
 }
 
-export default function Table({data, columns, placeH, typeTable=''}: 
-                              {data: any[], columns:any, placeH:string, typeTable?:string}) {
+export default function Table({data, columns, placeH, typeTable='', initialColumns={}}: 
+                              {data: any[], columns:any, placeH:string, 
+                                typeTable?:string, initialColumns?:any}) {
 
   const [sorting, setSorting] = useState<any>([]);
   const [filtering, setFiltering] = useState('')
@@ -25,6 +26,16 @@ export default function Table({data, columns, placeH, typeTable=''}:
   const [showColumns, setShowColumns] = useState<boolean>(false);
   const [startPage, setStarPage] = useState<number>(1);
   const [endPage, setEndPage] = useState<number>(25);
+  
+  // const aux: any = {
+  //   columnId1: true,
+  //   importe: false, //hide this column by default
+  //   columnId3: true,
+  // }
+  
+  //const [columnVisibility, setColumnVisibility] = useState(aux);
+  console.log(JSON.stringify(initialColumns));
+  const [columnVisibility, setColumnVisibility] = useState(initialColumns);
 
   const {search} = useTableStates();
   //const {numRows, changeCounter} = useRowsCounter();
@@ -91,9 +102,11 @@ export default function Table({data, columns, placeH, typeTable=''}:
       sorting,
       globalFilter: filtering,
       rowSelection,
+      columnVisibility,
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
+    onColumnVisibilityChange: setColumnVisibility,
     initialState : {
       pagination: {
         // pageSize: numRows,

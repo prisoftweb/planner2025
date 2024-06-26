@@ -67,13 +67,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                   style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
                       color: isHover===1 || option===1 ? 'white' : '',}}
                 />
-                {/* <AdjustmentsVerticalIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                    text-slate-500 my-1 bg-white rounded-md
-                  ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
-                  onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
-                  style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
-                      color: isHover===1 || option===1 ? 'white' : '',}}  
-                /> */}
               </div>
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
@@ -86,13 +79,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                   style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
                     color: isHover===2 || option===2 ? 'white' : '',}} 
                 />
-                {/* <TableCellsIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                    text-slate-500 my-1 bg-white rounded-md
-                  ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
-                  onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
-                  style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
-                    color: isHover===2 || option===2 ? 'white' : '',}}  
-                /> */}
               </div>
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
@@ -105,13 +91,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                   style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
                     color: isHover===3 || option===3 ? 'white' : '',}}
                 />
-                {/* <GlobeAmericasIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                    text-slate-500 my-1 bg-white rounded-md
-                  ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
-                  onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-                  style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-                    color: isHover===3 || option===3 ? 'white' : '',}}  
-                /> */}
               </div>
           </Tooltip>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Garantia' 
@@ -123,12 +102,17 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                   style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
                     color: isHover===4 || option===4 ? 'white' : '',}}
                 />
-                {/* <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                  text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
-                  onMouseEnter={() => {setIsHover(4)} } onMouseLeave={() => setIsHover(-1)}
-                  style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
-                    color: isHover===4 || option===4 ? 'white' : '',}}
-                /> */}
+              </div>
+          </Tooltip>
+          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Avance' 
+            className="text-blue-500 bg-white" placement="right">
+              <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
+                <FaRegCreditCard className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
+                  onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
+                  style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
+                    color: isHover===5 || option===5 ? 'white' : '',}}
+                />
               </div>
           </Tooltip>
         </div>

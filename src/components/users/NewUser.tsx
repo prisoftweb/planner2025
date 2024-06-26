@@ -67,73 +67,40 @@ export default function NewUser({showForm, departments, token, roles}:
 
     onSubmit: async valores => {
       const { email, password, confirmpassword, name } = valores;
-      
-      const formdata = new FormData();
-      formdata.append('name',name);
-      formdata.append('email', email);
-      formdata.append('password', password);
-      formdata.append('confirmPassword', confirmpassword);
-      formdata.append('department', department);
-      formdata.append('rol', role);
-      if(file){
-        //console.log('con file');
-        formdata.append('photo', file);
-      }
 
-      try {
-        const res = await createUserPhoto(formdata, token);
-        //console.log('res ', res);
-        if(res===201){
-          //showForm(false);
-          showToastMessage('Usuario creado exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+      //if(file){
+        const formdata = new FormData();
+        formdata.append('name',name);
+        formdata.append('email', email);
+        formdata.append('password', password);
+        formdata.append('confirmPassword', confirmpassword);
+        formdata.append('department', department);
+        formdata.append('rol', role);
+        if(file) formdata.append('photo', file);
+
+        try {
+          const res = await createUserPhoto(formdata, token);
+          //console.log('res ', res);
+          if(res===201){
+            //showForm(false);
+            showToastMessage('Usuario creado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          //console.log('error ', error);
+          showToastMessageError('Error al crear usuario!!');
         }
-      } catch (error) {
-        //console.log('error ', error);
-        showToastMessageError('Error al crear usuario!!');
-      }
-      // if(file){
-      //   const formdata = new FormData();
-      //   formdata.append('name',name);
-      //   formdata.append('email', email);
-      //   formdata.append('password', password);
-      //   formdata.append('confirmPassword', confirmpassword);
-      //   formdata.append('department', department);
-      //   formdata.append('rol', role);
-      //   if(file){
-      //     //console.log('con file');
-      //     formdata.append('photo', file);
-      //   }
-
-      //   try {
-      //     const res = await createUserPhoto(formdata, token);
-      //     //console.log('res ', res);
-      //     if(res===201){
-      //       //showForm(false);
-      //       showToastMessage('Usuario creado exitosamente!!!');
-      //       setTimeout(() => {
-      //         window.location.reload();
-      //       }, 500);
-      //     }else{
-      //       showToastMessageError(res);
-      //     }
-      //   } catch (error) {
-      //     //console.log('error ', error);
-      //     showToastMessageError('Error al crear usuario!!');
-      //   }
       // }else{
       //   const data = {
       //     name, email, password, confirmpassword, department, rol:role
       //   }
       //   try {
       //     const res = await createUser(data, token);
-      //     //console.log('res ', res);
       //     if(res===201){
-      //       //showForm(false);
       //       showToastMessage('Usuario creado exitosamente!!!');
       //       setTimeout(() => {
       //         window.location.reload();
@@ -142,7 +109,6 @@ export default function NewUser({showForm, departments, token, roles}:
       //       showToastMessageError(res);
       //     }
       //   } catch (error) {
-      //     //console.log('error ', error);
       //     showToastMessageError('Error al crear usuario!!');
       //   }
       // }

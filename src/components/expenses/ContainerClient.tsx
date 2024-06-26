@@ -14,12 +14,12 @@ export default function ContainerClient({data, token, expenses,
                     optProjectFilter, optReportsFilter, idLabour, idTicket, 
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
                     optGlossaries, optProjects, optProviders, optReports, optResponsibles, 
-                    optTypes, projects, reports, user, optVats}:
+                    optTypes, projects, reports, user, optVats, optCostCenterFilter}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
                     optConditionsFilter:Options[], expenses:Expense[], 
                     optReportsFilter:Options[], optProjectFilter:Options[], 
-                    user:string, optCostCenter:Options[],
+                    user:string, optCostCenter:Options[], optCostCenterFilter:Options[],
                     optProviders:Options[], optResponsibles:Options[],
                     optGlossaries:Options[], optProjects:Options[], 
                     optCategories:Options[], optTypes:Options[], 
@@ -53,6 +53,7 @@ export default function ContainerClient({data, token, expenses,
         optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
         optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
         optReports={optReportsFilter} isFilter={isFilter} setIsFilter={setIsFilter}
+        optCostCenterFilter={optCostCenterFilter}
       />
     </div>
   )

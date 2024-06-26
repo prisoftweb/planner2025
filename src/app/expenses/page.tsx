@@ -54,6 +54,10 @@ export default async function Page() {
 
   const optCostCenter:Options[]= [];
   const optCostCenterDeductible:Options[] = [];
+  const optCostCenterFilter:Options[]= [{
+    label: 'TODOS',
+    value: 'all'
+  }];
   costcenters.map((costcenter) => {
     //console.log(costcenter);
     if(costcenter.isnormal){
@@ -65,10 +69,12 @@ export default async function Page() {
       })
     }
     costcenter.categorys.map((category) => {
-      optCostCenter.push({
+      const cat = {
         label: category.name + ' ( ' + costcenter.name + ' ) ',
         value: category._id
-      });
+      }
+      optCostCenter.push(cat);
+      optCostCenterFilter.push(cat);
     })
   });
 
@@ -289,6 +295,18 @@ export default async function Page() {
           currency: "MXN",
           value: expense.cost.subtotal
         })
+    const discount = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.cost.discount || 0
+    })
+    const vat = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.cost.iva || 0
+    })
+    const total = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.cost.total || 0
+    })
     const elements: string[] = [];
     if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
       const typeFiles = getTypeFiles(expense);
@@ -331,6 +349,7 @@ export default async function Page() {
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
+      costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter.name,
       Importe: dollar,
       Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
@@ -340,7 +359,10 @@ export default async function Page() {
         photo: expense.user.photo
       },
       condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
-      archivos: elements
+      archivos: elements,
+      vat,
+      discount,
+      total,
     });
   });
 
@@ -354,7 +376,7 @@ export default async function Page() {
         optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
-        token={token} user={user._id} optVats={optVats} />
+        token={token} user={user._id} optVats={optVats} optCostCenterFilter={optCostCenterFilter} />
       {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Gastos" placeHolder="Buscar gasto.." >
         <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
