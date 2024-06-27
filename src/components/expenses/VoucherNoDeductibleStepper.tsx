@@ -12,7 +12,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
                                     {token:string, user:string, idVat:string}) {
   
   const {updateIndexStepper, updateVoucher, amount, costCenter, date, description, 
-    responsible, report, project, condition, category, reset, updateRefresh} = useNewExpense();
+    responsible, report, project, condition, category, reset, updateRefresh, isCard} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   
@@ -39,6 +39,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
       formdata.append('isticket', JSON.stringify(true));
       formdata.append('project', project);
       formdata.append('category', category);
+      formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('cost', JSON.stringify({
         discount: 0,
         subtotal:amount.replace(/[$,]/g, ""),
@@ -85,7 +86,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
         user:responsible, report, isticket:true, project, category, condition: {
           glossary: condition,
           user
-        }
+        }, iscard:isCard
       }
   
       try {

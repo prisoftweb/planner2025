@@ -37,10 +37,9 @@ export default async function Page() {
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {
+    console.log('page expanses ', error);
     return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
   }
-
-  // console.log('costos => ', expenses);
 
   let costcenters: CostCenter[];
   try {
@@ -59,7 +58,6 @@ export default async function Page() {
     value: 'all'
   }];
   costcenters.map((costcenter) => {
-    //console.log(costcenter);
     if(costcenter.isnormal){
       costcenter.categorys.map((category) => {
         optCostCenterDeductible.push({
@@ -293,22 +291,22 @@ export default async function Page() {
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.cost.subtotal
+          value: expense.cost?.subtotal || 0
         })
     const discount = CurrencyFormatter({
       currency: "MXN",
-      value: expense.cost.discount || 0
+      value: expense.cost?.discount || 0
     })
     const vat = CurrencyFormatter({
       currency: "MXN",
-      value: expense.cost.iva || 0
+      value: expense.cost?.iva || 0
     })
     const total = CurrencyFormatter({
       currency: "MXN",
-      value: expense.cost.total || 0
+      value: expense.cost?.total || 0
     })
     const elements: string[] = [];
-    if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
+    if(expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
       const typeFiles = getTypeFiles(expense);
       if(typeFiles.includes('xml')){
         elements.push('xml');
@@ -322,7 +320,7 @@ export default async function Page() {
         elements.push('none');
       }
     }else{
-      if(expense.category.name.toLowerCase().includes('xml')){
+      if(expense.category?.name.toLowerCase().includes('xml')){
         const typeFiles = getTypeFiles(expense);
         if(typeFiles.includes('xml')){
           elements.push('xml');
@@ -330,7 +328,7 @@ export default async function Page() {
           elements.push('none');
         }
       }else{
-        if(expense.category.name.toLowerCase().includes('pdf')){
+        if(expense.category?.name.toLowerCase().includes('pdf')){
           const typeFiles = getTypeFiles(expense);
           if(typeFiles.includes('pdf')){
             elements.push('pdf');
@@ -349,16 +347,16 @@ export default async function Page() {
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter.name,
+      costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter?.name,
       Importe: dollar,
       Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
-        responsible: expense.user.name,
-        photo: expense.user.photo
+        responsible: expense.user?.name,
+        photo: expense.user?.photo
       },
-      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+      condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
       archivos: elements,
       vat,
       discount,
@@ -377,23 +375,6 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
         token={token} user={user._id} optVats={optVats} optCostCenterFilter={optCostCenterFilter} />
-      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title="Gastos" placeHolder="Buscar gasto.." >
-        <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
-                    optProviders={optProviders} optResponsibles={optResponsibles}
-                    optGlossaries={optGlossaries} optProjects={optProjects} 
-                    optCategories={optCategories} optConditions={optConditions}
-                    optTypes={optTypes} projects={projects} reports={reports}
-                    optReports={optReports} idLabour={labour} idTicket={ticket}
-                    optCostCenterDeductible={optCostCenterDeductible}
-        />
-        </Header>
-        <TableExpenses data={table} token={token} 
-          optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
-          optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
-          optReports={optReportsFilter}
-        />
-      </div> */}
     </>
   )
 }

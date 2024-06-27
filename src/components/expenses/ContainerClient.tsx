@@ -27,6 +27,7 @@ export default function ContainerClient({data, token, expenses,
                     reports:Report[], optReports:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
                     idTicket:string, optVats:Options[]}){
+
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const handleFilter = (value: boolean) => {
     setIsFilter(value);

@@ -76,48 +76,7 @@ export default function UpdateNode({showForm, token, departments, glossaries,
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
-
-    // const fetchNode = async () => {
-    //   try {
-    //     const res: (string | Node) = await getNode(token, id);
-    //     if(typeof(res)==='string'){
-    //       showToastMessageError(res);
-    //       showForm(false);
-    //     }else{
-    //       //let indexDept = 0;
-    //       //let indexGlossary = 0;
-    //       //let indexWorkFlow = 0;
-    //       departments.map((dept, index:number) => {
-    //         if(dept.value === res.department._id) {
-    //           setShowDept(<SelectReact index={index} opts={departments} setValue={handleDepartment} />)
-    //           //indexDept=index;
-    //           setDepartment(res.department._id);
-    //         }
-    //       });
-
-    //       glossaries.map((gloss, index:number) => {
-    //         if(gloss.value === res.glossary._id) {
-    //           setShowConditions(<SelectReact index={index} opts={glossaries} setValue={handleGlossary} />)
-    //           //indexGlossary=index;
-    //           setGlossary(res.glossary._id);
-    //         }
-    //       });
-
-    //       workFlows.map((wf, index:number) => {
-    //         if(wf.value === res.workflow._id) {
-    //           setShowWorkflow(<SelectReact index={index} opts={workFlows} setValue={handleWorkflow} />)
-    //           //indexWorkFlow=index;
-    //           setWorkflow(res.workflow._id);
-    //         }
-    //       });
-    //     }
-    //   } catch (error) {
-    //     showToastMessageError('Ocurrio un error al consultar nodo!!');
-    //     showForm(false);
-    //   }
-    // }
-
-    //fetchNode();
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
   useEffect(() => {

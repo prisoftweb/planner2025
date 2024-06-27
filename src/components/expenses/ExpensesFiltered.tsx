@@ -82,6 +82,7 @@ export default function Filtering({showForm, optCategories, optTypes,
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
+    return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
   useEffect(() => {

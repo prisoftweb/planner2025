@@ -34,8 +34,7 @@ export default function NewStatus({showForm, token, catalogOptions,
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
-    // console.log('useefect');
-    // console.log(heightPage, '   ', window.outerHeight );
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
   const pushStatus = (route: string) => {

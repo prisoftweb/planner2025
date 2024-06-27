@@ -40,6 +40,7 @@ export default function NewNode({showForm, token, departments, glossaries,
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
   const saveNode = async () => {

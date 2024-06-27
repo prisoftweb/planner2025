@@ -22,6 +22,11 @@ interface NewExpenseState {
   refresh: boolean
 }
 
+interface PettyCashState{
+  isPettyCash: boolean,
+  isCard: boolean
+}
+
 interface ProjectState{
   project: string,
   indexStepper: number,
@@ -44,6 +49,8 @@ interface Actions {
   updateReport: (value: string) => void,
   updateCondition: (value:string) => void,
   updateCategory: (value:string) => void,
+  updatePettyCash: (value:boolean) => void,
+  updateIsCard: (value:boolean) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -74,9 +81,15 @@ const projectInitial: ProjectState = {
   isDeductible: true
 }
 
-export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((set) => ({
+const pettyCashInitial: PettyCashState = {
+  isPettyCash: false,
+  isCard: false,
+}
+
+export const useNewExpense = create<NewExpenseState & Actions & ProjectState & PettyCashState>((set) => ({
   ...initialState,
   ...projectInitial,
+  ...pettyCashInitial,
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
       typeCFDI:string, typeExpense:string, category:string, idVat:string) => set(state => ({
@@ -131,6 +144,15 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState>((s
   updateCategory: (value:string) => set(state => ({
     ...state,
     category: value,
+  })),
+  updatePettyCash: (value:boolean) => set(state => ({
+    ...state,
+    isPettyCash: value,
+    isCard: false
+  })),
+  updateIsCard: (value:boolean) => set(state => ({
+    ...state,
+    isCard: value,
   })),
   reset: () => {
     set(initialState)

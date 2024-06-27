@@ -38,6 +38,7 @@ export default function SendReport({send, report, node,
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
+    return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
   const sendReport = async (relation:Relation) => {

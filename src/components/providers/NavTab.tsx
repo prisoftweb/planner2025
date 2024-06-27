@@ -35,6 +35,7 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
     setWidth(window.innerWidth);
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
   
   useEffect(() => {

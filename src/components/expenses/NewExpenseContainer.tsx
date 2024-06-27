@@ -36,17 +36,12 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   const [heightPage, setHeightPage] = useState<number>(900);
   const [optSelectize, setOptSelectize] = useState<Options>();
   
-  // const [stepform, setStepForm] = useState<JSX.Element>(
-  //                         <DataStepper optCostCenter={optCostCenter} 
-  //                           optProviders={optProviders} optResponsibles={optResponsibles}
-  //                           token={token} user={user} optGlossaries={optGlossaries} 
-  //                           optProjects={optProjects} optCategories={optCategories} 
-  //                           optConditions={optConditions} optTypes={optTypes}  />)
   const [stepform, setStepForm] = useState<JSX.Element>(<></>)
-  const [isPettyCash, setIsPettyCash] = useState<boolean>(false);
+  //const [isPettyCash, setIsPettyCash] = useState<boolean>(false);
 
   const {indexStepper, isDeductible, project, updateProject, 
-    report, updateReport, updateIndexStepper, updateCondition} = useNewExpense();
+    report, isPettyCash, updateReport, updateIndexStepper, 
+    updateCondition, updatePettyCash} = useNewExpense();
 
   const idVat = optVats.find((vat) => vat.label === '0')?.value || '';
   
@@ -130,7 +125,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     if(report !== ''){
       const r = reports.find((rep) => rep._id === report);
       
-      setIsPettyCash(r?.ispettycash || false);
+      //setIsPettyCash(r?.ispettycash || false);
+      updatePettyCash(r?.ispettycash || false);
       //console.log('petty ', r);
       updateProject(r?.project._id || '');
       setViewSelectProject(<></>);
@@ -146,6 +142,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     ));
     updateCondition(optConditions[0].value);
     selectProject();
+    return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
   useEffect(() => {
@@ -216,20 +213,6 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
             title="Nuevo gasto"
           />
           {viewSelectProject}
-          {/* <Select
-            className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
-            value={optSelectize}
-            options={optProjects}
-            isDisabled={isPettyCash}
-            maxMenuHeight={250}
-            components={{
-              DropdownIndicator
-            }}
-            placeholder='Buscar ...'
-            styles={customStyles}
-            onChange={(value:any) => updateProject(value.value)}
-          /> */}
-        
         </div>
         <TabDeductible />
         {stepform}

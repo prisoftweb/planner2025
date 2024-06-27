@@ -4,7 +4,6 @@ import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import Button from "../Button";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { RemoveCost } from "@/app/api/routeCost";
@@ -14,10 +13,13 @@ import { GetCosts } from "@/app/api/routeCost";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
-import { GiSettingsKnobs } from "react-icons/gi";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
+import ReportCostByProjects from "../ReportCostByProjects";
+import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
@@ -390,6 +392,14 @@ export default function TableExpenses({data, token, expenses,
 
   return(
     <>
+      {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} >
+        {({loading, url, error, blob}) => 
+          loading? (
+            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+          ) : (
+            <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+          ) }
+      </PDFDownloadLink> */}
       <div className="flex justify-end my-5">
         {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
         {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}

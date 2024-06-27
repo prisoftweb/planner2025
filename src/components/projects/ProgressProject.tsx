@@ -69,15 +69,20 @@ export default function ProgressProject({token, id, project, user}:
       <div className="mt-4 max-w-sm rounded-lg space-y-5">
         <div>
           <Label htmlFor="progress"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Avance</p></Label>
-          <Box sx={{ width: 370 }}>
-          <Slider
-            size="medium"
-            defaultValue={progress}
-            onChange={(e: any) => setProgress(e.target.value)}
-            aria-label="Small"
-            valueLabelDisplay="on"
-          />
-        </Box>
+          <div className="flex gap-x-3 items-center">
+            <Box sx={{ width: 370 }}>
+              <Slider
+                size="medium"
+                defaultValue={progress}
+                onChange={(e: any) => setProgress(e.target.value)}
+                aria-label="Small"
+                min={0}
+                max={100}
+                valueLabelDisplay="auto"
+              />
+            </Box>
+            <p className="text-slate-700 text-lg">{progress}%</p>
+          </div>
         </div>
         <div>
           <Label htmlFor="notes"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Notes</p></Label>
