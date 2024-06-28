@@ -16,7 +16,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
   const {updateIndexStepper, updateVoucher, amount, costCenter, 
     date, description, discount, folio, project, proveedor, report, 
     responsible, taxFolio, typeCFDI, vat, CFDI, condition, category, 
-    idVat, isCard, reset, updateRefresh} = useNewExpense();
+    idVat, isCard, type, reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   
@@ -58,6 +58,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
       formdata.append('isticket', JSON.stringify(false));
       formdata.append('ispaid', JSON.stringify(supplierCredit));
       formdata.append('iscard', JSON.stringify(isCard));
+      formdata.append('type', type);
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -107,7 +108,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
-        }], iscard:isCard
+        }], iscard:isCard, type
       }
   
       try {

@@ -1,4 +1,4 @@
-import { UserBack } from "./User"
+import { UsrBack } from "./User"
 import { Company } from "./Companies"
 import { ClientBack } from "./Clients"
 import { Glossary } from "./Glossary"
@@ -29,7 +29,7 @@ export interface Project {
   photo: string
   haslocation: boolean
   hasguaranteefund: boolean
-  user: UserBack
+  user: UsrBack
   company: Company
   client: ClientBack
   status: boolean

@@ -14,7 +14,7 @@ export default function ButtonNewUser({token, id, departments, roles}:
     <>
       <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
         {newUser && <NewUser showForm={setNewUser} departments={departments} 
-          token={token} roles={roles} />}
+          token={token} roles={roles} addUser={() => console.log('en construccion')} />}
     </>
   )
 }

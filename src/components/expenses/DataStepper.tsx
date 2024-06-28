@@ -64,7 +64,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       const {description, folio, taxFolio, discount, amount, vat} = valores;
       updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, typeExpenseS, categoryS, idVat);
+          typeCFDIS, typeExpenseS, categoryS, idVat, 'PROVEEDOR');
       updateIndexStepper(2);
     },       
   });
@@ -116,7 +116,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, typeExpenseS, categoryS, idVat.replace(/[$,]/g, ""));
+        typeCFDIS, typeExpenseS, categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR');
     
     let supplierCredit: boolean;
     try {
@@ -142,6 +142,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(false));
       formdata.append('iscard', JSON.stringify(isCard));
+      formdata.append('type', 'PROVEEDOR');
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -198,7 +199,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         report, isticket:false, category:categoryS, condition: [{
           glossary: condition,
           user
-        }], iscard:isCard
+        }], iscard:isCard, type:'PROVEEDOR',
       }
   
       try {

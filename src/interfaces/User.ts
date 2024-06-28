@@ -14,17 +14,6 @@ export interface User{
   'department': string
 }
 
-export interface Usr{
-  '_id': string,
-  'photo': string,
-  'name': string,
-  'profile': {
-    'status': boolean,
-    'role': string, 
-  },
-  'email': string
-}
-
 export interface UsrBack{
   "_id": string,
   "name": string,
@@ -39,14 +28,25 @@ export interface UsrBack{
   "rol"? : Role
 }
 
-export interface UserBack {
-  _id: string
-  name: string
-  email: string
-  photo: string
-  department: string
-  rol: string
-  status: boolean
-  createAt: string
-  __v: number
-}
+// export interface Usr{
+//   '_id': string,
+//   'photo': string,
+//   'name': string,
+//   'profile': {
+//     'status': boolean,
+//     'role': string, 
+//   },
+//   'email': string
+// }
+
+// export interface UserBack {
+//   _id: string
+//   name: string
+//   email: string
+//   photo: string
+//   department: string
+//   rol: string
+//   status: boolean
+//   createAt: string
+//   __v: number
+// }

@@ -20,7 +20,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
     vat, voucher, condition, category, idVat, isCard,
-    reset, updateRefresh, updateIndexStepper} = useNewExpense();
+    reset, updateRefresh, updateIndexStepper, type} = useNewExpense();
   
   const validationType = (f: File) => {
     if(!f.type.includes('xml') && !f.type.includes('XML')){
@@ -58,6 +58,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       formdata.append('isticket', JSON.stringify(false));
       formdata.append('ispaid', JSON.stringify(supplierCredit));
       formdata.append('iscard', JSON.stringify(isCard));
+      formdata.append('type', type);
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -113,7 +114,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
-        }], iscard:isCard
+        }], iscard:isCard, type
       }
   
       try {

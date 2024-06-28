@@ -31,28 +31,31 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
     onSubmit: async (valores) => {            
       const {currentPassword, newPassword, confirmNewPassword} = valores;
       
-      const password = {
-        currentPassword,
-        newPassword,
-        confirmNewPassword
-      }
-      console.log('password', password);
-      //validar new password y confirmnewpassword sean iguales
-      
-      //let res = await updateMeUser(id, formData, token);
-      //console.log('res =>', res)
-      let res = await updateMePassword(id, currentPassword, newPassword, confirmNewPassword, token)
-      if(typeof(res) === 'string'){
-        showToastMessageError(res);
+      if(newPassword !== confirmNewPassword){
+        showToastMessageError("La nueva contraseña debe ser igual a su confirmacion!!")
       }else{
-        if(res === 200) {
-          showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-          //router.refresh();
-          setTimeout(() => {
-            logOut();
-          }, 600)
-        } else {
-          showToastMessageError('Error al modificar usuario..');
+        // const password = {
+        //   currentPassword,
+        //   newPassword,
+        //   confirmNewPassword
+        // }
+        //console.log('password', password);
+        //validar new password y confirmnewpassword sean iguales
+        
+        //let res = await updateMeUser(id, formData, token);
+        //console.log('res =>', res)
+        let res = await updateMePassword(id, currentPassword, newPassword, confirmNewPassword, token)
+        if(typeof(res) === 'string'){
+          showToastMessageError(res);
+        }else{
+          if(res === 200) {
+            showToastMessage(`La contraseña ha sido modificada exitosamente!`);            
+            setTimeout(() => {
+              logOut();
+            }, 500)
+          } else {
+            showToastMessageError('Error al modificar contraseña..');
+          }
         }
       }
     },       

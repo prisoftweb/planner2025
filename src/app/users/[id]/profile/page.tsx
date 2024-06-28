@@ -1,13 +1,11 @@
 import TabUser from "@/components/users/TabUsers";
 import NavTab from "@/components/users/NavTab";
 import Navigation from "@/components/navigation/Navigation";
-import Image from "next/image";
 import { getUser, getUsers } from "@/app/api/routeUser";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
-import ArrowReturn from "@/components/ArrowReturn";
 import HeaderImage from "@/components/HeaderImage";
 
 export default async function Page({ params, searchParams }: 
@@ -39,8 +37,7 @@ export default async function Page({ params, searchParams }:
 
   const photo=user.photo
   const name=user.name
-  //const email=user.email
-
+  
   let options: Options[] = [];
   
   users.map((usr: any) => {
@@ -57,22 +54,9 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      <Navigation user={userLog} />
+      {/* <Navigation user={userLog} /> */}
+      <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
-          <div className="flex items-center">
-            <ArrowReturn link="/users" />
-            <Image 
-              src={photo? photo: '/img/default.jpg'}
-              alt="profile"
-              width={50}
-              height={50}
-              className="rounded-full mx-3"
-            />
-            <p className="text-slate-500 mx-3">{name}</p>
-          </div>
-          <Selectize options={options} routePage="users" subpath="profile?opt=1" />
-        </div> */}
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
           <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
         </HeaderImage>

@@ -8,13 +8,14 @@ import { Project } from "@/interfaces/Projects"
 import { Report } from "@/interfaces/Reports"
 import { useState } from "react"
 import { GiSettingsKnobs } from "react-icons/gi"
+import { ReportByProject } from "@/interfaces/ReportsOfCosts"
 
 export default function ContainerClient({data, token, expenses, 
                     optCategoriesFilter, optConditionsFilter, optTypeFilter, 
                     optProjectFilter, optReportsFilter, idLabour, idTicket, 
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
                     optGlossaries, optProjects, optProviders, optReports, optResponsibles, 
-                    optTypes, projects, reports, user, optVats, optCostCenterFilter}:
+                    optTypes, projects, reports, user, optVats, optCostCenterFilter, reportProjects}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
                     optConditionsFilter:Options[], expenses:Expense[], 
@@ -26,7 +27,7 @@ export default function ContainerClient({data, token, expenses,
                     optConditions:Options[], projects:Project[], 
                     reports:Report[], optReports:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
-                    idTicket:string, optVats:Options[]}){
+                    idTicket:string, optVats:Options[], reportProjects: ReportByProject[]}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const handleFilter = (value: boolean) => {
@@ -54,7 +55,7 @@ export default function ContainerClient({data, token, expenses,
         optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
         optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
         optReports={optReportsFilter} isFilter={isFilter} setIsFilter={setIsFilter}
-        optCostCenterFilter={optCostCenterFilter}
+        optCostCenterFilter={optCostCenterFilter} reportsProjects={reportProjects}
       />
     </div>
   )

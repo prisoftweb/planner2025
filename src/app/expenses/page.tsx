@@ -15,7 +15,7 @@ import { getProjects } from "../api/routeProjects";
 import { Project } from "@/interfaces/Projects";
 import { ExpensesTable, Expense, Vat } from "@/interfaces/Expenses";
 //import TableExpenses from "@/components/expenses/TableExpenses";
-import { GetCosts, GetVats } from "../api/routeCost";
+import { GetCosts, GetVats, GetCostsGroupByProject } from "../api/routeCost";
 //import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
@@ -24,6 +24,7 @@ import { GetReports, getReportsByUser } from "../api/routeReports";
 import { Report } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { getTypeFiles } from "../functions/CostsFunctions";
+import { ReportByProject } from "@/interfaces/ReportsOfCosts";
 
 export default async function Page() {
   
@@ -364,6 +365,17 @@ export default async function Page() {
     });
   });
 
+  let reportsProject: ReportByProject[];
+  try {
+    reportsProject = await GetCostsGroupByProject(token);
+    //console.log('reports projects page => ', reportsProject);
+    if(typeof(reportsProject)==='string'){
+      return <h1>Error al consultar costos por proyecto!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por proyecto!!</h1>
+  }
+
   return(
     <>
       <Navigation user={user} />
@@ -374,7 +386,9 @@ export default async function Page() {
         optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
-        token={token} user={user._id} optVats={optVats} optCostCenterFilter={optCostCenterFilter} />
+        token={token} user={user._id} optVats={optVats} optCostCenterFilter={optCostCenterFilter} 
+          reportProjects={reportsProject}
+        />
     </>
   )
 }
