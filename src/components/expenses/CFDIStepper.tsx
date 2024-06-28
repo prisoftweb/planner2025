@@ -19,7 +19,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
-    vat, voucher, condition, category, idVat,
+    vat, voucher, condition, category, idVat, isCard,
     reset, updateRefresh, updateIndexStepper} = useNewExpense();
   
   const validationType = (f: File) => {
@@ -57,6 +57,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       formdata.append('category', category);
       formdata.append('isticket', JSON.stringify(false));
       formdata.append('ispaid', JSON.stringify(supplierCredit));
+      formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -112,7 +113,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
-        }],
+        }], iscard:isCard
       }
   
       try {

@@ -41,6 +41,7 @@ export default function NewReport({showForm, token, companies,
 
     const d = year+'-'+month+'-'+day;
     setStartDate(d);
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
   
   const handleProject = (value:string) => {

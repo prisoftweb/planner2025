@@ -24,6 +24,7 @@ export default function NewWorkFlow({showForm, token, workFlow}:
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
   const formik = useFormik({

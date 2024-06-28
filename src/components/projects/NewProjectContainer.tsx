@@ -23,8 +23,7 @@ export default function NewProjectContainer({token, showForm, optClients,
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 110);
-    //console.log('useefect');
-    //console.log(heightPage, '   ', window.outerHeight );
+    return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
   const closeForm = () => {

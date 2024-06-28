@@ -9,6 +9,7 @@ import ExtraData from "./ExtraData"
 import Address from "./Address"
 import GuaranteeProject from "./GuaranteeProject"
 import ProfileProject from "./ProfileProject"
+import ProgressProject from "./ProgressProject"
 
 export default function ProjectCli({project, token, id, optCategories, optClients, 
                              optTypes, optConditions, user}: 
@@ -45,11 +46,16 @@ export default function ProjectCli({project, token, id, optCategories, optClient
           (opt===4? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                               style={{borderColor:'#F8FAFC'}}>
                         <GuaranteeProject id={id} token={token} project={project} />
-                      </div>):  setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
-                                          style={{borderColor:'#F8FAFC'}}>
-                                    <DataBasic token={token} id={id} project={project} 
-                                      optConditions={optConditions} user={user} />
-                                </div>)) ))
+                      </div>):  
+            (opt === 5? setView( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                                    style={{borderColor:'#F8FAFC'}}>
+                                      <ProgressProject id={id} project={project} token={token} user={user} />                                  
+                                </div> ) : 
+                    setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+                                style={{borderColor:'#F8FAFC'}}>
+                          <DataBasic token={token} id={id} project={project} 
+                            optConditions={optConditions} user={user} />
+                      </div>)) )))
   }, [opt, ])
   
   const [open, setOpen] = useState<boolean>(false);

@@ -28,6 +28,7 @@ export default function NewCompany({showForm, token}:
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
+    return () => window.removeEventListener('scroll', handleResize);
     // console.log('useefect');
     // console.log(heightPage, '   ', window.outerHeight );
   }, [])

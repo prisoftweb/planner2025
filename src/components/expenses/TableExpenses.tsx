@@ -4,7 +4,6 @@ import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import Button from "../Button";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { RemoveCost } from "@/app/api/routeCost";
@@ -14,19 +13,24 @@ import { GetCosts } from "@/app/api/routeCost";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
-import { GiSettingsKnobs } from "react-icons/gi";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
+import ReportCostByProjects from "../ReportCostByProjects";
+import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
-                            optProjects, optReports, isFilter, setIsFilter}:
+                            optProjects, optReports, isFilter, setIsFilter, 
+                          optCostCenterFilter}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
-                        isFilter:boolean, setIsFilter:Function }){
+                        isFilter:boolean, setIsFilter:Function, 
+                        optCostCenterFilter:Options[], }){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -95,6 +99,15 @@ export default function TableExpenses({data, token, expenses,
         </Link>
       )
     }),
+    columnHelper.accessor('costcenter', {
+      header: 'Centro de costos',
+      id: 'Centro de costos',
+      cell: ({row}) => (
+        <Link href={`/expenses/${row.original.id}/profile`}>
+          <p className="py-2 font-semibold">{row.original.costcenter}</p>
+        </Link>
+      )
+    }),
     columnHelper.accessor('Descripcion', {
       header: 'Descripcion',
       id: 'descripcion',
@@ -140,10 +153,53 @@ export default function TableExpenses({data, token, expenses,
         </Link>
       ),
     }),
+    columnHelper.accessor('vat', {
+      header: 'IVA',
+      id: 'iva',
+      cell: ({row}) => (
+        <Link href={`/expenses/${row.original.id}/profile`}>
+          <p className="">{row.original.vat}</p>
+        </Link>
+      ),
+    }),
+    columnHelper.accessor('discount', {
+      header: 'Descuento',
+      id: 'descuento',
+      cell: ({row}) => (
+        <Link href={`/expenses/${row.original.id}/profile`}>
+          <p className="">{row.original.discount}</p>
+        </Link>
+      ),
+    }),
+    columnHelper.accessor('total', {
+      header: 'Total',
+      id: 'total',
+      cell: ({row}) => (
+        <Link href={`/expenses/${row.original.id}/profile`}>
+          <p className="">{row.original.total}</p>
+        </Link>
+      ),
+    }),
   ]
   
+  const initialVisibilityColumns: any = {
+    seleccion: true,
+    Responsable: true, 
+    Proyecto: true, 
+    Informe: true, 
+    "Centro de costos": true, 
+    descripcion: true, 
+    proveedor: true, 
+    estatus: true, 
+    fecha: true, 
+    importe: true,
+    iva: false,
+    descuento: false,
+    total: false,
+  }
+
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} 
-                placeH="Buscar gasto.." typeTable='cost' />);
+                placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
   const [maxAmount, setMaxAmount] = useState<number>(0);
   
   useEffect(() => {
@@ -166,7 +222,7 @@ export default function TableExpenses({data, token, expenses,
             setView(<></>);
             setTimeout(() => {
               setView(<Table columns={columns} data={d} 
-                    placeH="Buscar gasto.." typeTable='cost' />);
+                    placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
             }, 500);
           }else{
             showToastMessageError(res);
@@ -187,7 +243,7 @@ export default function TableExpenses({data, token, expenses,
       setTimeout(() => {
         // const total = da
         setView(<Table columns={columns} data={dataExpenses} 
-          placeH="Buscar gasto.." typeTable='cost' />);
+          placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
       }, 100);
       setFilter(false);
     }
@@ -210,14 +266,37 @@ export default function TableExpenses({data, token, expenses,
     return false;
   }
 
-  const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                      startDate:number, endDate:number, projects:string[]) => {
-    if(projects.includes('all')){
+  const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                      startDate:number, endDate:number, costcenters:string[]) => {
+    if(costcenters.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+    }else{
+      if(exp.costcenter){
+        if(typeof(exp.costcenter)==='string'){
+          if(costcenters.includes(exp.costcenter)){
+            return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          }
+        }else{
+          if(exp.costcenter.categorys.every((cat) => costcenters.includes(cat._id))){
+            return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                      startDate:number, endDate:number, projects:string[], 
+                      costcenters:string[]) => {
+    if(projects.includes('all')){
+      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+      return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters);
     }else{
       if(exp.project){
         if(projects.includes(exp.project._id)){
-          return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters);
+          //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
         }
       }
     }
@@ -225,13 +304,14 @@ export default function TableExpenses({data, token, expenses,
   }
 
   const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-              startDate:number, endDate:number, projects:string[], reports:string[]) => {
+              startDate:number, endDate:number, projects:string[], 
+              reports:string[], costcenters: string[]) => {
     if(reports.includes('all')){
-      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects); 
+      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters); 
     }else{
       if(exp.report){
         if(reports.includes(exp.report._id)){
-          return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
+          return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters);
         }
       }
     }
@@ -240,14 +320,14 @@ export default function TableExpenses({data, token, expenses,
 
   const categoriesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                 startDate:number, endDate:number, projects:string[], 
-                reports:string[], categories:string[]) => {
+                reports:string[], categories:string[], costcenters: string[]) => {
     
     if(categories.includes('all')){
-      return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports);
+      return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, costcenters);
     }else{
       if(exp.category){
         if(categories.includes(exp.category._id)){
-          return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports);
+          return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, costcenters);
         }
       }
     }
@@ -256,14 +336,17 @@ export default function TableExpenses({data, token, expenses,
 
   const typesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
-                  reports:string[], categories:string[], types:string[]) => {
+                  reports:string[], categories:string[], types:string[], 
+                  costcenters:string[]) => {
     
     if(types.includes('all')){
-      return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories);
+      return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, 
+                projects, reports, categories, costcenters);
     }else{
       if(exp.typeCFDI){
         if(types.includes(exp.typeCFDI._id)){
-          return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories);
+          return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, 
+                    projects, reports, categories, costcenters);
         }
       }
     }
@@ -272,13 +355,16 @@ export default function TableExpenses({data, token, expenses,
 
   const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
-                  reports:string[], categories:string[], types:string[], conditions:string[]) => {
+                  reports:string[], categories:string[], types:string[], 
+                  conditions:string[], costcenters: string[]) => {
 
     if(conditions.includes('all')){
-      return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories, types);
+      return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
+                reports, categories, types, costcenters);
     }else{
       if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-        return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, categories, types);
+        return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
+                    reports, categories, types, costcenters);
       }
     }
     return false;
@@ -286,21 +372,13 @@ export default function TableExpenses({data, token, expenses,
 
   const filterData = (conditions:string[], types:string[], 
     categories:string[], minAmount:number, maxAmount:number, 
-    reports:string[], projects:string[], startDate:number, endDate:number) => {
+    reports:string[], projects:string[], startDate:number, 
+    endDate:number, costcenters:string[]) => {
   
-    // console.log('filtrar');
-    // console.log('conditions', conditions);
-    // console.log('types ', types);
-    // console.log('categories ', categories);
-    // console.log('startdate ', startDate);
-    // console.log('endDate ', endDate);
-    // console.log('min amount ', minAmount);
-    // console.log('max amount ', maxAmount);
-    
     let filtered: Expense[] = [];
     expenses.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
-          endDate, projects, reports, categories, types, conditions)){
+          endDate, projects, reports, categories, types, conditions, costcenters)){
         filtered.push(expense);
       }
     });
@@ -314,6 +392,14 @@ export default function TableExpenses({data, token, expenses,
 
   return(
     <>
+      {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} >
+        {({loading, url, error, blob}) => 
+          loading? (
+            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+          ) : (
+            <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+          ) }
+      </PDFDownloadLink> */}
       <div className="flex justify-end my-5">
         {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
         {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
@@ -322,7 +408,8 @@ export default function TableExpenses({data, token, expenses,
           {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} 
-                          optProjects={optProjects} optReports={optReports} />}
+                          optProjects={optProjects} optReports={optReports}
+                          optCostCenterFilter={optCostCenterFilter} />}
       </div>
       {view}
     </>

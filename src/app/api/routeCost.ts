@@ -12,8 +12,10 @@ export async function GetCosts(auth_token:string){
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
+      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
+    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }

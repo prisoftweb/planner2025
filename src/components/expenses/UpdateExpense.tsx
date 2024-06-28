@@ -75,7 +75,7 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   useEffect(() => {
     let indexCC = 0;
     if(expense.costcenter){
-      console.log('expense cc ', expense.costcenter);
+      //console.log('expense cc ', expense.costcenter);
       optCostCenter.map((optCC, index:number) => {
         if(typeof(expense.costcenter)==='string'){
           if(optCC.value===expense.costcenter){

@@ -23,6 +23,7 @@ export default function NewCatalog({showForm, token, catalog}:
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
+    return () => window.removeEventListener('scroll', handleResize);
     // console.log('useefect');
     // console.log(heightPage, '   ', window.outerHeight );
   }, [])

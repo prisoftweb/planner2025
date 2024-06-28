@@ -20,6 +20,10 @@ export interface ExpensesTable {
   Importe: string
   condition: string,
   archivos: string[],
+  costcenter: string,
+  vat: string,
+  discount: string,
+  total: string
 }
 
 export interface Expense {
@@ -27,8 +31,6 @@ export interface Expense {
   _id: string
   folio: string
   taxfolio: string
-  //subtotal: number
-  //discount: number
   description: string
   date: string
   taxapply: boolean

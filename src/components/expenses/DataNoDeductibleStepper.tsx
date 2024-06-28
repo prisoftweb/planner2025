@@ -26,7 +26,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, project, condition, category, 
-    reset, updateRefresh, updateCategory} = useNewExpense();
+    reset, updateRefresh, updateCategory, isCard, isPettyCash, updateIsCard} = useNewExpense();
 
   const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
 
@@ -100,6 +100,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       formdata.append('isticket', JSON.stringify(true));
       formdata.append('project', project);
       formdata.append('category', categoryS);
+      formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('cost', JSON.stringify({
         discount: 0,
         subtotal:amount.replace(/[$,]/g, ""),
@@ -149,7 +150,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
           glossary: condition,
           user
-        }]
+        }], iscard:isCard
       }
   
       try {
@@ -210,11 +211,11 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     const cc = optCostCenter.find((costC) => costC.value === value);
     if(cc){
       if(cc.label.toLowerCase().includes('mano de obra')){
-        console.log('idlabour ');
+        //console.log('idlabour ');
         setCategoryS(idLabour);
         updateCategory(idLabour);
       }else{
-        console.log('id ticket ');
+        //console.log('id ticket ');
         setCategoryS(idTicket);
         updateCategory(idTicket);
       }
@@ -300,6 +301,27 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       <div className="mt-2">
         <NavExpenseNoDeductibleStepper index={1} />
       </div>
+      {isPettyCash && (
+        <div className="flex justify-end my-5 pr-3">
+          <div className="inline-flex items-center justify-end">
+            <Label>Tarjeta</Label>
+            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+              <input checked={isCard} 
+                onClick={() => updateIsCard(!isCard)} id="switch-3" type="checkbox"
+                onChange={() => console.log('')}
+                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                  peer-checked:border-green-500 peer-checked:before:bg-green-500
+                  border border-slate-300" />
+              <label htmlFor="switch-3"
+                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                  data-ripple-dark="true"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      )}
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-3">
           {viewCC}

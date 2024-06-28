@@ -65,6 +65,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
       }
       getCostC();
     }
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
   const pushConcept = (concept: string, account:string) => {

@@ -20,6 +20,7 @@ export default function NewClientContainer({token, id, showForm, tags}:
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 110);
+    return () => window.removeEventListener('scroll', handleResize);
     //console.log('useefect');
     //console.log(heightPage, '   ', window.outerHeight );
   }, []);

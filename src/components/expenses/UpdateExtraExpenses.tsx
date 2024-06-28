@@ -59,9 +59,20 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
     let indexResponsible = 0;
     if(expense.costcenter){
       optCostCenter.map((optCC, index:number) => {
-        if(optCC.value===expense.costcenter){
-          setCostCenter(optCostCenter[index].value);
-          indexCC = index;
+        // if(optCC.value===expense.costcenter){
+        //   setCostCenter(optCostCenter[index].value);
+        //   indexCC = index;
+        // }
+        if(typeof(expense.costcenter)==='string'){
+          if(optCC.value===expense.costcenter){
+            setCostCenter(optCostCenter[index].value);
+            indexCC = index;
+          }
+        }else{
+          if(optCC.value===expense.costcenter.categorys[0]._id){
+            setCostCenter(optCostCenter[index].value);
+            indexCC = index;
+          }
         }
       });
     }

@@ -32,20 +32,13 @@ export default function AddProvider({token, setShowForm, addProv}:
   }
 
   useEffect(() => {
-    // console.log('hei => ', window.outerHeight);
-    // console.log('hei body => ', document.body.offsetHeight);
     window.addEventListener("resize", handleResize, false);
-    // setHeightPage(document.body.offsetHeight - 110);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
-    // console.log('new val => ', Math.max(
-    //   document.body.scrollHeight, document.documentElement.scrollHeight,
-    //   document.body.offsetHeight, document.documentElement.offsetHeight,
-    //   document.body.clientHeight, document.documentElement.clientHeight
-    // ));
+    return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
   const ref = useOutsideClick(() => {

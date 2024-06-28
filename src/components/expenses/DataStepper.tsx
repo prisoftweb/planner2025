@@ -33,8 +33,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 
     folio, project, proveedor, responsible, taxFolio, 
-    typeCFDI, typeExpense, vat, reset, updateRefresh, 
-    report, condition, category} = useNewExpense();
+    typeCFDI, vat, reset, updateRefresh, isCard, 
+    report, condition, category, isPettyCash, 
+    updateIsCard} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -75,7 +76,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   if(day.length ===1) day = '0'+day;
 
   const d = year+'-'+month+'-'+day;
-
+  
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
   const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
@@ -97,13 +98,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [viewAmount, setViewAmount] = useState<JSX.Element>(<CurrencyInput
     id="amount"
     name="amount"
-    // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-    //   focus:border-slate-700 outline-0"
     className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
       focus:border-slate-700 outline-0"
     onChange={formik.handleChange}
     onBlur={formik.handleChange}
-    //defaultValue={0}
     defaultValue={amount}
     decimalsLimit={2}
     prefix="$"
@@ -143,6 +141,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       //formdata.append('vat', vat);
       formdata.append('report', report);
       formdata.append('isticket', JSON.stringify(false));
+      formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -152,8 +151,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         subtotal:amount.replace(/[$,]/g, ""),
         iva:vat.replace(/[$,]/g, ""),
         vat: idVat, 
-        // vatvalue: number no se usa 
-        // total: number no se usa 
       }));
       if(voucher){
         formdata.append('files', voucher);
@@ -194,16 +191,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           discount: discount.replace(/[$,]/g, ""),
           subtotal:amount.replace(/[$,]/g, ""),
           iva:vat.replace(/[$,]/g, ""),
-          vat: idVat,
-          // vatvalue: number no se usa 
-          // total: number no se usa 
+          vat: idVat, isCard
         },
         folio, provider, user:responsibleS, 
         taxfolio:taxFolio, typeCFDI: typeCFDIS, project, ispaid:supplierCredit,
         report, isticket:false, category:categoryS, condition: [{
           glossary: condition,
           user
-        }]
+        }], iscard:isCard
       }
   
       try {
@@ -246,18 +241,17 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [indexProv, setIndexProv] = useState<number>(0);
 
   useEffect(() => {
-    setSelectProviders(<></>);
+    //setSelectProviders(<></>);
     setTimeout(() => {
-      //console.log('index prov ', indexProv);
       setSelectProviders(
-        <div>
-          <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-          <div className="flex gap-x-2 items-center">
-            <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
-            <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-              onClick={() => setShowProvider(true)} />
-          </div>
-        </div>
+        () => <div>
+                <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+                <div className="flex gap-x-2 items-center">
+                  <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
+                  <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+                    onClick={() => setShowProvider(true)} />
+                </div>
+              </div>
       )
     }, 100);
   }, [indexProv]);
@@ -274,15 +268,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     if(date !== ''){
       setStartDate(date);
     }
-
-    // let indexTypeExpense = 0;
-    // if(typeExpenseS !== ''){
-    //   optTypes.map((opt, index:number) => {
-    //     if(opt.value === typeExpense){
-    //       indexTypeExpense = index;
-    //     }
-    //   });      
-    // }
 
     let indexTypeCFDI = 0;
     if(typeCFDIS !== ''){
@@ -319,8 +304,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('index provider = ', indexProvider);
-      //setIndexProv(indexProvider);
 
     setView(<></>);
     setViewCC(<></>);
@@ -344,10 +327,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>)
       
       setView(<>
-        {/* <div>
-          <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
-          <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
-        </div> */}
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
@@ -380,15 +359,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         setStartDate(date);
       }
       
-      // let indexTypeExpense = 0;
-      // if(typeExpenseS !== ''){
-      //   optTypes.map((opt, index:number) => {
-      //     if(opt.value === typeExpense){
-      //       indexTypeExpense = index;
-      //     }
-      //   });      
-      // }
-      
       let indexTypeCFDI = 0;
       if(typeCFDIS !== ''){
         optTypes.map((opt, index:number) => {
@@ -406,19 +376,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           }
         });      
       }
-      //console.log('index provider = ', indexProvider);
       setIndexProv(indexProvider);
-      // setSelectProviders(
-      //   <div>
-      //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-      //     <div className="flex gap-x-2 items-center">
-      //       <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
-      //       <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-      //         onClick={() => setShowProvider(true)} />
-      //     </div>
-      //   </div>
-      // )
-
+      
       let indexResp = 0;
       if(responsibleS !== ''){
         optResponsibles.map((opt, index:number) => {
@@ -443,10 +402,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             </div>)
 
       setView(<>
-        {/* <div>
-          <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
-          <SelectReact index={indexTypeExpense} opts={optTypes} setValue={setTypeExpenseS} />
-        </div> */}
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
@@ -465,11 +420,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   }, [resetBand]);
 
   useEffect(() => {
-    //console.log('CFDI ', typeCFDIS);
     if(typeCFDIS !== ''){
       const found = optTypes.find((type) => type.value === typeCFDIS);
       if(found){
-        //console.log({found});
         if(found.label.toLowerCase().includes('egreso')){
           setViewAmount(<></>);
           setTimeout(() => {
@@ -534,13 +487,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         setViewAmount(<CurrencyInput
           id="amount"
           name="amount"
-          // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-          //   focus:border-slate-700 outline-0"
           className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
             focus:border-slate-700 outline-0"
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
-          //defaultValue={0}
           defaultValue={amount}
           decimalsLimit={2}
           prefix="$"
@@ -557,19 +507,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   useEffect(() => {
     try {
-      console.log('id vat => ', idVat);
       const foundVat = optVats.find((vat) => vat.value === idVat);
-      console.log('found vat => ', foundVat);
       const vatvalue = foundVat?.label || '0';
-      console.log('vat value =>', vatvalue);
       const operation = 
         (Number(formik.values.amount.replace(/[$,]/g, "")) - 
           Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-      console.log('operation => ', operation)
       formik.values.vat = operation.toString();
       setVatValue(operation.toString());
     } catch (error) {
-      console.log(error);
       formik.values.vat = '0';
     }
   }, [formik.values.amount, formik.values.discount, idVat]);
@@ -584,6 +529,27 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <NavExpenseStepper index={1} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg">
+        {isPettyCash && (
+          <div className="flex justify-end my-5 pr-3">
+            <div className="inline-flex items-center">
+              <Label>Tarjeta</Label>  
+              <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                <input checked={isCard} 
+                  onClick={() => updateIsCard(!isCard)} id="switch-3" type="checkbox"
+                  onChange={() => console.log('')}
+                  className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                    appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                    peer-checked:border-green-500 peer-checked:before:bg-green-500
+                    border border-slate-300" />
+                <label htmlFor="switch-3"
+                  className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                  <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                    data-ripple-dark="true"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-5">
           {viewCC}
           <div>
@@ -656,11 +622,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <div>
             <Label htmlFor="vat">Iva</Label>
             <div className="flex gap-x-3">
-              {/* <Input type="text" name="vat" 
-                value={formik.values.vat}
-                onChange={formik.handleChange}
-                onBlur={formik.handleChange}
-              /> */}
               <CurrencyInput
                 id="vat"
                 name="vat"
@@ -668,11 +629,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                   focus:border-slate-700 outline-0"
                 onChange={formik.handleChange}
                 onBlur={formik.handleChange}
-                //defaultValue={0}
-                //defaultValue={formik.values.vat}
                 decimalsLimit={2}
                 value={vatValue}
-                //value={formik.values.vat}
                 prefix="$"
                 onValueChange={(value) => {try {
                   formik.values.vat=value || '0';
@@ -695,13 +653,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
-            {/* <input 
-              className="w-full h-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                focus:border-slate-700 outline-0"
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-            /> */}
           </div>
           {view}
           <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
@@ -714,8 +665,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <div className="mt-5">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            // focus:border-slate-700 outline-0 overflow-hidden resize-none"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
             focus:border-slate-700 outline-0 overflow-hidden resize-none"
             rows={4} 

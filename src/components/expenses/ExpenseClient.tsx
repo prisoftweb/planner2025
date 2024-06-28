@@ -36,7 +36,7 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
   const [opt, setOpt] = useState<number>(1);
   
   useEffect(() => {
-    console.log('expensee ', expense );
+    //console.log('expensee ', expense );
     opt===1? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
                   <div className=" max-w-lg">

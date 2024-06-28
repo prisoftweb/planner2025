@@ -41,6 +41,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
         }
       })
     }
+    return () => window.removeEventListener('scroll', handleResize);
   }, [])
   
   // useEffect(() => {

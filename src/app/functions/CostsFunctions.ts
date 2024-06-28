@@ -10,6 +10,18 @@ export function ExpenseDataToTableData(expenses:Expense[]){
           currency: "MXN",
           value: expense.cost.subtotal
         });
+    const discount = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.cost.discount || 0
+    });
+    const vat = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.cost.iva || 0
+    });
+    const total = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.cost.total || 0
+    });
     const elements: string[] = [];
     if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
       const typeFiles = getTypeFiles(expense);
@@ -51,6 +63,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
+      costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter.name,
       Importe: dollar,
       Informe: expense.report?.name || 'sin informe',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
@@ -60,7 +73,10 @@ export function ExpenseDataToTableData(expenses:Expense[]){
         photo: expense.user.photo
       },
       condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
-      archivos: elements
+      archivos: elements,
+      vat, 
+      discount, 
+      total
     })
   });
 

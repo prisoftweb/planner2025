@@ -24,14 +24,17 @@ export async function createUserPhoto(user:FormData, auth_token:string){
 }
 
 export async function createUser(user:any, auth_token:string){
-  const url=`${process.env.NEXT_PUBLIC_API_URL}/users`;
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
   try {
+    console.log(url);
+    console.log(JSON.stringify(user));
     const res = await axios.post(url, JSON.stringify(user), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     })
+    console.log(res);
     if(res.status === 201){
       return res.status;
     }else{
