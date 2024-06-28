@@ -16,22 +16,18 @@ import { Options } from "@/interfaces/Common";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-import { PDFDownloadLink } from "@react-pdf/renderer";
 
-import ReportCostByProjects from "../ReportCostByProjects";
-import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
-import { ReportByProject } from "@/interfaces/ReportsOfCosts";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
                             optProjects, optReports, isFilter, setIsFilter, 
-                          optCostCenterFilter, reportsProjects}:
+                          optCostCenterFilter}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
                         isFilter:boolean, setIsFilter:Function, 
-                        optCostCenterFilter:Options[], reportsProjects:ReportByProject[] }){
+                        optCostCenterFilter:Options[]}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -391,35 +387,8 @@ export default function TableExpenses({data, token, expenses,
     setFilter(true);
   }
 
-  //const [reportsProject, setReportProjects] = useState<ReportByProject[]>([]);
-
-  // useEffect(() => {
-  //   try {
-  //     const res = async() => {
-  //       const res2 = await GetCostsGroupByProject(token);
-  //       if(typeof(res2)!== 'string'){
-  //         setReportProjects(res2);
-  //       }else{
-  //         setReportProjects([]);
-  //       }
-  //     };
-  //     res();
-  //   } catch (error) {
-  //     setReportProjects([]);
-  //   }
-  // }, []);
-
   return(
     <>
-      {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} > */}
-      <PDFDownloadLink document={<ReportCostByProjects reports={reportsProjects} />} fileName={`InformeObras`} >
-        {({loading, url, error, blob}) => 
-          loading? (
-            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-          ) : (
-            <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-          ) }
-      </PDFDownloadLink>
       <div className="flex justify-end my-5">
         {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
         {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}

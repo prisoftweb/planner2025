@@ -213,7 +213,7 @@ export async function updateUser(data:any, auth_token:string, id:string) {
       }
     })
     console.log(res);
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
       return res.statusText;
   } catch (error) {
     console.log(error);
