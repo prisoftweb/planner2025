@@ -15,7 +15,7 @@ import { getProjects } from "../api/routeProjects";
 import { Project } from "@/interfaces/Projects";
 import { ExpensesTable, Expense, Vat } from "@/interfaces/Expenses";
 //import TableExpenses from "@/components/expenses/TableExpenses";
-import { GetCosts, GetVats, GetCostsGroupByProject } from "../api/routeCost";
+import { GetCosts, GetVats, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
 //import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
@@ -24,7 +24,7 @@ import { GetReports, getReportsByUser } from "../api/routeReports";
 import { Report } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { getTypeFiles } from "../functions/CostsFunctions";
-import { ReportByProject } from "@/interfaces/ReportsOfCosts";
+import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
 
 export default async function Page() {
   
@@ -376,6 +376,17 @@ export default async function Page() {
     return <h1>Error al consultar costos por proyecto!!</h1>
   }
 
+  let costTypes: CostGroupByType[];
+  try {
+    costTypes = await GetCostsGroupByType(token);
+    //console.log('reports projects page => ', costTypes);
+    if(typeof(costTypes)==='string'){
+      return <h1>Error al consultar costos por tipo!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por tipo!!</h1>
+  }
+
   return(
     <>
       <Navigation user={user} />
@@ -387,7 +398,7 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
         token={token} user={user._id} optVats={optVats} optCostCenterFilter={optCostCenterFilter} 
-          reportProjects={reportsProject}
+          reportProjects={reportsProject} costsTypes={costTypes}
         />
     </>
   )

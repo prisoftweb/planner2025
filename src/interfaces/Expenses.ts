@@ -52,6 +52,7 @@ export interface Expense {
   //report: string
   report: Report
   isticket: boolean
+  iscard: boolean
 }
 
 export interface File {

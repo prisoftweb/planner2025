@@ -81,14 +81,15 @@ export async function GetCost(auth_token:string, id:string) {
 export async function UpdateCost(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/${id}`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(data));
+    //console.log(url);
+    //console.log(JSON.stringify(data));
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       }
     });
+    //console.log(res);
     if(res.status===200) return res.status;
     res.statusText;
   } catch (error) {
@@ -197,5 +198,28 @@ export async function GetCostsGroupByProject(auth_token:string) {
       return error.response?.data.message || 'Error al consultar costos por proyecto!!';
     }
     return 'Error al consultar costos por proyecto!!';
+  }
+}
+
+export async function GetCostsGroupByType(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByTYPE`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      //console.log('res route cost => ', res.data.data.resok);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por tipo!!';
+    }
+    return 'Error al consultar costos por tipo!!';
   }
 }
