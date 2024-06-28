@@ -34,7 +34,7 @@ export default function Table({data, columns, placeH, typeTable='', initialColum
   // }
   
   //const [columnVisibility, setColumnVisibility] = useState(aux);
-  console.log(JSON.stringify(initialColumns));
+  //console.log(JSON.stringify(initialColumns));
   const [columnVisibility, setColumnVisibility] = useState(initialColumns);
 
   const {search} = useTableStates();

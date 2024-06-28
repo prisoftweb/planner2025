@@ -43,9 +43,14 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }),
     onSubmit: async (valores) => {            
       const {description, amount} = valores;
+      let type = 'OTROS';
+      const cc = optCostCenter.find((costc) => costc.value === costCenter);
+      if(cc?.label.toLowerCase().includes('mano de obra')){
+        type = 'MANO DE OBRA';
+      }
       updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
-          '', '', categoryS, '');
+          '', '', categoryS, '', type);
       updateIndexStepper(2);
     },       
   });
@@ -85,9 +90,14 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
                                           />);
   
   const SaveData = async() => {
+    let type = 'OTROS';
+    const cc = optCostCenter.find((costc) => costc.value === costCenter);
+    if(cc?.label.toLowerCase().includes('mano de obra')){
+      type = 'MANO DE OBRA';
+    }
     const {description, amount} = formik.values
     updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', categoryS, '');
+        startDate, '', '', '', '', '', '', '', categoryS, '', type);
     
     if(voucher){
       const formdata = new FormData();
@@ -101,6 +111,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       formdata.append('project', project);
       formdata.append('category', categoryS);
       formdata.append('iscard', JSON.stringify(isCard));
+      formdata.append('type', type);
       formdata.append('cost', JSON.stringify({
         discount: 0,
         subtotal:amount.replace(/[$,]/g, ""),
@@ -150,7 +161,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
           glossary: condition,
           user
-        }], iscard:isCard
+        }], iscard:isCard, type
       }
   
       try {

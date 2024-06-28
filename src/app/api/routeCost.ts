@@ -176,3 +176,26 @@ export async function GetVats(auth_token:string){
     return 'Error al consultar ivas!!';
   }
 }
+
+export async function GetCostsGroupByProject(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByProject`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      //console.log('res route cost => ', res.data.data.resok);
+      return res.data.data.resok;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por proyecto!!';
+    }
+    return 'Error al consultar costos por proyecto!!';
+  }
+}

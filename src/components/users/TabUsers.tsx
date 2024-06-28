@@ -5,13 +5,15 @@ import { getDepartments } from "@/app/api/routeDepartments";
 import { getRoles } from "@/app/api/routeRoles";
 import { Role } from "@/interfaces/Roles";
 import { Options } from "@/interfaces/Common";
+import { Department } from "@/interfaces/Departments";
+import { UsrBack } from "@/interfaces/User";
 
 export default async function TabUser({id, opt}: {id:string, opt: number}){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  let user;
+  let user: UsrBack;
 
   try {
     user = await getUser(id, token);
@@ -22,7 +24,7 @@ export default async function TabUser({id, opt}: {id:string, opt: number}){
   if(typeof(user) === "string")
     return <h1 className="text-center text-red-500">{user}</h1>
 
-  let departments
+  let departments: Department[];
   try {
     departments = await getDepartments(token);
     if(typeof(departments) === "string")
@@ -46,12 +48,20 @@ export default async function TabUser({id, opt}: {id:string, opt: number}){
     optsRole.push({
       label: role.name,
       value: role._id
-    })
-  })
+    });
+  });
+
+  let optionsDepartments:Options[] = [];
+  departments.map((dept:any) => {
+    optionsDepartments.push({
+      label: dept.name,
+      value: dept._id
+    });
+  });
 
   return(
     <>
-      <UserClient user={user} token={token} departments={departments} 
+      <UserClient user={user} token={token} departments={optionsDepartments} 
             optQuery={opt} optsRole={optsRole} />
     </>
   )

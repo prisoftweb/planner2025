@@ -1,22 +1,42 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import { User } from "@/interfaces/User";
-import DeleteUser from "./DeleteUser";
+import { User, UsrBack } from "@/interfaces/User";
+//import DeleteUser from "./DeleteUser";
+import RemoveElement from "../RemoveElement";
 import NewUser from "./NewUser";
 import Button from "../Button";
 import { useState } from "react";
 import Link from "next/link";
 import { Options } from "@/interfaces/Common";
-//import Header from "../HeaderPage";
 import Header from "../Header";
+import { DataUsersToTableData } from "@/app/functions/UsersFunctions";
+import { removeUser } from "@/app/api/routeUser";
 
-export default function TableUsers({data, token, departments, roles}:
-                        {data:User[], token:string, 
+export default function TableUsers({users, token, departments, roles}:
+                        {users:UsrBack[], token:string, 
                           departments:any, roles:Options[]}){
   
   const columnHelper = createColumnHelper<User>();
   const [newUser, setNewUser] = useState<boolean>(false);
+  const [usersData, setUsersData] = useState<UsrBack[]>(users);
+
+  const handleClickNew = (value:boolean) => {
+    setNewUser(value);
+  }
+
+  const addUser = (usr: UsrBack) => {
+    setUsersData((oldUsers) => [...oldUsers, usr]);
+  }
+
+  const deleteUser = (id: string) => {
+    const newUsers = usersData.filter((usr) => {
+      if(usr._id !== id) return usr;
+    });
+    setUsersData(newUsers);
+  }
+
+  const data = DataUsersToTableData(usersData);
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -44,7 +64,9 @@ export default function TableUsers({data, token, departments, roles}:
           <div 
             className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
           </div>
-          <DeleteUser token={token} user={row.original} />
+          <RemoveElement token={token} id={row.original.id} 
+                name={row.original.name} remove={removeUser} removeElement={deleteUser} />
+          {/* <DeleteUser token={token} user={row.original} /> */}
         </div>
       ),
       enableSorting:false,
@@ -72,20 +94,6 @@ export default function TableUsers({data, token, departments, roles}:
         </Link>
       )
     }),
-    // columnHelper.accessor('profile', {
-    //   header: 'Perfil / Estado',
-    //   id: 'profile',
-    //   cell: ({row}) => (
-    //     <Link href={`/users/${row.original.id}/profile?opt=1`}>
-    //       <div className="flex items-center">
-    //         <div 
-    //           className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
-    //         </div>
-    //         <p>{row.original.profile.role}</p>
-    //       </div>
-    //     </Link>       
-    //   ),
-    // }),
     columnHelper.accessor('department', {
       header: 'Departamento',
       id: 'departamento',
@@ -117,22 +125,11 @@ export default function TableUsers({data, token, departments, roles}:
   
   return(
     <>
-      {/* <div className="flex justify-between mb-5 flex-wrap">
-        <div className="flex items-center">
-          <Link href={'/'}>
-            <ArrowLeftIcon className="w-8 h-8 text-slate-600" />
-          </Link>
-          <p className="ml-3 text-2xl">Usuarios</p>
-        </div>
-        <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
-        {newUser && <NewUser showForm={setNewUser} departments={departments} 
-                        token={token} roles={roles} />}
-      </div> */}
       <Header title="Usuarios" placeHolder="Buscar usuario..">
         <>
           <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
-            {newUser && <NewUser showForm={setNewUser} departments={departments} 
-                        token={token} roles={roles} />}
+            {newUser && <NewUser showForm={handleClickNew} departments={departments} 
+                        token={token} roles={roles} addUser={addUser} />}
         </>
       </Header>
       <div className="mt-5">

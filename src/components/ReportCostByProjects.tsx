@@ -1,7 +1,9 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
+import { ReportByProject } from '@/interfaces/ReportsOfCosts'
 
-export default function ReportCostByProjects(){
+export default function ReportCostByProjects({reports}: {reports:ReportByProject[]}){
+  
   const style = StyleSheet.create({
     table: {
       display: 'flex',
@@ -30,11 +32,27 @@ export default function ReportCostByProjects(){
       color: 'black',
     },
   })
+  //type 'PROVEEDOR', DEDUCIBLES
+  //TYPE 'OTROS' NO DEDUCIBLES
+  //type 'MANO DE OBRA' NO DEDUCIBLES SI ES MANO DE OBRA
+  const reportSorted = reports.sort((a, b) => {
+    const nameA = a.project.title.toUpperCase(); // ignore upper and lowercase
+    const nameB = b.project.title.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
   
+    // names must be equal
+    return 0;
+  });
   return(
     <Document>
       <Page>
-        <View style={{padding: '7px'}}>
+        {/* <View style={{padding: '30px'}}> */}
+        <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
@@ -50,10 +68,33 @@ export default function ReportCostByProjects(){
               <View style={[style.header, {flex: 1}]}><Text>Tipo</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Monto de obra</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Acumulado</Text></View>
+              {/* <View style={[style.header, {flex: 1}]}><Text>Acumulado</Text></View> */}
+              <View style={[style.header, {flex: 1}]}><Text>Cantidad</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Porcentaje %</Text></View>
             </View>
-            {costs.map((cost, index:number) => (
+            {reportSorted.map((rep, index:number) => (
+              <View style={[style.table, index > 0 && reports[index-1].project.title !== rep.project.title? {borderTop: '1px solid gray'}: {}]} key={index}>
+                <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep.project.title}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{rep.tipo ?? 'Sin tipo'}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: rep.project.amount
+                })}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: rep.totalCost
+                })}</Text></View>
+                {/* <View style={[style.element, {flex: 1}]}>
+                  <Text>{CurrencyFormatter({
+                      currency: 'MXN',
+                      value: rep.project.costQuantity
+                    })}</Text>
+                </View> */}
+                <View style={[style.element, {flex: 1}]}><Text>{rep.quantity}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{((rep.totalCost / rep.project.amount) * 100).toFixed(2)}%</Text></View>
+              </View>
+            ) )}
+            {/* {costs.map((cost, index:number) => (
               <View style={style.table} key={index}>
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{cost.project}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.type}</Text></View>
@@ -73,7 +114,7 @@ export default function ReportCostByProjects(){
                 </View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.percentage}</Text></View>
               </View>
-            ) )}
+            ) )} */}
           </View>
         </View>
       </Page>

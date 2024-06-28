@@ -13,9 +13,9 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 
-export default function NewUser({showForm, departments, token, roles}: 
+export default function NewUser({showForm, departments, token, roles, addUser}: 
                     {showForm:Function, departments:any, token:string
-                    roles:Options[]}){
+                    roles:Options[], addUser:Function}){
   
   const [file, setFile] = useState<File>();
   const [department, setDepartment] = useState<string>(departments[0]._id);
@@ -67,7 +67,7 @@ export default function NewUser({showForm, departments, token, roles}:
     onSubmit: async valores => {
       const { email, password, confirmpassword, name } = valores;
 
-      //if(file){
+      if(file){
         const formdata = new FormData();
         formdata.append('name',name);
         formdata.append('email', email);
@@ -79,38 +79,41 @@ export default function NewUser({showForm, departments, token, roles}:
 
         try {
           const res = await createUserPhoto(formdata, token);
-          //console.log('res ', res);
-          if(res===201){
-            //showForm(false);
+          console.log('res ', res);
+          if(typeof(res)==='string'){
+            showToastMessageError(res);
+          }else{
             showToastMessage('Usuario creado exitosamente!!!');
+            //addUser(res);
+            //showForm(false);
             setTimeout(() => {
               window.location.reload();
             }, 500);
-          }else{
-            showToastMessageError(res);
           }
         } catch (error) {
-          //console.log('error ', error);
+          console.log('error ', error);
           showToastMessageError('Error al crear usuario!!');
         }
-      // }else{
-      //   const data = {
-      //     name, email, password, confirmpassword, department, rol:role
-      //   }
-      //   try {
-      //     const res = await createUser(data, token);
-      //     if(res===201){
-      //       showToastMessage('Usuario creado exitosamente!!!');
-      //       setTimeout(() => {
-      //         window.location.reload();
-      //       }, 500);
-      //     }else{
-      //       showToastMessageError(res);
-      //     }
-      //   } catch (error) {
-      //     showToastMessageError('Error al crear usuario!!');
-      //   }
-      // }
+      }else{
+        const data = {
+          name, email, password, confirmpassword, department, rol:role
+        }
+        try {
+          const res = await createUser(data, token);
+          if(typeof(res)==='string'){
+            showToastMessageError(res);
+          }else{
+            showToastMessage('Usuario creado exitosamente!!!');
+            //addUser(res);
+            //showForm(false);
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }
+        } catch (error) {
+          showToastMessageError('Error al crear usuario!!');
+        }
+      }
     }
   });
 

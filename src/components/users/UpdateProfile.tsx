@@ -1,53 +1,82 @@
 'use client'
 import Label from "../Label"
 import Input from "../Input"
-//import Select from "../Select"
 import Button from "../Button"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "@/components/Alert";
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import HeaderForm from "../HeaderForm"
 import { updateMeUser } from "@/app/api/routeUser"
 import { setCookie } from "cookies-next"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
-//import { UserBack } from "@/interfaces/User"
+import { UsrBack } from "@/interfaces/User"
 
 export default function UpdateProfile({user, departments, token, optsRoles}: 
-                  {user:any, departments:any, token:string, optsRoles:Options[]}){
+                  {user:UsrBack, departments:Options[], token:string, optsRoles:Options[]}){
 
-  const [rol, setRol] = useState<string>(optsRoles[0].value);
-  const [optRole, setOptRole] = useState<Options>(optsRoles[0]);
-  const [department, setDepartment] = useState<string>(departments[0]._id);
 
-  let optionsDepartments:Options[] = [];
-  departments.map((dept:any) => (
-    optionsDepartments.push({
-      label: dept.name,
-      value: dept._id
-    })
-  ))
+  // let optionsDepartments:Options[] = [];
+  // departments.map((dept:any) => {
+  //   optionsDepartments.push({
+  //     label: dept.name,
+  //     value: dept._id
+  //   });
+  // });
 
-  const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
+  // let indexRol: number = 0;
+  // if(user.rol){
+  //   optsRoles.map((optRol, index:number) => {
+  //     if(user.rol._id === optRol.value){
+  //       indexRol = index;
+  //     }
+  //   });
+  // }
 
-  useEffect(() => {
-    optsRoles.map((optRol) => {
-      if(user.rol){
-        if(user.rol._id === optRol.value){
-          setOptRole(optRol);
-          setRol(optRol.value);
-        }
-      }
-    });
+  // let indexDepto: number = 0;
+  // optionsDepartments.map((dept, index:number) => {
+  //   if(dept.value === user.department._id){
+  //     indexDepto = index;
+  //   }
+  // });
+  
+  const [rol, setRol] = useState<string>(user.rol?._id || '');
+  //const [optRole, setOptRole] = useState<Options>(optsRoles[indexRol]);
+  const [department, setDepartment] = useState<string>
+                        (typeof(user.department)==='string'? user.department: user.department._id);
+  //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[indexDepto]);
 
-    optionsDepartments.map((dept) => {
-      if(dept.value === user.department._id){
-        setDepartment(dept.value);
-        setOptDepts(dept);
-      }
-    });
-  }, []);
+  let optRol = optsRoles[0];
+  const opRol = optsRoles.find((opt) => opt.value===rol);
+  if(opRol) optRol = opRol; 
+
+  let optDepto = departments[0];
+  const opDep = departments.find((opt) => opt.value===department);
+  if(opDep) optDepto = opDep;
+
+  // const [rol, setRol] = useState<string>(optsRoles[0].value);
+  // const [optRole, setOptRole] = useState<Options>(optsRoles[0]);
+  // const [department, setDepartment] = useState<string>(departments[0]._id);
+  // const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
+
+  // useEffect(() => {
+  //   optsRoles.map((optRol) => {
+  //     if(user.rol){
+  //       if(user.rol._id === optRol.value){
+  //         setOptRole(optRol);
+  //         setRol(optRol.value);
+  //       }
+  //     }
+  //   });
+
+  //   optionsDepartments.map((dept) => {
+  //     if(dept.value === user.department._id){
+  //       setDepartment(dept.value);
+  //       setOptDepts(dept);
+  //     }
+  //   });
+  // }, []);
 
   const emailU:string = user.email;
   const nameU:string = user.name;
@@ -69,7 +98,7 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
       const formData = new FormData();
       formData.append('name', name);
       formData.append('email', email);
-      formData.append('role', rol);
+      formData.append('rol', rol);
       formData.append('department', department);
 
       try {
@@ -130,16 +159,16 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
             <Label htmlFor="rol">Rol</Label>
             <Select 
               options={optsRoles}
-              onChange={(e: any) => {setRol(e.value); setOptRole(e)}}
-              value={optRole}
+              onChange={(e: any) => setRol(e.value)}
+              value={optRol}
             />
           </div>
           <div>
             <Label htmlFor="department">Departamento</Label>
             <Select 
-              options={optionsDepartments}
-              onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
-              value={optDepts}
+              options={departments}
+              onChange={(e:any) => setDepartment(e.value)}
+              value={optDepto}
             />
           </div>
           <div className="flex justify-center mt-4">

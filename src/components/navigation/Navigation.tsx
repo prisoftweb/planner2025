@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation"
 import RemoveCookies from "@/app/functions/RemoveCookies"
 import NavItem from "./NavItem"
 import { UsrBack } from "@/interfaces/User"
-import { useOutsideClickButton, useOutsideClick } from "@/app/functions/useOutsideClick";
+import { useOutsideClick } from "@/app/functions/useOutsideClick";
 
 export default function Navigation({user}: {user:UsrBack}){
   
@@ -34,6 +34,10 @@ export default function Navigation({user}: {user:UsrBack}){
   if(user){
     id = user._id;
   }
+
+  role = user.rol?.name || '';
+  console.log('role ', role);
+  console.log('user role ', user.rol);
 
   const ref = useOutsideClick(() => {
     //console.log('Clicked outside of MyComponent');
@@ -80,37 +84,49 @@ export default function Navigation({user}: {user:UsrBack}){
       {isOpenP && (
         <div className="flex justify-end" ref={ref}>
           <div className="flex flex-col w-44 absolute z-50 text-xs bg-white border-2 border-slate-300">
-            <Link href={`/users/${id}?tab=1&&opt=1`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
-              <div className="flex p-2 items-center">
-                <UserIcon className="w-4 h-4 mr-2 text-slate-500" />
-                Editar Perfil
+            {role.toLowerCase().includes('residente')? (
+              <div className="flex p-2 items-center hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
+                onClick={() => logOut()}
+              >
+                  <ArrowRightStartOnRectangleIcon className="w-4 h-4 mr-2 text-slate-500" />
+                <p className="py-1" >Salir</p>
               </div>
-            </Link>
-            <Link href={`/users/${id}?tab=1&&opt=4`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
-              <div className="flex p-2 items-center">
-                <Cog6ToothIcon className="w-4 h-4 mr-2 text-slate-500" />
-                Configuracion
-              </div>
-            </Link>
-            <Link href={`/users/${id}?tab=1&&opt=2`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
-              <div className="flex p-2 items-center">
-                <PhotoIcon className="w-4 h-4 mr-2 text-slate-500" />
-                Cambiar foto
-              </div>
-            </Link>
-            <Link href={`/users/${id}?tab=1&&opt=3`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
-              <div className="flex p-2 items-center">
-                <MdPassword className="w-2 h-2 text-slate-500" />
-                <MdPassword className="w-2 h-2 mr-2 text-slate-500" />
-                Cambiar Contrasena
-              </div>
-            </Link>
-            <div className="flex p-2 items-center hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
-              onClick={() => logOut()}
-            >
-                <ArrowRightStartOnRectangleIcon className="w-4 h-4 mr-2 text-slate-500" />
-              <p className="py-1" >Salir</p>
-            </div>
+            ): (
+              <>
+                <Link href={`/users/${id}?tab=1&&opt=1`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+                  <div className="flex p-2 items-center">
+                    <UserIcon className="w-4 h-4 mr-2 text-slate-500" />
+                    Editar Perfil
+                  </div>
+                </Link>
+                <Link href={`/users/${id}?tab=1&&opt=4`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+                  <div className="flex p-2 items-center">
+                    <Cog6ToothIcon className="w-4 h-4 mr-2 text-slate-500" />
+                    Configuracion
+                  </div>
+                </Link>
+                <Link href={`/users/${id}?tab=1&&opt=2`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+                  <div className="flex p-2 items-center">
+                    <PhotoIcon className="w-4 h-4 mr-2 text-slate-500" />
+                    Cambiar foto
+                  </div>
+                </Link>
+                <Link href={`/users/${id}?tab=1&&opt=3`} className="py-1 hover:text-gray-900 hover:bg-gray-200">
+                  <div className="flex p-2 items-center">
+                    <MdPassword className="w-2 h-2 text-slate-500" />
+                    <MdPassword className="w-2 h-2 mr-2 text-slate-500" />
+                    Cambiar Contrasena
+                  </div>
+                </Link>
+                <div className="flex p-2 items-center hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
+                  onClick={() => logOut()}
+                >
+                    <ArrowRightStartOnRectangleIcon className="w-4 h-4 mr-2 text-slate-500" />
+                  <p className="py-1" >Salir</p>
+                </div>
+              </>  
+            )}
+            
           </div>
         </div>
       )}
@@ -119,6 +135,24 @@ export default function Navigation({user}: {user:UsrBack}){
 }
 
 const NavItems = ({role}: {role:string}) => {
+  if(role.toLowerCase().includes('residente')){
+    return(
+      <>
+        <NavItem name="Costos" link="" items={[
+            {
+              name: 'Gastos',
+              link: '/expenses'
+            },
+            {
+              name: 'Informes',
+              link: '/reports'
+            },
+          ]} 
+        />
+      </>
+    )
+  }
+  
   return(
     <>
       <NavItem name="Usuarios" link="" items={[

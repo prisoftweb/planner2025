@@ -10,7 +10,8 @@ export async function createUserPhoto(user:FormData, auth_token:string){
       }
     })
     if(res.status === 201){
-      return res.status;
+      //return res.status;
+      return res.data.data.data;
     }else{
       return res.statusText;
     }
@@ -36,7 +37,8 @@ export async function createUser(user:any, auth_token:string){
     })
     console.log(res);
     if(res.status === 201){
-      return res.status;
+      //return res.status;
+      return res.data.data.data;
     }else{
       return res.statusText;
     }
@@ -184,7 +186,7 @@ export async function getUsers(auth_token:string){
 export async function removeUser(id:string, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${id}`;
   
-  console.log(url, url);
+  console.log('url', url);
 
   try {
     const res = await axios.delete(url, {
@@ -192,9 +194,11 @@ export async function removeUser(id:string, auth_token:string) {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
+    console.log('res', res);
     if(res.status=== 204) return 204;
     else return res.statusText;
   } catch (error) {
+    console.log('catch', error);
     return 'Ocurrio un error al eliminar usuario!';
   }
 }

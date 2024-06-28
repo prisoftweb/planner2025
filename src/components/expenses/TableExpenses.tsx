@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-import { RemoveCost } from "@/app/api/routeCost";
+import { GetCostsGroupByProject, RemoveCost } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { GetCosts } from "@/app/api/routeCost";
@@ -20,17 +20,18 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 
 import ReportCostByProjects from "../ReportCostByProjects";
 import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
+import { ReportByProject } from "@/interfaces/ReportsOfCosts";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
                             optProjects, optReports, isFilter, setIsFilter, 
-                          optCostCenterFilter}:
+                          optCostCenterFilter, reportsProjects}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
                         isFilter:boolean, setIsFilter:Function, 
-                        optCostCenterFilter:Options[], }){
+                        optCostCenterFilter:Options[], reportsProjects:ReportByProject[] }){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -390,16 +391,35 @@ export default function TableExpenses({data, token, expenses,
     setFilter(true);
   }
 
+  //const [reportsProject, setReportProjects] = useState<ReportByProject[]>([]);
+
+  // useEffect(() => {
+  //   try {
+  //     const res = async() => {
+  //       const res2 = await GetCostsGroupByProject(token);
+  //       if(typeof(res2)!== 'string'){
+  //         setReportProjects(res2);
+  //       }else{
+  //         setReportProjects([]);
+  //       }
+  //     };
+  //     res();
+  //   } catch (error) {
+  //     setReportProjects([]);
+  //   }
+  // }, []);
+
   return(
     <>
-      {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} >
+      {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} > */}
+      <PDFDownloadLink document={<ReportCostByProjects reports={reportsProjects} />} fileName={`InformeObras`} >
         {({loading, url, error, blob}) => 
           loading? (
             <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
           ) : (
             <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
           ) }
-      </PDFDownloadLink> */}
+      </PDFDownloadLink>
       <div className="flex justify-end my-5">
         {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
         {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}

@@ -1,7 +1,7 @@
 import { getUsers } from "../api/routeUser";
 import TableUsers from "@/components/users/TableUsers";
 import { cookies } from "next/headers";
-import { UsrBack, User } from "@/interfaces/User";
+import { UsrBack } from "@/interfaces/User";
 import { getDepartments } from "../api/routeDepartments";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
@@ -9,6 +9,7 @@ import ButtonNewUser from "@/components/users/ButtonNewUser";
 import { Options } from "@/interfaces/Common";
 import { getRoles } from "../api/routeRoles";
 import { Role } from "@/interfaces/Roles";
+import { DataUsersToTableData } from "../functions/UsersFunctions";
 
 export default async function Users() {  
 
@@ -45,8 +46,8 @@ export default async function Users() {
 
   let departments;
   try {
-    //departments = await getDepartments(token);
-    departments = await getDepartments('');
+    departments = await getDepartments(token);
+    //departments = await getDepartments('');
     if(typeof(departments)==='string') 
       return <h1 className="text-center text-red-500">{departments}</h1>
   } catch (error) {
@@ -66,29 +67,28 @@ export default async function Users() {
     )
   }
   
-  let data:User[] = [];
-  users.map((user:any) => {
-    data.push({
-      'id': user._id,
-      'photo': user.photo? user.photo: '/img/default.jpg',
-      'name': user.name,
-      'profile': {
-        'role': user.role,
-        'status': user.status
-      },
-      'email': user.email,
-      'department': user.department.name,
-      'role': user.rol? user.rol.name : 'sin rol'
-    })
-  })
+  // let data:User[] = [];
+  // users.map((user:any) => {
+  //   data.push({
+  //     'id': user._id,
+  //     'photo': user.photo? user.photo: '/img/default.jpg',
+  //     'name': user.name,
+  //     'profile': {
+  //       'role': user.role,
+  //       'status': user.status
+  //     },
+  //     'email': user.email,
+  //     'department': user.department.name,
+  //     'role': user.rol? user.rol.name : 'sin rol'
+  //   })
+  // })
+  //const data = DataUsersToTableData(users);
 
   return (
     <>
-      {/* <div className="h-screen p-10" style={{backgroundColor:'#F8FAFC'}}> */}
       <Navigation user={user} />
-      {/* <div className="bg-slate-300 h-screen p-10"> */}
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <TableUsers data={data} token={token} departments={departments} roles={optionsRoles} />
+        <TableUsers users={users} token={token} departments={departments} roles={optionsRoles} />
       </div>
     </>
   );
