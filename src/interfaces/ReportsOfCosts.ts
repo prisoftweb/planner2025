@@ -48,6 +48,19 @@ export interface Types {
   id: string
 }
 
+export interface CostGroupByType {
+  _id: Id
+  quantity: number
+  totalCost: number
+  totalIVA: number
+  totalDiscount: number
+  tipo: string
+}
+
+// export interface Id {
+//   type: string
+// }
+
 // export interface User {
 //   _id: string
 //   name: string

@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "@/components/Alert";
 import { useState } from "react"
 import HeaderForm from "../HeaderForm"
-import { updateMeUser } from "@/app/api/routeUser"
+import { updateMeUser, updateUser } from "@/app/api/routeUser"
 import { setCookie } from "cookies-next"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
@@ -101,20 +101,21 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
       formData.append('rol', rol);
       formData.append('department', department);
 
+      const data = {
+        name, email, rol, department
+      }
+
       try {
-        let res = await updateMeUser(user._id, formData, token);
+        //let res = await updateMeUser(user._id, formData, token);
+        const res = await updateUser(data, token, user._id);
         if(typeof(res) === 'string'){
           showToastMessageError(res);
         }else{
-          if(res.status === 200) {
-            showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-            setCookie('user', res.data.data.user);
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          } else {
-            showToastMessageError('Error al modificar usuario..');
-          }
+          showToastMessage(`Usuario ${name} modificado exitosamente!`);            
+          setCookie('user', res);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         } 
       } catch (error) {
         showToastMessageError('Ocurrio un error al modificar usuario..');

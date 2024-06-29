@@ -8,14 +8,19 @@ import { Project } from "@/interfaces/Projects"
 import { Report } from "@/interfaces/Reports"
 import { useState } from "react"
 import { GiSettingsKnobs } from "react-icons/gi"
-import { ReportByProject } from "@/interfaces/ReportsOfCosts"
+import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts"
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
+import ReportCostByProjects from "../ReportCostByProjects";
+import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
 
 export default function ContainerClient({data, token, expenses, 
                     optCategoriesFilter, optConditionsFilter, optTypeFilter, 
                     optProjectFilter, optReportsFilter, idLabour, idTicket, 
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
                     optGlossaries, optProjects, optProviders, optReports, optResponsibles, 
-                    optTypes, projects, reports, user, optVats, optCostCenterFilter, reportProjects}:
+                    optTypes, projects, reports, user, optVats, optCostCenterFilter, 
+                    reportProjects, costsTypes}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
                     optConditionsFilter:Options[], expenses:Expense[], 
@@ -27,7 +32,8 @@ export default function ContainerClient({data, token, expenses,
                     optConditions:Options[], projects:Project[], 
                     reports:Report[], optReports:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
-                    idTicket:string, optVats:Options[], reportProjects: ReportByProject[]}){
+                    idTicket:string, optVats:Options[], reportProjects: ReportByProject[], 
+                    costsTypes: CostGroupByType[]}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const handleFilter = (value: boolean) => {
@@ -40,6 +46,16 @@ export default function ContainerClient({data, token, expenses,
           <GiSettingsKnobs onClick={() => handleFilter(true)}
             className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
           />
+          {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} > */}
+          <PDFDownloadLink document={<ReportCostByProjects reports={reportProjects} costsByTypes={costsTypes} />} 
+              fileName={`InformeObras`} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+              ) : (
+                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+              ) }
+          </PDFDownloadLink>
           <ButtonNew token={token} user={user} optCostCenter={optCostCenter} 
                       optProviders={optProviders} optResponsibles={optResponsibles}
                       optGlossaries={optGlossaries} optProjects={optProjects} 
@@ -55,7 +71,7 @@ export default function ContainerClient({data, token, expenses,
         optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
         optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
         optReports={optReportsFilter} isFilter={isFilter} setIsFilter={setIsFilter}
-        optCostCenterFilter={optCostCenterFilter} reportsProjects={reportProjects}
+        optCostCenterFilter={optCostCenterFilter}
       />
     </div>
   )
