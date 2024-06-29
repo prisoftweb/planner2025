@@ -44,7 +44,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     onSubmit: async (valores) => {            
       const {description, amount} = valores;
       let type = 'OTROS';
-      const cc = optCostCenter.find((costc) => costc.value === costCenter);
+      const cc = optCostCenter.find((costc) => costc.value === costcenter);
       if(cc?.label.toLowerCase().includes('mano de obra')){
         type = 'MANO DE OBRA';
       }
@@ -82,6 +82,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
                                             defaultValue={amount}
                                             decimalsLimit={2}
                                             prefix="$"
+                                            autoFocus
                                             onValueChange={(value) => {try {
                                               formik.values.amount=value || '0';
                                             } catch (error) {
@@ -91,8 +92,11 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   
   const SaveData = async() => {
     let type = 'OTROS';
-    const cc = optCostCenter.find((costc) => costc.value === costCenter);
+    //console.log('cost center a buscar => ', costcenter);
+    const cc = optCostCenter.find((costc) => costc.value === costcenter);
+    //console.log('cc find save', cc);
     if(cc?.label.toLowerCase().includes('mano de obra')){
+      //console.log('entro aqui => ', cc?.label.toLowerCase());
       type = 'MANO DE OBRA';
     }
     const {description, amount} = formik.values
@@ -166,6 +170,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   
       try {
         const res = await SaveExpense(data, token);
+        //console.log('save cost no deductible', JSON.stringify(data));
         if(res===201){
           setView(<></>);
           reset();
@@ -205,6 +210,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
             defaultValue={amount}
             decimalsLimit={2}
             prefix="$"
+            autoFocus
             onValueChange={(value) => {try {
               formik.values.amount=value || '0';
             } catch (error) {

@@ -513,8 +513,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       const operation = 
         (Number(formik.values.amount.replace(/[$,]/g, "")) - 
           Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-      formik.values.vat = operation.toString();
-      setVatValue(operation.toString());
+      formik.values.vat = operation.toFixed(2).toString();
+      setVatValue(operation.toFixed(2).toString());
     } catch (error) {
       formik.values.vat = '0';
     }
