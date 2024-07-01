@@ -10,7 +10,7 @@ import { Company } from "@/interfaces/Companies";
 import { Project } from "@/interfaces/Projects";
 import { getProjects } from "../api/routeProjects";
 import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReports, GetReportsByUser, GetReportsByDept } from "../api/routeReports";
+import { GetReports, GetReportsMin, GetReportsByUser, GetReportsByDept } from "../api/routeReports";
 import { Report, ReportTable } from "@/interfaces/Reports";
 //import Header from "@/components/Header";
 //import TableReports from "@/components/reports/TableReports";

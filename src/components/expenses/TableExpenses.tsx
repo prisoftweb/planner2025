@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-import { GetCostsGroupByProject, RemoveCost } from "@/app/api/routeCost";
+import { RemoveCost } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { GetCosts } from "@/app/api/routeCost";
@@ -64,7 +64,8 @@ export default function TableExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
-          <DeleteElement id={row.original.id} name={row.original.Descripcion} remove={RemoveCost} token={token} />
+          <DeleteElement id={row.original.id} name={row.original.Descripcion} 
+            remove={RemoveCost} token={token} colorIcon="text-slate-500 hover:text-slate-300" />
           {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
           {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
           {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
@@ -225,6 +226,7 @@ export default function TableExpenses({data, token, expenses,
             showToastMessageError(res);
           }
         } catch (error) {
+          console.log('catch table expenses => ', error);
           showToastMessageError('Error al actualizar tabla!!');
         }
       }

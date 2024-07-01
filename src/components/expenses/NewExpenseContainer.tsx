@@ -34,9 +34,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
-  const [optSelectize, setOptSelectize] = useState<Options>();
-  
-  const [stepform, setStepForm] = useState<JSX.Element>(<></>)
+  //const [stepform, setStepForm] = useState<JSX.Element>(<></>)
   //const [isPettyCash, setIsPettyCash] = useState<boolean>(false);
 
   const {indexStepper, isDeductible, project, updateProject, 
@@ -45,6 +43,17 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
 
   const idVat = optVats.find((vat) => vat.label === '0')?.value || '';
   
+  // let ind = 0;
+  // if(project !== ''){
+  //   optProjects.map((optP, index:number) => {
+  //     if(optP.value === project){
+  //       ind = index;
+  //     }
+  //   });
+  // }
+  
+  const [optSelectize, setOptSelectize] = useState<Options>(optProjects.find((optP) => optP.value === project)?? optProjects[0]);
+
   const DropdownIndicator = (props: any) => {
     return (
       components.DropdownIndicator && (
@@ -63,21 +72,37 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     }),
   }
 
-  const [viewSelectProject, setViewSelectProject] = useState<JSX.Element>(
-  <Select
-    className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
-    value={optSelectize}
-    options={optProjects}
-    isDisabled={isPettyCash}
-    //isDisabled={true}
-    maxMenuHeight={250}
-    components={{
-      DropdownIndicator
-    }}
-    placeholder='Buscar ...'
-    styles={customStyles}
-    onChange={(value:any) => updateProject(value.value)}
-  />);
+  // const [viewSelectProject, setViewSelectProject] = useState<JSX.Element>(
+  // <Select
+  //   className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
+  //   value={optSelectize}
+  //   options={optProjects}
+  //   isDisabled={isPettyCash}
+  //   //isDisabled={true}
+  //   maxMenuHeight={250}
+  //   components={{
+  //     DropdownIndicator
+  //   }}
+  //   placeholder='Buscar ...'
+  //   styles={customStyles}
+  //   onChange={(value:any) => updateProject(value.value)}
+  // />);
+
+  const viewSelectProject: JSX.Element = (
+    <Select
+      className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
+      value={optSelectize}
+      options={optProjects}
+      isDisabled={isPettyCash}
+      //isDisabled={true}
+      maxMenuHeight={250}
+      components={{
+        DropdownIndicator
+      }}
+      placeholder='Buscar ...'
+      styles={customStyles}
+      onChange={(value:any) => {updateProject(value.value); setOptSelectize(value);}}
+    />)
   
   const handleResize = () => {
     //setHeightPage(window.outerHeight);
@@ -88,38 +113,38 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     ));
   }
 
-  const selectProject = () => {
-    let ind = 0;
-    if(project === ''){
-      setOptSelectize(optProjects[0]);
-    }else{
-      let aux = 0;
-      optProjects.map((optP, index:number) => {
-        if(optP.value === project){
-          aux = index;
-        }
-      });
-      ind = aux;
-      setOptSelectize(optProjects[aux]);
-    }
-    setTimeout(() => {
-      setViewSelectProject(
-        <Select
-          className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
-          value={optProjects[ind]}
-          options={optProjects}
-          isDisabled={isPettyCash}
-          //isDisabled={true}
-          maxMenuHeight={250}
-          components={{
-            DropdownIndicator
-          }}
-          placeholder='Buscar ...'
-          styles={customStyles}
-          onChange={(value:any) => updateProject(value.value)}
-        />)
-    }, 500);
-  }
+  // const selectProject = () => {
+  //   let ind = 0;
+  //   if(project === ''){
+  //     setOptSelectize(optProjects[0]);
+  //   }else{
+  //     let aux = 0;
+  //     optProjects.map((optP, index:number) => {
+  //       if(optP.value === project){
+  //         aux = index;
+  //       }
+  //     });
+  //     ind = aux;
+  //     setOptSelectize(optProjects[aux]);
+  //   }
+  //   setTimeout(() => {
+  //     setViewSelectProject(
+  //       <Select
+  //         className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
+  //         value={optProjects[ind]}
+  //         options={optProjects}
+  //         isDisabled={isPettyCash}
+  //         //isDisabled={true}
+  //         maxMenuHeight={250}
+  //         components={{
+  //           DropdownIndicator
+  //         }}
+  //         placeholder='Buscar ...'
+  //         styles={customStyles}
+  //         onChange={(value:any) => updateProject(value.value)}
+  //       />)
+  //   }, 500);
+  // }
 
   useEffect(() => {
     if(report !== ''){
@@ -129,7 +154,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       updatePettyCash(r?.ispettycash || false);
       //console.log('petty ', r);
       updateProject(r?.project._id || '');
-      setViewSelectProject(<></>);
+      //setViewSelectProject(<></>);
     }
   }, [report]);
 
@@ -141,13 +166,13 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       document.body.clientHeight, document.documentElement.clientHeight
     ));
     updateCondition(optConditions[0].value);
-    selectProject();
+    //selectProject();
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  useEffect(() => {
-    selectProject();
-  }, [project]);
+  // useEffect(() => {
+  //   selectProject();
+  // }, [project]);
 
   const closeForm = () => {
     updateReport('');
@@ -155,49 +180,83 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     showForm(false);
   }
 
-  try {
-    useEffect(() => {
-      try {
-        if(isDeductible){
-          if(indexStepper || indexStepper>=0){
-            if(indexStepper===1){
-              setStepForm(<DataStepper optCostCenter={optCostCenterDeductible} 
-                optProviders={optProviders} optGlossaries={optGlossaries} 
-                optResponsibles={optResponsibles}
-                token={token} user={user} optProjects={optProjects}
-                optCategories={optCategories} optConditions={optConditions}
-                optTypes={optTypes} optVats={optVats}
-              />)
-            }else if(indexStepper===2){
-                setStepForm(<VoucherStepper token={token} user={user} />)
-              }else if(indexStepper===3){
-                  setStepForm(<CFDIStepper token={token} user={user} />)
-                }else {
-                  setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
-                              />)
-              }
-          }
-        }else{
-          if(indexStepper || indexStepper>=0){
-            if(indexStepper===1){
-              setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
-                optResponsibles={optResponsibles} token={token} user={user}
-                idLabour={idLabour} idTicket={idTicket} idVat={idVat} />)
-            }else if(indexStepper===2){
-                setStepForm(<VoucherNoDeductibleStepper token={token} user={user} idVat={idVat} />)  
-              }else {
-                  setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
-                              />)
-              }
-          }
-        }
-      } catch (error) {
-        setStepForm(<></>)
-      }
-    }, [indexStepper, isDeductible]);
-  } catch (error) {
-    console.log(error);
+  let stepform: JSX.Element = <></>;
+  if(isDeductible){
+    if(indexStepper || indexStepper>=0){
+      stepform = indexStepper===1? (
+        <DataStepper optCostCenter={optCostCenterDeductible} 
+          optProviders={optProviders} optGlossaries={optGlossaries} 
+          optResponsibles={optResponsibles}
+          token={token} user={user} optProjects={optProjects}
+          optCategories={optCategories} optConditions={optConditions}
+          optTypes={optTypes} optVats={optVats}
+        />
+      ): indexStepper===2? (
+        <VoucherStepper token={token} user={user} />
+      ): indexStepper===3? (
+        <CFDIStepper token={token} user={user} />
+      ): (
+        <SelectProjectStepper reports={reports} optReports={optReports}/>
+      )
+    }
+  }else{
+    if(indexStepper || indexStepper>=0){
+      stepform = indexStepper===1? (
+        <DataNoDeductibleStepper optCostCenter={optCostCenter} 
+          optResponsibles={optResponsibles} token={token} user={user}
+          idLabour={idLabour} idTicket={idTicket} idVat={idVat} />
+      ): indexStepper===2? (
+        <VoucherNoDeductibleStepper token={token} user={user} idVat={idVat} />
+      ): (
+        <SelectProjectStepper reports={reports} optReports={optReports}/>
+      )
+    }
   }
+
+
+  // try {
+  //   useEffect(() => {
+  //     try {
+  //       if(isDeductible){
+  //         if(indexStepper || indexStepper>=0){
+  //           if(indexStepper===1){
+  //             setStepForm(<DataStepper optCostCenter={optCostCenterDeductible} 
+  //               optProviders={optProviders} optGlossaries={optGlossaries} 
+  //               optResponsibles={optResponsibles}
+  //               token={token} user={user} optProjects={optProjects}
+  //               optCategories={optCategories} optConditions={optConditions}
+  //               optTypes={optTypes} optVats={optVats}
+  //             />)
+  //           }else if(indexStepper===2){
+  //               setStepForm(<VoucherStepper token={token} user={user} />)
+  //             }else if(indexStepper===3){
+  //                 setStepForm(<CFDIStepper token={token} user={user} />)
+  //               }else {
+  //                 setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
+  //                             />)
+  //             }
+  //         }
+  //       }else{
+  //         if(indexStepper || indexStepper>=0){
+  //           if(indexStepper===1){
+  //             setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
+  //               optResponsibles={optResponsibles} token={token} user={user}
+  //               idLabour={idLabour} idTicket={idTicket} idVat={idVat} />)
+  //           }else if(indexStepper===2){
+  //               setStepForm(<VoucherNoDeductibleStepper token={token} user={user} idVat={idVat} />)  
+  //             }else {
+  //                 setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
+  //                             />)
+  //             }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       setStepForm(<></>)
+  //     }
+  //   }, [indexStepper, isDeductible]);
+  // } catch (error) {
+  //   console.log(error);
+  // }
 
   return(
     <div className="z-10 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
@@ -212,7 +271,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
           <HeaderForm img="/img/gastos.svg" subtitle="Ingresa los gastos del informe" 
             title="Nuevo gasto"
           />
-          {viewSelectProject}
+          { report!=='' && viewSelectProject}
         </div>
         <TabDeductible />
         {stepform}

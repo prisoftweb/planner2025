@@ -11,6 +11,7 @@ export async function createUserPhoto(user:FormData, auth_token:string){
     })
     if(res.status === 201){
       //return res.status;
+      //console.log('res back ', res);
       return res.data.data.data;
     }else{
       return res.statusText;
@@ -76,7 +77,7 @@ export async function updateMeUser(id:string, userData:FormData, auth_token:stri
       },
     });
     console.log(res); 
-    if(res.status === 200) return res;
+    if(res.status === 200) return res.data.data.user;
       return res.statusText;
   } catch {
     return 'Ocurrio un problema al actualizar informacion del usuario..'

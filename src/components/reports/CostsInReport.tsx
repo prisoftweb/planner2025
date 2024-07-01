@@ -32,7 +32,7 @@ export default function CostsInReport({report, costs}:
             <div>
               <p className="text-blue-500">{report.project.title}</p>
               <p className="text-slate-500">{report.project.code}</p>
-              <p className="text-slate-500">{report.project.types.name}</p>
+              <p className="text-slate-500">{report.project.glossary.name}</p>
               <p className="text-slate-500">{report.project.account}</p>
               <div className="mt-3 border-t border-slate-500 pt-2">
                 <p className="text-blue-500">{report.name}</p>

@@ -8,6 +8,7 @@ export async function GetCosts(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
+    console.log('res', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {

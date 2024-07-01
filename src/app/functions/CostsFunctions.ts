@@ -6,6 +6,11 @@ import { Provider } from "@/interfaces/Providers";
 export function ExpenseDataToTableData(expenses:Expense[]){
   const table: ExpensesTable[] = [];
   expenses.map((expense) => {
+    // if(typeof(expense.costcenter) !== 'string'){
+    //   console.log('Error con el cost center');
+    //   console.log(expense);
+    // }
+    
     const dollar = CurrencyFormatter({
           currency: "MXN",
           value: expense.cost.subtotal
@@ -63,7 +68,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter.name,
+      costcenter: expense.costcenter? typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter.name ?? 'error costcenter' : 'Sin centro de costos',
       Importe: dollar,
       Informe: expense.report?.name || 'sin informe',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',

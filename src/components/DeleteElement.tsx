@@ -5,8 +5,10 @@ import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-export default function DeleteElement({token, id, name, remove} : 
-                                {token : string, name:string, id:string, remove:Function}){
+export default function DeleteElement({token, id, name, remove, 
+                        colorIcon='text-red-500 hover:text-red-300'} : 
+                                {token : string, name:string, id:string, 
+                                  remove:Function, colorIcon?: string}){
   
   const deleteElement = async ()  => {
   
@@ -66,7 +68,7 @@ export default function DeleteElement({token, id, name, remove} :
     return(
     <>
       {/* <TrashIcon width={20} height={20} className="text-red-500 hover:text-red-300 cursor-pointer" */}
-      <TrashIcon className="text-red-500 hover:text-red-300 cursor-pointer w-6 h-6"  
+      <TrashIcon className={`${colorIcon} cursor-pointer w-6 h-6`}  
         onClick={() => {
           deleteElement();
         }}

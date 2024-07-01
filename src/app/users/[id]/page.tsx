@@ -58,7 +58,7 @@ export default async function Page({ params, searchParams }:
   let res;
   if(searchParams.tab==='2') res=<></>
   else if(searchParams.tab==='3') res=<></>
-    else res=<TabUser id={params.id} opt={opt} />;
+    else res=<TabUser user={user} opt={opt} />;
 
   return(
     <>

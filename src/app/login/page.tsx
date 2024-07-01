@@ -38,44 +38,6 @@ export default function Login({}) {
           setCookie('user', res.data.user);
           const {_id } = res.data.user;
           setCookie('id', _id);
-        //   setCookie('resources', {
-        //     "resources": [
-        //         {
-        //             "resource": {
-        //                 "name": "clients",
-        //             },
-        //             "routes": [],
-        //         },
-        //         {
-        //             "resource": {
-        //                 "name": "roles",
-        //             },
-        //             "routes": [
-        //                 {
-        //                     "route": {
-        //                         "name": "components",
-        //                     },
-        //                 },
-        //                 {
-        //                     "route": {
-        //                         "name": "resources",
-        //                     },
-        //                 },
-        //                 {
-        //                     "route": {
-        //                         "name": "role",
-        //                     },
-        //                 },
-        //                 {
-        //                   "route": {
-        //                       "name": "trees",
-        //                   },
-        //               }
-        //             ],
-        //         }
-        //     ],
-        // })
-
           
           setTimeout(() => {                
             router.push(
@@ -108,6 +70,7 @@ export default function Login({}) {
                 type="email" 
                 name="email" 
                 id="email" 
+                autoFocus
                 placeholder="tucorreo@gmail.com" 
                 className="form-input w-full pl-10 text-xs py-1 sm:text-base outline-none outline-0 mt-2 border-0"
                 onChange={formik.handleChange}

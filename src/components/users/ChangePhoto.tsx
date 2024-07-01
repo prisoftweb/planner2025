@@ -7,10 +7,13 @@ import Button from "../Button";
 import Label from "../Label";
 import { updateMeUser } from "@/app/api/routeUser";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import { setCookie } from "cookies-next"
+import { useUserStore } from "@/app/store/userStore";
 
 export default function ChangePhoto({id, token}: {id:string, token:string}){
   
   const [photo, setPhoto] = useState<File>();
+  const {updateUser} = useUserStore();
   
   const onSave = async () => {
     if(photo){
@@ -22,9 +25,13 @@ export default function ChangePhoto({id, token}: {id:string, token:string}){
           showToastMessageError(res);
         }else{
           showToastMessage('La foto ha sido actualizada!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          console.log('res updateme user => ', res);            
+          console.log('photo => ', res.photo);
+          setCookie('user', res);
+          updateUser(res);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al cambiar foto!!');

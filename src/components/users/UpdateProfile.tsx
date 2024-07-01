@@ -7,11 +7,12 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "@/components/Alert";
 import { useState } from "react"
 import HeaderForm from "../HeaderForm"
-import { updateMeUser, updateUser } from "@/app/api/routeUser"
+import { updateUser as updateApiUser } from "@/app/api/routeUser"
 import { setCookie } from "cookies-next"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 import { UsrBack } from "@/interfaces/User"
+import { useUserStore } from "@/app/store/userStore"
 
 export default function UpdateProfile({user, departments, token, optsRoles}: 
                   {user:UsrBack, departments:Options[], token:string, optsRoles:Options[]}){
@@ -41,18 +42,19 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
   //   }
   // });
   
-  const [rol, setRol] = useState<string>(user.rol?._id || '');
+  const {updateUser} = useUserStore();
+  const [rolS, setRolS] = useState<string>(user.rol?._id ?? '');
   //const [optRole, setOptRole] = useState<Options>(optsRoles[indexRol]);
-  const [department, setDepartment] = useState<string>
+  const [depto, setDepto] = useState<string>
                         (typeof(user.department)==='string'? user.department: user.department._id);
   //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[indexDepto]);
 
   let optRol = optsRoles[0];
-  const opRol = optsRoles.find((opt) => opt.value===rol);
+  const opRol = optsRoles.find((opt) => opt.value===rolS);
   if(opRol) optRol = opRol; 
 
   let optDepto = departments[0];
-  const opDep = departments.find((opt) => opt.value===department);
+  const opDep = departments.find((opt) => opt.value===depto);
   if(opDep) optDepto = opDep;
 
   // const [rol, setRol] = useState<string>(optsRoles[0].value);
@@ -95,27 +97,28 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
     onSubmit: async (valores) => {            
       const {email, name} = valores;
       
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('rol', rol);
-      formData.append('department', department);
+      // const formData = new FormData();
+      // formData.append('name', name);
+      // formData.append('email', email);
+      // formData.append('rol', rol);
+      // formData.append('department', department);
 
       const data = {
-        name, email, rol, department
+        name, email, rol:rolS, department: depto
       }
 
       try {
         //let res = await updateMeUser(user._id, formData, token);
-        const res = await updateUser(data, token, user._id);
+        const res = await updateApiUser(data, token, user._id);
         if(typeof(res) === 'string'){
           showToastMessageError(res);
         }else{
           showToastMessage(`Usuario ${name} modificado exitosamente!`);            
           setCookie('user', res);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateUser(res);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         } 
       } catch (error) {
         showToastMessageError('Ocurrio un error al modificar usuario..');
@@ -160,7 +163,7 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
             <Label htmlFor="rol">Rol</Label>
             <Select 
               options={optsRoles}
-              onChange={(e: any) => setRol(e.value)}
+              onChange={(e: any) => setRolS(e.value)}
               value={optRol}
             />
           </div>
@@ -168,12 +171,12 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
             <Label htmlFor="department">Departamento</Label>
             <Select 
               options={departments}
-              onChange={(e:any) => setDepartment(e.value)}
+              onChange={(e:any) => setDepto(e.value)}
               value={optDepto}
             />
           </div>
           <div className="flex justify-center mt-4">
-            <Button type="submit">Guardar cambios</Button>
+              <Button type="submit">Guardar cambios</Button>
           </div>
         </form>
       </div>

@@ -36,14 +36,14 @@ export default function ExtraData({token, optClients, optCategories,
 
   let idType = 0;
   optTypes.map((optTy, index:number) => {
-    if(optTy.value === project.types?._id){
+    if(optTy.value === project.glossary?._id){
       idType = index;
     }
   });
 
   let idCategory = 0;
   optCategories.map((optCat, index:number) => {
-    if(optCat.value === project.categorys._id){
+    if(optCat.value === project.category._id){
       idCategory = index;
     }
   })

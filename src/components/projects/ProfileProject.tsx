@@ -26,7 +26,7 @@ export default function ProfileProject({project}:
           <div>
             <p className="text-blue-500">{project.title}</p>
             <p className="text-slate-500">{project.code}</p>
-            <p className="text-slate-500">{project.types? project.types.name: ''}</p>
+            <p className="text-slate-500">{project.glossary? project.glossary.name: ''}</p>
             <p className="text-slate-500">{project.account}</p>
           </div>
         </div>

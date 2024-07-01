@@ -38,16 +38,17 @@ export default function TableProviders({data, token}:
       header: 'Accion',
       id: 'accion',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}/profile`}>
-          <div className="flex items-center">
-            <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
-            <div 
-              className={`w-4 h-4 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
-            </div>
-            <DeleteProvider provider={row.original} token={token} />
-            <NumberContacts numContacts={row.original.contacts} />
+        <div className="flex items-center">
+          <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
+          <div 
+            className={`w-4 h-4 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
           </div>
-        </Link>       
+          <DeleteProvider provider={row.original} token={token} />
+          <NumberContacts numContacts={row.original.contacts} />
+        </div>
+        // <Link href={`/providers/${row.original.id}/profile`}>
+          
+        // </Link>       
       ),
     }),
     columnHelper.accessor('name', {
