@@ -14,7 +14,7 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  const userLog: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+  //const userLog: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let user;
   let users;
@@ -63,7 +63,7 @@ export default async function Page({ params, searchParams }:
         <div className="mt-3">
           <NavTab idUser={params.id} tab={'1'} />
         </div>
-        <TabUser id={params.id} opt={opt} />
+        <TabUser user={user} opt={opt} />
       </div>
     </>
   )

@@ -9,7 +9,8 @@ import ButtonNewUser from "@/components/users/ButtonNewUser";
 import { Options } from "@/interfaces/Common";
 import { getRoles } from "../api/routeRoles";
 import { Role } from "@/interfaces/Roles";
-import { DataUsersToTableData } from "../functions/UsersFunctions";
+//import { DataUsersToTableData } from "../functions/UsersFunctions";
+import UsersConstext from "@/components/users/UsersContext";
 
 export default async function Users() {  
 
@@ -88,7 +89,8 @@ export default async function Users() {
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <TableUsers users={users} token={token} departments={departments} roles={optionsRoles} />
+        {/* <TableUsers users={users} token={token} departments={departments} roles={optionsRoles} /> */}
+        <UsersConstext departments={departments} optionsRoles={optionsRoles} token={token} users={users} />
       </div>
     </>
   );

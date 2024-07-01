@@ -20,7 +20,9 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
   const [file, setFile] = useState<File>();
   const [department, setDepartment] = useState<string>(departments[0]._id);
   const [role, setRole] = useState<string>(roles[0].value);
-  const [optsRoles, setOptsRoles] = useState<Options>(roles[0]);
+  //const [optsRoles, setOptsRoles] = useState<Options>(roles[0]);
+
+  let optRole = roles.find(r => r.value === role)?? roles[0];
 
   const [heightPage, setHeightPage] = useState<number>(900);
   
@@ -42,7 +44,8 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
     })
   ))
 
-  const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
+  //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
+  let optDepto = optionsDepartments.find(dep => dep.value === department)?? optionsDepartments[0];
 
   const formik = useFormik({
     initialValues: {
@@ -50,7 +53,6 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
       password:'', 
       name: '',
       confirmpassword: '',
-
     }, 
     validationSchema: Yup.object({
       email: Yup.string()
@@ -79,16 +81,16 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
 
         try {
           const res = await createUserPhoto(formdata, token);
-          console.log('res ', res);
+          //console.log('res ', res);
           if(typeof(res)==='string'){
             showToastMessageError(res);
           }else{
             showToastMessage('Usuario creado exitosamente!!!');
-            //addUser(res);
-            //showForm(false);
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            addUser(res);
+            showForm(false);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }
         } catch (error) {
           console.log('error ', error);
@@ -99,16 +101,17 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
           name, email, password, confirmpassword, department, rol:role
         }
         try {
+          //console.log('send user ', JSON.stringify(data));
           const res = await createUser(data, token);
           if(typeof(res)==='string'){
             showToastMessageError(res);
           }else{
             showToastMessage('Usuario creado exitosamente!!!');
-            //addUser(res);
-            //showForm(false);
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            addUser(res);
+            showForm(false);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }
         } catch (error) {
           showToastMessageError('Error al crear usuario!!');
@@ -162,8 +165,10 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
           <div className="mt-1">
             <Select 
               options={roles}
-              onChange={(e: any) => {setRole(e.value); setOptsRoles(e)}}
-              value={optsRoles}
+              //onChange={(e: any) => {setRole(e.value); setOptsRoles(e)}}
+              onChange={(e: any) => setRole(e.value)}
+              //value={optsRoles}
+              value={optRole}
             />
           </div>
         </div>
@@ -172,8 +177,10 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
           <div className="mt-1">
             <Select 
               options={optionsDepartments}
-              onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
-              value={optDepts}
+              // onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
+              onChange={(e:any) => setDepartment(e.value)}
+              //value={optDepts}
+              value={optDepto}
             />
           </div>
         </div>

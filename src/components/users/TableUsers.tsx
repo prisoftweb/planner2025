@@ -12,31 +12,36 @@ import { Options } from "@/interfaces/Common";
 import Header from "../Header";
 import { DataUsersToTableData } from "@/app/functions/UsersFunctions";
 import { removeUser } from "@/app/api/routeUser";
+import { useUserStore } from "@/app/store/userStore";
 
-export default function TableUsers({users, token, departments, roles}:
-                        {users:UsrBack[], token:string, 
+export default function TableUsers({token, departments, roles}:
+                        {token:string, 
                           departments:any, roles:Options[]}){
   
   const columnHelper = createColumnHelper<User>();
   const [newUser, setNewUser] = useState<boolean>(false);
-  const [usersData, setUsersData] = useState<UsrBack[]>(users);
+  const {pushUser, users, deleteUser} = useUserStore();
+  //const [usersData, setUsersData] = useState<UsrBack[]>(users);
 
   const handleClickNew = (value:boolean) => {
     setNewUser(value);
   }
 
   const addUser = (usr: UsrBack) => {
-    setUsersData((oldUsers) => [...oldUsers, usr]);
+    //setUsersData((oldUsers) => [...oldUsers, usr]);
+    pushUser(usr);
   }
 
-  const deleteUser = (id: string) => {
-    const newUsers = usersData.filter((usr) => {
-      if(usr._id !== id) return usr;
-    });
-    setUsersData(newUsers);
+  const delUser = (id: string) => {
+    // const newUsers = usersData.filter((usr) => {
+    //   if(usr._id !== id) return usr;
+    // });
+    // setUsersData(newUsers);
+    deleteUser(id);
   }
 
-  const data = DataUsersToTableData(usersData);
+  //const data = DataUsersToTableData(usersData);
+  const data = DataUsersToTableData(users);
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -65,7 +70,7 @@ export default function TableUsers({users, token, departments, roles}:
             className={`w-4 h-4 mr-3 ${row.original.profile.status? 'bg-green-500': 'bg-red-500'}`}>
           </div>
           <RemoveElement token={token} id={row.original.id} 
-                name={row.original.name} remove={removeUser} removeElement={deleteUser} />
+                name={row.original.name} remove={removeUser} removeElement={delUser} />
           {/* <DeleteUser token={token} user={row.original} /> */}
         </div>
       ),

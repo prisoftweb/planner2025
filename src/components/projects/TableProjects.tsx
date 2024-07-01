@@ -199,8 +199,8 @@ export default function TableProjects({data, token, projects, optCategories,
         return true
       return false;
     }else{
-      if(project.categorys)
-        if(categories.includes(project.categorys._id))
+      if(project.glossary)
+        if(categories.includes(project.glossary._id))
           if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
             return true
       return false;
@@ -214,8 +214,8 @@ export default function TableProjects({data, token, projects, optCategories,
         return true;
       return false;
     }else{
-      if(project.types)
-        if(types.includes(project.types._id))
+      if(project.glossary)
+        if(types.includes(project.glossary._id))
           if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
             return true;
       return false;

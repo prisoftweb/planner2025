@@ -34,7 +34,7 @@ export default function ProfileExpense({expense}:
             <div>
               <p className="text-blue-500">{expense.project?.title || 'Sin proyecto'}</p>
               <p className="text-slate-500">{expense.project?.code || ''}</p>
-              <p className="text-slate-500">{expense.project?.types? expense.project.types.name: ''}</p>
+              <p className="text-slate-500">{expense.project?.glossary? expense.project.glossary.name: ''}</p>
               <p className="text-slate-500">{expense.project?.account || ''}</p>
             </div>
           </div>

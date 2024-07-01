@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import { getUser } from "@/app/api/routeUser";
+//import { getUser } from "@/app/api/routeUser";
 import UserClient from "./UserClient";
 import { getDepartments } from "@/app/api/routeDepartments";
 import { getRoles } from "@/app/api/routeRoles";
@@ -8,21 +8,21 @@ import { Options } from "@/interfaces/Common";
 import { Department } from "@/interfaces/Departments";
 import { UsrBack } from "@/interfaces/User";
 
-export default async function TabUser({id, opt}: {id:string, opt: number}){
+export default async function TabUser({user, opt}: {user:UsrBack, opt: number}){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  let user: UsrBack;
+  // let user: UsrBack;
 
-  try {
-    user = await getUser(id, token);
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>  
-  }
+  // try {
+  //   user = await getUser(id, token);
+  // } catch (error) {
+  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>  
+  // }
 
-  if(typeof(user) === "string")
-    return <h1 className="text-center text-red-500">{user}</h1>
+  // if(typeof(user) === "string")
+  //   return <h1 className="text-center text-red-500">{user}</h1>
 
   let departments: Department[];
   try {

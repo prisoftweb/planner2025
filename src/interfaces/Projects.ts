@@ -39,8 +39,10 @@ export interface Project {
   account: string
   __v: number
   id: string
-  types: Glossary
-  categorys: Glossary
+  glossary: Glossary
+  category: Glossary
+  // types: Glossary
+  // categorys: Glossary
 }
 
 export interface Location {
