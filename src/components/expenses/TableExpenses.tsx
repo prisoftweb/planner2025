@@ -270,7 +270,7 @@ export default function TableExpenses({data, token, expenses,
 
   const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
-    if(exp.cost.subtotal >= minAmount && exp.cost.subtotal <= maxAmount){
+    if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
       return dateValidation(exp, startDate, endDate);
     }
     return false;
