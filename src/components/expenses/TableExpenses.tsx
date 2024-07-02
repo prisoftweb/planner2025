@@ -196,15 +196,26 @@ export default function TableExpenses({data, token, expenses,
     total: false,
   }
 
+  // try {
+  //   expenses.map((exp, index:number) => {
+  //     console.log('index');
+  //     if(!exp.cost || !exp.cost.subtotal){
+  //       console.log('id => ', exp._id);
+  //     }
+  //   });
+  // } catch (error) {
+  //   console.log('error catch => ', error);
+  // }
+
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} 
                 placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
   const [maxAmount, setMaxAmount] = useState<number>(0);
   
   useEffect(() => {
     const expenseM = expenses.reduce((previous, current) => {
-      return current.cost.subtotal > previous.cost.subtotal ? current : previous;
+      return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
     });
-    setMaxAmount(expenseM.cost.subtotal);
+    setMaxAmount(expenseM.cost?.subtotal);
   }, [])
 
 

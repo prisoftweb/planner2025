@@ -16,6 +16,8 @@ export interface ReportTable{
   Total: string 
   Fecha: string
   color:string
+  account: string
+  isPettyCash: boolean
 }
 
 export interface Report {
@@ -63,3 +65,74 @@ export interface CostsTable {
   Importe: string
   condition: string
 }
+
+// export interface ReportParse {
+//   _id: string
+//   name: string
+//   ispettycash: boolean
+//   date: string
+//   status: boolean
+//   account: string
+//   quantity: number
+//   total: number
+//   subtotal: number
+//   company: string
+//   companylogo: string
+//   department: string
+//   user: string
+//   userphoto: string
+//   lastmovedate: string
+//   lastmovestatus: string
+//   lastmovecolor: string
+//   project: Project
+// }
+
+export interface ReportParse {
+  _id: string
+  name: string
+  ispettycash: boolean
+  date: string
+  user: User
+  company: Company
+  project: Project
+  status: boolean
+  account: string
+  quantity: number
+  total: number
+  subtotal: number
+  lastmove: Lastmove
+  department: string
+}
+
+export interface User {
+  name: string
+  photo: string
+}
+
+// export interface Company {
+//   _id: string
+//   name: string
+//   logo: string
+// }
+
+// export interface Project {
+//   _id: string
+//   title: string
+// }
+
+export interface Lastmove {
+  condition: Condition
+  department: Department
+  date: string
+}
+
+export interface Condition {
+  _id: string
+  name: string
+  color: string
+}
+
+// export interface Department {
+//   _id: string
+//   name: string
+// }

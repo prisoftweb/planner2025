@@ -5,7 +5,7 @@ import ButtonNew from "./ButtonNew"
 import TableReports from "./TableReports"
 import { useState } from "react"
 import { Options } from "@/interfaces/Common"
-import { ReportTable, Report } from "@/interfaces/Reports"
+import { ReportTable, Report, ReportParse } from "@/interfaces/Reports"
 import { GiSettingsKnobs } from "react-icons/gi"
 
 export default function ContainerClient({token, optCompanies, optDepartments, 
@@ -15,7 +15,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
                           {token:string, optDepartments:Options[], 
                             optCompanies:Options[], optProjects:Options[], 
                             user:string, condition:string, data:ReportTable[], 
-                            reports: Report[], optConditionsFilter: Options[], 
+                            reports: ReportParse[], optConditionsFilter: Options[], 
                             optCompaniesFilter: Options[], optProjectsFilter:Options[]
                           }){
 

@@ -1,5 +1,5 @@
 import { CurrencyFormatter } from "./Globals";
-import { Report } from "@/interfaces/Reports";
+import { Report, ReportParse } from "@/interfaces/Reports";
 import { ReportTable } from "@/interfaces/Reports";
 import { CostsTable } from "@/interfaces/Reports";
 import { Expense } from "@/interfaces/Expenses";
@@ -24,9 +24,39 @@ export function ReportDataToTableData(reports:Report[]){
       Status: report.moves[report.moves.length - 1]?.condition?.name || 'Sin status',
       id: report._id,
       color: report.moves[report.moves.length - 1].condition.color || '',
+      account: report.account,
+      isPettyCash: report.ispettycash,
     })
   });
 
+  return table;
+}
+
+export function ReportParseDataToTableData(reports:ReportParse[]){
+  const table: ReportTable[] = [];
+  reports.map((report) => {
+    const dollar = CurrencyFormatter({
+      currency: "MXN",
+      value: report.total
+    })
+    
+    table.push({
+      //Company: report._id.company.logo,
+      Company: report.company.logo,
+      Total: dollar,
+      Depto: report.department,
+      Fecha: report.date,
+      NºGastos: report.quantity.toString(),
+      Project: report.project.title,
+      Report: report.name,
+      Responsible: report.user.photo,
+      Status: report.lastmove.condition.name,
+      id: report._id,
+      color: report.lastmove.condition.color,
+      account: report.account,
+      isPettyCash: report.ispettycash,
+    })
+  });
   return table;
 }
 
