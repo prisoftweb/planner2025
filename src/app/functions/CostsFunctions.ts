@@ -13,19 +13,19 @@ export function ExpenseDataToTableData(expenses:Expense[]){
     
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.cost.subtotal
+          value: expense.cost?.subtotal || 0
         });
     const discount = CurrencyFormatter({
       currency: "MXN",
-      value: expense.cost.discount || 0
+      value: expense.cost?.discount || 0
     });
     const vat = CurrencyFormatter({
       currency: "MXN",
-      value: expense.cost.iva || 0
+      value: expense.cost?.iva || 0
     });
     const total = CurrencyFormatter({
       currency: "MXN",
-      value: expense.cost.total || 0
+      value: expense.cost?.total || 0
     });
     const elements: string[] = [];
     if(expense.category.name.toLowerCase().includes('xml') && expense.category.name.toLowerCase().includes('pdf')){
