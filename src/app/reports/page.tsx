@@ -10,11 +10,11 @@ import { Company } from "@/interfaces/Companies";
 import { Project } from "@/interfaces/Projects";
 import { getProjects } from "../api/routeProjects";
 import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReports, GetReportsMin, GetReportsByUser, GetReportsByDept } from "../api/routeReports";
-import { Report, ReportTable } from "@/interfaces/Reports";
+import { GetReports, GetReportsMin, GetReportsByUser, GetReportsByDept, GetReportsLastMovInDept } from "../api/routeReports";
+import { Report, ReportParse, ReportTable } from "@/interfaces/Reports";
 //import Header from "@/components/Header";
 //import TableReports from "@/components/reports/TableReports";
-import { ReportDataToTableData } from "../functions/ReportsFunctions";
+import { ReportDataToTableData, ReportParseDataToTableData } from "../functions/ReportsFunctions";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import ContainerClient from "@/components/reports/ContainerClient";
@@ -25,19 +25,25 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let reports: Report[] = [];
+  //let reports: Report[] = [];
+  let reports: ReportParse[] = [];
   try {
     //console.log(user.department.name.toLowerCase());
     if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
       reports = await GetReportsByUser(token, user._id);
+      console.log('rep por usuario!! => ', reports);
       //consultar por usuario y por departamento
       //console.log('by user');
     }else{
       if(user.department.name.toLowerCase().includes('direccion')){
-        reports = await GetReports(token);
+        //reports = await GetReports(token);
+        reports = await GetReportsMin(token);
+        console.log('rep por min!! => ', reports);
       }else{
         //console.log('by dept');
-        reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
+        //reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
+        reports = await GetReportsLastMovInDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
+        console.log('rep por ultimo dept!! => ', reports);
       }
     }
     //reports = await GetReports(token);
@@ -167,7 +173,8 @@ export default async function Page() {
     )
   }
 
-  const table: ReportTable[] = ReportDataToTableData(reports);
+  //const table: ReportTable[] = ReportDataToTableData(reports);
+  const table: ReportTable[] = ReportParseDataToTableData(reports);
 
   return (
     <>

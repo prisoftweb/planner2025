@@ -5,26 +5,27 @@ import DeleteElement from "../DeleteElement";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 //import Filtering from "./Filtering";
-import Button from "../Button";
+//import Button from "../Button";
 import { Options } from "@/interfaces/Common";
-import { Report, ReportTable } from "@/interfaces/Reports";
+import { Report, ReportTable, ReportParse } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
 import { RemoveReport } from "@/app/api/routeReports";
-import { ReportDataToTableData } from "@/app/functions/ReportsFunctions";
-import { GiSettingsKnobs } from "react-icons/gi";
+import { ReportDataToTableData, ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
+//import { GiSettingsKnobs } from "react-icons/gi";
 import Filtering from "./FilteringReports";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
 
 export default function TableReports({data, token, reports, 
                           optCompanies, optConditions, optProjects, 
                           isFilter, setIsFilter}:
                         {data:ReportTable[], token:string, 
-                          reports: Report[], optCompanies: Options[], 
+                          reports: ReportParse[], optCompanies: Options[], 
                           optProjects: Options[], optConditions: Options[], 
                           isFilter:boolean, setIsFilter:Function}){
   
   const columnHelper = createColumnHelper<ReportTable>();
 
-  const [filtering, setFiltering] = useState<boolean>(false);
+  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataReports, setDataReports] = useState(data);
 
@@ -55,6 +56,7 @@ export default function TableReports({data, token, reports,
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
           <DeleteElement id={row.original.id} name={row.original.Report} remove={RemoveReport} token={token} />
+          {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500" />}
         </div>
       ),
       enableSorting:false,
@@ -74,6 +76,20 @@ export default function TableReports({data, token, reports,
       enableSorting:false,
       header: () => (
         <p>Reporte</p>
+      )
+    }),
+    columnHelper.accessor(row => row.account, {
+      id: 'Cuenta',
+      cell: ({row}) => (
+        <Link href={`/reports/${row.original.id}/profile`}>
+          <div className="flex gap-x-1 items-center">
+            <p>{row.original.account}</p>
+          </div>
+        </Link>
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>Cuenta</p>
       )
     }),
     columnHelper.accessor('Project', {
@@ -169,7 +185,7 @@ export default function TableReports({data, token, reports,
     setMaxAmount(repAmount.total || 100);
   }, [])
 
-  const dateValidation = (rep:Report, startDate:number, endDate:number) => {
+  const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
     let d = new Date(rep.date).getTime();
     //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
@@ -178,7 +194,7 @@ export default function TableReports({data, token, reports,
     return false;
   }
 
-  const amountValidation = (rep:Report, minAmount:number, maxAmount:number, 
+  const amountValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
     if(rep.total >= 0){
       //console.log('total ', rep.total, ' >= ', minAmount);
@@ -192,7 +208,7 @@ export default function TableReports({data, token, reports,
     //return dateValidation(rep, startDate, endDate);
   }
 
-  const projectValidation = (rep:Report, minAmount:number, maxAmount:number, 
+  const projectValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, projects:string[]) => {
     if(projects.includes('all')){
       return amountValidation(rep, minAmount, maxAmount, startDate, endDate);
@@ -206,7 +222,7 @@ export default function TableReports({data, token, reports,
     return false;
   }
 
-  const companyValidation = (rep:Report, minAmount:number, maxAmount:number, 
+  const companyValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
               startDate:number, endDate:number, projects:string[], companies:string[]) => {
     if(companies.includes('all')){
       return projectValidation(rep, minAmount, maxAmount, startDate, endDate, projects); 
@@ -220,14 +236,14 @@ export default function TableReports({data, token, reports,
     return false;
   }
 
-  const conditionValidation = (rep:Report, minAmount:number, maxAmount:number, 
+  const conditionValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   companies:string[], conditions:string[]) => {
 
     if(conditions.includes('all')){
       return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
     }else{
-      if(conditions.includes(rep.moves[rep.moves.length-1].condition._id)){
+      if(conditions.includes(rep.lastmove.condition._id)){
         return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
       }
       // if(!rep.condition.every((cond) => !conditions.includes(cond.glossary._id))){
@@ -237,7 +253,7 @@ export default function TableReports({data, token, reports,
     return false;
   }
 
-  const pettyCashValidation = (rep:Report, minAmount:number, maxAmount:number, 
+  const pettyCashValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
       startDate:number, endDate:number, projects:string[], 
       companies:string[], conditions:string[], isPettyCash:boolean) => {
 
@@ -259,7 +275,9 @@ export default function TableReports({data, token, reports,
     // console.log('endDate ', endDate);
     // console.log('min amount ', minAmount);
     // console.log('max amount ', maxAmount);
-    let filtered: Report[] = [];
+    
+    //let filtered: Report[] = [];
+    let filtered: ReportParse[] = [];
     reports.map((report) => {
       if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
           endDate, projects, companies, conditions, isPettyCash)){
@@ -270,7 +288,8 @@ export default function TableReports({data, token, reports,
     //console.log(filtered);
     //setFilteredReports(filtered);
     
-    setDataReports(ReportDataToTableData(filtered));
+    // setDataReports(ReportDataToTableData(filtered));
+    setDataReports(ReportParseDataToTableData(filtered));
     setFilter(true);
   }
 
