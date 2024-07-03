@@ -146,17 +146,31 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   //   }, 500);
   // }
 
-  useEffect(() => {
-    if(report !== ''){
-      const r = reports.find((rep) => rep._id === report);
+  // useEffect(() => {
+  //   if(report !== ''){
+  //     const r = reports.find((rep) => rep._id === report);
       
-      //setIsPettyCash(r?.ispettycash || false);
+  //     //setIsPettyCash(r?.ispettycash || false);
+  //     updatePettyCash(r?.ispettycash || false);
+  //     //console.log('petty ', r);
+  //     updateProject(r?.project._id || '');
+  //     //setViewSelectProject(<></>);
+  //   }
+  // }, [report]);
+
+  if(report !== ''){
+    const r = reports.find((rep) => rep._id === report);
+    
+    //setIsPettyCash(r?.ispettycash || false);
+    if(r?.ispettycash !== isPettyCash){
       updatePettyCash(r?.ispettycash || false);
-      //console.log('petty ', r);
-      updateProject(r?.project._id || '');
-      //setViewSelectProject(<></>);
     }
-  }, [report]);
+    //console.log('petty ', r);
+    if(r?.project._id !== project){
+      updateProject(r?.project._id || '');
+    }
+    //setViewSelectProject(<></>);
+  }
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
