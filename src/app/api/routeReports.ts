@@ -215,7 +215,7 @@ export async function GetReportsLastMovInDept(auth_token:string, idDept:string) 
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    if(res.status === 200) return res.data.data.data;
+    if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

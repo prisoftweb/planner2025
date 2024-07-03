@@ -8,7 +8,6 @@ import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { useEffect, useState } from "react";
-//import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseStepper from "./NavExpenseStepper"
 import { useNewExpense } from "@/app/store/newExpense"
@@ -64,7 +63,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       const {description, folio, taxFolio, discount, amount, vat} = valores;
       updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, typeExpenseS, categoryS, idVat, 'PROVEEDOR');
+          typeCFDIS, '', categoryS, idVat, 'PROVEEDOR');
       updateIndexStepper(2);
     },       
   });
@@ -78,45 +77,81 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const d = year+'-'+month+'-'+day;
   
   const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
-  const [startDate, setStartDate] = useState<string>(d);
-  const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
+  const [startDate, setStartDate] = useState<string>(date!== ''? date: d);
+  //const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(optTypes[0].value);
-  const [provider, setProvider] = useState<string>(optProviders[0].value);
-  const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
+  const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: optProviders[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: optResponsibles[0].value);
   const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
-  const [resetBand, setResetBand] = useState<boolean>(false);
-  const [view, setView] = useState<JSX.Element>(<></>);
-  const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-  const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
-  const [idVat, setIdVat] = useState<string>(optVats[0].value);
-  const [vatValue, setVatValue] = useState<string>('0');
+  //const [resetBand, setResetBand] = useState<boolean>(false);
+  //const [view, setView] = useState<JSX.Element>(<></>);
+  //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
+  //const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
-  const [clearAmountm, setClearAmount] = useState<boolean>(false);
+  //actualizacion juntar estos 2 estados en un objeto
+  const [idVat, setIdVat] = useState<string>(optVats[0].value);
+  //const [vatValue, setVatValue] = useState<string>('0');
+  
+  let vatValue = '0';
+  try {
+    const foundVat = optVats.find((vat) => vat.value === idVat);
+    const vatvalue = foundVat?.label || '0';
+    const operation = 
+      (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+        Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+    formik.values.vat = operation.toFixed(2).toString();
+    vatValue = operation.toFixed(2).toString();
+    //setVatValue(operation.toFixed(2).toString());
+  } catch (error) {
+    vatValue = '0';
+    formik.values.vat = '0';
+  }
 
-  const [viewAmount, setViewAmount] = useState<JSX.Element>(<CurrencyInput
-    id="amount"
-    name="amount"
-    className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-      focus:border-slate-700 outline-0"
-    onChange={formik.handleChange}
-    onBlur={formik.handleChange}
-    defaultValue={amount}
-    decimalsLimit={2}
-    prefix="$"
-    onValueChange={(value) => {try {
-      formik.values.amount=value || '0';
-    } catch (error) {
-      formik.values.amount='0';
-    }}}
-  />)
+  //const [clearAmountm, setClearAmount] = useState<boolean>(false);
+
+  // const [viewAmount, setViewAmount] = useState<JSX.Element>(<CurrencyInput
+  //   id="amount"
+  //   name="amount"
+  //   className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+  //     focus:border-slate-700 outline-0"
+  //   onChange={formik.handleChange}
+  //   onBlur={formik.handleChange}
+  //   defaultValue={amount}
+  //   decimalsLimit={2}
+  //   prefix="$"
+  //   onValueChange={(value) => {try {
+  //     formik.values.amount=value || '0';
+  //   } catch (error) {
+  //     formik.values.amount='0';
+  //   }}}
+  // />)
+
+  const viewAmount = (
+    <CurrencyInput
+      id="amount"
+      name="amount"
+      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+        focus:border-slate-700 outline-0"
+      onChange={formik.handleChange}
+      onBlur={formik.handleChange}
+      defaultValue={formik.values.amount}
+      decimalsLimit={2}
+      prefix="$"
+      onValueChange={(value) => {try {
+        formik.values.amount=value || '0';
+      } catch (error) {
+        formik.values.amount='0';
+      }}}
+    />
+  )
 
   const SaveData = async() => {
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, typeExpenseS, categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR');
+        typeCFDIS, '', categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR');
     
     let supplierCredit: boolean;
     try {
@@ -165,7 +200,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         formdata.append('ispaid', JSON.stringify(supplierCredit));
         const res = await CreateCostWithFiles(token, formdata);
         if(res === 201){
-          setView(<></>);
+          //setView(<></>);
           reset();
           formik.values.amount = '';
           formik.values.description = '';
@@ -173,12 +208,12 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           formik.values.folio = '';
           formik.values.taxFolio = '';
           formik.values.vat = '';
-          setClearAmount(true);
+          //setClearAmount(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           updateRefresh(true);
-          setTimeout(() => {
-            setResetBand(true);
-          }, 300);
+          // setTimeout(() => {
+          //   setResetBand(true);
+          // }, 300);
         }else{
           showToastMessageError(res);
         }
@@ -205,7 +240,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       try {
         const res = await SaveExpense(data, token);
         if(res===201){
-          setView(<></>);
+          //setView(<></>);
           reset();
           formik.values.amount = '';
           formik.values.description = '';
@@ -214,11 +249,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           formik.values.taxFolio = '';
           formik.values.vat = '';
           showToastMessage('Costo creado satisfactoriamente!!!');
-          setClearAmount(true);
+          //setClearAmount(true);
           updateRefresh(true);
-          setTimeout(() => {
-            setResetBand(true);
-          }, 300);
+          // setTimeout(() => {
+          //   setResetBand(true);
+          // }, 300);
         }
         else{
           showToastMessageError(res);
@@ -234,279 +269,396 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     //console.log('optProviders => ', optProviders);
     setProvider(newProvider.value);
     //console.log('prov length => ', optProviders.length)
-    setIndexProv(optProviders.length - 1);
+    //setIndexProv(optProviders.length - 1);
   }
 
-  const [selectProvider, setSelectProviders] = useState<JSX.Element>(
-              <SelectReact index={0} opts={optProviders} setValue={setProvider} />)
-  const [indexProv, setIndexProv] = useState<number>(0);
+  //const [selectProvider, setSelectProviders] = useState<JSX.Element>(
+              //<SelectReact index={0} opts={optProviders} setValue={setProvider} />)
+  //const [indexProv, setIndexProv] = useState<number>(0);
 
-  useEffect(() => {
-    //setSelectProviders(<></>);
-    setTimeout(() => {
-      setSelectProviders(
-        () => <div>
-                <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-                <div className="flex gap-x-2 items-center">
-                  <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
-                  <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-                    onClick={() => setShowProvider(true)} />
-                </div>
-              </div>
-      )
-    }, 100);
-  }, [indexProv]);
+  let indexProvider = 0;
+  if(provider !== ''){
+    optProviders.map((opt, index:number) => {
+      if(opt.value === proveedor){
+        indexProvider = index;
+      }
+    });      
+  }
+
+  const handleProvider = (value : string) => {
+    setProvider(value);
+  }
+
+  const selectProvider = (
+    <div>
+        <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+        <div className="flex gap-x-2 items-center">
+          <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+          <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+          onClick={() => setShowProvider(true)} />
+      </div>
+    </div>
+  )
+
+  // useEffect(() => {
+  //   //setSelectProviders(<></>);
+  //   setTimeout(() => {
+  //     setSelectProviders(
+  //       () => <div>
+  //               <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+  //               <div className="flex gap-x-2 items-center">
+  //                 <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
+  //                 <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+  //                   onClick={() => setShowProvider(true)} />
+  //               </div>
+  //             </div>
+  //     )
+  //   }, 100);
+  // }, [indexProv]);
   
-  useEffect(() => {
-    let indexCC = 0;
-    if(costCenter !== ''){
-      optCostCenter.map((opt, index:number) => {
-        if(opt.value === costCenter){
-          indexCC = index;
-        }
-      });      
-    }
-    if(date !== ''){
-      setStartDate(date);
-    }
-
-    let indexTypeCFDI = 0;
-    if(typeCFDIS !== ''){
-      optTypes.map((opt, index:number) => {
-        if(opt.value === typeCFDI){
-          indexTypeCFDI = index;
-        }
-      });      
-    }
+  // useEffect(() => {
     
-    let indexResp = 0;
-    if(responsibleS !== ''){
-      optResponsibles.map((opt, index:number) => {
-        if(opt.value === responsible){
-          indexResp = index;
-        }
-      });      
-    }
+  //   // if(date !== ''){
+  //   //   setStartDate(date);
+  //   // }
 
-    let indexCate = 0;
-    if(categoryS !== ''){
-      optCategories.map((opt, index:number) => {
-        if(opt.value === category){
-          indexCate = index;
-        }
-      });      
-    }
+  //   // let indexResp = 0;
+  //   // if(responsibleS !== ''){
+  //   //   optResponsibles.map((opt, index:number) => {
+  //   //     if(opt.value === responsible){
+  //   //       indexResp = index;
+  //   //     }
+  //   //   });      
+  //   // }
 
-    let indexProvider = 0;
-      if(proveedor !== ''){
-        optProviders.map((opt, index:number) => {
-          if(opt.value === proveedor){
-            indexProvider = index;
-          }
-        });      
-      }
+    
 
-    setView(<></>);
-    setViewCC(<></>);
-    setViewResponsible(<></>);
-    setSelectProviders(<></>);
-    setTimeout(() => {
-      setSelectProviders(
-        <div>
-          <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-          <div className="flex gap-x-2 items-center">
-            <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
-            <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-              onClick={() => setShowProvider(true)} />
-          </div>
-        </div>
-      )
+  //   // let indexProvider = 0;
+  //   //   if(proveedor !== ''){
+  //   //     optProviders.map((opt, index:number) => {
+  //   //       if(opt.value === proveedor){
+  //   //         indexProvider = index;
+  //   //       }
+  //   //     });      
+  //   //   }
+
+  //   //setView(<></>);
+  //   //setViewCC(<></>);
+  //   //setViewResponsible(<></>);
+  //   //setSelectProviders(<></>);
+  //   setTimeout(() => {
+  //     // setSelectProviders(
+  //     //   <div>
+  //     //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+  //     //     <div className="flex gap-x-2 items-center">
+  //     //       <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
+  //     //       <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+  //     //         onClick={() => setShowProvider(true)} />
+  //     //     </div>
+  //     //   </div>
+  //     // )
       
-      setViewCC(<div className=" col-span-1 md:col-span-3">
-            <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-            <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-          </div>)
+  //     // setViewCC(<div className=" col-span-1 md:col-span-3">
+  //     //       <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+  //     //       <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+  //     //     </div>)
       
-      setView(<>
-        <div>
-          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-        </div>
-        <div>
-          <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-          <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
-        </div>
-      </>)
+  //     // setView(<>
+  //     //   <div>
+  //     //     <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+  //     //     <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
+  //     //   </div>
+  //     //   <div>
+  //     //     <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
+  //     //     <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
+  //     //   </div>
+  //     // </>)
 
-      setViewResponsible(<div>
-                <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-                <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-              </div>)
-    }, 10);
+  //     // setViewResponsible(<div>
+  //     //           <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+  //     //           <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+  //     //         </div>)
+  //   }, 10);
 
-  }, []);
+  // }, []);
 
-  useEffect(() => {
-    if(resetBand){
-      let indexCC = 0;
-      if(costCenter !== ''){
-        optCostCenter.map((opt, index:number) => {
-          if(opt.value === costCenter){
-            indexCC = index;
-          }
-        });      
+  let indexCate = 0;
+  if(categoryS !== ''){
+    optCategories.map((opt, index:number) => {
+      if(opt.value === category){
+        indexCate = index;
       }
-      if(date !== ''){
-        setStartDate(date);
-      }
-      
-      let indexTypeCFDI = 0;
-      if(typeCFDIS !== ''){
-        optTypes.map((opt, index:number) => {
-          if(opt.value === typeCFDI){
-            indexTypeCFDI = index;
-          }
-        });      
-      }
-      
-      let indexProvider = 0;
-      if(proveedor !== ''){
-        optProviders.map((opt, index:number) => {
-          if(opt.value === proveedor){
-            indexProvider = index;
-          }
-        });      
-      }
-      setIndexProv(indexProvider);
-      
-      let indexResp = 0;
-      if(responsibleS !== ''){
-        optResponsibles.map((opt, index:number) => {
-          if(opt.value === responsible){
-            indexResp = index;
-          }
-        });      
-      }
-      
-      let indexCate = 0;
-      if(categoryS !== ''){
-        optCategories.map((opt, index:number) => {
-          if(opt.value === category){
-            indexCate = index;
-          }
-        });      
-      }
-      
-      setViewCC(<div className=" col-span-1 md:col-span-3">
-              <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-              <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-            </div>)
+    });      
+  }
 
-      setView(<>
-        <div>
-          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-        </div>
-        <div>
-          <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-          <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
-        </div>
-      </>)
-      setViewResponsible(<div>
-              <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-              <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-            </div>)
-      setResetBand(false);
-    }
-  }, [resetBand]);
+  let indexTypeCFDI = 0;
+  if(typeCFDIS !== ''){
+    optTypes.map((opt, index:number) => {
+      if(opt.value === typeCFDI){
+        indexTypeCFDI = index;
+      }
+    });      
+  }
 
-  useEffect(() => {
-    if(typeCFDIS !== ''){
-      const found = optTypes.find((type) => type.value === typeCFDIS);
+  const handleCategory = (value: string) => {
+    setCategoryS(value);
+  }
+
+  const handleTypeCfdi = (value: string) => {
+    handleTypeCategoryCFDI(value);
+    setTypeCFDIS(value);
+  }
+
+  const view = (
+    <>
+      <div>
+        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+        <SelectReact index={indexCate} opts={optCategories} setValue={handleCategory} />
+      </div>
+      <div>
+        <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
+        <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={handleTypeCfdi} />
+      </div>
+    </>
+  );
+
+  let indexCC = 0;
+  if(costCenter !== ''){
+    optCostCenter.map((opt, index:number) => {
+      if(opt.value === costCenter){
+        indexCC = index;
+      }
+    });      
+  }
+
+  const handleConstCenter = (value : string) => {
+    setCostCenter(value);
+  }
+
+  const viewCC = (
+    <div className=" col-span-1 md:col-span-3">
+      <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+      <SelectReact index={indexCC} opts={optCostCenter} setValue={handleConstCenter} />
+    </div>
+  );
+
+  let indexResp = 0;
+  if(responsibleS !== ''){
+    optResponsibles.map((opt, index:number) => {
+      if(opt.value === responsibleS){
+        indexResp = index;
+      }
+    });      
+  }
+
+  let viewResponsible = (
+    <div>
+      <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+      <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+    </div>
+  );
+
+  // useEffect(() => {
+  //   if(resetBand){
+  //     // let indexCC = 0;
+  //     // if(costCenter !== ''){
+  //     //   optCostCenter.map((opt, index:number) => {
+  //     //     if(opt.value === costCenter){
+  //     //       indexCC = index;
+  //     //     }
+  //     //   });      
+  //     // }
+
+  //     // if(date !== ''){
+  //     //   setStartDate(date);
+  //     // }
+      
+  //     // let indexTypeCFDI = 0;
+  //     // if(typeCFDIS !== ''){
+  //     //   optTypes.map((opt, index:number) => {
+  //     //     if(opt.value === typeCFDI){
+  //     //       indexTypeCFDI = index;
+  //     //     }
+  //     //   });      
+  //     // }
+      
+  //     // let indexProvider = 0;
+  //     // if(proveedor !== ''){
+  //     //   optProviders.map((opt, index:number) => {
+  //     //     if(opt.value === proveedor){
+  //     //       indexProvider = index;
+  //     //     }
+  //     //   });      
+  //     // }
+  //     //setIndexProv(indexProvider);
+      
+  //     // let indexResp = 0;
+  //     // if(responsibleS !== ''){
+  //     //   optResponsibles.map((opt, index:number) => {
+  //     //     if(opt.value === responsible){
+  //     //       indexResp = index;
+  //     //     }
+  //     //   });      
+  //     // }
+      
+  //     // let indexCate = 0;
+  //     // if(categoryS !== ''){
+  //     //   optCategories.map((opt, index:number) => {
+  //     //     if(opt.value === category){
+  //     //       indexCate = index;
+  //     //     }
+  //     //   });      
+  //     // }
+      
+  //     // setViewCC(<div className=" col-span-1 md:col-span-3">
+  //     //         <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+  //     //         <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
+  //     //       </div>)
+
+  //     // setView(<>
+  //     //   <div>
+  //     //     <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+  //     //     <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
+  //     //   </div>
+  //     //   <div>
+  //     //     <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
+  //     //     <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
+  //     //   </div>
+  //     // </>)
+  //     // setViewResponsible(<div>
+  //     //         <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
+  //     //         <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+  //     //       </div>)
+  //     setResetBand(false);
+  //   }
+  // }, [resetBand]);
+
+  // useEffect(() => {
+  //   if(typeCFDIS !== ''){
+  //     const found = optTypes.find((type) => type.value === typeCFDIS);
+  //     if(found){
+  //       if(found.label.toLowerCase().includes('egreso')){
+  //         //setViewAmount(<></>);
+  //         //setTimeout(() => {
+  //           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
+  //           if(num > 0){
+  //             num = num * -1;
+  //             formik.values.amount = num.toString();
+  //           }
+            
+  //           // setViewAmount(<CurrencyInput
+  //           //   id="amount"
+  //           //   name="amount"
+  //           //   className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+  //           //     focus:border-slate-700 outline-0"
+  //           //   onChange={formik.handleChange}
+  //           //   onBlur={formik.handleChange}
+  //           //   defaultValue={num}
+  //           //   decimalsLimit={2}
+  //           //   prefix="$"
+  //           //   onValueChange={(value) => {try {
+  //           //     formik.values.amount=value || '0';
+  //           //   } catch (error) {
+  //           //     formik.values.amount='0';
+  //           //   }}}
+  //           // />)
+  //         //}, 30);
+  //       }else{
+  //         //setViewAmount(<></>);
+  //         //setTimeout(() => {
+  //           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
+  //           if(num < 0){
+  //             num = Math.abs(num) ;
+  //             formik.values.amount = num.toString();
+  //           }
+            
+  //           // setViewAmount(<CurrencyInput
+  //           //   id="amount"
+  //           //   name="amount"
+  //           //   className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+  //           //     focus:border-slate-700 outline-0"
+  //           //   onChange={formik.handleChange}
+  //           //   onBlur={formik.handleChange}
+  //           //   defaultValue={num}
+  //           //   decimalsLimit={2}
+  //           //   prefix="$"
+  //           //   onValueChange={(value) => {try {
+  //           //     formik.values.amount=value || '0';
+  //           //   } catch (error) {
+  //           //     formik.values.amount='0';
+  //           //   }}}
+  //           // />)
+  //         //}, 30);
+  //       }
+  //     }
+  //   }
+  // }, [typeCFDIS]);
+
+  const handleTypeCategoryCFDI = (catType: string) => {
+    if(catType !== ''){
+      const found = optTypes.find((type) => type.value === catType);
       if(found){
         if(found.label.toLowerCase().includes('egreso')){
-          setViewAmount(<></>);
-          setTimeout(() => {
-            let num = Number(formik.values.amount.replace(/[$,]/g, ""));
-            if(num > 0){
-              num = num * -1;
-              formik.values.amount = num.toString();
-            }
-            
-            setViewAmount(<CurrencyInput
-              id="amount"
-              name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                focus:border-slate-700 outline-0"
-              onChange={formik.handleChange}
-              onBlur={formik.handleChange}
-              defaultValue={num}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => {try {
-                formik.values.amount=value || '0';
-              } catch (error) {
-                formik.values.amount='0';
-              }}}
-            />)
-          }, 30);
+          let num = Number(formik.values.amount.replace(/[$,]/g, ""));
+          if(num > 0){
+            num = num * -1;
+            formik.values.amount = num.toString();
+          }
         }else{
-          setViewAmount(<></>);
-          setTimeout(() => {
-            let num = Number(formik.values.amount.replace(/[$,]/g, ""));
-            if(num < 0){
-              num = num * -1;
-              formik.values.amount = num.toString();
-            }
-            
-            setViewAmount(<CurrencyInput
-              id="amount"
-              name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                focus:border-slate-700 outline-0"
-              onChange={formik.handleChange}
-              onBlur={formik.handleChange}
-              defaultValue={num}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => {try {
-                formik.values.amount=value || '0';
-              } catch (error) {
-                formik.values.amount='0';
-              }}}
-            />)
-          }, 30);
+          let num = Number(formik.values.amount.replace(/[$,]/g, ""));
+          if(num < 0){
+            num = Math.abs(num) ;
+            formik.values.amount = num.toString();
+          }    
         }
       }
     }
-  }, [typeCFDIS]);
+  }
 
-  useEffect(() => {
-    if(clearAmountm){
-      setViewAmount(<></>);
-      setTimeout(() => {
-        setViewAmount(<CurrencyInput
-          id="amount"
-          name="amount"
-          className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-            focus:border-slate-700 outline-0"
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-          defaultValue={amount}
-          decimalsLimit={2}
-          prefix="$"
-          onValueChange={(value) => {try {
-            formik.values.amount=value || '0';
-          } catch (error) {
-            formik.values.amount='0';
-          }}}
-        />);
-      }, 100);
-      setClearAmount(false);
-    }
-  }, [clearAmountm]);
+  // useEffect(() => {
+  //   if(clearAmountm){
+  //     setViewAmount(<></>);
+  //     setTimeout(() => {
+  //       setViewAmount(<CurrencyInput
+  //         id="amount"
+  //         name="amount"
+  //         className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+  //           focus:border-slate-700 outline-0"
+  //         onChange={formik.handleChange}
+  //         onBlur={formik.handleChange}
+  //         defaultValue={amount}
+  //         decimalsLimit={2}
+  //         prefix="$"
+  //         onValueChange={(value) => {try {
+  //           formik.values.amount=value || '0';
+  //         } catch (error) {
+  //           formik.values.amount='0';
+  //         }}}
+  //       />);
+  //     }, 100);
+  //     setClearAmount(false);
+  //   }
+  // }, [clearAmountm]);
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   try {
+  //     const foundVat = optVats.find((vat) => vat.value === idVat);
+  //     const vatvalue = foundVat?.label || '0';
+  //     const operation = 
+  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+  //     formik.values.vat = operation.toFixed(2).toString();
+  //     setVatValue(operation.toFixed(2).toString());
+  //   } catch (error) {
+  //     formik.values.vat = '0';
+  //   }
+  // }, [formik.values.amount, formik.values.discount, idVat]);
+
+  const handleIdVat = (value: string) => {
+    setIdVat(value);
+  };
+
+  const vatCalculated = () => {
     try {
       const foundVat = optVats.find((vat) => vat.value === idVat);
       const vatvalue = foundVat?.label || '0';
@@ -514,15 +666,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         (Number(formik.values.amount.replace(/[$,]/g, "")) - 
           Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
       formik.values.vat = operation.toFixed(2).toString();
-      setVatValue(operation.toFixed(2).toString());
+      //setVatValue(operation.toFixed(2).toString());
     } catch (error) {
       formik.values.vat = '0';
     }
-  }, [formik.values.amount, formik.values.discount, idVat]);
-
-  const handleIdVat = (value: string) => {
-    setIdVat(value);
-  };
+  }
 
   return(
     <div className="w-full bg-white">

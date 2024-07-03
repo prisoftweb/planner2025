@@ -42,17 +42,17 @@ export function ReportParseDataToTableData(reports:ReportParse[]){
     
     table.push({
       //Company: report._id.company.logo,
-      Company: report.company.logo,
+      Company: report.company?.logo || 'sin logo',
       Total: dollar,
       Depto: report.department,
       Fecha: report.date,
       NºGastos: report.quantity.toString(),
-      Project: report.project.title,
+      Project: report.project?.title || 'sin proyecto',
       Report: report.name,
-      Responsible: report.user.photo,
-      Status: report.lastmove.condition.name,
+      Responsible: report.user?.photo || '/img/users/default.jpg',
+      Status: report.lastmove?.condition.name || 'sin status',
       id: report._id,
-      color: report.lastmove.condition.color,
+      color: report.lastmove?.condition.color || '',
       account: report.account,
       isPettyCash: report.ispettycash,
     })
@@ -65,7 +65,7 @@ export function CostsDataToTableData(expenses:Expense[]){
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.cost.subtotal
+          value: expense.cost?.subtotal || 0
         })
     table.push({
       id: expense._id,
