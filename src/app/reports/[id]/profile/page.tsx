@@ -12,11 +12,11 @@ import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/reports/NavTab";
 import ReportClient from "@/components/reports/ReportClient";
-import { GetReport, GetReports, updateReport, insertMovementsInReport } from "@/app/api/routeReports";
-import { Report } from "@/interfaces/Reports";
-import { getCostByReport } from "@/app/api/routeReports";
-import { Expense } from "@/interfaces/Expenses";
-import { getNode, getNodesByDepto } from "@/app/api/routeNodes";
+import { GetReport, GetReports, updateReport, 
+    insertMovementsInReport, getCostByReportMin } from "@/app/api/routeReports";
+import { Report, CostReport } from "@/interfaces/Reports";
+//import { Expense } from "@/interfaces/Expenses";
+import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -98,9 +98,9 @@ export default async function Page({ params }: { params: { id: string }}){
     });
   });
 
-  let costs:Expense[] = [];
+  let costs:CostReport[] = [];
   try {
-    costs = await getCostByReport(params.id, token);
+    costs = await getCostByReportMin(params.id, token);
     if(typeof(costs)==='string') 
       return <h1 className="text-center text-lg text-red-500">{costs}</h1>
   } catch (error) {

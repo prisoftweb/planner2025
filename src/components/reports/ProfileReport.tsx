@@ -1,18 +1,18 @@
 import Chip from "../providers/Chip";
-import { Report } from "@/interfaces/Reports";
+import { Report, CostReport } from "@/interfaces/Reports";
 import Button from "../Button";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {PDFDownloadLink} from '@react-pdf/renderer'
 import ReportPDF from "../ReportPDF";
 import { BsFileEarmarkPdf } from "react-icons/bs";
-import { Expense } from "@/interfaces/Expenses";
+//import { Expense } from "@/interfaces/Expenses";
 import AttachedPDF from "../AttachedPDF";
 import { UsrBack } from "@/interfaces/User";
 import {Tooltip} from "@nextui-org/react";
 
 export default function ProfileReport({report, send, token, costs, user}: 
                         {report:Report, send:Function, 
-                          token: string, costs:Expense[], user:UsrBack}){
+                          token: string, costs:CostReport[], user:UsrBack}){
 // console.log('report ', report);
   const total = CurrencyFormatter({
     currency: "MXN",

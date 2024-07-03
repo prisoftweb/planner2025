@@ -4,7 +4,7 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 //import Header from "@/components/Header";
 //import Header from "@/components/HeaderPage";
-import Header from "@/components/Header";
+//import Header from "@/components/Header";
 import ButtonNew from "@/components/projects/ButtonNew";
 import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
@@ -13,11 +13,11 @@ import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompanies } from "../api/routeCompany";
 import { Company } from "@/interfaces/Companies";
-import { getProjects } from "../api/routeProjects";
-import { ProjectsTable, Project } from "@/interfaces/Projects";
-import TableProjects from "@/components/projects/TableProjects";
-import { CurrencyFormatter } from "../functions/Globals";
-import { ProjectDataToTableData } from "../functions/SaveProject";
+import { getProjectsMin } from "../api/routeProjects";
+import { ProjectsTable, Project, ProjectMin } from "@/interfaces/Projects";
+//import TableProjects from "@/components/projects/TableProjects";
+//import { CurrencyFormatter } from "../functions/Globals";
+import { ProjectDataToTableDataMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
 
 export default async function Page(){
@@ -25,9 +25,9 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: Project[];
+  let projects: ProjectMin[];
   try {
-    projects = await getProjects(token);
+    projects = await getProjectsMin(token);
     if(typeof(projects)==='string') return <h1 className="text-red-500 text-center text-lg">{projects}</h1>
   } catch (error) {
     return <h1>Error al consultar los proyectos!!</h1>
@@ -143,7 +143,7 @@ export default async function Page(){
     )
   }
 
-  const table: ProjectsTable[] = ProjectDataToTableData(projects);
+  const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
   
   // const table: ProjectsTable[] = [];
   // projects.map((project) => {

@@ -132,6 +132,30 @@ export interface Condition {
   color: string
 }
 
+export interface CostReport {
+  _id: string
+  folio: string
+  taxfolio: string
+  description: string
+  date: string
+  taxapply: boolean
+  isticket: boolean
+  ispaid: boolean
+  user: User
+  project: Project
+  report: Report
+  status: boolean
+  cost: Cost
+}
+
+export interface Cost {
+  subtotal: number
+  discount: number
+  iva: number
+  vatvalue: number
+  vat: string
+}
+
 // export interface Department {
 //   _id: string
 //   name: string

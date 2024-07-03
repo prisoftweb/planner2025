@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseStepper from "./NavExpenseStepper"
 import { useNewExpense } from "@/app/store/newExpense"
@@ -35,7 +35,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     typeCFDI, vat, reset, updateRefresh, isCard, 
     report, condition, category, isPettyCash, 
     updateIsCard} = useNewExpense();
-
+console.log('render');
   const formik = useFormik({
     initialValues: {
       folio: folio,
@@ -109,26 +109,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     formik.values.vat = '0';
   }
 
-  //const [clearAmountm, setClearAmount] = useState<boolean>(false);
-
-  // const [viewAmount, setViewAmount] = useState<JSX.Element>(<CurrencyInput
-  //   id="amount"
-  //   name="amount"
-  //   className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-  //     focus:border-slate-700 outline-0"
-  //   onChange={formik.handleChange}
-  //   onBlur={formik.handleChange}
-  //   defaultValue={amount}
-  //   decimalsLimit={2}
-  //   prefix="$"
-  //   onValueChange={(value) => {try {
-  //     formik.values.amount=value || '0';
-  //   } catch (error) {
-  //     formik.values.amount='0';
-  //   }}}
-  // />)
-
-  const viewAmount = (
+  console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
+  let viewAmount: JSX.Element = <></>;
+  viewAmount = (
     <CurrencyInput
       id="amount"
       name="amount"
@@ -136,7 +119,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         focus:border-slate-700 outline-0"
       onChange={formik.handleChange}
       onBlur={formik.handleChange}
-      defaultValue={formik.values.amount}
+      defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
@@ -272,10 +255,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     //setIndexProv(optProviders.length - 1);
   }
 
-  //const [selectProvider, setSelectProviders] = useState<JSX.Element>(
-              //<SelectReact index={0} opts={optProviders} setValue={setProvider} />)
-  //const [indexProv, setIndexProv] = useState<number>(0);
-
   let indexProvider = 0;
   if(provider !== ''){
     optProviders.map((opt, index:number) => {
@@ -299,88 +278,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       </div>
     </div>
   )
-
-  // useEffect(() => {
-  //   //setSelectProviders(<></>);
-  //   setTimeout(() => {
-  //     setSelectProviders(
-  //       () => <div>
-  //               <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //               <div className="flex gap-x-2 items-center">
-  //                 <SelectReact index={indexProv} opts={optProviders} setValue={setProvider} />
-  //                 <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-  //                   onClick={() => setShowProvider(true)} />
-  //               </div>
-  //             </div>
-  //     )
-  //   }, 100);
-  // }, [indexProv]);
-  
-  // useEffect(() => {
-    
-  //   // if(date !== ''){
-  //   //   setStartDate(date);
-  //   // }
-
-  //   // let indexResp = 0;
-  //   // if(responsibleS !== ''){
-  //   //   optResponsibles.map((opt, index:number) => {
-  //   //     if(opt.value === responsible){
-  //   //       indexResp = index;
-  //   //     }
-  //   //   });      
-  //   // }
-
-    
-
-  //   // let indexProvider = 0;
-  //   //   if(proveedor !== ''){
-  //   //     optProviders.map((opt, index:number) => {
-  //   //       if(opt.value === proveedor){
-  //   //         indexProvider = index;
-  //   //       }
-  //   //     });      
-  //   //   }
-
-  //   //setView(<></>);
-  //   //setViewCC(<></>);
-  //   //setViewResponsible(<></>);
-  //   //setSelectProviders(<></>);
-  //   setTimeout(() => {
-  //     // setSelectProviders(
-  //     //   <div>
-  //     //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //     //     <div className="flex gap-x-2 items-center">
-  //     //       <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
-  //     //       <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-  //     //         onClick={() => setShowProvider(true)} />
-  //     //     </div>
-  //     //   </div>
-  //     // )
-      
-  //     // setViewCC(<div className=" col-span-1 md:col-span-3">
-  //     //       <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-  //     //       <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-  //     //     </div>)
-      
-  //     // setView(<>
-  //     //   <div>
-  //     //     <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-  //     //     <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-  //     //   </div>
-  //     //   <div>
-  //     //     <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-  //     //     <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
-  //     //   </div>
-  //     // </>)
-
-  //     // setViewResponsible(<div>
-  //     //           <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-  //     //           <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-  //     //         </div>)
-  //   }, 10);
-
-  // }, []);
 
   let indexCate = 0;
   if(categoryS !== ''){
@@ -406,6 +303,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const handleTypeCfdi = (value: string) => {
     handleTypeCategoryCFDI(value);
+    console.log('value type cfdi => ', value);
     setTypeCFDIS(value);
   }
 
@@ -458,142 +356,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     </div>
   );
 
-  // useEffect(() => {
-  //   if(resetBand){
-  //     // let indexCC = 0;
-  //     // if(costCenter !== ''){
-  //     //   optCostCenter.map((opt, index:number) => {
-  //     //     if(opt.value === costCenter){
-  //     //       indexCC = index;
-  //     //     }
-  //     //   });      
-  //     // }
-
-  //     // if(date !== ''){
-  //     //   setStartDate(date);
-  //     // }
-      
-  //     // let indexTypeCFDI = 0;
-  //     // if(typeCFDIS !== ''){
-  //     //   optTypes.map((opt, index:number) => {
-  //     //     if(opt.value === typeCFDI){
-  //     //       indexTypeCFDI = index;
-  //     //     }
-  //     //   });      
-  //     // }
-      
-  //     // let indexProvider = 0;
-  //     // if(proveedor !== ''){
-  //     //   optProviders.map((opt, index:number) => {
-  //     //     if(opt.value === proveedor){
-  //     //       indexProvider = index;
-  //     //     }
-  //     //   });      
-  //     // }
-  //     //setIndexProv(indexProvider);
-      
-  //     // let indexResp = 0;
-  //     // if(responsibleS !== ''){
-  //     //   optResponsibles.map((opt, index:number) => {
-  //     //     if(opt.value === responsible){
-  //     //       indexResp = index;
-  //     //     }
-  //     //   });      
-  //     // }
-      
-  //     // let indexCate = 0;
-  //     // if(categoryS !== ''){
-  //     //   optCategories.map((opt, index:number) => {
-  //     //     if(opt.value === category){
-  //     //       indexCate = index;
-  //     //     }
-  //     //   });      
-  //     // }
-      
-  //     // setViewCC(<div className=" col-span-1 md:col-span-3">
-  //     //         <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-  //     //         <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-  //     //       </div>)
-
-  //     // setView(<>
-  //     //   <div>
-  //     //     <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-  //     //     <SelectReact index={indexCate} opts={optCategories} setValue={setCategoryS} />
-  //     //   </div>
-  //     //   <div>
-  //     //     <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-  //     //     <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={setTypeCFDIS} />
-  //     //   </div>
-  //     // </>)
-  //     // setViewResponsible(<div>
-  //     //         <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-  //     //         <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
-  //     //       </div>)
-  //     setResetBand(false);
-  //   }
-  // }, [resetBand]);
-
-  // useEffect(() => {
-  //   if(typeCFDIS !== ''){
-  //     const found = optTypes.find((type) => type.value === typeCFDIS);
-  //     if(found){
-  //       if(found.label.toLowerCase().includes('egreso')){
-  //         //setViewAmount(<></>);
-  //         //setTimeout(() => {
-  //           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
-  //           if(num > 0){
-  //             num = num * -1;
-  //             formik.values.amount = num.toString();
-  //           }
-            
-  //           // setViewAmount(<CurrencyInput
-  //           //   id="amount"
-  //           //   name="amount"
-  //           //   className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-  //           //     focus:border-slate-700 outline-0"
-  //           //   onChange={formik.handleChange}
-  //           //   onBlur={formik.handleChange}
-  //           //   defaultValue={num}
-  //           //   decimalsLimit={2}
-  //           //   prefix="$"
-  //           //   onValueChange={(value) => {try {
-  //           //     formik.values.amount=value || '0';
-  //           //   } catch (error) {
-  //           //     formik.values.amount='0';
-  //           //   }}}
-  //           // />)
-  //         //}, 30);
-  //       }else{
-  //         //setViewAmount(<></>);
-  //         //setTimeout(() => {
-  //           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
-  //           if(num < 0){
-  //             num = Math.abs(num) ;
-  //             formik.values.amount = num.toString();
-  //           }
-            
-  //           // setViewAmount(<CurrencyInput
-  //           //   id="amount"
-  //           //   name="amount"
-  //           //   className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-  //           //     focus:border-slate-700 outline-0"
-  //           //   onChange={formik.handleChange}
-  //           //   onBlur={formik.handleChange}
-  //           //   defaultValue={num}
-  //           //   decimalsLimit={2}
-  //           //   prefix="$"
-  //           //   onValueChange={(value) => {try {
-  //           //     formik.values.amount=value || '0';
-  //           //   } catch (error) {
-  //           //     formik.values.amount='0';
-  //           //   }}}
-  //           // />)
-  //         //}, 30);
-  //       }
-  //     }
-  //   }
-  // }, [typeCFDIS]);
-
   const handleTypeCategoryCFDI = (catType: string) => {
     if(catType !== ''){
       const found = optTypes.find((type) => type.value === catType);
@@ -615,32 +377,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     }
   }
 
-  // useEffect(() => {
-  //   if(clearAmountm){
-  //     setViewAmount(<></>);
-  //     setTimeout(() => {
-  //       setViewAmount(<CurrencyInput
-  //         id="amount"
-  //         name="amount"
-  //         className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-  //           focus:border-slate-700 outline-0"
-  //         onChange={formik.handleChange}
-  //         onBlur={formik.handleChange}
-  //         defaultValue={amount}
-  //         decimalsLimit={2}
-  //         prefix="$"
-  //         onValueChange={(value) => {try {
-  //           formik.values.amount=value || '0';
-  //         } catch (error) {
-  //           formik.values.amount='0';
-  //         }}}
-  //       />);
-  //     }, 100);
-  //     setClearAmount(false);
-  //   }
-  // }, [clearAmountm]);
+  const handleIdVat = (value: string) => {
+    setIdVat(value);
+  };
 
-  // useEffect(() => {
+  // const vatCalculated = () => {
   //   try {
   //     const foundVat = optVats.find((vat) => vat.value === idVat);
   //     const vatvalue = foundVat?.label || '0';
@@ -648,29 +389,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
   //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
   //     formik.values.vat = operation.toFixed(2).toString();
-  //     setVatValue(operation.toFixed(2).toString());
+  //     //setVatValue(operation.toFixed(2).toString());
   //   } catch (error) {
   //     formik.values.vat = '0';
   //   }
-  // }, [formik.values.amount, formik.values.discount, idVat]);
-
-  const handleIdVat = (value: string) => {
-    setIdVat(value);
-  };
-
-  const vatCalculated = () => {
-    try {
-      const foundVat = optVats.find((vat) => vat.value === idVat);
-      const vatvalue = foundVat?.label || '0';
-      const operation = 
-        (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-          Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-      formik.values.vat = operation.toFixed(2).toString();
-      //setVatValue(operation.toFixed(2).toString());
-    } catch (error) {
-      formik.values.vat = '0';
-    }
-  }
+  // }
 
   return(
     <div className="w-full bg-white">
@@ -757,11 +480,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                 formik.values.discount='0';
               }}}
             />
-            {/* <Input type="text" name="discount" 
-              value={formik.values.discount}
-              onChange={formik.handleChange}
-              onBlur={formik.handleChange}
-            /> */}
             {formik.touched.discount && formik.errors.discount ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                 <p>{formik.errors.discount}</p>

@@ -1,10 +1,10 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
-import { Report } from '@/interfaces/Reports'
-import { Expense } from '@/interfaces/Expenses'
+import { Report, CostReport } from '@/interfaces/Reports'
+//import { Expense } from '@/interfaces/Expenses'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 
 export default function ReportPDF({report, costs}: 
-                {report: Report, costs: Expense[]}){
+                {report: Report, costs: CostReport[]}){
   
   const style = StyleSheet.create({
     table: {
@@ -140,8 +140,10 @@ export default function ReportPDF({report, costs}:
           {costs.map((cost) => (
             <View style={style.table} key={cost._id}>
               <View style={[style.element, {flex: 1}]}><Text>{cost.project?.title}</Text></View>
-              <View style={[style.element, {flex: 2}]}><Text>{cost.costcenter? (typeof(cost.costcenter)==='string'? cost.costcenter: cost.costcenter.name): 'Sin centro de costos'}</Text></View>
-              <View style={[style.element, {flex: 2}]}><Text>{cost.provider?.name || 'NA'}</Text></View>
+              {/* <View style={[style.element, {flex: 2}]}><Text>{cost.costcenter? (typeof(cost.costcenter)==='string'? cost.costcenter: cost.costcenter.name): 'Sin centro de costos'}</Text></View>
+              <View style={[style.element, {flex: 2}]}><Text>{cost.provider?.name || 'NA'}</Text></View> */}
+              <View style={[style.element, {flex: 2}]}><Text>{'Sin centro de costos'}</Text></View>
+              <View style={[style.element, {flex: 2}]}><Text>{'NA'}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 1}]}>
                 <Text>{CurrencyFormatter({

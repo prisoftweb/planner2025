@@ -10,7 +10,7 @@ import { Company } from "@/interfaces/Companies";
 import { Project } from "@/interfaces/Projects";
 import { getProjects } from "../api/routeProjects";
 import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReports, GetReportsMin, GetReportsByUser, GetReportsByDept, GetReportsLastMovInDept } from "../api/routeReports";
+import { GetReports, GetReportsMin, GetReportsByUserMin, GetReportsLastMovInDept } from "../api/routeReports";
 import { Report, ReportParse, ReportTable } from "@/interfaces/Reports";
 //import Header from "@/components/Header";
 //import TableReports from "@/components/reports/TableReports";
@@ -30,7 +30,7 @@ export default async function Page() {
   try {
     //console.log(user.department.name.toLowerCase());
     if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-      reports = await GetReportsByUser(token, user._id);
+      reports = await GetReportsByUserMin(token, user._id);
       console.log('rep por usuario!! => ', reports);
       //consultar por usuario y por departamento
       //console.log('by user');

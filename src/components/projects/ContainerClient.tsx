@@ -1,10 +1,10 @@
 'use client'
-import Header from "../Header"
+//import Header from "../Header"
 import ButtonNew from "./ButtonNew"
 import TableProjects from "./TableProjects"
 import { useState } from "react"
 import { Options } from "@/interfaces/Common"
-import { ProjectsTable, Project } from "@/interfaces/Projects"
+import { ProjectsTable, Project, ProjectMin } from "@/interfaces/Projects"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
 import { PiTableThin } from "react-icons/pi";
@@ -18,7 +18,7 @@ export default function ContainerClient({token, optClients, optCategories,
                         {token:string, optClients:Options[], user:string,
                           optCategories:Options[], optTypes:Options[],
                           optCompanies: Options[], data:ProjectsTable[], 
-                          projects: Project[], optCategoriesFilter: Options[], 
+                          projects: ProjectMin[], optCategoriesFilter: Options[], 
                           optTypesFilter: Options[], optConditionsFilter: Options[]}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);

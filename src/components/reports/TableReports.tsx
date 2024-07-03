@@ -278,6 +278,7 @@ export default function TableReports({data, token, reports,
     
     //let filtered: Report[] = [];
     let filtered: ReportParse[] = [];
+    console.log('filter data => ');
     reports.map((report) => {
       if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
           endDate, projects, companies, conditions, isPettyCash)){
@@ -287,7 +288,7 @@ export default function TableReports({data, token, reports,
 
     //console.log(filtered);
     //setFilteredReports(filtered);
-    
+    console.log('filteres => ', filtered);
     // setDataReports(ReportDataToTableData(filtered));
     setDataReports(ReportParseDataToTableData(filtered));
     setFilter(true);
