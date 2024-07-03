@@ -4,9 +4,9 @@ import { useState, useEffect } from "react"
 import NavResponsive from "./NavResponsive"
 import { Options } from "@/interfaces/Common"
 import DataReports from "./DataReports"
-import { Report } from "@/interfaces/Reports"
+import { Report, CostReport } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
-import { Expense } from "@/interfaces/Expenses"
+//import { Expense } from "@/interfaces/Expenses"
 import { Node } from "@/interfaces/Nodes"
 import { UsrBack } from "@/interfaces/User"
 
@@ -15,7 +15,7 @@ export default function ReportClient({report, token, id, companies,
                                 node}: 
                             {report:Report, token:string, id:string, 
                               departments:Options[], companies:Options[], 
-                              projects:Options[], expenses:Expense[], 
+                              projects:Options[], expenses:CostReport[], 
                               user:UsrBack, node:Node }){
   
   const [view, setView] = useState<JSX.Element>(<></>)

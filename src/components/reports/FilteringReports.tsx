@@ -48,7 +48,7 @@ export default function Filtering({showForm, optCompanies,
   }, [values]);
 
   useEffect(() => {
-    //FilterData(conditions, minValue, maxValue, companies, projects, firstDate?.getTime(), secondDate?.getTime(), isPettyCash);
+    FilterData(conditions, minValue, maxValue, companies, projects, firstDate?.getTime(), secondDate?.getTime(), isPettyCash);
   }, [ companies, projects, conditions, minValue, maxValue, isPettyCash]);
 
   // useEffect (() => {

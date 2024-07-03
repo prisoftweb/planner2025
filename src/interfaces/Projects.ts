@@ -45,6 +45,27 @@ export interface Project {
   // categorys: Glossary
 }
 
+export interface ProjectMin {
+  _id: string
+  title: string
+  code: string
+  date: string
+  amount: number
+  photo: string
+  hasguaranteefund: boolean
+  company: Company
+  client: ClientBack
+  status: boolean
+  account: string
+  // category: Category
+  // type: Type
+  // segment: Segment
+  category: Glossary
+  type: Glossary
+  segment: Glossary
+  progress: number
+}
+
 export interface Location {
   cp: number
   community: string

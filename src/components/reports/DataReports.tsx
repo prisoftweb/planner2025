@@ -1,18 +1,18 @@
 import ProfileReport from "./ProfileReport"
 import UpdateReport from "./UpdateReport"
 import { Options } from "@/interfaces/Common"
-import { Report } from "@/interfaces/Reports"
+import { Report, CostReport } from "@/interfaces/Reports"
 import { useState } from "react"
 import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
-import { Expense } from "@/interfaces/Expenses"
+//import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
 
 export default function DataReports({companies, departments, projects, token,
                                  report, user, node, costs}:
                               {departments:Options[], companies:Options[], 
                                 projects:Options[], token:string, report:Report, 
-                                user:UsrBack, node:Node, costs:Expense[] }) {
+                                user:UsrBack, node:Node, costs:CostReport[] }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
 

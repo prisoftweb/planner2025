@@ -4,20 +4,21 @@ import Label from "../Label"
 import Table from "../Table"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import { createColumnHelper } from "@tanstack/react-table"
-import { Expense } from "@/interfaces/Expenses"
-import { CostsDataToTableData } from "@/app/functions/ReportsFunctions"
+//import { Expense } from "@/interfaces/Expenses"
+import { CostsDataToTableDataMin } from "@/app/functions/ReportsFunctions"
 import DeleteElement from "../DeleteElement"
 import { RemoveCost } from "@/app/api/routeCost"
+import { CostReport } from "@/interfaces/Reports"
 
 export default function CostsInReport({report, costs}: 
-    {report:Report, costs:Expense[]}) {
+    {report:Report, costs:CostReport[]}) {
   
   //const costs: Expense[] = getCosts();
   const total = CurrencyFormatter({
     currency: "MXN",
     value: report.total
   });
-  const data = CostsDataToTableData(costs);
+  const data = CostsDataToTableDataMin(costs);
   
   return (
     <>

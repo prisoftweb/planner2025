@@ -1,11 +1,11 @@
-import { Project } from "@/interfaces/Projects";
+import { Project, ProjectMin } from "@/interfaces/Projects";
 import DeleteElement from "../DeleteElement";
 import { RemoveProject } from "@/app/api/routeProjects";
 import Link from "next/link";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function CardProject({project, token}:
-                      {project:Project, token:string}){
+                      {project:ProjectMin, token:string}){
   return(
     <>
       <Link href={`/projects/${project._id}/profile`}>
@@ -30,11 +30,9 @@ export default function CardProject({project, token}:
             <div className="flex items-center">
               <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
                 <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-                  style={{"width": project.progress.length > 0? 
-                        project.progress[project.progress.length - 1].progress : 0}}></div>
+                  style={{"width": project.progress?? 0}}></div>
               </div>
-              <p>{project.progress.length > 0? 
-                        project.progress[project.progress.length - 1].progress : 0}%</p>
+              <p>{project.progress?? 0}%</p>
             </div>
           </div>
           <div className="text-right flex flex-col justify-between">
