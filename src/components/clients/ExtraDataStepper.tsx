@@ -1,7 +1,7 @@
 import NavClientsStepper from "./NavClientsStepper"
 import Input from "../Input"
 import Label from "../Label"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import UploadImage from "../UploadImage"
 import { useRegFormContext } from "./StepperClientProvider";
 import Button from "../Button"
@@ -14,9 +14,10 @@ export default function ExtraDataStepper({token}: {token:string}){
   const [state, dispatch] = useRegFormContext();
   const [page, setPage] = useState('');
   const [file, setFile] = useState('');
+  const refRequest = useRef(true);
 
   const onClickSave = async () => {
-    
+    refRequest.current = false;
     if(file){
       const data = new FormData();
       if(state.databasic){
@@ -71,14 +72,17 @@ export default function ExtraDataStepper({token}: {token:string}){
               state.databasic.tags? state.databasic.tags: [], state.contacts? state.contacts: [],
               state.databasic.phone? state.databasic.phone: '');
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
 
@@ -137,14 +141,17 @@ export default function ExtraDataStepper({token}: {token:string}){
       try {
         const res = await SaveClient(data, token);
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
     }
@@ -190,7 +197,15 @@ export default function ExtraDataStepper({token}: {token:string}){
           </div>
         </div>
         <div className="flex justify-center mt-8 space-x-5">
-          <Button onClick={onClickSave} type="button">Guardar</Button>
+          <Button 
+            onClick={() => {
+              if(refRequest.current){
+                onClickSave();
+              }
+              else{
+                showToastMessageError('Ya hay una peticion en proceso..!');
+              }
+            }} type="button">Guardar</Button>
           <button type="button" onClick={onClickNext}
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"

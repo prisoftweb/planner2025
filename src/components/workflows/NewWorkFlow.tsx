@@ -7,7 +7,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 //import { GlossaryTable } from "@/interfaces/Glossary"
 import { Workflow } from "@/interfaces/Workflows"
 import { createWorkFlow } from "@/app/api/routeWorkflows"
@@ -16,6 +16,7 @@ export default function NewWorkFlow({showForm, token, workFlow}:
                     {showForm:Function, token:string, workFlow: (Workflow | string)}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -40,23 +41,31 @@ export default function NewWorkFlow({showForm, token, workFlow}:
     }),
 
     onSubmit: async valores => {
-      try {
-        const {description, title} = valores;
-        const data = {
-          description,
-          title,
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          const {description, title} = valores;
+          const data = {
+            description,
+            title,
+          }
+          const res = await createWorkFlow(token, data);
+          if(res === 201){
+            refRequest.current = true;
+            showToastMessage('WorkFlow creado satisfactoriamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear workflow!!!');
         }
-        const res = await createWorkFlow(token, data);
-        if(res === 201){
-          showToastMessage('WorkFlow creado satisfactoriamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Error al crear workflow!!!');
+      }else{
+        showToastMessageError('Ya hay una solicitud en procese!!!');
       }
     }
   });

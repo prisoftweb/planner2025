@@ -9,10 +9,12 @@ import HeaderForm from "../HeaderForm"
 import { updateMePassword } from "@/app/api/routeUser"
 import { useRouter } from "next/navigation"
 import RemoveCookies from "@/app/functions/RemoveCookies"
+import { useRef } from "react"
 
 export default function ChangePassword({token, name, id}:{token:string, name:string, id:string}){
 
   const router = useRouter();
+  const refRequest = useRef(true);
 
   const formik = useFormik({
     initialValues: {
@@ -28,35 +30,33 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
       confirmNewPassword: Yup.string()
                   .required('La confirmacion de la nueva contraseña es obligatoria'),
     }),
-    onSubmit: async (valores) => {            
-      const {currentPassword, newPassword, confirmNewPassword} = valores;
+    onSubmit: async (valores) => { 
+      if(refRequest.current){
+        const {currentPassword, newPassword, confirmNewPassword} = valores;
       
-      if(newPassword !== confirmNewPassword){
-        showToastMessageError("La nueva contraseña debe ser igual a su confirmacion!!")
-      }else{
-        // const password = {
-        //   currentPassword,
-        //   newPassword,
-        //   confirmNewPassword
-        // }
-        //console.log('password', password);
-        //validar new password y confirmnewpassword sean iguales
-        
-        //let res = await updateMeUser(id, formData, token);
-        //console.log('res =>', res)
-        let res = await updateMePassword(id, currentPassword, newPassword, confirmNewPassword, token)
-        if(typeof(res) === 'string'){
-          showToastMessageError(res);
+        if(newPassword !== confirmNewPassword){
+          showToastMessageError("La nueva contraseña debe ser igual a su confirmacion!!")
         }else{
-          if(res === 200) {
-            showToastMessage(`La contraseña ha sido modificada exitosamente!`);            
-            setTimeout(() => {
-              logOut();
-            }, 500)
-          } else {
-            showToastMessageError('Error al modificar contraseña..');
+          refRequest.current = false;
+          let res = await updateMePassword(id, currentPassword, newPassword, confirmNewPassword, token)
+          if(typeof(res) === 'string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            if(res === 200) {
+              showToastMessage(`La contraseña ha sido modificada exitosamente!`);            
+              setTimeout(() => {
+                logOut();
+              }, 500)
+            } else {
+              refRequest.current = true;
+              showToastMessageError('Error al modificar contraseña..');
+            }
           }
         }
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     },       
   });

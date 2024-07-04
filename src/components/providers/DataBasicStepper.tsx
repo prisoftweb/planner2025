@@ -4,7 +4,7 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRegFormContext } from "./StepperProvider";
 import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -13,6 +13,7 @@ import BasicBarStepper from "./BasicBarStepper";
 export default function DataBasicStepper({token, id}: {token:string, id:string}){
   
   const [state, dispatch] = useRegFormContext();
+  const refRequest = useRef(true);
 
   let tradenameI = '';
   let nameI = '';
@@ -61,47 +62,55 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
   });
   
   const onClickSave = async () => {
-    const {name, rfc, tradename} = formik.values;
+    if(refRequest.current){
+      refRequest.current = false;
+      const {name, rfc, tradename} = formik.values;
     
-    let tradeline = {};
+      let tradeline = {};
 
-    if(suppliercredit && state.creditline){
-      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
-      tradeline = {
-        creditdays: parseInt(creditdays),
-        creditlimit: parseInt(creditlimit),
-        currentbalance: parseInt(currentbalance),
-        percentoverduedebt: parseInt(percentoverduedebt)
+      if(suppliercredit && state.creditline){
+        const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+        tradeline = {
+          creditdays: parseInt(creditdays),
+          creditlimit: parseInt(creditlimit),
+          currentbalance: parseInt(currentbalance),
+          percentoverduedebt: parseInt(percentoverduedebt)
+        }
       }
-    }
-    
-    let contact = [];
-    if(state.contacts){
-      contact = state.contacts;
-    }
-
-    if(name && rfc && tradename){
       
-      const data: any = {
-        name,
-        rfc,
-        tradename,
-        suppliercredit,
-        user: id,
-        tradeline,
-        contact,
+      let contact = [];
+      if(state.contacts){
+        contact = state.contacts;
       }
-      const res = await SaveProvider(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+
+      if(name && rfc && tradename){
+        
+        const data: any = {
+          name,
+          rfc,
+          tradename,
+          suppliercredit,
+          user: id,
+          tradeline,
+          contact,
+        }
+        const res = await SaveProvider(data, token);
+        if(res.status){
+          refRequest.current = true;
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res.message);
+        }
       }else{
-        showToastMessageError(res.message);
+        refRequest.current = true;
+        showToastMessageError('Todos los campos son obligatorios');
       }
     }else{
-      showToastMessageError('Todos los campos son obligatorios');
+      showToastMessageError('Ya hay una solicitud en proceso!!');
     }
   }
 

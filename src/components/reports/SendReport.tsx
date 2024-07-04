@@ -1,10 +1,10 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Report } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
 import Label from "../Label";
 import TextArea from "../TextArea";
-import Button from "../Button";
+//import Button from "../Button";
 import { Node, Relation } from "@/interfaces/Nodes";
 import { insertMovementsInReport } from "@/app/api/routeReports";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -21,6 +21,7 @@ export default function SendReport({send, report, node,
   const [heightPage, setHeightPage] = useState<number>(900);
   const [notes, setNotes] = useState<string>();
   const [isSend, setIsSend] = useState<boolean>(true);
+  const refRequest = useRef(true);
 
   const handleResize = () => {
     //setHeightPage(window.outerHeight);
@@ -43,64 +44,68 @@ export default function SendReport({send, report, node,
 
   const sendReport = async (relation:Relation) => {
     //console.log(relation);
-    if(notes && notes !== ''){
-      if(typeof(relation.relation.nextnodo)==='string'){
-        try {
-          if(!relation.relation.glossary.name.toLowerCase().includes('pagado')){
-            const data = {wached: false};
-            const res = await updateReport(token, report._id, data);
-            if(res !== 200){
-              showToastMessageError(res);
-            }
-          }
-        } catch (error) {
-          showToastMessageError('Ocurrio un problema al actualizar estado visto!!');
-        }
-        try {
-          const res: Node = await getNode(token, relation.relation.nextnodo);
-          if(typeof(res)=== 'string'){
-            showToastMessageError(res);
-          }else{
-            // const data = {
-            //   moves: [{
-            //       condition:res.glossary._id,
-            //       notes,
-            //       user,
-            //       department: res.department._id
-            //   }]
-            // };
-            const data = {
-              moves: [{
-                  condition: relation.relation.glossary._id,
-                  notes,
-                  user,
-                  department: res.department._id
-              }]
-            };
-    
-            try {
-              const res = await insertMovementsInReport(token, report._id, data);
-              if(res === 200){
-                showToastMessage('Movimiento hecho correctamente!!');
-                setTimeout(() => {
-                  window.location.replace("/reports");
-                }, 500);
-              }else{
+    if(refRequest.current){
+      refRequest.current = false;
+      if(notes && notes !== ''){
+        if(typeof(relation.relation.nextnodo)==='string'){
+          try {
+            if(!relation.relation.glossary.name.toLowerCase().includes('pagado')){
+              const data = {wached: false};
+              const res = await updateReport(token, report._id, data);
+              if(res !== 200){
+                //refRequest.current = true;
                 showToastMessageError(res);
               }
-            } catch (error) {
-              showToastMessageError("Ocurrio un problema al consultar siguiente departamento!!");
             }
+          } catch (error) {
+            //refRequest.current = true;
+            showToastMessageError('Ocurrio un problema al actualizar estado visto!!');
           }
-        } catch (error) {
-          showToastMessageError("Ocurrio un problema al consultar siguiente departamento!!");
+          try {
+            const res: Node = await getNode(token, relation.relation.nextnodo);
+            if(typeof(res)=== 'string'){
+              refRequest.current = true;
+              showToastMessageError(res);
+            }else{
+              const data = {
+                moves: [{
+                    condition: relation.relation.glossary._id,
+                    notes,
+                    user,
+                    department: res.department._id
+                }]
+              };
+      
+              try {
+                const res = await insertMovementsInReport(token, report._id, data);
+                if(res === 200){
+                  refRequest.current = true;
+                  showToastMessage('Movimiento hecho correctamente!!');
+                  setTimeout(() => {
+                    window.location.replace("/reports");
+                  }, 500);
+                }else{
+                  refRequest.current = true;
+                  showToastMessageError(res);
+                }
+              } catch (error) {
+                refRequest.current = true;
+                showToastMessageError("Ocurrio un problema al consultar siguiente departamento!!");
+              }
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError("Ocurrio un problema al consultar siguiente departamento!!");
+          }
         }
+      }else{
+        setIsSend(false);
+        setTimeout(() => {
+          setIsSend(true);
+        }, (1000));
       }
     }else{
-      setIsSend(false);
-      setTimeout(() => {
-        setIsSend(true);
-      }, (1000));
+      showToastMessageError('Ya hay una solicitud en proceso!!');
     }
   }
 

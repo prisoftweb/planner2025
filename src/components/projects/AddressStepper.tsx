@@ -1,10 +1,10 @@
-import HeaderForm from "../HeaderForm"
+//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRegFormContext } from "./StepperProjectProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
@@ -21,6 +21,7 @@ export default function AddressStepper({token}: {token:string}){
   
   const [state, dispatch] = useRegFormContext();
   const [guarantee, setGuarantee] = useState<boolean>(hasguaranteefund);
+  const refRequest = useRef(true);
 
   //const {updateAddress} = useNewProject();
   
@@ -66,78 +67,77 @@ export default function AddressStepper({token}: {token:string}){
     }),
     onSubmit: async (valores) => {            
       const {community, country, cp, municipy, stateA, street} = valores;
-      // const data= {
-      //   name, 
-      //   description,
-      //   key: keyProject,
-      // }
-
-      // dispatch({ type: 'SET_BASIC_DATA', data: data });
-      // dispatch({type: 'INDEX_STEPPER', data: 1})
-      //dispatch({ type: 'SET_ADDRESS_DATA', data: valores });
       updateAddress(community, country, cp, municipy, stateA, street);
       dispatch({type: 'INDEX_STEPPER', data: 3})
     },       
   });
   
   const onClickSave = async () => {
-    const {community, country, cp, municipy, stateA, street} = formik.values;
-    updateAddress(community, country, cp, municipy, stateA, street);
-    
-    const location = {
-      community, country, cp, municipy, 
-      state: stateA, 
-      stret: street
-    }
-
-    let data;
-    const guaranteeData = {
-      amount:amountG,
-      date: dateG,
-      porcentage:percentage
-    };
-
-    if(haveAddress && hasguaranteefund){
-      data = {
-        amount, categorys:category, client, code, company, date: date, description, 
-        hasguaranteefund, title, types:type, user,
-        location,
-        guaranteefund: guaranteeData
+    if(refRequest.current){
+      refRequest.current = false;
+      const {community, country, cp, municipy, stateA, street} = formik.values;
+      updateAddress(community, country, cp, municipy, stateA, street);
+      
+      const location = {
+        community, country, cp, municipy, 
+        state: stateA, 
+        stret: street
       }
-    }else{
-      if(haveAddress){
+
+      let data;
+      const guaranteeData = {
+        amount:amountG,
+        date: dateG,
+        porcentage:percentage
+      };
+
+      if(haveAddress && hasguaranteefund){
         data = {
-          amount, categorys:category, client, code, company, date, description, 
+          amount, categorys:category, client, code, company, date: date, description, 
           hasguaranteefund, title, types:type, user,
-          location
+          location,
+          guaranteefund: guaranteeData
         }
       }else{
-        if(hasguaranteefund){
+        if(haveAddress){
           data = {
             amount, categorys:category, client, code, company, date, description, 
             hasguaranteefund, title, types:type, user,
-            guaranteefund: guaranteeData
+            location
           }
         }else{
-          data = {
-            amount, categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user,
+          if(hasguaranteefund){
+            data = {
+              amount, categorys:category, client, code, company, date, description, 
+              hasguaranteefund, title, types:type, user,
+              guaranteefund: guaranteeData
+            }
+          }else{
+            data = {
+              amount, categorys:category, client, code, company, date, description, 
+              hasguaranteefund, title, types:type, user,
+            }
           }
         }
       }
-    }
-    try {
-      const res = await SaveProject(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res.message);
+      try {
+        const res = await SaveProject(data, token);
+        if(res.status){
+          refRequest.current = true;
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Ocurrio un problema al crear proyecto!!');
       }
-    } catch (error) {
-      showToastMessageError('Ocurrio un problema al crear proyecto!!');
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 

@@ -9,12 +9,13 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { CreateCatalog, UpdateCatalog } from "@/app/api/routeCatalogs"
 import { CatalogTable } from "@/interfaces/Catalogs"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 
 export default function NewCatalog({showForm, token, catalog}: 
                     {showForm:Function, token:string, catalog:(CatalogTable | string)}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -41,30 +42,37 @@ export default function NewCatalog({showForm, token, catalog}:
     }),
 
     onSubmit: async valores => {
-      try {
-        if(typeof(catalog)==='string'){
-          const res = await CreateCatalog(token, valores);
-          if(typeof(res)==='string'){
-            return showToastMessageError(res);
-          }else{
-            showToastMessage('Catalogo creado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          if(typeof(catalog)==='string'){
+            const res = await CreateCatalog(token, valores);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              return showToastMessageError(res);
+            }else{
+              showToastMessage('Catalogo creado exitosamente!!');
+              refRequest.current = true;
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }
+          }else {
+            const res = await UpdateCatalog(token, catalog.id, valores);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              return showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              showToastMessage('Catalogo actualizado exitosamente!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }
           }
-        }else {
-          const res = await UpdateCatalog(token, catalog.id, valores);
-          if(typeof(res)==='string'){
-            return showToastMessageError(res);
-          }else{
-            showToastMessage('Catalogo actualizado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }
+        } catch (error) {
+          showToastMessageError('Error al crear catalogo!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear catalogo!!');
       }
     }
   });

@@ -9,32 +9,42 @@ import { updateMeUser } from "@/app/api/routeUser";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { setCookie } from "cookies-next"
 import { useUserStore } from "@/app/store/userStore";
+import { useRef } from "react";
 
 export default function ChangePhoto({id, token}: {id:string, token:string}){
   
   const [photo, setPhoto] = useState<File>();
   const {updateUser} = useUserStore();
+  const refRequest = useRef(true);
   
   const onSave = async () => {
     if(photo){
-      try {
-        const data = new FormData();
-        data.append('photo', photo);
-        const res = await updateMeUser(id, data, token);
-        if(typeof(res)==='string'){
-          showToastMessageError(res);
-        }else{
-          showToastMessage('La foto ha sido actualizada!!');
-          console.log('res updateme user => ', res);            
-          console.log('photo => ', res.photo);
-          setCookie('user', res);
-          updateUser(res);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          const data = new FormData();
+          data.append('photo', photo);
+          const res = await updateMeUser(id, data, token);
+          if(typeof(res)==='string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            showToastMessage('La foto ha sido actualizada!!');
+            //console.log('res updateme user => ', res);            
+            //console.log('photo => ', res.photo);
+            setCookie('user', res);
+            updateUser(res);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un error al cambiar foto!!');
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un error al cambiar foto!!');
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }else{
       showToastMessageError('Debe elegir una foto primero!!!');

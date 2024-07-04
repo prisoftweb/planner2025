@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useState, useRef } from "react";
 import NavExpenseNoDeductibleStepper from "./NavExpenseNoDeductibleStepper";
 import UploadFileDropZone from "../UploadFileDropZone";
 import Button from "../Button";
@@ -16,6 +16,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
     isCard, type} = useNewExpense();
 
   const [file, setFile] = useState<File>();
+  const refRequest = useRef(true);
   
   const validationType = (f: File) => {
     if((f.type !== 'application/pdf') && (!f.type.includes('jpg')
@@ -29,6 +30,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
   }
 
   const SaveData = async () => {
+    refRequest.current = false;
     if(file){
       const formdata = new FormData();
       //formdata.append('subtotal', amount);
@@ -68,8 +70,10 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           setTimeout(() => {
             updateIndexStepper(1);
           }, 200);
+          refRequest.current = true;
         }else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -100,9 +104,11 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           setTimeout(() => {
             updateIndexStepper(1);
           }, 200);
+          refRequest.current = true;
         }
         else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -118,7 +124,15 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
       <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile}
          Validation={validationType} getData={handle} />
       <div className="flex justify-center mt-8 space-x-5">
-        <Button type="button" onClick={SaveData}>Guardar</Button>
+        <Button type="button" 
+          onClick={() => { 
+            if(refRequest.current){
+              SaveData();
+            }
+            else{
+              showToastMessageError('Ya hay una peticion en proceso..!');
+            }
+          }}>Guardar</Button>
       </div>
     </div>
   );

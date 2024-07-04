@@ -4,7 +4,7 @@ import Label from "../Label"
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Expense } from "@/interfaces/Expenses"
 import { UpdateCost } from "@/app/api/routeCost"
@@ -35,6 +35,8 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
   const [optionsProviders, setOptionProviders] = useState<Options[]>(optProviders);
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const [indexProv, setIndexProv] = useState<number>(0);
+
+  const refRequest = useRef(true);
 
   // const [selectProvider, setSelectProviders] = useState<JSX.Element>(<div>
   //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
@@ -173,19 +175,29 @@ export default function UpdateExtraExpense({token, id, user, optCostCenter, expe
   // }, [indexProv]);
 
   const updateExpense = async () => {
-    const data = {
-      costcenter, provider, user:responsible, typeCFDI, category, project
-    }
-    try {
-      const res = await UpdateCost(token, id, data);
-      if(res === 200){
-        showToastMessage('Costo actualizado satisfactoriamente!!!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+    if(refRequest.current){
+      refRequest.current = false;
+      const data = {
+        costcenter, provider, user:responsible, typeCFDI, category, project
       }
-    } catch (error) {
-      showToastMessageError('Ocurrio un error al actualizar costo!!');
+      try {
+        const res = await UpdateCost(token, id, data);
+        if(res === 200){
+          refRequest.current = true;
+          showToastMessage('Costo actualizado satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Ocurrio un error al actualizar costo!!');
+      }
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
   

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import NavExpenseStepper from "./NavExpenseStepper";
 import UploadFileDropZone from "../UploadFileDropZone";
 import Button from "../Button";
@@ -16,6 +16,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   const {updateCDFI} = useNewExpense();
   const [file, setFile] = useState<File>();
   const [dataCFDI, setDataCFDI] = useState<CFDIValidation>();
+  const refRequest = useRef(true);
   
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
@@ -32,6 +33,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   }
 
   const SaveData = async () => {
+    refRequest.current = false;
     let supplierCredit: boolean;
     try {
       supplierCredit = await getSupplierCreditProv(token, proveedor);
@@ -92,8 +94,10 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
             setTimeout(() => {
               updateIndexStepper(1);
             }, 200);
+            refRequest.current = true;
           }else{
             showToastMessageError(res);
+            refRequest.current = true;
           }
         } catch (error) {
           showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -126,9 +130,11 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           setTimeout(() => {
             updateIndexStepper(1);
           }, 200);
+          refRequest.current = true;
         }
         else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -181,7 +187,15 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} 
           Validation={validationType} getData={handleCFDI} />
       <div className="flex justify-center mt-8 space-x-5">
-        <Button type="button" onClick={SaveData}>Guardar</Button>
+        <Button type="button" 
+          onClick={() => { 
+            if(refRequest.current){
+              SaveData();
+            }
+            else{
+              showToastMessageError('Ya hay una peticion en proceso..!');
+            }
+          }}>Guardar</Button>
       </div>
     </div>
   );

@@ -1,9 +1,9 @@
 import Label from "../Label"
-import Input from "../Input"
+//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
@@ -26,6 +26,7 @@ export default function ExtraData({token, optClients, optCategories,
   //const [company, setCompany] = useState<string>(optCompanies[0].value);
   const [guarantee, setGuarantee] = useState<boolean>(project.hasguaranteefund);
   // const [haveAddress, setHaveAddress] = useState<boolean>(false);
+  const refRequest = useRef(true);
 
   let idCli = 0;
   optClients.map((optCli, index:number) => {
@@ -59,27 +60,35 @@ export default function ExtraData({token, optClients, optCategories,
                   .required('El monto es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      const {amount} = valores;
-      const data= {
-        amount: amount.toString().replace(/[$,]/g, ""),
-        date: startDate,
-        categorys: category,
-        types: type,
-        client,
-        hasguaranteefund: guarantee
-      }
-      try {
-        const res = await UpdateProject(token, id, data);
-        if(res===200){
-          showToastMessage('Proyecto actualizado satisfactoriamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+      if(refRequest.current){
+        refRequest.current = false;
+        const {amount} = valores;
+        const data= {
+          amount: amount.toString().replace(/[$,]/g, ""),
+          date: startDate,
+          categorys: category,
+          types: type,
+          client,
+          hasguaranteefund: guarantee
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al actualizar proyecto!!');
+        try {
+          const res = await UpdateProject(token, id, data);
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('Proyecto actualizado satisfactoriamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un problema al actualizar proyecto!!');
+        }
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     },       
   });

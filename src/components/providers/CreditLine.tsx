@@ -8,9 +8,12 @@ import { Provider } from "@/interfaces/Providers";
 import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import CurrencyInput from "react-currency-input-field";
+import { useRef } from "react";
 
 export default function CreditLine({provider, id, token}: 
         {provider:Provider, id:string, token:string}){
+  
+  const refRequest = useRef(true);
   const formik = useFormik({
     initialValues: {
       creditlimit:provider.tradeline.creditlimit?.toString(),
@@ -28,27 +31,35 @@ export default function CreditLine({provider, id, token}:
       percentoverduedebt: Yup.string()
                   .required('El porcentaje es obligatorio'),        
     }),
-    onSubmit: async (valores) => {            
-      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
-      try {
-        const tradeline = {
-          creditdays: parseInt(creditdays? creditdays: '0'), 
-          creditlimit: parseInt(creditlimit? creditlimit.replace(/[$,%,]/g, ""): '0'),
-          currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
-          percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
+    onSubmit: async (valores) => { 
+      if(refRequest.current){
+        refRequest.current = false;
+        const {creditdays, creditlimit, currentbalance, percentoverduedebt} = valores;
+        try {
+          const tradeline = {
+            creditdays: parseInt(creditdays? creditdays: '0'), 
+            creditlimit: parseInt(creditlimit? creditlimit.replace(/[$,%,]/g, ""): '0'),
+            currentbalance: parseInt(currentbalance? currentbalance.replace(/[$,%,]/g, ""): '0'),
+            percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
+          }
+          const res = await updateProvider(id, token, {tradeline});
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('Los datos han sido actualizados!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al actualizar informacion!!');
+          console.log(error);
         }
-        const res = await updateProvider(id, token, {tradeline});
-        if(res===200){
-          showToastMessage('Los datos han sido actualizados!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Error al actualizar informacion!!');
-        console.log(error);
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso..!!!');
       }
     },       
   });

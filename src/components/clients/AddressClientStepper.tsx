@@ -7,11 +7,13 @@ import Label from "../Label";
 import Input from "../Input";
 import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { clientValidation } from "@/schemas/client.schema";
+import { useRef } from "react";
+//import { clientValidation } from "@/schemas/client.schema";
 
 export default function AddressClientStepper({token}:{token:string}){
   
   const [state, dispatch] = useRegFormContext();
+  const refRequest = useRef(true);
 
   let stretI = '';
   let cpI = '';
@@ -71,7 +73,7 @@ export default function AddressClientStepper({token}:{token:string}){
   });
 
   const onClickSave = async() => {
-    
+    refRequest.current = false;
     if(state.extradata.photo){
       const data = new FormData();
       if(state.databasic){
@@ -126,14 +128,17 @@ export default function AddressClientStepper({token}:{token:string}){
                       state.contacts? state.contacts: [],
                       state.databasic.phone? state.databasic.phone: '');
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
       // const newdata = Object.fromEntries(data);
@@ -195,14 +200,17 @@ export default function AddressClientStepper({token}:{token:string}){
       try {
         const res = await SaveClient(data, token);
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
     }
@@ -296,7 +304,15 @@ export default function AddressClientStepper({token}:{token:string}){
         </div>
         
         <div className="flex justify-center mt-8 space-x-5">
-          <Button onClick={onClickSave} type="button">Guardar</Button>
+          <Button 
+            onClick={() => {
+              if(refRequest.current){
+                onClickSave();
+              }
+              else{
+                showToastMessageError('Ya hay una peticion en proceso..!');
+              }
+            }} type="button">Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"

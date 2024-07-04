@@ -7,7 +7,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import UploadImage from "../UploadImage"
@@ -20,6 +20,7 @@ export default function NewCompany({showForm, token}:
   const [phoneNumber, setPhoneNumber] = useState('');
   
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -49,54 +50,66 @@ export default function NewCompany({showForm, token}:
     }),
 
     onSubmit: async valores => {
-      try {
-        if(file){
-          if(phoneNumber && phoneNumber!==''){
-            const {address, email, name} = valores;
-            const formdata = new FormData();
-            formdata.append('address', address);
-            formdata.append('email', email);
-            formdata.append('name', name);
-            formdata.append('phoneNumber', phoneNumber);
-            formdata.append('logo', file);
-            const res = await CreateCompanyLogo(token, formdata);
-            if(res===201){
-              showForm(false);
-              showToastMessage('Compañia creada exitosamente!!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          if(file){
+            if(phoneNumber && phoneNumber!==''){
+              const {address, email, name} = valores;
+              const formdata = new FormData();
+              formdata.append('address', address);
+              formdata.append('email', email);
+              formdata.append('name', name);
+              formdata.append('phoneNumber', phoneNumber);
+              formdata.append('logo', file);
+              const res = await CreateCompanyLogo(token, formdata);
+              if(res===201){
+                refRequest.current = true;
+                showForm(false);
+                showToastMessage('Compañia creada exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              }
             }else{
-              showToastMessageError(res);
+              refRequest.current = true;
+              showToastMessageError('El telefono es obligatorio!!');
             }
           }else{
-            showToastMessageError('El telefono es obligatorio!!');
-          }
-        }else{
-          if(phoneNumber && phoneNumber!==''){
-            const {address, email, name} = valores;
-            const data = {
-              address,
-              email,
-              name,
-              phoneNumber
-            }
-            const res = await CreateCompany(token, data);
-            if(res===201){
-              showForm(false);
-              showToastMessage('Compañia creada exitosamente!!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+            if(phoneNumber && phoneNumber!==''){
+              const {address, email, name} = valores;
+              const data = {
+                address,
+                email,
+                name,
+                phoneNumber
+              }
+              const res = await CreateCompany(token, data);
+              if(res===201){
+                refRequest.current = true;
+                showForm(false);
+                showToastMessage('Compañia creada exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              }
             }else{
-              showToastMessageError(res);
+              refRequest.current = true;
+              showToastMessageError('El telefono es obligatorio!!');
             }
-          }else{
-            showToastMessageError('El telefono es obligatorio!!');
           }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear Compañia!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear Compañia!!');
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     }
   });

@@ -7,16 +7,17 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useRouter } from "next/navigation"
+//import { useRouter } from "next/navigation"
 import { createRole } from "@/app/api/routeRoles"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { getTrees } from "@/app/api/routeRoles"
-import TextArea from "../TextArea"
+//import TextArea from "../TextArea"
 
 export default function NewRole({showForm, token}: 
                     {showForm:Function, token:string}){
   
-  const router = useRouter();
+  //const router = useRouter();
+  const refRequest = useRef(true);
 
   const [idTree, setIdTree] = useState<string>('');
   useEffect(() => {
@@ -43,17 +44,26 @@ export default function NewRole({showForm, token}:
     }),
 
     onSubmit: async valores => {
-      try {
-        const res = await createRole(token, valores, idTree);
-        if(res===201){
-          showForm(false);
-          showToastMessage('Rol creado exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          const res = await createRole(token, valores, idTree);
+          if(res===201){
+            refRequest.current = true;
+            showForm(false);
+            showToastMessage('Rol creado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear Rol!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear Rol!!');
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }
   });

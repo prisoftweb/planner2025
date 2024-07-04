@@ -7,7 +7,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Options } from "@/interfaces/Common"
 import SelectReact from "../SelectReact"
 import { CreateReport } from "@/app/api/routeReports"
@@ -24,6 +24,7 @@ export default function NewReport({showForm, token, companies,
   const [department, setDepartment] = useState<string>(departments[0].value);
   const [startDate, setStartDate] = useState<string>('');
   const [imprest, setImprest] = useState<boolean>(false);
+  const refRequest = useRef(true);
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -69,35 +70,43 @@ export default function NewReport({showForm, token, companies,
     }),
 
     onSubmit: async valores => {
-      try {
-        const {comment, name} = valores;
-        const data = {
-          name,
-          comment,
-          date: startDate,
-          user,
-          company,
-          department,
-          project,
-          ispettycash: imprest,
-          moves: [{
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          const {comment, name} = valores;
+          const data = {
+            name,
+            comment,
+            date: startDate,
             user,
+            company,
             department,
-            notes: comment,
-            condition
-          }]
+            project,
+            ispettycash: imprest,
+            moves: [{
+              user,
+              department,
+              notes: comment,
+              condition
+            }]
+          }
+          const res = await CreateReport(token, data);
+          if(res === 201){
+            refRequest.current = true;
+            showToastMessage('Informe creado exitosamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear informe!!');
         }
-        const res = await CreateReport(token, data);
-        if(res === 201){
-          showToastMessage('Informe creado exitosamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Error al crear informe!!');
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }
   });

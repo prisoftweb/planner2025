@@ -6,14 +6,15 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import { Provider } from "@/interfaces/Providers";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import CardContact from "./CardContact";
 
 export default function DataBasic({id, token, provider}:{id:string, token:string, provider:Provider}){
   
-  const [suppliercredit, setSuppliercredit] = useState<boolean>(provider.suppliercredit)
+  const [suppliercredit, setSuppliercredit] = useState<boolean>(provider.suppliercredit);
+  const refRequest = useRef(true);
 
   const formik = useFormik({
     initialValues: {
@@ -29,30 +30,37 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
       rfc: Yup.string()
                   .required('El rfc no puede ir vacio'),
     }),
-    onSubmit: async (valores) => {            
-      const {name, tradename, rfc} = valores;
-      const data= {
-        name, 
-        tradename,
-        rfc,
-        "suppliercredit": suppliercredit
-      }
-
-      try {
-        const res = await updateProvider(id, token, data);
-        if(res===200){
-          showToastMessage('La informacion del proveedor ha sido actualizada!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+    onSubmit: async (valores) => {
+      if(refRequest.current){
+        refRequest.current = false;
+        const {name, tradename, rfc} = valores;
+        const data= {
+          name, 
+          tradename,
+          rfc,
+          "suppliercredit": suppliercredit
         }
-      } catch (error) {
-        console.log(typeof(error))
-        showToastMessageError('Error al actualizar informacion del proveedor!!');
-      }
 
+        try {
+          const res = await updateProvider(id, token, data);
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('La informacion del proveedor ha sido actualizada!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          console.log(typeof(error))
+          showToastMessageError('Error al actualizar informacion del proveedor!!');
+        }
+      }else{
+        showToastMessageError('Ya hay una solitud en proceso!!');
+      }
     },       
   });
   

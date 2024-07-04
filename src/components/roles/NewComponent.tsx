@@ -9,11 +9,13 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { createComponent, updateComponent } from "@/app/api/routeRoles"
 import { Resource } from "@/interfaces/Roles"
-import TextArea from "../TextArea"
+//import TextArea from "../TextArea"
+import { useRef } from "react"
 
 export default function NewComponent({showForm, token, component}: 
                     {showForm:Function, token:string, component:Resource}){
 
+  const refRequest = useRef(true);
   const formik = useFormik({
     initialValues: {
       name: component.name,
@@ -30,32 +32,41 @@ export default function NewComponent({showForm, token, component}:
     }),
 
     onSubmit: async valores => {
-      if(component.id === ''){
-        try {
-          const res = await createComponent(token, valores);
-          if(res===201){
-            showForm(false);
-            showToastMessage('Componente creado exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+      if(refRequest.current){
+        if(component.id === ''){
+          refRequest.current = false;
+          try {
+            const res = await createComponent(token, valores);
+            if(res===201){
+              refRequest.current = true;
+              showForm(false);
+              showToastMessage('Componente creado exitosamente!!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al crear Componente!!');
           }
-        } catch (error) {
-          showToastMessageError('Error al crear Componente!!');
+        }else{
+          try {
+            const res = await updateComponent(token, component.id, valores);
+            if(res===200){
+              refRequest.current = true;
+              showForm(false);
+              showToastMessage('Componente actualizado exitosamente!!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al actualizar Componente!!');
+          }
         }
       }else{
-        try {
-          const res = await updateComponent(token, component.id, valores);
-          if(res===200){
-            showForm(false);
-            showToastMessage('Componente actualizado exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }
-        } catch (error) {
-          showToastMessageError('Error al actualizar Componente!!');
-        }
+        showToastMessageError('Ya hay una peticion en proceso!!');
       }
     }
   });

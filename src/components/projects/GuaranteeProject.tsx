@@ -1,10 +1,10 @@
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import Input from "../Input"
+//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { Project } from "@/interfaces/Projects";
 import { UpdateProject } from "@/app/api/routeProjects";
@@ -16,6 +16,7 @@ export default function GuaranteeProject({token, id, project}:
                               {token:string, id:string, project:Project}){
   
   const [startDate, setStartDate] = useState(project.guaranteefund?.date.substring(0,10) || '');
+  const refRequest = useRef(true);
 
   const formik = useFormik({
     initialValues: {
@@ -29,27 +30,35 @@ export default function GuaranteeProject({token, id, project}:
                   .required('El monto es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      const {percentage, amount} = valores;
-      const amo = amount.toString().replace(/[$,%]/g, "");
-      const data = {
-        guaranteefund: {
-          porcentage: percentage.replace(/[$,%,]/g, ""),
-          date: startDate,
-          amount: amo
+      if(refRequest.current){
+        refRequest.current = false;
+        const {percentage, amount} = valores;
+        const amo = amount.toString().replace(/[$,%]/g, "");
+        const data = {
+          guaranteefund: {
+            porcentage: percentage.replace(/[$,%,]/g, ""),
+            date: startDate,
+            amount: amo
+          }
         }
-      }
-      try {
-        const res = await UpdateProject(token, id, data);
-        if(res===200){
-          showToastMessage('Proyecto actualizado satisfactoriamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+        try {
+          const res = await UpdateProject(token, id, data);
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('Proyecto actualizado satisfactoriamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un problema al actualizar el proyecto!!');
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al actualizar el proyecto!!');
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso..!!!');
       }
     },       
   });

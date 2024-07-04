@@ -1,5 +1,5 @@
 import Button from "../Button";
-import NavClientsStepper from "./NavClientsStepper";
+//import NavClientsStepper from "./NavClientsStepper";
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Label from "../Label";
@@ -8,9 +8,11 @@ import Input from "../Input";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ClientBack } from "@/interfaces/Clients";
 import { updateClient } from "@/app/api/routeClients";
+import { useRef } from "react";
 
 export default function AddressClient({token, client}:{token:string, client:ClientBack}){
   
+  const refRequest = useRef(true);
   const formik = useFormik({
     initialValues: {
       stret:client.location.stret? client.location.stret: '' ,
@@ -35,35 +37,41 @@ export default function AddressClient({token, client}:{token:string, client:Clie
                   .required('El estado no puede ir vacio'),
     }),
     onSubmit: async (valores) => {            
-      const {country, cp, municipy, stret, community, stateS} = valores;
+      if(refRequest.current){
+        refRequest.current = false;
+        const {country, cp, municipy, stret, community, stateS} = valores;
       
-      const data = {
-        location: {
-          country,
-          municipy,
-          stret,
-          cp: parseInt(cp),
-          community, 
-          state: stateS
+        const data = {
+          location: {
+            country,
+            municipy,
+            stret,
+            cp: parseInt(cp),
+            community, 
+            state: stateS
+          }
         }
-      }
 
-      const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
+        const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
 
-      //console.log('update address');
-      //console.log(JSON.stringify(newObj));
-      try {
-        const res = await updateClient(client._id, token, newObj);
-        if(res === 200){
-          showToastMessage('Cliente actualizado exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+        //console.log('update address');
+        //console.log(JSON.stringify(newObj));
+        try {
+          const res = await updateClient(client._id, token, newObj);
+          if(res === 200){
+            refRequest.current = true;
+            showToastMessage('Cliente actualizado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al actualizar direccion del cliente!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al actualizar direccion del cliente!!');
       }
     },       
   });

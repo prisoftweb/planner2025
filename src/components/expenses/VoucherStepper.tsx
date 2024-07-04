@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 // import { useCallback } from 'react';
 // import { useDropzone} from 'react-dropzone';
 import NavExpenseStepper from "./NavExpenseStepper";
@@ -19,6 +19,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
     idVat, isCard, type, reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
+  const refRequest = useRef(true);
   
   const validationType = (f: File) => {
     if((f.type !== 'application/pdf') && (!f.type.includes('jpg')
@@ -32,6 +33,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
   }
 
   const SaveData = async () => {
+    refRequest.current = false;
     let supplierCredit: boolean;
     try {
       supplierCredit = await getSupplierCreditProv(token, proveedor);
@@ -89,8 +91,10 @@ export default function VoucherStepper({token, user}: {token:string, user:string
           setTimeout(() => {
             updateIndexStepper(1);
           }, 200);
+          refRequest.current = true;
         }else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -120,9 +124,11 @@ export default function VoucherStepper({token, user}: {token:string, user:string
           setTimeout(() => {
             updateIndexStepper(1);
           }, 200);
+          refRequest.current = true;
         }
         else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -145,7 +151,15 @@ export default function VoucherStepper({token, user}: {token:string, user:string
       <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} 
           Validation={validationType} getData={handle} />
       <div className="flex justify-center mt-8 space-x-5">
-        <Button type="button" onClick={SaveData}>Guardar</Button>
+        <Button type="button" 
+          onClick={() => { 
+            if(refRequest.current){
+              SaveData();
+            }
+            else{
+              showToastMessageError('Ya hay una peticion en proceso..!');
+            }
+          }}>Guardar</Button>
         <button type="button"
           onClick={Next}
           className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 

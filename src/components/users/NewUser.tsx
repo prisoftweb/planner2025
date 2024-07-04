@@ -4,7 +4,7 @@ import Input from "../Input"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import UploadImage from "../UploadImage"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -25,6 +25,7 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
   let optRole = roles.find(r => r.value === role)?? roles[0];
 
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(window.outerHeight);
@@ -67,55 +68,66 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
     }),
 
     onSubmit: async valores => {
-      const { email, password, confirmpassword, name } = valores;
+      if(refRequest.current){
+        refRequest.current = false;
+        const { email, password, confirmpassword, name } = valores;
 
-      if(file){
-        const formdata = new FormData();
-        formdata.append('name',name);
-        formdata.append('email', email);
-        formdata.append('password', password);
-        formdata.append('confirmPassword', confirmpassword);
-        formdata.append('department', department);
-        formdata.append('rol', role);
-        if(file) formdata.append('photo', file);
+        if(file){
+          const formdata = new FormData();
+          formdata.append('name',name);
+          formdata.append('email', email);
+          formdata.append('password', password);
+          formdata.append('confirmPassword', confirmpassword);
+          formdata.append('department', department);
+          formdata.append('rol', role);
+          if(file) formdata.append('photo', file);
 
-        try {
-          const res = await createUserPhoto(formdata, token);
-          //console.log('res ', res);
-          if(typeof(res)==='string'){
-            showToastMessageError(res);
-          }else{
-            showToastMessage('Usuario creado exitosamente!!!');
-            addUser(res);
-            showForm(false);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+          try {
+            const res = await createUserPhoto(formdata, token);
+            //console.log('res ', res);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              showToastMessage('Usuario creado exitosamente!!!');
+              addUser(res);
+              showForm(false);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            console.log('error ', error);
+            showToastMessageError('Error al crear usuario!!');
           }
-        } catch (error) {
-          console.log('error ', error);
-          showToastMessageError('Error al crear usuario!!');
+        }else{
+          const data = {
+            name, email, password, confirmpassword, department, rol:role
+          }
+          try {
+            //console.log('send user ', JSON.stringify(data));
+            const res = await createUser(data, token);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              showToastMessage('Usuario creado exitosamente!!!');
+              addUser(res);
+              showForm(false);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al crear usuario!!');
+          }
         }
       }else{
-        const data = {
-          name, email, password, confirmpassword, department, rol:role
-        }
-        try {
-          //console.log('send user ', JSON.stringify(data));
-          const res = await createUser(data, token);
-          if(typeof(res)==='string'){
-            showToastMessageError(res);
-          }else{
-            showToastMessage('Usuario creado exitosamente!!!');
-            addUser(res);
-            showForm(false);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
-          }
-        } catch (error) {
-          showToastMessageError('Error al crear usuario!!');
-        }
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }
   });

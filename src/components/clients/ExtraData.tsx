@@ -1,6 +1,6 @@
 import Input from "../Input"
 import Label from "../Label"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import UploadImage from "../UploadImage"
 import Button from "../Button"
 import { updateClient, updateClientLogo } from "@/app/api/routeClients"
@@ -11,50 +11,62 @@ export default function ExtraData({token, id, link}:
   
   const [page, setPage] = useState(link);
   const [file, setFile] = useState('');
+  const refRequest = useRef(true);
 
   const onClickSave = async () => {
-    
-    if(file){
-      const formdata = new FormData();
-      formdata.append('logo', file);
-      if(page !== link){
-        formdata.append('link', page);
-      }
-      try {
-        const res = await updateClientLogo(formdata, token, id);
-        if(res === 200){
-          showToastMessage('Cliente actualizado exitosamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Error al actualizar link del cliente!!');
-      }
-    }else{
-      if(page !== link){
-        const data = {
-          link: page,
+    if(refRequest.current){
+      refRequest.current = false;
+      if(file){
+        const formdata = new FormData();
+        formdata.append('logo', file);
+        if(page !== link){
+          formdata.append('link', page);
         }
         try {
-          const res = await updateClient(id, token, data);
+          const res = await updateClientLogo(formdata, token, id);
           if(res === 200){
-            showToastMessage('Link del cliente actualizado exitosamente!!');
+            refRequest.current = true;
+            showToastMessage('Cliente actualizado exitosamente!!');
             setTimeout(() => {
               window.location.reload();
             }, 500);
           }else{
+            refRequest.current = true;
             showToastMessageError(res);
           }
         } catch (error) {
+          refRequest.current = true;
           showToastMessageError('Error al actualizar link del cliente!!');
         }
       }else{
-        showToastMessageError('No hay nada que actualizar!!');
+        if(page !== link){
+          const data = {
+            link: page,
+          }
+          try {
+            const res = await updateClient(id, token, data);
+            if(res === 200){
+              refRequest.current = true;
+              showToastMessage('Link del cliente actualizado exitosamente!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al actualizar link del cliente!!');
+          }
+        }else{
+          refRequest.current = true;
+          showToastMessageError('No hay nada que actualizar!!');
+        }
       }
-    }  
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
+    }
   }
 
   return(

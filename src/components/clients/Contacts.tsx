@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Contact } from "@/interfaces/Contacts";
 import FormContact from "../providers/FormContact";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -17,41 +17,59 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   const [index, setIndex] = useState(0);
   const numberContacts = 1;
   const [filter, setFilter] = useState<Contact[]>(contacts);
+  const refRequest = useRef(true);
 
   const newContact = async (newContact:string) => {
-    try {
-      const res = await updateContactClient({contact: newContact}, id, token);
-      if(res===200){
-        showToastMessage('El cliente ha sido actualizado!!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res);
-      }
-    } catch (error) {
-      showToastMessageError('Error al actualizar cliente');
-    }
-  }
-
-  const updateContactt = async (data:Contact, id:string) => {
-    const validation = contactUpdateValidation.safeParse(data);
-    if(validation.success){
+    if(refRequest.current){
+      refRequest.current = false;
       try {
-        const res = await updateContact(id, token, data);
+        const res = await updateContactClient({contact: newContact}, id, token);
         if(res===200){
-          showToastMessage('El contacto ha sido actualizado!!');
+          refRequest.current = true;
+          showToastMessage('El cliente ha sido actualizado!!');
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al actualizar cliente');
       }
     }else{
-      showToastMessageError(validation.error.issues[0].message);
+      showToastMessageError('Ya hay una peticion en proceso..!!');
+    }
+  }
+
+  const updateContactt = async (data:Contact, id:string) => {
+    if(refRequest.current){
+      refRequest.current = false;
+      const validation = contactUpdateValidation.safeParse(data);
+      if(validation.success){
+        try {
+          const res = await updateContact(id, token, data);
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('El contacto ha sido actualizado!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al actualizar cliente');
+        }
+      }else{
+        refRequest.current = true;
+        showToastMessageError(validation.error.issues[0].message);
+      }
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 

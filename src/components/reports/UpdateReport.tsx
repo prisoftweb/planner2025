@@ -1,13 +1,13 @@
 'use client'
-import HeaderForm from "../HeaderForm"
+//import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+//import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Options } from "@/interfaces/Common"
 import SelectReact from "../SelectReact"
 import { Report } from "@/interfaces/Reports"
@@ -25,6 +25,7 @@ export default function UpdateReport({companies, departments, projects, token, r
   const [imprest, setImprest] = useState<boolean>(report.ispettycash);
   const [viewSelects, setViewSelects] = useState<JSX.Element>(<></>);
   const [viewProject, setViewProject] = useState<JSX.Element>(<></>);
+  const refRequest = useRef(true);
 
   // const handleResize = () => {
   //   setHeightPage(document.body.offsetHeight);
@@ -82,34 +83,36 @@ export default function UpdateReport({companies, departments, projects, token, r
     }),
 
     onSubmit: async valores => {
-      try {
-        const {comment, name} = valores;
-        const data = {
-          name,
-          comment,
-          date: startDate,
-          company,
-          department,
-          project,
-          ispettycash: imprest
-          // moves: [{
-          //   user,
-          //   department,
-          //   notes: comment,
-          //   condition
-          // }]
+      if(refRequest.current){
+        try {
+          refRequest.current = false;
+          const {comment, name} = valores;
+          const data = {
+            name,
+            comment,
+            date: startDate,
+            company,
+            department,
+            project,
+            ispettycash: imprest
+          }
+          const res = await updateReport(token, report._id, data);
+          if(res === 200){
+            refRequest.current = true;
+            showToastMessage('Informe actualizado exitosamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al actualizar informe!!');
         }
-        const res = await updateReport(token, report._id, data);
-        if(res === 200){
-          showToastMessage('Informe actualizado exitosamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Error al actualizar informe!!');
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }
   });

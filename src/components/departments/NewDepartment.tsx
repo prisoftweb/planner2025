@@ -7,7 +7,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { CreateDepartment, UpdateDepartment } from "@/app/api/routeDepartments"
 import Select from 'react-select'
 import { Options } from "@/interfaces/Common"
@@ -20,6 +20,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
 
   const [company, setCompany] = useState(OptionsCompany[0].value);
   const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
+  const refRequest = useRef(true);
 
   const [heightPage, setHeightPage] = useState<number>(900);
   
@@ -61,42 +62,53 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
     }),
 
     onSubmit: async valores => {
-      try {
-        if(company || company!==''){
-          const {abbr, name} = valores;
-          const data = {
-            abbr,
-            name,
-            company
-          }
-          if(typeof(dept)==='string'){
-            const res = await CreateDepartment(token, data);
-            if(res===201){
-              showForm(false);
-              showToastMessage('Departamento creado exitosamente!!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          if(company || company!==''){
+            const {abbr, name} = valores;
+            const data = {
+              abbr,
+              name,
+              company
+            }
+            if(typeof(dept)==='string'){
+              const res = await CreateDepartment(token, data);
+              if(res===201){
+                refRequest.current = true;
+                showForm(false);
+                showToastMessage('Departamento creado exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              }
             }else{
-              showToastMessageError(res);
+              const res = await UpdateDepartment(token, dept.id, data);
+              if(res===200){
+                refRequest.current = true;
+                showForm(false);
+                showToastMessage('Departamento actualizado exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              }
             }
           }else{
-            const res = await UpdateDepartment(token, dept.id, data);
-            if(res===200){
-              showForm(false);
-              showToastMessage('Departamento actualizado exitosamente!!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
-            }else{
-              showToastMessageError(res);
-            }
+            refRequest.current = true;
+            showToastMessageError('La compañia es obligatoria!!');
           }
-        }else{
-          showToastMessageError('La compañia es obligatoria!!');
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear Departamento!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear Departamento!!');
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     }
   });

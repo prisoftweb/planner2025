@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseStepper from "./NavExpenseStepper"
 import { useNewExpense } from "@/app/store/newExpense"
@@ -65,7 +65,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
           typeCFDIS, '', categoryS, idVat, 'PROVEEDOR');
       updateIndexStepper(2);
-    },       
+    },
   });
 
   let year = new Date().getFullYear().toString();
@@ -85,6 +85,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
+  const refRequest = useRef(true);
   //const [resetBand, setResetBand] = useState<boolean>(false);
   //const [view, setView] = useState<JSX.Element>(<></>);
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -132,6 +133,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   )
 
   const SaveData = async() => {
+    refRequest.current = false;
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
@@ -198,7 +200,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);
+          refRequest.current = true;
         }else{
+          refRequest.current = true;
           showToastMessageError(res);
         }
       } catch (error) {
@@ -238,9 +242,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);
+          refRequest.current = true;
         }
         else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -548,7 +554,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         </div>
 
         <div className="flex justify-center mt-8 space-x-5">
-          <Button type="button" onClick={SaveData}>Guardar</Button>
+          <Button type="button" onClick={() => {
+            if(refRequest.current){
+              SaveData();
+            }
+            else{
+              showToastMessageError('Ya hay una peticion en proceso..!');
+            }
+          }}>Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
               border-slate-900 rounded-xl hover:bg-slate-200"

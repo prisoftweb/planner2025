@@ -1,6 +1,6 @@
 'use client'
 import HeaderForm from "../HeaderForm"
-import Input from "../Input"
+//import Input from "../Input"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
@@ -10,6 +10,7 @@ import Select from 'react-select'
 import AddRoutes from "./AddElements"
 import { useState, useEffect } from "react"
 import { insertResourceTree } from "@/app/api/routeRoles"
+import { useRef } from "react"
 
 export default function NewRouteTree({showForm, token, optResources, 
                                         optRoutes, descRoutes, idTree}: 
@@ -25,6 +26,7 @@ export default function NewRouteTree({showForm, token, optResources,
   const [resourceSel, setResourceSel] = useState(optResources[0]);
 
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(window.outerHeight);
@@ -78,37 +80,44 @@ export default function NewRouteTree({showForm, token, optResources,
   }, [indexDelete])
 
   const onclickSave = async () => {
-    
-    if(!routes || routes.length <= 0 || !resource || resource === ''){
-      showToastMessageError('Todos los campos son obligatorios!!!');
-    }else{
-      try {        
-        const arrRoutes: Object[] = [];
-        routes.map((route) => {
-          arrRoutes.push({
-            route: route
+    if(refRequest.current){
+      if(!routes || routes.length <= 0 || !resource || resource === ''){
+        showToastMessageError('Todos los campos son obligatorios!!!');
+      }else{
+        refRequest.current = false;
+        try {        
+          const arrRoutes: Object[] = [];
+          routes.map((route) => {
+            arrRoutes.push({
+              route: route
+            })
           })
-        })
-
-        const data = {
-          resources: {
-            resource,
-            routes: arrRoutes
+  
+          const data = {
+            resources: {
+              resource,
+              routes: arrRoutes
+            }
           }
+  
+          const res = await insertResourceTree(token, idTree, data);
+          if(res === 200){
+            refRequest.current = true;
+            showToastMessage('Recurso agregado a arbol exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un problema al agregar recurso a arbol!!');
         }
-
-        const res = await insertResourceTree(token, idTree, data);
-        if(res === 200){
-          showToastMessage('Recurso agregado a arbol exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al agregar recurso a arbol!!');
       }
+    }else{
+      showToastMessageError('Ya hay una solicitud en proceso!!');
     }
   }
 

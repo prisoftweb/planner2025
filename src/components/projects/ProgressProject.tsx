@@ -1,7 +1,7 @@
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Button from "../Button";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { Project } from "@/interfaces/Projects";
 import { InsertProgressInProject } from "@/app/api/routeProjects";
@@ -16,6 +16,7 @@ export default function ProgressProject({token, id, project, user}:
   const [notes, setNotes] = useState<string>('');
   const [progress, setProgress] = useState<number>(project.progress[project.progress.length -1]?.progress || 0);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const refRequest = useRef(true);
 
   const handleChangeNotes = (value:string) => {
     setNotes(value);
@@ -36,28 +37,36 @@ export default function ProgressProject({token, id, project, user}:
   }
 
   const insertProgress = async () => {
-    const empty = noteIsEmpty(notes);
-    if(!empty){
-      const data = {
-        progress: {
-          progress,
-          notes,
-          user
+    if(refRequest.current){
+      refRequest.current = false;
+      const empty = noteIsEmpty(notes);
+      if(!empty){
+        const data = {
+          progress: {
+            progress,
+            notes,
+            user
+          }
+        };
+        try {
+          const res = await InsertProgressInProject(token, id, data);
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('Avance actualizado correctamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un error al actualizar avance del proyecto!!');
         }
-      };
-      try {
-        const res = await InsertProgressInProject(token, id, data);
-        if(res===200){
-          showToastMessage('Avance actualizado correctamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Ocurrio un error al actualizar avance del proyecto!!');
       }
+    }else{
+      showToastMessageError('Ya hay una solicitud en proceso..!!!');
     }
   }
 

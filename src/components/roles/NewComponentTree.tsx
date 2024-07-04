@@ -7,7 +7,7 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 import AddComponents from "./AddElements"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { insertComponentsTree } from "@/app/api/routeRoles"
 
 export default function NewComponentTree({showForm, token, optResources, 
@@ -32,6 +32,7 @@ export default function NewComponentTree({showForm, token, optResources,
   const [descRoute, setDescRoute] = useState<string>('');
 
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(window.outerHeight);
@@ -91,33 +92,41 @@ export default function NewComponentTree({showForm, token, optResources,
   }, [indexDelete])
 
   const onclickSave = async() => {
-    if(!route || route === '' || !resource || resource === '' || !components || components.length <= 0){
-      showToastMessageError('Todos los campos son obligatorios!!!');
-    }else{
-      try {        
-        const arrComponents: Object[] = [];
-        components.map((component) => {
-          arrComponents.push({
-            component
+    if(refRequest.current){
+      if(!route || route === '' || !resource || resource === '' || !components || components.length <= 0){
+        showToastMessageError('Todos los campos son obligatorios!!!');
+      }else{
+        refRequest.current = false;
+        try {        
+          const arrComponents: Object[] = [];
+          components.map((component) => {
+            arrComponents.push({
+              component
+            })
           })
-        })
-
-        const data = {
-          components: arrComponents
+  
+          const data = {
+            components: arrComponents
+          }
+  
+          const res = await insertComponentsTree(token, idTree, resource, route, data);
+          if(res === 200){
+            refRequest.current = true;
+            showToastMessage('Recurso agregado a arbol exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un problema al agregar recurso a arbol!!');
         }
-
-        const res = await insertComponentsTree(token, idTree, resource, route, data);
-        if(res === 200){
-          showToastMessage('Recurso agregado a arbol exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al agregar recurso a arbol!!');
       }
+    }else{
+      showToastMessageError('Ya hay una solictud en proceso!!');
     }
   }
 

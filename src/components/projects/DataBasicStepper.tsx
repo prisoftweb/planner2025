@@ -4,7 +4,7 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
+import { useRef } from "react";
 import { useRegFormContext } from "./StepperProjectProvider";
 import SaveProject from "@/app/functions/SaveProject";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -14,6 +14,7 @@ import { useNewProject } from "@/app/store/newProject";
 export default function DataBasicStepper({token, user}: {token:string, user:string}){
   
   const [,dispatch] = useRegFormContext();
+  const refRequest = useRef(true);
 
   const {updateBasicData, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
@@ -45,76 +46,77 @@ export default function DataBasicStepper({token, user}: {token:string, user:stri
     }),
     onSubmit: async (valores) => {            
       const {name, description, keyProject} = valores;
-      // const data= {
-      //   title: name, 
-      //   description,
-      //   code: keyProject,
-      // }
-
+      
       updateBasicData(name, keyProject, description);
-
-      //dispatch({ type: 'SET_BASIC_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 1})
     },       
   });
   
   const onClickSave = async () => {
-    const {description, keyProject, name} = formik.values;
-    updateBasicData(name, keyProject, description);
-    
-    const location = {
-      community, country, cp, municipy, 
-      state: stateA, 
-      stret: street
-    }
-    let data;
-    const guaranteeData = {
-      amount:amountG,
-      date: dateG,
-      porcentage:percentage
-    };
-
-    if(haveAddress && hasguaranteefund){
-      data = {
-        amount, categorys:category, client, code, company, date, description, 
-        hasguaranteefund, title, types:type, user,
-        location,
-        guaranteefund: guaranteeData
+    if(refRequest.current){
+      refRequest.current = false;
+      const {description, keyProject, name} = formik.values;
+      updateBasicData(name, keyProject, description);
+      
+      const location = {
+        community, country, cp, municipy, 
+        state: stateA, 
+        stret: street
       }
-    }else{
-      if(haveAddress){
+      let data;
+      const guaranteeData = {
+        amount:amountG,
+        date: dateG,
+        porcentage:percentage
+      };
+
+      if(haveAddress && hasguaranteefund){
         data = {
           amount, categorys:category, client, code, company, date, description, 
           hasguaranteefund, title, types:type, user,
-          location
+          location,
+          guaranteefund: guaranteeData
         }
       }else{
-        if(hasguaranteefund){
+        if(haveAddress){
           data = {
             amount, categorys:category, client, code, company, date, description, 
             hasguaranteefund, title, types:type, user,
-            guaranteefund: guaranteeData
+            location
           }
         }else{
-          data = {
-            amount, categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user,
+          if(hasguaranteefund){
+            data = {
+              amount, categorys:category, client, code, company, date, description, 
+              hasguaranteefund, title, types:type, user,
+              guaranteefund: guaranteeData
+            }
+          }else{
+            data = {
+              amount, categorys:category, client, code, company, date, description, 
+              hasguaranteefund, title, types:type, user,
+            }
           }
         }
       }
-    }
-    try {
-      const res = await SaveProject(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res.message);
+      try {
+        const res = await SaveProject(data, token);
+        if(res.status){
+          refRequest.current = true;
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Ocurrio un problema al crear proyecto!!');
       }
-    } catch (error) {
-      showToastMessageError('Ocurrio un problema al crear proyecto!!');
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Contact } from "@/interfaces/Contacts";
 import FormContact from "./FormContact";
 //import { updateProvider } from "@/app/api/routeProviders";
@@ -8,49 +8,67 @@ import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
 import { updateContactProvider } from "@/app/api/routeProviders";
 import CardContact from "./CardContact";
-import { contactUpdateValidation, contactValidation } from "@/schemas/contact.schema";
+import { contactUpdateValidation } from "@/schemas/contact.schema";
 
 export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
   
   const [index, setIndex] = useState(0);
   const numberContacts = 1;
   const [filter, setFilter] = useState<Contact[]>(contacts);
+  const refRequest = useRef(true);
 
   const newContact = async (newContact:string) => {
-    console.log('nuevo contacto');
-    try {
-      const res = await updateContactProvider({contact: newContact}, id, token);
-      if(res===200){
-        showToastMessage('El proveedor ha sido actualizado!!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res);
-      }
-    } catch (error) {
-      showToastMessageError('Error al actualizar proveedor');
-    }
-  }
-
-  const updateContactt = async (data:Contact, id:string) => {
-    const validation = contactUpdateValidation.safeParse(data);
-    if(validation.success){
+    //console.log('nuevo contacto');
+    if(refRequest.current){
+      refRequest.current = false;
       try {
-        const res = await updateContact(id, token, data);
+        const res = await updateContactProvider({contact: newContact}, id, token);
         if(res===200){
-          showToastMessage('El contacto ha sido actualizado!!');
+          refRequest.current = true;
+          showToastMessage('El proveedor ha sido actualizado!!');
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al actualizar proveedor');
       }
     }else{
-      showToastMessageError(validation.error.issues[0].message);
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
+    }
+  }
+
+  const updateContactt = async (data:Contact, id:string) => {
+    if(refRequest.current){
+      refRequest.current = false;
+      const validation = contactUpdateValidation.safeParse(data);
+      if(validation.success){
+        try {
+          const res = await updateContact(id, token, data);
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('El contacto ha sido actualizado!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al actualizar proveedor');
+        }
+      }else{
+        refRequest.current = true;
+        showToastMessageError(validation.error.issues[0].message);
+      }
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 
