@@ -35,7 +35,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     typeCFDI, vat, reset, updateRefresh, isCard, 
     report, condition, category, isPettyCash, 
     updateIsCard} = useNewExpense();
-console.log('render');
+
   const formik = useFormik({
     initialValues: {
       folio: folio,
@@ -109,7 +109,7 @@ console.log('render');
     formik.values.vat = '0';
   }
 
-  console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
+  //console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
   let viewAmount: JSX.Element = <></>;
   viewAmount = (
     <CurrencyInput
@@ -119,7 +119,8 @@ console.log('render');
         focus:border-slate-700 outline-0"
       onChange={formik.handleChange}
       onBlur={formik.handleChange}
-      defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
+      //defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
+      value={Number(formik.values.amount.replace(/[$,]/g, ""))}
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {

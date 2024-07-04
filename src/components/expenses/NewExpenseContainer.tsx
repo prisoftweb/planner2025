@@ -169,8 +169,19 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     if(r?.project._id !== project){
       updateProject(r?.project._id || '');
     }
+
+    const optProject = optProjects.find((optP) => optP.value === r?.project._id);
+    if(optProject && optProject !== optSelectize){
+      setOptSelectize(optProject);
+    }
     //setViewSelectProject(<></>);
   }
+
+  // const handleReport = (value:string) => {
+  //   const optProject = optProjects.find((optP) => optP.value )
+  //   updateReport(value);
+  //   updateIndexStepper(1);
+  // }
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);

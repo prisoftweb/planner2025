@@ -11,11 +11,11 @@ export default function CardProject({report}:
     <>
       <div className="grid grid-cols-2 gap-x-2 p-3 border border-slate-700 
             rounded-xl bg-white shadow-md shadow-slate-500 hover:shadow-xl 
-            hover:shadow-slate-600"
+            hover:shadow-slate-600 hover:cursor-pointer"
         key={report._id + report.name}
         onClick={ () => {
-          console.log('report card project => ', report.name);
-          console.log('rep id => ', report._id);
+          //console.log('report card project => ', report.name);
+          //console.log('rep id => ', report._id);
           updateReport(report._id);
           updateIndexStepper(1);
         }}

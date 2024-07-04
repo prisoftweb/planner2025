@@ -55,13 +55,13 @@ export default function SelectProjectStepper({reports, optReports}:
         }}
         placeholder='Buscar ...'
         styles={customStyles}
-        onInputChange={(e) => filterReports(e)}
+        //onInputChange={(e) => filterReports(e)}
         onChange={(value:(Options | null)) => filterReports(value?.label || '')}
       />
       <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-3 
         3xl:grid-cols-4 gap-x-4 gap-y-3 mt-5">
           {filtered.map((repor, index:number) => (
-            <CardProject report={repor} key={index} />
+            <CardProject report={repor} key={repor._id} />
           ))}
       </div>
     </div>

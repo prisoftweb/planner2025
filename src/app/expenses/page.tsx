@@ -304,7 +304,7 @@ export default async function Page() {
     })
     const total = CurrencyFormatter({
       currency: "MXN",
-      value: expense.cost?.total || 0
+      value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
     })
     const elements: string[] = [];
     if(expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
