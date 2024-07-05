@@ -1,11 +1,11 @@
 import { cookies } from "next/headers"
 //import { getUser } from "@/app/api/routeUser";
 import UserClient from "./UserClient";
-import { getDepartments } from "@/app/api/routeDepartments";
-import { getRoles } from "@/app/api/routeRoles";
-import { Role } from "@/interfaces/Roles";
+import { getDepartmentsLV } from "@/app/api/routeDepartments";
+import { getRolesLV } from "@/app/api/routeRoles";
+//import { Role } from "@/interfaces/Roles";
 import { Options } from "@/interfaces/Common";
-import { Department } from "@/interfaces/Departments";
+//import { Department } from "@/interfaces/Departments";
 import { UsrBack } from "@/interfaces/User";
 
 export default async function TabUser({user, opt}: {user:UsrBack, opt: number}){
@@ -24,40 +24,40 @@ export default async function TabUser({user, opt}: {user:UsrBack, opt: number}){
   // if(typeof(user) === "string")
   //   return <h1 className="text-center text-red-500">{user}</h1>
 
-  let departments: Department[];
+  let optionsDepartments:Options[] = [];
   try {
-    departments = await getDepartments(token);
-    if(typeof(departments) === "string")
-      return <h1 className="text-center text-red-500">{departments}</h1>
+    optionsDepartments = await getDepartmentsLV(token);
+    if(typeof(optionsDepartments) === "string")
+      return <h1 className="text-center text-red-500">{optionsDepartments}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener los departamentos!!</h1>
   }
 
-  let roles:Role[];
+  // let optionsDepartments:Options[] = [];
+  // departments.map((dept:any) => {
+  //   optionsDepartments.push({
+  //     label: dept.name,
+  //     value: dept._id
+  //   });
+  // });
+
+  let optsRole:Options[] = [];
 
   try {
-    roles = await getRoles(token);
-    if(typeof(roles)==='string')
-        return <h1 className="text-red-500 text-center text-lg">{roles}</h1>
+    optsRole = await getRolesLV(token);
+    if(typeof(optsRole)==='string')
+        return <h1 className="text-red-500 text-center text-lg">{optsRole}</h1>
   } catch (error) {
     return <h1 className="text-red-500 text-center text-lg">Ocurrio un error al obtener roles!!</h1>
   }
 
-  const optsRole:Options[] = [];
-  roles.map((role) => {
-    optsRole.push({
-      label: role.name,
-      value: role._id
-    });
-  });
-
-  let optionsDepartments:Options[] = [];
-  departments.map((dept:any) => {
-    optionsDepartments.push({
-      label: dept.name,
-      value: dept._id
-    });
-  });
+  // const optsRole:Options[] = [];
+  // roles.map((role) => {
+  //   optsRole.push({
+  //     label: role.name,
+  //     value: role._id
+  //   });
+  // });
 
   return(
     <>

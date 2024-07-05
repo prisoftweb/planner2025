@@ -225,8 +225,8 @@ export async function GetReportsMin(auth_token:string) {
   }
 }
 
-export async function GetReportsLastMovInDept(auth_token:string, idDept:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsWithLastMoveInDepartment/${idDept}`;
+export async function GetReportsLastMovInDeptMIN(auth_token:string, idDept:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsWithLastMoveInDepartmentMIN/${idDept}`;
   try {
     const res = await axios.get(url, {
       headers: {
@@ -245,6 +245,25 @@ export async function GetReportsLastMovInDept(auth_token:string, idDept:string) 
 
 export async function GetReportsByUserMin(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsByUserMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    //console.log('res ack => ', res.data.data);
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al obtener informes';
+    }
+    return 'Ocurrio un problema al obtener informes';
+  }
+}
+
+export async function GetReportsLV(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsLV`;
   try {
     const res = await axios.get(url, {
       headers: {

@@ -18,6 +18,24 @@ export async function getCostCenters(auth_token:string){
   }
 }
 
+export async function getCostCentersMin(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costcenters/getAllCostCentersLV`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar los centros de costos!!';
+    }
+    return 'Error al consultar los centros de costos!!';
+  }
+}
+
 export async function getCostCenter(auth_token:string, id:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costcenters/${id}`;
   try {

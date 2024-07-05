@@ -6,9 +6,9 @@ import Header from "@/components/Header";
 import { getNodes } from "../api/routeNodes";
 import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
-import { getDepartments } from "../api/routeDepartments";
+import { getDepartmentsLV } from "../api/routeDepartments";
 import { getWorkFlows } from "../api/routeWorkflows";
-import { Department } from "@/interfaces/Departments";
+//import { Department } from "@/interfaces/Departments";
 import { Glossary } from "@/interfaces/Glossary";
 import { Workflow } from "@/interfaces/Workflows";
 import ButtonNewNode from "@/components/nodes/ButtonNewNode";
@@ -33,15 +33,24 @@ export default async function page() {
     return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar nodos!!</h1>
   }
 
-  let departments: Department[] = [];
+  //let departments: Department[] = [];
+  let optDepartments: Options[] = [];
   try {
-    departments = await getDepartments(token);
-    if(typeof(departments) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{departments}</h1>
+    optDepartments = await getDepartmentsLV(token);
+    if(typeof(optDepartments) ==='string'){
+      return <h1 className="text-red-500 text-xl text-center">{optDepartments}</h1>
     }
   } catch (error) {
     return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar departamentos!!</h1>
   }
+
+  // const optDepartments: Options[] = [];
+  // departments.map(department => {
+  //   optDepartments.push({
+  //     label: department.name,
+  //     value: department._id
+  //   });
+  // });
 
   let glossaries: Glossary[] = [];
   try {
@@ -62,14 +71,6 @@ export default async function page() {
   } catch (error) {
     return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar workflows!!</h1>
   }
-
-  const optDepartments: Options[] = [];
-  departments.map(department => {
-    optDepartments.push({
-      label: department.name,
-      value: department._id
-    });
-  });
 
   const optGlossaries: Options[] = [];
   const optDescGlossaries: Options[] = [];

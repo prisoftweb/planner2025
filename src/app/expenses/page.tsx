@@ -11,17 +11,17 @@ import { Provider } from "@/interfaces/Providers";
 import { getUsers } from "../api/routeUser";
 import { getGlossaries } from "../api/routeGlossary";
 import { Glossary } from "@/interfaces/Glossary";
-import { getProjects } from "../api/routeProjects";
-import { Project } from "@/interfaces/Projects";
-import { ExpensesTable, Expense, Vat } from "@/interfaces/Expenses";
+import { getProjectsLV } from "../api/routeProjects";
+//import { Project } from "@/interfaces/Projects";
+import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 //import TableExpenses from "@/components/expenses/TableExpenses";
-import { GetCosts, GetVats, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
+import { GetCosts, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
 //import Header from "@/components/Header";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
-import { GetReports, getReportsByUser } from "../api/routeReports";
-import { Report } from "@/interfaces/Reports";
+import { GetReportsMin, GetReportsByUserMin } from "../api/routeReports";
+import { ReportParse } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { getTypeFiles } from "../functions/CostsFunctions";
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
@@ -113,30 +113,31 @@ export default async function Page() {
     });
   });
 
-  let glossaries: Glossary[];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
-  }
+  //agregar glosaries lv
+  // let glossaries: Glossary[];
+  // try {
+  //   glossaries = await getGlossaries(token);
+  //   if(typeof(glossaries)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
+  // }
 
-  const optGlossaries:Options[]= [];
-  glossaries.map((glossary) => {
-    optGlossaries.push({
-      label: glossary.name,
-      value: glossary._id
-    });
-  });
+  // const optGlossaries:Options[]= [];
+  // glossaries.map((glossary) => {
+  //   optGlossaries.push({
+  //     label: glossary.name,
+  //     value: glossary._id
+  //   });
+  // });
 
-  let reports: Report[];
+  let reports: ReportParse[];
   try {
     if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
-      reports = await GetReports(token);
+      reports = await GetReportsMin(token);
     }else{
-      reports = await getReportsByUser(token, user._id);
+      reports = await GetReportsByUserMin(token, user._id);
     }
     
     if(typeof(reports)==='string'){
@@ -160,29 +161,46 @@ export default async function Page() {
     optReportsFilter.push(r);
   });
 
-  let projects: Project[];
+  // let projects: Project[];
+  // try {
+  //   projects = await getProjects(token);
+  //   if(typeof(projects)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{projects}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+  // }
+
+  //let projects: Options[];
+  let optProjects:Options[];
+  let optProjectFilter: Options[] = [{
+      label: 'TODOS',
+      value: 'all'
+    }]
   try {
-    projects = await getProjects(token);
-    if(typeof(projects)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{projects}</h1>
+    optProjects = await getProjectsLV(token);
+    if(typeof(optProjects)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
     }    
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
   }
 
-  const optProjects:Options[]= [];
-  const optProjectFilter: Options[] = [{
-    label: 'TODOS',
-    value: 'all'
-  }]
-  projects.map((project) => {
-    const p = {
-      label: project.title,
-      value: project._id
-    }
-    optProjects.push(p);
-    optProjectFilter.push(p);
-  });
+  optProjectFilter = optProjectFilter.concat(optProjects);
+
+  // const optProjects:Options[]= [];
+  // const optProjectFilter: Options[] = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }]
+  // projects.map((project) => {
+  //   const p = {
+  //     label: project.title,
+  //     value: project._id
+  //   }
+  //   optProjects.push(p);
+  //   optProjectFilter.push(p);
+  // });
 
   let catalogs: GlossaryCatalog[];
   try {
@@ -245,23 +263,33 @@ export default async function Page() {
     optConditionsFilter.push(c);
   })
 
-  let vats: Vat[];
+  // let vats: Vat[];
+  // try {
+  //   vats = await GetVats(token);
+  //   if(typeof(vats)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{vats}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
+  // }
+
+  let optVats: Options[];
   try {
-    vats = await GetVats(token);
-    if(typeof(vats)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{vats}</h1>
+    optVats = await GetVatsLV(token);
+    if(typeof(optVats)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optVats}</h1>
     }    
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
   }
 
-  const optVats:Options[]= [];
-  vats.map((vat) => {
-    optVats.push({
-      label: vat.value.toString(),
-      value: vat._id
-    });
-  });
+  // const optVats:Options[]= [];
+  // vats.map((vat) => {
+  //   optVats.push({
+  //     label: vat.value.toString(),
+  //     value: vat._id
+  //   });
+  // });
 
   if(!expenses || expenses.length <= 0){
     return (
@@ -275,9 +303,8 @@ export default async function Page() {
             title="Gastos">
               <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
                   optProviders={optProviders} optResponsibles={optResponsibles}
-                  optGlossaries={optGlossaries} optProjects={optProjects} 
-                  optCategories={optCategories} optConditions={optConditions}
-                  optTypes={optTypes} projects={projects} reports={reports}
+                  optProjects={optProjects} optConditions={optConditions}
+                  optCategories={optCategories} optTypes={optTypes} reports={reports}
                   optReports={optReports} idLabour={labour} idTicket={ticket}
                   optCostCenterDeductible={optCostCenterDeductible} optVats={optVats}
               />
@@ -393,12 +420,11 @@ export default async function Page() {
       <ContainerClient data={table} expenses={expenses} idLabour={labour} idTicket={ticket}
         optCategories={optCategories} optCategoriesFilter={optCategoriesFilter} optConditions={optConditions}
         optConditionsFilter={optConditionsFilter} optCostCenter={optCostCenter} 
-        optCostCenterDeductible={optCostCenterDeductible} optGlossaries={optGlossaries} 
+        optCostCenterDeductible={optCostCenterDeductible} optCostCenterFilter={optCostCenterFilter}
         optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
-        optTypeFilter={optTypeFilter} optTypes={optTypes} projects={projects} reports={reports}
-        token={token} user={user._id} optVats={optVats} optCostCenterFilter={optCostCenterFilter} 
-          reportProjects={reportsProject} costsTypes={costTypes}
+        optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
+        token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
         />
     </>
   )

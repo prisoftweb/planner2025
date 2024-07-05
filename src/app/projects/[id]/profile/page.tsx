@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
 import { getClients } from "@/app/api/routeClients";
-import { GetProject, getProjects } from "@/app/api/routeProjects";
+import { GetProject, getProjectsLV } from "@/app/api/routeProjects";
 import { Project } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
@@ -30,27 +30,27 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
   }
 
-  let projects: Project[];
+  let options: Options[] = [];
   try {
-    projects = await getProjects(token);
-    if(typeof(projects) === "string")
-      return <h1 className="text-center text-red-500">{projects}</h1>
+    options = await getProjectsLV(token);
+    if(typeof(options) === "string")
+      return <h1 className="text-center text-red-500">{options}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proyectos!!</h1>  
   }
 
-  let options: Options[] = [];
+  // let options: Options[] = [];
 
-  if(projects.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener proyectos...</h1>
-  }
+  // if(projects.length <= 0){
+  //   return <h1 className="text-center text-red-500">Error al obtener proyectos...</h1>
+  // }
 
-  projects.map((proj) => {
-    options.push({
-      value: proj._id,
-      label: proj.title,
-    })
-  })
+  // projects.map((proj) => {
+  //   options.push({
+  //     value: proj._id,
+  //     label: proj.title,
+  //   })
+  // })
 
   let clients: ClientBack[];
   try {

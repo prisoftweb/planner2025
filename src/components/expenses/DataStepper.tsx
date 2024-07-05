@@ -20,14 +20,12 @@ import CurrencyInput from 'react-currency-input-field';
 import { getSupplierCreditProv } from "@/app/functions/CostsFunctions"
 
 export default function DataStepper({token, user, optCostCenter, optProviders, 
-                                      optResponsibles, optGlossaries, optProjects, 
-                                      optCategories, optConditions, optTypes, optVats
+                                      optResponsibles, optCategories, optTypes, optVats
                                     }: 
                                   {token:string, user:string, optCostCenter:Options[],
                                     optProviders:Options[], optResponsibles:Options[],
-                                    optGlossaries:Options[], optProjects:Options[], 
                                     optCategories:Options[], optTypes:Options[], 
-                                    optConditions:Options[], optVats:Options[] }){
+                                    optVats:Options[] }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 

@@ -2,19 +2,19 @@ import WithOut from "@/components/WithOut"
 import Navigation from "@/components/navigation/Navigation"
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { getCompanies } from "../api/routeCompany";
-import { getDepartments } from "../api/routeDepartments";
+import { getCompaniesLV } from "../api/routeCompany";
+import { getDepartmentsLV } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
-import { Department } from "@/interfaces/Departments";
-import { Company } from "@/interfaces/Companies";
-import { Project } from "@/interfaces/Projects";
-import { getProjects } from "../api/routeProjects";
+//import { Department } from "@/interfaces/Departments";
+//import { Company } from "@/interfaces/Companies";
+//import { Project } from "@/interfaces/Projects";
+import { getProjectsLV } from "../api/routeProjects";
 import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReports, GetReportsMin, GetReportsByUserMin, GetReportsLastMovInDept } from "../api/routeReports";
-import { Report, ReportParse, ReportTable } from "@/interfaces/Reports";
+import { GetReportsMin, GetReportsByUserMin, GetReportsLastMovInDeptMIN } from "../api/routeReports";
+import { ReportParse, ReportTable } from "@/interfaces/Reports";
 //import Header from "@/components/Header";
 //import TableReports from "@/components/reports/TableReports";
-import { ReportDataToTableData, ReportParseDataToTableData } from "../functions/ReportsFunctions";
+import { ReportParseDataToTableData } from "../functions/ReportsFunctions";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import ContainerClient from "@/components/reports/ContainerClient";
@@ -31,19 +31,19 @@ export default async function Page() {
     //console.log(user.department.name.toLowerCase());
     if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
       reports = await GetReportsByUserMin(token, user._id);
-      console.log('rep por usuario!! => ', reports);
+      //console.log('rep por usuario!! => ', reports);
       //consultar por usuario y por departamento
       //console.log('by user');
     }else{
       if(user.department.name.toLowerCase().includes('direccion')){
         //reports = await GetReports(token);
         reports = await GetReportsMin(token);
-        console.log('rep por min!! => ', reports);
+        //console.log('rep por min!! => ', reports);
       }else{
         //console.log('by dept');
         //reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
-        reports = await GetReportsLastMovInDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
-        console.log('rep por ultimo dept!! => ', reports);
+        reports = await GetReportsLastMovInDeptMIN(token, typeof(user.department)==='string' ? user.department : user.department._id);
+        //console.log('rep por ultimo dept!! => ', reports);
       }
     }
     //reports = await GetReports(token);
@@ -72,40 +72,87 @@ export default async function Page() {
   //   return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar informes!!</h1>
   // }
   
-  let companies: Company[] = [];
+  let optCompanies: Options[] = [];
   try {
-    companies = await getCompanies(token);
+    optCompanies = await getCompaniesLV(token);
   } catch (error) {
     return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
   }
 
-  let departments: Department[] = [];
+  let optCompaniesFilter: Options[] = [{
+    label: 'TODAS',
+    value: 'all'
+  }]
+
+  optCompaniesFilter = optCompaniesFilter.concat(optCompanies);
+
+  // const optCompanies: Options[] = [];
+  // const optCompaniesFilter: Options[] = [{
+  //   label: 'Todas',
+  //   value: 'all'
+  // }];
+  // companies.map((company) => {
+  //   let c = {
+  //     label: company.name,
+  //     value: company._id
+  //   };
+  //   optCompanies.push(c);
+  //   optCompaniesFilter.push(c);
+  // });
+
+  let optDepartments: Options[] = [];
   try {
-    departments = await getDepartments(token);
+    optDepartments = await getDepartmentsLV(token);
   } catch (error) {
     return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
   }
 
-  let projects:Project[] = [];
+  //const optDepartments: Options[] = [];
+
+  // departments.map((department) => {
+  //   let d = {
+  //     label: department.name,
+  //     value: department._id
+  //   }
+  //   optDepartments.push(d);
+  // });
+
+  // let projects:Project[] = [];
+  // try {
+  //   projects = await getProjects(token);
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red">Error al consultar los proyectos</h1>
+  // }
+
+  // const optProjects: Options[] = [];
+  // const optProjectsFilter: Options[] = [{
+  //   label: 'Todos',
+  //   value: 'all'
+  // }];
+  // projects.map((project) => {
+  //   let p = {
+  //     label: project.title,
+  //     value: project._id
+  //   }
+  //   optProjects.push(p);
+  //   optProjectsFilter.push(p);
+  // });
+
+  let optProjects:Options[];
+  let optProjectsFilter: Options[] = [{
+      label: 'TODOS',
+      value: 'all'
+    }]
   try {
-    projects = await getProjects(token);
+    optProjects = await getProjectsLV(token);
+    if(typeof(optProjects)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+    }    
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar los proyectos</h1>
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
   }
 
-  const optProjects: Options[] = [];
-  const optProjectsFilter: Options[] = [{
-    label: 'Todos',
-    value: 'all'
-  }];
-  projects.map((project) => {
-    let p = {
-      label: project.title,
-      value: project._id
-    }
-    optProjects.push(p);
-    optProjectsFilter.push(p);
-  });
+  optProjectsFilter = optProjectsFilter.concat(optProjects);
 
   let catalogs: GlossaryCatalog[];
   try {
@@ -129,30 +176,6 @@ export default async function Page() {
     }
     optConditions.push(c);
     optConditionsFilter.push(c);
-  });
-
-  const optCompanies: Options[] = [];
-  const optCompaniesFilter: Options[] = [{
-    label: 'Todas',
-    value: 'all'
-  }];
-  companies.map((company) => {
-    let c = {
-      label: company.name,
-      value: company._id
-    };
-    optCompanies.push(c);
-    optCompaniesFilter.push(c);
-  });
-
-  const optDepartments: Options[] = [];
-
-  departments.map((department) => {
-    let d = {
-      label: department.name,
-      value: department._id
-    }
-    optDepartments.push(d);
   });
 
   if(!reports || reports.length <= 0){

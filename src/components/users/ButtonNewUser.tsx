@@ -4,17 +4,19 @@ import Button from "../Button";
 import NewUser from "./NewUser";
 import { Options } from "@/interfaces/Common";
 
-export default function ButtonNewUser({token, id, departments, roles}: 
-    {token:string, id:string, departments:any, roles:Options[]}){
+export default function ButtonNewUser({token, optionsDepartments, roles}: 
+    {token:string, optionsDepartments:Options[], roles:Options[]}){
   const [newUser, setNewUser] = useState<boolean>(false);
   
-      console.log('new user = ', roles);
+  const handleNewUser = () => {
+    window.location.reload();
+  }
 
   return(
     <>
       <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
-        {newUser && <NewUser showForm={setNewUser} departments={departments} 
-          token={token} roles={roles} addUser={() => console.log('en construccion')} />}
+        {newUser && <NewUser showForm={setNewUser} optionsDepartments={optionsDepartments} 
+          token={token} roles={roles} addUser={() => handleNewUser} />}
     </>
   )
 }

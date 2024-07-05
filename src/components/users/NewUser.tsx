@@ -13,12 +13,12 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 
-export default function NewUser({showForm, departments, token, roles, addUser}: 
-                    {showForm:Function, departments:any, token:string
+export default function NewUser({showForm, optionsDepartments, token, roles, addUser}: 
+                    {showForm:Function, optionsDepartments:Options[], token:string
                     roles:Options[], addUser:Function}){
   
   const [file, setFile] = useState<File>();
-  const [department, setDepartment] = useState<string>(departments[0]._id);
+  const [department, setDepartment] = useState<string>(optionsDepartments[0].value);
   const [role, setRole] = useState<string>(roles[0].value);
   //const [optsRoles, setOptsRoles] = useState<Options>(roles[0]);
 
@@ -37,13 +37,13 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
   
-  let optionsDepartments:Options[] = [];
-  departments.map((dept:any) => (
-    optionsDepartments.push({
-      label: dept.name,
-      value: dept._id
-    })
-  ))
+  // let optionsDepartments:Options[] = [];
+  // departments.map((dept:any) => (
+  //   optionsDepartments.push({
+  //     label: dept.name,
+  //     value: dept._id
+  //   })
+  // ))
 
   //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
   let optDepto = optionsDepartments.find(dep => dep.value === department)?? optionsDepartments[0];

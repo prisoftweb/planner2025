@@ -5,7 +5,7 @@ import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import { Options } from "@/interfaces/Common";
 import RoleProfile from "@/components/roles/RoleProfile";
-import { getRole, getRoles, getTree } from "@/app/api/routeRoles";
+import { getRole, getRolesLV, getTree } from "@/app/api/routeRoles";
 import { RoleUser } from "@/interfaces/Roles";
 import { Tree } from "@/interfaces/Roles";
 import PermissionResource from "@/components/roles/PermissionResource";
@@ -28,23 +28,23 @@ export default async function Page({ params, searchParams }:
     return <h1 className="text-center text-lg text-red-500">Ocurrio un error al obtener rol!!</h1>
   }
 
-  let roles:RoleUser[];
+  let options: Options[] = [];
   try {
-    roles = await getRoles(token);
-    if(typeof(roles) === 'string'){
-      <h1 className="text-center text-lg text-red-500">{roles}</h1>
+    options = await getRolesLV(token);
+    if(typeof(options) === 'string'){
+      <h1 className="text-center text-lg text-red-500">{options}</h1>
     }
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Ocurrio un error al obtener roles!!</h1>
   }
 
-  const options: Options[] = [];
-  roles.map((role) => {
-    options.push({
-      label: role.name,
-      value: role._id
-    })
-  });
+  // const options: Options[] = [];
+  // roles.map((role) => {
+  //   options.push({
+  //     label: role.name,
+  //     value: role._id
+  //   })
+  // });
 
   //660af0683b237344454ad085
   let tree: Tree;

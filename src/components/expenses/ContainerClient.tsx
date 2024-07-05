@@ -4,22 +4,22 @@ import TableExpenses from "./TableExpenses"
 import ButtonNew from "./ButtonNew"
 import { Options } from "@/interfaces/Common"
 import { ExpensesTable, Expense } from "@/interfaces/Expenses"
-import { Project } from "@/interfaces/Projects"
-import { Report } from "@/interfaces/Reports"
+//import { Project } from "@/interfaces/Projects"
+import { ReportParse } from "@/interfaces/Reports"
 import { useState } from "react"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import ReportCostByProjects from "../ReportCostByProjects";
-import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
+//import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
 
 export default function ContainerClient({data, token, expenses, 
                     optCategoriesFilter, optConditionsFilter, optTypeFilter, 
                     optProjectFilter, optReportsFilter, idLabour, idTicket, 
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
-                    optGlossaries, optProjects, optProviders, optReports, optResponsibles, 
-                    optTypes, projects, reports, user, optVats, optCostCenterFilter, 
+                    optProjects, optProviders, optReports, optResponsibles, 
+                    optTypes, reports, user, optVats, optCostCenterFilter, 
                     reportProjects, costsTypes}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
@@ -27,10 +27,9 @@ export default function ContainerClient({data, token, expenses,
                     optReportsFilter:Options[], optProjectFilter:Options[], 
                     user:string, optCostCenter:Options[], optCostCenterFilter:Options[],
                     optProviders:Options[], optResponsibles:Options[],
-                    optGlossaries:Options[], optProjects:Options[], 
+                    optProjects:Options[], optConditions:Options[],
                     optCategories:Options[], optTypes:Options[], 
-                    optConditions:Options[], projects:Project[], 
-                    reports:Report[], optReports:Options[], 
+                    reports:ReportParse[], optReports:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
                     idTicket:string, optVats:Options[], reportProjects: ReportByProject[], 
                     costsTypes: CostGroupByType[]}){
@@ -58,12 +57,11 @@ export default function ContainerClient({data, token, expenses,
           </PDFDownloadLink>
           <ButtonNew token={token} user={user} optCostCenter={optCostCenter} 
                       optProviders={optProviders} optResponsibles={optResponsibles}
-                      optGlossaries={optGlossaries} optProjects={optProjects} 
+                      optProjects={optProjects} optVats={optVats}
                       optCategories={optCategories} optConditions={optConditions}
-                      optTypes={optTypes} projects={projects} reports={reports}
+                      optTypes={optTypes} reports={reports}
                       optReports={optReports} idLabour={idLabour} idTicket={idTicket}
                       optCostCenterDeductible={optCostCenterDeductible}
-                      optVats={optVats}
           />
         </div>
       </Header>

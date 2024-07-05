@@ -14,9 +14,8 @@ import { DataUsersToTableData } from "@/app/functions/UsersFunctions";
 import { removeUser } from "@/app/api/routeUser";
 import { useUserStore } from "@/app/store/userStore";
 
-export default function TableUsers({token, departments, roles}:
-                        {token:string, 
-                          departments:any, roles:Options[]}){
+export default function TableUsers({token, optionsDepartments, roles}:
+                        {token:string, optionsDepartments:Options[], roles:Options[]}){
   
   const columnHelper = createColumnHelper<User>();
   const [newUser, setNewUser] = useState<boolean>(false);
@@ -133,7 +132,7 @@ export default function TableUsers({token, departments, roles}:
       <Header title="Usuarios" placeHolder="Buscar usuario..">
         <>
           <Button type="button" onClick={() => setNewUser(true)}>Nuevo</Button>
-            {newUser && <NewUser showForm={handleClickNew} departments={departments} 
+            {newUser && <NewUser showForm={handleClickNew} optionsDepartments={optionsDepartments} 
                         token={token} roles={roles} addUser={addUser} />}
         </>
       </Header>

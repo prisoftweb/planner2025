@@ -8,7 +8,7 @@ export async function GetCosts(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res', res);
+    //console.log('res', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
@@ -23,8 +23,8 @@ export async function GetCosts(auth_token:string){
 
 export async function CreateCost(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs`;
-  console.log(url);
-  console.log(JSON.stringify(data));
+  //console.log(url);
+  //console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -32,7 +32,7 @@ export async function CreateCost(auth_token:string, data:Object) {
         'Content-Type': 'application/json'
       }
     });
-    console.log(res);
+    //console.log(res);
     if(res.status === 201) return res.status;
     return res.statusText
   } catch (error) {
@@ -103,9 +103,9 @@ export async function UpdateCost(auth_token:string, id:string, data:Object) {
 
 export async function CreateCostWithFiles(auth_token:string, data:FormData) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/costWithFILES`;
-  console.log(url);
-  console.log('files => ', data.getAll('files'));
-  console.log('types => ', data.getAll('types'));
+  // console.log(url);
+  // console.log('files => ', data.getAll('files'));
+  // console.log('types => ', data.getAll('types'));
   //console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, data, {
@@ -163,6 +163,24 @@ export async function DeleteFILE(auth_token:string, id:string, idFile:string) {
 
 export async function GetVats(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/vats`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar ivas!!';
+    }
+    return 'Error al consultar ivas!!';
+  }
+}
+
+export async function GetVatsLV(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/vats/getAllVatsLV`;
   try {
     const res = await axios.get(url, {
       headers: {

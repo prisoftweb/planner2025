@@ -1,9 +1,9 @@
 //import { Project } from "@/interfaces/Projects";
 import { useNewExpense } from "@/app/store/newExpense";
-import { Report } from "@/interfaces/Reports";
+import { ReportParse } from "@/interfaces/Reports";
 
 export default function CardProject({report}:
-                      {report:Report}){
+                      {report:ReportParse}){
   
   const {updateIndexStepper, updateReport} = useNewExpense();
 

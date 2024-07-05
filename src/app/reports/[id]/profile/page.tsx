@@ -1,10 +1,10 @@
 import { Options } from "@/interfaces/Common";
-import { Company } from "@/interfaces/Companies";
-import { getCompanies } from "@/app/api/routeCompany";
-import { Department } from "@/interfaces/Departments";
-import { getDepartments } from "@/app/api/routeDepartments";
-import { Project } from "@/interfaces/Projects";
-import { getProjects } from "@/app/api/routeProjects";
+//import { Company } from "@/interfaces/Companies";
+import { getCompaniesLV } from "@/app/api/routeCompany";
+//import { Department } from "@/interfaces/Departments";
+import { getDepartmentsLV } from "@/app/api/routeDepartments";
+//import { Project } from "@/interfaces/Projects";
+import { getProjectsLV } from "@/app/api/routeProjects";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
@@ -12,7 +12,7 @@ import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/reports/NavTab";
 import ReportClient from "@/components/reports/ReportClient";
-import { GetReport, GetReports, updateReport, 
+import { GetReport, GetReportsLV, updateReport, 
     insertMovementsInReport, getCostByReportMin } from "@/app/api/routeReports";
 import { Report, CostReport } from "@/interfaces/Reports";
 //import { Expense } from "@/interfaces/Expenses";
@@ -35,68 +35,82 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
   }
   
-  let reports: Report[] = [];
+  let optReports:Options[] = [];
   try {
-    reports = await GetReports(token);
-    if(typeof(reports)==='string'){
-      return <h1 className="text-lg text-center text-red-500">{reports}</h1>
+    optReports = await GetReportsLV(token);
+    if(typeof(optReports)==='string'){
+      return <h1 className="text-lg text-center text-red-500">{optReports}</h1>
     }
   } catch (error) {
     return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
   }
 
-  const optReports:Options[] = [];
-  reports.map((rep) => {
-    optReports.push({
-      label: rep.name,
-      value: rep._id
-    });
-  });
+  // const optReports:Options[] = [];
+  // reports.map((rep) => {
+  //   optReports.push({
+  //     label: rep.name,
+  //     value: rep._id
+  //   });
+  // });
 
-  let companies: Company[] = [];
+  let optCompanies: Options[] = [];
   try {
-    companies = await getCompanies(token);
+    optCompanies = await getCompaniesLV(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar las compañias</h1>
+    return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
   }
 
-  let departments: Department[] = [];
+  // let companies: Company[] = [];
+  // try {
+  //   companies = await getCompanies(token);
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar las compañias</h1>
+  // }
+
+  // const optCompanies: Options[] = [];
+  // companies.map((company) => {
+  //   optCompanies.push({
+  //     label: company.name,
+  //     value: company._id
+  //   });
+  // });
+
+  let optDepartments: Options[] = [];
   try {
-    departments = await getDepartments(token);
+    optDepartments = await getDepartmentsLV(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los departamentos</h1>
+    return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
   }
 
-  let projects:Project[] = [];
+  // let departments: Department[] = [];
+  // try {
+  //   departments = await getDepartments(token);
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los departamentos</h1>
+  // }
+
+  // const optDepartments: Options[] = [];
+  // departments.map((department) => {
+  //   optDepartments.push({
+  //     label: department.name,
+  //     value: department._id
+  //   });
+  // });
+
+  let optProjects: Options[] = [];
   try {
-    projects = await getProjects(token);
+    optProjects = await getProjectsLV(token);
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos</h1>
   }
 
-  const optProjects: Options[] = [];
-  projects.map((project) => {
-    optProjects.push({
-      label: project.title,
-      value: project._id
-    });
-  });
-
-  const optCompanies: Options[] = [];
-  companies.map((company) => {
-    optCompanies.push({
-      label: company.name,
-      value: company._id
-    });
-  });
-
-  const optDepartments: Options[] = [];
-  departments.map((department) => {
-    optDepartments.push({
-      label: department.name,
-      value: department._id
-    });
-  });
+  // const optProjects: Options[] = [];
+  // projects.map((project) => {
+  //   optProjects.push({
+  //     label: project.title,
+  //     value: project._id
+  //   });
+  // });
 
   let costs:CostReport[] = [];
   try {
