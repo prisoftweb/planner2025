@@ -9,11 +9,13 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { createRoute, updateRoute } from "@/app/api/routeRoles"
 import { Resource } from "@/interfaces/Roles"
-import TextArea from "../TextArea"
+//import TextArea from "../TextArea"
+import { useRef } from "react"
 
 export default function NewSubPath({showForm, token, route}: 
                     {showForm:Function, token:string, route:Resource}){
-  
+
+  const refRequest = useRef(true);
   const formik = useFormik({
     initialValues: {
       name: route.name,
@@ -30,32 +32,45 @@ export default function NewSubPath({showForm, token, route}:
     }),
 
     onSubmit: async valores => {
-      if(route.id === ''){
-        try {
-          const res = await createRoute(token, valores);
-          if(res===201){
-            showForm(false);
-            showToastMessage('Ruta creada exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+      if(refRequest.current){
+        refRequest.current = false;
+        if(route.id === ''){
+          try {
+            const res = await createRoute(token, valores);
+            if(res===201){
+              refRequest.current = true;
+              showForm(false);
+              showToastMessage('Ruta creada exitosamente!!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al crear Ruta!!');
           }
-        } catch (error) {
-          showToastMessageError('Error al crear Ruta!!');
+        }else{
+          try {
+            const res = await updateRoute(token, route.id, valores);
+            if(res===200){
+              refRequest.current = true;
+              showForm(false);
+              showToastMessage('Ruta actualizada exitosamente!!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al actualizar Ruta!!');
+          }
         }
       }else{
-        try {
-          const res = await updateRoute(token, route.id, valores);
-          if(res===200){
-            showForm(false);
-            showToastMessage('Ruta actualizada exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }
-        } catch (error) {
-          showToastMessageError('Error al actualizar Ruta!!');
-        }
+        showToastMessageError('Ya hay una solicitud en proceso!!')
       }
     }
   });

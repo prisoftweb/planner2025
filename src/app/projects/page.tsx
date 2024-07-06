@@ -11,10 +11,10 @@ import { Options } from "@/interfaces/Common";
 import { ClientBack } from "@/interfaces/Clients";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
-import { getCompanies } from "../api/routeCompany";
-import { Company } from "@/interfaces/Companies";
+import { getCompaniesLV } from "../api/routeCompany";
+//import { Company } from "@/interfaces/Companies";
 import { getProjectsMin } from "../api/routeProjects";
-import { ProjectsTable, Project, ProjectMin } from "@/interfaces/Projects";
+import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
 //import TableProjects from "@/components/projects/TableProjects";
 //import { CurrencyFormatter } from "../functions/Globals";
 import { ProjectDataToTableDataMin } from "../functions/SaveProject";
@@ -41,6 +41,14 @@ export default async function Page(){
     return <h1>Error al consultar clientes!!</h1>
   }
 
+  const optClients: Options[] = [];
+  clients.map((client) => {
+    optClients.push({
+      label: client.name,
+      value: client._id
+    })
+  })
+
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'projects');
@@ -49,21 +57,25 @@ export default async function Page(){
     return <h1>Error al consultar catalogos!!</h1>
   }
   
-  let companies: Company[];
+  let optCompanies: Options[] = [];
   try {
-    companies = await getCompanies(token);
-    if(typeof(companies)==='string') return <h1 className="text-red-500 text-center text-lg">{companies}</h1>
+    optCompanies = await getCompaniesLV(token);
+    if(typeof(optCompanies)==='string') return <h1 className="text-red-500 text-center text-lg">{optCompanies}</h1>
   } catch (error) {
     return <h1 className="text-red-500 text-center text-lg">Error al consultar compañias!!</h1>
   }
 
-  const optClients: Options[] = [];
-  clients.map((client) => {
-    optClients.push({
-      label: client.name,
-      value: client._id
-    })
-  })
+  // if(companies.length <= 0){
+  //   <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
+  // }
+
+  // const optCompanies: Options[] = [];
+  // companies.map((company) => {
+  //   optCompanies.push({
+  //     label: company.name,
+  //     value: company._id
+  //   })
+  // })
 
   const optCategories: Options[] = [{
     label: 'Todas',
@@ -113,18 +125,6 @@ export default async function Page(){
     })
   })
 
-  if(companies.length <= 0){
-    <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
-  }
-
-  const optCompanies: Options[] = [];
-  companies.map((company) => {
-    optCompanies.push({
-      label: company.name,
-      value: company._id
-    })
-  })
-
   if(!projects || projects.length <= 0){
     return (
       <>
@@ -145,71 +145,12 @@ export default async function Page(){
 
   const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
   
-  // const table: ProjectsTable[] = [];
-  // projects.map((project) => {
-  //   let p: string;
-  //   if(project.progress && project.progress.length > 0){
-  //     if(project.progress[project.progress.length - 1].progress){
-  //       p = project.progress[project.progress.length - 1].progress.toString() + '%';
-  //     }else{
-  //       p = '0%';
-  //     }
-  //   }else{
-  //     p = '0%';
-  //   }
-  //   //La moneda mexicana lleva el mx antes del $
-  //   const dollar = CurrencyFormatter({
-  //     currency: "MXN",
-  //     value: project.amount
-  //   })
-  //   //se puede usar dolares si no se quiere el mx antes del $
-  //   // const dollar = CurrencyFormatter({
-  //   //   currency: "USD",
-  //   //   value: project.amount
-  //   // })
-
-  //   let cond: string;
-
-  //   if(project.condition.length > 0){
-  //     cond = project.condition[project.condition.length - 1].glossary.color || '#f00';
-  //   }else{
-  //     cond = '#f00';
-  //   }
-
-  //   table.push({
-  //     //amount: project.amount.toString(),
-  //     amount: dollar,
-  //     category: project.categorys?.name || 'Sin Categoria',
-  //     client: project.client.name,
-  //     code: project.code,
-  //     date: project.date,
-  //     id: project._id,
-  //     project:project.title,
-  //     // status: project.status,
-  //     condition: cond,
-  //     percentage: p
-  //   })
-  // });
-  
   return(
     <>
       <Navigation user={user} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
         optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
         optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user._id}  />
-      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <Header title="Proyectos" placeHolder="Buscar proyecto.." >
-          <ButtonNew token={token} optClients={optClients} 
-                    optCategories={optsCategories} optTypes={optsTypes}
-                    user={user._id} optCompanies={optCompanies} />
-        </Header>
-        <div className="mt-5">
-          <TableProjects data={table} token={token} projects={projects} 
-            optCategories={optCategories} optTypes={optTypes}
-            optConditions={optConditions}
-          />
-        </div>
-      </div> */}
     </>
   )
 }

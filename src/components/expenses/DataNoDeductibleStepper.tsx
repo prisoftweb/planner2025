@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 //import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseNoDeductibleStepper from "./NavExpenseNoDeductibleStepper";
@@ -70,6 +70,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   const [view, setView] = useState<JSX.Element>(<></>);
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [clearAmount, setClearAmount] = useState<boolean>(false);
+  const refRequest = useRef(true);
   const [viewAmount, setViewAmount] = useState<JSX.Element>(
                                           <CurrencyInput
                                             id="amount"
@@ -91,6 +92,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
                                           />);
   
   const SaveData = async() => {
+    refRequest.current = false;
     let type = 'OTROS';
     //console.log('cost center a buscar => ', costcenter);
     const cc = optCostCenter.find((costc) => costc.value === costcenter);
@@ -145,8 +147,10 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           setTimeout(() => {
             setResetBand(true);
           }, 300);
+          refRequest.current = true;
         }else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -182,9 +186,11 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           setTimeout(() => {
             setResetBand(true);
           }, 300);
+          refRequest.current = true;
         }
         else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -382,7 +388,14 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         </div>
 
         <div className="flex justify-center mt-8 space-x-5">
-          <Button type="button" onClick={SaveData}>Guardar</Button>
+          <Button type="button" onClick={() => { 
+            if(refRequest.current){
+              SaveData();
+            }
+            else{
+              showToastMessageError('Ya hay una peticion en proceso..!');
+            }
+          }}>Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
               border-slate-900 rounded-xl hover:bg-slate-200"

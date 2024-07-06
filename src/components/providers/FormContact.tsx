@@ -4,7 +4,7 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import PhoneContact from "./PhoneContact";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { Phone, Contact } from "@/interfaces/Contacts";
 import { createContact } from "@/app/api/routeContacts";
@@ -18,6 +18,7 @@ export default function FormContact({addNewContact, token, contact, updateContac
   let emailContactI = '';
   let nameContactI = '';
   let emailCompanyI = '';
+  const refRequest = useRef(true);
 
   if(typeof(contact)!=='string'){
     emailCompanyI = contact.companyemail || '';
@@ -39,65 +40,74 @@ export default function FormContact({addNewContact, token, contact, updateContac
       nameContact: Yup.string()
                   .required('El nombre es obligatorio'),
     }),
-    onSubmit: async (valores) => {            
-      let phoneNumber: Phone[] = [];
+    onSubmit: async (valores) => {  
+      if(refRequest.current){
+        refRequest.current = false;
+        let phoneNumber: Phone[] = [];
     
-      phones.map((phone:string, index:number) => {
-        let phoneformat = phone.trim();
-        phoneformat = phoneformat.replace(/\s+/g, '');
-        phoneformat = phoneformat.replace('(+52)', '');
-        phoneNumber.push({
-          phone:phoneformat,
-          type: typesPhone[index],
-          phoneformat: phone
+        phones.map((phone:string, index:number) => {
+          let phoneformat = phone.trim();
+          phoneformat = phoneformat.replace(/\s+/g, '');
+          phoneformat = phoneformat.replace('(+52)', '');
+          phoneNumber.push({
+            phone:phoneformat,
+            type: typesPhone[index],
+            phoneformat: phone
+          })
         })
-      })
-      
-      const {emailCompany, emailContact, nameContact} = formik.values;
-      
-      const newContact:Contact ={
-        email: emailContact,
-        name: nameContact,
-        companyemail: emailCompany,
-        phoneNumber,
-      }
-      
-      if(newContact.email==='' || !newContact.email)
-        delete newContact.email;
-      if(newContact.companyemail==='' || !newContact.companyemail)
-        delete newContact.companyemail;
+        
+        const {emailCompany, emailContact, nameContact} = formik.values;
+        
+        const newContact:Contact ={
+          email: emailContact,
+          name: nameContact,
+          companyemail: emailCompany,
+          phoneNumber,
+        }
+        
+        if(newContact.email==='' || !newContact.email)
+          delete newContact.email;
+        if(newContact.companyemail==='' || !newContact.companyemail)
+          delete newContact.companyemail;
 
-      console.log('new contact')
-      console.log(newContact);
+        // console.log('new contact')
+        // console.log(newContact);
 
-      const validation = contactValidation.safeParse(newContact);
-      if(validation.success){
-        try {
-          const res = await createContact(token, newContact);
-          if(typeof(res)==='string'){
-            showToastMessageError(res);
-          }else{
-            console.log('contacto creado');
-            console.log(res);
-            
-            addNewContact(res._id);
-            formik.values.emailCompany = '';
-            formik.values.emailContact = '';
-            formik.values.nameContact = '';
-            setPhones([]);
-            setTypesPhone([]);
-            setUpPhones([]);
-            setTimeout(() => {
-              setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
-                deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} valueType=""
-                key={0} updateCount={updateCount} />])
-            }, 10);
-          }
-        } catch (error) {
-          showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
-        } 
+        const validation = contactValidation.safeParse(newContact);
+        if(validation.success){
+          try {
+            const res = await createContact(token, newContact);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              // console.log('contacto creado');
+              // console.log(res);
+              
+              addNewContact(res._id);
+              formik.values.emailCompany = '';
+              formik.values.emailContact = '';
+              formik.values.nameContact = '';
+              setPhones([]);
+              setTypesPhone([]);
+              setUpPhones([]);
+              setTimeout(() => {
+                setUpPhones((oldValues) => [...oldValues, <PhoneContact pushPhone={pushPhone} 
+                  deletePhone={deletePhone} valuePhone="" bandPlus={true} index={0} valueType=""
+                  key={0} updateCount={updateCount} />])
+              }, 10);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Ocurrio un error, intente de nuevo por favor!!');
+          } 
+        }else{
+          refRequest.current = true;
+          showToastMessageError(validation.error.issues[0].message);
+        }
       }else{
-        showToastMessageError(validation.error.issues[0].message);
+        showToastMessageError('Ya hay un solicitud en proceso!!');
       }
     },       
   });
@@ -155,126 +165,131 @@ export default function FormContact({addNewContact, token, contact, updateContac
   }, [countFiles])
 
   const onUpdateContact = async () => {
-    let phoneNumber: Phone[] = [];
+    if(refRequest.current){
+      refRequest.current = false;
+      let phoneNumber: Phone[] = [];
     
-    const {emailCompany, emailContact, nameContact} = formik.values;
-    if((emailCompanyI !== emailCompany || emailContact !== emailContactI 
-      || nameContact !== nameContactI) && phones.length > 0){
+      const {emailCompany, emailContact, nameContact} = formik.values;
+      if((emailCompanyI !== emailCompany || emailContact !== emailContactI 
+        || nameContact !== nameContactI) && phones.length > 0){
 
-      phones.map((phone:string, index:number) => {
-        let phoneformat = phone.trim();
-        phoneformat = phoneformat.replace(/\s+/g, '');
-        phoneformat = phoneformat.replace('(+52)', '');
-        phoneNumber.push({
-          phone:phoneformat,
-          type: typesPhone[index],
-          phoneformat: phone
-        })
-      })
-      
-      if(typeof(contact)!=='string'){
-        try {
-          phoneNumber.map(async(pNum, index) => {
-            const res = await insertPhoneContact(contact._id || '', token, pNum);
-            if(res===200){
-              showToastMessage('Telefono agregado exitosamente!!');
-              // if(index+1===phoneNumber.length){
-              //   setTimeout(() => {
-              //     window.location.reload();
-              //   }, 500);
-              // }
-            }else{
-              showToastMessageError(res);
-            }
+        phones.map((phone:string, index:number) => {
+          let phoneformat = phone.trim();
+          phoneformat = phoneformat.replace(/\s+/g, '');
+          phoneformat = phoneformat.replace('(+52)', '');
+          phoneNumber.push({
+            phone:phoneformat,
+            type: typesPhone[index],
+            phoneformat: phone
           })
-        } catch (error) {
-          showToastMessageError('Ocurrio un problema al guardar telefono!!!');
-        }
-      }
-
-      type UpdateContact = {
-        email? : string,
-        companyemail? : string,
-        name:string
-      }
-
-      const newContact:UpdateContact ={
-        email: emailContact,
-        name: nameContact,
-        companyemail: emailCompany,
-        //phoneNumber,
-      }
-      
-      if(!newContact.companyemail || newContact.companyemail===''){
-        delete newContact.companyemail;
-      }
-
-      if(!newContact.email || newContact.email){
-        delete newContact.email;
-      }
-
-      if(typeof(contact)!=='string'){
-        updateContact(newContact, contact._id);
-      }
-    }else{
-      phones.map((phone:string, index:number) => {
-        let phoneformat = phone.trim();
-        phoneformat = phoneformat.replace(/\s+/g, '');
-        phoneformat = phoneformat.replace('(+52)', '');
-        phoneNumber.push({
-          phone:phoneformat,
-          type: typesPhone[index],
-          phoneformat: phone
         })
-      })
-      
-      if(phoneNumber.length > 0){
+        
         if(typeof(contact)!=='string'){
           try {
-            phoneNumber.map(async(pNum, index:number) => {
+            phoneNumber.map(async(pNum, index) => {
               const res = await insertPhoneContact(contact._id || '', token, pNum);
               if(res===200){
+                refRequest.current = true;
                 showToastMessage('Telefono agregado exitosamente!!');
-                if(index+1===phoneNumber.length){
-                  setTimeout(() => {
-                    window.location.reload();
-                  }, 500);
-                }
               }else{
                 showToastMessageError(res);
               }
             })
           } catch (error) {
+            refRequest.current = true;
             showToastMessageError('Ocurrio un problema al guardar telefono!!!');
           }
         }
-      }else{
-        const {emailCompany, emailContact, nameContact} = formik.values;
-  
+
         type UpdateContact = {
           email? : string,
           companyemail? : string,
           name:string
         }
-  
+
         const newContact:UpdateContact ={
           email: emailContact,
           name: nameContact,
           companyemail: emailCompany,
+          //phoneNumber,
         }
         
         if(!newContact.companyemail || newContact.companyemail===''){
           delete newContact.companyemail;
         }
-  
-        if(!newContact.email || newContact.email===''){
+
+        if(!newContact.email || newContact.email){
           delete newContact.email;
         }
-  
+
         if(typeof(contact)!=='string'){
           updateContact(newContact, contact._id);
         }
+      }else{
+        phones.map((phone:string, index:number) => {
+          let phoneformat = phone.trim();
+          phoneformat = phoneformat.replace(/\s+/g, '');
+          phoneformat = phoneformat.replace('(+52)', '');
+          phoneNumber.push({
+            phone:phoneformat,
+            type: typesPhone[index],
+            phoneformat: phone
+          })
+        })
+        
+        if(phoneNumber.length > 0){
+          if(typeof(contact)!=='string'){
+            try {
+              phoneNumber.map(async(pNum, index:number) => {
+                const res = await insertPhoneContact(contact._id || '', token, pNum);
+                if(res===200){
+                  refRequest.current = true;
+                  showToastMessage('Telefono agregado exitosamente!!');
+                  if(index+1===phoneNumber.length){
+                    setTimeout(() => {
+                      window.location.reload();
+                    }, 500);
+                  }
+                }else{
+                  refRequest.current = true;
+                  showToastMessageError(res);
+                }
+              })
+            } catch (error) {
+              refRequest.current = true;
+              showToastMessageError('Ocurrio un problema al guardar telefono!!!');
+            }
+          }
+        }else{
+          const {emailCompany, emailContact, nameContact} = formik.values;
+    
+          type UpdateContact = {
+            email? : string,
+            companyemail? : string,
+            name:string
+          }
+    
+          const newContact:UpdateContact ={
+            email: emailContact,
+            name: nameContact,
+            companyemail: emailCompany,
+          }
+          
+          if(!newContact.companyemail || newContact.companyemail===''){
+            delete newContact.companyemail;
+          }
+    
+          if(!newContact.email || newContact.email===''){
+            delete newContact.email;
+          }
+    
+          if(typeof(contact)!=='string'){
+            updateContact(newContact, contact._id);
+          }
+        }
       }
+    }else{
+      showToastMessageError('Ya hay una solicitud en proceso!!');
     }
   }
   

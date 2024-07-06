@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useCallback } from 'react';
 import { useDropzone} from 'react-dropzone';
 import Label from "./Label";
-import {xml2json, xml2js} from 'xml-js'
+import { xml2js} from 'xml-js'
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { XMLCFDI, Element3 } from "@/interfaces/Expense";
 import { CFDIValidation } from "@/interfaces/Expense";

@@ -4,7 +4,7 @@ import Input from "../Input"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import UploadImage from "../UploadImage"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -13,18 +13,19 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 
-export default function NewUser({showForm, departments, token, roles, addUser}: 
-                    {showForm:Function, departments:any, token:string
+export default function NewUser({showForm, optionsDepartments, token, roles, addUser}: 
+                    {showForm:Function, optionsDepartments:Options[], token:string
                     roles:Options[], addUser:Function}){
   
   const [file, setFile] = useState<File>();
-  const [department, setDepartment] = useState<string>(departments[0]._id);
+  const [department, setDepartment] = useState<string>(optionsDepartments[0].value);
   const [role, setRole] = useState<string>(roles[0].value);
   //const [optsRoles, setOptsRoles] = useState<Options>(roles[0]);
 
   let optRole = roles.find(r => r.value === role)?? roles[0];
 
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(window.outerHeight);
@@ -36,13 +37,13 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
   
-  let optionsDepartments:Options[] = [];
-  departments.map((dept:any) => (
-    optionsDepartments.push({
-      label: dept.name,
-      value: dept._id
-    })
-  ))
+  // let optionsDepartments:Options[] = [];
+  // departments.map((dept:any) => (
+  //   optionsDepartments.push({
+  //     label: dept.name,
+  //     value: dept._id
+  //   })
+  // ))
 
   //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
   let optDepto = optionsDepartments.find(dep => dep.value === department)?? optionsDepartments[0];
@@ -67,55 +68,66 @@ export default function NewUser({showForm, departments, token, roles, addUser}:
     }),
 
     onSubmit: async valores => {
-      const { email, password, confirmpassword, name } = valores;
+      if(refRequest.current){
+        refRequest.current = false;
+        const { email, password, confirmpassword, name } = valores;
 
-      if(file){
-        const formdata = new FormData();
-        formdata.append('name',name);
-        formdata.append('email', email);
-        formdata.append('password', password);
-        formdata.append('confirmPassword', confirmpassword);
-        formdata.append('department', department);
-        formdata.append('rol', role);
-        if(file) formdata.append('photo', file);
+        if(file){
+          const formdata = new FormData();
+          formdata.append('name',name);
+          formdata.append('email', email);
+          formdata.append('password', password);
+          formdata.append('confirmPassword', confirmpassword);
+          formdata.append('department', department);
+          formdata.append('rol', role);
+          if(file) formdata.append('photo', file);
 
-        try {
-          const res = await createUserPhoto(formdata, token);
-          //console.log('res ', res);
-          if(typeof(res)==='string'){
-            showToastMessageError(res);
-          }else{
-            showToastMessage('Usuario creado exitosamente!!!');
-            addUser(res);
-            showForm(false);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+          try {
+            const res = await createUserPhoto(formdata, token);
+            //console.log('res ', res);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              showToastMessage('Usuario creado exitosamente!!!');
+              addUser(res);
+              showForm(false);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            console.log('error ', error);
+            showToastMessageError('Error al crear usuario!!');
           }
-        } catch (error) {
-          console.log('error ', error);
-          showToastMessageError('Error al crear usuario!!');
+        }else{
+          const data = {
+            name, email, password, confirmpassword, department, rol:role
+          }
+          try {
+            //console.log('send user ', JSON.stringify(data));
+            const res = await createUser(data, token);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              showToastMessage('Usuario creado exitosamente!!!');
+              addUser(res);
+              showForm(false);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al crear usuario!!');
+          }
         }
       }else{
-        const data = {
-          name, email, password, confirmpassword, department, rol:role
-        }
-        try {
-          //console.log('send user ', JSON.stringify(data));
-          const res = await createUser(data, token);
-          if(typeof(res)==='string'){
-            showToastMessageError(res);
-          }else{
-            showToastMessage('Usuario creado exitosamente!!!');
-            addUser(res);
-            showForm(false);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
-          }
-        } catch (error) {
-          showToastMessageError('Error al crear usuario!!');
-        }
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }
   });

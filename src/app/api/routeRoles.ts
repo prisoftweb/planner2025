@@ -23,6 +23,23 @@ export async function getRoles(auth_token:string) {
   }
 }
 
+export async function getRolesLV(auth_token:string) {
+  try {
+    const res = await axiosInstance.get('/roles/getAllRolesLV', {
+      headers: {
+        Authorization: `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log(error.response?.data);
+      return error.response?.data.message || error.message;
+    }
+  }
+}
+
 export async function getRole(auth_token:string, id:string) {
   try {
     const res = await axiosInstance.get(`/roles/${id}`, {

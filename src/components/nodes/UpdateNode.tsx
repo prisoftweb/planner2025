@@ -4,10 +4,10 @@ import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Options } from "@/interfaces/Common"
 import { insertRelationsInNode } from "@/app/api/routeNodes"
-import SelectReact from "../SelectReact"
+//import SelectReact from "../SelectReact"
 import { Node, NodeTable } from "@/interfaces/Nodes"
 import AddElements from "../roles/AddElements"
 import Input from "../Input"
@@ -28,6 +28,7 @@ export default function UpdateNode({showForm, token, departments, glossaries,
   const [indexDelete, setIndexDelete] = useState<number>(-1);
   const [bandDelete, setBandDelete] = useState<boolean>(false);
   const [countFiles, setCountFiles] = useState(0);
+  const refRequest = useRef(true);
   
   const deleteElement = (index:number) => {
     setIndexDelete(index);
@@ -109,33 +110,35 @@ export default function UpdateNode({showForm, token, departments, glossaries,
   }, [indexDelete])
 
   const saveNode = async () => {
-    try {
-      let arrRelations: any[] = [];
-      relations.map((relation) => {
-        arrRelations.push({
-            relation
-          });
-      });
-      const data = {
-        //workflow,
-        //department,
-        //glossary,
-        relations: arrRelations
-        // relations: [{
-          //   relation: node
-          // }]
+    if(refRequest.current){
+      refRequest.current = false;
+      try {
+        let arrRelations: any[] = [];
+        relations.map((relation) => {
+          arrRelations.push({
+              relation
+            });
+        });
+        const data = {
+          relations: arrRelations
+        }
+        const res = await insertRelationsInNode(token, data, id);
+        if(res === 200){
+          refRequest.current = true;
+          showToastMessage('Relaciones insertadas satisfactoriamente!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Error al insertar relaciones en el nodo!!!');
       }
-      const res = await insertRelationsInNode(token, data, id);
-      if(res === 200){
-        showToastMessage('Relaciones insertadas satisfactoriamente!!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res);
-      }
-    } catch (error) {
-      showToastMessageError('Error al insertar relaciones en el nodo!!!');
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 

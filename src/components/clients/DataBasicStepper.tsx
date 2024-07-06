@@ -3,7 +3,7 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRegFormContext } from "./StepperClientProvider";
 import SaveClient from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -19,6 +19,7 @@ export default function DataBasicStepper({token, id, tags}:
                           {token:string, id:string, tags:Options[]}){
   
   const [state, dispatch] = useRegFormContext();
+  const refRequest = useRef(true);
 
   let tradenameI = '';
   let nameI = '';
@@ -81,7 +82,7 @@ export default function DataBasicStepper({token, id, tags}:
   });
   
   const onClickSave = async () => {
-    
+    refRequest.current = false;
     if(state.extradata && state.extradata.photo){
       const data = new FormData();
       
@@ -134,14 +135,17 @@ export default function DataBasicStepper({token, id, tags}:
                         state.contacts? state.contacts: [], 
                         phone!==''? parseInt(phone): '');
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
     }else{
@@ -206,14 +210,17 @@ export default function DataBasicStepper({token, id, tags}:
 
         const res = await SaveClient(data, token);
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       }else{
+        refRequest.current = true;
         showToastMessageError('Llene todos los campos obligatorios!!');
       }
     }
@@ -349,7 +356,15 @@ export default function DataBasicStepper({token, id, tags}:
         </div>
         
         <div className="flex justify-center mt-8 space-x-5">
-          <Button onClick={onClickSave} type="button">Guardar</Button>
+          <Button 
+            onClick={() => {
+              if(refRequest.current){
+                onClickSave();
+              }
+              else{
+                showToastMessageError('Ya hay una peticion en proceso..!');
+              }
+            }} type="button">Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"

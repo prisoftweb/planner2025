@@ -1,14 +1,14 @@
 import { getUsers } from "../api/routeUser";
-import TableUsers from "@/components/users/TableUsers";
+//import TableUsers from "@/components/users/TableUsers";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { getDepartments } from "../api/routeDepartments";
+import { getDepartmentsLV } from "../api/routeDepartments";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
 import ButtonNewUser from "@/components/users/ButtonNewUser";
 import { Options } from "@/interfaces/Common";
-import { getRoles } from "../api/routeRoles";
-import { Role } from "@/interfaces/Roles";
+import { getRolesLV } from "../api/routeRoles";
+//import { Role } from "@/interfaces/Roles";
 //import { DataUsersToTableData } from "../functions/UsersFunctions";
 import UsersConstext from "@/components/users/UsersContext";
 
@@ -28,26 +28,26 @@ export default async function Users() {
     return <h1 className="text-center text-red-500">Error al obtener usuarios!!</h1>
   }
 
-  let roles: Role[];
+  let optionsRoles:Options[] = [];
   try {
-    roles = await getRoles(token);
-    if(typeof(roles)==='string') 
-      return <h1 className="text-center text-red-500">{roles}</h1>
+    optionsRoles = await getRolesLV(token);
+    if(typeof(optionsRoles)==='string') 
+      return <h1 className="text-center text-red-500">{optionsRoles}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Error al obtener roles!!</h1>
   }
 
-  const optionsRoles:Options[] = [];
-  roles.map((role) => {
-    optionsRoles.push({
-      label: role.name,
-      value: role._id
-    })
-  });
+  // const optionsRoles:Options[] = [];
+  // roles.map((role) => {
+  //   optionsRoles.push({
+  //     label: role.name,
+  //     value: role._id
+  //   })
+  // });
 
   let departments;
   try {
-    departments = await getDepartments(token);
+    departments = await getDepartmentsLV(token);
     //departments = await getDepartments('');
     if(typeof(departments)==='string') 
       return <h1 className="text-center text-red-500">{departments}</h1>
@@ -61,7 +61,7 @@ export default async function Users() {
         <Navigation user={user} />
         <WithOut img="/img/user.svg" subtitle="Usuarios" 
             text="Aqui puedes gestionar tus usuarios con toda su informacion" title="Usuarios"
-          ><ButtonNewUser departments={departments} id={user._id} token={token} 
+          ><ButtonNewUser optionsDepartments={departments} token={token} 
               roles={optionsRoles} />
         </WithOut>
       </>

@@ -8,6 +8,7 @@ import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 import AddElements from "../roles/AddElements"
+import { useRef } from "react"
 
 export default function NewStatus({showForm, token, catalogOptions, 
                                     descGlossaries, glosariesOptions, 
@@ -26,6 +27,7 @@ export default function NewStatus({showForm, token, catalogOptions,
   const [selectStatus, setSelectStatus] = useState<JSX.Element[]>([]);
 
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -80,62 +82,74 @@ export default function NewStatus({showForm, token, catalogOptions,
   }, [indexDelete])
 
   const onclickSave = async() => {
-    if( !statuses || statuses.length <= 0){
-      showToastMessageError('Todos los campos son obligatorios!!!');
-    }else{
-      try {        
-        const glossaries: Object[] = [];
-        statuses.map((glossary) => {
-          glossaries.push({
-            glossary
+    if(refRequest.current){
+      if( !statuses || statuses.length <= 0){
+        showToastMessageError('Todos los campos son obligatorios!!!');
+      }else{
+        refRequest.current = false;
+        try {        
+          const glossaries: Object[] = [];
+          statuses.map((glossary) => {
+            glossaries.push({
+              glossary
+            })
           })
-        })
-        
-        if(opt === 2){
-          const data = {
-            categorys: glossaries
-          }
-          const res = await insertFunction(token, catalog, data);
-          if(res === 200){
-            showToastMessage('Categorias agregadas exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
-            showToastMessageError(res);
-          }
-        }else{
-          if(opt === 3){
+          
+          if(opt === 2){
             const data = {
-              condition: glossaries
+              categorys: glossaries
             }
             const res = await insertFunction(token, catalog, data);
             if(res === 200){
-              showToastMessage('Condicion agregada exitosamente!!!');
+              refRequest.current = true;
+              showToastMessage('Categorias agregadas exitosamente!!!');
               setTimeout(() => {
                 window.location.reload();
               }, 500);
             }else{
+              refRequest.current = true;
               showToastMessageError(res);
-            } 
-          }else{
-            const data = {
-              types: glossaries
             }
-            const res = await insertFunction(token, catalog, data);
-            if(res === 200){
-              showToastMessage('Tipos agregados exitosamente!!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+          }else{
+            if(opt === 3){
+              const data = {
+                condition: glossaries
+              }
+              const res = await insertFunction(token, catalog, data);
+              if(res === 200){
+                refRequest.current = true;
+                showToastMessage('Condicion agregada exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              } 
             }else{
-              showToastMessageError(res);
-            } 
+              const data = {
+                types: glossaries
+              }
+              const res = await insertFunction(token, catalog, data);
+              if(res === 200){
+                refRequest.current = true;
+                showToastMessage('Tipos agregados exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              } 
+            }
           }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un problema al agregar status!!');
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al agregar status!!');
       }
+    }else{
+      showToastMessageError('Ya hay una solicitud en proceso!!');
     }
   }  
   

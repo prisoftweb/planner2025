@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseStepper from "./NavExpenseStepper"
 import { useNewExpense } from "@/app/store/newExpense"
@@ -20,14 +20,12 @@ import CurrencyInput from 'react-currency-input-field';
 import { getSupplierCreditProv } from "@/app/functions/CostsFunctions"
 
 export default function DataStepper({token, user, optCostCenter, optProviders, 
-                                      optResponsibles, optGlossaries, optProjects, 
-                                      optCategories, optConditions, optTypes, optVats
+                                      optResponsibles, optCategories, optTypes, optVats
                                     }: 
                                   {token:string, user:string, optCostCenter:Options[],
                                     optProviders:Options[], optResponsibles:Options[],
-                                    optGlossaries:Options[], optProjects:Options[], 
                                     optCategories:Options[], optTypes:Options[], 
-                                    optConditions:Options[], optVats:Options[] }){
+                                    optVats:Options[] }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 
@@ -35,7 +33,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     typeCFDI, vat, reset, updateRefresh, isCard, 
     report, condition, category, isPettyCash, 
     updateIsCard} = useNewExpense();
-console.log('render');
+
   const formik = useFormik({
     initialValues: {
       folio: folio,
@@ -65,7 +63,7 @@ console.log('render');
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
           typeCFDIS, '', categoryS, idVat, 'PROVEEDOR');
       updateIndexStepper(2);
-    },       
+    },
   });
 
   let year = new Date().getFullYear().toString();
@@ -85,6 +83,7 @@ console.log('render');
   const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
+  const refRequest = useRef(true);
   //const [resetBand, setResetBand] = useState<boolean>(false);
   //const [view, setView] = useState<JSX.Element>(<></>);
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -109,7 +108,7 @@ console.log('render');
     formik.values.vat = '0';
   }
 
-  console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
+  //console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
   let viewAmount: JSX.Element = <></>;
   viewAmount = (
     <CurrencyInput
@@ -119,7 +118,8 @@ console.log('render');
         focus:border-slate-700 outline-0"
       onChange={formik.handleChange}
       onBlur={formik.handleChange}
-      defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
+      //defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
+      value={Number(formik.values.amount.replace(/[$,]/g, ""))}
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
@@ -131,6 +131,7 @@ console.log('render');
   )
 
   const SaveData = async() => {
+    refRequest.current = false;
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
     updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
@@ -197,7 +198,9 @@ console.log('render');
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);
+          refRequest.current = true;
         }else{
+          refRequest.current = true;
           showToastMessageError(res);
         }
       } catch (error) {
@@ -237,9 +240,11 @@ console.log('render');
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);
+          refRequest.current = true;
         }
         else{
           showToastMessageError(res);
+          refRequest.current = true;
         }
       } catch (error) {
         showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -547,7 +552,14 @@ console.log('render');
         </div>
 
         <div className="flex justify-center mt-8 space-x-5">
-          <Button type="button" onClick={SaveData}>Guardar</Button>
+          <Button type="button" onClick={() => {
+            if(refRequest.current){
+              SaveData();
+            }
+            else{
+              showToastMessageError('Ya hay una peticion en proceso..!');
+            }
+          }}>Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
               border-slate-900 rounded-xl hover:bg-slate-200"

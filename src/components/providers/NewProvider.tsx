@@ -1,8 +1,8 @@
 'use client'
-import { XMarkIcon } from "@heroicons/react/24/solid"
-import HeaderForm from "@/components/HeaderForm";
+//import { XMarkIcon } from "@heroicons/react/24/solid"
+//import HeaderForm from "@/components/HeaderForm";
 import StepperProvider from "./StepperProvider";
-import ContainerStepper from "./ContainerStepper";
+//import ContainerStepper from "./ContainerStepper";
 import NewProviderContainer from "./NewProviderContainer";
 
 export default function NewProvider({showForm, token, id}: 

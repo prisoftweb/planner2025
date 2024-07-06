@@ -6,7 +6,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Options } from "@/interfaces/Common"
 import { createRelation } from "@/app/api/routeRelations"
 import SelectReact from "../SelectReact"
@@ -21,6 +21,7 @@ export default function NewRelation({showForm, token, glossaries,
   const [heightPage, setHeightPage] = useState<number>(900);
   const [glossary, setGlossary] = useState<string>(glossaries[0].value);
   const [node, setNode] = useState<string>(nodes[0].value);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -50,27 +51,32 @@ export default function NewRelation({showForm, token, glossaries,
     }),
 
     onSubmit: async valores => {
-      try {
-        const {description} = valores;
-        const data = {
-          description,
-          nextnodo: node,
-          glossary,
-          // relations: [{
-          //   relation: node
-          // }]
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          const {description} = valores;
+          const data = {
+            description,
+            nextnodo: node,
+            glossary,
+          }
+          const res = await createRelation(token, data);
+          if(res === 201){
+            refRequest.current = true;
+            showToastMessage('Relacion creada satisfactoriamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear relacion!!!');
         }
-        const res = await createRelation(token, data);
-        if(res === 201){
-          showToastMessage('Relacion creada satisfactoriamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Error al crear relacion!!!');
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }
   });

@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 //import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import { Expense } from "@/interfaces/Expenses"
@@ -25,6 +25,7 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
   const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [isCard, setIsCard] = useState<boolean>(expense.iscard);
+  const refRequest = useRef(true);
 
   const formik = useFormik({
     initialValues: {
@@ -45,22 +46,30 @@ export default function UpdateExpense({token, id, user, optCostCenter,
       amount: Yup.string()
                   .required('El importe es obligatorio'),
     }),
-    onSubmit: async (valores) => {            
-      const {amount, description, discount, folio, taxFolio, vat} = valores;
-      const data = { subtotal:amount.replace(/[$,]/g, ""), description, discount: discount.toString().replace(/[$,]/g, ""), 
-          folio, taxfolio:taxFolio, vat, costcenter, date:startDate, iscard:isCard}
-      try {
-        const res = await UpdateCost(token, id, data);
-        if(res === 200){
-          showToastMessage('Costo actualizado exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+    onSubmit: async (valores) => {  
+      if(refRequest.current){
+        refRequest.current = false;
+        const {amount, description, discount, folio, taxFolio, vat} = valores;
+        const data = { subtotal:amount.replace(/[$,]/g, ""), description, discount: discount.toString().replace(/[$,]/g, ""), 
+            folio, taxfolio:taxFolio, vat, costcenter, date:startDate, iscard:isCard}
+        try {
+          const res = await UpdateCost(token, id, data);
+          if(res === 200){
+            refRequest.current = true;
+            showToastMessage('Costo actualizado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un problema al actualizar costo!!')
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al actualizar costo!!')
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     },       
   });

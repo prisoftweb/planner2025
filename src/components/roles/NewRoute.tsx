@@ -9,11 +9,13 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { createResource, updateResource } from "@/app/api/routeRoles"
 import { Resource } from "@/interfaces/Roles"
-import TextArea from "../TextArea"
+//import TextArea from "../TextArea"
+import { useRef } from "react"
 
 export default function NewRoute({showForm, token, resource}: 
                     {showForm:Function, token:string, resource:Resource}){
 
+  const refRequest = useRef(true);
   const formik = useFormik({
     initialValues: {
       name: resource.name,
@@ -30,32 +32,45 @@ export default function NewRoute({showForm, token, resource}:
     }),
 
     onSubmit: async valores => {
-      if(resource.id === ''){
-        try {
-          const res = await createResource(token, valores);
-          if(res===201){
-            showForm(false);
-            showToastMessage('Recurso creada exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+      if(refRequest.current){
+        refRequest.current = false;
+        if(resource.id === ''){
+          try {
+            const res = await createResource(token, valores);
+            if(res===201){
+              refRequest.current = true;
+              showForm(false);
+              showToastMessage('Recurso creada exitosamente!!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al crear Recurso!!');
           }
-        } catch (error) {
-          showToastMessageError('Error al crear Recurso!!');
+        }else{
+          try {
+            const res = await updateResource(token, resource.id, valores);
+            if(res===200){
+              refRequest.current = true;
+              showForm(false);
+              showToastMessage('Recurso modificado exitosamente!!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Error al actualizar Recurso!!');
+          }
         }
       }else{
-        try {
-          const res = await updateResource(token, resource.id, valores);
-          if(res===200){
-            showForm(false);
-            showToastMessage('Recurso modificado exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }
-        } catch (error) {
-          showToastMessageError('Error al actualizar Recurso!!');
-        }
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     }
   });

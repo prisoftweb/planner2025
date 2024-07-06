@@ -7,7 +7,7 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import AddConcept from "./AddConcept"
 import { CreateCostCenter, UpdateCostCenter, 
   InsertCategoryInCostCenter, getCostCenter, DeleteCategoryInCostCenter } from "@/app/api/routeCostCenter"
@@ -33,6 +33,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
   const [countFiles, setCountFiles] = useState(0);
   const [addConcepts, setAddConcepts] = useState<JSX.Element[]>([]);
   const [concetpsCostCenter, setConceptsCostCenter] = useState<JSX.Element[]>([]);
+  const refRequest = useRef(true);
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -142,54 +143,65 @@ export default function NewCostCenter({showForm, token, costCenter}:
     }),
 
     onSubmit: async valores => {
-      try {
-        const categorys: CategoryCostCenter[] = []; 
-        concepts.map((concept, index:number) => {
-          categorys.push({
-            account: accounts[index],
-            name: concept
-          })
-        });
-
-        if(typeof(costCenter)==='string'){
-          const {category, code} = valores;
-          const data = {
-            name: category,
-            code,
-            categorys
-          }
-          const res = await CreateCostCenter(token, data);
-          if(res===201){
-            showForm(false);
-            showToastMessage('Centro de costos creado exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
-            showToastMessageError(res);
-          }
-        }else{
-          const data = {
-            categorys
-          }
-          const res = await UpdateCostCenter(token, costCenter.id, valores);
-          if(res===200){
-            const resInsert = await InsertCategoryInCostCenter(token, costCenter.id, data);
-            if(resInsert===200){
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          const categorys: CategoryCostCenter[] = []; 
+          concepts.map((concept, index:number) => {
+            categorys.push({
+              account: accounts[index],
+              name: concept
+            })
+          });
+  
+          if(typeof(costCenter)==='string'){
+            const {category, code} = valores;
+            const data = {
+              name: category,
+              code,
+              categorys
+            }
+            const res = await CreateCostCenter(token, data);
+            if(res===201){
+              refRequest.current = true;
               showForm(false);
-              showToastMessage('Centro de costos actualizado exitosamente!!!');
+              showToastMessage('Centro de costos creado exitosamente!!!');
               setTimeout(() => {
                 window.location.reload();
               }, 500);
             }else{
-              showToastMessageError(res + 'insert cost');
+              refRequest.current = true;
+              showToastMessageError(res);
             }
           }else{
-            showToastMessageError(res + 'update cost');
+            const data = {
+              categorys
+            }
+            const res = await UpdateCostCenter(token, costCenter.id, valores);
+            if(res===200){
+              const resInsert = await InsertCategoryInCostCenter(token, costCenter.id, data);
+              if(resInsert===200){
+                refRequest.current = true;
+                showForm(false);
+                showToastMessage('Centro de costos actualizado exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res + 'insert cost');
+              }
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res + 'update cost');
+            }
           }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear Centro de costos!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear Centro de costos!!');
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     }
   });

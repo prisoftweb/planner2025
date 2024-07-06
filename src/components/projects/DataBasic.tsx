@@ -4,7 +4,7 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { Project } from "@/interfaces/Projects";
 import { UpdateProject, UpdateProjectPhoto, InsertConditionInProject } from "@/app/api/routeProjects";
@@ -22,6 +22,7 @@ export default function DataBasic({token, id, project, optConditions, user}:
   const [condition, setCondition] = useState<string>();
   let indexCond = 0;
   const [showConditions, setShowConditions] = useState<JSX.Element>(<></>);
+  const refRequest = useRef(true);
 
   useEffect(() => {
     if(project.condition.length > 0){
@@ -55,78 +56,92 @@ export default function DataBasic({token, id, project, optConditions, user}:
       keyProject: Yup.string()
                   .required('La clave es obligatoria'),
     }),
-    onSubmit: async (valores) => {            
-      const {name, description, keyProject} = valores;
+    onSubmit: async (valores) => {   
+      if(refRequest.current){
+        refRequest.current = false;
+        const {name, description, keyProject} = valores;
       
-      if(project.condition.length===0 || project.condition[project.condition.length -1].glossary._id !== condition){
-        //showToastMessage('condicion con cambios');
-        UpdateCondition();
-      }
-      // }else{
-      //   showToastMessageError('Condicion sin cambios');
-      // }
-      
-      if(!file){
-        const data= {
-          title: name, 
-          description,
-          code: keyProject,
+        if(project.condition.length===0 || project.condition[project.condition.length -1].glossary._id !== condition){
+          UpdateCondition();
         }
-        try {
-          const res = await UpdateProject(token, id, data);
-          if(res===200){
-            showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
-            showToastMessageError(res);
+        if(!file){
+          const data= {
+            title: name, 
+            description,
+            code: keyProject,
           }
-        } catch (error) {
-          showToastMessageError('Ocurrio un problema al actualizar proyecto!!');
+          try {
+            const res = await UpdateProject(token, id, data);
+            if(res===200){
+              refRequest.current = true;
+              showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Ocurrio un problema al actualizar proyecto!!');
+          }
+        }else{
+          const formdata = new FormData();
+          formdata.append('title', name);
+          formdata.append('description', description);
+          formdata.append('code', keyProject);
+          formdata.append('photo', file);
+
+          try {
+            const res = await UpdateProjectPhoto(token, id, formdata);
+            if(res===200){
+              refRequest.current = true;
+              showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Ocurrio un problema al actualizar proyecto!!');
+          }
         }
       }else{
-        const formdata = new FormData();
-        formdata.append('title', name);
-        formdata.append('description', description);
-        formdata.append('code', keyProject);
-        formdata.append('photo', file);
-
-        try {
-          const res = await UpdateProjectPhoto(token, id, formdata);
-          if(res===200){
-            showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
-            showToastMessageError(res);
-          }
-        } catch (error) {
-          showToastMessageError('Ocurrio un problema al actualizar proyecto!!');
-        }
+        showToastMessageError('Ya hay una solicitud en proceso..!!!');
       }
     },       
   });
 
   const UpdateCondition = async () => {
-    const data = {
-      condition: [
-        {
-          glossary: condition,
-          user
-        }
-      ]
-    }
-    try {
-      const res = await InsertConditionInProject(token, project._id, data);
-      if(res === 200){
-        showToastMessage('Condicion del proyecto actualizada satisfactoriamente!!');
-      }else{
-        showToastMessageError(res);
+    if(refRequest.current){
+      refRequest.current = false;
+      const data = {
+        condition: [
+          {
+            glossary: condition,
+            user
+          }
+        ]
       }
-    } catch (error) {
-      showToastMessageError('Error al actualizar condicion del proyecto!!!');
+      try {
+        const res = await InsertConditionInProject(token, project._id, data);
+        if(res === 200){
+          refRequest.current = true;
+          showToastMessage('Condicion del proyecto actualizada satisfactoriamente!!');
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Error al actualizar condicion del proyecto!!!');
+      }
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 

@@ -8,10 +8,12 @@ import Button from "../Button";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { Project } from "@/interfaces/Projects";
 import { UpdateProject } from "@/app/api/routeProjects";
+import { useRef } from "react";
 
 export default function Address({token, id, project}: 
         {token:string, id:string, project:Project}){
-  
+
+  const refRequest = useRef(true);
   const formik = useFormik({
     initialValues: {
       stret: project.location?.stret || '',
@@ -34,29 +36,37 @@ export default function Address({token, id, project}:
                   .required('El estado es obligatorio'),
     }),
     onSubmit: async (valores) => {         
-      const {community, country, cp, municipy, stateA, stret} = valores;
-      const data = {
-        location: {
-          community, 
-          country, 
-          cp,
-          municipy, 
-          state: stateA,
-          stret
+      if(refRequest.current){
+        refRequest.current = false;
+        const {community, country, cp, municipy, stateA, stret} = valores;
+        const data = {
+          location: {
+            community, 
+            country, 
+            cp,
+            municipy, 
+            state: stateA,
+            stret
+          }
         }
-      }
-      try {
-        const res = await UpdateProject(token, id, data);
-        if(res===200){
-          showToastMessage('Proyecto actualizado exitosamente!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
+        try {
+          const res = await UpdateProject(token, id, data);
+          if(res===200){
+            refRequest.current = true;
+            showToastMessage('Proyecto actualizado exitosamente!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un problema al actualizar el proyecto!!');
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al actualizar el proyecto!!');
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     },       
   });

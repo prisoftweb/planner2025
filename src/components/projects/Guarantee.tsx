@@ -1,12 +1,12 @@
 import DatePicker from "react-datepicker";
-import HeaderForm from "../HeaderForm"
+//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import Input from "../Input"
+//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState } from "react";
-import { useRegFormContext } from "./StepperProjectProvider";
+import { useState, useRef } from "react";
+//import { useRegFormContext } from "./StepperProjectProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
@@ -23,6 +23,7 @@ export default function Guarantee({token}:{token:string}){
   if(day.length ===1) day = '0'+day;
 
   const [startDate, setStartDate] = useState<string>(year+'-'+month+'-'+day);
+  const refRequest = useRef(true);
 
   const formik = useFormik({
     initialValues: {
@@ -36,15 +37,7 @@ export default function Guarantee({token}:{token:string}){
                   .required('El monto es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      // const {percentage, amountG} = valores;
-      // const data= {
-      //   percentage,
-      //   date: startDate,
-      //   amountG
-      // }
-
-      //dispatch({ type: 'SET_GUARANTEE', data: data });
-      //dispatch({type: 'INDEX_STEPPER', data: 4})
+      
     },       
   });
   
@@ -52,60 +45,68 @@ export default function Guarantee({token}:{token:string}){
     haveAddress, municipy, stateA, street, title, type, user
   } = useNewProject();
   const onClickSave = async () => {
-    const {amountG, percentage} = formik.values;
-    let data;
-    const location = {
-      community, country, cp, municipy, 
-      state: stateA, 
-      stret: street
-    }
-    const guaranteeData = {
-      amount:amountG.replace(/[$,%,]/g, ""),
-      date: startDate,
-      porcentage:percentage.replace(/[$,%,]/g, ""),
-    };
-
-    if(haveAddress && hasguaranteefund){
-      data = {
-        amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-        hasguaranteefund, title, types:type, user,
-        location,
-        guaranteefund: guaranteeData
+    if(refRequest.current){
+      refRequest.current = false;
+      const {amountG, percentage} = formik.values;
+      let data;
+      const location = {
+        community, country, cp, municipy, 
+        state: stateA, 
+        stret: street
       }
-    }else{
-      if(haveAddress){
+      const guaranteeData = {
+        amount:amountG.replace(/[$,%,]/g, ""),
+        date: startDate,
+        porcentage:percentage.replace(/[$,%,]/g, ""),
+      };
+
+      if(haveAddress && hasguaranteefund){
         data = {
           amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
           hasguaranteefund, title, types:type, user,
-          location
+          location,
+          guaranteefund: guaranteeData
         }
       }else{
-        if(hasguaranteefund){
+        if(haveAddress){
           data = {
             amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
             hasguaranteefund, title, types:type, user,
-            guaranteefund: guaranteeData
+            location
           }
         }else{
-          data = {
-            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user,
+          if(hasguaranteefund){
+            data = {
+              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+              hasguaranteefund, title, types:type, user,
+              guaranteefund: guaranteeData
+            }
+          }else{
+            data = {
+              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+              hasguaranteefund, title, types:type, user,
+            }
           }
         }
       }
-    }
-    try {
-      const res = await SaveProject(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res.message);
+      try {
+        const res = await SaveProject(data, token);
+        if(res.status){
+          refRequest.current = true;
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res.message);
+        }
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Ocurrio un problema al crear proyecto!!');
       }
-    } catch (error) {
-      showToastMessageError('Ocurrio un problema al crear proyecto!!');
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 

@@ -12,25 +12,24 @@ import TabDeductible from "./TabDeductible";
 import DataNoDeductibleStepper from "./DataNoDeductibleStepper";
 import VoucherNoDeductibleStepper from "./VoucherNoDeductibleStepper";
 import SelectProjectStepper from "./SelectProyectStepper";
-import { Project } from "@/interfaces/Projects";
+//import { Project } from "@/interfaces/Projects";
 import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import { Report } from "@/interfaces/Reports";
+import { ReportParse } from "@/interfaces/Reports";
 
 export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
-                                optProviders, optResponsibles, optGlossaries, 
+                                optProviders, optResponsibles, optReports,
                                 optProjects, optCategories, optConditions, optTypes, 
-                                projects, reports, optReports, idLabour, 
-                                idTicket, optCostCenterDeductible, optVats }: 
+                                reports, idLabour, idTicket, optCostCenterDeductible,
+                                optVats }: 
                             {token:string, showForm:Function, user:string, 
-                              optCostCenter:Options[],
+                              optCostCenter:Options[], optProjects:Options[],
                               optProviders:Options[], optResponsibles:Options[],
-                              optGlossaries:Options[], optProjects:Options[], 
                               optCategories:Options[], optTypes:Options[], 
-                              optConditions:Options[], projects:Project[], 
-                              reports:Report[], optReports: Options[],
+                              optConditions:Options[], optVats:Options[],
+                              reports:ReportParse[], optReports: Options[],
                               optCostCenterDeductible:Options[], idLabour:string, 
-                              idTicket:string, optVats:Options[]
+                              idTicket:string,
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -169,8 +168,19 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     if(r?.project._id !== project){
       updateProject(r?.project._id || '');
     }
+
+    const optProject = optProjects.find((optP) => optP.value === r?.project._id);
+    if(optProject && optProject !== optSelectize){
+      setOptSelectize(optProject);
+    }
     //setViewSelectProject(<></>);
   }
+
+  // const handleReport = (value:string) => {
+  //   const optProject = optProjects.find((optP) => optP.value )
+  //   updateReport(value);
+  //   updateIndexStepper(1);
+  // }
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
@@ -199,10 +209,9 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     if(indexStepper || indexStepper>=0){
       stepform = indexStepper===1? (
         <DataStepper optCostCenter={optCostCenterDeductible} 
-          optProviders={optProviders} optGlossaries={optGlossaries} 
+          optProviders={optProviders} 
           optResponsibles={optResponsibles}
-          token={token} user={user} optProjects={optProjects}
-          optCategories={optCategories} optConditions={optConditions}
+          token={token} user={user} optCategories={optCategories}
           optTypes={optTypes} optVats={optVats}
         />
       ): indexStepper===2? (

@@ -35,6 +35,7 @@ export function ReportDataToTableData(reports:Report[]){
 export function ReportParseDataToTableData(reports:ReportParse[]){
   const table: ReportTable[] = [];
   reports.map((report) => {
+    console.log(report.total);
     const dollar = CurrencyFormatter({
       currency: "MXN",
       value: report.total

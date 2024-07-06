@@ -11,6 +11,7 @@ export default function UpdateVoucher({id, token, expense}:
   const [file, setFile] = useState<File | null>();
   const [urlFile, setUrlFile] = useState<string>();
   const [idFile, setIdFile] = useState<string>('');
+  const refRequest = useRef(true);
 
   useEffect(() => {
     //console.log('expense', expense);
@@ -26,27 +27,36 @@ export default function UpdateVoucher({id, token, expense}:
   }, []);
 
   const sendFile = async () => {
-    try {
-      if(file){
-        const data = new FormData();
-        //console.log('send file => ', file);
-        data.append('file', file);
-        data.append('types', file.type);
-        //console.log('append => ', data.get('file'));
-        const res = await ADDNewFILE(token, id, data);
-        if(res === 200){
-          showToastMessage('Archivo agregado satisfactoriamente');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+    if(refRequest.current){
+      refRequest.current = false;
+      try {
+        if(file){
+          const data = new FormData();
+          //console.log('send file => ', file);
+          data.append('file', file);
+          data.append('types', file.type);
+          //console.log('append => ', data.get('file'));
+          const res = await ADDNewFILE(token, id, data);
+          if(res === 200){
+            refRequest.current = true;
+            showToastMessage('Archivo agregado satisfactoriamente');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
         }else{
-          showToastMessageError(res);
+          refRequest.current = true;
+          showToastMessageError('Seleccione un archivo primero!!');
         }
-      }else{
-        showToastMessageError('Seleccione un archivo primero!!');
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Ocurrio un error al ingresar archivo!!');
       }
-    } catch (error) {
-      showToastMessageError('Ocurrio un error al ingresar archivo!!');
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso!!!');
     }
   }
 

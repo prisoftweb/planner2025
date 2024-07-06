@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRegFormContext } from "./StepperProvider";
 import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -9,48 +9,58 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
   
   const [state, dispatch] = useRegFormContext();
   const [contacts, setContacts] = useState<string[]>([]);
+  const refRequest = useRef(true);
   
   const onClickSave = async () => {
-    const {name, rfc, suppliercredit, tradename} = state.databasic;
-    let tradeline = {};
+    if(refRequest.current){
+      refRequest.current = false;
+      const {name, rfc, suppliercredit, tradename} = state.databasic;
+      let tradeline = {};
 
-    if(suppliercredit){
-      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
-      tradeline = {
-        creditdays: parseInt(creditdays),
-        creditlimit: parseInt(creditlimit),
-        currentbalance: parseInt(currentbalance),
-        percentoverduedebt: parseInt(percentoverduedebt)
-      }
-    }
-    
-    try {
-      if(name && rfc && tradename){
-        
-        const data: any = {
-          name,
-          rfc,
-          tradename,
-          suppliercredit,
-          tradeline,
-          contact: contacts,
-          user: id,
+      if(suppliercredit){
+        const {creditdays, creditlimit, currentbalance, percentoverduedebt} = state.creditline;
+        tradeline = {
+          creditdays: parseInt(creditdays),
+          creditlimit: parseInt(creditlimit),
+          currentbalance: parseInt(currentbalance),
+          percentoverduedebt: parseInt(percentoverduedebt)
         }
+      }
+      
+      try {
+        if(name && rfc && tradename){
+          
+          const data: any = {
+            name,
+            rfc,
+            tradename,
+            suppliercredit,
+            tradeline,
+            contact: contacts,
+            user: id,
+          }
 
-        const res = await SaveProvider(data, token);
-        if(res.status){
-          showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          const res = await SaveProvider(data, token);
+          if(res.status){
+            refRequest.current = true;
+            showToastMessage(res.message);
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res.message);
+          }
         }else{
-          showToastMessageError(res.message);
+          refRequest.current = true;
+          showToastMessageError('Nombre y RFC son obligatorios');
         }
-      }else{
-        showToastMessageError('Nombre y RFC son obligatorios');
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Error al crear proveedor!!');
       }
-    } catch (error) {
-      showToastMessageError('Error al crear proveedor!!');
+    }else{
+      showToastMessageError('Ya hay una solicitud en proceso..!!!');
     }
   }
 

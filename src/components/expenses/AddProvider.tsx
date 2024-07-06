@@ -4,8 +4,8 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState, useEffect } from "react";
-import { showToastMessage, showToastMessageError } from "../Alert";
+import { useState, useEffect, useRef } from "react";
+import { showToastMessageError } from "../Alert";
 import { createNewProvider } from "@/app/api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
@@ -16,14 +16,9 @@ export default function AddProvider({token, setShowForm, addProv}:
   
   //const [suppliercredit, setSuppliercredit] = useState<boolean>(false);
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
 
   const handleResize = () => {
-    // console.log(Math.max(
-    //   document.body.scrollHeight, document.documentElement.scrollHeight,
-    //   document.body.offsetHeight, document.documentElement.offsetHeight,
-    //   document.body.clientHeight, document.documentElement.clientHeight
-    // ));
-    //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -42,7 +37,6 @@ export default function AddProvider({token, setShowForm, addProv}:
   }, []);
 
   const ref = useOutsideClick(() => {
-    //console.log('Clicked outside of MyComponent');
     setShowForm(false);
   });
 
@@ -61,28 +55,36 @@ export default function AddProvider({token, setShowForm, addProv}:
                   .required('El rfc no puede ir vacio'),
     }),
     onSubmit: async (valores) => {            
-      const {name, tradename, rfc} = valores;
-      const data= {
-        name, 
-        tradename,
-        rfc,
-        //"suppliercredit": suppliercredit
-      }
-      try {
-        const res:(Provider | string) = await createNewProvider(data, token);
-        if(typeof(res)==='string'){
-          showToastMessageError(res);
-        }else{
-          const option: Options = {
-            label: res.name,
-            value: res._id
-          }
-          console.log('new provider => ', option);
-          addProv(option);
-          setShowForm(false);
+      if(refRequest.current){
+        refRequest.current = false;
+        const {name, tradename, rfc} = valores;
+        const data= {
+          name, 
+          tradename,
+          rfc,
+          //"suppliercredit": suppliercredit
         }
-      } catch (error) {
-        showToastMessageError('Ocurrio un error al crear proveedor!!');
+        try {
+          const res:(Provider | string) = await createNewProvider(data, token);
+          if(typeof(res)==='string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            const option: Options = {
+              label: res.name,
+              value: res._id
+            }
+            console.log('new provider => ', option);
+            addProv(option);
+            setShowForm(false);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un error al crear proveedor!!');
+        }
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     },       
   });

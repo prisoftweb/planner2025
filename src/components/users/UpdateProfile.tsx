@@ -13,6 +13,7 @@ import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 import { UsrBack } from "@/interfaces/User"
 import { useUserStore } from "@/app/store/userStore"
+import { useRef } from "react"
 
 export default function UpdateProfile({user, departments, token, optsRoles}: 
                   {user:UsrBack, departments:Options[], token:string, optsRoles:Options[]}){
@@ -48,6 +49,7 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
   const [depto, setDepto] = useState<string>
                         (typeof(user.department)==='string'? user.department: user.department._id);
   //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[indexDepto]);
+  const refRequest = useRef(true);
 
   let optRol = optsRoles[0];
   const opRol = optsRoles.find((opt) => opt.value===rolS);
@@ -95,33 +97,35 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
                   .required('El nombre es obligatorio'),        
     }),
     onSubmit: async (valores) => {            
-      const {email, name} = valores;
+      if(refRequest.current){
+        refRequest.current = false;
+        const {email, name} = valores;
       
-      // const formData = new FormData();
-      // formData.append('name', name);
-      // formData.append('email', email);
-      // formData.append('rol', rol);
-      // formData.append('department', department);
+        const data = {
+          name, email, rol:rolS, department: depto
+        }
 
-      const data = {
-        name, email, rol:rolS, department: depto
-      }
-
-      try {
-        //let res = await updateMeUser(user._id, formData, token);
-        const res = await updateApiUser(data, token, user._id);
-        if(typeof(res) === 'string'){
-          showToastMessageError(res);
-        }else{
-          showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-          setCookie('user', res);
-          updateUser(res);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
-        } 
-      } catch (error) {
-        showToastMessageError('Ocurrio un error al modificar usuario..');
+        try {
+          //let res = await updateMeUser(user._id, formData, token);
+          const res = await updateApiUser(data, token, user._id);
+          if(typeof(res) === 'string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            showToastMessage(`Usuario ${name} modificado exitosamente!`);            
+            setCookie('user', res);
+            updateUser(res);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
+          } 
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un error al modificar usuario..');
+        }
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
       }
     },       
   });

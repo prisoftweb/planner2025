@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as Yup from 'yup';
 import Label from "../Label";
 import Input from "../Input";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { optionsSource } from "@/interfaces/Clients";
 import { Options } from "@/interfaces/Common";
 import Select from 'react-select';
@@ -15,7 +15,7 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 
 export default function DataBasic({client, tags, id, token}: 
                           {client:ClientBack, tags:Options[], id:string, token:string}){
-  
+  const refRequest = useRef(true);
   const formik = useFormik({
     initialValues: {
       tradename:client.tradename,
@@ -33,42 +33,48 @@ export default function DataBasic({client, tags, id, token}:
       email: Yup.string(),
     }),
     onSubmit: async (valores) => {            
-      const {name, tradename, rfc, email} = valores;
+      if(refRequest.current){
+        refRequest.current = false;
+        const {name, tradename, rfc, email} = valores;
       
-      let tagsSelected: any = [];
-      if(updateTags){
-        optsTags.map((optTag) => {
-          //tagsSelected.push(optTag.value);
-          tagsSelected.push(optTag.label);
-        })
-      }else{
-        tagsSelected='';
-      }
-      
-      const data: any = {
-        name,
-        rfc,
-        tradename,
-        phone,
-        source,
-        tags:tagsSelected,
-        email,
-        regime: regime,
-      }
-
-      const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
-      try {
-        const res = await updateClient(client._id, token, newObj);
-        if(res === 200){
-          showToastMessage('Cliente actualizado exitosamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+        let tagsSelected: any = [];
+        if(updateTags){
+          optsTags.map((optTag) => {
+            //tagsSelected.push(optTag.value);
+            tagsSelected.push(optTag.label);
+          })
         }else{
-          showToastMessageError(res);
+          tagsSelected='';
         }
-      } catch (error) {
-        showToastMessageError('Error al actualizar informacion basica del cliente!!');
+        
+        const data: any = {
+          name,
+          rfc,
+          tradename,
+          phone,
+          source,
+          tags:tagsSelected,
+          email,
+          regime: regime,
+        }
+
+        const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
+        try {
+          const res = await updateClient(client._id, token, newObj);
+          if(res === 200){
+            refRequest.current = true;
+            showToastMessage('Cliente actualizado exitosamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al actualizar informacion basica del cliente!!');
+        }
       }
     },
   });

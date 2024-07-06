@@ -4,7 +4,7 @@ import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Options } from "@/interfaces/Common"
 import { createNode } from "@/app/api/routeNodes"
 import SelectReact from "../SelectReact"
@@ -20,6 +20,7 @@ export default function NewNode({showForm, token, departments, glossaries,
   const [department, setDepartment] = useState<string>(departments[0].value);
   const [glossary, setGlossary] = useState<string>(glossaries[0].value);
   const [workflow, setWorkflow] = useState<string>(workFlows[0].value);
+  const refRequest = useRef(true);
 
   const handleDepartment = (value:string) => {
     setDepartment(value);
@@ -44,23 +45,31 @@ export default function NewNode({showForm, token, departments, glossaries,
   }, [])
 
   const saveNode = async () => {
-    try {
-      const data = {
-        workflow,
-        department,
-        glossary
+    if(refRequest.current){
+      refRequest.current = false;
+      try {
+        const data = {
+          workflow,
+          department,
+          glossary
+        }
+        const res = await createNode(token, data);
+        if(res === 201){
+          refRequest.current = true;
+          showToastMessage('Nodo creado satisfactoriamente!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        refRequest.current = true;
+        showToastMessageError('Error al crear workflow!!!');
       }
-      const res = await createNode(token, data);
-      if(res === 201){
-        showToastMessage('Nodo creado satisfactoriamente!!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
-      }else{
-        showToastMessageError(res);
-      }
-    } catch (error) {
-      showToastMessageError('Error al crear workflow!!!');
+    }else{
+      showToastMessageError('Ya hay una peticion en proceso..!!!');
     }
   }
 

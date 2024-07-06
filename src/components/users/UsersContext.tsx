@@ -17,6 +17,6 @@ export default function UsersConstext({departments, optionsRoles, token, users}:
   }, []);
 
   return(
-    <TableUsers token={token} departments={departments} roles={optionsRoles} />
+    <TableUsers token={token} optionsDepartments={departments} roles={optionsRoles} />
   )
 }

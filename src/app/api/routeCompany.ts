@@ -18,6 +18,24 @@ export async function getCompanies(auth_token:string) {
   }
 }
 
+export async function getCompaniesLV(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/companys/getAllCompanysLV`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return 'Error al obtener compañias!!'
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Ocurrio un error al obtener compañias!!';
+  }
+}
+
 export async function RemoveCompany(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/companys/${id}`;
   try {

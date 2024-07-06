@@ -6,12 +6,12 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { useState } from "react";
 import { Options } from "@/interfaces/Common";
 
-import { Report } from "@/interfaces/Reports";
+import { ReportParse } from "@/interfaces/Reports";
 
 export default function SelectProjectStepper({reports, optReports}: 
-                                {reports:Report[], optReports:Options[]}){
+                                {reports:ReportParse[], optReports:Options[]}){
 
-  const [filtered, setFiltered] = useState<Report[]>(reports);
+  const [filtered, setFiltered] = useState<ReportParse[]>(reports);
 
   const DropdownIndicator = (props: any) => {
     return (
@@ -55,13 +55,13 @@ export default function SelectProjectStepper({reports, optReports}:
         }}
         placeholder='Buscar ...'
         styles={customStyles}
-        onInputChange={(e) => filterReports(e)}
+        //onInputChange={(e) => filterReports(e)}
         onChange={(value:(Options | null)) => filterReports(value?.label || '')}
       />
       <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-3 
         3xl:grid-cols-4 gap-x-4 gap-y-3 mt-5">
-          {filtered.map((repor, index:number) => (
-            <CardProject report={repor} key={index} />
+          {filtered.map((repor) => (
+            <CardProject report={repor} key={repor._id} />
           ))}
       </div>
     </div>

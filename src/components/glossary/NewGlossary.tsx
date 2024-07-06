@@ -11,6 +11,7 @@ import { useState, useEffect } from "react"
 import { HexColorPicker } from "react-colorful";
 import { CreateGlossary, UpdateGlossary } from "@/app/api/routeGlossary"
 import { GlossaryTable } from "@/interfaces/Glossary"
+import { useRef } from "react"
 
 export default function NewGlossary({showForm, token, glossary}: 
                     {showForm:Function, token:string, glossary: (GlossaryTable | string)}){
@@ -18,6 +19,7 @@ export default function NewGlossary({showForm, token, glossary}:
   const [color, setColor] = useState(typeof(glossary)==='string'? "#b32aa9": glossary.color);
 
   const [heightPage, setHeightPage] = useState<number>(900);
+  const refRequest = useRef(true);
   
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -42,36 +44,46 @@ export default function NewGlossary({showForm, token, glossary}:
     }),
 
     onSubmit: async valores => {
-      try {
-        const {description, name} = valores;
-        const data = {
-          description,
-          name,
-          color
-        }
-        if(typeof(glossary)==='string'){
-          const res = await CreateGlossary(token, data);
-          if(res===201){
-            showToastMessage('Glosario agregado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
-            showToastMessageError(res);
+      if(refRequest.current){
+        refRequest.current = false;
+        try {
+          const {description, name} = valores;
+          const data = {
+            description,
+            name,
+            color
           }
-        }else{
-          const res = await UpdateGlossary(token, glossary.id, data);
-          if(res===200){
-            showToastMessage('Glosario actualizado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+          if(typeof(glossary)==='string'){
+            const res = await CreateGlossary(token, data);
+            if(res===201){
+              refRequest.current = true;
+              showToastMessage('Glosario agregado exitosamente!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
           }else{
-            showToastMessageError(res);
+            const res = await UpdateGlossary(token, glossary.id, data);
+            if(res===200){
+              refRequest.current = true;
+              showToastMessage('Glosario actualizado exitosamente!!');
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
           }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Error al crear glosario!!!');
         }
-      } catch (error) {
-        showToastMessageError('Error al crear glosario!!!');
+      }else{
+        showToastMessageError('Ya hay una peticion en proceso..!!!');
       }
     }
   });

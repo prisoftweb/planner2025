@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRegFormContext } from "./StepperClientProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import FormContact from "../providers/FormContact";
@@ -10,9 +10,10 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
   const [state, dispatch] = useRegFormContext();
   //const [contacts, setContacts] = useState<string[]>();
   const [contacts, setContacts] = useState<string[]>(state.contacts? state.contacts: []);
+  const refRequest = useRef(true);
   
   const onClickSave = async () => {
-
+    refRequest.current = false;
     if(state.extradata && state.extradata.photo){
       const data = new FormData();
       if(state.databasic){
@@ -60,14 +61,17 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
                     state.databasic.tags? state.databasic.tags: [], contacts,
                     state.databasic.phone? state.databasic.phone: '');
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
     }else{
@@ -126,14 +130,17 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
       try {
         const res = await SaveClient(data, token);
         if(res.status){
+          refRequest.current = true;
           showToastMessage(res.message);
           setTimeout(() => {
             window.location.reload();
           }, 500);
         }else{
+          refRequest.current = true;
           showToastMessageError(res.message);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
     }
@@ -159,7 +166,14 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         <FormContact addNewContact={newContact} token={token} contact={''} 
             updateContact={updateContact} >
           <button type="button" 
-            onClick={onClickSave}
+            onClick={() => {
+              if(refRequest.current){
+                onClickSave();
+              }
+              else{
+                showToastMessageError('Ya hay una peticion en proceso..!');
+              }
+            }}
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
            hover:bg-slate-200">
             Guardar

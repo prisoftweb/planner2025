@@ -8,10 +8,12 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveProvider from "@/app/functions/SaveProvider";
 import BasicBarStepper from "./BasicBarStepper";
 import CurrencyInput from "react-currency-input-field";
+import { useRef } from "react";
 
 export default function CreditLineStepper({token, id}:{token:string, id:string}){
   
   const [state, dispatch] = useRegFormContext();
+  const refRequest = useRef(true);
 
   let creditlimitI= '', creditdaysI='', currentbalanceI='', percentoverduedebtI=''; 
 
@@ -54,45 +56,53 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
   });
   
   const onClickSave = async () => {
-    const {creditdays, creditlimit, currentbalance, percentoverduedebt} = formik.values;
-    const {name, rfc, suppliercredit, tradename} = state.databasic;
-    
-    let contact = [];
-    if(state.contacts){
-      contact = state.contacts;
-    }
-    let tradeline = {};
-
-    if(suppliercredit){
-      tradeline = {
-        creditdays: parseInt(creditdays),
-        creditlimit: parseInt(creditlimit.replace(/[$,%,]/g, "")),
-        currentbalance: parseInt(currentbalance.replace(/[$,%,]/g, "")),
-        percentoverduedebt: parseInt(percentoverduedebt.replace(/[$,%,]/g, ""))
+    if(refRequest.current){
+      refRequest.current = false;
+      const {creditdays, creditlimit, currentbalance, percentoverduedebt} = formik.values;
+      const {name, rfc, suppliercredit, tradename} = state.databasic;
+      
+      let contact = [];
+      if(state.contacts){
+        contact = state.contacts;
       }
-    }
+      let tradeline = {};
 
-    if(name && rfc && tradename){
-      const data: any = {
-        name,
-        rfc,
-        tradename,
-        suppliercredit,
-        tradeline,
-        user: id,
-        contact,
+      if(suppliercredit){
+        tradeline = {
+          creditdays: parseInt(creditdays),
+          creditlimit: parseInt(creditlimit.replace(/[$,%,]/g, "")),
+          currentbalance: parseInt(currentbalance.replace(/[$,%,]/g, "")),
+          percentoverduedebt: parseInt(percentoverduedebt.replace(/[$,%,]/g, ""))
+        }
       }
-      const res = await SaveProvider(data, token);
-      if(res.status){
-        showToastMessage(res.message);
-        setTimeout(() => {
-          window.location.reload();
-        }, 500);
+
+      if(name && rfc && tradename){
+        const data: any = {
+          name,
+          rfc,
+          tradename,
+          suppliercredit,
+          tradeline,
+          user: id,
+          contact,
+        }
+        const res = await SaveProvider(data, token);
+        if(res.status){
+          refRequest.current = true;
+          showToastMessage(res.message);
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          refRequest.current = true;
+          showToastMessageError(res.message);
+        }
       }else{
-        showToastMessageError(res.message);
+        refRequest.current = true;
+        showToastMessageError('Nombre y RFC son obligatorios');
       }
     }else{
-      showToastMessageError('Nombre y RFC son obligatorios');
+      showToastMessageError('Ya hay una solicitud en proceso..!!!');
     }
   }
 
