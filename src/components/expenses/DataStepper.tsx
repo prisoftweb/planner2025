@@ -119,10 +119,12 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       onChange={formik.handleChange}
       onBlur={formik.handleChange}
       //defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
-      value={Number(formik.values.amount.replace(/[$,]/g, ""))}
-      //decimalsLimit={2}
+      // value={Number(formik.values.amount.replace(/[$,]/g, ""))}
+      value={formik.values.amount.replace(/[$,]/g, "")}
+      decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
+        console.log('value amount data stepper => ', value);
         formik.values.amount=value || '0';
       } catch (error) {
         formik.values.amount='0';
