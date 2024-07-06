@@ -7,6 +7,7 @@ import { useState } from "react"
 import { Options } from "@/interfaces/Common"
 import { ReportTable, ReportParse } from "@/interfaces/Reports"
 import { GiSettingsKnobs } from "react-icons/gi"
+import TableHistoryReports from "./TableHistoryReports"
 
 export default function ContainerClient({token, optCompanies, optDepartments, 
                             optProjects, condition, user, data, reports, 
@@ -39,10 +40,15 @@ export default function ContainerClient({token, optCompanies, optDepartments,
         </div>
       </Header>
       <div className="mt-5">
-        <TableReports data={data} optConditions={optConditionsFilter} 
+        {isHistory? (
+          <TableHistoryReports data={data} optConditions={optConditionsFilter} 
+          reports={reports} token={token} optCompanies={optCompaniesFilter} 
+          optProjects={optProjectsFilter} isFilter={isFilter} setIsFilter={handleFilter} />
+        ): (
+          <TableReports data={data} optConditions={optConditionsFilter} 
             reports={reports} token={token} optCompanies={optCompaniesFilter} 
-            optProjects={optProjectsFilter} isFilter={isFilter} setIsFilter={handleFilter} 
-            path="/reports/history"  />
+            optProjects={optProjectsFilter} isFilter={isFilter} setIsFilter={handleFilter} />
+        )}
       </div>
     </div>
   )

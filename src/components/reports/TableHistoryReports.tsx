@@ -4,18 +4,15 @@ import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-//import Filtering from "./Filtering";
-//import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import { ReportTable, ReportParse } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
 import { RemoveReport } from "@/app/api/routeReports";
 import { ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
-//import { GiSettingsKnobs } from "react-icons/gi";
 import Filtering from "./FilteringReports";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 
-export default function TableReports({data, token, reports, 
+export default function TableHistoryReports({data, token, reports, 
                           optCompanies, optConditions, optProjects, 
                           isFilter, setIsFilter}:
                         {data:ReportTable[], token:string, 
@@ -67,7 +64,7 @@ export default function TableReports({data, token, reports,
     columnHelper.accessor(row => row.Report, {
       id: 'Reporte',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <div className="flex gap-x-1 items-center">
             <p>{row.original.Report}</p>
           </div>
@@ -81,7 +78,7 @@ export default function TableReports({data, token, reports,
     columnHelper.accessor(row => row.account, {
       id: 'Cuenta',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <div className="flex gap-x-1 items-center">
             <p>{row.original.account}</p>
           </div>
@@ -96,7 +93,7 @@ export default function TableReports({data, token, reports,
       header: 'Proyecto',
       id: 'Proyecto',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <div className="flex gap-x-1 items-center">
             <p>{row.original.Project}</p>
           </div>
@@ -107,7 +104,7 @@ export default function TableReports({data, token, reports,
       header: 'Empresa/Depto',
       id: 'Departamento',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <div className="flex gap-x-1 items-center">
             <img src={row.original.Company} className="w-12 h-auto" alt="compania" />
             <p>{row.original.Depto}</p>
@@ -119,7 +116,7 @@ export default function TableReports({data, token, reports,
       header: 'Estatus',
       id: 'Estatus',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <Chip label={row.original.Status} color={row.original.color} />
         </Link>
       ),
@@ -128,7 +125,7 @@ export default function TableReports({data, token, reports,
       header: 'NºGastos',
       id: 'NºGastos',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <p className="">{row.original.NºGastos}</p>
         </Link>
       ),
@@ -137,7 +134,7 @@ export default function TableReports({data, token, reports,
       header: 'Total',
       id: 'Total',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <p className="">{row.original.Total}</p>
         </Link>
       ),
@@ -146,7 +143,7 @@ export default function TableReports({data, token, reports,
       header: 'Fecha',
       id: 'Fecha',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        <Link href={`/reports/history/${row.original.id}`}>
           <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
         </Link>
       ),
@@ -166,17 +163,6 @@ export default function TableReports({data, token, reports,
     }
   }, [filter]);
 
-  // useEffect(() => {
-  //   if(isFilter){
-  //     console.log('data rep ', dataReports);
-  //     setView(<></>);
-  //     setTimeout(() => {
-  //       setView(<Table columns={columns} data={dataReports} placeH="Buscar reporte.." />);
-  //     }, 100);
-  //     setIsFilter(false);
-  //   }
-  // }, [isFilter]);
-
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const repAmount = reports.reduce((previous, current) => {
@@ -187,7 +173,6 @@ export default function TableReports({data, token, reports,
 
   const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
     let d = new Date(rep.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return true;
     }
@@ -197,15 +182,11 @@ export default function TableReports({data, token, reports,
   const amountValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
     if(rep.total >= 0){
-      //console.log('total ', rep.total, ' >= ', minAmount);
-      //console.log('total ', rep.total, ' <= ', maxAmount)
       if(rep.total >= minAmount && rep.total <= maxAmount){
-        //console.log('date ?');
         return dateValidation(rep, startDate, endDate);
       }
     }
     return false;
-    //return dateValidation(rep, startDate, endDate);
   }
 
   const projectValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
@@ -246,9 +227,6 @@ export default function TableReports({data, token, reports,
       if(conditions.includes(rep.lastmove.condition._id)){
         return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
       }
-      // if(!rep.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
-      // }
     }
     return false;
   }
@@ -267,18 +245,8 @@ export default function TableReports({data, token, reports,
     maxAmount:number, companies:string[], projects:string[], 
     startDate:number, endDate:number, isPettyCash:boolean) => {
   
-    // console.log('filtrar');
-    // console.log('conditions', conditions);
-    // console.log('types ', types);
-    // console.log('categories ', categories);
-    // console.log('startdate ', startDate);
-    // console.log('endDate ', endDate);
-    // console.log('min amount ', minAmount);
-    // console.log('max amount ', maxAmount);
-    
-    //let filtered: Report[] = [];
     let filtered: ReportParse[] = [];
-    console.log('filter data => ');
+    //console.log('filter data => ');
     reports.map((report) => {
       if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
           endDate, projects, companies, conditions, isPettyCash)){
@@ -286,10 +254,7 @@ export default function TableReports({data, token, reports,
       }
     });
 
-    //console.log(filtered);
-    //setFilteredReports(filtered);
-    console.log('filteres => ', filtered);
-    // setDataReports(ReportDataToTableData(filtered));
+    //console.log('filteres => ', filtered);
     setDataReports(ReportParseDataToTableData(filtered));
     setFilter(true);
   }
@@ -297,13 +262,6 @@ export default function TableReports({data, token, reports,
   return(
     <>
       <div className="flex justify-end my-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        /> */}
-          {/* {filtering && <Filtering showForm={setFiltering} optConditions={optConditions} 
-                          FilterData={filterData} maxAmount={maxAmount} 
-                          optProjects={optProjects} optCompanies={optCompanies} />} */}
         {isFilter && <Filtering showForm={setIsFilter} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optCompanies={optCompanies} />}
