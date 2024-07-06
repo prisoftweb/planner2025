@@ -36,8 +36,8 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   role = user.rol?.name || '';
-  console.log('role ', role);
-  console.log('user role ', user.rol);
+  //console.log('role ', role);
+  //console.log('user role ', user.rol);
 
   const ref = useOutsideClick(() => {
     //console.log('Clicked outside of MyComponent');
@@ -49,7 +49,7 @@ export default function Navigation({user}: {user:UsrBack}){
   const router = useRouter();
   
   function logOut(){
-    console.log('logout ');
+    //console.log('logout ');
     RemoveCookies();
     router.push('/login');
   }
@@ -143,9 +143,16 @@ const NavItems = ({role}: {role:string}) => {
               name: 'Gastos',
               link: '/expenses'
             },
+          ]} 
+        />
+        <NavItem name="Informes" link="" items={[
             {
               name: 'Informes',
               link: '/reports'
+            },
+            {
+              name: 'Historial',
+              link: '/reports/history'
             },
           ]} 
         />
@@ -194,9 +201,16 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Gastos',
             link: '/expenses'
           },
+        ]} 
+      />
+      <NavItem name="Informes" link="" items={[
           {
             name: 'Informes',
             link: '/reports'
+          },
+          {
+            name: 'Historial',
+            link: '/reports/history'
           },
         ]} 
       />

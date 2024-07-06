@@ -18,22 +18,22 @@ export default function ReportClient({report, token, id, companies,
                               projects:Options[], expenses:CostReport[], 
                               user:UsrBack, node:Node }){
   
-  const [view, setView] = useState<JSX.Element>(<></>)
+  //const [view, setView] = useState<JSX.Element>(<></>)
 
   const [opt, setOpt] = useState<number>(1);
   
-  useEffect(() => {
-    opt===2? setView(<CostsInReport report={report} costs={expenses} />) : 
-                  setView(<DataReports companies={companies} costs={expenses}
+  // useEffect(() => {
+  //   opt===2? setView(<CostsInReport report={report} costs={expenses} />) : 
+  //                 setView(<DataReports companies={companies} costs={expenses}
+  //                             departments={departments} projects={projects} 
+  //                   token={token} report={report} user={user} node={node} />)
+  // }, [opt, ])
+  let view:JSX.Element = <></>;
+  opt===2? view =(<CostsInReport report={report} costs={expenses} />) : 
+                  view =(<DataReports companies={companies} costs={expenses}
                               departments={departments} projects={projects} 
                     token={token} report={report} user={user} node={node} />)
-                  // setView(<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
-                  //   style={{borderColor:'#F8FAFC'}}>
-                  //     <UpdateReport companies={companies} departments={departments} 
-                  //           projects={projects} token={token} />
-                  //   </div>)
-  }, [opt, ])
-
+  
   const [open, setOpen] = useState<boolean>(false);
   
   const handeleOpen = (value:boolean) => {

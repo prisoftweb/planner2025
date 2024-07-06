@@ -48,7 +48,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
         discount: 0,
         subtotal:amount.replace(/[$,]/g, ""),
         iva: 0,
-        vat: idVat, 
+        //vat: idVat, 
         // vatvalue: number no se usa 
         // total: number no se usa 
       }));
@@ -85,7 +85,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           discount: 0,
           subtotal:amount.replace(/[$,]/g, ""),
           iva: 0,
-          vat: idVat,
+          //vat: idVat,
           // vatvalue: number no se usa 
           // total: number no se usa 
         },
