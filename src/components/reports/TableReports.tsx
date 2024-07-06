@@ -7,21 +7,21 @@ import { useState, useEffect } from "react";
 //import Filtering from "./Filtering";
 //import Button from "../Button";
 import { Options } from "@/interfaces/Common";
-import { Report, ReportTable, ReportParse } from "@/interfaces/Reports";
+import { ReportTable, ReportParse } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
 import { RemoveReport } from "@/app/api/routeReports";
-import { ReportDataToTableData, ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
+import { ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
 //import { GiSettingsKnobs } from "react-icons/gi";
 import Filtering from "./FilteringReports";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 
 export default function TableReports({data, token, reports, 
                           optCompanies, optConditions, optProjects, 
-                          isFilter, setIsFilter}:
+                          isFilter, setIsFilter, path=''}:
                         {data:ReportTable[], token:string, 
                           reports: ReportParse[], optCompanies: Options[], 
                           optProjects: Options[], optConditions: Options[], 
-                          isFilter:boolean, setIsFilter:Function}){
+                          isFilter:boolean, setIsFilter:Function, path?:string}){
   
   const columnHelper = createColumnHelper<ReportTable>();
 

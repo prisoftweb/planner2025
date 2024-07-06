@@ -5,18 +5,19 @@ import ButtonNew from "./ButtonNew"
 import TableReports from "./TableReports"
 import { useState } from "react"
 import { Options } from "@/interfaces/Common"
-import { ReportTable, Report, ReportParse } from "@/interfaces/Reports"
+import { ReportTable, ReportParse } from "@/interfaces/Reports"
 import { GiSettingsKnobs } from "react-icons/gi"
 
 export default function ContainerClient({token, optCompanies, optDepartments, 
                             optProjects, condition, user, data, reports, 
                             optCompaniesFilter, optConditionsFilter, 
-                            optProjectsFilter}: 
+                            optProjectsFilter, isHistory=false}: 
                           {token:string, optDepartments:Options[], 
                             optCompanies:Options[], optProjects:Options[], 
                             user:string, condition:string, data:ReportTable[], 
                             reports: ReportParse[], optConditionsFilter: Options[], 
-                            optCompaniesFilter: Options[], optProjectsFilter:Options[]
+                            optCompaniesFilter: Options[], optProjectsFilter:Options[], 
+                            isHistory?:boolean
                           }){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
@@ -32,15 +33,16 @@ export default function ContainerClient({token, optCompanies, optDepartments,
           <GiSettingsKnobs onClick={() => handleFilter(true)}
             className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
           />
-          <ButtonNew companies={optCompanies} departments={optDepartments} 
-            projects={optProjects} token={token} condition={condition} user={user}
-          />
+          {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
+                            projects={optProjects} token={token} condition={condition} user={user}
+                          />}
         </div>
       </Header>
       <div className="mt-5">
         <TableReports data={data} optConditions={optConditionsFilter} 
             reports={reports} token={token} optCompanies={optCompaniesFilter} 
-            optProjects={optProjectsFilter} isFilter={isFilter} setIsFilter={handleFilter} />
+            optProjects={optProjectsFilter} isFilter={isFilter} setIsFilter={handleFilter} 
+            path="/reports/history"  />
       </div>
     </div>
   )

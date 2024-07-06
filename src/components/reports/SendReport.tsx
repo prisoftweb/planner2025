@@ -15,7 +15,7 @@ import { updateReport } from "@/app/api/routeReports";
 
 export default function SendReport({send, report, node, 
               user, token}: 
-          {send:Function, report:Report, node:Node, 
+          {send:Function, report:Report, node:(Node | undefined), 
             user:string, token:string }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -133,17 +133,10 @@ export default function SendReport({send, report, node,
               </div>
             </div>
             <div>
-              {node.relations.map((rel) => (
+              {node && node.relations.map((rel) => (
                 <Card relation={rel.relation} key={rel._id} _id={rel._id} id={rel.id} />
               ))}
             </div>
-            {/* <div className="mt-2 p-3 flex flex-col items-center">
-              <p className="text-xs">Enviar informe a:</p>
-              <p className="text-xs">{typeof(node.relations)=== 'string'? '': 'administracion'}</p>
-              <img src="/img/users/default.jpg" className="w-12 h-auto rounded-full" alt="responsable" />
-              <p className="text-xs text-center">Diana Camacho</p>
-              <Chip label={report.moves[report.moves.length-1].condition.name} />
-            </div> */}
           </div>
 
           <div className="border-t border-slate-700">
@@ -183,47 +176,31 @@ export default function SendReport({send, report, node,
               </nav>
             </div>
 
-            {/* <div className=" mt-5">
-              {report.moves.map((mov, index:number) => (
-                <div key={index} className="flex gap-x-4 justify-between mt-5">
-                  <div className="flex gap-x-4">
-                    <img src={mov.user.photo || '/img/users/default.jpg'} 
-                        className="w-12 h-auto rounded-2xl" alt="responsable" />
-                    <div>
-                      <p>{'fecha mov ? '}</p>
-                      <Chip label={mov.condition.name} />
-                      <p className="text-blue-600">{mov.notes}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <p>{mov.department.name}</p>
-                    <img src={mov.department.company.logo || '/img/users/default.jpg'} 
-                        className="w-12 h-auto rounded-md" alt="departamento" />
-                  </div>
+            {node && (
+              <div className="mt-3">
+                <Label htmlFor="notes"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Comentarios</p></Label>
+                <TextArea placeholder="comentarios.." 
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
+                {!isSend && <p className="text-red-500">*Los comentarios son obligatorios!!</p>}
+              </div>
+            )}
+
+            {
+              node && (
+                <div className="mt-3 flex justify-center gap-x-3">
+                  {node.relations.map((rel) => (
+                    <ButtonColor 
+                      // className="bg-red-600 text-white font-normal text-sm rounded-xl w-36 h-9 py-2 hover:bg-red-400" 
+                      className="text-white font-normal text-sm rounded-xl w-36 h-9 py-2" 
+                      type="button" key={rel._id} 
+                      style={{backgroundColor: rel.relation.glossary.color}}
+                      onClick={() => sendReport(rel)}>{rel.relation.glossary.name}</ButtonColor>
+                  ))}
                 </div>
-              ))}
-            </div> */}
-
-            <div className="mt-3">
-              <Label htmlFor="notes"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Comentarios</p></Label>
-              <TextArea placeholder="comentarios.." 
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-              {!isSend && <p className="text-red-500">*Los comentarios son obligatorios!!</p>}
-            </div>
-
-            <div className="mt-3 flex justify-center gap-x-3">
-              {/* <Button type="button" onClick={sendReport}>Enviar</Button> */}
-              {node.relations.map((rel) => (
-                <ButtonColor 
-                  // className="bg-red-600 text-white font-normal text-sm rounded-xl w-36 h-9 py-2 hover:bg-red-400" 
-                  className="text-white font-normal text-sm rounded-xl w-36 h-9 py-2" 
-                  type="button" key={rel._id} 
-                  style={{backgroundColor: rel.relation.glossary.color}}
-                  onClick={() => sendReport(rel)}>{rel.relation.glossary.name}</ButtonColor>
-              ))}
-            </div>
+              )
+            }
           </div>
 
         </div>
