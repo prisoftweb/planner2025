@@ -5,11 +5,11 @@ import { Expense } from "@/interfaces/Expenses";
 import { showToastMessageError, showToastMessage } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { CFDIValidation } from "@/interfaces/Expense";
-import { Provider } from "@/interfaces/Providers";
-import { getProvider } from "@/app/api/routeProviders";
+//import { Provider } from "@/interfaces/Providers";
+//import { getProvider } from "@/app/api/routeProviders";
 
-export default function UpdateCFDI({id, token, expense}: 
-                  {token: string, id:string, expense:Expense}){
+export default function UpdateCFDI({id, token, expense, isHistory}: 
+                  {token: string, id:string, expense:Expense, isHistory:boolean}){
   
   const [file, setFile] = useState<File | null>();
   const [urlFile, setUrlFile] = useState<string>();
@@ -39,7 +39,7 @@ export default function UpdateCFDI({id, token, expense}:
         if(dataCFDIValidation()){
           //showToastMessage('validado!!')
           const res = await ADDNewFILE(token, id, data);
-          if(res === 200){
+          if(typeof(res) !== 'string'){
             showToastMessage('Archivo agregado satisfactoriamente');
             setTimeout(() => {
               window.location.reload();
@@ -113,6 +113,10 @@ export default function UpdateCFDI({id, token, expense}:
     return true;
   }
 
+  const handleFile = (value: File) => {
+    setFile(value);
+  }
+
   return (
     <div className="mt-2">
       {urlFile && (
@@ -120,11 +124,15 @@ export default function UpdateCFDI({id, token, expense}:
           className="w-full h-96"
         ></iframe>
       )}
-      <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} 
-          Validation={validationType} getData={handleCFDI} />
-      <div className="flex justify-center mt-8 space-x-5">
-        <Button type="button" onClick={SaveData}>Guardar</Button>
-      </div>
+      {isHistory? <></>: (
+        <>
+          <UploadFileDropZone label="Subir archivo .XML" setFile={handleFile} 
+              Validation={validationType} getData={handleCFDI} />
+          <div className="flex justify-center mt-8 space-x-5">
+            <Button type="button" onClick={SaveData}>Guardar</Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -112,7 +112,7 @@ export async function UpdateCost(auth_token:string, id:string, data:Object) {
       }
     });
     //console.log(res);
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
     res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -154,7 +154,8 @@ export async function ADDNewFILE(auth_token:string, id:string, data:FormData) {
         'Content-Type': 'multipart/form-data',
       }
     })
-    if(res.status === 200) return res.status;
+    //console.log('add new file => ', res.data.data.slider);
+    if(res.status === 200) return res.data.data.slider;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

@@ -4,30 +4,35 @@ import Label from "../Label"
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { Expense } from "@/interfaces/Expenses"
 import { UpdateCost } from "@/app/api/routeCost"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import AddProvider from "./AddProvider";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { useNewExpense } from "@/app/store/newExpense";
 
 export default function UpdateExtraExpense({token, id, optCostCenter, expense, 
-                                        optProviders, optResponsibles, 
+                                        optProviders, optResponsibles, isHistory, 
                                         optProjects, optCategories, optTypes }: 
                                   {token:string, id:string, optProviders:Options[],
                                     optCostCenter:Options[], expense:Expense, 
                                     optResponsibles:Options[], optProjects:Options[], 
-                                    optCategories:Options[], optTypes:Options[]}){
+                                    optCategories:Options[], optTypes:Options[], 
+                                    isHistory:boolean}){
   
-  const [costcenter, setCostCenter] = useState<string>(typeof(expense.costcenter)==='string'? expense.costcenter: expense.costcenter.categorys[0]._id);
+  const {currentExpense, updateCurrentExpense} = useNewExpense();
+  const [costcenter, setCostCenter] = useState<string>( currentExpense? 
+      typeof(currentExpense.costcenter)==='string'? currentExpense.costcenter: currentExpense.costcenter.categorys[0]._id
+      : '');
   //const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-  const [typeCFDI, setTypeCFDI] = useState<string>(expense.typeCFDI._id);
-  const [provider, setProvider] = useState<string>(expense.provider._id);
-  const [responsible, setResponsible] = useState<string>(expense.user._id);
-  const [category, setCategory] = useState<string>(expense.category._id);
-  const [project, setProject] = useState<string>(expense.project._id);
+  const [typeCFDI, setTypeCFDI] = useState<string>(currentExpense?.typeCFDI._id || expense.typeCFDI._id);
+  const [provider, setProvider] = useState<string>(currentExpense?.provider._id || expense.provider._id);
+  const [responsible, setResponsible] = useState<string>(currentExpense?.user._id || expense.user._id);
+  const [category, setCategory] = useState<string>(currentExpense?.category._id || expense.category._id);
+  const [project, setProject] = useState<string>(currentExpense?.project._id || expense.project._id);
   
   const [optionsProviders, setOptionProviders] = useState<Options[]>(optProviders);
   const [showProvider, setShowProvider] = useState<boolean>(false);
@@ -101,8 +106,10 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
       <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
       <div className="flex gap-x-2 items-center">
         <SelectReact index={indexProvider} opts={optionsProviders} setValue={handleProvider} />
-        <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-          onClick={() => setShowProvider(true)} />
+        {!isHistory && (
+          <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+            onClick={() => setShowProvider(true)} />
+        )}
       </div>
     </div>
   )
@@ -230,12 +237,13 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
       }
       try {
         const res = await UpdateCost(token, id, data);
-        if(res === 200){
+        if(typeof(res) !== 'string'){
           refRequest.current = true;
           showToastMessage('Costo actualizado satisfactoriamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateCurrentExpense(res);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res);
@@ -276,11 +284,13 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
           {viewCC}
           {selectProvider}
         </div>
-        <div className="flex justify-center mt-8 space-x-5">
-          <Button type="button" onClick={updateExpense}>Guardar</Button>         
-        </div>
+        {isHistory? <></>: (
+          <div className="flex justify-center mt-8 space-x-5">
+            <Button type="button" onClick={updateExpense}>Guardar</Button>         
+          </div>
+        )}
       </form>
-      {showProvider && <AddProvider token={token} setShowForm={setShowProvider} 
+      {showProvider && !isHistory && <AddProvider token={token} setShowForm={setShowProvider} 
                             addProv={addProvider}  />}  
     </div>
   )

@@ -1,30 +1,48 @@
 import Button from "../Button";
 import UploadFileDropZone from "../UploadFileDropZone";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Expense } from "@/interfaces/Expenses";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
+import { useNewExpense } from "@/app/store/newExpense";
 
-export default function UpdateVoucher({id, token, expense}: 
-    {token: string, id:string, expense:Expense}){
+export default function UpdateVoucher({id, token, expense, isHistory}: 
+    {token: string, id:string, expense:Expense, isHistory:boolean}){
   
   const [file, setFile] = useState<File | null>();
-  const [urlFile, setUrlFile] = useState<string>();
-  const [idFile, setIdFile] = useState<string>('');
+  //const [urlFile, setUrlFile] = useState<string>();
+  //const [idFile, setIdFile] = useState<string>('');
   const refRequest = useRef(true);
+  const {currentExpense, updateCurrentExpense} = useNewExpense();
 
-  useEffect(() => {
-    //console.log('expense', expense);
-    expense.files.map((f) => {
+  let idFile = '';
+  let urlFile = '';
+  if(currentExpense){
+    currentExpense.files.map((f) => {
       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-        || f.types.includes('PNG')){
+        || f.types.includes('PNG') || f.types.includes('pdf')){
           //console.log('aqui entro => ', f);
-          setIdFile(f._id);
-          setUrlFile(f.file);
+          //setIdFile(f._id);
+          //setUrlFile(f.file);
+          idFile = f._id;
+          urlFile = f.file;
       }
     });
-  }, []);
+  }
+
+  // useEffect(() => {
+  //   //console.log('expense', expense);
+  //   expense.files.map((f) => {
+  //     if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
+  //       || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
+  //       || f.types.includes('PNG')){
+  //         //console.log('aqui entro => ', f);
+  //         setIdFile(f._id);
+  //         setUrlFile(f.file);
+  //     }
+  //   });
+  // }, []);
 
   const sendFile = async () => {
     if(refRequest.current){
@@ -37,12 +55,13 @@ export default function UpdateVoucher({id, token, expense}:
           data.append('types', file.type);
           //console.log('append => ', data.get('file'));
           const res = await ADDNewFILE(token, id, data);
-          if(res === 200){
+          if(typeof(res) !== 'string'){
             refRequest.current = true;
             showToastMessage('Archivo agregado satisfactoriamente');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            updateCurrentExpense(res);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -90,6 +109,9 @@ export default function UpdateVoucher({id, token, expense}:
   }
 
   const handle = () => {}
+  const handleFile = (value: File) => {
+    setFile(value);
+  }
 
   return (
     <div className="mt-2">
@@ -99,11 +121,15 @@ export default function UpdateVoucher({id, token, expense}:
           className="w-full h-96"
         ></iframe>
       )}
-      <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} 
-          Validation={validationType} getData={handle} />
-      <div className="flex justify-center mt-8 space-x-5">
-        <Button type="button" onClick={SaveData}>Guardar</Button>
-      </div>
+      {isHistory? <></> : (
+        <>
+          <UploadFileDropZone label="Subir PDF o imagen" setFile={handleFile} 
+              Validation={validationType} getData={handle} />
+          <div className="flex justify-center mt-8 space-x-5">
+            <Button type="button" onClick={SaveData}>Guardar</Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
