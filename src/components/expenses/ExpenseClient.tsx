@@ -12,16 +12,14 @@ import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
 
 export default function ExpenseClient({token, user, id, expense, optCostCenter, 
-                                        optGlossaries, optProjects, optProviders, 
-                                        optResponsibles, optCategories, optConditions,
-                                        optTypes
+                                        optProjects, optProviders, 
+                                        optResponsibles, optCategories, optTypes
                                       }: 
                             { token:string, id:string, user:string, 
                               expense:Expense, optCostCenter:Options[],
-                              optGlossaries:Options[], optProviders:Options[], 
+                              optProviders:Options[], 
                               optResponsibles:Options[], optProjects:Options[], 
-                              optTypes:Options[], optCategories:Options[], 
-                              optConditions:Options[] }){
+                              optTypes:Options[], optCategories:Options[]}){
 
   const [view, setView] = useState<JSX.Element>
                 (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
@@ -49,11 +47,10 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                           style={{borderColor:'#F8FAFC'}}>
                             <div className=" max-w-lg">
                               <UpdateExtraExpense expense={expense} id={id} 
-                                optCostCenter={optCostCenter} optGlossaries={optGlossaries} 
+                                optCostCenter={optCostCenter} 
                                 optProjects={optProjects} optProviders={optProviders} 
-                                optResponsibles={optResponsibles} token={token} user={user} 
-                                optCategories={optCategories} optConditions={optConditions}
-                                optTypes={optTypes}
+                                optResponsibles={optResponsibles} token={token} 
+                                optCategories={optCategories} optTypes={optTypes}
                               />
                             </div>
                   </div>): 

@@ -8,14 +8,14 @@ import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
 
-import { GetCost, GetCosts } from "@/app/api/routeCost";
+import { GetCost, GetCostsLV } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
 import { Expense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { getCostCenters } from "@/app/api/routeCostCenter";
-import { Glossary } from "@/interfaces/Glossary";
-import { getGlossaries } from "@/app/api/routeGlossary";
+//import { Glossary } from "@/interfaces/Glossary";
+//import { getGlossaries } from "@/app/api/routeGlossary";
 import { Provider } from "@/interfaces/Providers";
 import { getProviders } from "@/app/api/routeProviders";
 import { getUsers } from "@/app/api/routeUser";
@@ -38,27 +38,28 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>  
   }
 
-  let costs: Expense[];
+  //let costs: Expense[];
+  let options: Options[] = [];
   try {
-    costs = await GetCosts(token);
-    if(typeof(costs) === "string")
-      return <h1 className="text-center text-red-500">{costs}</h1>
+    options = await GetCostsLV(token);
+    if(typeof(options) === "string")
+      return <h1 className="text-center text-red-500">{options}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>  
   }
 
-  let options: Options[] = [];
+  //let options: Options[] = [];
 
-  if(costs.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener costos...</h1>
-  }
+  // if(costs.length <= 0){
+  //   return <h1 className="text-center text-red-500">Error al obtener costos...</h1>
+  // }
 
-  costs.map((cos) => {
-    options.push({
-      value: cos._id,
-      label: cos.description,
-    })
-  })
+  // costs.map((cos) => {
+  //   options.push({
+  //     value: cos._id,
+  //     label: cos.description,
+  //   })
+  // })
 
   let costcenters: CostCenter[];
   try {
@@ -87,23 +88,23 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   });
 
-  let glossaries: Glossary[];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
-  }
+  // let glossaries: Glossary[];
+  // try {
+  //   glossaries = await getGlossaries(token);
+  //   if(typeof(glossaries)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
+  // }
 
-  const optGlossaries:Options[]= [];
-  glossaries.map((glossary) => {
-    optGlossaries.push({
-      label: glossary.name,
-      value: glossary._id
-    });
-  });
+  // const optGlossaries:Options[]= [];
+  // glossaries.map((glossary) => {
+  //   optGlossaries.push({
+  //     label: glossary.name,
+  //     value: glossary._id
+  //   });
+  // });
 
   let projects: Project[];
   try {
@@ -185,14 +186,14 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
-  const optConditions: Options[] = [];
-  //const optConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
-    optConditions.push({
-      label: condition.glossary.name,
-      value: condition.glossary._id
-    })
-  })
+  // const optConditions: Options[] = [];
+  // //const optConditions: Options[] = [];
+  // catalogs[0].condition.map((condition) => {
+  //   optConditions.push({
+  //     label: condition.glossary.name,
+  //     value: condition.glossary._id
+  //   })
+  // })
 
   const subTotal = CurrencyFormatter({
     currency: "MXN",
@@ -209,9 +210,9 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTabExpense idExp={params.id} tab="1" />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 
-              user={user._id} optCostCenter={optCostCenter} optGlossaries={optGlossaries} 
+              user={user._id} optCostCenter={optCostCenter} 
               optProjects={optProjects} optProviders={optProviders} optResponsibles={optResponsibles}
-              optCategories={optCategories} optConditions={optConditions} optTypes={optTypes}
+              optCategories={optCategories} optTypes={optTypes}
           />
         </NextUiProviders>
       </div>
