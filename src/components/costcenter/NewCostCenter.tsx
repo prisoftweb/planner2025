@@ -9,11 +9,13 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
 import AddConcept from "./AddConcept"
-import { CreateCostCenter, UpdateCostCenter, 
+import { CreateCostoCenter, UpdateCostCenter, 
   InsertCategoryInCostCenter, getCostCenter, DeleteCategoryInCostCenter } from "@/app/api/routeCostCenter"
 import { CostCenter, CostCenterTable } from "@/interfaces/CostCenter"
 //import DeleteElement from "../DeleteElement"
 import DeleteConceptCC from "./DeleteConcept"
+import { CreateConcept } from "@/app/api/routeConcepts"
+import { Concept } from "@/interfaces/Concepts"
 
 interface CategoryCostCenter {
   "name": string,
@@ -146,22 +148,42 @@ export default function NewCostCenter({showForm, token, costCenter}:
       if(refRequest.current){
         refRequest.current = false;
         try {
-          const categorys: CategoryCostCenter[] = []; 
+          // const categorys: CategoryCostCenter[] = []; 
+          // concepts.map((concept, index:number) => {
+          //   categorys.push({
+          //     account: accounts[index],
+          //     name: concept
+          //   })
+          // });
+
+          const arrConcepts: Object[] = []; 
           concepts.map((concept, index:number) => {
-            categorys.push({
-              account: accounts[index],
-              name: concept
+            //create concept
+            arrConcepts.push({
+              name: concept,
+              description: accounts[index]
             })
           });
   
+          const arrIdConcepts: Object[] = [];
+          for (let index = 0; index < arrConcepts.length; index++) {
+            const element = arrConcepts[index];
+            const res: (string | Concept) = await CreateConcept(token, element);
+            if(typeof(res)!== 'string'){
+              arrIdConcepts.push({
+                concept: res._id
+              });
+            }
+          }
+
           if(typeof(costCenter)==='string'){
             const {category, code} = valores;
             const data = {
               name: category,
               code,
-              categorys
+              categorys: concepts
             }
-            const res = await CreateCostCenter(token, data);
+            const res = await CreateCostoCenter(token, data);
             if(res===201){
               refRequest.current = true;
               showForm(false);
@@ -174,27 +196,28 @@ export default function NewCostCenter({showForm, token, costCenter}:
               showToastMessageError(res);
             }
           }else{
-            const data = {
-              categorys
-            }
-            const res = await UpdateCostCenter(token, costCenter.id, valores);
-            if(res===200){
-              const resInsert = await InsertCategoryInCostCenter(token, costCenter.id, data);
-              if(resInsert===200){
-                refRequest.current = true;
-                showForm(false);
-                showToastMessage('Centro de costos actualizado exitosamente!!!');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 500);
-              }else{
-                refRequest.current = true;
-                showToastMessageError(res + 'insert cost');
-              }
-            }else{
-              refRequest.current = true;
-              showToastMessageError(res + 'update cost');
-            }
+            //agregar conceptos
+            // const data = {
+            //   categorys
+            // }
+            // const res = await UpdateCostCenter(token, costCenter.id, valores);
+            // if(res===200){
+            //   const resInsert = await InsertCategoryInCostCenter(token, costCenter.id, data);
+            //   if(resInsert===200){
+            //     refRequest.current = true;
+            //     showForm(false);
+            //     showToastMessage('Centro de costos actualizado exitosamente!!!');
+            //     setTimeout(() => {
+            //       window.location.reload();
+            //     }, 500);
+            //   }else{
+            //     refRequest.current = true;
+            //     showToastMessageError(res + 'insert cost');
+            //   }
+            // }else{
+            //   refRequest.current = true;
+            //   showToastMessageError(res + 'update cost');
+            // }
           }
         } catch (error) {
           refRequest.current = true;
