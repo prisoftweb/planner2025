@@ -6,12 +6,17 @@ import { Options } from "@/interfaces/Common";
 
 export default function ButtonNewClient({token, id, tags}: 
                               {token:string, id:string, tags:Options[]}){
+
   const [newClient, setNewClient] = useState<boolean>(false);
+
+  const handleClick = (value:boolean) => {
+    setNewClient(value);
+  }
   
   return(
     <>
       <Button type="button" onClick={() => setNewClient(true)}>Nuevo</Button>
-        {newClient && <NewClient tags={tags} showForm={setNewClient} id={id} token={token} />}
+        {newClient && <NewClient tags={tags} showForm={handleClick} id={id} token={token} />}
     </>
   )
 }
