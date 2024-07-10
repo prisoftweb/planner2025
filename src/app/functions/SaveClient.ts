@@ -1,5 +1,6 @@
 import { createClient, createClientLogo } from "../api/routeClients";
 import { clientValidation } from "@/schemas/client.schema";
+import { TransformClientInTableClient } from "./ClientFunctions";
 
 export default async function SaveClient(data:Object, token:string){
   const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
@@ -9,10 +10,11 @@ export default async function SaveClient(data:Object, token:string){
   if(res.success){
     try {
       const res = await createClient(token, newObj);
-      if(res===201){
+      if(typeof(res)!=='string'){
         return {
           status: true,
-          message: 'Cliente agregado exitosamente!!'
+          message: 'Cliente agregado exitosamente!!',
+          client: TransformClientInTableClient(res),
         }
       }
       return {
@@ -60,10 +62,11 @@ export async function SaveClientLogo(data:FormData, token:string,
     
     try {
       const res = await createClientLogo(token, data);
-      if(res===201){
+      if(typeof(res)!=='string'){
         return {
           status: true,
-          message: 'Cliente agregado exitosamente!!'
+          message: 'Cliente agregado exitosamente!!',
+          client: TransformClientInTableClient(res),
         }
       }
       return {

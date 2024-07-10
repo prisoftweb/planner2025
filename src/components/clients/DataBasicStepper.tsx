@@ -14,12 +14,15 @@ import Select from 'react-select';
 import InputMask from 'react-input-mask';
 import { optionsSource } from "@/interfaces/Clients";
 import { SaveClientLogo } from "@/app/functions/SaveClient";
+import { useClientStore } from "@/app/store/clientStore";
 
 export default function DataBasicStepper({token, id, tags}: 
                           {token:string, id:string, tags:Options[]}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
+
+  const {pushClient} = useClientStore();
 
   let tradenameI = '';
   let nameI = '';
@@ -137,9 +140,10 @@ export default function DataBasicStepper({token, id, tags}:
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client) pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -212,9 +216,10 @@ export default function DataBasicStepper({token, id, tags}:
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client)pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

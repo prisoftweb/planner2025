@@ -9,6 +9,7 @@ import Header from "@/components/Header";
 //import Header from "@/components/HeaderPage";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
+import { ClientDataToTableClient } from "../functions/ClientFunctions";
 
 export default async function clients(){
   
@@ -64,19 +65,21 @@ export default async function clients(){
       </>
   }
   
-  let data:TableClient[] = [];
-  clients.map((client:ClientBack) => {
-    data.push({
-      'id': client._id,
-      'name': client.name,
-      account: client.account,
-      contacts: client.contact.length,
-      currentbalance: 0,
-      rfc: client.rfc,
-      status: client.status,
-      logo: client.logo? client.logo: '/img/clients/default.jpg',
-    })
-  })
+  // let data:TableClient[] = [];
+  // clients.map((client:ClientBack) => {
+  //   data.push({
+  //     'id': client._id,
+  //     'name': client.name,
+  //     account: client.account,
+  //     contacts: client.contact.length,
+  //     currentbalance: 0,
+  //     rfc: client.rfc,
+  //     status: client.status,
+  //     logo: client.logo? client.logo: '/img/clients/default.jpg',
+  //   })
+  // })
+
+  let data:TableClient[] = ClientDataToTableClient(clients);
 
   return (
     <>

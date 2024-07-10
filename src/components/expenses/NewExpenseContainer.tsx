@@ -87,6 +87,8 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   //   onChange={(value:any) => updateProject(value.value)}
   // />);
 
+  console.log('opt selectize => ', optSelectize);
+
   const viewSelectProject: JSX.Element = (
     <Select
       className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
@@ -100,7 +102,11 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       }}
       placeholder='Buscar ...'
       styles={customStyles}
-      onChange={(value:any) => {updateProject(value.value); setOptSelectize(value);}}
+      onChange={(value:any) => {
+        console.log('onchange => ', value);
+        updateProject(value.value); 
+        setOptSelectize(value);
+      }}
     />)
   
   const handleResize = () => {
@@ -169,10 +175,10 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       updateProject(r?.project._id || '');
     }
 
-    const optProject = optProjects.find((optP) => optP.value === r?.project._id);
-    if(optProject && optProject !== optSelectize){
-      setOptSelectize(optProject);
-    }
+    // const optProject = optProjects.find((optP) => optP.value === r?.project._id);
+    // if(optProject && optProject !== optSelectize){
+    //   setOptSelectize(optProject);
+    // }
     //setViewSelectProject(<></>);
   }
 

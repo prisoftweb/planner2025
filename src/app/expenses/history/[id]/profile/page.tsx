@@ -14,6 +14,8 @@ import { Expense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { getCostCenters } from "@/app/api/routeCostCenter";
+//import { Glossary } from "@/interfaces/Glossary";
+//import { getGlossaries } from "@/app/api/routeGlossary";
 import { Provider } from "@/interfaces/Providers";
 import { getProviders } from "@/app/api/routeProviders";
 import { getUsers } from "@/app/api/routeUser";
@@ -36,6 +38,7 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>  
   }
 
+  //let costs: Expense[];
   let options: Options[] = [];
   try {
     options = await GetCostsLV(token);
@@ -44,6 +47,19 @@ export default async function Page({ params }: { params: { id: string }}){
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>  
   }
+
+  //let options: Options[] = [];
+
+  // if(costs.length <= 0){
+  //   return <h1 className="text-center text-red-500">Error al obtener costos...</h1>
+  // }
+
+  // costs.map((cos) => {
+  //   options.push({
+  //     value: cos._id,
+  //     label: cos.description,
+  //   })
+  // })
 
   let costcenters: CostCenter[];
   try {
@@ -56,6 +72,12 @@ export default async function Page({ params }: { params: { id: string }}){
   }
 
   const optCostCenter:Options[]= [];
+  // costcenters.map((costcenter) => {
+  //   optCostCenter.push({
+  //     label: costcenter.name,
+  //     value: costcenter._id
+  //   });
+  // });
   costcenters.map((costcenter) => {
     costcenter.categorys.map((category) => {
       optCostCenter.push({
@@ -65,6 +87,24 @@ export default async function Page({ params }: { params: { id: string }}){
       //cat += category.name + ', ';
     })
   });
+
+  // let glossaries: Glossary[];
+  // try {
+  //   glossaries = await getGlossaries(token);
+  //   if(typeof(glossaries)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
+  // }
+
+  // const optGlossaries:Options[]= [];
+  // glossaries.map((glossary) => {
+  //   optGlossaries.push({
+  //     label: glossary.name,
+  //     value: glossary._id
+  //   });
+  // });
 
   let projects: Project[];
   try {
@@ -172,7 +212,7 @@ export default async function Page({ params }: { params: { id: string }}){
           <ExpenseClient expense={cost} id={params.id} token={token} 
               user={user._id} optCostCenter={optCostCenter} 
               optProjects={optProjects} optProviders={optProviders} optResponsibles={optResponsibles}
-              optCategories={optCategories} optTypes={optTypes}
+              optCategories={optCategories} optTypes={optTypes} isHistory={true}
           />
         </NextUiProviders>
       </div>

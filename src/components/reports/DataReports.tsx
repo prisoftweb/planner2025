@@ -2,7 +2,7 @@ import ProfileReport from "./ProfileReport"
 import UpdateReport from "./UpdateReport"
 import { Options } from "@/interfaces/Common"
 import { Report, CostReport } from "@/interfaces/Reports"
-import { useState } from "react"
+import { useState, useRef } from "react"
 import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
 //import { Expense } from "@/interfaces/Expenses"
@@ -15,9 +15,14 @@ export default function DataReports({companies, departments, projects, token,
                                 user:UsrBack, node:Node, costs:CostReport[] }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
+  const refClose = useRef(false);
+  //const [isClose, setIsClose] = useState<boolean>(false);
 
-  const handleSend = (value: boolean) => {
+  const handleSend = (value: boolean, valueClose: boolean) => {
+    refClose.current = valueClose;
+    console.log('handle send close ', valueClose);
     setIsSend(value);
+    //setIsClose(valueClose);
   }
 
   return (
@@ -35,7 +40,7 @@ export default function DataReports({companies, departments, projects, token,
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 
-                    token={token} user={user._id} node={node} />}
+                    token={token} user={user._id} node={node} isClose={refClose.current} />}
     </>
   )
 }

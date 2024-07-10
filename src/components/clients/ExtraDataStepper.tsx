@@ -8,6 +8,7 @@ import Button from "../Button"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import SaveClient from "@/app/functions/SaveClient"
 import { SaveClientLogo } from "@/app/functions/SaveClient"
+import { useClientStore } from "@/app/store/clientStore"
 
 export default function ExtraDataStepper({token}: {token:string}){
   
@@ -15,6 +16,8 @@ export default function ExtraDataStepper({token}: {token:string}){
   const [page, setPage] = useState('');
   const [file, setFile] = useState('');
   const refRequest = useRef(true);
+
+  const {pushClient} = useClientStore();
 
   const onClickSave = async () => {
     refRequest.current = false;
@@ -74,9 +77,10 @@ export default function ExtraDataStepper({token}: {token:string}){
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client) pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -143,9 +147,10 @@ export default function ExtraDataStepper({token}: {token:string}){
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client) pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

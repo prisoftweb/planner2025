@@ -21,6 +21,27 @@ export async function GetCosts(auth_token:string){
   }
 }
 
+export async function GetCostsLV(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsLV`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    //console.log('res', res);
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    console.log('catch ', error);
+    return 'Error al consultar costos!!';
+  }
+}
+
 export async function CreateCost(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs`;
   //console.log(url);
@@ -91,7 +112,7 @@ export async function UpdateCost(auth_token:string, id:string, data:Object) {
       }
     });
     //console.log(res);
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
     res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -133,7 +154,8 @@ export async function ADDNewFILE(auth_token:string, id:string, data:FormData) {
         'Content-Type': 'multipart/form-data',
       }
     })
-    if(res.status === 200) return res.status;
+    //console.log('add new file => ', res.data.data.slider);
+    if(res.status === 200) return res.data.data.slider;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

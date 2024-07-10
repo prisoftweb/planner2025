@@ -10,18 +10,19 @@ import { insertMovementsInReport } from "@/app/api/routeReports";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import ButtonColor from "../ButtonColor";
-import { getNode } from "@/app/api/routeNodes";
+import { getNode, getNodes } from "@/app/api/routeNodes";
 import { updateReport } from "@/app/api/routeReports";
 
 export default function SendReport({send, report, node, 
-              user, token}: 
+              user, token, isClose}: 
           {send:Function, report:Report, node:(Node | undefined), 
-            user:string, token:string }){
+            user:string, token:string, isClose:boolean }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [notes, setNotes] = useState<string>();
   const [isSend, setIsSend] = useState<boolean>(true);
   const refRequest = useRef(true);
+  console.log('is close => ', isClose);
 
   const handleResize = () => {
     //setHeightPage(window.outerHeight);
@@ -109,10 +110,94 @@ export default function SendReport({send, report, node,
     }
   }
 
+  const closeReport = async () => {
+    //console.log(relation);
+    if(refRequest.current){
+      refRequest.current = false;
+      if(notes && notes !== ''){
+        try {
+          const res: Node[] = await getNodes(token);
+          if(typeof(res)=== 'string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+          }else{
+            const node = res.find(n => n.relations.length===0)
+            const data = {
+              moves: [{
+                  //condition: relation.relation.glossary._id,
+                  condition: node?.glossary._id,
+                  notes,
+                  user,
+                  department: node?.department._id
+              }]
+            };
+    
+            try {
+              const res = await insertMovementsInReport(token, report._id, data);
+              if(res === 200){
+                refRequest.current = true;
+                showToastMessage('Movimiento hecho correctamente!!');
+                setTimeout(() => {
+                  window.location.replace("/reports");
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              }
+            } catch (error) {
+              refRequest.current = true;
+              showToastMessageError("Ocurrio un problema al consultar siguiente departamento!!");
+            }
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError("Ocurrio un problema al consultar siguiente departamento!!");
+        }
+      }else{
+        setIsSend(false);
+        setTimeout(() => {
+          setIsSend(true);
+        }, (1000));
+      }
+    }else{
+      showToastMessageError('Ya hay una solicitud en proceso!!');
+    }
+  }
+
   const total = CurrencyFormatter({
     currency: 'MXN',
     value: report.total
   });
+
+  let button: JSX.Element = <></>;
+
+  if(isClose){
+    button = (
+      <div className="mt-3 flex justify-center gap-x-3">
+        <ButtonColor 
+            // className="bg-red-600 text-white font-normal text-sm rounded-xl w-36 h-9 py-2 hover:bg-red-400" 
+            className="text-white font-normal text-sm rounded-xl w-36 h-9 py-2 bg-black hover:bg-slate-600" 
+            type="button"
+            //style={{backgroundColor: rel.relation.glossary.color}}
+            onClick={() => closeReport()}>Cerrar</ButtonColor>
+      </div>
+    )
+  }else{
+    if(node){
+      button = (
+        <div className="mt-3 flex justify-center gap-x-3">
+          {node.relations.map((rel) => (
+            <ButtonColor 
+              // className="bg-red-600 text-white font-normal text-sm rounded-xl w-36 h-9 py-2 hover:bg-red-400" 
+              className="text-white font-normal text-sm rounded-xl w-36 h-9 py-2" 
+              type="button" key={rel._id} 
+              style={{backgroundColor: rel.relation.glossary.color}}
+              onClick={() => sendReport(rel)}>{rel.relation.glossary.name}</ButtonColor>
+          ))}
+        </div>
+      )
+    }
+  }
   
   return(
     <>
@@ -122,7 +207,7 @@ export default function SendReport({send, report, node,
         <div className="h-full p-1 sm:p-3">
           <div className="flex justify-end">
             <XMarkIcon className="w-6 h-6 text-slate-500 
-                hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => send(false)} />
+                hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => send(false, false)} />
           </div>
           <div className="grid grid-cols-2 gap-x-3">
             <div className="col-span-1 mt-2 p-3">
@@ -186,8 +271,9 @@ export default function SendReport({send, report, node,
                 {!isSend && <p className="text-red-500">*Los comentarios son obligatorios!!</p>}
               </div>
             )}
+            {button}
 
-            {
+            {/* {
               node && (
                 <div className="mt-3 flex justify-center gap-x-3">
                   {node.relations.map((rel) => (
@@ -200,7 +286,7 @@ export default function SendReport({send, report, node,
                   ))}
                 </div>
               )
-            }
+            } */}
           </div>
 
         </div>

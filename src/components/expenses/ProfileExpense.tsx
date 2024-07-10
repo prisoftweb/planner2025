@@ -2,23 +2,26 @@ import Label from "../Label";
 import { Expense } from "@/interfaces/Expenses";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "../providers/Chip";
+import { useNewExpense } from "@/app/store/newExpense";
 
 export default function ProfileExpense({expense}: 
                         {expense:Expense}){
 
+  const {currentExpense} = useNewExpense();
+  
   const amount = CurrencyFormatter({
     currency: "MXN",
-    value: expense.cost.subtotal
+    value: currentExpense?.cost.subtotal || 0
   });
 
   const discount = CurrencyFormatter({
     currency: "MXN",
-    value: Number(expense.cost.discount)
+    value: Number(currentExpense?.cost.discount || 0)
   });
 
   const vat = CurrencyFormatter({
     currency: "MXN",
-    value: expense.cost.iva? expense.cost.iva : 0
+    value: currentExpense?.cost.iva? currentExpense.cost.iva : 0
   });
 
   return(
@@ -28,14 +31,14 @@ export default function ProfileExpense({expense}:
           <div className="flex gap-x-2">
             <div>
               {/* <img src={expense.project.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo"  */}
-              <img src={expense.project?.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo"              
+              <img src={currentExpense?.project?.photo? currentExpense?.project.photo : '/img/projects/default.svg'} alt="logo"              
                 className="w-28 h-auto" />
             </div>
             <div>
-              <p className="text-blue-500">{expense.project?.title || 'Sin proyecto'}</p>
-              <p className="text-slate-500">{expense.project?.code || ''}</p>
-              <p className="text-slate-500">{expense.project?.glossary? expense.project.glossary.name: ''}</p>
-              <p className="text-slate-500">{expense.project?.account || ''}</p>
+              <p className="text-blue-500">{currentExpense?.project?.title || 'Sin proyecto'}</p>
+              <p className="text-slate-500">{currentExpense?.project?.code || ''}</p>
+              <p className="text-slate-500">{currentExpense?.project?.glossary? currentExpense?.project.glossary.name: ''}</p>
+              <p className="text-slate-500">{currentExpense?.project?.account || ''}</p>
             </div>
           </div>
           <div className=" flex gap-x-2 items-center">
@@ -44,8 +47,8 @@ export default function ProfileExpense({expense}:
                 style={{"width": expense.project?.progress.length > 0? 
                             expense.project.progress[expense.project.progress.length-1].progress : 0}}></div>
             </div>
-            <p>{expense.project?.progress.length > 0?
-                      expense.project.progress[expense.project.progress.length-1].progress : 0}%</p>
+            <p>{currentExpense && currentExpense?.project?.progress.length > 0?
+                      currentExpense?.project.progress[currentExpense?.project.progress.length-1].progress : 0}%</p>
           </div>
         </div>
         
@@ -57,16 +60,16 @@ export default function ProfileExpense({expense}:
               </div>
               <div className="flex justify-between w-full">
                 <div>
-                  <p className="text-slate-500">{expense.category?.name || 'Sin categoria'}</p>
-                  <p className="text-blue-500">{expense.provider?.name || 'Sin proveedor'}</p>
+                  <p className="text-slate-500">{currentExpense?.category?.name || 'Sin categoria'}</p>
+                  <p className="text-blue-500">{currentExpense?.provider?.name || 'Sin proveedor'}</p>
                 </div>
                 <div className="h-6">
-                  <Chip label={expense.condition.length >0? 
-                      expense.condition[expense.condition.length-1].glossary.name: 'sin status'} />
+                  <Chip label={currentExpense && currentExpense?.condition.length >0? 
+                      currentExpense?.condition[currentExpense?.condition.length-1].glossary.name: 'sin status'} />
                 </div>
               </div>
             </div>
-            <Label>{expense.taxfolio}</Label>
+            <Label>{currentExpense?.taxfolio}</Label>
           </div>
           
           <div className="grid grid-cols-2 gap-x-2 my-2">
@@ -91,11 +94,11 @@ export default function ProfileExpense({expense}:
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Tipo de CFDI</p>
-              <p className="text-blue-600 font-semibold">{expense.typeCFDI?.name}</p>
+              <p className="text-blue-600 font-semibold">{currentExpense?.typeCFDI?.name}</p>
             </div>
             <div>
               <p className="text-slate-500">Fecha</p>
-              <p className="text-blue-600 font-semibold">{expense.date.substring(0, 10)}</p>
+              <p className="text-blue-600 font-semibold">{currentExpense?.date.substring(0, 10)}</p>
             </div>
           </div>
         </div>
@@ -104,15 +107,15 @@ export default function ProfileExpense({expense}:
             shadow-md py-2">
           <div className="mt-3">
             <Label>Proveedor</Label>
-            <p className="my-0 text-slate-700">{expense.provider?.name || 'Sin proveedor'}</p>
+            <p className="my-0 text-slate-700">{currentExpense?.provider?.name || 'Sin proveedor'}</p>
           </div>
           <div className="mt-3">
             <Label>Responsable</Label>
-            <p className="my-0 text-slate-700">{expense.user.name}</p>
+            <p className="my-0 text-slate-700">{currentExpense?.user.name}</p>
           </div>
           <div className="mt-3">
             <Label>Descripcion</Label>
-            <p className="my-0 text-slate-700">{expense.description}</p>
+            <p className="my-0 text-slate-700">{currentExpense?.description}</p>
           </div>
         </div>
       </div>

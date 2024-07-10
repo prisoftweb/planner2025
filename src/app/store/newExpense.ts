@@ -1,4 +1,5 @@
 import {create} from 'zustand'
+import { Expense } from '@/interfaces/Expenses'
 
 interface NewExpenseState {
   costCenter: string,
@@ -36,6 +37,10 @@ interface ProjectState{
   isDeductible: boolean
 }
 
+interface CurrentExpense{
+  currentExpense: (Expense | null),
+}
+
 interface Actions {
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
@@ -52,6 +57,7 @@ interface Actions {
   updateCategory: (value:string) => void,
   updatePettyCash: (value:boolean) => void,
   updateIsCard: (value:boolean) => void,
+  updateCurrentExpense: (value: Expense) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -88,10 +94,15 @@ const pettyCashInitial: PettyCashState = {
   isCard: false,
 }
 
-export const useNewExpense = create<NewExpenseState & Actions & ProjectState & PettyCashState>((set) => ({
+const initialExpense: CurrentExpense = {
+  currentExpense: null,
+}
+
+export const useNewExpense = create<NewExpenseState & Actions & ProjectState & PettyCashState & CurrentExpense>((set) => ({
   ...initialState,
   ...projectInitial,
   ...pettyCashInitial,
+  ...initialExpense,
   updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
       typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string) => set(state => ({
@@ -156,6 +167,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   updateIsCard: (value:boolean) => set(state => ({
     ...state,
     isCard: value,
+  })),
+  updateCurrentExpense: (value:Expense) => set(state => ({
+    ...state,
+    currentExpense: value
   })),
   reset: () => {
     set(initialState)

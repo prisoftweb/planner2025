@@ -2,29 +2,25 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-import { getCostCenters } from "../api/routeCostCenter";
+import { getCostCenters } from "../../api/routeCostCenter";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
-import { getProviders } from "../api/routeProviders";
+import { getProviders } from "../../api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
-import { getUsers } from "../api/routeUser";
-//import { getGlossaries } from "../api/routeGlossary";
-//import { Glossary } from "@/interfaces/Glossary";
-import { getProjectsLV } from "../api/routeProjects";
-//import { Project } from "@/interfaces/Projects";
+import { getUsers } from "../../api/routeUser";
+import { getProjectsLV } from "../../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-//import TableExpenses from "@/components/expenses/TableExpenses";
-import { GetCosts, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
-//import Header from "@/components/Header";
-import { CurrencyFormatter } from "../functions/Globals";
-import { getCatalogsByName } from "../api/routeCatalogs";
+import { GetCosts, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../../api/routeCost";
+//import { CurrencyFormatter } from "../../functions/Globals";
+import { getCatalogsByName } from "../../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
-import { GetReportsMin, GetReportsByUserMin } from "../api/routeReports";
+import { GetReportsMin, GetReportsByUserMin } from "../../api/routeReports";
 import { ReportParse } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
-import { getTypeFiles } from "../functions/CostsFunctions";
+import { ExpenseDataToTableData, getTypeFiles } from "../../functions/CostsFunctions";
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
+//import { CostsDataToTableData } from "@/app/functions/ReportsFunctions";
 
 export default async function Page() {
   
@@ -113,25 +109,6 @@ export default async function Page() {
     });
   });
 
-  //agregar glosaries lv
-  // let glossaries: Glossary[];
-  // try {
-  //   glossaries = await getGlossaries(token);
-  //   if(typeof(glossaries)==='string'){
-  //     return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
-  //   }    
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
-  // }
-
-  // const optGlossaries:Options[]= [];
-  // glossaries.map((glossary) => {
-  //   optGlossaries.push({
-  //     label: glossary.name,
-  //     value: glossary._id
-  //   });
-  // });
-
   let reports: ReportParse[];
   try {
     if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
@@ -161,17 +138,6 @@ export default async function Page() {
     optReportsFilter.push(r);
   });
 
-  // let projects: Project[];
-  // try {
-  //   projects = await getProjects(token);
-  //   if(typeof(projects)==='string'){
-  //     return <h1 className="text-center text-lg text-red-500">{projects}</h1>
-  //   }    
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-  // }
-
-  //let projects: Options[];
   let optProjects:Options[];
   let optProjectFilter: Options[] = [{
       label: 'TODOS',
@@ -187,20 +153,6 @@ export default async function Page() {
   }
 
   optProjectFilter = optProjectFilter.concat(optProjects);
-
-  // const optProjects:Options[]= [];
-  // const optProjectFilter: Options[] = [{
-  //   label: 'TODOS',
-  //   value: 'all'
-  // }]
-  // projects.map((project) => {
-  //   const p = {
-  //     label: project.title,
-  //     value: project._id
-  //   }
-  //   optProjects.push(p);
-  //   optProjectFilter.push(p);
-  // });
 
   let catalogs: GlossaryCatalog[];
   try {
@@ -263,16 +215,6 @@ export default async function Page() {
     optConditionsFilter.push(c);
   })
 
-  // let vats: Vat[];
-  // try {
-  //   vats = await GetVats(token);
-  //   if(typeof(vats)==='string'){
-  //     return <h1 className="text-center text-lg text-red-500">{vats}</h1>
-  //   }    
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
-  // }
-
   let optVats: Options[];
   try {
     optVats = await GetVatsLV(token);
@@ -282,14 +224,6 @@ export default async function Page() {
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
   }
-
-  // const optVats:Options[]= [];
-  // vats.map((vat) => {
-  //   optVats.push({
-  //     label: vat.value.toString(),
-  //     value: vat._id
-  //   });
-  // });
 
   if(!expenses || expenses.length <= 0){
     return (
@@ -314,83 +248,83 @@ export default async function Page() {
     )
   }
 
-  const table: ExpensesTable[] = [];
+  const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 
-  expenses.map((expense) => {
-    const dollar = CurrencyFormatter({
-          currency: "MXN",
-          value: expense.cost?.subtotal || 0
-        })
-    const discount = CurrencyFormatter({
-      currency: "MXN",
-      value: expense.cost?.discount || 0
-    })
-    const vat = CurrencyFormatter({
-      currency: "MXN",
-      value: expense.cost?.iva || 0
-    })
-    const total = CurrencyFormatter({
-      currency: "MXN",
-      value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
-    })
-    const elements: string[] = [];
-    if(expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
-      const typeFiles = getTypeFiles(expense);
-      if(typeFiles.includes('xml')){
-        elements.push('xml');
-      }else{
-        elements.push('none');
-      }
+  // expenses.map((expense) => {
+  //   const dollar = CurrencyFormatter({
+  //         currency: "MXN",
+  //         value: expense.cost?.subtotal || 0
+  //       })
+  //   const discount = CurrencyFormatter({
+  //     currency: "MXN",
+  //     value: expense.cost?.discount || 0
+  //   })
+  //   const vat = CurrencyFormatter({
+  //     currency: "MXN",
+  //     value: expense.cost?.iva || 0
+  //   })
+  //   const total = CurrencyFormatter({
+  //     currency: "MXN",
+  //     value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
+  //   })
+  //   const elements: string[] = [];
+  //   if(expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
+  //     const typeFiles = getTypeFiles(expense);
+  //     if(typeFiles.includes('xml')){
+  //       elements.push('xml');
+  //     }else{
+  //       elements.push('none');
+  //     }
 
-      if(typeFiles.includes('pdf')){
-        elements.push('pdf');
-      }else{
-        elements.push('none');
-      }
-    }else{
-      if(expense.category?.name.toLowerCase().includes('xml')){
-        const typeFiles = getTypeFiles(expense);
-        if(typeFiles.includes('xml')){
-          elements.push('xml');
-        }else{
-          elements.push('none');
-        }
-      }else{
-        if(expense.category?.name.toLowerCase().includes('pdf')){
-          const typeFiles = getTypeFiles(expense);
-          if(typeFiles.includes('pdf')){
-            elements.push('pdf');
-          }else{
-            elements.push('none');
-          }
-        }else{
-          //sin archivos
-          elements.push('none');
-        }
-      }
-    }
+  //     if(typeFiles.includes('pdf')){
+  //       elements.push('pdf');
+  //     }else{
+  //       elements.push('none');
+  //     }
+  //   }else{
+  //     if(expense.category?.name.toLowerCase().includes('xml')){
+  //       const typeFiles = getTypeFiles(expense);
+  //       if(typeFiles.includes('xml')){
+  //         elements.push('xml');
+  //       }else{
+  //         elements.push('none');
+  //       }
+  //     }else{
+  //       if(expense.category?.name.toLowerCase().includes('pdf')){
+  //         const typeFiles = getTypeFiles(expense);
+  //         if(typeFiles.includes('pdf')){
+  //           elements.push('pdf');
+  //         }else{
+  //           elements.push('none');
+  //         }
+  //       }else{
+  //         //sin archivos
+  //         elements.push('none');
+  //       }
+  //     }
+  //   }
     
-    table.push({
-      id: expense._id,
-      Descripcion: expense.description,
-      Estatus: 'condition',
-      Fecha: expense.date,
-      costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter?.name,
-      Importe: dollar,
-      Informe: expense.report?.name || 'sin reporte',
-      Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
-      Proyecto: expense.project?.title || 'sin proyecto',
-      Responsable: {
-        responsible: expense.user?.name,
-        photo: expense.user?.photo
-      },
-      condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
-      archivos: elements,
-      vat,
-      discount,
-      total,
-    });
-  });
+  //   table.push({
+  //     id: expense._id,
+  //     Descripcion: expense.description,
+  //     Estatus: 'condition',
+  //     Fecha: expense.date,
+  //     costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter?.name,
+  //     Importe: dollar,
+  //     Informe: expense.report?.name || 'sin reporte',
+  //     Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
+  //     Proyecto: expense.project?.title || 'sin proyecto',
+  //     Responsable: {
+  //       responsible: expense.user?.name,
+  //       photo: expense.user?.photo
+  //     },
+  //     condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
+  //     archivos: elements,
+  //     vat,
+  //     discount,
+  //     total,
+  //   });
+  // });
 
   let reportsProject: ReportByProject[];
   try {
@@ -425,7 +359,7 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        />
+        isHistory={true}/>
     </>
   )
 }

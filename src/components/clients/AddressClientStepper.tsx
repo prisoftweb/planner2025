@@ -9,11 +9,13 @@ import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { useRef } from "react";
 //import { clientValidation } from "@/schemas/client.schema";
+import { useClientStore } from "@/app/store/clientStore";
 
 export default function AddressClientStepper({token}:{token:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
+  const {pushClient} = useClientStore();
 
   let stretI = '';
   let cpI = '';
@@ -130,9 +132,10 @@ export default function AddressClientStepper({token}:{token:string}){
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client) pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -202,9 +205,10 @@ export default function AddressClientStepper({token}:{token:string}){
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client) pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

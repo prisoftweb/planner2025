@@ -10,70 +10,61 @@ import NavResponsive from "./NavResponsive"
 import UpdateExtraExpense from "./UpdateExtraExpenses"
 import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
+import { useNewExpense } from "@/app/store/newExpense"
 
 export default function ExpenseClient({token, user, id, expense, optCostCenter, 
-                                        optGlossaries, optProjects, optProviders, 
-                                        optResponsibles, optCategories, optConditions,
-                                        optTypes
+                                        optProjects, optProviders, isHistory=false, 
+                                        optResponsibles, optCategories, optTypes
                                       }: 
                             { token:string, id:string, user:string, 
                               expense:Expense, optCostCenter:Options[],
-                              optGlossaries:Options[], optProviders:Options[], 
+                              optProviders:Options[], isHistory?:boolean,
                               optResponsibles:Options[], optProjects:Options[], 
-                              optTypes:Options[], optCategories:Options[], 
-                              optConditions:Options[] }){
+                              optTypes:Options[], optCategories:Options[]}){
 
-  const [view, setView] = useState<JSX.Element>
-                (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
-                  pl-2" style={{borderColor:'#F8FAFC'}}>
-                    <div className=" max-w-md">
-                      <UpdateExpense id={id} optCostCenter={optCostCenter} 
-                        token={token} user={user} expense={expense} 
-                        isticket={expense.isticket}  />
-                    </div>
-                </div>)
+  const {updateCurrentExpense} = useNewExpense();
+  useEffect(() => {
+    updateCurrentExpense(expense);
+  }, []);
 
   const [opt, setOpt] = useState<number>(1);
-  
-  useEffect(() => {
-    //console.log('expensee ', expense );
-    opt===1? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-                style={{borderColor:'#F8FAFC'}}>
-                  <div className=" max-w-lg">
-                    <UpdateExpense id={id} optCostCenter={optCostCenter} 
-                      token={token} user={user} expense={expense} 
-                      isticket={expense.isticket}  />
-                  </div>
-                </div>) : 
-      (opt===2? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+  const view = (
+    opt===1? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+      style={{borderColor:'#F8FAFC'}}>
+        <div className=" max-w-lg">
+          <UpdateExpense id={id} optCostCenter={optCostCenter} 
+            token={token} user={user} expense={expense} 
+            isticket={expense.isticket} isHistory={isHistory} />
+        </div>
+      </div>) : 
+    (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+                    style={{borderColor:'#F8FAFC'}}>
+                      <div className=" max-w-lg">
+                        <UpdateExtraExpense expense={expense} id={id} 
+                          optCostCenter={optCostCenter} isHistory={isHistory} 
+                          optProjects={optProjects} optProviders={optProviders} 
+                          optResponsibles={optResponsibles} token={token} 
+                          optCategories={optCategories} optTypes={optTypes}
+                        />
+                      </div>
+            </div>): 
+    (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                      style={{borderColor:'#F8FAFC'}}>
+                        <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
+                      </div>): 
+      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                            <div className=" max-w-lg">
-                              <UpdateExtraExpense expense={expense} id={id} 
-                                optCostCenter={optCostCenter} optGlossaries={optGlossaries} 
-                                optProjects={optProjects} optProviders={optProviders} 
-                                optResponsibles={optResponsibles} token={token} user={user} 
-                                optCategories={optCategories} optConditions={optConditions}
-                                optTypes={optTypes}
-                              />
-                            </div>
-                  </div>): 
-        (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-                            style={{borderColor:'#F8FAFC'}}>
-                              <UpdateVoucher id={id} token={token} expense={expense} />
-                            </div>): 
-            (opt===4? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-                                style={{borderColor:'#F8FAFC'}}>
-                                    <UpdateCFDI id={id} token={token} expense={expense} />
-                              </div>): 
-                    setView(<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-                              style={{borderColor:'#F8FAFC'}}>
-                                <div className=" max-w-lg">
-                                  <UpdateExpense id={id} optCostCenter={optCostCenter} 
-                                    token={token} user={user} expense={expense} 
-                                    isticket={expense.isticket}  />
-                                </div>
-                            </div>))))
-  }, [opt, ])
+                              <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
+                        </div>): 
+              (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+                        style={{borderColor:'#F8FAFC'}}>
+                          <div className=" max-w-lg">
+                            <UpdateExpense id={id} optCostCenter={optCostCenter} 
+                              token={token} user={user} expense={expense} 
+                              isticket={expense.isticket} isHistory={isHistory}  />
+                          </div>
+                      </div>))))
+  )
   
   const [open, setOpen] = useState<boolean>(false);
 

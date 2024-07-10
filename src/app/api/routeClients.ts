@@ -39,13 +39,16 @@ export async function getTags(auth_token:string) {
 export async function createClient(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients`;
   try {
+    // console.log('url => ', url);
+    // console.log('data => ', JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     })
-    if(res.status===201) return res.status;
+    //console.log('res => ', res);
+    if(res.status===201) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -137,8 +140,8 @@ export async function updateContactClient(data:Object, id:string, auth_token:str
 export async function createClientLogo(auth_token:string, data:FormData) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/clientWithLogo`;
   
-  console.log('location');
-  console.log(data.get('location'));
+  //console.log('location');
+  //console.log(data.get('location'));
 
   try {
     const res = await axios.post(url, data, {
@@ -147,7 +150,7 @@ export async function createClientLogo(auth_token:string, data:FormData) {
         'Content-Type': 'multipart/form-data',
       }
     })
-    if(res.status===201) return res.status;
+    if(res.status===201) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

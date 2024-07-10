@@ -4,6 +4,7 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import FormContact from "../providers/FormContact";
 import NavClientsStepper from "./NavClientsStepper";
 import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
+import { useClientStore } from "@/app/store/clientStore";
 
 export default function ContactsStepper({id, token}: {id:string, token:string}){
   
@@ -11,6 +12,8 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
   //const [contacts, setContacts] = useState<string[]>();
   const [contacts, setContacts] = useState<string[]>(state.contacts? state.contacts: []);
   const refRequest = useRef(true);
+
+  const {pushClient} = useClientStore();
   
   const onClickSave = async () => {
     refRequest.current = false;
@@ -63,9 +66,10 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client) pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -132,9 +136,10 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          if(res.client) pushClient(res.client);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

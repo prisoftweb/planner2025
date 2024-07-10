@@ -17,8 +17,7 @@ import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 
-
-export default function TableExpenses({data, token, expenses, 
+export default function TableHistoryExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
                             optProjects, optReports, isFilter, setIsFilter, 
                           optCostCenterFilter}:
@@ -64,8 +63,6 @@ export default function TableExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
-          <DeleteElement id={row.original.id} name={row.original.Descripcion} 
-            remove={RemoveCost} token={token} colorIcon="text-slate-500 hover:text-slate-300" />
           {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
           {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
           {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
@@ -79,7 +76,7 @@ export default function TableExpenses({data, token, expenses,
     columnHelper.accessor('Proyecto', {
       id: 'Proyecto',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="py-2 font-semibold">{row.original.Proyecto}</p>
         </Link>
       ),
@@ -92,7 +89,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Informe',
       id: 'Informe',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="py-2 font-semibold">{row.original.Informe}</p>
         </Link>
       )
@@ -101,7 +98,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Centro de costos',
       id: 'Centro de costos',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="py-2 font-semibold">{row.original.costcenter}</p>
         </Link>
       )
@@ -110,7 +107,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Descripcion',
       id: 'descripcion',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">{row.original.Descripcion}</p>
         </Link>
       ),
@@ -119,7 +116,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Proveedor',
       id: 'proveedor',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">{row.original.Proveedor}</p>
         </Link>
       ),
@@ -128,7 +125,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <Chip label={row.original.condition} />
         </Link>
       ),
@@ -137,7 +134,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Fecha',
       id: 'fecha',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
         </Link>
       ),
@@ -146,7 +143,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Importe',
       id: 'importe',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">{row.original.Importe}</p>
         </Link>
       ),
@@ -155,7 +152,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'IVA',
       id: 'iva',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">{row.original.vat}</p>
         </Link>
       ),
@@ -164,7 +161,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Descuento',
       id: 'descuento',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">{row.original.discount}</p>
         </Link>
       ),
@@ -173,7 +170,7 @@ export default function TableExpenses({data, token, expenses,
       header: 'Total',
       id: 'total',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
+        <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">{row.original.total}</p>
         </Link>
       ),
@@ -237,7 +234,7 @@ export default function TableExpenses({data, token, expenses,
 
   useEffect(() => {
     if(filter){
-      console.log('data exp ', dataExpenses);
+      //console.log('data exp ', dataExpenses);
       setView(<></>);
       setTimeout(() => {
         // const total = da
@@ -382,7 +379,7 @@ export default function TableExpenses({data, token, expenses,
       }
     });
 
-    console.log(filtered);
+    //console.log(filtered);
     setFilteredExpenses(filtered);
     
     setDataExpenses(ExpenseDataToTableData(filtered));
@@ -392,15 +389,11 @@ export default function TableExpenses({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        /> */}
-          {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
-                          optTypes={optTypes} optConditions={optConditions} 
-                          FilterData={filterData} maxAmount={maxAmount} 
-                          optProjects={optProjects} optReports={optReports}
-                          optCostCenterFilter={optCostCenterFilter} />}
+        {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
+                        optTypes={optTypes} optConditions={optConditions} 
+                        FilterData={filterData} maxAmount={maxAmount} 
+                        optProjects={optProjects} optReports={optReports}
+                        optCostCenterFilter={optCostCenterFilter} />}
       </div>
       {view}
     </>
