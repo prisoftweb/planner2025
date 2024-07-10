@@ -5,7 +5,8 @@ import { ReportParse } from "@/interfaces/Reports";
 export default function CardProject({report}:
                       {report:ReportParse}){
   
-  const {updateIndexStepper, updateReport} = useNewExpense();
+  const {updateIndexStepper, updateReport, 
+    updateProject, updatePettyCash} = useNewExpense();
 
   return(
     <>
@@ -17,6 +18,8 @@ export default function CardProject({report}:
           //console.log('report card project => ', report.name);
           //console.log('rep id => ', report._id);
           updateReport(report._id);
+          updateProject(report.project._id);
+          updatePettyCash(report.ispettycash);
           updateIndexStepper(1);
         }}
       >
