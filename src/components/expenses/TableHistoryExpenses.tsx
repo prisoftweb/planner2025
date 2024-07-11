@@ -267,13 +267,13 @@ export default function TableHistoryExpenses({data, token, expenses,
     if(costcenters.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
     }else{
-      if(exp.costcenter){
-        if(typeof(exp.costcenter)==='string'){
-          if(costcenters.includes(exp.costcenter)){
+      if(exp.costocenter){
+        if(typeof(exp.costocenter)==='string'){
+          if(costcenters.includes(exp.costocenter)){
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           }
         }else{
-          if(exp.costcenter.categorys.every((cat) => costcenters.includes(cat._id))){
+          if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           }
         }

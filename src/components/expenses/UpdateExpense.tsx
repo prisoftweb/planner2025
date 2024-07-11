@@ -25,8 +25,8 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
-                              typeof(currentExpense.costcenter)==='string'? currentExpense.costcenter : currentExpense.costcenter.categorys[0]._id
-                              : typeof(expense.costcenter)==='string'? expense.costcenter : expense.costcenter.categorys[0]._id);
+                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.categorys[0]?._id || ''
+                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.categorys[0]?._id || '');
   const [startDate, setStartDate] = 
           useState<string>(currentExpense? currentExpense.date.substring(0, 10): expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -71,7 +71,7 @@ export default function UpdateExpense({token, id, user, optCostCenter,
         refRequest.current = false;
         const {amount, description, discount, folio, taxFolio, vat} = valores;
         const data = { description, 
-            folio, taxfolio:taxFolio, costcenter, date:startDate, iscard:isCard, 
+            folio, taxfolio:taxFolio, costocenter:costcenter, date:startDate, iscard:isCard, 
             cost: {
               discount: discount.toString().replace(/[$,]/g, ""),
               subtotal:amount.replace(/[$,]/g, ""),

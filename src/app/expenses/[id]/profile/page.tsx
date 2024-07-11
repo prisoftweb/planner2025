@@ -13,7 +13,7 @@ import ExpenseClient from "@/components/expenses/ExpenseClient";
 import { Expense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CostCenter } from "@/interfaces/CostCenter";
-import { getCostCenters } from "@/app/api/routeCostCenter";
+import { getCostoCenters } from "@/app/api/routeCostCenter";
 import { Provider } from "@/interfaces/Providers";
 import { getProviders } from "@/app/api/routeProviders";
 import { getUsers } from "@/app/api/routeUser";
@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let costcenters: CostCenter[];
   try {
-    costcenters = await getCostCenters(token);
+    costcenters = await getCostoCenters(token);
     if(typeof(costcenters)==='string'){
       return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
     }    
@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: { id: string }}){
     costcenter.categorys.map((category) => {
       optCostCenter.push({
         //label: category.name + ' ( ' + costcenter.name + ' ) ',
-        label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+        label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
         value: category._id
       });
       //cat += category.name + ', ';

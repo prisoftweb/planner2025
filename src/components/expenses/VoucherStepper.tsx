@@ -44,7 +44,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
     if(file || CFDI){
       const formdata = new FormData();
       //formdata.append('subtotal', amount);
-      formdata.append('costcenter', costCenter);
+      formdata.append('costocenter', costCenter);
       formdata.append('date', date);
       formdata.append('description', description);
       //formdata.append('discount', discount);
@@ -101,7 +101,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
       }
     }else{
       const data = {
-        costcenter: costCenter, date:date, description, folio, 
+        costocenter: costCenter, date:date, description, folio, 
         cost: {
           discount,
           subtotal:amount.replace(/[$,]/g, ""),

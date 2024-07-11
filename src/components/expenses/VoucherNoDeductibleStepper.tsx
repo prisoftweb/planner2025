@@ -34,7 +34,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
     if(file){
       const formdata = new FormData();
       //formdata.append('subtotal', amount);
-      formdata.append('costcenter', costCenter);
+      formdata.append('costocenter', costCenter);
       formdata.append('date', date);
       formdata.append('description', description);
       formdata.append('user', responsible);
@@ -80,7 +80,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
       }
     }else{
       const data = {
-        costcenter: costCenter, date:date, description, 
+        costocenter: costCenter, date:date, description, 
         cost: {
           discount: 0,
           subtotal:amount.replace(/[$,]/g, ""),

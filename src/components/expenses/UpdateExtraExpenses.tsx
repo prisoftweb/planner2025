@@ -24,7 +24,7 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
   
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [costcenter, setCostCenter] = useState<string>( currentExpense? 
-      typeof(currentExpense.costcenter)==='string'? currentExpense.costcenter: currentExpense.costcenter.categorys[0]._id
+      typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter: currentExpense.costocenter?.categorys[0]?._id || ''
       : '');
   //const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -233,7 +233,7 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
     if(refRequest.current){
       refRequest.current = false;
       const data = {
-        costcenter, provider, user:responsible, typeCFDI, category, project
+        costocenter:costcenter, provider, user:responsible, typeCFDI, category, project
       }
       try {
         const res = await UpdateCost(token, id, data);
