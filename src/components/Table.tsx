@@ -16,9 +16,10 @@ type MyData = {
   numRows: string
 }
 
-export default function Table({data, columns, placeH, typeTable='', initialColumns={}}: 
+export default function Table({data, columns, placeH, typeTable='', 
+                            initialColumns={}, selectFunction=() => console.log('')}: 
                               {data: any[], columns:any, placeH:string, 
-                                typeTable?:string, initialColumns?:any}) {
+                                typeTable?:string, initialColumns?:any, selectFunction?:Function}) {
 
   const [sorting, setSorting] = useState<any>([]);
   const [filtering, setFiltering] = useState('')
@@ -62,7 +63,7 @@ export default function Table({data, columns, placeH, typeTable='', initialColum
     }
   });
 
-  const [rowsTable, setRowsTable] = useState<number>(parsedData? parseInt(parsedData.numRows): 10);
+  //const [rowsTable, setRowsTable] = useState<number>(parsedData? parseInt(parsedData.numRows): 10);
 
   let total: number = 0;
   let labelJSX : JSX.Element = <div></div>;
@@ -86,6 +87,8 @@ export default function Table({data, columns, placeH, typeTable='', initialColum
     //do something when the row selection changes...
     //console.info({ rowSelection });
     console.log(table.getSelectedRowModel().flatRows.map((row) => row.original))
+    selectFunction(table.getSelectedRowModel().flatRows.map((row) => row.original));
+    //table.getSelectedRowModel().flatRows.
   }, [rowSelection]);
 
   const table = useReactTable({
@@ -109,8 +112,9 @@ export default function Table({data, columns, placeH, typeTable='', initialColum
     onColumnVisibilityChange: setColumnVisibility,
     initialState : {
       pagination: {
-        // pageSize: numRows,
-        pageSize: rowsTable,
+        //pageSize: numRows,
+       // pageSize: rowsTable,
+        pageSize: endPage
       }
     },
   })

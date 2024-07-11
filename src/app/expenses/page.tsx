@@ -215,6 +215,8 @@ export default async function Page() {
     return <h1>Error al consultar catalogos!!</h1>
   }
 
+  const idValidado = catalogs[0].condition.find((cond) => cond.glossary.name.toLowerCase().includes('validado'))?.glossary._id || '';
+
   const optCategories: Options[] = [];
   const optCategoriesFilter: Options[] = [{
     label: 'TODOS',
@@ -430,7 +432,7 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        />
+        idValidado={idValidado}  />
     </>
   )
 }
