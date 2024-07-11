@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { Project } from "@/interfaces/Projects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import { UpdateProject, UpdateProjectPhoto, InsertConditionInProject } from "@/app/api/routeProjects";
 import UploadImage from "../UploadImage";
 import { Options } from "@/interfaces/Common";
@@ -15,7 +15,7 @@ import { useEffect } from "react";
 
 export default function DataBasic({token, id, project, optConditions, user}: 
                                   {token:string, id:string, 
-                                    project:Project, optConditions:Options[],
+                                    project:OneProjectMin, optConditions:Options[],
                                     user:string}){
   
   const [file, setFile] = useState();
@@ -25,10 +25,10 @@ export default function DataBasic({token, id, project, optConditions, user}:
   const refRequest = useRef(true);
 
   useEffect(() => {
-    if(project.condition.length > 0){
+    if(project.category){
       optConditions.map((cond, index:number) => {
         //console.log('condicion ', cond.value, 'value ', project.condition[project.condition.length - 1].glossary._id);
-        if(cond.value === project.condition[project.condition.length - 1].glossary._id){
+        if(cond.value === project.category._id){
           indexCond = index;
           setCondition(cond.value);
         }
@@ -41,7 +41,7 @@ export default function DataBasic({token, id, project, optConditions, user}:
                         <SelectReact index={indexCond} opts={optConditions} setValue={setCondition} />
                       </div>)
   }, []);
-  
+  console.log('proyect data => ', project);
   const formik = useFormik({
     initialValues: {
       name: project.title,
@@ -61,7 +61,7 @@ export default function DataBasic({token, id, project, optConditions, user}:
         refRequest.current = false;
         const {name, description, keyProject} = valores;
       
-        if(project.condition.length===0 || project.condition[project.condition.length -1].glossary._id !== condition){
+        if(project.category._id !== condition){
           UpdateCondition();
         }
         if(!file){

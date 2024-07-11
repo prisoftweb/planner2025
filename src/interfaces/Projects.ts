@@ -45,6 +45,45 @@ export interface Project {
   // categorys: Glossary
 }
 
+export interface OneProjectMin {
+  _id: string
+  description: string
+  location: Location
+  guaranteefund: Guaranteefund
+  company: Company
+  client: ClientBack
+  category: Glossary
+  title: string
+  code: string
+  amount: number
+  date: string
+  photo: string
+  account: string
+  hasguaranteefund: boolean
+  type: Glossary
+  segment: Glossary
+  progress: number
+  status: boolean
+}
+
+// export interface ProjectMin {
+//   _id: string
+//   title: string
+//   code: string
+//   amount: number
+//   date: string
+//   photo: string
+//   account: string
+//   hasguaranteefund: boolean
+//   client: ClientBack
+//   company: Company
+//   type: Glossary
+//   segment: Glossary
+//   category: Glossary
+//   progress: number
+//   status: boolean
+// }
+
 export interface ProjectMin {
   _id: string
   title: string

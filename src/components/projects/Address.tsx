@@ -6,12 +6,12 @@ import * as Yup from 'yup';
 import Button from "../Button";
 //import { useState } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { Project } from "@/interfaces/Projects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import { UpdateProject } from "@/app/api/routeProjects";
 import { useRef } from "react";
 
 export default function Address({token, id, project}: 
-        {token:string, id:string, project:Project}){
+        {token:string, id:string, project:OneProjectMin}){
 
   const refRequest = useRef(true);
   const formik = useFormik({

@@ -9,7 +9,7 @@ import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import ButtonNew from "@/components/costcenter/ButtonNew";
 import { CostCenterTable, CostCenter } from "@/interfaces/CostCenter";
-import { getCostCenters } from "../api/routeCostCenter";
+import { getCostoCenters } from "../api/routeCostCenter";
 import TableCostCenter from "@/components/costcenter/TableCostCenter";
 
 export default async function Page(){
@@ -36,7 +36,8 @@ export default async function Page(){
 
   let costs: CostCenter[];
   try {
-    costs = await getCostCenters(token);
+    costs = await getCostoCenters(token);
+    //console.log('cost => ', costs);
     if(typeof(costs)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{costs}</h1>
   } catch (error) {
@@ -64,7 +65,8 @@ export default async function Page(){
   costs.map((cost) => {
     let concept = '';
     cost.categorys.map((conc) => {
-      concept += conc.name + ', ';
+      //concept += conc.name + ', ';
+      concept += conc.concept.name + ', ';
     })
     table.push({
       category: cost.name,

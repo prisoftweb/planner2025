@@ -19,7 +19,7 @@ export async function getCostCenters(auth_token:string){
 }
 
 export async function getCostoCenters(auth_token:string){
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costcenters`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters`;
   try {
     const res = await axios.get(url, {
       headers: {
@@ -72,6 +72,24 @@ export async function getCostCenter(auth_token:string, id:string){
   }
 }
 
+export async function getCostoCenter(auth_token:string, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar el centro de costos!!';
+    }
+    return 'Error al consultar el centro de costos!!';
+  }
+}
+
 export async function CreateCostCenter(auth_token:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costcenters`;
   try {
@@ -93,6 +111,7 @@ export async function CreateCostCenter(auth_token:string, data:Object){
 
 export async function CreateCostoCenter(auth_token:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters`;
+  console.log('costo centers => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -100,6 +119,7 @@ export async function CreateCostoCenter(auth_token:string, data:Object){
         'Content-Type': 'application/json',
       }
     });
+    console.log('res => ', res);
     if(res.status === 201) return res.status;
     return res.statusText;
   } catch (error) {
@@ -128,8 +148,45 @@ export async function RemoveCostCenter(auth_token:string, id:string) {
   }
 }
 
+export async function RemoveCostoCenter(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters/${id}`;
+  try {
+    const res = await axios.delete(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status===204) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al eliminar centro de costos!!';
+    }
+    return 'Error al eliminar centro de costos!!';
+  }
+}
+
 export async function UpdateCostCenter(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costcenters/${id}`;
+  try {
+    const res = await axios.patch(url, JSON.stringify(data), {
+      headers: {
+        'Authorization':`Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status===200) return res.status
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al actualizar centro de costos!!';
+    }
+    return 'Error al actualizar centro de costos!!';
+  }
+}
+
+export async function UpdateCostoCenter(auth_token:string, id:string, data:Object){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters/${id}`;
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
@@ -166,8 +223,45 @@ export async function InsertCategoryInCostCenter(auth_token:string, id:string, d
   }
 }
 
+export async function InsertConceptInCostCenter(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters/insertCategoryInCostoCenter/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    if(res.status===200) return res.status
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al insertar concepto en centro de costos!!';
+    }
+    return 'Error al insertar concepto en centro de costos!!';
+  }
+}
+
 export async function DeleteCategoryInCostCenter(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costcenters/deleteCategoryInCostCenter/${id}`;
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status===200) return 204
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al eliminar concepto en centro de costos!!';
+    }
+    return 'Error al eliminar concepto en centro de costos!!';
+  }
+}
+
+export async function DeleteConceptInCostCenter(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters/deleteCategoryInCostoCenter/${id}`;
   try {
     const res = await axios.post(url, {}, {
       headers: {

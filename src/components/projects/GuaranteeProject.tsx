@@ -6,14 +6,14 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { Project } from "@/interfaces/Projects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import { UpdateProject } from "@/app/api/routeProjects";
 import CurrencyInput from 'react-currency-input-field';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function GuaranteeProject({token, id, project}:
-                              {token:string, id:string, project:Project}){
+                              {token:string, id:string, project:OneProjectMin}){
   
   const [startDate, setStartDate] = useState(project.guaranteefund?.date.substring(0,10) || '');
   const refRequest = useRef(true);

@@ -1,8 +1,26 @@
 import axios from "axios";
-import { Contact } from "@/interfaces/Common";
 
 export async function getProviders(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Error al obtener proveedores';
+    }
+  }
+}
+
+export async function getProvidersLV(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getAllProvidersLV`;
   try {
     const res = await axios.get(url, {
       'headers': {

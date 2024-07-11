@@ -3,7 +3,7 @@ import { CostCenterTable } from "@/interfaces/CostCenter";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "../Table";
 import DeleteElement from "../DeleteElement";
-import { RemoveCostCenter } from "@/app/api/routeCostCenter";
+import { RemoveCostoCenter } from "@/app/api/routeCostCenter";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import NewCostCenter from "./NewCostCenter";
@@ -51,7 +51,7 @@ export default function TableCostCenter({data, token}:
               setCostCenter(row.original);
               setEditCostCenter(true);
             }} />
-          <DeleteElement remove={RemoveCostCenter} id={row.original.id} 
+          <DeleteElement remove={RemoveCostoCenter} id={row.original.id} 
               token={token} name={row.original.category} />
           <p className="text-base font-semibold">{row.original.code}</p>
         </div>
