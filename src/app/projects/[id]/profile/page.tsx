@@ -2,8 +2,8 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
 import { getClients } from "@/app/api/routeClients";
-import { GetProject, getProjectsLV } from "@/app/api/routeProjects";
-import { Project } from "@/interfaces/Projects";
+import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
@@ -21,9 +21,10 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: Project;
+  let project: OneProjectMin;
   try {
-    project = await GetProject(token, params.id);
+    project = await GetProjectMin(token, params.id);
+    console.log('project min => ', project);
     if(typeof(project) === "string")
       return <h1 className="text-center text-red-500">{project}</h1>
   } catch (error) {

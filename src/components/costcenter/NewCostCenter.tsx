@@ -9,17 +9,17 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
 import AddConcept from "./AddConcept"
-import { CreateCostoCenter, UpdateCostCenter, 
-  InsertCategoryInCostCenter, getCostCenter, DeleteCategoryInCostCenter } from "@/app/api/routeCostCenter"
+import { CreateCostoCenter, getCostoCenter, DeleteConceptInCostCenter, 
+  InsertConceptInCostCenter, UpdateCostoCenter } from "@/app/api/routeCostCenter"
 import { CostCenter, CostCenterTable } from "@/interfaces/CostCenter"
 //import DeleteElement from "../DeleteElement"
 import DeleteConceptCC from "./DeleteConcept"
 import { CreateConcept } from "@/app/api/routeConcepts"
 import { Concept } from "@/interfaces/Concepts"
 
-interface CategoryCostCenter {
+interface ConceptCostCenter {
   "name": string,
-  "account": string
+  "description": string
 }
 
 export default function NewCostCenter({showForm, token, costCenter}: 
@@ -47,17 +47,17 @@ export default function NewCostCenter({showForm, token, costCenter}:
 
     if(typeof(costCenter)!=='string'){
       const getCostC = async () => {
-        const res:CostCenter = await getCostCenter(token, costCenter.id);
+        const res:CostCenter = await getCostoCenter(token, costCenter.id);
         if(typeof(res)!== 'string'){
           let aux:JSX.Element[] = [];
           res.categorys.map((category, index:number) => {
             aux.push(
               <div className="p-2 flex space-x-2 items-center" key={index}>
-              <DeleteConceptCC id={res._id+'/'+category._id} name={category.name} 
-                  remove={DeleteCategoryInCostCenter} token={token}
+              <DeleteConceptCC id={res._id+'/'+category._id} name={category.concept.name} 
+                  remove={DeleteConceptInCostCenter} token={token}
                   DeleteElement={DeleteConceptCostC} indexConcept={index} />
-              <p>{category.account}</p>
-              <p>{category.name}</p>
+              <p>{category.concept.name}</p>
+              <p>{category.concept.description}</p>
             </div>
             );
           });
@@ -156,7 +156,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
           //   })
           // });
 
-          const arrConcepts: Object[] = []; 
+          const arrConcepts: ConceptCostCenter[] = []; 
           concepts.map((concept, index:number) => {
             //create concept
             arrConcepts.push({
@@ -181,43 +181,43 @@ export default function NewCostCenter({showForm, token, costCenter}:
             const data = {
               name: category,
               code,
-              categorys: concepts
+              categorys: arrIdConcepts
             }
             const res = await CreateCostoCenter(token, data);
             if(res===201){
               refRequest.current = true;
               showForm(false);
               showToastMessage('Centro de costos creado exitosamente!!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);
             }
           }else{
             //agregar conceptos
-            // const data = {
-            //   categorys
-            // }
-            // const res = await UpdateCostCenter(token, costCenter.id, valores);
-            // if(res===200){
-            //   const resInsert = await InsertCategoryInCostCenter(token, costCenter.id, data);
-            //   if(resInsert===200){
-            //     refRequest.current = true;
-            //     showForm(false);
-            //     showToastMessage('Centro de costos actualizado exitosamente!!!');
-            //     setTimeout(() => {
-            //       window.location.reload();
-            //     }, 500);
-            //   }else{
-            //     refRequest.current = true;
-            //     showToastMessageError(res + 'insert cost');
-            //   }
-            // }else{
-            //   refRequest.current = true;
-            //   showToastMessageError(res + 'update cost');
-            // }
+             const data = {
+              categorys: arrIdConcepts
+            }
+            const res = await UpdateCostoCenter(token, costCenter.id, valores);
+            if(res===200){
+              const resInsert = await InsertConceptInCostCenter(token, costCenter.id, data);
+              if(resInsert===200){
+                refRequest.current = true;
+                showForm(false);
+                showToastMessage('Centro de costos actualizado exitosamente!!!');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 500);
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res + 'insert cost');
+              }
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res + 'update cost');
+            }
           }
         } catch (error) {
           refRequest.current = true;
@@ -258,7 +258,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
           ) : null}
         </div>
         <div>
-          <Label htmlFor="code"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Codigo</p></Label>
+          <Label htmlFor="code"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <Input type="text" name="code" 
             onChange={formik.handleChange}
             onBlur={formik.handleChange}

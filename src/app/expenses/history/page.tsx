@@ -58,14 +58,16 @@ export default async function Page() {
     if(costcenter.isnormal){
       costcenter.categorys.map((category) => {
         optCostCenterDeductible.push({
-          label: category.name + ' ( ' + costcenter.name + ' ) ',
+          // label: category.name + ' ( ' + costcenter.name + ' ) ',
+          label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
           value: category._id
         });
       })
     }
     costcenter.categorys.map((category) => {
       const cat = {
-        label: category.name + ' ( ' + costcenter.name + ' ) ',
+        //label: category.name + ' ( ' + costcenter.name + ' ) ',
+        label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
         value: category._id
       }
       optCostCenter.push(cat);

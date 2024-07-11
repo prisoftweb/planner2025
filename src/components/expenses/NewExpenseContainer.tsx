@@ -51,8 +51,9 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   //   });
   // }
   
-  const [optSelectize, setOptSelectize] = useState<Options>(optProjects.find((optP) => optP.value === project)?? optProjects[0]);
-
+  //const [optSelectize, setOptSelectize] = useState<Options>(optProjects.find((optP) => optP.value === project)?? optProjects[0]);
+  const optSelectize = optProjects.find((optP) => optP.value === project)?? optProjects[0];
+  //console.log('find => ', optProjects.find((optP) => optP.value === project));
   const DropdownIndicator = (props: any) => {
     return (
       components.DropdownIndicator && (
@@ -87,7 +88,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   //   onChange={(value:any) => updateProject(value.value)}
   // />);
 
-  console.log('opt selectize => ', optSelectize);
+  //console.log('opt selectize => ', optSelectize);
 
   const viewSelectProject: JSX.Element = (
     <Select
@@ -105,7 +106,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       onChange={(value:any) => {
         console.log('onchange => ', value);
         updateProject(value.value); 
-        setOptSelectize(value);
+        //setOptSelectize(value);
       }}
     />)
   
@@ -163,24 +164,26 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   //   }
   // }, [report]);
 
-  if(report !== ''){
-    const r = reports.find((rep) => rep._id === report);
+  // if(report !== ''){
+  //   const r = reports.find((rep) => rep._id === report);
     
-    //setIsPettyCash(r?.ispettycash || false);
-    if(r?.ispettycash !== isPettyCash){
-      updatePettyCash(r?.ispettycash || false);
-    }
-    //console.log('petty ', r);
-    if(r?.project._id !== project){
-      updateProject(r?.project._id || '');
-    }
+  //   //setIsPettyCash(r?.ispettycash || false);
+  //   // if(r?.ispettycash !== isPettyCash){
+  //   //   updatePettyCash(r?.ispettycash || false);
+  //   // }
+  //   //console.log('petty ', r);
+  //   console.log('project => ', project);
+  //   console.log('r.project => ', r?.project);
+  //   // if(r?.project._id !== project){
+  //   //   updateProject(r?.project._id || '');
+  //   // }
 
-    // const optProject = optProjects.find((optP) => optP.value === r?.project._id);
-    // if(optProject && optProject !== optSelectize){
-    //   setOptSelectize(optProject);
-    // }
-    //setViewSelectProject(<></>);
-  }
+  //   // const optProject = optProjects.find((optP) => optP.value === r?.project._id);
+  //   // if(optProject && optProject !== optSelectize){
+  //   //   setOptSelectize(optProject);
+  //   // }
+  //   //setViewSelectProject(<></>);
+  // }
 
   // const handleReport = (value:string) => {
   //   const optProject = optProjects.find((optP) => optP.value )

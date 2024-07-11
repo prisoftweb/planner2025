@@ -59,7 +59,8 @@ export default async function Page({ params }: { params: { id: string }}){
   costcenters.map((costcenter) => {
     costcenter.categorys.map((category) => {
       optCostCenter.push({
-        label: category.name + ' ( ' + costcenter.name + ' ) ',
+        //label: category.name + ' ( ' + costcenter.name + ' ) ',
+        label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
         value: category._id
       });
       //cat += category.name + ', ';

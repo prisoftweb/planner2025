@@ -28,15 +28,15 @@ export async function createUserPhoto(user:FormData, auth_token:string){
 export async function createUser(user:any, auth_token:string){
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(user));
+    //console.log(url);
+    //console.log(JSON.stringify(user));
     const res = await axios.post(url, JSON.stringify(user), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     })
-    console.log(res);
+    //console.log(res);
     if(res.status === 201){
       //return res.status;
       return res.data.data.data;
@@ -180,6 +180,24 @@ export async function getUsers(auth_token:string){
   }catch(e:any){
     //console.log(e.response.data.message);
     //return 'Ocurrio un problema al consultar usuarios!!';
+    return e.response.data.message;
+  }
+}
+
+export async function getUsersLV(auth_token:string){
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/getAllUsersLV`;
+
+  try{
+    const res = await axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  }catch(e:any){
     return e.response.data.message;
   }
 }

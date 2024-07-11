@@ -3,7 +3,7 @@ import Label from "../Label"
 import Button from "../Button";
 import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { Project } from "@/interfaces/Projects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import { InsertProgressInProject } from "@/app/api/routeProjects";
 import TextArea from "../TextArea";
 import Box from '@mui/material/Box';
@@ -11,10 +11,10 @@ import Slider from '@mui/material/Slider';
 
 export default function ProgressProject({token, id, project, user}: 
                                   {token:string, id:string, 
-                                    project:Project, user:string}){
+                                    project:OneProjectMin, user:string}){
   
   const [notes, setNotes] = useState<string>('');
-  const [progress, setProgress] = useState<number>(project.progress[project.progress.length -1]?.progress || 0);
+  const [progress, setProgress] = useState<number>(project.progress || 0);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const refRequest = useRef(true);
 

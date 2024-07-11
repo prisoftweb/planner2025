@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { Project } from "@/interfaces/Projects"
+import { OneProjectMin } from "@/interfaces/Projects"
 import DataBasic from "./DataBasic"
 import NavResponsive from "./NavResponsive"
 import ExtraData from "./ExtraData"
@@ -13,7 +13,7 @@ import ProgressProject from "./ProgressProject"
 
 export default function ProjectCli({project, token, id, optCategories, optClients, 
                              optTypes, optConditions, user}: 
-                            {project:Project, token:string, id:string,
+                            {project:OneProjectMin, token:string, id:string,
                               optClients:Options[], optCategories:Options[], 
                               optTypes:Options[], optConditions:Options[],
                               user:string}){

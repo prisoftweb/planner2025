@@ -6,9 +6,9 @@ import { getCostCenters } from "../api/routeCostCenter";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
-import { getProviders } from "../api/routeProviders";
-import { Provider } from "@/interfaces/Providers";
-import { getUsers } from "../api/routeUser";
+import { getProvidersLV } from "../api/routeProviders";
+//import { Provider } from "@/interfaces/Providers";
+import { getUsersLV } from "../api/routeUser";
 //import { getGlossaries } from "../api/routeGlossary";
 //import { Glossary } from "@/interfaces/Glossary";
 import { getProjectsLV } from "../api/routeProjects";
@@ -58,60 +58,64 @@ export default async function Page() {
     label: 'TODOS',
     value: 'all'
   }];
-  costcenters.map((costcenter) => {
-    if(costcenter.isnormal){
-      costcenter.categorys.map((category) => {
-        optCostCenterDeductible.push({
-          label: category.name + ' ( ' + costcenter.name + ' ) ',
-          value: category._id
-        });
-      })
-    }
-    costcenter.categorys.map((category) => {
-      const cat = {
-        label: category.name + ' ( ' + costcenter.name + ' ) ',
-        value: category._id
-      }
-      optCostCenter.push(cat);
-      optCostCenterFilter.push(cat);
-    })
-  });
+  // costcenters.map((costcenter) => {
+  //   if(costcenter.isnormal){
+  //     costcenter.categorys.map((category) => {
+  //       optCostCenterDeductible.push({
+  //         // label: category.name + ' ( ' + costcenter.name + ' ) ',
+  //         label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+  //         value: category._id
+  //       });
+  //     })
+  //   }
+  //   costcenter.categorys.map((category) => {
+  //     const cat = {
+  //       // label: category.name + ' ( ' + costcenter.name + ' ) ',
+  //       label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+  //       value: category._id
+  //     }
+  //     optCostCenter.push(cat);
+  //     optCostCenterFilter.push(cat);
+  //   })
+  // });
 
-  let providers: Provider[];
+  //let providers: Provider[];
+  let optProviders:Options[]= [];
   try {
-    providers = await getProviders(token);
-    if(typeof(providers)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{providers}</h1>
-    }    
+    optProviders = await getProvidersLV(token);
+    if(typeof(optProviders)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optProviders}</h1>
+    }
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
   }
 
-  const optProviders:Options[]= [];
-  providers.map((provider) => {
-    optProviders.push({
-      label: provider.name,
-      value: provider._id
-    });
-  });
+  // const optProviders:Options[]= [];
+  // providers.map((provider) => {
+  //   optProviders.push({
+  //     label: provider.name,
+  //     value: provider._id
+  //   });
+  // });
   
-  let responsibles: UsrBack[];
+  //let responsibles: UsrBack[];
+  let optResponsibles:Options[]= [];
   try {
-    responsibles = await getUsers(token);
-    if(typeof(responsibles)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{responsibles}</h1>
+    optResponsibles = await getUsersLV(token);
+    if(typeof(optResponsibles)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optResponsibles}</h1>
     }    
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
   }
 
-  const optResponsibles:Options[]= [];
-  responsibles.map((responsible) => {
-    optResponsibles.push({
-      label: responsible.name,
-      value: responsible._id
-    });
-  });
+  // const optResponsibles:Options[]= [];
+  // responsibles.map((responsible) => {
+  //   optResponsibles.push({
+  //     label: responsible.name,
+  //     value: responsible._id
+  //   });
+  // });
 
   //agregar glosaries lv
   // let glossaries: Glossary[];

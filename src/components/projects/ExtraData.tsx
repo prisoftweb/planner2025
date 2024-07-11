@@ -9,7 +9,7 @@ import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import HeaderForm from "../HeaderForm";
 import { UpdateProject } from "@/app/api/routeProjects";
-import { Project } from "@/interfaces/Projects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import CurrencyInput from 'react-currency-input-field';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,7 +18,7 @@ export default function ExtraData({token, optClients, optCategories,
                           optTypes, id, project}:
                         {token:string, optClients:Options[], optCategories:Options[], 
                           optTypes:Options[], id:string,
-                          project:Project}){
+                          project:OneProjectMin}){
 
   const [client, setClient] = useState<string>(project.client._id);
   const [type, setType] = useState<string>(optTypes[0].value);
@@ -37,7 +37,7 @@ export default function ExtraData({token, optClients, optCategories,
 
   let idType = 0;
   optTypes.map((optTy, index:number) => {
-    if(optTy.value === project.glossary?._id){
+    if(optTy.value === project.type._id){
       idType = index;
     }
   });
@@ -49,7 +49,7 @@ export default function ExtraData({token, optClients, optCategories,
     }
   })
 
-  const [startDate, setStartDate] = useState<string>(project.datets? project.datets.substring(0,10): '');
+  const [startDate, setStartDate] = useState<string>(project.date? project.date.substring(0,10): '');
 
   const formik = useFormik({
     initialValues: {

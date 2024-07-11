@@ -1,9 +1,9 @@
 import Label from "../Label";
-import { Project } from "@/interfaces/Projects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function ProfileProject({project}: 
-                        {project:Project}){
+                        {project:OneProjectMin}){
 
   const amount = CurrencyFormatter({
     currency: "MXN",
@@ -12,7 +12,7 @@ export default function ProfileProject({project}:
 
   const amountGuarantee = CurrencyFormatter({
     currency: "MXN",
-    value: project.guaranteefund.amount? parseFloat(project.guaranteefund.amount): 0
+    value: project.guaranteefund?.amount? parseFloat(project.guaranteefund.amount): 0 || 0
   })
 
   return(
@@ -26,7 +26,7 @@ export default function ProfileProject({project}:
           <div>
             <p className="text-blue-500">{project.title}</p>
             <p className="text-slate-500">{project.code}</p>
-            <p className="text-slate-500">{project.glossary? project.glossary.name: ''}</p>
+            <p className="text-slate-500">{project.type? project.type.name: ''}</p>
             <p className="text-slate-500">{project.account}</p>
           </div>
         </div>
@@ -53,7 +53,7 @@ export default function ProfileProject({project}:
             </div>
           </div>
           <div className="my-2">
-            <p className="text-slate-500">Fecha ({project.datets.substring(0, 10)})</p>
+            <p className="text-slate-500">Fecha ({project.date?.substring(0, 10) || 'sin fecha'})</p>
           </div>
         </div>
         
@@ -62,7 +62,7 @@ export default function ProfileProject({project}:
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Fondo de garantia</p>
-              <p className="text-blue-600">{project.guaranteefund.porcentage? project.guaranteefund.porcentage: ''}</p>
+              <p className="text-blue-600">{project.progress? project.progress: '' || '0'}</p>
             </div>
             <div>
               <p className="text-slate-500">Monto</p>
