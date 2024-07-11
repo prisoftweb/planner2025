@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-import { getCostCenters } from "../api/routeCostCenter";
+import { getCostoCenters } from "../api/routeCostCenter";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
@@ -44,7 +44,7 @@ export default async function Page() {
 
   let costcenters: CostCenter[];
   try {
-    costcenters = await getCostCenters(token);
+    costcenters = await getCostoCenters(token);
     if(typeof(costcenters)==='string'){
       return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
     }    
@@ -58,26 +58,27 @@ export default async function Page() {
     label: 'TODOS',
     value: 'all'
   }];
-  // costcenters.map((costcenter) => {
-  //   if(costcenter.isnormal){
-  //     costcenter.categorys.map((category) => {
-  //       optCostCenterDeductible.push({
-  //         // label: category.name + ' ( ' + costcenter.name + ' ) ',
-  //         label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-  //         value: category._id
-  //       });
-  //     })
-  //   }
-  //   costcenter.categorys.map((category) => {
-  //     const cat = {
-  //       // label: category.name + ' ( ' + costcenter.name + ' ) ',
-  //       label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-  //       value: category._id
-  //     }
-  //     optCostCenter.push(cat);
-  //     optCostCenterFilter.push(cat);
-  //   })
-  // });
+  
+  costcenters.map((costcenter) => {
+    if(costcenter.isnormal){
+      costcenter.categorys.map((category) => {
+        optCostCenterDeductible.push({
+          // label: category.name + ' ( ' + costcenter.name + ' ) ',
+          label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+          value: category._id
+        });
+      })
+    }
+    costcenter.categorys.map((category) => {
+      const cat = {
+        // label: category.name + ' ( ' + costcenter.name + ' ) ',
+        label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
+        value: category._id
+      }
+      optCostCenter.push(cat);
+      optCostCenterFilter.push(cat);
+    })
+  });
 
   //let providers: Provider[];
   let optProviders:Options[]= [];
@@ -379,7 +380,7 @@ export default async function Page() {
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter?.name,
+      costcenter: typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter?.name,
       Importe: dollar,
       Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',

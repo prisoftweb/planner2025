@@ -68,7 +68,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      costcenter: expense.costcenter? typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter.name ?? 'error costcenter' : 'Sin centro de costos',
+      costcenter: expense.costocenter? typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter.name ?? 'error costcenter' : 'Sin centro de costos',
       Importe: dollar,
       Informe: expense.report?.name || 'sin informe',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',

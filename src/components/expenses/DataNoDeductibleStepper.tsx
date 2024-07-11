@@ -108,7 +108,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     if(voucher){
       const formdata = new FormData();
       //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
-      formdata.append('costcenter', costcenter);
+      formdata.append('costocenter', costcenter);
       formdata.append('date', startDate);
       formdata.append('description', description);
       formdata.append('user', responsibleS);
@@ -157,7 +157,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       }
     }else{
       const data = {
-        costcenter, date:startDate, description, 
+        costocenter:costcenter, date:startDate, description, 
         cost: {
           discount: 0,
           subtotal:amount.replace(/[$,]/g, ""),

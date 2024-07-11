@@ -148,7 +148,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     if(voucher || CFDI){
       const formdata = new FormData();
       //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
-      formdata.append('costcenter', costcenter);
+      formdata.append('costocenter', costcenter);
       formdata.append('date', startDate);
       formdata.append('description', description);
       //formdata.append('discount', discount.replace(/[$,]/g, ""));
@@ -210,7 +210,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       }
     }else{
       const data = {
-        costcenter, date:startDate, description, 
+        costocenter:costcenter, date:startDate, description, 
         cost: {
           discount: discount.replace(/[$,]/g, ""),
           subtotal:amount.replace(/[$,]/g, ""),
