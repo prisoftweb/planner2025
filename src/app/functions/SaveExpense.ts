@@ -5,6 +5,7 @@ export default async function SaveExpense(data: Object, token:string){
 
   console.log('obj = ', data);
   console.log('new obj = ',  newObj);
+  console.log('json => ', JSON.stringify(newObj));
 
   try {
     const res = await CreateCost(token, newObj);

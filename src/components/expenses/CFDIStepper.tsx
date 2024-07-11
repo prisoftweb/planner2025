@@ -21,7 +21,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
     vat, voucher, condition, category, idVat, isCard,
-    reset, updateRefresh, updateIndexStepper, type} = useNewExpense();
+    reset, updateRefresh, updateIndexStepper, type, concept} = useNewExpense();
   
   const validationType = (f: File) => {
     if(!f.type.includes('xml') && !f.type.includes('XML')){
@@ -40,11 +40,16 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
     } catch (error) {
       supplierCredit = false;
     }
+
+    const costcenter = {
+      category: costCenter,
+      concept
+    }
     
     if(file || voucher){
       const formdata = new FormData();
       //formdata.append('subtotal', amount);
-      formdata.append('costocenter', costCenter);
+      formdata.append('costocenter', JSON.stringify(costCenter));
       formdata.append('date', date);
       formdata.append('description', description);
       //formdata.append('discount', discount);
@@ -105,7 +110,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       }
     }else{
       const data = {
-        costocenter: costCenter, date:date, description, folio, 
+        costocenter: costcenter, date:date, description, folio, 
         cost: {
           discount,
           subtotal:amount.replace(/[$,]/g, ""),

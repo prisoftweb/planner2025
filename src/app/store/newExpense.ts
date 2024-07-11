@@ -3,6 +3,7 @@ import { Expense } from '@/interfaces/Expenses'
 
 interface NewExpenseState {
   costCenter: string,
+  concept: string,
   folio:string, 
   taxFolio:string,
   description:string,
@@ -42,7 +43,7 @@ interface CurrentExpense{
 }
 
 interface Actions {
-  updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
+  updateBasicData: (folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
     typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string) => void,
   updateVoucher: (file: File) => void,
@@ -54,6 +55,7 @@ interface Actions {
   updateProject: (value:string) => void,
   updateReport: (value: string) => void,
   updateCondition: (value:string) => void,
+  updateCostCenter: (costcenter:string, concept: string) => void,
   updateCategory: (value:string) => void,
   updatePettyCash: (value:boolean) => void,
   updateIsCard: (value:boolean) => void,
@@ -62,6 +64,7 @@ interface Actions {
 
 const initialState: NewExpenseState = {
   costCenter: '',
+  concept: '',
   folio: '', 
   description: '',
   amount: '', 
@@ -103,11 +106,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   ...projectInitial,
   ...pettyCashInitial,
   ...initialExpense,
-  updateBasicData: (costCenter:string, folio:string, description:string, amount: string,
+  updateBasicData: ( folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
       typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string) => set(state => ({
     ...state,
-    costCenter: costCenter,
     folio: folio,
     description: description,
     amount: amount,
@@ -154,6 +156,11 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   updateCondition: (value:string) => set(state => ({
     ...state,
     condition: value,
+  })),
+  updateCostCenter: (costCenter: string, concept: string) => set (state => ({
+    ...state,
+    costCenter: costCenter,
+    concept: concept
   })),
   updateCategory: (value:string) => set(state => ({
     ...state,

@@ -65,7 +65,7 @@ export default async function Page() {
         optCostCenterDeductible.push({
           // label: category.name + ' ( ' + costcenter.name + ' ) ',
           label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-          value: category._id
+          value: costcenter._id + '/' + category.concept._id
         });
       })
     }
@@ -73,7 +73,7 @@ export default async function Page() {
       const cat = {
         // label: category.name + ' ( ' + costcenter.name + ' ) ',
         label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
-        value: category._id
+        value: costcenter._id + '/' + category.concept._id
       }
       optCostCenter.push(cat);
       optCostCenterFilter.push(cat);
