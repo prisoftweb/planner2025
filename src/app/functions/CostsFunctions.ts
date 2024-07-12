@@ -92,21 +92,21 @@ export function ExpenseDataToTableData(expenses:Expense[]){
 
 export function getTypeFiles(expense:Expense) {
   const typeFiles: string[] = [];
-  // expense.files.map((f) => {
-  //     if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
-  //       || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-  //       || f.types.includes('PNG')){
-  //         typeFiles.push('pdf');
-  //         //console.log('aqui entro => ', f);
-  //         //tiene factura
-  //     }else{
-  //       if(f.types.includes('xml') || f.types.includes('XML')){
-  //         typeFiles.push('xml');
-  //         //console.log('aqui entro => ', f);
-  //         //tiene xml    
-  //       }
-  //     }
-  //   });
+  expense.files.map((f) => {
+      if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
+        || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
+        || f.types.includes('PNG')){
+          typeFiles.push('pdf');
+          //console.log('aqui entro => ', f);
+          //tiene factura
+      }else{
+        if(f.types.includes('xml') || f.types.includes('XML')){
+          typeFiles.push('xml');
+          //console.log('aqui entro => ', f);
+          //tiene xml    
+        }
+      }
+    });
   
   return typeFiles;
 }

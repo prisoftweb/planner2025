@@ -1,9 +1,9 @@
-import { Options } from '@/interfaces/Common'
+//import { Options } from '@/interfaces/Common'
 import { useState } from 'react'
 import { PlusCircleIcon, CheckCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Label from '../Label';
 import Input from '../Input';
-import CurrencyInput from 'react-currency-input-field';
+//import CurrencyInput from 'react-currency-input-field';
 
 export default function AddConcept({bandPlus, DeleteElement, index, 
                                   pushElement, updateCount}: 
@@ -60,13 +60,13 @@ export default function AddConcept({bandPlus, DeleteElement, index,
     <>
       <div className='flex items-center mt-2 flex-wrap gap-x-1 gap-y-1'>
         <div>
-          <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Concepto</p></Label>
+          <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input type='text' name='concept' 
             onChange={(e) => onChangeConcept(e.target.value)}
           />
         </div>
         <div>
-          <Label htmlFor="account"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
+          <Label htmlFor="account"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cuenta</p></Label>
           <Input type='text' name='account' 
             onChange={(e) => onChangeAccount(e.target.value)}
           />

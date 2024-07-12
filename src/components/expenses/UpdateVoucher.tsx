@@ -17,19 +17,19 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
 
   let idFile = '';
   let urlFile = '';
-  // if(currentExpense){
-  //   currentExpense.files.map((f) => {
-  //     if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
-  //       || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-  //       || f.types.includes('PNG') || f.types.includes('pdf')){
-  //         //console.log('aqui entro => ', f);
-  //         //setIdFile(f._id);
-  //         //setUrlFile(f.file);
-  //         idFile = f._id;
-  //         urlFile = f.file;
-  //     }
-  //   });
-  // }
+  if(currentExpense){
+    currentExpense.files.map((f) => {
+      if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
+        || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
+        || f.types.includes('PNG') || f.types.includes('pdf')){
+          //console.log('aqui entro => ', f);
+          //setIdFile(f._id);
+          //setUrlFile(f.file);
+          idFile = f._id;
+          urlFile = f.file;
+      }
+    });
+  }
 
   // useEffect(() => {
   //   //console.log('expense', expense);

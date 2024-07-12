@@ -2,16 +2,16 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-import { getCostCenters } from "../../api/routeCostCenter";
+import { getCostoCenters } from "../../api/routeCostCenter";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
 import { getProviders } from "../../api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
-import { getUsers } from "../../api/routeUser";
+//import { getUsers } from "../../api/routeUser";
 import { getProjectsLV } from "../../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import { GetCosts, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../../api/routeCost";
+import { GetCostsMIN, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../../api/routeCost";
 //import { CurrencyFormatter } from "../../functions/Globals";
 import { getCatalogsByName } from "../../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
@@ -30,7 +30,7 @@ export default async function Page() {
   
   let expenses: Expense[] = [];
   try {
-    expenses = await GetCosts(token);
+    expenses = await GetCostsMIN(token);
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {
@@ -40,7 +40,7 @@ export default async function Page() {
 
   let costcenters: CostCenter[];
   try {
-    costcenters = await getCostCenters(token);
+    costcenters = await getCostoCenters(token);
     if(typeof(costcenters)==='string'){
       return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
     }    
@@ -55,61 +55,65 @@ export default async function Page() {
     value: 'all'
   }];
   costcenters.map((costcenter) => {
-    if(costcenter.isnormal){
-      costcenter.categorys.map((category) => {
-        optCostCenterDeductible.push({
-          // label: category.name + ' ( ' + costcenter.name + ' ) ',
-          label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-          value: category._id
-        });
-      })
-    }
+    // if(costcenter.isnormal){
+    //   costcenter.categorys.map((category) => {
+    //     optCostCenterDeductible.push({
+    //       // label: category.name + ' ( ' + costcenter.name + ' ) ',
+    //       label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+    //       value: category._id
+    //     });
+    //   })
+    // }
     costcenter.categorys.map((category) => {
-      const cat = {
+      // const cat = {
+      //   //label: category.name + ' ( ' + costcenter.name + ' ) ',
+      //   label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+      //   value: category._id
+      // }
+      //optCostCenter.push(cat);
+      optCostCenterFilter.push({
         //label: category.name + ' ( ' + costcenter.name + ' ) ',
         label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-        value: category._id
-      }
-      optCostCenter.push(cat);
-      optCostCenterFilter.push(cat);
+        value: category.concept._id
+      });
     })
   });
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{providers}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
-  }
+  // let providers: Provider[];
+  // try {
+  //   providers = await getProviders(token);
+  //   if(typeof(providers)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{providers}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+  // }
 
   const optProviders:Options[]= [];
-  providers.map((provider) => {
-    optProviders.push({
-      label: provider.name,
-      value: provider._id
-    });
-  });
+  // providers.map((provider) => {
+  //   optProviders.push({
+  //     label: provider.name,
+  //     value: provider._id
+  //   });
+  // });
   
-  let responsibles: UsrBack[];
-  try {
-    responsibles = await getUsers(token);
-    if(typeof(responsibles)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{responsibles}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
-  }
+  //let responsibles: UsrBack[];
+  // try {
+  //   responsibles = await getUsers(token);
+  //   if(typeof(responsibles)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{responsibles}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+  // }
 
   const optResponsibles:Options[]= [];
-  responsibles.map((responsible) => {
-    optResponsibles.push({
-      label: responsible.name,
-      value: responsible._id
-    });
-  });
+  // responsibles.map((responsible) => {
+  //   optResponsibles.push({
+  //     label: responsible.name,
+  //     value: responsible._id
+  //   });
+  // });
 
   let reports: ReportParse[];
   try {
@@ -132,29 +136,46 @@ export default async function Page() {
     value: 'all'
   }]
   reports.map((rep) => {
-    const r = {
+    // const r = {
+    //   label: rep.name,
+    //   value: rep._id
+    // }
+    // optReports.push(r);
+    optReportsFilter.push({
       label: rep.name,
       value: rep._id
-    }
-    optReports.push(r);
-    optReportsFilter.push(r);
+    });
   });
 
-  let optProjects:Options[];
-  let optProjectFilter: Options[] = [{
-      label: 'TODOS',
-      value: 'all'
-    }]
+  // let optProjects:Options[];
+  // let optProjectFilter: Options[] = [{
+  //     label: 'TODOS',
+  //     value: 'all'
+  //   }]
+  // try {
+  //   optProjects = await getProjectsLV(token);
+  //   if(typeof(optProjects)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+  // }
+
+  let optProjects:Options[] = [];
+  let optProjectFilter: Options[] = []
   try {
-    optProjects = await getProjectsLV(token);
-    if(typeof(optProjects)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+    optProjectFilter = await getProjectsLV(token);
+    if(typeof(optProjectFilter)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optProjectFilter}</h1>
     }    
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
   }
-
-  optProjectFilter = optProjectFilter.concat(optProjects);
+  optProjectFilter.unshift({
+        label: 'TODOS',
+        value: 'all'
+      })
+  //optProjectFilter = optProjectFilter.concat(optProjects);
 
   let catalogs: GlossaryCatalog[];
   try {
@@ -173,18 +194,21 @@ export default async function Page() {
   let labour:string = '';
   let ticket:string = '';
   catalogs[0].categorys.map((category) => {
-    if(category.glossary.name.toLowerCase().includes('mano de obra')){
-      labour = category.glossary._id;
-    }
-    if(category.glossary.name.toLowerCase().includes('ticket')){
-      ticket = category.glossary._id;
-    }
-    const c = {
-      label: category.glossary.name,
-      value: category.glossary._id
-    }
-    optCategories.push(c);
-    optCategoriesFilter.push(c);
+    // if(category.glossary.name.toLowerCase().includes('mano de obra')){
+    //   labour = category.glossary._id;
+    // }
+    // if(category.glossary.name.toLowerCase().includes('ticket')){
+    //   ticket = category.glossary._id;
+    // }
+    // const c = {
+    //   label: category.glossary.name,
+    //   value: category.glossary._id
+    // }
+    //optCategories.push(c);
+    optCategoriesFilter.push({
+        label: category.glossary.name,
+        value: category.glossary._id
+      });
   })
 
   const optTypes: Options[] = [];
@@ -194,12 +218,15 @@ export default async function Page() {
   }];
   //const optTypes: Options[] = [];
   catalogs[0].types.map((type) => {
-    const t = {
+    // const t = {
+    //   label: type.glossary.name,
+    //   value: type.glossary._id
+    // };
+    //optTypes.push(t);
+    optTypeFilter.push({
       label: type.glossary.name,
       value: type.glossary._id
-    };
-    optTypes.push(t);
-    optTypeFilter.push(t);
+    });
   })
 
   const optConditions: Options[] = [];
@@ -209,12 +236,15 @@ export default async function Page() {
   }];
   //const optConditions: Options[] = [];
   catalogs[0].condition.map((condition) => {
-    const c:Options = {
+    // const c:Options = {
+    //   label: condition.glossary.name,
+    //   value: condition.glossary._id
+    // }
+    //optConditions.push(c);
+    optConditionsFilter.push({
       label: condition.glossary.name,
       value: condition.glossary._id
-    }
-    optConditions.push(c);
-    optConditionsFilter.push(c);
+    });
   })
 
   let optVats: Options[];
