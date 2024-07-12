@@ -68,7 +68,8 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      costcenter: expense.costocenter? typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter.name ?? 'error costcenter' : 'Sin centro de costos',
+      //costcenter: expense.costocenter? typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter.name ?? 'error costcenter' : 'Sin centro de costos',
+      costcenter: expense.costocenter.concept.name,
       Importe: dollar,
       Informe: expense.report?.name || 'sin informe',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
@@ -77,7 +78,8 @@ export function ExpenseDataToTableData(expenses:Expense[]){
         responsible: expense.user.name,
         photo: expense.user.photo
       },
-      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+      //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+      condition: expense.estatus.name,
       archivos: elements,
       vat, 
       discount, 
@@ -90,21 +92,21 @@ export function ExpenseDataToTableData(expenses:Expense[]){
 
 export function getTypeFiles(expense:Expense) {
   const typeFiles: string[] = [];
-  expense.files.map((f) => {
-      if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
-        || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-        || f.types.includes('PNG')){
-          typeFiles.push('pdf');
-          //console.log('aqui entro => ', f);
-          //tiene factura
-      }else{
-        if(f.types.includes('xml') || f.types.includes('XML')){
-          typeFiles.push('xml');
-          //console.log('aqui entro => ', f);
-          //tiene xml    
-        }
-      }
-    });
+  // expense.files.map((f) => {
+  //     if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
+  //       || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
+  //       || f.types.includes('PNG')){
+  //         typeFiles.push('pdf');
+  //         //console.log('aqui entro => ', f);
+  //         //tiene factura
+  //     }else{
+  //       if(f.types.includes('xml') || f.types.includes('XML')){
+  //         typeFiles.push('xml');
+  //         //console.log('aqui entro => ', f);
+  //         //tiene xml    
+  //       }
+  //     }
+  //   });
   
   return typeFiles;
 }

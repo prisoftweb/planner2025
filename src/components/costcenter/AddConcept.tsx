@@ -66,7 +66,7 @@ export default function AddConcept({bandPlus, DeleteElement, index,
           />
         </div>
         <div>
-          <Label htmlFor="account"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cuenta</p></Label>
+          <Label htmlFor="account"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <Input type='text' name='account' 
             onChange={(e) => onChangeAccount(e.target.value)}
           />

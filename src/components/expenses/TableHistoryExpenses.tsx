@@ -273,7 +273,10 @@ export default function TableHistoryExpenses({data, token, expenses,
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           }
         }else{
-          if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
+          // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
+          //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          // }
+          if(costcenters.includes(exp.costocenter.category)){
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           }
         }
@@ -358,7 +361,11 @@ export default function TableHistoryExpenses({data, token, expenses,
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                 reports, categories, types, costcenters);
     }else{
-      if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
+      //               reports, categories, types, costcenters);
+      // }
+      if(conditions.includes(exp.estatus._id)){
         return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                     reports, categories, types, costcenters);
       }

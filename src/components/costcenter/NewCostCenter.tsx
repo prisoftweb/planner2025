@@ -258,7 +258,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
           ) : null}
         </div>
         <div>
-          <Label htmlFor="code"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
+          <Label htmlFor="code"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Clave</p></Label>
           <Input type="text" name="code" 
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
