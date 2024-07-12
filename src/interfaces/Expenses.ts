@@ -4,6 +4,7 @@ import { Provider } from "./Providers"
 import { CostCenter } from "./CostCenter"
 import { Project } from "./Projects"
 import { Report } from "./Reports"
+import { Concept } from "./Concepts"
 
 export interface ExpensesTable {
   id: string
@@ -26,34 +27,59 @@ export interface ExpensesTable {
   total: string
 }
 
+// export interface Expense {
+//   cost: Cost
+//   _id: string
+//   folio: string
+//   taxfolio: string
+//   description: string
+//   date: string
+//   taxapply: boolean
+//   ispaid: boolean
+//   category: Glossary
+//   typeCFDI: Glossary
+//   user: UsrBack
+//   provider: Provider
+//   costocenter:(string | CostCenter)
+//   project: Project
+//   status: boolean
+//   condition: Condition[]
+//   files: File[]
+//   total: number
+//   __v: number
+//   id: string
+//   report: Report
+//   isticket: boolean
+//   iscard: boolean
+// }
+
 export interface Expense {
-  cost: Cost
   _id: string
   folio: string
   taxfolio: string
   description: string
   date: string
   taxapply: boolean
-  ispaid: boolean
-  category: Glossary
-  typeCFDI: Glossary
-  user: UsrBack
-  provider: Provider
-  //costcenter: CostCenter
-  // costcenter:(string | CostCenter)
-  costocenter:(string | CostCenter)
-  project: Project
-  status: boolean
-  condition: Condition[]
-  files: File[]
-  total: number
-  //iva: number
-  __v: number
-  id: string
-  //report: string
-  report: Report
   isticket: boolean
+  ispaid: boolean
+  cost: Cost
+  user: UsrBack
+  project: Project
+  report: Report
+  provider: Provider
+  costocenter: Costocenter
+  typeCFDI: Glossary
+  category: Glossary
+  estatus: Glossary
+  status: boolean
   iscard: boolean
+  //files: File[]
+}
+
+export interface Costocenter {
+  _id: string
+  category: string
+  concept: Concept
 }
 
 export interface File {

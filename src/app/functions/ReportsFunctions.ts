@@ -80,7 +80,8 @@ export function CostsDataToTableData(expenses:Expense[]){
         responsible: expense.user.name,
         photo: expense.user.photo
       },
-      condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
+      condition: expense.estatus.name,
+      //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
     })
   });
 

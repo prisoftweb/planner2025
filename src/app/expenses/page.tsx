@@ -7,16 +7,10 @@ import { CostCenter } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
 import { getProvidersLV } from "../api/routeProviders";
-//import { Provider } from "@/interfaces/Providers";
 import { getUsersLV } from "../api/routeUser";
-//import { getGlossaries } from "../api/routeGlossary";
-//import { Glossary } from "@/interfaces/Glossary";
 import { getProjectsLV } from "../api/routeProjects";
-//import { Project } from "@/interfaces/Projects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-//import TableExpenses from "@/components/expenses/TableExpenses";
-import { GetCosts, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
-//import Header from "@/components/Header";
+import { GetCostsMIN, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
@@ -34,7 +28,7 @@ export default async function Page() {
   
   let expenses: Expense[] = [];
   try {
-    expenses = await GetCosts(token);
+    expenses = await GetCostsMIN(token);
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {
@@ -382,7 +376,8 @@ export default async function Page() {
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      costcenter: typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter?.name,
+      //costcenter: typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter?.name,
+      costcenter: expense.costocenter.concept.name,
       Importe: dollar,
       Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
@@ -391,7 +386,8 @@ export default async function Page() {
         responsible: expense.user?.name,
         photo: expense.user?.photo
       },
-      condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
+      //condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
+      condition: expense.estatus.name,
       archivos: elements,
       vat,
       discount,

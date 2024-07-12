@@ -24,7 +24,7 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
   
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [costcenter, setCostCenter] = useState<string>( currentExpense? 
-      typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter: currentExpense.costocenter?.categorys[0]?._id || ''
+      typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter: currentExpense.costocenter?.concept?._id || ''
       : '');
   //const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);

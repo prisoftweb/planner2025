@@ -64,8 +64,10 @@ export default function ProfileExpense({expense}:
                   <p className="text-blue-500">{currentExpense?.provider?.name || 'Sin proveedor'}</p>
                 </div>
                 <div className="h-6">
-                  <Chip label={currentExpense && currentExpense?.condition.length >0? 
-                      currentExpense?.condition[currentExpense?.condition.length-1].glossary.name: 'sin status'} />
+                  {/* <Chip label={currentExpense && currentExpense?.condition.length >0? 
+                      currentExpense?.condition[currentExpense?.condition.length-1].glossary.name: 'sin status'} /> */}
+                  <Chip label={currentExpense && currentExpense?.estatus? 
+                    currentExpense?.estatus.name: 'sin status'} />
                 </div>
               </div>
             </div>
