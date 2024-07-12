@@ -16,18 +16,19 @@ import { Options } from "@/interfaces/Common";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-
+import { insertConditionInCost } from "@/app/api/routeCost";
+import Button from "../Button";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
                             optProjects, optReports, isFilter, setIsFilter, 
-                          optCostCenterFilter}:
+                          optCostCenterFilter, idValidado, user}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
-                        isFilter:boolean, setIsFilter:Function, 
-                        optCostCenterFilter:Options[]}){
+                        isFilter:boolean, setIsFilter:Function, user: string, 
+                        optCostCenterFilter:Options[], idValidado: string}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -35,6 +36,7 @@ export default function TableExpenses({data, token, expenses,
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
+  const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
 
   const {refresh, updateRefresh} = useNewExpense();
 
@@ -196,7 +198,11 @@ export default function TableExpenses({data, token, expenses,
     total: false,
   }
 
-  const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} 
+  const handleExpensesSelected = (value: ExpensesTable[]) => {
+    setExpensesSelected(value);
+  }
+
+  const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
   const [maxAmount, setMaxAmount] = useState<number>(0);
   
@@ -219,7 +225,7 @@ export default function TableExpenses({data, token, expenses,
             setDataExpenses(d);
             setView(<></>);
             setTimeout(() => {
-              setView(<Table columns={columns} data={d} 
+              setView(<Table columns={columns} data={d} selectFunction={handleExpensesSelected}
                     placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
             }, 500);
           }else{
@@ -235,13 +241,44 @@ export default function TableExpenses({data, token, expenses,
     }
   }, [refresh]);
 
+  const changeConditionInCost = async () => {
+    //
+    if(expensesSelected.length > 0){
+      const filter: string[] = [];
+      expensesSelected.map((row) => {
+        filter.push(row.id);
+      })
+      const data = {
+        condition: {
+          glossary: idValidado,
+          user
+        },
+        filter,
+      }
+
+      try {
+        const res = await insertConditionInCost(token, data);
+        if(res===200){
+          showToastMessage('Costos actualizados satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un problema al actualizar condicion!!');
+      }
+    }
+  }
+
   useEffect(() => {
     if(filter){
       console.log('data exp ', dataExpenses);
       setView(<></>);
       setTimeout(() => {
         // const total = da
-        setView(<Table columns={columns} data={dataExpenses} 
+        setView(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
           placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
       }, 100);
       setFilter(false);
@@ -402,6 +439,7 @@ export default function TableExpenses({data, token, expenses,
                           optProjects={optProjects} optReports={optReports}
                           optCostCenterFilter={optCostCenterFilter} />}
       </div>
+      <Button onClick={changeConditionInCost}>Validar</Button>
       {view}
     </>
   )

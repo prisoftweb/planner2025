@@ -65,7 +65,7 @@ export default async function Page() {
         optCostCenterDeductible.push({
           // label: category.name + ' ( ' + costcenter.name + ' ) ',
           label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-          value: category._id
+          value: costcenter._id + '/' + category.concept._id
         });
       })
     }
@@ -73,7 +73,7 @@ export default async function Page() {
       const cat = {
         // label: category.name + ' ( ' + costcenter.name + ' ) ',
         label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
-        value: category._id
+        value: costcenter._id + '/' + category.concept._id
       }
       optCostCenter.push(cat);
       optCostCenterFilter.push(cat);
@@ -214,6 +214,8 @@ export default async function Page() {
   } catch (error) {
     return <h1>Error al consultar catalogos!!</h1>
   }
+
+  const idValidado = catalogs[0].condition.find((cond) => cond.glossary.name.toLowerCase().includes('validado'))?.glossary._id || '';
 
   const optCategories: Options[] = [];
   const optCategoriesFilter: Options[] = [{
@@ -430,7 +432,7 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        />
+        idValidado={idValidado}  />
     </>
   )
 }

@@ -26,7 +26,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, project, condition, category, 
-    reset, updateRefresh, updateCategory, isCard, isPettyCash, updateIsCard} = useNewExpense();
+    reset, updateRefresh, updateCategory, isCard, isPettyCash, concept, 
+    updateIsCard, updateCostCenter} = useNewExpense();
 
   const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
 
@@ -44,11 +45,11 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     onSubmit: async (valores) => {            
       const {description, amount} = valores;
       let type = 'OTROS';
-      const cc = optCostCenter.find((costc) => costc.value === costcenter);
+      const cc = optCostCenter.find((costc) => costc.value === costCenter);
       if(cc?.label.toLowerCase().includes('mano de obra')){
         type = 'MANO DE OBRA';
       }
-      updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
+      updateBasicData('', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
           '', '', categoryS, '', type);
       updateIndexStepper(2);
@@ -63,7 +64,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
   const d = year+'-'+month+'-'+day;
 
-  const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
+  //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
   const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
   const [resetBand, setResetBand] = useState<boolean>(false);
@@ -95,20 +96,25 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     refRequest.current = false;
     let type = 'OTROS';
     //console.log('cost center a buscar => ', costcenter);
-    const cc = optCostCenter.find((costc) => costc.value === costcenter);
+    const cc = optCostCenter.find((costc) => costc.value === costCenter);
     //console.log('cc find save', cc);
     if(cc?.label.toLowerCase().includes('mano de obra')){
       //console.log('entro aqui => ', cc?.label.toLowerCase());
       type = 'MANO DE OBRA';
     }
     const {description, amount} = formik.values
-    updateBasicData(costcenter, '', description, amount.replace(/[$,]/g, ""), 
+    updateBasicData('', description, amount.replace(/[$,]/g, ""), 
         startDate, '', '', '', '', '', '', '', categoryS, '', type);
     
+
+    const costcenter = {
+      category: costCenter,
+      concept
+    }
     if(voucher){
       const formdata = new FormData();
       //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
-      formdata.append('costocenter', costcenter);
+      formdata.append('costocenter', JSON.stringify(costcenter));
       formdata.append('date', startDate);
       formdata.append('description', description);
       formdata.append('user', responsibleS);
@@ -230,7 +236,14 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   }, [clearAmount]);
 
   const handleCostCenter = (value:string) => {
-    setCostCenter(value);
+    //setCostCenter(value);
+    console.log('value costoc => ', value);
+    const indexCaracter = value.indexOf('/');
+    const c1 = value.substring(0, indexCaracter);
+    const c2 = value.substring(indexCaracter + 1);
+    console.log('cad 1 => ', c1);
+    console.log('cad 2 => ', c2);
+    updateCostCenter(c1, c2);
     const cc = optCostCenter.find((costC) => costC.value === value);
     if(cc){
       if(cc.label.toLowerCase().includes('mano de obra')){
@@ -246,6 +259,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   }
 
   useEffect(() => {
+    handleCostCenter(optCostCenter[0].value);
     let indexCC = 0;
     if(costCenter !== ''){
       optCostCenter.map((opt, index:number) => {

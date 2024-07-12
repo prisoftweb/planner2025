@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: { id: string }}){
       optCostCenter.push({
         //label: category.name + ' ( ' + costcenter.name + ' ) ',
         label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
-        value: category._id
+        value: category.concept._id
       });
       //cat += category.name + ', ';
     })

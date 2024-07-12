@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseStepper from "./NavExpenseStepper"
 import { useNewExpense } from "@/app/store/newExpense"
@@ -31,8 +31,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     costCenter, date, description, discount, 
     folio, project, proveedor, responsible, taxFolio, 
     typeCFDI, vat, reset, updateRefresh, isCard, 
-    report, condition, category, isPettyCash, 
-    updateIsCard} = useNewExpense();
+    report, condition, category, isPettyCash, concept,
+    updateIsCard, updateCostCenter} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -59,7 +59,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     }),
     onSubmit: async (valores) => {            
       const {description, folio, taxFolio, discount, amount, vat} = valores;
-      updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
+      updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
           typeCFDIS, '', categoryS, idVat, 'PROVEEDOR');
       updateIndexStepper(2);
@@ -74,7 +74,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const d = year+'-'+month+'-'+day;
   
-  const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
+  //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(date!== ''? date: d);
   //const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(optTypes[0].value);
@@ -132,10 +132,16 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     />
   )
 
+  useEffect(() => {
+    handleConstCenter(optCostCenter[0].value);
+  }, []);
+
+  console.log('costcenter contex => ', costCenter);
+  console.log('concept context => ', concept);
   const SaveData = async() => {
     refRequest.current = false;
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
-    updateBasicData(costcenter, folio, description, amount.replace(/[$,]/g, ""), 
+    updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
         typeCFDIS, '', categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR');
     
@@ -145,10 +151,16 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     } catch (error) {
       supplierCredit = false;
     }
+    
+    const costcenter = {
+      category: costCenter,
+      concept
+    }
+
     if(voucher || CFDI){
       const formdata = new FormData();
       //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
-      formdata.append('costocenter', costcenter);
+      formdata.append('costocenter', JSON.stringify(costcenter));
       formdata.append('date', startDate);
       formdata.append('description', description);
       //formdata.append('discount', discount.replace(/[$,]/g, ""));
@@ -337,7 +349,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   }
 
   const handleConstCenter = (value : string) => {
-    setCostCenter(value);
+    console.log('value costoc => ', value);
+    const indexCaracter = value.indexOf('/');
+    const c1 = value.substring(0, indexCaracter);
+    const c2 = value.substring(indexCaracter + 1);
+    console.log('cad 1 => ', c1);
+    console.log('cad 2 => ', c2);
+    updateCostCenter(c1, c2);
+    //setCostCenter(value);
   }
 
   const viewCC = (

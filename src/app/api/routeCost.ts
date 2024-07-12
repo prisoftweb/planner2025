@@ -264,3 +264,25 @@ export async function GetCostsGroupByType(auth_token:string) {
     return 'Error al consultar costos por tipo!!';
   }
 }
+
+export async function insertConditionInCost(auth_token:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/insertConditionInCost`;
+  //console.log(url);
+  //console.log(JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    //console.log(res);
+    if(res.status === 200) return res.status;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al insertar condicion en costo!!';
+    }
+    return 'Error al insertar condicion en costo!!';
+  }
+}

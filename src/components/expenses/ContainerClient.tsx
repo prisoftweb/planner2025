@@ -21,7 +21,7 @@ export default function ContainerClient({data, token, expenses,
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
                     optProjects, optProviders, optReports, optResponsibles, 
                     optTypes, reports, user, optVats, optCostCenterFilter, 
-                    reportProjects, costsTypes, isHistory=false}:
+                    reportProjects, costsTypes, isHistory=false, idValidado}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
                     optConditionsFilter:Options[], expenses:Expense[], 
@@ -33,7 +33,7 @@ export default function ContainerClient({data, token, expenses,
                     reports:ReportParse[], optReports:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
                     idTicket:string, optVats:Options[], reportProjects: ReportByProject[], 
-                    costsTypes: CostGroupByType[], isHistory?:boolean}){
+                    costsTypes: CostGroupByType[], isHistory?:boolean, idValidado: string}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const handleFilter = (value: boolean) => {
@@ -83,7 +83,7 @@ export default function ContainerClient({data, token, expenses,
             optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
             optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
             optReports={optReportsFilter} isFilter={isFilter} setIsFilter={setIsFilter}
-            optCostCenterFilter={optCostCenterFilter}
+            optCostCenterFilter={optCostCenterFilter} idValidado={idValidado} user={user}
           />
         )
       }
