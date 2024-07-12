@@ -19,7 +19,7 @@ import { Concept } from "@/interfaces/Concepts"
 
 interface ConceptCostCenter {
   "name": string,
-  "description": string
+  "account": string
 }
 
 export default function NewCostCenter({showForm, token, costCenter}: 
@@ -122,8 +122,8 @@ export default function NewCostCenter({showForm, token, costCenter}:
 
   useEffect(() => {
     if(indexDeleteConcept !== -1){
-      console.log('index del => ', indexDeleteConcept);
-      console.log('leng => ', concetpsCostCenter.length);
+      // console.log('index del => ', indexDeleteConcept);
+      // console.log('leng => ', concetpsCostCenter.length);
       const arrConcepts = concetpsCostCenter;
       arrConcepts.splice(indexDeleteConcept, 1);
       console.log('res => ', arrConcepts.length);
@@ -161,7 +161,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
             //create concept
             arrConcepts.push({
               name: concept,
-              description: accounts[index]
+              account : accounts[index]
             })
           });
   
@@ -188,9 +188,9 @@ export default function NewCostCenter({showForm, token, costCenter}:
               refRequest.current = true;
               showForm(false);
               showToastMessage('Centro de costos creado exitosamente!!!');
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
+              setTimeout(() => {
+                window.location.reload();
+              }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);

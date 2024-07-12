@@ -17,15 +17,15 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
   const [dataCFDI, setDataCFDI] = useState<CFDIValidation>();
 
   useEffect(() => {
-    //console.log('expense', expense);
-    // expense.files.map((f) => {
-    //   if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
-    //       //console.log('aqui entro => ', f);
+    console.log('expense', expense);
+    expense.files.map((f) => {
+      if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
+          //console.log('aqui entro => ', f);
           
-    //       setIdFile(f._id);
-    //       setUrlFile(f.file);
-    //   }
-    // });
+          setIdFile(f._id);
+          setUrlFile(f.file);
+      }
+    });
   }, []);
 
   const sendFile = async () => {

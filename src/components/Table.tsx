@@ -67,16 +67,17 @@ export default function Table({data, columns, placeH, typeTable='',
 
   let total: number = 0;
   let labelJSX : JSX.Element = <div></div>;
+  //const [labelJSX, setLabelJSX] = useState<JSX.Element>(<></>)
   if(typeTable === 'cost'){
     data.map((exp:ExpensesTable) => total += Number(exp.Importe.replace(/[$, M, X, N,]/g, "")));
     const t = CurrencyFormatter({
       currency: 'MXN',
       value: total
     });
-    labelJSX = <div className="flex gap-x-5 text-white pl-5">
+    labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
           <p>Cantidad: {data.length}</p>
           <p>Total de informes: {t}</p>
-        </div>
+        </div>)
   }
 
   useEffect(() => {

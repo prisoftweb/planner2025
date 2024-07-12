@@ -16,19 +16,19 @@ import { Options } from "@/interfaces/Common";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-import { insertConditionInCost } from "@/app/api/routeCost";
-import Button from "../Button";
+// import { insertConditionInCost } from "@/app/api/routeCost";
+//import Button from "../Button";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
                             optProjects, optReports, isFilter, setIsFilter, 
-                          optCostCenterFilter, idValidado, user}:
+                          optCostCenterFilter, idValidado, user, handleExpensesSelected}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
                         isFilter:boolean, setIsFilter:Function, user: string, 
-                        optCostCenterFilter:Options[], idValidado: string}){
+                        optCostCenterFilter:Options[], idValidado: string, handleExpensesSelected:Function}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -36,7 +36,7 @@ export default function TableExpenses({data, token, expenses,
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
-  const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
+  // const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
 
   const {refresh, updateRefresh} = useNewExpense();
 
@@ -198,9 +198,9 @@ export default function TableExpenses({data, token, expenses,
     total: false,
   }
 
-  const handleExpensesSelected = (value: ExpensesTable[]) => {
-    setExpensesSelected(value);
-  }
+  // const handleExpensesSelected = (value: ExpensesTable[]) => {
+  //   setExpensesSelected(value);
+  // }
 
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
@@ -241,36 +241,36 @@ export default function TableExpenses({data, token, expenses,
     }
   }, [refresh]);
 
-  const changeConditionInCost = async () => {
-    //
-    if(expensesSelected.length > 0){
-      const filter: string[] = [];
-      expensesSelected.map((row) => {
-        filter.push(row.id);
-      })
-      const data = {
-        condition: {
-          glossary: idValidado,
-          user
-        },
-        filter,
-      }
+  // const changeConditionInCost = async () => {
+  //   //
+  //   if(expensesSelected.length > 0){
+  //     const filter: string[] = [];
+  //     expensesSelected.map((row) => {
+  //       filter.push(row.id);
+  //     })
+  //     const data = {
+  //       condition: {
+  //         glossary: idValidado,
+  //         user
+  //       },
+  //       filter,
+  //     }
 
-      try {
-        const res = await insertConditionInCost(token, data);
-        if(res===200){
-          showToastMessage('Costos actualizados satisfactoriamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
-        }else{
-          showToastMessageError(res);
-        }
-      } catch (error) {
-        showToastMessageError('Ocurrio un problema al actualizar condicion!!');
-      }
-    }
-  }
+  //     try {
+  //       const res = await insertConditionInCost(token, data);
+  //       if(res===200){
+  //         showToastMessage('Costos actualizados satisfactoriamente!!!');
+  //         setTimeout(() => {
+  //           window.location.reload();
+  //         }, 500);
+  //       }else{
+  //         showToastMessageError(res);
+  //       }
+  //     } catch (error) {
+  //       showToastMessageError('Ocurrio un problema al actualizar condicion!!');
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     if(filter){
@@ -316,8 +316,13 @@ export default function TableExpenses({data, token, expenses,
           // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
           //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           // }
-          if( costcenters.includes(exp.costocenter.concept.id)){
+          if(costcenters.includes(exp.costocenter.concept.id)){
+            console.log('entrooo???');
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          }else{
+            console.log('elseee');
+            console.log('concept id => ', exp.costocenter.concept._id);
+            console.log('all cost centers  => ', costcenters);
           }
         }
       }
@@ -446,7 +451,7 @@ export default function TableExpenses({data, token, expenses,
                           optProjects={optProjects} optReports={optReports}
                           optCostCenterFilter={optCostCenterFilter} />}
       </div>
-      <Button onClick={changeConditionInCost}>Validar</Button>
+      {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
       {view}
     </>
   )

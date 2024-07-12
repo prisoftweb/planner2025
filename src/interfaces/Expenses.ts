@@ -73,7 +73,7 @@ export interface Expense {
   estatus: Glossary
   status: boolean
   iscard: boolean
-  //files: File[]
+  files: File[]
 }
 
 export interface Costocenter {

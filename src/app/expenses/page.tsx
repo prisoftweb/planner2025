@@ -10,7 +10,7 @@ import { getProvidersLV } from "../api/routeProviders";
 import { getUsersLV } from "../api/routeUser";
 import { getProjectsLV } from "../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import { GetCostsMIN, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
+import { getAllCostsByCondition, GetCostsMIN, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
@@ -28,6 +28,7 @@ export default async function Page() {
   
   let expenses: Expense[] = [];
   try {
+    //expenses = await getAllCostsByCondition(token);
     expenses = await GetCostsMIN(token);
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
@@ -64,16 +65,25 @@ export default async function Page() {
       })
     }
     costcenter.categorys.map((category) => {
-      const cat = {
+      // const cat = {
+      //   // label: category.name + ' ( ' + costcenter.name + ' ) ',
+      //   label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
+      //   value: costcenter._id + '/' + category.concept._id
+      // }
+      optCostCenter.push({
         // label: category.name + ' ( ' + costcenter.name + ' ) ',
         label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
         value: costcenter._id + '/' + category.concept._id
-      }
-      optCostCenter.push(cat);
-      optCostCenterFilter.push(cat);
+      });
+      optCostCenterFilter.push({
+        // label: category.name + ' ( ' + costcenter.name + ' ) ',
+        label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
+        value: category.concept._id
+      });
     })
   });
-
+  console.log('opt costcenter normal => ', optCostCenter);
+  console.log('opt costcenter filter => ', optCostCenterFilter);
   //let providers: Provider[];
   let optProviders:Options[]= [];
   try {
