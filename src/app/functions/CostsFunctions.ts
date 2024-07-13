@@ -63,28 +63,52 @@ export function ExpenseDataToTableData(expenses:Expense[]){
         }
       }
     }
+    // table.push({
+    //   id: expense._id,
+    //   Descripcion: expense.description,
+    //   Estatus: 'condition',
+    //   Fecha: expense.date,
+    //   //costcenter: expense.costocenter? typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter.name ?? 'error costcenter' : 'Sin centro de costos',
+    //   costcenter: expense.costocenter.concept.name,
+    //   Importe: dollar,
+    //   Informe: expense.report?.name || 'sin informe',
+    //   Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
+    //   Proyecto: expense.project?.title || 'sin proyecto',
+    //   Responsable: {
+    //     responsible: expense.user.name,
+    //     photo: expense.user.photo
+    //   },
+    //   //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+    //   condition: expense.estatus.name,
+    //   archivos: elements,
+    //   vat, 
+    //   discount, 
+    //   total,
+    //   taxFolio: expense.taxfolio || ''
+    // })
     table.push({
       id: expense._id,
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      //costcenter: expense.costocenter? typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter.name ?? 'error costcenter' : 'Sin centro de costos',
+      //costcenter: typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter?.name,
       costcenter: expense.costocenter.concept.name,
       Importe: dollar,
-      Informe: expense.report?.name || 'sin informe',
+      Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
-        responsible: expense.user.name,
-        photo: expense.user.photo
+        responsible: expense.user?.name,
+        photo: expense.user?.photo
       },
-      //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status',
+      //condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
       condition: expense.estatus.name,
       archivos: elements,
-      vat, 
-      discount, 
-      total
-    })
+      vat,
+      discount,
+      total,
+      taxFolio: expense.taxfolio || ''
+    });
   });
 
   return table;

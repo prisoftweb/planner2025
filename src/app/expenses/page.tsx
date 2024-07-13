@@ -2,8 +2,8 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-import { getCostoCenters } from "../api/routeCostCenter";
-import { CostCenter } from "@/interfaces/CostCenter";
+import { getCostoCentersLV } from "../api/routeCostCenter";
+import { CostoCenterLV } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
 import { getProvidersLV } from "../api/routeProviders";
@@ -37,9 +37,9 @@ export default async function Page() {
     return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
   }
 
-  let costcenters: CostCenter[];
+  let costcenters: CostoCenterLV[];
   try {
-    costcenters = await getCostoCenters(token);
+    costcenters = await getCostoCentersLV(token);
     if(typeof(costcenters)==='string'){
       return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
     }    
@@ -48,39 +48,49 @@ export default async function Page() {
   }
 
   const optCostCenter:Options[]= [];
-  const optCostCenterDeductible:Options[] = [];
+  //const optCostCenterDeductible:Options[] = [];
   const optCostCenterFilter:Options[]= [{
     label: 'TODOS',
     value: 'all'
   }];
   
   costcenters.map((costcenter) => {
-    if(costcenter.isnormal){
-      costcenter.categorys.map((category) => {
-        optCostCenterDeductible.push({
-          // label: category.name + ' ( ' + costcenter.name + ' ) ',
-          label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-          value: costcenter._id + '/' + category.concept._id
-        });
-      })
-    }
-    costcenter.categorys.map((category) => {
-      // const cat = {
-      //   // label: category.name + ' ( ' + costcenter.name + ' ) ',
-      //   label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
-      //   value: costcenter._id + '/' + category.concept._id
-      // }
-      optCostCenter.push({
-        // label: category.name + ' ( ' + costcenter.name + ' ) ',
-        label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
-        value: costcenter._id + '/' + category.concept._id
-      });
-      optCostCenterFilter.push({
-        // label: category.name + ' ( ' + costcenter.name + ' ) ',
-        label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
-        value: category.concept._id
-      });
-    })
+    // if(costcenter.isnormal){
+    //   costcenter.categorys.map((category) => {
+    //     optCostCenterDeductible.push({
+    //       // label: category.name + ' ( ' + costcenter.name + ' ) ',
+    //       label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+    //       value: costcenter._id + '/' + category.concept._id
+    //     });
+    //   })
+    // }
+    // costcenter.categorys.map((category) => {
+    //   // const cat = {
+    //   //   // label: category.name + ' ( ' + costcenter.name + ' ) ',
+    //   //   label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
+    //   //   value: costcenter._id + '/' + category.concept._id
+    //   // }
+    //   optCostCenter.push({
+    //     // label: category.name + ' ( ' + costcenter.name + ' ) ',
+    //     label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
+    //     value: costcenter._id + '/' + category.concept._id
+    //   });
+    //   optCostCenterFilter.push({
+    //     // label: category.name + ' ( ' + costcenter.name + ' ) ',
+    //     label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
+    //     value: category.concept._id
+    //   });
+    // })
+    optCostCenter.push({
+      // label: category.name + ' ( ' + costcenter.name + ' ) ',
+      label: costcenter.label || 'sin categoria',
+      value: costcenter.categoryid + '/' + costcenter.value
+    });
+    optCostCenterFilter.push({
+      // label: category.name + ' ( ' + costcenter.name + ' ) ',
+      label: costcenter.label || 'sin categoria',
+      value: costcenter.value
+    });
   });
   // console.log('opt costcenter normal => ', optCostCenter);
   // console.log('opt costcenter filter => ', optCostCenterFilter);
@@ -317,7 +327,7 @@ export default async function Page() {
                   optProjects={optProjects} optConditions={optConditions}
                   optCategories={optCategories} optTypes={optTypes} reports={reports}
                   optReports={optReports} idLabour={labour} idTicket={ticket}
-                  optCostCenterDeductible={optCostCenterDeductible} optVats={optVats}
+                  optCostCenterDeductible={optCostCenter} optVats={optVats}
               />
           </WithOut>
         </div>
@@ -402,6 +412,7 @@ export default async function Page() {
       vat,
       discount,
       total,
+      taxFolio: expense.taxfolio || ''
     });
   });
 
@@ -433,7 +444,7 @@ export default async function Page() {
       <ContainerClient data={table} expenses={expenses} idLabour={labour} idTicket={ticket}
         optCategories={optCategories} optCategoriesFilter={optCategoriesFilter} optConditions={optConditions}
         optConditionsFilter={optConditionsFilter} optCostCenter={optCostCenter} 
-        optCostCenterDeductible={optCostCenterDeductible} optCostCenterFilter={optCostCenterFilter}
+        optCostCenterDeductible={optCostCenter} optCostCenterFilter={optCostCenterFilter}
         optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 

@@ -44,3 +44,10 @@ export interface Category {
   _id: string
   id: string
 }
+
+export interface CostoCenterLV {
+  categoryid: string
+  categoryname: string
+  value: string
+  label: string
+}

@@ -65,21 +65,6 @@ export default function Table({data, columns, placeH, typeTable='',
 
   //const [rowsTable, setRowsTable] = useState<number>(parsedData? parseInt(parsedData.numRows): 10);
 
-  let total: number = 0;
-  let labelJSX : JSX.Element = <div></div>;
-  //const [labelJSX, setLabelJSX] = useState<JSX.Element>(<></>)
-  if(typeTable === 'cost'){
-    data.map((exp:ExpensesTable) => total += Number(exp.Importe.replace(/[$, M, X, N,]/g, "")));
-    const t = CurrencyFormatter({
-      currency: 'MXN',
-      value: total
-    });
-    labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
-          <p>Cantidad: {data.length}</p>
-          <p>Total de informes: {t}</p>
-        </div>)
-  }
-
   useEffect(() => {
     setFiltering(search);
   }, [search]);
@@ -119,6 +104,45 @@ export default function Table({data, columns, placeH, typeTable='',
       }
     },
   })
+
+  let total: number = 0;
+  let labelJSX : JSX.Element = <div></div>;
+  //const [labelJSX, setLabelJSX] = useState<JSX.Element>(<></>)
+  if(typeTable === 'cost'){
+    data.map((exp:ExpensesTable) => total += Number(exp.Importe.replace(/[$, M, X, N,]/g, "")));
+    const t = CurrencyFormatter({
+      currency: 'MXN',
+      value: total
+    });
+    // labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
+    //       <p>Cantidad: {data.length}</p>
+    //       <p>Total de informes: {t}</p>
+    //     </div>)
+    if(table.getSelectedRowModel().flatRows.length > 0){
+      let totalSeleccionados: number = 0;
+      table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.Importe.replace(/[$, M, X, N,]/g, "")));
+      //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
+      const tSeleccionados = CurrencyFormatter({
+        currency: 'MXN',
+        value: totalSeleccionados
+      });
+      labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
+          <div className="flex gap-x-5 text-white pl-5">
+            <p>Cantidad: {data.length}</p>
+            <p>Total de informes: {t}</p>
+          </div>
+          <div className="flex gap-x-5 text-white pl-5">
+            <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
+            <p>Total de informes seleccionados: {tSeleccionados}</p>
+          </div>
+      </div>)
+    }else{
+      labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
+            <p>Cantidad: {data.length}</p>
+            <p>Total de informes: {t}</p>
+          </div>)
+    }
+  }
 
   const updateLabelRowsPage = () => {
     //setStarPage()

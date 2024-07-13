@@ -125,6 +125,8 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           user
         }], iscard:isCard, type
       }
+      // console.log('save cost in cfdi stepper => ', JSON.stringify(data));
+      // console.log('costo center => ', JSON.stringify(costcenter));
   
       try {
         const res = await SaveExpense(data, token);

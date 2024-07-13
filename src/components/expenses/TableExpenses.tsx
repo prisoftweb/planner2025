@@ -42,7 +42,7 @@ export default function TableExpenses({data, token, expenses,
 
   const {refresh, updateRefresh} = useNewExpense();
 
-  console.log('is filter => ', isFilter);
+  //console.log('is filter => ', isFilter);
   const handleIsFilter = (value: boolean) => {
     // console.log('value is filter => ', value);
     if(value){
@@ -196,6 +196,15 @@ export default function TableExpenses({data, token, expenses,
         </Link>
       ),
     }),
+    columnHelper.accessor('taxFolio', {
+      header: 'Folio fiscal',
+      id: 'Folio fiscal',
+      cell: ({row}) => (
+        <Link href={`/expenses/${row.original.id}/profile`}>
+          <p className="">{row.original.taxFolio}</p>
+        </Link>
+      ),
+    }),
   ]
   
   const initialVisibilityColumns: any = {
@@ -212,6 +221,7 @@ export default function TableExpenses({data, token, expenses,
     iva: false,
     descuento: false,
     total: false,
+    "Folio fiscal": false,
   }
 
   // const handleExpensesSelected = (value: ExpensesTable[]) => {
