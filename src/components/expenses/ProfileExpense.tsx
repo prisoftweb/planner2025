@@ -1,11 +1,11 @@
 import Label from "../Label";
-import { Expense } from "@/interfaces/Expenses";
+import { OneExpense } from "@/interfaces/Expenses";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "../providers/Chip";
 import { useNewExpense } from "@/app/store/newExpense";
 
 export default function ProfileExpense({expense}: 
-                        {expense:Expense}){
+                        {expense:OneExpense}){
 
   const {currentExpense} = useNewExpense();
   

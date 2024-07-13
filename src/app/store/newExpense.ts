@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import { Expense } from '@/interfaces/Expenses'
+import { Expense, OneExpense } from '@/interfaces/Expenses'
 
 interface NewExpenseState {
   costCenter: string,
@@ -39,7 +39,7 @@ interface ProjectState{
 }
 
 interface CurrentExpense{
-  currentExpense: (Expense | null),
+  currentExpense: (OneExpense | null),
 }
 
 interface Actions {
@@ -59,7 +59,7 @@ interface Actions {
   updateCategory: (value:string) => void,
   updatePettyCash: (value:boolean) => void,
   updateIsCard: (value:boolean) => void,
-  updateCurrentExpense: (value: Expense) => void,
+  updateCurrentExpense: (value: OneExpense) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -175,7 +175,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
     ...state,
     isCard: value,
   })),
-  updateCurrentExpense: (value:Expense) => set(state => ({
+  updateCurrentExpense: (value:OneExpense) => set(state => ({
     ...state,
     currentExpense: value
   })),

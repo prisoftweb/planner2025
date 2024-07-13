@@ -3,7 +3,7 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { RemoveCost } from "@/app/api/routeCost";
@@ -21,24 +21,40 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
-                            optProjects, optReports, isFilter, setIsFilter, 
-                          optCostCenterFilter, idValidado, user, handleExpensesSelected}:
+                            optProjects, optReports, handleExpensesSelected,
+                          optCostCenterFilter, idValidado, user, isFilter, setIsFilter }:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
-                        isFilter:boolean, setIsFilter:Function, user: string, 
+                        user: string, isFilter:boolean, setIsFilter:Function, 
                         optCostCenterFilter:Options[], idValidado: string, handleExpensesSelected:Function}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
+  const refExpenses = useRef(expenses);
+  const refFilter = useRef(false);
 
   //const [filtering, setFiltering] = useState<boolean>(false);
-  const [filter, setFilter] = useState<boolean>(false);
+  //const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
-  const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
+  //const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
   // const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
 
   const {refresh, updateRefresh} = useNewExpense();
+
+  console.log('is filter => ', isFilter);
+  const handleIsFilter = (value: boolean) => {
+    // console.log('value is filter => ', value);
+    if(value){
+      if(!refFilter.current){
+        refFilter.current = true;
+        setDataExpenses(ExpenseDataToTableData(refExpenses.current));
+      }
+    }else{
+      refFilter.current = false;
+    }
+    setIsFilter(value);
+  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -202,8 +218,10 @@ export default function TableExpenses({data, token, expenses,
   //   setExpensesSelected(value);
   // }
 
-  const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
-                placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
+  // const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
+  //               placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
+  const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
+                placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />
   const [maxAmount, setMaxAmount] = useState<number>(0);
   
   useEffect(() => {
@@ -214,32 +232,57 @@ export default function TableExpenses({data, token, expenses,
   }, [])
 
 
-  useEffect(() => {
-    if(refresh){
-      const aux = async () =>{
-        try {
-          const res = await GetCosts(token);
-          //console.log('res');
-          if(typeof(res) !== 'string'){
-            const d = ExpenseDataToTableData(res);
-            setDataExpenses(d);
-            setView(<></>);
-            setTimeout(() => {
-              setView(<Table columns={columns} data={d} selectFunction={handleExpensesSelected}
-                    placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-            }, 500);
-          }else{
-            showToastMessageError(res);
-          }
-        } catch (error) {
-          console.log('catch table expenses => ', error);
-          showToastMessageError('Error al actualizar tabla!!');
+  // useEffect(() => {
+  //   if(refresh){
+  //     const aux = async () =>{
+  //       try {
+  //         const res = await GetCosts(token);
+  //         //console.log('res');
+  //         if(typeof(res) !== 'string'){
+  //           const d = ExpenseDataToTableData(res);
+  //           setDataExpenses(d);
+  //           setView(<></>);
+  //           setTimeout(() => {
+  //             setView(<Table columns={columns} data={d} selectFunction={handleExpensesSelected}
+  //                   placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
+  //           }, 500);
+  //         }else{
+  //           showToastMessageError(res);
+  //         }
+  //       } catch (error) {
+  //         console.log('catch table expenses => ', error);
+  //         showToastMessageError('Error al actualizar tabla!!');
+  //       }
+  //     }
+  //     aux();
+  //     updateRefresh(false);
+  //   }
+  // }, [refresh]);
+  if(refresh){
+    const aux = async () =>{
+      try {
+        const res = await GetCosts(token);
+        //console.log('res');
+        if(typeof(res) !== 'string'){
+          refExpenses.current = res;
+          const d = ExpenseDataToTableData(res);
+          setDataExpenses(d);
+          // setView(<></>);
+          // setTimeout(() => {
+          //   setView(<Table columns={columns} data={d} selectFunction={handleExpensesSelected}
+          //         placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
+          // }, 500);
+        }else{
+          showToastMessageError(res);
         }
+      } catch (error) {
+        console.log('catch table expenses => ', error);
+        showToastMessageError('Error al actualizar tabla!!');
       }
-      aux();
-      updateRefresh(false);
     }
-  }, [refresh]);
+    aux();
+    updateRefresh(false);
+  }
 
   // const changeConditionInCost = async () => {
   //   //
@@ -272,18 +315,18 @@ export default function TableExpenses({data, token, expenses,
   //   }
   // }
 
-  useEffect(() => {
-    if(filter){
-      console.log('data exp ', dataExpenses);
-      setView(<></>);
-      setTimeout(() => {
-        // const total = da
-        setView(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
-          placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-      }, 100);
-      setFilter(false);
-    }
-  }, [filter]);
+  // useEffect(() => {
+  //   if(filter){
+  //     console.log('data exp ', dataExpenses);
+  //     setView(<></>);
+  //     setTimeout(() => {
+  //       // const total = da
+  //       setView(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
+  //         placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
+  //     }, 100);
+  //     setFilter(false);
+  //   }
+  // }, [filter]);
 
   const dateValidation = (exp:Expense, startDate:number, endDate:number) => {
     let d = new Date(exp.date).getTime();
@@ -424,18 +467,18 @@ export default function TableExpenses({data, token, expenses,
     endDate:number, costcenters:string[]) => {
   
     let filtered: Expense[] = [];
-    expenses.map((expense) => {
+    refExpenses.current.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
           endDate, projects, reports, categories, types, conditions, costcenters)){
         filtered.push(expense);
       }
     });
 
-    console.log(filtered);
-    setFilteredExpenses(filtered);
+    //console.log(filtered);
+    //setFilteredExpenses(filtered);
     
     setDataExpenses(ExpenseDataToTableData(filtered));
-    setFilter(true);
+    //setFilter(true);
   }
 
   return(
@@ -445,7 +488,7 @@ export default function TableExpenses({data, token, expenses,
         {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
           className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
         /> */}
-          {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
+          {isFilter && <Filtering showForm={handleIsFilter} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} 
                           optProjects={optProjects} optReports={optReports}

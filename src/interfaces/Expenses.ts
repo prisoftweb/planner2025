@@ -76,9 +76,52 @@ export interface Expense {
   files: File[]
 }
 
+export interface OneExpense {
+  _id: string
+  folio: string
+  taxfolio: string
+  description: string
+  date: string
+  taxapply: boolean
+  isticket: boolean
+  ispaid: boolean
+  cost: Cost
+  user: UsrBack
+  project: Project
+  report: Report
+  provider: Provider
+  costocenter: OneCostocenter
+  typeCFDI: Glossary
+  category: Glossary
+  estatus: Glossary
+  status: boolean
+  iscard: boolean
+  files: File[]
+}
+
+export interface OneCategory {
+  _id: string
+  name: string
+  code: number
+  categorys: ListCategory[]
+  status: boolean
+  id: string
+}
+
+export interface ListCategory {
+  concept: Concept
+  id: any
+}
+
 export interface Costocenter {
   _id: string
   category: string
+  concept: Concept
+}
+
+export interface OneCostocenter {
+  _id: string
+  category: OneCategory
   concept: Concept
 }
 

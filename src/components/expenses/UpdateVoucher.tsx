@@ -1,13 +1,13 @@
 import Button from "../Button";
 import UploadFileDropZone from "../UploadFileDropZone";
 import { useState, useRef } from "react";
-import { Expense } from "@/interfaces/Expenses";
+import { OneExpense } from "@/interfaces/Expenses";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 
 export default function UpdateVoucher({id, token, expense, isHistory}: 
-    {token: string, id:string, expense:Expense, isHistory:boolean}){
+    {token: string, id:string, expense:OneExpense, isHistory:boolean}){
   
   const [file, setFile] = useState<File | null>();
   //const [urlFile, setUrlFile] = useState<string>();

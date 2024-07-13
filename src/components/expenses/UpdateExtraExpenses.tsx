@@ -6,7 +6,7 @@ import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { useState, useRef } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { Expense } from "@/interfaces/Expenses"
+import { OneExpense } from "@/interfaces/Expenses"
 import { UpdateCost } from "@/app/api/routeCost"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import AddProvider from "./AddProvider";
@@ -17,15 +17,15 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
                                         optProviders, optResponsibles, isHistory, 
                                         optProjects, optCategories, optTypes }: 
                                   {token:string, id:string, optProviders:Options[],
-                                    optCostCenter:Options[], expense:Expense, 
+                                    optCostCenter:Options[], expense:OneExpense, 
                                     optResponsibles:Options[], optProjects:Options[], 
                                     optCategories:Options[], optTypes:Options[], 
                                     isHistory:boolean}){
   
   const {currentExpense, updateCurrentExpense} = useNewExpense();
-  const [costcenter, setCostCenter] = useState<string>( currentExpense? 
-      typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter: currentExpense.costocenter?.concept?._id || ''
-      : '');
+  // const [costcenter, setCostCenter] = useState<string>( currentExpense? 
+  //     typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter: currentExpense.costocenter?.concept?._id || ''
+  //     : '');
   //const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [typeCFDI, setTypeCFDI] = useState<string>(currentExpense?.typeCFDI._id || expense.typeCFDI._id);
@@ -38,18 +38,41 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
   const [showProvider, setShowProvider] = useState<boolean>(false);
   //const [indexProv, setIndexProv] = useState<number>(0);
 
+  const [costcenter, setCostCenter] = 
+          useState<string>(currentExpense? 
+                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''
+                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.category._id || '');
+
+  const [concept, setConcept] = useState<string>(currentExpense? 
+                                typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id || ''
+                                : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.concept._id || '');
+
   const refRequest = useRef(true);
   //const [selectProvider, setSelectProviders] = useState<JSX.Element>(<></>);
 
-  const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter);
+  console.log('value cc => ', costcenter+'/'+concept);
+  console.log('optcost => ', optCostCenter);
+  const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept);
   const indexCFDI = optTypes.findIndex((cfdi) => cfdi.value === typeCFDI);
   const indexCategory = optCategories.findIndex((cat) => cat.value === category);
   const indexProject = optProjects.findIndex((prj) => prj.value === project);
   const indexResponsible = optResponsibles.findIndex((res) => res.value === responsible);
   const indexProvider = optionsProviders.findIndex((prov) => prov.value === provider);
 
+  // const handleCostCenter = (value: string) => {
+  //   setCostCenter(value);
+  // }
+
   const handleCostCenter = (value: string) => {
-    setCostCenter(value);
+    console.log('value costoc => ', value);
+    const indexCaracter = value.indexOf('/');
+    const c1 = value.substring(0, indexCaracter);
+    const c2 = value.substring(indexCaracter + 1);
+    console.log('cad 1 => ', c1);
+    console.log('cad 2 => ', c2);
+    //updateCostCenter(c1, c2);
+    setCostCenter(c1);
+    setConcept(c2);
   }
 
   const handleCFDI = (value: string) => {
@@ -232,8 +255,13 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
   const updateExpense = async () => {
     if(refRequest.current){
       refRequest.current = false;
+      
+      const costocenter = {
+        category: costcenter,
+        concept
+      }
       const data = {
-        costocenter:costcenter, provider, user:responsible, typeCFDI, category, project
+        costocenter, provider, user:responsible, typeCFDI, category, project
       }
       try {
         const res = await UpdateCost(token, id, data);

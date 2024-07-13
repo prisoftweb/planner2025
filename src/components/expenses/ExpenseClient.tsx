@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 //import NavResponsive from "../projects/NavResponsive"
 import ProfileExpense from "./ProfileExpense"
-import { Expense } from "@/interfaces/Expenses"
+import { OneExpense } from "@/interfaces/Expenses"
 import UpdateExpense from "@/components/expenses/UpdateExpense";
 import NavResponsive from "./NavResponsive"
 import UpdateExtraExpense from "./UpdateExtraExpenses"
@@ -17,17 +17,19 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                                         optResponsibles, optCategories, optTypes
                                       }: 
                             { token:string, id:string, user:string, 
-                              expense:Expense, optCostCenter:Options[],
+                              expense:OneExpense, optCostCenter:Options[],
                               optProviders:Options[], isHistory?:boolean,
                               optResponsibles:Options[], optProjects:Options[], 
                               optTypes:Options[], optCategories:Options[]}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
+    console.log('new expense => ', expense);
     updateCurrentExpense(expense);
   }, []);
 
   const [opt, setOpt] = useState<number>(1);
+
   const view = (
     opt===1? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
@@ -65,6 +67,44 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                           </div>
                       </div>))))
   )
+
+  // const view = (
+  //   opt===1? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+  //     style={{borderColor:'#F8FAFC'}}>
+  //       <div className=" max-w-lg">
+  //         <UpdateExpense id={id} optCostCenter={optCostCenter} 
+  //           token={token} user={user} expense={expense} 
+  //           isticket={expense.isticket} isHistory={isHistory} />
+  //       </div>
+  //     </div>) : 
+  //   (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                   style={{borderColor:'#F8FAFC'}}>
+  //                     <div className=" max-w-lg">
+  //                       <UpdateExtraExpense expense={expense} id={id} 
+  //                         optCostCenter={optCostCenter} isHistory={isHistory} 
+  //                         optProjects={optProjects} optProviders={optProviders} 
+  //                         optResponsibles={optResponsibles} token={token} 
+  //                         optCategories={optCategories} optTypes={optTypes}
+  //                       />
+  //                     </div>
+  //           </div>): 
+  //   (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                     style={{borderColor:'#F8FAFC'}}>
+  //                       <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
+  //                     </div>): 
+  //     (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                         style={{borderColor:'#F8FAFC'}}>
+  //                             <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
+  //                       </div>): 
+  //             (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                       style={{borderColor:'#F8FAFC'}}>
+  //                         <div className=" max-w-lg">
+  //                           <UpdateExpense id={id} optCostCenter={optCostCenter} 
+  //                             token={token} user={user} expense={expense} 
+  //                             isticket={expense.isticket} isHistory={isHistory}  />
+  //                         </div>
+  //                     </div>))))
+  // )
   
   const [open, setOpen] = useState<boolean>(false);
 

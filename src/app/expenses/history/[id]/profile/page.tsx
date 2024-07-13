@@ -10,7 +10,7 @@ import Header from "@/components/HeaderPage";
 
 import { GetCost, GetCostsLV } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
-import { Expense } from "@/interfaces/Expenses";
+import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { getCostCenters } from "@/app/api/routeCostCenter";
@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let cost: Expense;
+  let cost: OneExpense;
   try {
     cost = await GetCost(token, params.id);
     if(typeof(cost) === "string")
