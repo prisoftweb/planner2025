@@ -7,10 +7,10 @@ import * as Yup from 'yup';
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 //import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
-import { Expense } from "@/interfaces/Expenses"
+import { OneExpense } from "@/interfaces/Expenses"
 import { UpdateCost } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
 import { showToastMessage, showToastMessageError } from "../Alert"
@@ -19,24 +19,35 @@ import { useNewExpense } from "@/app/store/newExpense"
 export default function UpdateExpense({token, id, user, optCostCenter, 
                                       expense, isticket, isHistory}: 
                                   {token:string, id:string, user:string, 
-                                    optCostCenter:Options[], expense:Expense, 
+                                    optCostCenter:Options[], expense:OneExpense, 
                                     isticket:boolean, isHistory: boolean}){
 
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
-                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id || ''
-                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.concept._id || '');
+                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''
+                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.category._id || '');
   const [startDate, setStartDate] = 
           useState<string>(currentExpense? currentExpense.date.substring(0, 10): expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
+  const [concept, setConcept] = useState<string>(currentExpense? 
+                    typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id || ''
+                    : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.concept._id || '');
   const [isCard, setIsCard] = useState<boolean>(currentExpense? currentExpense.iscard: expense.iscard);
   const refRequest = useRef(true);
 
   const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter);
 
   const handleCostCenter = (value: string) => {
-    setCostCenter(value);
+    console.log('value costoc => ', value);
+    const indexCaracter = value.indexOf('/');
+    const c1 = value.substring(0, indexCaracter);
+    const c2 = value.substring(indexCaracter + 1);
+    console.log('cad 1 => ', c1);
+    console.log('cad 2 => ', c2);
+    //updateCostCenter(c1, c2);
+    setCostCenter(c1);
+    setConcept(c2);
   }
 
   const viewCC = (
@@ -70,8 +81,12 @@ export default function UpdateExpense({token, id, user, optCostCenter,
       if(refRequest.current){
         refRequest.current = false;
         const {amount, description, discount, folio, taxFolio, vat} = valores;
+        const costocenter = {
+          category: costcenter,
+          concept
+        }
         const data = { description, 
-            folio, taxfolio:taxFolio, costocenter:costcenter, date:startDate, iscard:isCard, 
+            folio, taxfolio:taxFolio, costocenter, date:startDate, iscard:isCard, 
             cost: {
               discount: discount.toString().replace(/[$,]/g, ""),
               subtotal:amount.replace(/[$,]/g, ""),
@@ -129,6 +144,21 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   //   }, 50);
   //   setCostCenter(optCostCenter[indexCC].value);
   // }, []);
+
+  useEffect(() => {
+    if(currentExpense){
+      formik.values.amount = currentExpense.cost.subtotal.toString(),
+      formik.values.folio = currentExpense.folio;
+      formik.values.taxFolio= currentExpense.taxfolio,
+      formik.values.vat= currentExpense.cost.iva.toString(),
+      formik.values.discount= currentExpense.cost.discount? currentExpense.cost.discount.toString(): '0' ;
+      formik.values.description= currentExpense.description;
+      setCostCenter(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''); 
+      setStartDate(currentExpense.date.substring(0, 10));
+      setConcept(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id)
+      setIsCard(currentExpense.iscard);
+    }
+  }, [currentExpense]);
 
   return(
     <div className="w-full">

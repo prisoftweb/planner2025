@@ -82,8 +82,8 @@ export default async function Page() {
       });
     })
   });
-  console.log('opt costcenter normal => ', optCostCenter);
-  console.log('opt costcenter filter => ', optCostCenterFilter);
+  // console.log('opt costcenter normal => ', optCostCenter);
+  // console.log('opt costcenter filter => ', optCostCenterFilter);
   //let providers: Provider[];
   let optProviders:Options[]= [];
   try {

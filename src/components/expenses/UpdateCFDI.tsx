@@ -1,7 +1,7 @@
 import Button from "../Button";
 import UploadFileDropZone from "../UploadFileDropZone";
 import { useState, useEffect } from "react";
-import { Expense } from "@/interfaces/Expenses";
+import { OneExpense } from "@/interfaces/Expenses";
 import { showToastMessageError, showToastMessage } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { CFDIValidation } from "@/interfaces/Expense";
@@ -9,7 +9,7 @@ import { CFDIValidation } from "@/interfaces/Expense";
 //import { getProvider } from "@/app/api/routeProviders";
 
 export default function UpdateCFDI({id, token, expense, isHistory}: 
-                  {token: string, id:string, expense:Expense, isHistory:boolean}){
+                  {token: string, id:string, expense:OneExpense, isHistory:boolean}){
   
   const [file, setFile] = useState<File | null>();
   const [urlFile, setUrlFile] = useState<string>();

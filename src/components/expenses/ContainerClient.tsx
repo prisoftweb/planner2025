@@ -167,7 +167,7 @@ export default function ContainerClient({data, token, expenses,
           <TableExpenses data={data} token={token} 
             optCategories={optCategoriesFilter} optConditions={optConditionsFilter}
             optTypes={optTypeFilter} expenses={expenses} optProjects={optProjectFilter}
-            optReports={optReportsFilter} isFilter={isFilter} setIsFilter={setIsFilter}
+            optReports={optReportsFilter} isFilter={isFilter} setIsFilter={handleFilter}
             optCostCenterFilter={optCostCenterFilter} idValidado={idValidado} user={user}
             handleExpensesSelected={handleExpensesSelected}
           />
