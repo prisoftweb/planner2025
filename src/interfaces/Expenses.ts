@@ -26,6 +26,7 @@ export interface ExpensesTable {
   discount: string,
   total: string
   taxFolio: string
+  color: string
 }
 
 // export interface Expense {

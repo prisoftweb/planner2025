@@ -10,9 +10,9 @@ import { getProvidersLV } from "../api/routeProviders";
 import { getUsersLV } from "../api/routeUser";
 import { getProjectsLV } from "../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import { getAllCostsByCondition, GetCostsMIN, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
+import { getAllCostsByCondition, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
 import { CurrencyFormatter } from "../functions/Globals";
-import { getCatalogsByName } from "../api/routeCatalogs";
+import { getCatalogsByNameAndCategory, getCatalogsByNameAndCondition, getCatalogsByNameAndType } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { GetReportsMin, GetReportsByUserMin } from "../api/routeReports";
 import { ReportParse } from "@/interfaces/Reports";
@@ -28,8 +28,8 @@ export default async function Page() {
   
   let expenses: Expense[] = [];
   try {
-    //expenses = await getAllCostsByCondition(token);
-    expenses = await GetCostsMIN(token);
+    expenses = await getAllCostsByCondition(token);
+    //expenses = await GetCostsMIN(token);
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {
@@ -221,68 +221,95 @@ export default async function Page() {
   //   optProjectFilter.push(p);
   // });
 
-  let catalogs: GlossaryCatalog[];
+  //let catalogsCate: Options[];
+  let optCategories: Options[] = [];
   try {
-    catalogs = await getCatalogsByName(token, 'cost');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    optCategories = await getCatalogsByNameAndCategory(token, 'cost');
+    if(typeof(optCategories)==='string') return <h1 className="text-red-500 text-center text-lg">{optCategories}</h1>
+  } catch (error) {
+    return <h1>Error al consultar catalogos!!</h1>
+  }  
+
+  //const optCategories: Options[] = [];
+  const optCategoriesFilter = [{
+    label: 'TODOS',
+    value: 'all'
+  }].concat(optCategories);
+  
+  let optTypes: Options[] = [];
+  try {
+    optTypes = await getCatalogsByNameAndType(token, 'cost');
+    if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+  } catch (error) {
+    return <h1>Error al consultar catalogos!!</h1>
+  }
+  const optTypeFilter: Options[] = [{
+    label: 'TODOS',
+    value: 'all'
+  }].concat(optTypes);
+
+  let optConditions: Options[] = [];
+  try {
+    optConditions = await getCatalogsByNameAndCondition(token, 'cost');
+    if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
   } catch (error) {
     return <h1>Error al consultar catalogos!!</h1>
   }
 
-  const idValidado = catalogs[0].condition.find((cond) => cond.glossary.name.toLowerCase().includes('validado'))?.glossary._id || '';
-
-  const optCategories: Options[] = [];
-  const optCategoriesFilter: Options[] = [{
-    label: 'TODOS',
-    value: 'all'
-  }];
-  //const optCategories: Options[] = [];
-  let labour:string = '';
-  let ticket:string = '';
-  catalogs[0].categorys.map((category) => {
-    if(category.glossary.name.toLowerCase().includes('mano de obra')){
-      labour = category.glossary._id;
-    }
-    if(category.glossary.name.toLowerCase().includes('ticket')){
-      ticket = category.glossary._id;
-    }
-    const c = {
-      label: category.glossary.name,
-      value: category.glossary._id
-    }
-    optCategories.push(c);
-    optCategoriesFilter.push(c);
-  })
-
-  const optTypes: Options[] = [];
-  const optTypeFilter: Options[] = [{
-    label: 'TODOS',
-    value: 'all'
-  }];
-  //const optTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
-    const t = {
-      label: type.glossary.name,
-      value: type.glossary._id
-    };
-    optTypes.push(t);
-    optTypeFilter.push(t);
-  })
-
-  const optConditions: Options[] = [];
   const optConditionsFilter: Options[] = [{
     label: 'TODOS',
     value: 'all'
-  }];
-  //const optConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
-    const c:Options = {
-      label: condition.glossary.name,
-      value: condition.glossary._id
-    }
-    optConditions.push(c);
-    optConditionsFilter.push(c);
-  })
+  }].concat(optConditions);
+
+  //const optCategories: Options[] = [];
+  const idValidado = optConditions.find((cond) => cond.label.toLowerCase().includes('validado'))?.value || '';
+  console.log('page expense => validado => ', idValidado);
+  let labour:string = '';
+  let ticket:string = '';
+  // catalogs[0].categorys.map((category) => {
+  //   if(category.glossary.name.toLowerCase().includes('mano de obra')){
+  //     labour = category.glossary._id;
+  //   }
+  //   if(category.glossary.name.toLowerCase().includes('ticket')){
+  //     ticket = category.glossary._id;
+  //   }
+  //   const c = {
+  //     label: category.glossary.name,
+  //     value: category.glossary._id
+  //   }
+  //   optCategories.push(c);
+  //   optCategoriesFilter.push(c);
+  // })
+
+  // const optTypes: Options[] = [];
+  // const optTypeFilter: Options[] = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }];
+  // //const optTypes: Options[] = [];
+  // catalogs[0].types.map((type) => {
+  //   const t = {
+  //     label: type.glossary.name,
+  //     value: type.glossary._id
+  //   };
+  //   optTypes.push(t);
+  //   optTypeFilter.push(t);
+  // })
+
+  // const optConditions: Options[] = [];
+  // const optConditionsFilter: Options[] = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }];
+  // //const optConditions: Options[] = [];
+  // catalogs[0].condition.map((condition) => {
+  //   const c:Options = {
+  //     label: condition.glossary.name,
+  //     value: condition.glossary._id
+  //   }
+  //   optConditions.push(c);
+  //   optConditionsFilter.push(c);
+  // })
 
   // let vats: Vat[];
   // try {
@@ -412,7 +439,8 @@ export default async function Page() {
       vat,
       discount,
       total,
-      taxFolio: expense.taxfolio || ''
+      taxFolio: expense.taxfolio || '',
+      color: expense.estatus.color || 'gray'
     });
   });
 

@@ -148,3 +148,57 @@ export async function getCatalogsByName(auth_token:string, name:string) {
     return 'Error al obtener catalogos!!';
   }
 }
+
+export async function getCatalogsByNameAndType(auth_token:string, name:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/catalogs/getCalalogNameMINType/${name}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener catalogos!!';
+  }
+}
+
+export async function getCatalogsByNameAndCondition(auth_token:string, name:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/catalogs/getCalalogNameMINCond/${name}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener catalogos!!';
+  }
+}
+
+export async function getCatalogsByNameAndCategory(auth_token:string, name:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/catalogs/getCalalogNameMINCate/${name}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener catalogos!!';
+  }
+}

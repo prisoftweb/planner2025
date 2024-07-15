@@ -36,15 +36,16 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   const [isCard, setIsCard] = useState<boolean>(currentExpense? currentExpense.iscard: expense.iscard);
   const refRequest = useRef(true);
 
-  const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter);
+  //const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter);
+  const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept);
 
   const handleCostCenter = (value: string) => {
     console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    console.log('cad 1 => ', c1);
-    console.log('cad 2 => ', c2);
+    //console.log('cad 1 => ', c1);
+    //console.log('cad 2 => ', c2);
     //updateCostCenter(c1, c2);
     setCostCenter(c1);
     setConcept(c2);
@@ -145,20 +146,20 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   //   setCostCenter(optCostCenter[indexCC].value);
   // }, []);
 
-  useEffect(() => {
-    if(currentExpense){
-      formik.values.amount = currentExpense.cost.subtotal.toString(),
-      formik.values.folio = currentExpense.folio;
-      formik.values.taxFolio= currentExpense.taxfolio,
-      formik.values.vat= currentExpense.cost.iva.toString(),
-      formik.values.discount= currentExpense.cost.discount? currentExpense.cost.discount.toString(): '0' ;
-      formik.values.description= currentExpense.description;
-      setCostCenter(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''); 
-      setStartDate(currentExpense.date.substring(0, 10));
-      setConcept(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id)
-      setIsCard(currentExpense.iscard);
-    }
-  }, [currentExpense]);
+  // useEffect(() => {
+  //   if(currentExpense){
+  //     formik.values.amount = currentExpense.cost.subtotal.toString(),
+  //     formik.values.folio = currentExpense.folio;
+  //     formik.values.taxFolio= currentExpense.taxfolio,
+  //     formik.values.vat= currentExpense.cost.iva.toString(),
+  //     formik.values.discount= currentExpense.cost.discount? currentExpense.cost.discount.toString(): '0' ;
+  //     formik.values.description= currentExpense.description;
+  //     setCostCenter(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''); 
+  //     setStartDate(currentExpense.date.substring(0, 10));
+  //     setConcept(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id)
+  //     setIsCard(currentExpense.iscard);
+  //   }
+  // }, [currentExpense]);
 
   return(
     <div className="w-full">

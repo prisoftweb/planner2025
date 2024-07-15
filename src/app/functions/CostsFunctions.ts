@@ -107,7 +107,8 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       vat,
       discount,
       total,
-      taxFolio: expense.taxfolio || ''
+      taxFolio: expense.taxfolio || '',
+      color: expense.estatus.color || 'gray'
     });
   });
 

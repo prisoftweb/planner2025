@@ -129,17 +129,17 @@ export default function Table({data, columns, placeH, typeTable='',
       labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
           <div className="flex gap-x-5 text-white pl-5">
             <p>Cantidad: {data.length}</p>
-            <p>Total de informes: {t}</p>
+            <p>Total de gastos: {t}</p>
           </div>
           <div className="flex gap-x-5 text-white pl-5">
             <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
-            <p>Total de informes seleccionados: {tSeleccionados}</p>
+            <p>Total de gastos seleccionados: {tSeleccionados}</p>
           </div>
       </div>)
     }else{
       labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
             <p>Cantidad: {data.length}</p>
-            <p>Total de informes: {t}</p>
+            <p>Total de gastos: {t}</p>
           </div>)
     }
   }

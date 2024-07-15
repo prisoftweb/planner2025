@@ -59,7 +59,7 @@ interface Actions {
   updateCategory: (value:string) => void,
   updatePettyCash: (value:boolean) => void,
   updateIsCard: (value:boolean) => void,
-  updateCurrentExpense: (value: OneExpense) => void,
+  updateCurrentExpense: (value: (OneExpense | null)) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -175,7 +175,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
     ...state,
     isCard: value,
   })),
-  updateCurrentExpense: (value:OneExpense) => set(state => ({
+  updateCurrentExpense: (value:(OneExpense | null)) => set(state => ({
     ...state,
     currentExpense: value
   })),
