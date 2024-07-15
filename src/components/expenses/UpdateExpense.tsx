@@ -25,8 +25,10 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
-                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''
-                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.category._id || '');
+                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?._id || ''
+                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?._id || '');
+  console.log('expense date => ', expense.date);
+  console.log('expense ?? => ', expense);
   const [startDate, setStartDate] = 
           useState<string>(currentExpense? currentExpense.date.substring(0, 10): expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);

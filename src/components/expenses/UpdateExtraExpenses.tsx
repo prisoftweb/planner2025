@@ -40,8 +40,8 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
 
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
-                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''
-                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.category._id || '');
+                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?._id || ''
+                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?._id || '');
 
   const [concept, setConcept] = useState<string>(currentExpense? 
                                 typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id || ''
@@ -54,7 +54,10 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
   // console.log('optcost => ', optCostCenter);
   const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept);
   const indexCFDI = optTypes.findIndex((cfdi) => cfdi.value === typeCFDI);
+  console.log('cate => ', category);
+  console.log('cats => ', optCategories);
   const indexCategory = optCategories.findIndex((cat) => cat.value === category);
+  console.log('index cat => ', indexCategory);
   const indexProject = optProjects.findIndex((prj) => prj.value === project);
   const indexResponsible = optResponsibles.findIndex((res) => res.value === responsible);
   const indexProvider = optionsProviders.findIndex((prov) => prov.value === provider);

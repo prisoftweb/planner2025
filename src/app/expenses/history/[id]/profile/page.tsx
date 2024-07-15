@@ -8,12 +8,12 @@ import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
 
-import { GetCost, GetCostsLV } from "@/app/api/routeCost";
+import { GetCostMIN, GetCostsLV } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
 import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
-import { CostCenter } from "@/interfaces/CostCenter";
-import { getCostCenters } from "@/app/api/routeCostCenter";
+import { CostoCenterLV } from "@/interfaces/CostCenter";
+import { getCostoCentersLV } from "@/app/api/routeCostCenter";
 //import { Glossary } from "@/interfaces/Glossary";
 //import { getGlossaries } from "@/app/api/routeGlossary";
 import { Provider } from "@/interfaces/Providers";
@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let cost: OneExpense;
   try {
-    cost = await GetCost(token, params.id);
+    cost = await GetCostMIN(token, params.id);
     if(typeof(cost) === "string")
       return <h1 className="text-center text-red-500">{cost}</h1>
   } catch (error) {
@@ -61,9 +61,9 @@ export default async function Page({ params }: { params: { id: string }}){
   //   })
   // })
 
-  let costcenters: CostCenter[];
+  let costcenters: CostoCenterLV[];
   try {
-    costcenters = await getCostCenters(token);
+    costcenters = await getCostoCentersLV(token);
     if(typeof(costcenters)==='string'){
       return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
     }    
@@ -79,14 +79,20 @@ export default async function Page({ params }: { params: { id: string }}){
   //   });
   // });
   costcenters.map((costcenter) => {
-    costcenter.categorys.map((category) => {
-      optCostCenter.push({
-        // label: category.name + ' ( ' + costcenter.name + ' ) ',
-        label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-        value: category._id
-      });
-      //cat += category.name + ', ';
-    })
+    // costcenter.categorys.map((category) => {
+    //   optCostCenter.push({
+    //     // label: category.name + ' ( ' + costcenter.name + ' ) ',
+    //     label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
+    //     value: category._id
+    //   });
+    //   //cat += category.name + ', ';
+    // })
+    optCostCenter.push({
+      // label: category.name + ' ( ' + costcenter.name + ' ) ',
+      //label: costcenter.label + ' ( ' + costcenter.categoryname + ' ) ',
+      label: costcenter.label,
+      value: costcenter.categoryid + '/' + costcenter.value
+    });
   });
 
   // let glossaries: Glossary[];

@@ -24,6 +24,8 @@ export default function ProfileExpense({expense}:
     value: currentExpense?.cost.iva? currentExpense.cost.iva : 0
   });
 
+  currentExpense? console.log('current expense => ', currentExpense) : console.log('expense => ', expense);
+
   return(
     <>
       <div className="w-full h-full mt-3">
@@ -43,12 +45,15 @@ export default function ProfileExpense({expense}:
           </div>
           <div className=" flex gap-x-2 items-center">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
+              {/* <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
                 style={{"width": expense.project?.progress.length > 0? 
-                            expense.project.progress[expense.project.progress.length-1].progress : 0}}></div>
+                            expense.project.progress[expense.project.progress.length-1].progress : 0}}></div> */}
+              <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
+                style={{"width": expense.project?.progress?.length > 0? 
+                            expense.project.progress[expense.project?.progress.length-1].progress : 0 || 0}}></div>
             </div>
-            <p>{currentExpense && currentExpense?.project?.progress.length > 0?
-                      currentExpense?.project.progress[currentExpense?.project.progress.length-1].progress : 0}%</p>
+            <p>{currentExpense && currentExpense?.project?.progress?.length > 0?
+                      currentExpense?.project.progress[currentExpense?.project.progress?.length-1].progress : 0 || 0}%</p>
           </div>
         </div>
         
@@ -67,7 +72,8 @@ export default function ProfileExpense({expense}:
                   {/* <Chip label={currentExpense && currentExpense?.condition.length >0? 
                       currentExpense?.condition[currentExpense?.condition.length-1].glossary.name: 'sin status'} /> */}
                   <Chip label={currentExpense && currentExpense?.estatus? 
-                    currentExpense?.estatus.name: 'sin status'} />
+                    currentExpense?.estatus.name: 'sin status'} color={currentExpense && currentExpense?.estatus? 
+                      currentExpense?.estatus.color: 'gray'} />
                 </div>
               </div>
             </div>

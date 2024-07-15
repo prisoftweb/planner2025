@@ -27,6 +27,11 @@ export default function Table({data, columns, placeH, typeTable='',
   const [showColumns, setShowColumns] = useState<boolean>(false);
   const [startPage, setStarPage] = useState<number>(1);
   const [endPage, setEndPage] = useState<number>(25);
+
+  const [pagination, setPagination] = useState({
+    pageIndex: 0, //initial page index
+    pageSize: 25, //default page size
+  });
   
   // const aux: any = {
   //   columnId1: true,
@@ -49,7 +54,13 @@ export default function Table({data, columns, placeH, typeTable='',
     if(storedData){
       parsedData = JSON.parse(storedData);
     }
+    //console.log('stored => ', storedData);
+    //console.log('parsed data => ', parsedData);
     setEndPage(Number(parsedData?.numRows || 25));
+    setPagination({
+      pageIndex: 0, //initial page index
+      pageSize: Number(parsedData?.numRows), //default page size
+    })
   }, []);
   // const ref = useOutsideClickButton(() => {
   //   console.log('Clicked outside of MyComponent');
@@ -92,17 +103,18 @@ export default function Table({data, columns, placeH, typeTable='',
       globalFilter: filtering,
       rowSelection,
       columnVisibility,
+      pagination
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
     onColumnVisibilityChange: setColumnVisibility,
-    initialState : {
-      pagination: {
-        //pageSize: numRows,
-       // pageSize: rowsTable,
-        pageSize: endPage
-      }
-    },
+    // initialState : {
+    //   pagination: {
+    //     //pageSize: numRows,
+    //    // pageSize: rowsTable,
+    //     pageSize: endPage
+    //   }
+    // },
   })
 
   let total: number = 0;
@@ -275,6 +287,10 @@ export default function Table({data, columns, placeH, typeTable='',
                   onChange={e => { 
                     table.setPageSize(Number(e.target.value));
                     //changeCounter(Number(e.target.value));
+                    setPagination({
+                      pageIndex: 0,
+                      pageSize: Number(e.target.value),
+                    })
                     const dataToStore = { numRows: e.target.value};
                     localStorage.setItem('myData', JSON.stringify(dataToStore));
                     updateLabelRowsPage();
