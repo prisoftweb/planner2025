@@ -64,6 +64,7 @@ export default function TableExpenses({data, token, expenses,
           <input type="checkbox" 
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
+            className="w-14 cursor-pointer"
           />
         </div>
       ),
@@ -81,12 +82,14 @@ export default function TableExpenses({data, token, expenses,
       id: 'Responsable',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
+          <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
           <DeleteElement id={row.original.id} name={row.original.Descripcion} 
             remove={RemoveCost} token={token} colorIcon="text-slate-500 hover:text-slate-300" />
-          {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
-          {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
-          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
+          <div className="w-20 flex gap-x-1 items-center">
+            {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
+            {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
+            {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
+          </div>
         </div>
       ),
       enableSorting:false,
