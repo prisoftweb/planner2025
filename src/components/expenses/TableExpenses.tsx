@@ -147,7 +147,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'estatus',
       cell: ({row}) => (
         <Link href={`/expenses/${row.original.id}/profile`}>
-          <Chip label={row.original.condition} />
+          <Chip label={row.original.condition} color={row.original.color} />
         </Link>
       ),
     }),
@@ -369,13 +369,14 @@ export default function TableExpenses({data, token, expenses,
           // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
           //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           // }
-          if(costcenters.includes(exp.costocenter.concept.id)){
-            console.log('entrooo???');
+          // if(costcenters.includes(exp.costocenter.concept.id)){
+          if(costcenters.some((cc) => cc === exp.costocenter.concept._id)){
+            //console.log('entrooo???');
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           }else{
-            console.log('elseee');
-            console.log('concept id => ', exp.costocenter.concept._id);
-            console.log('all cost centers  => ', costcenters);
+            // console.log('elseee');
+            // console.log('concept id => ', exp.costocenter.concept._id);
+            // console.log('all cost centers  => ', costcenters);
           }
         }
       }

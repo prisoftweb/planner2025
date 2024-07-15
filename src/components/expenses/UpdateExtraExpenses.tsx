@@ -50,8 +50,8 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
   const refRequest = useRef(true);
   //const [selectProvider, setSelectProviders] = useState<JSX.Element>(<></>);
 
-  console.log('value cc => ', costcenter+'/'+concept);
-  console.log('optcost => ', optCostCenter);
+  // console.log('value cc => ', costcenter+'/'+concept);
+  // console.log('optcost => ', optCostCenter);
   const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept);
   const indexCFDI = optTypes.findIndex((cfdi) => cfdi.value === typeCFDI);
   const indexCategory = optCategories.findIndex((cat) => cat.value === category);

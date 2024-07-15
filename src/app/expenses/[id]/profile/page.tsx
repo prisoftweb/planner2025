@@ -5,8 +5,9 @@ import { Project } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
-import Selectize from "@/components/Selectize";
-import Header from "@/components/HeaderPage";
+//import Selectize from "@/components/Selectize";
+//import Header from "@/components/HeaderPage";
+import HeaderProfileExpense from "@/components/expenses/HeaderProfileExpense";
 
 import { GetCost, GetCostsLV } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
@@ -166,9 +167,10 @@ export default async function Page({ params }: { params: { id: string }}){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title={subTotal} previousPage="/expenses">
+        {/* <Header title={subTotal} previousPage="/expenses">
           <Selectize options={options} routePage="expenses" subpath="/profile" />
-        </Header>
+        </Header> */}
+        <HeaderProfileExpense options={options} subTotal={subTotal} />
         <NavTabExpense idExp={params.id} tab="1" />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 

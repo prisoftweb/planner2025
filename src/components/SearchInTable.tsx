@@ -21,6 +21,7 @@ export default function SearchInTable({placeH}: {placeH:string}){
         type="search" 
         id="default-search"
         value={search}
+        autoFocus
         onChange={(e) => updateSearch(e.target.value)} 
         className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 
           rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500

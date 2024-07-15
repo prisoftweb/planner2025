@@ -144,7 +144,7 @@ const NavItems = ({role}: {role:string}) => {
               link: '/expenses'
             },
             {
-              name: 'Historial',
+              name: 'Historial gastos',
               link: '/expenses/history'
             },
           ]} 

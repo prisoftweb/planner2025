@@ -88,7 +88,7 @@ export default function ContainerClient({data, token, expenses,
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
-          <p className="text-xl ml-4 font-medium">Gastos</p>
+          <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': 'Gastos'}</p>
         </div>
         {/* <ButtonNewProvider id={id} token={token} /> */}
         <div className="flex gap-x-3">
