@@ -4,7 +4,7 @@ import Label from "../Label"
 import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { OneExpense } from "@/interfaces/Expenses"
 import { UpdateCost } from "@/app/api/routeCost"
@@ -12,32 +12,33 @@ import { showToastMessage, showToastMessageError } from "../Alert"
 import AddProvider from "./AddProvider";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { useNewExpense } from "@/app/store/newExpense";
+import { getProjectsLV } from "@/app/api/routeProjects";
+import { CostoCenterLV } from "@/interfaces/CostCenter";
+import { getCostoCentersLV } from "@/app/api/routeCostCenter";
+import { getProvidersLV } from "@/app/api/routeProviders";
+import { getUsersLV } from "@/app/api/routeUser";
+import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 
-export default function UpdateExtraExpense({token, id, optCostCenter, expense, 
-                                        optProviders, optResponsibles, isHistory, 
-                                        optProjects, optCategories, optTypes }: 
-                                  {token:string, id:string, optProviders:Options[],
-                                    optCostCenter:Options[], expense:OneExpense, 
-                                    optResponsibles:Options[], optProjects:Options[], 
-                                    optCategories:Options[], optTypes:Options[], 
+export default function UpdateExtraExpense({token, id, expense, isHistory}: 
+                                  {token:string, id:string, expense:OneExpense, 
                                     isHistory:boolean}){
   
   const {currentExpense, updateCurrentExpense} = useNewExpense();
-  // const [costcenter, setCostCenter] = useState<string>( currentExpense? 
-  //     typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter: currentExpense.costocenter?.concept?._id || ''
-  //     : '');
-  //const [startDate, setStartDate] = useState<string>(expense.date.substring(0, 10));
-  //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [typeCFDI, setTypeCFDI] = useState<string>(currentExpense?.typeCFDI._id || expense.typeCFDI._id);
   const [provider, setProvider] = useState<string>(currentExpense?.provider._id || expense.provider._id);
   const [responsible, setResponsible] = useState<string>(currentExpense?.user._id || expense.user._id);
   const [category, setCategory] = useState<string>(currentExpense?.category._id || expense.category._id);
   const [project, setProject] = useState<string>(currentExpense?.project._id || expense.project._id);
   
-  const [optionsProviders, setOptionProviders] = useState<Options[]>(optProviders);
+  //const [optionsProviders, setOptionProviders] = useState<Options[]>(optProviders);
   const [showProvider, setShowProvider] = useState<boolean>(false);
-  //const [indexProv, setIndexProv] = useState<number>(0);
-
+  
+  const [optCostCenter, setOptCostCenter] = useState<Options[]>([]);
+  const [optTypeCFDI, setOptTypeCFDI] = useState<Options[]>([]);
+  const [optProjects, setOptProjects] = useState<Options[]>([]);
+  const [optResponsibles, setOptResponsibles] = useState<Options[]>([]);
+  const [optProviders, setOptProviders] = useState<Options[]>([]);
+  const [optCategories, setOptCategories] = useState<Options[]>([]);
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
                               typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?._id || ''
@@ -47,20 +48,89 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
                                 typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id || ''
                                 : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.concept._id || '');
 
-  const refRequest = useRef(true);
-  //const [selectProvider, setSelectProviders] = useState<JSX.Element>(<></>);
+  useEffect(() => {
+    const fetchOptions = async () => {
+      let costcenters: CostoCenterLV[];
+      try {
+        costcenters = await getCostoCentersLV(token);
+        if(typeof(costcenters)==='string'){
+          return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+        }    
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+      }
+      
+      let optTypes: Options[] = [];
+      try {
+        optTypes = await getCatalogsByNameAndType(token, 'cost');
+        if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+      } catch (error) {
+        return <h1>Error al consultar tipos de cfdi!!</h1>
+      }
 
-  // console.log('value cc => ', costcenter+'/'+concept);
-  // console.log('optcost => ', optCostCenter);
+      let optPro: Options[] = [];
+      try {
+        optPro = await getProjectsLV(token);
+        if(typeof(optPro)==='string'){
+          return <h1 className="text-center text-lg text-red-500">{optPro}</h1>
+        }    
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+      }
+
+      let optRes : Options[] = [];
+      try {
+        optRes = await getUsersLV(token);
+        if(typeof(optRes)==='string'){
+          return <h1 className="text-center text-lg text-red-500">{optRes}</h1>
+        }    
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+      }
+
+      let optProv: Options[] =  [];
+      try {
+        optProv = await getProvidersLV(token);
+        if(typeof(optProv)==='string'){
+          return <h1 className="text-center text-lg text-red-500">{optProv}</h1>
+        }    
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+      }
+
+      let optCat: Options[] = [];
+      try {
+        optCat = await getCatalogsByNameAndCategory(token, 'cost');
+        if(typeof(optCat)==='string') return <h1 className="text-red-500 text-center text-lg">{optCat}</h1>
+      } catch (error) {
+        return <h1>Error al consultar catalogos!!</h1>
+      }
+
+      const optCC:Options[]= [];
+      costcenters.map((costcenter) => {
+        optCC.push({
+          label: costcenter.label || 'sin categoria',
+          value: costcenter.categoryid + '/' + costcenter.value
+        });
+      });
+
+      setOptCostCenter(optCC);
+      setOptTypeCFDI(optTypes);
+      setOptProjects(optPro);
+      setOptResponsibles(optRes);
+      setOptProviders(optProv);
+      setOptCategories(optCat);
+    }
+    fetchOptions();
+  }, []);
+  
+  const refRequest = useRef(true);
   const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept);
-  const indexCFDI = optTypes.findIndex((cfdi) => cfdi.value === typeCFDI);
-  console.log('cate => ', category);
-  console.log('cats => ', optCategories);
+  const indexCFDI = optTypeCFDI.findIndex((cfdi) => cfdi.value === typeCFDI);
   const indexCategory = optCategories.findIndex((cat) => cat.value === category);
-  console.log('index cat => ', indexCategory);
   const indexProject = optProjects.findIndex((prj) => prj.value === project);
   const indexResponsible = optResponsibles.findIndex((res) => res.value === responsible);
-  const indexProvider = optionsProviders.findIndex((prov) => prov.value === provider);
+  const indexProvider = optProviders.findIndex((prov) => prov.value === provider);
 
   // const handleCostCenter = (value: string) => {
   //   setCostCenter(value);
@@ -98,7 +168,7 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
     setProvider(value);
   }
 
-  const viewCC = (
+  const viewCC = optCostCenter.length > 0? (
     <>
       <div className=" col-span-1 sm:col-span-2">
         <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
@@ -107,7 +177,7 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
 
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-        <SelectReact index={indexCFDI} opts={optTypes} setValue={handleCFDI} />
+        <SelectReact index={indexCFDI} opts={optTypeCFDI} setValue={handleCFDI} />
       </div>
       
       <div>
@@ -125,19 +195,23 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
         <SelectReact index={indexResponsible} opts={optResponsibles} setValue={handleResponsible} />
       </div>
     </>
+  ): (
+    <></>
   )
 
-  const selectProvider = (
+  const selectProvider = optProviders.length > 0? (
     <div className="">
       <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
       <div className="flex gap-x-2 items-center">
-        <SelectReact index={indexProvider} opts={optionsProviders} setValue={handleProvider} />
+        <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
         {!isHistory && (
           <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
             onClick={() => setShowProvider(true)} />
         )}
       </div>
     </div>
+  ): (
+    <></>
   )
 
   // useEffect(() => {
@@ -291,7 +365,7 @@ export default function UpdateExtraExpense({token, id, optCostCenter, expense,
   const addProvider = (newProvider:Options) => {
     //optProviders.push(newProvider);
     console.log('optProviders => ', optProviders);
-    setOptionProviders((oldValues) => [...oldValues, newProvider])
+    setOptProviders((oldValues) => [...oldValues, newProvider])
     setProvider(newProvider.value);
     console.log('prov length => ', optProviders.length)
     //setIndexProv(optProviders.length -1);

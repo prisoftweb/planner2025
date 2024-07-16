@@ -497,7 +497,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
               //defaultValue={0}
-              defaultValue={discount}
+              //defaultValue={discount}
+              value={formik.values.discount.replace(/[$,]/g, "") || 0}
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {
