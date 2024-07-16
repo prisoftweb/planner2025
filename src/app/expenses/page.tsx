@@ -13,7 +13,7 @@ import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import { getAllCostsByCondition, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../api/routeCost";
 import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndCondition, getCatalogsByNameAndType } from "../api/routeCatalogs";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
+//import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { GetReportsMin, GetReportsByUserMin } from "../api/routeReports";
 import { ReportParse } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
@@ -266,6 +266,12 @@ export default async function Page() {
   console.log('page expense => validado => ', idValidado);
   let labour:string = '';
   let ticket:string = '';
+
+  labour = optCategories.find((cat) => cat.label.toLowerCase().includes('mano de obra'))?.value || '';
+  ticket = optCategories.find((cat) => cat.label.toLowerCase().includes('ticket'))?.value || '';
+
+  console.log('tiket +> ', ticket);
+  console.log('labour => ', labour);
   // catalogs[0].categorys.map((category) => {
   //   if(category.glossary.name.toLowerCase().includes('mano de obra')){
   //     labour = category.glossary._id;
@@ -382,7 +388,7 @@ export default async function Page() {
       value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
     })
     const elements: string[] = [];
-    if(expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
+    if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
       const typeFiles = getTypeFiles(expense);
       if(typeFiles.includes('xml')){
         elements.push('xml');
@@ -396,7 +402,7 @@ export default async function Page() {
         elements.push('none');
       }
     }else{
-      if(expense.category?.name.toLowerCase().includes('xml')){
+      if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
         const typeFiles = getTypeFiles(expense);
         if(typeFiles.includes('xml')){
           elements.push('xml');
@@ -404,7 +410,7 @@ export default async function Page() {
           elements.push('none');
         }
       }else{
-        if(expense.category?.name.toLowerCase().includes('pdf')){
+        if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
           const typeFiles = getTypeFiles(expense);
           if(typeFiles.includes('pdf')){
             elements.push('pdf');

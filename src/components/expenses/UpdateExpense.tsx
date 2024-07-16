@@ -11,22 +11,24 @@ import { useState, useRef, useEffect } from "react";
 //import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import { OneExpense } from "@/interfaces/Expenses"
-import { UpdateCost } from "@/app/api/routeCost"
+import { UpdateCost, GetVatsLV } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
 import { showToastMessage, showToastMessageError } from "../Alert"
 import { useNewExpense } from "@/app/store/newExpense"
+import { CostoCenterLV } from "@/interfaces/CostCenter";
+import { getCostoCentersLV } from "@/app/api/routeCostCenter";
 
-export default function UpdateExpense({token, id, user, optCostCenter, 
-                                      expense, isticket, isHistory}: 
-                                  {token:string, id:string, user:string, 
-                                    optCostCenter:Options[], expense:OneExpense, 
+export default function UpdateExpense({token, id, expense, isticket, isHistory}: 
+                                  {token:string, id:string, expense:OneExpense, 
                                     isticket:boolean, isHistory: boolean}){
 
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
-                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''
-                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.category._id || '');
+                              typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?._id || ''
+                              : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?._id || '');
+  //console.log('expense date => ', expense.date);
+  //console.log('expense ?? => ', expense);
   const [startDate, setStartDate] = 
           useState<string>(currentExpense? currentExpense.date.substring(0, 10): expense.date.substring(0, 10));
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -36,7 +38,63 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   const [isCard, setIsCard] = useState<boolean>(currentExpense? currentExpense.iscard: expense.iscard);
   const refRequest = useRef(true);
 
+  const [optCostCenter, setOptCostCenter] = useState<Options[]>([]);
+  const [optVats, setOptVats] = useState<Options[]>([]);
+  const [idVat, setIdVat] = useState<string>('');
+
+  useEffect(() => {
+    const fetchCostCenters = async () => {
+      let costcenters: CostoCenterLV[];
+      try {
+        costcenters = await getCostoCentersLV(token);
+        if(typeof(costcenters)==='string'){
+          return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+        }    
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+      }
+      
+      let optVatts: Options[];
+      try {
+        optVatts = await GetVatsLV(token);
+        if(typeof(optVatts)==='string'){
+          return <h1 className="text-center text-lg text-red-500">{optVatts}</h1>
+        }    
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
+      }
+
+      const optCC:Options[]= [];
+      costcenters.map((costcenter) => {
+        optCC.push({
+          label: costcenter.label || 'sin categoria',
+          value: costcenter.categoryid + '/' + costcenter.value
+        });
+      });
+      
+      let indexVat = 0;
+      if(currentExpense){
+        indexVat = optVatts.findIndex((ivat) => currentExpense.cost?.iva === Number(ivat.label));
+        // console.log('current expense => ', currentExpense.cost.iva);
+        // console.log('opt vats => ', optVatts);
+      }else{
+        indexVat = optVatts.findIndex((ivat) => expense.cost?.iva == Number(ivat.label));
+        // console.log('expense => ', expense.cost.iva);
+        // console.log('opt vats => ', optVatts);
+      }
+
+      setOptCostCenter(optCC);
+      setOptVats(optVatts);
+      //console.log('id vat => ', indexVat);
+      setIdVat(indexVat >= 0? indexVat.toString(): '0');
+    }
+    fetchCostCenters();
+  }, []);
+
   //const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter);
+  // console.log('cost center ue => ', costcenter);
+  // console.log('options cc ue => ', optCostCenter);
+  // console.log('index cc ue => ', optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept));
   const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept);
 
   const handleCostCenter = (value: string) => {
@@ -51,11 +109,13 @@ export default function UpdateExpense({token, id, user, optCostCenter,
     setConcept(c2);
   }
 
-  const viewCC = (
+  const viewCC = optCostCenter.length > 0? (
     <div className=" col-span-1 sm:col-span-2">
       <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
       <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
     </div>
+  ): (
+    <></>
   )
 
   const formik = useFormik({
@@ -91,7 +151,8 @@ export default function UpdateExpense({token, id, user, optCostCenter,
             cost: {
               discount: discount.toString().replace(/[$,]/g, ""),
               subtotal:amount.replace(/[$,]/g, ""),
-              iva:vat,
+              iva:vat.replace(/[$,]/g, ""),
+              vat: optVats.find((vat) => vat.value === idVat)?.value || ''
             }}
         try {
           const res = await UpdateCost(token, id, data);
@@ -161,6 +222,25 @@ export default function UpdateExpense({token, id, user, optCostCenter,
   //   }
   // }, [currentExpense]);
 
+  const handleIdVat = (value: string) => {
+    setIdVat(value);
+  };
+
+  let vatValue = '0';
+  try {
+    const foundVat = optVats.find((vat) => vat.value === idVat);
+    const vatvalue = foundVat?.label || '0';
+    const operation = 
+      (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+        Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+    formik.values.vat = operation.toFixed(2).toString();
+    vatValue = operation.toFixed(2).toString();
+    //setVatValue(operation.toFixed(2).toString());
+  } catch (error) {
+    vatValue = '0';
+    formik.values.vat = '0';
+  }
+
   return(
     <div className="w-full">
       <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
@@ -228,50 +308,6 @@ export default function UpdateExpense({token, id, user, optCostCenter,
               </div>
           ) : null}
         </div>
-        <div className={`${isticket? 'hidden': ''}`}>
-          <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
-          <Input type="text" name="vat" 
-            value={formik.values.vat}
-            disabled={isHistory}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.vat && formik.errors.vat ? (
-              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.vat}</p>
-              </div>
-          ) : null}
-        </div>
-        <div className={`${isticket? 'hidden': ''}`}>
-          <Label htmlFor="discount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descuento</p></Label>
-          <CurrencyInput
-            id="discount"
-            name="discount"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
-            //   focus:border-slate-700 outline-0"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
-              focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
-            defaultValue={currentExpense?.cost.discount || 0}
-            decimalsLimit={2}
-            disabled={isHistory}
-            prefix="$"
-            onValueChange={(value) => {try {
-              formik.values.discount=(value || '0');
-            } catch (error) {
-              formik.values.discount='0';
-            }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
-          />
-          {formik.touched.discount && formik.errors.discount ? (
-              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.discount}</p>
-              </div>
-          ) : null}
-        </div>
         <div>
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
           <CurrencyInput
@@ -300,6 +336,80 @@ export default function UpdateExpense({token, id, user, optCostCenter,
                   <p>{formik.errors.amount}</p>
               </div>
           ) : null}
+        </div>
+        <div className={`${isticket? 'hidden': ''}`}>
+          <Label htmlFor="discount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descuento</p></Label>
+          <CurrencyInput
+            id="discount"
+            name="discount"
+            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+            //   focus:border-slate-700 outline-0"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+              focus:border-slate-700 outline-0"
+            value={formik.values.discount}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={currentExpense?.cost.discount || 0}
+            decimalsLimit={2}
+            disabled={isHistory}
+            prefix="$"
+            onValueChange={(value) => {try {
+              formik.values.discount=(value || '0');
+            } catch (error) {
+              formik.values.discount='0';
+            }}}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+          />
+          {formik.touched.discount && formik.errors.discount ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.discount}</p>
+              </div>
+          ) : null}
+        </div>
+        <div className={`${isticket? 'hidden': ''}`}>
+          <div className="flex justify-between">
+            <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
+            <Label htmlFor="vatt"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Impuestos</p></Label>
+          </div>
+          <div className="flex gap-x-1">
+            <CurrencyInput
+              id="vat"
+              name="vat"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                focus:border-slate-700 outline-0"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              decimalsLimit={2}
+              disabled={isHistory}
+              value={vatValue}
+              prefix="$"
+              onValueChange={(value) => {try {
+                formik.values.vat=value || '0';
+              } catch (error) {
+                formik.values.vat='0';
+              }}}
+            />
+            {formik.touched.vat && formik.errors.vat ? (
+                <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                    <p>{formik.errors.vat}</p>
+                </div>
+            ) : null}
+            {optVats.length > 0 && (
+              <SelectReact index={Number(idVat)} opts={optVats} setValue={handleIdVat} />
+            )}
+          </div>
+          {/* <Input type="text" name="vat" 
+            value={formik.values.vat}
+            disabled={isHistory}
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+          />
+          {formik.touched.vat && formik.errors.vat ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.vat}</p>
+              </div>
+          ) : null} */}
         </div>
         <div className=" col-span-1 sm:col-span-3">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>

@@ -31,11 +31,10 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
   const [opt, setOpt] = useState<number>(1);
 
   const view = (
-    opt===1? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+    opt===1? (<div className="mt-3 w-full max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
-        <div className=" max-w-lg">
-          <UpdateExpense id={id} optCostCenter={optCostCenter} 
-            token={token} user={user} expense={expense} 
+        <div className=" max-w-2xl">
+          <UpdateExpense id={id} token={token} expense={expense} 
             isticket={expense.isticket} isHistory={isHistory} />
         </div>
       </div>) : 
@@ -43,10 +42,7 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                     style={{borderColor:'#F8FAFC'}}>
                       <div className=" max-w-lg">
                         <UpdateExtraExpense expense={expense} id={id} 
-                          optCostCenter={optCostCenter} isHistory={isHistory} 
-                          optProjects={optProjects} optProviders={optProviders} 
-                          optResponsibles={optResponsibles} token={token} 
-                          optCategories={optCategories} optTypes={optTypes}
+                          isHistory={isHistory} token={token}
                         />
                       </div>
             </div>): 
@@ -61,8 +57,7 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
               (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                           <div className=" max-w-lg">
-                            <UpdateExpense id={id} optCostCenter={optCostCenter} 
-                              token={token} user={user} expense={expense} 
+                            <UpdateExpense id={id} token={token} expense={expense} 
                               isticket={expense.isticket} isHistory={isHistory}  />
                           </div>
                       </div>))))

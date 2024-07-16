@@ -1,16 +1,14 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-import { RemoveCost } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { GetCosts } from "@/app/api/routeCost";
-import { showToastMessage, showToastMessageError } from "../Alert";
+import { showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
@@ -126,7 +124,7 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'estatus',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <Chip label={row.original.condition} />
+          <Chip label={row.original.condition} color={row.original.color} />
         </Link>
       ),
     }),

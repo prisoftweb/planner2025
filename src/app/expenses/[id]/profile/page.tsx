@@ -1,26 +1,21 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { getProjects } from "@/app/api/routeProjects";
-import { Project } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
-//import Selectize from "@/components/Selectize";
-//import Header from "@/components/HeaderPage";
 import HeaderProfileExpense from "@/components/expenses/HeaderProfileExpense";
 
-import { GetCost, GetCostsLV } from "@/app/api/routeCost";
+import { GetCostMIN, GetCostsLV } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
 import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
-import { CostCenter } from "@/interfaces/CostCenter";
-import { getCostoCenters } from "@/app/api/routeCostCenter";
-import { Provider } from "@/interfaces/Providers";
-import { getProviders } from "@/app/api/routeProviders";
-import { getUsers } from "@/app/api/routeUser";
+import { getProjectsLV } from "@/app/api/routeProjects";
+//import { CostoCenterLV } from "@/interfaces/CostCenter";
+//import { getCostoCentersLV } from "@/app/api/routeCostCenter";
+import { getProvidersLV } from "@/app/api/routeProviders";
+import { getUsersLV } from "@/app/api/routeUser";
+//import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -30,7 +25,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let cost: OneExpense;
   try {
-    cost = await GetCost(token, params.id);
+    cost = await GetCostMIN(token, params.id);
     if(typeof(cost) === "string")
       return <h1 className="text-center text-red-500">{cost}</h1>
   } catch (error) {
@@ -46,121 +41,73 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>  
   }
 
-  let costcenters: CostCenter[];
-  try {
-    costcenters = await getCostoCenters(token);
-    if(typeof(costcenters)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
-  }
+  // let costcenters: CostoCenterLV[];
+  // try {
+  //   costcenters = await getCostoCentersLV(token);
+  //   if(typeof(costcenters)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+  // }
 
   const optCostCenter:Options[]= [];
-  costcenters.map((costcenter) => {
-    costcenter.categorys.map((category) => {
-      optCostCenter.push({
-        //label: category.name + ' ( ' + costcenter.name + ' ) ',
-        label: category.concept?.name + ' ( ' + costcenter.name + ' ) ' || 'sin categoria',
-        //value: category.concept._id
-        value: costcenter._id + '/' + category.concept._id
-      });
-      //cat += category.name + ', ';
-    })
-  });
+  // costcenters.map((costcenter) => {
+  //   optCostCenter.push({
+  //     label: costcenter.label || 'sin categoria',
+  //     value: costcenter.categoryid + '/' + costcenter.value
+  //   });
+  // });
 
-  let projects: Project[];
-  try {
-    projects = await getProjects(token);
-    if(typeof(projects)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{projects}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-  }
+  let optProjects:Options[]= [];
+  // try {
+  //   optProjects = await getProjectsLV(token);
+  //   if(typeof(optProjects)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+  // }
 
-  const optProjects:Options[]= [];
-  projects.map((project) => {
-    optProjects.push({
-      label: project.title,
-      value: project._id
-    });
-  });
+  let optResponsibles:Options[]= [];
+  // try {
+  //   optResponsibles = await getUsersLV(token);
+  //   if(typeof(optResponsibles)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optResponsibles}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+  // }
 
-  let responsibles: UsrBack[];
-  try {
-    responsibles = await getUsers(token);
-    if(typeof(responsibles)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{responsibles}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
-  }
+  let optProviders:Options[]= [];
+  // try {
+  //   optProviders = await getProvidersLV(token);
+  //   if(typeof(optProviders)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optProviders}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+  // }
 
-  const optResponsibles:Options[]= [];
-  responsibles.map((responsible) => {
-    optResponsibles.push({
-      label: responsible.name,
-      value: responsible._id
-    });
-  });
+  let optCategories: Options[] = [];
+  // try {
+  //   optCategories = await getCatalogsByNameAndCategory(token, 'cost');
+  //   if(typeof(optCategories)==='string') return <h1 className="text-red-500 text-center text-lg">{optCategories}</h1>
+  // } catch (error) {
+  //   return <h1>Error al consultar catalogos!!</h1>
+  // }  
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{providers}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
-  }
-
-  const optProviders:Options[]= [];
-  providers.map((provider) => {
-    optProviders.push({
-      label: provider.name,
-      value: provider._id
-    });
-  });
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'cost');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
-  }
-
-  const optCategories: Options[] = [];
-  //const optCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
-    optCategories.push({
-      label: category.glossary.name,
-      value: category.glossary._id
-    })
-  })
-
-  const optTypes: Options[] = [];
-  //const optTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
-    optTypes.push({
-      label: type.glossary.name,
-      value: type.glossary._id
-    })
-  })
-
-  // const optConditions: Options[] = [];
-  // //const optConditions: Options[] = [];
-  // catalogs[0].condition.map((condition) => {
-  //   optConditions.push({
-  //     label: condition.glossary.name,
-  //     value: condition.glossary._id
-  //   })
-  // })
-
+  let optTypes: Options[] = [];
+  // try {
+  //   optTypes = await getCatalogsByNameAndType(token, 'cost');
+  //   if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+  // } catch (error) {
+  //   return <h1>Error al consultar catalogos!!</h1>
+  // }
+  
   const subTotal = CurrencyFormatter({
     currency: "MXN",
-    value: cost.cost.subtotal
+    value: cost.cost?.subtotal || 0
   });
 
   return(
