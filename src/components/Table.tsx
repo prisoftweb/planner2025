@@ -103,7 +103,7 @@ export default function Table({data, columns, placeH, typeTable='',
       globalFilter: filtering,
       rowSelection,
       columnVisibility,
-      pagination
+      //pagination
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,

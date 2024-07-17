@@ -146,6 +146,22 @@ export interface CostReport {
   report: Report
   status: boolean
   cost: Cost
+  costocenter: {
+    concept: {
+      _id: string
+      name: string
+    }
+    _id: string
+    category: string
+  }
+  iscard: boolean
+  provider: {
+    _id: string
+    name: string
+  }
+  costo: {
+    total: number
+  }
 }
 
 export interface Cost {
