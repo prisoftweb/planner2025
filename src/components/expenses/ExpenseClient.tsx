@@ -12,15 +12,9 @@ import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
 import { useNewExpense } from "@/app/store/newExpense"
 
-export default function ExpenseClient({token, user, id, expense, optCostCenter, 
-                                        optProjects, optProviders, isHistory=false, 
-                                        optResponsibles, optCategories, optTypes
-                                      }: 
+export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
                             { token:string, id:string, user:string, 
-                              expense:OneExpense, optCostCenter:Options[],
-                              optProviders:Options[], isHistory?:boolean,
-                              optResponsibles:Options[], optProjects:Options[], 
-                              optTypes:Options[], optCategories:Options[]}){
+                              expense:OneExpense, isHistory?:boolean,}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
@@ -63,44 +57,6 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                       </div>))))
   )
 
-  // const view = (
-  //   opt===1? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-  //     style={{borderColor:'#F8FAFC'}}>
-  //       <div className=" max-w-lg">
-  //         <UpdateExpense id={id} optCostCenter={optCostCenter} 
-  //           token={token} user={user} expense={expense} 
-  //           isticket={expense.isticket} isHistory={isHistory} />
-  //       </div>
-  //     </div>) : 
-  //   (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                   style={{borderColor:'#F8FAFC'}}>
-  //                     <div className=" max-w-lg">
-  //                       <UpdateExtraExpense expense={expense} id={id} 
-  //                         optCostCenter={optCostCenter} isHistory={isHistory} 
-  //                         optProjects={optProjects} optProviders={optProviders} 
-  //                         optResponsibles={optResponsibles} token={token} 
-  //                         optCategories={optCategories} optTypes={optTypes}
-  //                       />
-  //                     </div>
-  //           </div>): 
-  //   (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                     style={{borderColor:'#F8FAFC'}}>
-  //                       <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
-  //                     </div>): 
-  //     (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                         style={{borderColor:'#F8FAFC'}}>
-  //                             <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
-  //                       </div>): 
-  //             (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                       style={{borderColor:'#F8FAFC'}}>
-  //                         <div className=" max-w-lg">
-  //                           <UpdateExpense id={id} optCostCenter={optCostCenter} 
-  //                             token={token} user={user} expense={expense} 
-  //                             isticket={expense.isticket} isHistory={isHistory}  />
-  //                         </div>
-  //                     </div>))))
-  // )
-  
   const [open, setOpen] = useState<boolean>(false);
 
   return(
@@ -112,7 +68,7 @@ export default function ExpenseClient({token, user, id, expense, optCostCenter,
                   changeOption={setOpt} option={opt} isticket={expense.isticket} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+        <div className="flex w-full max-w-5xl px-2 flex-wrap lg:flex-nowrap space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             {/* <ProfileProject project={project} /> */}

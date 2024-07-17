@@ -5,7 +5,7 @@ import { Options } from "@/interfaces/Common"
 import { ExpensesTable, Expense } from "@/interfaces/Expenses"
 //import { Project } from "@/interfaces/Projects"
 import { ReportParse } from "@/interfaces/Reports"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts"
 import { PDFDownloadLink } from "@react-pdf/renderer";
@@ -18,7 +18,15 @@ import { TbArrowNarrowLeft } from "react-icons/tb"
 import Button from "../Button"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import { insertConditionInCost } from "@/app/api/routeCost"
-//import ReportCostByCostCenterPDF from "../ReportCostByCostCenterPDF";
+import ReportCostByCostCenter from "../ReportCostByCostCenter"
+
+import { useOptionsExpense } from "@/app/store/newExpense"
+
+import { getCostoCentersLV } from "@/app/api/routeCostCenter";
+import { CostoCenterLV, ReportByCostcenter } from "@/interfaces/CostCenter";
+import { getProvidersLV } from "@/app/api/routeProviders";
+import { getUsersLV } from "@/app/api/routeUser";
+import { getProjectsLV } from "@/app/api/routeProjects";
 
 export default function ContainerClient({data, token, expenses, 
                     optCategoriesFilter, optConditionsFilter, optTypeFilter, 
@@ -26,7 +34,7 @@ export default function ContainerClient({data, token, expenses,
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
                     optProjects, optProviders, optReports, optResponsibles, 
                     optTypes, reports, user, optVats, optCostCenterFilter, 
-                    reportProjects, costsTypes, isHistory=false, idValidado}:
+                    reportProjects, costsTypes, isHistory=false, idValidado, costCostoCenter}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
                     optConditionsFilter:Options[], expenses:Expense[], 
@@ -38,7 +46,88 @@ export default function ContainerClient({data, token, expenses,
                     reports:ReportParse[], optReports:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
                     idTicket:string, optVats:Options[], reportProjects: ReportByProject[], 
-                    costsTypes: CostGroupByType[], isHistory?:boolean, idValidado: string}){
+                    costsTypes: CostGroupByType[], isHistory?:boolean, idValidado: string, costCostoCenter: ReportByCostcenter[]}){
+
+  // const {categories, conditions, costCenter, projects, providers, responsibles, 
+  //   types, updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
+  //   updateReports, updateResponsibles, updateTypes, updateVats} = useOptionsExpense();
+
+  // useEffect(() => {
+  //   const fetchApis = async () => {
+  //     let costcenters: CostoCenterLV[];
+  //     try {
+  //       costcenters = await getCostoCentersLV(token);
+  //       if(typeof(costcenters)==='string'){
+  //         return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+  //       }    
+  //     } catch (error) {
+  //       return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+  //     }
+
+  //     const optCostCenter:Options[]= [];
+  //     costcenters.map((costcenter) => {
+  //       optCostCenter.push({
+  //         label: costcenter.label || 'sin categoria',
+  //         value: costcenter.categoryid + '/' + costcenter.value
+  //       });
+  //     });
+
+  //     let optProviders:Options[]= [];
+  //     try {
+  //       optProviders = await getProvidersLV(token);
+  //       if(typeof(optProviders)==='string'){
+  //         return <h1 className="text-center text-lg text-red-500">{optProviders}</h1>
+  //       }
+  //     } catch (error) {
+  //       return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+  //     }
+
+  //     let optResponsibles:Options[]= [];
+  //     try {
+  //       optResponsibles = await getUsersLV(token);
+  //       if(typeof(optResponsibles)==='string'){
+  //         return <h1 className="text-center text-lg text-red-500">{optResponsibles}</h1>
+  //       }    
+  //     } catch (error) {
+  //       return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+  //     }
+
+  //     // let reports: ReportParse[];
+  //     // try {
+  //     //   if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
+  //     //     reports = await GetReportsMin(token);
+  //     //   }else{
+  //     //     reports = await GetReportsByUserMin(token, user._id);
+  //     //   }
+        
+  //     //   if(typeof(reports)==='string'){
+  //     //     return <h1 className="text-center text-lg text-red-500">{reports}</h1>
+  //     //   }    
+  //     // } catch (error) {
+  //     //   return <h1 className="text-center text-lg text-red-500">Error al consultar los reportes!!</h1>
+  //     // }
+
+  //     const optReports:Options[]= [];
+  //     const optReportsFilter:Options[] = [{
+  //       label: 'TODOS',
+  //       value: 'all'
+  //     }]
+  //     reports.map((rep) => {
+  //       const r = {
+  //         label: rep.name,
+  //         value: rep._id
+  //       }
+  //       optReports.push(r);
+  //       optReportsFilter.push(r);
+  //     });
+
+  //     updateCostC(optCostCenter);
+  //     updateProviders(optProviders);
+  //     updateResponsibles(optResponsibles);
+  //   }
+
+  //   fetchApis();
+  // }, []);
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
@@ -102,6 +191,15 @@ export default function ContainerClient({data, token, expenses,
               {!isHistory && (
                 <>
                   <PDFDownloadLink document={<ReportCostByProjects reports={reportProjects} costsByTypes={costsTypes} />} 
+                      fileName={`InformeObras`} >
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                      ) : (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                      ) }
+                  </PDFDownloadLink>
+                  <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={costCostoCenter} />} 
                       fileName={`InformeObras`} >
                     {({loading, url, error, blob}) => 
                       loading? (

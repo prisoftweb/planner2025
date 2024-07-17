@@ -1,5 +1,6 @@
 import {create} from 'zustand'
-import { Expense, OneExpense } from '@/interfaces/Expenses'
+import { OneExpense } from '@/interfaces/Expenses'
+import { Options } from '@/interfaces/Common'
 
 interface NewExpenseState {
   costCenter: string,
@@ -182,4 +183,80 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   reset: () => {
     set(initialState)
   },
+}))
+
+interface OptionsExpenseState {
+  costCenter: Options[],
+  projects: Options[],
+  providers: Options[], 
+  responsibles: Options[],
+  reports: Options[],
+  categories: Options[],
+  types: Options[],
+  conditions: Options[],
+  vats: Options[],
+}
+
+const optionsExpenseInitial: OptionsExpenseState = {
+  categories: [],
+  conditions: [],
+  costCenter: [],
+  projects: [],
+  providers: [],
+  reports: [],
+  responsibles: [],
+  types: [],
+  vats: [],
+}
+
+interface ActionsOptions {
+  updateCategories: (cats: Options[]) => void,
+  updateConditions: (conds: Options[]) => void,
+  updateCostC: (costsC: Options[]) => void,
+  updateProjects: (proj: Options[]) => void,
+  updateProviders: (provs: Options[]) => void,
+  updateResponsibles: (resp: Options[]) => void,
+  updateTypes: (typs: Options[]) => void,
+  updateVats: (vas: Options[]) => void,
+  updateReports: (reps: Options[]) => void,
+}
+
+export const useOptionsExpense = create<OptionsExpenseState & ActionsOptions >((set) => ({
+  ...optionsExpenseInitial,
+  updateCategories: (cats: Options[]) => set(state => ({
+    ...state,
+    categories: cats,
+  })),
+  updateConditions: (conds: Options[]) => set(state => ({
+    ...state,
+    conditions: conds,
+  })),
+  updateCostC: (costsC: Options[]) => set(state => ({
+    ...state,
+    costCenter: costsC,
+  })),
+  updateProjects: (proj: Options[]) => set(state => ({
+    ...state,
+    projects: proj,
+  })),
+  updateProviders: (provs: Options[]) => set(state => ({
+    ...state,
+    providers: provs,
+  })),
+  updateResponsibles: (resp: Options[]) => set(state => ({
+    ...state,
+    responsibles: resp,
+  })),
+  updateTypes: (typs: Options[]) => set(state => ({
+    ...state,
+    types: typs,
+  })),
+  updateVats: (vts: Options[]) => set(state => ({
+    ...state,
+    vatss: vts,
+  })),
+  updateReports: (reps: Options[]) => set(state => ({
+    ...state,
+    reports: reps,
+  })),
 }))
