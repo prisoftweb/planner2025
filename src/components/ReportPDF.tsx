@@ -97,6 +97,10 @@ export default function ReportPDF({report, costs}:
 
         <View style={style.containerData}>
           <View style={style.inLineText}>
+            <Text style={style.textLeft}>Numero de informe:</Text>
+            <Text style={style.textRight}>{report.account}</Text>
+          </View>
+          <View style={style.inLineText}>
             <Text style={style.textLeft}>Id. del informe:</Text>
             <Text style={style.textRight}>{report._id}</Text>
           </View>
@@ -142,13 +146,13 @@ export default function ReportPDF({report, costs}:
               <View style={[style.element, {flex: 1}]}><Text>{cost.project?.title}</Text></View>
               {/* <View style={[style.element, {flex: 2}]}><Text>{cost.costcenter? (typeof(cost.costcenter)==='string'? cost.costcenter: cost.costcenter.name): 'Sin centro de costos'}</Text></View>
               <View style={[style.element, {flex: 2}]}><Text>{cost.provider?.name || 'NA'}</Text></View> */}
-              <View style={[style.element, {flex: 2}]}><Text>{'Sin centro de costos'}</Text></View>
-              <View style={[style.element, {flex: 2}]}><Text>{'NA'}</Text></View>
+              <View style={[style.element, {flex: 2}]}><Text>{cost.costocenter.concept.name + ' ( ' + cost.costocenter.category + ' )' }</Text></View>
+              <View style={[style.element, {flex: 2}]}><Text>{cost.provider.name}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 1}]}>
                 <Text>{CurrencyFormatter({
                     currency: 'MXN',
-                    value: (cost.cost?.subtotal + cost.cost?.iva) || 0
+                    value: (cost.costo.total) || 0
                     //value: cost.total
                   })}</Text>
               </View>

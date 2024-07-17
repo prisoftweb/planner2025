@@ -41,7 +41,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const [optCostCenter, setOptCostCenter] = useState<Options[]>([]);
   const [optVats, setOptVats] = useState<Options[]>([]);
   const [idVat, setIdVat] = useState<string>('');
-  //const [currentVat, setCurrentVat] = useState(currentExpense? currentExpense.cost.iva: expense.cost.iva);
+  const [vatValue, setVatValue] = useState(currentExpense? currentExpense.cost.iva.toString(): expense.cost.iva.toString());
 
   useEffect(() => {
     const fetchCostCenters = async () => {
@@ -73,21 +73,23 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
         });
       });
       
-      let indexVat = 0;
-      if(currentExpense){
-        indexVat = optVatts.findIndex((ivat) => currentExpense.cost?.iva === Number(ivat.label));
-        // console.log('current expense => ', currentExpense.cost.iva);
-        // console.log('opt vats => ', optVatts);
-      }else{
-        indexVat = optVatts.findIndex((ivat) => expense.cost?.iva == Number(ivat.label));
-        // console.log('expense => ', expense.cost.iva);
-        // console.log('opt vats => ', optVatts);
-      }
+      // let indexVat = 0;
+      // if(currentExpense){
+      //   indexVat = optVatts.findIndex((ivat) => currentExpense.cost?.iva === Number(ivat.label));
+      //   // console.log('current expense => ', currentExpense.cost.iva);
+      //   // console.log('opt vats => ', optVatts);
+      // }else{
+      //   indexVat = optVatts.findIndex((ivat) => expense.cost?.iva == Number(ivat.label));
+      //   // console.log('expense => ', expense.cost.iva);
+      //   // console.log('opt vats => ', optVatts);
+      // }
 
       setOptCostCenter(optCC);
       setOptVats(optVatts);
       //console.log('id vat => ', indexVat);
-      setIdVat(indexVat >= 0? indexVat.toString(): '0');
+      //console.log('index vat useefect => ', indexVat);
+      //setIdVat(indexVat >= 0? indexVat.toString(): '0');
+      setIdVat(optVatts[0].value);
     }
     fetchCostCenters();
   }, []);
@@ -155,7 +157,10 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               iva:vat.replace(/[$,]/g, ""),
               vat: optVats.find((vat) => vat.value === idVat)?.value || ''
             }}
+            console.log('send data => ', JSON.stringify(data));
+            console.log('id vat => ', idVat);
         try {
+          console.log('update expense => ', JSON.stringify(data));
           const res = await UpdateCost(token, id, data);
           if(typeof(res) !== 'string'){
             refRequest.current = true;
@@ -224,40 +229,43 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   // }, [currentExpense]);
 
   const handleIdVat = (value: string) => {
+    updateIva(value);
     setIdVat(value);
   };
 
-  let vatValue = '0';
-  try {
-    const foundVat = optVats.find((vat) => vat.value === idVat);
-    const vatvalue = foundVat?.label || '0';
-    const operation = 
-      (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-        Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-    formik.values.vat = operation.toFixed(2).toString();
-    vatValue = operation.toFixed(2).toString();
-    //setVatValue(operation.toFixed(2).toString());
-  } catch (error) {
-    vatValue = '0';
-    formik.values.vat = '0';
-  }
-
-  // const updateIva = () => {
-  //   try {
-  //     const foundVat = optVats.find((vat) => vat.value === idVat);
-  //     const vatvalue = foundVat?.label || '0';
-  //     const operation = 
-  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-  //     formik.values.vat = operation.toFixed(2).toString();
-  //     vatValue = operation.toFixed(2).toString();
-  //     setCurrentVat(operation);
-  //     //setVatValue(operation.toFixed(2).toString());
-  //   } catch (error) {
-  //     vatValue = '0';
-  //     formik.values.vat = '0';
-  //   }
+  // let vatValue = '0';
+  // try {
+  //   const foundVat = optVats.find((vat) => vat.value === idVat);
+  //   const vatvalue = foundVat?.label || '0';
+  //   const operation = 
+  //     (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+  //       Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+  //   formik.values.vat = operation.toFixed(2).toString();
+  //   vatValue = operation.toFixed(2).toString();
+  //   //setVatValue(operation.toFixed(2).toString());
+  // } catch (error) {
+  //   vatValue = '0';
+  //   formik.values.vat = '0';
   // }
+
+  const updateIva = (idvat: string) => {
+    try {
+      const foundVat = optVats.find((vat) => vat.value === idvat);
+      const vatvalue = foundVat?.label || '0';
+      const operation = 
+        (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+          Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+      formik.values.vat = operation.toFixed(2).toString();
+      //vatValue = operation.toFixed(2).toString();
+      setVatValue(operation.toFixed(2).toString());
+      //setCurrentVat(operation);
+      //setVatValue(operation.toFixed(2).toString());
+    } catch (error) {
+      //vatValue = '0';
+      setVatValue('0');
+      formik.values.vat = '0';
+    }
+  }
 
   return(
     <div className="w-full">
@@ -376,7 +384,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             onValueChange={(value) => {try {
               console.log('value input => ', value);
               console.log('formik value => ', formik.values.discount);
-              //updateIva();
+              //updateIva(idVat);
               formik.values.discount=(value || '0');
             } catch (error) {
               formik.values.discount='0';
@@ -409,7 +417,9 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               prefix="$"
               onValueChange={(value) => {try {
                 formik.values.vat=value || '0';
+                setVatValue(value || '0');
               } catch (error) {
+                setVatValue('0');
                 formik.values.vat='0';
               }}}
             />
@@ -419,7 +429,8 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
                 </div>
             ) : null}
             {optVats.length > 0 && (
-              <SelectReact index={Number(idVat)} opts={optVats} setValue={handleIdVat} />
+              // <SelectReact index={Number(idVat)} opts={optVats} setValue={handleIdVat} />
+              <SelectReact index={0} opts={optVats} setValue={handleIdVat} />
             )}
           </div>
           {/* <Input type="text" name="vat" 

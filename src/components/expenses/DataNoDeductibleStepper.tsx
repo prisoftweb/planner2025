@@ -45,10 +45,12 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     onSubmit: async (valores) => {            
       const {description, amount} = valores;
       let type = 'OTROS';
-      const cc = optCostCenter.find((costc) => costc.value === costCenter);
+      const cc = optCostCenter.find((costc) => costc.value === (costCenter + '/' + concept));
       if(cc?.label.toLowerCase().includes('mano de obra')){
         type = 'MANO DE OBRA';
       }
+      console.log('cc => ', cc);
+      console.log('type no deductible => ', type);
       updateBasicData('', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
           '', '', categoryS, '', type);
@@ -96,7 +98,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     refRequest.current = false;
     let type = 'OTROS';
     //console.log('cost center a buscar => ', costcenter);
-    const cc = optCostCenter.find((costc) => costc.value === costCenter);
+    const cc = optCostCenter.find((costc) => costc.value === (costCenter + '/' + concept));
     //console.log('cc find save', cc);
     if(cc?.label.toLowerCase().includes('mano de obra')){
       //console.log('entro aqui => ', cc?.label.toLowerCase());
