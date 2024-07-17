@@ -1,27 +1,15 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { getProjects } from "@/app/api/routeProjects";
-import { Project } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
-
 import { GetCostMIN, GetCostsLV } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
 import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
-import { CostoCenterLV } from "@/interfaces/CostCenter";
-import { getCostoCentersLV } from "@/app/api/routeCostCenter";
-//import { Glossary } from "@/interfaces/Glossary";
-//import { getGlossaries } from "@/app/api/routeGlossary";
-import { Provider } from "@/interfaces/Providers";
-import { getProviders } from "@/app/api/routeProviders";
-import { getUsers } from "@/app/api/routeUser";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -38,7 +26,6 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>  
   }
 
-  //let costs: Expense[];
   let options: Options[] = [];
   try {
     options = await GetCostsLV(token);
@@ -48,159 +35,6 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>  
   }
 
-  //let options: Options[] = [];
-
-  // if(costs.length <= 0){
-  //   return <h1 className="text-center text-red-500">Error al obtener costos...</h1>
-  // }
-
-  // costs.map((cos) => {
-  //   options.push({
-  //     value: cos._id,
-  //     label: cos.description,
-  //   })
-  // })
-
-  let costcenters: CostoCenterLV[];
-  try {
-    costcenters = await getCostoCentersLV(token);
-    if(typeof(costcenters)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
-  }
-
-  const optCostCenter:Options[]= [];
-  // costcenters.map((costcenter) => {
-  //   optCostCenter.push({
-  //     label: costcenter.name,
-  //     value: costcenter._id
-  //   });
-  // });
-  costcenters.map((costcenter) => {
-    // costcenter.categorys.map((category) => {
-    //   optCostCenter.push({
-    //     // label: category.name + ' ( ' + costcenter.name + ' ) ',
-    //     label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-    //     value: category._id
-    //   });
-    //   //cat += category.name + ', ';
-    // })
-    optCostCenter.push({
-      // label: category.name + ' ( ' + costcenter.name + ' ) ',
-      //label: costcenter.label + ' ( ' + costcenter.categoryname + ' ) ',
-      label: costcenter.label,
-      value: costcenter.categoryid + '/' + costcenter.value
-    });
-  });
-
-  // let glossaries: Glossary[];
-  // try {
-  //   glossaries = await getGlossaries(token);
-  //   if(typeof(glossaries)==='string'){
-  //     return <h1 className="text-center text-lg text-red-500">{glossaries}</h1>
-  //   }    
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los catalogos!!</h1>
-  // }
-
-  // const optGlossaries:Options[]= [];
-  // glossaries.map((glossary) => {
-  //   optGlossaries.push({
-  //     label: glossary.name,
-  //     value: glossary._id
-  //   });
-  // });
-
-  let projects: Project[];
-  try {
-    projects = await getProjects(token);
-    if(typeof(projects)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{projects}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-  }
-
-  const optProjects:Options[]= [];
-  projects.map((project) => {
-    optProjects.push({
-      label: project.title,
-      value: project._id
-    });
-  });
-
-  let responsibles: UsrBack[];
-  try {
-    responsibles = await getUsers(token);
-    if(typeof(responsibles)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{responsibles}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
-  }
-
-  const optResponsibles:Options[]= [];
-  responsibles.map((responsible) => {
-    optResponsibles.push({
-      label: responsible.name,
-      value: responsible._id
-    });
-  });
-
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{providers}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
-  }
-
-  const optProviders:Options[]= [];
-  providers.map((provider) => {
-    optProviders.push({
-      label: provider.name,
-      value: provider._id
-    });
-  });
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'cost');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
-  }
-
-  const optCategories: Options[] = [];
-  //const optCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
-    optCategories.push({
-      label: category.glossary.name,
-      value: category.glossary._id
-    })
-  })
-
-  const optTypes: Options[] = [];
-  //const optTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
-    optTypes.push({
-      label: type.glossary.name,
-      value: type.glossary._id
-    })
-  })
-
-  // const optConditions: Options[] = [];
-  // //const optConditions: Options[] = [];
-  // catalogs[0].condition.map((condition) => {
-  //   optConditions.push({
-  //     label: condition.glossary.name,
-  //     value: condition.glossary._id
-  //   })
-  // })
 
   const subTotal = CurrencyFormatter({
     currency: "MXN",
@@ -217,10 +51,7 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTabExpense idExp={params.id} tab="1" />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 
-              user={user._id} optCostCenter={optCostCenter} 
-              optProjects={optProjects} optProviders={optProviders} optResponsibles={optResponsibles}
-              optCategories={optCategories} optTypes={optTypes} isHistory={true}
-          />
+              user={user._id} isHistory={true}/>
         </NextUiProviders>
       </div>
     </>

@@ -325,6 +325,29 @@ export async function GetCostsGroupByType(auth_token:string) {
   }
 }
 
+export async function GetCostsGroupByCostoCenter(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTER-Concept`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      //console.log('res route cost => ', res.data.data.resok);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+    }
+    return 'Error al consultar costos por centros de costos!!';
+  }
+}
+
 export async function insertConditionInCost(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/insertConditionInCost`;
   //console.log(url);

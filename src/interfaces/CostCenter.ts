@@ -8,25 +8,6 @@ export interface CostCenterTable {
   concept: string
 }
 
-// export interface CostCenter {
-//   _id: string
-//   name: string
-//   isnormal: boolean
-//   code: number
-//   categorys: Concept[]
-//   status: boolean
-//   __v: number
-//   id: string
-// }
-
-// export interface Concept {
-//   name: string
-//   account: string
-//   status: boolean
-//   _id: string
-//   id: string
-// }
-
 export interface CostCenter {
   _id: string
   name: string
@@ -50,4 +31,20 @@ export interface CostoCenterLV {
   categoryname: string
   value: string
   label: string
+}
+
+export interface ReportByCostcenter {
+  quantity: number
+  totalCost: number
+  totalIVA: number
+  totalDiscount: number
+  type: string
+  costocenter: CostocenterReport
+  project: string
+}
+
+export interface CostocenterReport {
+  category: string
+  concept: string
+  account: string
 }

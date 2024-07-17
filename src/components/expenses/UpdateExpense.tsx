@@ -41,6 +41,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const [optCostCenter, setOptCostCenter] = useState<Options[]>([]);
   const [optVats, setOptVats] = useState<Options[]>([]);
   const [idVat, setIdVat] = useState<string>('');
+  //const [currentVat, setCurrentVat] = useState(currentExpense? currentExpense.cost.iva: expense.cost.iva);
 
   useEffect(() => {
     const fetchCostCenters = async () => {
@@ -241,6 +242,23 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
     formik.values.vat = '0';
   }
 
+  // const updateIva = () => {
+  //   try {
+  //     const foundVat = optVats.find((vat) => vat.value === idVat);
+  //     const vatvalue = foundVat?.label || '0';
+  //     const operation = 
+  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+  //     formik.values.vat = operation.toFixed(2).toString();
+  //     vatValue = operation.toFixed(2).toString();
+  //     setCurrentVat(operation);
+  //     //setVatValue(operation.toFixed(2).toString());
+  //   } catch (error) {
+  //     vatValue = '0';
+  //     formik.values.vat = '0';
+  //   }
+  // }
+
   return(
     <div className="w-full">
       <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
@@ -346,15 +364,19 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             //   focus:border-slate-700 outline-0"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            value={formik.values.discount}
+            //value={formik.values.discount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             //placeholder="Please enter a number"
-            defaultValue={currentExpense?.cost.discount || 0}
+            //defaultValue={currentExpense?.cost.discount || 0}
+            defaultValue={currentExpense?.cost.discount || expense?.cost.discount || 0}
             decimalsLimit={2}
             disabled={isHistory}
             prefix="$"
             onValueChange={(value) => {try {
+              console.log('value input => ', value);
+              console.log('formik value => ', formik.values.discount);
+              //updateIva();
               formik.values.discount=(value || '0');
             } catch (error) {
               formik.values.discount='0';
@@ -383,6 +405,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               decimalsLimit={2}
               disabled={isHistory}
               value={vatValue}
+              //defaultValue={currentExpense?.cost.iva || expense?.cost.iva || 0}
               prefix="$"
               onValueChange={(value) => {try {
                 formik.values.vat=value || '0';
