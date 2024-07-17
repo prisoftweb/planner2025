@@ -20,6 +20,8 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
   useEffect(() => {
     console.log('new expense => ', expense);
     updateCurrentExpense(expense);
+
+    return () => updateCurrentExpense(null);
   }, []);
 
   const [opt, setOpt] = useState<number>(1);

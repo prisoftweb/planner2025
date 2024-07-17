@@ -97,6 +97,10 @@ export default function ReportPDF({report, costs}:
 
         <View style={style.containerData}>
           <View style={style.inLineText}>
+            <Text style={style.textLeft}>Numero de informe:</Text>
+            <Text style={style.textRight}>{report.account}</Text>
+          </View>
+          <View style={style.inLineText}>
             <Text style={style.textLeft}>Id. del informe:</Text>
             <Text style={style.textRight}>{report._id}</Text>
           </View>
