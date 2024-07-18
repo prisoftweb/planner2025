@@ -54,6 +54,10 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
             const res2: (XMLCFDI | any ) = xml2js(t);
             console.log(res2);
 
+            console.log('elements => ', res2.elements[0].elements);
+            const uuid = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('complemento'));
+            console.log('uuid => ', uuid);
+
             let CFDIObj:CFDIValidation = {
               amount: '',
               date: '',
@@ -66,12 +70,13 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
               //console.log('rfc 1 ', res2.elements[0].elements[1].attributes?.Rfc);
               console.log('rfc 2 ', res2.elements[0].elements[0].attributes?.Rfc);
               const emisor = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('emisor'));
-              console.log('emisor');
+              console.log('emisor', emisor);
               CFDIObj.RFCProvider = emisor?.attributes?.Rfc || 'sin rfc de proveedor';
               CFDIObj.amount = res2.elements[0].attributes.SubTotal;
-              CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID;
+              CFDIObj.taxFolio = uuid.elements[0].attributes?.UUID || 'error al leer CFDI';
+              //CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID;
             } catch (error) {
-              
+              console.log('error al leer cfdi => ', error);
             }
 
 
@@ -90,7 +95,8 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
             }
 
             try {
-              setFolio(res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID || 'No se pudo leer el folio');
+              setFolio(uuid.elements[0].attributes?.UUID || 'error al leer CFDI')
+              //setFolio(res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID || 'No se pudo leer el folio');
             } catch (error) {
               setFolio('No se pudo leer el folio');
             }

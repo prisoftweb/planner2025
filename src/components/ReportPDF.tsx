@@ -85,6 +85,11 @@ export default function ReportPDF({report, costs}:
       width: '60px',
     }
   })
+
+  let totalAllCosts = 0;
+  costs.map((c) => {
+    totalAllCosts += c.costo.total;
+  });
   
   return(
     <Document>
@@ -165,7 +170,8 @@ export default function ReportPDF({report, costs}:
           <Text style={{textDecoration: 'underline'}}>Importe del informe :</Text>
           <Text style={{textDecoration: 'underline'}}>{CurrencyFormatter({
               currency: 'MXN',
-              value: report.total
+              // value: report.total
+              value: totalAllCosts
             })}</Text>
         </View>
       </Page>
