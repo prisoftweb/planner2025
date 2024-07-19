@@ -48,3 +48,13 @@ export interface CostocenterReport {
   concept: string
   account: string
 }
+
+export interface ReportByCostcenterCategory {
+  quantity: number
+  totalCost: number
+  totalIVA: number
+  totalDiscount: number
+  type: string
+  costocenter: string
+  project: string
+}

@@ -1,9 +1,9 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 //import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
-import { ReportByCostcenter } from '@/interfaces/CostCenter'
+import { ReportByCostcenterCategory } from '@/interfaces/CostCenter'
 
-export default function ReportCostByCostCenter({costsCostCenter}: {costsCostCenter: ReportByCostcenter[]}){
+export default function ReportCostByCategory({costsCostCenter}: {costsCostCenter: ReportByCostcenterCategory[]}){
   
   const style = StyleSheet.create({
     table: {
@@ -52,7 +52,7 @@ export default function ReportCostByCostCenter({costsCostCenter}: {costsCostCent
   //   totalTypes += costtype.totalCost;
   // });
 
-  //console.log('costos por concepto => ', costsCostCenter);
+  //console.log('costos por categoria => ', costsCostCenter);
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const date = new Date();
@@ -75,8 +75,8 @@ export default function ReportCostByCostCenter({costsCostCenter}: {costsCostCent
               <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Tipo</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Obra</Text></View>
               {/* <View style={[style.header, {flex: 1}]}><Text>Categoria</Text></View> */}
-              <View style={[style.header, {flex: 1}]}><Text>Concepto</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Cuenta</Text></View>
+              <View style={[style.header, {flex: 1}]}><Text>Categoria</Text></View>
+              {/* <View style={[style.header, {flex: 1}]}><Text>Cuenta</Text></View> */}
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Cantidad</Text></View>
             </View>
@@ -85,8 +85,8 @@ export default function ReportCostByCostCenter({costsCostCenter}: {costsCostCent
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{costCC.type}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.project}</Text></View>
                 {/* <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter.category}</Text></View> */}
-                <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter?.concept || ''}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter?.account || ''}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter}</Text></View>
+                {/* <View style={[style.element, {flex: 1}]}><Text>{costCC.costocenter.account}</Text></View> */}
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',
                   value: costCC.totalCost

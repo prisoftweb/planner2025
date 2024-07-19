@@ -325,7 +325,7 @@ export async function GetCostsGroupByType(auth_token:string) {
   }
 }
 
-export async function GetCostsGroupByCostoCenter(auth_token:string) {
+export async function GetCostsGroupByCostoCenterConcept(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTER-Concept`;
   try {
     const res = await axios.get(url, {
@@ -335,7 +335,30 @@ export async function GetCostsGroupByCostoCenter(auth_token:string) {
     });
     
     if(res.status===200) {
-      //console.log('res route cost => ', res.data.data.resok);
+      //console.log('res route cost concept => ', res.data.data);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+    }
+    return 'Error al consultar costos por centros de costos!!';
+  }
+}
+
+export async function GetCostsGroupByCostoCenterCategory(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTER-Category`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText

@@ -19,21 +19,22 @@ import Button from "../Button"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import { insertConditionInCost } from "@/app/api/routeCost"
 import ReportCostByCostCenter from "../ReportCostByCostCenter"
+import ReportCostByCategory from "../ReportCostByCategory"
 
-import { useOptionsExpense } from "@/app/store/newExpense"
+//import { useOptionsExpense } from "@/app/store/newExpense"
 
-import { getCostoCentersLV } from "@/app/api/routeCostCenter";
-import { CostoCenterLV, ReportByCostcenter } from "@/interfaces/CostCenter";
-import { getProvidersLV } from "@/app/api/routeProviders";
-import { getUsersLV } from "@/app/api/routeUser";
-import { getProjectsLV } from "@/app/api/routeProjects";
+//import { getCostoCentersLV } from "@/app/api/routeCostCenter";
+import { CostoCenterLV, ReportByCostcenter, ReportByCostcenterCategory } from "@/interfaces/CostCenter";
+// import { getProvidersLV } from "@/app/api/routeProviders";
+// import { getUsersLV } from "@/app/api/routeUser";
+// import { getProjectsLV } from "@/app/api/routeProjects";
 
 export default function ContainerClient({data, token, expenses, 
                     optCategoriesFilter, optConditionsFilter, optTypeFilter, 
                     optProjectFilter, optReportsFilter, idLabour, idTicket, 
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
                     optProjects, optProviders, optReports, optResponsibles, 
-                    optTypes, reports, user, optVats, optCostCenterFilter, 
+                    optTypes, reports, user, optVats, optCostCenterFilter, costCostoCenterCategory, 
                     reportProjects, costsTypes, isHistory=false, idValidado, costCostoCenter}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
@@ -46,11 +47,15 @@ export default function ContainerClient({data, token, expenses,
                     reports:ReportParse[], optReports:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
                     idTicket:string, optVats:Options[], reportProjects: ReportByProject[], 
-                    costsTypes: CostGroupByType[], isHistory?:boolean, idValidado: string, costCostoCenter: ReportByCostcenter[]}){
+                    costsTypes: CostGroupByType[], isHistory?:boolean, idValidado: string, 
+                    costCostoCenter: ReportByCostcenter[], costCostoCenterCategory: ReportByCostcenterCategory[]}){
 
   // const {categories, conditions, costCenter, projects, providers, responsibles, 
   //   types, updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
   //   updateReports, updateResponsibles, updateTypes, updateVats} = useOptionsExpense();
+
+  // console.log('costo center concept container => ', costCostoCenter);
+  // console.log('costo center category container => ', costCostoCenterCategory);
 
   // useEffect(() => {
   //   const fetchApis = async () => {
@@ -191,7 +196,7 @@ export default function ContainerClient({data, token, expenses,
               {!isHistory && (
                 <>
                   <PDFDownloadLink document={<ReportCostByProjects reports={reportProjects} costsByTypes={costsTypes} />} 
-                      fileName={`InformeObras`} >
+                      fileName={`InformeCostoporProyecto`} >
                     {({loading, url, error, blob}) => 
                       loading? (
                         <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
@@ -200,7 +205,16 @@ export default function ContainerClient({data, token, expenses,
                       ) }
                   </PDFDownloadLink>
                   <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={costCostoCenter} />} 
-                      fileName={`InformeObras`} >
+                      fileName={`InformeCostoporConcepto`} >
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                      ) : (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                      ) }
+                  </PDFDownloadLink>
+                  <PDFDownloadLink document={<ReportCostByCategory costsCostCenter={costCostoCenterCategory} />} 
+                      fileName={`InformeCostoporCategoria`} >
                     {({loading, url, error, blob}) => 
                       loading? (
                         <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />

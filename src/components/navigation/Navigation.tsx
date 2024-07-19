@@ -53,6 +53,8 @@ export default function Navigation({user}: {user:UsrBack}){
     RemoveCookies();
     router.push('/login');
   }
+
+  const firstName = user.name.substring(0, user.name.indexOf(' '));
   
   return(
     <>
@@ -66,10 +68,8 @@ export default function Navigation({user}: {user:UsrBack}){
         </div>
         
         <div className="flex items-center">
-          <div className="flex justify-around items-center w-20 text-white">
-            {/* <p className="invisible md:visible text-2xl"> | </p> */}
-            {/* <Link href={'/'}><ChartBarIcon width={30} height={30} /></Link> */}
-            {/* <Link href={'/issues'}><Cog8ToothIcon width={30} height={30} /></Link> */}
+          <div className="flex justify-around items-center w-24 text-white">
+            <p className="p-2 hover:bg-slate-700 text-center font-semibold">{firstName}</p>
           </div>
           <Image src={photo} alt="profile" width={50} height={50} 
                   onClick={toggleProfile} className="cursor-pointer rounded-full"

@@ -391,7 +391,7 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        isHistory={true} idValidado="" costCostoCenter={[]}/>
+        isHistory={true} idValidado="" costCostoCenter={[]} costCostoCenterCategory={[]} />
     </>
   )
 }

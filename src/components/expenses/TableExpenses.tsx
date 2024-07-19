@@ -64,13 +64,14 @@ export default function TableExpenses({data, token, expenses,
           <input type="checkbox" 
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
-            className="w-14 cursor-pointer"
+            className="w-24 cursor-pointer"
           />
         </div>
       ),
       enableSorting:false,
       header: ({table}:any) => (
         <input type="checkbox"
+          className="w-24 cursor-pointer"
           checked={table.getIsAllRowsSelected()}
           onClick={()=> {
             table.toggleAllRowsSelected(!table.getIsAllRowsSelected())

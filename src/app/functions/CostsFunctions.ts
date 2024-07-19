@@ -134,12 +134,36 @@ export function ExpenseDataToTableData(expenses:Expense[]){
             elements.push('none');
           }
         }else{
-          //sin archivos
-          elements.push('none');
+          const typeFiles = getTypeFiles(expense);
+          if(typeFiles.includes('xml')){
+            elements.push('xml');
+          }
+    
+          if(typeFiles.includes('pdf')){
+            elements.push('pdf');
+          }
+
+          if(elements.length === 0){
+            elements.push('none');
+          }
+          // if(expense.category && expense.category?.name.toLowerCase().includes('ticket')){
+          //   const typeFiles = getTypeFiles(expense);
+          //   if(typeFiles.includes('pdf')){
+          //     elements.push('pdf');
+          //   }else{
+          //     elements.push('none');
+          //   }
+          // }else{
+          //   //sin archivos
+          //   //elements.push('none');
+          // }
         }
       }
     }
-    
+    console.log(expense.description);
+    console.log(expense.category.name);
+    console.log(elements);
+
     table.push({
       id: expense._id,
       Descripcion: expense.description,
@@ -174,12 +198,12 @@ export function getTypeFiles(expense:Expense) {
   expense.files.map((f) => {
       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-        || f.types.includes('PNG')){
+        || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a'){
           typeFiles.push('pdf');
           //console.log('aqui entro => ', f);
           //tiene factura
       }else{
-        if(f.types.includes('xml') || f.types.includes('XML')){
+        if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
           typeFiles.push('xml');
           //console.log('aqui entro => ', f);
           //tiene xml    

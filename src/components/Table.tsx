@@ -103,7 +103,7 @@ export default function Table({data, columns, placeH, typeTable='',
       globalFilter: filtering,
       rowSelection,
       columnVisibility,
-      //pagination
+      pagination
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setFiltering,
@@ -263,14 +263,17 @@ export default function Table({data, columns, placeH, typeTable='',
             {
               table.getRowModel().rows.map((row, index:number) => (
                 <tr key={row.id}
-                  className="border-b dark:border-gray-700 
-                  hover:bg-gray-200 dark:hover:bg-gray-600"
-                  style={{'backgroundColor': `${index%2==0? '#fff': '#F8FAFC'}`}}
+                  // className="border-b dark:border-gray-700 
+                  // hover:bg-gray-200 dark:hover:bg-gray-600"
+                  className={`border-b dark:border-gray-700 
+                    dark:hover:bg-gray-600 
+                    ${row.getIsSelected()? 'bg-slate-500 opacity-75': index%2===0? 'bg-white': 'bg-gray-200'}`}
+                    //style={{'backgroundColor': `${index%2==0? '#fff': '#F8FAFC'}`}}
                   // className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 
                     // hover:bg-gray-200 dark:hover:bg-gray-600"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-6 py-4 text-slate-900">
+                    <td key={cell.id} className={`px-6 py-4 ${row.getIsSelected()? 'text-white': 'text-slate-900'} `}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
@@ -306,7 +309,14 @@ export default function Table({data, columns, placeH, typeTable='',
                 <p className="hidden sm:block text-md text-slate-700">{startPage} - {endPage} de {data.length} </p>
 
                 <button type="button"
-                  onClick={() => {table.setPageIndex(0); updateLabelRowsPage()}} 
+                  //onClick={() => {table.setPageIndex(0); updateLabelRowsPage()}} 
+                  onClick={() => {
+                    updateLabelRowsPage();
+                    setPagination({
+                      pageIndex: 0, //initial page index
+                      pageSize: pagination.pageSize
+                    });
+                  }}
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >
@@ -314,7 +324,16 @@ export default function Table({data, columns, placeH, typeTable='',
                 </button>
                 
                 <button type="button" 
-                  onClick={() => {table.previousPage(); updateLabelRowsPage()}}
+                  //onClick={() => {table.previousPage(); updateLabelRowsPage()}}
+                  onClick={() => {
+                    updateLabelRowsPage();
+                    if(pagination.pageIndex > 0){
+                      setPagination({
+                        pageIndex: pagination.pageIndex - 1, //initial page index
+                        pageSize: pagination.pageSize
+                      });
+                    }
+                  }}
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >
@@ -322,7 +341,16 @@ export default function Table({data, columns, placeH, typeTable='',
                 </button>
                 
                 <button type="button" 
-                  onClick={() => {table.nextPage(); updateLabelRowsPage()}}
+                  //onClick={() => {table.nextPage(); updateLabelRowsPage()}}
+                  onClick={() => {
+                    updateLabelRowsPage();
+                    if(pagination.pageIndex < table.getPageCount()-1){
+                      setPagination({
+                        pageIndex: pagination.pageIndex + 1, //initial page index
+                        pageSize: pagination.pageSize
+                      });
+                    }
+                  }}
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >
@@ -330,7 +358,16 @@ export default function Table({data, columns, placeH, typeTable='',
                 </button>
                 
                 <button type="button" 
-                  onClick={() => {table.setPageIndex(table.getPageCount()-1); updateLabelRowsPage()}}
+                  //onClick={() => {table.setPageIndex(table.getPageCount()-1); updateLabelRowsPage()}}
+                  onClick={() => {
+                    updateLabelRowsPage();
+                    if(pagination.pageIndex < table.getPageCount()-1){
+                      setPagination({
+                        pageIndex: table.getPageCount()-1, //initial page index
+                        pageSize: pagination.pageSize
+                      });
+                    }
+                  }}
                   className="border border-slate-300 text-blue-600 bg-white 
                     hover:bg-text-900 hover:bg-slate-200 p-1 rounded-xl"
                 >

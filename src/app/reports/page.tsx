@@ -35,16 +35,17 @@ export default async function Page() {
       //consultar por usuario y por departamento
       //console.log('by user');
     }else{
-      if(user.department.name.toLowerCase().includes('direccion')){
-        //reports = await GetReports(token);
-        reports = await GetReportsMin(token);
-        //console.log('rep por min!! => ', reports);
-      }else{
-        //console.log('by dept');
-        //reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
-        reports = await GetReportsLastMovInDeptMIN(token, typeof(user.department)==='string' ? user.department : user.department._id);
-        //console.log('rep por ultimo dept!! => ', reports);
-      }
+      reports = await GetReportsMin(token);
+      // if(user.department.name.toLowerCase().includes('direccion')){
+      //   //reports = await GetReports(token);
+      //   reports = await GetReportsMin(token);
+      //   //console.log('rep por min!! => ', reports);
+      // }else{
+      //   //console.log('by dept');
+      //   //reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
+      //   reports = await GetReportsLastMovInDeptMIN(token, typeof(user.department)==='string' ? user.department : user.department._id);
+      //   //console.log('rep por ultimo dept!! => ', reports);
+      // }
     }
     //reports = await GetReports(token);
     if(typeof(reports)==='string'){
