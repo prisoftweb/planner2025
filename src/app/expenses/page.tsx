@@ -3,7 +3,7 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
 import { getCostoCentersLV } from "../api/routeCostCenter";
-import { CostoCenterLV, ReportByCostcenter } from "@/interfaces/CostCenter";
+import { CostoCenterLV, ReportByCostcenter, ReportByCostcenterCategory } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
 import { getProvidersLV } from "../api/routeProviders";
@@ -11,15 +11,16 @@ import { getUsersLV } from "../api/routeUser";
 import { getProjectsLV } from "../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import { getAllCostsByCondition, GetVatsLV, GetCostsGroupByProject, 
-  GetCostsGroupByType, GetCostsGroupByCostoCenter } from "../api/routeCost";
-import { CurrencyFormatter } from "../functions/Globals";
+  GetCostsGroupByType, GetCostsGroupByCostoCenterConcept, GetCostsGroupByCostoCenterCategory } from "../api/routeCost";
+//import { CurrencyFormatter } from "../functions/Globals";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndCondition, getCatalogsByNameAndType } from "../api/routeCatalogs";
 import { GetReportsMin, GetReportsByUserMin } from "../api/routeReports";
 import { ReportParse } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
-import { getTypeFiles } from "../functions/CostsFunctions";
+//import { getTypeFiles } from "../functions/CostsFunctions";
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
-import { CostByCostCenter } from "@/components/ReportCostByCostCenterPDF";
+//import { CostByCostCenter } from "@/components/ReportCostByCostCenterPDF";
+import { ExpenseDataToTableData } from "../functions/CostsFunctions";
 
 export default async function Page() {
   
@@ -207,87 +208,7 @@ export default async function Page() {
     )
   }
 
-  const table: ExpensesTable[] = [];
-
-  expenses.map((expense) => {
-    const dollar = CurrencyFormatter({
-          currency: "MXN",
-          value: expense.cost?.subtotal || 0
-        })
-    const discount = CurrencyFormatter({
-      currency: "MXN",
-      value: expense.cost?.discount || 0
-    })
-    const vat = CurrencyFormatter({
-      currency: "MXN",
-      value: expense.cost?.iva || 0
-    })
-    const total = CurrencyFormatter({
-      currency: "MXN",
-      value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
-    })
-    const elements: string[] = [];
-    if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
-      const typeFiles = getTypeFiles(expense);
-      if(typeFiles.includes('xml')){
-        elements.push('xml');
-      }else{
-        elements.push('none');
-      }
-
-      if(typeFiles.includes('pdf')){
-        elements.push('pdf');
-      }else{
-        elements.push('none');
-      }
-    }else{
-      if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
-        const typeFiles = getTypeFiles(expense);
-        if(typeFiles.includes('xml')){
-          elements.push('xml');
-        }else{
-          elements.push('none');
-        }
-      }else{
-        if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
-          const typeFiles = getTypeFiles(expense);
-          if(typeFiles.includes('pdf')){
-            elements.push('pdf');
-          }else{
-            elements.push('none');
-          }
-        }else{
-          //sin archivos
-          elements.push('none');
-        }
-      }
-    }
-    
-    table.push({
-      id: expense._id,
-      Descripcion: expense.description,
-      Estatus: 'condition',
-      Fecha: expense.date,
-      //costcenter: typeof(expense.costocenter)=== 'string'? expense.costocenter: expense.costocenter?.name,
-      costcenter: expense.costocenter.concept.name,
-      Importe: dollar,
-      Informe: expense.report?.name || 'sin reporte',
-      Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
-      Proyecto: expense.project?.title || 'sin proyecto',
-      Responsable: {
-        responsible: expense.user?.name,
-        photo: expense.user?.photo
-      },
-      //condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
-      condition: expense.estatus.name,
-      archivos: elements,
-      vat,
-      discount,
-      total,
-      taxFolio: expense.taxfolio || '',
-      color: expense.estatus.color || 'gray'
-    });
-  });
+  const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 
   let reportsProject: ReportByProject[];
   try {
@@ -313,7 +234,7 @@ export default async function Page() {
 
   let costCostoCenter: ReportByCostcenter[] = [];
   try {
-    costCostoCenter = await GetCostsGroupByCostoCenter(token);
+    costCostoCenter = await GetCostsGroupByCostoCenterConcept(token);
     //console.log('reports projects page => ', costCostoCenter);
     if(typeof(costCostoCenter)==='string'){
       return <h1>Error al consultar costos por centro de costos!!</h1>
@@ -321,6 +242,20 @@ export default async function Page() {
   } catch (error) {
     return <h1>Error al consultar costos por centro de costos!!</h1>
   }
+
+  //console.log('res cost center concept => ', costCostoCenter);
+
+  let costCostoCenterCategory: ReportByCostcenterCategory[] = [];
+  try {
+    costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
+    //console.log('reports projects page => ', costCostoCenter);
+    if(typeof(costCostoCenter)==='string'){
+      return <h1>Error al consultar costos por centro de costos!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por centro de costos!!</h1>
+  }
+  //console.log('res costo center category => ', costCostoCenterCategory);
 
   return(
     <>
@@ -333,7 +268,7 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        idValidado={idValidado} costCostoCenter={costCostoCenter} />
+        idValidado={idValidado} costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} />
     </>
   )
 }

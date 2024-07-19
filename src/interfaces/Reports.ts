@@ -62,7 +62,7 @@ export interface CostsTable {
   Proveedor: string 
   Estatus: string 
   Fecha: string 
-  Importe: string
+  Total: string
   condition: string
 }
 
@@ -162,6 +162,7 @@ export interface CostReport {
   costo: {
     total: number
   }
+  estatus: Glossary
 }
 
 export interface Cost {

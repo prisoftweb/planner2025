@@ -23,7 +23,12 @@ export default async function Page() {
     if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')){
       reports = await GetReportsMin(token);
     }else{
-      reports = await GetReportsByUserMin(token, user._id);
+      // reports = await GetReportsByUserMin(token, user._id);
+      if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras')){
+        reports = await GetReportsByUserMin(token, user._id);
+      }else{
+        reports = await GetReportsMin(token);
+      }
     }
     if(typeof(reports)==='string'){
       return <h1 className="text-lg text-center text-red-500">{reports}</h1>

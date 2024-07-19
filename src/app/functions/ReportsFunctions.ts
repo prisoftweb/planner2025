@@ -66,14 +66,14 @@ export function CostsDataToTableData(expenses:Expense[]){
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.cost?.subtotal || 0
+          value: expense.cost?.total || 0
         })
     table.push({
       id: expense._id,
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      Importe: dollar,
+      Total: dollar,
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
@@ -93,23 +93,23 @@ export function CostsDataToTableDataMin(expenses:CostReport[]){
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.cost?.subtotal || 0
+          value: expense.costo.total || 0
         })
     table.push({
       id: expense._id,
       Descripcion: expense.description,
       Estatus: 'condition',
       Fecha: expense.date,
-      Importe: dollar,
+      Total: dollar,
       //Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
-      Proveedor: 'sin proveedor',
+      Proveedor: expense.provider?.name || 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
       Responsable: {
         responsible: expense.user.name,
         photo: expense.user.photo
       },
       //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
-      condition: 'sin status'
+      condition: expense.estatus?.name || 'sin status'
     })
   });
 

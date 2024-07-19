@@ -166,11 +166,11 @@ function CostsTableInReport({data}: {data: CostsTable[]}){
         <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
-    columnHelper.accessor('Importe', {
-      header: 'Importe',
-      id: 'importe',
+    columnHelper.accessor('Total', {
+      header: 'Total',
+      id: 'Total',
       cell: ({row}) => (
-        <p className="">{row.original.Importe}</p>
+        <p className="">{row.original.Total}</p>
       ),
     }),
   ]
