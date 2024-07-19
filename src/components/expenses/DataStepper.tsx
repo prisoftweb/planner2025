@@ -136,8 +136,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     handleConstCenter(optCostCenter[0].value);
   }, []);
 
-  console.log('costcenter contex => ', costCenter);
-  console.log('concept context => ', concept);
+  //console.log('costcenter contex => ', costCenter);
+  //console.log('concept context => ', concept);
   const SaveData = async() => {
     refRequest.current = false;
     const {description, folio, taxFolio, discount, amount, vat} = formik.values
@@ -342,7 +342,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   let indexCC = 0;
   if(costCenter !== ''){
     optCostCenter.map((opt, index:number) => {
-      if(opt.value === costCenter){
+      if(opt.value === costCenter + '/' + concept){
         indexCC = index;
       }
     });      

@@ -30,6 +30,34 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     updateIsCard, updateCostCenter} = useNewExpense();
 
   const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
+  //const [categoryCostCenter, setCategoryCostCenter] = useState<string>(costCenter===''?  )
+
+  const handleCostCenter = (value:string) => {
+    //setCostCenter(value);
+    console.log('value costoc => ', value);
+    const indexCaracter = value.indexOf('/');
+    const c1 = value.substring(0, indexCaracter);
+    const c2 = value.substring(indexCaracter + 1);
+    console.log('cad 1 => ', c1);
+    console.log('cad 2 => ', c2);
+    updateCostCenter(c1, c2);
+    const cc = optCostCenter.find((costC) => costC.value === value);
+    if(cc){
+      if(cc.label.toLowerCase().includes('mano de obra')){
+        //console.log('idlabour ');
+        setCategoryS(idLabour);
+        updateCategory(idLabour);
+      }else{
+        //console.log('id ticket ');
+        setCategoryS(idTicket);
+        updateCategory(idTicket);
+      }
+    }
+  }
+  
+  if(concept==='' || costCenter === ''){
+    handleCostCenter(optCostCenter[0].value);
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -71,7 +99,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
-  const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
+  //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [clearAmount, setClearAmount] = useState<boolean>(false);
   const refRequest = useRef(true);
   const [viewAmount, setViewAmount] = useState<JSX.Element>(
@@ -113,6 +141,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       category: costCenter,
       concept
     }
+    console.log('cost center no deductible => ', JSON.stringify(costcenter));
     if(voucher){
       const formdata = new FormData();
       //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
@@ -142,27 +171,35 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
       }
-      try {
-        const res = await CreateCostWithFiles(token, formdata);
-        if(res === 201){
-          setView(<></>);
-          reset();
-          formik.values.amount = '';
-          formik.values.description = '';
-          showToastMessage('Costo creado satisfactoriamente!!!');
-          setClearAmount(true);
-          updateRefresh(true);
-          setTimeout(() => {
-            setResetBand(true);
-          }, 300);
-          refRequest.current = true;
-        }else{
-          showToastMessageError(res);
-          refRequest.current = true;
-        }
-      } catch (error) {
-        showToastMessageError('Ocurrio un error al guardar costo!!');
-      }
+
+      reset();
+      setClearAmount(true);
+      updateRefresh(true);
+      setTimeout(() => {
+        setResetBand(true);
+      }, 300);
+      refRequest.current = true;
+      // try {
+      //   const res = await CreateCostWithFiles(token, formdata);
+      //   if(res === 201){
+      //     setView(<></>);
+      //     reset();
+      //     formik.values.amount = '';
+      //     formik.values.description = '';
+      //     showToastMessage('Costo creado satisfactoriamente!!!');
+      //     setClearAmount(true);
+      //     updateRefresh(true);
+      //     setTimeout(() => {
+      //       setResetBand(true);
+      //     }, 300);
+      //     refRequest.current = true;
+      //   }else{
+      //     showToastMessageError(res);
+      //     refRequest.current = true;
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Ocurrio un error al guardar costo!!');
+      // }
     }else{
       const data = {
         costocenter:costcenter, date:startDate, description, 
@@ -237,28 +274,6 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }
   }, [clearAmount]);
 
-  const handleCostCenter = (value:string) => {
-    //setCostCenter(value);
-    console.log('value costoc => ', value);
-    const indexCaracter = value.indexOf('/');
-    const c1 = value.substring(0, indexCaracter);
-    const c2 = value.substring(indexCaracter + 1);
-    console.log('cad 1 => ', c1);
-    console.log('cad 2 => ', c2);
-    updateCostCenter(c1, c2);
-    const cc = optCostCenter.find((costC) => costC.value === value);
-    if(cc){
-      if(cc.label.toLowerCase().includes('mano de obra')){
-        //console.log('idlabour ');
-        setCategoryS(idLabour);
-        updateCategory(idLabour);
-      }else{
-        //console.log('id ticket ');
-        setCategoryS(idTicket);
-        updateCategory(idTicket);
-      }
-    }
-  }
 
   useEffect(() => {
     handleCostCenter(optCostCenter[0].value);
@@ -290,10 +305,10 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       </div>
     </>)
 
-    setViewCC(<div className="col-span-1 sm:col-span-2">
-          <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
-        </div>)
+    // setViewCC(<div className="col-span-1 sm:col-span-2">
+    //       <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+    //       <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
+    //     </div>)
 
   }, []);
 
@@ -327,13 +342,29 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         </div>
       </>)
 
-      setViewCC(<div className="col-span-1 sm:col-span-2">
-              <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-              <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
-            </div>)
+      // setViewCC(<div className="col-span-1 sm:col-span-2">
+      //         <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+      //         <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
+      //       </div>)
       setResetBand(false);
     }
   }, [resetBand]);
+
+  let viewCC = <></>;
+  let indexCC = 0;
+  if(costCenter !== ''){
+    optCostCenter.map((opt, index:number) => {
+      if(opt.value === (costCenter + '/' + concept)){
+        indexCC = index;
+      }
+    });      
+  }
+  viewCC = (
+    <div className=" col-span-1 md:col-span-3">
+      <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
+      <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
+    </div>
+  );
 
   return(
     <div className="w-full bg-white">

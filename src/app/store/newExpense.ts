@@ -22,6 +22,7 @@ interface NewExpenseState {
   
   voucher: (File | null),
   CFDI: (File | null)
+  haveTaxExempt: boolean,
 
   refresh: boolean
 }
@@ -82,7 +83,8 @@ const initialState: NewExpenseState = {
   category: '',
   refresh: false,
   idVat: '',
-  type: ''
+  type: '',
+  haveTaxExempt: false,
 }
 
 const projectInitial: ProjectState = {
