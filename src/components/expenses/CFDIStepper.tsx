@@ -20,7 +20,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
-    vat, voucher, condition, category, idVat, isCard,
+    vat, voucher, condition, category, idVat, isCard, taxExempt,
     reset, updateRefresh, updateIndexStepper, type, concept} = useNewExpense();
   
   const validationType = (f: File) => {
@@ -66,6 +66,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       formdata.append('ispaid', JSON.stringify(supplierCredit));
       formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('type', type);
+      formdata.append('exempttax', taxExempt.replace(/[$,]/g, ""));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -74,7 +75,8 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         discount: discount.replace(/[$,]/g, ""),
         subtotal:amount.replace(/[$,]/g, ""),
         iva:vat,
-        vat: idVat
+        vat: idVat,
+        exempttax: taxExempt.replace(/[$,]/g, ""),
         // vatvalue: number no se usa 
         // total: number no se usa 
       }));
@@ -115,7 +117,8 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           discount,
           subtotal:amount.replace(/[$,]/g, ""),
           iva:vat,
-          vat: idVat 
+          vat: idVat,
+          exempttax: taxExempt.replace(/[$,]/g, ""),
           // vatvalue: number no se usa 
           // total: number no se usa 
         },
@@ -123,7 +126,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
-        }], iscard:isCard, type
+        }], iscard:isCard, type,
       }
       // console.log('save cost in cfdi stepper => ', JSON.stringify(data));
       // console.log('costo center => ', JSON.stringify(costcenter));

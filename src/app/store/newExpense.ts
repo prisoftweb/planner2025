@@ -19,10 +19,12 @@ interface NewExpenseState {
   category:string
   idVat: string
   type: string
+  taxExempt: string
   
   voucher: (File | null),
   CFDI: (File | null)
   haveTaxExempt: boolean,
+  haveDiscount: boolean
 
   refresh: boolean
 }
@@ -47,7 +49,7 @@ interface CurrentExpense{
 interface Actions {
   updateBasicData: (folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-    typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string) => void,
+    typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, taxExempt: string) => void,
   updateVoucher: (file: File) => void,
   updateCDFI: (CFDI: File) => void,
   updateIndexStepper: (index: number) => void,
@@ -62,6 +64,8 @@ interface Actions {
   updatePettyCash: (value:boolean) => void,
   updateIsCard: (value:boolean) => void,
   updateCurrentExpense: (value: (OneExpense | null)) => void,
+  updateHaveTaxExempt: (value:boolean) => void,
+  updateHaveDiscount: (value:boolean) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -85,6 +89,8 @@ const initialState: NewExpenseState = {
   idVat: '',
   type: '',
   haveTaxExempt: false,
+  haveDiscount: false,
+  taxExempt: '',
 }
 
 const projectInitial: ProjectState = {
@@ -111,7 +117,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   ...initialExpense,
   updateBasicData: ( folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-      typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string) => set(state => ({
+      typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, taxExempt: string) => set(state => ({
     ...state,
     folio: folio,
     description: description,
@@ -126,7 +132,8 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
     typeExpense: typeExpense,
     category: category,
     idVat: idVat,
-    type: type
+    type: type,
+    taxExempt: taxExempt
   })),
   updateVoucher: (file: File) => set (state => ({
     ...state,
@@ -181,6 +188,14 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   updateCurrentExpense: (value:(OneExpense | null)) => set(state => ({
     ...state,
     currentExpense: value
+  })),
+  updateHaveDiscount: (value:boolean) => set(state => ({
+    ...state,
+    haveDiscount: value,
+  })),
+  updateHaveTaxExempt: (value:boolean) => set(state => ({
+    ...state,
+    haveTaxExempt: value,
   })),
   reset: () => {
     set(initialState)

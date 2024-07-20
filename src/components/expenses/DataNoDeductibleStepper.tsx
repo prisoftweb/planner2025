@@ -38,8 +38,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    console.log('cad 1 => ', c1);
-    console.log('cad 2 => ', c2);
+    //console.log('cad 1 => ', c1);
+    //console.log('cad 2 => ', c2);
     updateCostCenter(c1, c2);
     const cc = optCostCenter.find((costC) => costC.value === value);
     if(cc){
@@ -81,7 +81,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       console.log('type no deductible => ', type);
       updateBasicData('', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
-          '', '', categoryS, '', type);
+          '', '', categoryS, '', type, '');
       updateIndexStepper(2);
     },       
   });
@@ -134,8 +134,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }
     const {description, amount} = formik.values
     updateBasicData('', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', categoryS, '', type);
-    
+        startDate, '', '', '', '', '', '', '', categoryS, '', type, '');
 
     const costcenter = {
       category: costCenter,
@@ -179,27 +178,27 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         setResetBand(true);
       }, 300);
       refRequest.current = true;
-      // try {
-      //   const res = await CreateCostWithFiles(token, formdata);
-      //   if(res === 201){
-      //     setView(<></>);
-      //     reset();
-      //     formik.values.amount = '';
-      //     formik.values.description = '';
-      //     showToastMessage('Costo creado satisfactoriamente!!!');
-      //     setClearAmount(true);
-      //     updateRefresh(true);
-      //     setTimeout(() => {
-      //       setResetBand(true);
-      //     }, 300);
-      //     refRequest.current = true;
-      //   }else{
-      //     showToastMessageError(res);
-      //     refRequest.current = true;
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Ocurrio un error al guardar costo!!');
-      // }
+      try {
+        const res = await CreateCostWithFiles(token, formdata);
+        if(res === 201){
+          setView(<></>);
+          reset();
+          formik.values.amount = '';
+          formik.values.description = '';
+          showToastMessage('Costo creado satisfactoriamente!!!');
+          setClearAmount(true);
+          updateRefresh(true);
+          setTimeout(() => {
+            setResetBand(true);
+          }, 300);
+          refRequest.current = true;
+        }else{
+          showToastMessageError(res);
+          refRequest.current = true;
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un error al guardar costo!!');
+      }
     }else{
       const data = {
         costocenter:costcenter, date:startDate, description, 

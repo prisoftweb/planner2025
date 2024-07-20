@@ -20,6 +20,8 @@ import { showToastMessage, showToastMessageError } from "../Alert"
 import { insertConditionInCost } from "@/app/api/routeCost"
 import ReportCostByCostCenter from "../ReportCostByCostCenter"
 import ReportCostByCategory from "../ReportCostByCategory"
+import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts"
+import ReportCostsByProjectOnlyPDF from "../ReportCostByProjectOnlyPDF"
 
 //import { useOptionsExpense } from "@/app/store/newExpense"
 
@@ -35,7 +37,8 @@ export default function ContainerClient({data, token, expenses,
                     optCategories, optConditions, optCostCenter, optCostCenterDeductible, 
                     optProjects, optProviders, optReports, optResponsibles, 
                     optTypes, reports, user, optVats, optCostCenterFilter, costCostoCenterCategory, 
-                    reportProjects, costsTypes, isHistory=false, idValidado, costCostoCenter}:
+                    reportProjects, costsTypes, isHistory=false, idValidado, costCostoCenter, 
+                    isViewReports, reportCostProjectOnly}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
                     optConditionsFilter:Options[], expenses:Expense[], 
@@ -48,7 +51,8 @@ export default function ContainerClient({data, token, expenses,
                     optCostCenterDeductible:Options[], idLabour:string, 
                     idTicket:string, optVats:Options[], reportProjects: ReportByProject[], 
                     costsTypes: CostGroupByType[], isHistory?:boolean, idValidado: string, 
-                    costCostoCenter: ReportByCostcenter[], costCostoCenterCategory: ReportByCostcenterCategory[]}){
+                    costCostoCenter: ReportByCostcenter[], costCostoCenterCategory: ReportByCostcenterCategory[], 
+                    isViewReports: boolean, reportCostProjectOnly: ReportCostsByProjectOnly[]}){
 
   // const {categories, conditions, costCenter, projects, providers, responsibles, 
   //   types, updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
@@ -195,33 +199,46 @@ export default function ContainerClient({data, token, expenses,
               {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} > */}
               {!isHistory && (
                 <>
-                  <PDFDownloadLink document={<ReportCostByProjects reports={reportProjects} costsByTypes={costsTypes} />} 
-                      fileName={`InformeCostoporProyecto`} >
-                    {({loading, url, error, blob}) => 
-                      loading? (
-                        <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-                      ) : (
-                        <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                      ) }
-                  </PDFDownloadLink>
-                  <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={costCostoCenter} />} 
-                      fileName={`InformeCostoporConcepto`} >
-                    {({loading, url, error, blob}) => 
-                      loading? (
-                        <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-                      ) : (
-                        <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                      ) }
-                  </PDFDownloadLink>
-                  <PDFDownloadLink document={<ReportCostByCategory costsCostCenter={costCostoCenterCategory} />} 
-                      fileName={`InformeCostoporCategoria`} >
-                    {({loading, url, error, blob}) => 
-                      loading? (
-                        <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-                      ) : (
-                        <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                      ) }
-                  </PDFDownloadLink>
+                  {isViewReports && (
+                    <>
+                      <PDFDownloadLink document={<ReportCostByProjects reports={reportProjects} costsByTypes={costsTypes} />} 
+                          fileName={`InformeCostoporProyecto`} >
+                        {({loading, url, error, blob}) => 
+                          loading? (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                          ) : (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                          ) }
+                      </PDFDownloadLink>
+                      <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={costCostoCenter} />} 
+                          fileName={`InformeCostoporConcepto`} >
+                        {({loading, url, error, blob}) => 
+                          loading? (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                          ) : (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                          ) }
+                      </PDFDownloadLink>
+                      <PDFDownloadLink document={<ReportCostByCategory costsCostCenter={costCostoCenterCategory} />} 
+                          fileName={`InformeCostoporCategoria`} >
+                        {({loading, url, error, blob}) => 
+                          loading? (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                          ) : (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                          ) }
+                      </PDFDownloadLink>
+                      <PDFDownloadLink document={<ReportCostsByProjectOnlyPDF reports={reportCostProjectOnly} />} 
+                          fileName={`InformeCostosAgrupadosPorProyecto`} >
+                        {({loading, url, error, blob}) => 
+                          loading? (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                          ) : (
+                            <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                          ) }
+                      </PDFDownloadLink>
+                    </>
+                  )}
                   {expensesSelected.length > 0 && (
                     <Button onClick={changeConditionInCost}>Validar</Button>
                   )}

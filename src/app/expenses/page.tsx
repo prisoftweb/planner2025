@@ -21,12 +21,20 @@ import ContainerClient from "@/components/expenses/ContainerClient";
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
 //import { CostByCostCenter } from "@/components/ReportCostByCostCenterPDF";
 import { ExpenseDataToTableData } from "../functions/CostsFunctions";
+import { GetAllCostsGroupByProjectOnly } from "../api/routeCost";
+import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
 
 export default async function Page() {
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+
+  const role = user.rol?.name || '';
+  const isViewReports = role.toLowerCase().includes('residente')? false: true;
+
+  //console.log('role => ', role);
+  //console.log('is view reports =>', isViewReports);
   
   let expenses: Expense[] = [];
   try {
@@ -257,6 +265,17 @@ export default async function Page() {
   }
   //console.log('res costo center category => ', costCostoCenterCategory);
 
+  let reportProjectOnly: ReportCostsByProjectOnly[] = [];
+  try {
+    reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
+    //console.log('reports projects page => ', costCostoCenter);
+    if(typeof(reportProjectOnly)==='string'){
+      return <h1>Error al consultar costos por proyecto!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por proyecto!!</h1>
+  }
+
   return(
     <>
       <Navigation user={user} />
@@ -268,7 +287,8 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        idValidado={idValidado} costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} />
+        idValidado={idValidado} costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} 
+        isViewReports={isViewReports} reportCostProjectOnly={reportProjectOnly} />
     </>
   )
 }

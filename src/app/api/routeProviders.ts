@@ -124,6 +124,8 @@ export async function createProvider(data:Object, auth_token:string) {
 export async function createNewProvider(data:Object, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
   
+  console.log('new provider => ', url);
+  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -131,6 +133,7 @@ export async function createNewProvider(data:Object, auth_token:string) {
         'Content-Type': 'Application/json',
       }
     })
+    console.log('res => ', res);
     if(res.status===201) return res.data.data.data;
       return res.statusText;
   } catch (error) {

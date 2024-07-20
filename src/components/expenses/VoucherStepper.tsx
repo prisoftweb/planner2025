@@ -16,7 +16,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
   const {updateIndexStepper, updateVoucher, amount, costCenter, 
     date, description, discount, folio, project, proveedor, report, 
     responsible, taxFolio, typeCFDI, vat, CFDI, condition, category, 
-    idVat, isCard, type, concept, reset, updateRefresh} = useNewExpense();
+    idVat, isCard, type, concept, taxExempt, reset, updateRefresh} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   const refRequest = useRef(true);
@@ -49,7 +49,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
     if(file || CFDI){
       const formdata = new FormData();
       //formdata.append('subtotal', amount);
-      formdata.append('costocenter', JSON.stringify(costCenter));
+      formdata.append('costocenter', JSON.stringify(costcenter));
       formdata.append('date', date);
       formdata.append('description', description);
       //formdata.append('discount', discount);
@@ -74,7 +74,8 @@ export default function VoucherStepper({token, user}: {token:string, user:string
         discount: discount.replace(/[$,]/g, ""),
         subtotal:amount.replace(/[$,]/g, ""),
         iva:vat,
-        vat: idVat 
+        vat: idVat,
+        exempttax: taxExempt.replace(/[$,]/g, "")
         // vatvalue: number no se usa 
         // total: number no se usa 
       }));
@@ -106,18 +107,19 @@ export default function VoucherStepper({token, user}: {token:string, user:string
       }
     }else{
       const data = {
-        costocenter: costCenter, date:date, description, folio, 
+        costocenter: costcenter, date:date, description, folio, 
         cost: {
           discount,
           subtotal:amount.replace(/[$,]/g, ""),
           iva:vat,
-          vat: idVat 
+          vat: idVat,
+          exempttax: taxExempt.replace(/[$,]/g, "")
         },
         provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project,
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
-        }], iscard:isCard, type
+        }], iscard:isCard, type,
       }
   
       try {
