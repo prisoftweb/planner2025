@@ -13,7 +13,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
   
   const {updateIndexStepper, updateVoucher, amount, costCenter, date, description, 
     responsible, report, project, condition, category, reset, updateRefresh, 
-    isCard, type, concept} = useNewExpense();
+    isCard, type, concept, total} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   const refRequest = useRef(true);
@@ -52,6 +52,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
         discount: 0,
         subtotal:amount.replace(/[$,]/g, ""),
         iva: 0,
+        total: total.replace(/[$,]/g, ""),
         //vat: idVat, 
         // vatvalue: number no se usa 
         // total: number no se usa 
@@ -80,6 +81,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }else{
@@ -89,6 +91,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           discount: 0,
           subtotal:amount.replace(/[$,]/g, ""),
           iva: 0,
+          total: total.replace(/[$,]/g, ""),
           //vat: idVat,
           // vatvalue: number no se usa 
           // total: number no se usa 
@@ -115,6 +118,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }

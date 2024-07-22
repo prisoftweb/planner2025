@@ -38,6 +38,25 @@ export async function getProvidersLV(auth_token:string){
   }
 }
 
+export async function getProvidersSATLV(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getAllProvidersSATLV`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Error al obtener proveedores del sat';
+    }
+  }
+}
+
 export async function getProvider(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/${id}`;
   try {

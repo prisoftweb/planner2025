@@ -6,7 +6,7 @@ import { getCostoCentersLV } from "../api/routeCostCenter";
 import { CostoCenterLV, ReportByCostcenter, ReportByCostcenterCategory } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
-import { getProvidersLV } from "../api/routeProviders";
+import { getProvidersLV, getProvidersSATLV } from "../api/routeProviders";
 import { getUsersLV } from "../api/routeUser";
 import { getProjectsLV } from "../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
@@ -80,6 +80,16 @@ export default async function Page() {
     }
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+  }
+
+  let optProvidersSAT:Options[]= [];
+  try {
+    optProvidersSAT = await getProvidersSATLV(token);
+    if(typeof(optProvidersSAT)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optProvidersSAT}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores del sat!!</h1>
   }
 
   let optResponsibles:Options[]= [];
@@ -209,6 +219,7 @@ export default async function Page() {
                   optCategories={optCategories} optTypes={optTypes} reports={reports}
                   optReports={optReports} idLabour={labour} idTicket={ticket}
                   optCostCenterDeductible={optCostCenter} optVats={optVats}
+                  optProvidersSAT={optProvidersSAT}
               />
           </WithOut>
         </div>
@@ -288,7 +299,8 @@ export default async function Page() {
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
         idValidado={idValidado} costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} 
-        isViewReports={isViewReports} reportCostProjectOnly={reportProjectOnly} />
+        isViewReports={isViewReports} reportCostProjectOnly={reportProjectOnly} 
+        optProvidersSAT={optProvidersSAT}  />
     </>
   )
 }

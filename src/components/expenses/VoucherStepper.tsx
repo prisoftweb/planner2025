@@ -16,7 +16,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
   const {updateIndexStepper, updateVoucher, amount, costCenter, 
     date, description, discount, folio, project, proveedor, report, 
     responsible, taxFolio, typeCFDI, vat, CFDI, condition, category, 
-    idVat, isCard, type, concept, taxExempt, reset, updateRefresh} = useNewExpense();
+    idVat, isCard, type, concept, taxExempt, reset, updateRefresh, total} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   const refRequest = useRef(true);
@@ -75,7 +75,8 @@ export default function VoucherStepper({token, user}: {token:string, user:string
         subtotal:amount.replace(/[$,]/g, ""),
         iva:vat,
         vat: idVat,
-        exempttax: taxExempt.replace(/[$,]/g, "")
+        exempttax: taxExempt.replace(/[$,]/g, ""),
+        total: total.replace(/[$,]/g, ""),
         // vatvalue: number no se usa 
         // total: number no se usa 
       }));
@@ -103,6 +104,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }else{
@@ -113,7 +115,8 @@ export default function VoucherStepper({token, user}: {token:string, user:string
           subtotal:amount.replace(/[$,]/g, ""),
           iva:vat,
           vat: idVat,
-          exempttax: taxExempt.replace(/[$,]/g, "")
+          exempttax: taxExempt.replace(/[$,]/g, ""),
+          total: total.replace(/[$,]/g, ""),
         },
         provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project,
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
@@ -138,6 +141,7 @@ export default function VoucherStepper({token, user}: {token:string, user:string
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }

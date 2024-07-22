@@ -38,7 +38,7 @@ export default function ContainerClient({data, token, expenses,
                     optProjects, optProviders, optReports, optResponsibles, 
                     optTypes, reports, user, optVats, optCostCenterFilter, costCostoCenterCategory, 
                     reportProjects, costsTypes, isHistory=false, idValidado, costCostoCenter, 
-                    isViewReports, reportCostProjectOnly}:
+                    isViewReports, reportCostProjectOnly, optProvidersSAT}:
                   {data:ExpensesTable[], token:string, 
                     optCategoriesFilter:Options[], optTypeFilter:Options[], 
                     optConditionsFilter:Options[], expenses:Expense[], 
@@ -47,7 +47,7 @@ export default function ContainerClient({data, token, expenses,
                     optProviders:Options[], optResponsibles:Options[],
                     optProjects:Options[], optConditions:Options[],
                     optCategories:Options[], optTypes:Options[], 
-                    reports:ReportParse[], optReports:Options[], 
+                    reports:ReportParse[], optReports:Options[], optProvidersSAT:Options[], 
                     optCostCenterDeductible:Options[], idLabour:string, 
                     idTicket:string, optVats:Options[], reportProjects: ReportByProject[], 
                     costsTypes: CostGroupByType[], isHistory?:boolean, idValidado: string, 
@@ -249,6 +249,7 @@ export default function ContainerClient({data, token, expenses,
                               optTypes={optTypes} reports={reports}
                               optReports={optReports} idLabour={idLabour} idTicket={idTicket}
                               optCostCenterDeductible={optCostCenterDeductible}
+                              optProvidersSAT={optProvidersSAT}
                   />
                 </>
               )}
@@ -256,34 +257,6 @@ export default function ContainerClient({data, token, expenses,
           </div>
         </div>
       </div>
-      {/* <Header title="Gastos" placeHolder="Buscar gasto.." >
-        <div className="flex gap-x-4 items-center">
-          <GiSettingsKnobs onClick={() => handleFilter(true)}
-            className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-          />
-          {!isHistory && (
-            <>
-              <PDFDownloadLink document={<ReportCostByProjects reports={reportProjects} costsByTypes={costsTypes} />} 
-                  fileName={`InformeObras`} >
-                {({loading, url, error, blob}) => 
-                  loading? (
-                    <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-                  ) : (
-                    <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                  ) }
-              </PDFDownloadLink>
-              <ButtonNew token={token} user={user} optCostCenter={optCostCenter} 
-                          optProviders={optProviders} optResponsibles={optResponsibles}
-                          optProjects={optProjects} optVats={optVats}
-                          optCategories={optCategories} optConditions={optConditions}
-                          optTypes={optTypes} reports={reports}
-                          optReports={optReports} idLabour={idLabour} idTicket={idTicket}
-                          optCostCenterDeductible={optCostCenterDeductible}
-              />
-            </>
-          )}
-        </div>
-      </Header> */}
       {
         isHistory? (
           <TableHistoryExpenses data={data} token={token} 

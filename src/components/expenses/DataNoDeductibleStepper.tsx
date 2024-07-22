@@ -27,10 +27,11 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, project, condition, category, 
     reset, updateRefresh, updateCategory, isCard, isPettyCash, concept, 
-    updateIsCard, updateCostCenter} = useNewExpense();
+    updateIsCard, updateCostCenter, total} = useNewExpense();
 
   const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
   //const [categoryCostCenter, setCategoryCostCenter] = useState<string>(costCenter===''?  )
+  const [totalExpense, setTotalExpense] = useState<string>(total);
 
   const handleCostCenter = (value:string) => {
     //setCostCenter(value);
@@ -81,7 +82,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       console.log('type no deductible => ', type);
       updateBasicData('', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
-          '', '', categoryS, '', type, '');
+          '', '', categoryS, '', type, '', totalExpense.replace(/[$,]/g, ""));
       updateIndexStepper(2);
     },       
   });
@@ -134,7 +135,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }
     const {description, amount} = formik.values
     updateBasicData('', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', categoryS, '', type, '');
+        startDate, '', '', '', '', '', '', '', categoryS, '', type, '', totalExpense.replace(/[$,]/g, ""));
 
     const costcenter = {
       category: costCenter,
@@ -158,6 +159,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         discount: 0,
         subtotal:amount.replace(/[$,]/g, ""),
         iva: 0,
+        total: totalExpense.replace(/[$,]/g, ""),
         //vat: idVat, 
         // vatvalue: number no se usa 
         // total: number no se usa 
@@ -197,6 +199,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }else{
@@ -206,6 +209,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           discount: 0,
           subtotal:amount.replace(/[$,]/g, ""),
           iva: 0,
+          total: totalExpense.replace(/[$,]/g, ""),
           //vat: idVat,
           // vatvalue: number no se usa 
           // total: number no se usa 
@@ -237,6 +241,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }
@@ -276,14 +281,14 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
   useEffect(() => {
     handleCostCenter(optCostCenter[0].value);
-    let indexCC = 0;
-    if(costCenter !== ''){
-      optCostCenter.map((opt, index:number) => {
-        if(opt.value === costCenter){
-          indexCC = index;
-        }
-      });      
-    }
+    // let indexCC = 0;
+    // if(costCenter !== ''){
+    //   optCostCenter.map((opt, index:number) => {
+    //     if(opt.value === costCenter){
+    //       indexCC = index;
+    //     }
+    //   });      
+    // }
     if(date !== ''){
       setStartDate(date);
     }
@@ -313,14 +318,14 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
   useEffect(() => {
     if(resetBand){
-      let indexCC = 0;
-      if(costCenter !== ''){
-        optCostCenter.map((opt, index:number) => {
-          if(opt.value === costCenter){
-            indexCC = index;
-          }
-        });      
-      }
+      // let indexCC = 0;
+      // if(costCenter !== ''){
+      //   optCostCenter.map((opt, index:number) => {
+      //     if(opt.value === costCenter){
+      //       indexCC = index;
+      //     }
+      //   });      
+      // }
       if(date !== ''){
         setStartDate(date);
       }
@@ -365,6 +370,30 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     </div>
   );
 
+  let viewTotal: JSX.Element = <></>;
+  viewTotal = (
+    <CurrencyInput
+      id="total"
+      name="total"
+      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+        focus:border-slate-700 outline-0"
+      //onChange={formik.handleChange}
+      //onBlur={formik.handleChange}
+      //value={formik.values.amount.replace(/[$,]/g, "")}
+      value={totalExpense.replace(/[$,]/g, "")}
+      decimalsLimit={2}
+      prefix="$"
+      onValueChange={(value) => {try {
+        //console.log('value amount data stepper => ', value);
+        //formik.values.amount=value || '0';
+        setTotalExpense(value || '0');
+      } catch (error) {
+        //formik.values.amount='0';
+        setTotalExpense('0');
+      }}}
+    />
+  )
+
   return(
     <div className="w-full bg-white">
       <div className="mt-2">
@@ -402,6 +431,10 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
                 <p>{formik.errors.amount}</p>
               </div>
             ) : null}
+          </div>
+          <div>
+            <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
+            {viewTotal}
           </div>
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
