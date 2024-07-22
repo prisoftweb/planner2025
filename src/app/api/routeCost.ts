@@ -358,7 +358,30 @@ export async function GetCostsGroupByCostoCenterCategory(auth_token:string) {
     });
     
     if(res.status===200) {
-      console.log('res route cost category => ', res.data.data);
+      //console.log('res route cost category => ', res.data.data);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+    }
+    return 'Error al consultar costos por centros de costos!!';
+  }
+}
+
+export async function GetAllCostsGroupByProjectOnly(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByProject-Only`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText

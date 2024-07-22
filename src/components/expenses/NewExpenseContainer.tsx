@@ -21,7 +21,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                                 optProviders, optResponsibles, optReports,
                                 optProjects, optCategories, optConditions, optTypes, 
                                 reports, idLabour, idTicket, optCostCenterDeductible,
-                                optVats }: 
+                                optVats, optProvidersSAT }: 
                             {token:string, showForm:Function, user:string, 
                               optCostCenter:Options[], optProjects:Options[],
                               optProviders:Options[], optResponsibles:Options[],
@@ -29,7 +29,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
                               optConditions:Options[], optVats:Options[],
                               reports:ReportParse[], optReports: Options[],
                               optCostCenterDeductible:Options[], idLabour:string, 
-                              idTicket:string,
+                              idTicket:string, optProvidersSAT:Options[]
                             }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -72,24 +72,6 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     }),
   }
 
-  // const [viewSelectProject, setViewSelectProject] = useState<JSX.Element>(
-  // <Select
-  //   className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
-  //   value={optSelectize}
-  //   options={optProjects}
-  //   isDisabled={isPettyCash}
-  //   //isDisabled={true}
-  //   maxMenuHeight={250}
-  //   components={{
-  //     DropdownIndicator
-  //   }}
-  //   placeholder='Buscar ...'
-  //   styles={customStyles}
-  //   onChange={(value:any) => updateProject(value.value)}
-  // />);
-
-  //console.log('opt selectize => ', optSelectize);
-
   const viewSelectProject: JSX.Element = (
     <Select
       className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
@@ -119,78 +101,6 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     ));
   }
 
-  // const selectProject = () => {
-  //   let ind = 0;
-  //   if(project === ''){
-  //     setOptSelectize(optProjects[0]);
-  //   }else{
-  //     let aux = 0;
-  //     optProjects.map((optP, index:number) => {
-  //       if(optP.value === project){
-  //         aux = index;
-  //       }
-  //     });
-  //     ind = aux;
-  //     setOptSelectize(optProjects[aux]);
-  //   }
-  //   setTimeout(() => {
-  //     setViewSelectProject(
-  //       <Select
-  //         className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
-  //         value={optProjects[ind]}
-  //         options={optProjects}
-  //         isDisabled={isPettyCash}
-  //         //isDisabled={true}
-  //         maxMenuHeight={250}
-  //         components={{
-  //           DropdownIndicator
-  //         }}
-  //         placeholder='Buscar ...'
-  //         styles={customStyles}
-  //         onChange={(value:any) => updateProject(value.value)}
-  //       />)
-  //   }, 500);
-  // }
-
-  // useEffect(() => {
-  //   if(report !== ''){
-  //     const r = reports.find((rep) => rep._id === report);
-      
-  //     //setIsPettyCash(r?.ispettycash || false);
-  //     updatePettyCash(r?.ispettycash || false);
-  //     //console.log('petty ', r);
-  //     updateProject(r?.project._id || '');
-  //     //setViewSelectProject(<></>);
-  //   }
-  // }, [report]);
-
-  // if(report !== ''){
-  //   const r = reports.find((rep) => rep._id === report);
-    
-  //   //setIsPettyCash(r?.ispettycash || false);
-  //   // if(r?.ispettycash !== isPettyCash){
-  //   //   updatePettyCash(r?.ispettycash || false);
-  //   // }
-  //   //console.log('petty ', r);
-  //   console.log('project => ', project);
-  //   console.log('r.project => ', r?.project);
-  //   // if(r?.project._id !== project){
-  //   //   updateProject(r?.project._id || '');
-  //   // }
-
-  //   // const optProject = optProjects.find((optP) => optP.value === r?.project._id);
-  //   // if(optProject && optProject !== optSelectize){
-  //   //   setOptSelectize(optProject);
-  //   // }
-  //   //setViewSelectProject(<></>);
-  // }
-
-  // const handleReport = (value:string) => {
-  //   const optProject = optProjects.find((optP) => optP.value )
-  //   updateReport(value);
-  //   updateIndexStepper(1);
-  // }
-
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(Math.max(
@@ -202,10 +112,6 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     //selectProject();
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
-
-  // useEffect(() => {
-  //   selectProject();
-  // }, [project]);
 
   const closeForm = () => {
     updateReport('');
@@ -221,7 +127,7 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
           optProviders={optProviders} 
           optResponsibles={optResponsibles}
           token={token} user={user} optCategories={optCategories}
-          optTypes={optTypes} optVats={optVats}
+          optTypes={optTypes} optVats={optVats} optProvidersSAT={optProvidersSAT}
         />
       ): indexStepper===2? (
         <VoucherStepper token={token} user={user} />
@@ -244,51 +150,6 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       )
     }
   }
-
-
-  // try {
-  //   useEffect(() => {
-  //     try {
-  //       if(isDeductible){
-  //         if(indexStepper || indexStepper>=0){
-  //           if(indexStepper===1){
-  //             setStepForm(<DataStepper optCostCenter={optCostCenterDeductible} 
-  //               optProviders={optProviders} optGlossaries={optGlossaries} 
-  //               optResponsibles={optResponsibles}
-  //               token={token} user={user} optProjects={optProjects}
-  //               optCategories={optCategories} optConditions={optConditions}
-  //               optTypes={optTypes} optVats={optVats}
-  //             />)
-  //           }else if(indexStepper===2){
-  //               setStepForm(<VoucherStepper token={token} user={user} />)
-  //             }else if(indexStepper===3){
-  //                 setStepForm(<CFDIStepper token={token} user={user} />)
-  //               }else {
-  //                 setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
-  //                             />)
-  //             }
-  //         }
-  //       }else{
-  //         if(indexStepper || indexStepper>=0){
-  //           if(indexStepper===1){
-  //             setStepForm(<DataNoDeductibleStepper optCostCenter={optCostCenter} 
-  //               optResponsibles={optResponsibles} token={token} user={user}
-  //               idLabour={idLabour} idTicket={idTicket} idVat={idVat} />)
-  //           }else if(indexStepper===2){
-  //               setStepForm(<VoucherNoDeductibleStepper token={token} user={user} idVat={idVat} />)  
-  //             }else {
-  //                 setStepForm(<SelectProjectStepper reports={reports} optReports={optReports}
-  //                             />)
-  //             }
-  //         }
-  //       }
-  //     } catch (error) {
-  //       setStepForm(<></>)
-  //     }
-  //   }, [indexStepper, isDeductible]);
-  // } catch (error) {
-  //   console.log(error);
-  // }
 
   return(
     <div className="z-10 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"

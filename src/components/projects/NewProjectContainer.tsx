@@ -8,10 +8,10 @@ import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
 
 export default function NewProjectContainer({token, showForm, optClients, 
-                              optCategories, optTypes, user, optCompanies}: 
+                              optCategories, optTypes, user, optCompanies, condition}: 
                             {token:string, showForm:Function, optClients:Options[], 
                               optCategories:Options[], optTypes:Options[], user:string,
-                              optCompanies: Options[] }){
+                              optCompanies: Options[], condition: string }){
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -87,7 +87,7 @@ export default function NewProjectContainer({token, showForm, optClients,
         </div>
         <ContainerProjectStepper token={token} optClients={optClients} 
             optCategories={optCategories} optTypes={optTypes} 
-            user={user} optCompanies={optCompanies} />
+            user={user} optCompanies={optCompanies} condition={condition} />
       </div>
     </div>
   )

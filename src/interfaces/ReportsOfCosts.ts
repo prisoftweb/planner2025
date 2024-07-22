@@ -57,56 +57,12 @@ export interface CostGroupByType {
   tipo: string
 }
 
-// export interface Id {
-//   type: string
-// }
-
-// export interface User {
-//   _id: string
-//   name: string
-//   email: string
-//   photo: string
-//   department: Department
-//   rol: Rol
-// }
-
-// export interface Department {
-//   _id: string
-//   name: string
-//   abbr: string
-//   company: Company
-//   id: string
-// }
-
-// export interface Company {
-//   _id: string
-//   name: string
-//   logo: string
-//   id: string
-// }
-
-// export interface Rol {
-//   _id: string
-//   name: string
-//   description: string
-// }
-
-// export interface Company2 {
-//   _id: string
-//   name: string
-//   logo: string
-//   status: boolean
-//   id: string
-// }
-
-// export interface Client {
-//   _id: string
-//   name: string
-//   tradename: string
-//   logo: string
-//   contact: any[]
-//   user: any
-//   status: boolean
-//   datets: string
-//   id: string
-// }
+export interface ReportCostsByProjectOnly {
+  quantity: number
+  totalCost: number
+  totalIVA: number
+  totalDiscount: number
+  project: string
+  amount: number
+  porcentage: number
+}

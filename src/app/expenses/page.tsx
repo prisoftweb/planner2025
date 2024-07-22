@@ -6,7 +6,7 @@ import { getCostoCentersLV } from "../api/routeCostCenter";
 import { CostoCenterLV, ReportByCostcenter, ReportByCostcenterCategory } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
-import { getProvidersLV } from "../api/routeProviders";
+import { getProvidersLV, getProvidersSATLV } from "../api/routeProviders";
 import { getUsersLV } from "../api/routeUser";
 import { getProjectsLV } from "../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
@@ -21,12 +21,20 @@ import ContainerClient from "@/components/expenses/ContainerClient";
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
 //import { CostByCostCenter } from "@/components/ReportCostByCostCenterPDF";
 import { ExpenseDataToTableData } from "../functions/CostsFunctions";
+import { GetAllCostsGroupByProjectOnly } from "../api/routeCost";
+import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
 
 export default async function Page() {
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+
+  const role = user.rol?.name || '';
+  const isViewReports = role.toLowerCase().includes('residente')? false: true;
+
+  //console.log('role => ', role);
+  //console.log('is view reports =>', isViewReports);
   
   let expenses: Expense[] = [];
   try {
@@ -72,6 +80,16 @@ export default async function Page() {
     }
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+  }
+
+  let optProvidersSAT:Options[]= [];
+  try {
+    optProvidersSAT = await getProvidersSATLV(token);
+    if(typeof(optProvidersSAT)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{optProvidersSAT}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores del sat!!</h1>
   }
 
   let optResponsibles:Options[]= [];
@@ -201,6 +219,7 @@ export default async function Page() {
                   optCategories={optCategories} optTypes={optTypes} reports={reports}
                   optReports={optReports} idLabour={labour} idTicket={ticket}
                   optCostCenterDeductible={optCostCenter} optVats={optVats}
+                  optProvidersSAT={optProvidersSAT}
               />
           </WithOut>
         </div>
@@ -257,6 +276,17 @@ export default async function Page() {
   }
   //console.log('res costo center category => ', costCostoCenterCategory);
 
+  let reportProjectOnly: ReportCostsByProjectOnly[] = [];
+  try {
+    reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
+    //console.log('reports projects page => ', costCostoCenter);
+    if(typeof(reportProjectOnly)==='string'){
+      return <h1>Error al consultar costos por proyecto!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por proyecto!!</h1>
+  }
+
   return(
     <>
       <Navigation user={user} />
@@ -268,7 +298,9 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        idValidado={idValidado} costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} />
+        idValidado={idValidado} costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} 
+        isViewReports={isViewReports} reportCostProjectOnly={reportProjectOnly} 
+        optProvidersSAT={optProvidersSAT}  />
     </>
   )
 }

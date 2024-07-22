@@ -5,10 +5,10 @@ import NewProject from "./NewProject";
 import { Options } from "@/interfaces/Common";
 
 export default function ButtonNew({token, optClients, optCategories, 
-                            optTypes, user, optCompanies}: 
+                            optTypes, user, optCompanies, condition}: 
                           {token:string, optClients:Options[], user:string,
                             optCategories:Options[], optTypes:Options[],
-                            optCompanies: Options[]}){
+                            optCompanies: Options[], condition: string}){
   const [newProject, setNewProject] = useState<boolean>(false);
   
   return(
@@ -17,7 +17,7 @@ export default function ButtonNew({token, optClients, optCategories,
           {newProject && <NewProject showForm={setNewProject} optTypes={optTypes} 
                           token={token} optClients={optClients} 
                           optCategories={optCategories} user={user} 
-                           optCompanies={optCompanies} />}
+                           optCompanies={optCompanies} condition={condition} />}
     </>
   )
 }

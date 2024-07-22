@@ -28,6 +28,9 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
+  const role = user.rol?.name || '';
+  const isViewReports = role.toLowerCase().includes('residente')? false: true;
+
   let expenses: Expense[] = [];
   try {
     expenses = await GetCostsMIN(token);
@@ -263,21 +266,33 @@ export default async function Page() {
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
-            text="Agrega el costo de mano de obra,
-                  caja chica o proveedor desde esta
-                  seccion a un determinado proyecto"
+            text="El historial de gastos actualmente esta vacio!!!"
             title="Gastos">
-              <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
-                  optProviders={optProviders} optResponsibles={optResponsibles}
-                  optProjects={optProjects} optConditions={optConditions}
-                  optCategories={optCategories} optTypes={optTypes} reports={reports}
-                  optReports={optReports} idLabour={labour} idTicket={ticket}
-                  optCostCenterDeductible={optCostCenterDeductible} optVats={optVats}
-              />
+              <></>
           </WithOut>
         </div>
       </>
     )
+    // return (
+    //   <>
+    //     <Navigation user={user} />
+    //     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+    //       <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
+    //         text="Agrega el costo de mano de obra,
+    //               caja chica o proveedor desde esta
+    //               seccion a un determinado proyecto"
+    //         title="Gastos">
+    //           <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
+    //               optProviders={optProviders} optResponsibles={optResponsibles}
+    //               optProjects={optProjects} optConditions={optConditions}
+    //               optCategories={optCategories} optTypes={optTypes} reports={reports}
+    //               optReports={optReports} idLabour={labour} idTicket={ticket}
+    //               optCostCenterDeductible={optCostCenterDeductible} optVats={optVats}
+    //           />
+    //       </WithOut>
+    //     </div>
+    //   </>
+    // )
   }
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
@@ -391,7 +406,8 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        isHistory={true} idValidado="" costCostoCenter={[]} costCostoCenterCategory={[]} />
+        isHistory={true} idValidado="" costCostoCenter={[]} costCostoCenterCategory={[]} 
+        isViewReports={isViewReports} reportCostProjectOnly={[]} optProvidersSAT={[]} />
     </>
   )
 }

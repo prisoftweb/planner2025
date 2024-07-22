@@ -11,7 +11,8 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import { useNewProject } from "@/app/store/newProject";
 
-export default function DataBasicStepper({token, user}: {token:string, user:string}){
+export default function DataBasicStepper({token, user, condition}: 
+  {token:string, user:string, condition: string}){
   
   const [,dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -75,26 +76,30 @@ export default function DataBasicStepper({token, user}: {token:string, user:stri
           amount, categorys:category, client, code, company, date, description, 
           hasguaranteefund, title, types:type, user,
           location,
-          guaranteefund: guaranteeData
+          guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
         if(haveAddress){
           data = {
             amount, categorys:category, client, code, company, date, description, 
             hasguaranteefund, title, types:type, user,
-            location
+            location, condition: [{glossary: condition, user}]
           }
         }else{
           if(hasguaranteefund){
             data = {
               amount, categorys:category, client, code, company, date, description, 
               hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData
+              guaranteefund: guaranteeData, 
+              condition: [{glossary: condition, user}],
             }
           }else{
             data = {
               amount, categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user,
+              hasguaranteefund, title, types:type, user, 
+              condition: [
+                  {glossary: condition, user}
+              ],
             }
           }
         }

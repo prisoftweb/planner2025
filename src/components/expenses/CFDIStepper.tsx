@@ -20,8 +20,8 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
-    vat, voucher, condition, category, idVat, isCard,
-    reset, updateRefresh, updateIndexStepper, type, concept} = useNewExpense();
+    vat, voucher, condition, category, idVat, isCard, taxExempt,
+    reset, updateRefresh, updateIndexStepper, type, concept, total} = useNewExpense();
   
   const validationType = (f: File) => {
     if(!f.type.includes('xml') && !f.type.includes('XML')){
@@ -66,6 +66,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       formdata.append('ispaid', JSON.stringify(supplierCredit));
       formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('type', type);
+      formdata.append('exempttax', taxExempt.replace(/[$,]/g, ""));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -74,7 +75,9 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         discount: discount.replace(/[$,]/g, ""),
         subtotal:amount.replace(/[$,]/g, ""),
         iva:vat,
-        vat: idVat
+        vat: idVat,
+        exempttax: taxExempt.replace(/[$,]/g, ""),
+        total: total.replace(/[$,]/g, ""),
         // vatvalue: number no se usa 
         // total: number no se usa 
       }));
@@ -105,6 +108,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
             refRequest.current = true;
           }
         } catch (error) {
+          refRequest.current = true;
           showToastMessageError('Ocurrio un error al guardar costo!!');
         }
       }
@@ -115,7 +119,9 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           discount,
           subtotal:amount.replace(/[$,]/g, ""),
           iva:vat,
-          vat: idVat 
+          vat: idVat,
+          exempttax: taxExempt.replace(/[$,]/g, ""),
+          total: total.replace(/[$,]/g, ""),
           // vatvalue: number no se usa 
           // total: number no se usa 
         },
@@ -123,7 +129,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
           user
-        }], iscard:isCard, type
+        }], iscard:isCard, type,
       }
       // console.log('save cost in cfdi stepper => ', JSON.stringify(data));
       // console.log('costo center => ', JSON.stringify(costcenter));
@@ -144,6 +150,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true,
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }

@@ -20,19 +20,21 @@ import CurrencyInput from 'react-currency-input-field';
 import { getSupplierCreditProv } from "@/app/functions/CostsFunctions"
 
 export default function DataStepper({token, user, optCostCenter, optProviders, 
-                                      optResponsibles, optCategories, optTypes, optVats
+                                      optResponsibles, optCategories, optTypes, 
+                                      optVats, optProvidersSAT
                                     }: 
                                   {token:string, user:string, optCostCenter:Options[],
                                     optProviders:Options[], optResponsibles:Options[],
                                     optCategories:Options[], optTypes:Options[], 
-                                    optVats:Options[] }){
+                                    optVats:Options[], optProvidersSAT:Options[] }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 
     folio, project, proveedor, responsible, taxFolio, 
     typeCFDI, vat, reset, updateRefresh, isCard, 
     report, condition, category, isPettyCash, concept,
-    updateIsCard, updateCostCenter} = useNewExpense();
+    updateIsCard, updateCostCenter, updateHaveDiscount, 
+    updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, total} = useNewExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +43,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       description: description,
       discount: discount,
       amount: amount,
-      vat: vat
+      vat: vat,
+      taxExempt: taxExempt,
     }, 
     validationSchema: Yup.object({
       description: Yup.string()
@@ -54,14 +57,15 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                   //.required('El descuento es obligatorio'),
       amount: Yup.string()
                   .required('El importe es obligatorio!!!'),
-      vat: Yup.string()
+      vat: Yup.string(),
                   //.required('El iva es obligatorio!!!')
+      taxExempt: Yup.string(),
     }),
     onSubmit: async (valores) => {            
-      const {description, folio, taxFolio, discount, amount, vat} = valores;
+      const {description, folio, taxFolio, discount, amount, vat, taxExempt} = valores;
       updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, '', categoryS, idVat, 'PROVEEDOR');
+          typeCFDIS, '', categoryS, idVat, 'PROVEEDOR', taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
       updateIndexStepper(2);
     },
   });
@@ -91,21 +95,27 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   
   //actualizacion juntar estos 2 estados en un objeto
   const [idVat, setIdVat] = useState<string>(optVats[0].value);
-  //const [vatValue, setVatValue] = useState<string>('0');
+  const [vatValue, setVatValue] = useState<string>('0');
+  const [isBusinessName, setIsBusinesName] = useState<boolean>(false);
+  const [totalExpense, setTotalExpense] = useState<string>(total);
   
-  let vatValue = '0';
-  try {
-    const foundVat = optVats.find((vat) => vat.value === idVat);
-    const vatvalue = foundVat?.label || '0';
-    const operation = 
-      (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-        Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-    formik.values.vat = operation.toFixed(2).toString();
-    vatValue = operation.toFixed(2).toString();
-    //setVatValue(operation.toFixed(2).toString());
-  } catch (error) {
-    vatValue = '0';
-    formik.values.vat = '0';
+  //let vatValue = '0';
+  const updateIva = (idValue: string) => {
+    try {
+      const foundVat = optVats.find((vat) => vat.value === idValue);
+      const vatvalue = foundVat?.label || '0';
+      const operation = 
+        (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+          Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+      formik.values.vat = operation.toFixed(2).toString();
+      //vatValue = operation.toFixed(2).toString();
+      setVatValue(operation.toFixed(2).toString());
+      //setVatValue(operation.toFixed(2).toString());
+    } catch (error) {
+      setVatValue('0');
+      //vatValue = '0';
+      formik.values.vat = '0';
+    }
   }
 
   //console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
@@ -126,8 +136,34 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       onValueChange={(value) => {try {
         console.log('value amount data stepper => ', value);
         formik.values.amount=value || '0';
+        handleIdVat(idVat);
       } catch (error) {
         formik.values.amount='0';
+        handleIdVat(idVat);
+      }}}
+    />
+  )
+
+  let viewTotal: JSX.Element = <></>;
+  viewTotal = (
+    <CurrencyInput
+      id="total"
+      name="total"
+      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+        focus:border-slate-700 outline-0"
+      //onChange={formik.handleChange}
+      //onBlur={formik.handleChange}
+      //value={formik.values.amount.replace(/[$,]/g, "")}
+      value={totalExpense.replace(/[$,]/g, "")}
+      decimalsLimit={2}
+      prefix="$"
+      onValueChange={(value) => {try {
+        //console.log('value amount data stepper => ', value);
+        //formik.values.amount=value || '0';
+        setTotalExpense(value || '0');
+      } catch (error) {
+        //formik.values.amount='0';
+        setTotalExpense('0');
       }}}
     />
   )
@@ -140,10 +176,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   //console.log('concept context => ', concept);
   const SaveData = async() => {
     refRequest.current = false;
-    const {description, folio, taxFolio, discount, amount, vat} = formik.values
+    const {description, folio, taxFolio, discount, amount, vat, taxExempt} = formik.values
     updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, '', categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR');
+        typeCFDIS, '', categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR', 
+        taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
     
     let supplierCredit: boolean;
     try {
@@ -176,6 +213,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       formdata.append('isticket', JSON.stringify(false));
       formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('type', 'PROVEEDOR');
+      formdata.append('exempttax', taxExempt.replace(/[$,]/g, ""));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -185,6 +223,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         subtotal:amount.replace(/[$,]/g, ""),
         iva:vat.replace(/[$,]/g, ""),
         vat: idVat, 
+        exempttax: taxExempt.replace(/[$,]/g, ""),
+        total: totalExpense.replace(/[$,]/g, "")
       }));
       if(voucher){
         formdata.append('files', voucher);
@@ -206,6 +246,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           formik.values.folio = '';
           formik.values.taxFolio = '';
           formik.values.vat = '';
+          setTotalExpense('0');
           //setClearAmount(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           updateRefresh(true);
@@ -218,6 +259,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           showToastMessageError(res);
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }else{
@@ -227,11 +269,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           discount: discount.replace(/[$,]/g, ""),
           subtotal:amount.replace(/[$,]/g, ""),
           iva:vat.replace(/[$,]/g, ""),
-          vat: idVat, isCard
+          vat: idVat,
+          exempttax: taxExempt.replace(/[$,]/g, ""),
+          total: totalExpense.replace(/[$,]/g, "")
         },
         folio, provider, user:responsibleS, 
         taxfolio:taxFolio, typeCFDI: typeCFDIS, project, ispaid:supplierCredit,
-        report, isticket:false, category:categoryS, condition: [{
+        report, isticket:false, category:categoryS, 
+        condition: [{
           glossary: condition,
           user
         }], iscard:isCard, type:'PROVEEDOR',
@@ -248,6 +293,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           formik.values.folio = '';
           formik.values.taxFolio = '';
           formik.values.vat = '';
+          setTotalExpense('0');
           showToastMessage('Costo creado satisfactoriamente!!!');
           //setClearAmount(true);
           updateRefresh(true);
@@ -261,6 +307,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           refRequest.current = true;
         }
       } catch (error) {
+        refRequest.current = true;
         showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }
@@ -280,7 +327,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       if(opt.value === proveedor){
         indexProvider = index;
       }
-    });      
+    });
   }
 
   const handleProvider = (value : string) => {
@@ -404,6 +451,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   }
 
   const handleIdVat = (value: string) => {
+    updateIva(value);
     setIdVat(value);
   };
 
@@ -427,8 +475,44 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
         <NavExpenseStepper index={1} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-3xl rounded-lg">
-        {isPettyCash && (
-          <div className="flex justify-end my-5 pr-3">
+        <div className="flex gap-x-5 justify-end my-5 pr-3">
+          <div className="inline-flex items-center">
+            <Label>Descuento</Label>  
+            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+              <input checked={haveDiscount} 
+                onClick={() => updateHaveDiscount(!haveDiscount)} id="discount" type="checkbox"
+                onChange={() => console.log('')}
+                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                  peer-checked:border-green-500 peer-checked:before:bg-green-500
+                  border border-slate-300" />
+              <label htmlFor="discount"
+                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                  data-ripple-dark="true"></div>
+              </label>
+            </div>
+          </div>
+
+          <div className="inline-flex items-center">
+            <Label>Iva exento</Label>  
+            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+              <input checked={haveTaxExempt} 
+                onClick={() => updateHaveTaxExempt(!haveTaxExempt)} id="exemptTax" type="checkbox"
+                onChange={() => console.log('')}
+                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                  peer-checked:border-green-500 peer-checked:before:bg-green-500
+                  border border-slate-300" />
+              <label htmlFor="exemptTax"
+                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                  data-ripple-dark="true"></div>
+              </label>
+            </div>
+          </div>
+
+          {isPettyCash && (
             <div className="inline-flex items-center">
               <Label>Tarjeta</Label>  
               <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
@@ -446,8 +530,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                 </label>
               </div>
             </div>
-          </div>
-        )}
+          )}
+
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-3 gap-y-5">
           {viewCC}
           <div>
@@ -485,34 +570,68 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
               </div>
             ) : null}
           </div>
-          <div>
-            <Label htmlFor="discount">Descuento / Iva excento</Label>
-            <CurrencyInput
-              id="discount"
-              name="discount"
-              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              //   focus:border-slate-700 outline-0"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                focus:border-slate-700 outline-0"
-              onChange={formik.handleChange}
-              onBlur={formik.handleChange}
-              //defaultValue={0}
-              //defaultValue={discount}
-              value={formik.values.discount.replace(/[$,]/g, "") || 0}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => {try {
-                formik.values.discount=value || '0';
-              } catch (error) {
-                formik.values.discount='0';
-              }}}
-            />
-            {formik.touched.discount && formik.errors.discount ? (
-              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{formik.errors.discount}</p>
-              </div>
-            ) : null}
-          </div>
+          {haveDiscount && (
+            <div>
+              <Label htmlFor="discount">Descuento</Label>
+              <CurrencyInput
+                id="discount"
+                name="discount"
+                // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                //   focus:border-slate-700 outline-0"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                  focus:border-slate-700 outline-0"
+                onChange={formik.handleChange}
+                onBlur={formik.handleChange}
+                //defaultValue={0}
+                //defaultValue={discount}
+                value={formik.values.discount.replace(/[$,]/g, "") || 0}
+                decimalsLimit={2}
+                prefix="$"
+                onValueChange={(value) => {try {
+                  formik.values.discount=value || '0';
+                  handleIdVat(idVat);
+                } catch (error) {
+                  handleIdVat(idVat);
+                  formik.values.discount='0';
+                }}}
+              />
+              {formik.touched.discount && formik.errors.discount ? (
+                <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.discount}</p>
+                </div>
+              ) : null}
+            </div>
+          )}
+          {haveTaxExempt && (
+            <div>
+              <Label htmlFor="taxExemptt">Iva exento</Label>
+              <CurrencyInput
+                id="taxExemptt"
+                name="taxExemptt"
+                // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                //   focus:border-slate-700 outline-0"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                  focus:border-slate-700 outline-0"
+                onChange={formik.handleChange}
+                onBlur={formik.handleChange}
+                //defaultValue={0}
+                //defaultValue={discount}
+                value={formik.values.taxExempt.replace(/[$,]/g, "") || 0}
+                decimalsLimit={2}
+                prefix="$"
+                onValueChange={(value) => {try {
+                  formik.values.taxExempt=value || '0';
+                } catch (error) {
+                  formik.values.taxExempt='0';
+                }}}
+              />
+              {formik.touched.taxExempt && formik.errors.taxExempt ? (
+                <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.taxExempt}</p>
+                </div>
+              ) : null}
+            </div>
+          )}
           <div>
             <Label htmlFor="vat">Iva</Label>
             <div className="flex gap-x-3">
@@ -528,8 +647,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                 prefix="$"
                 onValueChange={(value) => {try {
                   formik.values.vat=value || '0';
+                  setVatValue(value || '0');
                 } catch (error) {
                   formik.values.vat='0';
+                  setVatValue('0');
                 }}}
               />
               {formik.touched.vat && formik.errors.vat ? (
@@ -541,6 +662,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             </div>
           </div>
           <div>
+            <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
+            {viewTotal}
+          </div>
+          <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 
               type="date"
@@ -550,6 +675,33 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>
           {view}
           <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
+            {/* <div>
+              <div className="inline-flex items-center justify-between">
+                <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+                <div className="inline-flex items-center">
+                  <Label>Razon S?</Label>  
+                  <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                    <input checked={isCard} 
+                      onClick={() => updateIsCard(!isCard)} id="switch-3" type="checkbox"
+                      onChange={() => console.log('')}
+                      className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                        appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                        peer-checked:border-green-500 peer-checked:before:bg-green-500
+                        border border-slate-300" />
+                    <label htmlFor="switch-3"
+                      className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                      <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                        data-ripple-dark="true"></div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-x-2 items-center">
+                  <SelectReact index={indexProvider} opts={optProvidersSAT} setValue={handleProvider} />
+                  <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+                  onClick={() => setShowProvider(true)} />
+              </div>
+            </div> */}
             {selectProvider}
             {viewResponsible}
           </div>

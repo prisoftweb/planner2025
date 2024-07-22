@@ -11,7 +11,7 @@ import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
 import { useNewProject } from "@/app/store/newProject";
 
-export default function AddressStepper({token}: {token:string}){
+export default function AddressStepper({token, condition}: {token:string, condition: string}){
   
   const {updateAddress, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
@@ -96,26 +96,26 @@ export default function AddressStepper({token}: {token:string}){
           amount, categorys:category, client, code, company, date: date, description, 
           hasguaranteefund, title, types:type, user,
           location,
-          guaranteefund: guaranteeData
+          guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
         if(haveAddress){
           data = {
             amount, categorys:category, client, code, company, date, description, 
             hasguaranteefund, title, types:type, user,
-            location
+            location, condition: [{glossary: condition, user}]
           }
         }else{
           if(hasguaranteefund){
             data = {
               amount, categorys:category, client, code, company, date, description, 
               hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData
+              guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
             }
           }else{
             data = {
               amount, categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user,
+              hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
             }
           }
         }
