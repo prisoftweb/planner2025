@@ -42,6 +42,10 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const [optVats, setOptVats] = useState<Options[]>([]);
   const [idVat, setIdVat] = useState<string>('');
   const [vatValue, setVatValue] = useState(currentExpense? currentExpense.cost.iva.toString(): expense.cost.iva.toString());
+  const [totalExpense, setTotalExpense] = useState<string>(currentExpense? currentExpense.cost?.total?.toString() || '0': expense.cost?.total?.toString() || '0');
+  const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(false);
+  const [haveDiscount, setHaveDiscount] = useState<boolean>(currentExpense? currentExpense.cost?.discount? true: false :
+                                                      expense.cost?.discount? true: false)
 
   useEffect(() => {
     const fetchCostCenters = async () => {
@@ -86,9 +90,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
 
       setOptCostCenter(optCC);
       setOptVats(optVatts);
-      //console.log('id vat => ', indexVat);
-      //console.log('index vat useefect => ', indexVat);
-      //setIdVat(indexVat >= 0? indexVat.toString(): '0');
       setIdVat(optVatts[0].value);
     }
     fetchCostCenters();
@@ -130,6 +131,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
                 expense.cost.discount? expense.cost.discount.toString(): '0',
       amount: currentExpense? currentExpense.cost.subtotal.toString(): expense.cost.subtotal.toString(),
       description: currentExpense?  currentExpense.description: expense.description,
+      taxExempt: currentExpense? currentExpense.cost?.exempttax?.toString() || '0' : expense.cost?.exempttax?.toString() || '0',
     }, 
     validationSchema: Yup.object({
       description: Yup.string()
@@ -144,7 +146,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
     onSubmit: async (valores) => {  
       if(refRequest.current){
         refRequest.current = false;
-        const {amount, description, discount, folio, taxFolio, vat} = valores;
+        const {amount, description, discount, folio, taxFolio, vat, taxExempt} = valores;
         const costocenter = {
           category: costcenter,
           concept
@@ -155,10 +157,12 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               discount: discount.toString().replace(/[$,]/g, ""),
               subtotal:amount.replace(/[$,]/g, ""),
               iva:vat.replace(/[$,]/g, ""),
-              vat: optVats.find((vat) => vat.value === idVat)?.value || ''
+              vat: optVats.find((vat) => vat.value === idVat)?.value || '',
+              exempttax: taxExempt.replace(/[$,]/g, ""),
+              total: totalExpense.replace(/[$,]/g, ""),
             }}
-            console.log('send data => ', JSON.stringify(data));
-            console.log('id vat => ', idVat);
+            //console.log('send data => ', JSON.stringify(data));
+            //console.log('id vat => ', idVat);
         try {
           console.log('update expense => ', JSON.stringify(data));
           const res = await UpdateCost(token, id, data);
@@ -267,12 +271,37 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
     }
   }
 
+  let viewTotal: JSX.Element = <></>;
+  viewTotal = (
+    <CurrencyInput
+      id="total"
+      name="total"
+      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+        focus:border-slate-700 outline-0"
+      //onChange={formik.handleChange}
+      //onBlur={formik.handleChange}
+      //value={formik.values.amount.replace(/[$,]/g, "")}
+      value={totalExpense.replace(/[$,]/g, "")}
+      decimalsLimit={2}
+      prefix="$"
+      disabled={isHistory}
+      onValueChange={(value) => {try {
+        //console.log('value amount data stepper => ', value);
+        //formik.values.amount=value || '0';
+        setTotalExpense(value || '0');
+      } catch (error) {
+        //formik.values.amount='0';
+        setTotalExpense('0');
+      }}}
+    />
+  )
+
   return(
     <div className="w-full">
       <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
         title="Modificar gasto"
       />
-      <div className="flex justify-end my-5 pr-3">
+      {/* <div className="flex justify-end my-5 pr-3">
         <div className="inline-flex items-center">
           <Label>Tarjeta</Label>  
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
@@ -291,6 +320,62 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             </label>
           </div>
         </div>
+      </div> */}
+      <div className="flex gap-x-5 justify-end my-5 pr-3">
+        <div className="inline-flex items-center">
+          <Label>Descuento</Label>  
+          <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+            <input checked={haveDiscount} 
+              onClick={() => setHaveDiscount(!haveDiscount)} id="discount" type="checkbox"
+              onChange={() => console.log('')}
+              className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                peer-checked:border-green-500 peer-checked:before:bg-green-500
+                border border-slate-300" />
+            <label htmlFor="discount"
+              className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+              <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                data-ripple-dark="true"></div>
+            </label>
+          </div>
+        </div>
+
+        <div className="inline-flex items-center">
+          <Label>Iva exento</Label>  
+          <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+            <input checked={haveTaxExempt} 
+              onClick={() => setHaveTaxExempt(!haveTaxExempt)} id="exemptTax" type="checkbox"
+              onChange={() => console.log('')}
+              className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                peer-checked:border-green-500 peer-checked:before:bg-green-500
+                border border-slate-300" />
+            <label htmlFor="exemptTax"
+              className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+              <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                data-ripple-dark="true"></div>
+            </label>
+          </div>
+        </div>
+
+        <div className="inline-flex items-center">
+          <Label>Tarjeta</Label>  
+          <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+            <input checked={isCard} 
+              onClick={() => setIsCard(!isCard)} id="switch-3" type="checkbox"
+              onChange={() => console.log('')}
+              className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                peer-checked:border-green-500 peer-checked:before:bg-green-500
+                border border-slate-300" />
+            <label htmlFor="switch-3"
+              className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+              <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                data-ripple-dark="true"></div>
+            </label>
+          </div>
+        </div>
+
       </div>
       <form onSubmit={formik.handleSubmit} 
         className="mt-4 w-full rounded-lg grid grid-cols-1 sm:grid-cols-3 gap-x-3 gap-y-5">
@@ -353,6 +438,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             prefix="$"
             onValueChange={(value) => {try {
               formik.values.amount=(value || '0');
+              handleIdVat(idVat);
             } catch (error) {
               formik.values.amount='0';
             }}}
@@ -363,40 +449,74 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               </div>
           ) : null}
         </div>
-        <div className={`${isticket? 'hidden': ''}`}>
-          <Label htmlFor="discount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descuento</p></Label>
-          <CurrencyInput
-            id="discount"
-            name="discount"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
-            //   focus:border-slate-700 outline-0"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
-              focus:border-slate-700 outline-0"
-            //value={formik.values.discount}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
-            //defaultValue={currentExpense?.cost.discount || 0}
-            defaultValue={currentExpense?.cost.discount || expense?.cost.discount || 0}
-            decimalsLimit={2}
-            disabled={isHistory}
-            prefix="$"
-            onValueChange={(value) => {try {
-              console.log('value input => ', value);
-              console.log('formik value => ', formik.values.discount);
-              //updateIva(idVat);
-              formik.values.discount=(value || '0');
-            } catch (error) {
-              formik.values.discount='0';
-            }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
-          />
-          {formik.touched.discount && formik.errors.discount ? (
+        {haveDiscount && (
+          <div className={`${isticket? 'hidden': ''}`}>
+            <Label htmlFor="discount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descuento</p></Label>
+            <CurrencyInput
+              id="discount"
+              name="discount"
+              // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              //   focus:border-slate-700 outline-0"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+                focus:border-slate-700 outline-0"
+              //value={formik.values.discount}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              //placeholder="Please enter a number"
+              //defaultValue={currentExpense?.cost.discount || 0}
+              defaultValue={currentExpense?.cost.discount || expense?.cost.discount || 0}
+              decimalsLimit={2}
+              disabled={isHistory}
+              prefix="$"
+              onValueChange={(value) => {try {
+                //console.log('value input => ', value);
+                //console.log('formik value => ', formik.values.discount);
+                //updateIva(idVat);
+                handleIdVat(idVat);
+                formik.values.discount=(value || '0');
+              } catch (error) {
+                formik.values.discount='0';
+              }}}
+              // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
+            />
+            {formik.touched.discount && formik.errors.discount ? (
+                <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                    <p>{formik.errors.discount}</p>
+                </div>
+            ) : null}
+          </div>
+        )}
+        {haveTaxExempt && (
+          <div>
+            <Label htmlFor="taxExemptt">Iva exento</Label>
+            <CurrencyInput
+              id="taxExemptt"
+              name="taxExemptt"
+              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              //   focus:border-slate-700 outline-0"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                focus:border-slate-700 outline-0"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              //defaultValue={0}
+              //defaultValue={discount}
+              value={formik.values.taxExempt.replace(/[$,]/g, "") || 0}
+              decimalsLimit={2}
+              prefix="$"
+              disabled={isHistory}
+              onValueChange={(value) => {try {
+                formik.values.taxExempt=value || '0';
+              } catch (error) {
+                formik.values.taxExempt='0';
+              }}}
+            />
+            {formik.touched.taxExempt && formik.errors.taxExempt ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.discount}</p>
+                <p>{formik.errors.taxExempt}</p>
               </div>
-          ) : null}
-        </div>
+            ) : null}
+          </div>
+        )}
         <div className={`${isticket? 'hidden': ''}`}>
           <div className="flex justify-between">
             <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
@@ -433,17 +553,10 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               <SelectReact index={0} opts={optVats} setValue={handleIdVat} />
             )}
           </div>
-          {/* <Input type="text" name="vat" 
-            value={formik.values.vat}
-            disabled={isHistory}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.vat && formik.errors.vat ? (
-              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.vat}</p>
-              </div>
-          ) : null} */}
+        </div>
+        <div>
+          <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
+          {viewTotal}
         </div>
         <div className=" col-span-1 sm:col-span-3">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>

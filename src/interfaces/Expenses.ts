@@ -161,4 +161,5 @@ export interface Cost {
   vat: Vat
   vatvalue: number
   total: number
+  exempttax: number
 }

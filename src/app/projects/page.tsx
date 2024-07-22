@@ -56,6 +56,8 @@ export default async function Page(){
   } catch (error) {
     return <h1>Error al consultar catalogos!!</h1>
   }
+
+  const condition = catalogs[0].condition[0].glossary._id;
   
   let optCompanies: Options[] = [];
   try {
@@ -136,7 +138,8 @@ export default async function Page(){
             title="Proyectos">
               <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
-                      user={user._id} optCompanies={optCompanies} />
+                      user={user._id} optCompanies={optCompanies} 
+                      condition={condition}  />
           </WithOut>
         </div>
       </>
@@ -150,7 +153,8 @@ export default async function Page(){
       <Navigation user={user} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
         optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user._id}  />
+        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user._id} 
+        condition={condition} />
     </>
   )
 }

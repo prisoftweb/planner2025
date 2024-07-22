@@ -14,7 +14,7 @@ import { useNewProject } from "@/app/store/newProject";
 import CurrencyInput from 'react-currency-input-field';
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Guarantee({token}:{token:string}){
+export default function Guarantee({token, condition}:{token:string, condition: string}){
   
   let year = new Date().getFullYear().toString();
   let month = (new Date().getMonth() + 1).toString();
@@ -65,26 +65,26 @@ export default function Guarantee({token}:{token:string}){
           amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
           hasguaranteefund, title, types:type, user,
           location,
-          guaranteefund: guaranteeData
+          guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
         if(haveAddress){
           data = {
             amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
             hasguaranteefund, title, types:type, user,
-            location
+            location, condition: [{glossary: condition, user}]
           }
         }else{
           if(hasguaranteefund){
             data = {
               amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
               hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData
+              guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
             }
           }else{
             data = {
               amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user,
+              hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
             }
           }
         }

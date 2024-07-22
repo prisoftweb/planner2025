@@ -16,9 +16,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function ExtraDataStepper({token, optClients, optCategories, 
-                          optTypes, user, optCompanies}:
+                          optTypes, user, optCompanies, condition}:
                         {token:string, optClients:Options[], optCategories:Options[], 
-                          optTypes:Options[], user:string, optCompanies: Options[]}){
+                          optTypes:Options[], user:string, optCompanies: Options[]
+                          condition: string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -91,26 +92,26 @@ export default function ExtraDataStepper({token, optClients, optCategories,
           amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
           hasguaranteefund, title, types:type, user,
           location,
-          guaranteefund: guaranteeData
+          guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
         if(haveAddress){
           data = {
             amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
             hasguaranteefund, title, types:type, user,
-            location
+            location, condition: [{glossary: condition, user}]
           }
         }else{
           if(hasguaranteefund){
             data = {
               amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
               hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData
+              guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
             }
           }else{
             data = {
               amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user,
+              hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
             }
           }
         }

@@ -604,7 +604,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           )}
           {haveTaxExempt && (
             <div>
-              <Label htmlFor="discount">Iva exento</Label>
+              <Label htmlFor="taxExemptt">Iva exento</Label>
               <CurrencyInput
                 id="taxExemptt"
                 name="taxExemptt"

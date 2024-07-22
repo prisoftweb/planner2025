@@ -14,12 +14,13 @@ import SearchInTable from "../SearchInTable"
 
 export default function ContainerClient({token, optClients, optCategories, 
                           optTypes, user, optCompanies, data, optCategoriesFilter, 
-                          optConditionsFilter, optTypesFilter, projects}: 
+                          optConditionsFilter, optTypesFilter, projects, condition}: 
                         {token:string, optClients:Options[], user:string,
                           optCategories:Options[], optTypes:Options[],
                           optCompanies: Options[], data:ProjectsTable[], 
                           projects: ProjectMin[], optCategoriesFilter: Options[], 
-                          optTypesFilter: Options[], optConditionsFilter: Options[]}){
+                          optTypesFilter: Options[], optConditionsFilter: Options[], 
+                          condition: string}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -56,7 +57,7 @@ export default function ContainerClient({token, optClients, optCategories,
               />
               <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
-                      user={user} optCompanies={optCompanies} />
+                      user={user} optCompanies={optCompanies} condition={condition} />
             </div>
           </div>
         </div>
