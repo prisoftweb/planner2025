@@ -100,21 +100,101 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [totalExpense, setTotalExpense] = useState<string>(total);
   
   //let vatValue = '0';
+  // const updateIva = (idValue: string) => {
+  //   try {
+  //     const foundVat = optVats.find((vat) => vat.value === idValue);
+  //     const vatvalue = foundVat?.label || '0';
+  //     const operation = 
+  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+  //     formik.values.vat = operation.toFixed(2).toString();
+  //     setVatValue(operation.toFixed(2).toString());
+  //   } catch (error) {
+  //     setVatValue('0');
+  //     formik.values.vat = '0';
+  //   }
+  // }
+
   const updateIva = (idValue: string) => {
     try {
       const foundVat = optVats.find((vat) => vat.value === idValue);
       const vatvalue = foundVat?.label || '0';
-      const operation = 
-        (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-          Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+      let operation;
+      let t = 0;
+      if(haveDiscount && haveTaxExempt){
+        operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+                        Number(formik.values.discount.replace(/[$,]/g, "")) -
+                        Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+        
+        t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+              Number(formik.values.discount.replace(/[$,]/g, "")) -
+              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              operation;
+      }else{
+        if(haveDiscount){
+          operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+                        Number(formik.values.discount.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+
+          t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                Number(formik.values.discount.replace(/[$,]/g, "")) +
+                operation;
+        }else{
+          if(haveTaxExempt){
+            operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+                        Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+                  operation;              
+          }else{
+            operation = (Number(formik.values.amount.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+                
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;
+          }
+        }
+      }
+      
       formik.values.vat = operation.toFixed(2).toString();
-      //vatValue = operation.toFixed(2).toString();
       setVatValue(operation.toFixed(2).toString());
-      //setVatValue(operation.toFixed(2).toString());
+      setTotalExpense(t.toFixed(2).toString())
     } catch (error) {
       setVatValue('0');
-      //vatValue = '0';
       formik.values.vat = '0';
+    }
+  }
+
+  const updateTotal = (valueIva: string) => {
+    try {
+      let t = 0;
+      if(haveDiscount && haveTaxExempt){
+        t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+              Number(formik.values.discount.replace(/[$,]/g, "")) -
+              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              Number(valueIva.replace(/[$,]/g, ""));
+      }else{
+        if(haveDiscount){
+          t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                Number(formik.values.discount.replace(/[$,]/g, "")) +
+                Number(valueIva.replace(/[$,]/g, ""));
+        }else{
+          if(haveTaxExempt){
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+                  Number(valueIva.replace(/[$,]/g, ""));
+          }else{
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
+                  Number(valueIva.replace(/[$,]/g, ""));
+          }
+        }
+      }
+      console.log('update total => ', t.toFixed(2).toString());
+      setTotalExpense(t.toFixed(2).toString());
+    } catch (error) {
+      setTotalExpense('0');
     }
   }
 
@@ -330,18 +410,43 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     });
   }
 
+  let indexProviderSAT = 0;
+  if(provider !== ''){
+    optProviders.map((opt, index:number) => {
+      if(opt.value === proveedor){
+        indexProviderSAT = index;
+      }
+    });
+  }
+
   const handleProvider = (value : string) => {
     setProvider(value);
   }
 
-  const selectProvider = (
-    <div>
-        <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-        <div className="flex gap-x-2 items-center">
-          <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
-          <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-          onClick={() => setShowProvider(true)} />
-      </div>
+  // const selectProvider = (
+  //   <div>
+  //       <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+  //       <div className="flex gap-x-2 items-center">
+  //         <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+  //         <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+  //         onClick={() => setShowProvider(true)} />
+  //     </div>
+  //   </div>
+  // )
+
+  const viewProvider = (
+    <div className="flex gap-x-2 items-center">
+      <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+      <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+      onClick={() => setShowProvider(true)} />
+    </div>
+  )
+
+  const viewProviderSAT = (
+    <div className="flex gap-x-2 items-center">
+      <SelectReact index={indexProviderSAT} opts={optProvidersSAT} setValue={handleProvider} />
+      <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+      onClick={() => setShowProvider(true)} />
     </div>
   )
 
@@ -454,20 +559,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     updateIva(value);
     setIdVat(value);
   };
-
-  // const vatCalculated = () => {
-  //   try {
-  //     const foundVat = optVats.find((vat) => vat.value === idVat);
-  //     const vatvalue = foundVat?.label || '0';
-  //     const operation = 
-  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-  //     formik.values.vat = operation.toFixed(2).toString();
-  //     //setVatValue(operation.toFixed(2).toString());
-  //   } catch (error) {
-  //     formik.values.vat = '0';
-  //   }
-  // }
 
   return(
     <div className="w-full bg-white">
@@ -633,7 +724,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
             </div>
           )}
           <div>
-            <Label htmlFor="vat">Iva</Label>
+            {/* <Label htmlFor="vat">Iva</Label> */}
+            <div className="flex justify-between">
+              <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
+              <Label htmlFor="vatt"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Impuestos</p></Label>
+            </div>
             <div className="flex gap-x-3">
               <CurrencyInput
                 id="vat"
@@ -647,6 +742,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                 prefix="$"
                 onValueChange={(value) => {try {
                   formik.values.vat=value || '0';
+                  updateTotal(value || '0');
                   setVatValue(value || '0');
                 } catch (error) {
                   formik.values.vat='0';
@@ -675,20 +771,20 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           </div>
           {view}
           <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
-            {/* <div>
-              <div className="inline-flex items-center justify-between">
+            <div>
+              <div className="flex items-center justify-between mr-5">
                 <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
                 <div className="inline-flex items-center">
-                  <Label>Razon S?</Label>  
+                  <Label>Razon Social?</Label>  
                   <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-                    <input checked={isCard} 
-                      onClick={() => updateIsCard(!isCard)} id="switch-3" type="checkbox"
+                    <input checked={isBusinessName} 
+                      onClick={() => setIsBusinesName(!isBusinessName)} id="businessName" type="checkbox"
                       onChange={() => console.log('')}
                       className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                         appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                         peer-checked:border-green-500 peer-checked:before:bg-green-500
                         border border-slate-300" />
-                    <label htmlFor="switch-3"
+                    <label htmlFor="businessName"
                       className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
                       <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
                         data-ripple-dark="true"></div>
@@ -696,13 +792,15 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                   </div>
                 </div>
               </div>
-              <div className="flex gap-x-2 items-center">
-                  <SelectReact index={indexProvider} opts={optProvidersSAT} setValue={handleProvider} />
-                  <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-                  onClick={() => setShowProvider(true)} />
-              </div>
-            </div> */}
-            {selectProvider}
+              {
+                isBusinessName? (
+                  viewProviderSAT
+                ): (
+                  viewProvider
+                )
+              }
+            </div>
+            {/* {selectProvider} */}
             {viewResponsible}
           </div>
           

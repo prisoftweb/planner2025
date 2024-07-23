@@ -225,6 +225,25 @@ export async function GetReportsMin(auth_token:string) {
   }
 }
 
+export async function GetAllReportsMINAndNECondition(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsMINAndNECondition/6671e3ab02acae12837cbe71`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    //console.log('res ack => ', res.data.data);
+    if(res.status === 200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al obtener informes';
+    }
+    return 'Ocurrio un problema al obtener informes';
+  }
+}
+
 export async function GetReportsLastMovInDeptMIN(auth_token:string, idDept:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsWithLastMoveInDepartmentMIN/${idDept}`;
   try {

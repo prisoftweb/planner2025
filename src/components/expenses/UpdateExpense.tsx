@@ -43,7 +43,9 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const [idVat, setIdVat] = useState<string>('');
   const [vatValue, setVatValue] = useState(currentExpense? currentExpense.cost.iva.toString(): expense.cost.iva.toString());
   const [totalExpense, setTotalExpense] = useState<string>(currentExpense? currentExpense.cost?.total?.toString() || '0': expense.cost?.total?.toString() || '0');
-  const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(false);
+  // const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(false);
+  const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(currentExpense? currentExpense.cost?.exempttax? true: false :
+                                                expense.cost?.exempttax? true: false);
   const [haveDiscount, setHaveDiscount] = useState<boolean>(currentExpense? currentExpense.cost?.discount? true: false :
                                                       expense.cost?.discount? true: false)
 
@@ -252,24 +254,109 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   //   formik.values.vat = '0';
   // }
 
+  // const updateIva = (idvat: string) => {
+  //   try {
+  //     const foundVat = optVats.find((vat) => vat.value === idvat);
+  //     const vatvalue = foundVat?.label || '0';
+  //     const operation = 
+  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+  //     formik.values.vat = operation.toFixed(2).toString();
+  //     //vatValue = operation.toFixed(2).toString();
+  //     setVatValue(operation.toFixed(2).toString());
+  //     //setCurrentVat(operation);
+  //     //setVatValue(operation.toFixed(2).toString());
+  //   } catch (error) {
+  //     //vatValue = '0';
+  //     setVatValue('0');
+  //     formik.values.vat = '0';
+  //   }
+  // }
+
   const updateIva = (idvat: string) => {
     try {
       const foundVat = optVats.find((vat) => vat.value === idvat);
       const vatvalue = foundVat?.label || '0';
-      const operation = 
-        (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-          Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
+      let operation;
+      let t = 0;
+      if(haveDiscount && haveTaxExempt){
+        operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+                        Number(formik.values.discount.replace(/[$,]/g, "")) -
+                        Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+        
+        t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+              Number(formik.values.discount.replace(/[$,]/g, "")) -
+              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              operation;
+      }else{
+        if(haveDiscount){
+          operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+                        Number(formik.values.discount.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+
+          t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                Number(formik.values.discount.replace(/[$,]/g, "")) +
+                operation;
+        }else{
+          if(haveTaxExempt){
+            operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
+                        Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+                  operation;              
+          }else{
+            operation = (Number(formik.values.amount.replace(/[$,]/g, ""))) * 
+                          Number(vatvalue) / 100;
+                
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;
+          }
+        }
+      }
+      
       formik.values.vat = operation.toFixed(2).toString();
-      //vatValue = operation.toFixed(2).toString();
       setVatValue(operation.toFixed(2).toString());
-      //setCurrentVat(operation);
-      //setVatValue(operation.toFixed(2).toString());
+      setTotalExpense(t.toFixed(2).toString())
     } catch (error) {
-      //vatValue = '0';
       setVatValue('0');
       formik.values.vat = '0';
     }
   }
+
+  const updateTotal = (valueIva: string) => {
+    try {
+      let t = 0;
+      if(haveDiscount && haveTaxExempt){
+        t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+              Number(formik.values.discount.replace(/[$,]/g, "")) -
+              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              Number(valueIva.replace(/[$,]/g, ""));
+      }else{
+        if(haveDiscount){
+          t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                Number(formik.values.discount.replace(/[$,]/g, "")) +
+                Number(valueIva.replace(/[$,]/g, ""));
+        }else{
+          if(haveTaxExempt){
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+                  Number(valueIva.replace(/[$,]/g, ""));
+          }else{
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
+                  Number(valueIva.replace(/[$,]/g, ""));
+          }
+        }
+      }
+      //console.log('update total => ', t.toFixed(2).toString());
+      setTotalExpense(t.toFixed(2).toString());
+    } catch (error) {
+      setTotalExpense('0');
+    }
+  }
+
+  //console.log('total render => ', totalExpense);
 
   let viewTotal: JSX.Element = <></>;
   viewTotal = (
@@ -301,26 +388,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
       <HeaderForm img="/img/costs/costs.svg" subtitle="Modifica los datos basicos de un gasto" 
         title="Modificar gasto"
       />
-      {/* <div className="flex justify-end my-5 pr-3">
-        <div className="inline-flex items-center">
-          <Label>Tarjeta</Label>  
-          <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-            <input checked={isCard}
-              disabled={isHistory} 
-              onClick={() => setIsCard(!isCard)} id="switch-3" type="checkbox"
-              onChange={() => console.log('')}
-              className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-                appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-                peer-checked:border-green-500 peer-checked:before:bg-green-500
-                border border-slate-300" />
-            <label htmlFor="switch-3"
-              className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-              <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                data-ripple-dark="true"></div>
-            </label>
-          </div>
-        </div>
-      </div> */}
       <div className="flex gap-x-5 justify-end my-5 pr-3">
         <div className="inline-flex items-center">
           <Label>Descuento</Label>  
@@ -537,6 +604,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               prefix="$"
               onValueChange={(value) => {try {
                 formik.values.vat=value || '0';
+                updateTotal(value || '0');
                 setVatValue(value || '0');
               } catch (error) {
                 setVatValue('0');
