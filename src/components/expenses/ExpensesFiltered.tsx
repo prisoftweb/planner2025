@@ -11,13 +11,13 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 
 export default function Filtering({showForm, optCategories, optTypes, 
-                      optConditions, FilterData, maxAmount, 
+                      optConditions, FilterData, maxAmount, minAmount, 
                       optProjects, optReports, optCostCenterFilter }: 
                     {showForm:Function, optCategories: Options[],
                       optTypes: Options[], optConditions: Options[],
                       FilterData:Function, maxAmount:number, 
                       optProjects:Options[], optReports:Options[], 
-                      optCostCenterFilter:Options[]}){
+                      optCostCenterFilter:Options[], minAmount:number,}){
   
   const [types, setTypes] = useState<string[]>([optTypes[0].value]);
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);

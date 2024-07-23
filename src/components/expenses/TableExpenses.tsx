@@ -237,12 +237,17 @@ export default function TableExpenses({data, token, expenses,
   const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />
   const [maxAmount, setMaxAmount] = useState<number>(0);
+  const [minAmount, setMinAmount] = useState<number>(0);
   
   useEffect(() => {
     const expenseM = expenses.reduce((previous, current) => {
       return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
     });
+    const expenseMin = expenses.reduce((previous, current) => {
+      return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
+    });
     setMaxAmount(expenseM.cost?.subtotal);
+    setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
   }, [])
 
 
@@ -507,7 +512,7 @@ export default function TableExpenses({data, token, expenses,
                           optTypes={optTypes} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} 
                           optProjects={optProjects} optReports={optReports}
-                          optCostCenterFilter={optCostCenterFilter} />}
+                          optCostCenterFilter={optCostCenterFilter} minAmount={minAmount} />}
       </div>
       {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
       {view}

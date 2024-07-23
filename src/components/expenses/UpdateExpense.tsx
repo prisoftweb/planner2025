@@ -43,7 +43,9 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const [idVat, setIdVat] = useState<string>('');
   const [vatValue, setVatValue] = useState(currentExpense? currentExpense.cost.iva.toString(): expense.cost.iva.toString());
   const [totalExpense, setTotalExpense] = useState<string>(currentExpense? currentExpense.cost?.total?.toString() || '0': expense.cost?.total?.toString() || '0');
-  const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(false);
+  // const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(false);
+  const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(currentExpense? currentExpense.cost?.exempttax? true: false :
+                                                expense.cost?.exempttax? true: false);
   const [haveDiscount, setHaveDiscount] = useState<boolean>(currentExpense? currentExpense.cost?.discount? true: false :
                                                       expense.cost?.discount? true: false)
 

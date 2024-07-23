@@ -194,12 +194,17 @@ export default function TableHistoryExpenses({data, token, expenses,
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} 
                 placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
   const [maxAmount, setMaxAmount] = useState<number>(0);
+  const [minAmount, setMinAmount] = useState<number>(0);
   
   useEffect(() => {
     const expenseM = expenses.reduce((previous, current) => {
       return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
     });
+    const expenseMin = expenses.reduce((previous, current) => {
+      return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
+    });
     setMaxAmount(expenseM.cost?.subtotal);
+    setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
   }, [])
 
 
@@ -266,16 +271,29 @@ export default function TableHistoryExpenses({data, token, expenses,
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
     }else{
       if(exp.costocenter){
+        // if(typeof(exp.costocenter)==='string'){
+        //   if(costcenters.includes(exp.costocenter)){
+        //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+        //   }
+        // }else{
+        //   // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
+        //   //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+        //   // }
+        //   if(costcenters.includes(exp.costocenter.category)){
+        //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+        //   }
+        // }
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           }
         }else{
-          // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
-          //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-          // }
-          if(costcenters.includes(exp.costocenter.category)){
+          if(costcenters.some((cc) => cc === exp.costocenter.concept._id)){
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          }else{
+            // console.log('elseee');
+            // console.log('concept id => ', exp.costocenter.concept._id);
+            // console.log('all cost centers  => ', costcenters);
           }
         }
       }
@@ -398,7 +416,7 @@ export default function TableHistoryExpenses({data, token, expenses,
                         optTypes={optTypes} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optReports={optReports}
-                        optCostCenterFilter={optCostCenterFilter} />}
+                        optCostCenterFilter={optCostCenterFilter} minAmount={minAmount} />}
       </div>
       {view}
     </>
