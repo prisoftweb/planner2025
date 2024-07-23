@@ -128,8 +128,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                           Number(vatvalue) / 100;
         
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-              Number(formik.values.discount.replace(/[$,]/g, "")) -
-              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              Number(formik.values.discount.replace(/[$,]/g, "")) +
               operation;
       }else{
         if(haveDiscount){
@@ -146,9 +145,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                         Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
                           Number(vatvalue) / 100;
 
-            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-                  operation;              
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;              
           }else{
             operation = (Number(formik.values.amount.replace(/[$,]/g, ""))) * 
                           Number(vatvalue) / 100;
@@ -170,28 +167,39 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const updateTotal = (valueIva: string) => {
     try {
       let t = 0;
-      if(haveDiscount && haveTaxExempt){
+      // if(haveDiscount && haveTaxExempt){
+      //   t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+      //         Number(formik.values.discount.replace(/[$,]/g, "")) -
+      //         Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+      //         Number(valueIva.replace(/[$,]/g, ""));
+      // }else{
+      //   if(haveDiscount){
+      //     t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+      //           Number(formik.values.discount.replace(/[$,]/g, "")) +
+      //           Number(valueIva.replace(/[$,]/g, ""));
+      //   }else{
+      //     if(haveTaxExempt){
+      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+      //             Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+      //             Number(valueIva.replace(/[$,]/g, ""));
+      //     }else{
+      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
+      //             Number(valueIva.replace(/[$,]/g, ""));
+      //     }
+      //   }
+      // }
+      // console.log('update total => ', t.toFixed(2).toString());
+      if(haveDiscount){
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-              Number(formik.values.discount.replace(/[$,]/g, "")) -
-              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              Number(formik.values.discount.replace(/[$,]/g, "")) +
               Number(valueIva.replace(/[$,]/g, ""));
       }else{
-        if(haveDiscount){
-          t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-                Number(formik.values.discount.replace(/[$,]/g, "")) +
-                Number(valueIva.replace(/[$,]/g, ""));
-        }else{
-          if(haveTaxExempt){
-            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-                  Number(valueIva.replace(/[$,]/g, ""));
-          }else{
-            t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
-                  Number(valueIva.replace(/[$,]/g, ""));
-          }
-        }
+        t = Number(formik.values.amount.replace(/[$,]/g, "")) +
+              Number(valueIva.replace(/[$,]/g, ""));
+              //console.log('importe => ', formik.values.amount.replace(/[$,]/g, ""));
+              //console.log('value iva => ', valueIva.replace(/[$,]/g, ""));
       }
-      console.log('update total => ', t.toFixed(2).toString());
+      //console.log('total calculado  => ', t.toFixed(2).toString());
       setTotalExpense(t.toFixed(2).toString());
     } catch (error) {
       setTotalExpense('0');
