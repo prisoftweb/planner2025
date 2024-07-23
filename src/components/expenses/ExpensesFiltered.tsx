@@ -35,7 +35,7 @@ export default function Filtering({showForm, optCategories, optTypes,
     new DateObject().setDay(4).add(1, "month")
   ])
 
-  const [minValue, set_minValue] = useState(0);
+  const [minValue, set_minValue] = useState(minAmount);
   const [maxValue, set_maxValue] = useState(maxAmount);
 
   const handleInput = (e:any) => {
@@ -159,7 +159,7 @@ export default function Filtering({showForm, optCategories, optTypes,
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
-            min={0}
+            min={minAmount}
             max={maxAmount}
             step={5}
             minValue={minValue}
