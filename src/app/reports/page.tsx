@@ -10,7 +10,7 @@ import { Options } from "@/interfaces/Common";
 //import { Project } from "@/interfaces/Projects";
 import { getProjectsLV } from "../api/routeProjects";
 import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReportsMin, GetReportsByUserMin, GetReportsLastMovInDeptMIN } from "../api/routeReports";
+import { GetReportsMin, GetReportsByUserMin, GetAllReportsMINAndNECondition } from "../api/routeReports";
 import { ReportParse, ReportTable } from "@/interfaces/Reports";
 //import Header from "@/components/Header";
 //import TableReports from "@/components/reports/TableReports";
@@ -35,17 +35,19 @@ export default async function Page() {
       //consultar por usuario y por departamento
       //console.log('by user');
     }else{
-      reports = await GetReportsMin(token);
-      // if(user.department.name.toLowerCase().includes('direccion')){
-      //   //reports = await GetReports(token);
-      //   reports = await GetReportsMin(token);
-      //   //console.log('rep por min!! => ', reports);
-      // }else{
-      //   //console.log('by dept');
-      //   //reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
-      //   reports = await GetReportsLastMovInDeptMIN(token, typeof(user.department)==='string' ? user.department : user.department._id);
-      //   //console.log('rep por ultimo dept!! => ', reports);
-      // }
+      //reports = await GetReportsMin(token);
+      if(user.department.name.toLowerCase().includes('direccion')){
+        //reports = await GetReports(token);
+        //reports = await GetReportsMin(token);
+        reports = await GetAllReportsMINAndNECondition(token);
+        //console.log('rep por min!! => ', reports);
+      }else{
+        //console.log('by dept');
+        //reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
+        //reports = await GetReportsLastMovInDeptMIN(token, typeof(user.department)==='string' ? user.department : user.department._id);
+        reports = await GetReportsMin(token);
+        //console.log('rep por ultimo dept!! => ', reports);
+      }
     }
     //reports = await GetReports(token);
     if(typeof(reports)==='string'){

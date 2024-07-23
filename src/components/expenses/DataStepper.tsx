@@ -330,6 +330,15 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     });
   }
 
+  let indexProviderSAT = 0;
+  if(provider !== ''){
+    optProviders.map((opt, index:number) => {
+      if(opt.value === proveedor){
+        indexProviderSAT = index;
+      }
+    });
+  }
+
   const handleProvider = (value : string) => {
     setProvider(value);
   }
@@ -342,6 +351,22 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
           onClick={() => setShowProvider(true)} />
       </div>
+    </div>
+  )
+
+  const viewProvider = (
+    <div className="flex gap-x-2 items-center">
+      <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+      <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+      onClick={() => setShowProvider(true)} />
+    </div>
+  )
+
+  const viewProviderSAT = (
+    <div className="flex gap-x-2 items-center">
+      <SelectReact index={indexProviderSAT} opts={optProvidersSAT} setValue={handleProvider} />
+      <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+      onClick={() => setShowProvider(true)} />
     </div>
   )
 
@@ -454,20 +479,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     updateIva(value);
     setIdVat(value);
   };
-
-  // const vatCalculated = () => {
-  //   try {
-  //     const foundVat = optVats.find((vat) => vat.value === idVat);
-  //     const vatvalue = foundVat?.label || '0';
-  //     const operation = 
-  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-  //     formik.values.vat = operation.toFixed(2).toString();
-  //     //setVatValue(operation.toFixed(2).toString());
-  //   } catch (error) {
-  //     formik.values.vat = '0';
-  //   }
-  // }
 
   return(
     <div className="w-full bg-white">
@@ -696,11 +707,13 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                   </div>
                 </div>
               </div>
-              <div className="flex gap-x-2 items-center">
-                  <SelectReact index={indexProvider} opts={optProvidersSAT} setValue={handleProvider} />
-                  <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-                  onClick={() => setShowProvider(true)} />
-              </div>
+              {
+                isBusinessName? (
+                  viewProvider
+                ): (
+                  viewProviderSAT
+                )
+              }
             </div> */}
             {selectProvider}
             {viewResponsible}
