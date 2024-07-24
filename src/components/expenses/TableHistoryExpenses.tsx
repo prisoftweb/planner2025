@@ -18,13 +18,13 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 export default function TableHistoryExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
                             optProjects, optReports, isFilter, setIsFilter, 
-                          optCostCenterFilter}:
+                          optCostCenterFilter, isViewReports}:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
                         isFilter:boolean, setIsFilter:Function, 
-                        optCostCenterFilter:Options[]}){
+                        optCostCenterFilter:Options[], isViewReports: boolean}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -206,7 +206,6 @@ export default function TableHistoryExpenses({data, token, expenses,
     setMaxAmount(expenseM.cost?.subtotal);
     setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
   }, [])
-
 
   useEffect(() => {
     if(refresh){
@@ -416,7 +415,8 @@ export default function TableHistoryExpenses({data, token, expenses,
                         optTypes={optTypes} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optReports={optReports}
-                        optCostCenterFilter={optCostCenterFilter} minAmount={minAmount} />}
+                        optCostCenterFilter={optCostCenterFilter} minAmount={minAmount}
+                        expensesFiltered={filteredExpenses} isViewReports={isViewReports} />}
       </div>
       {view}
     </>

@@ -3,15 +3,16 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
 import { getCostoCenters } from "../../api/routeCostCenter";
-import { CostCenter } from "@/interfaces/CostCenter";
+import { CostCenter, ReportByCostcenter, ReportByCostcenterCategory } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
-import ButtonNew from "@/components/expenses/ButtonNew";
+//import ButtonNew from "@/components/expenses/ButtonNew";
 //import { getProviders } from "../../api/routeProviders";
 //import { Provider } from "@/interfaces/Providers";
 //import { getUsers } from "../../api/routeUser";
 import { getProjectsLV } from "../../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import { GetCostsMIN, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType } from "../../api/routeCost";
+import { GetCostsMIN, GetVatsLV, GetCostsGroupByProject, GetCostsGroupByType, 
+  GetCostsGroupByCostoCenterConcept, GetCostsGroupByCostoCenterCategory } from "../../api/routeCost";
 //import { CurrencyFormatter } from "../../functions/Globals";
 import { getCatalogsByName } from "../../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
@@ -21,6 +22,10 @@ import ContainerClient from "@/components/expenses/ContainerClient";
 import { ExpenseDataToTableData, getTypeFiles } from "../../functions/CostsFunctions";
 import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
 //import { CostsDataToTableData } from "@/app/functions/ReportsFunctions";
+//import { CostByCostCenter } from "@/components/ReportCostByCostCenterPDF";
+import { GetAllCostsGroupByProjectOnly } from "../../api/routeCost";
+import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
+
 
 export default async function Page() {
   
@@ -58,65 +63,17 @@ export default async function Page() {
     value: 'all'
   }];
   costcenters.map((costcenter) => {
-    // if(costcenter.isnormal){
-    //   costcenter.categorys.map((category) => {
-    //     optCostCenterDeductible.push({
-    //       // label: category.name + ' ( ' + costcenter.name + ' ) ',
-    //       label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-    //       value: category._id
-    //     });
-    //   })
-    // }
     costcenter.categorys.map((category) => {
-      // const cat = {
-      //   //label: category.name + ' ( ' + costcenter.name + ' ) ',
-      //   label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
-      //   value: category._id
-      // }
-      //optCostCenter.push(cat);
       optCostCenterFilter.push({
-        //label: category.name + ' ( ' + costcenter.name + ' ) ',
         label: category.concept.name + ' ( ' + costcenter.name + ' ) ',
         value: category.concept._id
       });
     })
   });
 
-  // let providers: Provider[];
-  // try {
-  //   providers = await getProviders(token);
-  //   if(typeof(providers)==='string'){
-  //     return <h1 className="text-center text-lg text-red-500">{providers}</h1>
-  //   }    
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
-  // }
-
   const optProviders:Options[]= [];
-  // providers.map((provider) => {
-  //   optProviders.push({
-  //     label: provider.name,
-  //     value: provider._id
-  //   });
-  // });
-  
-  //let responsibles: UsrBack[];
-  // try {
-  //   responsibles = await getUsers(token);
-  //   if(typeof(responsibles)==='string'){
-  //     return <h1 className="text-center text-lg text-red-500">{responsibles}</h1>
-  //   }    
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
-  // }
 
   const optResponsibles:Options[]= [];
-  // responsibles.map((responsible) => {
-  //   optResponsibles.push({
-  //     label: responsible.name,
-  //     value: responsible._id
-  //   });
-  // });
 
   let reports: ReportParse[];
   try {
@@ -139,30 +96,11 @@ export default async function Page() {
     value: 'all'
   }]
   reports.map((rep) => {
-    // const r = {
-    //   label: rep.name,
-    //   value: rep._id
-    // }
-    // optReports.push(r);
     optReportsFilter.push({
       label: rep.name,
       value: rep._id
     });
   });
-
-  // let optProjects:Options[];
-  // let optProjectFilter: Options[] = [{
-  //     label: 'TODOS',
-  //     value: 'all'
-  //   }]
-  // try {
-  //   optProjects = await getProjectsLV(token);
-  //   if(typeof(optProjects)==='string'){
-  //     return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
-  //   }    
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-  // }
 
   let optProjects:Options[] = [];
   let optProjectFilter: Options[] = []
@@ -178,8 +116,7 @@ export default async function Page() {
         label: 'TODOS',
         value: 'all'
       })
-  //optProjectFilter = optProjectFilter.concat(optProjects);
-
+ 
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'cost');
@@ -197,17 +134,6 @@ export default async function Page() {
   let labour:string = '';
   let ticket:string = '';
   catalogs[0].categorys.map((category) => {
-    // if(category.glossary.name.toLowerCase().includes('mano de obra')){
-    //   labour = category.glossary._id;
-    // }
-    // if(category.glossary.name.toLowerCase().includes('ticket')){
-    //   ticket = category.glossary._id;
-    // }
-    // const c = {
-    //   label: category.glossary.name,
-    //   value: category.glossary._id
-    // }
-    //optCategories.push(c);
     optCategoriesFilter.push({
         label: category.glossary.name,
         value: category.glossary._id
@@ -219,13 +145,7 @@ export default async function Page() {
     label: 'TODOS',
     value: 'all'
   }];
-  //const optTypes: Options[] = [];
   catalogs[0].types.map((type) => {
-    // const t = {
-    //   label: type.glossary.name,
-    //   value: type.glossary._id
-    // };
-    //optTypes.push(t);
     optTypeFilter.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -239,11 +159,6 @@ export default async function Page() {
   }];
   //const optConditions: Options[] = [];
   catalogs[0].condition.map((condition) => {
-    // const c:Options = {
-    //   label: condition.glossary.name,
-    //   value: condition.glossary._id
-    // }
-    //optConditions.push(c);
     optConditionsFilter.push({
       label: condition.glossary.name,
       value: condition.glossary._id
@@ -273,110 +188,35 @@ export default async function Page() {
         </div>
       </>
     )
-    // return (
-    //   <>
-    //     <Navigation user={user} />
-    //     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-    //       <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
-    //         text="Agrega el costo de mano de obra,
-    //               caja chica o proveedor desde esta
-    //               seccion a un determinado proyecto"
-    //         title="Gastos">
-    //           <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
-    //               optProviders={optProviders} optResponsibles={optResponsibles}
-    //               optProjects={optProjects} optConditions={optConditions}
-    //               optCategories={optCategories} optTypes={optTypes} reports={reports}
-    //               optReports={optReports} idLabour={labour} idTicket={ticket}
-    //               optCostCenterDeductible={optCostCenterDeductible} optVats={optVats}
-    //           />
-    //       </WithOut>
-    //     </div>
-    //   </>
-    // )
+  }
+
+  let costCostoCenter: ReportByCostcenter[] = [];
+  try {
+    costCostoCenter = await GetCostsGroupByCostoCenterConcept(token);
+    //console.log('reports projects page => ', costCostoCenter);
+    if(typeof(costCostoCenter)==='string'){
+      return <h1>Error al consultar costos por centro de costos!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por centro de costos!!</h1>
+  }
+
+  let costCostoCenterCategory: ReportByCostcenterCategory[] = [];
+  try {
+    costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
+    //console.log('reports projects page => ', costCostoCenter);
+    if(typeof(costCostoCenter)==='string'){
+      return <h1>Error al consultar costos por centro de costos!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por centro de costos!!</h1>
   }
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 
-  // expenses.map((expense) => {
-  //   const dollar = CurrencyFormatter({
-  //         currency: "MXN",
-  //         value: expense.cost?.subtotal || 0
-  //       })
-  //   const discount = CurrencyFormatter({
-  //     currency: "MXN",
-  //     value: expense.cost?.discount || 0
-  //   })
-  //   const vat = CurrencyFormatter({
-  //     currency: "MXN",
-  //     value: expense.cost?.iva || 0
-  //   })
-  //   const total = CurrencyFormatter({
-  //     currency: "MXN",
-  //     value: (expense.cost?.subtotal + expense.cost?.iva - expense.cost?.discount) || 0
-  //   })
-  //   const elements: string[] = [];
-  //   if(expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
-  //     const typeFiles = getTypeFiles(expense);
-  //     if(typeFiles.includes('xml')){
-  //       elements.push('xml');
-  //     }else{
-  //       elements.push('none');
-  //     }
-
-  //     if(typeFiles.includes('pdf')){
-  //       elements.push('pdf');
-  //     }else{
-  //       elements.push('none');
-  //     }
-  //   }else{
-  //     if(expense.category?.name.toLowerCase().includes('xml')){
-  //       const typeFiles = getTypeFiles(expense);
-  //       if(typeFiles.includes('xml')){
-  //         elements.push('xml');
-  //       }else{
-  //         elements.push('none');
-  //       }
-  //     }else{
-  //       if(expense.category?.name.toLowerCase().includes('pdf')){
-  //         const typeFiles = getTypeFiles(expense);
-  //         if(typeFiles.includes('pdf')){
-  //           elements.push('pdf');
-  //         }else{
-  //           elements.push('none');
-  //         }
-  //       }else{
-  //         //sin archivos
-  //         elements.push('none');
-  //       }
-  //     }
-  //   }
-    
-  //   table.push({
-  //     id: expense._id,
-  //     Descripcion: expense.description,
-  //     Estatus: 'condition',
-  //     Fecha: expense.date,
-  //     costcenter: typeof(expense.costcenter)=== 'string'? expense.costcenter: expense.costcenter?.name,
-  //     Importe: dollar,
-  //     Informe: expense.report?.name || 'sin reporte',
-  //     Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
-  //     Proyecto: expense.project?.title || 'sin proyecto',
-  //     Responsable: {
-  //       responsible: expense.user?.name,
-  //       photo: expense.user?.photo
-  //     },
-  //     condition: expense.condition?.length > 0 ? expense.condition[expense.condition?.length -1]?.glossary?.name: 'sin status',
-  //     archivos: elements,
-  //     vat,
-  //     discount,
-  //     total,
-  //   });
-  // });
-
   let reportsProject: ReportByProject[];
   try {
     reportsProject = await GetCostsGroupByProject(token);
-    //console.log('reports projects page => ', reportsProject);
     if(typeof(reportsProject)==='string'){
       return <h1>Error al consultar costos por proyecto!!</h1>
     }
@@ -384,15 +224,36 @@ export default async function Page() {
     return <h1>Error al consultar costos por proyecto!!</h1>
   }
 
+  // let costCostoCenterCategory: ReportByCostcenterCategory[] = [];
+  // try {
+  //   costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
+  //   //console.log('reports projects page => ', costCostoCenter);
+  //   if(typeof(costCostoCenter)==='string'){
+  //     return <h1>Error al consultar costos por centro de costos!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por centro de costos!!</h1>
+  // }
+
   let costTypes: CostGroupByType[];
   try {
     costTypes = await GetCostsGroupByType(token);
-    //console.log('reports projects page => ', costTypes);
     if(typeof(costTypes)==='string'){
       return <h1>Error al consultar costos por tipo!!</h1>
     }
   } catch (error) {
     return <h1>Error al consultar costos por tipo!!</h1>
+  }
+
+  let reportProjectOnly: ReportCostsByProjectOnly[] = [];
+  try {
+    reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
+    //console.log('reports projects page => ', costCostoCenter);
+    if(typeof(reportProjectOnly)==='string'){
+      return <h1>Error al consultar costos por proyecto!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al consultar costos por proyecto!!</h1>
   }
 
   return(
@@ -406,8 +267,8 @@ export default async function Page() {
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
         token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
-        isHistory={true} idValidado="" costCostoCenter={[]} costCostoCenterCategory={[]} 
-        isViewReports={isViewReports} reportCostProjectOnly={[]} optProvidersSAT={[]} />
+        idValidado="" costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} 
+        isViewReports={isViewReports} reportCostProjectOnly={reportProjectOnly} optProvidersSAT={[]} isHistory={true} />
     </>
   )
 }
