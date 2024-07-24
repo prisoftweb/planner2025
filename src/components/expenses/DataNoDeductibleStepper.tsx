@@ -31,7 +31,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
   const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
   //const [categoryCostCenter, setCategoryCostCenter] = useState<string>(costCenter===''?  )
-  const [totalExpense, setTotalExpense] = useState<string>(total);
+  //const [totalExpense, setTotalExpense] = useState<string>(total);
 
   const handleCostCenter = (value:string) => {
     //setCostCenter(value);
@@ -82,7 +82,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       console.log('type no deductible => ', type);
       updateBasicData('', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
-          '', '', categoryS, '', type, '', totalExpense.replace(/[$,]/g, ""));
+          '', '', categoryS, '', type, '', amount.replace(/[$,]/g, ""));
       updateIndexStepper(2);
     },       
   });
@@ -135,7 +135,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     }
     const {description, amount} = formik.values
     updateBasicData('', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', categoryS, '', type, '', totalExpense.replace(/[$,]/g, ""));
+        startDate, '', '', '', '', '', '', '', categoryS, '', type, '', amount.replace(/[$,]/g, ""));
 
     const costcenter = {
       category: costCenter,
@@ -159,7 +159,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
         discount: 0,
         subtotal:amount.replace(/[$,]/g, ""),
         iva: 0,
-        total: totalExpense.replace(/[$,]/g, ""),
+        total: amount.replace(/[$,]/g, ""),
         //vat: idVat, 
         // vatvalue: number no se usa 
         // total: number no se usa 
@@ -209,7 +209,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
           discount: 0,
           subtotal:amount.replace(/[$,]/g, ""),
           iva: 0,
-          total: totalExpense.replace(/[$,]/g, ""),
+          total: amount.replace(/[$,]/g, ""),
           //vat: idVat,
           // vatvalue: number no se usa 
           // total: number no se usa 
@@ -370,29 +370,29 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     </div>
   );
 
-  let viewTotal: JSX.Element = <></>;
-  viewTotal = (
-    <CurrencyInput
-      id="total"
-      name="total"
-      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-        focus:border-slate-700 outline-0"
-      //onChange={formik.handleChange}
-      //onBlur={formik.handleChange}
-      //value={formik.values.amount.replace(/[$,]/g, "")}
-      value={totalExpense.replace(/[$,]/g, "")}
-      decimalsLimit={2}
-      prefix="$"
-      onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
-        //formik.values.amount=value || '0';
-        setTotalExpense(value || '0');
-      } catch (error) {
-        //formik.values.amount='0';
-        setTotalExpense('0');
-      }}}
-    />
-  )
+  // let viewTotal: JSX.Element = <></>;
+  // viewTotal = (
+  //   <CurrencyInput
+  //     id="total"
+  //     name="total"
+  //     className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+  //       focus:border-slate-700 outline-0"
+  //     //onChange={formik.handleChange}
+  //     //onBlur={formik.handleChange}
+  //     //value={formik.values.amount.replace(/[$,]/g, "")}
+  //     value={totalExpense.replace(/[$,]/g, "")}
+  //     decimalsLimit={2}
+  //     prefix="$"
+  //     onValueChange={(value) => {try {
+  //       //console.log('value amount data stepper => ', value);
+  //       //formik.values.amount=value || '0';
+  //       setTotalExpense(value || '0');
+  //     } catch (error) {
+  //       //formik.values.amount='0';
+  //       setTotalExpense('0');
+  //     }}}
+  //   />
+  // )
 
   return(
     <div className="w-full bg-white">
@@ -432,10 +432,10 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
               </div>
             ) : null}
           </div>
-          <div>
+          {/* <div>
             <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
             {viewTotal}
-          </div>
+          </div> */}
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 
