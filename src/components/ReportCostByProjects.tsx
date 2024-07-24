@@ -63,7 +63,7 @@ export default function ReportCostByProjects({reports, costsByTypes}:
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos por obras</Text>
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text>
+              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
           </View>

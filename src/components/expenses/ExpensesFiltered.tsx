@@ -1,5 +1,5 @@
 'use client'
-import HeaderForm from "../HeaderForm"
+//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
@@ -9,15 +9,22 @@ import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
+import { Expense } from "@/interfaces/Expenses"
+import Button from "../Button"
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
+import ReportCostsByFilter from "../ReportCostsByFilter"
 
 export default function Filtering({showForm, optCategories, optTypes, 
                       optConditions, FilterData, maxAmount, minAmount, 
-                      optProjects, optReports, optCostCenterFilter }: 
+                      optProjects, optReports, optCostCenterFilter, expensesFiltered, 
+                      isViewReports }: 
                     {showForm:Function, optCategories: Options[],
                       optTypes: Options[], optConditions: Options[],
                       FilterData:Function, maxAmount:number, 
                       optProjects:Options[], optReports:Options[], 
-                      optCostCenterFilter:Options[], minAmount:number,}){
+                      optCostCenterFilter:Options[], minAmount:number, 
+                      expensesFiltered: Expense[], isViewReports: boolean}){
   
   const [types, setTypes] = useState<string[]>([optTypes[0].value]);
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
@@ -26,6 +33,7 @@ export default function Filtering({showForm, optCategories, optTypes,
   const [reports, setReports] = useState<string[]>([optReports[0].value]);
   const [heightPage, setHeightPage] = useState<number>(900);
   const [costcenters, setCostCenters] = useState<string[]>([optCostCenterFilter[0].value]);
+  const [isGeneratedReport, setIsGeneratedReport] = useState<boolean>(false);
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -35,7 +43,7 @@ export default function Filtering({showForm, optCategories, optTypes,
     new DateObject().setDay(4).add(1, "month")
   ])
 
-  const [minValue, set_minValue] = useState(0);
+  const [minValue, set_minValue] = useState(minAmount);
   const [maxValue, set_maxValue] = useState(maxAmount);
 
   const handleInput = (e:any) => {
@@ -159,7 +167,7 @@ export default function Filtering({showForm, optCategories, optTypes,
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
-            min={0}
+            min={minAmount}
             max={maxAmount}
             step={5}
             minValue={minValue}
@@ -205,6 +213,34 @@ export default function Filtering({showForm, optCategories, optTypes,
               'height': '35px', 'width': '330px'}}
           /> 
         </div>
+        {isViewReports && (
+          <div className="p-2 flex justify-center">
+            <Button  
+              onClick={() => {
+                console.log('gastos filtrados => ', expensesFiltered);
+                setIsGeneratedReport(true);
+              }}
+              type="button"
+            >Generar Informe</Button>
+          </div>
+        )}
+        {isGeneratedReport && isViewReports? (
+          <div className="p-2 flex justify-center">
+          <PDFDownloadLink document={<ReportCostsByFilter costs={expensesFiltered} />} 
+              fileName={`InformeCostosFiltrados`} onClick={() => setTimeout(() => {
+                setIsGeneratedReport(false);
+              }, 300)} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+              ) : (
+                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+              ) }
+          </PDFDownloadLink>
+        </div>
+        ): (
+          <></>
+        )}
       </form>
     </>
   )

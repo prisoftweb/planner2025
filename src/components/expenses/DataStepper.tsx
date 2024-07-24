@@ -96,7 +96,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   //actualizacion juntar estos 2 estados en un objeto
   const [idVat, setIdVat] = useState<string>(optVats[0].value);
   const [vatValue, setVatValue] = useState<string>('0');
-  const [isBusinessName, setIsBusinesName] = useState<boolean>(false);
+  const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [totalExpense, setTotalExpense] = useState<string>(total);
   
   //let vatValue = '0';
@@ -128,8 +128,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                           Number(vatvalue) / 100;
         
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-              Number(formik.values.discount.replace(/[$,]/g, "")) -
-              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              Number(formik.values.discount.replace(/[$,]/g, "")) +
               operation;
       }else{
         if(haveDiscount){
@@ -146,9 +145,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                         Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
                           Number(vatvalue) / 100;
 
-            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-                  operation;              
+            t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;              
           }else{
             operation = (Number(formik.values.amount.replace(/[$,]/g, ""))) * 
                           Number(vatvalue) / 100;
@@ -170,28 +167,39 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const updateTotal = (valueIva: string) => {
     try {
       let t = 0;
-      if(haveDiscount && haveTaxExempt){
+      // if(haveDiscount && haveTaxExempt){
+      //   t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+      //         Number(formik.values.discount.replace(/[$,]/g, "")) -
+      //         Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+      //         Number(valueIva.replace(/[$,]/g, ""));
+      // }else{
+      //   if(haveDiscount){
+      //     t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+      //           Number(formik.values.discount.replace(/[$,]/g, "")) +
+      //           Number(valueIva.replace(/[$,]/g, ""));
+      //   }else{
+      //     if(haveTaxExempt){
+      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) -
+      //             Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+      //             Number(valueIva.replace(/[$,]/g, ""));
+      //     }else{
+      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
+      //             Number(valueIva.replace(/[$,]/g, ""));
+      //     }
+      //   }
+      // }
+      // console.log('update total => ', t.toFixed(2).toString());
+      if(haveDiscount){
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-              Number(formik.values.discount.replace(/[$,]/g, "")) -
-              Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
+              Number(formik.values.discount.replace(/[$,]/g, "")) +
               Number(valueIva.replace(/[$,]/g, ""));
       }else{
-        if(haveDiscount){
-          t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-                Number(formik.values.discount.replace(/[$,]/g, "")) +
-                Number(valueIva.replace(/[$,]/g, ""));
-        }else{
-          if(haveTaxExempt){
-            t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-                  Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-                  Number(valueIva.replace(/[$,]/g, ""));
-          }else{
-            t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
-                  Number(valueIva.replace(/[$,]/g, ""));
-          }
-        }
+        t = Number(formik.values.amount.replace(/[$,]/g, "")) +
+              Number(valueIva.replace(/[$,]/g, ""));
+              //console.log('importe => ', formik.values.amount.replace(/[$,]/g, ""));
+              //console.log('value iva => ', valueIva.replace(/[$,]/g, ""));
       }
-      console.log('update total => ', t.toFixed(2).toString());
+      //console.log('total calculado  => ', t.toFixed(2).toString());
       setTotalExpense(t.toFixed(2).toString());
     } catch (error) {
       setTotalExpense('0');
@@ -773,12 +781,12 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
           <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
             <div>
               <div className="flex items-center justify-between mr-5">
-                <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+                <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Emisor</p></Label>
                 <div className="inline-flex items-center">
-                  <Label>Razon Social?</Label>  
+                  <Label>Nombre comercial?</Label>  
                   <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-                    <input checked={isBusinessName} 
-                      onClick={() => setIsBusinesName(!isBusinessName)} id="businessName" type="checkbox"
+                    <input checked={isNoBusinessName} 
+                      onClick={() => setIsNoBusinesName(!isNoBusinessName)} id="businessName" type="checkbox"
                       onChange={() => console.log('')}
                       className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                         appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
@@ -793,10 +801,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                 </div>
               </div>
               {
-                isBusinessName? (
-                  viewProviderSAT
-                ): (
+                isNoBusinessName? (
                   viewProvider
+                ): (
+                  viewProviderSAT
                 )
               }
             </div>

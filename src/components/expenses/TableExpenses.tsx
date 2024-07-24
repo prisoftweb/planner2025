@@ -22,13 +22,15 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
                             optProjects, optReports, handleExpensesSelected,
-                          optCostCenterFilter, idValidado, user, isFilter, setIsFilter }:
+                          optCostCenterFilter, idValidado, user, isFilter, setIsFilter, 
+                        isViewReports }:
                         {data:ExpensesTable[], token:string, 
                         optCategories:Options[], optTypes:Options[], 
                         optConditions:Options[], expenses:Expense[], 
                         optReports:Options[], optProjects:Options[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
-                        optCostCenterFilter:Options[], idValidado: string, handleExpensesSelected:Function}){
+                        optCostCenterFilter:Options[], idValidado: string, handleExpensesSelected:Function, 
+                        isViewReports: boolean}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
@@ -37,6 +39,7 @@ export default function TableExpenses({data, token, expenses,
   //const [filtering, setFiltering] = useState<boolean>(false);
   //const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
+  const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
   //const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
   // const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
 
@@ -496,7 +499,7 @@ export default function TableExpenses({data, token, expenses,
 
     //console.log(filtered);
     //setFilteredExpenses(filtered);
-    
+    setExpensesFiltered(filtered);
     setDataExpenses(ExpenseDataToTableData(filtered));
     //setFilter(true);
   }
@@ -512,7 +515,8 @@ export default function TableExpenses({data, token, expenses,
                           optTypes={optTypes} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} 
                           optProjects={optProjects} optReports={optReports}
-                          optCostCenterFilter={optCostCenterFilter} minAmount={minAmount} />}
+                          optCostCenterFilter={optCostCenterFilter} minAmount={minAmount}
+                          expensesFiltered={expensesFiltered} isViewReports={isViewReports} />}
       </div>
       {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
       {view}
