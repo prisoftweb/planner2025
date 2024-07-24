@@ -35,7 +35,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
 
   let totalTypes: number = 0;
   costs.map((cost) => {
-    totalTypes += cost.cost.subtotal;
+    totalTypes += cost.cost?.total || 0;
   });
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -48,7 +48,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos por filtrado</Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos detalle</Text>
               {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
@@ -59,7 +59,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
               <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Obra</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Informe</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Centro de costos</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Descripcion</Text></View>
+              <View style={[style.header, {flex: 2}]}><Text>Descripcion</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Fecha</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Importe</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
@@ -70,7 +70,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{cost.project?.title || ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.report?.name ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.costocenter?.concept?.name || ''}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{cost.description ?? ''}</Text></View>
+                <View style={[style.element, {flex: 2}]}><Text>{cost.description ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.date?.substring(0, 10) ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',
