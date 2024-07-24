@@ -266,7 +266,7 @@ export default async function Page() {
         optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
         optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
         optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
-        token={token} user={user._id} reportProjects={reportsProject} costsTypes={costTypes}
+        token={token} user={user} reportProjects={reportsProject} costsTypes={costTypes}
         idValidado="" costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} 
         isViewReports={isViewReports} reportCostProjectOnly={reportProjectOnly} optProvidersSAT={[]} isHistory={true} />
     </>
