@@ -1,10 +1,8 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
-import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
 import { Expense } from '@/interfaces/Expenses'
 
-export default function ReportCostsByFilter({costs}: 
-                                {costs:Expense[]}){
+export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
   
   const style = StyleSheet.create({
     table: {
@@ -34,23 +32,10 @@ export default function ReportCostsByFilter({costs}:
       color: 'black',
     },
   })
-  // const reportSorted = reports.sort((a, b) => {
-  //   const nameA = a.project.title.toUpperCase(); // ignore upper and lowercase
-  //   const nameB = b.project.title.toUpperCase(); // ignore upper and lowercase
-  //   if (nameA < nameB) {
-  //     return -1;
-  //   }
-  //   if (nameA > nameB) {
-  //     return 1;
-  //   }
-  
-  //   // names must be equal
-  //   return 0;
-  // });
 
   let totalTypes: number = 0;
   costs.map((cost) => {
-    totalTypes += cost.cost.subtotal;
+    totalTypes += cost.cost?.total || 0;
   });
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -63,7 +48,7 @@ export default function ReportCostsByFilter({costs}:
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos por filtrado</Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos detalle</Text>
               {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
@@ -74,7 +59,7 @@ export default function ReportCostsByFilter({costs}:
               <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Obra</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Informe</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Centro de costos</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Descripcion</Text></View>
+              <View style={[style.header, {flex: 2}]}><Text>Descripcion</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Fecha</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Importe</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
@@ -85,7 +70,7 @@ export default function ReportCostsByFilter({costs}:
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{cost.project?.title || ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.report?.name ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.costocenter?.concept?.name || ''}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{cost.description ?? ''}</Text></View>
+                <View style={[style.element, {flex: 2}]}><Text>{cost.description ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.date?.substring(0, 10) ?? ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',

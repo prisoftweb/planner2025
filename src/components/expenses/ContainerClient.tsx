@@ -58,8 +58,9 @@ export default function ContainerClient({data, token, expenses,
                     costCostoCenter: ReportByCostcenter[], costCostoCenterCategory: ReportByCostcenterCategory[], 
                     isViewReports: boolean, reportCostProjectOnly: ReportCostsByProjectOnly[]}){
 
-  const {updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
-    updateReports, updateResponsibles, updateTypes, updateVats} = useOptionsExpense();
+  // const { categories, conditions, costCenter, projects, providers, responsibles, types, 
+  //   updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
+  //   updateReports, updateResponsibles, updateTypes, updateVats} = useOptionsExpense();
 
   // console.log('costo center concept container => ', costCostoCenter);
   // console.log('costo center category container => ', costCostoCenterCategory);
@@ -241,6 +242,14 @@ export default function ContainerClient({data, token, expenses,
           <SearchInTable placeH={"Buscar gasto.."} />
           <div className="w-72">
             <div className="flex gap-x-4 items-center">
+              {/* {categories.length > 0 && 
+                conditions.length > 0 && costCenter.length > 0 && 
+                projects.length > 0 && providers.length > 0 && responsibles.length > 0 && 
+                types.length > 0 && (
+                  <GiSettingsKnobs onClick={() => handleFilter(true)}
+                    className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+                  />
+              )}   */}
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
