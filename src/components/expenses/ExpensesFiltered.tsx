@@ -15,6 +15,8 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import ReportCostsByFilter from "../ReportCostsByFilter"
 
+import { useOptionsExpense } from "@/app/store/newExpense"
+
 export default function Filtering({showForm, optCategories, optTypes, 
                       optConditions, FilterData, maxAmount, minAmount, 
                       optProjects, optReports, optCostCenterFilter, expensesFiltered, 
@@ -83,7 +85,12 @@ export default function Filtering({showForm, optCategories, optTypes,
     setCostCenters(value);
   }
 
+  //const {costCenter, providers, responsibles, vats} = useOptionsExpense();
+
   useEffect(() => {
+
+    //console.log('options expense => ', costCenter, providers, responsibles, vats);
+
     window.addEventListener("resize", handleResize, false);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,

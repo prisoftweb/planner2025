@@ -18,7 +18,6 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 // import { insertConditionInCost } from "@/app/api/routeCost";
 //import Button from "../Button";
-import { useOptionsExpense } from "@/app/store/newExpense";
 
 export default function TableExpenses({data, token, expenses, 
                             optCategories, optConditions, optTypes, 
@@ -36,8 +35,6 @@ export default function TableExpenses({data, token, expenses,
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
   const refFilter = useRef(false);
-
-  //const {categories, conditions, costCenter, projects, providers, responsibles, types} = useOptionsExpense();
 
   //const [filtering, setFiltering] = useState<boolean>(false);
   //const [filter, setFilter] = useState<boolean>(false);

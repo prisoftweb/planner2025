@@ -1,10 +1,8 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
-import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
 import { Expense } from '@/interfaces/Expenses'
 
-export default function ReportCostsByFilter({costs}: 
-                                {costs:Expense[]}){
+export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
   
   const style = StyleSheet.create({
     table: {
@@ -34,19 +32,6 @@ export default function ReportCostsByFilter({costs}:
       color: 'black',
     },
   })
-  // const reportSorted = reports.sort((a, b) => {
-  //   const nameA = a.project.title.toUpperCase(); // ignore upper and lowercase
-  //   const nameB = b.project.title.toUpperCase(); // ignore upper and lowercase
-  //   if (nameA < nameB) {
-  //     return -1;
-  //   }
-  //   if (nameA > nameB) {
-  //     return 1;
-  //   }
-  
-  //   // names must be equal
-  //   return 0;
-  // });
 
   let totalTypes: number = 0;
   costs.map((cost) => {
