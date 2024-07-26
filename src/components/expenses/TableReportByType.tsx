@@ -72,6 +72,20 @@ export default function TableReportByType({token}: {token:string}){
     //     />
     //   )
     // }),
+    columnHelper.accessor('project.user._id', {
+      id: 'Responsable',
+      cell: ({row}) => (
+        <div className="flex gap-x-1 items-center">
+          <img src={row.original.project.user.photo} alt={row.original.project.title} 
+            className="w-12 h-auto rounded-full"
+          />          
+        </div>
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>Foto</p>
+      )
+    }),
     columnHelper.accessor('project', {
       id: 'Proyecto',
       cell: ({row}) => (
