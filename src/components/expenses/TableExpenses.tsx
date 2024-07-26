@@ -136,7 +136,11 @@ export default function TableExpenses({data, token, expenses,
       id: 'descripcion',
       cell: ({row}) => (
         <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.Descripcion}</p>
+          {row.original.Descripcion.length < 100? (
+            <p className="">{row.original.Descripcion}</p>
+          ): (
+            <p className="">{row.original.Descripcion.substring(0, 100)}</p>
+          )}
         </Link>
       ),
     }),

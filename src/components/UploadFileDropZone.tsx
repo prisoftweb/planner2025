@@ -66,6 +66,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
             }
 
             try {
+              console.log('atributos => ', res2.elements[0].attributes);
               CFDIObj.date = res2.elements[0].attributes.Fecha;
               //console.log('rfc 1 ', res2.elements[0].elements[1].attributes?.Rfc);
               console.log('rfc 2 ', res2.elements[0].elements[0].attributes?.Rfc);
@@ -165,7 +166,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
           </div>
           <div className="mt-5 py-4 px-10 border-t text-sm border-slate-900">
             <p>{folio}</p>
-            <p>{date.substring(0, 10)}</p>
+            <p>{date?.substring(0, 10)}</p>
             {/* <p>{description}</p> */}
           </div>
           <div className="mt-3 grid grid-cols-4 gap-x-2">

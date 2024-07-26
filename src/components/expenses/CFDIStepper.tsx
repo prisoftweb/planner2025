@@ -49,7 +49,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
     if(file || voucher){
       const formdata = new FormData();
       //formdata.append('subtotal', amount);
-      formdata.append('costocenter', JSON.stringify(costCenter));
+      formdata.append('costocenter', JSON.stringify(costcenter));
       formdata.append('date', date);
       formdata.append('description', description);
       //formdata.append('discount', discount);
@@ -94,6 +94,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       if(await dataCFDIValidation()){
         //showToastMessage('todo coincide !!');
         try {
+          console.log('data cost center => ', JSON.stringify(costCenter));
           const res = await CreateCostWithFiles(token, formdata);
           if(res === 201){
             reset();
@@ -162,14 +163,14 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   }
 
   const dataCFDIValidation = async() => {
-    console.log('amount ', amount, ' = subtotal cfdi ', dataCFDI?.amount);
+    console.log('amount ', Number(amount), ' = subtotal cfdi ', Number(dataCFDI?.amount));
     console.log('date ', date.substring(0, 10), ' = date cfdi ', dataCFDI?.date.substring(0, 10));
     console.log('folio fis ', taxFolio, ' = folio fis cfdi ', dataCFDI?.taxFolio);
-    if(amount !== dataCFDI?.amount){
+    if(Number(amount) !== Number(dataCFDI?.amount)){
       showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
       return false;
     }
-    if(date.substring(0, 10) !== dataCFDI.date.substring(0, 10)){
+    if(date.substring(0, 10) !== dataCFDI?.date.substring(0, 10)){
       showToastMessageError('La fecha ingresada no coincide con la del CFDI!!');
       return false;
     }

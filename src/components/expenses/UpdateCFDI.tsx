@@ -94,7 +94,7 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
     // console.log('expense', expense.taxfolio);
     // console.log('expense', expense.provider.rfc);
     // console.log('data dfdi ', dataCFDI);
-    if(expense.cost.subtotal.toString() !== dataCFDI?.amount){
+    if(expense.cost.subtotal !== Number(dataCFDI?.amount)){
       showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
       return false;
     }
@@ -107,6 +107,8 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
       return false;
     }
     if(expense.provider.rfc !== dataCFDI.RFCProvider){
+      console.log('epxense provider => ', expense.provider);
+      console.log('cfdi provider => ', dataCFDI.RFCProvider);
       showToastMessageError('El rfc del proveedor no coincide con el del CFDI!!');
       return false;
     }

@@ -188,6 +188,7 @@ export async function CreateCostWithFiles(auth_token:string, data:FormData) {
   // console.log('files => ', data.getAll('files'));
   // console.log('types => ', data.getAll('types'));
   //console.log(JSON.stringify(data));
+  console.log('formdata cost center => ', data.get('costocenter'));
   try {
     const res = await axios.post(url, data, {
       headers: {
@@ -195,6 +196,7 @@ export async function CreateCostWithFiles(auth_token:string, data:FormData) {
         'Content-Type': 'multipart/form-data',
       }
     });
+    console.log('res costo => ', res);
     if(res.status === 201) return res.status;
     return res.statusText
   } catch (error) {

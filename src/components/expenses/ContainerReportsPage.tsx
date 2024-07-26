@@ -3,6 +3,7 @@
 import TabReports from "./TabReports"
 import { useState } from "react"
 import TableReportByProject from "./TableReportByProject";
+import TableReportByType from "./TableReportByType";
 
 export default function ContainerReportsPage({token}: {token:string}){
   
@@ -16,6 +17,9 @@ export default function ContainerReportsPage({token}: {token:string}){
   switch(option){
     case 0:
       table =  <TableReportByProject token={token} />;
+    break;
+    case 1:
+      table =  <TableReportByType token={token} />;
     break;
   }
 

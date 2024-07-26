@@ -3,30 +3,47 @@ import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
 import Table from "../Table";
 import SearchInTable from "../SearchInTable";
 import { useState, useEffect } from "react";
-import { GetAllCostsGroupByProjectOnly } from "@/app/api/routeCost";
 import ReportCostsByProjectOnlyPDF from "../ReportCostByProjectOnlyPDF"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
-import { CurrencyFormatter } from "@/app/functions/Globals";
 
-export default function TableReportByProject({token}: {token:string}){
+import { CurrencyFormatter } from '@/app/functions/Globals'
+import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
+import { GetCostsGroupByProject, GetCostsGroupByType } from "@/app/api/routeCost";
+import ReportCostByProjects from "../ReportCostByProjects";
+
+export default function TableReportByType({token}: {token:string}){
   
-  const columnHelper = createColumnHelper<ReportCostsByProjectOnly>();
-  const [data, setData] = useState<ReportCostsByProjectOnly[]>([]);
+  const columnHelper = createColumnHelper<ReportByProject>();
+  const [data, setData] = useState<ReportByProject[]>([]);
+  const [dataType, setDataType] = useState<CostGroupByType[]>([]);
 
   useEffect(() => {
     const fetchData = async() => {
-      let reportProjectOnly: ReportCostsByProjectOnly[] = [];
+      let reportsProject: ReportByProject[];
       try {
-        reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
-        //console.log('reports projects page => ', costCostoCenter);
-        if(typeof(reportProjectOnly)==='string'){
+        reportsProject = await GetCostsGroupByProject(token);
+        //console.log('reports projects page => ', reportsProject);
+        if(typeof(reportsProject)==='string'){
           return <h1>Error al consultar costos por proyecto!!</h1>
         }
       } catch (error) {
         return <h1>Error al consultar costos por proyecto!!</h1>
       }
-      setData(reportProjectOnly);
+
+      let costTypes: CostGroupByType[];
+      try {
+        costTypes = await GetCostsGroupByType(token);
+        //console.log('reports projects page => ', costTypes);
+        if(typeof(costTypes)==='string'){
+          return <h1>Error al consultar costos por tipo!!</h1>
+        }
+      } catch (error) {
+        return <h1>Error al consultar costos por tipo!!</h1>
+      }
+
+      setData(reportsProject);
+      setDataType(costTypes);
     }
 
     fetchData();
@@ -59,7 +76,7 @@ export default function TableReportByProject({token}: {token:string}){
       id: 'Proyecto',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          <p>{row.original.project}</p>          
+          <p>{row.original.project.title}</p>          
         </div>
       ),
       enableSorting:false,
@@ -67,13 +84,25 @@ export default function TableReportByProject({token}: {token:string}){
         <p>Proyecto</p>
       )
     }),
-    columnHelper.accessor('amount', {
+    columnHelper.accessor('tipo', {
+      id: 'Tipo',
+      cell: ({row}) => (
+        <div className="flex gap-x-1 items-center">
+          <p>{row.original.tipo}</p>          
+        </div>
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>Tipo</p>
+      )
+    }),
+    columnHelper.accessor('project.amount', {
       id: 'Monto',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <p>{CurrencyFormatter({
             currency: 'MXN',
-            value: row.original.amount,
+            value: row.original.project.amount,
           })}</p>          
         </div>
       ),
@@ -87,9 +116,9 @@ export default function TableReportByProject({token}: {token:string}){
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <p>{CurrencyFormatter({
-            currency: 'MXN',
-            value: row.original.totalCost
-          })}</p>          
+                  currency: 'MXN',
+                  value: row.original.totalCost
+                })}</p>          
         </div>
       ),
       enableSorting:false,
@@ -97,15 +126,27 @@ export default function TableReportByProject({token}: {token:string}){
         <p>Total gastado</p>
       )
     }),
-    columnHelper.accessor('porcentage', {
+    columnHelper.accessor('quantity', {
+      id: 'Cantidad',
+      cell: ({row}) => (
+        <div className="flex gap-x-1 items-center">
+          <p>{row.original.quantity}</p>          
+        </div>
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>Cantidad</p>
+      )
+    }),
+    columnHelper.accessor('project._id', {
       id: 'Porcentaje',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <div className="w-20 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
             <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-              style={{"width": row.original.porcentage}}></div>
+              style={{"width":  ((row.original.totalCost / row.original.project.amount) * 100).toFixed(2)}}></div>
           </div>
-          <p>{row.original.porcentage} %</p>
+          <p>{((row.original.totalCost / row.original.project.amount) * 100).toFixed(2)} %</p>
         </div>
       ),
       enableSorting:false,
@@ -124,7 +165,7 @@ export default function TableReportByProject({token}: {token:string}){
       <div className="flex justify-end gap-x-3 mt-7 items-center">
         <SearchInTable placeH={"Buscar gasto.."} />
         {data.length > 0 && (
-          <PDFDownloadLink document={<ReportCostsByProjectOnlyPDF reports={data} />} 
+          <PDFDownloadLink document={<ReportCostByProjects reports={data} costsByTypes={dataType} />} 
               fileName={`InformeCostosAgrupadosPorProyecto`} >
             {({loading, url, error, blob}) => 
               loading? (
