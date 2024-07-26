@@ -34,8 +34,12 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
   })
 
   let totalTypes: number = 0;
+  let totalCosts: number = 0;
+  let totalIva: number = 0;
   costs.map((cost) => {
     totalTypes += cost.cost?.total || 0;
+    totalCosts += cost.cost?.subtotal || 0;
+    totalIva += cost.cost?.iva || 0;
   });
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -82,6 +86,30 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
                 })}</Text></View>
               </View>
             ) )}
+            
+            <View style={[style.table, {borderTop: '1px solid gray'}]}>
+              <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>COSTO</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
+                currency: 'MXN',
+                value: totalCosts
+              })}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+            </View>
+
+            <View style={[style.table, {borderTop: '1px solid gray'}]}>
+              <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>IVA</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
+                currency: 'MXN',
+                value: totalIva
+              })}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+            </View>
             
             <View style={[style.table, {borderTop: '1px solid gray'}]}>
               <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>TOTAL</Text></View>

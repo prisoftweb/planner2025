@@ -15,7 +15,7 @@ import { useNewExpense } from "@/app/store/newExpense";
 import { getProjectsLV } from "@/app/api/routeProjects";
 import { CostoCenterLV } from "@/interfaces/CostCenter";
 import { getCostoCentersLV } from "@/app/api/routeCostCenter";
-import { getProvidersLV } from "@/app/api/routeProviders";
+import { getProvidersLV, getProvidersSATLV } from "@/app/api/routeProviders";
 import { getUsersLV } from "@/app/api/routeUser";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 
@@ -38,6 +38,8 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
   const [optProjects, setOptProjects] = useState<Options[]>([]);
   const [optResponsibles, setOptResponsibles] = useState<Options[]>([]);
   const [optProviders, setOptProviders] = useState<Options[]>([]);
+  const [optProvidersSAT, setOptProvidersSAT] = useState<Options[]>([]);
+  const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [optCategories, setOptCategories] = useState<Options[]>([]);
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
@@ -98,6 +100,16 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
         return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
       }
 
+      let optProvSat: Options[] =  [];
+      try {
+        optProvSat = await getProvidersSATLV(token);
+        if(typeof(optProvSat)==='string'){
+          return <h1 className="text-center text-lg text-red-500">{optProvSat}</h1>
+        }    
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+      }
+
       let optCat: Options[] = [];
       try {
         optCat = await getCatalogsByNameAndCategory(token, 'cost');
@@ -119,6 +131,7 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
       setOptProjects(optPro);
       setOptResponsibles(optRes);
       setOptProviders(optProv);
+      setOptProvidersSAT(optProvSat);
       setOptCategories(optCat);
     }
     fetchOptions();
@@ -199,135 +212,40 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
     <></>
   )
 
-  const selectProvider = optProviders.length > 0? (
-    <div className="">
-      <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+  // const selectProvider = optProviders.length > 0? (
+  //   <div className="">
+  //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
+  //     <div className="flex gap-x-2 items-center">
+  //       <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+  //       {!isHistory && (
+  //         <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+  //           onClick={() => setShowProvider(true)} />
+  //       )}
+  //     </div>
+  //   </div>
+  // ): (
+  //   <></>
+  // )
+
+  const selectProvider = optProviders.length > 0 && isNoBusinessName? (
+    <div className="flex gap-x-2 items-center">
+      <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+      {!isHistory && (
+        <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+          onClick={() => setShowProvider(true)} />
+      )}
+    </div>
+  ): optProvidersSAT.length > 0 && !isNoBusinessName? (
       <div className="flex gap-x-2 items-center">
-        <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+        <SelectReact index={indexProvider} opts={optProvidersSAT} setValue={handleProvider} />
         {!isHistory && (
           <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
             onClick={() => setShowProvider(true)} />
         )}
       </div>
-    </div>
-  ): (
-    <></>
-  )
-
-  // useEffect(() => {
-  //   //let indexCC = 0;
-  //   //let indexCFDI = 0;
-  //   let indexProvider = 0;
-  //   // let indexCategory = 0;
-  //   // let indexProject = 0;
-  //   // let indexResponsible = 0;
-  //   // if(expense.costcenter){
-  //   //   optCostCenter.map((optCC, index:number) => {
-  //   //     // if(optCC.value===expense.costcenter){
-  //   //     //   setCostCenter(optCostCenter[index].value);
-  //   //     //   indexCC = index;
-  //   //     // }
-  //   //     if(typeof(expense.costcenter)==='string'){
-  //   //       if(optCC.value===expense.costcenter){
-  //   //         setCostCenter(optCostCenter[index].value);
-  //   //         indexCC = index;
-  //   //       }
-  //   //     }else{
-  //   //       if(optCC.value===expense.costcenter.categorys[0]._id){
-  //   //         setCostCenter(optCostCenter[index].value);
-  //   //         indexCC = index;
-  //   //       }
-  //   //     }
-  //   //   });
-  //   // }
-  //   // if(expense.provider){
-  //   //   optProviders.map((optProv, index:number) => {
-  //   //     if(optProv.value === expense.provider._id){
-  //   //       setProvider(optProviders[index].value);
-  //   //       setIndexProv(index);
-  //   //       indexProvider = index;
-  //   //     }
-  //   //   });
-  //   // }
-  //   // if(expense.typeCFDI){
-  //   //   optTypes.map((optCFDI, index:number) => {
-  //   //     if(optCFDI.value === expense.typeCFDI._id){
-  //   //       setTypeCFDI(optCFDI.value);
-  //   //       indexCFDI = index;
-  //   //     }
-  //   //   });
-  //   // }
-  //   // if(expense.category){
-  //   //   optCategories.map((optCat, index:number) => {
-  //   //     if(optCat.value === expense.category._id){
-  //   //       setCategory(optCat.value);
-  //   //       indexCategory = index;
-  //   //     }
-  //   //   });
-  //   // }
-  //   // if(expense.project){
-  //   //   optProjects.map((optProj, index:number) => {
-  //   //     if(optProj.value === expense.project._id){
-  //   //       setProject(optProjects[index].value);
-  //   //       indexProject = index;
-  //   //     }
-  //   //   });
-  //   // }
-  //   // if(expense.user){
-  //   //   optResponsibles.map((optRes, index:number) => {
-  //   //     if(optRes.value === expense.user._id){
-  //   //       setResponsible(optResponsibles[index].value);
-  //   //       indexResponsible = index;
-  //   //     }
-  //   //   });
-  //   // }
-  //   // setViewCC(<>
-  //   //             <div className=" col-span-1 sm:col-span-2">
-  //   //               <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-  //   //               <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-  //   //             </div>
-
-  //   //             {/* <div>
-  //   //               <Label htmlFor="typeExpense"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de gasto</p></Label>
-  //   //               <SelectReact index={0} opts={optTypes} setValue={setTypeExpense} />
-  //   //             </div> */}
-                
-  //   //             <div>
-  //   //               <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-  //   //               <SelectReact index={indexCFDI} opts={optTypes} setValue={setTypeCFDI} />
-  //   //             </div>
-                
-  //   //             <div>
-  //   //               <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-  //   //               <SelectReact index={indexCategory} opts={optCategories} setValue={setCategory} />
-  //   //             </div>
-                
-  //   //             {/* <div>
-  //   //               <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //   //               <SelectReact index={indexProvider} opts={optProviders} setValue={setProvider} />
-  //   //             </div> */}
-                
-  //   //             <div>
-  //   //               <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
-  //   //               <SelectReact index={indexProject} opts={optProjects} setValue={setProject} />
-  //   //             </div>
-                
-  //   //             <div>
-  //   //               <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-  //   //               <SelectReact index={indexResponsible} opts={optResponsibles} setValue={setResponsible} />
-  //   //             </div>
-  //   //           </>);
-  //   //setCostCenter(optCostCenter[indexCC].value);
-
-  //   // setSelectProviders(<div className="">
-  //   //         <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //   //         <div className="flex gap-x-2 items-center">
-  //   //           <SelectReact index={indexProvider} opts={optionsProviders} setValue={setProvider} />
-  //   //           <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-  //   //             onClick={() => setShowProvider(true)} />
-  //   //         </div>
-  //   //       </div>)
-  // }, []);
+    ):  (
+      <></>
+    )
 
   const updateExpense = async () => {
     if(refRequest.current){
@@ -387,7 +305,29 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
       <form>
         <div className="mt-4 w-full rounded-lg grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-5">
           {viewCC}
-          {selectProvider}
+          <div>
+            <div className="flex items-center justify-between mr-5">
+              <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Emisor</p></Label>
+              <div className="inline-flex items-center">
+                <Label>Nombre comercial?</Label>  
+                <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                  <input checked={isNoBusinessName} 
+                    onClick={() => setIsNoBusinesName(!isNoBusinessName)} id="businessName" type="checkbox"
+                    onChange={() => console.log('')}
+                    className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                      appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                      peer-checked:border-green-500 peer-checked:before:bg-green-500
+                      border border-slate-300" />
+                  <label htmlFor="businessName"
+                    className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                    <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                      data-ripple-dark="true"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            {selectProvider}
+          </div>
         </div>
         {isHistory? <></>: (
           <div className="flex justify-center mt-8 space-x-5">

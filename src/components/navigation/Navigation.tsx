@@ -209,6 +209,10 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Historial',
             link: '/expenses/history'
           },
+          {
+            name: 'Informes',
+            link: '/expenses/reports'
+          },
         ]}
       />
       <NavItem name="Informes" link="" items={[

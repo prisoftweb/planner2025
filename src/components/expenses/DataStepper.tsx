@@ -99,22 +99,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [totalExpense, setTotalExpense] = useState<string>(total);
   
-  //let vatValue = '0';
-  // const updateIva = (idValue: string) => {
-  //   try {
-  //     const foundVat = optVats.find((vat) => vat.value === idValue);
-  //     const vatvalue = foundVat?.label || '0';
-  //     const operation = 
-  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-  //     formik.values.vat = operation.toFixed(2).toString();
-  //     setVatValue(operation.toFixed(2).toString());
-  //   } catch (error) {
-  //     setVatValue('0');
-  //     formik.values.vat = '0';
-  //   }
-  // }
-
   const updateIva = (idValue: string) => {
     try {
       const foundVat = optVats.find((vat) => vat.value === idValue);
@@ -167,28 +151,6 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const updateTotal = (valueIva: string) => {
     try {
       let t = 0;
-      // if(haveDiscount && haveTaxExempt){
-      //   t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-      //         Number(formik.values.discount.replace(/[$,]/g, "")) -
-      //         Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-      //         Number(valueIva.replace(/[$,]/g, ""));
-      // }else{
-      //   if(haveDiscount){
-      //     t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-      //           Number(formik.values.discount.replace(/[$,]/g, "")) +
-      //           Number(valueIva.replace(/[$,]/g, ""));
-      //   }else{
-      //     if(haveTaxExempt){
-      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-      //             Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-      //             Number(valueIva.replace(/[$,]/g, ""));
-      //     }else{
-      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
-      //             Number(valueIva.replace(/[$,]/g, ""));
-      //     }
-      //   }
-      // }
-      // console.log('update total => ', t.toFixed(2).toString());
       if(haveDiscount){
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
               Number(formik.values.discount.replace(/[$,]/g, "")) +
@@ -196,10 +158,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
       }else{
         t = Number(formik.values.amount.replace(/[$,]/g, "")) +
               Number(valueIva.replace(/[$,]/g, ""));
-              //console.log('importe => ', formik.values.amount.replace(/[$,]/g, ""));
-              //console.log('value iva => ', valueIva.replace(/[$,]/g, ""));
       }
-      //console.log('total calculado  => ', t.toFixed(2).toString());
       setTotalExpense(t.toFixed(2).toString());
     } catch (error) {
       setTotalExpense('0');
@@ -257,7 +216,9 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   )
 
   useEffect(() => {
-    handleConstCenter(optCostCenter[0].value);
+    if(costCenter===''){
+      handleConstCenter(optCostCenter[0].value);
+    }
   }, []);
 
   //console.log('costcenter contex => ', costCenter);
@@ -501,20 +462,24 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   let indexCC = 0;
   if(costCenter !== ''){
+    //console.log('costCenter => ', costCenter);
+    //console.log('concept => ', concept);
     optCostCenter.map((opt, index:number) => {
       if(opt.value === costCenter + '/' + concept){
+        //console.log('opt => ', opt);
         indexCC = index;
       }
-    });      
+    });
+    //console.log('')
   }
 
   const handleConstCenter = (value : string) => {
-    console.log('value costoc => ', value);
+    //console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    console.log('cad 1 => ', c1);
-    console.log('cad 2 => ', c2);
+    //console.log('cad 1 => ', c1);
+    //console.log('cad 2 => ', c2);
     updateCostCenter(c1, c2);
     //setCostCenter(value);
   }
