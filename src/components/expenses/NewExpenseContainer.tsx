@@ -17,42 +17,38 @@ import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { ReportParse } from "@/interfaces/Reports";
 
-export default function NewExpenseContainer({token, showForm, user, optCostCenter, 
-                                optProviders, optResponsibles, optReports,
-                                optProjects, optCategories, optConditions, optTypes, 
-                                reports, idLabour, idTicket, optCostCenterDeductible,
-                                optVats, optProvidersSAT }: 
-                            {token:string, showForm:Function, user:string, 
-                              optCostCenter:Options[], optProjects:Options[],
-                              optProviders:Options[], optResponsibles:Options[],
-                              optCategories:Options[], optTypes:Options[], 
-                              optConditions:Options[], optVats:Options[],
-                              reports:ReportParse[], optReports: Options[],
-                              optCostCenterDeductible:Options[], idLabour:string, 
-                              idTicket:string, optProvidersSAT:Options[]
-                            }){
+import { UsrBack } from "@/interfaces/User";
+import { useOptionsExpense } from "@/app/store/newExpense";
+
+export default function NewExpenseContainer({token, showForm, user, }: 
+                            {token:string, showForm:Function, user:UsrBack, }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
-  //const [stepform, setStepForm] = useState<JSX.Element>(<></>)
-  //const [isPettyCash, setIsPettyCash] = useState<boolean>(false);
+  const [idLabour, setIdLabour] = useState<string>('');
+  const [idTicket, setIdTicket] = useState<string>('');
 
   const {indexStepper, isDeductible, project, updateProject, 
-    report, isPettyCash, updateReport, updateIndexStepper, 
+    report, isPettyCash, condition, updateReport, updateIndexStepper, 
     updateCondition, updatePettyCash} = useNewExpense();
 
-  const idVat = optVats.find((vat) => vat.label === '0')?.value || '';
+  const {vats, projects, conditions, categories} = useOptionsExpense();
+
+  if(idLabour==='' && categories.length > 0){
+    const idL = categories.find((cat) => cat.label.toLowerCase().includes('mano de obra'))?.value || '';
+    setIdLabour(idL);
+  }
+
+  if(idTicket==='' && categories.length > 0){
+    const idT = categories.find((cat) => cat.label.toLowerCase().includes('ticket'))?.value || '';
+    setIdTicket(idT);
+  }
+
+  //const idVat = optVats.find((vat) => vat.label === '0')?.value || '';
+  const idVat = vats.find((vat) => vat.label === '0')?.value || '';
   
-  // let ind = 0;
-  // if(project !== ''){
-  //   optProjects.map((optP, index:number) => {
-  //     if(optP.value === project){
-  //       ind = index;
-  //     }
-  //   });
-  // }
-  
-  //const [optSelectize, setOptSelectize] = useState<Options>(optProjects.find((optP) => optP.value === project)?? optProjects[0]);
-  const optSelectize = optProjects.find((optP) => optP.value === project)?? optProjects[0];
+  // //const [optSelectize, setOptSelectize] = useState<Options>(optProjects.find((optP) => optP.value === project)?? optProjects[0]);
+  // const optSelectize = optProjects.find((optP) => optP.value === project)?? optProjects[0];
+  const optSelectize = projects.find((optP) => optP.value === project)?? projects[0];
   //console.log('find => ', optProjects.find((optP) => optP.value === project));
   const DropdownIndicator = (props: any) => {
     return (
@@ -72,11 +68,14 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
     }),
   }
 
-  const viewSelectProject: JSX.Element = (
+  console.log('selectice => ', optSelectize);
+
+  const viewSelectProject: JSX.Element = indexStepper === 0 || projects.length===0 ? <></> : (
     <Select
-      className={`w-full max-w-sm ${indexStepper===0? 'hidden': ''}`} 
+      className={`w-full max-w-sm`} 
       value={optSelectize}
-      options={optProjects}
+      //options={optProjects}
+      options={projects}
       isDisabled={isPettyCash}
       //isDisabled={true}
       maxMenuHeight={250}
@@ -108,10 +107,14 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
-    updateCondition(optConditions[0].value);
+    // updateCondition(optConditions[0].value);
     //selectProject();
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
+
+  if(conditions.length > 0 && condition === ''){
+    updateCondition(conditions[0].value);
+  }
 
   const closeForm = () => {
     updateReport('');
@@ -123,30 +126,24 @@ export default function NewExpenseContainer({token, showForm, user, optCostCente
   if(isDeductible){
     if(indexStepper || indexStepper>=0){
       stepform = indexStepper===1? (
-        <DataStepper optCostCenter={optCostCenterDeductible} 
-          optProviders={optProviders} 
-          optResponsibles={optResponsibles}
-          token={token} user={user} optCategories={optCategories}
-          optTypes={optTypes} optVats={optVats} optProvidersSAT={optProvidersSAT}
-        />
+        <DataStepper token={token} user={user._id} />
       ): indexStepper===2? (
-        <VoucherStepper token={token} user={user} />
+        <VoucherStepper token={token} user={user._id} />
       ): indexStepper===3? (
-        <CFDIStepper token={token} user={user} />
+        <CFDIStepper token={token} user={user._id} />
       ): (
-        <SelectProjectStepper reports={reports} optReports={optReports}/>
+        <SelectProjectStepper />
       )
     }
   }else{
     if(indexStepper || indexStepper>=0){
       stepform = indexStepper===1? (
-        <DataNoDeductibleStepper optCostCenter={optCostCenter} 
-          optResponsibles={optResponsibles} token={token} user={user}
+        <DataNoDeductibleStepper token={token} user={user._id}
           idLabour={idLabour} idTicket={idTicket} idVat={idVat} />
       ): indexStepper===2? (
-        <VoucherNoDeductibleStepper token={token} user={user} idVat={idVat} />
+        <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
       ): (
-        <SelectProjectStepper reports={reports} optReports={optReports}/>
+        <SelectProjectStepper />
       )
     }
   }

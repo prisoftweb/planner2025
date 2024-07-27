@@ -2,27 +2,27 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
-import { getCostoCentersLV } from "../api/routeCostCenter";
+// import { getCostoCentersLV } from "../api/routeCostCenter";
 import { CostoCenterLV, ReportByCostcenter, ReportByCostcenterCategory } from "@/interfaces/CostCenter";
 import { Options } from "@/interfaces/Common";
 import ButtonNew from "@/components/expenses/ButtonNew";
 import { getProvidersLV, getProvidersSATLV } from "../api/routeProviders";
-import { getUsersLV } from "../api/routeUser";
-import { getProjectsLV } from "../api/routeProjects";
+// import { getUsersLV } from "../api/routeUser";
+// import { getProjectsLV } from "../api/routeProjects";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import { getAllCostsByCondition, GetVatsLV, GetCostsGroupByProject, 
   GetCostsGroupByType, GetCostsGroupByCostoCenterConcept, GetCostsGroupByCostoCenterCategory } from "../api/routeCost";
 //import { CurrencyFormatter } from "../functions/Globals";
-import { getCatalogsByNameAndCategory, getCatalogsByNameAndCondition, getCatalogsByNameAndType } from "../api/routeCatalogs";
-import { GetReportsMin, GetReportsByUserMin } from "../api/routeReports";
-import { ReportParse } from "@/interfaces/Reports";
+// import { getCatalogsByNameAndCategory, getCatalogsByNameAndCondition, getCatalogsByNameAndType } from "../api/routeCatalogs";
+// import { GetReportsMin, GetReportsByUserMin } from "../api/routeReports";
+// import { ReportParse } from "@/interfaces/Reports";
 import ContainerClient from "@/components/expenses/ContainerClient";
 //import { getTypeFiles } from "../functions/CostsFunctions";
-import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
+//import { ReportByProject, CostGroupByType } from "@/interfaces/ReportsOfCosts";
 //import { CostByCostCenter } from "@/components/ReportCostByCostCenterPDF";
 import { ExpenseDataToTableData } from "../functions/CostsFunctions";
-import { GetAllCostsGroupByProjectOnly } from "../api/routeCost";
-import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
+//import { GetAllCostsGroupByProjectOnly } from "../api/routeCost";
+//import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
 
 export default async function Page() {
   
@@ -46,162 +46,166 @@ export default async function Page() {
     return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
   }
 
-  let costcenters: CostoCenterLV[];
-  try {
-    costcenters = await getCostoCentersLV(token);
-    if(typeof(costcenters)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
-  }
+  // let costcenters: CostoCenterLV[];
+  // try {
+  //   costcenters = await getCostoCentersLV(token);
+  //   if(typeof(costcenters)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+  // }
 
-  const optCostCenter:Options[]= [];
-  const optCostCenterFilter:Options[]= [{
-    label: 'TODOS',
-    value: 'all'
-  }];
+  // const optCostCenter:Options[]= [];
+  // const optCostCenterFilter:Options[]= [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }];
   
-  costcenters.map((costcenter) => {
-    optCostCenter.push({
-      label: costcenter.label || 'sin categoria',
-      value: costcenter.categoryid + '/' + costcenter.value
-    });
-    optCostCenterFilter.push({
-      label: costcenter.label || 'sin categoria',
-      value: costcenter.value
-    });
-  });
-  let optProviders:Options[]= [];
-  try {
-    optProviders = await getProvidersLV(token);
-    if(typeof(optProviders)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optProviders}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
-  }
+  // costcenters.map((costcenter) => {
+  //   optCostCenter.push({
+  //     label: costcenter.label || 'sin categoria',
+  //     value: costcenter.categoryid + '/' + costcenter.value
+  //   });
+  //   optCostCenterFilter.push({
+  //     label: costcenter.label || 'sin categoria',
+  //     value: costcenter.value
+  //   });
+  // });
+  
+  // let optProviders:Options[]= [];
+  // try {
+  //   optProviders = await getProvidersLV(token);
+  //   if(typeof(optProviders)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optProviders}</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+  // }
 
-  let optProvidersSAT:Options[]= [];
-  try {
-    optProvidersSAT = await getProvidersSATLV(token);
-    if(typeof(optProvidersSAT)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optProvidersSAT}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores del sat!!</h1>
-  }
+  // let optProvidersSAT:Options[]= [];
+  // try {
+  //   optProvidersSAT = await getProvidersSATLV(token);
+  //   if(typeof(optProvidersSAT)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optProvidersSAT}</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores del sat!!</h1>
+  // }
 
-  let optResponsibles:Options[]= [];
-  try {
-    optResponsibles = await getUsersLV(token);
-    if(typeof(optResponsibles)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optResponsibles}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
-  }
+  // let optResponsibles:Options[]= [];
+  // try {
+  //   optResponsibles = await getUsersLV(token);
+  //   if(typeof(optResponsibles)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optResponsibles}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+  // }
 
-  let reports: ReportParse[];
-  try {
-    if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
-      reports = await GetReportsMin(token);
-    }else{
-      reports = await GetReportsByUserMin(token, user._id);
-    }
+  // let reports: ReportParse[];
+  // try {
+  //   if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
+  //     reports = await GetReportsMin(token);
+  //   }else{
+  //     reports = await GetReportsByUserMin(token, user._id);
+  //   }
     
-    if(typeof(reports)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{reports}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los reportes!!</h1>
-  }
+  //   if(typeof(reports)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{reports}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los reportes!!</h1>
+  // }
 
-  const optReports:Options[]= [];
-  const optReportsFilter:Options[] = [{
-    label: 'TODOS',
-    value: 'all'
-  }]
-  reports.map((rep) => {
-    const r = {
-      label: rep.name,
-      value: rep._id
-    }
-    optReports.push(r);
-    optReportsFilter.push(r);
-  });
+  // const optReports:Options[]= [];
+  // const optReportsFilter:Options[] = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }]
+  // reports.map((rep) => {
+  //   const r = {
+  //     label: rep.name,
+  //     value: rep._id
+  //   }
+  //   optReports.push(r);
+  //   optReportsFilter.push(r);
+  // });
 
-  let optProjects:Options[];
-  let optProjectFilter: Options[] = [{
-      label: 'TODOS',
-      value: 'all'
-    }]
-  try {
-    optProjects = await getProjectsLV(token);
-    if(typeof(optProjects)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-  }
+  // let optProjects:Options[];
+  // let optProjectFilter: Options[] = [{
+  //     label: 'TODOS',
+  //     value: 'all'
+  //   }]
+  // try {
+  //   optProjects = await getProjectsLV(token);
+  //   if(typeof(optProjects)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+  // }
 
-  optProjectFilter = optProjectFilter.concat(optProjects);
+  // optProjectFilter = optProjectFilter.concat(optProjects);
 
-  let optCategories: Options[] = [];
-  try {
-    optCategories = await getCatalogsByNameAndCategory(token, 'cost');
-    if(typeof(optCategories)==='string') return <h1 className="text-red-500 text-center text-lg">{optCategories}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
-  }  
+  // let optCategories: Options[] = [];
+  // try {
+  //   optCategories = await getCatalogsByNameAndCategory(token, 'cost');
+  //   if(typeof(optCategories)==='string') return <h1 className="text-red-500 text-center text-lg">{optCategories}</h1>
+  // } catch (error) {
+  //   return <h1>Error al consultar catalogos!!</h1>
+  // }  
 
-  //const optCategories: Options[] = [];
-  const optCategoriesFilter = [{
-    label: 'TODOS',
-    value: 'all'
-  }].concat(optCategories);
+  // const optCategoriesFilter = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }].concat(optCategories);
   
-  let optTypes: Options[] = [];
-  try {
-    optTypes = await getCatalogsByNameAndType(token, 'cost');
-    if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
-  }
-  const optTypeFilter: Options[] = [{
-    label: 'TODOS',
-    value: 'all'
-  }].concat(optTypes);
+  // let optTypes: Options[] = [];
+  // try {
+  //   optTypes = await getCatalogsByNameAndType(token, 'cost');
+  //   if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+  // } catch (error) {
+  //   return <h1>Error al consultar catalogos!!</h1>
+  // }
+  // const optTypeFilter: Options[] = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }].concat(optTypes);
 
-  let optConditions: Options[] = [];
-  try {
-    optConditions = await getCatalogsByNameAndCondition(token, 'cost');
-    if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
-  }
+  // let optConditions: Options[] = [];
+  // try {
+  //   optConditions = await getCatalogsByNameAndCondition(token, 'cost');
+  //   if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
+  // } catch (error) {
+  //   return <h1>Error al consultar catalogos!!</h1>
+  // }
 
-  const optConditionsFilter: Options[] = [{
-    label: 'TODOS',
-    value: 'all'
-  }].concat(optConditions);
+  // const optConditionsFilter: Options[] = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }].concat(optConditions);
 
-  const idValidado = optConditions.find((cond) => cond.label.toLowerCase().includes('validado'))?.value || '';
-  let labour:string = '';
-  let ticket:string = '';
+  // const idValidado = optConditions.find((cond) => cond.label.toLowerCase().includes('validado'))?.value || '';
+  //const idValidado = '';
+  //let labour:string = '';
+  //let ticket:string = '';
 
-  labour = optCategories.find((cat) => cat.label.toLowerCase().includes('mano de obra'))?.value || '';
-  ticket = optCategories.find((cat) => cat.label.toLowerCase().includes('ticket'))?.value || '';
+  //labour = optCategories.find((cat) => cat.label.toLowerCase().includes('mano de obra'))?.value || '';
+  //ticket = optCategories.find((cat) => cat.label.toLowerCase().includes('ticket'))?.value || '';
 
-  let optVats: Options[];
-  try {
-    optVats = await GetVatsLV(token);
-    if(typeof(optVats)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optVats}</h1>
-    }    
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
-  }
+  //labour = '';
+  //ticket = '';
+
+  // let optVats: Options[];
+  // try {
+  //   optVats = await GetVatsLV(token);
+  //   if(typeof(optVats)==='string'){
+  //     return <h1 className="text-center text-lg text-red-500">{optVats}</h1>
+  //   }    
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
+  // }
 
   if(!expenses || expenses.length <= 0){
     return (
@@ -213,14 +217,7 @@ export default async function Page() {
                   caja chica o proveedor desde esta
                   seccion a un determinado proyecto"
             title="Gastos">
-              <ButtonNew token={token} user={user._id} optCostCenter={optCostCenter} 
-                  optProviders={optProviders} optResponsibles={optResponsibles}
-                  optProjects={optProjects} optConditions={optConditions}
-                  optCategories={optCategories} optTypes={optTypes} reports={reports}
-                  optReports={optReports} idLabour={labour} idTicket={ticket}
-                  optCostCenterDeductible={optCostCenter} optVats={optVats}
-                  optProvidersSAT={optProvidersSAT}
-              />
+              <ButtonNew token={token} user={user} />
           </WithOut>
         </div>
       </>
@@ -229,32 +226,31 @@ export default async function Page() {
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 
-  let reportsProject: ReportByProject[];
-  try {
-    reportsProject = await GetCostsGroupByProject(token);
-    //console.log('reports projects page => ', reportsProject);
-    if(typeof(reportsProject)==='string'){
-      return <h1>Error al consultar costos por proyecto!!</h1>
-    }
-  } catch (error) {
-    return <h1>Error al consultar costos por proyecto!!</h1>
-  }
+  // let reportsProject: ReportByProject[];
+  // try {
+  //   reportsProject = await GetCostsGroupByProject(token);
+  //   //console.log('reports projects page => ', reportsProject);
+  //   if(typeof(reportsProject)==='string'){
+  //     return <h1>Error al consultar costos por proyecto!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por proyecto!!</h1>
+  // }
 
-  let costTypes: CostGroupByType[];
-  try {
-    costTypes = await GetCostsGroupByType(token);
-    //console.log('reports projects page => ', costTypes);
-    if(typeof(costTypes)==='string'){
-      return <h1>Error al consultar costos por tipo!!</h1>
-    }
-  } catch (error) {
-    return <h1>Error al consultar costos por tipo!!</h1>
-  }
+  // let costTypes: CostGroupByType[];
+  // try {
+  //   costTypes = await GetCostsGroupByType(token);
+  //   //console.log('reports projects page => ', costTypes);
+  //   if(typeof(costTypes)==='string'){
+  //     return <h1>Error al consultar costos por tipo!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por tipo!!</h1>
+  // }
 
   let costCostoCenter: ReportByCostcenter[] = [];
   try {
     costCostoCenter = await GetCostsGroupByCostoCenterConcept(token);
-    //console.log('reports projects page => ', costCostoCenter);
     if(typeof(costCostoCenter)==='string'){
       return <h1>Error al consultar costos por centro de costos!!</h1>
     }
@@ -262,12 +258,9 @@ export default async function Page() {
     return <h1>Error al consultar costos por centro de costos!!</h1>
   }
 
-  //console.log('res cost center concept => ', costCostoCenter);
-
   let costCostoCenterCategory: ReportByCostcenterCategory[] = [];
   try {
     costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
-    //console.log('reports projects page => ', costCostoCenter);
     if(typeof(costCostoCenter)==='string'){
       return <h1>Error al consultar costos por centro de costos!!</h1>
     }
@@ -276,31 +269,23 @@ export default async function Page() {
   }
   //console.log('res costo center category => ', costCostoCenterCategory);
 
-  let reportProjectOnly: ReportCostsByProjectOnly[] = [];
-  try {
-    reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
-    //console.log('reports projects page => ', costCostoCenter);
-    if(typeof(reportProjectOnly)==='string'){
-      return <h1>Error al consultar costos por proyecto!!</h1>
-    }
-  } catch (error) {
-    return <h1>Error al consultar costos por proyecto!!</h1>
-  }
+  // let reportProjectOnly: ReportCostsByProjectOnly[] = [];
+  // try {
+  //   reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
+  //   //console.log('reports projects page => ', costCostoCenter);
+  //   if(typeof(reportProjectOnly)==='string'){
+  //     return <h1>Error al consultar costos por proyecto!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por proyecto!!</h1>
+  // }
 
   return(
     <>
       <Navigation user={user} />
-      <ContainerClient data={table} expenses={expenses} idLabour={labour} idTicket={ticket}
-        optCategories={optCategories} optCategoriesFilter={optCategoriesFilter} optConditions={optConditions}
-        optConditionsFilter={optConditionsFilter} optCostCenter={optCostCenter} 
-        optCostCenterDeductible={optCostCenter} optCostCenterFilter={optCostCenterFilter}
-        optProjectFilter={optProjectFilter} optProjects={optProjects} optProviders={optProviders}
-        optReports={optReports} optReportsFilter={optReportsFilter} optResponsibles={optResponsibles}
-        optTypeFilter={optTypeFilter} optTypes={optTypes} reports={reports} optVats={optVats} 
-        token={token} user={user} reportProjects={reportsProject} costsTypes={costTypes}
-        idValidado={idValidado} costCostoCenter={costCostoCenter} costCostoCenterCategory={costCostoCenterCategory} 
-        isViewReports={isViewReports} reportCostProjectOnly={reportProjectOnly} 
-        optProvidersSAT={optProvidersSAT}  />
+      <ContainerClient data={table} expenses={expenses}
+        token={token} user={user} costCostoCenter={costCostoCenter} 
+        costCostoCenterCategory={costCostoCenterCategory} isViewReports={isViewReports} />
     </>
   )
 }
