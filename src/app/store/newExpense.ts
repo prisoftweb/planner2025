@@ -243,6 +243,8 @@ interface ActionsOptions {
   updateProjects: (proj: Options[]) => void,
   updateProviders: (provs: Options[]) => void,
   updateProvidersSAT: (provs: Options[]) => void,
+  addProvider: (prov: Options) => void,
+  addProviderSat: (prov: Options) => void,
   updateResponsibles: (resp: Options[]) => void,
   updateTypes: (typs: Options[]) => void,
   updateVats: (vas: Options[]) => void,
@@ -275,6 +277,14 @@ export const useOptionsExpense = create<OptionsExpenseState & ActionsOptions >((
   updateProvidersSAT: (provs: Options[]) => set(state => ({
     ...state,
     providersSAT: provs,
+  })),
+  addProvider: (prov: Options) => set(state => ({
+    ...state,
+    providers: [...state.providers, prov],
+  })),
+  addProviderSat: (prov: Options) => set(state => ({
+    ...state,
+    providersSAT: [...state.providersSAT, prov],
   })),
   updateResponsibles: (resp: Options[]) => set(state => ({
     ...state,

@@ -75,8 +75,12 @@ export default function AddProvider({token, setShowForm, addProv}:
               label: res.name,
               value: res._id
             }
+            const tradeOption: Options = {
+              label: res.tradename || name,
+              value: res._id
+            }
             console.log('new provider => ', option);
-            addProv(option);
+            addProv(option, tradeOption);
             setShowForm(false);
           }
         } catch (error) {

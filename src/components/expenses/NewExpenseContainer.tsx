@@ -68,7 +68,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
     }),
   }
 
-  console.log('selectice => ', optSelectize);
+  //console.log('selectice => ', optSelectize);
 
   const viewSelectProject: JSX.Element = indexStepper === 0 || projects.length===0 ? <></> : (
     <Select
