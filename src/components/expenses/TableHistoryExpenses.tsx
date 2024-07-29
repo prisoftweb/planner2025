@@ -16,15 +16,10 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 
 export default function TableHistoryExpenses({data, token, expenses, 
-                            optCategories, optConditions, optTypes, 
-                            optProjects, optReports, isFilter, setIsFilter, 
-                          optCostCenterFilter, isViewReports}:
+                            isFilter, setIsFilter, isViewReports}:
                         {data:ExpensesTable[], token:string, 
-                        optCategories:Options[], optTypes:Options[], 
-                        optConditions:Options[], expenses:Expense[], 
-                        optReports:Options[], optProjects:Options[], 
-                        isFilter:boolean, setIsFilter:Function, 
-                        optCostCenterFilter:Options[], isViewReports: boolean}){
+                        expenses:Expense[], isFilter:boolean, setIsFilter:Function, 
+                        isViewReports: boolean}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -274,29 +269,13 @@ export default function TableHistoryExpenses({data, token, expenses,
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
     }else{
       if(exp.costocenter){
-        // if(typeof(exp.costocenter)==='string'){
-        //   if(costcenters.includes(exp.costocenter)){
-        //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-        //   }
-        // }else{
-        //   // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
-        //   //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-        //   // }
-        //   if(costcenters.includes(exp.costocenter.category)){
-        //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-        //   }
-        // }
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           }
         }else{
-          if(costcenters.some((cc) => cc === exp.costocenter.concept._id)){
+          if(costcenters.some((cc) => cc === (exp.costocenter._id + '/' + exp.costocenter.concept._id))){
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-          }else{
-            // console.log('elseee');
-            // console.log('concept id => ', exp.costocenter.concept._id);
-            // console.log('all cost centers  => ', costcenters);
           }
         }
       }
@@ -415,12 +394,9 @@ export default function TableHistoryExpenses({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-        {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
-                        optTypes={optTypes} optConditions={optConditions} 
-                        FilterData={filterData} maxAmount={maxAmount} 
-                        optProjects={optProjects} optReports={optReports}
-                        optCostCenterFilter={optCostCenterFilter} minAmount={minAmount}
-                        expensesFiltered={filteredExpenses} isViewReports={isViewReports} />}
+        {isFilter && <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
+                        minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
+                      />}
       </div>
       {view}
     </>

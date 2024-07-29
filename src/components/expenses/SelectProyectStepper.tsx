@@ -7,10 +7,13 @@ import { useState } from "react";
 import { Options } from "@/interfaces/Common";
 
 import { ReportParse } from "@/interfaces/Reports";
+import { useOptionsExpense } from "@/app/store/newExpense";
+import { UsrBack } from "@/interfaces/User";
+//import { GetReportsMin, GetReportsByUserMin } from "@/app/api/routeReports";
 
-export default function SelectProjectStepper({reports, optReports}: 
-                                {reports:ReportParse[], optReports:Options[]}){
+export default function SelectProjectStepper(){
 
+  const {reports, reportsOptions, updateReports, updateReportsOptions} = useOptionsExpense();
   const [filtered, setFiltered] = useState<ReportParse[]>(reports);
 
   const DropdownIndicator = (props: any) => {
@@ -37,18 +40,25 @@ export default function SelectProjectStepper({reports, optReports}:
   //   //console.log(filter);
   // }
 
+  if(reports.length > 0 && filtered.length===0){
+    setFiltered(reports);
+  }
+
   const filterReports = (value: string) => {
     const filter = reports.filter((repor) => repor.name.toLowerCase().includes(value.toLowerCase()));
     setFiltered(filter);
     //console.log(filter);
   }
 
+  //console.log('reps opt => ', reportsOptions);
+
   return (
   <>
-    <div className="mt-3">
+    {reports.length > 0 && reportsOptions.length > 0? (
+      <div className="mt-3">
       <Select
         className='w-full' 
-        options={optReports}
+        options={reportsOptions}
         maxMenuHeight={250}
         components={{
           DropdownIndicator
@@ -65,6 +75,7 @@ export default function SelectProjectStepper({reports, optReports}:
           ))}
       </div>
     </div>
+    ): <></>}
   </>)
 }
 

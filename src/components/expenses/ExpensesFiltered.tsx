@@ -17,33 +17,41 @@ import ReportCostsByFilter from "../ReportCostsByFilter"
 
 import { useOptionsExpense } from "@/app/store/newExpense"
 
-export default function Filtering({showForm, optCategories, optTypes, 
-                      optConditions, FilterData, maxAmount, minAmount, 
-                      optProjects, optReports, optCostCenterFilter, expensesFiltered, 
-                      isViewReports }: 
-                    {showForm:Function, optCategories: Options[],
-                      optTypes: Options[], optConditions: Options[],
-                      FilterData:Function, maxAmount:number, 
-                      optProjects:Options[], optReports:Options[], 
-                      optCostCenterFilter:Options[], minAmount:number, 
-                      expensesFiltered: Expense[], isViewReports: boolean}){
-  
-  const [types, setTypes] = useState<string[]>([optTypes[0].value]);
-  const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
-  const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
-  const [projects, setProjects] = useState<string[]>([optProjects[0].value]);
-  const [reports, setReports] = useState<string[]>([optReports[0].value]);
+export default function Filtering({showForm, FilterData, maxAmount, minAmount, 
+                      expensesFiltered, isViewReports, }: 
+                    {showForm:Function, FilterData:Function, maxAmount:number, 
+                      minAmount:number, expensesFiltered: Expense[], isViewReports: boolean}){
+
+  const {categories, conditions, costCenterOpt, projects, reportsOptions, types} = useOptionsExpense();
+
+  const [typesSel, setTypesSel] = useState<string[]>(['all']);
+  const [categoriesSel, setCategoriesSel] = useState<string[]>(['all']);
+  const [conditionsSel, setConditionsSel] = useState<string[]>(['all']);
+  const [projectsSel, setProjectsSel] = useState<string[]>(['all']);
+  const [reportsSel, setReportsSel] = useState<string[]>(['all']);
   const [heightPage, setHeightPage] = useState<number>(900);
-  const [costcenters, setCostCenters] = useState<string[]>([optCostCenterFilter[0].value]);
+  const [costcentersSel, setCostCentersSel] = useState<string[]>(['all']);
   const [isGeneratedReport, setIsGeneratedReport] = useState<boolean>(false);
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
-  
+
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
     new DateObject().setDay(4).add(1, "month")
   ])
+
+  // console.log('expenses no filtered => ', expenses);
+  // const expenseM = expenses.reduce((previous, current) => {
+  //   return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
+  // });
+  // const expenseMin = expenses.reduce((previous, current) => {
+  //   return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
+  // });
+  //setMaxAmount(expenseM.cost?.subtotal);
+  //setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
+  // const minA = expenseM.cost?.subtotal;
+  // const maxA = expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0;
 
   const [minValue, set_minValue] = useState(minAmount);
   const [maxValue, set_maxValue] = useState(maxAmount);
@@ -62,27 +70,27 @@ export default function Filtering({showForm, optCategories, optTypes,
   }
 
   const handleConditions = (value: string[]) => {
-    setConditions(value);
+    setConditionsSel(value);
   }
 
   const handleTypes = (value: string[]) => {
-    setTypes(value);
+    setTypesSel(value);
   }
 
   const handleCategories = (value: string[]) => {
-    setCategories(value);
+    setCategoriesSel(value);
   }
 
   const handleReports = (value: string[]) => {
-    setReports(value);
+    setReportsSel(value);
   }
 
   const handleProjects = (value: string[]) => {
-    setProjects(value);
+    setProjectsSel(value);
   }
 
   const handleCostCenters = (value: string[]) => {
-    setCostCenters(value);
+    setCostCentersSel(value);
   }
 
   //const {costCenter, providers, responsibles, vats} = useOptionsExpense();
@@ -112,18 +120,24 @@ export default function Filtering({showForm, optCategories, optTypes,
   }, [values]);
 
   useEffect(() => {
-    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, 
-      firstDate?.getTime(), secondDate?.getTime(), costcenters);
-  }, [ categories, types, conditions, minValue, maxValue, firstDate, secondDate, projects, reports, costcenters]);
+    FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
+      firstDate?.getTime(), secondDate?.getTime(), costcentersSel);
+  }, [ categoriesSel, typesSel, conditionsSel, minValue, maxValue, firstDate, secondDate, 
+        projectsSel, reportsSel, costcentersSel]);
 
   useEffect (() => {
-    FilterData(conditions, types, categories, minValue, maxValue, reports, projects, 
-      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcenters);
+    FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
+      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcentersSel);
   }, []);
 
   // useEffect(() => {
   //   FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
   // }, [firstDate, secondDate]);
+
+  const allArray = [{
+    label: 'TODOS',
+    value: 'all'
+  }];
 
   return(
     <>
@@ -148,27 +162,27 @@ export default function Filtering({showForm, optCategories, optTypes,
         
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          <SelectMultipleReact index={0} opts={optConditions} setValue={handleConditions} />
+          <SelectMultipleReact index={0} opts={allArray.concat(conditions)} setValue={handleConditions} />
         </div>
         <div className="">
           <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-          <SelectMultipleReact index={0} opts={optTypes} setValue={handleTypes} />
+          <SelectMultipleReact index={0} opts={allArray.concat(types)} setValue={handleTypes} />
         </div>
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectMultipleReact index={0} opts={optCategories} setValue={handleCategories} />
+          <SelectMultipleReact index={0} opts={allArray.concat(categories)} setValue={handleCategories} />
         </div>
         <div>
           <Label htmlFor="reports"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Reporte</p></Label>
-          <SelectMultipleReact index={0} opts={optReports} setValue={handleReports} />
+          <SelectMultipleReact index={0} opts={allArray.concat(reportsOptions)} setValue={handleReports} />
         </div>
         <div>
           <Label htmlFor="projects"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyectos</p></Label>
-          <SelectMultipleReact index={0} opts={optProjects} setValue={handleProjects} />
+          <SelectMultipleReact index={0} opts={allArray.concat(projects)} setValue={handleProjects} />
         </div>
         <div>
           <Label htmlFor="costcenters"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-          <SelectMultipleReact index={0} opts={optCostCenterFilter} setValue={handleCostCenters} />
+          <SelectMultipleReact index={0} opts={allArray.concat(costCenterOpt)} setValue={handleCostCenters} />
         </div>
         {/* <div className="pt-9"> */}
         <div className="pt-0">

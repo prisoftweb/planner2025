@@ -19,14 +19,9 @@ import { CreateCostWithFiles } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
 import { getSupplierCreditProv } from "@/app/functions/CostsFunctions"
 
-export default function DataStepper({token, user, optCostCenter, optProviders, 
-                                      optResponsibles, optCategories, optTypes, 
-                                      optVats, optProvidersSAT
-                                    }: 
-                                  {token:string, user:string, optCostCenter:Options[],
-                                    optProviders:Options[], optResponsibles:Options[],
-                                    optCategories:Options[], optTypes:Options[], 
-                                    optVats:Options[], optProvidersSAT:Options[] }){
+import { useOptionsExpense } from "@/app/store/newExpense";
+
+export default function DataStepper({token, user}: {token:string, user:string }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 
@@ -35,6 +30,8 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     report, condition, category, isPettyCash, concept,
     updateIsCard, updateCostCenter, updateHaveDiscount, 
     updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, total} = useNewExpense();
+
+  const {costCenterOpt, providers, providersSAT, responsibles, categories, types, vats} = useOptionsExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -81,10 +78,10 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(date!== ''? date: d);
   //const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
-  const [typeCFDIS, setTypeCFDIS] = useState<string>(optTypes[0].value);
-  const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: optProviders[0].value);
-  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: optResponsibles[0].value);
-  const [categoryS, setCategoryS] = useState<string>(optCategories[0].value);
+  const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
+  const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: responsibles[0].value);
+  const [categoryS, setCategoryS] = useState<string>(categories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const refRequest = useRef(true);
@@ -94,14 +91,14 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   //const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
   //actualizacion juntar estos 2 estados en un objeto
-  const [idVat, setIdVat] = useState<string>(optVats[0].value);
+  const [idVat, setIdVat] = useState<string>(vats[0].value);
   const [vatValue, setVatValue] = useState<string>('0');
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [totalExpense, setTotalExpense] = useState<string>(total);
   
   const updateIva = (idValue: string) => {
     try {
-      const foundVat = optVats.find((vat) => vat.value === idValue);
+      const foundVat = vats.find((vat) => vat.value === idValue);
       const vatvalue = foundVat?.label || '0';
       let operation;
       let t = 0;
@@ -217,7 +214,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   useEffect(() => {
     if(costCenter===''){
-      handleConstCenter(optCostCenter[0].value);
+      handleConstCenter(costCenterOpt[0].value);
     }
   }, []);
 
@@ -363,7 +360,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   }
 
   const addProvider = (newProvider:Options) => {
-    optProviders.push(newProvider);
+    //optProviders.push(newProvider);
     //console.log('optProviders => ', optProviders);
     setProvider(newProvider.value);
     //console.log('prov length => ', optProviders.length)
@@ -372,7 +369,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   let indexProvider = 0;
   if(provider !== ''){
-    optProviders.map((opt, index:number) => {
+    providers.map((opt, index:number) => {
       if(opt.value === proveedor){
         indexProvider = index;
       }
@@ -381,7 +378,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   let indexProviderSAT = 0;
   if(provider !== ''){
-    optProviders.map((opt, index:number) => {
+    providersSAT.map((opt, index:number) => {
       if(opt.value === proveedor){
         indexProviderSAT = index;
       }
@@ -405,7 +402,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const viewProvider = (
     <div className="flex gap-x-2 items-center">
-      <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
+      <SelectReact index={indexProvider} opts={providers} setValue={handleProvider} />
       <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
       onClick={() => setShowProvider(true)} />
     </div>
@@ -413,7 +410,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   const viewProviderSAT = (
     <div className="flex gap-x-2 items-center">
-      <SelectReact index={indexProviderSAT} opts={optProvidersSAT} setValue={handleProvider} />
+      <SelectReact index={indexProviderSAT} opts={providersSAT} setValue={handleProvider} />
       <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
       onClick={() => setShowProvider(true)} />
     </div>
@@ -421,7 +418,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   let indexCate = 0;
   if(categoryS !== ''){
-    optCategories.map((opt, index:number) => {
+    categories.map((opt, index:number) => {
       if(opt.value === category){
         indexCate = index;
       }
@@ -430,7 +427,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
 
   let indexTypeCFDI = 0;
   if(typeCFDIS !== ''){
-    optTypes.map((opt, index:number) => {
+    types.map((opt, index:number) => {
       if(opt.value === typeCFDI){
         indexTypeCFDI = index;
       }
@@ -451,11 +448,11 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
     <>
       <div>
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact index={indexCate} opts={optCategories} setValue={handleCategory} />
+        <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
       </div>
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
-        <SelectReact index={indexTypeCFDI} opts={optTypes} setValue={handleTypeCfdi} />
+        <SelectReact index={indexTypeCFDI} opts={types} setValue={handleTypeCfdi} />
       </div>
     </>
   );
@@ -464,7 +461,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   if(costCenter !== ''){
     //console.log('costCenter => ', costCenter);
     //console.log('concept => ', concept);
-    optCostCenter.map((opt, index:number) => {
+    costCenterOpt.map((opt, index:number) => {
       if(opt.value === costCenter + '/' + concept){
         //console.log('opt => ', opt);
         indexCC = index;
@@ -487,13 +484,13 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   const viewCC = (
     <div className=" col-span-1 md:col-span-3">
       <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-      <SelectReact index={indexCC} opts={optCostCenter} setValue={handleConstCenter} />
+      <SelectReact index={indexCC} opts={costCenterOpt} setValue={handleConstCenter} />
     </div>
   );
 
   let indexResp = 0;
   if(responsibleS !== ''){
-    optResponsibles.map((opt, index:number) => {
+    responsibles.map((opt, index:number) => {
       if(opt.value === responsibleS){
         indexResp = index;
       }
@@ -503,13 +500,13 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
   let viewResponsible = (
     <div>
       <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-      <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+      <SelectReact index={indexResp} opts={responsibles} setValue={setResponsibleS} />
     </div>
   );
 
   const handleTypeCategoryCFDI = (catType: string) => {
     if(catType !== ''){
-      const found = optTypes.find((type) => type.value === catType);
+      const found = types.find((type) => type.value === catType);
       if(found){
         if(found.label.toLowerCase().includes('egreso')){
           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
@@ -727,7 +724,7 @@ export default function DataStepper({token, user, optCostCenter, optProviders,
                       <p>{formik.errors.vat}</p>
                   </div>
               ) : null}
-              <SelectReact index={0} opts={optVats} setValue={handleIdVat} />
+              <SelectReact index={0} opts={vats} setValue={handleIdVat} />
             </div>
           </div>
           <div>

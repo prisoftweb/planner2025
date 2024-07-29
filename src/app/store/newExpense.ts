@@ -1,6 +1,7 @@
 import {create} from 'zustand'
 import { OneExpense } from '@/interfaces/Expenses'
 import { Options } from '@/interfaces/Common'
+import { ReportParse } from '@/interfaces/Reports'
 
 interface NewExpenseState {
   costCenter: string,
@@ -208,27 +209,31 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
 }))
 
 interface OptionsExpenseState {
-  costCenter: Options[],
+  costCenterOpt: Options[],
   projects: Options[],
-  providers: Options[], 
+  providers: Options[],
+  providersSAT: Options[], 
   responsibles: Options[],
-  reports: Options[],
+  reportsOptions: Options[],
   categories: Options[],
   types: Options[],
   conditions: Options[],
   vats: Options[],
+  reports: ReportParse[]
 }
 
 const optionsExpenseInitial: OptionsExpenseState = {
   categories: [],
   conditions: [],
-  costCenter: [],
+  costCenterOpt: [],
   projects: [],
   providers: [],
-  reports: [],
+  reportsOptions: [],
   responsibles: [],
   types: [],
   vats: [],
+  providersSAT: [],
+  reports: [],
 }
 
 interface ActionsOptions {
@@ -237,10 +242,12 @@ interface ActionsOptions {
   updateCostC: (costsC: Options[]) => void,
   updateProjects: (proj: Options[]) => void,
   updateProviders: (provs: Options[]) => void,
+  updateProvidersSAT: (provs: Options[]) => void,
   updateResponsibles: (resp: Options[]) => void,
   updateTypes: (typs: Options[]) => void,
   updateVats: (vas: Options[]) => void,
-  updateReports: (reps: Options[]) => void,
+  updateReportsOptions: (reps: Options[]) => void,
+  updateReports: (reps: ReportParse[]) => void,
 }
 
 export const useOptionsExpense = create<OptionsExpenseState & ActionsOptions >((set) => ({
@@ -255,7 +262,7 @@ export const useOptionsExpense = create<OptionsExpenseState & ActionsOptions >((
   })),
   updateCostC: (costsC: Options[]) => set(state => ({
     ...state,
-    costCenter: costsC,
+    costCenterOpt: costsC,
   })),
   updateProjects: (proj: Options[]) => set(state => ({
     ...state,
@@ -264,6 +271,10 @@ export const useOptionsExpense = create<OptionsExpenseState & ActionsOptions >((
   updateProviders: (provs: Options[]) => set(state => ({
     ...state,
     providers: provs,
+  })),
+  updateProvidersSAT: (provs: Options[]) => set(state => ({
+    ...state,
+    providersSAT: provs,
   })),
   updateResponsibles: (resp: Options[]) => set(state => ({
     ...state,
@@ -275,9 +286,13 @@ export const useOptionsExpense = create<OptionsExpenseState & ActionsOptions >((
   })),
   updateVats: (vts: Options[]) => set(state => ({
     ...state,
-    vatss: vts,
+    vats: vts,
   })),
-  updateReports: (reps: Options[]) => set(state => ({
+  updateReportsOptions: (reps: Options[]) => set(state => ({
+    ...state,
+    reportsOptions: reps,
+  })),
+  updateReports: (reps: ReportParse[]) => set(state => ({
     ...state,
     reports: reps,
   })),

@@ -20,16 +20,11 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 //import Button from "../Button";
 
 export default function TableExpenses({data, token, expenses, 
-                            optCategories, optConditions, optTypes, 
-                            optProjects, optReports, handleExpensesSelected,
-                          optCostCenterFilter, idValidado, user, isFilter, setIsFilter, 
+                            handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
                         isViewReports }:
-                        {data:ExpensesTable[], token:string, 
-                        optCategories:Options[], optTypes:Options[], 
-                        optConditions:Options[], expenses:Expense[], 
-                        optReports:Options[], optProjects:Options[], 
+                        {data:ExpensesTable[], token:string, expenses:Expense[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
-                        optCostCenterFilter:Options[], idValidado: string, handleExpensesSelected:Function, 
+                        idValidado: string, handleExpensesSelected:Function, 
                         isViewReports: boolean}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
@@ -376,6 +371,7 @@ export default function TableExpenses({data, token, expenses,
     if(costcenters.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
     }else{
+      //console.log('cost center filter => ', costcenters);
       if(exp.costocenter){
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
@@ -386,13 +382,10 @@ export default function TableExpenses({data, token, expenses,
           //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
           // }
           // if(costcenters.includes(exp.costocenter.concept.id)){
-          if(costcenters.some((cc) => cc === exp.costocenter.concept._id)){
+          //console.log('concept cc => ', exp.costocenter.concept._id);
+          if(costcenters.some((cc) => cc === (exp.costocenter._id + '/' + exp.costocenter.concept._id))){
             //console.log('entrooo???');
             return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-          }else{
-            // console.log('elseee');
-            // console.log('concept id => ', exp.costocenter.concept._id);
-            // console.log('all cost centers  => ', costcenters);
           }
         }
       }
@@ -515,12 +508,10 @@ export default function TableExpenses({data, token, expenses,
         {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
           className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
         /> */}
-          {isFilter && <Filtering showForm={handleIsFilter} optCategories={optCategories} 
-                          optTypes={optTypes} optConditions={optConditions} 
+          {isFilter && <Filtering showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
-                          optProjects={optProjects} optReports={optReports}
-                          optCostCenterFilter={optCostCenterFilter} minAmount={minAmount}
-                          expensesFiltered={expensesFiltered} isViewReports={isViewReports} />}
+                          minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
+                        />}
       </div>
       {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
       {view}

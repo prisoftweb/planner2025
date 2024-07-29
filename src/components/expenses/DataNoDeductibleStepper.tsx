@@ -17,11 +17,10 @@ import { showToastMessage, showToastMessageError } from "../Alert"
 import { CreateCostWithFiles } from "@/app/api/routeCost"
 import CurrencyInput from 'react-currency-input-field';
 import Input from "../Input";
+import { useOptionsExpense } from "@/app/store/newExpense";
 
-export default function DataNoDeductibleStepper({token, user, optCostCenter, optResponsibles,
-                                                 idLabour, idTicket, idVat }: 
-                                  {token:string, user:string, optCostCenter:Options[],
-                                    optResponsibles:Options[], idLabour:string, 
+export default function DataNoDeductibleStepper({token, user, idLabour, idTicket, idVat }: 
+                                  {token:string, user:string, idLabour:string, 
                                     idTicket:string, idVat:string}){
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
@@ -29,6 +28,8 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     reset, updateRefresh, updateCategory, isCard, isPettyCash, concept, 
     updateIsCard, updateCostCenter, total} = useNewExpense();
 
+  const {costCenterOpt, responsibles} = useOptionsExpense();
+  
   const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
   //const [categoryCostCenter, setCategoryCostCenter] = useState<string>(costCenter===''?  )
   //const [totalExpense, setTotalExpense] = useState<string>(total);
@@ -42,7 +43,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     //console.log('cad 1 => ', c1);
     //console.log('cad 2 => ', c2);
     updateCostCenter(c1, c2);
-    const cc = optCostCenter.find((costC) => costC.value === value);
+    const cc = costCenterOpt.find((costC) => costC.value === value);
     if(cc){
       if(cc.label.toLowerCase().includes('mano de obra')){
         //console.log('idlabour ');
@@ -57,7 +58,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   }
   
   if(concept==='' || costCenter === ''){
-    handleCostCenter(optCostCenter[0].value);
+    handleCostCenter(costCenterOpt[0].value);
   }
 
   const formik = useFormik({
@@ -74,7 +75,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     onSubmit: async (valores) => {            
       const {description, amount} = valores;
       let type = 'OTROS';
-      const cc = optCostCenter.find((costc) => costc.value === (costCenter + '/' + concept));
+      const cc = costCenterOpt.find((costc) => costc.value === (costCenter + '/' + concept));
       if(cc?.label.toLowerCase().includes('mano de obra')){
         type = 'MANO DE OBRA';
       }
@@ -97,7 +98,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
   //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
-  const [responsibleS, setResponsibleS] = useState<string>(optResponsibles[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsibles[0].value);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -127,7 +128,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     refRequest.current = false;
     let type = 'OTROS';
     //console.log('cost center a buscar => ', costcenter);
-    const cc = optCostCenter.find((costc) => costc.value === (costCenter + '/' + concept));
+    const cc = costCenterOpt.find((costc) => costc.value === (costCenter + '/' + concept));
     //console.log('cc find save', cc);
     if(cc?.label.toLowerCase().includes('mano de obra')){
       //console.log('entro aqui => ', cc?.label.toLowerCase());
@@ -280,7 +281,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
 
 
   useEffect(() => {
-    handleCostCenter(optCostCenter[0].value);
+    handleCostCenter(costCenterOpt[0].value);
     // let indexCC = 0;
     // if(costCenter !== ''){
     //   optCostCenter.map((opt, index:number) => {
@@ -295,7 +296,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     
     let indexResp = 0;
     if(responsibleS !== ''){
-      optResponsibles.map((opt, index:number) => {
+      responsibles.map((opt, index:number) => {
         if(opt.value === responsible){
           indexResp = index;
         }
@@ -305,7 +306,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
     setView(<>
       <div className="col-span-1 sm:col-span-2">
         <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-        <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+        <SelectReact index={indexResp} opts={responsibles} setValue={setResponsibleS} />
       </div>
     </>)
 
@@ -332,7 +333,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       
       let indexResp = 0;
       if(responsibleS !== ''){
-        optResponsibles.map((opt, index:number) => {
+        responsibles.map((opt, index:number) => {
           if(opt.value === responsible){
             indexResp = index;
           }
@@ -342,7 +343,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
       setView(<>
         <div className="col-span-1 sm:col-span-2">
           <Label htmlFor="responsible"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Responsable</p></Label>
-          <SelectReact index={indexResp} opts={optResponsibles} setValue={setResponsibleS} />
+          <SelectReact index={indexResp} opts={responsibles} setValue={setResponsibleS} />
         </div>
       </>)
 
@@ -357,7 +358,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   let viewCC = <></>;
   let indexCC = 0;
   if(costCenter !== ''){
-    optCostCenter.map((opt, index:number) => {
+    costCenterOpt.map((opt, index:number) => {
       if(opt.value === (costCenter + '/' + concept)){
         indexCC = index;
       }
@@ -366,7 +367,7 @@ export default function DataNoDeductibleStepper({token, user, optCostCenter, opt
   viewCC = (
     <div className=" col-span-1 md:col-span-3">
       <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-      <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
+      <SelectReact index={indexCC} opts={costCenterOpt} setValue={handleCostCenter} />
     </div>
   );
 
