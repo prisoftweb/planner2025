@@ -271,7 +271,7 @@ export default function ContainerClient({data, token, expenses,
                           <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
                         ) }
                     </PDFDownloadLink> */}
-                    <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={costCostoCenter} />} 
+                    {/* <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={costCostoCenter} />} 
                         fileName={`InformeCostoporConcepto`} >
                       {({loading, url, error, blob}) => 
                         loading? (
@@ -279,8 +279,8 @@ export default function ContainerClient({data, token, expenses,
                         ) : (
                           <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
                         ) }
-                    </PDFDownloadLink>
-                    <PDFDownloadLink document={<ReportCostByCategory costsCostCenter={costCostoCenterCategory} />} 
+                    </PDFDownloadLink> */}
+                    {/* <PDFDownloadLink document={<ReportCostByCategory costsCostCenter={costCostoCenterCategory} />} 
                         fileName={`InformeCostoporCategoria`} >
                       {({loading, url, error, blob}) => 
                         loading? (
@@ -288,7 +288,7 @@ export default function ContainerClient({data, token, expenses,
                         ) : (
                           <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
                         ) }
-                    </PDFDownloadLink>
+                    </PDFDownloadLink> */}
                     {/* <PDFDownloadLink document={<ReportCostsByProjectOnlyPDF reports={reportCostProjectOnly} />} 
                         fileName={`InformeCostosAgrupadosPorProyecto`} >
                       {({loading, url, error, blob}) => 

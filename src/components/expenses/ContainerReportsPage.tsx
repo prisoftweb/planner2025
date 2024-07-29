@@ -4,6 +4,8 @@ import TabReports from "./TabReports"
 import { useState } from "react"
 import TableReportByProject from "./TableReportByProject";
 import TableReportByType from "./TableReportByType";
+import TableReportByCategory from "./TableReportByCategory";
+import TableReportByConcept from "./TableReportByConcept";
 
 export default function ContainerReportsPage({token}: {token:string}){
   
@@ -20,6 +22,12 @@ export default function ContainerReportsPage({token}: {token:string}){
     break;
     case 1:
       table =  <TableReportByType token={token} />;
+    break;
+    case 2:
+      table =  <TableReportByCategory token={token} />;
+    break;
+    case 3:
+      table = <TableReportByConcept token={token} />
     break;
   }
 
