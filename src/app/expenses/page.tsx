@@ -249,24 +249,24 @@ export default async function Page() {
   // }
 
   let costCostoCenter: ReportByCostcenter[] = [];
-  try {
-    costCostoCenter = await GetCostsGroupByCostoCenterConcept(token);
-    if(typeof(costCostoCenter)==='string'){
-      return <h1>Error al consultar costos por centro de costos!!</h1>
-    }
-  } catch (error) {
-    return <h1>Error al consultar costos por centro de costos!!</h1>
-  }
+  // try {
+  //   costCostoCenter = await GetCostsGroupByCostoCenterConcept(token);
+  //   if(typeof(costCostoCenter)==='string'){
+  //     return <h1>Error al consultar costos por centro de costos!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por centro de costos!!</h1>
+  // }
 
   let costCostoCenterCategory: ReportByCostcenterCategory[] = [];
-  try {
-    costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
-    if(typeof(costCostoCenter)==='string'){
-      return <h1>Error al consultar costos por centro de costos!!</h1>
-    }
-  } catch (error) {
-    return <h1>Error al consultar costos por centro de costos!!</h1>
-  }
+  // try {
+  //   costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
+  //   if(typeof(costCostoCenter)==='string'){
+  //     return <h1>Error al consultar costos por centro de costos!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por centro de costos!!</h1>
+  // }
   //console.log('res costo center category => ', costCostoCenterCategory);
 
   // let reportProjectOnly: ReportCostsByProjectOnly[] = [];

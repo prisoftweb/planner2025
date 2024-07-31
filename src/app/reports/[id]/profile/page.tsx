@@ -14,7 +14,7 @@ import NavTab from "@/components/reports/NavTab";
 import ReportClient from "@/components/reports/ReportClient";
 import { GetReport, GetReportsLV, updateReport, 
     insertMovementsInReport, getCostByReportMin } from "@/app/api/routeReports";
-import { Report, CostReport } from "@/interfaces/Reports";
+import { Report, CostReport  } from "@/interfaces/Reports";
 //import { Expense } from "@/interfaces/Expenses";
 import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
@@ -45,96 +45,19 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
   }
 
-  // const optReports:Options[] = [];
-  // reports.map((rep) => {
-  //   optReports.push({
-  //     label: rep.name,
-  //     value: rep._id
-  //   });
-  // });
-
-  let optCompanies: Options[] = [];
-  try {
-    optCompanies = await getCompaniesLV(token);
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
-  }
-
-  // let companies: Company[] = [];
+  //let costs:CostReport[] = [];
   // try {
-  //   companies = await getCompanies(token);
+  //   costs = await getCostByReportMin(params.id, token);
+  //   if(typeof(costs)==='string') 
+  //     return <h1 className="text-center text-lg text-red-500">{costs}</h1>
   // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar las compañias</h1>
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
   // }
 
-  // const optCompanies: Options[] = [];
-  // companies.map((company) => {
-  //   optCompanies.push({
-  //     label: company.name,
-  //     value: company._id
-  //   });
-  // });
-
-  let optDepartments: Options[] = [];
-  try {
-    optDepartments = await getDepartmentsLV(token);
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
-  }
-
-  // let departments: Department[] = [];
-  // try {
-  //   departments = await getDepartments(token);
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los departamentos</h1>
-  // }
-
-  // const optDepartments: Options[] = [];
-  // departments.map((department) => {
-  //   optDepartments.push({
-  //     label: department.name,
-  //     value: department._id
-  //   });
-  // });
-
-  let optProjects: Options[] = [];
-  try {
-    optProjects = await getProjectsLV(token);
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos</h1>
-  }
-
-  // const optProjects: Options[] = [];
-  // projects.map((project) => {
-  //   optProjects.push({
-  //     label: project.title,
-  //     value: project._id
-  //   });
-  // });
-
-  let costs:CostReport[] = [];
-  try {
-    costs = await getCostByReportMin(params.id, token);
-    if(typeof(costs)==='string') 
-      return <h1 className="text-center text-lg text-red-500">{costs}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
-  }
-
-  //console.log('costos del reporte!! ', costs);
   let node:(Node | null) = null;
-  // try {
-  //   node = await getNode(token, '666de2aef1ac5120b2982e01');
-  //   if(typeof(node)==='string'){
-  //     return <h1 className="text-lg text-red-500 text-center">{node}</h1>
-  //   }
-  // } catch (error) {
-  //   return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
-  // }
-
+  
   let nodes:(Node[] | null) = null;
   try {
-    //console.log('dept, ', user.department);
     nodes = await getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id);
     if(typeof(nodes)==='string'){
       return <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1>
@@ -183,7 +106,7 @@ export default async function Page({ params }: { params: { id: string }}){
   // if(!node){
   //   return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
   // }
-  
+  console.log('opt reps selectice => ', optReports);
   return(
     <>
       <Navigation user={user} />
@@ -197,9 +120,7 @@ export default async function Page({ params }: { params: { id: string }}){
         </div>
         <NavTab idRep={params.id} tab='1' />
         <ReportClient report={report} token={token} id={params.id} 
-          companies={optCompanies} departments={optDepartments}
-          projects={optProjects} expenses={costs} user={user}
-          node={node}
+          user={user} node={node}
         />
       </div>
     </>

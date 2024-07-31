@@ -6,8 +6,8 @@ import SendReport from "./SendReport"
 import { UsrBack } from "@/interfaces/User"
 import HistoryReportData from "./HistoryReportData"
 
-export default function DataHistoryReports({report, user, costs}:
-                              {report:Report, user:UsrBack, costs:CostReport[] }) {
+export default function DataHistoryReports({report, user, id, token}:
+                              {report:Report, user:UsrBack, id:string, token:string }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
 
@@ -20,8 +20,8 @@ export default function DataHistoryReports({report, user, costs}:
       <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
         style={{'backgroundColor': '#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
-          <ProfileReport report={report} send={handleSend} token=''
-            costs={costs} user={user} />
+          <ProfileReport report={report} send={handleSend} token={token}
+            user={user} id={id} />
         </div>
         <div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>

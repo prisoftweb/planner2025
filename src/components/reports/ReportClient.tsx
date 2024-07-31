@@ -4,18 +4,15 @@ import { useState, useEffect } from "react"
 import NavResponsive from "./NavResponsive"
 import { Options } from "@/interfaces/Common"
 import DataReports from "./DataReports"
-import { Report, CostReport } from "@/interfaces/Reports"
+import { Report, CostReport, ReportMin } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
 //import { Expense } from "@/interfaces/Expenses"
 import { Node } from "@/interfaces/Nodes"
 import { UsrBack } from "@/interfaces/User"
 
-export default function ReportClient({report, token, id, companies, 
-                                departments, projects, expenses, user, 
+export default function ReportClient({report, token, id, user, 
                                 node}: 
                             {report:Report, token:string, id:string, 
-                              departments:Options[], companies:Options[], 
-                              projects:Options[], expenses:CostReport[], 
                               user:UsrBack, node:Node }){
   
   //const [view, setView] = useState<JSX.Element>(<></>)
@@ -29,10 +26,8 @@ export default function ReportClient({report, token, id, companies,
   //                   token={token} report={report} user={user} node={node} />)
   // }, [opt, ])
   let view:JSX.Element = <></>;
-  opt===2? view =(<CostsInReport report={report} costs={expenses} />) : 
-                  view =(<DataReports companies={companies} costs={expenses}
-                              departments={departments} projects={projects} 
-                    token={token} report={report} user={user} node={node} />)
+  opt===2? view =(<CostsInReport id={id} token={token} report={report} />) : 
+                  view =(<DataReports id={id} token={token} report={report} user={user} node={node} />)
   
   const [open, setOpen] = useState<boolean>(false);
   

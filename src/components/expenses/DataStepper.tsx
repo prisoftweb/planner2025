@@ -31,7 +31,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
     updateIsCard, updateCostCenter, updateHaveDiscount, 
     updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, total} = useNewExpense();
 
-  const {costCenterOpt, providers, providersSAT, responsibles, categories, types, vats} = useOptionsExpense();
+  const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
+    vats, addProvider, addProviderSat} = useOptionsExpense();
 
   const formik = useFormik({
     initialValues: {
@@ -359,10 +360,14 @@ export default function DataStepper({token, user}: {token:string, user:string })
     }
   }
 
-  const addProvider = (newProvider:Options) => {
+  const addProv = (newProviderSAT:Options, newProvider:Options) => {
     //optProviders.push(newProvider);
     //console.log('optProviders => ', optProviders);
-    setProvider(newProvider.value);
+    //console.log('new Provider => ', newProvider);
+    //setProvider(newProvider.value);
+    addProvider(newProvider);
+    addProviderSat(newProviderSAT);
+
     //console.log('prov length => ', optProviders.length)
     //setIndexProv(optProviders.length - 1);
   }
@@ -811,7 +816,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
         </div>
       </form> 
       {showProvider && <AddProvider token={token} setShowForm={setShowProvider} 
-                            addProv={addProvider}  />} 
+                            addProv={addProv}  />} 
     </div>
   )
 }

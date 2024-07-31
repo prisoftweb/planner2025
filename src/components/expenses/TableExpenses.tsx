@@ -58,7 +58,7 @@ export default function TableExpenses({data, token, expenses,
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
       cell: ({row}) => (
-        <div className="flex gap-x-2">
+        <div className="flex gap-x-2 justify-center">
           <input type="checkbox" 
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
@@ -68,13 +68,15 @@ export default function TableExpenses({data, token, expenses,
       ),
       enableSorting:false,
       header: ({table}:any) => (
-        <input type="checkbox"
-          className="w-24 cursor-pointer"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
+        <div className="w-8">
+          <input type="checkbox"
+            className="w-24 cursor-pointer"
+            checked={table.getIsAllRowsSelected()}
+            onClick={()=> {
+              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+            }}
+          />
+        </div>
       )
     }),
     columnHelper.accessor('Responsable', {

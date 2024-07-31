@@ -59,14 +59,14 @@ export default async function Page({ params }: { params: { id: string }}){
   //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos</h1>
   // }
 
-  let costs:CostReport[] = [];
-  try {
-    costs = await getCostByReportMin(params.id, token);
-    if(typeof(costs)==='string') 
-      return <h1 className="text-center text-lg text-red-500">{costs}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
-  }
+  // let costs:CostReport[] = [];
+  // try {
+  //   costs = await getCostByReportMin(params.id, token);
+  //   if(typeof(costs)==='string') 
+  //     return <h1 className="text-center text-lg text-red-500">{costs}</h1>
+  // } catch (error) {
+  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
+  // }
 
   return(
     <>
@@ -80,7 +80,7 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={optReports} routePage="reports/history" subpath="" />
         </div>
         <NavTab idRep={params.id} tab='1' />
-        <ReportHistoryClient report={report} expenses={costs} user={user}
+        <ReportHistoryClient report={report} id={params.id} token={token} user={user}
         />
       </div>
     </>

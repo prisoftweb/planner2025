@@ -4,20 +4,20 @@ import { useState } from "react"
 import NavResponsive from "./NavResponsive"
 //import { Options } from "@/interfaces/Common"
 //import DataReports from "./DataReports"
-import { Report, CostReport } from "@/interfaces/Reports"
+import { Report } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
 //import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
 import DataHistoryReports from "./DataHistoryReports"
 
-export default function ReportHistoryClient({report, expenses, user}: 
-                            {report:Report, expenses:CostReport[], user:UsrBack }){
+export default function ReportHistoryClient({report, user, id, token}: 
+                            {report:Report, user:UsrBack, id:string, token:string }){
 
   const [opt, setOpt] = useState<number>(1);
   
   let view:JSX.Element = <></>;
-  opt===2? view =(<CostsInReport report={report} costs={expenses} />) : 
-                  view =(<DataHistoryReports costs={expenses} report={report} user={user} />)
+  opt===2? view =(<CostsInReport report={report} id={id} token={token} />) : 
+                  view =(<DataHistoryReports report={report} user={user} id={id} token={token} />)
 
   const [open, setOpen] = useState<boolean>(false);
   

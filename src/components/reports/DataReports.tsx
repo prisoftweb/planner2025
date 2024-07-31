@@ -8,11 +8,9 @@ import { Node } from "@/interfaces/Nodes"
 //import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
 
-export default function DataReports({companies, departments, projects, token,
-                                 report, user, node, costs}:
-                              {departments:Options[], companies:Options[], 
-                                projects:Options[], token:string, report:Report, 
-                                user:UsrBack, node:Node, costs:CostReport[] }) {
+export default function DataReports({token, report, user, node, id}:
+                              {token:string, report:Report, 
+                                user:UsrBack, node:Node, id:string }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
@@ -31,12 +29,11 @@ export default function DataReports({companies, departments, projects, token,
         style={{'backgroundColor': '#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
           <ProfileReport report={report} send={handleSend} token={token}
-            costs={costs} user={user} />
+            user={user} id={id} />
         </div>
         <div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>
-            <UpdateReport companies={companies} departments={departments} 
-                  projects={projects} token={token} report={report} />
+            <UpdateReport token={token} report={report} />
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 

@@ -9,16 +9,39 @@ import { CostsDataToTableDataMin } from "@/app/functions/ReportsFunctions"
 import DeleteElement from "../DeleteElement"
 import { RemoveCost } from "@/app/api/routeCost"
 import { CostReport } from "@/interfaces/Reports"
+import { useEffect, useState } from "react"
+import { getCostByReportMin } from "@/app/api/routeReports"
 
-export default function CostsInReport({report, costs}: 
-    {report:Report, costs:CostReport[]}) {
-  
+export default function CostsInReport({report, id, token}: 
+    {report:Report, id:string, token: string}) {
+
+  //console.log('costs in report => ', costs);
   //const costs: Expense[] = getCosts();
   const total = CurrencyFormatter({
     currency: "MXN",
     value: report.total
   });
-  const data = CostsDataToTableDataMin(costs);
+  
+  const [costsReport, setCostReport] = useState<CostReport[]>([]);
+
+  useEffect(() => {
+    const fetchCosts = async () => {
+      let costsRep:CostReport[] = [];
+      try {
+        costsRep = await getCostByReportMin(id, token);
+        if(typeof(costsRep)==='string')
+          return <h1 className="text-center text-lg text-red-500">{costsRep}</h1>
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
+      }
+      setCostReport(costsRep);
+    }
+    fetchCosts();
+  }, []);
+  
+  const data = CostsDataToTableDataMin(costsReport);
+
+  console.log('costs min in report', data);
   
   return (
     <>
@@ -175,6 +198,7 @@ function CostsTableInReport({data}: {data: CostsTable[]}){
     }),
   ]
 
+  console.log('cost table in report data => ', data);
   return (
     <Table columns={columns} data={data} placeH="buscar costo" />
   )
