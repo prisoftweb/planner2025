@@ -9,15 +9,34 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import AttachedPDF from "../AttachedPDF";
 import { UsrBack } from "@/interfaces/User";
 import {Tooltip} from "@nextui-org/react";
+import { useState, useEffect } from "react";
+import { getCostByReportMin } from "@/app/api/routeReports";
 
-export default function ProfileReport({report, send, token, costs, user}: 
-                        {report:Report, send:Function, 
-                          token: string, costs:CostReport[], user:UsrBack}){
+export default function ProfileReport({report, send, token, user, id}: 
+                        {report:Report, send:Function, id:string, 
+                          token: string, user:UsrBack}){
 // console.log('report ', report);
   const total = CurrencyFormatter({
     currency: "MXN",
     value: report.total
   });
+
+  const [costsReport, setCostReport] = useState<CostReport[]>([]);
+
+  useEffect(() => {
+    const fetchCosts = async () => {
+      let costsRep:CostReport[] = [];
+      try {
+        costsRep = await getCostByReportMin(id, token);
+        if(typeof(costsRep)==='string')
+          return <h1 className="text-center text-lg text-red-500">{costsRep}</h1>
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
+      }
+      setCostReport(costsRep);
+    }
+    fetchCosts();
+  }, []);
 
   let props = {
     variants: {
@@ -113,23 +132,25 @@ export default function ProfileReport({report, send, token, costs, user}:
               <p className="text-slate-500">Descargar</p>
               {/* <p className="text-blue-600">{"PDF"}</p> */}
               <div className="flex justify-center gap-x-5 mt-2">
-                <PDFDownloadLink document={<ReportPDF report={report} costs={costs} />} fileName={report.name} >
-                {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
-                  {({loading, url, error, blob}) => 
-                    loading? (
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
-                          placement="right" className="text-blue-500 bg-white">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                        {/* // <button type="button">Loading document...</button> */}
-                      </Tooltip>
-                    ) : (
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
-                          placement="right" className="text-blue-500 bg-white">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                      </Tooltip>
-                      // <button type="button">Download now!</button>
-                    ) }
-                </PDFDownloadLink>
+                {costsReport.length > 0 && (
+                  <PDFDownloadLink document={<ReportPDF report={report} costs={costsReport} />} fileName={report.name} >
+                  {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                            placement="right" className="text-blue-500 bg-white">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                          {/* // <button type="button">Loading document...</button> */}
+                        </Tooltip>
+                      ) : (
+                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                            placement="right" className="text-blue-500 bg-white">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                        </Tooltip>
+                        // <button type="button">Download now!</button>
+                      ) }
+                  </PDFDownloadLink>
+                )}
                 {typeof(user.department)!== 'string' && (user.department.name.toLowerCase().includes('soporte') || 
                     user.department.name.toLowerCase().includes('direccion')) && (
                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Anexo' 

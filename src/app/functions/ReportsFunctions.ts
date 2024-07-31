@@ -94,6 +94,7 @@ export function CostsDataToTableDataMin(expenses:CostReport[]){
     const dollar = CurrencyFormatter({
           currency: "MXN",
           value: expense.costo.total || 0
+          //value: expense.cost.subtotal || 0
         })
     table.push({
       id: expense._id,

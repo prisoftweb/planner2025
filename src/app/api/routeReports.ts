@@ -73,6 +73,24 @@ export async function GetReport(auth_token:string, id:string){
   }
 }
 
+export async function GetReportMIN(auth_token:string, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getReport/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers:{
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar informe!!';
+    }
+    return 'Error al consultar informe!!';
+  }
+}
+
 export async function updateReport(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/${id}`;
   console.log(url);
@@ -290,7 +308,7 @@ export async function GetReportsLV(auth_token:string) {
       }
     })
     //console.log('res ack => ', res.data.data);
-    if(res.status === 200) return res.data.data.stats;
+    if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

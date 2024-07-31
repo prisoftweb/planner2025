@@ -12,20 +12,23 @@ import { Options } from "@/interfaces/Common"
 import SelectReact from "../SelectReact"
 import { Report } from "@/interfaces/Reports"
 import { updateReport } from "@/app/api/routeReports"
+import { getCompaniesLV } from "@/app/api/routeCompany";
+import { getProjectsLV } from "@/app/api/routeProjects";
+import { getDepartmentsLV } from "@/app/api/routeDepartments";
 
-export default function UpdateReport({companies, departments, projects, token, report}:{
-                          token:string, departments:Options[], companies:Options[], 
-                          projects:Options[], report:Report}) {
+export default function UpdateReport({ token, report}:{
+                          token:string, report:Report}) {
   
-  //const [heightPage, setHeightPage] = useState<number>(900);
   const [project, setProject] = useState<string>(report.project._id);
   const [company, setCompany] = useState<string>(report.company._id);
   const [department, setDepartment] = useState<string>(report.department._id);
   const [startDate, setStartDate] = useState<string>(report.date.substring(0, 10));
   const [imprest, setImprest] = useState<boolean>(report.ispettycash);
-  const [viewSelects, setViewSelects] = useState<JSX.Element>(<></>);
-  const [viewProject, setViewProject] = useState<JSX.Element>(<></>);
   const refRequest = useRef(true);
+
+  const [optCompanies, setOptCompanies] = useState<Options[]>([]);
+  const [optDepartments, setOptDepartments] = useState<Options[]>([]);
+  const [optProjects, setOptProjects] = useState<Options[]>([]);
 
   // const handleResize = () => {
   //   setHeightPage(document.body.offsetHeight);
@@ -34,30 +37,36 @@ export default function UpdateReport({companies, departments, projects, token, r
   useEffect (() => {
     // window.addEventListener("resize", handleResize, false);
     // setHeightPage(document.body.offsetHeight - 70);
-    
-    const indexP = projects.findIndex((optProj) => optProj.value === report.project._id);
-    const indexC = companies.findIndex((optComp) => optComp.value === report.company._id);
-    const indexDept = departments.findIndex((optDept) => optDept.value === report.department._id);
-    
-    setViewSelects(<>
-      <div>
-          <Label htmlFor="company"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Empresa</p></Label>
-          <SelectReact index={indexC===-1? 0: indexC} opts={companies} setValue={handleCompany} />
-        </div>
+    const fetchOptions = async () => {
+      let optComps: Options[] = [];
+      try {
+        optComps = await getCompaniesLV(token);
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+      }
 
-        <div>
-          <Label htmlFor="department"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Departamento</p></Label>
-          <SelectReact index={indexDept===-1? 0:indexDept} opts={departments} setValue={handleDepartment} />
-        </div>
-    </>)
+      let optDeps: Options[] = [];
+      try {
+        optDeps = await getDepartmentsLV(token);
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
+      }
 
-    setViewProject(<div>
-      <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
-      <SelectReact index={indexP===-1? 0: indexP} opts={projects} setValue={handleProject} />
-    </div>)
+      let optProjs: Options[] = [];
+      try {
+        optProjs = await getProjectsLV(token);
+      } catch (error) {
+        return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos</h1>
+      }
 
+      setOptCompanies(optComps);
+      setOptDepartments(optDeps);
+      setOptProjects(optProjs);
+    }
+
+    fetchOptions();
   }, [])
-  
+
   const handleProject = (value:string) => {
     setProject(value);
   }
@@ -69,6 +78,33 @@ export default function UpdateReport({companies, departments, projects, token, r
   const handleDepartment = (value:string) => {
     setDepartment(value);
   }
+  
+  const indexP = optProjects.findIndex((optProj) => optProj.value === report.project._id);
+  const indexC = optCompanies.findIndex((optComp) => optComp.value === report.company._id);
+  const indexDept = optDepartments.findIndex((optDept) => optDept.value === report.department._id);
+  
+  const viewSelects = (<>
+    <div>
+        <Label htmlFor="company"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Empresa</p></Label>
+        {optCompanies.length>0? (
+          <SelectReact index={indexC===-1? 0: indexC} opts={optCompanies} setValue={handleCompany} />
+        ): <></>}
+      </div>
+
+      <div>
+        <Label htmlFor="department"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Departamento</p></Label>
+        {optDepartments.length>0? (
+          <SelectReact index={indexDept===-1? 0:indexDept} opts={optDepartments} setValue={handleDepartment} />
+        ): <></>}
+      </div>
+  </>)
+
+  const viewProject = (<div>
+    <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
+    {optProjects.length > 0? (
+      <SelectReact index={indexP===-1? 0: indexP} opts={optProjects} setValue={handleProject} />
+    ): <></>}
+  </div>)
 
   const formik = useFormik({
     initialValues: {

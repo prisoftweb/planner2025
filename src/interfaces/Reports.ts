@@ -109,17 +109,6 @@ export interface User {
   photo: string
 }
 
-// export interface Company {
-//   _id: string
-//   name: string
-//   logo: string
-// }
-
-// export interface Project {
-//   _id: string
-//   title: string
-// }
-
 export interface Lastmove {
   condition: Condition
   department: Department
@@ -173,7 +162,22 @@ export interface Cost {
   vat: string
 }
 
-// export interface Department {
-//   _id: string
-//   name: string
-// }
+export interface ReportMin {
+  _id: string
+  name: string
+  comment: string
+  total: number
+  subtotal: number
+  quantity: number
+  ispettycash: boolean
+  date: string
+  user: User
+  company: Company
+  project: Project
+  status: boolean
+  account: string
+  wached: boolean
+  lastmove: Lastmove
+  departmentid: string
+  department: string
+}

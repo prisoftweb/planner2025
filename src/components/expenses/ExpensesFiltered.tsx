@@ -141,7 +141,7 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
 
   return(
     <>
-      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0"
+      <form className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
         style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
