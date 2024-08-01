@@ -106,7 +106,7 @@ export default async function Page({ params }: { params: { id: string }}){
   // if(!node){
   //   return <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
   // }
-  console.log('opt reps selectice => ', optReports);
+  //console.log('opt reps selectice => ', optReports);
   return(
     <>
       <Navigation user={user} />

@@ -4,7 +4,7 @@ import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
 import HeaderProfileExpense from "@/components/expenses/HeaderProfileExpense";
-import { GetCostMIN, GetCostsLV } from "@/app/api/routeCost";
+import { GetCostMIN, GetCostsLV, GetCostsLVByCond } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
 import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
@@ -27,7 +27,8 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let options: Options[] = [];
   try {
-    options = await GetCostsLV(token);
+    // options = await GetCostsLV(token);
+    options = await GetCostsLVByCond(token);
     if(typeof(options) === "string")
       return <h1 className="text-center text-red-500">{options}</h1>
   } catch (error) {

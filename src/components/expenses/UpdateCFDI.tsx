@@ -106,6 +106,8 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
       showToastMessageError('El folio fiscal ingresado no coincide con el del CFDI!!');
       return false;
     }
+    console.log('rfc prov expense => ', expense.provider.rfc);
+    console.log('rfc prov xml => ', dataCFDI.RFCProvider);
     if(expense.provider.rfc !== dataCFDI.RFCProvider){
       console.log('epxense provider => ', expense.provider);
       console.log('cfdi provider => ', dataCFDI.RFCProvider);

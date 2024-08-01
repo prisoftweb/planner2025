@@ -133,14 +133,17 @@ export async function getCostByReport(id:string, auth_token:string){
 export async function getCostByReportMin(id:string, auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByReportMIN/${id}`;
   try {
+    //console.log('url => ', url);
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
+    //console.log('res => ', res);
     if(res.status===200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
+    //console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos del informe!!';
     }
@@ -279,6 +282,44 @@ export async function GetReportsLastMovInDeptMIN(auth_token:string, idDept:strin
     return 'Ocurrio un problema al obtener informes';
   }
 }
+
+export async function GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(auth_token:string, idDept:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsWithLastMoveInDepartmentAndNEConditionMIN/${idDept}/CERRADO`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al obtener informes';
+    }
+    return 'Ocurrio un problema al obtener informes';
+  }
+}
+
+export async function GetAllReportsWithUSERAndNEConditionMIN(auth_token:string, idUser:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsWithUSERAndNEConditionMIN/${idUser}/CERRADO`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al obtener informes';
+    }
+    return 'Ocurrio un problema al obtener informes';
+  }
+}
+
+
 
 export async function GetReportsByUserMin(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsByUserMIN/${id}`;

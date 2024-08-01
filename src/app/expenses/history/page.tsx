@@ -175,42 +175,42 @@ export default async function Page() {
   //   return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
   // }
 
-  if(!expenses || expenses.length <= 0){
-    return (
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
-            text="El historial de gastos actualmente esta vacio!!!"
-            title="Gastos">
-              <></>
-          </WithOut>
-        </div>
-      </>
-    )
-  }
+  // if(!expenses || expenses.length <= 0){
+  //   return (
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+  //         <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
+  //           text="El historial de gastos actualmente esta vacio!!!"
+  //           title="Gastos">
+  //             <></>
+  //         </WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
-  let costCostoCenter: ReportByCostcenter[] = [];
-  try {
-    costCostoCenter = await GetCostsGroupByCostoCenterConcept(token);
-    //console.log('reports projects page => ', costCostoCenter);
-    if(typeof(costCostoCenter)==='string'){
-      return <h1>Error al consultar costos por centro de costos!!</h1>
-    }
-  } catch (error) {
-    return <h1>Error al consultar costos por centro de costos!!</h1>
-  }
+  // let costCostoCenter: ReportByCostcenter[] = [];
+  // try {
+  //   costCostoCenter = await GetCostsGroupByCostoCenterConcept(token);
+  //   //console.log('reports projects page => ', costCostoCenter);
+  //   if(typeof(costCostoCenter)==='string'){
+  //     return <h1>Error al consultar costos por centro de costos!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por centro de costos!!</h1>
+  // }
 
-  let costCostoCenterCategory: ReportByCostcenterCategory[] = [];
-  try {
-    costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
-    //console.log('reports projects page => ', costCostoCenter);
-    if(typeof(costCostoCenter)==='string'){
-      return <h1>Error al consultar costos por centro de costos!!</h1>
-    }
-  } catch (error) {
-    return <h1>Error al consultar costos por centro de costos!!</h1>
-  }
+  // let costCostoCenterCategory: ReportByCostcenterCategory[] = [];
+  // try {
+  //   costCostoCenterCategory = await GetCostsGroupByCostoCenterCategory(token);
+  //   //console.log('reports projects page => ', costCostoCenter);
+  //   if(typeof(costCostoCenter)==='string'){
+  //     return <h1>Error al consultar costos por centro de costos!!</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al consultar costos por centro de costos!!</h1>
+  // }
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 
@@ -260,8 +260,7 @@ export default async function Page() {
     <>
       <Navigation user={user} />
       <ContainerClient data={table} expenses={expenses}
-        token={token} user={user} costCostoCenter={costCostoCenter} 
-        costCostoCenterCategory={costCostoCenterCategory} isViewReports={isViewReports} 
+        token={token} user={user} isViewReports={isViewReports} 
         isHistory={true} />
     </>
   )

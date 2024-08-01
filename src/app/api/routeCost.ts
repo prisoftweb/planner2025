@@ -84,6 +84,27 @@ export async function GetCostsLV(auth_token:string){
   }
 }
 
+export async function GetCostsLVByCond(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsLVbyCOND/661eaa4af642112488c85f56`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    //console.log('res', res);
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    console.log('catch ', error);
+    return 'Error al consultar costos!!';
+  }
+}
+
 export async function CreateCost(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs`;
   //console.log(url);

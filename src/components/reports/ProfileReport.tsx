@@ -33,6 +33,7 @@ export default function ProfileReport({report, send, token, user, id}:
       } catch (error) {
         return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
       }
+      console.log('costs rep => ', costsRep);
       setCostReport(costsRep);
     }
     fetchCosts();

@@ -69,36 +69,48 @@ export default function TableClients({data, token}:
       header: 'Nombre',
       id: 'nombre',
       cell: ({row}) => (
-        <Link href={`/clients/${row.original.id}/profile`}>
-          <p className="py-2">{row.original.name}</p>
-        </Link>
+        // <Link href={`/clients/${row.original.id}/profile`}>
+        //   <p className="py-2">{row.original.name}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original.name}</p>
       )
     }),
     columnHelper.accessor('rfc', {
       header: 'RFC',
       id: 'rfc',
       cell: ({row}) => (
-        <Link href={`/clients/${row.original.id}/profile`}>
-          <p className="py-2">{row.original.rfc}</p>
-        </Link>
+        // <Link href={`/clients/${row.original.id}/profile`}>
+        //   <p className="py-2">{row.original.rfc}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original.rfc}</p>
       )
     }),
     columnHelper.accessor('account', {
       header: 'Cuenta',
       id: 'cuenta',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}/profile`}>
-          <p className="py-2">{row.original.account}</p>
-        </Link>
+        // <Link href={`/providers/${row.original.id}/profile`}>
+        //   <p className="py-2">{row.original.account}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original.account}</p>
       )
     }),
     columnHelper.accessor('currentbalance', {
       header: 'Saldo actual',
       id: 'saldo',
       cell: ({row}) => (
-        <Link href={`/providers/${row.original.id}/profile`}>
-          <p className="py-2">{row.original.currentbalance}</p>
-        </Link>
+        // <Link href={`/providers/${row.original.id}/profile`}>
+        //   <p className="py-2">{row.original.currentbalance}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original.currentbalance}</p>
       )
     }),
   ]

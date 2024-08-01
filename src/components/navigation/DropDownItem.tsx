@@ -27,7 +27,8 @@ export default function DropDownItem({items}:{items:NavItem[]}){
           <div
             className="p-2 cursor-pointer text-black bg-white 
             hover:bg-gray-200 z-50"
-            onClick={() => router.push(item.link)}
+            // onClick={() => router.push(item.link)}
+            onClick={() => window.location.replace(item.link)}
             key={index}
           >
             <p className=" z-50">{item.name}</p>

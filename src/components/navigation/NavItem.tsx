@@ -24,8 +24,11 @@ export default function NavItemComponent({name, items, link}: {name:string, item
     <>
       <button type="button" ref={ref} 
         className="text-sm cursor-pointer lg:text-base w-full mr-2 z-50" 
+        // onClick={() => {
+        //   link===''? setIsOpen(!isOpen) : router.push(link);
+        // }}
         onClick={() => {
-          link===''? setIsOpen(!isOpen) : router.push(link);
+          link===''? setIsOpen(!isOpen) : window.location.replace(link);
         }}
         // onBlur={() => {setTimeout(() => {
         //   setIsOpen(false);
