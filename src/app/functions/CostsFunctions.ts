@@ -161,10 +161,6 @@ export function ExpenseDataToTableData(expenses:Expense[]){
         }
       }
     }
-    // console.log(expense.description);
-    // console.log(expense.category.name);
-    // console.log(elements);
-
     table.push({
       id: expense._id,
       Descripcion: expense.description,

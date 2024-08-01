@@ -82,47 +82,62 @@ export default function TableUsers({token, optionsDepartments, roles}:
       header: 'Foto',
       id: 'foto',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile?opt=1`}>
-          <img src={row.original.photo} 
-            className="w-12 h-auto rounded-full" 
-            onClick={() => console.log(row.original.photo)} alt="profile" />
-        </Link>
+        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
+        //   <img src={row.original.photo} 
+        //     className="w-12 h-auto rounded-full" 
+        //     onClick={() => console.log(row.original.photo)} alt="profile" />
+        // </Link>
+        <img src={row.original.photo} 
+          className="w-12 h-auto rounded-full cursor-pointer" 
+          onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)} alt="profile" />
       ),
     }),
     columnHelper.accessor('name', {
       header: 'Nombre',
       id: 'nombre',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile?opt=1`}>
-          <p className="py-2">{row.original.name}</p>
-        </Link>
+        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
+        //   <p className="py-2">{row.original.name}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
+        >{row.original.name}</p>
       )
     }),
     columnHelper.accessor('department', {
       header: 'Departamento',
       id: 'departamento',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile?opt=1`}>
-          <p className="py-2">{row.original.department}</p>
-        </Link>
+        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
+        //   <p className="py-2">{row.original.department}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
+        >{row.original.department}</p>
       ),
     }),
     columnHelper.accessor('role', {
       header: 'Rol',
       id: 'rol',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile?opt=1`}>
-          <p className="py-2">{row.original.role}</p>
-        </Link>
+        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
+        //   <p className="py-2">{row.original.role}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
+        >{row.original.role}</p>
       ),
     }),
     columnHelper.accessor('email', {
       header: 'Correo',
       id: 'email',
       cell: ({row}) => (
-        <Link href={`/users/${row.original.id}/profile?opt=1`}>
-          <p className="py-2">{row.original.email}</p>
-        </Link>
+        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
+        //   <p className="py-2">{row.original.email}</p>
+        // </Link>
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
+        >{row.original.email}</p>
       ),
     }),
   ]

@@ -82,54 +82,72 @@ export default function TableProjects({data, token, projects, optCategories,
       header: 'Clave',
       id: 'clave',
       cell: ({row}) => (
-        <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="py-2 font-semibold">{row.original.code}</p>
-        </Link>
+        // <Link href={`/projects/${row.original.id}/profile`}>
+        //   <p className="py-2 font-semibold">{row.original.code}</p>
+        // </Link>
+        <p className="py-2 font-semibold cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{row.original.code}</p>
       )
     }),
     columnHelper.accessor('project', {
       header: 'Proyecto',
       id: 'proyecto',
       cell: ({row}) => (
-        <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="">{row.original.project}</p>
-        </Link>
+        // <Link href={`/projects/${row.original.id}/profile`}>
+        //   <p className="">{row.original.project}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{row.original.project}</p>
       ),
     }),
     columnHelper.accessor('category', {
       header: 'Categoria',
       id: 'categoria',
       cell: ({row}) => (
-        <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="">{row.original.category}</p>
-        </Link>
+        // <Link href={`/projects/${row.original.id}/profile`}>
+        //   <p className="">{row.original.category}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{row.original.category}</p>
       ),
     }),
     columnHelper.accessor('client', {
       header: 'Cliente',
       id: 'cliente',
       cell: ({row}) => (
-        <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="">{row.original.client}</p>
-        </Link>
+        // <Link href={`/projects/${row.original.id}/profile`}>
+        //   <p className="">{row.original.client}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{row.original.client}</p>
       ),
     }),
     columnHelper.accessor('date', {
       header: 'Fecha',
       id: 'fecha',
       cell: ({row}) => (
-        <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="">{row.original.date?.substring(0, 10) || ''}</p>
-        </Link>
+        // <Link href={`/projects/${row.original.id}/profile`}>
+        //   <p className="">{row.original.date?.substring(0, 10) || ''}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{row.original.date?.substring(0, 10) || ''}</p>
       ),
     }),
     columnHelper.accessor('amount', {
       header: 'Monto',
       id: 'monto',
       cell: ({row}) => (
-        <Link href={`/projects/${row.original.id}/profile`}>
-          <p className="">{row.original.amount}</p>
-        </Link>
+        // <Link href={`/projects/${row.original.id}/profile`}>
+        //   <p className="">{row.original.amount}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{row.original.amount}</p>
       ),
     }),
   ]

@@ -5,15 +5,12 @@ import { cookies } from "next/headers";
 import { getCompaniesLV } from "../api/routeCompany";
 import { getDepartmentsLV } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
-//import { Department } from "@/interfaces/Departments";
-//import { Company } from "@/interfaces/Companies";
-//import { Project } from "@/interfaces/Projects";
 import { getProjectsLV } from "../api/routeProjects";
 import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReportsMin, GetReportsByUserMin, GetAllReportsMINAndNECondition } from "../api/routeReports";
+import { GetReportsMin, GetReportsByUserMin, GetAllReportsMINAndNECondition, 
+  GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN
+ } from "../api/routeReports";
 import { ReportParse, ReportTable } from "@/interfaces/Reports";
-//import Header from "@/components/Header";
-//import TableReports from "@/components/reports/TableReports";
 import { ReportParseDataToTableData } from "../functions/ReportsFunctions";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
@@ -25,55 +22,26 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  //let reports: Report[] = [];
   let reports: ReportParse[] = [];
   try {
-    //console.log(user.department.name.toLowerCase());
     if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-      reports = await GetReportsByUserMin(token, user._id);
-      //console.log('rep por usuario!! => ', reports);
-      //consultar por usuario y por departamento
-      //console.log('by user');
+      //reports = await GetReportsByUserMin(token, user._id);
+      reports = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
     }else{
-      //reports = await GetReportsMin(token);
-      if(user.department.name.toLowerCase().includes('direccion')){
-        //reports = await GetReports(token);
-        //reports = await GetReportsMin(token);
-        reports = await GetAllReportsMINAndNECondition(token);
-        //console.log('rep por min!! => ', reports);
-      }else{
-        //console.log('by dept');
-        //reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
-        //reports = await GetReportsLastMovInDeptMIN(token, typeof(user.department)==='string' ? user.department : user.department._id);
-        reports = await GetReportsMin(token);
-        //console.log('rep por ultimo dept!! => ', reports);
-      }
+      //reports = await GetAllReportsMINAndNECondition(token);
+      reports = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
+      // if(user.department.name.toLowerCase().includes('direccion')){
+      //   reports = await GetAllReportsMINAndNECondition(token);
+      // }else{
+      //   reports = await GetReportsMin(token);
+      // }
     }
-    //reports = await GetReports(token);
     if(typeof(reports)==='string'){
       return <h1 className="text-lg text-center text-red-500">{reports}</h1>
     }
   } catch (error) {
     return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
   }
-  
-  // try {
-  //   reports = await GetReportsByDept(token, typeof(user.department)==='string' ? user.department : user.department._id);
-  //   if(typeof(reports)==='string'){
-  //     return <h1 className="text-lg text-center text-red-500">{reports}</h1>
-  //   }
-  // } catch (error) {
-  //   return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar informes!!</h1>
-  // }
-
-  // try {
-  //   reports = await GetReportsByUser(token, user._id);
-  //   if(typeof(reports)==='string'){
-  //     return <h1 className="text-lg text-center text-red-500">{reports}</h1>
-  //   }
-  // } catch (error) {
-  //   return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar informes!!</h1>
-  // }
   
   let optCompanies: Options[] = [];
   try {
@@ -89,57 +57,12 @@ export default async function Page() {
 
   optCompaniesFilter = optCompaniesFilter.concat(optCompanies);
 
-  // const optCompanies: Options[] = [];
-  // const optCompaniesFilter: Options[] = [{
-  //   label: 'Todas',
-  //   value: 'all'
-  // }];
-  // companies.map((company) => {
-  //   let c = {
-  //     label: company.name,
-  //     value: company._id
-  //   };
-  //   optCompanies.push(c);
-  //   optCompaniesFilter.push(c);
-  // });
-
   let optDepartments: Options[] = [];
   try {
     optDepartments = await getDepartmentsLV(token);
   } catch (error) {
     return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
   }
-
-  //const optDepartments: Options[] = [];
-
-  // departments.map((department) => {
-  //   let d = {
-  //     label: department.name,
-  //     value: department._id
-  //   }
-  //   optDepartments.push(d);
-  // });
-
-  // let projects:Project[] = [];
-  // try {
-  //   projects = await getProjects(token);
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red">Error al consultar los proyectos</h1>
-  // }
-
-  // const optProjects: Options[] = [];
-  // const optProjectsFilter: Options[] = [{
-  //   label: 'Todos',
-  //   value: 'all'
-  // }];
-  // projects.map((project) => {
-  //   let p = {
-  //     label: project.title,
-  //     value: project._id
-  //   }
-  //   optProjects.push(p);
-  //   optProjectsFilter.push(p);
-  // });
 
   let optProjects:Options[];
   let optProjectsFilter: Options[] = [{
@@ -199,7 +122,6 @@ export default async function Page() {
     )
   }
 
-  //const table: ReportTable[] = ReportDataToTableData(reports);
   const table: ReportTable[] = ReportParseDataToTableData(reports);
 
   return (
@@ -209,18 +131,6 @@ export default async function Page() {
           optCompaniesFilter={optCompaniesFilter} optConditionsFilter={optConditionsFilter}
           optDepartments={optDepartments} optProjects={optProjects} 
           optProjectsFilter={optProjectsFilter} reports={reports} token={token} user={user._id} />
-      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title="Informes" placeHolder="Buscar Informe.." >
-          <ButtonNew companies={optCompanies} departments={optDepartments} 
-              projects={optProjects} token={token} condition={condition} user={user._id}
-          />
-        </Header>
-        <div className="mt-5">
-          <TableReports data={table} optConditions={optConditionsFilter} 
-              reports={reports} token={token} optCompanies={optCompaniesFilter} 
-              optProjects={optProjectsFilter} />
-        </div>
-      </div> */}
     </>
   )
 }

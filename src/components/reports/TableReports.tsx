@@ -67,11 +67,16 @@ export default function TableReports({data, token, reports,
     columnHelper.accessor(row => row.Report, {
       id: 'Reporte',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
-          <div className="flex gap-x-1 items-center">
-            <p>{row.original.Report}</p>
-          </div>
-        </Link>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <div className="flex gap-x-1 items-center">
+        //     <p>{row.original.Report}</p>
+        //   </div>
+        // </Link>
+        <div className="flex gap-x-1 items-center cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >
+          <p>{row.original.Report}</p>
+        </div>
       ),
       enableSorting:false,
       header: () => (
@@ -81,11 +86,16 @@ export default function TableReports({data, token, reports,
     columnHelper.accessor(row => row.account, {
       id: 'Cuenta',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
-          <div className="flex gap-x-1 items-center">
-            <p>{row.original.account}</p>
-          </div>
-        </Link>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <div className="flex gap-x-1 items-center">
+        //     <p>{row.original.account}</p>
+        //   </div>
+        // </Link>
+        <div className="flex gap-x-1 items-center cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >
+          <p>{row.original.account}</p>
+        </div>
       ),
       enableSorting:false,
       header: () => (
@@ -96,59 +106,84 @@ export default function TableReports({data, token, reports,
       header: 'Proyecto',
       id: 'Proyecto',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
-          <div className="flex gap-x-1 items-center">
-            <p>{row.original.Project}</p>
-          </div>
-        </Link>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <div className="flex gap-x-1 items-center">
+        //     <p>{row.original.Project}</p>
+        //   </div>
+        // </Link>
+        <div className="flex gap-x-1 items-center cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >
+          <p>{row.original.Project}</p>
+        </div>
       )
     }),
     columnHelper.accessor('Company', {
       header: 'Empresa/Depto',
       id: 'Departamento',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
-          <div className="flex gap-x-1 items-center">
-            <img src={row.original.Company} className="w-12 h-auto" alt="compania" />
-            <p>{row.original.Depto}</p>
-          </div>
-        </Link>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <div className="flex gap-x-1 items-center">
+        //     <img src={row.original.Company} className="w-12 h-auto" alt="compania" />
+        //     <p>{row.original.Depto}</p>
+        //   </div>
+        // </Link>
+        <div className="flex gap-x-1 items-center cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >
+          <img src={row.original.Company} className="w-12 h-auto" alt="compania" />
+          <p>{row.original.Depto}</p>
+        </div>
       )
     }),
     columnHelper.accessor('Status', {
       header: 'Estatus',
       id: 'Estatus',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <Chip label={row.original.Status} color={row.original.color} />
+        // </Link>
+        <div className="cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >
           <Chip label={row.original.Status} color={row.original.color} />
-        </Link>
+        </div>
       ),
     }),
     columnHelper.accessor('NºGastos', {
       header: 'NºGastos',
       id: 'NºGastos',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
-          <p className="">{row.original.NºGastos}</p>
-        </Link>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <p className="">{row.original.NºGastos}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >{row.original.NºGastos}</p>
       ),
     }),
     columnHelper.accessor('Total', {
       header: 'Total',
       id: 'Total',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
-          <p className="">{row.original.Total}</p>
-        </Link>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <p className="">{row.original.Total}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >{row.original.Total}</p>
       ),
     }),
     columnHelper.accessor('Fecha', {
       header: 'Fecha',
       id: 'Fecha',
       cell: ({row}) => (
-        <Link href={`/reports/${row.original.id}/profile`}>
-          <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
-        </Link>
+        // <Link href={`/reports/${row.original.id}/profile`}>
+        //   <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+        >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
   ]

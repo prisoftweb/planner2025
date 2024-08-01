@@ -101,9 +101,12 @@ export default function TableExpenses({data, token, expenses,
     columnHelper.accessor('Proyecto', {
       id: 'Proyecto',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="py-2 font-semibold">{row.original.Proyecto}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="py-2 font-semibold">{row.original.Proyecto}</p>
+        // </Link>
+        <p className="py-2 font-semibold cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.Proyecto}</p>
       ),
       enableSorting:false,
       header: () => (
@@ -114,103 +117,143 @@ export default function TableExpenses({data, token, expenses,
       header: 'Informe',
       id: 'Informe',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="py-2 font-semibold">{row.original.Informe}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="py-2 font-semibold">{row.original.Informe}</p>
+        // </Link>
+        <p className="py-2 font-semibold cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.Informe}</p>
       )
     }),
     columnHelper.accessor('costcenter', {
       header: 'Centro de costos',
       id: 'Centro de costos',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="py-2 font-semibold">{row.original.costcenter}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="py-2 font-semibold">{row.original.costcenter}</p>
+        // </Link>
+        <p className="py-2 font-semibold cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.costcenter}</p>
       )
     }),
     columnHelper.accessor('Descripcion', {
       header: 'Descripcion',
       id: 'descripcion',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          {row.original.Descripcion.length < 100? (
-            <p className="">{row.original.Descripcion}</p>
-          ): (
-            <p className="">{row.original.Descripcion.substring(0, 100)}</p>
-          )}
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   {row.original.Descripcion.length < 100? (
+        //     <p className="">{row.original.Descripcion}</p>
+        //   ): (
+        //     <p className="">{row.original.Descripcion.substring(0, 100)}</p>
+        //   )}
+        // </Link>
+        row.original.Descripcion.length < 100? (
+          <p className="cursor-pointer" 
+            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          >{row.original.Descripcion}</p>
+        ): (
+          <p className="cursor-pointer" 
+            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          >{row.original.Descripcion.substring(0, 100)}</p>
+        )
       ),
     }),
     columnHelper.accessor('Proveedor', {
       header: 'Proveedor',
       id: 'proveedor',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.Proveedor}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.Proveedor}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.Proveedor}</p>
       ),
     }),
     columnHelper.accessor('Estatus', {
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <Chip label={row.original.condition} color={row.original.color} />
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <Chip label={row.original.condition} color={row.original.color} />
+        // </Link>
+        <div className="cursor-pointer" 
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}>
+            <Chip label={row.original.condition} color={row.original.color} />
+        </div>
       ),
     }),
     columnHelper.accessor('Fecha', {
       header: 'Fecha',
       id: 'fecha',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
     columnHelper.accessor('Importe', {
       header: 'Importe',
       id: 'importe',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.Importe}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.Importe}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.Importe}</p>
       ),
     }),
     columnHelper.accessor('vat', {
       header: 'IVA',
       id: 'iva',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.vat}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.vat}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.vat}</p>
       ),
     }),
     columnHelper.accessor('discount', {
       header: 'Descuento',
       id: 'descuento',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.discount}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.discount}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.discount}</p>
       ),
     }),
     columnHelper.accessor('total', {
       header: 'Total',
       id: 'total',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.total}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.total}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.total}</p>
       ),
     }),
     columnHelper.accessor('taxFolio', {
       header: 'Folio fiscal',
       id: 'Folio fiscal',
       cell: ({row}) => (
-        <Link href={`/expenses/${row.original.id}/profile`}>
-          <p className="">{row.original.taxFolio}</p>
-        </Link>
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.taxFolio}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+        >{row.original.taxFolio}</p>
       ),
     }),
   ]
@@ -254,33 +297,6 @@ export default function TableExpenses({data, token, expenses,
     setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
   }, [])
 
-
-  // useEffect(() => {
-  //   if(refresh){
-  //     const aux = async () =>{
-  //       try {
-  //         const res = await GetCosts(token);
-  //         //console.log('res');
-  //         if(typeof(res) !== 'string'){
-  //           const d = ExpenseDataToTableData(res);
-  //           setDataExpenses(d);
-  //           setView(<></>);
-  //           setTimeout(() => {
-  //             setView(<Table columns={columns} data={d} selectFunction={handleExpensesSelected}
-  //                   placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-  //           }, 500);
-  //         }else{
-  //           showToastMessageError(res);
-  //         }
-  //       } catch (error) {
-  //         console.log('catch table expenses => ', error);
-  //         showToastMessageError('Error al actualizar tabla!!');
-  //       }
-  //     }
-  //     aux();
-  //     updateRefresh(false);
-  //   }
-  // }, [refresh]);
   if(refresh){
     const aux = async () =>{
       try {
@@ -290,11 +306,6 @@ export default function TableExpenses({data, token, expenses,
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);
           setDataExpenses(d);
-          // setView(<></>);
-          // setTimeout(() => {
-          //   setView(<Table columns={columns} data={d} selectFunction={handleExpensesSelected}
-          //         placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-          // }, 500);
         }else{
           showToastMessageError(res);
         }
