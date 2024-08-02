@@ -187,7 +187,7 @@ export default function TableReports({data, token, reports,
       ),
     }),
   ]
-  
+
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataReports} placeH="Buscar informe.." />);
   
   useEffect(() => {
@@ -201,17 +201,6 @@ export default function TableReports({data, token, reports,
     }
   }, [filter]);
 
-  // useEffect(() => {
-  //   if(isFilter){
-  //     console.log('data rep ', dataReports);
-  //     setView(<></>);
-  //     setTimeout(() => {
-  //       setView(<Table columns={columns} data={dataReports} placeH="Buscar reporte.." />);
-  //     }, 100);
-  //     setIsFilter(false);
-  //   }
-  // }, [isFilter]);
-
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const repAmount = reports.reduce((previous, current) => {
@@ -222,7 +211,6 @@ export default function TableReports({data, token, reports,
 
   const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
     let d = new Date(rep.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return true;
     }
@@ -232,15 +220,11 @@ export default function TableReports({data, token, reports,
   const amountValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
     if(rep.total >= 0){
-      //console.log('total ', rep.total, ' >= ', minAmount);
-      //console.log('total ', rep.total, ' <= ', maxAmount)
       if(rep.total >= minAmount && rep.total <= maxAmount){
-        //console.log('date ?');
         return dateValidation(rep, startDate, endDate);
       }
     }
     return false;
-    //return dateValidation(rep, startDate, endDate);
   }
 
   const projectValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
@@ -302,16 +286,6 @@ export default function TableReports({data, token, reports,
     maxAmount:number, companies:string[], projects:string[], 
     startDate:number, endDate:number, isPettyCash:boolean) => {
   
-    // console.log('filtrar');
-    // console.log('conditions', conditions);
-    // console.log('types ', types);
-    // console.log('categories ', categories);
-    // console.log('startdate ', startDate);
-    // console.log('endDate ', endDate);
-    // console.log('min amount ', minAmount);
-    // console.log('max amount ', maxAmount);
-    
-    //let filtered: Report[] = [];
     let filtered: ReportParse[] = [];
     console.log('filter data => ');
     reports.map((report) => {
@@ -321,10 +295,7 @@ export default function TableReports({data, token, reports,
       }
     });
 
-    //console.log(filtered);
-    //setFilteredReports(filtered);
     console.log('filteres => ', filtered);
-    // setDataReports(ReportDataToTableData(filtered));
     setDataReports(ReportParseDataToTableData(filtered));
     setFilter(true);
   }

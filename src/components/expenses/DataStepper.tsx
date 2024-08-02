@@ -687,8 +687,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 prefix="$"
                 onValueChange={(value) => {try {
                   formik.values.taxExempt=value || '0';
+                  handleIdVat(idVat);
                 } catch (error) {
                   formik.values.taxExempt='0';
+                  handleIdVat(idVat);
                 }}}
               />
               {formik.touched.taxExempt && formik.errors.taxExempt ? (
