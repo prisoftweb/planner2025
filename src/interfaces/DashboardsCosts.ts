@@ -21,4 +21,5 @@ export interface CostsByDay {
   totalExemptTAX: number
   totalDiscount: number
   date: string
+  day: number
 }

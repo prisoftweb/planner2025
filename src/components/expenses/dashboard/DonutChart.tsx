@@ -13,7 +13,8 @@ export default function DonutChartt({data, colors, categories, category}:
           data={data}
           //category="sales"
           category={category}
-          index="name"
+          //index="name"
+          index='label'
           valueFormatter={valueFormatter}
           colors={colors}
           className="w-40"

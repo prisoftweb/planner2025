@@ -70,9 +70,10 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
       })
     });
 
-    costsDays.map((cc) => {
+    costsDays.map((cc, index:number) => {
       optDays.push({
-        label: cc.date ?? '',
+        //label: cc.date ?? '',
+        label: cc.day?.toString() || ' ',
         value: cc.subtotalCost
       })
     });
@@ -105,7 +106,7 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   //   },
   // ];
 
-  const colors = ['blue', 'cyan', 'indigo', 'violet', 'fuchsia'];
+  const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const categoriesCategories: string[] = [];
   costsByCategory.map((cc) => {

@@ -83,12 +83,12 @@ export function BarChartComponent({data, colors, categories, category}:
         className="mt-4 h-72"
         //data={chartdata}
         data={data}
-        index="date"
+        index="label"
         //categories={['Running']}
         categories={categories}
         colors={colors}
         //colors={['blue']}
-        yAxisWidth={30}
+        yAxisWidth={48}
         customTooltip={customTooltip}
       />
     </>
