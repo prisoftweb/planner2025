@@ -14,7 +14,7 @@ import Button from "../Button"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import { insertConditionInCost } from "@/app/api/routeCost"
 
-import { useOptionsExpense } from "@/app/store/newExpense"
+import { useOptionsExpense, useNewExpense } from "@/app/store/newExpense"
 
 import { getCostoCentersLV } from "@/app/api/routeCostCenter";
 import { CostoCenterLV, } from "@/interfaces/CostCenter";
@@ -23,12 +23,14 @@ import { getUsersLV } from "@/app/api/routeUser";
 import { getProjectsLV } from "@/app/api/routeProjects";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndCondition, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import { GetVatsLV } from "@/app/api/routeCost"
-import { GetReportsByUserMin, GetAllReportsMINAndNECondition, GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, 
-  GetAllReportsWithUSERAndNEConditionMIN
+import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN
  } from "@/app/api/routeReports";
 import { UsrBack } from "@/interfaces/User"
 import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
+
+import { getAllCostsByCondition } from "@/app/api/routeCost"
+import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports}:
@@ -44,8 +46,16 @@ export default function ContainerClient({data, token, expenses,
   // console.log('costo center concept container => ', costCostoCenter);
   // console.log('costo center category container => ', costCostoCenterCategory);
   const [idVal, setIdVal] = useState<string>('');
+  const [tableData, setTableData] = useState<ExpensesTable[]>(data);
+
+  const {expensesTable, updateExpensesTable, refresh, updateRefresh} = useNewExpense();
 
   useEffect(() => {
+
+    if(expensesTable.length <= 0 && expenses.length > 0){
+      updateExpensesTable(expenses);
+    }
+
     const fetchApis = async () => {
       let costcenters: CostoCenterLV[];
       try {
@@ -237,7 +247,31 @@ export default function ContainerClient({data, token, expenses,
     }
   }
 
-  if(!expenses || expenses.length <= 0){
+  // if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
+  //   const aux = async () =>{
+  //     try {
+  //       const res = await getAllCostsByCondition(token);
+  //       //console.log('res');
+  //       if(typeof(res) !== 'string'){
+  //         //refExpenses.current = res;
+  //         const d = ExpenseDataToTableData(res);
+  //         setTableData(d);
+  //         updateExpensesTable(res);
+  //         //setDataExpenses(d);
+  //       }else{
+  //         showToastMessageError(res);
+  //       }
+  //     } catch (error) {
+  //       console.log('catch table expenses => ', error);
+  //       showToastMessageError('Error al actualizar tabla!!');
+  //     }
+  //   }
+  //   aux();
+  //   updateRefresh(false);
+  // }
+
+  //if( expensesTable.length <= 0 && expenses.length <= 0){
+  if( expenses.length <= 0){
     return (
       <>
         <Navigation user={user} />
@@ -303,15 +337,17 @@ export default function ContainerClient({data, token, expenses,
       </div>
       {
         isHistory? (
-          <TableHistoryExpenses data={data} token={token} 
+          <TableHistoryExpenses  token={token} isViewReports={isViewReports}
             expenses={expenses} isFilter={isFilter} setIsFilter={setIsFilter}
-            isViewReports={isViewReports}
+            //data={data}
+            data={tableData}
           />
         ): (
-          <TableExpenses data={data} token={token} 
-            expenses={expenses} isFilter={isFilter} setIsFilter={handleFilter}
+          <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
+            expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
             idValidado={idVal} user={user._id} isViewReports={isViewReports}
-            handleExpensesSelected={handleExpensesSelected} 
+            //data={data}
+            data={tableData}
           />
         )
       }

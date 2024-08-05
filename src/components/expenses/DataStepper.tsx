@@ -29,7 +29,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
     typeCFDI, vat, reset, updateRefresh, isCard, 
     report, condition, category, isPettyCash, concept,
     updateIsCard, updateCostCenter, updateHaveDiscount, 
-    updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, total} = useNewExpense();
+    updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, 
+    total, updateExpensesTable} = useNewExpense();
 
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
@@ -296,6 +297,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           setTotalExpense('0');
           //setClearAmount(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
+          //updateHaveExpenses(true);
           updateRefresh(true);
           // setTimeout(() => {
           //   setResetBand(true);
@@ -343,6 +345,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           setTotalExpense('0');
           showToastMessage('Costo creado satisfactoriamente!!!');
           //setClearAmount(true);
+          //updateHaveExpenses(true);
           updateRefresh(true);
           // setTimeout(() => {
           //   setResetBand(true);

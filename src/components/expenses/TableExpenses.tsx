@@ -305,6 +305,9 @@ export default function TableExpenses({data, token, expenses,
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);
+          if(d.length > 0){
+            //
+          }
           setDataExpenses(d);
         }else{
           showToastMessageError(res);
