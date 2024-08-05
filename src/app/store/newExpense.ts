@@ -1,5 +1,5 @@
 import {create} from 'zustand'
-import { OneExpense } from '@/interfaces/Expenses'
+import { OneExpense, Expense } from '@/interfaces/Expenses'
 import { Options } from '@/interfaces/Common'
 import { ReportParse } from '@/interfaces/Reports'
 
@@ -29,6 +29,7 @@ interface NewExpenseState {
   haveDiscount: boolean
 
   refresh: boolean
+  expensesTable: Expense[]
 }
 
 interface PettyCashState{
@@ -69,6 +70,7 @@ interface Actions {
   updateCurrentExpense: (value: (OneExpense | null)) => void,
   updateHaveTaxExempt: (value:boolean) => void,
   updateHaveDiscount: (value:boolean) => void,
+  updateExpensesTable: (value:Expense[]) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -95,6 +97,7 @@ const initialState: NewExpenseState = {
   haveDiscount: false,
   taxExempt: '',
   total: '0',
+  expensesTable: [],
 }
 
 const projectInitial: ProjectState = {
@@ -202,6 +205,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   updateHaveTaxExempt: (value:boolean) => set(state => ({
     ...state,
     haveTaxExempt: value,
+  })),
+  updateExpensesTable: (value:Expense[]) => set(state => ({
+    ...state,
+    expensesTable: value,
   })),
   reset: () => {
     set(initialState)

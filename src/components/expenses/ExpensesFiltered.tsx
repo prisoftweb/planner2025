@@ -22,13 +22,14 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
                     {showForm:Function, FilterData:Function, maxAmount:number, 
                       minAmount:number, expensesFiltered: Expense[], isViewReports: boolean}){
 
-  const {categories, conditions, costCenterOpt, projects, reportsOptions, types} = useOptionsExpense();
+  const {categories, conditions, costCenterOpt, projects, reportsOptions, types, providers, providersSAT} = useOptionsExpense();
 
   const [typesSel, setTypesSel] = useState<string[]>(['all']);
   const [categoriesSel, setCategoriesSel] = useState<string[]>(['all']);
   const [conditionsSel, setConditionsSel] = useState<string[]>(['all']);
   const [projectsSel, setProjectsSel] = useState<string[]>(['all']);
   const [reportsSel, setReportsSel] = useState<string[]>(['all']);
+  const [providersSel, setProvidersSel] = useState<string[]>(['all']);
   const [heightPage, setHeightPage] = useState<number>(900);
   const [costcentersSel, setCostCentersSel] = useState<string[]>(['all']);
   const [isGeneratedReport, setIsGeneratedReport] = useState<boolean>(false);
@@ -93,6 +94,10 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
     setCostCentersSel(value);
   }
 
+  const handleProviders = (value: string[]) => {
+    setProvidersSel(value);
+  }
+
   //const {costCenter, providers, responsibles, vats} = useOptionsExpense();
 
   useEffect(() => {
@@ -120,14 +125,15 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }, [values]);
 
   useEffect(() => {
+    console.log('providers sel => ', providersSel);
     FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
-      firstDate?.getTime(), secondDate?.getTime(), costcentersSel);
+      firstDate?.getTime(), secondDate?.getTime(), costcentersSel, providersSel);
   }, [ categoriesSel, typesSel, conditionsSel, minValue, maxValue, firstDate, secondDate, 
-        projectsSel, reportsSel, costcentersSel]);
+        projectsSel, reportsSel, costcentersSel, providersSel]);
 
   useEffect (() => {
     FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
-      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcentersSel);
+      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcentersSel, providersSel);
   }, []);
 
   // useEffect(() => {
@@ -183,6 +189,10 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
         <div>
           <Label htmlFor="costcenters"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
           <SelectMultipleReact index={0} opts={allArray.concat(costCenterOpt)} setValue={handleCostCenters} />
+        </div>
+        <div>
+          <Label htmlFor="providers"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedores</p></Label>
+          <SelectMultipleReact index={0} opts={allArray.concat(providers)} setValue={handleProviders} />
         </div>
         {/* <div className="pt-9"> */}
         <div className="pt-0">

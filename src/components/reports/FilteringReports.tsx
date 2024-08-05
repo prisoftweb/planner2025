@@ -10,6 +10,13 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 
+import { useOptionsReports } from "@/app/store/reportsStore";
+import { getCompaniesLV } from "@/app/api/routeCompany";
+import { getProjectsLV } from "@/app/api/routeProjects";
+import { getCatalogsByName } from "@/app/api/routeCatalogs";
+import { getDepartmentsLV } from "@/app/api/routeDepartments";
+import { GlossaryCatalog } from "@/interfaces/Glossary";
+
 export default function Filtering({showForm, optCompanies, 
                       optConditions, FilterData, maxAmount, optProjects }: 
                     {showForm:Function, optCompanies: Options[],
@@ -35,6 +42,64 @@ export default function Filtering({showForm, optCompanies,
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
   };
+
+  // const {companies, conditions, projects, updateCompanies, updateConditions, updateProjects} = useOptionsReports();
+
+  // useEffect(() => {
+  //   const fetchOptions = async () => {
+  //     let optComp: Options[] = [];
+  //     try {
+  //       optComp = await getCompaniesLV(token);
+  //     } catch (error) {
+  //       return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+  //     }
+
+  //     let optDepts: Options[] = [];
+  //     try {
+  //       optDepts = await getDepartmentsLV(token);
+  //     } catch (error) {
+  //       return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
+  //     }
+
+  //     let optProjs:Options[];
+  //     try {
+  //       optProjs = await getProjectsLV(token);
+  //       if(typeof(optProjs)==='string'){
+  //         return <h1 className="text-center text-lg text-red-500">{optProjs}</h1>
+  //       }    
+  //     } catch (error) {
+  //       return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+  //     }
+
+  //     let catalogs: GlossaryCatalog[];
+  //     try {
+  //       catalogs = await getCatalogsByName(token, 'reports');
+  //       if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+  //     } catch (error) {
+  //       return <h1>Error al consultar catalogos!!</h1>
+  //     }
+
+  //     //const condition = catalogs[0].condition[0].glossary._id;
+
+  //     const optConds:Options[] = [];
+  //     catalogs[0].condition.map((cond) => {
+  //       let c = {
+  //         label: cond.glossary.name,
+  //         value: cond.glossary._id
+  //       }
+  //       optConds.push(c);
+  //     });
+
+  //     updateCompanies(optComp);
+  //     updateConditions(optConds);
+  //     updateProjects(optProjs);
+
+  //   };
+
+  //   if(projects.length <= 0 || companies.length <= 0 || conditions.length <= 0){
+  //     fetchOptions();
+  //   }
+  // }, []);
 
   useEffect(() => {
     if(values.length > 1){

@@ -210,8 +210,12 @@ const NavItems = ({role}: {role:string}) => {
             link: '/expenses/history'
           },
           {
-            name: 'Informes',
+            name: 'Reportes',
             link: '/expenses/reports'
+          },
+          {
+            name: 'Dashboards',
+            link: '/expenses/dashboard'
           },
         ]}
       />

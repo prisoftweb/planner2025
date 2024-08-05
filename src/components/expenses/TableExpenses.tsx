@@ -305,6 +305,9 @@ export default function TableExpenses({data, token, expenses,
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);
+          if(d.length > 0){
+            //
+          }
           setDataExpenses(d);
         }else{
           showToastMessageError(res);
@@ -379,16 +382,40 @@ export default function TableExpenses({data, token, expenses,
     return false;
   }
 
-  const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                      startDate:number, endDate:number, costcenters:string[]) => {
-    if(costcenters.includes('all')){
+  const providerValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+        startDate:number, endDate:number, providers:string[]) => {
+          //console.log('providers => ', providers);
+    if(providers.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+    }else{
+    //console.log('cost center filter => ', costcenters);
+      if(exp.provider){
+        if(typeof(exp.provider)==='string'){
+          if(providers.includes(exp.provider)){
+            return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          }
+        }else{
+          if(providers.some((prov) => prov === exp.provider._id)){
+            return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                      startDate:number, endDate:number, costcenters:string[], providers:string[]) => {
+    if(costcenters.includes('all')){
+      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+      return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers);
     }else{
       //console.log('cost center filter => ', costcenters);
       if(exp.costocenter){
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
-            return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+            return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers);
           }
         }else{
           // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
@@ -398,7 +425,8 @@ export default function TableExpenses({data, token, expenses,
           //console.log('concept cc => ', exp.costocenter.concept._id);
           if(costcenters.some((cc) => cc === (exp.costocenter._id + '/' + exp.costocenter.concept._id))){
             //console.log('entrooo???');
-            return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+            return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers);
           }
         }
       }
@@ -408,14 +436,14 @@ export default function TableExpenses({data, token, expenses,
 
   const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, projects:string[], 
-                      costcenters:string[]) => {
+                      costcenters:string[], providers:string[]) => {
     if(projects.includes('all')){
       //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-      return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters);
+      return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters, providers);
     }else{
       if(exp.project){
         if(projects.includes(exp.project._id)){
-          return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters);
+          return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters, providers);
           //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
         }
       }
@@ -425,13 +453,13 @@ export default function TableExpenses({data, token, expenses,
 
   const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
               startDate:number, endDate:number, projects:string[], 
-              reports:string[], costcenters: string[]) => {
+              reports:string[], costcenters: string[], providers: string[]) => {
     if(reports.includes('all')){
-      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters); 
+      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters, providers); 
     }else{
       if(exp.report){
         if(reports.includes(exp.report._id)){
-          return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters);
+          return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters, providers);
         }
       }
     }
@@ -440,14 +468,14 @@ export default function TableExpenses({data, token, expenses,
 
   const categoriesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                 startDate:number, endDate:number, projects:string[], 
-                reports:string[], categories:string[], costcenters: string[]) => {
+                reports:string[], categories:string[], costcenters: string[], providers: string[]) => {
     
     if(categories.includes('all')){
-      return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, costcenters);
+      return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, costcenters, providers);
     }else{
       if(exp.category){
         if(categories.includes(exp.category._id)){
-          return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, costcenters);
+          return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, costcenters, providers);
         }
       }
     }
@@ -457,16 +485,16 @@ export default function TableExpenses({data, token, expenses,
   const typesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], categories:string[], types:string[], 
-                  costcenters:string[]) => {
+                  costcenters:string[], providers: string[]) => {
     
     if(types.includes('all')){
       return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, 
-                projects, reports, categories, costcenters);
+                projects, reports, categories, costcenters, providers);
     }else{
       if(exp.typeCFDI){
         if(types.includes(exp.typeCFDI._id)){
           return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, 
-                    projects, reports, categories, costcenters);
+                    projects, reports, categories, costcenters, providers);
         }
       }
     }
@@ -476,11 +504,11 @@ export default function TableExpenses({data, token, expenses,
   const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], categories:string[], types:string[], 
-                  conditions:string[], costcenters: string[]) => {
+                  conditions:string[], costcenters: string[], providers: string[]) => {
 
     if(conditions.includes('all')){
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-                reports, categories, types, costcenters);
+                reports, categories, types, costcenters, providers);
     }else{
       // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
       //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
@@ -488,7 +516,7 @@ export default function TableExpenses({data, token, expenses,
       // }
       if(conditions.includes(exp.estatus._id)){
         return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-                    reports, categories, types, costcenters);
+                    reports, categories, types, costcenters, providers);
       }
     }
     return false;
@@ -497,12 +525,12 @@ export default function TableExpenses({data, token, expenses,
   const filterData = (conditions:string[], types:string[], 
     categories:string[], minAmount:number, maxAmount:number, 
     reports:string[], projects:string[], startDate:number, 
-    endDate:number, costcenters:string[]) => {
+    endDate:number, costcenters:string[], providers: string[]) => {
   
     let filtered: Expense[] = [];
     refExpenses.current.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
-          endDate, projects, reports, categories, types, conditions, costcenters)){
+          endDate, projects, reports, categories, types, conditions, costcenters, providers)){
         filtered.push(expense);
       }
     });

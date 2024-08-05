@@ -33,25 +33,25 @@ export default function ContainerClient({token, optCompanies, optDepartments,
 
   // useEffect(() => {
   //   const fetchOptions = async () => {
-  //     let optCompanies: Options[] = [];
+  //     let optComp: Options[] = [];
   //     try {
-  //       optCompanies = await getCompaniesLV(token);
+  //       optComp = await getCompaniesLV(token);
   //     } catch (error) {
   //       return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
   //     }
 
-  //     let optDepartments: Options[] = [];
+  //     let optDepts: Options[] = [];
   //     try {
-  //       optDepartments = await getDepartmentsLV(token);
+  //       optDepts = await getDepartmentsLV(token);
   //     } catch (error) {
   //       return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
   //     }
 
-  //     let optProjects:Options[];
+  //     let optProjs:Options[];
   //     try {
-  //       optProjects = await getProjectsLV(token);
-  //       if(typeof(optProjects)==='string'){
-  //         return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+  //       optProjs = await getProjectsLV(token);
+  //       if(typeof(optProjs)==='string'){
+  //         return <h1 className="text-center text-lg text-red-500">{optProjs}</h1>
   //       }    
   //     } catch (error) {
   //       return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
@@ -67,16 +67,20 @@ export default function ContainerClient({token, optCompanies, optDepartments,
 
   //     //const condition = catalogs[0].condition[0].glossary._id;
 
-  //     const optConditions:Options[] = [];
+  //     const optConds:Options[] = [];
   //     catalogs[0].condition.map((cond) => {
   //       let c = {
   //         label: cond.glossary.name,
   //         value: cond.glossary._id
   //       }
-  //       optConditions.push(c);
-  //       optConditionsFilter.push(c);
+  //       optConds.push(c);
   //     });
-  //   };//aqui me quede
+
+  //     updateCompanies(optComp);
+  //     updateConditions(optConds);
+  //     updateProjects(optProjs);
+
+  //   };
   //   fetchOptions();
   // }, []);
 
