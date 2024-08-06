@@ -2,47 +2,8 @@
 import { BarChart } from '@tremor/react';
 import { CurrencyFormatter } from '@/app/functions/Globals';
 
-// const chartdata = [
-//   {
-//     date: 'Jan 23',
-//     Running: 167,
-//   },
-//   {
-//     date: 'Feb 23',
-//     Running: 125,
-//   },
-//   {
-//     date: 'Mar 23',
-//     Running: 156,
-//   },
-//   {
-//     date: 'Apr 23',
-//     Running: 165,
-//   },
-//   {
-//     date: 'May 23',
-//     Running: 153,
-//   },
-//   {
-//     date: 'Jun 23',
-//     Running: 124,
-//   },
-//   {
-//     date: 'Jul 23',
-//     Running: 164,
-//   },
-//   {
-//     date: 'Aug 23',
-//     Running: 123,
-//   },
-//   {
-//     date: 'Sep 23',
-//     Running: 132,
-//   },
-// ];
-
-export function BarChartComponent({data, colors, categories, category}: 
-  {data:any, colors: string[], categories: string[], category: string}) {
+export function BarChartComponent({data, colors, categories}: 
+  {data:any, colors: string[], categories: string[]}) {
   type CustomTooltipTypeBar = {
     payload: any;
     active: boolean | undefined;
@@ -62,7 +23,6 @@ export function BarChartComponent({data, colors, categories, category}:
             <div className="space-y-1">
               <p className="text-tremor-content">{category.dataKey}</p>
               <p className="font-medium text-tremor-content-emphasis">
-                {/* {category.value} bpm */}
                 {CurrencyFormatter({
                   currency: 'MXN',
                   value: category.value
@@ -88,7 +48,7 @@ export function BarChartComponent({data, colors, categories, category}:
         categories={categories}
         colors={colors}
         //colors={['blue']}
-        yAxisWidth={48}
+        yAxisWidth={56}
         customTooltip={customTooltip}
       />
     </>

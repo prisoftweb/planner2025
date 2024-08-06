@@ -1,16 +1,16 @@
-//import StatisticsHeader from "@/components/expenses/dashboard/StatisticsHeader"
 import Navigation from "@/components/navigation/Navigation"
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-//import DonutChartt from "@/components/expenses/dashboard/DonutChart";
-//import { BarChartComponent } from "@/components/expenses/dashboard/BarChartComponent";
 import DashBoardContainer from "@/components/expenses/dashboard/DashBoardContainer";
-import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLY, GetAllCostsGroupByCOSTOCENTERCONCEPTONLY, GetAllCostsGroupByDAY } from "@/app/api/routeCost"
-import { CostsByConceptAndCategory, Costocenter, CostsByDay } from "@/interfaces/DashboardsCosts";
+import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject, GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject, 
+  GetAllCostsGroupByDAYAndProject } from "@/app/api/routeCost"
+import { CostsByConceptAndCategory, CostsByDay } from "@/interfaces/DashboardsCosts";
+import { getProjectsLV } from "@/app/api/routeProjects";
+import { Options } from "@/interfaces/Common";
 
 interface OptionsDashboard {
   label: string,
-  value: number
+  costo: number
 }
 
 export default async function Page() {
@@ -19,14 +19,12 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const dateCurrent = new Date();
-  const dateIni = dateCurrent.getFullYear.toString() + '-' + dateCurrent.getMonth().toString() + '-' + dateCurrent.getDate();
-  //const dateEnd = dateCurrent.getFullYear.toString() + '-' + dateCurrent.getMonth().toString() + '-' + dateCurrent.getDate();
-
+  //const dateCurrent = new Date();
+  //const dateIni = dateCurrent.getFullYear.toString() + '-' + dateCurrent.getMonth().toString() + '-' + dateCurrent.getDate();
+  
   let costsCategory: CostsByConceptAndCategory[] = [];
   try {
-    // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(token, dateIni, dateIni);
-    costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(token, new Date().toDateString(), new Date().toDateString());
+    costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
     if(typeof(costsCategory)==='string'){
       return <h1>Error al obtener costos agrupados por categoria!!!</h1>
     }
@@ -36,8 +34,7 @@ export default async function Page() {
 
   let costsConcept: CostsByConceptAndCategory[] = [];
   try {
-    // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(token, dateIni, dateIni);
-    costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(token, new Date().toDateString(), new Date().toDateString());
+    costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
     if(typeof(costsConcept)==='string'){
       return <h1>Error al obtener costos agrupados por concepto!!!</h1>
     }
@@ -47,13 +44,22 @@ export default async function Page() {
 
   let costsDays: CostsByDay[] = [];
   try {
-    // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(token, dateIni, dateIni);
-    costsDays = await GetAllCostsGroupByDAY(token, new Date().toDateString(), new Date().toDateString());
+    costsDays = await GetAllCostsGroupByDAYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
     if(typeof(costsDays)==='string'){
       return <h1>Error al obtener costos agrupados por dias!!!</h1>
     }
   } catch (error) {
     return <h1>Error al obtener costos agrupados por dias!!!</h1>
+  }
+
+  let projects: Options[] = [];
+  try {
+    projects = await getProjectsLV(token);
+    if(typeof(projects)==='string'){
+      return <h1>Error al obtener proyectos!!!</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener proyectos!!!</h1>
   }
 
   const optCategories: OptionsDashboard[] = [];
@@ -63,29 +69,34 @@ export default async function Page() {
   costsCategory.map((cc) => {
     optCategories.push({
       label: cc.costocenter.category ?? '',
-      value: cc.subtotalCost
+      costo: cc.subtotalCost
     })
   });
 
   costsConcept.map((cc) => {
     optConcepts.push({
       label: cc.costocenter.concept ?? '',
-      value: cc.subtotalCost
+      costo: cc.subtotalCost
     })
   });
 
   costsDays.map((cc) => {
     optDays.push({
-      label: cc.date ?? '',
-      value: cc.subtotalCost
+      label: cc.day?.toString() || ' ',
+      costo: cc.subtotalCost
     })
   })
-  //console.log('costs category => ', costsCategory);
 
+  //console.log('projects dashboard => ', projects);
+  
   return (
     <>
       <Navigation user={user} />
-      <DashBoardContainer token={token} costsCategories={optCategories} costsConcepts={optConcepts} costsDays={optDays} />
+      <DashBoardContainer token={token} costsCategories={optCategories} 
+          costsConcepts={optConcepts} costsDays={optDays} projects={[{
+            label: 'TODOS',
+            value: 'TODOS'
+          }].concat(projects)} />
       {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <StatisticsHeader />
         <div className="mt-5 grid grid-cols-2 gap-x-5">
