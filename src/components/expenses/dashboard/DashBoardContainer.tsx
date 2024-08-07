@@ -131,7 +131,7 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
         costsResumenType={costsByResumenType} />
-      <div className="mt-5 grid grid-cols-2 gap-x-5">
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5">
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>CENTRO DE COSTOS</p>

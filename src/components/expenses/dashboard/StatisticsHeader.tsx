@@ -30,7 +30,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
   return (
     <div>
       <div>
-        <div className='flex justify-end p-3 gap-x-5 mt-2'>
+        <div className='flex flex-wrap justify-end p-3 gap-x-5 gap-y-3 mt-2'>
           <div>
             <Label htmlFor='date'>Fecha</Label>
             <DateRangePicker 
@@ -63,7 +63,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 0 && (
               <>
                 <p className='text-xs'>{costsResumenType[0].tipo}</p>
-                <p className='text-xl'>{CurrencyFormatter({
+                <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
                   currency: 'MXN',
                   value: costsResumenType[0].subtotalCost
                 })}</p>
@@ -76,7 +76,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 1 && (
               <>
                 <p className='text-xs'>{costsResumenType[1].tipo}</p>
-                <p className='text-xl'>{CurrencyFormatter({
+                <p className='text-lg sm:text-xl'>{CurrencyFormatter({
                   currency: 'MXN',
                   value: costsResumenType[1].subtotalCost
                 })}</p>
@@ -89,7 +89,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 2 && (
               <>
                 <p className='text-xs'>{costsResumenType[2].tipo}</p>
-                <p className='text-xl'>{CurrencyFormatter({
+                <p className='text-lg sm:text-xl'>{CurrencyFormatter({
                   currency: 'MXN',
                   value: costsResumenType[2].subtotalCost
                 })}</p>
