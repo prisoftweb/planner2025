@@ -442,7 +442,7 @@ export async function insertConditionInCost(auth_token:string, data:Object) {
 export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:string, dateStart:string, dateEnd:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}`;
   try {
-    console.log('url => ', url);
+    //console.log('url => ', url);
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
@@ -450,16 +450,40 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:strin
     });
     
     if(res.status===200) {
-      console.log('res route cost category => ', res.data.data);
+      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
     console.log('error', error);
     if(axios.isAxiosError(error)){
-      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+      return error.response?.data.message || 'Error al consultar costos por centro de costos categoria!!';
     }
-    return 'Error al consultar costos por centros de costos!!';
+    return 'Error al consultar costos por centros de costos categoria!!';
+  }
+}
+
+export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}/${project}`;
+  try {
+    //console.log('url => ', url);
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      //console.log('res route cost category => ', res.data.data);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos categoria!!';
+    }
+    return 'Error al consultar costos por centros de costos categoria!!';
   }
 }
 
@@ -480,9 +504,32 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(auth_token:string
   } catch (error) {
     //console.log('error', error);
     if(axios.isAxiosError(error)){
-      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+      return error.response?.data.message || 'Error al consultar costos por centro de costos concepto!!';
     }
-    return 'Error al consultar costos por centros de costos!!';
+    return 'Error al consultar costos por centros de costos concepto!!';
+  }
+}
+
+export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${dateStart}/${dateEnd}/${project}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      //console.log('res route cost category => ', res.data.data);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos concepto!!';
+    }
+    return 'Error al consultar costos por centros de costos concepto!!';
   }
 }
 
@@ -503,8 +550,80 @@ export async function GetAllCostsGroupByDAY(auth_token:string, dateStart:string,
   } catch (error) {
     //console.log('error', error);
     if(axios.isAxiosError(error)){
-      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+      return error.response?.data.message || 'Error al consultar costos por dia!!';
     }
-    return 'Error al consultar costos por centros de costos!!';
+    return 'Error al consultar costos por dia!!';
+  }
+}
+
+export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByDAY/${dateStart}/${dateEnd}/${project}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      //console.log('res route cost category => ', res.data.data);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por dia!!';
+    }
+    return 'Error al consultar costos por dia!!';
+  }
+}
+
+export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMEN/${dateStart}/${dateEnd}/${project}`;
+  console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      console.log(res.data.data.stats);
+      //console.log('res route cost category => ', res.data.data);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por resumen!!';
+    }
+    return 'Error al consultar costos por resumen!!';
+  }
+}
+
+export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMENTYPE/${dateStart}/${dateEnd}/${project}`;
+  console.log(url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    if(res.status===200) {
+      console.log(res.data.data.stats);
+      //console.log('res route cost category => ', res.data.data);
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    //console.log('error', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por resumen y tipo!!';
+    }
+    return 'Error al consultar costos por resumen y tipo!!';
   }
 }
