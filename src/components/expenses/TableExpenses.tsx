@@ -9,7 +9,7 @@ import Chip from "../providers/Chip";
 import { RemoveCost } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
-import { GetCostsMIN } from "@/app/api/routeCost";
+import { getAllCostsByCondition } from "@/app/api/routeCost";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { Options } from "@/interfaces/Common";
@@ -300,7 +300,8 @@ export default function TableExpenses({data, token, expenses,
   if(refresh){
     const aux = async () =>{
       try {
-        const res = await GetCostsMIN(token);
+        const res = await getAllCostsByCondition(token);
+        //const res = await GetCostsMIN(token);
         //console.log('res');
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
