@@ -23,3 +23,24 @@ export interface CostsByDay {
   date: string
   day: number
 }
+
+export interface CostsGroupByResumen {
+  _id: any
+  quantity: number
+  subtotalCost: number
+  totalIVA: number
+  totalDiscount: number
+  totalCost: number
+}
+
+export interface CostsGroupResumenByType {
+  _id: {
+    type: string
+  }
+  quantity: number
+  subtotalCost: number
+  totalIVA: number
+  totalDiscount: number
+  totalCost: number
+  tipo: string
+}

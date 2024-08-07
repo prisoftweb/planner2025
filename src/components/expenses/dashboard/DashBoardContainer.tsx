@@ -4,8 +4,8 @@ import DonutChartt from "./DonutChart"
 import { BarChartComponent } from "./BarChartComponent"
 import { useState } from "react"
 import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject, GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject, 
-  GetAllCostsGroupByDAYAndProject } from "@/app/api/routeCost"
-import { CostsByConceptAndCategory, CostsByDay } from "@/interfaces/DashboardsCosts";
+  GetAllCostsGroupByDAYAndProject, GetAllCostsGroupByRESUMEN, GetAllCostsGroupByTYPERESUMEN } from "@/app/api/routeCost"
+import { CostsByConceptAndCategory, CostsByDay, CostsGroupByResumen, CostsGroupResumenByType } from "@/interfaces/DashboardsCosts";
 import { Options } from "@/interfaces/Common"
 
 interface OptionsDashboard {
@@ -13,13 +13,17 @@ interface OptionsDashboard {
   costo: number
 }
 
-export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, projects}:
+export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, 
+            projects, costsResumen, costsResumenType}:
           {token: string, costsConcepts: OptionsDashboard[], costsCategories: OptionsDashboard[], 
-            costsDays: OptionsDashboard[], projects:Options[]}) {
+            costsDays: OptionsDashboard[], projects:Options[], costsResumen:CostsGroupByResumen[], 
+            costsResumenType:CostsGroupResumenByType[] }) {
   
   const [costsByConcept, setCostsByConcept] = useState<OptionsDashboard[]>(costsConcepts);
   const [costsByCategory, setCostsByCategory] = useState<OptionsDashboard[]>(costsCategories);
   const [costsByDay, setCostsByDay] = useState<OptionsDashboard[]>(costsDays);
+  const [costsByResumen, setCostsByResumen] = useState<CostsGroupByResumen[]>(costsResumen);
+  const [costsByResumenType, setCostsByResumenType] = useState<CostsGroupResumenByType[]>(costsResumenType)
 
   const fetchData = async (dateS: string, dateE: string, project:string) => {
     let costsCategory: CostsByConceptAndCategory[] = [];
@@ -53,6 +57,26 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
       return <h1>Error al obtener costos agrupados por dias!!!</h1>
     }
 
+    let costsRes: CostsGroupByResumen[] = [];
+    try {
+      costsRes = await GetAllCostsGroupByRESUMEN(token, dateS, dateE, project);
+      if(typeof(costsRes)==='string'){
+        return <h1>{costsRes}</h1>
+      }
+    } catch (error) {
+      return <h1>Error al obtener costos agrupados por resumen!!!</h1>
+    }
+
+    let costsResType: CostsGroupResumenByType[] = [];
+    try {
+      costsResType = await GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project);
+      if(typeof(costsResType)==='string'){
+        return <h1>{costsResType}</h1>
+      }
+    } catch (error) {
+      return <h1>Error al obtener costos agrupados por resumen y tipo!!!</h1>
+    }
+
     const optCategories: OptionsDashboard[] = [];
     const optConcepts: OptionsDashboard[] = [];
     const optDays: OptionsDashboard[] = [];
@@ -81,6 +105,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     setCostsByCategory(optCategories);
     setCostsByConcept(optConcepts);
     setCostsByDay(optDays);
+    setCostsByResumen(costsRes);
+    setCostsByResumenType(costsResType);
   }
 
   // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
@@ -103,7 +129,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
 
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <StatisticsHeader handleDate={fetchData} projects={projects} />
+      <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
+        costsResumenType={costsByResumenType} />
       <div className="mt-5 grid grid-cols-2 gap-x-5">
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
