@@ -18,13 +18,19 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
     {handleDate: Function, projects:Options[], costsResumen:CostsGroupByResumen[], 
       costsResumenType:CostsGroupResumenByType[]}) {
   const [project, setProject] = useState<string>(projects[0].value);
-  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>();
+  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+    from: new Date(),
+    to: new Date(),
+  });
 
   //console.log('header proyects => ', projects);
+  //console.log('header cost resumen => ', costsResumen);
   const handleProjects = (value: string) => {
     setProject(value);
     if(rangeDate?.from && rangeDate.to){
-      handleDate(rangeDate.from, rangeDate.to, project);
+      //console.log('handle proyect => ');
+      //handleDate(rangeDate.from, rangeDate.to, project);
+      handleDate(rangeDate.from, rangeDate.to, value);
     }
   };
   return (
@@ -37,12 +43,14 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               className='mt-2'
               placeholder='Seleccione un rango de fechas'
               onValueChange={(e) => {
-                console.log('change date range => ', e);
+                //console.log('change date range => ', e);
+                setRangeDate(e);
                 if(e.from && e.to){
-                  setRangeDate(e);
+                  //setRangeDate(e);
                   handleDate(e.from.toDateString(), e.to.toDateString(), project);
                 }
               }}
+              value={rangeDate}
               locale={es}
             />
           </div>

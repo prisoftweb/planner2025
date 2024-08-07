@@ -29,8 +29,8 @@ import { UsrBack } from "@/interfaces/User"
 import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
 
-import { getAllCostsByCondition } from "@/app/api/routeCost"
-import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
+//import { getAllCostsByCondition } from "@/app/api/routeCost"
+//import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports}:
