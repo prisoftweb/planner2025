@@ -21,7 +21,7 @@ export default function DonutChartt({data, colors, categories, category}:
     if (!categoryPayload) return null;
     return (
       // <div className='bg-tremor-background'></div>
-      <div className="w-56 rounded-tremor-default border border-tremor-border p-2 
+      <div className="w-72 rounded-tremor-default border border-tremor-border p-2 
           text-tremor-default shadow-tremor-dropdown bg-slate-600 z-50">
         <div className="flex flex-1 space-x-2.5 bg-slate-600 z-50">
           <div
@@ -50,7 +50,7 @@ export default function DonutChartt({data, colors, categories, category}:
   
   return (
     <>
-      <div className="flex items-center justify-center space-x-6">
+      <div className="flex flex-wrap items-center justify-center space-x-6">
         <DonutChart
           data={data}
           //category="sales"
