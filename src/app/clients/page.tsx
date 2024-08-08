@@ -17,6 +17,7 @@ export default async function clients(){
   const token = cookieStore.get('token')?.value || '';
   
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+  //console.log('user back => ', user);
 
   let tags;
   try {
@@ -53,6 +54,21 @@ export default async function clients(){
         </div>
       </>
   }
+
+  // let permission = false;
+
+  // if(!permission){
+  //   return (
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+  //           text="Lo sentimos, no tienes acceso a esta informacion!!!" 
+  //           title="Clientes"><></></WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   if(!clients || clients.length<= 0){
     return <>

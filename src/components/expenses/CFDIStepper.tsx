@@ -112,6 +112,8 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           refRequest.current = true;
           showToastMessageError('Ocurrio un error al guardar costo!!');
         }
+      } else{
+        refRequest.current = true;
       }
     }else{
       const data = {
