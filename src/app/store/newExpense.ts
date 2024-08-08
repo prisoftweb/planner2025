@@ -71,6 +71,7 @@ interface Actions {
   updateHaveTaxExempt: (value:boolean) => void,
   updateHaveDiscount: (value:boolean) => void,
   updateExpensesTable: (value:Expense[]) => void,
+  updateResponsible: (value:string) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -209,6 +210,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
   updateExpensesTable: (value:Expense[]) => set(state => ({
     ...state,
     expensesTable: value,
+  })),
+  updateResponsible: (value:string) => set(state => ({
+    ...state,
+    responsible: value
   })),
   reset: () => {
     set(initialState)

@@ -38,7 +38,7 @@ export default function TableExpenses({data, token, expenses,
   //const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
   // const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
 
-  const {refresh, updateRefresh} = useNewExpense();
+  const {refresh, updateRefresh, updateResponsible} = useNewExpense();
 
   //console.log('is filter => ', isFilter);
   const handleIsFilter = (value: boolean) => {
@@ -319,6 +319,7 @@ export default function TableExpenses({data, token, expenses,
       }
     }
     aux();
+    updateResponsible(user);
     updateRefresh(false);
   }
 

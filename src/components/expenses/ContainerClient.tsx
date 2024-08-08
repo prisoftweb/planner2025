@@ -48,7 +48,7 @@ export default function ContainerClient({data, token, expenses,
   const [idVal, setIdVal] = useState<string>('');
   const [tableData, setTableData] = useState<ExpensesTable[]>(data);
 
-  const {expensesTable, updateExpensesTable, refresh, updateRefresh} = useNewExpense();
+  const {expensesTable, updateExpensesTable, updateResponsible, refresh, updateRefresh} = useNewExpense();
 
   useEffect(() => {
 
@@ -204,6 +204,8 @@ export default function ContainerClient({data, token, expenses,
       updateProvidersSAT(optProvidersSAT);
     }
     fetchApis();
+
+    updateResponsible(user._id);
   }, []);
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
