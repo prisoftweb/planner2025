@@ -430,7 +430,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
       if(opt.value === category){
         indexCate = index;
       }
-    });      
+    });   
   }
 
   let indexTypeCFDI = 0;
@@ -522,11 +522,19 @@ export default function DataStepper({token, user}: {token:string, user:string })
             num = num * -1;
             formik.values.amount = num.toString();
           }
+          let numTotal = Number(totalExpense.replace(/[$,]/g, ""));
+          if(numTotal > 0){
+            setTotalExpense((numTotal * -1).toString());
+          }
         }else{
           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
           if(num < 0){
             num = Math.abs(num) ;
             formik.values.amount = num.toString();
+          }
+          let numTotal = Number(totalExpense.replace(/[$,]/g, ""));
+          if(numTotal < 0){
+            setTotalExpense((numTotal * -1).toString());
           }    
         }
       }

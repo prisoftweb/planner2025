@@ -107,6 +107,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     setCostsByDay(optDays);
     setCostsByResumen(costsRes);
     setCostsByResumenType(costsResType);
+    //console.log('cost resumen => ', costsRes);
+    //console.log('cost res type => ', costsResType);
   }
 
   // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];

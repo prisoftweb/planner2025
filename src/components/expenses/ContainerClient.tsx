@@ -29,8 +29,8 @@ import { UsrBack } from "@/interfaces/User"
 import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
 
-import { getAllCostsByCondition } from "@/app/api/routeCost"
-import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
+//import { getAllCostsByCondition } from "@/app/api/routeCost"
+//import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports}:
@@ -48,7 +48,7 @@ export default function ContainerClient({data, token, expenses,
   const [idVal, setIdVal] = useState<string>('');
   const [tableData, setTableData] = useState<ExpensesTable[]>(data);
 
-  const {expensesTable, updateExpensesTable, refresh, updateRefresh} = useNewExpense();
+  const {expensesTable, updateExpensesTable, updateResponsible, refresh, updateRefresh} = useNewExpense();
 
   useEffect(() => {
 
@@ -204,6 +204,8 @@ export default function ContainerClient({data, token, expenses,
       updateProvidersSAT(optProvidersSAT);
     }
     fetchApis();
+
+    updateResponsible(user._id);
   }, []);
 
   const [isFilter, setIsFilter] = useState<boolean>(false);

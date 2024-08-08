@@ -581,7 +581,7 @@ export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateSta
 
 export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMEN/${dateStart}/${dateEnd}/${project}`;
-  console.log('url => ', url);
+  //console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
@@ -590,7 +590,7 @@ export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:str
     });
     
     if(res.status===200) {
-      console.log(res.data.data.stats);
+      //console.log(res.data.data.stats);
       //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
