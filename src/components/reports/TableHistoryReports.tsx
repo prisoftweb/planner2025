@@ -52,7 +52,7 @@ export default function TableHistoryReports({data, token, reports,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
-          <DeleteElement id={row.original.id} name={row.original.Report} remove={RemoveReport} token={token} />
+          {/* <DeleteElement id={row.original.id} name={row.original.Report} remove={RemoveReport} token={token} /> */}
           {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500" />}
         </div>
       ),
