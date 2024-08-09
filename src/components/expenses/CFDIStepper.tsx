@@ -101,7 +101,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
             updateRefresh(true);
             showToastMessage('Costo creado satisfactoriamente!!!');
             setTimeout(() => {
-              updateIndexStepper(1);
+              updateIndexStepper(4);
             }, 200);
             refRequest.current = true;
           }else{
@@ -144,7 +144,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           setTimeout(() => {
-            updateIndexStepper(1);
+            updateIndexStepper(4);
           }, 200);
           refRequest.current = true;
         }

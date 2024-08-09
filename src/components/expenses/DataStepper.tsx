@@ -299,6 +299,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           showToastMessage('Costo creado satisfactoriamente!!!');
           //updateHaveExpenses(true);
           updateRefresh(true);
+          updateIndexStepper(4);
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);
@@ -347,6 +348,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           //setClearAmount(true);
           //updateHaveExpenses(true);
           updateRefresh(true);
+          updateIndexStepper(4);
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);

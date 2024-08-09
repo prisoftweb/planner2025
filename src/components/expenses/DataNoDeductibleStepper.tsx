@@ -232,6 +232,7 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
           showToastMessage('Costo creado satisfactoriamente!!!');
           setClearAmount(true);
           updateRefresh(true);
+          updateIndexStepper(3);
           setTimeout(() => {
             setResetBand(true);
           }, 300);
