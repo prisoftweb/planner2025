@@ -4,8 +4,6 @@ import { Options } from '@/interfaces/Common'
 import { ReportParse } from '@/interfaces/Reports'
 
 interface NewExpenseState {
-  costCenter: string,
-  concept: string,
   folio:string, 
   taxFolio:string,
   description:string,
@@ -35,6 +33,11 @@ interface NewExpenseState {
 interface PettyCashState{
   isPettyCash: boolean,
   isCard: boolean
+}
+
+interface CostCenterState{
+  costCenter: string,
+  concept: string,
 }
 
 interface ProjectState{
@@ -75,8 +78,8 @@ interface Actions {
 }
 
 const initialState: NewExpenseState = {
-  costCenter: '',
-  concept: '',
+  //costCenter: '',
+  //concept: '',
   folio: '', 
   description: '',
   amount: '', 
@@ -101,6 +104,11 @@ const initialState: NewExpenseState = {
   expensesTable: [],
 }
 
+const initialCostCenter : CostCenterState = {
+  concept: '',
+  costCenter: ''
+}
+
 const projectInitial: ProjectState = {
   project: '',
   indexStepper: 0,
@@ -118,11 +126,13 @@ const initialExpense: CurrentExpense = {
   currentExpense: null,
 }
 
-export const useNewExpense = create<NewExpenseState & Actions & ProjectState & PettyCashState & CurrentExpense>((set) => ({
+export const useNewExpense = create<NewExpenseState & Actions & ProjectState 
+    & PettyCashState & CurrentExpense & CostCenterState>((set) => ({
   ...initialState,
   ...projectInitial,
   ...pettyCashInitial,
   ...initialExpense,
+  ...initialCostCenter,
   updateBasicData: ( folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
       typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, 

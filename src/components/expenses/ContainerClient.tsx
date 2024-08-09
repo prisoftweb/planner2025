@@ -300,14 +300,14 @@ export default function ContainerClient({data, token, expenses,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-2 gap-y-2 items-center">
         <div className="flex items-center">
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
           <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': 'Gastos'}</p>
         </div>
-        <div className="flex gap-x-3">
+        <div className="flex gap-x-3 gap-y-3">
           <SearchInTable placeH={"Buscar gasto.."} />
           <div className="w-72">
             <div className="flex gap-x-4 items-center">
@@ -319,10 +319,6 @@ export default function ContainerClient({data, token, expenses,
                     className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
                   />
               )}  
-              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              /> */}
-              {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} > */}
               <>
                 {!isHistory && (
                   <>

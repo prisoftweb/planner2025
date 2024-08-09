@@ -65,7 +65,7 @@ export default function TableReports({data, token, reports,
       )
     }),
     columnHelper.accessor(row => row.Report, {
-      id: 'Reporte',
+      id: 'Informe',
       cell: ({row}) => (
         // <Link href={`/reports/${row.original.id}/profile`}>
         //   <div className="flex gap-x-1 items-center">
@@ -80,7 +80,7 @@ export default function TableReports({data, token, reports,
       ),
       enableSorting:false,
       header: () => (
-        <p>Reporte</p>
+        <p>Informe</p>
       )
     }),
     columnHelper.accessor(row => row.account, {

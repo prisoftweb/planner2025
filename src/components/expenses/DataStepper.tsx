@@ -35,6 +35,9 @@ export default function DataStepper({token, user}: {token:string, user:string })
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
 
+    // console.log('cost center data stepper => ', costCenter);
+    // console.log('concept data stepper => ', concept);
+
   const formik = useFormik({
     initialValues: {
       folio: folio,
@@ -761,7 +764,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
             />
           </div>
           {view}
-          <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
+          {/* <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3"> */}
+          <div className="col-span-1 sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-x-3">
             <div>
               <div className="flex items-center justify-between mr-5">
                 <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Emisor</p></Label>

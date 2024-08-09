@@ -172,6 +172,18 @@ export default function TableHistoryExpenses({data, token, expenses,
         </Link>
       ),
     }),
+    columnHelper.accessor('taxFolio', {
+      header: 'Folio fiscal',
+      id: 'Folio fiscal',
+      cell: ({row}) => (
+        // <Link href={`/expenses/${row.original.id}/profile`}>
+        //   <p className="">{row.original.taxFolio}</p>
+        // </Link>
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/history/${row.original.id}/profile`)}
+        >{row.original.taxFolio}</p>
+      ),
+    }),
   ]
   
   const initialVisibilityColumns: any = {
@@ -188,6 +200,7 @@ export default function TableHistoryExpenses({data, token, expenses,
     iva: false,
     descuento: false,
     total: false,
+    "Folio fiscal": false,
   }
 
   const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} 
