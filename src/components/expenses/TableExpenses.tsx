@@ -320,6 +320,7 @@ export default function TableExpenses({data, token, expenses,
     }
     aux();
     updateResponsible(user);
+    console.log('refresh user => ', user);
     updateRefresh(false);
   }
 

@@ -82,7 +82,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
   //const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
   const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
-  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: responsibles[0].value);
+  //const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: responsibles[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
   const [categoryS, setCategoryS] = useState<string>(categories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);

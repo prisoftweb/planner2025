@@ -98,7 +98,8 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
 
   //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
-  const [responsibleS, setResponsibleS] = useState<string>(responsibles[0].value);
+  //const [responsibleS, setResponsibleS] = useState<string>(responsibles[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
