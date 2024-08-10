@@ -97,8 +97,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
   //const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
   //actualizacion juntar estos 2 estados en un objeto
+
+  console.log('vat zustand => ', vat);
+
   const [idVat, setIdVat] = useState<string>(vats[0].value);
-  const [vatValue, setVatValue] = useState<string>('0');
+  const [vatValue, setVatValue] = useState<string>(vat!==''? vat: '0');
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [totalExpense, setTotalExpense] = useState<string>(total);
   
@@ -532,6 +535,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
           if(numTotal > 0){
             setTotalExpense((numTotal * -1).toString());
           }
+          let ivaTotal = Number(vatValue.replace(/[$,]/g, ""));
+          if(ivaTotal > 0){
+            formik.values.vat= (ivaTotal * -1).toString();
+            setVatValue((ivaTotal * -1).toString());
+          }
         }else{
           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
           if(num < 0){
@@ -541,6 +549,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
           let numTotal = Number(totalExpense.replace(/[$,]/g, ""));
           if(numTotal < 0){
             setTotalExpense((numTotal * -1).toString());
+          }
+          let ivaTotal = Number(vatValue.replace(/[$,]/g, ""));
+          if(ivaTotal < 0){
+            formik.values.vat= (ivaTotal * -1).toString();
+            setVatValue((ivaTotal * -1).toString());
           }    
         }
       }
