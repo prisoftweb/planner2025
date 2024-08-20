@@ -9,19 +9,23 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { UpdateProject } from "@/app/api/routeProjects";
 import { useRef } from "react";
+import { useOneProjectsStore } from "@/app/store/projectsStore";
+import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
 
 export default function Address({token, id, project}: 
         {token:string, id:string, project:OneProjectMin}){
 
   const refRequest = useRef(true);
+  const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
+
   const formik = useFormik({
     initialValues: {
-      stret: project.location?.stret || '',
-      community: project.location?.community || '',
-      cp: project.location?.cp?.toString() || '',
-      municipy: project.location?.municipy,
-      stateA: project.location?.state,
-      country: project.location?.country,
+      stret: oneProjectStore?.location?.stret || project.location?.stret || '',
+      community: oneProjectStore?.location?.community || project.location?.community || '',
+      cp: oneProjectStore?.location?.cp || project.location?.cp?.toString() || '',
+      municipy: oneProjectStore?.location?.municipy || project.location?.municipy,
+      stateA: oneProjectStore?.location?.state || project.location?.state,
+      country: oneProjectStore?.location?.country || project.location?.country,
     }, 
     validationSchema: Yup.object({
       // stret: Yup.string()
@@ -51,12 +55,14 @@ export default function Address({token, id, project}:
         }
         try {
           const res = await UpdateProject(token, id, data);
-          if(res===200){
+          if(typeof(res)!=='string'){
             refRequest.current = true;
+            const r = ParseProjectToOneProjectMin(res);
+            updateOneProjectStore(r);
             showToastMessage('Proyecto actualizado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);

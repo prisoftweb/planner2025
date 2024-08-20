@@ -8,12 +8,11 @@ import Link from "next/link";
 import CardProject from "./CardProject";
 import { useState, useEffect } from "react";
 import Filtering from "./Filtering";
-//import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
-//import { GiSettingsKnobs } from "react-icons/gi";
-//import { VscListUnordered } from "react-icons/vsc";
-//import { PiTableThin } from "react-icons/pi";
+import { useProjectsStore } from "@/app/store/projectsStore";
+import { getProjectsMin } from "@/app/api/routeProjects";
+import { showToastMessageError } from "../Alert";
 
 export default function TableProjects({data, token, projects, optCategories, 
                           optTypes, optConditions, isFilter, setIsFilter, isTable}:
@@ -27,6 +26,9 @@ export default function TableProjects({data, token, projects, optCategories,
   //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataProjects, setDataProjects] = useState(data);
+
+  const {haveDeleteProject, haveNewProject, projectStore, updateHaveDeleteProject, 
+    updateHaveNewProject, updateProjectStore} = useProjectsStore();
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -161,36 +163,76 @@ export default function TableProjects({data, token, projects, optCategories,
   }, [])
 
   //const [isTable, setIsTable] = useState<boolean>(true);
-  const [view, setView] = useState<JSX.Element>(<></>);
-  const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>([]);
+  //const [view, setView] = useState<JSX.Element>(<></>);
+  const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>(projects);
 
-  useEffect(() => {
-    if(isTable){
-      setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
-    }else{
-      setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-                {projects.map((project, index:number) => (
-                  <CardProject project={project} token={token} key={index} />
-                ))}
-              </div>)
-    }
-  }, [ , isTable]);
+  // useEffect(() => {
+  //   if(isTable){
+  //     setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+  //   }else{
+  //     setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
+  //               {projects.map((project, index:number) => (
+  //                 <CardProject project={project} token={token} key={index} />
+  //               ))}
+  //             </div>)
+  //   }
+  // }, [ , isTable]);
 
-  useEffect(() => {
-    if(filter){
-      if(isTable){
-        setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+  // useEffect(() => {
+  //   if(filter){
+  //     if(isTable){
+  //       setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+  //     }
+  //     else{
+  //       setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
+  //                 {filteredProjects.map((project, index:number) => (
+  //                   <CardProject project={project} token={token} key={index} />
+  //                 ))}
+  //               </div>)
+  //     }
+  //     setFilter(false);
+  //   }
+  // }, [filter]);
+
+  const addNewProject = async() => {
+    let projs: ProjectMin[];
+    try {
+      projs = await getProjectsMin(token);
+      if(typeof(projs)==='string') 
+        showToastMessageError(projs);
+      else {
+        const d = ProjectDataToTableDataMin(projs);
+        updateProjectStore(projs);
+        setFilteredProjects(projs);
+        setDataProjects(d);
       }
-      else{
-        setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-                  {filteredProjects.map((project, index:number) => (
-                    <CardProject project={project} token={token} key={index} />
-                  ))}
-                </div>)
-      }
-      setFilter(false);
+    } catch (error) {
+      return <h1>Error al consultar los proyectos!!</h1>
     }
-  }, [filter]);
+  }
+
+  if(haveNewProject){
+    addNewProject();
+    updateHaveNewProject(false);
+  }
+
+  if(haveDeleteProject){
+    const d = ProjectDataToTableDataMin(projectStore);
+    //setExpensesFiltered(expensesTable);
+    setDataProjects(d);
+    updateHaveDeleteProject(false);
+  }
+
+  let view = <></>;
+  if(isTable){
+    view = (<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+  }else{
+    view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
+              {filteredProjects.map((project, index:number) => (
+                <CardProject project={project} token={token} key={index} />
+              ))}
+            </div>)
+  }
   
   const dateValidation = (date:string, startDate:number, endDate:number) => {
     let d = new Date(date).getTime();
@@ -199,16 +241,6 @@ export default function TableProjects({data, token, projects, optCategories,
     }
     return false;
   }
-
-  // const amountValidation = (project:Project, startDate:number, endDate:number, 
-  //                             minAmount:number, maxAmount:number) => {
-  //   if(project.amount >= minAmount && project.amount <= maxAmount){
-  //     if(dateValidation(project.date, startDate, endDate)){
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
 
   const amountValidation = (project:ProjectMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number) => {
@@ -219,21 +251,6 @@ export default function TableProjects({data, token, projects, optCategories,
     }
     return false;
   }
-
-  // const categoriesValidation = (project:Project, startDate:number, endDate:number, 
-  //                 minAmount:number, maxAmount:number, categories:string[]) => {
-  //   if(categories.includes('all')){
-  //     if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-  //       return true
-  //     return false;
-  //   }else{
-  //     if(project.glossary)
-  //       if(categories.includes(project.glossary._id))
-  //         if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-  //           return true
-  //     return false;
-  //   }
-  // }
 
   const categoriesValidation = (project:ProjectMin, startDate:number, endDate:number, 
             minAmount:number, maxAmount:number, categories:string[]) => {
@@ -250,21 +267,6 @@ export default function TableProjects({data, token, projects, optCategories,
     }
   }
 
-  // const typesValidation = (project:Project, startDate:number, endDate:number, 
-  //   minAmount:number, maxAmount:number, categories:string[], types:string[]) => {
-  //   if(types.includes('all')){
-  //     if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(project.glossary)
-  //       if(types.includes(project.glossary._id))
-  //         if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-  //           return true;
-  //     return false;
-  //   }
-  // }
-
   const typesValidation = (project:ProjectMin, startDate:number, endDate:number, 
     minAmount:number, maxAmount:number, categories:string[], types:string[]) => {
     if(types.includes('all')){
@@ -279,21 +281,6 @@ export default function TableProjects({data, token, projects, optCategories,
       return false;
     }
   }
-
-  // const conditionsValidation = (project:Project, startDate:number, endDate:number, 
-  //             minAmount:number, maxAmount:number, categories:string[], 
-  //             types:string[], conditions:string[]) => {
-  //   if(conditions.includes('all')){
-  //     if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(!project.condition.every((cond) => !conditions.includes(cond.glossary._id)))
-  //       if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
-  //         return true;
-  //     return false;
-  //   }
-  // }
 
   const conditionsValidation = (project:ProjectMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number, categories:string[], 
@@ -310,33 +297,22 @@ export default function TableProjects({data, token, projects, optCategories,
     }
   }
 
-  // const filterData = (conditions:string[], types:string[], 
-  //     categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
-    
-  //   let filtered: Project[] = [];
-  //   projects.map((project) => {
-  //     if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
-  //       filtered.push(project);
-  //     }
-  //   });
-
-  //   console.log(filtered);
-  //   setFilteredProjects(filtered);
-  //   setDataProjects(ProjectDataToTableDataMin(filtered));
-  //   setFilter(true);
-  // }
-
   const filterData = (conditions:string[], types:string[], 
     categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
   
     let filtered: ProjectMin[] = [];
-    projects.map((project) => {
+    // projects.map((project) => {
+    //   if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
+    //     filtered.push(project);
+    //   }
+    // });
+    projectStore.map((project) => {
       if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
         filtered.push(project);
       }
     });
 
-    console.log(filtered);
+    //console.log(filtered);
     setFilteredProjects(filtered);
     setDataProjects(ProjectDataToTableDataMin(filtered));
     setFilter(true);
@@ -345,41 +321,11 @@ export default function TableProjects({data, token, projects, optCategories,
   return(
     <>
       <div className="flex justify-end mb-5">
-        {/* <div className="inline-flex rounded-md shadow-sm mx-2">
-          <VscListUnordered className="text-red-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-            onClick={() => setIsTable(true)}
-          />
-          <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
-                    ${isTable? 'bg-green-500 text-white': ''}`}
-            onClick={() => setIsTable(true)}
-          >
-            Tabla
-          </button>
-          <PiTableThin onClick={() => setIsTable(false)} 
-            className="text-red-600 w-8 h-8 cursor-pointer hover:text-red-300"
-          />
-          <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
-                    ${!isTable? 'bg-red-500 text-white': ''}`}
-            onClick={() => setIsTable(false)}
-          >
-            Tarjetas
-          </button>
-        </div> */}
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-          {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-            className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-          /> */}
-          {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
-                            optTypes={optTypes} optConditions={optConditions} 
-                            FilterData={filterData} maxAmount={maxAmount}  />}
+        {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
+                          optTypes={optTypes} optConditions={optConditions} 
+                          FilterData={filterData} maxAmount={maxAmount}  />}
       </div>
       {view}
-      {/* <Table columns={columns} data={data} placeH="Buscar proyecto.." /> */}
-      {/* <div className="grid grid-cols-3 gap-x-4 gap-y-3">
-        {projects.map((project, index:number) => (
-          <CardProject project={project} token={token} key={index} />
-        ))}
-      </div> */}
     </>
   )
 }

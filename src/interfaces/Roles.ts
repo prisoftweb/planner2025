@@ -87,19 +87,19 @@ export interface Resource2 {
   id: string
 }
 
-export interface Permission {
-  create: boolean
-  read: boolean
-  update: boolean
-  delete: boolean
-  search: boolean
-  export: boolean
-  print: boolean
-  select: boolean
-  filter: boolean
-  searchfull: boolean
-  readfull: boolean
-}
+// export interface Permission {
+//   create: boolean
+//   read: boolean
+//   update: boolean
+//   delete: boolean
+//   search: boolean
+//   export: boolean
+//   print: boolean
+//   select: boolean
+//   filter: boolean
+//   searchfull: boolean
+//   readfull: boolean
+// }
 
 export interface Resource3 {
   _id: string

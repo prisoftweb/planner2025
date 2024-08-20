@@ -14,15 +14,17 @@ import { useNewProject } from "@/app/store/newProject";
 import CurrencyInput from 'react-currency-input-field';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useProjectsStore } from "@/app/store/projectsStore";
 
 export default function ExtraDataStepper({token, optClients, optCategories, 
-                          optTypes, user, optCompanies, condition}:
+                          optTypes, user, optCompanies, condition, showForm}:
                         {token:string, optClients:Options[], optCategories:Options[], 
                           optTypes:Options[], user:string, optCompanies: Options[]
-                          condition: string}){
+                          condition: string, showForm:Function}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
+  const {updateHaveNewProject} = useProjectsStore();
   
   const {updateExtraData, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, amountG, percentage, dateG} = useNewProject();
@@ -122,9 +124,11 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateHaveNewProject(true);
+          showForm(false);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

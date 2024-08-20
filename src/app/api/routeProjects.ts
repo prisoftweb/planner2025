@@ -140,7 +140,7 @@ export async function UpdateProject(auth_token:string, id:string, data:Object){
         'Content-Type': 'application/json'
       }
     });
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -159,7 +159,7 @@ export async function UpdateProjectPhoto(auth_token:string, id:string, data:Form
         'Content-Type': 'multipart/form-data'
       }
     });
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

@@ -29,8 +29,8 @@ import { UsrBack } from "@/interfaces/User"
 import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
 
-//import { getAllCostsByCondition } from "@/app/api/routeCost"
-//import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
+import { getAllCostsByCondition } from "@/app/api/routeCost"
+import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports}:
@@ -50,12 +50,12 @@ export default function ContainerClient({data, token, expenses,
 
   const {expensesTable, updateExpensesTable, updateResponsible, refresh, updateRefresh} = useNewExpense();
 
+  if(expensesTable.length <= 0 && expenses.length > 0){
+    //console.log('actualizar expenses table => ');
+    updateExpensesTable(expenses);
+  }
+
   useEffect(() => {
-
-    if(expensesTable.length <= 0 && expenses.length > 0){
-      updateExpensesTable(expenses);
-    }
-
     const fetchApis = async () => {
       let costcenters: CostoCenterLV[];
       try {
@@ -249,31 +249,35 @@ export default function ContainerClient({data, token, expenses,
     }
   }
 
-  // if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
-  //   const aux = async () =>{
-  //     try {
-  //       const res = await getAllCostsByCondition(token);
-  //       //console.log('res');
-  //       if(typeof(res) !== 'string'){
-  //         //refExpenses.current = res;
-  //         const d = ExpenseDataToTableData(res);
-  //         setTableData(d);
-  //         updateExpensesTable(res);
-  //         //setDataExpenses(d);
-  //       }else{
-  //         showToastMessageError(res);
-  //       }
-  //     } catch (error) {
-  //       console.log('catch table expenses => ', error);
-  //       showToastMessageError('Error al actualizar tabla!!');
-  //     }
-  //   }
-  //   aux();
-  //   updateRefresh(false);
-  // }
+  //console.log('expenses table container client => ', expensesTable);
+
+  if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
+    //console.log('entro en el if => ');
+    const aux = async () =>{
+      try {
+        const res = await getAllCostsByCondition(token);
+        //console.log('res');
+        if(typeof(res) !== 'string'){
+          //refExpenses.current = res;
+          const d = ExpenseDataToTableData(res);
+          setTableData(d);
+          updateExpensesTable(res);
+          //setDataExpenses(d);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        //console.log('catch table expenses => ', error);
+        showToastMessageError('Error al actualizar tabla!!');
+      }
+    }
+    aux();
+    updateRefresh(false);
+  }
 
   //if( expensesTable.length <= 0 && expenses.length <= 0){
-  if( expenses.length <= 0){
+  if( expenses.length <= 0 && expensesTable.length <= 0){
+    //console.log('entro en el return length 0 => ');
     return (
       <>
         <Navigation user={user} />

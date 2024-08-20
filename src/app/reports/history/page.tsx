@@ -109,7 +109,7 @@ export default async function Page() {
       <Navigation user={user} />
       <ContainerClient data={table} optCompaniesFilter={optCompaniesFilter} 
           optConditionsFilter={optConditionsFilter} condition="" optCompanies={[]}
-          optDepartments={[]} optProjects={[]} user="" isHistory={true}
+          optDepartments={[]} optProjects={[]} user={user} isHistory={true}
           optProjectsFilter={optProjectsFilter} reports={reports} token={token} />
     </>
   )

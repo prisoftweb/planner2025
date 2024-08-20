@@ -11,9 +11,9 @@ import { createContact } from "@/app/api/routeContacts";
 import { contactValidation } from "@/schemas/contact.schema";
 import { insertPhoneContact } from "@/app/api/routeContacts";
 
-export default function FormContact({addNewContact, token, contact, updateContact, children}: 
+export default function FormContact({addNewContact, token, contact, updateContact, children, editContact=true}: 
                   {addNewContact:Function, token:string, contact:(Contact | string), 
-                  updateContact:Function, children:JSX.Element}){
+                  updateContact:Function, children:JSX.Element, editContact?:boolean}){
   
   let emailContactI = '';
   let nameContactI = '';
@@ -350,18 +350,22 @@ export default function FormContact({addNewContact, token, contact, updateContac
               </div>
           ) : null}
         </div>
-        <div>
-          <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
-          <div className="mt-1">
-            {upPhones.map((elements) => (
-              elements
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-y-2 justify-around mt-8">
-          {button}
-          {children}
-        </div>
+        {editContact && (
+          <>
+            <div>
+              <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
+              <div className="mt-1">
+                {upPhones.map((elements) => (
+                  elements
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-y-2 justify-around mt-8">
+              {button}
+              {children}
+            </div>
+          </>
+        )}
       </form>
     </>
   )

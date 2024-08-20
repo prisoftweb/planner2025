@@ -10,8 +10,10 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
 import { useNewProject } from "@/app/store/newProject";
+import { useProjectsStore } from "@/app/store/projectsStore";
 
-export default function AddressStepper({token, condition}: {token:string, condition: string}){
+export default function AddressStepper({token, condition, showForm}: 
+  {token:string, condition: string, showForm:Function}){
   
   const {updateAddress, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
@@ -22,6 +24,8 @@ export default function AddressStepper({token, condition}: {token:string, condit
   const [state, dispatch] = useRegFormContext();
   const [guarantee, setGuarantee] = useState<boolean>(hasguaranteefund);
   const refRequest = useRef(true);
+
+  const {updateHaveNewProject} = useProjectsStore();
 
   //const {updateAddress} = useNewProject();
   
@@ -125,9 +129,11 @@ export default function AddressStepper({token, condition}: {token:string, condit
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateHaveNewProject(true);
+          showForm(false);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

@@ -37,7 +37,7 @@ export async function CreateReport(auth_token:string, data:Object) {
   }
 }
 
-export async function RemoveReport(auth_token:string, id:string) {
+export async function RemoveReport(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/${id}`;
   try {
     const res = await axios.delete(url, {

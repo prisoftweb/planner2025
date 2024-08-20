@@ -1,7 +1,7 @@
 //import { Provider } from "@/interfaces/Providers";
 import { projectValidation } from "@/schemas/project.schema";
 import { CreateProject } from "../api/routeProjects";
-import { ProjectsTable, Project, ProjectMin } from "@/interfaces/Projects";
+import { ProjectsTable, Project, ProjectMin, OneProjectMin } from "@/interfaces/Projects";
 import { CurrencyFormatter } from "./Globals";
 
 export default async function SaveProject(data:Object, token:string){
@@ -138,4 +138,30 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
   });
 
   return table;
+}
+
+export function ParseProjectToOneProjectMin(value: Project){
+  const projMin: OneProjectMin = {
+    _id: value._id,
+    account: value.account,
+    amount: value.amount,
+    //category: value.category,
+    category: value.condition[value.condition.length-1].glossary,
+    client: value.client,
+    code: value.code,
+    company: value.company,
+    date: value.date,
+    description: value.description,
+    guaranteefund: value.guaranteefund,
+    hasguaranteefund: value.hasguaranteefund,
+    location: value.location,
+    photo: value.photo,
+    progress: value.progress[value.progress.length -1].progress,
+    segment: value.category,
+    status: value.status,
+    title: value.title,
+    type: value.glossary
+  }
+
+  return projMin;
 }

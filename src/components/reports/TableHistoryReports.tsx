@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { Options } from "@/interfaces/Common";
 import { ReportTable, ReportParse } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
-import { RemoveReport } from "@/app/api/routeReports";
+//import { RemoveReport } from "@/app/api/routeReports";
 import { ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
 import Filtering from "./FilteringReports";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
@@ -166,9 +166,9 @@ export default function TableHistoryReports({data, token, reports,
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const repAmount = reports.reduce((previous, current) => {
-      return current.total > previous.total ? current : previous;
+      return current.totalok > previous.totalok ? current : previous;
     });
-    setMaxAmount(repAmount.total || 100);
+    setMaxAmount(repAmount.totalok || 100);
   }, [])
 
   const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
@@ -181,8 +181,8 @@ export default function TableHistoryReports({data, token, reports,
 
   const amountValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
-    if(rep.total >= 0){
-      if(rep.total >= minAmount && rep.total <= maxAmount){
+    if(rep.totalok >= 0){
+      if(rep.totalok >= minAmount && rep.totalok <= maxAmount){
         return dateValidation(rep, startDate, endDate);
       }
     }

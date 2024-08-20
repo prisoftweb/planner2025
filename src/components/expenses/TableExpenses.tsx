@@ -18,6 +18,7 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 // import { insertConditionInCost } from "@/app/api/routeCost";
 //import Button from "../Button";
+import RemoveElement from "../RemoveElement";
 
 export default function TableExpenses({data, token, expenses, 
                             handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
@@ -38,7 +39,20 @@ export default function TableExpenses({data, token, expenses,
   //const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
   // const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
 
-  const {refresh, updateRefresh, updateResponsible} = useNewExpense();
+  const {refresh, updateRefresh, updateResponsible, isDeleteExpensesTable, 
+    updateIsDeleteExpenseTable, expensesTable, updateExpensesTable} = useNewExpense();
+
+  const delCost = async(id: string) => {
+    try {
+      const arrExpenses = expensesTable.filter(exp => exp._id !== id);
+      updateExpensesTable(arrExpenses);
+      updateIsDeleteExpenseTable(true);
+    } catch (error) {
+      showToastMessageError('Error al quitar costo de la tabla!!');
+      //console.log('Error al eliminar');
+      //console.log('catch function => ', error);
+    }
+  }
 
   //console.log('is filter => ', isFilter);
   const handleIsFilter = (value: boolean) => {
@@ -84,8 +98,11 @@ export default function TableExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
-          <DeleteElement id={row.original.id} name={row.original.Descripcion} 
-            remove={RemoveCost} token={token} colorIcon="text-slate-500 hover:text-slate-300" />
+          {/* <DeleteElement id={row.original.id} name={row.original.Descripcion} 
+            remove={RemoveCost} token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+          <RemoveElement id={row.original.id} name={row.original.Descripcion} 
+              remove={RemoveCost} removeElement={delCost} 
+              token={token} colorIcon="text-slate-500 hover:text-slate-300" />
           <div className="w-20 flex gap-x-1 items-center">
             {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
@@ -275,6 +292,13 @@ export default function TableExpenses({data, token, expenses,
     "Folio fiscal": false,
   }
 
+  if(isDeleteExpensesTable){
+    const d = ExpenseDataToTableData(expensesTable);
+    setExpensesFiltered(expensesTable);
+    setDataExpenses(d);
+    updateIsDeleteExpenseTable(false);
+  }
+
   // const handleExpensesSelected = (value: ExpensesTable[]) => {
   //   setExpensesSelected(value);
   // }
@@ -314,13 +338,13 @@ export default function TableExpenses({data, token, expenses,
           showToastMessageError(res);
         }
       } catch (error) {
-        console.log('catch table expenses => ', error);
+        //console.log('catch table expenses => ', error);
         showToastMessageError('Error al actualizar tabla!!');
       }
     }
     aux();
     updateResponsible(user);
-    console.log('refresh user => ', user);
+    //console.log('refresh user => ', user);
     updateRefresh(false);
   }
 

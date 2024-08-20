@@ -104,23 +104,23 @@ export default async function Page() {
     optConditionsFilter.push(c);
   });
 
-  if(!reports || reports.length <= 0){
-    return (
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/costs/costs.svg" subtitle="Informes"
-            text="Agrega informes de caja chica,
-                  para el control de costos"
-            title="Informes">
-              <ButtonNew companies={optCompanies} departments={optDepartments} 
-                projects={optProjects} token={token} condition={condition} user={user._id}
-              />
-          </WithOut>
-        </div>
-      </>
-    )
-  }
+  // if(!reports || reports.length <= 0){
+  //   return (
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+  //         <WithOut img="/img/costs/costs.svg" subtitle="Informes"
+  //           text="Agrega informes de caja chica,
+  //                 para el control de costos"
+  //           title="Informes">
+  //             <ButtonNew companies={optCompanies} departments={optDepartments} 
+  //               projects={optProjects} token={token} condition={condition} user={user._id}
+  //             />
+  //         </WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   const table: ReportTable[] = ReportParseDataToTableData(reports);
 
@@ -130,7 +130,7 @@ export default async function Page() {
       <ContainerClient data={table} condition={condition} optCompanies={optCompanies} 
           optCompaniesFilter={optCompaniesFilter} optConditionsFilter={optConditionsFilter}
           optDepartments={optDepartments} optProjects={optProjects} 
-          optProjectsFilter={optProjectsFilter} reports={reports} token={token} user={user._id} />
+          optProjectsFilter={optProjectsFilter} reports={reports} token={token} user={user} />
     </>
   )
 }

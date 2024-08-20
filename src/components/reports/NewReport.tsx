@@ -11,6 +11,7 @@ import { useState, useEffect, useRef } from "react"
 import { Options } from "@/interfaces/Common"
 import SelectReact from "../SelectReact"
 import { CreateReport } from "@/app/api/routeReports"
+import { useOptionsReports } from "@/app/store/reportsStore"
 
 export default function NewReport({showForm, token, companies, 
                           departments, projects, user, condition}: 
@@ -25,6 +26,8 @@ export default function NewReport({showForm, token, companies,
   const [startDate, setStartDate] = useState<string>('');
   const [imprest, setImprest] = useState<boolean>(false);
   const refRequest = useRef(true);
+  
+  const {updateHaveNewReport} = useOptionsReports();
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -94,9 +97,11 @@ export default function NewReport({showForm, token, companies,
           if(res === 201){
             refRequest.current = true;
             showToastMessage('Informe creado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            updateHaveNewReport(true);
+            showForm(false);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);

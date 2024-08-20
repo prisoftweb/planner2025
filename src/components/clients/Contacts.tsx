@@ -12,7 +12,8 @@ import { contactUpdateValidation } from "@/schemas/contact.schema";
 import CardContacts from "../CardContacts";
 import DeleteContactClient from "./DeleteContactClient";
 
-export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
+export default function Contacts({id, token, contacts, editInfo}: 
+    {id:string, token:string, contacts:(Contact[]), editInfo:boolean}){
   
   const [index, setIndex] = useState(0);
   const numberContacts = 1;
@@ -75,27 +76,29 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
 
   const showNewContact = () => {
     setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} >
+        contact={''} updateContact={updateContactt} editContact={editInfo} >
         <></>
       </FormContact>)
   }
   
   const [showContacts, setShowContacts] = useState<JSX.Element>(contacts.length > 0? 
     <FormContact token={token} addNewContact={newContact} contact={contacts[0]} 
-      updateContact={updateContactt} >
+      updateContact={updateContactt} editContact={editInfo} >
         <></>
     </FormContact> : 
     <FormContact token={token} addNewContact={newContact} contact={''} 
-      updateContact={updateContactt} >
-        <Button onClick={showNewContact}>
-          Nuevo contacto
-        </Button>
+      updateContact={updateContactt} editContact={editInfo} >
+        {editInfo? (
+          <Button onClick={showNewContact}>
+            Nuevo contacto
+          </Button>
+        ): (<></>)}
       </FormContact> );
 
   useEffect(() => {
     if(contacts.length === 0){
       setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} >
+        contact={''} updateContact={updateContactt} editContact={editInfo} >
           <></>
         </FormContact>);
     }else{
@@ -103,7 +106,9 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
       contacts.map((contactm, index) => {
         // showConts.push(<CardContactClient idCli={id} contact={contactm} token={token} key={index} />)
         showConts.push(<CardContacts contact={contactm} token={token} key={index}>
-                          <DeleteContactClient contact={contactm} token={token} idCli={id} />
+                          {editInfo? (
+                            <DeleteContactClient contact={contactm} token={token} idCli={id} />
+                          ): <></>}
                         </CardContacts>)
       })
 
@@ -125,17 +130,19 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
                 {filter.map((contact: Contact, index:number) => (
                   <div className='' key={index}>
                     <FormContact token={token} addNewContact={newContact} contact={contact} 
-                      updateContact={updateContactt}
+                      updateContact={updateContactt} editContact={editInfo}
                     >
-                      <button 
-                        type="button"
-                        onClick={showNewContact}
-                        className="font-normal text-sm rounded-xl w-36 h-9 py-2
-                        border bg-white text-slate-900 border-slate-900 
-                          hover:bg-slate-200"  
-                      >
-                        Nuevo contacto
-                      </button>
+                      {editInfo? (
+                        <button 
+                          type="button"
+                          onClick={showNewContact}
+                          className="font-normal text-sm rounded-xl w-36 h-9 py-2
+                          border bg-white text-slate-900 border-slate-900 
+                            hover:bg-slate-200"  
+                        >
+                          Nuevo contacto
+                        </button>
+                      ): <></>}
                     </FormContact>
                   </div>
                 ))}

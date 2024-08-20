@@ -12,10 +12,13 @@ import Button from "../Button";
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import { updateClient } from "@/app/api/routeClients";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import { useClientProfileStore } from "@/app/store/clientStore";
 
-export default function DataBasic({client, tags, id, token}: 
-                          {client:ClientBack, tags:Options[], id:string, token:string}){
+export default function DataBasic({client, tags, id, token, editInfo}: 
+                          {client:ClientBack, tags:Options[], id:string, token:string, editInfo: boolean}){
   const refRequest = useRef(true);
+  const {updateProfileClient} = useClientProfileStore();
+
   const formik = useFormik({
     initialValues: {
       tradename:client.tradename,
@@ -61,15 +64,13 @@ export default function DataBasic({client, tags, id, token}:
         const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
         try {
           const res = await updateClient(client._id, token, newObj);
-          if(res === 200){
-            refRequest.current = true;
-            showToastMessage('Cliente actualizado exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
+          if(typeof(res)==='string'){
             refRequest.current = true;
             showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            updateProfileClient(res);
+            showToastMessage('Cliente actualizado exitosamente!!!');
           }
         } catch (error) {
           refRequest.current = true;
@@ -201,15 +202,17 @@ export default function DataBasic({client, tags, id, token}:
 
         </div>
         
-        <div className="flex justify-center mt-8 space-x-5">
-          {/* <button type="submit"
-            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
-            hover:bg-slate-200"
-          >
-            Siguiente
-          </button> */}
-          <Button type="submit">Guardar</Button>
-        </div>
+        {editInfo && (
+          <div className="flex justify-center mt-8 space-x-5">
+            {/* <button type="submit"
+              className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
+              hover:bg-slate-200"
+            >
+              Siguiente
+            </button> */}
+            <Button type="submit">Guardar</Button>
+          </div>
+        )}
       </form>
     </>
   )

@@ -11,17 +11,22 @@ import { UpdateProject } from "@/app/api/routeProjects";
 import CurrencyInput from 'react-currency-input-field';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useOneProjectsStore } from "@/app/store/projectsStore";
+import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
 
 export default function GuaranteeProject({token, id, project}:
                               {token:string, id:string, project:OneProjectMin}){
   
-  const [startDate, setStartDate] = useState(project.guaranteefund?.date.substring(0,10) || '');
+  const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
+  
+  const [startDate, setStartDate] = useState(oneProjectStore?.guaranteefund?.date.substring(0, 10) || 
+                      project.guaranteefund?.date.substring(0,10) || '');
   const refRequest = useRef(true);
 
   const formik = useFormik({
     initialValues: {
-      percentage: project.guaranteefund?.porcentage || '',
-      amount: project.guaranteefund?.amount || '',
+      percentage: oneProjectStore?.guaranteefund?.porcentage || project.guaranteefund?.porcentage || '',
+      amount: oneProjectStore?.guaranteefund?.amount || project.guaranteefund?.amount || '',
     }, 
     validationSchema: Yup.object({
       percentage: Yup.string()
@@ -43,12 +48,14 @@ export default function GuaranteeProject({token, id, project}:
         }
         try {
           const res = await UpdateProject(token, id, data);
-          if(res===200){
+          if(typeof(res)!=='string'){
             refRequest.current = true;
+            const r = ParseProjectToOneProjectMin(res);
+            updateOneProjectStore(r);
             showToastMessage('Proyecto actualizado satisfactoriamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -60,7 +67,7 @@ export default function GuaranteeProject({token, id, project}:
       }else{
         showToastMessageError('Ya hay una solicitud en proceso..!!!');
       }
-    },       
+    }, 
   });
 
   return(
@@ -80,7 +87,8 @@ export default function GuaranteeProject({token, id, project}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             //placeholder="Please enter a number"
-            defaultValue={0}
+            // defaultValue={0}
+            defaultValue={formik.values.percentage}
             decimalsLimit={2}
             //prefix="%"
             suffix="%"

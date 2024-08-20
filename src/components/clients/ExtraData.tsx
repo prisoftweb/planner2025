@@ -5,13 +5,15 @@ import UploadImage from "../UploadImage"
 import Button from "../Button"
 import { updateClient, updateClientLogo } from "@/app/api/routeClients"
 import { showToastMessage, showToastMessageError } from "../Alert"
+import { useClientProfileStore } from "@/app/store/clientStore"
 
-export default function ExtraData({token, id, link}: 
-                        {token:string, id:string, link:string}){
+export default function ExtraData({token, id, link, editInfo}: 
+                        {token:string, id:string, link:string, editInfo: boolean}){
   
   const [page, setPage] = useState(link);
   const [file, setFile] = useState('');
   const refRequest = useRef(true);
+  const {updateProfileClient} = useClientProfileStore();
 
   const onClickSave = async () => {
     if(refRequest.current){
@@ -24,16 +26,27 @@ export default function ExtraData({token, id, link}:
         }
         try {
           const res = await updateClientLogo(formdata, token, id);
-          if(res === 200){
-            refRequest.current = true;
-            showToastMessage('Cliente actualizado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
+          if(typeof(res)==='string'){
             refRequest.current = true;
             showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            showToastMessage('Cliente actualizado exitosamente!!');
+            updateProfileClient(res);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }
+          // if(res === 200){
+          //   refRequest.current = true;
+          //   showToastMessage('Cliente actualizado exitosamente!!');
+          //   setTimeout(() => {
+          //     window.location.reload();
+          //   }, 500);
+          // }else{
+          //   refRequest.current = true;
+          //   showToastMessageError(res);
+          // }
         } catch (error) {
           refRequest.current = true;
           showToastMessageError('Error al actualizar link del cliente!!');
@@ -45,15 +58,13 @@ export default function ExtraData({token, id, link}:
           }
           try {
             const res = await updateClient(id, token, data);
-            if(res === 200){
-              refRequest.current = true;
-              showToastMessage('Link del cliente actualizado exitosamente!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
-            }else{
+            if(typeof(res)==='string'){
               refRequest.current = true;
               showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              showToastMessage('Link del cliente actualizado exitosamente!!');
+              updateProfileClient(res);
             }
           } catch (error) {
             refRequest.current = true;
@@ -77,14 +88,18 @@ export default function ExtraData({token, id, link}:
             <Label>Pagina</Label>
             <Input type="text" value={page} onChange={(e) => setPage(e.target.value)} />
           </div>
-          <div>
-            <Label>Logotipo</Label>
-            <UploadImage setFile={setFile} />
+          {editInfo && (
+            <div>
+              <Label>Logotipo</Label>
+              <UploadImage setFile={setFile} />
+            </div>
+          )}
+        </div>
+        {editInfo && (
+          <div className="flex justify-center mt-8 space-x-5">
+            <Button onClick={onClickSave} type="button">Guardar</Button>
           </div>
-        </div>
-        <div className="flex justify-center mt-8 space-x-5">
-          <Button onClick={onClickSave} type="button">Guardar</Button>
-        </div>
+        )}
       </div>
     </>
   )

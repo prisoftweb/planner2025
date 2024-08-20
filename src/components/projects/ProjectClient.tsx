@@ -10,6 +10,7 @@ import Address from "./Address"
 import GuaranteeProject from "./GuaranteeProject"
 import ProfileProject from "./ProfileProject"
 import ProgressProject from "./ProgressProject"
+import { useOneProjectsStore } from "@/app/store/projectsStore"
 
 export default function ProjectCli({project, token, id, optCategories, optClients, 
                              optTypes, optConditions, user}: 
@@ -18,45 +19,81 @@ export default function ProjectCli({project, token, id, optCategories, optClient
                               optTypes:Options[], optConditions:Options[],
                               user:string}){
 
-  const [view, setView] = useState<JSX.Element>
-                (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
-                  pl-2" style={{borderColor:'#F8FAFC'}}>
-                    <DataBasic token={token} id={id} project={project}
-                      optConditions={optConditions} user={user} />
-                </div>)
+  // const [view, setView] = useState<JSX.Element>
+  //               (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
+  //                 pl-2" style={{borderColor:'#F8FAFC'}}>
+  //                   <DataBasic token={token} id={id} project={project}
+  //                     optConditions={optConditions} user={user} />
+  //               </div>)
 
   const [opt, setOpt] = useState<number>(1);
+  const {updateOneProjectStore} = useOneProjectsStore();
   
   useEffect(() => {
-    opt===1? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+    updateOneProjectStore(project);
+  }, []);
+  
+  // useEffect(() => {
+  //   opt===1? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+  //               style={{borderColor:'#F8FAFC'}}>
+  //                 <DataBasic token={token} id={id} project={project} 
+  //                   optConditions={optConditions} user={user} />
+  //               </div>) : 
+  //     (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                         style={{borderColor:'#F8FAFC'}}>
+  //                   <ExtraData optCategories={optCategories} optClients={optClients} 
+  //                       // optCompanies={optCompanies} 
+  //                       id={id} optTypes={optTypes} token={token} project={project} />
+  //                 </div>): 
+  //       (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                           style={{borderColor:'#F8FAFC'}}>
+  //                     <Address token={token} id={id} project={project} />
+  //                   </div>): 
+  //         (opt===4? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                             style={{borderColor:'#F8FAFC'}}>
+  //                       <GuaranteeProject id={id} token={token} project={project} />
+  //                     </div>):  
+  //           (opt === 5? setView( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                                   style={{borderColor:'#F8FAFC'}}>
+  //                                     <ProgressProject id={id} project={project} token={token} user={user} />                                  
+  //                               </div> ) : 
+  //                   setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+  //                               style={{borderColor:'#F8FAFC'}}>
+  //                         <DataBasic token={token} id={id} project={project} 
+  //                           optConditions={optConditions} user={user} />
+  //                     </div>)) )))
+  // }, [opt, ])
+
+  const view = (
+    opt===1? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+      style={{borderColor:'#F8FAFC'}}>
+        <DataBasic token={token} id={id} project={project} 
+          optConditions={optConditions} user={user} />
+      </div>) : 
+(opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <DataBasic token={token} id={id} project={project} 
-                    optConditions={optConditions} user={user} />
-                </div>) : 
-      (opt===2? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+          <ExtraData optCategories={optCategories} optClients={optClients} 
+              // optCompanies={optCompanies} 
+              id={id} optTypes={optTypes} token={token} project={project} />
+        </div>): 
+(opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+                  style={{borderColor:'#F8FAFC'}}>
+            <Address token={token} id={id} project={project} />
+          </div>): 
+(opt===4? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+                    style={{borderColor:'#F8FAFC'}}>
+              <GuaranteeProject id={id} token={token} project={project} />
+            </div>):  
+  (opt === 5? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                    <ExtraData optCategories={optCategories} optClients={optClients} 
-                        // optCompanies={optCompanies} 
-                        id={id} optTypes={optTypes} token={token} project={project} />
-                  </div>): 
-        (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-                            style={{borderColor:'#F8FAFC'}}>
-                      <Address token={token} id={id} project={project} />
-                    </div>): 
-          (opt===4? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-                              style={{borderColor:'#F8FAFC'}}>
-                        <GuaranteeProject id={id} token={token} project={project} />
-                      </div>):  
-            (opt === 5? setView( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-                                    style={{borderColor:'#F8FAFC'}}>
-                                      <ProgressProject id={id} project={project} token={token} user={user} />                                  
-                                </div> ) : 
-                    setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
-                                style={{borderColor:'#F8FAFC'}}>
-                          <DataBasic token={token} id={id} project={project} 
-                            optConditions={optConditions} user={user} />
-                      </div>)) )))
-  }, [opt, ])
+                            <ProgressProject id={id} project={project} token={token} user={user} />                                  
+                      </div> ) : 
+          (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+                      style={{borderColor:'#F8FAFC'}}>
+                <DataBasic token={token} id={id} project={project} 
+                  optConditions={optConditions} user={user} />
+            </div>)) )))
+  )
   
   const [open, setOpen] = useState<boolean>(false);
 

@@ -30,7 +30,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
     report, condition, category, isPettyCash, concept,
     updateIsCard, updateCostCenter, updateHaveDiscount, 
     updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, 
-    total, updateExpensesTable} = useNewExpense();
+    total} = useNewExpense();
 
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
@@ -98,7 +98,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
   
   //actualizacion juntar estos 2 estados en un objeto
 
-  console.log('vat zustand => ', vat);
+  //console.log('vat zustand => ', vat);
 
   const [idVat, setIdVat] = useState<string>(vats[0].value);
   const [vatValue, setVatValue] = useState<string>(vat!==''? vat: '0');
@@ -187,7 +187,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
-        console.log('value amount data stepper => ', value);
+        //console.log('value amount data stepper => ', value);
         formik.values.amount=value || '0';
         handleIdVat(idVat);
       } catch (error) {

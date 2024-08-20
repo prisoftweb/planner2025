@@ -27,12 +27,13 @@ interface NewExpenseState {
   haveDiscount: boolean
 
   refresh: boolean
-  expensesTable: Expense[]
 }
 
 interface PettyCashState{
   isPettyCash: boolean,
   isCard: boolean
+  expensesTable: Expense[]
+  isDeleteExpensesTable: boolean
 }
 
 interface CostCenterState{
@@ -75,6 +76,7 @@ interface Actions {
   updateHaveDiscount: (value:boolean) => void,
   updateExpensesTable: (value:Expense[]) => void,
   updateResponsible: (value:string) => void,
+  updateIsDeleteExpenseTable: (value:boolean) => void,
 }
 
 const initialState: NewExpenseState = {
@@ -101,7 +103,6 @@ const initialState: NewExpenseState = {
   haveDiscount: false,
   taxExempt: '',
   total: '0',
-  expensesTable: [],
 }
 
 const initialCostCenter : CostCenterState = {
@@ -120,6 +121,8 @@ const projectInitial: ProjectState = {
 const pettyCashInitial: PettyCashState = {
   isPettyCash: false,
   isCard: false,
+  expensesTable: [],
+  isDeleteExpensesTable: false
 }
 
 const initialExpense: CurrentExpense = {
@@ -217,13 +220,20 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
     ...state,
     haveTaxExempt: value,
   })),
-  updateExpensesTable: (value:Expense[]) => set(state => ({
-    ...state,
-    expensesTable: value,
-  })),
+  updateExpensesTable: (value:Expense[]) => {
+    console.log('update expenses table => ', value);
+    set(state => ({
+      ...state,
+      expensesTable: value,
+    }))
+  },
   updateResponsible: (value:string) => set(state => ({
     ...state,
     responsible: value
+  })),
+  updateIsDeleteExpenseTable: (value:boolean) => set(state => ({
+    ...state,
+    isDeleteExpensesTable: value,
   })),
   reset: () => {
     set(initialState)

@@ -8,10 +8,12 @@ import { Tag } from "@/interfaces/Clients";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import ClientCli from "@/components/clients/Clientcli";
 import Navigation from "@/components/navigation/Navigation";
-import ArrowReturn from "@/components/ArrowReturn";
+//import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/clients/NavTab";
 import HeaderImage from "@/components/HeaderImage";
+import WithOut from "@/components/WithOut";
+import { Resource2 } from "@/interfaces/Roles";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
@@ -26,6 +28,25 @@ export default async function Page({ params }: { params: { id: string }}){
       return <h1 className="text-center text-red-500">{client}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>  
+  }
+
+  const clientCookie = cookieStore.get('clients')?.value;
+  let permisionsClient: Resource2 | undefined;
+  if(clientCookie){
+    permisionsClient = JSON.parse(clientCookie);
+  }
+
+  if(!permisionsClient){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+            text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
+            title="Clientes"><></></WithOut>
+        </div>
+      </>
+    )
   }
 
   let clients: ClientBack[];
@@ -72,13 +93,17 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
+  console.log('permission client => ', permisionsClient);
+  
   return(
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={client.logo? client.logo: '/img/clients.svg'} 
               previousPage="/clients" title={client.name}>
-          <Selectize options={options} routePage="clients" subpath="/profile" />
+          {permisionsClient.permission.searchfull? (
+            <Selectize options={options} routePage="clients" subpath="/profile" />
+          ): <></>}
         </HeaderImage>
         {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
@@ -91,7 +116,7 @@ export default async function Page({ params }: { params: { id: string }}){
         </div> */}
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
-          <ClientCli client={client} token={token} id={params.id} tags={arrTags} />
+          <ClientCli client={client} token={token} id={params.id} tags={arrTags} clientPermissions={permisionsClient} />
         </NextUiProviders>
       </div>
     </>

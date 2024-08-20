@@ -13,6 +13,8 @@ import { OneProjectMin } from "@/interfaces/Projects";
 import CurrencyInput from 'react-currency-input-field';
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
+import { useOneProjectsStore } from "@/app/store/projectsStore";
+import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
 
 export default function ExtraData({token, optClients, optCategories, 
                           optTypes, id, project}:
@@ -28,32 +30,39 @@ export default function ExtraData({token, optClients, optCategories,
   // const [haveAddress, setHaveAddress] = useState<boolean>(false);
   const refRequest = useRef(true);
 
+  const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
+
   let idCli = 0;
+  const idC = oneProjectStore?.client._id || project.client._id
   optClients.map((optCli, index:number) => {
-    if(optCli.value === project.client._id){
+    if(optCli.value === idC ){
       idCli = index;
     }
   });
 
   let idType = 0;
+  const idT = oneProjectStore?.type._id || project.type._id
   optTypes.map((optTy, index:number) => {
-    if(optTy.value === project.type._id){
+    if(optTy.value === idT ){
       idType = index;
     }
   });
 
   let idCategory = 0;
+  const idCat = oneProjectStore?.category._id || project.category._id
   optCategories.map((optCat, index:number) => {
-    if(optCat.value === project.category._id){
+    if(optCat.value === idCat ){
       idCategory = index;
     }
   })
 
-  const [startDate, setStartDate] = useState<string>(project.date? project.date.substring(0,10): '');
+  const [startDate, setStartDate] = useState<string>(oneProjectStore?.date? 
+                oneProjectStore?.date.substring(0,10) : 
+                    project.date? project.date.substring(0,10): '');
 
   const formik = useFormik({
     initialValues: {
-      amount: project.amount,
+      amount: oneProjectStore?.amount || project.amount,
     }, 
     validationSchema: Yup.object({
       amount: Yup.string()
@@ -66,19 +75,25 @@ export default function ExtraData({token, optClients, optCategories,
         const data= {
           amount: amount.toString().replace(/[$,]/g, ""),
           date: startDate,
-          categorys: category,
-          types: type,
+          //categorys: category,
+          category,
+          //types: type,
+          glossary: type,
           client,
           hasguaranteefund: guarantee
         }
         try {
           const res = await UpdateProject(token, id, data);
-          if(res===200){
+          if(typeof(res)!=='string'){
             refRequest.current = true;
+            console.log('res router => ', res);
+            const r = ParseProjectToOneProjectMin(res);
+            console.log('parse res => ', r);
+            updateOneProjectStore(r);
             showToastMessage('Proyecto actualizado satisfactoriamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
