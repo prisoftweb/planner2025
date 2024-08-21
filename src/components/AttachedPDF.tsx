@@ -1,11 +1,20 @@
 import {Document, Page, Text, Image, View, StyleSheet} from '@react-pdf/renderer'
-import { Report } from '@/interfaces/Reports'
+import { Report, DateReport } from '@/interfaces/Reports'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 
-export default function AttachedPDF({report} :{report:Report}){
+export default function AttachedPDF({report, dates} :{report:Report, dates: DateReport[]}){
   
   const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MARZO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
   const date = new Date(report.date);
+
+  const dateIni = dates[0]?.minDate? new Date(dates[0].minDate): new Date();
+  const dateEnd = dates[0]?.maxDate? new Date(dates[0].maxDate): new Date();
+
+  console.log('dates anexo => ', dates);
+  console.log('date i => ', dateIni);
+  console.log('date f => ', dateEnd);
+
+  const bandMonth = dateIni.getMonth() === dateEnd.getMonth()
 
   const style = StyleSheet.create({
     textBlue: {
@@ -85,7 +94,8 @@ export default function AttachedPDF({report} :{report:Report}){
                   value: report.total
                 })} </Text>
               <Text> QUE SE REFIERE A GASTOS REALIZADOS DURANTE EL PERIODO COMPRENDIDO DEL </Text>
-              <Text style={style.textBlue}>DIA 23 al 25 DE MAYO DEL AÑO 2024.</Text>
+              {/* <Text style={style.textBlue}>DIA 23 al 25 DE MAYO DEL AÑO 2024.</Text> */}
+              <Text style={style.textBlue}>DIA {dateIni.getDate()} {!bandMonth? 'de' + ' ' + months[dateIni.getMonth()]: ''} al {dateEnd.getDate()} DE {months[dateEnd.getMonth()]} DEL AÑO {dateEnd.getFullYear()}.</Text>
             </Text>
           </View>
 

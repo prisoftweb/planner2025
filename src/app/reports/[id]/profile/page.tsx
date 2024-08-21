@@ -13,8 +13,8 @@ import Selectize from "@/components/Selectize";
 import NavTab from "@/components/reports/NavTab";
 import ReportClient from "@/components/reports/ReportClient";
 import { GetReport, GetReportsLV, updateReport, 
-    insertMovementsInReport, getCostByReportMin } from "@/app/api/routeReports";
-import { Report, CostReport  } from "@/interfaces/Reports";
+    insertMovementsInReport, GetAllCostByReportWithDateMINAndMAX } from "@/app/api/routeReports";
+import { Report, DateReport  } from "@/interfaces/Reports";
 //import { Expense } from "@/interfaces/Expenses";
 import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
@@ -33,6 +33,17 @@ export default async function Page({ params }: { params: { id: string }}){
     }
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
+  }
+
+  let dateReport: DateReport[];
+  try {
+    dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
+    console.log('res dates => ', dateReport);
+    if(typeof(dateReport)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar fechas del reporte!!</h1>
   }
   
   let optReports:Options[] = [];
@@ -120,7 +131,7 @@ export default async function Page({ params }: { params: { id: string }}){
         </div>
         <NavTab idRep={params.id} tab='1' />
         <ReportClient report={report} token={token} id={params.id} 
-          user={user} node={node}
+          user={user} node={node} dates={dateReport}
         />
       </div>
     </>

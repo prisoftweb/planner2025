@@ -358,3 +358,21 @@ export async function GetReportsLV(auth_token:string) {
     return 'Ocurrio un problema al obtener informes';
   }
 }
+
+export async function GetAllCostByReportWithDateMINAndMAX(auth_token:string, id: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByReportMINAndMAX/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al obtener fechas de gastos del informe informe';
+    }
+    return 'Ocurrio un problema al obtener fechas de gastos del informe informe';
+  }
+}

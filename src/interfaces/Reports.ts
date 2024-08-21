@@ -182,3 +182,9 @@ export interface ReportMin {
   departmentid: string
   department: string
 }
+
+export interface DateReport {
+  _id: any
+  maxDate: string
+  minDate: string
+}

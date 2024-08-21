@@ -1,5 +1,5 @@
 import Chip from "../providers/Chip";
-import { Report, CostReport } from "@/interfaces/Reports";
+import { Report, CostReport, DateReport } from "@/interfaces/Reports";
 import Button from "../Button";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {PDFDownloadLink} from '@react-pdf/renderer'
@@ -12,9 +12,9 @@ import {Tooltip} from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { getCostByReportMin } from "@/app/api/routeReports";
 
-export default function ProfileReport({report, send, token, user, id}: 
+export default function ProfileReport({report, send, token, user, id, dates}: 
                         {report:Report, send:Function, id:string, 
-                          token: string, user:UsrBack}){
+                          token: string, user:UsrBack, dates: DateReport[]}){
 // console.log('report ', report);
   const total = CurrencyFormatter({
     currency: "MXN",
@@ -156,7 +156,8 @@ export default function ProfileReport({report, send, token, user, id}:
                     user.department.name.toLowerCase().includes('direccion')) && (
                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Anexo' 
                       placement="top" className="text-blue-500 bg-white">
-                    <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} >
+                    <PDFDownloadLink document={<AttachedPDF report={report} dates={dates} />} 
+                          fileName={`FF-ANEXO-1-${report.name}`} >
                       {({loading, url, error, blob}) => 
                         loading? (
                           <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
