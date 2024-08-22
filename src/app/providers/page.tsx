@@ -9,6 +9,7 @@ import { UsrBack } from "@/interfaces/User";
 import Header from "@/components/Header";
 import ButtonNewProvider from "@/components/providers/ButtonNewProvider";
 import { CurrencyFormatter } from "../functions/Globals";
+import ContainerProvider from "@/components/providers/ContainerProvider";
 
 export default async function Providers(){
   
@@ -28,54 +29,58 @@ export default async function Providers(){
     return <h1 className="text-5xl text-center text-red-500 font-semibold">Error al consultar proveedores!!</h1>
   }  
 
-  if(providers.length === 0 || !providers){
-    return (
-      <div>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
-          <WithOutProvider id={id} token={token} />
-        </div>
-      </div>
-    )      
-  }
-
-  let data:TableProvider[] = [];
-  providers.map((prov:Provider) => {
-    
-    let nc = 0;
-    if(prov.contact) nc = prov.contact.length;
-    
-    const dollar = CurrencyFormatter({
-      currency: "MXN",
-      value: prov.tradeline.currentbalance || 0
-    })
-
-    data.push({
-      'id': prov._id,
-      'name': prov.tradename || prov.name,
-      rfc: prov.rfc,
-      //currentbalance: prov.tradeline.currentbalance,
-      currentbalance: dollar,
-      account: prov.account,
-      suppliercredit: prov.suppliercredit,
-      'contacts': nc
-    })
-  })
-  
   return(
-    <>
-      <Navigation user={user} />
-      
-      <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
-        {/* <HeaderProvider id={id} token={token} /> */}
-        <Header title="Proveedores" placeHolder="Buscar proveedor..">
-          <ButtonNewProvider id={id} token={token} />    
-        </Header>
-        {/* <WithOutProvider /> */}
-        <div className="mt-5">
-          <TableProviders data={data} token={token} />
-        </div>
-      </div>
-    </>
+    <ContainerProvider providers={providers} token={token} user={user} />
   )
+
+  // if(providers.length === 0 || !providers){
+  //   return (
+  //     <div>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
+  //         <WithOutProvider id={id} token={token} />
+  //       </div>
+  //     </div>
+  //   )      
+  // }
+
+  // let data:TableProvider[] = [];
+  // providers.map((prov:Provider) => {
+    
+  //   let nc = 0;
+  //   if(prov.contact) nc = prov.contact.length;
+    
+  //   const dollar = CurrencyFormatter({
+  //     currency: "MXN",
+  //     value: prov.tradeline.currentbalance || 0
+  //   })
+
+  //   data.push({
+  //     'id': prov._id,
+  //     'name': prov.tradename || prov.name,
+  //     rfc: prov.rfc,
+  //     //currentbalance: prov.tradeline.currentbalance,
+  //     currentbalance: dollar,
+  //     account: prov.account,
+  //     suppliercredit: prov.suppliercredit,
+  //     'contacts': nc
+  //   })
+  // })
+  
+  // return(
+  //   <>
+  //     <Navigation user={user} />
+      
+  //     <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
+  //       {/* <HeaderProvider id={id} token={token} /> */}
+  //       <Header title="Proveedores" placeHolder="Buscar proveedor..">
+  //         <ButtonNewProvider id={id} token={token} />    
+  //       </Header>
+  //       {/* <WithOutProvider /> */}
+  //       <div className="mt-5">
+  //         <TableProviders data={data} token={token} />
+  //       </div>
+  //     </div>
+  //   </>
+  // )
 }

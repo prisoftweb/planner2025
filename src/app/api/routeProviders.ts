@@ -129,7 +129,7 @@ export async function createProvider(data:Object, auth_token:string) {
         'Content-Type': 'Application/json',
       }
     })
-    if(res.status===201) return res.status;
+    if(res.status===201) return res.data.data.data;
       return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

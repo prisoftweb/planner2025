@@ -6,11 +6,29 @@ import IconText from "./IconText";
 import { TableProvider } from "@/interfaces/Providers";
 import DeleteProvider from "./DeleteProvider";
 import NumberContacts from "./NumberContacts";
+import { RemoveProvider } from "@/app/api/routeProviders";
+import RemoveElement from "../RemoveElement";
+import { useProviderStore } from "@/app/store/providerStore";
+import { showToastMessageError } from "../Alert";
 
 export default function TableProviders({data, token}:
           {data:TableProvider[], token:string}){
   
   const columnHelper = createColumnHelper<any>();
+
+  const {updateProviderStore, providerStore} = useProviderStore();
+
+  const delProvider = async(id: string) => {
+    try {
+      const arrProvs = providerStore.filter(prov => prov._id !== id);
+      updateProviderStore(arrProvs);
+      //updateHaveDeleteReport(true);
+    } catch (error) {
+      showToastMessageError('Error al quitar proveedor de la tabla!!');
+      //console.log('Error al eliminar');
+      //console.log('catch function => ', error);
+    }
+  }
   
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -43,7 +61,9 @@ export default function TableProviders({data, token}:
           <div 
             className={`w-4 h-4 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
           </div>
-          <DeleteProvider provider={row.original} token={token} />
+          {/* <DeleteProvider provider={row.original} token={token} /> */}
+          <RemoveElement id={row.original.id} name={row.original.name} token={token} 
+              remove={RemoveProvider} removeElement={delProvider} />
           <NumberContacts numContacts={row.original.contacts} />
         </div>
         // <Link href={`/providers/${row.original.id}/profile`}>

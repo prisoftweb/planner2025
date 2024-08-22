@@ -4,12 +4,15 @@ import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import FormContact from "./FormContact";
 import BasicBarStepper from "./BasicBarStepper";
+import { useProviderStore } from "@/app/store/providerStore";
 
 export default function ContactsStepper({id, token}: {id:string, token:string}){
   
   const [state, dispatch] = useRegFormContext();
   const [contacts, setContacts] = useState<string[]>([]);
   const refRequest = useRef(true);
+ 
+  const {providerStore, updateProviderStore, updateHaveNewProvider} = useProviderStore();
   
   const onClickSave = async () => {
     if(refRequest.current){
@@ -44,9 +47,11 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           if(res.status){
             refRequest.current = true;
             showToastMessage(res.message);
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            updateProviderStore([...providerStore, res.prov]);
+            updateHaveNewProvider(true);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res.message);
