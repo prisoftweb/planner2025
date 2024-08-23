@@ -87,7 +87,7 @@ export async function updateProvider(id:string, auth_token:string, data:Object) 
         'Content-Type': 'application/json',
       }
     });    
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
       return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

@@ -160,11 +160,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
     }else{
       setFilter(contacts.slice(index, index + numberContacts));
     }
-
-    // setTimeout(() => {
-    //   console.log('settiemfilter')
-    //   console.log(filter);
-    // }, 500);
   }, [index])
 
   const Previous = () => {

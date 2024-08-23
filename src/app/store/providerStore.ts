@@ -34,3 +34,23 @@ export const useProviderStore = create<providerState & ActionsProvider >((set) =
     haveNewProvider: value
   })),
 }))
+
+interface providerContainerState {
+  oneProviderStore: Provider | undefined,
+}
+
+const oneProviderInitial: providerContainerState = {
+  oneProviderStore: undefined,
+}
+
+interface ActionsOneProvider {
+  updateOneProviderStore: (prov: Provider) => void,
+}
+
+export const useOneProviderStore = create< providerContainerState & ActionsOneProvider >((set) => ({
+  ...oneProviderInitial,
+  updateOneProviderStore: (prov: Provider) => set(state => ({
+    ...state,
+    oneProviderStore: prov
+  })),
+}));
