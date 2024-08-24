@@ -9,6 +9,7 @@ import { useRegFormContext } from "./StepperProvider";
 import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import BasicBarStepper from "./BasicBarStepper";
+import { useProviderStore } from "@/app/store/providerStore";
 
 export default function DataBasicStepper({token, id}: {token:string, id:string}){
   
@@ -28,6 +29,8 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
   }
 
   const [suppliercredit, setSuppliercredit] = useState<boolean>(supplier);
+
+  const {providerStore, updateProviderStore, updateHaveNewProvider} = useProviderStore();
 
   const formik = useFormik({
     initialValues: {
@@ -98,9 +101,11 @@ export default function DataBasicStepper({token, id}: {token:string, id:string})
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateProviderStore([...providerStore, res.prov]);
+          updateHaveNewProvider(true);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

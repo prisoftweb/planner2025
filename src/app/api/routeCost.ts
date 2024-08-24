@@ -127,7 +127,7 @@ export async function CreateCost(auth_token:string, data:Object) {
   }
 }
 
-export async function RemoveCost(auth_token:string, id:string) {
+export async function RemoveCost(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/${id}`;
   try {
     const res = await axios.delete(url, {

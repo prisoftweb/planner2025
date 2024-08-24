@@ -9,11 +9,14 @@ import SaveProvider from "@/app/functions/SaveProvider";
 import BasicBarStepper from "./BasicBarStepper";
 import CurrencyInput from "react-currency-input-field";
 import { useRef } from "react";
+import { useProviderStore } from "@/app/store/providerStore";
 
 export default function CreditLineStepper({token, id}:{token:string, id:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
+
+  const {providerStore, updateProviderStore, updateHaveNewProvider} = useProviderStore();
 
   let creditlimitI= '', creditdaysI='', currentbalanceI='', percentoverduedebtI=''; 
 
@@ -90,9 +93,11 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateProviderStore([...providerStore, res.prov]);
+          updateHaveNewProvider(true);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

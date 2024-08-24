@@ -101,7 +101,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
             updateRefresh(true);
             showToastMessage('Costo creado satisfactoriamente!!!');
             setTimeout(() => {
-              updateIndexStepper(1);
+              updateIndexStepper(4);
             }, 200);
             refRequest.current = true;
           }else{
@@ -112,6 +112,8 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           refRequest.current = true;
           showToastMessageError('Ocurrio un error al guardar costo!!');
         }
+      } else{
+        refRequest.current = true;
       }
     }else{
       const data = {
@@ -142,7 +144,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           setTimeout(() => {
-            updateIndexStepper(1);
+            updateIndexStepper(4);
           }, 200);
           refRequest.current = true;
         }

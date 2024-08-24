@@ -10,6 +10,8 @@ import { setCookie } from 'cookies-next';
 import Link from 'next/link';
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/solid';
 import Button from '@/components/Button';
+import { Resource2, Tree } from '@/interfaces/Roles';
+import { getTree } from '../api/routeRoles';
 
 export default function Login({}) {
   const router = useRouter();
@@ -33,17 +35,140 @@ export default function Login({}) {
           const dataToStore = { numRows: '10'};
           localStorage.setItem('myData', JSON.stringify(dataToStore));
           
-          showToastMessage(`Ha iniciado sesion exitosamente ${email}!`);            
-          setCookie('token', res.token);
-          setCookie('user', res.data.user);
-          const {_id } = res.data.user;
-          setCookie('id', _id);
-          
-          setTimeout(() => {                
-            router.push(
-              '/'
-            );
-          }, 500);
+          //console.log('res login => ', res);
+
+          //const resPermission = getTree(res.token, res.data.user.tree._id);
+          try {
+            let tree: Tree = await getTree(res.token, '66bbc98153827ab3d270987a');
+            
+            console.log('res tree => ', tree);
+            if(typeof(tree)==='string'){
+              showToastMessage(tree);
+            }else{
+              showToastMessage(`Ha iniciado sesion exitosamente ${email}!`);            
+              setCookie('token', res.token);
+              setCookie('user', res.data.user);
+              const {_id } = res.data.user;
+              setCookie('id', _id);
+              tree.resources.map((reso) => {
+              console.log(reso.resource.name, ' => ', JSON.stringify(reso).length);
+              setCookie(reso.resource.name, reso);
+              });
+
+              const clientCook = {
+                "permission": {
+                    "create": false,
+                    "read": false,
+                    "update": false,
+                    "delete": false,
+                    "export": false,
+                    "print": false,
+                    "select": false,
+                    "filter": false,
+                    "searchfull": false,
+                    "readfull": true,
+                    "search": false
+                },
+                "resource": {
+                    "_id": "6601ee5997c47d2dafaa517d",
+                    "name": "clients",
+                    "description": "Ruta de clientes",
+                    "title": "Clientes",
+                    "id": "6601ee5997c47d2dafaa517d"
+                },
+                "status": true,
+                "routes": [
+                    {
+                        "route": {
+                            "_id": "6601ed1c97c47d2dafaa517a",
+                            "name": "profile",
+                            "description": "Perfil del cliente a detalle",
+                            "title": "Perfil",
+                            "id": "6601ed1c97c47d2dafaa517a"
+                        },
+                        "status": true,
+                        "components": [
+                            {
+                                "component": {
+                                    "_id": "6601efd66429d0a86b0cf10c",
+                                    "name": "basicdata",
+                                    "description": "Captura los datos basicos de un cliente",
+                                    "title": "Datos basicos",
+                                    "id": "6601efd66429d0a86b0cf10c"
+                                },
+                                "status": true,
+                                "_id": "660ef850f7bd2d031cae71d9",
+                                "id": "660ef850f7bd2d031cae71d9"
+                            },
+                            {
+                                "component": {
+                                    "_id": "6601effa6429d0a86b0cf110",
+                                    "name": "address",
+                                    "description": "Captura la direccion de un cliente",
+                                    "title": "Direccion",
+                                    "id": "6601effa6429d0a86b0cf110"
+                                },
+                                "status": true,
+                                "_id": "660ef850f7bd2d031cae71da",
+                                "id": "660ef850f7bd2d031cae71da"
+                            },
+                            {
+                                "component": {
+                                    "_id": "6601eb9c97c47d2dafaa5175",
+                                    "name": "resume",
+                                    "description": "Ver resumen completo de clientes",
+                                    "title": "Resumen",
+                                    "id": "6601eb9c97c47d2dafaa5175"
+                                },
+                                "status": true,
+                                "_id": "660ef850f7bd2d031cae71dc",
+                                "id": "660ef850f7bd2d031cae71dc"
+                            },
+                            {
+                                "component": {
+                                    "_id": "6601f0076429d0a86b0cf112",
+                                    "name": "contact",
+                                    "description": "Mouestra y manipula los contactos de un cliente",
+                                    "title": "Contactos",
+                                    "id": "6601f0076429d0a86b0cf112"
+                                },
+                                "status": true,
+                                "_id": "66ba9e360600ee65ccc0841d",
+                                "id": "66ba9e360600ee65ccc0841d"
+                            },
+                            {
+                                "component": {
+                                    "_id": "6601efea6429d0a86b0cf10e",
+                                    "name": "aditionaldata",
+                                    "description": "Captura los datos adicionales de un cliente",
+                                    "title": "Datos adicionales",
+                                    "id": "6601efea6429d0a86b0cf10e"
+                                },
+                                "status": true,
+                                "_id": "66ba9e7e0600ee65ccc085f6",
+                                "id": "66ba9e7e0600ee65ccc085f6"
+                            },
+                        ],
+                        "_id": "660ef649f7bd2d031cae7116",
+                        "id": "660ef649f7bd2d031cae7116"
+                    },
+                ],
+                "_id": "660ef649f7bd2d031cae7115",
+                "id": "660ef649f7bd2d031cae7115"
+            }
+
+              console.log('cleints cook => ', JSON.stringify(clientCook));
+              setCookie('clients', clientCook);
+
+              setTimeout(() => {                
+                router.push(
+                  '/'
+                );
+              }, 300);
+            }
+          } catch (error) {
+            showToastMessage(`Ha ocurrido un problema al obtener permisos de usuario!!!`);
+          }
         } else {
           showToastMessageError(res);
         }

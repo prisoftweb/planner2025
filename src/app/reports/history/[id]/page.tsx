@@ -8,8 +8,8 @@ import Navigation from "@/components/navigation/Navigation";
 import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/reports/NavTab";
-import { GetReport, GetReportsLV, getCostByReportMin } from "@/app/api/routeReports";
-import { Report, CostReport } from "@/interfaces/Reports";
+import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX } from "@/app/api/routeReports";
+import { Report, DateReport } from "@/interfaces/Reports";
 import ReportHistoryClient from "@/components/reports/ReportHistoryClient";
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -26,6 +26,16 @@ export default async function Page({ params }: { params: { id: string }}){
     }
   } catch (error) {
     return <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
+  }
+
+  let dateReport: DateReport[];
+  try {
+    dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
+    if(typeof(dateReport)==='string'){
+      return <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-center text-lg text-red-500">Error al consultar fechas del reporte!!</h1>
   }
   
   let optReports:Options[] = [];
@@ -80,8 +90,8 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={optReports} routePage="reports/history" subpath="" />
         </div>
         <NavTab idRep={params.id} tab='1' />
-        <ReportHistoryClient report={report} id={params.id} token={token} user={user}
-        />
+        <ReportHistoryClient report={report} id={params.id} token={token} 
+          user={user} dates={dateReport} />
       </div>
     </>
   )

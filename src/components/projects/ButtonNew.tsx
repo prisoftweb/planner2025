@@ -10,11 +10,14 @@ export default function ButtonNew({token, optClients, optCategories,
                             optCategories:Options[], optTypes:Options[],
                             optCompanies: Options[], condition: string}){
   const [newProject, setNewProject] = useState<boolean>(false);
+  const handleNewProject = (value: boolean) => {
+    setNewProject(value);
+  }
   
   return(
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
-          {newProject && <NewProject showForm={setNewProject} optTypes={optTypes} 
+          {newProject && <NewProject showForm={handleNewProject} optTypes={optTypes} 
                           token={token} optClients={optClients} 
                           optCategories={optCategories} user={user} 
                            optCompanies={optCompanies} condition={condition} />}

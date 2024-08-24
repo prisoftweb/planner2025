@@ -12,9 +12,11 @@ export default async function SaveProvider(data:Provider, token:string){
   if(res.success){
     try {
       const res = await createProvider(data, token);
-      if(res===201){
+      if(typeof(res)!== 'string'){
+        //updateProviderStore([...providerStore, res]);
         return {
           status: true,
+          prov: res,
           message: 'Proveedor agregado exitosamente!!'
         }
       }

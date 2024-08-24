@@ -88,6 +88,10 @@ export default function NewGlossary({showForm, token, glossary}:
     }
   });
 
+  const handleColor = (value: string) => {
+    setColor(value);
+  }
+
   return(
     <>
       <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
@@ -135,8 +139,15 @@ export default function NewGlossary({showForm, token, glossary}:
         <div>
           <Label htmlFor="color"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Color</p></Label>
           <div className="flex gap-x-1" >
-            <HexColorPicker color={color} onChange={setColor} />
+            <HexColorPicker color={color} onChange={handleColor} />
             <div className="w-12 h-12" style={{backgroundColor:color}}></div>
+          </div>
+          <Label htmlFor="hex"><p className="after:content-['*'] after:ml-0.5 after:text-red-500 mt-2">Codigo</p></Label>
+          <div className="flex gap-x-1" >
+            <Input 
+              value={color}
+              onChange={e => handleColor(e.target.value)}
+            />
           </div>
         </div>
         {/* <div className="flex items-center gap-x-1" >

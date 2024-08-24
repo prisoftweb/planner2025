@@ -16,6 +16,10 @@ export default function TableStatus({data, token}:
   // const [editGloss, setEditGloss] = useState<boolean>(false);
   // const [glossEdit, setGlossEdit] = useState<GlossaryTable>();
 
+  data.map((dt) => {
+    console.log('arr colors table => ', dt.statuses.arrColors);
+  });
+
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
@@ -73,7 +77,15 @@ export default function TableStatus({data, token}:
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        <p className="">{row.original.statuses}</p>
+        //<p className="">{row.original.statuses}</p>
+        <div className="flex items-center gap-x-1">
+          {row.original.statuses.arrStatuses.map((st, index:number) => (
+            <div className="flex items-center gap-x-1" key={index}>
+              <p>{st}</p>
+              <div className="w-2 h-2" style={{backgroundColor: row.original.statuses.arrColors[index]}}></div>
+            </div>
+          ))}
+        </div>
       ),
     }),
     columnHelper.accessor('categories', {

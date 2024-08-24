@@ -73,7 +73,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           setTimeout(() => {
-            updateIndexStepper(1);
+            updateIndexStepper(3);
           }, 200);
           refRequest.current = true;
         }else{
@@ -109,7 +109,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           updateRefresh(true);
           showToastMessage('Costo creado satisfactoriamente!!!');
           setTimeout(() => {
-            updateIndexStepper(1);
+            updateIndexStepper(3);
           }, 200);
           refRequest.current = true;
         }

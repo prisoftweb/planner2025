@@ -54,7 +54,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               locale={es}
             />
           </div>
-          <div className='w-56'>
+          <div className='sm:w-56 w-96'>
             <Label htmlFor='project'>Proyecto</Label>
             <SelectReact index={0} opts={projects} setValue={handleProjects} />
             {/* <SelectMultipleReact opts={projects} setValue={() => {}} index={0} /> */}

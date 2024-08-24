@@ -10,17 +10,21 @@ import { useState, useRef } from "react";
 import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import CardContact from "./CardContact";
+import { useOneProviderStore } from "@/app/store/providerStore";
 
 export default function DataBasic({id, token, provider}:{id:string, token:string, provider:Provider}){
   
-  const [suppliercredit, setSuppliercredit] = useState<boolean>(provider.suppliercredit);
   const refRequest = useRef(true);
+
+  const {updateOneProviderStore, oneProviderStore} = useOneProviderStore();
+
+  const [suppliercredit, setSuppliercredit] = useState<boolean>(oneProviderStore? oneProviderStore.suppliercredit : provider.suppliercredit);
 
   const formik = useFormik({
     initialValues: {
-      tradename:provider.tradename,
-      name:provider.name,
-      rfc: provider.rfc,
+      tradename: oneProviderStore?.tradename || provider.tradename,
+      name: oneProviderStore?.name || provider.name,
+      rfc: oneProviderStore?.rfc || provider.rfc,
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -43,12 +47,13 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
 
         try {
           const res = await updateProvider(id, token, data);
-          if(res===200){
+          if(typeof(res)!=='string'){
             refRequest.current = true;
             showToastMessage('La informacion del proveedor ha sido actualizada!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            updateOneProviderStore(res);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);

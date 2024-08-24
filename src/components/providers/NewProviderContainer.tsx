@@ -5,11 +5,18 @@ import ContainerStepper from "./ContainerStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
 import { useState, useEffect } from "react";
+import { useProviderStore } from "@/app/store/providerStore";
 
 export default function NewProviderContainer({token, id, showForm}: {token:string, id:string, showForm:Function}){
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
+  const {haveNewProvider, updateHaveNewProvider} = useProviderStore();
+  
+  if(haveNewProvider){
+    updateHaveNewProvider(false);
+    showForm(false);
+  }
   
   const handleResize = () => {
     setHeightPage(window.outerHeight);

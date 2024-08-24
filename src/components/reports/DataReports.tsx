@@ -1,16 +1,16 @@
 import ProfileReport from "./ProfileReport"
 import UpdateReport from "./UpdateReport"
 import { Options } from "@/interfaces/Common"
-import { Report, CostReport } from "@/interfaces/Reports"
+import { Report, DateReport } from "@/interfaces/Reports"
 import { useState, useRef } from "react"
 import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
 //import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
 
-export default function DataReports({token, report, user, node, id}:
-                              {token:string, report:Report, 
-                                user:UsrBack, node:Node, id:string }) {
+export default function DataReports({token, report, user, node, id, dates}:
+                              {token:string, report:Report, user:UsrBack, 
+                                node:Node, id:string, dates: DateReport[] }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
@@ -29,7 +29,7 @@ export default function DataReports({token, report, user, node, id}:
         style={{'backgroundColor': '#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
           <ProfileReport report={report} send={handleSend} token={token}
-            user={user} id={id} />
+            user={user} id={id} dates={dates} />
         </div>
         <div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>

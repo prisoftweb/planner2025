@@ -66,6 +66,15 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
             }
 
             try {
+              const uuidXML = uuid.elements.find((elem: any) => {
+                if(elem.attributes?.UUID) return elem.attributes?.UUID;
+              });
+
+              console.log('uuidXML => ', uuidXML);
+              const folioXML = uuidXML?.attributes?.UUID || 'error al leer CFDI';
+              console.log('folio xml => ', folioXML);
+              setFolio(folioXML);
+
               console.log('atributos => ', res2.elements[0].attributes);
               CFDIObj.date = res2.elements[0].attributes.Fecha;
               //console.log('rfc 1 ', res2.elements[0].elements[1].attributes?.Rfc);
@@ -74,7 +83,8 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
               console.log('emisor', emisor);
               CFDIObj.RFCProvider = emisor?.attributes?.Rfc || 'sin rfc de proveedor';
               CFDIObj.amount = res2.elements[0].attributes.SubTotal;
-              CFDIObj.taxFolio = uuid.elements[0].attributes?.UUID || 'error al leer CFDI';
+              CFDIObj.taxFolio = folioXML;
+              //CFDIObj.taxFolio = uuid.elements[0].attributes?.UUID || 'error al leer CFDI';
               //CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID;
             } catch (error) {
               console.log('error al leer cfdi => ', error);
@@ -95,12 +105,20 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
               setTotal('$0');
             }
 
-            try {
-              setFolio(uuid.elements[0].attributes?.UUID || 'error al leer CFDI')
-              //setFolio(res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID || 'No se pudo leer el folio');
-            } catch (error) {
-              setFolio('No se pudo leer el folio');
-            }
+            // try {
+            //   const uuidXML = uuid.elements.find((elem: any) => {
+            //     if(elem.attributes?.UUID) return elem.attributes?.UUID;
+            //   });
+
+            //   console.log('uuidXML => ', uuidXML);
+            //   const folioXML = uuidXML?.attributes?.UUID || 'error al leer CFDI';
+            //   console.log('folio xml => ', folioXML);
+            //   setFolio(folioXML);
+            //   //setFolio(uuid.elements[0].attributes?.UUID || 'error al leer CFDI')
+            //   //setFolio(res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID || 'No se pudo leer el folio');
+            // } catch (error) {
+            //   setFolio('No se pudo leer el folio');
+            // }
             
             try {
               res2.elements[0].elements[2].elements?.map((concept:Element3) => {
@@ -115,9 +133,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
               setDescriptions(['error al leer conceptos']);
               setPrices(['error al leer conceptos']);
             }
-            
             setIsCFDI(true);
-
           }
           readXML();
         }else{

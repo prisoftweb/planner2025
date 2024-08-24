@@ -9,17 +9,20 @@ import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import CurrencyInput from "react-currency-input-field";
 import { useRef } from "react";
+import { useOneProviderStore } from "@/app/store/providerStore";
 
 export default function CreditLine({provider, id, token}: 
         {provider:Provider, id:string, token:string}){
   
   const refRequest = useRef(true);
+  const {oneProviderStore, updateOneProviderStore} = useOneProviderStore();
+
   const formik = useFormik({
     initialValues: {
-      creditlimit:provider.tradeline.creditlimit?.toString(),
-      creditdays:provider.tradeline.creditdays?.toString(),
-      currentbalance: provider.tradeline.currentbalance?.toString(),
-      percentoverduedebt: provider.tradeline.percentoverduedebt?.toString()
+      creditlimit: oneProviderStore?.tradeline?.creditlimit?.toString() || provider.tradeline.creditlimit?.toString(),
+      creditdays: oneProviderStore?.tradeline?.creditdays?.toString() || provider.tradeline.creditdays?.toString(),
+      currentbalance: oneProviderStore?.tradeline?.currentbalance?.toString() || provider.tradeline.currentbalance?.toString(),
+      percentoverduedebt: oneProviderStore?.tradeline?.percentoverduedebt?.toString() || provider.tradeline.percentoverduedebt?.toString()
     },
     validationSchema: Yup.object({
       creditlimit: Yup.string()
@@ -43,12 +46,13 @@ export default function CreditLine({provider, id, token}:
             percentoverduedebt: parseInt(percentoverduedebt? percentoverduedebt.replace(/[$,%,]/g, ""): '0')
           }
           const res = await updateProvider(id, token, {tradeline});
-          if(res===200){
+          if(typeof(res)!=='string'){
             refRequest.current = true;
             showToastMessage('Los datos han sido actualizados!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
+            updateOneProviderStore(res);
+            // setTimeout(() => {
+            //   window.location.reload();
+            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -81,7 +85,8 @@ export default function CreditLine({provider, id, token}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             //placeholder="Please enter a number"
-            defaultValue={provider.tradeline.creditlimit?.toString() || 0}
+            //defaultValue={provider.tradeline.creditlimit?.toString() || 0}
+            defaultValue={formik.values.creditlimit || 0}
             decimalsLimit={2}
             prefix="$"
             onValueChange={(value) => {try {
@@ -126,7 +131,8 @@ export default function CreditLine({provider, id, token}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             //placeholder="Please enter a number"
-            defaultValue={provider.tradeline.currentbalance?.toString() || 0}
+            //defaultValue={provider.tradeline.currentbalance?.toString() || 0}
+            defaultValue={formik.values.currentbalance || 0}
             decimalsLimit={2}
             prefix="$"
             onValueChange={(value) => {try {
@@ -158,7 +164,8 @@ export default function CreditLine({provider, id, token}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             //placeholder="Please enter a number"
-            defaultValue={provider.tradeline.percentoverduedebt?.toString() || 0}
+            //defaultValue={provider.tradeline.percentoverduedebt?.toString() || 0}
+            defaultValue={formik.values.percentoverduedebt || 0}
             decimalsLimit={2}
             //prefix="%"
             suffix="%"

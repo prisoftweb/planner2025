@@ -16,6 +16,7 @@ import SelectProjectStepper from "./SelectProyectStepper";
 import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { ReportParse } from "@/interfaces/Reports";
+import RefreshStepperComponent from "./RefreshStepperComponent";
 
 import { UsrBack } from "@/interfaces/User";
 import { useOptionsExpense } from "@/app/store/newExpense";
@@ -131,6 +132,8 @@ export default function NewExpenseContainer({token, showForm, user, }:
         <VoucherStepper token={token} user={user._id} />
       ): indexStepper===3? (
         <CFDIStepper token={token} user={user._id} />
+      ): indexStepper===4? (
+        <RefreshStepperComponent />
       ): (
         <SelectProjectStepper />
       )
@@ -142,7 +145,9 @@ export default function NewExpenseContainer({token, showForm, user, }:
           idLabour={idLabour} idTicket={idTicket} idVat={idVat} />
       ): indexStepper===2? (
         <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
-      ): (
+      ): indexStepper===3? (
+        <RefreshStepperComponent />
+      ):  (
         <SelectProjectStepper />
       )
     }

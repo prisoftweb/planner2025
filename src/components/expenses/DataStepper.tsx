@@ -30,10 +30,13 @@ export default function DataStepper({token, user}: {token:string, user:string })
     report, condition, category, isPettyCash, concept,
     updateIsCard, updateCostCenter, updateHaveDiscount, 
     updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, 
-    total, updateExpensesTable} = useNewExpense();
+    total} = useNewExpense();
 
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
+
+    // console.log('cost center data stepper => ', costCenter);
+    // console.log('concept data stepper => ', concept);
 
   const formik = useFormik({
     initialValues: {
@@ -82,7 +85,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
   //const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
   const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
-  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: responsibles[0].value);
+  //const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: responsibles[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
   const [categoryS, setCategoryS] = useState<string>(categories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
@@ -93,8 +97,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
   //const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
   //actualizacion juntar estos 2 estados en un objeto
+
+  //console.log('vat zustand => ', vat);
+
   const [idVat, setIdVat] = useState<string>(vats[0].value);
-  const [vatValue, setVatValue] = useState<string>('0');
+  const [vatValue, setVatValue] = useState<string>(vat!==''? vat: '0');
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [totalExpense, setTotalExpense] = useState<string>(total);
   
@@ -180,7 +187,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
-        console.log('value amount data stepper => ', value);
+        //console.log('value amount data stepper => ', value);
         formik.values.amount=value || '0';
         handleIdVat(idVat);
       } catch (error) {
@@ -299,6 +306,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           showToastMessage('Costo creado satisfactoriamente!!!');
           //updateHaveExpenses(true);
           updateRefresh(true);
+          updateIndexStepper(4);
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);
@@ -347,6 +355,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           //setClearAmount(true);
           //updateHaveExpenses(true);
           updateRefresh(true);
+          updateIndexStepper(4);
           // setTimeout(() => {
           //   setResetBand(true);
           // }, 300);
@@ -526,6 +535,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
           if(numTotal > 0){
             setTotalExpense((numTotal * -1).toString());
           }
+          let ivaTotal = Number(vatValue.replace(/[$,]/g, ""));
+          if(ivaTotal > 0){
+            formik.values.vat= (ivaTotal * -1).toString();
+            setVatValue((ivaTotal * -1).toString());
+          }
         }else{
           let num = Number(formik.values.amount.replace(/[$,]/g, ""));
           if(num < 0){
@@ -535,6 +549,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
           let numTotal = Number(totalExpense.replace(/[$,]/g, ""));
           if(numTotal < 0){
             setTotalExpense((numTotal * -1).toString());
+          }
+          let ivaTotal = Number(vatValue.replace(/[$,]/g, ""));
+          if(ivaTotal < 0){
+            formik.values.vat= (ivaTotal * -1).toString();
+            setVatValue((ivaTotal * -1).toString());
           }    
         }
       }
@@ -758,7 +777,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
             />
           </div>
           {view}
-          <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3">
+          {/* <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3"> */}
+          <div className="col-span-1 sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-x-3">
             <div>
               <div className="flex items-center justify-between mr-5">
                 <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Emisor</p></Label>

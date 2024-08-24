@@ -98,7 +98,8 @@ export interface ReportParse {
   status: boolean
   account: string
   quantity: number
-  total: number
+  //total: number
+  totalok: number
   subtotal: number
   lastmove: Lastmove
   department: string
@@ -180,4 +181,10 @@ export interface ReportMin {
   lastmove: Lastmove
   departmentid: string
   department: string
+}
+
+export interface DateReport {
+  _id: any
+  maxDate: string
+  minDate: string
 }

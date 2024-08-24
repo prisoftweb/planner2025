@@ -9,10 +9,14 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { ClientBack } from "@/interfaces/Clients";
 import { updateClient } from "@/app/api/routeClients";
 import { useRef } from "react";
+import { useClientProfileStore } from "@/app/store/clientStore";
 
-export default function AddressClient({token, client}:{token:string, client:ClientBack}){
+export default function AddressClient({token, client, editInfo}:
+  {token:string, client:ClientBack, editInfo:boolean}){
   
   const refRequest = useRef(true);
+  const {updateProfileClient} = useClientProfileStore();
+
   const formik = useFormik({
     initialValues: {
       stret:client.location.stret? client.location.stret: '' ,
@@ -58,15 +62,13 @@ export default function AddressClient({token, client}:{token:string, client:Clie
         //console.log(JSON.stringify(newObj));
         try {
           const res = await updateClient(client._id, token, newObj);
-          if(res === 200){
-            refRequest.current = true;
-            showToastMessage('Cliente actualizado exitosamente!!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
-          }else{
+          if(typeof(res)==='string'){
             refRequest.current = true;
             showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            updateProfileClient(res);
+            showToastMessage('Cliente actualizado exitosamente!!!');
           }
         } catch (error) {
           refRequest.current = true;
@@ -160,9 +162,11 @@ export default function AddressClient({token, client}:{token:string, client:Clie
           </div>
         </div>
         
-        <div className="flex justify-center mt-8 space-x-5">
-          <Button type="submit">Guardar</Button>
-        </div>
+        {editInfo && (
+          <div className="flex justify-center mt-8 space-x-5">
+            <Button type="submit">Guardar</Button>
+          </div>
+        )}
       </form>  
     </div>
   )

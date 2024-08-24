@@ -10,13 +10,36 @@ import Header from "@/components/Header";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
+import { Resource2 } from "@/interfaces/Roles";
 
 export default async function clients(){
   
   const cookieStore = cookies();
+  //const allCookies = cookieStore.getAll();
+  //console.log('all cookies => ', allCookies);
   const token = cookieStore.get('token')?.value || '';
   
+  const clientCookie = cookieStore.get('clients')?.value;
+  let permisionsClient: Resource2 | undefined;
+  if(clientCookie){
+    permisionsClient = JSON.parse(clientCookie);
+  }
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+  //console.log('user back => ', user);
+  //console.log('client cookie => ', clientCookie, ' typeof => ', typeof(clientCookie));
+
+  if(!permisionsClient){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+            text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
+            title="Clientes"><></></WithOut>
+        </div>
+      </>
+    )
+  }
 
   let tags;
   try {
@@ -43,6 +66,13 @@ export default async function clients(){
   let clients;
   try {
     clients = await getClients(token);
+    if(typeof(clients)==='string'){
+      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+          text={clients} 
+          title="Clientes"><></></WithOut>
+      </div>
+    }
   } catch (error) {
     return <>
         <Navigation user={user} />
@@ -53,6 +83,21 @@ export default async function clients(){
         </div>
       </>
   }
+
+  // let permission = false;
+
+  // if(!permission){
+  //   return (
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+  //           text="Lo sentimos, no tienes acceso a esta informacion!!!" 
+  //           title="Clientes"><></></WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   if(!clients || clients.length<= 0){
     return <>
@@ -65,30 +110,24 @@ export default async function clients(){
       </>
   }
   
-  // let data:TableClient[] = [];
-  // clients.map((client:ClientBack) => {
-  //   data.push({
-  //     'id': client._id,
-  //     'name': client.name,
-  //     account: client.account,
-  //     contacts: client.contact.length,
-  //     currentbalance: 0,
-  //     rfc: client.rfc,
-  //     status: client.status,
-  //     logo: client.logo? client.logo: '/img/clients/default.jpg',
-  //   })
-  // })
-
   let data:TableClient[] = ClientDataToTableClient(clients);
+
+  //console.log('permissions client => ', permisionsClient.permission);
 
   return (
     <>
       <Navigation user={user} />
-      
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <Header title="Clientes" placeHolder="Buscar cliente.."><ButtonNewClient id={user._id} token={token} tags={arrTags} /></Header>
+        <Header title="Clientes" placeHolder="Buscar cliente.." >
+          {permisionsClient.permission.create? (
+            <ButtonNewClient id={user._id} token={token} tags={arrTags} />
+          ): (
+            <></>
+          )}
+        </Header>
         <div className="mt-5">
-          <TableClients data={data} token={token} />
+          <TableClients data={data} token={token} deletePermission={permisionsClient.permission.delete}
+            selectPermission={permisionsClient.permission.select} />
         </div>
       </div>
     </>

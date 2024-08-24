@@ -11,11 +11,15 @@ export default function ButtonNew({token, companies, departments,
                         user:string, condition:string
                       }){
   const [newReport, setNewReport] = useState<boolean>(false);
+
+  const handleNewReport = (value: boolean) => {
+    setNewReport(value);
+  }
   
   return(
     <>
       <Button type="button" onClick={() => setNewReport(true)}>Nuevo</Button>
-          {newReport && <NewReport showForm={setNewReport} 
+          {newReport && <NewReport showForm={handleNewReport} 
                                   token={token} projects={projects}
                                   companies={companies} departments={departments} 
                                   condition={condition} user={user}

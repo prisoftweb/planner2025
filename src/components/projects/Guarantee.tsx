@@ -13,8 +13,10 @@ import SaveProject from "@/app/functions/SaveProject";
 import { useNewProject } from "@/app/store/newProject";
 import CurrencyInput from 'react-currency-input-field';
 import "react-datepicker/dist/react-datepicker.css";
+import { useProjectsStore } from "@/app/store/projectsStore";
 
-export default function Guarantee({token, condition}:{token:string, condition: string}){
+export default function Guarantee({token, condition, showForm}:
+  {token:string, condition: string, showForm:Function}){
   
   let year = new Date().getFullYear().toString();
   let month = (new Date().getMonth() + 1).toString();
@@ -24,6 +26,8 @@ export default function Guarantee({token, condition}:{token:string, condition: s
 
   const [startDate, setStartDate] = useState<string>(year+'-'+month+'-'+day);
   const refRequest = useRef(true);
+
+  const {updateHaveNewProject} = useProjectsStore();
 
   const formik = useFormik({
     initialValues: {
@@ -94,9 +98,11 @@ export default function Guarantee({token, condition}:{token:string, condition: s
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateHaveNewProject(true);
+          showForm(false);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

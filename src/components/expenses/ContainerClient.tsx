@@ -29,8 +29,8 @@ import { UsrBack } from "@/interfaces/User"
 import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
 
-//import { getAllCostsByCondition } from "@/app/api/routeCost"
-//import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
+import { getAllCostsByCondition } from "@/app/api/routeCost"
+import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports}:
@@ -50,12 +50,12 @@ export default function ContainerClient({data, token, expenses,
 
   const {expensesTable, updateExpensesTable, updateResponsible, refresh, updateRefresh} = useNewExpense();
 
+  if(expensesTable.length <= 0 && expenses.length > 0){
+    //console.log('actualizar expenses table => ');
+    updateExpensesTable(expenses);
+  }
+
   useEffect(() => {
-
-    if(expensesTable.length <= 0 && expenses.length > 0){
-      updateExpensesTable(expenses);
-    }
-
     const fetchApis = async () => {
       let costcenters: CostoCenterLV[];
       try {
@@ -249,31 +249,35 @@ export default function ContainerClient({data, token, expenses,
     }
   }
 
-  // if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
-  //   const aux = async () =>{
-  //     try {
-  //       const res = await getAllCostsByCondition(token);
-  //       //console.log('res');
-  //       if(typeof(res) !== 'string'){
-  //         //refExpenses.current = res;
-  //         const d = ExpenseDataToTableData(res);
-  //         setTableData(d);
-  //         updateExpensesTable(res);
-  //         //setDataExpenses(d);
-  //       }else{
-  //         showToastMessageError(res);
-  //       }
-  //     } catch (error) {
-  //       console.log('catch table expenses => ', error);
-  //       showToastMessageError('Error al actualizar tabla!!');
-  //     }
-  //   }
-  //   aux();
-  //   updateRefresh(false);
-  // }
+  //console.log('expenses table container client => ', expensesTable);
+
+  if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
+    //console.log('entro en el if => ');
+    const aux = async () =>{
+      try {
+        const res = await getAllCostsByCondition(token);
+        //console.log('res');
+        if(typeof(res) !== 'string'){
+          //refExpenses.current = res;
+          const d = ExpenseDataToTableData(res);
+          setTableData(d);
+          updateExpensesTable(res);
+          //setDataExpenses(d);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        //console.log('catch table expenses => ', error);
+        showToastMessageError('Error al actualizar tabla!!');
+      }
+    }
+    aux();
+    updateRefresh(false);
+  }
 
   //if( expensesTable.length <= 0 && expenses.length <= 0){
-  if( expenses.length <= 0){
+  if( expenses.length <= 0 && expensesTable.length <= 0){
+    //console.log('entro en el return length 0 => ');
     return (
       <>
         <Navigation user={user} />
@@ -300,14 +304,14 @@ export default function ContainerClient({data, token, expenses,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-2 gap-y-2 items-center">
         <div className="flex items-center">
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
           <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': 'Gastos'}</p>
         </div>
-        <div className="flex gap-x-3">
+        <div className="flex gap-x-3 gap-y-3">
           <SearchInTable placeH={"Buscar gasto.."} />
           <div className="w-72">
             <div className="flex gap-x-4 items-center">
@@ -319,10 +323,6 @@ export default function ContainerClient({data, token, expenses,
                     className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
                   />
               )}  
-              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              /> */}
-              {/* <PDFDownloadLink document={<ReportCostByCostCenterPDF />} fileName={`costo por cost center`} > */}
               <>
                 {!isHistory && (
                   <>

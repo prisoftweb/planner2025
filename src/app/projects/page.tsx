@@ -127,24 +127,24 @@ export default async function Page(){
     })
   })
 
-  if(!projects || projects.length <= 0){
-    return (
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/projects.jpg" subtitle="Proyectos"
-            text="Aqui puedes agregar nuevos proyectos
-                    para la gestion desde Planner"
-            title="Proyectos">
-              <ButtonNew token={token} optClients={optClients} 
-                      optCategories={optCategories} optTypes={optTypes}
-                      user={user._id} optCompanies={optCompanies} 
-                      condition={condition}  />
-          </WithOut>
-        </div>
-      </>
-    )
-  }
+  // if(!projects || projects.length <= 0){
+  //   return (
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+  //         <WithOut img="/img/projects.jpg" subtitle="Proyectos"
+  //           text="Aqui puedes agregar nuevos proyectos
+  //                   para la gestion desde Planner"
+  //           title="Proyectos">
+  //             <ButtonNew token={token} optClients={optClients} 
+  //                     optCategories={optCategories} optTypes={optTypes}
+  //                     user={user._id} optCompanies={optCompanies} 
+  //                     condition={condition}  />
+  //         </WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
   
@@ -153,7 +153,7 @@ export default async function Page(){
       <Navigation user={user} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
         optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user._id} 
+        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
         condition={condition} />
     </>
   )

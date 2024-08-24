@@ -1,24 +1,27 @@
 import Chip from "../providers/Chip";
-import { ClientBack } from "@/interfaces/Clients";
+//import { ClientBack } from "@/interfaces/Clients";
 import Label from "../Label";
+import { useClientProfileStore } from "@/app/store/clientStore";
 
-export default function ProfileClient({client}: 
-                        {client:ClientBack}){
+export default function ProfileClient(){
+
+  const {clientProfile} = useClientProfileStore();
 
   return(
     <>
       <div className="w-full h-full mt-3">
         <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
-            <img src={client.logo? client.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
+            {/* <img src={client.logo? client.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" /> */}
+            <img src={clientProfile?.logo? clientProfile?.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
           </div>
           <div>
-            <p className="text-blue-500">{client.name}</p>
-            <p className="text-slate-500">{client.tradename}</p>
-            <p className="text-slate-500">{client.rfc}</p>
-            <p className="text-slate-500">{client.regime==='Moral'? 'Persona Moral': 'Persona Fisica'}</p>
+            <p className="text-blue-500">{clientProfile?.name}</p>
+            <p className="text-slate-500">{clientProfile?.tradename}</p>
+            <p className="text-slate-500">{clientProfile?.rfc}</p>
+            <p className="text-slate-500">{clientProfile?.regime==='Moral'? 'Persona Moral': 'Persona Fisica'}</p>
             <div className="flex gap-x-2 gap-y-2">
-              {client.tags?.map((tag, index:number) => (
+              {clientProfile?.tags?.map((tag, index:number) => (
                 <Chip label={tag} key={index} />
               ))}
             </div>
@@ -28,42 +31,42 @@ export default function ProfileClient({client}:
         <div className="mt-2 bg-white p-3 rounded-lg shadow-md py-2">
           <div className="">
             <Label>Email</Label>
-            <p className="my-0 text-blue-500">{client.email? client.email: ''}</p>
+            <p className="my-0 text-blue-500">{clientProfile?.email? clientProfile?.email: ''}</p>
           </div>
           <div className="mt-3">
             <Label>Telefono</Label>
-            <p className="my-0 text-blue-500">{client.phone? client.phone: ''}</p>
+            <p className="my-0 text-blue-500">{clientProfile?.phone? clientProfile?.phone: ''}</p>
           </div>
           <div className="mt-3">
             <Label>Web</Label>
-            <p className="my-0 text-blue-500">{client.link? client.link: ''}</p>
+            <p className="my-0 text-blue-500">{clientProfile?.link? clientProfile?.link: ''}</p>
           </div>
         </div>
         
         <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-3 bg-white p-3 rounded-lg shadow-md py-2">
           <div>
             <Label>Direccion</Label>
-            <p className="my-0 text-slate-700">{client.location.stret? client.location.stret: '' }</p>
+            <p className="my-0 text-slate-700">{clientProfile?.location.stret? clientProfile?.location.stret: '' }</p>
           </div>
           <div>
             <Label>Colonia</Label>
-            <p className="my-0 text-slate-700">{client.location.community? client.location.community: '' }</p>
+            <p className="my-0 text-slate-700">{clientProfile?.location.community? clientProfile?.location.community: '' }</p>
           </div>
           <div>
             <Label>Municipio</Label>
-            <p className="my-0 text-slate-700">{client.location.municipy? client.location.municipy: '' }</p>
+            <p className="my-0 text-slate-700">{clientProfile?.location.municipy? clientProfile?.location.municipy: '' }</p>
           </div>
           <div>
             <Label>Codigo Postal</Label>
-            <p className="my-0 text-slate-700">{client.location.cp? client.location.cp: '' }</p>
+            <p className="my-0 text-slate-700">{clientProfile?.location.cp? clientProfile?.location.cp: '' }</p>
           </div>
           <div>
             <Label>Estado</Label>
-            <p className="my-0 text-slate-700">{client.location.state? client.location.state: '' }</p>
+            <p className="my-0 text-slate-700">{clientProfile?.location.state? clientProfile?.location.state: '' }</p>
           </div>
           <div>
             <Label>Pais</Label>
-            <p className="my-0 text-slate-700">{client.location.country? client.location.country: '' }</p>
+            <p className="my-0 text-slate-700">{clientProfile?.location.country? clientProfile?.location.country: '' }</p>
           </div>
         </div>
       </div>

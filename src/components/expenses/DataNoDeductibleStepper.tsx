@@ -36,7 +36,7 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
 
   const handleCostCenter = (value:string) => {
     //setCostCenter(value);
-    console.log('value costoc => ', value);
+    //console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
@@ -57,7 +57,11 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
     }
   }
   
+  // console.log('cost center data stepper nd => ', costCenter);
+  // console.log('concept data stepper nd => ', concept);
+
   if(concept==='' || costCenter === ''){
+    //console.log('if c c => ', concept, ' => ', costCenter);
     handleCostCenter(costCenterOpt[0].value);
   }
 
@@ -98,7 +102,8 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
 
   //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
-  const [responsibleS, setResponsibleS] = useState<string>(responsibles[0].value);
+  //const [responsibleS, setResponsibleS] = useState<string>(responsibles[0].value);
+  const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
   //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
@@ -232,6 +237,7 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
           showToastMessage('Costo creado satisfactoriamente!!!');
           setClearAmount(true);
           updateRefresh(true);
+          updateIndexStepper(3);
           setTimeout(() => {
             setResetBand(true);
           }, 300);
@@ -281,7 +287,7 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
 
 
   useEffect(() => {
-    handleCostCenter(costCenterOpt[0].value);
+    //handleCostCenter(costCenterOpt[0].value);
     // let indexCC = 0;
     // if(costCenter !== ''){
     //   optCostCenter.map((opt, index:number) => {

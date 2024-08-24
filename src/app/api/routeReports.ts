@@ -37,7 +37,7 @@ export async function CreateReport(auth_token:string, data:Object) {
   }
 }
 
-export async function RemoveReport(auth_token:string, id:string) {
+export async function RemoveReport(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/${id}`;
   try {
     const res = await axios.delete(url, {
@@ -356,5 +356,23 @@ export async function GetReportsLV(auth_token:string) {
       return error.response?.data.message || 'Ocurrio un problema al obtener informes';
     }
     return 'Ocurrio un problema al obtener informes';
+  }
+}
+
+export async function GetAllCostByReportWithDateMINAndMAX(auth_token:string, id: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByReportMINAndMAX/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al obtener fechas de gastos del informe informe';
+    }
+    return 'Ocurrio un problema al obtener fechas de gastos del informe informe';
   }
 }

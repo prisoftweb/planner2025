@@ -59,8 +59,12 @@ export default async function Page() {
       value: cat._id
     });
     let statuses = '';
+    let arrStatuses: string[] = [];
+    let arrColors: string[] = [];
     cat.condition.map((cond) => {
       statuses += cond.glossary.name + ', ';
+      arrStatuses.push(cond.glossary.name);
+      arrColors.push(cond.glossary.color || '#fff');
     });
     let categories = '';
     cat.categorys.map((category) => {
@@ -70,11 +74,19 @@ export default async function Page() {
     cat.types.map((type) => {
       types += type.glossary.name + ', ';
     });
+
+    console.log('arr statuses => ', arrStatuses);
+    console.log('arr colors => ', arrColors);
+
     table.push({
       catalog: cat.name,
       collection: cat.collection,
       id: cat._id,
-      statuses: statuses,
+      //statuses: statuses,
+      statuses: {
+        arrStatuses,
+        arrColors
+      },
       categories,
       types
     })

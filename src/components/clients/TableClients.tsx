@@ -10,8 +10,9 @@ import { useEffect } from "react";
 import RemoveElement from "../RemoveElement";
 import { removeClient } from "@/app/api/routeClients";
 
-export default function TableClients({data, token}:
-                        {data:TableClient[], token:string}){
+export default function TableClients({data, token, deletePermission, selectPermission}:
+                        {data:TableClient[], token:string, selectPermission:boolean, 
+                          deletePermission: boolean}){
   
   const columnHelper = createColumnHelper<TableClient>();
   const {clients, setClients, deleteClient} = useClientStore();
@@ -29,23 +30,27 @@ export default function TableClients({data, token}:
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
+          {selectPermission && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          )}
           {/* <IconText size="w-6 h-6" sizeText="text-sm" text={row.original.name} /> */}
           <img src={row.original.logo} alt="logo" className="w-10 h-auto" />
         </div>
       ),
       enableSorting:false,
-      header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
-      )
+      header: ({table}:any) => {
+        selectPermission? (
+          <input type="checkbox"
+            checked={table.getIsAllRowsSelected()}
+            onClick={()=> {
+              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+            }}
+          />
+        ): <></>
+      }
     }),
     columnHelper.accessor('status', {
       id: 'accion',
@@ -55,8 +60,10 @@ export default function TableClients({data, token}:
             className={`w-4 h-4  ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
           </div>
           {/* <DeleteClient client={row.original} token={token} /> */}
-          <RemoveElement id={row.original.id} name={row.original.name} token={token}
-            remove={removeClient} removeElement={delClient} />
+          {deletePermission && (
+            <RemoveElement id={row.original.id} name={row.original.name} token={token}
+              remove={removeClient} removeElement={delClient} />
+          )}
           <NumberContacts numContacts={row.original.contacts} />
         </div>
       ),

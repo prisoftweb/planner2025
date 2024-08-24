@@ -9,7 +9,7 @@ export async function getClients(auth_token:string) {
       }
     })
     if(res.status===200) return res.data.data.data;
-    return res.statusText;
+    return res.data?.message?? res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
       return error.message;
@@ -85,7 +85,7 @@ export async function updateClient(id:string, auth_token:string, data:Object) {
       }
     })
     if(res.status===200){
-      return res.status;
+      return res.data.data.data;
     }
     return 'Error al actualizar cliente!!';
   } catch (error) {
@@ -190,7 +190,7 @@ export async function updateClientLogo(data:FormData, auth_token:string, id:stri
         'Content-Type': 'multipart/form-data',
       }
     })
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
     return 'Error al actualizar logo del cliente!!';
   } catch (error) {
     if(axios.isAxiosError(error)){

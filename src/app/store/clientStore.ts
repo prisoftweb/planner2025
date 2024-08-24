@@ -1,6 +1,7 @@
 import {create} from 'zustand'
 import { TableClient } from '@/interfaces/Clients'
 import { Condition, Location } from '@/interfaces/Clients'
+import { ClientBack } from '@/interfaces/Clients'
 
 interface Actions {
   updateClient: (cli: TableClient) => void,
@@ -87,5 +88,29 @@ export const useClientStore = create<TableClient & Actions & ArrClients>((set) =
   })),
   reset: () => {
     set(initialState)
+  },
+}))
+
+interface ActionsClient {
+  updateProfileClient: (cli: ClientBack) => void,
+  reset: () => void,
+}
+
+interface clientProfile {
+  clientProfile: ClientBack | undefined
+}
+
+const initialClientProfile: clientProfile = {
+  clientProfile: undefined
+}
+
+export const useClientProfileStore = create<ActionsClient & clientProfile>((set) => ({
+  ...initialClientProfile,
+  updateProfileClient: (value:ClientBack) => set(state => ({
+    ...state,
+    clientProfile: value,
+  })),
+  reset: () => {
+    set(initialClientProfile)
   },
 }))

@@ -86,7 +86,7 @@ export default function NewProjectContainer({token, showForm, optClients,
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
         </div>
         <ContainerProjectStepper token={token} optClients={optClients} 
-            optCategories={optCategories} optTypes={optTypes} 
+            optCategories={optCategories} optTypes={optTypes} showForm={showForm}
             user={user} optCompanies={optCompanies} condition={condition} />
       </div>
     </div>

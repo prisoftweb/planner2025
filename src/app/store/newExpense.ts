@@ -4,8 +4,6 @@ import { Options } from '@/interfaces/Common'
 import { ReportParse } from '@/interfaces/Reports'
 
 interface NewExpenseState {
-  costCenter: string,
-  concept: string,
   folio:string, 
   taxFolio:string,
   description:string,
@@ -29,12 +27,18 @@ interface NewExpenseState {
   haveDiscount: boolean
 
   refresh: boolean
-  expensesTable: Expense[]
 }
 
 interface PettyCashState{
   isPettyCash: boolean,
   isCard: boolean
+  expensesTable: Expense[]
+  isDeleteExpensesTable: boolean
+}
+
+interface CostCenterState{
+  costCenter: string,
+  concept: string,
 }
 
 interface ProjectState{
@@ -72,11 +76,12 @@ interface Actions {
   updateHaveDiscount: (value:boolean) => void,
   updateExpensesTable: (value:Expense[]) => void,
   updateResponsible: (value:string) => void,
+  updateIsDeleteExpenseTable: (value:boolean) => void,
 }
 
 const initialState: NewExpenseState = {
-  costCenter: '',
-  concept: '',
+  //costCenter: '',
+  //concept: '',
   folio: '', 
   description: '',
   amount: '', 
@@ -98,7 +103,11 @@ const initialState: NewExpenseState = {
   haveDiscount: false,
   taxExempt: '',
   total: '0',
-  expensesTable: [],
+}
+
+const initialCostCenter : CostCenterState = {
+  concept: '',
+  costCenter: ''
 }
 
 const projectInitial: ProjectState = {
@@ -112,17 +121,21 @@ const projectInitial: ProjectState = {
 const pettyCashInitial: PettyCashState = {
   isPettyCash: false,
   isCard: false,
+  expensesTable: [],
+  isDeleteExpensesTable: false
 }
 
 const initialExpense: CurrentExpense = {
   currentExpense: null,
 }
 
-export const useNewExpense = create<NewExpenseState & Actions & ProjectState & PettyCashState & CurrentExpense>((set) => ({
+export const useNewExpense = create<NewExpenseState & Actions & ProjectState 
+    & PettyCashState & CurrentExpense & CostCenterState>((set) => ({
   ...initialState,
   ...projectInitial,
   ...pettyCashInitial,
   ...initialExpense,
+  ...initialCostCenter,
   updateBasicData: ( folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
       typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, 
@@ -207,13 +220,20 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState & P
     ...state,
     haveTaxExempt: value,
   })),
-  updateExpensesTable: (value:Expense[]) => set(state => ({
-    ...state,
-    expensesTable: value,
-  })),
+  updateExpensesTable: (value:Expense[]) => {
+    console.log('update expenses table => ', value);
+    set(state => ({
+      ...state,
+      expensesTable: value,
+    }))
+  },
   updateResponsible: (value:string) => set(state => ({
     ...state,
     responsible: value
+  })),
+  updateIsDeleteExpenseTable: (value:boolean) => set(state => ({
+    ...state,
+    isDeleteExpensesTable: value,
   })),
   reset: () => {
     set(initialState)

@@ -10,9 +10,10 @@ import SaveProject from "@/app/functions/SaveProject";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import { useNewProject } from "@/app/store/newProject";
+import { useProjectsStore } from "@/app/store/projectsStore"
 
-export default function DataBasicStepper({token, user, condition}: 
-  {token:string, user:string, condition: string}){
+export default function DataBasicStepper({token, user, condition, showForm}: 
+  {token:string, user:string, condition: string, showForm:Function}){
   
   const [,dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -20,6 +21,8 @@ export default function DataBasicStepper({token, user, condition}:
   const {updateBasicData, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
     company, amountG, dateG, percentage} = useNewProject();
+
+  const {updateHaveNewProject} = useProjectsStore();
 
   // let nameI = '';
   // let keyProjectI = '';
@@ -109,9 +112,11 @@ export default function DataBasicStepper({token, user, condition}:
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+          updateHaveNewProject(true);
+          showForm(false);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
