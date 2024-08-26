@@ -25,20 +25,20 @@ export default async function Page(){
     return <h1 className="text-center text-red-500 text-lg">Error al consultar glosarios!!</h1>
   } 
 
-  if(!glossaries || glossaries.length <= 0){
-    return (
-      <div>
-        <Navigation user={user} />
-        <CompanyClient option={1} >
-          <WithOut img="/img/clientes.svg" subtitle="Glosarios"
-            text="Aqui puedes agregar los glosarios"
-            title="Glosarios">
-                <ButtonNew token={token} glossary={''} />
-          </WithOut>
-        </CompanyClient>
-      </div>
-    )
-  }
+  // if(!glossaries || glossaries.length <= 0){
+  //   return (
+  //     <div>
+  //       <Navigation user={user} />
+  //       <CompanyClient option={1} >
+  //         <WithOut img="/img/clientes.svg" subtitle="Glosarios"
+  //           text="Aqui puedes agregar los glosarios"
+  //           title="Glosarios">
+  //               <ButtonNew token={token} glossary={''} />
+  //         </WithOut>
+  //       </CompanyClient>
+  //     </div>
+  //   )
+  // }
 
   const table: GlossaryTable[] = [];
 
@@ -60,7 +60,7 @@ export default async function Page(){
             <ButtonNew token={token} glossary={''} />
           </Header>
           <div className="mt-5">
-            <TableGlossary data={table} token={token} />
+            <TableGlossary data={table} token={token} glossaries={glossaries} />
           </div>
         </div>
       </CompanyClient>

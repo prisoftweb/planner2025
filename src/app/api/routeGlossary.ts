@@ -45,7 +45,7 @@ export async function CreateGlossary(auth_token:string, data:Object) {
         'Content-Type': 'application/json',
       }
     })
-    if(res.status===201) return res.status;
+    if(res.status===201) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -55,7 +55,7 @@ export async function CreateGlossary(auth_token:string, data:Object) {
   }
 }
 
-export async function RemoveGlossary(auth_token:string, id:string) {
+export async function RemoveGlossary(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/glossarys/${id}`;
   try {
     const res = await axios.delete(url, {
@@ -82,7 +82,7 @@ export async function UpdateGlossary(auth_token:string, id:string, data:Object){
         'Content-Type': 'application/json',
       }
     })
-    if(res.status=== 200) return res.status;
+    if(res.status=== 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
