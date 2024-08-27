@@ -11,15 +11,17 @@ import { RemoveCost } from "@/app/api/routeCost"
 import { CostReport } from "@/interfaces/Reports"
 import { useEffect, useState } from "react"
 import { getCostByReportMin } from "@/app/api/routeReports"
+import { useOneReportStore } from "@/app/store/reportsStore"
 
 export default function CostsInReport({report, id, token}: 
     {report:Report, id:string, token: string}) {
 
   //console.log('costs in report => ', costs);
+  const {oneReport} = useOneReportStore();
   //const costs: Expense[] = getCosts();
   const total = CurrencyFormatter({
     currency: "MXN",
-    value: report.total
+    value: oneReport?.total ?? 0
   });
   
   const [costsReport, setCostReport] = useState<CostReport[]>([]);
@@ -41,26 +43,27 @@ export default function CostsInReport({report, id, token}:
   
   const data = CostsDataToTableDataMin(costsReport);
 
-  console.log('costs min in report', data);
+  //console.log('costs min in report', data);
   
   return (
     <>
-      <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+      {/* <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2"  */}
+      <div className="flex w-full max-w-screen-2xl px-2 flex-wrap space-x-2"
           style={{'backgroundColor': '#F8FAFC'}}>
         <div className="grid grid-cols-3 gap-x-3 mt-2">
           <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
             <div>
-              <img src={ report.project.photo? report.project.photo: '/img/projects/default.svg'} alt="logo" 
+              <img src={ oneReport?.project.photo? oneReport.project.photo: '/img/projects/default.svg'} alt="logo" 
                 className="w-28 h-auto" />
             </div>
             <div>
-              <p className="text-blue-500">{report.project.title}</p>
-              <p className="text-slate-500">{report.project.code}</p>
-              <p className="text-slate-500">{report.project.glossary.name}</p>
-              <p className="text-slate-500">{report.project.account}</p>
+              <p className="text-blue-500">{oneReport?.project.title}</p>
+              <p className="text-slate-500">{oneReport?.project.code}</p>
+              <p className="text-slate-500">{oneReport?.project.glossary.name}</p>
+              <p className="text-slate-500">{oneReport?.project.account}</p>
               <div className="mt-3 border-t border-slate-500 pt-2">
-                <p className="text-blue-500">{report.name}</p>
-                <p className="text-slate-500">{report.account}</p>
+                <p className="text-blue-500">{oneReport?.name}</p>
+                <p className="text-slate-500">{oneReport?.account}</p>
               </div>
             </div>
           </div>
@@ -68,14 +71,14 @@ export default function CostsInReport({report, id, token}:
           <div className=" bg-white p-3 rounded-lg shadow-md py-2">
             <div className="flex gap-x-2 justify-between">
               <div>
-                <img src={report.company.logo} alt="logo" className="w-16 h-auto" />
+                <img src={oneReport?.company.logo} alt="logo" className="w-16 h-auto" />
               </div>
               <div>
-                <p className="text-slate-700">{report.company.name}</p>
-                <p className="text-blue-600">{report.department.name}</p>
+                <p className="text-slate-700">{oneReport?.company.name}</p>
+                <p className="text-blue-600">{oneReport?.department.name}</p>
               </div>
               <div>
-                <Chip label={report.moves[report.moves.length -1]?.condition?.name || 'sin status'} />
+                <Chip label={oneReport?.moves[oneReport?.moves.length -1]?.condition?.name || 'sin status'} />
               </div>
             </div>
             
@@ -86,7 +89,7 @@ export default function CostsInReport({report, id, token}:
               </div>
               <div className="">
                 <p className="text-slate-500">Nº gastos</p>
-                <p className="text-red-500 font-semibold">{report.quantity}</p>
+                <p className="text-red-500 font-semibold">{oneReport?.quantity}</p>
               </div>
             </div>
           </div>
@@ -94,17 +97,17 @@ export default function CostsInReport({report, id, token}:
           <div className="grid grid-cols-2 bg-white p-3 rounded-lg shadow-md py-2 ">
             <div className=" border-r-1 border-slate-700 p-2">
               <Label>Fecha</Label>
-              <p className="text-lg text-blue-600 mt-2">{report.date.substring(0, 10)}</p>
+              <p className="text-lg text-blue-600 mt-2">{oneReport?.date.substring(0, 10)}</p>
             </div>
             <div className="p-2">
               <Label>Comentarios</Label>
-              <p className="text-blue-600 mt-2 text-sm">{report.comment}</p>
+              <p className="text-blue-600 mt-2 text-sm">{oneReport?.comment}</p>
             </div>
           </div>
 
         </div>
 
-        <div className="mt-5 bg-white">
+        <div className="mt-5 bg-white w-full">
           <CostsTableInReport data={data} />
         </div>
 

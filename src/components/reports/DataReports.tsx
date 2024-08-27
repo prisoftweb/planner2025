@@ -7,6 +7,7 @@ import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
 //import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
+import { useOneReportStore } from "@/app/store/reportsStore"
 
 export default function DataReports({token, report, user, node, id, dates}:
                               {token:string, report:Report, user:UsrBack, 
@@ -14,6 +15,8 @@ export default function DataReports({token, report, user, node, id, dates}:
   
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
+
+  const {oneReport} = useOneReportStore();
   //const [isClose, setIsClose] = useState<boolean>(false);
 
   const handleSend = (value: boolean, valueClose: boolean) => {

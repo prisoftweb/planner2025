@@ -1,6 +1,6 @@
 import {create} from 'zustand'
 import { Options } from "@/interfaces/Common"
-import { ReportParse } from '@/interfaces/Reports'
+import { Report, ReportParse } from '@/interfaces/Reports'
 
 interface OptionsReportState {
   projects: Options[],
@@ -57,5 +57,25 @@ export const useOptionsReports = create<OptionsReportState & ActionsOptions >((s
   updateHaveNewReport: (value: boolean) => set(state => ({
     ...state,
     haveNewReport: value
+  })),
+}))
+
+interface OneReportState {
+  oneReport: Report | undefined;
+}
+
+const oneReportInitial: OneReportState = {
+  oneReport: undefined,
+}
+
+interface ActionsReport {
+  updateOneReportStore: (rep: Report) => void,
+}
+
+export const useOneReportStore = create<OneReportState & ActionsReport >((set) => ({
+  ...oneReportInitial,
+  updateOneReportStore: (rep: Report) => set(state => ({
+    ...state,
+    oneReport: rep
   })),
 }))

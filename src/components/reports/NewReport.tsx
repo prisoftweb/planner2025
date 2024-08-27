@@ -60,6 +60,11 @@ export default function NewReport({showForm, token, companies,
     setDepartment(value);
   }
 
+  function getLastDayOfMonth(year:number, month:number) {
+    let date = new Date(year, month + 1, 0);
+    return date.getDate();
+  }
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -77,6 +82,7 @@ export default function NewReport({showForm, token, companies,
         refRequest.current = false;
         try {
           const {comment, name} = valores;
+          const currentDate = new Date();
           const data = {
             name,
             comment,
@@ -85,6 +91,7 @@ export default function NewReport({showForm, token, companies,
             company,
             department,
             project,
+            //new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59)
             ispettycash: imprest,
             moves: [{
               user,
@@ -93,6 +100,16 @@ export default function NewReport({showForm, token, companies,
               condition
             }]
           }
+
+          // alert( getLastDayOfMonth(2012, 0) ); // 31
+          // alert( getLastDayOfMonth(2012, 1) ); // 29
+          // alert( getLastDayOfMonth(2013, 1) ); // 28
+          const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
+          //alert( day);
+          //alert(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59));
+
+          refRequest.current = true;
+
           const res = await CreateReport(token, data);
           if(res === 201){
             refRequest.current = true;
