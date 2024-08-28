@@ -27,7 +27,7 @@ export async function CreateCatalog(auth_token:string, data:Object) {
         'Content-Type': 'application/json',
       }
     })
-    if(res.status===201) return res.status;
+    if(res.status===201) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -37,7 +37,7 @@ export async function CreateCatalog(auth_token:string, data:Object) {
   }
 }
 
-export async function RemoveCatalog(auth_token:string, id:string) {
+export async function RemoveCatalog(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/catalogs/${id}`;
   try {
     const res = await axios.delete(url, {
@@ -64,7 +64,7 @@ export async function UpdateCatalog(auth_token:string, id:string, data:Object) {
         'Content-Type': 'application/json',
       }
     })
-    if(res.status===200) return res.status;
+    if(res.status===200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

@@ -8,14 +8,17 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { CreateCatalog, UpdateCatalog } from "@/app/api/routeCatalogs"
-import { CatalogTable } from "@/interfaces/Catalogs"
+import { Catalog, CatalogTable } from "@/interfaces/Catalogs"
 import { useState, useEffect, useRef } from "react"
+import { useListsStore } from "@/app/store/listStore"
 
 export default function NewCatalog({showForm, token, catalog}: 
                     {showForm:Function, token:string, catalog:(CatalogTable | string)}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);
+
+  const {listsStore, updateListsStore} = useListsStore();
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -25,8 +28,6 @@ export default function NewCatalog({showForm, token, catalog}:
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
     return () => window.removeEventListener('scroll', handleResize);
-    // console.log('useefect');
-    // console.log(heightPage, '   ', window.outerHeight );
   }, [])
   
   const formik = useFormik({
@@ -51,11 +52,10 @@ export default function NewCatalog({showForm, token, catalog}:
               refRequest.current = true;
               return showToastMessageError(res);
             }else{
-              showToastMessage('Catalogo creado exitosamente!!');
+              showToastMessage('Lista creada exitosamente!!');
               refRequest.current = true;
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+              updateListsStore([res, ...listsStore]);
+              showForm(false);
             }
           }else {
             const res = await UpdateCatalog(token, catalog.id, valores);
@@ -65,9 +65,16 @@ export default function NewCatalog({showForm, token, catalog}:
             }else{
               refRequest.current = true;
               showToastMessage('Catalogo actualizado exitosamente!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+              showForm(false);
+              const arrLists: Catalog[] = [];
+              listsStore.map((lis) => {
+                if(lis._id !== catalog.id){
+                  arrLists.push(lis);
+                }else{
+                  arrLists.push(res);
+                }
+              });
+              updateListsStore(arrLists);
             }
           }
         } catch (error) {
