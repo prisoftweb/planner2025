@@ -9,6 +9,8 @@ import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 import AddElements from "../roles/AddElements"
 import { useRef } from "react"
+import { useListsStore } from "@/app/store/listStore"
+import { Catalog } from "@/interfaces/Catalogs"
 
 export default function NewStatus({showForm, token, catalogOptions, 
                                     descGlossaries, glosariesOptions, 
@@ -19,6 +21,7 @@ export default function NewStatus({showForm, token, catalogOptions,
   
   const [optCat, setOptCat] = useState<Options>(catalogOptions[0]);
   const [catalog, setCatalog] = useState<string>(catalogOptions[0].value);
+  const {listsStore, updateListsStore} = useListsStore();
 
   const [statuses, setStatuses] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);
@@ -100,12 +103,22 @@ export default function NewStatus({showForm, token, catalogOptions,
               categorys: glossaries
             }
             const res = await insertFunction(token, catalog, data);
-            if(res === 200){
+            if(typeof(res)!=='string'){
               refRequest.current = true;
               showToastMessage('Categorias agregadas exitosamente!!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+              const arrCats: Catalog[] = [];
+              listsStore.map((lis) => {
+                if(lis._id!==catalog){
+                  arrCats.push(lis);
+                }else{
+                  arrCats.push(res);
+                }
+              })
+              updateListsStore(arrCats);
+              showForm(false);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -116,12 +129,22 @@ export default function NewStatus({showForm, token, catalogOptions,
                 condition: glossaries
               }
               const res = await insertFunction(token, catalog, data);
-              if(res === 200){
+              if(typeof(res)!=='string'){
                 refRequest.current = true;
                 showToastMessage('Condicion agregada exitosamente!!!');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 500);
+                const arrCats: Catalog[] = [];
+                listsStore.map((lis) => {
+                  if(lis._id!==catalog){
+                    arrCats.push(lis);
+                  }else{
+                    arrCats.push(res);
+                  }
+                });
+                updateListsStore(arrCats);
+                showForm(false);
+                // setTimeout(() => {
+                //   window.location.reload();
+                // }, 500);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);
@@ -131,12 +154,24 @@ export default function NewStatus({showForm, token, catalogOptions,
                 types: glossaries
               }
               const res = await insertFunction(token, catalog, data);
-              if(res === 200){
+              if(typeof(res)!=='string'){
                 refRequest.current = true;
                 showToastMessage('Tipos agregados exitosamente!!!');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 500);
+                const arrCats: Catalog[] = [];
+                //console.log('list store add type => ', listsStore);
+                listsStore.map((lis) => {
+                  if(lis._id!==catalog){
+                    arrCats.push(lis);
+                  }else{
+                    arrCats.push(res);
+                  }
+                });
+                //console.log('es este map? = >');
+                updateListsStore(arrCats);
+                showForm(false);
+                // setTimeout(() => {
+                //   window.location.reload();
+                // }, 500);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);

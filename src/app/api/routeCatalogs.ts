@@ -83,7 +83,7 @@ export async function InsertConditionInCatalog(auth_token:string, id:string, dat
         'Content-Type': 'application/json',
       }
     })
-    if(res.status === 200) return res.status;
+    if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -102,7 +102,7 @@ export async function InsertCategoryInCatalog(auth_token:string, id:string, data
         'Content-Type': 'application/json',
       }
     })
-    if(res.status === 200) return res.status;
+    if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -121,7 +121,8 @@ export async function InsertTypeInCatalog(auth_token:string, id:string, data:Obj
         'Content-Type': 'application/json',
       }
     })
-    if(res.status === 200) return res.status;
+    console.log('res router => ', res);
+    if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
