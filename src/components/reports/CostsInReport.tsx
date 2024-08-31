@@ -67,7 +67,7 @@ export default function CostsInReport({report, id, token}:
               </div>
             </div>
           </div>
-          
+        
           <div className=" bg-white p-3 rounded-lg shadow-md py-2">
             <div className="flex gap-x-2 justify-between">
               <div>

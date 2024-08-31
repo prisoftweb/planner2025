@@ -39,6 +39,8 @@ export interface Report {
   ispettycash: boolean
   quantity: number
   wached: boolean
+  ammount: number
+  expirationdate: string
 }
 
 export interface Mfe {

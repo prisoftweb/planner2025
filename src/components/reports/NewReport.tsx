@@ -12,6 +12,7 @@ import { Options } from "@/interfaces/Common"
 import SelectReact from "../SelectReact"
 import { CreateReport } from "@/app/api/routeReports"
 import { useOptionsReports } from "@/app/store/reportsStore"
+import CurrencyInput from "react-currency-input-field"
 
 export default function NewReport({showForm, token, companies, 
                           departments, projects, user, condition}: 
@@ -26,6 +27,14 @@ export default function NewReport({showForm, token, companies,
   const [startDate, setStartDate] = useState<string>('');
   const [imprest, setImprest] = useState<boolean>(false);
   const refRequest = useRef(true);
+
+  // const currentDate = new Date();
+  // const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
+          //alert( day);
+          //alert(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59));
+
+  const [ammount, setAmmount] = useState<string>('0');
+  //const [closeDate, setCloseDate] = useState<string>(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59).toDateString());
   
   const {updateHaveNewReport} = useOptionsReports();
 
@@ -65,6 +74,31 @@ export default function NewReport({showForm, token, companies,
     return date.getDate();
   }
 
+  let viewAmmount: JSX.Element = <></>;
+  viewAmmount = (
+    <CurrencyInput
+      id="total"
+      name="total"
+      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+        focus:border-slate-700 outline-0"
+      //onChange={formik.handleChange}
+      //onBlur={formik.handleChange}
+      //value={formik.values.amount.replace(/[$,]/g, "")}
+      value={ammount.replace(/[$,]/g, "")}
+      decimalsLimit={2}
+      prefix="$"
+      //disabled={isHistory}
+      onValueChange={(value) => {try {
+        //console.log('value amount data stepper => ', value);
+        //formik.values.amount=value || '0';
+        setAmmount(value || '0');
+      } catch (error) {
+        //formik.values.amount='0';
+        setAmmount('0');
+      }}}
+    />
+  )
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -83,6 +117,7 @@ export default function NewReport({showForm, token, companies,
         try {
           const {comment, name} = valores;
           const currentDate = new Date();
+          const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
           const data = {
             name,
             comment,
@@ -91,7 +126,8 @@ export default function NewReport({showForm, token, companies,
             company,
             department,
             project,
-            //new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59)
+            expirationdate: new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59),
+            ammount: ammount.replace(/[$,]/g, ""),
             ispettycash: imprest,
             moves: [{
               user,
@@ -104,7 +140,7 @@ export default function NewReport({showForm, token, companies,
           // alert( getLastDayOfMonth(2012, 0) ); // 31
           // alert( getLastDayOfMonth(2012, 1) ); // 29
           // alert( getLastDayOfMonth(2013, 1) ); // 28
-          const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
+          //const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
           //alert( day);
           //alert(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59));
 
@@ -190,6 +226,20 @@ export default function NewReport({showForm, token, companies,
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
+          </div>
+
+          {/* <div>
+            <Label htmlFor="closeDate"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de cierre</p></Label>
+            <Input 
+              type="date"
+              value={closeDate}
+              onChange={(e) => setCloseDate(e.target.value)}
+            />
+          </div> */}
+
+          <div>
+            <Label htmlFor="ammount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
+            {viewAmmount}
           </div>
 
           <div>

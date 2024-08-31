@@ -16,6 +16,7 @@ import { getCompaniesLV } from "@/app/api/routeCompany";
 import { getProjectsLV } from "@/app/api/routeProjects";
 import { getDepartmentsLV } from "@/app/api/routeDepartments";
 import { useOneReportStore } from "@/app/store/reportsStore";
+import CurrencyInput from "react-currency-input-field";
 
 export default function UpdateReport({ token, report}:{
                           token:string, report:Report}) {
@@ -25,13 +26,17 @@ export default function UpdateReport({ token, report}:{
   const [company, setCompany] = useState<string>(oneReport?.company._id ?? report.company._id);
   const [department, setDepartment] = useState<string>(oneReport?.department._id ?? report.department._id);
   const [startDate, setStartDate] = useState<string>(oneReport?.date.substring(0, 10) ?? report.date.substring(0, 10));
-  const [closeDate, setCloseDate] = useState<string>(oneReport?.date.substring(0, 10) ?? report.date.substring(0, 10));
+  const [closeDate, setCloseDate] = useState<string>(oneReport?.expirationdate ? 
+                      oneReport?.expirationdate?.substring(0, 10): report.expirationdate? 
+                      report.expirationdate?.substring(0, 10): '');
   const [imprest, setImprest] = useState<boolean>(oneReport? oneReport.ispettycash : report.ispettycash);
   const refRequest = useRef(true);
 
   const [optCompanies, setOptCompanies] = useState<Options[]>([]);
   const [optDepartments, setOptDepartments] = useState<Options[]>([]);
   const [optProjects, setOptProjects] = useState<Options[]>([]);
+
+  const [ammount, setAmmount] = useState<string>(oneReport? oneReport.ammount?.toString() || '0': report.ammount?.toString() || '0');
 
   // const handleResize = () => {
   //   setHeightPage(document.body.offsetHeight);
@@ -107,7 +112,32 @@ export default function UpdateReport({ token, report}:{
     {optProjects.length > 0? (
       <SelectReact index={indexP===-1? 0: indexP} opts={optProjects} setValue={handleProject} />
     ): <></>}
-  </div>)
+  </div>);
+
+  let viewAmmount: JSX.Element = <></>;
+  viewAmmount = (
+    <CurrencyInput
+      id="total"
+      name="total"
+      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+        focus:border-slate-700 outline-0"
+      //onChange={formik.handleChange}
+      //onBlur={formik.handleChange}
+      //value={formik.values.amount.replace(/[$,]/g, "")}
+      value={ammount.replace(/[$,]/g, "")}
+      decimalsLimit={2}
+      prefix="$"
+      //disabled={isHistory}
+      onValueChange={(value) => {try {
+        //console.log('value amount data stepper => ', value);
+        //formik.values.amount=value || '0';
+        setAmmount(value || '0');
+      } catch (error) {
+        //formik.values.amount='0';
+        setAmmount('0');
+      }}}
+    />
+  )
 
   const formik = useFormik({
     initialValues: {
@@ -133,16 +163,15 @@ export default function UpdateReport({ token, report}:{
             company,
             department,
             project,
-            ispettycash: imprest
+            ispettycash: imprest,
+            expirationdate: closeDate,
+            ammount: ammount.replace(/[$,]/g, ""),
           }
           const res = await updateReport(token, report._id, data);
           if(typeof(res)!== 'string'){
             updateOneReportStore(res);
             refRequest.current = true;
             showToastMessage('Informe actualizado exitosamente!!');
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -222,6 +251,19 @@ export default function UpdateReport({ token, report}:{
             onChange={(e) => setCloseDate(e.target.value)}
           />
         </div>
+
+        {oneReport && oneReport.ispettycash && (
+          <div>
+            <Label htmlFor="ammount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
+            {viewAmmount}
+            {/* <Input type="text" name="ammount"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.name}
+              autoFocus
+            /> */}
+          </div>
+        )}
 
         {viewSelects}
 
