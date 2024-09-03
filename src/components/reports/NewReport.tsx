@@ -145,6 +145,7 @@ export default function NewReport({showForm, token, companies,
           //alert(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59));
 
           refRequest.current = true;
+          //console.log('object informe => ', data);
 
           const res = await CreateReport(token, data);
           if(res === 201){

@@ -34,8 +34,9 @@ export default function Selectize({options, routePage, subpath, onChangeFunction
   // }
 
   const onChange = (value:string) => {
-    onChangeFunction();
-    router.push(`/${routePage}/${value}${subpath}`)
+    //onChangeFunction();
+    //router.push(`/${routePage}/${value}${subpath}`)
+    window.location.replace(`/${routePage}/${value}${subpath}`);
   }
   
   return(

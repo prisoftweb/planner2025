@@ -105,6 +105,7 @@ export interface ReportParse {
   subtotal: number
   lastmove: Lastmove
   department: string
+  expirationdate: string
 }
 
 export interface User {

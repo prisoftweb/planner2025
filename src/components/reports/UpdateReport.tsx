@@ -17,9 +17,10 @@ import { getProjectsLV } from "@/app/api/routeProjects";
 import { getDepartmentsLV } from "@/app/api/routeDepartments";
 import { useOneReportStore } from "@/app/store/reportsStore";
 import CurrencyInput from "react-currency-input-field";
+import { UsrBack } from "@/interfaces/User";
 
-export default function UpdateReport({ token, report}:{
-                          token:string, report:Report}) {
+export default function UpdateReport({ token, report, user}:{
+                          token:string, report:Report, user:UsrBack}) {
 
   const {oneReport, updateOneReportStore} = useOneReportStore();
   const [project, setProject] = useState<string>(oneReport?.project._id ?? report.project._id);
@@ -41,6 +42,8 @@ export default function UpdateReport({ token, report}:{
   // const handleResize = () => {
   //   setHeightPage(document.body.offsetHeight);
   // }
+
+  const updateDatePermission = typeof(user.department)==='string'? false: user.department.name.toLowerCase().includes('admin');
   
   useEffect (() => {
     // window.addEventListener("resize", handleResize, false);
@@ -243,14 +246,16 @@ export default function UpdateReport({ token, report}:{
             onChange={(e) => setStartDate(e.target.value)}
           />
         </div>
-        <div>
-          <Label htmlFor="closeDate"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de cierre</p></Label>
-          <Input 
-            type="date"
-            value={closeDate}
-            onChange={(e) => setCloseDate(e.target.value)}
-          />
-        </div>
+        {updateDatePermission && (
+          <div>
+            <Label htmlFor="closeDate"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de cierre</p></Label>
+            <Input 
+              type="date"
+              value={closeDate}
+              onChange={(e) => setCloseDate(e.target.value)}
+            />
+          </div>
+        )}
 
         {oneReport && oneReport.ispettycash && (
           <div>

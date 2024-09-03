@@ -118,7 +118,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
   }
 
   const closeForm = () => {
-    updateReport('');
+    updateReport('', undefined);
     updateIndexStepper(0);    
     showForm(false);
   }

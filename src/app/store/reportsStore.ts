@@ -69,12 +69,12 @@ const oneReportInitial: OneReportState = {
 }
 
 interface ActionsReport {
-  updateOneReportStore: (rep: Report) => void,
+  updateOneReportStore: (rep: Report | undefined) => void,
 }
 
 export const useOneReportStore = create<OneReportState & ActionsReport >((set) => ({
   ...oneReportInitial,
-  updateOneReportStore: (rep: Report) => set(state => ({
+  updateOneReportStore: (rep: Report | undefined) => set(state => ({
     ...state,
     oneReport: rep
   })),

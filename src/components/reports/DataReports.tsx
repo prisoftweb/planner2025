@@ -36,7 +36,7 @@ export default function DataReports({token, report, user, node, id, dates}:
         </div>
         <div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>
-            <UpdateReport token={token} report={report} />
+            <UpdateReport token={token} report={report} user={user} />
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 

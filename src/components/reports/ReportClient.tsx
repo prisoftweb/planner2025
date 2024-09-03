@@ -16,17 +16,21 @@ export default function ReportClient({report, token, id, user,
                               user:UsrBack, node:Node, dates: DateReport[] }){
   const [opt, setOpt] = useState<number>(1);
 
-  const {updateOneReportStore} = useOneReportStore();
+  const {updateOneReportStore, oneReport} = useOneReportStore();
 
   useEffect(() => {
     updateOneReportStore(report);
+
+    return () => updateOneReportStore(undefined);
   }, []);
   
   let view:JSX.Element = <></>;
-  opt===2? view =(<CostsInReport id={id} token={token} report={report} />) : 
+  if(oneReport){
+    opt===2? view =(<CostsInReport id={id} token={token} report={report} />) : 
       opt===3?  view =(<NuevoComponente id={id} token={token} report={report} />): 
                   view = (<DataReports id={id} token={token} report={report} user={user} 
                     node={node} dates={dates} />)
+  }
   
   const [open, setOpen] = useState<boolean>(false);
   
