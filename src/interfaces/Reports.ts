@@ -39,6 +39,8 @@ export interface Report {
   ispettycash: boolean
   quantity: number
   wached: boolean
+  ammount: number
+  expirationdate: string
 }
 
 export interface Mfe {
@@ -103,6 +105,7 @@ export interface ReportParse {
   subtotal: number
   lastmove: Lastmove
   department: string
+  expirationdate: string
 }
 
 export interface User {

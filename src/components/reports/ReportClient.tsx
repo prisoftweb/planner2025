@@ -1,34 +1,36 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import NavResponsive from "./NavResponsive"
-import { Options } from "@/interfaces/Common"
 import DataReports from "./DataReports"
 import { Report, DateReport } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
-//import { Expense } from "@/interfaces/Expenses"
 import { Node } from "@/interfaces/Nodes"
 import { UsrBack } from "@/interfaces/User"
+import NuevoComponente from "./NuevoComponente"
+import { useOneReportStore } from "@/app/store/reportsStore"
 
 export default function ReportClient({report, token, id, user, 
                                 node, dates}: 
                             {report:Report, token:string, id:string, 
                               user:UsrBack, node:Node, dates: DateReport[] }){
-  
-  //const [view, setView] = useState<JSX.Element>(<></>)
-
   const [opt, setOpt] = useState<number>(1);
+
+  const {updateOneReportStore, oneReport} = useOneReportStore();
+
+  useEffect(() => {
+    updateOneReportStore(report);
+
+    return () => updateOneReportStore(undefined);
+  }, []);
   
-  // useEffect(() => {
-  //   opt===2? setView(<CostsInReport report={report} costs={expenses} />) : 
-  //                 setView(<DataReports companies={companies} costs={expenses}
-  //                             departments={departments} projects={projects} 
-  //                   token={token} report={report} user={user} node={node} />)
-  // }, [opt, ])
   let view:JSX.Element = <></>;
-  opt===2? view =(<CostsInReport id={id} token={token} report={report} />) : 
-                  view =(<DataReports id={id} token={token} report={report} user={user} 
-                            node={node} dates={dates} />)
+  if(oneReport){
+    opt===2? view =(<CostsInReport id={id} token={token} report={report} />) : 
+      opt===3?  view =(<NuevoComponente id={id} token={token} report={report} />): 
+                  view = (<DataReports id={id} token={token} report={report} user={user} 
+                    node={node} dates={dates} />)
+  }
   
   const [open, setOpen] = useState<boolean>(false);
   

@@ -2,11 +2,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
+import RemoveElement from "../RemoveElement";
 //import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 //import { useState } from "react";
 import { StatusTable } from "@/interfaces/Status";
 //import { RemoveGlossary } from "@/app/api/routeGlossary";
 import { RemoveCatalog } from "@/app/api/routeCatalogs";
+import { showToastMessageError } from "../Alert";
+import { useListsStore } from "@/app/store/listStore";
 
 export default function TableStatus({data, token}:
                         {data:StatusTable[], token:string}){
@@ -15,10 +18,16 @@ export default function TableStatus({data, token}:
 
   // const [editGloss, setEditGloss] = useState<boolean>(false);
   // const [glossEdit, setGlossEdit] = useState<GlossaryTable>();
+  const {listsStore, updateListsStore} = useListsStore();
 
-  data.map((dt) => {
-    console.log('arr colors table => ', dt.statuses.arrColors);
-  });
+  const delReport = async(id: string) => {
+    try {
+      const arrLists = listsStore.filter(list => list._id !== id);
+      updateListsStore(arrLists);
+    } catch (error) {
+      showToastMessageError('Error al quitar informe de la tabla!!');
+    }
+  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -46,12 +55,9 @@ export default function TableStatus({data, token}:
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <div className="w-5 h-5 bg-blue-700"></div>
-          {/* <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
-            //onClick={() => {setGlossEdit(row.original); setEditGloss(true);}}
-          /> */}
-          <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveCatalog} token={token} />
-          {/* <TrashIcon className="w-5 h-5 text-red-500 hover:text-red-400 cursor-pointer"/> */}
-          {/* <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveGlossary} token={token} /> */}
+          {/* <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveCatalog} token={token} /> */}
+          <RemoveElement id={row.original.id} name={row.original.catalog} token={token} 
+              remove={RemoveCatalog} removeElement={delReport} />
         </div>
       ),
       enableSorting:false,

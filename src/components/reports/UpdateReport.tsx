@@ -15,24 +15,35 @@ import { updateReport } from "@/app/api/routeReports"
 import { getCompaniesLV } from "@/app/api/routeCompany";
 import { getProjectsLV } from "@/app/api/routeProjects";
 import { getDepartmentsLV } from "@/app/api/routeDepartments";
+import { useOneReportStore } from "@/app/store/reportsStore";
+import CurrencyInput from "react-currency-input-field";
+import { UsrBack } from "@/interfaces/User";
 
-export default function UpdateReport({ token, report}:{
-                          token:string, report:Report}) {
-  
-  const [project, setProject] = useState<string>(report.project._id);
-  const [company, setCompany] = useState<string>(report.company._id);
-  const [department, setDepartment] = useState<string>(report.department._id);
-  const [startDate, setStartDate] = useState<string>(report.date.substring(0, 10));
-  const [imprest, setImprest] = useState<boolean>(report.ispettycash);
+export default function UpdateReport({ token, report, user}:{
+                          token:string, report:Report, user:UsrBack}) {
+
+  const {oneReport, updateOneReportStore} = useOneReportStore();
+  const [project, setProject] = useState<string>(oneReport?.project._id ?? report.project._id);
+  const [company, setCompany] = useState<string>(oneReport?.company._id ?? report.company._id);
+  const [department, setDepartment] = useState<string>(oneReport?.department._id ?? report.department._id);
+  const [startDate, setStartDate] = useState<string>(oneReport?.date.substring(0, 10) ?? report.date.substring(0, 10));
+  const [closeDate, setCloseDate] = useState<string>(oneReport?.expirationdate ? 
+                      oneReport?.expirationdate?.substring(0, 10): report.expirationdate? 
+                      report.expirationdate?.substring(0, 10): '');
+  const [imprest, setImprest] = useState<boolean>(oneReport? oneReport.ispettycash : report.ispettycash);
   const refRequest = useRef(true);
 
   const [optCompanies, setOptCompanies] = useState<Options[]>([]);
   const [optDepartments, setOptDepartments] = useState<Options[]>([]);
   const [optProjects, setOptProjects] = useState<Options[]>([]);
 
+  const [ammount, setAmmount] = useState<string>(oneReport? oneReport.ammount?.toString() || '0': report.ammount?.toString() || '0');
+
   // const handleResize = () => {
   //   setHeightPage(document.body.offsetHeight);
   // }
+
+  const updateDatePermission = typeof(user.department)==='string'? false: user.department.name.toLowerCase().includes('admin');
   
   useEffect (() => {
     // window.addEventListener("resize", handleResize, false);
@@ -79,9 +90,9 @@ export default function UpdateReport({ token, report}:{
     setDepartment(value);
   }
   
-  const indexP = optProjects.findIndex((optProj) => optProj.value === report.project._id);
-  const indexC = optCompanies.findIndex((optComp) => optComp.value === report.company._id);
-  const indexDept = optDepartments.findIndex((optDept) => optDept.value === report.department._id);
+  const indexP = optProjects.findIndex((optProj) => optProj.value === (oneReport? oneReport.project._id: report.project._id));
+  const indexC = optCompanies.findIndex((optComp) => optComp.value === (oneReport? oneReport.company._id: report.company._id));
+  const indexDept = optDepartments.findIndex((optDept) => optDept.value === (oneReport? oneReport.department._id: report.department._id));
   
   const viewSelects = (<>
     <div>
@@ -104,12 +115,37 @@ export default function UpdateReport({ token, report}:{
     {optProjects.length > 0? (
       <SelectReact index={indexP===-1? 0: indexP} opts={optProjects} setValue={handleProject} />
     ): <></>}
-  </div>)
+  </div>);
+
+  let viewAmmount: JSX.Element = <></>;
+  viewAmmount = (
+    <CurrencyInput
+      id="total"
+      name="total"
+      className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+        focus:border-slate-700 outline-0"
+      //onChange={formik.handleChange}
+      //onBlur={formik.handleChange}
+      //value={formik.values.amount.replace(/[$,]/g, "")}
+      value={ammount.replace(/[$,]/g, "")}
+      decimalsLimit={2}
+      prefix="$"
+      //disabled={isHistory}
+      onValueChange={(value) => {try {
+        //console.log('value amount data stepper => ', value);
+        //formik.values.amount=value || '0';
+        setAmmount(value || '0');
+      } catch (error) {
+        //formik.values.amount='0';
+        setAmmount('0');
+      }}}
+    />
+  )
 
   const formik = useFormik({
     initialValues: {
-      name: report.name,
-      comment: report.comment,
+      name: oneReport?.name ?? report.name,
+      comment: oneReport?.comment ?? report.comment,
     }, 
     validationSchema: Yup.object({
       name: Yup.string()
@@ -130,15 +166,15 @@ export default function UpdateReport({ token, report}:{
             company,
             department,
             project,
-            ispettycash: imprest
+            ispettycash: imprest,
+            expirationdate: closeDate,
+            ammount: ammount.replace(/[$,]/g, ""),
           }
           const res = await updateReport(token, report._id, data);
-          if(res === 200){
+          if(typeof(res)!== 'string'){
+            updateOneReportStore(res);
             refRequest.current = true;
             showToastMessage('Informe actualizado exitosamente!!');
-            setTimeout(() => {
-              window.location.reload();
-            }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -152,6 +188,14 @@ export default function UpdateReport({ token, report}:{
       }
     }
   });
+
+  // function getLastDayOfMonth(year:number, month:number) {
+  //   let date = new Date(year, month + 1, 0);
+  //   return date.getDate();
+  // }
+  // const currentDate = new Date();
+  // const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
+  // console.log(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59).toDateString());
   
   return (
     <form className="bg-white space-y-5 p-3 right-0 h-full"
@@ -202,6 +246,29 @@ export default function UpdateReport({ token, report}:{
             onChange={(e) => setStartDate(e.target.value)}
           />
         </div>
+        {updateDatePermission && (
+          <div>
+            <Label htmlFor="closeDate"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de cierre</p></Label>
+            <Input 
+              type="date"
+              value={closeDate}
+              onChange={(e) => setCloseDate(e.target.value)}
+            />
+          </div>
+        )}
+
+        {oneReport && oneReport.ispettycash && (
+          <div>
+            <Label htmlFor="ammount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
+            {viewAmmount}
+            {/* <Input type="text" name="ammount"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.name}
+              autoFocus
+            /> */}
+          </div>
+        )}
 
         {viewSelects}
 

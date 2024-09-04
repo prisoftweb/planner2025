@@ -46,7 +46,8 @@ interface ProjectState{
   indexStepper: number,
   report: string,
   condition: string,
-  isDeductible: boolean
+  isDeductible: boolean,
+  reportObject: ReportParse | undefined
 }
 
 interface CurrentExpense{
@@ -65,7 +66,7 @@ interface Actions {
   updateRefresh: (value: boolean) => void,
   updateDeductible: (value: boolean) => void,
   updateProject: (value:string) => void,
-  updateReport: (value: string) => void,
+  updateReport: (value: string, reportValue: ReportParse | undefined) => void,
   updateCondition: (value:string) => void,
   updateCostCenter: (costcenter:string, concept: string) => void,
   updateCategory: (value:string) => void,
@@ -115,7 +116,8 @@ const projectInitial: ProjectState = {
   indexStepper: 0,
   report: '',
   condition: '',
-  isDeductible: true
+  isDeductible: true,
+  reportObject: undefined
 }
 
 const pettyCashInitial: PettyCashState = {
@@ -182,9 +184,10 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
     ...state,
     project: value
   })),
-  updateReport: (value:string) => set(state => ({
+  updateReport: (value:string, reportValue: ReportParse | undefined) => set(state => ({
     ...state, 
     report: value,
+    reportObject: reportValue,
   })),
   updateCondition: (value:string) => set(state => ({
     ...state,

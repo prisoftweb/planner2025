@@ -7,6 +7,7 @@ import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
 //import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
+import { useOneReportStore } from "@/app/store/reportsStore"
 
 export default function DataReports({token, report, user, node, id, dates}:
                               {token:string, report:Report, user:UsrBack, 
@@ -14,6 +15,8 @@ export default function DataReports({token, report, user, node, id, dates}:
   
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
+
+  const {oneReport} = useOneReportStore();
   //const [isClose, setIsClose] = useState<boolean>(false);
 
   const handleSend = (value: boolean, valueClose: boolean) => {
@@ -33,7 +36,7 @@ export default function DataReports({token, report, user, node, id, dates}:
         </div>
         <div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>
-            <UpdateReport token={token} report={report} />
+            <UpdateReport token={token} report={report} user={user} />
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 

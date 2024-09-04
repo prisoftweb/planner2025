@@ -13,7 +13,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
   
   const {updateIndexStepper, updateVoucher, amount, costCenter, date, description, 
     responsible, report, project, condition, category, reset, updateRefresh, 
-    isCard, type, concept, total} = useNewExpense();
+    isCard, type, concept, total, reportObject} = useNewExpense();
 
   const [file, setFile] = useState<File>();
   const refRequest = useRef(true);
@@ -66,23 +66,54 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
         formdata.append('files', file);
         formdata.append('types', file.type);
       }
-      try {
-        const res = await CreateCostWithFiles(token, formdata);
-        if(res === 201){
-          reset();
-          updateRefresh(true);
-          showToastMessage('Costo creado satisfactoriamente!!!');
-          setTimeout(() => {
-            updateIndexStepper(3);
-          }, 200);
-          refRequest.current = true;
+      if(reportObject && reportObject.ispettycash){
+        const fechaGasto = new Date(date);
+        const fechaReport = new Date(reportObject.date);
+        const currentDate = new Date();
+        const expiration = new Date(reportObject.expirationdate);
+        if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+              (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+          try {
+            const res = await CreateCostWithFiles(token, formdata);
+            if(res === 201){
+              reset();
+              updateRefresh(true);
+              showToastMessage('Costo creado satisfactoriamente!!!');
+              setTimeout(() => {
+                updateIndexStepper(3);
+              }, 200);
+              refRequest.current = true;
+            }else{
+              showToastMessageError(res);
+              refRequest.current = true;
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Ocurrio un error al guardar costo!!');
+          }
         }else{
-          showToastMessageError(res);
+          showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
           refRequest.current = true;
         }
-      } catch (error) {
-        refRequest.current = true;
-        showToastMessageError('Ocurrio un error al guardar costo!!');
+      }else{
+        try {
+          const res = await CreateCostWithFiles(token, formdata);
+          if(res === 201){
+            reset();
+            updateRefresh(true);
+            showToastMessage('Costo creado satisfactoriamente!!!');
+            setTimeout(() => {
+              updateIndexStepper(3);
+            }, 200);
+            refRequest.current = true;
+          }else{
+            showToastMessageError(res);
+            refRequest.current = true;
+          }
+        } catch (error) {
+          refRequest.current = true;
+          showToastMessageError('Ocurrio un error al guardar costo!!');
+        }
       }
     }else{
       const data = {
@@ -102,24 +133,56 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
         }, iscard:isCard, type
       }
   
-      try {
-        const res = await SaveExpense(data, token);
-        if(res===201) {
-          reset();
-          updateRefresh(true);
-          showToastMessage('Costo creado satisfactoriamente!!!');
-          setTimeout(() => {
-            updateIndexStepper(3);
-          }, 200);
+      if(reportObject && reportObject.ispettycash){
+        const fechaGasto = new Date(date);
+        const fechaReport = new Date(reportObject.date);
+        const currentDate = new Date();
+        const expiration = new Date(reportObject.expirationdate);
+        if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+              (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+          try {
+            const res = await SaveExpense(data, token);
+            if(res===201) {
+              reset();
+              updateRefresh(true);
+              showToastMessage('Costo creado satisfactoriamente!!!');
+              setTimeout(() => {
+                updateIndexStepper(3);
+              }, 200);
+              refRequest.current = true;
+            }
+            else{
+              showToastMessageError(res);
+              refRequest.current = true;
+            }
+          } catch (error) {
+            refRequest.current = true;
+            showToastMessageError('Ocurrio un error al guardar costo!!');
+          }
+        }else{
+          showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
           refRequest.current = true;
         }
-        else{
-          showToastMessageError(res);
+      }else{
+        try {
+          const res = await SaveExpense(data, token);
+          if(res===201) {
+            reset();
+            updateRefresh(true);
+            showToastMessage('Costo creado satisfactoriamente!!!');
+            setTimeout(() => {
+              updateIndexStepper(3);
+            }, 200);
+            refRequest.current = true;
+          }
+          else{
+            showToastMessageError(res);
+            refRequest.current = true;
+          }
+        } catch (error) {
           refRequest.current = true;
+          showToastMessageError('Ocurrio un error al guardar costo!!');
         }
-      } catch (error) {
-        refRequest.current = true;
-        showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }
   }

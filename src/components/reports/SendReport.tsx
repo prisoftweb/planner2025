@@ -12,17 +12,19 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import ButtonColor from "../ButtonColor";
 import { getNode, getNodes } from "@/app/api/routeNodes";
 import { updateReport } from "@/app/api/routeReports";
+import { useOneReportStore } from "@/app/store/reportsStore";
 
 export default function SendReport({send, report, node, 
               user, token, isClose}: 
           {send:Function, report:Report, node:(Node | undefined), 
             user:string, token:string, isClose:boolean }){
-  
+
+  const {oneReport, updateOneReportStore} = useOneReportStore();
   const [heightPage, setHeightPage] = useState<number>(900);
   const [notes, setNotes] = useState<string>();
   const [isSend, setIsSend] = useState<boolean>(true);
   const refRequest = useRef(true);
-  console.log('is close => ', isClose);
+  //console.log('is close => ', isClose);
 
   const handleResize = () => {
     //setHeightPage(window.outerHeight);
@@ -52,8 +54,8 @@ export default function SendReport({send, report, node,
           try {
             if(!relation.relation.glossary.name.toLowerCase().includes('pagado')){
               const data = {wached: false};
-              const res = await updateReport(token, report._id, data);
-              if(res !== 200){
+              const res = await updateReport(token, oneReport?._id || '', data);
+              if(typeof(res)==='string'){
                 //refRequest.current = true;
                 showToastMessageError(res);
               }
@@ -78,7 +80,7 @@ export default function SendReport({send, report, node,
               };
       
               try {
-                const res = await insertMovementsInReport(token, report._id, data);
+                const res = await insertMovementsInReport(token, oneReport?._id || '', data);
                 if(res === 200){
                   refRequest.current = true;
                   showToastMessage('Movimiento hecho correctamente!!');
@@ -133,7 +135,7 @@ export default function SendReport({send, report, node,
             };
     
             try {
-              const res = await insertMovementsInReport(token, report._id, data);
+              const res = await insertMovementsInReport(token, oneReport?._id || '', data);
               if(res === 200){
                 refRequest.current = true;
                 showToastMessage('Movimiento hecho correctamente!!');
@@ -166,7 +168,7 @@ export default function SendReport({send, report, node,
 
   const total = CurrencyFormatter({
     currency: 'MXN',
-    value: report.total
+    value: oneReport?.total || 0
   });
 
   let button: JSX.Element = <></>;
@@ -211,7 +213,7 @@ export default function SendReport({send, report, node,
           </div>
           <div className="grid grid-cols-2 gap-x-3">
             <div className="col-span-1 mt-2 p-3">
-              <p className=" text-3xl text-slate-500">{report.name}</p>
+              <p className=" text-3xl text-slate-500">{oneReport?.name}</p>
               <div className="bg-slate-500 p-4">
                 <p className="text-4xl text-white">{total}</ p>
                 <p className="text-xs">Importe adeudado al empleado</p>
@@ -226,11 +228,11 @@ export default function SendReport({send, report, node,
 
           <div className="border-t border-slate-700">
             <p className=" ml-10">Cantidad de gastos del informe</p>
-            <p className=" ml-10">{report.quantity}</p>
+            <p className=" ml-10">{oneReport?.quantity}</p>
 
             <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
               <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700">
-                {report.moves.map((mov) => (
+                {oneReport?.moves.map((mov) => (
                   <div role="button"
                     key={mov._id}
                     className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">

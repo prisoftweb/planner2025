@@ -17,7 +17,7 @@ export default function CardProject({report}:
         onClick={ () => {
           //console.log('report card project => ', report.name);
           //console.log('rep id => ', report._id);
-          updateReport(report._id);
+          updateReport(report._id, report);
           updateProject(report.project._id);
           updatePettyCash(report.ispettycash);
           updateIndexStepper(1);

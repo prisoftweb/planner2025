@@ -10,8 +10,9 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect } from "react"
 import { HexColorPicker } from "react-colorful";
 import { CreateGlossary, UpdateGlossary } from "@/app/api/routeGlossary"
-import { GlossaryTable } from "@/interfaces/Glossary"
+import { GlossaryTable, Glossary } from "@/interfaces/Glossary"
 import { useRef } from "react"
+import { useGlossariesStore } from "@/app/store/glossaryStore"
 
 export default function NewGlossary({showForm, token, glossary}: 
                     {showForm:Function, token:string, glossary: (GlossaryTable | string)}){
@@ -20,6 +21,8 @@ export default function NewGlossary({showForm, token, glossary}:
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);
+
+  const {updateGlossariesStore, glossariesStore} = useGlossariesStore();
   
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -55,24 +58,36 @@ export default function NewGlossary({showForm, token, glossary}:
           }
           if(typeof(glossary)==='string'){
             const res = await CreateGlossary(token, data);
-            if(res===201){
+            if(typeof(res)!== 'string'){
               refRequest.current = true;
               showToastMessage('Glosario agregado exitosamente!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+              updateGlossariesStore([res, ...glossariesStore]);
+              showForm(false);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);
             }
           }else{
             const res = await UpdateGlossary(token, glossary.id, data);
-            if(res===200){
+            if(typeof(res)!=='string'){
               refRequest.current = true;
               showToastMessage('Glosario actualizado exitosamente!!');
-              setTimeout(() => {
-                window.location.reload();
-              }, 500);
+              const arrGlo: Glossary[] = [];
+              glossariesStore.map((glos) => {
+                if(glos._id !== glossary.id){
+                  arrGlo.push(glos);
+                }else{
+                  arrGlo.push(res);
+                }
+              });
+              updateGlossariesStore(arrGlo);
+              showForm(false);
+              // setTimeout(() => {
+              //   window.location.reload();
+              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);

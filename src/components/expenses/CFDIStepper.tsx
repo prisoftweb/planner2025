@@ -21,7 +21,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   const { amount, costCenter, date, description, discount, report, 
     folio, project, proveedor, responsible, taxFolio, typeCFDI, 
     vat, voucher, condition, category, idVat, isCard, taxExempt,
-    reset, updateRefresh, updateIndexStepper, type, concept, total} = useNewExpense();
+    reset, updateRefresh, updateIndexStepper, type, concept, total, reportObject} = useNewExpense();
   
   const validationType = (f: File) => {
     if(!f.type.includes('xml') && !f.type.includes('XML')){
@@ -94,19 +94,46 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       if(await dataCFDIValidation()){
         //showToastMessage('todo coincide !!');
         try {
-          console.log('data cost center => ', JSON.stringify(costCenter));
-          const res = await CreateCostWithFiles(token, formdata);
-          if(res === 201){
-            reset();
-            updateRefresh(true);
-            showToastMessage('Costo creado satisfactoriamente!!!');
-            setTimeout(() => {
-              updateIndexStepper(4);
-            }, 200);
-            refRequest.current = true;
+          // console.log('data cost center => ', JSON.stringify(costCenter));
+          if(reportObject && reportObject.ispettycash){
+            const fechaGasto = new Date(date);
+            const fechaReport = new Date(reportObject.date);
+            const currentDate = new Date();
+            const expiration = new Date(reportObject.expirationdate);
+            if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+                (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+              
+              const res = await CreateCostWithFiles(token, formdata);
+              if(res === 201){
+                reset();
+                updateRefresh(true);
+                showToastMessage('Costo creado satisfactoriamente!!!');
+                setTimeout(() => {
+                  updateIndexStepper(4);
+                }, 200);
+                refRequest.current = true;
+              }else{
+                showToastMessageError(res);
+                refRequest.current = true;
+              }
+            }else{
+              showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
+              refRequest.current = true;
+            }
           }else{
-            showToastMessageError(res);
-            refRequest.current = true;
+            const res = await CreateCostWithFiles(token, formdata);
+            if(res === 201){
+              reset();
+              updateRefresh(true);
+              showToastMessage('Costo creado satisfactoriamente!!!');
+              setTimeout(() => {
+                updateIndexStepper(4);
+              }, 200);
+              refRequest.current = true;
+            }else{
+              showToastMessageError(res);
+              refRequest.current = true;
+            }
           }
         } catch (error) {
           refRequest.current = true;
@@ -137,24 +164,57 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       // console.log('save cost in cfdi stepper => ', JSON.stringify(data));
       // console.log('costo center => ', JSON.stringify(costcenter));
   
-      try {
-        const res = await SaveExpense(data, token);
-        if(res===201) {
-          reset();
-          updateRefresh(true);
-          showToastMessage('Costo creado satisfactoriamente!!!');
-          setTimeout(() => {
-            updateIndexStepper(4);
-          }, 200);
+      if(reportObject && reportObject.ispettycash){
+        const fechaGasto = new Date(date);
+        const fechaReport = new Date(reportObject.date);
+        const currentDate = new Date();
+        const expiration = new Date(reportObject.expirationdate);
+        if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+            (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+
+          try {
+            const res = await SaveExpense(data, token);
+            if(res===201) {
+              reset();
+              updateRefresh(true);
+              showToastMessage('Costo creado satisfactoriamente!!!');
+              setTimeout(() => {
+                updateIndexStepper(4);
+              }, 200);
+              refRequest.current = true;
+            }
+            else{
+              showToastMessageError(res);
+              refRequest.current = true;
+            }
+          } catch (error) {
+            refRequest.current = true,
+            showToastMessageError('Ocurrio un error al guardar costo!!');
+          }
+        }else{
+          showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
           refRequest.current = true;
         }
-        else{
-          showToastMessageError(res);
-          refRequest.current = true;
+      }else{
+        try {
+          const res = await SaveExpense(data, token);
+          if(res===201) {
+            reset();
+            updateRefresh(true);
+            showToastMessage('Costo creado satisfactoriamente!!!');
+            setTimeout(() => {
+              updateIndexStepper(4);
+            }, 200);
+            refRequest.current = true;
+          }
+          else{
+            showToastMessageError(res);
+            refRequest.current = true;
+          }
+        } catch (error) {
+          refRequest.current = true,
+          showToastMessageError('Ocurrio un error al guardar costo!!');
         }
-      } catch (error) {
-        refRequest.current = true,
-        showToastMessageError('Ocurrio un error al guardar costo!!');
       }
     }
   }

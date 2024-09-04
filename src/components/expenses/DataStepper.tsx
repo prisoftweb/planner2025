@@ -30,7 +30,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
     report, condition, category, isPettyCash, concept,
     updateIsCard, updateCostCenter, updateHaveDiscount, 
     updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, 
-    total} = useNewExpense();
+    total, reportObject} = useNewExpense();
 
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
@@ -249,6 +249,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
       concept
     }
 
+    console.log('save data !!!!');
+
     if(voucher || CFDI){
       const formdata = new FormData();
       //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
@@ -291,29 +293,66 @@ export default function DataStepper({token, user}: {token:string, user:string })
       }
       try {
         formdata.append('ispaid', JSON.stringify(supplierCredit));
-        const res = await CreateCostWithFiles(token, formdata);
-        if(res === 201){
-          //setView(<></>);
-          reset();
-          formik.values.amount = '';
-          formik.values.description = '';
-          formik.values.discount = '';
-          formik.values.folio = '';
-          formik.values.taxFolio = '';
-          formik.values.vat = '';
-          setTotalExpense('0');
-          //setClearAmount(true);
-          showToastMessage('Costo creado satisfactoriamente!!!');
-          //updateHaveExpenses(true);
-          updateRefresh(true);
-          updateIndexStepper(4);
-          // setTimeout(() => {
-          //   setResetBand(true);
-          // }, 300);
-          refRequest.current = true;
+        if(reportObject && reportObject.ispettycash){
+          const fechaGasto = new Date(startDate);
+          const fechaReport = new Date(reportObject.date);
+          const currentDate = new Date();
+          const expiration = new Date(reportObject.expirationdate);
+          if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+              (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+            const res = await CreateCostWithFiles(token, formdata);
+            if(res === 201){
+              //setView(<></>);
+              reset();
+              formik.values.amount = '';
+              formik.values.description = '';
+              formik.values.discount = '';
+              formik.values.folio = '';
+              formik.values.taxFolio = '';
+              formik.values.vat = '';
+              setTotalExpense('0');
+              //setClearAmount(true);
+              showToastMessage('Costo creado satisfactoriamente!!!');
+              //updateHaveExpenses(true);
+              updateRefresh(true);
+              updateIndexStepper(4);
+              // setTimeout(() => {
+              //   setResetBand(true);
+              // }, 300);
+              refRequest.current = true;
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
+          }else{
+            refRequest.current = true;
+            showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
+          }
         }else{
-          refRequest.current = true;
-          showToastMessageError(res);
+          const res = await CreateCostWithFiles(token, formdata);
+          if(res === 201){
+            //setView(<></>);
+            reset();
+            formik.values.amount = '';
+            formik.values.description = '';
+            formik.values.discount = '';
+            formik.values.folio = '';
+            formik.values.taxFolio = '';
+            formik.values.vat = '';
+            setTotalExpense('0');
+            //setClearAmount(true);
+            showToastMessage('Costo creado satisfactoriamente!!!');
+            //updateHaveExpenses(true);
+            updateRefresh(true);
+            updateIndexStepper(4);
+            // setTimeout(() => {
+            //   setResetBand(true);
+            // }, 300);
+            refRequest.current = true;
+          }else{
+            refRequest.current = true;
+            showToastMessageError(res);
+          }
         }
       } catch (error) {
         refRequest.current = true;
@@ -340,30 +379,74 @@ export default function DataStepper({token, user}: {token:string, user:string })
       }
   
       try {
-        const res = await SaveExpense(data, token);
-        if(res===201){
-          //setView(<></>);
-          reset();
-          formik.values.amount = '';
-          formik.values.description = '';
-          formik.values.discount = '';
-          formik.values.folio = '';
-          formik.values.taxFolio = '';
-          formik.values.vat = '';
-          setTotalExpense('0');
-          showToastMessage('Costo creado satisfactoriamente!!!');
-          //setClearAmount(true);
-          //updateHaveExpenses(true);
-          updateRefresh(true);
-          updateIndexStepper(4);
-          // setTimeout(() => {
-          //   setResetBand(true);
-          // }, 300);
-          refRequest.current = true;
-        }
-        else{
-          showToastMessageError(res);
-          refRequest.current = true;
+        if(reportObject && reportObject.ispettycash){
+          const fechaGasto = new Date(startDate);
+          const fechaReport = new Date(reportObject.date);
+          const currentDate = new Date();
+          const expiration = new Date(reportObject.expirationdate);
+          console.log(fechaGasto, ' mayor => ', fechaReport);
+          console.log(currentDate, ' menor => ', expiration);
+          console.log('fecha gasto time => ', fechaGasto.getTime());
+          console.log('fecha report time => ', fechaReport.getTime());
+          console.log('fecha current => ', currentDate.getTime());
+          console.log('fecha expiration => ', expiration.getTime());
+          if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+              (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+            const res = await SaveExpense(data, token);
+            if(res===201){
+              //setView(<></>);
+              reset();
+              formik.values.amount = '';
+              formik.values.description = '';
+              formik.values.discount = '';
+              formik.values.folio = '';
+              formik.values.taxFolio = '';
+              formik.values.vat = '';
+              setTotalExpense('0');
+              showToastMessage('Costo creado satisfactoriamente!!!');
+              //setClearAmount(true);
+              //updateHaveExpenses(true);
+              updateRefresh(true);
+              updateIndexStepper(4);
+              // setTimeout(() => {
+              //   setResetBand(true);
+              // }, 300);
+              refRequest.current = true;
+            }
+            else{
+              showToastMessageError(res);
+              refRequest.current = true;
+            }
+          }else{
+            showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
+            refRequest.current = true;
+          }
+        }else{
+          const res = await SaveExpense(data, token);
+          if(res===201){
+            //setView(<></>);
+            reset();
+            formik.values.amount = '';
+            formik.values.description = '';
+            formik.values.discount = '';
+            formik.values.folio = '';
+            formik.values.taxFolio = '';
+            formik.values.vat = '';
+            setTotalExpense('0');
+            showToastMessage('Costo creado satisfactoriamente!!!');
+            //setClearAmount(true);
+            //updateHaveExpenses(true);
+            updateRefresh(true);
+            updateIndexStepper(4);
+            // setTimeout(() => {
+            //   setResetBand(true);
+            // }, 300);
+            refRequest.current = true;
+          }
+          else{
+            showToastMessageError(res);
+            refRequest.current = true;
+          }
         }
       } catch (error) {
         refRequest.current = true;

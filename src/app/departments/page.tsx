@@ -11,6 +11,7 @@ import TableDepartments from "@/components/departments/TableDepartments";
 import { Options } from "@/interfaces/Common";
 import { getCompanies } from "../api/routeCompany";
 import { Company } from "@/interfaces/Companies";
+import ContainerDepartment from "@/components/departments/ContainerDepartment";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -49,39 +50,40 @@ export default async function Page(){
     return <h1 className="text-center text-red-500 text-lg">Error al consultar departamentos!!</h1>
   } 
 
-  if(!departments || departments.length <= 0){
-    return (
-      <div>
-        <Navigation user={user} />
-        <CompanyClient option={1} >
-          <WithOut img="/img/clientes.svg" subtitle="Departamentos"
-            text="Aqui puedes agregar los departamentos"
-            title="Departamentos">
-                <ButtonNew token={token} dept={''} optionsCompany={optsCompanies} />
-          </WithOut>
-        </CompanyClient>
-      </div>
-    )
-  }
+  // if(!departments || departments.length <= 0){
+  //   return (
+  //     <div>
+  //       <Navigation user={user} />
+  //       <CompanyClient option={1} >
+  //         <WithOut img="/img/clientes.svg" subtitle="Departamentos"
+  //           text="Aqui puedes agregar los departamentos"
+  //           title="Departamentos">
+  //               <ButtonNew token={token} dept={''} optionsCompany={optsCompanies} />
+  //         </WithOut>
+  //       </CompanyClient>
+  //     </div>
+  //   )
+  // }
 
-  const table: DepartmentTable[] = [];
+  // const table: DepartmentTable[] = [];
 
-  departments.map((dept) => {
-    table.push({
-      id: dept._id,
-      name: dept.name,
-      abbreviation: dept.abbr? dept.abbr : 'SA',
-      company: {
-        id: dept.company._id,
-        logo: dept.company.logo
-      }
-    })
-  })
+  // departments.map((dept) => {
+  //   table.push({
+  //     id: dept._id,
+  //     name: dept.name,
+  //     abbreviation: dept.abbr? dept.abbr : 'SA',
+  //     company: {
+  //       id: dept.company._id,
+  //       logo: dept.company.logo
+  //     }
+  //   })
+  // })
 
   return(
     <>
       <Navigation user={user} />
-      <CompanyClient option={1} >
+      <ContainerDepartment departments={departments} optsCompanies={optsCompanies} token={token} />
+      {/* <CompanyClient option={1} >
         <div>
           <Header title="Departamentos" placeHolder="Buscar departamento.." >
             <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} />
@@ -90,7 +92,7 @@ export default async function Page(){
             <TableDepartments data={table} optionsCompany={optsCompanies} token={token} />
           </div>
         </div>
-      </CompanyClient>
+      </CompanyClient> */}
     </>
   )
 }

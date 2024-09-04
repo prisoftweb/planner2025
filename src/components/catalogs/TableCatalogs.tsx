@@ -7,14 +7,28 @@ import { useState } from "react";
 import { CatalogTable } from "@/interfaces/Catalogs";
 import { RemoveCatalog } from "@/app/api/routeCatalogs";
 import NewCatalog from "./NewCatalog";
+import RemoveElement from "../RemoveElement";
+import { useListsStore } from "@/app/store/listStore";
+import { showToastMessageError } from "../Alert";
 
 export default function TableCatalogs({data, token}:
                         {data:CatalogTable[], token:string}){
   
   const columnHelper = createColumnHelper<CatalogTable>();
 
+  const {listsStore, updateListsStore} = useListsStore();
+
   const [editCat, setEditCat] = useState<boolean>(false);
   const [catEdit, setCatEdit] = useState<CatalogTable>();
+
+  const delReport = async(id: string) => {
+    try {
+      const arrLists = listsStore.filter(list => list._id !== id);
+      updateListsStore(arrLists);
+    } catch (error) {
+      showToastMessageError('Error al quitar informe de la tabla!!');
+    }
+  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -44,7 +58,9 @@ export default function TableCatalogs({data, token}:
           <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
             onClick={() => {setCatEdit(row.original); setEditCat(true);}}
           />
-          <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveCatalog} token={token} />
+          {/* <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveCatalog} token={token} /> */}
+          <RemoveElement id={row.original.id} name={row.original.name} token={token} 
+              remove={RemoveCatalog} removeElement={delReport} />
         </div>
       ),
       enableSorting:false,
