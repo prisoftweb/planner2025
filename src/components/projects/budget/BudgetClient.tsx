@@ -64,7 +64,7 @@ export default function BudgetCli({budget, token, id}:
           {/* <div className={`w-full max-w-md`}> */}
           <div className={`w-full`}>
             {/* <ProfileProject project={project} /> */}
-            <ProfileBudget budget={budget} />
+            <ProfileBudget budget={budget} token={token} />
           </div>
           {/* {view} */}
         </div>

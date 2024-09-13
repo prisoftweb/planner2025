@@ -1,13 +1,9 @@
 import { FullBudget } from "@/interfaces/BudgetProfile";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { BudgetDataToTableCostCenter } from "@/app/functions/SaveProject";
+import TableCostCenter from "./TableCostCenter";
 
-export default function ProfileBudget({budget}: {budget: FullBudget}) {
-
-  const view = <div className="mt-3 w-full max-w-4xl bg-white rounded-lg shadow-md pl-2 px-3" 
-                style={{borderColor:'#F8FAFC'}}>
-
-              </div>;
+export default function ProfileBudget({budget, token}: {budget: FullBudget, token:string}) {
 
   const amount = CurrencyFormatter({
     currency: 'MXN',
@@ -19,8 +15,15 @@ export default function ProfileBudget({budget}: {budget: FullBudget}) {
     value: budget.budgeted
   });
 
+  const tableData = BudgetDataToTableCostCenter(budget);
+
+  const view = <div className="mt-3 w-full max-w-4xl bg-white rounded-lg shadow-md pl-2 px-3" 
+                style={{borderColor:'#F8FAFC'}}>
+                  <TableCostCenter dataTable={tableData} token={token} />
+              </div>;
+
   return (
-    <div className="flex w-full px-2 flex-wrap space-x-2" 
+    <div className="flex w-full px-2 flex-wrap md:flex-nowrap space-x-2" 
         style={{backgroundColor:'#F8FAFC'}}>
       <div className={`w-full max-w-md`}>
         {/* <ProfileProject project={project} /> */}
