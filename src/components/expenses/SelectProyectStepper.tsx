@@ -53,30 +53,31 @@ export default function SelectProjectStepper(){
   //console.log('reps opt => ', reportsOptions);
 
   return (
-  <>
-    {reports.length > 0 && reportsOptions.length > 0? (
-      <div className="mt-3">
-      <Select
-        className='w-full' 
-        options={reportsOptions}
-        maxMenuHeight={250}
-        components={{
-          DropdownIndicator
-        }}
-        placeholder='Buscar ...'
-        styles={customStyles}
-        //onInputChange={(e) => filterReports(e)}
-        onChange={(value:(Options | null)) => filterReports(value?.label || '')}
-      />
-      <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-3 
-        3xl:grid-cols-4 gap-x-4 gap-y-3 mt-5">
-          {filtered.map((repor) => (
-            <CardProject report={repor} key={repor._id} />
-          ))}
+    <>
+      {reports.length > 0 && reportsOptions.length > 0? (
+        <div className="mt-3">
+        <Select
+          className='w-full' 
+          options={reportsOptions}
+          maxMenuHeight={250}
+          components={{
+            DropdownIndicator
+          }}
+          placeholder='Buscar ...'
+          styles={customStyles}
+          //onInputChange={(e) => filterReports(e)}
+          onChange={(value:(Options | null)) => filterReports(value?.label || '')}
+        />
+        <div className="grid grid-cols-2 sm:grid-cols-3 2xl:grid-cols-3 
+          3xl:grid-cols-4 gap-x-4 gap-y-3 mt-5">
+            {filtered.map((repor) => (
+              <CardProject report={repor} key={repor._id} />
+            ))}
+        </div>
       </div>
-    </div>
-    ): <></>}
-  </>)
+      ): <></>}
+    </>
+  )
 }
 
 // export default function SelectProjectStepper({projects, optProjects}: 

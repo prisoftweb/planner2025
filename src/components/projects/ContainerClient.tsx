@@ -66,7 +66,7 @@ export default function ContainerClient({token, optClients, optCategories,
   if(projects.length <= 0 && projectStore.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        {/* <Navigation user={user} /> */}
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/projects.jpg" subtitle="Proyectos"
             text="Aqui puedes agregar nuevos proyectos
