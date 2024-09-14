@@ -35,8 +35,8 @@ export default function NuevoComponente({report, id, token}:
   const porcentaje = (oneReport && oneReport?.total && oneReport?.ammount)? ((oneReport.total/oneReport.ammount) * 100).toFixed(0): 0;
   //console.log('porcentaje => ', porcentaje);
 
-  console.log('one rep petty => ', oneReport);
-  console.log('petty cash => ', oneReport?.ispettycash);
+  //console.log('one rep petty => ', oneReport);
+  //console.log('petty cash => ', oneReport?.ispettycash);
   const isPettyCash = oneReport?.ispettycash;
 
   return (

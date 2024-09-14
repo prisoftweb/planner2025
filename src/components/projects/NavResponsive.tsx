@@ -1,6 +1,4 @@
-import { ArrowDownTrayIcon, ChartBarIcon, 
-  AdjustmentsVerticalIcon, TableCellsIcon, 
-  UserCircleIcon, GlobeAmericasIcon } from "@heroicons/react/24/solid"
+import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
 import { useEffect, useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 
