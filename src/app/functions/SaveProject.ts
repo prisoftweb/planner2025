@@ -211,7 +211,8 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
     // });
     
     table.push({
-      id: budget._id,
+      //id: budget._id,
+      id: newB._id,
       percentage: p,
       amount: dollar,
       category: newB.costocenter.category,

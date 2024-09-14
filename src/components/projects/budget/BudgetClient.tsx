@@ -59,7 +59,7 @@ export default function BudgetCli({budget, token, id, user, costoCentersLV}:
         <div className="flex w-full px-2 space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full`}>
-            <ProfileBudget budget={budget} token={token} />
+            <ProfileBudget budget={budget} token={token} id={id} />
           </div>
         </div>
       </div>

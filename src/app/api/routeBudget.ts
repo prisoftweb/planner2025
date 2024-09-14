@@ -133,3 +133,22 @@ export async function InsertNewBudgetInBudgetByID(id:string, auth_token:string, 
     return 'Ocurrio un problema al agregar centro de costos!!';
   }
 }
+
+export async function DeleteNewBudgetInBudget(id:string, auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/budgets/deleteNewBudgetInBudget/${id}`;
+  try {
+    const res = await axios.delete(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    console.log('res remove bud => ', res);
+    if(res.status===204 || res.status===200 || res.status===201) return 204;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Ocurrio un problema al eliminar centro de costos del presupuesto!!';
+  }
+}

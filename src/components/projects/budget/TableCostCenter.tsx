@@ -2,27 +2,31 @@ import { BudgetTableCostCenter } from "@/interfaces/Budget"
 import { createColumnHelper } from "@tanstack/react-table";
 import RemoveElement from "@/components/RemoveElement";
 import Table from "@/components/Table";
+import { useOneBudget } from "@/app/store/budgetProject";
+import { getBudget, DeleteNewBudgetInBudget } from "@/app/api/routeBudget";
+import { showToastMessageError } from "@/components/Alert";
 
-export default function TableCostCenter({dataTable, token}: 
-  {dataTable:BudgetTableCostCenter[], token: string}) {
+export default function TableCostCenter({dataTable, token, id}: 
+  {dataTable:BudgetTableCostCenter[], token: string, id:string}) {
   
   const columnHelper = createColumnHelper<BudgetTableCostCenter>();
-
-  //const {budgetsStore, updateBudgetsStore} = useBudgetStore();
-
+  const {oneBudget, updateOneBudget} = useOneBudget();
+  
   //const [filtering, setFiltering] = useState<boolean>(false);
   //const [filter, setFilter] = useState<boolean>(false);
  // const [dataProjects, setDataProjects] = useState(data);
 
   const delBudget = async(id: string) => {
-    // try {
-    //   if(budgetsStore){
-    //     const arrBud = budgetsStore.filter(bud => bud._id !== id);
-    //     updateBudgetsStore(arrBud);
-    //   }
-    // } catch (error) {
-    //   showToastMessageError('Error al quitar glosario de la tabla!!');
-    // }
+    try {
+      const res = await getBudget(token, id);
+      if(typeof(res)==='string'){
+        showToastMessageError('Error al actualizar pantalla del presupuesto!!');
+      }else{
+        updateOneBudget(res);
+      }
+    } catch (error) {
+      showToastMessageError('Error al actualizar pantalla del presupuesto!!');
+    }
   }
 
   // const {haveDeleteProject, haveNewProject, projectStore, updateHaveDeleteProject, 
@@ -54,7 +58,7 @@ export default function TableCostCenter({dataTable, token}:
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           {/* <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} /> */}
-          <RemoveElement id={row.original.id} name={row.original.concept} remove={() => console.log('')} 
+          <RemoveElement id={id+'/'+row.original.id} name={row.original.concept} remove={DeleteNewBudgetInBudget} 
               removeElement={delBudget} token={token} />
         </div>
       ),

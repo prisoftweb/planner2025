@@ -3,7 +3,7 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import { BudgetDataToTableCostCenter } from "@/app/functions/SaveProject";
 import TableCostCenter from "./TableCostCenter";
 
-export default function ProfileBudget({budget, token}: {budget: FullBudget, token:string}) {
+export default function ProfileBudget({budget, token, id}: {budget: FullBudget, token:string, id: string}) {
 
   const amount = CurrencyFormatter({
     currency: 'MXN',
@@ -19,7 +19,7 @@ export default function ProfileBudget({budget, token}: {budget: FullBudget, toke
 
   const view = <div className="mt-3 w-full max-w-4xl bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <TableCostCenter dataTable={tableData} token={token} />
+                  <TableCostCenter dataTable={tableData} token={token} id={id} />
               </div>;
 
   return (
