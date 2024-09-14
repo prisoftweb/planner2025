@@ -57,7 +57,7 @@ interface OneBudgetStore {
 }
 
 interface ActionsBudget {
-  updateOneBudget: (value: FullBudget) => void,
+  updateOneBudget: (value: FullBudget | null) => void,
 }
 
 const initialOneBudget : OneBudgetStore = {
@@ -66,7 +66,7 @@ const initialOneBudget : OneBudgetStore = {
 
 export const useOneBudget = create<OneBudgetStore & ActionsBudget>((set) => ({
   ...initialOneBudget,
-  updateOneBudget: (value: FullBudget) => set(state => ({
+  updateOneBudget: (value: FullBudget | null) => set(state => ({
     ...state,
     oneBudget: value,
   })),

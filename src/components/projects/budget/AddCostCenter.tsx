@@ -28,7 +28,7 @@ export default function AddCostCenter({costoCentersLV, token, user, closeForm}:
   const [description, setDescription] = useState<string>('');
   const [descriptionMessage, setDescriptionMessage] = useState('');
 
-  const options: Options[] = [];
+  // const options: Options[] = [];
 
   const onChangeAmount = (value: string) => {
     try {
@@ -85,13 +85,13 @@ export default function AddCostCenter({costoCentersLV, token, user, closeForm}:
   //   }
   // }
 
-  costoCentersLV.map((cclv) => {
-    options.push({
-      //label: cclv.categoryname,
-      label: cclv.label,
-      value: cclv.value
-    })
-  });
+  // costoCentersLV.map((cclv) => {
+  //   options.push({
+  //     //label: cclv.categoryname,
+  //     label: cclv.label,
+  //     value: cclv.value
+  //   })
+  // });
 
   const amount = CurrencyFormatter({
     currency: "MXN",

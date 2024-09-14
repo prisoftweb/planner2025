@@ -103,6 +103,9 @@ export default function TableCostCenter({dataTable, token}:
   ]
   
   return (
-    <Table columns={columns} data={dataTable} placeH="Buscar costo.." />
+    <div>
+      <p>PRESUPUESTADO POR CENTRO DE COSTOS</p>
+      <Table columns={columns} data={dataTable} placeH="Buscar costo.." />
+    </div>
   )
 }

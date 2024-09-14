@@ -201,7 +201,7 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
     const dollar = CurrencyFormatter({
       currency: "MXN",
       //value: budget.amount
-      value: budget.amount
+      value: newB.cost
     })
 
     // const amountBudget = CurrencyFormatter({
