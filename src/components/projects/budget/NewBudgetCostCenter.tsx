@@ -11,6 +11,7 @@ import CurrencyInput from "react-currency-input-field";
 import Button from "@/components/Button";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { InsertNewBudgetInBudgetByID } from "@/app/api/routeBudget";
+import { getBudget } from "@/app/api/routeBudget";
 
 //import DonutChartt from "@/components/expenses/dashboard/DonutChart";
 import DonutChartBudget from "./DonutChartBudget";
@@ -113,6 +114,19 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
     setPercentage('0');
   }
 
+  const fetchBudget = async() => {
+    try {
+      const res = await getBudget(token, id);
+      if(typeof(res)==='string'){
+        showToastMessageError('Error al actualizar pantalla del presupuesto!!');
+      }else{
+        updateOneBudget(res);
+      }
+    } catch (error) {
+      showToastMessageError('Error al actualizar pantalla del presupuesto!!');
+    }
+  }
+
   const onSaveBudget = async () => {
     const data = {
       newbudget: {
@@ -138,6 +152,7 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
           if(typeof(res)==='string'){
             showToastMessageError(res);
           }else{
+            fetchBudget();
             showToastMessage('Centro de costos agrregado satisfactoriamente!!!');
             setTotal('0');
             setPercentage('0');
