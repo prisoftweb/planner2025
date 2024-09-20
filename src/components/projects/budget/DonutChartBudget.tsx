@@ -59,16 +59,16 @@ export default function DonutChartBudget({data, colors, categories, category}:
           index='label'
           valueFormatter={valueFormatter}
           colors={colors}
-          className="w-64 h-64"
+          className="w-44 h-44"
           customTooltip={customTooltip}
         />
-        <Legend
+        {/* <Legend
           //categories={['New York', 'London', 'Hong Kong', 'San Francisco', 'Singapore']}
           categories={categories}
           //colors={['blue', 'cyan', 'indigo', 'violet', 'fuchsia']}
           colors={colors}
           className="max-w-xs z-0"
-        />
+        /> */}
       </div>
     </>
   );

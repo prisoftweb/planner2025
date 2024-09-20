@@ -22,6 +22,7 @@ import { getProjectsMin } from "@/app/api/routeProjects"
 import { CostoCenterLV } from "@/interfaces/CostCenter"
 import { BudgetMin } from "@/interfaces/Budget"
 import { useBudgetStore } from "@/app/store/budgetProject"
+import { Squares2X2Icon } from "@heroicons/react/24/solid"
 
 export default function ContainerBudgetClient({token, optClients, optCategories, 
                           optTypes, user, optCompanies, optCategoriesFilter, 
@@ -97,18 +98,33 @@ export default function ContainerBudgetClient({token, optClients, optCategories,
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
-          <p className="text-xl ml-4 font-medium">Proyectos</p>
+          <p className="text-xl ml-4 font-medium">Presupuestos</p>
         </div>
         <div className="flex gap-x-3">
-          <SearchInTable placeH="Buscar proyecto.." />
+          <div className="flex gap-x-3 items-center">
+            <p>Vista: </p>
+            <Squares2X2Icon onClick={() => setIsTable(true)} 
+              className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
+            />
+            <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
+              onClick={() => setIsTable(false)}
+            />
+            <GiSettingsKnobs onClick={() => handleFilter(true)}
+              className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+            />
+          </div>
+          <SearchInTable placeH="Buscar presupuesto.." />
           <div className="">
             <div className="flex gap-x-3 items-center">
-              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-                onClick={() => setIsTable(true)}
-              />
-              <PiTableThin onClick={() => setIsTable(false)} 
+              {/* <PiTableThin onClick={() => setIsTable(true)} 
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
               />
+              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
+                onClick={() => setIsTable(false)}
+              /> */}
+              {/* <PiTableThin onClick={() => setIsTable(false)} 
+                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
+              /> */}
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />

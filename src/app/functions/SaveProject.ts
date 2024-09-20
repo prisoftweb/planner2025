@@ -169,10 +169,11 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
     table.push({
       //amount: budget.amount.toString(),
       pending: dollar,
-      //client: budget.client?.name || 'Sin cliente',
-      client: 'sin cliente',
       id: budget._id,
-      project:budget.title,
+      project: {
+        budget: budget.title,
+        project: budget.project.photo
+      },
       status: budget.status,
       //condition: cond,
       percentage: p,
@@ -191,12 +192,12 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
   
   budget.newbudget.map((newB) => {
     let p: string;
-    // if(budget.progress){
-    //   p = budget.progress.toString() + '%';
-    // }else{
-    //   p = '0%';
-    // }
-    p='0%';
+    if(newB.percent){
+      p = newB.percent.toString() + '%';
+    }else{
+      p = '0%';
+    }
+    //p='0%';
     //La moneda mexicana lleva el mx antes del $
     const dollar = CurrencyFormatter({
       currency: "MXN",

@@ -73,8 +73,9 @@ export default function TableBudgetProjects({data, token, budgets, optCategories
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
+          <img src={row.original.project.project} alt="sin imagen" className="w-10 h-10" />
           {/* <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} /> */}
-          <RemoveElement id={row.original.id} name={row.original.project} remove={removeBudget} 
+          <RemoveElement id={row.original.id} name={row.original.project.budget} remove={removeBudget} 
               removeElement={delBudget} token={token} />
         </div>
       ),
@@ -126,15 +127,15 @@ export default function TableBudgetProjects({data, token, budgets, optCategories
     //   )
     // }),
     columnHelper.accessor('project', {
-      header: 'Proyecto',
-      id: 'proyecto',
+      header: 'Presupuesto',
+      id: 'presupuesto',
       cell: ({row}) => (
         // <Link href={`/projects/${row.original.id}`}>
         //   <p className="">{row.original.project}</p>
         // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.project}</p>
+        >{row.original.project.budget}</p>
       ),
     }),
     columnHelper.accessor('status', {
@@ -153,42 +154,6 @@ export default function TableBudgetProjects({data, token, budgets, optCategories
         <Chip label={row.original.segment} color={row.original.color} />
       ),
     }),
-    // columnHelper.accessor('category', {
-    //   header: 'Categoria',
-    //   id: 'categoria',
-    //   cell: ({row}) => (
-    //     // <Link href={`/projects/${row.original.id}`}>
-    //     //   <p className="">{row.original.category}</p>
-    //     // </Link>
-    //     <p className="cursor-pointer"
-    //       onClick={() => window.location.replace(`/projects/${row.original.id}`)}
-    //     >{row.original.category}</p>
-    //   ),
-    // }),
-    columnHelper.accessor('client', {
-      header: 'Cliente',
-      id: 'cliente',
-      cell: ({row}) => (
-        // <Link href={`/projects/${row.original.id}`}>
-        //   <p className="">{row.original.client}</p>
-        // </Link>
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.client}</p>
-      ),
-    }),
-    // columnHelper.accessor('date', {
-    //   header: 'Fecha',
-    //   id: 'fecha',
-    //   cell: ({row}) => (
-    //     // <Link href={`/projects/${row.original.id}`}>
-    //     //   <p className="">{row.original.date?.substring(0, 10) || ''}</p>
-    //     // </Link>
-    //     <p className="cursor-pointer"
-    //       onClick={() => window.location.replace(`/projects/${row.original.id}`)}
-    //     >{row.original.date?.substring(0, 10) || ''}</p>
-    //   ),
-    // }),
     columnHelper.accessor('amountBudget', {
       header: 'Monto presupuesto',
       id: 'Monto presupuesto',

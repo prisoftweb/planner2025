@@ -16,6 +16,7 @@ import NavResponsive from "./NavResponsive"
 import ProfileBudget from "./ProfileBudget"
 import ButtonNewBudget from "./ButtonNewBudget"
 import { CostoCenterLV } from "@/interfaces/CostCenter"
+import WithOut from "@/components/WithOut"
 
 export default function BudgetCli({budget, token, id, user, costoCentersLV}: 
   {budget: FullBudget, token:string, id:string, user: string, costoCentersLV: CostoCenterLV[]}){
@@ -24,7 +25,7 @@ export default function BudgetCli({budget, token, id, user, costoCentersLV}:
   const [open, setOpen] = useState<boolean>(false);
   const [newBudget, setNewBudget] = useState<boolean>(false);
 
-  const {updateOneBudget} = useOneBudget();
+  const {updateOneBudget, oneBudget} = useOneBudget();
   
   useEffect(() => {
     updateOneBudget(budget);
@@ -44,6 +45,14 @@ export default function BudgetCli({budget, token, id, user, costoCentersLV}:
     setNewBudget(value);
   }
 
+  if(!oneBudget){
+    return(
+      <>
+        <h1 className="text-center text-5xl">Obteniedo presupuesto</h1>
+      </>
+    )
+  }
+
   return(
     <>
       <div className="mt-5 flex justify-end items-center gap-x-10">
@@ -59,7 +68,7 @@ export default function BudgetCli({budget, token, id, user, costoCentersLV}:
         <div className="flex w-full px-2 space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full`}>
-            <ProfileBudget budget={budget} token={token} id={id} />
+            <ProfileBudget budget={oneBudget} token={token} id={id} />
           </div>
         </div>
       </div>

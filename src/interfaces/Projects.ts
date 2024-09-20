@@ -19,10 +19,12 @@ export interface ProjectsTable{
 export interface ProjectsBudgetTable{
   id: string,
   percentage: string
-  project:string,
+  project:{
+    budget: string
+    project: string
+  },
   status: boolean
   segment: string
-  client:string,
   amountBudget:string,
   pending:string,
   color: string  

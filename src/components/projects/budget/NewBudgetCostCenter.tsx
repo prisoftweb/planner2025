@@ -238,8 +238,8 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
           </div>
         </div>
 
-        <div>
-        <DonutChartBudget data={optsChart} colors={colors} category="costo"
+        <div className="bg-white p-3 rounded-lg shadow-md">
+          <DonutChartBudget data={optsChart} colors={colors} category="costo"
               categories={categoriesConcepts} />
         </div>
       </div>

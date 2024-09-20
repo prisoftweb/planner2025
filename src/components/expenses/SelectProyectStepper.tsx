@@ -57,7 +57,7 @@ export default function SelectProjectStepper(){
       {reports.length > 0 && reportsOptions.length > 0? (
         <div className="mt-3">
         <Select
-          className='w-full' 
+          className='w-full max-w-xl' 
           options={reportsOptions}
           maxMenuHeight={250}
           components={{
