@@ -8,9 +8,11 @@ import Label from "@/components/Label";
 import HeaderForm from "@/components/HeaderForm";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import CurrencyInput from "react-currency-input-field";
+import { UpdateNewBudgetInBudget } from "@/app/api/routeBudget";
 
-export default function EditBudget({showForm, token, budget}: 
-                    {showForm:Function, token:string, budget:(BudgetTableCostCenter)}){
+export default function EditBudget({showForm, token, budget, idBudget, user}: 
+                    {showForm:Function, token:string, budget:(BudgetTableCostCenter), 
+                      idBudget:string, user: string}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [total, setTotal] = useState<string>(budget.amount.replace(/[$,%, M, X,]/g, ""));
@@ -47,22 +49,35 @@ export default function EditBudget({showForm, token, budget}:
       setPercentage('0');
     }else{
       try {
-        setPercentage(value.replace(/[$,]/g, ""));
+        setPercentage(value.replace(/[$,%]/g, ""));
       } catch (error) {
         setPercentage('0');
       }
     }
   }
 
-  const updateCostCenter = () => {
+  const updateCostCenter = async () => {
     const data = {
-      amount: total,
-      percentage
+      cost:total.replace(/[$,%,]/g, ""),
+      percent:percentage.replace(/[$,%,]/g, ""),
+      date: new Date(),
+      user,
+      costocenter: {
+          category: budget.category,
+          concept: budget.concept
+      }
     }
     try {
-      console.log('data => ', data);
+      console.log('data new budget => ', data);
+      const res = await UpdateNewBudgetInBudget(token, data, idBudget+'/'+budget.id);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        showToastMessage('El centro de costos ha sido actulizado exitosamente!!');
+        console.log('res update ne bud in bud => ', res);
+      }
     } catch (error) {
-      
+      showToastMessageError('Ocurrrio un problema al actulizar centro de costos del presupuesto!!');
     }
   }
   

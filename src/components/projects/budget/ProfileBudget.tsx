@@ -10,7 +10,7 @@ interface OptionsDashboard {
   costo: number
 }
 
-export default function ProfileBudget({budget, token, id}: {budget: FullBudget, token:string, id: string}) {
+export default function ProfileBudget({budget, token, id, user}: {budget: FullBudget, token:string, id: string, user:string}) {
 
   const {oneBudget} = useOneBudget();
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
@@ -29,7 +29,7 @@ export default function ProfileBudget({budget, token, id}: {budget: FullBudget, 
 
   const view = <div className="mt-3 w-full bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <TableCostCenter dataTable={tableData} token={token} id={id} />
+                  <TableCostCenter dataTable={tableData} token={token} id={id} user={user} />
               </div>;
 
   const optsChart: OptionsDashboard[] = [];

@@ -152,3 +152,25 @@ export async function DeleteNewBudgetInBudget(id:string, auth_token:string){
     return 'Ocurrio un problema al eliminar centro de costos del presupuesto!!';
   }
 }
+
+export async function UpdateNewBudgetInBudget(auth_token:string, data:Object, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/budgets/updateElementArrByBUDGET/${id}`;
+  console.log('json data => ', JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'Application/json',
+      }
+    });
+    console.log('res update new budget => ', res);
+    if(res.status===200 || res.status===201)
+      return res.data.data.data;
+    return 'Error al actualizar centro de costos en el presupuesto!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al actualizar centro de costos en el presupuesto!!';
+  }
+}

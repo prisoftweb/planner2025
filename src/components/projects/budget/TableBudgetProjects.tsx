@@ -7,7 +7,8 @@ import { ProjectMin, ProjectsBudgetTable } from "@/interfaces/Projects";
 //import CardProject from "../CardProject";
 import CardBudgetProject from "./CardBudgetProject";
 import { useState, useEffect } from "react";
-import Filtering from "../Filtering";
+//import Filtering from "../Filtering";
+import Filtering from "./FilteringBudgets";
 import { Options } from "@/interfaces/Common";
 import { ProjectBudgetDataToTableDataMin } from "@/app/functions/SaveProject";
 import { useProjectsStore } from "@/app/store/projectsStore";
@@ -185,15 +186,18 @@ export default function TableBudgetProjects({data, token, budgets, optCategories
     // const projectM = projects.reduce((previous, current) => {
     //   return current.amount > previous.amount ? current : previous;
     // });
+    // const budgetMax = budgets.reduce(((previous, current) => {
+    //   return current.pending > previous.pending ? current: previous;
+    // }));
     const budgetMax = budgets.reduce(((previous, current) => {
-      return current.pending > previous.pending ? current: previous;
+      return current.amount > previous.amount ? current: previous;
     }));
-    setMaxAmount(budgetMax.pending);
+    setMaxAmount(budgetMax.amount);
   }, [])
 
   //const [isTable, setIsTable] = useState<boolean>(true);
   //const [view, setView] = useState<JSX.Element>(<></>);
-  const [filteredBudgets, setFilteredBudgets] = useState<BudgetMin[]>(budgets);
+  const [filteredBudgets, setFilteredBudgets] = useState<BudgetMin[]>(budgetsStore? budgetsStore: budgets);
 
   // useEffect(() => {
   //   if(isTable){
@@ -252,12 +256,15 @@ export default function TableBudgetProjects({data, token, budgets, optCategories
   //   updateHaveDeleteProject(false);
   // }
 
+  const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(filteredBudgets);
+
   let view = <></>;
   if(isTable){
-    view = (<Table columns={columns} data={data} placeH="Buscar proyecto.." />);
+    // view = (<Table columns={columns} data={data} placeH="Buscar proyecto.." />);
+    view = (<Table columns={columns} data={dataTable} placeH="Buscar proyecto.." />);
   }else{
     view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-              {budgets.map((budget, index:number) => (
+              {filteredBudgets.map((budget, index:number) => (
                 <CardBudgetProject budget={budget} token={token} key={index} />
               ))}
             </div>)
@@ -279,56 +286,62 @@ export default function TableBudgetProjects({data, token, budgets, optCategories
     return false;
   }
 
-  const amountValidation = (project:ProjectMin, startDate:number, endDate:number, 
+  const amountValidation = (budget:BudgetMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number) => {
-    if(project.amount >= minAmount && project.amount <= maxAmount){
-      if(dateValidation(project.date, startDate, endDate)){
+    if(budget.amount >= minAmount && budget.amount <= maxAmount){
+      if(dateValidation(budget.date, startDate, endDate)){
         return true;
       }
     }
     return false;
   }
 
-  const categoriesValidation = (project:ProjectMin, startDate:number, endDate:number, 
+  const categoriesValidation = (budget:BudgetMin, startDate:number, endDate:number, 
             minAmount:number, maxAmount:number, categories:string[]) => {
-    if(categories.includes('all')){
-      if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-        return true
-      return false;
-    }else{
-      if(project.segment)
-        if(categories.includes(project.segment._id))
-          if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-            return true
-      return false;
-    }
+    // if(categories.includes('all')){
+    //   if(amountValidation(budget, startDate, endDate, minAmount, maxAmount))
+    //     return true
+    //   return false;
+    // }else{
+    //   if(budget)
+    //     if(categories.includes(budget.segment._id))
+    //       if(amountValidation(budget, startDate, endDate, minAmount, maxAmount))
+    //         return true
+    //   return false;
+    // }
+    if(amountValidation(budget, startDate, endDate, minAmount, maxAmount))
+      return true
+    return false;
   }
 
-  const typesValidation = (project:ProjectMin, startDate:number, endDate:number, 
+  const typesValidation = (budget:BudgetMin, startDate:number, endDate:number, 
     minAmount:number, maxAmount:number, categories:string[], types:string[]) => {
-    if(types.includes('all')){
-      if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-        return true;
-      return false;
-    }else{
-      if(project.type)
-        if(types.includes(project.type._id))
-          if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-            return true;
-      return false;
-    }
+    // if(types.includes('all')){
+    //   if(categoriesValidation(budget, startDate, endDate, minAmount, maxAmount, categories))
+    //     return true;
+    //   return false;
+    // }else{
+    //   if(budget.type)
+    //     if(types.includes(budget.type._id))
+    //       if(categoriesValidation(budget, startDate, endDate, minAmount, maxAmount, categories))
+    //         return true;
+    //   return false;
+    // }
+    if(categoriesValidation(budget, startDate, endDate, minAmount, maxAmount, categories))
+      return true;
+    return false;
   }
 
-  const conditionsValidation = (project:ProjectMin, startDate:number, endDate:number, 
+  const conditionsValidation = (budget:BudgetMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number, categories:string[], 
         types:string[], conditions:string[]) => {
     if(conditions.includes('all')){
-      if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
+      if(typesValidation(budget, startDate, endDate, minAmount, maxAmount, categories, types))
         return true;
       return false;
     }else{
-      if(conditions.includes(project.category._id))
-        if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
+      if(conditions.includes(budget.lastmove.condition._id))
+        if(typesValidation(budget, startDate, endDate, minAmount, maxAmount, categories, types))
           return true;
       return false;
     }
@@ -337,14 +350,14 @@ export default function TableBudgetProjects({data, token, budgets, optCategories
   const filterData = (conditions:string[], types:string[], 
     categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
   
-    // let filtered: ProjectMin[] = [];
-    // projectStore.map((project) => {
-    //   if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
-    //     filtered.push(project);
-    //   }
-    // });
+    let filtered: BudgetMin[] = [];
+    budgetsStore?.map((budget) => {
+      if(conditionsValidation(budget, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
+        filtered.push(budget);
+      }
+    });
 
-    // //setFilteredProjects(filtered);
+    setFilteredBudgets(filtered);
     // setDataProjects(ProjectBudgetDataToTableDataMin(filtered));
   }
 

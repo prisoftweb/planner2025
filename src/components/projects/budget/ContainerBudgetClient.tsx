@@ -109,9 +109,6 @@ export default function ContainerBudgetClient({token, optClients, optCategories,
             <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
               onClick={() => setIsTable(false)}
             />
-            <GiSettingsKnobs onClick={() => handleFilter(true)}
-              className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-            />
           </div>
           <SearchInTable placeH="Buscar presupuesto.." />
           <div className="">

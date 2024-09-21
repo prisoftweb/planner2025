@@ -9,8 +9,8 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import EditBudget from "./EditBudget";
 
-export default function TableCostCenter({dataTable, token, id}: 
-  {dataTable:BudgetTableCostCenter[], token: string, id:string}) {
+export default function TableCostCenter({dataTable, token, id, user}: 
+  {dataTable:BudgetTableCostCenter[], token: string, id:string, user: string}) {
   
   const columnHelper = createColumnHelper<BudgetTableCostCenter>();
   const {updateOneBudget} = useOneBudget();
@@ -131,7 +131,7 @@ export default function TableCostCenter({dataTable, token, id}:
       <p>PRESUPUESTADO POR CENTRO DE COSTOS</p>
       <Table columns={columns} data={dataTable} placeH="Buscar costo.." />
       {openEditBudget && rowEditBudget && <EditBudget budget={rowEditBudget} showForm={handleEditBudget}
-        token={token} />}
+        token={token} idBudget={id} user={user} />}
     </div>
   )
 }

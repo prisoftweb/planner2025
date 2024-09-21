@@ -29,10 +29,6 @@ export default function CardProject({project, token}:
               <p>{project.title}</p>
               <p>{project.account}</p>
             </div>
-            <div>
-              <DeleteElement id={project._id} name={project.title} 
-                  token={token} remove={RemoveProject} />
-            </div>
           </div>
           <div className="flex items-center">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
