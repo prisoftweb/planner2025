@@ -45,13 +45,14 @@ export default function ContainerProvider({providers, user, token}:
 
     data.push({
       'id': prov._id,
-      'name': prov.tradename || prov.name,
+      'name': prov.name,
       rfc: prov.rfc,
       //currentbalance: prov.tradeline.currentbalance,
       currentbalance: dollar,
       account: prov.account,
       suppliercredit: prov.suppliercredit,
-      'contacts': nc
+      'contacts': nc,
+      tradename: prov.tradename || ' '
     })
   })
   

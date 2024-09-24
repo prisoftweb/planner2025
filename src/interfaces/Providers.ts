@@ -19,6 +19,7 @@ export interface Provider {
 export interface TableProvider{
   "id": string,
   "name":string,
+  tradename: string,
   "suppliercredit": boolean,
   "rfc": string,
   "account"?:string,

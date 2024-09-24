@@ -108,6 +108,8 @@ export default function DataBasicStepper({token, user, condition, showForm}:
         }
       }
       try {
+        console.log('date => ', date);
+        console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;

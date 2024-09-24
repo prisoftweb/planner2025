@@ -21,9 +21,9 @@ export default function AddCostCenter({costoCentersLV, token, user, closeForm}:
   const {project} = useNewBudget();
   const {updateBudgetsStore} = useBudgetStore();
 
-  const [amountBudget, setAmountBudget] = useState<number>(0);
+  const [amountBudget, setAmountBudget] = useState<number>(project?.amount || 0);
   const [amountMessage, setAmountMessage] = useState<string>('');
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>(project?.title || '');
   const [nameMessage, setNameMessage] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [descriptionMessage, setDescriptionMessage] = useState('');

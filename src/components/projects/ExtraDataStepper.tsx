@@ -45,9 +45,13 @@ export default function ExtraDataStepper({token, optClients, optCategories,
 
   const d = (date === '')? year+'-'+month+'-'+day: date;
 
+  //console.log('date dmy => ', d);
+
   const [startDate, setStartDate] = useState<string>(d);
 
-  const [dateM, setDateM] = useState(new Date());
+  //console.log('start date => ', startDate);
+
+  //const [dateM, setDateM] = useState(new Date());
 
   const formik = useFormik({
     initialValues: {
@@ -99,20 +103,20 @@ export default function ExtraDataStepper({token, optClients, optCategories,
       }else{
         if(haveAddress){
           data = {
-            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
             hasguaranteefund, title, types:type, user,
             location, condition: [{glossary: condition, user}]
           }
         }else{
           if(hasguaranteefund){
             data = {
-              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
               hasguaranteefund, title, types:type, user,
               guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
             }
           }else{
             data = {
-              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
               hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
             }
           }
@@ -120,6 +124,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
       }
       
       try {
+        //console.log('date => ', startDate);
+        //console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
@@ -190,7 +196,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0" 
             //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {setDateM(date);
+            selected={new Date(startDate)} onChange={(date:Date) => {
+                //setDateM(date);
                 setStartDate(date.toDateString()) 
                 console.log(date); console.log(date.toDateString())}} 
           />

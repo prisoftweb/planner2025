@@ -236,12 +236,12 @@ export default function SendReport({send, report, node,
                   <div role="button"
                     key={mov._id}
                     className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
-                    <div className="flex items-center">
+                    <div className="flex items-center ">
                       <div className="grid mr-4 place-items-center">
                         <img alt="responsable" src={mov.user.photo || '/img/users/default.jpg'}
                           className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                       </div>
-                      <div>
+                      <div className="w-full max-w-72">
                         <h6
                           className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
                           {mov.condition.name}

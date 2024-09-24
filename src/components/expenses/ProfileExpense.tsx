@@ -19,6 +19,11 @@ export default function ProfileExpense({expense}:
     value: Number(currentExpense?.cost.discount || 0)
   });
 
+  const total = CurrencyFormatter({
+    currency: "MXN",
+    value: currentExpense?.cost.total || 0
+  });
+
   const vat = CurrencyFormatter({
     currency: "MXN",
     value: currentExpense?.cost.iva? currentExpense.cost.iva : 0
@@ -80,7 +85,7 @@ export default function ProfileExpense({expense}:
             <Label>{currentExpense?.taxfolio}</Label>
           </div>
           
-          <div className="grid grid-cols-2 gap-x-2 my-2">
+          <div className="grid grid-cols-2 gap-x-2 gap-y-2 my-2">
             <div className="">
               <p className="text-slate-500">Importe</p>
               <p className="text-green-600 font-semibold">{amount}</p>
@@ -89,11 +94,17 @@ export default function ProfileExpense({expense}:
               <p className="text-slate-500">Descuento</p>
               <p className="text-red-600 font-semibold">{discount}</p>
             </div>
-          </div>
-          <div className="my-2">
-            <p className="text-slate-500">IVA</p>
-            <p className="text-blue-600 font-semibold">{vat}</p>
-            {/* <p className="text-blue-600 font-semibold">${expense.iva? expense.iva : 0} (16%)</p> */}
+
+            <div className="">
+              <p className="text-slate-500">IVA</p>
+              <p className="text-blue-600 font-semibold">{vat}</p>
+              {/* <p className="text-blue-600 font-semibold">${expense.iva? expense.iva : 0} (16%)</p> */}
+            </div>
+            <div className="">
+              <p className="text-slate-500">Total</p>
+              <p className="text-red-600 font-semibold">{total}</p>
+              {/* <p className="text-blue-600 font-semibold">${expense.iva? expense.iva : 0} (16%)</p> */}
+            </div>
           </div>
         </div>
         
