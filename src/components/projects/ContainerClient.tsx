@@ -84,14 +84,14 @@ export default function ContainerClient({token, optClients, optCategories,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-      <div className="flex justify-between items-center">
+      <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
         <div className="flex items-center">
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
           <p className="text-xl ml-4 font-medium">Proyectos</p>
         </div>
-        <div className="flex gap-x-3">
+        <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end">
           <SearchInTable placeH="Buscar proyecto.." />
           <div className="">
             <div className="flex gap-x-3 items-center">

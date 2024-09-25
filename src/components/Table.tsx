@@ -270,7 +270,8 @@ export default function Table({data, columns, placeH, typeTable='',
                 <tr key={headerGroup.id}>
                   {
                     headerGroup.headers.map(header => (
-                      <th key={header.id} 
+                      <th key={header.id}
+                        colSpan={typeTable=='projects' && header.id.toLowerCase().includes('avance')? 2: 1}
                         className="px-6 py-4 text-xs text-white uppercase bg-gray-400 border-b border-blue-400 
                         dark:text-white"
                         onClick={header.column.getToggleSortingHandler()}
@@ -311,7 +312,8 @@ export default function Table({data, columns, placeH, typeTable='',
                     // hover:bg-gray-200 dark:hover:bg-gray-600"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className={`px-6 py-4 ${row.getIsSelected()? 'text-slate-900': 'text-slate-900'} `}>
+                    <td key={cell.id} colSpan={typeTable=='projects' && cell.id.toLowerCase().includes('avance')? 2: 1} className={`px-6 py-4 ${row.getIsSelected()? 'text-slate-900': 'text-slate-900'} `}>
+                      {/* {cell.id} */}
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

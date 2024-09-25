@@ -7,6 +7,7 @@ export interface ProjectsTable{
   id: string,
   code: string, 
   project:string,
+  imgProject: string,
   //status:boolean, 
   condition: string,
   category:string, 

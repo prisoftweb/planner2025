@@ -136,7 +136,8 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       project:project.title,
       // status: project.status,
       condition: cond,
-      percentage: p
+      percentage: p,
+      imgProject: project.photo
     })
   });
 

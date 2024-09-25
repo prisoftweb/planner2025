@@ -304,17 +304,17 @@ export default function ContainerClient({data, token, expenses,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-2 gap-y-2 items-center">
-        <div className="flex items-center">
+      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center">
+        <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
           <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': 'Gastos'}</p>
         </div>
-        <div className="flex gap-x-3 gap-y-3">
+        <div className={`flex gap-x-3 gap-y-3 ${isHistory? '': 'flex-wrap-reverse sm:flex-nowrap'} w-full justify-end`}>
           <SearchInTable placeH={"Buscar gasto.."} />
-          <div className="w-72">
-            <div className="flex gap-x-4 items-center">
+          <div className={`${isHistory? '': 'w-72'}`}>
+            <div className="flex gap-x-4 justify-end items-center">
               {categories.length > 0 && 
                 conditions.length > 0 && costCenterOpt.length > 0 && 
                 projects.length > 0 && providers.length > 0 && responsibles.length > 0 && 

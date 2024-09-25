@@ -93,45 +93,34 @@ export default function ContainerBudgetClient({token, optClients, optCategories,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
         <div className="flex items-center">
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
           <p className="text-xl ml-4 font-medium">Presupuestos</p>
         </div>
-        <div className="flex gap-x-3">
-          <div className="flex gap-x-3 items-center">
-            <p>Vista: </p>
-            <Squares2X2Icon onClick={() => setIsTable(true)} 
-              className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
-            />
-            <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-              onClick={() => setIsTable(false)}
-            />
-          </div>
-          <SearchInTable placeH="Buscar presupuesto.." />
-          <div className="">
+        <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
+          <div className="flex gap-x-3 gap-y-3 justify-end">
             <div className="flex gap-x-3 items-center">
-              {/* <PiTableThin onClick={() => setIsTable(true)} 
+              <p>Vista: </p>
+              <Squares2X2Icon onClick={() => setIsTable(true)} 
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
               />
               <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
                 onClick={() => setIsTable(false)}
-              /> */}
-              {/* <PiTableThin onClick={() => setIsTable(false)} 
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
-              /> */}
+              />
+            </div>
+            <SearchInTable placeH="Buscar presupuesto.." />
+          </div>
+          <div className="">
+            <div className="flex gap-x-3 items-center">
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
               <ButtonNewBudgetProject condition="" optCategories={optCategories} optClients={optClients} 
                   optCompanies={optCompanies} optTypes={optTypes} projects={projects} token="" user={user._id}
                   costoCentersLV={costoCentersLV}  />
-              {/* <p>nuevo</p> */}
-              {/* <ButtonNew token={token} optClients={optClients} 
-                      optCategories={optCategories} optTypes={optTypes}
-                      user={user._id} optCompanies={optCompanies} condition={condition} /> */}
             </div>
           </div>
         </div>

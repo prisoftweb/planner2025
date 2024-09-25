@@ -84,7 +84,7 @@ export default function TableStatus({data, token}:
       id: 'estatus',
       cell: ({row}) => (
         //<p className="">{row.original.statuses}</p>
-        <div className="flex items-center gap-x-1">
+        <div className="flex items-center gap-x-1 gap-y-1 flex-wrap">
           {row.original.statuses.arrStatuses.map((st, index:number) => (
             <div className="flex items-center gap-x-1" key={index}>
               <p>{st}</p>
