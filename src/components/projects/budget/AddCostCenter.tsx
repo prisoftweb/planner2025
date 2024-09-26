@@ -15,8 +15,8 @@ import { createBudget } from "@/app/api/routeBudget";
 import { useBudgetStore } from "@/app/store/budgetProject";
 import { getBudgetsMin } from "@/app/api/routeBudget";
 
-export default function AddCostCenter({costoCentersLV, token, user, closeForm}: 
-  {costoCentersLV: CostoCenterLV[], token:string, user: string, closeForm: Function}) {
+export default function AddCostCenter({token, user, closeForm}: 
+  {token:string, user: string, closeForm: Function}) {
 
   const {project} = useNewBudget();
   const {updateBudgetsStore} = useBudgetStore();
@@ -27,8 +27,6 @@ export default function AddCostCenter({costoCentersLV, token, user, closeForm}:
   const [nameMessage, setNameMessage] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [descriptionMessage, setDescriptionMessage] = useState('');
-
-  // const options: Options[] = [];
 
   const onChangeAmount = (value: string) => {
     try {
@@ -77,43 +75,23 @@ export default function AddCostCenter({costoCentersLV, token, user, closeForm}:
     return val;
   }
 
-  // const onChangePercentage = (value: string) => {
-  //   try {
-  //     setPercentage(Number(value.replace(/[$,%,]/g, "")));
-  //   } catch (error) {
-  //     setPercentage(0);
-  //   }
-  // }
-
-  // costoCentersLV.map((cclv) => {
-  //   options.push({
-  //     //label: cclv.categoryname,
-  //     label: cclv.label,
-  //     value: cclv.value
-  //   })
-  // });
-
   const amount = CurrencyFormatter({
     currency: "MXN",
     value: project?.amount || 0
   });
 
   const saveBudget = async () => {
-    //const val = ValidationMessage();
     if(ValidationMessage()){
       const data = {
         title: name,
         description:description,
         date: new Date(),
-        //budgeted:0,
-        //pending:1500000,
         amount: amountBudget,
         conditionStatus:"CREADO",
         condition: [
             {glossary:"66db72ccd86ee6cdaa075a53", user}
         ],
         progressAverage:0,
-        //company: "65d3813c74045152c0c4377e",
         project: project?._id,
         user
       }
@@ -127,7 +105,6 @@ export default function AddCostCenter({costoCentersLV, token, user, closeForm}:
           showToastMessage('Presupuesto creado exitosamente!!!');
           fetchBudgets();
           closeForm(false);
-          //console.log('budget => ', res);
         }
       } catch (error) {
         showToastMessageError('Ocurrio un problema al crear presupuesto!!');

@@ -13,15 +13,9 @@ import { useNewBudget } from "@/app/store/budgetProject";
 import AddCostCenter from "./AddCostCenter";
 import { CostoCenterLV } from "@/interfaces/CostCenter";
 
-export default function NewBudgetProject({token, showForm, optClients, 
-                              optCategories, optTypes, user, optCompanies, condition, 
-                              projects, costoCentersLV}: 
-                            {token:string, showForm:Function, optClients:Options[], 
-                              optCategories:Options[], optTypes:Options[], user:string,
-                              optCompanies: Options[], condition: string, projects: ProjectMin[],
-                              costoCentersLV: CostoCenterLV[] }){
-  //const [state] = useRegFormContext();
-
+export default function NewBudgetProject({token, showForm, user, projects}: 
+                            {token:string, showForm:Function, user:string, projects: ProjectMin[] }){
+  
   const [heightPage, setHeightPage] = useState<number>(900);
 
   const {indexStepper, updateIndexStepper} = useNewBudget();
@@ -48,51 +42,11 @@ export default function NewBudgetProject({token, showForm, optClients,
 
   const closeForm = () => {
     showForm(false);
-    // confirmAlert({
-    //   title: 'Confirmacion para cerrar formulario?',
-    //   message: `Desea cerrar el formulario y perder los datos guardados?`,
-    //   buttons: [
-    //   {
-    //     label: 'Si',
-    //     onClick: () => {
-    //       //let res = undefined;
-
-    //       switch('user'){
-    //         case 'user':
-    //           showForm(false);
-    //         break;
-    //       }
-    //     }           
-    //   },
-    //   {
-    //     label: 'No',
-    //     onClick: () => {
-    //       showToastMessageInfo('Se ha cancelado el cierre!');            
-    //     }
-    //   }
-    //   ],
-    //   closeOnEscape: true,
-    //   closeOnClickOutside: true,
-    //   keyCodeForClose: [8, 32],
-    //   willUnmount: () => {},
-    //   //afterClose: () => {},
-    //   onClickOutside: () => {
-    //     showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
-    //   },
-    //   onkeyPress: () => {
-    //     showToastMessageInfo('Favor de seleccionar SI o NO');
-    //   },
-    //   onKeypressEscape: () => {
-    //     showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
-    //   },
-    //   overlayClassName: "overlay-custom-class-name"
-    // });
   }
 
   const component = 
     indexStepper === 0? <SelectBudgetProject projects={projects} token={token} />: 
-    indexStepper === 1? <AddCostCenter costoCentersLV={costoCentersLV} token={token} 
-                            user={user} closeForm={showForm} />:
+    indexStepper === 1? <AddCostCenter token={token} user={user} closeForm={showForm} />:
       <></>;
 
   return(
@@ -109,9 +63,6 @@ export default function NewBudgetProject({token, showForm, optClients,
         </div>
         <NavBudgetStepper />
         {component}
-        {/* <ContainerProjectStepper token={token} optClients={optClients} 
-            optCategories={optCategories} optTypes={optTypes} showForm={showForm}
-            user={user} optCompanies={optCompanies} condition={condition} /> */}
       </div>
     </div>
   )

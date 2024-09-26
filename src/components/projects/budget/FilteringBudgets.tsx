@@ -10,15 +10,13 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 
-export default function Filtering({showForm, optCategories, optTypes, 
+export default function Filtering({showForm, optProjects, 
                       optConditions, FilterData, maxAmount }: 
-                    {showForm:Function, optCategories: Options[],
-                      optTypes: Options[], optConditions: Options[],
-                      FilterData:Function, maxAmount:number  }){
+                    {showForm:Function, optProjects: Options[],
+                      optConditions: Options[], FilterData:Function, maxAmount:number  }){
   
-  const [types, setTypes] = useState<string[]>([optTypes[0].value]);
-  const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
+  const [projects, setProjects] = useState<string[]>([optProjects[0].value]);
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -48,27 +46,19 @@ export default function Filtering({showForm, optCategories, optTypes,
   }, [values]);
 
   useEffect(() => {
-    FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  }, [ categories, types, conditions, minValue, maxValue]);
+    FilterData(conditions, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime(), projects);
+  }, [ conditions, minValue, maxValue, projects, firstDate, secondDate]);
 
   useEffect (() => {
-    FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
+    FilterData(conditions, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), projects);
   }, []);
-
-  useEffect(() => {
-    FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  }, [firstDate, secondDate]);
 
   const handleCondition = (value:string[]) => {
     setConditions(value);
   }
 
-  const handleTypes = (value:string[]) => {
-    setTypes(value);
-  }
-
-  const handleCategories = (value:string[]) => {
-    setCategories(value);
+  const handleProjects = (value:string[]) => {
+    setProjects(value);
   }
 
   return(
@@ -95,12 +85,8 @@ export default function Filtering({showForm, optCategories, optTypes,
           <SelectMultipleReact index={0} opts={optConditions} setValue={handleCondition} />
         </div>
         <div className="">
-          <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-          <SelectMultipleReact index={0} opts={optTypes} setValue={handleTypes} />
-        </div>
-        <div>
-          <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-          <SelectMultipleReact index={0} opts={optCategories} setValue={handleCategories} />
+          <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
+          <SelectMultipleReact index={0} opts={optProjects} setValue={handleProjects} />
         </div>
         {/* <div className="pt-9"> */}
         <div className="pt-0">

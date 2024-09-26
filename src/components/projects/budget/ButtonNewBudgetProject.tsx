@@ -8,12 +8,8 @@ import NewBudgetProject from "./NewBudgetProject";
 import { ProjectMin } from "@/interfaces/Projects";
 import { CostoCenterLV } from "@/interfaces/CostCenter";
 
-export default function ButtonNewBudgetProject({token, optClients, optCategories, 
-                            optTypes, user, optCompanies, condition, projects, costoCentersLV}: 
-                          {token:string, optClients:Options[], user:string,
-                            optCategories:Options[], optTypes:Options[],
-                            optCompanies: Options[], condition: string, projects:ProjectMin[], 
-                            costoCentersLV: CostoCenterLV[]}){
+export default function ButtonNewBudgetProject({token, user, projects}: 
+                          {token:string, user:string, projects:ProjectMin[]}){
   const [newProject, setNewProject] = useState<boolean>(false);
   const handleNewProject = (value: boolean) => {
     setNewProject(value);
@@ -22,10 +18,8 @@ export default function ButtonNewBudgetProject({token, optClients, optCategories
   return(
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
-          {newProject && <NewBudgetProject showForm={handleNewProject} optTypes={optTypes} 
-                          token={token} optClients={optClients} projects={projects}
-                          optCategories={optCategories} user={user} costoCentersLV={costoCentersLV}
-                           optCompanies={optCompanies} condition={condition} />}
+          {newProject && <NewBudgetProject showForm={handleNewProject}
+                            token={token} projects={projects} user={user} />}
     </>
   )
 }
