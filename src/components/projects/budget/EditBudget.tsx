@@ -8,7 +8,8 @@ import Label from "@/components/Label";
 import HeaderForm from "@/components/HeaderForm";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import CurrencyInput from "react-currency-input-field";
-import { UpdateNewBudgetInBudget } from "@/app/api/routeBudget";
+import { UpdateNewBudgetInBudget, getBudget } from "@/app/api/routeBudget";
+import { useOneBudget } from "@/app/store/budgetProject";
 
 export default function EditBudget({showForm, token, budget, idBudget, user}: 
                     {showForm:Function, token:string, budget:(BudgetTableCostCenter), 
@@ -18,9 +19,11 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
   const [total, setTotal] = useState<string>(budget.amount.replace(/[$,%, M, X,]/g, ""));
   const [percentage, setPercentage] = useState(budget.percentage.replace(/[$,%,]/g, ""));
 
-  console.log('budget => ', budget);
-  console.log('total => ', total);
-  console.log('percentage => ', percentage);
+  const {updateOneBudget} = useOneBudget();
+
+  // console.log('budget => ', budget);
+  // console.log('total => ', total);
+  // console.log('percentage => ', percentage);
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -63,8 +66,8 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
       date: new Date(),
       user,
       costocenter: {
-          category: budget.category,
-          concept: budget.concept
+          category: budget.category.id,
+          concept: budget.concept.id
       }
     }
     try {
@@ -75,6 +78,13 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
       }else{
         showToastMessage('El centro de costos ha sido actulizado exitosamente!!');
         console.log('res update ne bud in bud => ', res);
+        const r = await getBudget(token, idBudget);
+        if(typeof(r)=== 'string'){
+          showToastMessageError('Error al actualizar cambios!!!');
+        }else{
+          updateOneBudget(r);
+        }
+        showForm(false);
       }
     } catch (error) {
       showToastMessageError('Ocurrrio un problema al actulizar centro de costos del presupuesto!!');
@@ -95,8 +105,8 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
         </div>
         
         <div>
-          <Label>{budget.category}</Label>
-          <Label>{budget.concept}</Label>
+          <Label>{budget.category.name}</Label>
+          <Label>{budget.concept.name}</Label>
           <div className="w-full flex justify-center mt-5">
             <p>{percentage.replace(/[$,%,]/g, "")}%</p>
           </div>

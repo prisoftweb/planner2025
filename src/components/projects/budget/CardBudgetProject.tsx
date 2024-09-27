@@ -41,10 +41,10 @@ export default function CardBudgetProject({budget, token}:
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
                 // style={{"width": project.progress?? 0}}></div>
-                style={{"width": budget.budgeted}}></div>
+                style={{"width": budget.progressAverage}}></div>
             </div>
             {/* <p>{budget.progress?? 0}%</p> */}
-            <p>{budget.budgeted}%</p>
+            <p>{budget.progressAverage}%</p>
           </div>
         </div>
       </Link>

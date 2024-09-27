@@ -148,12 +148,12 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
   const table: ProjectsBudgetTable[] = [];
   budgets.map((budget) => {
     let p: string;
-    // if(budget.progress){
-    //   p = budget.progress.toString() + '%';
-    // }else{
-    //   p = '0%';
-    // }
-    p='0%';
+    if(budget.progressAverage){
+      p = budget.progressAverage.toString() + '%';
+    }else{
+      p = '0%';
+    }
+    //p='0%';
     //La moneda mexicana lleva el mx antes del $
     const dollar = CurrencyFormatter({
       currency: "MXN",
@@ -217,8 +217,14 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
       id: newB._id,
       percentage: p,
       amount: dollar,
-      category: newB.costocenter.category,
-      concept: newB.costocenter.concept
+      category: {
+        id: newB.costocenter.category._id,
+        name: newB.costocenter.category.name        
+      },
+      concept: {
+        id: newB.costocenter.concept._id,
+        name: newB.costocenter.concept.name
+      }
     })
   });
 

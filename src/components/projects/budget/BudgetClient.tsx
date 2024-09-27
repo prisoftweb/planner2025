@@ -17,9 +17,10 @@ import ProfileBudget from "./ProfileBudget"
 import ButtonNewBudget from "./ButtonNewBudget"
 import { CostoCenterLV } from "@/interfaces/CostCenter"
 import WithOut from "@/components/WithOut"
+import { CostCenter } from "@/interfaces/CostCenter"
 
-export default function BudgetCli({budget, token, id, user, costoCentersLV}: 
-  {budget: FullBudget, token:string, id:string, user: string, costoCentersLV: CostoCenterLV[]}){
+export default function BudgetCli({budget, token, id, user, costoCenters}: 
+  {budget: FullBudget, token:string, id:string, user: string, costoCenters: CostCenter[]}){
 
   const [opt, setOpt] = useState<number>(1);
   const [open, setOpen] = useState<boolean>(false);
@@ -53,11 +54,13 @@ export default function BudgetCli({budget, token, id, user, costoCentersLV}:
     )
   }
 
+  console.log('one budget => ', oneBudget);
+
   return(
     <>
       <div className="mt-5 flex justify-end items-center gap-x-10">
         <ButtonNewBudget handleNewBudget={handleNewBudget} openNewBudget={newBudget} 
-          token={token} user={user} costoCentersLV={costoCentersLV} id={id} />
+          token={token} user={user} costoCenters={costoCenters} id={id} />
       </div>
       <div className={`flex mt-5`}>
         <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >

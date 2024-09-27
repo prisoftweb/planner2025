@@ -62,15 +62,8 @@ export default function TableCostCenter({dataTable, token, id, user}:
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          {/* <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} /> */}
-          <RemoveElement id={id+'/'+row.original.id} name={row.original.concept} remove={DeleteNewBudgetInBudget} 
+          <RemoveElement id={id+'/'+row.original.id} name={row.original.concept.name} remove={DeleteNewBudgetInBudget} 
               removeElement={delBudget} token={token} />
-          {/* <PencilIcon className="text-slate-500 w-6 h-6 cursor-pointer hover:text-slate-300" 
-            onClick={() => {
-              handleEditBudget(true);
-              setRowEditBudget(row.original);
-            }}
-          /> */}
         </div>
       ),
       enableSorting:false,
@@ -104,7 +97,7 @@ export default function TableCostCenter({dataTable, token, id, user}:
         <p className="cursor-pointer" onClick={() => {
           handleEditBudget(true);
           setRowEditBudget(row.original);
-        }}>{row.original.category}</p>
+        }}>{row.original.category.name}</p>
       ),
     }),
     columnHelper.accessor('concept', {
@@ -114,7 +107,7 @@ export default function TableCostCenter({dataTable, token, id, user}:
         <p className="cursor-pointer" onClick={() => {
           handleEditBudget(true);
           setRowEditBudget(row.original);
-        }}>{row.original.category}</p>
+        }}>{row.original.category.name}</p>
       ),
     }),
     columnHelper.accessor('amount', {

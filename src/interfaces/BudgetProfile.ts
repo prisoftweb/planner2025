@@ -52,8 +52,23 @@ export interface Newbudget {
 }
 
 export interface Costocenter {
-  category: string
-  concept: string
+  category: CategoryBudget
+  concept: ConceptBudget
+}
+
+export interface CategoryBudget {
+  _id: string
+  name: string
+  icon: string
+  code: number
+  id: string
+}
+
+export interface ConceptBudget {
+  _id: string
+  name: string
+  status: boolean
+  id: string
 }
 
 

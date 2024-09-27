@@ -39,15 +39,15 @@ export default function ProfileBudget({budget, token, id, user}: {budget: FullBu
     optsChart.push({
       //costo: newB.cost,
       costo: newB.percent,
-      label: newB.costocenter.concept
+      label: newB.costocenter.concept.name
     });
-    categoriesConcepts.push(newB.costocenter.concept);
+    categoriesConcepts.push(newB.costocenter.concept.name);
   });
 
   return (
     <div className="flex w-full px-2 flex-wrap md:flex-nowrap space-x-2" 
         style={{backgroundColor:'#F8FAFC'}}>
-      <div className={`w-full max-w-xl`}>
+      <div className={`w-full max-w-lg`}>
         {/* <ProfileProject project={project} /> */}
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
