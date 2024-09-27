@@ -22,16 +22,12 @@ import { getProjectsMin } from "@/app/api/routeProjects"
 import { CostoCenterLV } from "@/interfaces/CostCenter"
 import { BudgetMin } from "@/interfaces/Budget"
 import { useBudgetStore } from "@/app/store/budgetProject"
+import { Squares2X2Icon } from "@heroicons/react/24/solid"
 
-export default function ContainerBudgetClient({token, optClients, optCategories, 
-                          optTypes, user, optCompanies, optCategoriesFilter, 
-                          optConditionsFilter, optTypesFilter, projects, condition, 
-                          costoCentersLV, budgets}: 
-                        {token:string, optClients:Options[], user:UsrBack,
-                          optCategories:Options[], optTypes:Options[],
-                          optCompanies: Options[], projects: ProjectMin[], optCategoriesFilter: Options[], 
-                          optTypesFilter: Options[], optConditionsFilter: Options[], 
-                          condition: string, costoCentersLV: CostoCenterLV[], budgets:BudgetMin[]}){
+export default function ContainerBudgetClient({token, user, optConditionsFilter, 
+                          projects, budgets, optProjectsFilter }: 
+                        {token:string, user:UsrBack, projects: ProjectMin[], optConditionsFilter: Options[], 
+                          budgets:BudgetMin[], optProjectsFilter:Options[]}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -49,84 +45,58 @@ export default function ContainerBudgetClient({token, optClients, optCategories,
     setIsFilter(value);
   }
 
-  // if( haveNewProject && projects.length <= 0 && projectStore.length <= 0){
-  //   const aux = async () =>{
-  //     let projs: ProjectMin[] = [];
-  //     try {
-  //       projs = await getProjectsMin(token);
-  //       if(typeof(projs)==='string') showToastMessageError(projs);
-  //       else{
-  //         const d = ProjectBudgetDataToTableDataMin(projs);
-  //         updateProjectStore(projs);
-  //         setDataTable(d);
-  //       }
-  //     } catch (error) {
-  //       showToastMessageError('Ocurrio un error al actualizar datos de la tabla!!');
-  //     }
-  //   }
-  //   aux();
-  //   updateHaveNewProject(false);
-  // }
-
   if(!budgetsStore || budgetsStore.length <= 0){
     return (
       <>
-        {/* <Navigation user={user} /> */}
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/projects.jpg" subtitle="Presupuestos"
             text="Agregar un presupuesto a
                     un proyecto determinado"
             title="Presupuestos">
-              {/* <ButtonNew token={token} optClients={optClients} 
-                      optCategories={optCategories} optTypes={optTypes}
-                      user={user._id} optCompanies={optCompanies} 
-                      condition={condition}  /> */}
-                      <p>nuevo</p>
+              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
           </WithOut>
         </div>
       </>
     )
   }
 
-  const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(budgetsStore);
+  //const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(budgetsStore);
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
         <div className="flex items-center">
           <Link href={'/'}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link>
-          <p className="text-xl ml-4 font-medium">Proyectos</p>
+          <p className="text-xl ml-4 font-medium">Presupuestos</p>
         </div>
-        <div className="flex gap-x-3">
-          <SearchInTable placeH="Buscar proyecto.." />
-          <div className="">
+        <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
+          <div className="flex gap-x-3 gap-y-3 justify-end">
             <div className="flex gap-x-3 items-center">
-              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-                onClick={() => setIsTable(true)}
-              />
-              <PiTableThin onClick={() => setIsTable(false)} 
+              <p>Vista: </p>
+              <Squares2X2Icon onClick={() => setIsTable(true)} 
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
               />
+              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
+                onClick={() => setIsTable(false)}
+              />
+            </div>
+            <SearchInTable placeH="Buscar presupuesto.." />
+          </div>
+          <div className="">
+            <div className="flex gap-x-3 items-center">
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
-              <ButtonNewBudgetProject condition="" optCategories={optCategories} optClients={optClients} 
-                  optCompanies={optCompanies} optTypes={optTypes} projects={projects} token="" user={user._id}
-                  costoCentersLV={costoCentersLV}  />
-              {/* <p>nuevo</p> */}
-              {/* <ButtonNew token={token} optClients={optClients} 
-                      optCategories={optCategories} optTypes={optTypes}
-                      user={user._id} optCompanies={optCompanies} condition={condition} /> */}
+              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
             </div>
           </div>
         </div>
       </div>
       <div className="mt-5">
-        <TableBudgetProjects data={dataTable} token={token} 
-          budgets={ budgetsStore} 
-          optCategories={optCategoriesFilter} optTypes={optTypesFilter}
+        <TableBudgetProjects token={token} 
+          budgets={ budgetsStore} optProjects={optProjectsFilter}
           optConditions={optConditionsFilter} isFilter={isFilter} 
           setIsFilter={handleFilter} isTable={isTable}
         />

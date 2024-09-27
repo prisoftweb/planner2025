@@ -12,6 +12,7 @@ export interface BudgetMin {
   pending: number
   amount: number
   status: boolean
+  progressAverage: number
 }
 
 export interface User {
@@ -46,7 +47,13 @@ export interface Condition {
 export interface BudgetTableCostCenter{
   id: string,
   percentage: string
-  category: string
-  concept: string
+  category: {
+    id: string
+    name: string
+  }
+  concept: {
+    id: string
+    name: string
+  }
   amount:string
 }

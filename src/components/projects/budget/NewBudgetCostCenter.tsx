@@ -15,14 +15,15 @@ import { getBudget } from "@/app/api/routeBudget";
 
 //import DonutChartt from "@/components/expenses/dashboard/DonutChart";
 import DonutChartBudget from "./DonutChartBudget";
+import { CostCenter } from "@/interfaces/CostCenter";
 
 interface OptionsDashboard {
   label: string,
   costo: number
 }
 
-export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, token, id}: 
-  {closeForm:Function, costoCentersLV: CostoCenterLV[], user:string, token: string, id: string}) {
+export default function NewBudgetCostCenter({closeForm, costoCenters, user, token, id}: 
+  {closeForm:Function, costoCenters: CostCenter[], user:string, token: string, id: string}) {
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const {oneBudget, updateOneBudget} = useOneBudget();
@@ -96,12 +97,14 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
 
   const options: Options[] = [];
 
-  costoCentersLV.map((cclv) => {
-    options.push({
-      //label: cclv.categoryname,
-      label: cclv.label,
-      value: cclv.categoryid+'/'+cclv.value
-    })
+  costoCenters.map((cc) => {
+    cc.categorys.map((cat) => {
+      options.push({
+        //label: cclv.categoryname,
+        label: cat.concept.name,
+        value: cc._id+'/'+cat.concept._id
+      })
+    });
   });
 
   const onChangeCostoCenter = (value: string) => {
@@ -171,9 +174,9 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
     optsChart.push({
       //costo: newB.cost,
       costo: newB.percent,
-      label: newB.costocenter.concept
+      label: newB.costocenter.concept.name
     });
-    categoriesConcepts.push(newB.costocenter.concept);
+    categoriesConcepts.push(newB.costocenter.concept.name);
   });
   
   return (
@@ -188,7 +191,7 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
           hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => closeForm(false)} />
       </div>
       <div className="grid grid-cols-3 gap-x-3">
-        <div className="bg-white p-3 rounded-lg shadow-md">
+        <div className="bg-white p-3 rounded-lg shadow-md h-full">
           <div className="flex gap-x-2">
             <div>
               <img src={oneBudget?.project? oneBudget.project?.photo: '/img/projects/default.svg'} alt="logo" 
@@ -210,8 +213,8 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
           </div>
         </div>
         
-        <div>
-          <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
+        <div className="h-full bg-white p-3 rounded-lg shadow-md">
+          <div className="">
             <div className="flex gap-x-2">
               <div>
                 <img src={ oneBudget?.project?.client? oneBudget?.project.client.logo: '/img/clients.svg'} alt="logo" className="w-20 h-20" />
@@ -238,8 +241,8 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
           </div>
         </div>
 
-        <div>
-        <DonutChartBudget data={optsChart} colors={colors} category="costo"
+        <div className="bg-white p-3 rounded-lg shadow-md h-full">
+          <DonutChartBudget data={optsChart} colors={colors} category="costo"
               categories={categoriesConcepts} />
         </div>
       </div>
@@ -249,12 +252,14 @@ export default function NewBudgetCostCenter({closeForm, costoCentersLV, user, to
           <Select options={options} className="mt-2" onChange={(value:any) => onChangeCostoCenter(value.value)} />
           
           <div className="overflow-y-auto h-32 mt-5">
-            {costoCentersLV.map((cclv) => (
-              <div key={cclv.value} 
-                className="p-2 shadow-md shadow-slate-400"
-              >
-                <p>{cclv.label}</p>
-              </div>
+            {costoCenters.map((cclv) => (
+              cclv.categorys.map((conc) => (
+                <div key={conc.concept._id} 
+                  className="p-2 shadow-md shadow-slate-400"
+                >
+                  <p>{conc.concept.name}</p>
+                </div>
+              ))
             ))}
           </div>
         </div>

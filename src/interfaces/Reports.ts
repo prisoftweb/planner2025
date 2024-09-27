@@ -100,7 +100,7 @@ export interface ReportParse {
   status: boolean
   account: string
   quantity: number
-  //total: number
+  total: number
   totalok: number
   subtotal: number
   lastmove: Lastmove

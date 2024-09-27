@@ -136,7 +136,8 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       project:project.title,
       // status: project.status,
       condition: cond,
-      percentage: p
+      percentage: p,
+      imgProject: project.photo
     })
   });
 
@@ -147,12 +148,12 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
   const table: ProjectsBudgetTable[] = [];
   budgets.map((budget) => {
     let p: string;
-    // if(budget.progress){
-    //   p = budget.progress.toString() + '%';
-    // }else{
-    //   p = '0%';
-    // }
-    p='0%';
+    if(budget.progressAverage){
+      p = budget.progressAverage.toString() + '%';
+    }else{
+      p = '0%';
+    }
+    //p='0%';
     //La moneda mexicana lleva el mx antes del $
     const dollar = CurrencyFormatter({
       currency: "MXN",
@@ -169,10 +170,11 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
     table.push({
       //amount: budget.amount.toString(),
       pending: dollar,
-      //client: budget.client?.name || 'Sin cliente',
-      client: 'sin cliente',
       id: budget._id,
-      project:budget.title,
+      project: {
+        budget: budget.title,
+        project: budget.project.photo
+      },
       status: budget.status,
       //condition: cond,
       percentage: p,
@@ -191,12 +193,12 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
   
   budget.newbudget.map((newB) => {
     let p: string;
-    // if(budget.progress){
-    //   p = budget.progress.toString() + '%';
-    // }else{
-    //   p = '0%';
-    // }
-    p='0%';
+    if(newB.percent){
+      p = newB.percent.toString() + '%';
+    }else{
+      p = '0%';
+    }
+    //p='0%';
     //La moneda mexicana lleva el mx antes del $
     const dollar = CurrencyFormatter({
       currency: "MXN",
@@ -215,8 +217,14 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
       id: newB._id,
       percentage: p,
       amount: dollar,
-      category: newB.costocenter.category,
-      concept: newB.costocenter.concept
+      category: {
+        id: newB.costocenter.category._id,
+        name: newB.costocenter.category.name        
+      },
+      concept: {
+        id: newB.costocenter.concept._id,
+        name: newB.costocenter.concept.name
+      }
     })
   });
 

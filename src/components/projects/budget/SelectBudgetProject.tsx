@@ -49,7 +49,7 @@ export default function SelectBudgetProject({projects, token}:{projects:ProjectM
       {projects.length > 0 && selectedProjects.length > 0? (
         <div className="mt-3">
           <Select
-            className='w-full' 
+            className='w-full max-w-xl' 
             options={optProjects}
             maxMenuHeight={250}
             components={{

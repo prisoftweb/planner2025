@@ -3,22 +3,30 @@ import { createColumnHelper } from "@tanstack/react-table";
 import RemoveElement from "@/components/RemoveElement";
 import Table from "@/components/Table";
 import { useOneBudget } from "@/app/store/budgetProject";
-import { getBudget, DeleteNewBudgetInBudget } from "@/app/api/routeBudget";
+import { DeleteNewBudgetInBudget, getBudget } from "@/app/api/routeBudget";
 import { showToastMessageError } from "@/components/Alert";
+import { PencilIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import EditBudget from "./EditBudget";
 
-export default function TableCostCenter({dataTable, token, id}: 
-  {dataTable:BudgetTableCostCenter[], token: string, id:string}) {
+export default function TableCostCenter({dataTable, token, id, user}: 
+  {dataTable:BudgetTableCostCenter[], token: string, id:string, user: string}) {
   
   const columnHelper = createColumnHelper<BudgetTableCostCenter>();
-  const {oneBudget, updateOneBudget} = useOneBudget();
-  
-  //const [filtering, setFiltering] = useState<boolean>(false);
-  //const [filter, setFilter] = useState<boolean>(false);
- // const [dataProjects, setDataProjects] = useState(data);
+  const {updateOneBudget} = useOneBudget();
+
+  const [openEditBudget, setOpenEditBudget] = useState<boolean>(false);
+  const [rowEditBudget, setRowEditBudget] = useState<BudgetTableCostCenter>();
+
+  const handleEditBudget = (value: boolean) => {
+    setOpenEditBudget(value);
+  }
 
   const delBudget = async(id: string) => {
+    const index = id.indexOf('/');
+    const id_b = id.substring(0, index);
     try {
-      const res = await getBudget(token, id);
+      const res = await getBudget(token, id_b);
       if(typeof(res)==='string'){
         showToastMessageError('Error al actualizar pantalla del presupuesto!!');
       }else{
@@ -28,9 +36,6 @@ export default function TableCostCenter({dataTable, token, id}:
       showToastMessageError('Error al actualizar pantalla del presupuesto!!');
     }
   }
-
-  // const {haveDeleteProject, haveNewProject, projectStore, updateHaveDeleteProject, 
-  //   updateHaveNewProject, updateProjectStore} = useProjectsStore();
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -57,8 +62,7 @@ export default function TableCostCenter({dataTable, token, id}:
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          {/* <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} /> */}
-          <RemoveElement id={id+'/'+row.original.id} name={row.original.concept} remove={DeleteNewBudgetInBudget} 
+          <RemoveElement id={id+'/'+row.original.id} name={row.original.concept.name} remove={DeleteNewBudgetInBudget} 
               removeElement={delBudget} token={token} />
         </div>
       ),
@@ -70,7 +74,10 @@ export default function TableCostCenter({dataTable, token, id}:
     columnHelper.accessor(row => row.percentage, {
       id: 'porcentaje',
       cell: ({row}) => (
-        <div className="">
+        <div className="cursor-pointer" onClick={() => {
+          handleEditBudget(true);
+          setRowEditBudget(row.original);
+        }}>
           <p>{row.original.percentage}</p>
           <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
             <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
@@ -87,14 +94,20 @@ export default function TableCostCenter({dataTable, token, id}:
       header: 'Categoria',
       id: 'categoria',
       cell: ({row}) => (
-        <p className="">{row.original.category}</p>
+        <p className="cursor-pointer" onClick={() => {
+          handleEditBudget(true);
+          setRowEditBudget(row.original);
+        }}>{row.original.category.name}</p>
       ),
     }),
     columnHelper.accessor('concept', {
       header: 'Concepto',
       id: 'concepto',
       cell: ({row}) => (
-        <p className="">{row.original.category}</p>
+        <p className="cursor-pointer" onClick={() => {
+          handleEditBudget(true);
+          setRowEditBudget(row.original);
+        }}>{row.original.category.name}</p>
       ),
     }),
     columnHelper.accessor('amount', {
@@ -110,6 +123,8 @@ export default function TableCostCenter({dataTable, token, id}:
     <div>
       <p>PRESUPUESTADO POR CENTRO DE COSTOS</p>
       <Table columns={columns} data={dataTable} placeH="Buscar costo.." />
+      {openEditBudget && rowEditBudget && <EditBudget budget={rowEditBudget} showForm={handleEditBudget}
+        token={token} idBudget={id} user={user} />}
     </div>
   )
 }

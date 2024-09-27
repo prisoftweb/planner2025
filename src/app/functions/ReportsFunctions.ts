@@ -38,7 +38,7 @@ export function ReportParseDataToTableData(reports:ReportParse[]){
     //console.log(report.total);
     const dollar = CurrencyFormatter({
       currency: "MXN",
-      value: report.totalok
+      value: report.total
     })
     
     table.push({

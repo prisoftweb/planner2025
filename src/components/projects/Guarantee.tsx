@@ -94,6 +94,8 @@ export default function Guarantee({token, condition, showForm}:
         }
       }
       try {
+        console.log('date => ', date);
+        console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;

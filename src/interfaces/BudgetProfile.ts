@@ -52,6 +52,62 @@ export interface Newbudget {
 }
 
 export interface Costocenter {
-  category: string
-  concept: string
+  category: CategoryBudget
+  concept: ConceptBudget
 }
+
+export interface CategoryBudget {
+  _id: string
+  name: string
+  icon: string
+  code: number
+  id: string
+}
+
+export interface ConceptBudget {
+  _id: string
+  name: string
+  status: boolean
+  id: string
+}
+
+
+// export interface FullBudgetMin {
+//   _id: string
+//   user: UsrBack
+//   company: Company
+//   project: Project
+//   lastmove: Lastmove
+//   title: string
+//   description: string
+//   date: string
+//   account: string
+//   budgeted: number
+//   pending: number
+//   amount: number
+//   budget: Budget
+//   status: boolean
+// }
+
+// export interface Lastmove {
+//   date: string
+//   condition: Glossary
+// }
+
+// export interface Budget {
+//   cost: number
+//   percent: number
+//   date: string
+//   costocenter: Costocenter
+// }
+
+// export interface Costocenter {
+//   _id: string
+//   category: string
+//   concept: Concept
+// }
+
+// export interface Concept {
+//   _id: string
+//   namefull: string
+// }

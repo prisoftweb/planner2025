@@ -11,6 +11,7 @@ import RemoveElement from "../RemoveElement";
 import { useProviderStore } from "@/app/store/providerStore";
 import { showToastMessageError } from "../Alert";
 
+
 export default function TableProviders({data, token}:
           {data:TableProvider[], token:string}){
   
@@ -83,20 +84,19 @@ export default function TableProviders({data, token}:
         >{row.original.name}</p>
       )
     }),
-    // columnHelper.accessor('contacts', {
-    //   header: 'Contactos',
-    //   id: 'contacts',
-    //   cell: ({row}) => (
-    //     <NumberContacts numContacts={row.original.contacts} />       
-    //   ),
-    // }),
+    columnHelper.accessor('tradename', {
+      header: 'Nombre comercial',
+      id: 'nombre comercial',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
+        >{row.original.tradename}</p>
+      )
+    }),
     columnHelper.accessor('rfc', {
       header: 'RFC',
       id: 'rfc',
       cell: ({row}) => (
-        // <Link href={`/providers/${row.original.id}/profile`}>
-        //   <p className="py-2">{row.original.rfc}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
         >{row.original.rfc}</p>

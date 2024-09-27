@@ -166,9 +166,11 @@ export default function TableHistoryReports({data, token, reports,
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const repAmount = reports.reduce((previous, current) => {
-      return current.totalok > previous.totalok ? current : previous;
+      //console.log('REP => ', previous);
+      return current.total > previous.total ? current : previous;
     });
-    setMaxAmount(repAmount.totalok || 100);
+    //console.log('rep amount => ', repAmount);
+    setMaxAmount(repAmount.total || 100);
   }, [])
 
   const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
@@ -181,8 +183,8 @@ export default function TableHistoryReports({data, token, reports,
 
   const amountValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
-    if(rep.totalok >= 0){
-      if(rep.totalok >= minAmount && rep.totalok <= maxAmount){
+    if(rep.total >= 0){
+      if(rep.total >= minAmount && rep.total <= maxAmount){
         return dateValidation(rep, startDate, endDate);
       }
     }

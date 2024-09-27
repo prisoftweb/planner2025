@@ -2,8 +2,18 @@ import { FullBudget } from "@/interfaces/BudgetProfile";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { BudgetDataToTableCostCenter } from "@/app/functions/SaveProject";
 import TableCostCenter from "./TableCostCenter";
+import DonutChartBudget from "./DonutChartBudget";
+import { useOneBudget } from "@/app/store/budgetProject";
 
-export default function ProfileBudget({budget, token, id}: {budget: FullBudget, token:string, id: string}) {
+interface OptionsDashboard {
+  label: string,
+  costo: number
+}
+
+export default function ProfileBudget({budget, token, id, user}: {budget: FullBudget, token:string, id: string, user:string}) {
+
+  const {oneBudget} = useOneBudget();
+  const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const amount = CurrencyFormatter({
     currency: 'MXN',
@@ -17,15 +27,27 @@ export default function ProfileBudget({budget, token, id}: {budget: FullBudget, 
 
   const tableData = BudgetDataToTableCostCenter(budget);
 
-  const view = <div className="mt-3 w-full max-w-4xl bg-white rounded-lg shadow-md pl-2 px-3" 
+  const view = <div className="mt-3 w-full bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <TableCostCenter dataTable={tableData} token={token} id={id} />
+                  <TableCostCenter dataTable={tableData} token={token} id={id} user={user} />
               </div>;
+
+  const optsChart: OptionsDashboard[] = [];
+  const categoriesConcepts: string[] = [];
+
+  oneBudget?.newbudget.map((newB) => {
+    optsChart.push({
+      //costo: newB.cost,
+      costo: newB.percent,
+      label: newB.costocenter.concept.name
+    });
+    categoriesConcepts.push(newB.costocenter.concept.name);
+  });
 
   return (
     <div className="flex w-full px-2 flex-wrap md:flex-nowrap space-x-2" 
         style={{backgroundColor:'#F8FAFC'}}>
-      <div className={`w-full max-w-md`}>
+      <div className={`w-full max-w-lg`}>
         {/* <ProfileProject project={project} /> */}
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
@@ -74,6 +96,11 @@ export default function ProfileBudget({budget, token, id}: {budget: FullBudget, 
               <p className="text-slate-500">Fecha ({budget?.date?.substring(0, 10) || 'sin fecha'})</p>
             </div>
           </div>
+        </div>
+
+        <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
+          <DonutChartBudget data={optsChart} colors={colors} category="costo"
+              categories={categoriesConcepts} />
         </div>
       </div>
       {view}

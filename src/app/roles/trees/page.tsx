@@ -12,6 +12,9 @@ import { getResources, getRoutes, getComponents,
 import { Resource } from "@/interfaces/Roles";
 import { Options } from "@/interfaces/Common";
 import WithOut from "@/components/WithOut";
+import SearchInTable from "@/components/SearchInTable";
+import Link from "next/link";
+import { TbArrowNarrowLeft } from "react-icons/tb";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -181,20 +184,32 @@ export default async function Page() {
       
       <RolesClient token={token} option={5}>
         <div>
-          <Header title="Arbol" placeHolder="Buscar arbol..">
-            <div className="flex gap-x-2">
-            <ButtonNew token={token} opt={5} 
-                optResources={optionsResource} optRoutes={optionsRoutes}
-                descRoutes={titleRoutes} descComponents={[]} 
-                optComponents={[]} idTree={trees[0]._id} routesPerResource={[]} />
-            
-            <ButtonNew token={token} opt={6} 
-                optResources={optionsResourceComponents} optRoutes={optionsRoutesComponents}
-                descRoutes={descRoutes} descComponents={descComponents} 
-                optComponents={optionsComponents} idTree={trees[0]._id} 
-                routesPerResource={routesPerResource} />
+          <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap lg:flex-nowrap">
+            <div className="flex items-center gap-x-3 w-full max-w-96">
+              <Link href={'/'}>
+                <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+              </Link>
+              <p className="text-xl ml-4 font-medium">Arbol</p>
             </div>
-          </Header>
+            {/* <ButtonNewProvider id={id} token={token} /> */}
+            <div className="flex gap-x-3 gap-y-2 justify-end w-full flex-wrap-reverse sm:flex-nowrap">
+              <SearchInTable placeH="Buscar arbol.." />
+              <div className="w-70">
+                <div className="flex gap-x-2">
+                  <ButtonNew token={token} opt={5} 
+                    optResources={optionsResource} optRoutes={optionsRoutes}
+                    descRoutes={titleRoutes} descComponents={[]} 
+                    optComponents={[]} idTree={trees[0]._id} routesPerResource={[]} />
+                
+                  <ButtonNew token={token} opt={6} 
+                    optResources={optionsResourceComponents} optRoutes={optionsRoutesComponents}
+                    descRoutes={descRoutes} descComponents={descComponents} 
+                    optComponents={optionsComponents} idTree={trees[0]._id} 
+                    routesPerResource={routesPerResource} />
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="mt-5">
             <TableTree idTree={trees[0]._id} data={data} token={token} />
           </div>

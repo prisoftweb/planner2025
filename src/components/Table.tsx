@@ -11,6 +11,7 @@ import { useOutsideClick } from "@/app/functions/useOutsideClick";
 import { useTableStates } from "@/app/store/tableStates";
 import { ExpensesTable } from "@/interfaces/Expenses";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import { ProjectsTable } from "@/interfaces/Projects";
 
 type MyData = {
   numRows: string
@@ -97,6 +98,11 @@ export default function Table({data, columns, placeH, typeTable='',
     getFilteredRowModel: getFilteredRowModel(),
     getRowId: (row: any) => row.id,
     onRowSelectionChange: setRowSelection,
+    // defaultColumn: {
+    //   size: 200, //starting column size
+    //   minSize: 50, //enforced during column resizing
+    //   maxSize: 500, //enforced during column resizing
+    // },
     enableRowSelection: true,
     state : {
       sorting,
@@ -126,10 +132,7 @@ export default function Table({data, columns, placeH, typeTable='',
       currency: 'MXN',
       value: total
     });
-    // labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
-    //       <p>Cantidad: {data.length}</p>
-    //       <p>Total de informes: {t}</p>
-    //     </div>)
+    
     if(table.getSelectedRowModel().flatRows.length > 0){
       let totalSeleccionados: number = 0;
       table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.Importe.replace(/[$, M, X, N,]/g, "")));
@@ -153,6 +156,39 @@ export default function Table({data, columns, placeH, typeTable='',
             <p>Cantidad: {data.length}</p>
             <p>Total de gastos: {t}</p>
           </div>)
+    }
+  }else{
+    if(typeTable === 'projects'){
+      data.map((proj:ProjectsTable) => total += Number(proj.amount.replace(/[$, M, X, N,]/g, "")));
+      const t = CurrencyFormatter({
+        currency: 'MXN',
+        value: total
+      });
+      
+      if(table.getSelectedRowModel().flatRows.length > 0){
+        let totalSeleccionados: number = 0;
+        table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += Number(proj.original.amount.replace(/[$, M, X, N,]/g, "")));
+        //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
+        const tSeleccionados = CurrencyFormatter({
+          currency: 'MXN',
+          value: totalSeleccionados
+        });
+        labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
+            <div className="flex gap-x-5 text-white pl-5">
+              <p>Cantidad: {data.length}</p>
+              <p>Total de proyectos: {t}</p>
+            </div>
+            <div className="flex gap-x-5 text-white pl-5">
+              <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
+              <p>Total de proyectos seleccionados: {tSeleccionados}</p>
+            </div>
+        </div>)
+      }else{
+        labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
+              <p>Cantidad: {data.length}</p>
+              <p>Total de proyectos: {t}</p>
+            </div>)
+      }
     }
   }
 
@@ -205,7 +241,7 @@ export default function Table({data, columns, placeH, typeTable='',
               <AdjustmentsHorizontalIcon className="w-5 h-5 ml-2 mt-1 text-white" />
             </button>
             <div className={`${showColumns? 'relative': 'hidden'}`} ref={ref} >
-              <div className="absolute w-40 bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
+              <div className="absolute w-56 bg-gray-200 pr-6 pl-2 z-50 right-1 top-8">
                 {table.getAllLeafColumns().map(column => {
                   return (
                     <div key={column.id} className="px-1 py-1">
@@ -234,10 +270,12 @@ export default function Table({data, columns, placeH, typeTable='',
                 <tr key={headerGroup.id}>
                   {
                     headerGroup.headers.map(header => (
-                      <th key={header.id} 
+                      <th key={header.id}
+                        colSpan={typeTable=='projects' && header.id.toLowerCase().includes('avance')? 2: 1}
                         className="px-6 py-4 text-xs text-white uppercase bg-gray-400 border-b border-blue-400 
                         dark:text-white"
                         onClick={header.column.getToggleSortingHandler()}
+                        //colSpan={}
                       >
                         {header.isPlaceholder
                             ? null
@@ -266,14 +304,16 @@ export default function Table({data, columns, placeH, typeTable='',
                   // className="border-b dark:border-gray-700 
                   // hover:bg-gray-200 dark:hover:bg-gray-600"
                   className={`border-b dark:border-gray-700 
-                    dark:hover:bg-gray-600 
-                    ${row.getIsSelected()? 'bg-slate-500 opacity-75': index%2===0? 'bg-white': 'bg-gray-200'}`}
-                    //style={{'backgroundColor': `${index%2==0? '#fff': '#F8FAFC'}`}}
+                    dark:hover:bg-gray-600`}
+                    style={{'backgroundColor': `${row.getIsSelected()? '#e6e6e6': index%2===0? '#fff': '#f5f5f5' }`}} 
+                    //${row.getIsSelected()? '#e6e6e6': ${index%2==0? '#fff': '#F8FAFC'}
+                    //${row.getIsSelected()? 'bg-slate-500 opacity-75': index%2===0? 'bg-white': 'bg-gray-200'}`}
                   // className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 
                     // hover:bg-gray-200 dark:hover:bg-gray-600"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className={`px-6 py-4 ${row.getIsSelected()? 'text-white': 'text-slate-900'} `}>
+                    <td key={cell.id} colSpan={typeTable=='projects' && cell.id.toLowerCase().includes('avance')? 2: 1} className={`px-6 py-4 ${row.getIsSelected()? 'text-slate-900': 'text-slate-900'} `}>
+                      {/* {cell.id} */}
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

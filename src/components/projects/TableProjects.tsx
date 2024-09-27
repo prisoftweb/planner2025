@@ -41,6 +41,7 @@ export default function TableProjects({data, token, projects, optCategories,
           />
         </div>
       ),
+      size: 300,
       enableSorting:false,
       header: ({table}:any) => (
         <input type="checkbox"
@@ -55,6 +56,7 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
+          <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
           <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
           <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />
         </div>
@@ -225,7 +227,7 @@ export default function TableProjects({data, token, projects, optCategories,
 
   let view = <></>;
   if(isTable){
-    view = (<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
+    view = (<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." typeTable="projects" />);
   }else{
     view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
               {filteredProjects.map((project, index:number) => (
