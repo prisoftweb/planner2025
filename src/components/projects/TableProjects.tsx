@@ -30,6 +30,114 @@ export default function TableProjects({data, token, projects, optCategories,
   const {haveDeleteProject, haveNewProject, projectStore, updateHaveDeleteProject, 
     updateHaveNewProject, updateProjectStore} = useProjectsStore();
 
+  // const columns = [
+  //   columnHelper.accessor(row => row.id, {
+  //     id: 'seleccion',
+  //     cell: ({row}) => (
+  //       <div className="flex gap-x-2">
+  //         <input type="checkbox" 
+  //           checked={row.getIsSelected()}
+  //           onChange={row.getToggleSelectedHandler()}
+  //         />
+  //       </div>
+  //     ),
+  //     size: 300,
+  //     enableSorting:false,
+  //     header: ({table}:any) => (
+  //       <input type="checkbox"
+  //         checked={table.getIsAllRowsSelected()}
+  //         onClick={()=> {
+  //           table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+  //         }}
+  //       />
+  //     )
+  //   }),
+  //   columnHelper.accessor('condition', {
+  //     id: 'accion',
+  //     cell: ({row}) => (
+  //       <div className="flex gap-x-1 items-center">
+  //         <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
+  //         <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
+  //         <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />
+  //       </div>
+  //     ),
+  //     enableSorting:false,
+  //     header: () => (
+  //       <p>accion</p>
+  //     )
+  //   }),
+  //   columnHelper.accessor(row => row.percentage, {
+  //     id: 'avance',
+  //     cell: ({row}) => (
+  //       <div className="">
+  //         <p>{row.original.percentage}</p>
+  //         <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+  //           <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
+  //             style={{"width": row.original.percentage}}></div>
+  //         </div>
+  //       </div>
+  //     ),
+  //     enableSorting:false,
+  //     header: () => (
+  //       <p>Avance</p>
+  //     )
+  //   }),
+  //   columnHelper.accessor('code', {
+  //     header: 'Clave',
+  //     id: 'clave',
+  //     cell: ({row}) => (
+  //       <p className="py-2 font-semibold cursor-pointer"
+  //         onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+  //       >{row.original.code}</p>
+  //     )
+  //   }),
+  //   columnHelper.accessor('project', {
+  //     header: 'Proyecto',
+  //     id: 'proyecto',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //         onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+  //       >{row.original.project}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('category', {
+  //     header: 'Categoria',
+  //     id: 'categoria',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //         onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+  //       >{row.original.category}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('client', {
+  //     header: 'Cliente',
+  //     id: 'cliente',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //         onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+  //       >{row.original.client}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('date', {
+  //     header: 'Fecha',
+  //     id: 'fecha',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //         onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+  //       >{row.original.date?.substring(0, 10) || ''}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('amount', {
+  //     header: 'Monto',
+  //     id: 'monto',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //         onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+  //       >{row.original.amount}</p>
+  //     ),
+  //   }),
+  // ]
+
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
@@ -82,76 +190,67 @@ export default function TableProjects({data, token, projects, optCategories,
         <p>Avance</p>
       )
     }),
+    columnHelper.accessor('amount', {
+      header: 'Avance',
+      id: 'nada',
+      cell: ({row}) => (
+        <p className="py-2 font-semibold cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{row.original.code}</p>
+      ),
+    }),
     columnHelper.accessor('code', {
       header: 'Clave',
       id: 'clave',
       cell: ({row}) => (
-        // <Link href={`/projects/${row.original.id}/profile`}>
-        //   <p className="py-2 font-semibold">{row.original.code}</p>
-        // </Link>
-        <p className="py-2 font-semibold cursor-pointer"
+        <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
-        >{row.original.code}</p>
-      )
+        >{row.original.project}</p>
+      ),
     }),
     columnHelper.accessor('project', {
       header: 'Proyecto',
       id: 'proyecto',
       cell: ({row}) => (
-        // <Link href={`/projects/${row.original.id}/profile`}>
-        //   <p className="">{row.original.project}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
-        >{row.original.project}</p>
+        >{row.original.category}</p>
       ),
     }),
     columnHelper.accessor('category', {
       header: 'Categoria',
       id: 'categoria',
       cell: ({row}) => (
-        // <Link href={`/projects/${row.original.id}/profile`}>
-        //   <p className="">{row.original.category}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
-        >{row.original.category}</p>
+        >{row.original.client}</p>
       ),
     }),
     columnHelper.accessor('client', {
       header: 'Cliente',
       id: 'cliente',
       cell: ({row}) => (
-        // <Link href={`/projects/${row.original.id}/profile`}>
-        //   <p className="">{row.original.client}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
-        >{row.original.client}</p>
+        >{row.original.date?.substring(0, 10) || ''}</p>
       ),
     }),
     columnHelper.accessor('date', {
       header: 'Fecha',
       id: 'fecha',
       cell: ({row}) => (
-        // <Link href={`/projects/${row.original.id}/profile`}>
-        //   <p className="">{row.original.date?.substring(0, 10) || ''}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
-        >{row.original.date?.substring(0, 10) || ''}</p>
+        >{row.original.amount}</p>
       ),
     }),
     columnHelper.accessor('amount', {
       header: 'Monto',
       id: 'monto',
       cell: ({row}) => (
-        // <Link href={`/projects/${row.original.id}/profile`}>
-        //   <p className="">{row.original.amount}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
-        >{row.original.amount}</p>
+        > </p>
       ),
     }),
   ]
@@ -164,37 +263,7 @@ export default function TableProjects({data, token, projects, optCategories,
     setMaxAmount(projectM.amount);
   }, [])
 
-  //const [isTable, setIsTable] = useState<boolean>(true);
-  //const [view, setView] = useState<JSX.Element>(<></>);
   const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>(projects);
-
-  // useEffect(() => {
-  //   if(isTable){
-  //     setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
-  //   }else{
-  //     setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-  //               {projects.map((project, index:number) => (
-  //                 <CardProject project={project} token={token} key={index} />
-  //               ))}
-  //             </div>)
-  //   }
-  // }, [ , isTable]);
-
-  // useEffect(() => {
-  //   if(filter){
-  //     if(isTable){
-  //       setView(<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." />);
-  //     }
-  //     else{
-  //       setView(<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-  //                 {filteredProjects.map((project, index:number) => (
-  //                   <CardProject project={project} token={token} key={index} />
-  //                 ))}
-  //               </div>)
-  //     }
-  //     setFilter(false);
-  //   }
-  // }, [filter]);
 
   const addNewProject = async() => {
     let projs: ProjectMin[];
@@ -220,7 +289,6 @@ export default function TableProjects({data, token, projects, optCategories,
 
   if(haveDeleteProject){
     const d = ProjectDataToTableDataMin(projectStore);
-    //setExpensesFiltered(expensesTable);
     setDataProjects(d);
     updateHaveDeleteProject(false);
   }

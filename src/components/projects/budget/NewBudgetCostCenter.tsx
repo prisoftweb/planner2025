@@ -34,6 +34,20 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   const [category, setCategory] = useState<string>('');
   const [concept, setConcept] = useState<string>('');
 
+  const options: Options[] = [];
+
+  costoCenters.map((cc) => {
+    cc.categorys.map((cat) => {
+      options.push({
+        //label: cclv.categoryname,
+        label: (cc.name) + ' ' + cat.concept.name,
+        value: cc._id+'/'+cat.concept._id
+      });
+    });
+  });
+
+  const [optSel, setOptSel] = useState<Options>(options[0]);
+
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const onChangeTotal = (value: string) => {
@@ -95,26 +109,31 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
     value: oneBudget?.budgeted || 0
   })
 
-  const options: Options[] = [];
-
-  costoCenters.map((cc) => {
-    cc.categorys.map((cat) => {
-      options.push({
-        //label: cclv.categoryname,
-        label: cat.concept.name,
-        value: cc._id+'/'+cat.concept._id
-      })
-    });
-  });
-
-  const onChangeCostoCenter = (value: string) => {
-    const indexCaracter = value.indexOf('/');
-    const c1 = value.substring(0, indexCaracter);
-    const c2 = value.substring(indexCaracter + 1);
+  const onChangeCostoCenter = (value: Options) => {
+    setOptSel(value);
+    const indexCaracter = value.value.indexOf('/');
+    const c1 = value.value.substring(0, indexCaracter);
+    const c2 = value.value.substring(indexCaracter + 1);
     setCategory(c1);
     setConcept(c2);
     setTotal('0');
     setPercentage('0');
+  }
+
+  const onChangeCardCostoCenter = (value: string) => {
+    const newOpt = options.find(opt => opt.value.includes(value));
+    if(newOpt){
+      setOptSel(newOpt);
+      const indexCaracter = newOpt.value.indexOf('/');
+      const c1 = newOpt.value.substring(0, indexCaracter);
+      const c2 = newOpt.value.substring(indexCaracter + 1);
+      setCategory(c1);
+      setConcept(c2);
+      setTotal('0');
+      setPercentage('0');
+    }else{
+      showToastMessageError('Error al cambiar centro de costos!!');
+    }
   }
 
   const fetchBudget = async() => {
@@ -249,14 +268,23 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
 
       <div className="grid grid-cols-2 gap-x-3 mt-3">
         <div>
-          <Select options={options} className="mt-2" onChange={(value:any) => onChangeCostoCenter(value.value)} />
+          <Select options={options} className="mt-2" 
+            onChange={(value:any) => onChangeCostoCenter(value)}
+            value={optSel} />
           
           <div className="overflow-y-auto h-32 mt-5">
             {costoCenters.map((cclv) => (
               cclv.categorys.map((conc) => (
                 <div key={conc.concept._id} 
-                  className="p-2 shadow-md shadow-slate-400"
+                  className={`p-3 border border-white flex cursor-pointer hover:bg-slate-500
+                    ${optSel.value.includes(conc.concept._id)? 'bg-blue-700 text-white': 'text-white bg-slate-700'} 
+                    shadow-md shadow-slate-400 justify-between items-center`}
+                    onClick={() => onChangeCardCostoCenter(conc.concept._id)}
                 >
+                  <div className="flex gap-x-2">
+                    <img className="w-6 h-6" src={cclv.icon} alt="icono" />
+                    <p>{cclv.name}</p>
+                  </div>
                   <p>{conc.concept.name}</p>
                 </div>
               ))

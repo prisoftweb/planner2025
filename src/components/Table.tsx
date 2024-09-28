@@ -193,22 +193,16 @@ export default function Table({data, columns, placeH, typeTable='',
   }
 
   const updateLabelRowsPage = () => {
-    //setStarPage()
     setTimeout(() => {
-      //console.log('page count ', table.getPageCount());
-      //console.log('size page ', table.getState().pagination.pageSize);
-      //console.log('index size ', table.getState().pagination.pageIndex);
       const indexPagination = table.getState().pagination.pageIndex * table.getState().pagination.pageSize;
       setStarPage(indexPagination + 1);
       if((indexPagination + table.getState().pagination.pageSize) > data.length){
-        //alert(`${inde}`);
         setEndPage(data.length);
       }else{
         setEndPage(indexPagination + table.getState().pagination.pageSize );
       }
       
     }, 100);
-    //setStarPage()
   }
   
   return(
@@ -271,7 +265,7 @@ export default function Table({data, columns, placeH, typeTable='',
                   {
                     headerGroup.headers.map(header => (
                       <th key={header.id}
-                        colSpan={typeTable=='projects' && header.id.toLowerCase().includes('avance')? 2: 1}
+                        //colSpan={typeTable=='projects' && header.id.toLowerCase().includes('avance')? 2: 1}
                         className="px-6 py-4 text-xs text-white uppercase bg-gray-400 border-b border-blue-400 
                         dark:text-white"
                         onClick={header.column.getToggleSortingHandler()}
