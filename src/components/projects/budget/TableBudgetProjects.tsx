@@ -145,6 +145,14 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
 
   const [filteredBudgets, setFilteredBudgets] = useState<BudgetMin[]>(budgetsStore? budgetsStore: budgets);
 
+  useEffect(() => {
+    if(budgetsStore){
+      setFilteredBudgets(budgetsStore)
+    }else{
+      setFilteredBudgets([]);
+    }
+  }, [budgetsStore]);
+
   const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(filteredBudgets);
 
   let view = <></>;

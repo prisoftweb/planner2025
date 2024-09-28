@@ -259,17 +259,29 @@ export default function TableHistoryExpenses({data, token, expenses,
     }
   }, [filter]);
 
-  const paidValidation = (exp:Expense, isPaid:boolean) => {
-    //console.log('isPaid => ', isPaid);
-    //console.log('expense => ', exp);
-    //console.log('is paid => ', isPaid, ' == expense paid => ', exp.iscard);
-    if(exp.ispaid === isPaid){
+  const paidValidation = (exp:Expense, isPaid:number) => {
+    // if(exp.ispaid === isPaid){
+    //   return true;
+    // }
+    // return false;
+    if(isPaid===1){
       return true;
+    }else{
+      if(isPaid===2){
+        if(exp.ispaid){
+          return true;
+        }
+        return false;
+      }else{
+        if(!exp.ispaid){
+          return true;
+        }
+        return false;
+      }
     }
-    return false;
   }
 
-  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid:boolean) => {
+  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid:number) => {
     let d = new Date(exp.date).getTime();
     //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
@@ -280,7 +292,7 @@ export default function TableHistoryExpenses({data, token, expenses,
   }
 
   const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                              startDate:number, endDate:number, isPaid:boolean) => {
+                              startDate:number, endDate:number, isPaid:number) => {
     if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
       return dateValidation(exp, startDate, endDate, isPaid);
     }
@@ -288,7 +300,7 @@ export default function TableHistoryExpenses({data, token, expenses,
   }
 
   const providerValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-    startDate:number, endDate:number, providers:string[], isPaid:boolean) => {
+    startDate:number, endDate:number, providers:string[], isPaid:number) => {
       //console.log('providers => ', providers);
     if(providers.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
@@ -309,7 +321,7 @@ export default function TableHistoryExpenses({data, token, expenses,
     return false;
   }
 
-  const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, isPaid:boolean, 
+  const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, isPaid:number, 
                       startDate:number, endDate:number, costcenters:string[], providers:string[]) => {
     if(costcenters.includes('all')){
       //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
@@ -334,7 +346,7 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, projects:string[], 
-                      costcenters:string[], providers:string[], isPaid:boolean) => {
+                      costcenters:string[], providers:string[], isPaid:number) => {
     if(projects.includes('all')){
       //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return costCenterValidation(exp, minAmount, maxAmount, isPaid, startDate, endDate, costcenters, providers);
@@ -350,7 +362,7 @@ export default function TableHistoryExpenses({data, token, expenses,
   }
 
   const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-              startDate:number, endDate:number, projects:string[], isPaid:boolean, 
+              startDate:number, endDate:number, projects:string[], isPaid:number, 
               reports:string[], costcenters: string[], providers:string[]) => {
     if(reports.includes('all')){
       return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters, providers, isPaid); 
@@ -365,7 +377,7 @@ export default function TableHistoryExpenses({data, token, expenses,
   }
 
   const categoriesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                startDate:number, endDate:number, projects:string[], isPaid:boolean, 
+                startDate:number, endDate:number, projects:string[], isPaid:number, 
                 reports:string[], categories:string[], costcenters: string[], providers:string[]) => {
     
     if(categories.includes('all')){
@@ -383,7 +395,7 @@ export default function TableHistoryExpenses({data, token, expenses,
   const typesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], categories:string[], types:string[], 
-                  costcenters:string[], providers: string[], isPaid:boolean) => {
+                  costcenters:string[], providers: string[], isPaid:number) => {
     
     if(types.includes('all')){
       return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, 
@@ -402,7 +414,7 @@ export default function TableHistoryExpenses({data, token, expenses,
   const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], categories:string[], types:string[], 
-                  conditions:string[], costcenters: string[], providers: string[], isPaid:boolean) => {
+                  conditions:string[], costcenters: string[], providers: string[], isPaid:number) => {
 
     if(conditions.includes('all')){
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
@@ -423,7 +435,7 @@ export default function TableHistoryExpenses({data, token, expenses,
   const filterData = (conditions:string[], types:string[], 
     categories:string[], minAmount:number, maxAmount:number, 
     reports:string[], projects:string[], startDate:number, 
-    endDate:number, costcenters:string[], providers:string[], isPaid:boolean) => {
+    endDate:number, costcenters:string[], providers:string[], isPaid:number) => {
   
     let filtered: Expense[] = [];
     //console.log('expenses lenght => ', expenses.length);

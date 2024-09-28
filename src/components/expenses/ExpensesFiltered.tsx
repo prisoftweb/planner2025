@@ -37,7 +37,8 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
 
-  const [isPaid, setIsPaid] = useState<boolean>(false);
+  // const [isPaid, setIsPaid] = useState<boolean>(false);
+  const [isPaid, setIsPaid] = useState<number>(1);
 
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
@@ -168,13 +169,11 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
 
-        <div className="flex justify-end px-5">
-          <div className="inline-flex items-center">
-            {/* <p className="mr-3">Linea de credito</p> */}
+        <div className="flex justify-end px-5 items-center">
+          {/* <div className="inline-flex items-center">
             <Label>Pagado? </Label>
             <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
               <input checked={isPaid} 
-                //onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
                 onChange={() => setIsPaid(!isPaid)} id="switch-3" type="checkbox"
                 className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                   appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
@@ -185,6 +184,29 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
                 <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
                   data-ripple-dark="true"></div>
               </label>
+            </div>
+          </div> */}
+          <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
+          <div>
+            <div className="inline-flex rounded-md shadow-sm mx-2">
+            <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
+                        ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
+                onClick={() => setIsPaid(1)}
+              >
+                Ambos
+              </button>
+              <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                        ${isPaid===2? 'bg-green-500 text-white': ''}`}
+                onClick={() => setIsPaid(2)}
+              >
+                Pagado
+              </button>
+              <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                        ${isPaid===3? 'bg-red-500 text-white': ''}`}
+                onClick={() => setIsPaid(3)}
+              >
+                No Pagado
+              </button>
             </div>
           </div>
         </div>
