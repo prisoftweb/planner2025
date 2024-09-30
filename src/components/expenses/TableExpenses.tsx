@@ -392,14 +392,29 @@ export default function TableExpenses({data, token, expenses,
   //   }
   // }, [filter]);
 
-  const paidValidation = (exp:Expense, isPaid:boolean) => {
-    if(exp.ispaid === isPaid){
+  const paidValidation = (exp:Expense, isPaid:number) => {
+    if(isPaid===1){
       return true;
+    }else{
+      if(isPaid===2){
+        if(exp.ispaid){
+          return true;
+        }
+        return false;
+      }else{
+        if(!exp.ispaid){
+          return true;
+        }
+        return false;
+      }
     }
-    return false;
+    // if(exp.ispaid === isPaid){
+    //   return true;
+    // }
+    // return false;
   }
 
-  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: boolean) => {
+  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
     //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
@@ -410,7 +425,7 @@ export default function TableExpenses({data, token, expenses,
   }
 
   const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                              startDate:number, endDate:number, isPaid: boolean) => {
+                              startDate:number, endDate:number, isPaid: number) => {
     if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
       return dateValidation(exp, startDate, endDate, isPaid);
     }
@@ -418,7 +433,7 @@ export default function TableExpenses({data, token, expenses,
   }
 
   const providerValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-        startDate:number, endDate:number, providers:string[], isPaid: boolean) => {
+        startDate:number, endDate:number, providers:string[], isPaid: number) => {
           //console.log('providers => ', providers);
     if(providers.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
@@ -440,7 +455,7 @@ export default function TableExpenses({data, token, expenses,
   }
 
   const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                      startDate:number, endDate:number, costcenters:string[], providers:string[], isPaid: boolean) => {
+                      startDate:number, endDate:number, costcenters:string[], providers:string[], isPaid: number) => {
     if(costcenters.includes('all')){
       //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
@@ -471,7 +486,7 @@ export default function TableExpenses({data, token, expenses,
 
   const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, projects:string[], 
-                      costcenters:string[], providers:string[], isPaid: boolean) => {
+                      costcenters:string[], providers:string[], isPaid: number) => {
     if(projects.includes('all')){
       //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters, providers, isPaid);
@@ -488,7 +503,7 @@ export default function TableExpenses({data, token, expenses,
 
   const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
               startDate:number, endDate:number, projects:string[], 
-              reports:string[], costcenters: string[], providers: string[], isPaid: boolean) => {
+              reports:string[], costcenters: string[], providers: string[], isPaid: number) => {
     if(reports.includes('all')){
       return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, costcenters, providers, isPaid); 
     }else{
@@ -503,7 +518,7 @@ export default function TableExpenses({data, token, expenses,
 
   const categoriesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                 startDate:number, endDate:number, projects:string[], 
-                reports:string[], categories:string[], costcenters: string[], providers: string[], isPaid: boolean) => {
+                reports:string[], categories:string[], costcenters: string[], providers: string[], isPaid: number) => {
     
     if(categories.includes('all')){
       return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, costcenters, providers, isPaid);
@@ -520,7 +535,7 @@ export default function TableExpenses({data, token, expenses,
   const typesValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], categories:string[], types:string[], 
-                  costcenters:string[], providers: string[], isPaid: boolean) => {
+                  costcenters:string[], providers: string[], isPaid: number) => {
     
     if(types.includes('all')){
       return categoriesValidation(exp, minAmount, maxAmount, startDate, endDate, 
@@ -539,7 +554,7 @@ export default function TableExpenses({data, token, expenses,
   const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], categories:string[], types:string[], 
-                  conditions:string[], costcenters: string[], providers: string[], isPaid: boolean) => {
+                  conditions:string[], costcenters: string[], providers: string[], isPaid: number) => {
 
     if(conditions.includes('all')){
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
@@ -560,7 +575,7 @@ export default function TableExpenses({data, token, expenses,
   const filterData = (conditions:string[], types:string[], 
     categories:string[], minAmount:number, maxAmount:number, 
     reports:string[], projects:string[], startDate:number, 
-    endDate:number, costcenters:string[], providers: string[], isPaid: boolean) => {
+    endDate:number, costcenters:string[], providers: string[], isPaid: number) => {
   
     let filtered: Expense[] = [];
     refExpenses.current.map((expense) => {

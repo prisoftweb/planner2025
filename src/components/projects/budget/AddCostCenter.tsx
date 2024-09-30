@@ -88,8 +88,11 @@ export default function AddCostCenter({token, user, closeForm}:
         date: new Date(),
         amount: amountBudget,
         conditionStatus:"CREADO",
+        // condition: [
+        //     {glossary:"66db72ccd86ee6cdaa075a53", user}
+        // ],
         condition: [
-            {glossary:"66db72ccd86ee6cdaa075a53", user}
+          {glossary:"66e657bed63098c324d45464", user}
         ],
         progressAverage:0,
         project: project?._id,
