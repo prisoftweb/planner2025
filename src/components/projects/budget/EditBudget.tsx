@@ -121,6 +121,7 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
           <CurrencyInput
             prefix="$"
             value={total}
+            autoFocus
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                       focus:border-slate-700 outline-0"
             onChange={(e) => onChangeTotal(e.target.value)}
