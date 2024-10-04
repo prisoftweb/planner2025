@@ -2,8 +2,11 @@
 import { CurrencyFormatter } from '@/app/functions/Globals';
 import { DonutChart, Legend } from '@tremor/react';
 
+// const valueFormatter = (number: number) =>
+//   `$ ${Intl.NumberFormat('us').format(number).toString()}`;
+
 const valueFormatter = (number: number) =>
-  `$ ${Intl.NumberFormat('us').format(number).toString()}`;
+  `${Intl.NumberFormat('us').format(number).toString()} %`;
 
 export default function DonutChartBudget({data, colors, categories, category}: 
     {data:any, colors: string[], categories: string[], category: string}) {

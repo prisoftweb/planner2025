@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useOneBudget } from "@/app/store/budgetProject";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import HeaderForm from "@/components/HeaderForm";
@@ -34,6 +34,10 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   const [category, setCategory] = useState<string>('');
   const [concept, setConcept] = useState<string>('');
 
+  const [focusInput, setFocusInput] = useState<boolean>(true);
+  // const inputRef = useRef<CurrencyInputProps>(null);
+  const inputRef = useRef<any>(null);
+
   const options: Options[] = [];
 
   costoCenters.map((cc) => {
@@ -54,28 +58,35 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
     try {
       if(value.trim()===''){
         setTotal('0');
+        setPercentage('0');
       }else{
         //setTotal(Number(value.replace(/[$,]/g, "")));
+        const t = Number(value.replace(/[$,]/g, ""));
+        //const p = Number(percentage.replace(/[$,]/g, ""));
+        const p = (t / (oneBudget?.amount || 1)) * 100;
         setTotal(value);
+        setPercentage(p.toFixed(2));
       }
     } catch (error) {
       setTotal('0');
+      setPercentage('0');
     }
   }
 
   const onChangePercentage = (value: string) => {
     try {
       if(value.trim()===''){
-        console.log('if per => ');
         setPercentage('0');
+        setTotal('0');
       }else{
-        //setTotal(Number(value.replace(/[$,]/g, "")));
-        console.log('per = value ');
         setPercentage(value);
+        const p = Number(value.replace(/[$,%, ]/g, ""));
+        const t = ((oneBudget?.amount || 0) * p ) / 100;
+        setTotal(t.toFixed(2)); 
       }
     } catch (error) {
-      console.log('catch ');
       setPercentage('0');
+      setTotal('0');
     }
   }
   
@@ -118,6 +129,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
     setConcept(c2);
     setTotal('0');
     setPercentage('0');
+    inputRef?.current?.focus();
   }
 
   const onChangeCardCostoCenter = (value: string) => {
@@ -131,6 +143,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
       setConcept(c2);
       setTotal('0');
       setPercentage('0');
+      inputRef?.current?.focus();
     }else{
       showToastMessageError('Error al cambiar centro de costos!!');
     }
@@ -271,13 +284,12 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
           <Select options={options} className="mt-2" 
             onChange={(value:any) => onChangeCostoCenter(value)}
             value={optSel} />
-          
-          <div className="overflow-y-auto h-32 mt-5">
+          <div className="overflow-y-auto h-64 mt-5">
             {costoCenters.map((cclv) => (
               cclv.categorys.map((conc) => (
                 <div key={conc.concept._id} 
-                  className={`p-3 border border-white flex cursor-pointer hover:bg-slate-500
-                    ${optSel.value.includes(conc.concept._id)? 'bg-blue-700 text-white': 'text-white bg-slate-700'} 
+                  className={`p-3 border border-slate-700 flex cursor-pointer hover:bg-slate-200 text-slate-700 hover:text-slate-700
+                    ${optSel.value.includes(conc.concept._id)? 'bg-blue-700 text-white': 'text-slate-700 bg-white'} 
                     shadow-md shadow-slate-400 justify-between items-center`}
                     onClick={() => onChangeCardCostoCenter(conc.concept._id)}
                 >
@@ -296,6 +308,8 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
           <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
           <CurrencyInput
             prefix="$"
+            ref={inputRef}
+            autoFocus
             value={total.replace(/[$,]/g, "")}
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                       focus:border-slate-700 outline-0"
