@@ -36,6 +36,24 @@ export async function getProjectsMin(auth_token:string) {
   }
 }
 
+export async function getActiveProjectsMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsMINAndNECondition/66e0a1a4c6d95ffb8aa0ff31`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar proyectos!!';
+  }
+}
+
 export async function getProjectsLV(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLV`;
   try {

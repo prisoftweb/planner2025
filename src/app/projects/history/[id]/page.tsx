@@ -94,7 +94,7 @@ export default async function Page({ params }: { params: { id: string }}){
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects/history">
-          <Selectize options={options} routePage="projects/history" subpath="/profile" />
+          <Selectize options={options} routePage="projects/history" subpath="" />
         </Header>
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>

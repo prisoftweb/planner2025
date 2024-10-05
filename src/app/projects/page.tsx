@@ -1,22 +1,14 @@
-import WithOut from "@/components/WithOut";
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-//import Header from "@/components/Header";
-//import Header from "@/components/HeaderPage";
-//import Header from "@/components/Header";
-import ButtonNew from "@/components/projects/ButtonNew";
 import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
 import { ClientBack } from "@/interfaces/Clients";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
-//import { Company } from "@/interfaces/Companies";
-import { getProjectsMin } from "../api/routeProjects";
+import { getActiveProjectsMin } from "../api/routeProjects";
 import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
-//import TableProjects from "@/components/projects/TableProjects";
-//import { CurrencyFormatter } from "../functions/Globals";
 import { ProjectDataToTableDataMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
 
@@ -27,7 +19,7 @@ export default async function Page(){
 
   let projects: ProjectMin[];
   try {
-    projects = await getProjectsMin(token);
+    projects = await getActiveProjectsMin(token);
     if(typeof(projects)==='string') return <h1 className="text-red-500 text-center text-lg">{projects}</h1>
   } catch (error) {
     return <h1>Error al consultar los proyectos!!</h1>
