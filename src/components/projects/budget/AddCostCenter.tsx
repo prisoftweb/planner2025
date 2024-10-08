@@ -1,12 +1,8 @@
-import { ProjectMin } from "@/interfaces/Projects"
 import { useNewBudget } from "@/app/store/budgetProject"
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { CostoCenterLV } from "@/interfaces/CostCenter";
-import Select from 'react-select'
-import { Options } from "@/interfaces/Common";
 import Label from "@/components/Label";
 import CurrencyInput from "react-currency-input-field";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Input from "@/components/Input";
 import TextArea from "@/components/TextArea";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
@@ -27,6 +23,9 @@ export default function AddCostCenter({token, user, closeForm}:
   const [nameMessage, setNameMessage] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [descriptionMessage, setDescriptionMessage] = useState('');
+
+  const tabRef = useRef<any>(null);
+  const [bandTab, setBandTab] = useState<boolean>(false); 
 
   const onChangeAmount = (value: string) => {
     try {
@@ -115,6 +114,15 @@ export default function AddCostCenter({token, user, closeForm}:
     }
   }
 
+  const keyDown = (event: any) => {
+    console.log(event.key);
+    if(event.key==='Tab'){
+      console.log('entrooo')
+      tabRef?.current?.focus();
+      setBandTab(!bandTab);
+    }
+  };
+
   return (
     <>
       <div className="grid grid-cols-2 gap-x-3">
@@ -177,6 +185,7 @@ export default function AddCostCenter({token, user, closeForm}:
             value={name}
             onChange={(e) => setName(e.target.value)}
             autoFocus
+            onKeyDown={(e) => keyDown(e)}
           />
           {nameMessage !== ''}{
             <p className="text-red-500">{nameMessage}</p>
@@ -198,10 +207,14 @@ export default function AddCostCenter({token, user, closeForm}:
       </div>
       <div>
         <Label htmlFor="Description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
-        <TextArea 
+        <textarea 
+          className="border border-gray-200 rounded-lg w-full text-sm text-gray-900 bg-white dark:bg-gray-800 
+                  focus:ring-0 dark:text-white dark:placeholder-gray-400 my-2 p-2 outline-0 outline-none"
+          rows={4}
           name="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          ref={tabRef}
         />
         {descriptionMessage !== ''}{
             <p className="text-red-500">{descriptionMessage}</p>

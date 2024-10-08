@@ -19,7 +19,7 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
   const [total, setTotal] = useState<string>(budget.amount.replace(/[$,%, M, X,]/g, ""));
   const [percentage, setPercentage] = useState(budget.percentage.replace(/[$,%,]/g, ""));
 
-  const {updateOneBudget} = useOneBudget();
+  const {updateOneBudget, oneBudget} = useOneBudget();
 
   // console.log('budget => ', budget);
   // console.log('total => ', total);
@@ -35,29 +35,29 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
     return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
-  const onChangeTotal = (value: string) => {
-    if(value.replace(/[$,%,]/g, "").trim()===''){
-      setTotal('0');
-    }else{
-      try {
-        setTotal(value.replace(/[$,]/g, ""));
-      } catch (error) {
-        setTotal('0');
-      }
-    }
-  }
+  // const onChangeTotal = (value: string) => {
+  //   if(value.replace(/[$,%,]/g, "").trim()===''){
+  //     setTotal('0');
+  //   }else{
+  //     try {
+  //       setTotal(value.replace(/[$,]/g, ""));
+  //     } catch (error) {
+  //       setTotal('0');
+  //     }
+  //   }
+  // }
 
-  const onChangePercentage = (value: string) => {
-    if(value.replace(/[$,%,]/g, "").trim()===''){
-      setPercentage('0');
-    }else{
-      try {
-        setPercentage(value.replace(/[$,%]/g, ""));
-      } catch (error) {
-        setPercentage('0');
-      }
-    }
-  }
+  // const onChangePercentage = (value: string) => {
+  //   if(value.replace(/[$,%,]/g, "").trim()===''){
+  //     setPercentage('0');
+  //   }else{
+  //     try {
+  //       setPercentage(value.replace(/[$,%]/g, ""));
+  //     } catch (error) {
+  //       setPercentage('0');
+  //     }
+  //   }
+  // }
 
   const updateCostCenter = async () => {
     const data = {
@@ -90,6 +90,42 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
       showToastMessageError('Ocurrrio un problema al actulizar centro de costos del presupuesto!!');
     }
   }
+
+  const onChangeTotal = (value: string) => {
+    try {
+      if(value.trim()===''){
+        setTotal('0');
+        setPercentage('0');
+      }else{
+        //setTotal(Number(value.replace(/[$,]/g, "")));
+        const t = Number(value.replace(/[$,]/g, ""));
+        //const p = Number(percentage.replace(/[$,]/g, ""));
+        const p = (t / (oneBudget?.amount || 1)) * 100;
+        setTotal(value.replace(/[$,]/g, ""));
+        setPercentage(p.toFixed(2));
+      }
+    } catch (error) {
+      setTotal('0');
+      setPercentage('0');
+    }
+  }
+
+  const onChangePercentage = (value: string) => {
+    try {
+      if(value.trim()===''){
+        setPercentage('0');
+        setTotal('0');
+      }else{
+        setPercentage(value.replace(/[$,%, ]/g, ""));
+        const p = Number(value.replace(/[$,%, ]/g, ""));
+        const t = ((oneBudget?.amount || 0) * p ) / 100;
+        setTotal(t.toFixed(2)); 
+      }
+    } catch (error) {
+      setPercentage('0');
+      setTotal('0');
+    }
+  }
   
   return(
     <>
@@ -112,7 +148,7 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
             <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-              style={{"width": Number(percentage.replace(/[$,%,]/g, "") || 0)}}></div>
+              style={{"width": Number(percentage.replace(/[$,%,]/g, "") ) + '%'}}></div>
           </div>
         </div>
 
@@ -130,7 +166,8 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
         <div>
           <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje</p></Label>
           <CurrencyInput
-            prefix="$"
+            //prefix="$"
+            suffix="%"
             value={percentage}
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                       focus:border-slate-700 outline-0"

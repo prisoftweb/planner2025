@@ -107,7 +107,7 @@ export default function TableCostCenter({dataTable, token, id, user}:
         <p className="cursor-pointer" onClick={() => {
           handleEditBudget(true);
           setRowEditBudget(row.original);
-        }}>{row.original.category.name}</p>
+        }}>{row.original.concept.name}</p>
       ),
     }),
     columnHelper.accessor('amount', {

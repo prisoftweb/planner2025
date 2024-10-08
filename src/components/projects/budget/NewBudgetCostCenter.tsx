@@ -34,7 +34,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   const [category, setCategory] = useState<string>('');
   const [concept, setConcept] = useState<string>('');
 
-  const [focusInput, setFocusInput] = useState<boolean>(true);
+  //const [focusInput, setFocusInput] = useState<boolean>(true);
   // const inputRef = useRef<CurrencyInputProps>(null);
   const inputRef = useRef<any>(null);
 
@@ -164,6 +164,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
 
   const onSaveBudget = async () => {
     const data = {
+      progressAverage: Number(percentage.replace(/[$, %,]/g, "")),
       newbudget: {
         cost: Number(total.replace(/[$,]/g, "")),
         percent: Number(percentage.replace(/[$, %,]/g, "")),
@@ -239,7 +240,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
           <div className="flex items-center">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
               <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-                style={{"width": oneBudget?.progressAverage?? 0}}></div>
+                style={{"width": oneBudget?.progressAverage ? oneBudget?.progressAverage + '%': 0 + '%'}}></div>
             </div>
             <p>{oneBudget?.progressAverage?? 0}%</p>
           </div>

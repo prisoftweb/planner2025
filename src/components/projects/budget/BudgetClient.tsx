@@ -1,23 +1,13 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Options } from "@/interfaces/Common"
-import { OneProjectMin } from "@/interfaces/Projects"
-// import DataBasic from "./DataBasic"
-// import ExtraData from "./ExtraData"
-// import Address from "./Address"
-// import GuaranteeProject from "./GuaranteeProject"
-// import ProfileProject from "./ProfileProject"
-// import ProgressProject from "./ProgressProject"
-
 import { FullBudget } from "@/interfaces/BudgetProfile"
 import { useOneBudget } from "@/app/store/budgetProject"
 import NavResponsive from "./NavResponsive"
 import ProfileBudget from "./ProfileBudget"
 import ButtonNewBudget from "./ButtonNewBudget"
-import { CostoCenterLV } from "@/interfaces/CostCenter"
-import WithOut from "@/components/WithOut"
 import { CostCenter } from "@/interfaces/CostCenter"
+import Header from "@/components/HeaderPage";
 
 export default function BudgetCli({budget, token, id, user, costoCenters}: 
   {budget: FullBudget, token:string, id:string, user: string, costoCenters: CostCenter[]}){
@@ -54,14 +44,17 @@ export default function BudgetCli({budget, token, id, user, costoCenters}:
     )
   }
 
-  console.log('one budget => ', oneBudget);
-
   return(
     <>
-      <div className="mt-5 flex justify-end items-center gap-x-10">
+      <Header title={budget.title} previousPage="/projects/budget">
+        {/* <Selectize options={options} routePage="projects" subpath="/profile" /> */}
         <ButtonNewBudget handleNewBudget={handleNewBudget} openNewBudget={newBudget} 
           token={token} user={user} costoCenters={costoCenters} id={id} />
-      </div>
+      </Header>
+      {/* <div className="mt-5 flex justify-end items-center gap-x-10">
+        <ButtonNewBudget handleNewBudget={handleNewBudget} openNewBudget={newBudget} 
+          token={token} user={user} costoCenters={costoCenters} id={id} />
+      </div> */}
       <div className={`flex mt-5`}>
         <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>

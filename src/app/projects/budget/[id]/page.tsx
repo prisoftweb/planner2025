@@ -4,7 +4,7 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import { FullBudget } from "@/interfaces/BudgetProfile";
 import BudgetCli from "@/components/projects/budget/BudgetClient";
-import Header from "@/components/HeaderPage";
+//import Header from "@/components/HeaderPage";
 import { CostoCenterLV, CostCenter } from "@/interfaces/CostCenter";
 import { getCostoCentersLV, getCostoCenters } from "@/app/api/routeCostCenter";
 
@@ -51,10 +51,9 @@ export default async function page({ params }: { params: { id: string }}) {
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <Header title={budget.title} previousPage="/projects/budget">
-          {/* <Selectize options={options} routePage="projects" subpath="/profile" /> */}
+        {/* <Header title={budget.title} previousPage="/projects/budget">
           <></>
-        </Header>
+        </Header> */}
         <BudgetCli budget={budget} id={params.id} token={token} 
           costoCenters={costoCenters} user={user._id} />
       </div>

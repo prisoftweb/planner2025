@@ -28,6 +28,7 @@ export interface ProjectsBudgetTable{
   segment: string
   amountBudget:string,
   pending:string,
+  budgeted: string,
   color: string  
 }
 

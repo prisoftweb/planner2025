@@ -4,7 +4,6 @@ import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
 import { RemoveProject } from "@/app/api/routeProjects";
 import { ProjectsTable, Project, ProjectMin } from "@/interfaces/Projects";
-import Link from "next/link";
 import CardProject from "./CardProject";
 import { useState, useEffect } from "react";
 import Filtering from "./Filtering";
@@ -13,22 +12,30 @@ import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
 import { useProjectsStore } from "@/app/store/projectsStore";
 import { getProjectsMin } from "@/app/api/routeProjects";
 import { showToastMessageError } from "../Alert";
+import Chip from "../providers/Chip";
 
 export default function TableProjects({data, token, projects, optCategories, 
-                          optTypes, optConditions, isFilter, setIsFilter, isTable}:
-                        {data:ProjectsTable[], token:string, 
-                          projects: ProjectMin[], optCategories: Options[], 
-                          optTypes: Options[], optConditions: Options[], 
-                          isFilter:boolean, setIsFilter:Function, isTable:boolean}){
+                          optTypes, optConditions, isFilter, setIsFilter, isTable, isHistory=false}:
+                        {data:ProjectsTable[], token:string, projects: ProjectMin[], 
+                          optCategories: Options[], optTypes: Options[], optConditions: Options[], 
+                          isFilter:boolean, setIsFilter:Function, isTable:boolean, 
+                          isHistory?:boolean}){
   
   const columnHelper = createColumnHelper<ProjectsTable>();
 
-  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataProjects, setDataProjects] = useState(data);
 
   const {haveDeleteProject, haveNewProject, projectStore, updateHaveDeleteProject, 
     updateHaveNewProject, updateProjectStore} = useProjectsStore();
+
+  const linkToProfile = (id: string) => {
+    if(isHistory){
+      window.location.replace(`/projects/history/${id}`)
+    }else{
+      window.location.replace(`/projects/${id}/profile`)
+    }
+  }
 
   // const columns = [
   //   columnHelper.accessor(row => row.id, {
@@ -166,7 +173,7 @@ export default function TableProjects({data, token, projects, optCategories,
         <div className="flex gap-x-1 items-center">
           <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
           <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
-          <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />
+          {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
         </div>
       ),
       enableSorting:false,
@@ -195,7 +202,7 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'nada',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+          onClick={() => linkToProfile(row.original.id)}
         >{row.original.code}</p>
       ),
     }),
@@ -204,7 +211,7 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'clave',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+          onClick={() => linkToProfile(row.original.id)}
         >{row.original.project}</p>
       ),
     }),
@@ -213,8 +220,8 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'proyecto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
-        >{row.original.category}</p>
+          onClick={() => linkToProfile(row.original.id)}
+        ><Chip label={row.original.category} color={row.original.condition} /></p>
       ),
     }),
     columnHelper.accessor('category', {
@@ -222,7 +229,7 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'categoria',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+          onClick={() => linkToProfile(row.original.id)}
         >{row.original.client}</p>
       ),
     }),
@@ -231,7 +238,7 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'cliente',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+          onClick={() => linkToProfile(row.original.id)}
         >{row.original.date?.substring(0, 10) || ''}</p>
       ),
     }),
@@ -240,7 +247,7 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+          onClick={() => linkToProfile(row.original.id)}
         >{row.original.amount}</p>
       ),
     }),
@@ -249,7 +256,7 @@ export default function TableProjects({data, token, projects, optCategories,
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+          onClick={() => linkToProfile(row.original.id)}
         > </p>
       ),
     }),
@@ -371,17 +378,19 @@ export default function TableProjects({data, token, projects, optCategories,
     categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
   
     let filtered: ProjectMin[] = [];
-    // projects.map((project) => {
-    //   if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
-    //     filtered.push(project);
-    //   }
-    // });
-    projectStore.map((project) => {
-      if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
-        filtered.push(project);
-      }
-    });
-
+    if(isHistory){
+      projects.map((project) => {
+        if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
+          filtered.push(project);
+        }
+      });
+    }else{
+      projectStore.map((project) => {
+        if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
+          filtered.push(project);
+        }
+      });
+    }
     //console.log(filtered);
     setFilteredProjects(filtered);
     setDataProjects(ProjectDataToTableDataMin(filtered));

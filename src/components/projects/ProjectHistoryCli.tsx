@@ -1,59 +1,43 @@
 'use client'
 
-import { useState, useEffect } from "react"
-import { Options } from "@/interfaces/Common"
+import { useState } from "react"
 import { OneProjectMin } from "@/interfaces/Projects"
-import DataBasic from "./DataBasic"
 import NavResponsive from "./NavResponsive"
-import ExtraData from "./ExtraData"
-import Address from "./Address"
-import GuaranteeProject from "./GuaranteeProject"
-import ProfileProject from "./ProfileProject"
-import ProgressProject from "./ProgressProject"
-import { useOneProjectsStore } from "@/app/store/projectsStore"
+import DataBasicHistory from "./DataBasicHistory"
+import ExtraDataHistory from "./ExtraDataHistory"
+import AddressHistory from "./AddressHistory"
+import GuaranteeHistoryProject from "./GuaranteeHistoryProject"
+import ProgressHistoryProject from "./ProgressHistoryProject"
+import ProfileHistoryProject from "./ProfileHistoryProject"
 
-export default function ProjectCli({project, token, id, optCategories, optClients, 
-                             optTypes, optConditions, user}: 
-                            {project:OneProjectMin, token:string, id:string,
-                              optClients:Options[], optCategories:Options[], 
-                              optTypes:Options[], optConditions:Options[],
-                              user:string}){
+export default function ProjectHistoryCli({project}: {project:OneProjectMin}){
 
   const [opt, setOpt] = useState<number>(1);
-  const {updateOneProjectStore} = useOneProjectsStore();
-  
-  useEffect(() => {
-    updateOneProjectStore(project);
-  }, []);
 
   const view = (
     opt===1? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
-        <DataBasic token={token} id={id} project={project} 
-          optConditions={optConditions} user={user} />
+        <DataBasicHistory project={project} />
       </div>) : 
 (opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-          <ExtraData optCategories={optCategories} optClients={optClients} 
-              // optCompanies={optCompanies} 
-              id={id} optTypes={optTypes} token={token} project={project} />
+          <ExtraDataHistory project={project} />
         </div>): 
 (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                   style={{borderColor:'#F8FAFC'}}>
-            <Address token={token} id={id} project={project} />
+            <AddressHistory project={project} />
           </div>): 
 (opt===4? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
-              <GuaranteeProject id={id} token={token} project={project} />
+              <GuaranteeHistoryProject project={project} />
             </div>):  
   (opt === 5? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                            <ProgressProject id={id} project={project} token={token} user={user} />                                  
+                            <ProgressHistoryProject project={project} />                                  
                       </div> ) : 
           (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
-                <DataBasic token={token} id={id} project={project} 
-                  optConditions={optConditions} user={user} />
+                <DataBasicHistory project={project} />
             </div>)) )))
   )
   
@@ -70,7 +54,7 @@ export default function ProjectCli({project, token, id, optCategories, optClient
         <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            <ProfileProject project={project} />
+            <ProfileHistoryProject project={project} />
           </div>
           {view}
         </div>
