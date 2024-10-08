@@ -33,7 +33,7 @@ export default function CardBudgetProject({budget, token}:
                     })}
                 </p>
                 {/* <Chip label={budget.category.name} /> */}
-                <Chip label={'category'} />
+                <Chip label={budget.lastmove.condition.name} color={budget.lastmove.condition.color} />
               </div>
             </div>
           </div>

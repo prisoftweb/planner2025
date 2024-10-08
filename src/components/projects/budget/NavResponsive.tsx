@@ -51,30 +51,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Pendiente 1' 
-          className="text-blue-500 bg-white" placement="right">
-            <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
-              <AiOutlineFundProjectionScreen className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                  text-slate-500 my-1 bg-white rounded-md
-                ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
-                onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
-                  color: isHover===2 || option===2 ? 'white' : '',}} 
-              />
-            </div>
-        </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Pendiente 2' 
-          className="text-blue-500 bg-white" placement="right">
-            <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
-              <MdOutlineEditLocationAlt className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                  text-slate-500 my-1 bg-white rounded-md
-                ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
-                onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-                  color: isHover===3 || option===3 ? 'white' : '',}}
-              />
-            </div>
-        </Tooltip>
       </div>
     )
   }else{
@@ -91,22 +67,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           <LuConstruction className="w-4 h-4 mr-2 text-slate-500" />
           {/* <ChartBarIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Datos basicos
-        </div>
-        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center border-b border-slate-300 ${option===2? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(2)}
-        >
-          <AiOutlineFundProjectionScreen className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <TableCellsIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
-          Pendiente 1
-        </div>
-        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center border-b border-slate-300 ${option===3? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(3)}
-        >
-          <MdOutlineEditLocationAlt className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <GlobeAmericasIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
-          Pendiente 2
         </div>
       </div>
     )

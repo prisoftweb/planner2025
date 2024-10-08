@@ -109,8 +109,8 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       ),
     }),
     columnHelper.accessor('segment', {
-      header: 'Segmento',
-      id: 'segment',
+      header: 'Estatus',
+      id: 'Estatus',
       cell: ({row}) => (
         <Chip label={row.original.segment} color={row.original.color} />
       ),
@@ -122,6 +122,15 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
         >{row.original.amountBudget}</p>
+      ),
+    }),
+    columnHelper.accessor('budgeted', {
+      header: 'Presupuestado',
+      id: 'Presupuestado',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
+        >{row.original.budgeted}</p>
       ),
     }),
     columnHelper.accessor('pending', {

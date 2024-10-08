@@ -12,6 +12,7 @@ import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
 import { useProjectsStore } from "@/app/store/projectsStore";
 import { getProjectsMin } from "@/app/api/routeProjects";
 import { showToastMessageError } from "../Alert";
+import Chip from "../providers/Chip";
 
 export default function TableProjects({data, token, projects, optCategories, 
                           optTypes, optConditions, isFilter, setIsFilter, isTable, isHistory=false}:
@@ -220,7 +221,7 @@ export default function TableProjects({data, token, projects, optCategories,
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
-        >{row.original.category}</p>
+        ><Chip label={row.original.category} color={row.original.condition} /></p>
       ),
     }),
     columnHelper.accessor('category', {

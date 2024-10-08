@@ -166,6 +166,12 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
       //value: budget.amount
       value: budget.amount
     });
+
+    const budgeted = CurrencyFormatter({
+      currency: "MXN",
+      //value: budget.amount
+      value: budget.budgeted
+    });
     
     table.push({
       //amount: budget.amount.toString(),
@@ -181,7 +187,8 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
       amountBudget: amountBudget,
       //segment: budget.category?.name
       segment: budget.lastmove.condition.name,
-      color: budget.lastmove.condition.color
+      color: budget.lastmove.condition.color,
+      budgeted
     })
   });
 
