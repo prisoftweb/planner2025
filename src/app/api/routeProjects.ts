@@ -224,3 +224,113 @@ export async function InsertProgressInProject(auth_token:string, id:string, data
     return 'Error al actualizar avance del proyecto!!';
   }
 }
+
+export async function getDashboardProjectsAmount(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsAMOUNT/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar cantidad de proyectos!!';
+  }
+}
+
+export async function getDashboardListProjects(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLIST/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar lista de proyectos!!';
+  }
+}
+
+export async function getDashboardProjectsByClient(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYCLIENT/${dateStart}/${dateEnd}`;
+  console.log('url > ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    console.log('res route => ', res);
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar lista de proyectos por cliente!!';
+  }
+}
+
+export async function getDashboardProjectsBySEGMENT(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYSEGMENT/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar lista de proyectos por segmento!!';
+  }
+}
+
+export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYESTATUS/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar lista de proyectos por estatus!!';
+  }
+}
+
+export async function getDashboardProjectsByPROGRESS(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYPROGRESS/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar lista de proyectos por progreso!!';
+  }
+}
