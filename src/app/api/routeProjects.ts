@@ -334,3 +334,60 @@ export async function getDashboardProjectsByPROGRESS(auth_token:string, dateStar
     return 'Error al consultar lista de proyectos por progreso!!';
   }
 }
+
+export async function getDashboardByProjectAndType(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByProjectsAndTypes/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar Costos agrupados por proyecto y tipos!!';
+  }
+}
+
+export async function getDashboardListProjectsNotComplete(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLISTNotComplete/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    // console.log(url);
+    // console.log(res);
+    // console.log('res => ', res.data.data.stats);
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar lista de proyectos no completos!!';
+  }
+}
+
+export async function getDashboardListProjectsByDate(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLISTByDate/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar lista de proyectos!!';
+  }
+}

@@ -10,6 +10,16 @@ export interface ListProjects {
   estatus: string
 }
 
+export interface ListProjectsByDate {
+  _id: string
+  title: string
+  date: string
+  amount: number
+  estatus: string
+  porcentage: number
+  progress: number
+}
+
 export interface ProjectsByClient {
   quantity: number
   totalAmount: number
@@ -36,4 +46,20 @@ export interface ProjectsByProgress {
   totalAmount: number
   porcentage: number
   progress: number
+}
+
+export interface CostsByProjectAndType {
+  quantity: number
+  subtotalCost: number
+  totalIVA: number
+  totalDiscount: number
+  project: string
+  type: string
+}
+
+export interface ProjectsNotCompleted {
+  _id: string
+  title: string
+  amount: number
+  estatus: string
 }

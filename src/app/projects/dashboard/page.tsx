@@ -1,23 +1,24 @@
 import Navigation from "@/components/navigation/Navigation"
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-//import DashBoardContainer from "@/components/expenses/dashboard/DashBoardContainer";
-import { Options } from "@/interfaces/Common";
 import DashBoardContainer from "@/components/projects/dashboard/DashboardContainer";
 
 import { getDashboardProjectsAmount, getDashboardListProjects, 
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
-  getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT } 
+  getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT, 
+  getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
+  getDashboardListProjectsByDate } 
 from "@/app/api/routeProjects";
 
 import { ProjectsByClient, ListProjects, ProjectsByProgress, 
-  ProjectsBySegment, ProjectsByStatus, TotalAmountProjects } 
+  ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
+  CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate } 
 from "@/interfaces/DashboardProjects";
 
-interface OptionsDashboard {
-  label: string,
-  costo: number
-}
+// interface OptionsDashboard {
+//   label: string,
+//   costo: number
+// }
 
 export default async function Page() {
   
@@ -36,12 +37,23 @@ export default async function Page() {
     return <h1>Error al obtener monto total de proyectos!!!</h1>
   }
 
-  let listProjects: ListProjects[] = [];
+  // let listProjects: ListProjects[] = [];
+  // try {
+  //   // listProjects = await getDashboardListProjects(token, new Date().toDateString(), new Date().toDateString());
+  //   listProjects = await getDashboardListProjects(token, '2024-01-01', '2024-10-30');
+  //   if(typeof(listProjects)==='string'){
+  //     return <h1>{listProjects} list</h1>
+  //   }
+  // } catch (error) {
+  //   return <h1>Error al obtener lista de proyectos!!!</h1>
+  // }
+
+  let listProjectsdate: ListProjectsByDate[] = [];
   try {
     // listProjects = await getDashboardListProjects(token, new Date().toDateString(), new Date().toDateString());
-    listProjects = await getDashboardListProjects(token, '2024-01-01', '2024-10-30');
-    if(typeof(listProjects)==='string'){
-      return <h1>{listProjects} list</h1>
+    listProjectsdate = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30');
+    if(typeof(listProjectsdate)==='string'){
+      return <h1>{listProjectsdate} list</h1>
     }
   } catch (error) {
     return <h1>Error al obtener lista de proyectos!!!</h1>
@@ -88,12 +100,33 @@ export default async function Page() {
     return <h1>Error al obtener proyectos agrupados por progreso!!!</h1>
   }
 
+  let listProjectsnotCompleted: ProjectsNotCompleted[] = [];
+  try {
+    listProjectsnotCompleted = await getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30');
+    if(typeof(listProjectsnotCompleted)==='string'){
+      return <h1>{listProjectsnotCompleted} list not completed</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener lista de proyectos no completos!!!</h1>
+  }
+
+  let projectsandTypes: CostsByProjectAndType[] = [];
+  try {
+    projectsandTypes = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30');
+    if(typeof(projectsandTypes)==='string'){
+      return <h1>{projectsandTypes} list</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener costos por proyecto y tipo!!!</h1>
+  }
+
   return (
     <>
       <Navigation user={user} />
-      <DashBoardContainer token={token} amountProjects={amountProjects} listProjects={listProjects} 
+      <DashBoardContainer token={token} amountProjects={amountProjects} listProjects={listProjectsdate} 
         projectsClient={projectsClient} projectsProgress={projectsProgress} 
-        projectsSegment={projectsSegment} projectsStatus={projectsStatus} />
+        projectsSegment={projectsSegment} projectsStatus={projectsStatus} 
+        listProjectsnotCompleted={listProjectsnotCompleted} projectsandTypes={projectsandTypes} />
     </>
   )
 }
