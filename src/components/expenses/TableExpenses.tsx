@@ -1,24 +1,20 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
-import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-import { RemoveCost } from "@/app/api/routeCost";
+import { RemoveCost, getAllCostsByCondition, CloneCost } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
-import { getAllCostsByCondition } from "@/app/api/routeCost";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
-import { Options } from "@/interfaces/Common";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-// import { insertConditionInCost } from "@/app/api/routeCost";
-//import Button from "../Button";
 import RemoveElement from "../RemoveElement";
+//import IoMdCopy from 'react-icons';
+import { IoCopy } from "react-icons/io5";
 
 export default function TableExpenses({data, token, expenses, 
                             handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
@@ -32,16 +28,34 @@ export default function TableExpenses({data, token, expenses,
   const refExpenses = useRef(expenses);
   const refFilter = useRef(false);
 
-  //const [filtering, setFiltering] = useState<boolean>(false);
-  //const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
   const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
-  //const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
-  // const [expensesSelected, setExpensesSelected] = useState<ExpensesTable[]>([]);
-
+  
   const {refresh, updateRefresh, updateResponsible, isDeleteExpensesTable, 
     updateIsDeleteExpenseTable, expensesTable, updateExpensesTable} = useNewExpense();
 
+  const cloneCost = async (id: string) => {
+    try {
+      const res = await CloneCost(token, id);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        showToastMessage('Costo copiado exitosamente!!!');
+        const fetchCosts = await getAllCostsByCondition(token);
+        if(typeof(fetchCosts)==='string'){
+          showToastMessageError("Error al actulizar tabla!!!");
+        }else{
+          refExpenses.current = res;
+          updateExpensesTable(fetchCosts);
+          const d = ExpenseDataToTableData(fetchCosts);
+          setDataExpenses(d);
+        }
+      }
+    } catch (error) {
+      showToastMessageError("Ocurrio un problema al clonar costo!!!");
+    }
+  }
+  
   const delCost = async(id: string) => {
     try {
       const arrExpenses = expensesTable.filter(exp => exp._id !== id);
@@ -49,14 +63,10 @@ export default function TableExpenses({data, token, expenses,
       updateIsDeleteExpenseTable(true);
     } catch (error) {
       showToastMessageError('Error al quitar costo de la tabla!!');
-      //console.log('Error al eliminar');
-      //console.log('catch function => ', error);
     }
   }
 
-  //console.log('is filter => ', isFilter);
   const handleIsFilter = (value: boolean) => {
-    // console.log('value is filter => ', value);
     if(value){
       if(!refFilter.current){
         refFilter.current = true;
@@ -103,6 +113,7 @@ export default function TableExpenses({data, token, expenses,
           <RemoveElement id={row.original.id} name={row.original.Descripcion} 
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
+          <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneCost(row.original.id)} />
           <div className="w-20 flex gap-x-1 items-center">
             {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
@@ -299,12 +310,6 @@ export default function TableExpenses({data, token, expenses,
     updateIsDeleteExpenseTable(false);
   }
 
-  // const handleExpensesSelected = (value: ExpensesTable[]) => {
-  //   setExpensesSelected(value);
-  // }
-
-  // const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
-  //               placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
   const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />
   const [maxAmount, setMaxAmount] = useState<number>(0);
@@ -325,72 +330,24 @@ export default function TableExpenses({data, token, expenses,
     const aux = async () =>{
       try {
         const res = await getAllCostsByCondition(token);
-        //const res = await GetCostsMIN(token);
-        //console.log('res');
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);
-          if(d.length > 0){
-            //
-          }
+          // if(d.length > 0){
+          //   //
+          // }
           setDataExpenses(d);
         }else{
           showToastMessageError(res);
         }
       } catch (error) {
-        //console.log('catch table expenses => ', error);
         showToastMessageError('Error al actualizar tabla!!');
       }
     }
     aux();
     updateResponsible(user);
-    //console.log('refresh user => ', user);
     updateRefresh(false);
   }
-
-  // const changeConditionInCost = async () => {
-  //   //
-  //   if(expensesSelected.length > 0){
-  //     const filter: string[] = [];
-  //     expensesSelected.map((row) => {
-  //       filter.push(row.id);
-  //     })
-  //     const data = {
-  //       condition: {
-  //         glossary: idValidado,
-  //         user
-  //       },
-  //       filter,
-  //     }
-
-  //     try {
-  //       const res = await insertConditionInCost(token, data);
-  //       if(res===200){
-  //         showToastMessage('Costos actualizados satisfactoriamente!!!');
-  //         setTimeout(() => {
-  //           window.location.reload();
-  //         }, 500);
-  //       }else{
-  //         showToastMessageError(res);
-  //       }
-  //     } catch (error) {
-  //       showToastMessageError('Ocurrio un problema al actualizar condicion!!');
-  //     }
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if(filter){
-  //     console.log('data exp ', dataExpenses);
-  //     setView(<></>);
-  //     setTimeout(() => {
-  //       // const total = da
-  //       setView(<Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
-  //         placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-  //     }, 100);
-  //     setFilter(false);
-  //   }
-  // }, [filter]);
 
   const paidValidation = (exp:Expense, isPaid:number) => {
     if(isPaid===1){

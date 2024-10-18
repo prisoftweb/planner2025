@@ -6,9 +6,8 @@ import { getCompaniesLV } from "../api/routeCompany";
 import { getDepartmentsLV } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
 import { getProjectsLV } from "../api/routeProjects";
-import ButtonNew from "@/components/reports/ButtonNew";
-import { GetReportsMin, GetReportsByUserMin, GetAllReportsMINAndNECondition, 
-  GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN
+import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, 
+  GetAllReportsWithUSERAndNEConditionMIN
  } from "../api/routeReports";
 import { ReportParse, ReportTable } from "@/interfaces/Reports";
 import { ReportParseDataToTableData } from "../functions/ReportsFunctions";
@@ -25,16 +24,9 @@ export default async function Page() {
   let reports: ReportParse[] = [];
   try {
     if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-      //reports = await GetReportsByUserMin(token, user._id);
       reports = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
     }else{
-      //reports = await GetAllReportsMINAndNECondition(token);
       reports = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-      // if(user.department.name.toLowerCase().includes('direccion')){
-      //   reports = await GetAllReportsMINAndNECondition(token);
-      // }else{
-      //   reports = await GetReportsMin(token);
-      // }
     }
     if(typeof(reports)==='string'){
       return <h1 className="text-lg text-center text-red-500">{reports}</h1>
@@ -103,24 +95,6 @@ export default async function Page() {
     optConditions.push(c);
     optConditionsFilter.push(c);
   });
-
-  // if(!reports || reports.length <= 0){
-  //   return (
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-  //         <WithOut img="/img/costs/costs.svg" subtitle="Informes"
-  //           text="Agrega informes de caja chica,
-  //                 para el control de costos"
-  //           title="Informes">
-  //             <ButtonNew companies={optCompanies} departments={optDepartments} 
-  //               projects={optProjects} token={token} condition={condition} user={user._id}
-  //             />
-  //         </WithOut>
-  //       </div>
-  //     </>
-  //   )
-  // }
 
   const table: ReportTable[] = ReportParseDataToTableData(reports);
 

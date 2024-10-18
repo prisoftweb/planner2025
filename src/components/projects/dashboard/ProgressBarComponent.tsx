@@ -1,10 +1,10 @@
 import { ProgressBar } from '@tremor/react';
 
-export const ProgressBarComponent = ({label, progress}: {progress:number, label: string}) => {
+export const ProgressBarComponent = ({label, progress, widthBar}: {progress:number, label: string, widthBar: string}) => {
   return (
     <>
       <div className='flex gap-x-2'>
-        <div className='w-2/3'>
+        <div className={widthBar}>
           <ProgressBar value={progress} label={progress.toString() + '%'} />
         </div>
         <p>{label}</p>

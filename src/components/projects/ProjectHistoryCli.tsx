@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { OneProjectMin } from "@/interfaces/Projects"
 import NavResponsive from "./NavResponsive"
 import DataBasicHistory from "./DataBasicHistory"
@@ -9,36 +9,49 @@ import AddressHistory from "./AddressHistory"
 import GuaranteeHistoryProject from "./GuaranteeHistoryProject"
 import ProgressHistoryProject from "./ProgressHistoryProject"
 import ProfileHistoryProject from "./ProfileHistoryProject"
+import DashboardProfileProject from "./DashboardProfileProject"
+import { useOneProjectsStore } from "@/app/store/projectsStore"
 
-export default function ProjectHistoryCli({project}: {project:OneProjectMin}){
+export default function ProjectHistoryCli({project, id, token}: 
+  {project:OneProjectMin, token: string, id:string}){
 
+  const {updateOneProjectStore} = useOneProjectsStore();
+
+  useEffect(() => {
+    updateOneProjectStore(project);
+  }, []);
+  
   const [opt, setOpt] = useState<number>(1);
 
   const view = (
-    opt===1? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+    opt===1? (<div className="mt-3 w-full max-w-2xl bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
-        <DataBasicHistory project={project} />
+        <DashboardProfileProject token={token} id={id} />
       </div>) : 
 (opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-          <ExtraDataHistory project={project} />
+          <DataBasicHistory project={project} />
         </div>): 
 (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                   style={{borderColor:'#F8FAFC'}}>
-            <AddressHistory project={project} />
+            <ExtraDataHistory project={project} />
           </div>): 
 (opt===4? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
-              <GuaranteeHistoryProject project={project} />
+              <AddressHistory project={project} />
             </div>):  
   (opt === 5? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                            <ProgressHistoryProject project={project} />                                  
-                      </div> ) : 
-          (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+                            <GuaranteeHistoryProject project={project} />                                  
+                      </div> ) :
+    (opt === 6? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
-                <DataBasicHistory project={project} />
-            </div>)) )))
+                        <ProgressHistoryProject project={project} />                                  
+                  </div> ) : 
+          (<div className="mt-3 w-full max-w-2xl p-2 bg-white rounded-lg shadow-md pl-2 px-3" 
+                      style={{borderColor:'#F8FAFC'}}>
+                <DashboardProfileProject token={token} id={id} />
+            </div>)) ))))
   )
   
   const [open, setOpen] = useState<boolean>(false);
@@ -51,7 +64,7 @@ export default function ProjectHistoryCli({project}: {project:OneProjectMin}){
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+        <div className="flex w-full px-2 flex-wrap space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileHistoryProject project={project} />

@@ -228,6 +228,24 @@ export async function CreateCostWithFiles(auth_token:string, data:FormData) {
   }
 }
 
+export async function CloneCost(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/cloneCost/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status === 201) return res.status;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al clonar costo!!';
+    }
+    return 'Error al clonar costo!!';
+  }
+}
+
 export async function ADDNewFILE(auth_token:string, id:string, data:FormData) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/updateMeADDNewFILE/${id}`;
   try {

@@ -54,11 +54,18 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
       //             item.payload["on hold"])) *
       //     100
       // ).toFixed(2),
+      percentage: (
+          (item.value /
+              ((item.payload.PROVEEDOR || 0) +
+                  (item.payload["MANO DE OBRA"] || 0) +
+                  (item.payload["OTROS"] || 0))) *
+          100
+      ).toFixed(2),
   }));
 
   return (
     <>
-      <div className="w-60 rounded-md border border-gray-500/10  bg-blue-500 px-4 py-1.5 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
+      <div className="w-72 rounded-md border border-gray-500/10  bg-blue-500 px-4 py-1.5 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
         <p className="flex items-center justify-between">
           <span className="text-gray-50 dark:text-gray-50">
             Proyecto
@@ -67,7 +74,7 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
           <span className="font-medium text-gray-50 dark:text-gray-50">{title}</span>
         </p>
       </div>
-      <div className="mt-1 w-60 space-y-1 rounded-md border border-gray-500/10  bg-white px-4 py-2 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
+      <div className="mt-1 w-72 space-y-1 rounded-md border border-gray-500/10  bg-white px-4 py-2 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
         {data.map((item: any, index:number) => (
           <div key={index} className="flex items-center space-x-2.5">
             <span
@@ -85,9 +92,9 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
                 <span className="font-medium text-gray-900 dark:text-gray-50">
                   {item.value}
                 </span>
-                {/* <span className="text-gray-500 dark:text-gray-500">
+                <span className="text-gray-500 dark:text-gray-500">
                   ({item.percentage}&#37;)
-                </span> */}
+                </span>
               </div>
             </div>
           </div>
