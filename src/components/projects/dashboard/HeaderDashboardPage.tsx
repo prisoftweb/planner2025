@@ -1,19 +1,17 @@
 'use client'
 
-import { GiShoppingBag } from 'react-icons/gi';
-import { BsBarChartFill } from 'react-icons/bs';
 import { DateRangePicker } from '@tremor/react';
 import { es } from "date-fns/locale"
-import SelectReact from '@/components/SelectReact';
-import { Options } from '@/interfaces/Common';
 import { useState } from 'react';
 import { DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CurrencyFormatter } from '@/app/functions/Globals';
-import { TotalAmountProjects } from '@/interfaces/DashboardProjects';
+import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';
 
-export default function HeaderDashboardPage({handleDate, amountProjects}: 
-  {handleDate: Function, amountProjects: TotalAmountProjects[]}) {
+export default function HeaderDashboardPage({handleDate, amountProjects, 
+    projectsTotalCost, configMin}: 
+  {handleDate: Function, amountProjects: TotalAmountProjects[], 
+    projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[]}) {
   
     // const [project, setProject] = useState<string>(projects[0].value);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
@@ -47,10 +45,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects}:
               locale={es}
             />
           </div>
-          {/* <div className='sm:w-56 w-96'>
-            <Label htmlFor='project'>Proyecto</Label>
-            <SelectReact index={0} opts={projects} setValue={handleProjects} />
-          </div> */}
         </div>
       </div>
       <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-3'>
@@ -58,12 +52,8 @@ export default function HeaderDashboardPage({handleDate, amountProjects}:
             h-full flex flex-col justify-center items-center'>
           {amountProjects.length > 0 && (
             <>
-              <p className='text-xs'>{amountProjects[0].projects}</p>
+              <p className='text-lg'>{amountProjects[0].projects}</p>
               <p className='text-xs'>PROYECTOS TODOS</p>
-              {/* <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: amountProjects[0].totalAmount
-              })}</p> */}
             </>
           )}
         </div>
@@ -76,20 +66,23 @@ export default function HeaderDashboardPage({handleDate, amountProjects}:
           </ProgressCircle>
           <div>
             <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-              $35M
+              {CurrencyFormatter({
+                currency: 'MXN',
+                value: configMin[0].lastmeta.amount
+              })}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-500">
-              META 2024
+              META {configMin[0].lastmeta.year}
             </p>
           </div>
         </div>
         <div className='w-full h-full bg-cyan-300 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
             flex flex-col justify-center items-center'>
-          {amountProjects.length > 0 && (
+          {projectsTotalCost.length > 0 && (
             <>
               <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
                 currency: 'MXN',
-                value: amountProjects[0].totalAmount
+                value: projectsTotalCost[0].totalCost
               })}</p>
               <p className='text-xs'>COSTO TOTAL</p>
             </>
@@ -102,10 +95,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects}:
               <p className='text-xs'>MX 1.2M</p>
               <p className='text-xs'>UTILIDAD</p>
               <p className='text-xs'>$1,205,704</p>
-              {/* <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: amountProjects[0].totalAmount
-              })}</p> */}
             </>
           )}
         </div>

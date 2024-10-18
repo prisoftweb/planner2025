@@ -98,7 +98,7 @@ export default async function Page({ params }: { params: { id: string }}){
         </Header>
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>
-          <ProjectHistoryCli project={project} />
+          <ProjectHistoryCli project={project} id={params.id} token={token} />
         </NextUiProviders>
       </div>
     </>

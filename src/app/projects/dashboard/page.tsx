@@ -7,18 +7,16 @@ import { getDashboardProjectsAmount, getDashboardListProjects,
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
   getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT, 
   getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
-  getDashboardListProjectsByDate } 
+  getDashboardListProjectsByDate, getDashboardListProjectsTop10, 
+  getDashboardProjectTotalCost, getConfigMin, getProjectsBudgeted, 
+  getProjectsControlBudgeted, getProjectsSpent } 
 from "@/app/api/routeProjects";
 
 import { ProjectsByClient, ListProjects, ProjectsByProgress, 
   ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
-  CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate } 
+  CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
+  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted } 
 from "@/interfaces/DashboardProjects";
-
-// interface OptionsDashboard {
-//   label: string,
-//   costo: number
-// }
 
 export default async function Page() {
   
@@ -120,13 +118,75 @@ export default async function Page() {
     return <h1>Error al obtener costos por proyecto y tipo!!!</h1>
   }
 
+  let projectsTop10: ProjectsTop10[] = [];
+  try {
+    projectsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30');
+    if(typeof(projectsTop10)==='string'){
+      return <h1>{projectsTop10} list</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener proyectos top 10!!!</h1>
+  }
+
+  let projectsTotalCost: DashboardTotalCost[] = [];
+  try {
+    projectsTotalCost = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30');
+    if(typeof(projectsTotalCost)==='string'){
+      return <h1>{projectsTotalCost} list</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener costo total de los proyectos!!!</h1>
+  }
+
+  let configMin: ConfigMin[] = [];
+  try {
+    configMin = await getConfigMin(token);
+    if(typeof(configMin)==='string'){
+      return <h1>{configMin}</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener configuracion!!!</h1>
+  }
+
+  let projectsBudgeted: ControlBudgeted[] = [];
+  try {
+    projectsBudgeted = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30');
+    if(typeof(projectsBudgeted)==='string'){
+      return <h1>{projectsBudgeted}</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener proyectos presupuestados!!!</h1>
+  }
+
+  let projectsSpent: ControlBudgeted[] = [];
+  try {
+    projectsSpent = await getProjectsSpent(token, '2024-01-01', '2024-10-30');
+    if(typeof(projectsSpent)==='string'){
+      return <h1>{projectsSpent}</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener proyectos por gastos!!!</h1>
+  }
+
+  let projectsControlBudgeted: ControlBudgeted[] = [];
+  try {
+    projectsControlBudgeted = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30');
+    if(typeof(projectsControlBudgeted)==='string'){
+      return <h1>{projectsControlBudgeted}</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener proyectos por control presupuestal!!!</h1>
+  }
+
   return (
     <>
       <Navigation user={user} />
       <DashBoardContainer token={token} amountProjects={amountProjects} listProjects={listProjectsdate} 
         projectsClient={projectsClient} projectsProgress={projectsProgress} 
-        projectsSegment={projectsSegment} projectsStatus={projectsStatus} 
-        listProjectsnotCompleted={listProjectsnotCompleted} projectsandTypes={projectsandTypes} />
+        projectsSegment={projectsSegment} projectsStatus={projectsStatus} projectsTop10={projectsTop10}
+        listProjectsnotCompleted={listProjectsnotCompleted} projectsandTypes={projectsandTypes}
+        projectsTotalCost={projectsTotalCost} configMin={configMin} projectsBudgeted={projectsBudgeted}
+        projectsControlBudgeted={projectsControlBudgeted} projectsSpent={projectsSpent} />
     </>
   )
 }

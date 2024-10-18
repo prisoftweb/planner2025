@@ -11,10 +11,15 @@ export function BarChartComponent({data, colors, categories}:
   };
 
   const customTooltip = (props: CustomTooltipTypeBar) => {
-    const { payload, active } = props;
+    const { payload, active, label } = props;
     if (!active || !payload) return null;
     return (
       <div className="w-56 rounded-tremor-default border border-tremor-border bg-tremor-background p-2 text-tremor-default shadow-tremor-dropdown">
+        <div className="w-56 rounded-md border border-gray-500/10  bg-blue-500 px-4 py-1.5 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
+          <span className="text-gray-50 dark:text-gray-50">
+            {label}
+          </span>
+        </div>
         {payload.map((category: any, idx: number) => (
           <div key={idx} className="flex flex-1 space-x-2.5">
             <div

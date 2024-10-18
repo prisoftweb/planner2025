@@ -11,6 +11,7 @@ import GuaranteeProject from "./GuaranteeProject"
 import ProfileProject from "./ProfileProject"
 import ProgressProject from "./ProgressProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
+import DashboardProfileProject from "./DashboardProfileProject"
 
 export default function ProjectCli({project, token, id, optCategories, optClients, 
                              optTypes, optConditions, user}: 
@@ -27,34 +28,37 @@ export default function ProjectCli({project, token, id, optCategories, optClient
   }, []);
 
   const view = (
-    opt===1? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+    opt===1? (<div className="mt-3 w-full md:max-w-2xl lg:w-full bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
-        <DataBasic token={token} id={id} project={project} 
-          optConditions={optConditions} user={user} />
+        <DashboardProfileProject token={token} id={id} />
       </div>) : 
 (opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-          <ExtraData optCategories={optCategories} optClients={optClients} 
-              // optCompanies={optCompanies} 
-              id={id} optTypes={optTypes} token={token} project={project} />
+              <DataBasic token={token} id={id} project={project} 
+                optConditions={optConditions} user={user} />
         </div>): 
 (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                   style={{borderColor:'#F8FAFC'}}>
-            <Address token={token} id={id} project={project} />
+              <ExtraData optCategories={optCategories} optClients={optClients} 
+                id={id} optTypes={optTypes} token={token} project={project} />
           </div>): 
 (opt===4? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
-              <GuaranteeProject id={id} token={token} project={project} />
+                <Address token={token} id={id} project={project} />  
             </div>):  
   (opt === 5? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                           style={{borderColor:'#F8FAFC'}}>
-                            <ProgressProject id={id} project={project} token={token} user={user} />                                  
-                      </div> ) : 
+                            <GuaranteeProject id={id} token={token} project={project} />                                  
+                      </div> ) :
+    (opt === 6? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+            style={{borderColor:'#F8FAFC'}}>
+                    <ProgressProject id={id} project={project} token={token} user={user} />                                  
+              </div> ) : 
           (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
                 <DataBasic token={token} id={id} project={project} 
                   optConditions={optConditions} user={user} />
-            </div>)) )))
+            </div>)) ))))
   )
   
   const [open, setOpen] = useState<boolean>(false);
@@ -67,7 +71,8 @@ export default function ProjectCli({project, token, id, optCategories, optClient
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+        {/* <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2"  */}
+        <div className="flex w-full px-2 flex-wrap space-x-2"
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileProject project={project} />

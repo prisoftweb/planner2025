@@ -376,3 +376,21 @@ export async function GetAllCostByReportWithDateMINAndMAX(auth_token:string, id:
     return 'Ocurrio un problema al obtener fechas de gastos del informe informe';
   }
 }
+
+export async function CloneReport(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/cloneReport/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status === 201) return res.status;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al clonar reporte!!';
+    }
+    return 'Error al clonar reporte!!';
+  }
+}

@@ -1,25 +1,22 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
-import Link from "next/link";
 import { useState, useEffect } from "react";
-//import Filtering from "./Filtering";
-//import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import { ReportTable, ReportParse } from "@/interfaces/Reports";
 import Chip from "../providers/Chip";
 import { RemoveReport } from "@/app/api/routeReports";
 import { ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
-//import { GiSettingsKnobs } from "react-icons/gi";
 import Filtering from "./FilteringReports";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { useOptionsReports } from "@/app/store/reportsStore";
 import { UsrBack } from "@/interfaces/User";
-import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN
- } from "@/app/api/routeReports";
-import { showToastMessageError } from "../Alert";
+import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN,
+  CloneReport
+} from "@/app/api/routeReports";
+import { showToastMessageError, showToastMessage } from "../Alert";
 import RemoveElement from "../RemoveElement";
+import { IoCopy } from "react-icons/io5";
 
 export default function TableReports({data, token, reports, 
                           optCompanies, optConditions, optProjects, 
@@ -45,8 +42,36 @@ export default function TableReports({data, token, reports,
       updateHaveDeleteReport(true);
     } catch (error) {
       showToastMessageError('Error al quitar informe de la tabla!!');
-      //console.log('Error al eliminar');
-      //console.log('catch function => ', error);
+    }
+  }
+
+  const cloneReport = async (id: string) => {
+    try {
+      const res = await CloneReport(token, id);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        showToastMessage('Reporte copiado exitosamente!!!');
+        let reps;
+        try {
+          if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
+            reps = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
+          }else{
+            reps = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
+          }
+          if(typeof(reps)==='string'){
+            showToastMessageError(reps);
+          }else{
+            const d = ReportParseDataToTableData(reps);
+            updateReportStore(reps);
+            setDataReports(d);
+          }
+        } catch (error) {
+          showToastMessageError('Ocurrio un error al actualizar datos de la tabla!!');
+        }
+      }
+    } catch (error) {
+      showToastMessageError("Ocurrio un problema al clonar costo!!!");
     }
   }
 
@@ -79,6 +104,7 @@ export default function TableReports({data, token, reports,
           {/* <DeleteElement id={row.original.id} name={row.original.Report} remove={RemoveReport} token={token} /> */}
           <RemoveElement id={row.original.id} name={row.original.Report} token={token} 
               remove={RemoveReport} removeElement={delReport} />
+          <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneReport(row.original.id)} />
           {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500" />}
         </div>
       ),
@@ -211,19 +237,6 @@ export default function TableReports({data, token, reports,
     }),
   ]
 
-  //const [view, setView] = useState<JSX.Element>(<Table columns={columns} data={dataReports} placeH="Buscar informe.." />);
-
-  // useEffect(() => {
-  //   if(filter){
-  //     console.log('data rep ', dataReports);
-  //     //setView(<></>);
-  //     // setTimeout(() => {
-  //     //   setView(<Table columns={columns} data={dataReports} placeH="Buscar informe.." />);
-  //     // }, 100);
-  //     setFilter(false);
-  //   }
-  // }, [filter]);
-
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const repAmount = reports.reduce((previous, current) => {
@@ -350,7 +363,6 @@ export default function TableReports({data, token, reports,
       }
       if(typeof(reports)==='string'){
         showToastMessageError(reports);
-        //return <h1 className="text-lg text-center text-red-500">{reports}</h1>
       }else{
         const d = ReportParseDataToTableData(reports);
         updateReportStore(reports);
