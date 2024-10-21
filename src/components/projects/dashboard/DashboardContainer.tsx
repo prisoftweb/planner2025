@@ -7,6 +7,7 @@ import { ProgressBarComponent } from "./ProgressBarComponent"
 import HeaderDashboardPage from "./HeaderDashboardPage"
 import { BarChartTreeInOne } from "./BarChartTreeInOne"
 import { LineChartComponent } from "./LineChartComponent"
+import NewDonutChartComponent from "./NewDonutChartComponent"
 
 import { getDashboardProjectsAmount, getDashboardListProjects, 
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
@@ -20,7 +21,7 @@ from "@/app/api/routeProjects";
 import { ProjectsByClient, ListProjects, ProjectsByProgress, 
   ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
   CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
-  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted } 
+  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted, DonutChartJS, Dataset } 
 from "@/interfaces/DashboardProjects";
 
 interface OptionsDashboard {
@@ -287,22 +288,36 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     });
   });
 
-  const dataProjectsClient: OptionsDashboard[] = [];
-  const categoriesClient: string[] = [];
-
+  const values: number[] = [];
+  const titles: string[] = [];
+  
   stateProjectsClient.map((prj) => {
-    dataProjectsClient.push({
-      costo: prj.porcentage,
-      label: prj.client
-    });
-    categoriesClient.push(prj.client);
+    titles.push(prj.client);
+    values.push(prj.porcentage);
   });
+
+  const dataProjectsClient: DonutChartJS = {
+    labels: titles,
+    datasets: [
+      {
+        label: 'Projectos por cliente',
+        data: values,
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)'
+        ],
+        hoverOffset: 4
+      }
+    ]
+  };
 
   const dataProjectsProgress: OptionsDashboard[] = [];
   
   stateProjectsProgress.map((prj) => {
     dataProjectsProgress.push({
-      costo: prj.porcentage,
+      //costo: prj.porcentage,
+      costo: prj.progress?? 0,
       label: prj.title
     });
   });
@@ -355,10 +370,12 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     }
   }
 
+  const randomColors = [ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'];
+
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <HeaderDashboardPage amountProjects={totalAmount} handleDate={fetchData} 
-        projectsTotalCost={stateTotalCost} configMin={stateConfiMin} />
+        projectsTotalCost={stateTotalCost} configMin={stateConfiMin} activeProjects={dataProjectsProgress.length} />
       {/* <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
         costsResumenType={costsByResumenType} /> */}
       <div className="mt-5 gap-x-5 gap-y-5 flex">
@@ -366,8 +383,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>AVANCE DE PROYECTOS ACTIVOS</p>
           </div>
-          {dataProjectsProgress.map((prj) => (
-            <ProgressBarComponent label={prj.label} progress={prj.costo} key={prj.label} widthBar="w-2/3" />
+          {dataProjectsProgress.map((prj, index: number) => (
+            <ProgressBarComponent label={prj.label} progress={prj.costo} key={prj.label}
+               widthBar="w-2/3" color={ index > randomColors.length?  randomColors[index % randomColors.length] : randomColors[index]}  />
           ))}
         </div>
         
@@ -434,7 +452,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
-            <p>TOP 5 PROYECTOS</p>
+            <p>TOP 10 PROYECTOS</p>
           </div>
           <LineChartComponent dataProjectsTop={dataProjectsTop} />
           {/* <BarChartComponent categories={['costo']} colors={colors} data={dataListProjectsNotCompleted} /> */}
@@ -444,8 +462,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR Cliente</p>
           </div>
-          <PieChartComponent data={dataProjectsClient} colors={colors} category="costo"
-              categories={categoriesClient}  />
+          {/* <PieChartComponent data={dataProjectsClient} colors={colors} category="costo"
+              categories={categoriesClient}  /> */}
+            <NewDonutChartComponent data={dataProjectsClient} />
         </div>
       </div>
       

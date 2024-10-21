@@ -9,9 +9,9 @@ import { CurrencyFormatter } from '@/app/functions/Globals';
 import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';
 
 export default function HeaderDashboardPage({handleDate, amountProjects, 
-    projectsTotalCost, configMin}: 
+    projectsTotalCost, configMin, activeProjects}: 
   {handleDate: Function, amountProjects: TotalAmountProjects[], 
-    projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[]}) {
+    projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[], activeProjects: number}) {
   
     // const [project, setProject] = useState<string>(projects[0].value);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
@@ -25,6 +25,8 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
   //     handleDate(rangeDate.from, rangeDate.to, value);
   //   }
   // };
+
+  const progress = ((amountProjects[0].totalAmount / configMin[0].lastmeta.amount) * 100).toFixed(2);
 
   return (
     <div>
@@ -49,19 +51,21 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
       </div>
       <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-3'>
         <div className='w-full bg-cyan-500 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            h-full flex flex-col justify-center items-center'>
+            h-full'>
           {amountProjects.length > 0 && (
             <>
               <p className='text-lg'>{amountProjects[0].projects}</p>
               <p className='text-xs'>PROYECTOS TODOS</p>
+              <p className='text-lg text-right mt-2'>{activeProjects}</p>
+              <p className='text-xs text-right'>PROYECTOS ACTIVOS</p>
             </>
           )}
         </div>
         <div className="flex items-center bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
             justify-center gap-x-5">
-          <ProgressCircle value={75}>
+          <ProgressCircle value={Number(progress)}>
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
-              75%
+              {progress}%
             </span>
           </ProgressCircle>
           <div>
@@ -92,9 +96,13 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             flex flex-col justify-center items-center'>
           {amountProjects.length > 0 && (
             <>
-              <p className='text-xs'>MX 1.2M</p>
+              {/* <p className='text-xs'>MX 1.2M</p> */}
               <p className='text-xs'>UTILIDAD</p>
-              <p className='text-xs'>$1,205,704</p>
+              {/* <p className='text-xs'>$1,205,704</p> */}
+              <p className='text-xs'>{CurrencyFormatter({
+                currency: 'MXN',
+                value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
+              })}</p>
             </>
           )}
         </div>

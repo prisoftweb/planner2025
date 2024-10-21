@@ -196,8 +196,8 @@ export default function TableProjects({data, token, projects, optCategories,
       header: () => (
         <p>Avance</p>
       )
-    }),
-    columnHelper.accessor('amount', {
+    }), 
+    columnHelper.accessor('percentage', {
       header: 'Avance',
       id: 'nada',
       cell: ({row}) => (
@@ -218,6 +218,15 @@ export default function TableProjects({data, token, projects, optCategories,
     columnHelper.accessor('project', {
       header: 'Proyecto',
       id: 'proyecto',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => linkToProfile(row.original.id)}
+        >{row.original.account}</p>
+      ),
+    }),
+    columnHelper.accessor('account', {
+      header: 'Cuenta',
+      id: 'cuenta',
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
@@ -257,10 +266,33 @@ export default function TableProjects({data, token, projects, optCategories,
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
+        >{row.original.total}</p>
+      ),
+    }),
+    columnHelper.accessor('total', {
+      header: 'Total',
+      id: 'total',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => linkToProfile(row.original.id)}
         > </p>
       ),
     }),
   ]
+           
+  // const initialVisibilityColumns: any = {
+  //   seleccion: true,
+  //   accion: true, 
+  //   percentage: true, 
+  //   nada: true, 
+  //   clave: true, 
+  //   proyecto: true, 
+  //   cuenta: true, 
+  //   cliente: true, 
+  //   fecha: true, 
+  //   monto: true,  
+  //   total: false,
+  // }
   
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {

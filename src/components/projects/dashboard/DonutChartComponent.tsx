@@ -93,7 +93,7 @@ export default function DonutChartComponent({data, colors, categories, category}
           index='label'
           valueFormatter={valueFormatter}
           colors={colors}
-          className="w-44 h-44"
+          className="w-96 h-96"
           customTooltip={customTooltip}
         />
         <Legend

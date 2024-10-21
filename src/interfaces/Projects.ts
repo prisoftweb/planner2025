@@ -15,6 +15,8 @@ export interface ProjectsTable{
   date:string,
   amount:string,
   percentage: string
+  account: string
+  total: string
 }
 
 export interface ProjectsBudgetTable{

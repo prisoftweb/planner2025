@@ -137,3 +137,14 @@ export interface ControlBudgeted {
   porcentage: number
 }
 
+export interface DonutChartJS {
+  labels: string[]
+  datasets: Dataset[]
+}
+
+export interface Dataset {
+  label: string
+  data: number[]
+  backgroundColor: string[]
+  hoverOffset: number
+}
