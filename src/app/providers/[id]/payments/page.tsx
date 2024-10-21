@@ -3,11 +3,15 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
-import { getProvider, getProviders } from "@/app/api/routeProviders";
+import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
 import { Provider } from "@/interfaces/Providers";
 import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
+import { Expense } from "@/interfaces/Expenses";
+import TableExpenses from "@/components/expenses/TableExpenses";
+import { ExpensesTable } from "@/interfaces/Expenses";
+import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -34,6 +38,15 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
   }
 
+  let costs: Expense[];
+  try {
+    costs = await GetCostsMIN(token, params.id);
+    if(typeof(costs) === "string")
+      return <h1 className="text-center text-red-500">{costs}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
+  }
+
   let options: Options[] = [];
 
   if(providers.length <= 0){
@@ -45,7 +58,9 @@ export default async function Page({ params }: { params: { id: string }}){
       value: prov._id,
       label: prov.name,
     })
-  })
+  });
+
+  const table: ExpensesTable[] = ExpenseDataToTableData(costs);
   
   return(
     <>
@@ -60,6 +75,14 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={options} routePage="providers" subpath="/payments" />
         </div>
         <NavTab idProv={params.id} tab='2' />
+      </div>
+      <div>
+        <TableExpenses token={token} handleExpensesSelected={() => console.log('')}
+          expenses={costs} isFilter={false} setIsFilter={() => console.log('')}
+          idValidado='' user={user._id} isViewReports={false}
+          //data={data}
+          data={table}
+        />
       </div>
     </>
   )

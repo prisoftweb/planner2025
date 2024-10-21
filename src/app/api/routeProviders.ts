@@ -184,3 +184,23 @@ export async function updateContactProvider(data:Object, id:string, auth_token:s
     return 'Ocurrio un error al actulizar contacto del proveedor!!';
   }
 }
+
+export async function GetCostsMIN(auth_token:string, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByProviderMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    if(res.status===200) return res.data.data.stats
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    console.log('catch ', error);
+    return 'Error al consultar costos!!';
+  }
+}

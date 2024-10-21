@@ -26,10 +26,10 @@ export default function ReportClient({report, token, id, user,
   
   let view:JSX.Element = <></>;
   if(oneReport){
-    opt===2? view =(<CostsInReport id={id} token={token} report={report} />) : 
-      opt===3?  view =(<NuevoComponente id={id} token={token} report={report} />): 
-                  view = (<DataReports id={id} token={token} report={report} user={user} 
-                    node={node} dates={dates} />)
+    opt===3? view =(<CostsInReport id={id} token={token} report={report} />) : 
+      opt===2?  view =(<DataReports id={id} token={token} report={report} user={user} 
+                          node={node} dates={dates} />): 
+                  view = (<NuevoComponente id={id} token={token} report={report} />)
   }
   
   const [open, setOpen] = useState<boolean>(false);

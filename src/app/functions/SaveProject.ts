@@ -111,6 +111,12 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       currency: "MXN",
       value: project.amount
     })
+
+    const total = CurrencyFormatter({
+      currency: "MXN",
+      value: project.amount
+    });
+
     //se puede usar dolares si no se quiere el mx antes del $
     // const dollar = CurrencyFormatter({
     //   currency: "USD",
@@ -137,7 +143,9 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       // status: project.status,
       condition: cond,
       percentage: p,
-      imgProject: project.photo
+      imgProject: project.photo,
+      account: project.account,
+      total: total
     })
   });
 
