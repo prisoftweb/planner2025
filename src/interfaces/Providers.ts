@@ -1,4 +1,5 @@
 import { Contact } from "./Common"
+import { Glossary } from "./Glossary"
 
 export interface Provider {
   "_id":string,
@@ -34,4 +35,54 @@ export interface Tradeline{
   "overduedebt"?:boolean,
   "percentoverduedebt"?:number,
   "date"?:Date
+}
+
+export interface HistoryExpensesTable {
+  id: string
+  Responsable: {
+    responsible: string,
+    photo: string
+  } 
+  Proyecto: string 
+  Informe: string 
+  Descripcion: string 
+  Estatus: Glossary 
+  Fecha: string 
+  Importe: string
+  condition: string,
+  archivos: string[],
+  isPaid: boolean
+}
+
+export interface ExpensesTableProvider {
+  id: string
+  Responsable: {
+    responsible: string,
+    photo: string
+  } 
+  reference: string
+  range: string
+  notes: string
+  //Estatus: Glossary
+  Estatus: boolean
+  date: string
+  Quantity: string
+  paid: string
+  archivos: string[],
+}
+
+export interface DetailExpensesTableProvider {
+  id: string
+  Responsable: {
+    responsible: string,
+    photo: string
+  }
+  project: string,
+  report: string
+  description: string
+  Estatus: Glossary
+  paid: boolean
+  date: string
+  archivos: string[],
+  total: string
 }

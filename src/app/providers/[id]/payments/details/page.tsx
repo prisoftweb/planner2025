@@ -1,12 +1,11 @@
-import NavTab from "@/components/providers/NavTab";
+//import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { ExpensesTableProvider, HistoryExpensesTable, Provider } from "@/interfaces/Providers";
-import { Options } from "@/interfaces/Common";
-import { ExpenseDataToTableHistoryProviderData, ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
-import ContainerTableExpensesProvider from "@/components/providers/ContainerTableExpensesProvider";
+import { DetailExpensesTableProvider, ExpensesTableProvider, Provider } from "@/interfaces/Providers";
+import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
+import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
 import { Expense } from "@/interfaces/Expenses";
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -43,27 +42,18 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
   }
 
-  //let options: Options[] = [];
-
   if(providers.length <= 0){
     return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
   }
 
-  // providers.map((prov: any) => {
-  //   options.push({
-  //     value: prov._id,
-  //     label: prov.name,
-  //   })
-  // });
-
-  const table: ExpensesTableProvider[] = ExpenseDataToTablePaidExpensesProviderData(costs);
+  const table: DetailExpensesTableProvider[] = ExpenseDataToTableDetailExpensesProviderData(costs);
   
   return(
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <NavTab idProv={params.id} tab='4' />
-        <ContainerTableExpensesProvider data={table} expenses={costs} token={token} 
+        {/* <NavTab idProv={params.id} tab='4' /> */}
+        <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token} 
           user={user._id} provider={provider} />
       </div>
     </>
