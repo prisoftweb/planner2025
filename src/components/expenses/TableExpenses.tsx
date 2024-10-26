@@ -13,8 +13,7 @@ import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import RemoveElement from "../RemoveElement";
-//import IoMdCopy from 'react-icons';
-import { IoCopy } from "react-icons/io5";
+import {IoMdCopy} from 'react-icons/io';
 
 export default function TableExpenses({data, token, expenses, 
                             handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
@@ -113,7 +112,7 @@ export default function TableExpenses({data, token, expenses,
           <RemoveElement id={row.original.id} name={row.original.Descripcion} 
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
-          <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneCost(row.original.id)} />
+          <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneCost(row.original.id)} />
           <div className="w-20 flex gap-x-1 items-center">
             {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
