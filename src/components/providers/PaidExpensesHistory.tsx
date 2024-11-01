@@ -7,8 +7,13 @@ import TextArea from "../TextArea";
 import UploadFileDropZone from "../UploadFileDropZone";
 import { useState, useEffect, useCallback } from "react";
 import { useDropzone} from 'react-dropzone';
+import { createPayments, createPaymentsWithVoucher } from "@/app/api/routePayments";
+import { showToastMessage, showToastMessageError } from "../Alert";
 
-export default function PaidExpensesHistory({token}: {token:string}) {
+export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
+  minDate, showForm}: 
+          {token:string, id:string, user:string, costs: string[], 
+            minDate:string, maxDate: string, showForm: Function}) {
 
   const [amount, setAmount] = useState<string>('');
   const [reference, setReference] = useState<string>('');
@@ -49,7 +54,61 @@ export default function PaidExpensesHistory({token}: {token:string}) {
     }
 
     if(band){
-      console.log('guardar');
+      //console.log('guardar');
+      paidExpenses();
+    }
+  }
+
+  const paidExpenses = async() => {
+    if(acceptedFiles.length > 0){
+      const data = new FormData();
+      data.append("reference",reference);
+      data.append("payout",amount.replace(/[$]/g, ""));
+      data.append("range", JSON.stringify({
+          min:minDate,
+          max:maxDate
+        }));
+      data.append("date",date);
+      data.append("costs",JSON.stringify(costs));
+      data.append("notes",comments);
+      data.append("provider",id);
+      data.append("user",user);
+      data.append("voucher", acceptedFiles[0]);
+
+      console.log('acceoted files 0 => ', acceptedFiles[0]);
+      console.log(data.getAll('voucher'));
+      console.log(data.getAll('costs'));
+  
+      const res = await createPaymentsWithVoucher(token, data);
+      if(typeof(res) === 'string'){
+        showToastMessageError(res);
+      }else{ 
+        showToastMessage('Costos pagados exitosamente!!!');
+        showForm(false);
+      }
+    }else{
+      const data = {
+        reference:reference,
+        payout:amount.replace(/[$]/g, ""),
+        //pending:31902.33,
+        date,
+        range: {
+            min:minDate,
+            max:maxDate
+        },
+        costs,
+        notes:comments,
+        provider:id,
+        user
+      }
+  
+      const res = await createPayments(token, data);
+      if(typeof(res) === 'string'){
+        showToastMessageError(res);
+      }else{ 
+        showToastMessage('Costos pagados exitosamente!!!');
+        showForm(false);
+      }
     }
   }
 

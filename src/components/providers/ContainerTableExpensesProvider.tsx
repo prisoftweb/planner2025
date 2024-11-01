@@ -10,10 +10,11 @@ import { Provider } from "@/interfaces/Providers"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
+import { PaymentProvider } from "@/interfaces/Payments"
 
 export default function ContainerTableExpensesProvider({data, token, expenses, user, 
     provider}:
-  {data:ExpensesTableProvider[], token:string, expenses:Expense[], 
+  {data:ExpensesTableProvider[], token:string, expenses:PaymentProvider[], 
     user: string, provider: Provider}) {
 
   const [filter, setFilter] = useState<boolean>(false);
@@ -59,7 +60,7 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
       </div>
       <TableCostsProvider token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expenses} isFilter={filter} setIsFilter={handleFilter}
-        user={user} data={data} />
+        user={user} data={data} idProv={provider._id} />
     </div>
   )
 }

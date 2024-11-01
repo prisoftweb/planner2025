@@ -8,8 +8,9 @@ import { Provider } from "@/interfaces/Providers";
 import TableListExpensesPaid from "./TableListsExpensesPaid";
 import PaidExpensesHistory from "./PaidExpensesHistory";
 
-export default function PaidHistoryExpenses({showForm, dataTable, provider, token}: 
-  {showForm:Function, dataTable: HistoryExpensesTable[], provider: Provider, token:string}) {
+export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user}: 
+  {showForm:Function, dataTable: HistoryExpensesTable[], provider: Provider, 
+    token:string, user: string}) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
@@ -36,8 +37,29 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
+  const costs: string[] = [];
+  let minDate = '', maxDate = '';
+
+  dataTable.map((cost) => {
+    costs.push(cost.id);
+    if(minDate === '' && maxDate === ''){
+      minDate=cost.Fecha;
+      maxDate=cost.Fecha;
+    }else{
+      if(new Date(minDate) > new Date(cost.Fecha)){
+        minDate = cost.Fecha;
+      }else{
+        if(new Date(maxDate) < new Date(cost.Fecha)){
+          maxDate = cost.Fecha;
+        }
+      }
+    }
+  });
+
   let viewComponent = indexStepper===1? 
-      <PaidExpensesHistory token={token} />: <TableListExpensesPaid data={dataTable} />;
+      <PaidExpensesHistory id={provider._id} token={token} showForm={showForm}
+          user={user} costs={costs} maxDate={maxDate} minDate={minDate} />:
+      <TableListExpensesPaid data={dataTable} />;
   
   return(
     <>

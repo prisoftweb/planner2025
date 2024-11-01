@@ -8,6 +8,8 @@ import { Options } from "@/interfaces/Common";
 import { ExpenseDataToTableHistoryProviderData, ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableExpensesProvider from "@/components/providers/ContainerTableExpensesProvider";
 import { Expense } from "@/interfaces/Expenses";
+import { Payment, PaymentProvider } from "@/interfaces/Payments";
+import { getPaymentsProvider, getPayments } from "@/app/api/routePayments";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -20,7 +22,7 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     provider = await getProvider(params.id, token);
     if(typeof(provider) === "string")
-      return <h1 className="text-center text-red-500">{provider}</h1>
+      return <h1 className="text-center text-red-500">{provider} provedor</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
   }
@@ -29,32 +31,43 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     providers = await getProviders(token);
     if(typeof(providers) === "string")
-      return <h1 className="text-center text-red-500">{providers}</h1>
+      return <h1 className="text-center text-red-500">{providers} provedores</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
   }
 
-  let costs: Expense[];
+  // let costs: Expense[];
+  // try {
+  //   costs = await GetCostsMIN(token, params.id);
+  //   if(typeof(costs) === "string")
+  //     return <h1 className="text-center text-red-500">{costs}</h1>
+  // } catch (error) {
+  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
+  // }
+
+  let costs: PaymentProvider[];
   try {
-    costs = await GetCostsMIN(token, params.id);
+    costs = await getPaymentsProvider(token, params.id);
     if(typeof(costs) === "string")
-      return <h1 className="text-center text-red-500">{costs}</h1>
+      return <h1 className="text-center text-red-500">{costs} cp</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
   }
+
+  // let costs: Payment[];
+  // try {
+  //   costs = await getPayments(token);
+  //   if(typeof(costs) === "string")
+  //     return <h1 className="text-center text-red-500">{costs} payments</h1>
+  // } catch (error) {
+  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
+  // }
 
   //let options: Options[] = [];
 
   if(providers.length <= 0){
     return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
   }
-
-  // providers.map((prov: any) => {
-  //   options.push({
-  //     value: prov._id,
-  //     label: prov.name,
-  //   })
-  // });
 
   const table: ExpensesTableProvider[] = ExpenseDataToTablePaidExpensesProviderData(costs);
   

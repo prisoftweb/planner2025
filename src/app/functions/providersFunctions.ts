@@ -1,6 +1,7 @@
 import { Expense } from "@/interfaces/Expenses";
 import { HistoryExpensesTable, ExpensesTableProvider, DetailExpensesTableProvider } from "@/interfaces/Providers";
 import { CurrencyFormatter } from "./Globals";
+import { Payment, PaymentProvider, CostPayment } from "@/interfaces/Payments";
 
 export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
   const table: HistoryExpensesTable[] = [];
@@ -94,152 +95,294 @@ export function getTypeFiles(expense:Expense) {
   return typeFiles;
 }
 
-export function ExpenseDataToTablePaidExpensesProviderData(expenses:Expense[]){
+// export function getTypeFilePayment(pay:CostPayment) {
+//   const typeFiles: string[] = [];
+//   pay.files.map((f) => {
+//       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
+//         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
+//         || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a'){
+//           typeFiles.push('pdf');
+//       }else{
+//         if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
+//           typeFiles.push('xml');
+//         }
+//       }
+//     });
+  
+//   return typeFiles;
+// }
+
+// export function ExpenseDataToTablePaidExpensesProviderData(expenses:Expense[]){
+//   const table: ExpensesTableProvider[] = [];
+  
+//   expenses.map((expense) => {
+//     const dollar = CurrencyFormatter({
+//           currency: "MXN",
+//           value: expense.cost?.subtotal || 0
+//         })
+//     const elements: string[] = [];
+//     if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
+//       const typeFiles = getTypeFiles(expense);
+//       if(typeFiles.includes('xml')){
+//         elements.push('xml');
+//       }else{
+//         elements.push('none');
+//       }
+
+//       if(typeFiles.includes('pdf')){
+//         elements.push('pdf');
+//       }else{
+//         elements.push('none');
+//       }
+//     }else{
+//       if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
+//         const typeFiles = getTypeFiles(expense);
+//         if(typeFiles.includes('xml')){
+//           elements.push('xml');
+//         }else{
+//           elements.push('none');
+//         }
+//       }else{
+//         if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
+//           const typeFiles = getTypeFiles(expense);
+//           if(typeFiles.includes('pdf')){
+//             elements.push('pdf');
+//           }else{
+//             elements.push('none');
+//           }
+//         }else{
+//           const typeFiles = getTypeFiles(expense);
+//           if(typeFiles.includes('xml')){
+//             elements.push('xml');
+//           }
+    
+//           if(typeFiles.includes('pdf')){
+//             elements.push('pdf');
+//           }
+
+//           if(elements.length === 0){
+//             elements.push('none');
+//           }
+//         }
+//       }
+//     }
+//     table.push({
+//       id: expense._id,
+//       //Estatus: expense.estatus,
+//       Estatus: expense.ispaid,
+//       date: expense.date,
+//       Responsable: {
+//         responsible: expense.user?.name,
+//         photo: expense.user?.photo
+//       },
+//       archivos: elements,
+//       notes: expense.description,
+//       //paid: expense.cost.subtotal.toString(),
+//       paid: dollar,
+//       Quantity: '4',
+//       range: 'kkjdf',
+//       reference: 'hkjhf'
+//     });
+//   });
+
+//   return table;
+// }
+
+export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvider[]){
   const table: ExpensesTableProvider[] = [];
   
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.cost?.subtotal || 0
+          value: expense.payout || 0
         })
     const elements: string[] = [];
-    if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
-      const typeFiles = getTypeFiles(expense);
-      if(typeFiles.includes('xml')){
-        elements.push('xml');
-      }else{
-        elements.push('none');
-      }
+    // if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
+    //   const typeFiles = getTypeFiles(expense);
+    //   if(typeFiles.includes('xml')){
+    //     elements.push('xml');
+    //   }else{
+    //     elements.push('none');
+    //   }
 
-      if(typeFiles.includes('pdf')){
-        elements.push('pdf');
-      }else{
-        elements.push('none');
-      }
-    }else{
-      if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
-        const typeFiles = getTypeFiles(expense);
-        if(typeFiles.includes('xml')){
-          elements.push('xml');
-        }else{
-          elements.push('none');
-        }
-      }else{
-        if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
-          const typeFiles = getTypeFiles(expense);
-          if(typeFiles.includes('pdf')){
-            elements.push('pdf');
-          }else{
-            elements.push('none');
-          }
-        }else{
-          const typeFiles = getTypeFiles(expense);
-          if(typeFiles.includes('xml')){
-            elements.push('xml');
-          }
+    //   if(typeFiles.includes('pdf')){
+    //     elements.push('pdf');
+    //   }else{
+    //     elements.push('none');
+    //   }
+    // }else{
+    //   if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
+    //     const typeFiles = getTypeFiles(expense);
+    //     if(typeFiles.includes('xml')){
+    //       elements.push('xml');
+    //     }else{
+    //       elements.push('none');
+    //     }
+    //   }else{
+    //     if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
+    //       const typeFiles = getTypeFiles(expense);
+    //       if(typeFiles.includes('pdf')){
+    //         elements.push('pdf');
+    //       }else{
+    //         elements.push('none');
+    //       }
+    //     }else{
+    //       const typeFiles = getTypeFiles(expense);
+    //       if(typeFiles.includes('xml')){
+    //         elements.push('xml');
+    //       }
     
-          if(typeFiles.includes('pdf')){
-            elements.push('pdf');
-          }
+    //       if(typeFiles.includes('pdf')){
+    //         elements.push('pdf');
+    //       }
 
-          if(elements.length === 0){
-            elements.push('none');
-          }
-        }
-      }
-    }
+    //       if(elements.length === 0){
+    //         elements.push('none');
+    //       }
+    //     }
+    //   }
+    // }
     table.push({
       id: expense._id,
       //Estatus: expense.estatus,
-      Estatus: expense.ispaid,
+      Estatus: expense.status,
       date: expense.date,
       Responsable: {
-        responsible: expense.user?.name,
-        photo: expense.user?.photo
+        responsible: expense.user.name,
+        photo: expense.user.photo
       },
       archivos: elements,
-      notes: expense.description,
+      notes: expense.notes,
       //paid: expense.cost.subtotal.toString(),
       paid: dollar,
-      Quantity: '4',
-      range: 'kkjdf',
-      reference: 'hkjhf'
+      Quantity: expense.quantity.length.toString(),
+      range: 'sin rango de fechas',
+      reference: expense.reference
     });
   });
 
   return table;
 }
 
-export function ExpenseDataToTableDetailExpensesProviderData(expenses:Expense[]){
+export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPayment[]){
   const table: DetailExpensesTableProvider[] = [];
   
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.cost?.subtotal || 0
+          value: expense.payout || 0
         })
     const elements: string[] = [];
-    if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
-      const typeFiles = getTypeFiles(expense);
-      if(typeFiles.includes('xml')){
-        elements.push('xml');
-      }else{
-        elements.push('none');
-      }
+    // const typeFiles = getTypeFiles(expense);
+    if(expense.voucher.includes('pdf')){
+      elements.push('pdf');
+    }
 
-      if(typeFiles.includes('pdf')){
-        elements.push('pdf');
-      }else{
-        elements.push('none');
-      }
-    }else{
-      if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
-        const typeFiles = getTypeFiles(expense);
-        if(typeFiles.includes('xml')){
-          elements.push('xml');
-        }else{
-          elements.push('none');
-        }
-      }else{
-        if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
-          const typeFiles = getTypeFiles(expense);
-          if(typeFiles.includes('pdf')){
-            elements.push('pdf');
-          }else{
-            elements.push('none');
-          }
-        }else{
-          const typeFiles = getTypeFiles(expense);
-          if(typeFiles.includes('xml')){
-            elements.push('xml');
-          }
-    
-          if(typeFiles.includes('pdf')){
-            elements.push('pdf');
-          }
-
-          if(elements.length === 0){
-            elements.push('none');
-          }
-        }
-      }
+    if(elements.length === 0){
+      elements.push('none');
     }
     table.push({
       id: expense._id,
-      Estatus: expense.estatus,
+      Estatus: expense.costs.estatus,
       date: expense.date,
       Responsable: {
         responsible: expense.user?.name,
         photo: expense.user?.photo
       },
       archivos: elements,
-      description: expense.description,
-      paid: expense.ispaid,
-      project: expense.project.title,
-      report: expense.report.name,
+      description: expense.notes,
+      paid: true,
+      project: expense.costs.project.title,
+      report: expense.costs.report.name,
       total: dollar
     });
   });
 
   return table;
 }
+
+// export function ExpenseDataToTableDetailExpensesProviderData(expenses:Payment[]){
+//   const table: DetailExpensesTableProvider[] = [];
+  
+//   expenses.map((expense) => {
+//     const dollar = CurrencyFormatter({
+//           currency: "MXN",
+//           value: expense.payout || 0
+//         })
+//     const elements: string[] = [];
+//     // if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
+//     //   const typeFiles = getTypeFiles(expense);
+//     //   if(typeFiles.includes('xml')){
+//     //     elements.push('xml');
+//     //   }else{
+//     //     elements.push('none');
+//     //   }
+
+//     //   if(typeFiles.includes('pdf')){
+//     //     elements.push('pdf');
+//     //   }else{
+//     //     elements.push('none');
+//     //   }
+//     // }else{
+//     //   if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
+//     //     const typeFiles = getTypeFiles(expense);
+//     //     if(typeFiles.includes('xml')){
+//     //       elements.push('xml');
+//     //     }else{
+//     //       elements.push('none');
+//     //     }
+//     //   }else{
+//     //     if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
+//     //       const typeFiles = getTypeFiles(expense);
+//     //       if(typeFiles.includes('pdf')){
+//     //         elements.push('pdf');
+//     //       }else{
+//     //         elements.push('none');
+//     //       }
+//     //     }else{
+//     //       const typeFiles = getTypeFiles(expense);
+//     //       if(typeFiles.includes('xml')){
+//     //         elements.push('xml');
+//     //       }
+    
+//     //       if(typeFiles.includes('pdf')){
+//     //         elements.push('pdf');
+//     //       }
+
+//     //       if(elements.length === 0){
+//     //         elements.push('none');
+//     //       }
+//     //     }
+//     //   }
+//     // }
+//     table.push({
+//       id: expense._id,
+//       Estatus: {
+//         color: "#f00",
+//         __v: 0,
+//         _id: '1',
+//         description: "sin condicion",
+//         id: '1',
+//         name: 'sin condicion',
+//         status: true
+//       },
+//       date: expense.date,
+//       // Responsable: {
+//       //   responsible: expense.user?.name,
+//       //   photo: expense.user?.photo
+//       // },
+//       Responsable: {
+//         responsible: expense.user,
+//         photo: '/img/default.jpg'
+//       },
+//       archivos: elements,
+//       description: expense.notes,
+//       paid: expense.status,
+//       project: 'sin proyecto',
+//       report: 'sin reporte',
+//       total: dollar
+//     });
+//   });
+
+//   return table;
+// }

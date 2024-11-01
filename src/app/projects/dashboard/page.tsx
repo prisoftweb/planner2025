@@ -2,6 +2,7 @@ import Navigation from "@/components/navigation/Navigation"
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import DashBoardContainer from "@/components/projects/dashboard/DashboardContainer";
+import { Options } from "@/interfaces/Common";
 
 import { getDashboardProjectsAmount, getDashboardListProjects, 
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
@@ -9,7 +10,7 @@ import { getDashboardProjectsAmount, getDashboardListProjects,
   getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
   getDashboardListProjectsByDate, getDashboardListProjectsTop10, 
   getDashboardProjectTotalCost, getConfigMin, getProjectsBudgeted, 
-  getProjectsControlBudgeted, getProjectsSpent } 
+  getProjectsControlBudgeted, getProjectsSpent, getProjectsLV } 
 from "@/app/api/routeProjects";
 
 import { ProjectsByClient, ListProjects, ProjectsByProgress, 
@@ -178,6 +179,16 @@ export default async function Page() {
     return <h1>Error al obtener proyectos por control presupuestal!!!</h1>
   }
 
+  let projects: Options[] = [];
+  try {
+    projects = await getProjectsLV(token);
+    if(typeof(projects)==='string'){
+      return <h1>{projects}</h1>
+    }
+  } catch (error) {
+    return <h1>Error al obtener proyectos!!!</h1>
+  }
+
   return (
     <>
       <Navigation user={user} />
@@ -186,7 +197,11 @@ export default async function Page() {
         projectsSegment={projectsSegment} projectsStatus={projectsStatus} projectsTop10={projectsTop10}
         listProjectsnotCompleted={listProjectsnotCompleted} projectsandTypes={projectsandTypes}
         projectsTotalCost={projectsTotalCost} configMin={configMin} projectsBudgeted={projectsBudgeted}
-        projectsControlBudgeted={projectsControlBudgeted} projectsSpent={projectsSpent} />
+        projectsControlBudgeted={projectsControlBudgeted} projectsSpent={projectsSpent} 
+        projects={[{
+          label: 'Todos',
+          value: 'all'
+        }, ...projects]} />
     </>
   )
 }

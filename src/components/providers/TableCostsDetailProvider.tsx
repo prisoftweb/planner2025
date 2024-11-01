@@ -10,17 +10,18 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import { DetailExpensesTableProvider } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
+import { CostPayment } from "@/interfaces/Payments";
 
 export default function TableCostsDetailProvider({data, token, expenses, 
                           user, isFilter, setIsFilter }:
-                        {data:DetailExpensesTableProvider[], token:string, expenses:Expense[], 
+                        {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
                         user: string, isFilter:boolean, setIsFilter:Function }){
   
   const columnHelper = createColumnHelper<DetailExpensesTableProvider>();
   const refExpenses = useRef(expenses);
   
   const [dataExpenses, setDataExpenses] = useState(data);
-  const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
+  const [expensesFiltered, setExpensesFiltered] = useState<CostPayment[]>(expenses);
   
   const handleIsFilter = (value: boolean) => {
     // if(value){
@@ -84,7 +85,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
       ),
       enableSorting:false,
       header: () => (
-        <p>Referencia</p>
+        <p>Proyecto</p>
       )
     }),
     columnHelper.accessor('report', {
@@ -135,6 +136,14 @@ export default function TableCostsDetailProvider({data, token, expenses,
         ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} /></p>
       ),
     }),
+    columnHelper.accessor('total', {
+      header: 'Importe',
+      id: 'Importe',
+      cell: ({row}) => (
+        <p className="py-2 font-semibold cursor-pointer"
+        >{row.original.total}</p>
+      )
+    }),
   ]
   
 
@@ -144,34 +153,35 @@ export default function TableCostsDetailProvider({data, token, expenses,
   
   useEffect(() => {
     const expenseM = expenses.reduce((previous, current) => {
-      return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
+      return current.payout > previous.payout ? current : previous;
     });
     const expenseMin = expenses.reduce((previous, current) => {
-      return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
+      return current.payout < previous.payout ? current : previous;
     });
-    setMaxAmount(expenseM.cost?.subtotal);
-    setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
+    setMaxAmount(expenseM.payout);
+    setMinAmount(expenseMin.payout > 0? 0: expenseMin.payout || 0);
   }, [])
 
-  const paidValidation = (exp:Expense, isPaid:number) => {
-    if(isPaid===1){
-      return true;
-    }else{
-      if(isPaid===2){
-        if(exp.ispaid){
-          return true;
-        }
-        return false;
-      }else{
-        if(!exp.ispaid){
-          return true;
-        }
-        return false;
-      }
-    }
+  const paidValidation = (exp:CostPayment, isPaid:number) => {
+    // if(isPaid===1){
+    //   return true;
+    // }else{
+    //   if(isPaid===2){
+    //     if(exp.ispaid){
+    //       return true;
+    //     }
+    //     return false;
+    //   }else{
+    //     if(!exp.ispaid){
+    //       return true;
+    //     }
+    //     return false;
+    //   }
+    // }
+    return true;
   }
 
-  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
+  const dateValidation = (exp:CostPayment, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
     //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
@@ -181,22 +191,22 @@ export default function TableCostsDetailProvider({data, token, expenses,
     return false;
   }
 
-  const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const amountValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number, isPaid: number) => {
-    if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
+    if(exp.payout >= minAmount && exp.payout <= maxAmount){
       return dateValidation(exp, startDate, endDate, isPaid);
     }
     return false;
   }
 
-  const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const projectValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, projects:string[], 
                       isPaid: number) => {
     if(projects.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-      if(exp.project){
-        if(projects.includes(exp.project._id)){
+      if(exp.costs.project){
+        if(projects.includes(exp.costs.project._id)){
           return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
         }
       }
@@ -204,14 +214,14 @@ export default function TableCostsDetailProvider({data, token, expenses,
     return false;
   }
 
-  const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const reportValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
               startDate:number, endDate:number, projects:string[], 
               reports:string[], isPaid: number) => {
     if(reports.includes('all')){
       return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
     }else{
-      if(exp.report){
-        if(reports.includes(exp.report._id)){
+      if(exp.costs.report){
+        if(reports.includes(exp.costs.report._id)){
           return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
         }
       }
@@ -219,7 +229,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
     return false;
   }
 
-  const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const conditionValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], conditions:string[], isPaid: number) => {
 
@@ -230,7 +240,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
       //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
       //               reports, categories, types, costcenters);
       // }
-      if(conditions.includes(exp.estatus._id)){
+      if(conditions.includes(exp.costs.estatus._id)){
         return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
       }
     }
@@ -241,7 +251,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
     reports:string[], projects:string[], startDate:number, 
     endDate:number, isPaid: number) => {
   
-    let filtered: Expense[] = [];
+    let filtered: CostPayment[] = [];
     refExpenses.current.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
           endDate, projects, reports, conditions, isPaid)){

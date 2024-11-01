@@ -6,9 +6,11 @@ import { UsrBack } from "@/interfaces/User";
 import { DetailExpensesTableProvider, ExpensesTableProvider, Provider } from "@/interfaces/Providers";
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
-import { Expense } from "@/interfaces/Expenses";
+// import { Expense } from "@/interfaces/Expenses";
+import { CostPayment, OnePayment } from "@/interfaces/Payments";
+import { getCostsPayment, getPayment } from "@/app/api/routePayments";
 
-export default async function Page({ params }: { params: { id: string }}){
+export default async function Page({ params }: { params: { id: string, idP: string }}){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
@@ -33,28 +35,42 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
   }
 
-  let costs: Expense[];
+  let costs: CostPayment[];
   try {
-    costs = await GetCostsMIN(token, params.id);
+    costs = await getCostsPayment(token, params.idP);
     if(typeof(costs) === "string")
       return <h1 className="text-center text-red-500">{costs}</h1>
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del pago!!</h1>  
+  }
+
+  let payment: OnePayment;
+  try {
+    payment = await getPayment(token, params.idP);
+    if(typeof(payment) === "string")
+      return <h1 className="text-center text-red-500">{payment} one payment</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del pago!!</h1>  
   }
 
   if(providers.length <= 0){
     return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
   }
 
+  // const arrCosts : Expense[] = [];
+  // arrCosts.push(costs);
+
   const table: DetailExpensesTableProvider[] = ExpenseDataToTableDetailExpensesProviderData(costs);
+
+  // const table: DetailExpensesTableProvider[] = [];
   
   return(
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         {/* <NavTab idProv={params.id} tab='4' /> */}
-        <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token} 
-          user={user._id} provider={provider} />
+        <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token}
+          user={user._id} provider={provider} payment={payment} />
       </div>
     </>
   )
