@@ -10,18 +10,19 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
 import { ExpensesTableProvider } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
+import { PaymentProvider } from "@/interfaces/Payments";
 
-export default function TableCostsProvider({data, token, expenses, 
+export default function TableCostsProvider({data, token, expenses, idProv, 
                             handleExpensesSelected, user, isFilter, setIsFilter }:
-                        {data:ExpensesTableProvider[], token:string, expenses:Expense[], 
+                        {data:ExpensesTableProvider[], token:string, expenses:PaymentProvider[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
-                        handleExpensesSelected:Function }){
+                        handleExpensesSelected:Function, idProv: string }){
   
   const columnHelper = createColumnHelper<ExpensesTableProvider>();
   const refExpenses = useRef(expenses);
   
   const [dataExpenses, setDataExpenses] = useState(data);
-  const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
+  const [expensesFiltered, setExpensesFiltered] = useState<PaymentProvider[]>(expenses);
   
   const handleIsFilter = (value: boolean) => {
     // if(value){
@@ -81,7 +82,7 @@ export default function TableCostsProvider({data, token, expenses,
       id: 'Referencia',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
         >{row.original.reference}</p>
       ),
       enableSorting:false,
@@ -94,7 +95,7 @@ export default function TableCostsProvider({data, token, expenses,
       id: 'Rango',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
         >{row.original.range}</p>
       )
     }),
@@ -104,11 +105,11 @@ export default function TableCostsProvider({data, token, expenses,
       cell: ({row}) => (
         row.original.notes.length < 100? (
           <p className="cursor-pointer" 
-            onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}
+            onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
           >{row.original.notes}</p>
         ): (
           <p className="cursor-pointer" 
-            onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}
+            onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
           >{row.original.notes.substring(0, 100)}</p>
         )
       ),
@@ -118,7 +119,7 @@ export default function TableCostsProvider({data, token, expenses,
       id: 'Estatus',
       cell: ({row}) => (
         <div className="cursor-pointer" 
-          onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}>
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}>
             <Chip label={row.original.Estatus? 'Pagado': 'No pagado'} color={row.original.Estatus? '#0f0': '#f00'} />
         </div>
       ),
@@ -128,7 +129,7 @@ export default function TableCostsProvider({data, token, expenses,
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
         >{row.original.date?.substring(0, 10) || ''}</p>
       ),
     }),
@@ -137,7 +138,7 @@ export default function TableCostsProvider({data, token, expenses,
       id: 'Cantidad',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
         >{row.original.Quantity}</p>
       ),
     }),
@@ -146,7 +147,7 @@ export default function TableCostsProvider({data, token, expenses,
       id: 'Pago',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${row.original.id}/payments/details`)}
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
         >{row.original.paid}</p>
       ),
     }),
@@ -160,34 +161,35 @@ export default function TableCostsProvider({data, token, expenses,
   
   useEffect(() => {
     const expenseM = expenses.reduce((previous, current) => {
-      return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
+      return current.payout > previous.payout ? current : previous;
     });
     const expenseMin = expenses.reduce((previous, current) => {
-      return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
+      return current.payout < previous.payout ? current : previous;
     });
-    setMaxAmount(expenseM.cost?.subtotal);
-    setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
+    setMaxAmount(expenseM.payout);
+    setMinAmount(expenseMin.payout > 0? 0: expenseMin.payout || 0);
   }, [])
 
-  const paidValidation = (exp:Expense, isPaid:number) => {
-    if(isPaid===1){
-      return true;
-    }else{
-      if(isPaid===2){
-        if(exp.ispaid){
-          return true;
-        }
-        return false;
-      }else{
-        if(!exp.ispaid){
-          return true;
-        }
-        return false;
-      }
-    }
+  const paidValidation = (exp:PaymentProvider, isPaid:number) => {
+    // if(isPaid===1){
+    //   return true;
+    // }else{
+    //   if(isPaid===2){
+    //     if(exp.ispaid){
+    //       return true;
+    //     }
+    //     return false;
+    //   }else{
+    //     if(!exp.ispaid){
+    //       return true;
+    //     }
+    //     return false;
+    //   }
+    // }
+    return exp.status;
   }
 
-  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
+  const dateValidation = (exp:PaymentProvider, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
     //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
@@ -197,45 +199,45 @@ export default function TableCostsProvider({data, token, expenses,
     return false;
   }
 
-  const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const amountValidation = (exp:PaymentProvider, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number, isPaid: number) => {
-    if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
+    if(exp.payout >= minAmount && exp.payout <= maxAmount){
       return dateValidation(exp, startDate, endDate, isPaid);
     }
     return false;
   }
 
-  const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const projectValidation = (exp:PaymentProvider, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, projects:string[], 
                       isPaid: number) => {
     if(projects.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-      if(exp.project){
-        if(projects.includes(exp.project._id)){
-          return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-        }
-      }
+      // if(exp.project){
+      //   if(projects.includes(exp.project._id)){
+      //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
+      //   }
+      // }
     }
     return false;
   }
 
-  const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const reportValidation = (exp:PaymentProvider, minAmount:number, maxAmount:number, 
               startDate:number, endDate:number, projects:string[], 
               reports:string[], isPaid: number) => {
     if(reports.includes('all')){
       return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
     }else{
-      if(exp.report){
-        if(reports.includes(exp.report._id)){
-          return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
-        }
-      }
+      // if(exp.report){
+      //   if(reports.includes(exp.report._id)){
+      //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
+      //   }
+      // }
     }
     return false;
   }
 
-  const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  const conditionValidation = (exp:PaymentProvider, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, projects:string[], 
                   reports:string[], conditions:string[], isPaid: number) => {
 
@@ -246,9 +248,10 @@ export default function TableCostsProvider({data, token, expenses,
       //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
       //               reports, categories, types, costcenters);
       // }
-      if(conditions.includes(exp.estatus._id)){
-        return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
-      }
+      
+      // if(conditions.includes(exp.estatus._id)){
+      //   return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
+      // }
     }
     return false;
   }
@@ -257,7 +260,7 @@ export default function TableCostsProvider({data, token, expenses,
     reports:string[], projects:string[], startDate:number, 
     endDate:number, isPaid: number) => {
   
-    let filtered: Expense[] = [];
+    let filtered: PaymentProvider[] = [];
     refExpenses.current.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
           endDate, projects, reports, conditions, isPaid)){

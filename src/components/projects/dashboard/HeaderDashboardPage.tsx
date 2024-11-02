@@ -7,27 +7,38 @@ import { DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CurrencyFormatter } from '@/app/functions/Globals';
 import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';
+import SelectReact from '@/components/SelectReact';
+import { Options } from '@/interfaces/Common';
+// import MultiSelectReact from '@/components/MultiSelectReact';
+import SelectMultipleReact from '@/components/SelectMultipleReact';
 
 export default function HeaderDashboardPage({handleDate, amountProjects, 
-    projectsTotalCost, configMin, activeProjects}: 
-  {handleDate: Function, amountProjects: TotalAmountProjects[], 
+    projectsTotalCost, configMin, activeProjects, projects}: 
+  {handleDate: Function, amountProjects: TotalAmountProjects[], projects:Options[], 
     projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[], activeProjects: number}) {
   
-    // const [project, setProject] = useState<string>(projects[0].value);
+  const [project, setProject] = useState<string[]>([projects[0].value]);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(),
     to: new Date(),
   });
 
-  // const handleProjects = (value: string) => {
-  //   setProject(value);
-  //   if(rangeDate?.from && rangeDate.to){
-  //     handleDate(rangeDate.from, rangeDate.to, value);
-  //   }
-  // };
+  const handleProjects = (value: string[]) => {
+    // const aux: string[] = [];
+    // value.map((v) => {
+    //   aux.push(v.value);
+    // });
+    //console.log('value => ', value);
+    //console.log('aux handle pro => ', value);
+    setProject(value);
+    if(rangeDate?.from && rangeDate.to){
+      handleDate(rangeDate.from, rangeDate.to, value);
+    }
+  };
 
   const progress = ((amountProjects[0].totalAmount / configMin[0].lastmeta.amount) * 100).toFixed(2);
 
+  console.log('proyects => => ', project);
   return (
     <div>
       <div>
@@ -40,12 +51,17 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               onValueChange={(e) => {
                 setRangeDate(e);
                 if(e.from && e.to){
-                  handleDate(e.from.toDateString(), e.to.toDateString());
+                  handleDate(e.from.toDateString(), e.to.toDateString(), project);
                 }
               }}
               value={rangeDate}
               locale={es}
             />
+          </div>
+          <div className='sm:w-56 w-96'>
+            <Label htmlFor='project'>Proyecto</Label>
+            {/* <SelectReact index={0} opts={projects} setValue={handleProjects} /> */}
+            <SelectMultipleReact opts={projects} setValue={handleProjects} index={0} />
           </div>
         </div>
       </div>
@@ -118,52 +134,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </>
           )}
         </div>
-        
-        {/* <div className='grid grid-cols-5 gap-x-1 bg-white border 
-            border-slate-100 shadow-lg shadow-slate-500 p-1'>
-          
-          
-        </div> */}
-
-        {/* <div className='flex items-center gap-x-4 bg-white border border-slate-100 
-            shadow-lg shadow-slate-500 p-5'>
-          <div>
-            <ProgressCircle value={75} size="md">
-              <span className="text-xs font-medium text-slate-700">75%</span>
-            </ProgressCircle>
-          </div>
-          <div>
-            <div>
-              <p className='text-2xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: costsResumen.length > 0? costsResumen[0].subtotalCost : 0
-              })}</p>
-              <p className='text-xs'>Costo</p>
-            </div>
-            <div className='mt-3'>
-              <p className='text-2xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: costsResumen.length > 0? costsResumen[0].totalIVA : 0
-              })}</p>
-              <p className='text-xs'>Iva</p>
-            </div>
-          </div>
-        </div>
-
-        <div className='flex items-center justify-around gap-x-4 bg-white border border-slate-100 
-            shadow-lg shadow-slate-500 p-5'>
-          <div>
-            <p className='text-2xl'>{costsResumen.length > 0? costsResumen[0].quantity: 0}</p>
-            <p className='text-xs'>GRANTOTAL</p>
-            <p className='text-2xl'>{CurrencyFormatter({
-              currency: 'MXN',
-              value: costsResumen.length > 0? costsResumen[0].totalCost : 0
-            })}</p>
-          </div>
-          <div>
-            <BsBarChartFill className='w-12 h-auto' />
-          </div>
-        </div> */}
 
       </div>
     </div>
