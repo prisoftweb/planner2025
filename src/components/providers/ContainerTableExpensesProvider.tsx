@@ -11,6 +11,10 @@ import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
 import { PaymentProvider } from "@/interfaces/Payments"
+import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions"
+import WithOut from "../WithOut"
+import { showToastMessage, showToastMessageError } from "../Alert"
+import { getPaymentsProvider } from "@/app/api/routePayments"
 
 export default function ContainerTableExpensesProvider({data, token, expenses, user, 
     provider}:
@@ -18,19 +22,45 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
     user: string, provider: Provider}) {
 
   const [filter, setFilter] = useState<boolean>(false);
-  const [expensesSelected, setExpensesSelected] = useState<ExpensesTableProvider[]>([]);
-  const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
+  // const [expensesSelected, setExpensesSelected] = useState<ExpensesTableProvider[]>([]);
+  // const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
+  const [stateExpenses, setStateExpenses] = useState<PaymentProvider[]>(expenses);
 
   const handleFilter = (value: boolean) => {
     setFilter(value);
   }
 
-  const handlePaidExpenses = (value: boolean) => {
-    setPaidExpenses(value);
+  // const handlePaidExpenses = (value: boolean) => {
+  //   setPaidExpenses(value);
+  // }
+
+  // const handleExpensesSelected = (value: ExpensesTableProvider[]) => {
+  //   setExpensesSelected(value);
+  // }
+
+  const updateStateExpenses = async () => {
+    try {
+      const res = await getPaymentsProvider(token, provider._id);
+      if(typeof(res) === 'string'){
+        showToastMessageError('Error al actulizar tabla!!!');
+      }else{
+        setStateExpenses(res);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un error al actualizar tabla!!!');
+    }
   }
 
-  const handleExpensesSelected = (value: ExpensesTableProvider[]) => {
-    setExpensesSelected(value);
+  if(stateExpenses.length <= 0){
+    return (
+      <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+           <WithOut img="/img/provider.svg" subtitle="Pagos"
+            text="Aqui puedes ver los pagos que se han realizado del proveedor"
+            title="Pagos">
+              <></>
+          </WithOut>
+        </div>
+    )
   }
   
   return (
@@ -49,18 +79,21 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
-              {expensesSelected.length > 0 && (
+              {/* {expensesSelected.length > 0 && (
                 <GiSettingsKnobs onClick={() => handlePaidExpenses(true)}
                   className="text-red-600 w-8 h-8 cursor-pointer hover:text-slate-300"
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>
       </div>
-      <TableCostsProvider token={token} handleExpensesSelected={handleExpensesSelected}
+      {/* <TableCostsProvider token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expenses} isFilter={filter} setIsFilter={handleFilter}
-        user={user} data={data} idProv={provider._id} />
+        user={user} data={data} idProv={provider._id} udpateTable={updateStateExpenses} /> */}
+        <TableCostsProvider token={token} expenses={expenses} isFilter={filter}
+          setIsFilter={handleFilter} user={user} data={data} idProv={provider._id} 
+          udpateTable={updateStateExpenses} />
     </div>
   )
 }

@@ -20,14 +20,9 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
                       minAmount:number, token: string}){
 
   const [conditionsSel, setConditionsSel] = useState<string[]>(['all']);
-  const [projectsSel, setProjectsSel] = useState<string[]>(['all']);
-  const [reportsSel, setReportsSel] = useState<string[]>(['all']);
   const [heightPage, setHeightPage] = useState<number>(900);
 
-  const [conditions, setConditions] = useState<Options[]>([]);
-  const [projects, setProjects] = useState<Options[]>([]);
-  const [reports, setReports] = useState<Options[]>([]);
-  
+  const [conditions, setConditions] = useState<Options[]>([]);  
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
 
@@ -49,25 +44,7 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
         return <h1>Error al consultar catalogos!!</h1>
       }
 
-      let optPrj: Options[] = [];
-      try {
-        optPrj = await getProjectsLV(token);
-        if(typeof(optPrj)==='string') return <h1 className="text-red-500 text-center text-lg">{optPrj}</h1>
-      } catch (error) {
-        return <h1>Error al consultar Proyectos!!</h1>
-      }
-
-      let optRep: Options[] = [];
-      try {
-        optRep = await GetReportsLV(token);
-        if(typeof(optRep)==='string') return <h1 className="text-red-500 text-center text-lg">{optRep}</h1>
-      } catch (error) {
-        return <h1>Error al consultar Informes!!</h1>
-      }
-
       setConditions(optConditions);
-      setReports(optRep);
-      setProjects(optPrj);
     }
 
     fetchApis();
@@ -93,14 +70,6 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
     setConditionsSel(value);
   }
 
-  const handleReports = (value: string[]) => {
-    setReportsSel(value);
-  }
-
-  const handleProjects = (value: string[]) => {
-    setProjectsSel(value);
-  }
-
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(Math.max(
@@ -124,13 +93,12 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
 
   useEffect(() => {
     //console.log('providers sel => ', providersSel);
-    FilterData(conditionsSel, minValue, maxValue, reportsSel, projectsSel, 
+    FilterData(conditionsSel, minValue, maxValue, 
       firstDate?.getTime(), secondDate?.getTime(), isPaid);
-  }, [ conditionsSel, minValue, maxValue, firstDate, secondDate, 
-        projectsSel, reportsSel, isPaid]);
+  }, [ conditionsSel, minValue, maxValue, firstDate, secondDate, isPaid]);
 
   useEffect (() => {
-    FilterData(conditionsSel, minValue, maxValue, reportsSel, projectsSel, 
+    FilterData(conditionsSel, minValue, maxValue,
       new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), isPaid);
   }, []);
 
@@ -139,7 +107,7 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
     value: 'all'
   }];
 
-  if(projects.length === 0){
+  if(conditions.length === 0){
     return <></>
   }
 
@@ -189,14 +157,6 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
           <SelectMultipleReact index={0} opts={allArray.concat(conditions)} setValue={handleConditions} />
-        </div>
-        <div>
-          <Label htmlFor="reports"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Reporte</p></Label>
-          <SelectMultipleReact index={0} opts={allArray.concat(reports)} setValue={handleReports} />
-        </div>
-        <div>
-          <Label htmlFor="projects"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyectos</p></Label>
-          <SelectMultipleReact index={0} opts={allArray.concat(projects)} setValue={handleProjects} />
         </div>
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>

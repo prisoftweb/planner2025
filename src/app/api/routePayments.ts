@@ -120,3 +120,27 @@ export async function getCostsPayment(auth_token:string, payment:string) {
     return 'Error al consultar los costos del pago!!';
   }
 }
+
+export async function removePayment(id:string, auth_token:string, costs: string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/${id}`;
+  try {
+    const res = await axios.delete(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }, 
+      data: {
+        costs: costs
+      }
+    });
+    console.log('res eliminar => ', res);
+    if(res.status===204)
+      return res.status;
+    return 'Error al eliminar pago!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al eliminar pago!!';
+  }
+}

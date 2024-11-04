@@ -11,12 +11,16 @@ import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/prov
 import { ExpensesTableProvider } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 import { PaymentProvider } from "@/interfaces/Payments";
+import RemoveElement from "../RemoveElement";
+import { showToastMessageError } from "../Alert";
+import { removePayment } from "@/app/api/routePayments";
+import RemovePaymentComponent from "./RemovePaymentComponent";
 
 export default function TableCostsProvider({data, token, expenses, idProv, 
-                            handleExpensesSelected, user, isFilter, setIsFilter }:
+                          user, isFilter, setIsFilter, udpateTable }:
                         {data:ExpensesTableProvider[], token:string, expenses:PaymentProvider[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
-                        handleExpensesSelected:Function, idProv: string }){
+                        idProv: string, udpateTable: Function}){
   
   const columnHelper = createColumnHelper<ExpensesTableProvider>();
   const refExpenses = useRef(expenses);
@@ -34,6 +38,16 @@ export default function TableCostsProvider({data, token, expenses, idProv,
     //   refFilter.current = false;
     // }
     setIsFilter(value);
+  }
+
+  const deletePayment = (id:string) => {
+    const exp = expenses.find((e) => e._id=== id);
+    console.log(exp);
+    const auxExp = expenses.filter((e) => e._id===id);
+    setExpensesFiltered(auxExp);
+    refExpenses.current = auxExp;
+    const dataAux = ExpenseDataToTablePaidExpensesProviderData(auxExp);
+    setDataExpenses(dataAux);
   }
 
   const columns = [
@@ -66,11 +80,16 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
-          <div className="w-20 flex gap-x-1 items-center">
+          {/* <button type="button" onClick={() => deletePayment(row.original.id)}>eliminar</button> */}
+          <RemovePaymentComponent expenses={expenses} id={row.original.id} name={row.original.notes} 
+              token={token} updateTable={deletePayment} />
+          {/* <RemoveElement id={row.original.id} name={row.original.notes} token={token} 
+              remove={removePayment} removeElement={delPayment} /> */}
+          {/* <div className="w-20 flex gap-x-1 items-center">
             {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
-          </div>
+          </div> */}
         </div>
       ),
       enableSorting:false,
@@ -154,8 +173,11 @@ export default function TableCostsProvider({data, token, expenses, idProv,
   ]
   
 
-  const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
+  // const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
+  //               placeH="Buscar gasto.." />
+  const view = <Table columns={columns} data={dataExpenses}
                 placeH="Buscar gasto.." />
+
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [minAmount, setMinAmount] = useState<number>(0);
   
@@ -207,43 +229,13 @@ export default function TableCostsProvider({data, token, expenses, idProv,
     return false;
   }
 
-  const projectValidation = (exp:PaymentProvider, minAmount:number, maxAmount:number, 
-                      startDate:number, endDate:number, projects:string[], 
-                      isPaid: number) => {
-    if(projects.includes('all')){
-      return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-    }else{
-      // if(exp.project){
-      //   if(projects.includes(exp.project._id)){
-      //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-      //   }
-      // }
-    }
-    return false;
-  }
-
-  const reportValidation = (exp:PaymentProvider, minAmount:number, maxAmount:number, 
-              startDate:number, endDate:number, projects:string[], 
-              reports:string[], isPaid: number) => {
-    if(reports.includes('all')){
-      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
-    }else{
-      // if(exp.report){
-      //   if(reports.includes(exp.report._id)){
-      //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
-      //   }
-      // }
-    }
-    return false;
-  }
-
   const conditionValidation = (exp:PaymentProvider, minAmount:number, maxAmount:number, 
-                  startDate:number, endDate:number, projects:string[], 
-                  reports:string[], conditions:string[], isPaid: number) => {
+                  startDate:number, endDate:number, conditions:string[], isPaid: number) => {
 
     if(conditions.includes('all')){
-      return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
+      return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
+      return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
       // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
       //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
       //               reports, categories, types, costcenters);
@@ -253,17 +245,15 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       //   return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
       // }
     }
-    return false;
   }
 
   const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
-    reports:string[], projects:string[], startDate:number, 
-    endDate:number, isPaid: number) => {
+    startDate:number, endDate:number, isPaid: number) => {
   
     let filtered: PaymentProvider[] = [];
     refExpenses.current.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
-          endDate, projects, reports, conditions, isPaid)){
+          endDate, conditions, isPaid)){
         filtered.push(expense);
       }
     });

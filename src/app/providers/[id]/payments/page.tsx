@@ -36,15 +36,6 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
   }
 
-  // let costs: Expense[];
-  // try {
-  //   costs = await GetCostsMIN(token, params.id);
-  //   if(typeof(costs) === "string")
-  //     return <h1 className="text-center text-red-500">{costs}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
-  // }
-
   let costs: PaymentProvider[];
   try {
     costs = await getPaymentsProvider(token, params.id);
@@ -53,17 +44,6 @@ export default async function Page({ params }: { params: { id: string }}){
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
   }
-
-  // let costs: Payment[];
-  // try {
-  //   costs = await getPayments(token);
-  //   if(typeof(costs) === "string")
-  //     return <h1 className="text-center text-red-500">{costs} payments</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
-  // }
-
-  //let options: Options[] = [];
 
   if(providers.length <= 0){
     return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>

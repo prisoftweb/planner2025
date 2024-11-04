@@ -18,10 +18,10 @@ import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 
 export default function TableHistoryCosts({data, token, expenses, 
                             handleExpensesSelected, user, isFilter, setIsFilter, 
-                        isViewReports }:
+                        isViewReports, idProv }:
                         {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
-                        handleExpensesSelected:Function, 
+                        handleExpensesSelected:Function, idProv:string, 
                         isViewReports: boolean}){
   
   const columnHelper = createColumnHelper<HistoryExpensesTable>();
@@ -89,7 +89,7 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'Proyecto',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
         >{row.original.Proyecto}</p>
       ),
       enableSorting:false,
@@ -102,7 +102,7 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'Informe',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
         >{row.original.Informe}</p>
       )
     }),
@@ -112,11 +112,11 @@ export default function TableHistoryCosts({data, token, expenses,
       cell: ({row}) => (
         row.original.Descripcion.length < 100? (
           <p className="cursor-pointer" 
-            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
           >{row.original.Descripcion}</p>
         ): (
           <p className="cursor-pointer" 
-            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
           >{row.original.Descripcion.substring(0, 100)}</p>
         )
       ),
@@ -126,7 +126,7 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'pagado',
       cell: ({row}) => (
         <div className="cursor-pointer" 
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
             <Chip label={row.original.isPaid? 'Pagado': 'No pagado'} color={row.original.isPaid? '#0f0': '#f00'} />
         </div>
       ),
@@ -136,7 +136,7 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'estatus',
       cell: ({row}) => (
         <div className="cursor-pointer" 
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
             <Chip label={row.original.Estatus.name} color={row.original.Estatus.color} />
         </div>
       ),
@@ -146,7 +146,7 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
@@ -155,7 +155,7 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'importe',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
         >{row.original.Importe}</p>
       ),
     }),

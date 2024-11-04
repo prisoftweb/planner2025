@@ -334,6 +334,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
   const values: number[] = [];
   const titles: string[] = [];
+  const colorsDonutClientChart: string[] = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)',
+    'rgb(255, 205, 86)', 'rgb(255, 132, 99)', 'rgb(54, 235, 162)', 'rgb(255, 86, 205)',
+    'rgb(132, 99, 255)', 'rgb(235, 162, 54)', 'rgb(86, 205, 255)']
   
   stateProjectsClient.map((prj) => {
     titles.push(prj.client);
@@ -516,6 +519,15 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           </div>
           {/* <PieChartComponent data={dataProjectsClient} colors={colors} category="costo"
               categories={categoriesClient}  /> */}
+            <div className="flex flex-wrap gap-x-1 gap-y-1 items-center">
+              {titles.map((title, index: number) => (
+                <div key={title} className="flex gap-x-1 items-center">
+                  <div className="w-2 h-2" style={{backgroundColor: 
+                        (index > colorsDonutClientChart.length? colorsDonutClientChart[index%colorsDonutClientChart.length]: colorsDonutClientChart[index])}}></div>
+                  <p className="text-xs">{title}</p>
+                </div>
+              ))}
+            </div>
             <NewDonutChartComponent data={dataProjectsClient} />
         </div>
       </div>

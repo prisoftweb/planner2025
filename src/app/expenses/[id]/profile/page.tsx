@@ -10,11 +10,12 @@ import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
-export default async function Page({ params }: { params: { id: string }}){
+export default async function Page({ params, searchParams }: { params: { id: string }, searchParams: { prov: string }}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
+  console.log('search params', searchParams);
 
   let cost: OneExpense;
   try {
@@ -44,7 +45,7 @@ export default async function Page({ params }: { params: { id: string }}){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <HeaderProfileExpense options={options} subTotal={subTotal} />
+        <HeaderProfileExpense options={options} subTotal={subTotal} idProv={searchParams.prov} />
         <NavTabExpense idExp={params.id} tab="1" />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} user={user._id}/>
