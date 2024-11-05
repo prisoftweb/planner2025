@@ -255,15 +255,17 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       setStateProjectsControlBudgeted(prjsControlBudgeted);
       setStateProjectsBudgeted(prjsBudgeted);
     }else{
+      let auxPrjProgress = prjsProgress.filter((p) => !prj.includes(p.title));
+      
+      console.log('prjs progress => ', prjsProgress);
+      console.log('aux prjs progress => ', auxPrjProgress);
+      console.log('type data => ', prjsProgress[0]);
+      
       let auxListPrj = listPrjsDate.filter((p) => !prj.includes(p._id));
-
-      console.log('data primer grafico => ', listPrjsDate);
-      console.log('data filtrada => ', auxListPrj);
       let auxPrjCli = prjsClient.filter((p) => !prj.includes(p.client));
       let auxPrjSeg = prjsSegment.filter((p) => !prj.includes(p.client));
       // let auxTotalAmount = amountPrjs.filter((p) => !prj.includes(p.));
       let auxPrjStatus = prjStatus.filter((p) => !prj.includes(p.client));
-      // let auxPrjProgress = prjsProgress.filter((p) => !prj.includes(p.title));
       let auxPrjNotCompleted = listProjectsnotCompleted.filter((p) => !prj.includes(p._id));
       let auxPrjAntTypes = prjandTypes.filter((p) => !prj.includes(p.project));
       let auxPrjTop10 = prjsTop10.filter((p) => !prj.includes(p._id));
@@ -280,7 +282,8 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       setTotalAmount(amountPrjs);
       // setStateProjectsStatus(prjStatus);
       setStateProjectsStatus(auxPrjStatus);
-      setStateProjectsProgress(prjsProgress);
+      // setStateProjectsProgress(prjsProgress);
+      setStateProjectsProgress(auxPrjProgress);
       // setStateProjectsNotCompleted(listprjnotCompleted);
       setStateProjectsNotCompleted(auxPrjNotCompleted);
       // setStateProjectsAndType(prjandTypes);
@@ -433,10 +436,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         projectsTotalCost={stateTotalCost} configMin={stateConfiMin} activeProjects={dataProjectsProgress.length} />
       {/* <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
         costsResumenType={costsByResumenType} /> */}
-      <div className="mt-5 gap-x-5 gap-y-5 flex">
-        <div className="bg-white w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
+        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
-            <p>AVANCE DE PROYECTOS ACTIVOS</p>
+            <p>AVANCE DE PROYECTOS ACTIVOS {dataProjectsProgress.length}</p>
           </div>
           {dataProjectsProgress.map((prj, index: number) => (
             <ProgressBarComponent label={prj.label} progress={prj.costo} key={prj.label}
@@ -444,7 +447,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           ))}
         </div>
         
-        <div className="bg-white w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>ESTATUS</p>
           </div>
@@ -453,8 +456,8 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
       </div>
 
-      <div className="mt-5 gap-x-5 gap-y-5 flex">
-        <div className="bg-white w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
+        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR SEGMENTO</p>
           </div>
@@ -464,7 +467,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
             categories={categoriesSegment}  />
         </div>
 
-        <div className="bg-white w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOTAL PROJECTS   | Montos de proyectos</p>
           </div>
@@ -473,44 +476,11 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       </div>
 
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5">
-        {/* <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>AVANCE DE PROYECTOS ACTIVOS</p>
-          </div>
-          {dataProjectsProgress.map((prj) => (
-            <ProgressBarComponent label={prj.label} progress={prj.costo} key={prj.label} />
-          ))}
-        </div>
-        
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>ESTATUS</p>
-          </div>
-          <DonutChartComponent data={dataProjectsStatus} colors={colors} category="costo"
-              categories={categoriesStatus}  />
-        </div> */}
-
-        {/* <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>PROYECTOS POR SEGMENTO</p>
-          </div>
-          <DonutChartComponent data={dataProjectsSegment} colors={colors} category="costo"
-              categories={categoriesSegment}  />
-        </div>
-
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>TOTAL PROJECTS   | Montos de proyectos</p>
-          </div>
-          <BarChartComponent categories={['costo']} colors={colors} data={dataListProjects} />
-        </div> */}
-
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOP 10 PROYECTOS</p>
           </div>
           <LineChartComponent dataProjectsTop={dataProjectsTop} />
-          {/* <BarChartComponent categories={['costo']} colors={colors} data={dataListProjectsNotCompleted} /> */}
         </div>
 
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
