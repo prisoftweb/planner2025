@@ -14,7 +14,7 @@ import { useNewExpense } from "@/app/store/newExpense"
 
 export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
                             { token:string, id:string, user:string, 
-                              expense:OneExpense, isHistory?:boolean,}){
+                              expense:OneExpense, isHistory?:boolean}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {

@@ -61,7 +61,7 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
       </div>
       <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expenses} isFilter={filter} setIsFilter={handleFilter}
-        user={user} isViewReports={false} data={data}
+        user={user} isViewReports={false} data={data} idProv={provider._id}
       />
       {paidExpenses && (
         <PaidHistoryExpenses dataTable={expensesSelected} token={token}

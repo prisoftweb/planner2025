@@ -64,16 +64,23 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       const data = new FormData();
       data.append("reference",reference);
       data.append("payout",amount.replace(/[$]/g, ""));
-      data.append("range", JSON.stringify({
-          min:minDate,
-          max:maxDate
-        }));
+      // data.append("range", JSON.stringify({
+      //     min:minDate,
+      //     max:maxDate
+      //   }));
       data.append("date",date);
-      data.append("costs",JSON.stringify(costs));
+      // data.append("costs",JSON.stringify(costs));
+      costs.map((c) => {
+        data.append("costs", c);
+      })
       data.append("notes",comments);
+      // data.append("pending", "1000");
       data.append("provider",id);
       data.append("user",user);
       data.append("voucher", acceptedFiles[0]);
+      // acceptedFiles.map((f) => {
+      //   data.append("voucher", f);
+      // })
 
       console.log('acceoted files 0 => ', acceptedFiles[0]);
       console.log(data.getAll('voucher'));

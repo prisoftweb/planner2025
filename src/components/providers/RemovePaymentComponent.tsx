@@ -4,12 +4,12 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { removePayment } from '@/app/api/routePayments';
+import { PaymentProvider } from '@/interfaces/Payments';
 
-export default function RemoveElement({token, id, name, remove, removeElement, 
-                               colorIcon='text-red-500 hover:text-red-300'} : 
-                                {token : string, name:string, id:string, 
-                                  remove:Function, removeElement: Function, 
-                                  colorIcon?: string}){
+export default function RemovePaymentComponent({token, id, name, expenses, updateTable } : 
+    {token : string, name:string, id:string, expenses: PaymentProvider[], 
+      updateTable: Function}){
   
   const deleteElement = async ()  => {
   
@@ -25,16 +25,22 @@ export default function RemoveElement({token, id, name, remove, removeElement,
           switch('user'){
             case 'user':
               try {
-                res = await remove(id, token);
-                if(res === 204) {
-                  showToastMessage(`${name} eliminado exitosamente!`);
-                  removeElement(id);
-                  // setTimeout(() => {
-                  //   window.location.reload();
-                  // }, 500)
-                } else {
-                  console.log('res rem elem => ', res);
-                  showToastMessageError(`${name} no pudo ser eliminado..`);
+                const exp = expenses.find((e) => e._id=== id);
+                if(exp){
+                  res = await removePayment(id, token, exp.quantity);
+                  if(res === 204) {
+                    showToastMessage(`${name} eliminado exitosamente!`);
+                    updateTable(id);
+                    // removeElement(id);
+                    // setTimeout(() => {
+                    //   window.location.reload();
+                    // }, 500)
+                  } else {
+                    console.log('res rem elem => ', res);
+                    showToastMessageError(`${name} no pudo ser eliminado..`);
+                  }
+                }else{
+                  showToastMessageError('No se pudieron encontrar los costos del pago!!!');
                 }
               } catch (error) {
                 console.log('Error al eliminar');
@@ -71,7 +77,7 @@ export default function RemoveElement({token, id, name, remove, removeElement,
     return(
     <>
       {/* <TrashIcon width={20} height={20} className="text-red-500 hover:text-red-300 cursor-pointer" */}
-      <TrashIcon className={`cursor-pointer w-6 h-6 ${colorIcon}`}  
+      <TrashIcon className={`cursor-pointer w-6 h-6 text-red-500 hover:text-red-300`}  
         onClick={() => {
           deleteElement();
         }}
