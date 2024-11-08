@@ -54,7 +54,7 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
   if(stateExpenses.length <= 0){
     return (
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-           <WithOut img="/img/provider.svg" subtitle="Pagos"
+           <WithOut img="/img/payments/payments.svg" subtitle="Pagos"
             text="Aqui puedes ver los pagos que se han realizado del proveedor"
             title="Pagos">
               <></>

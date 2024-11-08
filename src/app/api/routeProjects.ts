@@ -225,12 +225,16 @@ export async function InsertProgressInProject(auth_token:string, id:string, data
   }
 }
 
-export async function getDashboardProjectsAmount(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardProjectsAmount(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsAMOUNT/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -243,12 +247,16 @@ export async function getDashboardProjectsAmount(auth_token:string, dateStart: s
   }
 }
 
-export async function getDashboardListProjects(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardListProjects(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLIST/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -261,13 +269,17 @@ export async function getDashboardListProjects(auth_token:string, dateStart: str
   }
 }
 
-export async function getDashboardProjectsByClient(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardProjectsByClient(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYCLIENT/${dateStart}/${dateEnd}`;
   console.log('url > ', url);
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }, 
+      data: {
+        project: projects
       }
     })
     console.log('res route => ', res);
@@ -281,12 +293,16 @@ export async function getDashboardProjectsByClient(auth_token:string, dateStart:
   }
 }
 
-export async function getDashboardProjectsBySEGMENT(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardProjectsBySEGMENT(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYSEGMENT/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -299,12 +315,16 @@ export async function getDashboardProjectsBySEGMENT(auth_token:string, dateStart
   }
 }
 
-export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYESTATUS/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -317,12 +337,16 @@ export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart
   }
 }
 
-export async function getDashboardProjectsByPROGRESS(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardProjectsByPROGRESS(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYPROGRESS/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -335,30 +359,44 @@ export async function getDashboardProjectsByPROGRESS(auth_token:string, dateStar
   }
 }
 
-export async function getDashboardByProjectAndType(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardByProjectAndType(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByProjectsAndTypes/${dateStart}/${dateEnd}`;
+  console.log('url costs => ', url);
+  console.log('date start costs => ', dateStart);
+  console.log('proyects costs => ', projects);
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: []
       }
     })
+    console.log('res costs => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    if(axios.isAxiosError(error)){
-      return error.response?.data.message || error.message
-    }
-    return 'Error al consultar Costos agrupados por proyecto y tipos!!';
+    console.log('catch costs => ', error);
+    return [];
+    // if(axios.isAxiosError(error)){
+    //   return error.response?.data.message || error.message
+    // }
+    // return 'Error al consultar Costos agrupados por proyecto y tipos!!';
   }
 }
 
-export async function getDashboardListProjectsNotComplete(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardListProjectsNotComplete(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLISTNotComplete/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     // console.log(url);
@@ -374,17 +412,28 @@ export async function getDashboardListProjectsNotComplete(auth_token:string, dat
   }
 }
 
-export async function getDashboardListProjectsByDate(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardListProjectsByDate(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLISTByDate/${dateStart}/${dateEnd}`;
+  console.log('url => ', url);
+  console.log('date start => ', dateStart);
+  console.log('projects => ', projects);
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
+    console.log('data primer grafico');
+    console.log('este no debe venir => ', projects);
+    console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
+    console.log('catch => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -392,12 +441,16 @@ export async function getDashboardListProjectsByDate(auth_token:string, dateStar
   }
 }
 
-export async function getDashboardListProjectsTop10(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardListProjectsTop10(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLISTOP10/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -415,8 +468,9 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
-      }
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
     })
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
@@ -433,8 +487,9 @@ export async function getDashboardProjectCostoCenters(auth_token:string, id:stri
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
-      }
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
     })
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
@@ -446,12 +501,16 @@ export async function getDashboardProjectCostoCenters(auth_token:string, id:stri
   }
 }
 
-export async function getDashboardProjectTotalCost(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getDashboardProjectTotalCost(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsTOTAL/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -469,7 +528,8 @@ export async function getConfigMin(auth_token:string) {
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
       }
     })
     if(res.status === 200) return res.data.data.data;
@@ -482,12 +542,16 @@ export async function getConfigMin(auth_token:string) {
   }
 }
 
-export async function getProjectsBudgeted(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getProjectsBudgeted(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsBudgeted/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -500,12 +564,16 @@ export async function getProjectsBudgeted(auth_token:string, dateStart: string, 
   }
 }
 
-export async function getProjectsSpent(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getProjectsSpent(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsSpent/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;
@@ -518,12 +586,16 @@ export async function getProjectsSpent(auth_token:string, dateStart: string, dat
   }
 }
 
-export async function getProjectsControlBudgeted(auth_token:string, dateStart: string, dateEnd:string) {
+export async function getProjectsControlBudgeted(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsByBudgetControl/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      data: {
+        project: projects
       }
     })
     if(res.status === 200) return res.data.data.stats;

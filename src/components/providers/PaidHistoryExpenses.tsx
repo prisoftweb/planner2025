@@ -59,7 +59,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   let viewComponent = indexStepper===1? 
       <PaidExpensesHistory id={provider._id} token={token} showForm={showForm}
           user={user} costs={costs} maxDate={maxDate} minDate={minDate} />:
-      <TableListExpensesPaid data={dataTable} />;
+      <TableListExpensesPaid data={dataTable} nextPage={handleIndexStepper} />;
   
   return(
     <>
@@ -80,7 +80,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
         
         <NavStepperPaidExpenses index={indexStepper} changeTab={handleIndexStepper} />
         <div className="mt-3">
-          <HeaderPaidHistoryExpenses expensesTable={dataTable} provider={provider} />
+          <HeaderPaidHistoryExpenses expensesTable={dataTable} provider={provider} token={token} />
         </div>
         <div className="mt-3">
           {viewComponent}

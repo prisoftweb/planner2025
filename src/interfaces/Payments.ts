@@ -116,3 +116,12 @@ export interface OnePayment {
   __v: number
   id: string
 }
+
+export interface pendingPaymentProvider {
+  provider: {
+    _id: string
+    tradename: string
+  }
+  totalPendingPayment: number
+}
+

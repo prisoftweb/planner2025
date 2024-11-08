@@ -26,7 +26,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
         setBudgetedControl(resBudCon[0]);
       }
 
-      console.log('res bud -> ', resBudCon);
+      // console.log('res bud -> ', resBudCon);
 
       const resCostoC = await getDashboardProjectCostoCenters(token, id);
       if(typeof(resCostoC) !== 'string'){
@@ -86,21 +86,24 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: budgetedControl.amountInfo.amount?? 0
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl.amountInfo.porcentage} widthBar="w-full" />
+                <ProgressBarComponent label={''} progress={budgetedControl.amountInfo.porcentage} 
+                  widthBar="w-full" color="#00f" hei="h-5" />
                 <p>Presupuestado ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.budgetedInfo.budgeted
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl.budgetedInfo.porcentage} widthBar="w-full" />
+                <ProgressBarComponent label={''} progress={budgetedControl.budgetedInfo.porcentage} 
+                  widthBar="w-full" color="#0f0" hei="h-5" />
                 <p>Costo ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.spentInfo.spent
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl.spentInfo.porcentage} widthBar="w-full" />
+                <ProgressBarComponent label={''} progress={budgetedControl.spentInfo.porcentage} 
+                  widthBar="w-full" color="#f00" hei="h-5" />
               </div>
             )}
           </div>

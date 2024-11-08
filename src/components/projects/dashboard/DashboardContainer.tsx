@@ -90,15 +90,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
   const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
     let amountPrjs: TotalAmountProjects[] = [];
-    try {
-      amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE);
-      if(typeof(amountPrjs)==='string'){
-        return <h1>{amountPrjs}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener monto total de proyectos!!!</h1>
-    }
-
+    
     // let listPrjs: ListProjects[] = [];
     // try {
     //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
@@ -110,199 +102,366 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     // }
 
     let listPrjsDate: ListProjectsByDate[] = [];
-    try {
-      listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE);
-      if(typeof(listPrjsDate)==='string'){
-        return <h1>{listPrjsDate}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener lista de proyectos!!!</h1>
-    }
-
+    
     let prjsClient: ProjectsByClient[] = [];
-    try {
-      prjsClient = await getDashboardProjectsByClient(token, dateS, dateE);
-      if(typeof(prjsClient)==='string'){
-        return <h1>{prjsClient}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos agrupados por clientes!!!</h1>
-    }
-
+    
     let prjsSegment: ProjectsBySegment[] = [];
-    try {
-      prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE);
-      if(typeof(prjsSegment)==='string'){
-        return <h1>{prjsSegment}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos agrupados por segmento!!!</h1>
-    }
-
+    
     let prjStatus: ProjectsByStatus[] = [];
-    try {
-      prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE);
-      if(typeof(prjStatus)==='string'){
-        return <h1>{prjStatus}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos agrupados por estatus!!!</h1>
-    }
-
+    
     let prjsProgress: ProjectsByProgress[] = [];
-    try {
-      prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE);
-      if(typeof(prjsProgress)==='string'){
-        return <h1>{prjsProgress}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos agrupados por progreso!!!</h1>
-    }
-
+    
     let listprjnotCompleted: ProjectsNotCompleted[] = [];
-    try {
-      listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE);
-      if(typeof(listprjnotCompleted)==='string'){
-        return <h1>{listprjnotCompleted} list not completed</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener lista de proyectos no completos!!!</h1>
-    }
-
+    
     let prjandTypes: CostsByProjectAndType[] = [];
-    try {
-      prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE);
-      if(typeof(prjandTypes)==='string'){
-        return <h1>{prjandTypes} list</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener costos por proyecto y tipo!!!</h1>
-    }
-
+    
     let prjsTop10: ProjectsTop10[] = [];
-    try {
-      prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30');
-      if(typeof(prjsTop10)==='string'){
-        return <h1>{prjsTop10}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos top 10!!!</h1>
-    }
-
+    
     let totalCost: DashboardTotalCost[] = [];
-    try {
-      totalCost = await getDashboardProjectTotalCost(token, dateS, dateE);
-      if(typeof(totalCost)==='string'){
-        return <h1>{totalCost}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener costo total de los proyectos!!!</h1>
-    }
-
+    
     let confMin: ConfigMin[] = [];
-    try {
-      confMin = await getConfigMin(token);
-      if(typeof(confMin)==='string'){
-        return <h1>{confMin}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener configuracion!!!</h1>
-    }
-
+    
     let prjsBudgeted: ControlBudgeted[] = [];
-    try {
-      prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE);
-      if(typeof(prjsBudgeted)==='string'){
-        return <h1>{prjsBudgeted}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos presupuestados!!!</h1>
-    }
-
+    
     let prjsSpent: ControlBudgeted[] = [];
-    try {
-      prjsSpent = await getProjectsSpent(token, dateS, dateE);
-      if(typeof(prjsSpent)==='string'){
-        return <h1>{prjsSpent}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos por gastos!!!</h1>
-    }
-
+    
     let prjsControlBudgeted: ControlBudgeted[] = [];
-    try {
-      prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE);
-      if(typeof(prjsControlBudgeted)==='string'){
-        return <h1>{prjsControlBudgeted}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener proyectos por control presupuestal!!!</h1>
-    }
-
+    
     if(prj.includes('all')){
-      setStateListProjects(listPrjsDate);
-      setStateProjectsClient(prjsClient);
-      setStateProjectsSegment(prjsSegment);
-      setTotalAmount(amountPrjs);
-      setStateProjectsStatus(prjStatus);
-      setStateProjectsProgress(prjsProgress);
-      setStateProjectsNotCompleted(listprjnotCompleted);
-      setStateProjectsAndType(prjandTypes);
-      setStateProjectsTop10(prjsTop10);
-      setStateTotalCost(totalCost);
-      setStateConfiMin(confMin);
-      setStateProjectsSpent(prjsSpent);
-      setStateProjectsControlBudgeted(prjsControlBudgeted);
-      setStateProjectsBudgeted(prjsBudgeted);
-    }else{
-      let auxPrjProgress = prjsProgress.filter((p) => !prj.includes(p.title));
-      
-      console.log('prjs progress => ', prjsProgress);
-      console.log('aux prjs progress => ', auxPrjProgress);
-      console.log('type data => ', prjsProgress[0]);
-      
-      let auxListPrj = listPrjsDate.filter((p) => !prj.includes(p._id));
-      let auxPrjCli = prjsClient.filter((p) => !prj.includes(p.client));
-      let auxPrjSeg = prjsSegment.filter((p) => !prj.includes(p.client));
-      // let auxTotalAmount = amountPrjs.filter((p) => !prj.includes(p.));
-      let auxPrjStatus = prjStatus.filter((p) => !prj.includes(p.client));
-      let auxPrjNotCompleted = listProjectsnotCompleted.filter((p) => !prj.includes(p._id));
-      let auxPrjAntTypes = prjandTypes.filter((p) => !prj.includes(p.project));
-      let auxPrjTop10 = prjsTop10.filter((p) => !prj.includes(p._id));
-      let auxPrjSpent = prjsSpent.filter((p) => !prj.includes(p.id));
-      let auxPrjCtrBud = prjsControlBudgeted.filter((p) => !prj.includes(p.id));
-      let auxBud = prjsBudgeted.filter((p) => !prj.includes(p.id));
+      try {
+        amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
+        if(typeof(amountPrjs)==='string'){
+          return <h1>{amountPrjs}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener monto total de proyectos!!!</h1>
+      }
 
-      // setStateListProjects(listPrjsDate);
-      setStateListProjects(auxListPrj);
-      // setStateProjectsClient(prjsClient);
-      setStateProjectsClient(auxPrjCli);
-      // setStateProjectsSegment(prjsSegment);
-      setStateProjectsSegment(auxPrjSeg);
-      setTotalAmount(amountPrjs);
-      // setStateProjectsStatus(prjStatus);
-      setStateProjectsStatus(auxPrjStatus);
-      // setStateProjectsProgress(prjsProgress);
-      setStateProjectsProgress(auxPrjProgress);
-      // setStateProjectsNotCompleted(listprjnotCompleted);
-      setStateProjectsNotCompleted(auxPrjNotCompleted);
-      // setStateProjectsAndType(prjandTypes);
-      setStateProjectsAndType(auxPrjAntTypes);
-      // setStateProjectsTop10(prjsTop10);
-      setStateProjectsTop10(auxPrjTop10);
-      setStateTotalCost(totalCost);
-      setStateConfiMin(confMin);
-      // setStateProjectsSpent(prjsSpent);
-      setStateProjectsSpent(auxPrjSpent);
-      // setStateProjectsControlBudgeted(prjsControlBudgeted);
-      setStateProjectsControlBudgeted(auxPrjCtrBud);
-      // setStateProjectsBudgeted(prjsBudgeted);
-      setStateProjectsBudgeted(auxBud);
+      // let listPrjs: ListProjects[] = [];
+      // try {
+      //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
+      //   if(typeof(listPrjs)==='string'){
+      //     return <h1>{listPrjs}</h1>
+      //   }
+      // } catch (error) {
+      //   return <h1>Error al obtener lista de proyectos!!!</h1>
+      // }
+
+      try {
+        listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
+        if(typeof(listPrjsDate)==='string'){
+          return <h1>{listPrjsDate}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener lista de proyectos!!!</h1>
+      }
+
+      try {
+        prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, []);
+        if(typeof(prjsClient)==='string'){
+          return <h1>{prjsClient}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por clientes!!!</h1>
+      }
+
+      try {
+        prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, []);
+        if(typeof(prjsSegment)==='string'){
+          return <h1>{prjsSegment}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por segmento!!!</h1>
+      }
+
+      try {
+        prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, []);
+        if(typeof(prjStatus)==='string'){
+          return <h1>{prjStatus}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por estatus!!!</h1>
+      }
+
+      try {
+        prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, []);
+        if(typeof(prjsProgress)==='string'){
+          return <h1>{prjsProgress}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por progreso!!!</h1>
+      }
+
+      try {
+        listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, []);
+        if(typeof(listprjnotCompleted)==='string'){
+          return <h1>{listprjnotCompleted} list not completed</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener lista de proyectos no completos!!!</h1>
+      }
+
+      try {
+        prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
+        if(typeof(prjsTop10)==='string'){
+          return <h1>{prjsTop10}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos top 10!!!</h1>
+      }
+
+      try {
+        totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, []);
+        if(typeof(totalCost)==='string'){
+          return <h1>{totalCost}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener costo total de los proyectos!!!</h1>
+      }
+
+      try {
+        confMin = await getConfigMin(token);
+        if(typeof(confMin)==='string'){
+          return <h1>{confMin}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener configuracion!!!</h1>
+      }
+
+      try {
+        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
+        if(typeof(prjsBudgeted)==='string'){
+          return <h1>{prjsBudgeted}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos presupuestados!!!</h1>
+      }
+
+      try {
+        prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
+        if(typeof(prjsSpent)==='string'){
+          return <h1>{prjsSpent}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos por gastos!!!</h1>
+      }
+
+      try {
+        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
+        if(typeof(prjsControlBudgeted)==='string'){
+          return <h1>{prjsControlBudgeted}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos por control presupuestal!!!</h1>
+      }
+
+      try {
+        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
+        if(typeof(prjandTypes)==='string'){
+          return <h1>{prjandTypes} list</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener costos por proyecto y tipo!!!</h1>
+      }
+    }else{
+      try {
+        amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
+        if(typeof(amountPrjs)==='string'){
+          return <h1>{amountPrjs}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener monto total de proyectos!!!</h1>
+      }
+
+      // let listPrjs: ListProjects[] = [];
+      // try {
+      //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
+      //   if(typeof(listPrjs)==='string'){
+      //     return <h1>{listPrjs}</h1>
+      //   }
+      // } catch (error) {
+      //   return <h1>Error al obtener lista de proyectos!!!</h1>
+      // }
+
+      try {
+        listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
+        if(typeof(listPrjsDate)==='string'){
+          return <h1>{listPrjsDate}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener lista de proyectos!!!</h1>
+      }
+
+      try {
+        prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, prj);
+        if(typeof(prjsClient)==='string'){
+          return <h1>{prjsClient}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por clientes!!!</h1>
+      }
+
+      try {
+        prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, prj);
+        if(typeof(prjsSegment)==='string'){
+          return <h1>{prjsSegment}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por segmento!!!</h1>
+      }
+
+      try {
+        prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, prj);
+        if(typeof(prjStatus)==='string'){
+          return <h1>{prjStatus}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por estatus!!!</h1>
+      }
+
+      try {
+        prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, prj);
+        if(typeof(prjsProgress)==='string'){
+          return <h1>{prjsProgress}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos agrupados por progreso!!!</h1>
+      }
+
+      try {
+        listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, prj);
+        if(typeof(listprjnotCompleted)==='string'){
+          return <h1>{listprjnotCompleted} list not completed</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener lista de proyectos no completos!!!</h1>
+      }
+
+      try {
+        prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', prj);
+        if(typeof(prjsTop10)==='string'){
+          return <h1>{prjsTop10}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos top 10!!!</h1>
+      }
+
+      try {
+        totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, prj);
+        if(typeof(totalCost)==='string'){
+          return <h1>{totalCost}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener costo total de los proyectos!!!</h1>
+      }
+
+      try {
+        confMin = await getConfigMin(token);
+        if(typeof(confMin)==='string'){
+          return <h1>{confMin}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener configuracion!!!</h1>
+      }
+
+      try {
+        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
+        if(typeof(prjsBudgeted)==='string'){
+          return <h1>{prjsBudgeted}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos presupuestados!!!</h1>
+      }
+
+      try {
+        prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
+        if(typeof(prjsSpent)==='string'){
+          return <h1>{prjsSpent}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos por gastos!!!</h1>
+      }
+
+      try {
+        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
+        if(typeof(prjsControlBudgeted)==='string'){
+          return <h1>{prjsControlBudgeted}</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener proyectos por control presupuestal!!!</h1>
+      }
+
+      try {
+        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
+        if(typeof(prjandTypes)==='string'){
+          return <h1>{prjandTypes} list</h1>
+        }
+      } catch (error) {
+        return <h1>Error al obtener costos por proyecto y tipo!!!</h1>
+      }
+      // let auxPrjProgress = prjsProgress.filter((p) => !prj.includes(p.title));
+      
+      // console.log('prjs progress => ', prjsProgress);
+      // console.log('aux prjs progress => ', auxPrjProgress);
+      // console.log('type data => ', prjsProgress[0]);
+      
+      // let auxListPrj = listPrjsDate.filter((p) => !prj.includes(p._id));
+      // let auxPrjCli = prjsClient.filter((p) => !prj.includes(p.client));
+      // let auxPrjSeg = prjsSegment.filter((p) => !prj.includes(p.client));
+      // // let auxTotalAmount = amountPrjs.filter((p) => !prj.includes(p.));
+      // let auxPrjStatus = prjStatus.filter((p) => !prj.includes(p.client));
+      // let auxPrjNotCompleted = listProjectsnotCompleted.filter((p) => !prj.includes(p._id));
+      // let auxPrjAntTypes = prjandTypes.filter((p) => !prj.includes(p.project));
+      // let auxPrjTop10 = prjsTop10.filter((p) => !prj.includes(p._id));
+      // let auxPrjSpent = prjsSpent.filter((p) => !prj.includes(p.id));
+      // let auxPrjCtrBud = prjsControlBudgeted.filter((p) => !prj.includes(p.id));
+      // let auxBud = prjsBudgeted.filter((p) => !prj.includes(p.id));
+
+      // // setStateListProjects(listPrjsDate);
+      // setStateListProjects(auxListPrj);
+      // // setStateProjectsClient(prjsClient);
+      // setStateProjectsClient(auxPrjCli);
+      // // setStateProjectsSegment(prjsSegment);
+      // setStateProjectsSegment(auxPrjSeg);
+      // setTotalAmount(amountPrjs);
+      // // setStateProjectsStatus(prjStatus);
+      // setStateProjectsStatus(auxPrjStatus);
+      // // setStateProjectsProgress(prjsProgress);
+      // setStateProjectsProgress(auxPrjProgress);
+      // // setStateProjectsNotCompleted(listprjnotCompleted);
+      // setStateProjectsNotCompleted(auxPrjNotCompleted);
+      // // setStateProjectsAndType(prjandTypes);
+      // setStateProjectsAndType(auxPrjAntTypes);
+      // // setStateProjectsTop10(prjsTop10);
+      // setStateProjectsTop10(auxPrjTop10);
+      // setStateTotalCost(totalCost);
+      // setStateConfiMin(confMin);
+      // // setStateProjectsSpent(prjsSpent);
+      // setStateProjectsSpent(auxPrjSpent);
+      // // setStateProjectsControlBudgeted(prjsControlBudgeted);
+      // setStateProjectsControlBudgeted(auxPrjCtrBud);
+      // // setStateProjectsBudgeted(prjsBudgeted);
+      // setStateProjectsBudgeted(auxBud);
     }
+    setStateListProjects(listPrjsDate);
+    setStateProjectsClient(prjsClient);
+    setStateProjectsSegment(prjsSegment);
+    setTotalAmount(amountPrjs);
+    setStateProjectsStatus(prjStatus);
+    setStateProjectsProgress(prjsProgress);
+    setStateProjectsNotCompleted(listprjnotCompleted);
+    setStateProjectsAndType(prjandTypes);
+    setStateProjectsTop10(prjsTop10);
+    setStateTotalCost(totalCost);
+    setStateConfiMin(confMin);
+    setStateProjectsSpent(prjsSpent);
+    setStateProjectsControlBudgeted(prjsControlBudgeted);
+    setStateProjectsBudgeted(prjsBudgeted);
   }
 
   // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
+  const colorsBudgeted = ['green', 'red', 'blue'];
 
   const dataProjectsStatus: OptionsDashboard[] = [];
   const categoriesStatus: string[] = [];
@@ -513,7 +672,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         <div className="mb-3">
           <p>CONTROL PRESUPUESTAL</p>
         </div>
-        <BarChartComponent categories={['controlBudgeted', 'budgeted', 'spent']} colors={colors} data={dataControlBudgeted} />
+        <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado']} colors={colorsBudgeted} data={dataControlBudgeted} />
         {/* <BarChartTreeInOne data={resParse} /> */}
       </div>
       {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
@@ -526,9 +685,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 interface DataControlBudgeted {
   //project: string,
   label: string,
-  controlBudgeted: number,
-  budgeted: number,
-  spent: number
+  "Monto de obra": number,
+  Presupuestado: number,
+  Gastado: number
 }
 
 function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
@@ -540,9 +699,9 @@ function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted:
     res.push({
       // project: prj.title,
       label: prj.title,
-      budgeted: prj.total,
-      controlBudgeted: prjCB?.total || 0,
-      spent: prjS?.total || 0
+      "Monto de obra": prjCB?.total || 0,
+      Gastado: prjS?.total || 0,
+      Presupuestado: prj.total,
     });
   });
   return res;
@@ -557,9 +716,9 @@ function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudget
     res.push({
       //project: prj.title,
       label: prj.title,
-      budgeted: prjB?.total || 0,
-      controlBudgeted: prj.total,
-      spent: prjS?.total || 0
+      "Monto de obra": prj.total,
+      Gastado: prjS?.total || 0,
+      Presupuestado: prjB?.total || 0,
     });
   });
   return res;
@@ -574,9 +733,9 @@ function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: Co
     res.push({
       //project: prj.title,
       label: prj.title,
-      budgeted: prjB?.total || 0,
-      controlBudgeted: prjCB?.total || 0,
-      spent: prj.total
+      "Monto de obra": prjCB?.total || 0,
+      Gastado: prj.total,
+      Presupuestado: prjB?.total || 0,
     });
   });
   return res;
