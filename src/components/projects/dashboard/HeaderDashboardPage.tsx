@@ -32,7 +32,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
     //console.log('aux handle pro => ', value);
     setProject(value);
     if(rangeDate?.from && rangeDate.to){
-      handleDate(rangeDate.from, rangeDate.to, value);
+      handleDate(getDate(rangeDate.from), getDate(rangeDate.to), value);
     }
   };
 
@@ -51,7 +51,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               onValueChange={(e) => {
                 setRangeDate(e);
                 if(e.from && e.to){
-                  handleDate(e.from.toDateString(), e.to.toDateString(), project);
+                  handleDate(getDate(e.from), getDate(e.to), project);
                 }
               }}
               value={rangeDate}
@@ -138,4 +138,18 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
       </div>
     </div>
   )
+}
+
+function getDate(date: Date){
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+
+  if(month < 10){
+    console.log(`${day}-0${month}-${year}`);
+    return `${day}-0${month}-${year}`;
+  }else{
+    console.log(`${day}-${month}-${year}`)
+    return `${day}-${month}-${year}`;
+  }
 }

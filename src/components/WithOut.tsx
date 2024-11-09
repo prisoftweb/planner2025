@@ -8,7 +8,8 @@ export default function WithOut({text, subtitle, title, children, img}:
       <div className="flex flex-col items-center">
         <p className="text-5xl mt-20 font-bold">{subtitle}</p>
         <p className="text-xl mt-10 text-slate-700 font-bold" 
-          style={{maxInlineSize: '45ch', textWrap:'balance' }}>{text}</p>
+          // style={{maxInlineSize: '45ch', textWrap:'balance' }}
+          >{text}</p>
         <img src={img} alt="image" className="w-60 h-auto" />
       </div>
     </>

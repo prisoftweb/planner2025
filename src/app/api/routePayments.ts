@@ -144,3 +144,23 @@ export async function removePayment(id:string, auth_token:string, costs: string[
     return 'Error al eliminar pago!!';
   }
 }
+
+export async function getPendingPaymentProvider(id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getTotalPendingPaymentByProviderMIN/${id}/false`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    // console.log('res eliminar => ', res);
+    if(res.status===200)
+      return res.data.data.stats;
+    return 'Error al consultar total pendiente!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total pendiente!!';
+  }
+}

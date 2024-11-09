@@ -12,6 +12,7 @@ import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
 import PaidHistoryExpenses from "./PaidHistoryExpenses"
+import { TbPaywall } from "react-icons/tb"
 
 export default function ContainerTableHistoryCosts({data, token, expenses, user, 
     provider, options}:
@@ -51,8 +52,8 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
               {expensesSelected.length > 0 && (
-                <GiSettingsKnobs onClick={() => handlePaidExpenses(true)}
-                  className="text-red-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+                <TbPaywall onClick={() => handlePaidExpenses(true)}
+                  className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
                 />
               )}
             </div>

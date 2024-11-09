@@ -49,6 +49,7 @@ export interface HistoryExpensesTable {
   Estatus: Glossary 
   Fecha: string 
   Importe: string
+  Total: string
   condition: string,
   archivos: string[],
   isPaid: boolean

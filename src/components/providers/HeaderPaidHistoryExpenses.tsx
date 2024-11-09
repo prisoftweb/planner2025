@@ -3,19 +3,37 @@ import IconText from "./IconText"
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { Provider } from "@/interfaces/Providers";
 import { ProgressCircle } from "@tremor/react";
+import { getPendingPaymentProvider } from "@/app/api/routePayments";
+import { useState, useEffect } from "react";
+import { pendingPaymentProvider } from "@/interfaces/Payments";
+import { showToastMessageError } from "../Alert";
 
-export default function HeaderPaidHistoryExpenses({expensesTable, provider}:
-   {expensesTable: HistoryExpensesTable[], provider: Provider}) {
+export default function HeaderPaidHistoryExpenses({expensesTable, provider, token}:
+   {expensesTable: HistoryExpensesTable[], provider: Provider, token: string}) {
+
+  const [pending, setPending] = useState<number>(0);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res :(pendingPaymentProvider[] | string) = await getPendingPaymentProvider(provider._id, token);
+      if(typeof(res) !== 'string'){
+        setPending(res[0].totalPendingPayment);
+      }else{
+        showToastMessageError(res);
+      }
+    }
+    fetch();
+  })
   
   let amount = 0;
-  let amountP = 0;
+  // let amountP = 0;
   expensesTable.map((exp) => {
-    amount += Number(exp.Importe.replace(/[$,%,M,N,X]/g,""));
-    if(!exp.isPaid){
-      amountP += Number(exp.Importe.replace(/[$,%,M,N,X]/g,""));
-    }
+    amount += Number(exp.Total.replace(/[$,%,M,N,X]/g,""));
+    // if(!exp.isPaid){
+    //   amountP += Number(exp.Importe.replace(/[$,%,M,N,X]/g,""));
+    // }
   });
-  
+ 
   return (
     <div>
       <div className="grid grid-cols-3">
@@ -47,7 +65,7 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider}:
           <p>Pendiente por pagar</p>
           <p className="text-red-500">{CurrencyFormatter({
             currency: 'MXN',
-            value: amountP
+            value: pending
           })}</p>
         </div>
 

@@ -6,8 +6,10 @@ import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { HistoryExpensesTable } from "@/interfaces/Providers";
+import Button from "../Button";
 
-export default function TableListExpensesPaid({data}:{data:HistoryExpensesTable[]}){
+export default function TableListExpensesPaid({data, nextPage}:
+  {data:HistoryExpensesTable[], nextPage: Function}){
   
   const columnHelper = createColumnHelper<HistoryExpensesTable>();
 
@@ -108,6 +110,9 @@ export default function TableListExpensesPaid({data}:{data:HistoryExpensesTable[
   return(
     <>
       <Table columns={columns} data={data} placeH="Buscar gasto.." />
+      <div className="mt-2 flex justify-center">
+        <Button onClick={() => nextPage(1)}>Siguiente</Button>
+      </div>
     </>
   )
 }

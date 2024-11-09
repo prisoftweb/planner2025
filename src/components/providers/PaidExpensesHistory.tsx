@@ -4,7 +4,6 @@ import Button from "../Button";
 import CurrencyInput from "react-currency-input-field";
 import Input from "../Input";
 import TextArea from "../TextArea";
-import UploadFileDropZone from "../UploadFileDropZone";
 import { useState, useEffect, useCallback } from "react";
 import { useDropzone} from 'react-dropzone';
 import { createPayments, createPaymentsWithVoucher } from "@/app/api/routePayments";
@@ -19,6 +18,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   const [reference, setReference] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [comments, setComments] = useState<string>('');
+  const [pre, setPre] = useState<(File | undefined)>();
 
   const [amountLabel, setAmountLabel] = useState<string>('');
   const [referenceLabel, setReferenceLabel] = useState<string>('');
@@ -96,7 +96,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
     }else{
       const data = {
         reference:reference,
-        payout:amount.replace(/[$]/g, ""),
+        payout:amount.replace(/[$,","]/g, ""),
         //pending:31902.33,
         date,
         range: {
@@ -108,6 +108,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         provider:id,
         user
       }
+
+      console.log('data payment => ', JSON.stringify(data));
   
       const res = await createPayments(token, data);
       if(typeof(res) === 'string'){
@@ -129,7 +131,12 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   });
 
   useEffect(() => {
-    console.log(acceptedFiles);
+    // console.log(acceptedFiles);
+    if ( typeof acceptedFiles[0] !== 'undefined' ){
+      setPre(acceptedFiles[0]);
+    }else{
+      setPre(undefined);
+    }
   },[acceptedFiles]);
 
   return (
@@ -181,6 +188,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
               <p>Arrastra los archivos, o click para seleccionar archivos</p>
           }
         </div>
+        { pre && <iframe className="w-full h-80 mt-4" src={URL.createObjectURL(pre)} /> }
       </div>
       <div className="flex justify-center space-x-5 mt-8">
         <Button 

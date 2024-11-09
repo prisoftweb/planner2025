@@ -159,6 +159,15 @@ export default function TableHistoryCosts({data, token, expenses,
         >{row.original.Importe}</p>
       ),
     }),
+    columnHelper.accessor('Total', {
+      header: 'Total',
+      id: 'total',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
+        >{row.original.Total}</p>
+      ),
+    }),
   ]
   
   // const initialVisibilityColumns: any = {
@@ -179,7 +188,7 @@ export default function TableHistoryCosts({data, token, expenses,
   // }
 
   const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
-                placeH="Buscar gasto.." />
+                placeH="Buscar gasto.." typeTable="costProvider" />
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [minAmount, setMinAmount] = useState<number>(0);
   

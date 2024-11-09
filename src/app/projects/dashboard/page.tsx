@@ -28,7 +28,7 @@ export default async function Page() {
   let amountProjects: TotalAmountProjects[] = [];
   try {
     // amountProjects = await getDashboardProjectsAmount(token, new Date().toDateString(), new Date().toDateString());
-    amountProjects = await getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30');
+    amountProjects = await getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []);
     if(typeof(amountProjects)==='string'){
       return <h1>{amountProjects} amount</h1>
     }
@@ -50,7 +50,7 @@ export default async function Page() {
   let listProjectsdate: ListProjectsByDate[] = [];
   try {
     // listProjects = await getDashboardListProjects(token, new Date().toDateString(), new Date().toDateString());
-    listProjectsdate = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30');
+    listProjectsdate = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []);
     if(typeof(listProjectsdate)==='string'){
       return <h1>{listProjectsdate} list</h1>
     }
@@ -61,7 +61,7 @@ export default async function Page() {
   let projectsClient: ProjectsByClient[] = [];
   try {
     // projectsClient = await getDashboardProjectsByClient(token, new Date().toDateString(), new Date().toDateString());
-    projectsClient = await getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30');
+    projectsClient = await getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsClient)==='string'){
       return <h1>{projectsClient} cleint</h1>
     }
@@ -71,7 +71,7 @@ export default async function Page() {
 
   let projectsSegment: ProjectsBySegment[] = [];
   try {
-    projectsSegment = await getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30');
+    projectsSegment = await getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsSegment)==='string'){
       return <h1>{projectsSegment} segment</h1>
     }
@@ -81,7 +81,7 @@ export default async function Page() {
 
   let projectsStatus: ProjectsByStatus[] = [];
   try {
-    projectsStatus = await getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30');
+    projectsStatus = await getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsStatus)==='string'){
       return <h1>{projectsStatus} status</h1>
     }
@@ -91,7 +91,7 @@ export default async function Page() {
 
   let projectsProgress: ProjectsByProgress[] = [];
   try {
-    projectsProgress = await getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30');
+    projectsProgress = await getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsProgress)==='string'){
       return <h1>{projectsProgress} progress</h1>
     }
@@ -101,7 +101,7 @@ export default async function Page() {
 
   let listProjectsnotCompleted: ProjectsNotCompleted[] = [];
   try {
-    listProjectsnotCompleted = await getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30');
+    listProjectsnotCompleted = await getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30', []);
     if(typeof(listProjectsnotCompleted)==='string'){
       return <h1>{listProjectsnotCompleted} list not completed</h1>
     }
@@ -111,7 +111,7 @@ export default async function Page() {
 
   let projectsandTypes: CostsByProjectAndType[] = [];
   try {
-    projectsandTypes = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30');
+    projectsandTypes = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsandTypes)==='string'){
       return <h1>{projectsandTypes} list</h1>
     }
@@ -121,7 +121,7 @@ export default async function Page() {
 
   let projectsTop10: ProjectsTop10[] = [];
   try {
-    projectsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30');
+    projectsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsTop10)==='string'){
       return <h1>{projectsTop10} list</h1>
     }
@@ -131,7 +131,7 @@ export default async function Page() {
 
   let projectsTotalCost: DashboardTotalCost[] = [];
   try {
-    projectsTotalCost = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30');
+    projectsTotalCost = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsTotalCost)==='string'){
       return <h1>{projectsTotalCost} list</h1>
     }
@@ -151,7 +151,7 @@ export default async function Page() {
 
   let projectsBudgeted: ControlBudgeted[] = [];
   try {
-    projectsBudgeted = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30');
+    projectsBudgeted = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsBudgeted)==='string'){
       return <h1>{projectsBudgeted}</h1>
     }
@@ -161,7 +161,7 @@ export default async function Page() {
 
   let projectsSpent: ControlBudgeted[] = [];
   try {
-    projectsSpent = await getProjectsSpent(token, '2024-01-01', '2024-10-30');
+    projectsSpent = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsSpent)==='string'){
       return <h1>{projectsSpent}</h1>
     }
@@ -171,7 +171,7 @@ export default async function Page() {
 
   let projectsControlBudgeted: ControlBudgeted[] = [];
   try {
-    projectsControlBudgeted = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30');
+    projectsControlBudgeted = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
     if(typeof(projectsControlBudgeted)==='string'){
       return <h1>{projectsControlBudgeted}</h1>
     }
