@@ -201,7 +201,11 @@ export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvi
           currency: "MXN",
           value: expense.payout || 0
         })
-    const elements: string[] = [];
+    const pending = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.pending || 0
+    })
+    // const elements: string[] = [];
     // if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
     //   const typeFiles = getTypeFiles(expense);
     //   if(typeFiles.includes('xml')){
@@ -256,10 +260,11 @@ export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvi
         responsible: expense.user.name,
         photo: expense.user.photo
       },
-      archivos: elements,
+      archivos: (!expense.voucher || expense.voucher.includes('default.svg')? false: true),
       notes: expense.notes,
       //paid: expense.cost.subtotal.toString(),
       paid: dollar,
+      pending: pending,
       Quantity: expense.quantity.length.toString(),
       range: 'sin rango de fechas',
       reference: expense.reference
@@ -276,7 +281,12 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
     const dollar = CurrencyFormatter({
           currency: "MXN",
           value: expense.costs.cost.subtotal || 0
-        })
+        });
+    
+    const total = CurrencyFormatter({
+      currency: "MXN",
+      value: expense.costs.cost.total || 0
+    })
     const elements: string[] = [];
     // const typeFiles = getTypeFiles(expense);
     if(expense.voucher.includes('pdf')){
@@ -299,7 +309,8 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       paid: expense.costs.ispaid, 
       project: expense.costs.project.title,
       report: expense.costs.report.name,
-      total: dollar
+      importe: dollar,
+      total: total
     });
   });
   return table;

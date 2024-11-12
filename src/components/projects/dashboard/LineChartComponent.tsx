@@ -83,5 +83,6 @@ export const LineChartComponent = ({dataProjectsTop}:{dataProjectsTop: OptionsDa
       `$${Intl.NumberFormat("us").format(number).toString()}`
     }
     onValueChange={(v) => console.log(v)}
+    yAxisWidth={76}
   />
 )

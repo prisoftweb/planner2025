@@ -130,7 +130,7 @@ export function BarChartTreeInOne({data}:{data: DataProjectsByType[]}) {
         //type="stacked"
         colors={["blue", "cyan", "violet"]}
         valueFormatter={valueFormatter}
-        yAxisWidth={35}
+        yAxisWidth={76}
         showLegend={false}
         customTooltip={Tooltip}
         stack
@@ -149,6 +149,7 @@ export function BarChartTreeInOne({data}:{data: DataProjectsByType[]}) {
         startEndOnly={true}
         customTooltip={Tooltip}
         stack
+        yAxisWidth={76}
       />
     </div>
   );

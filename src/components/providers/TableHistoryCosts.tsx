@@ -18,18 +18,18 @@ import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 
 export default function TableHistoryCosts({data, token, expenses, 
                             handleExpensesSelected, user, isFilter, setIsFilter, 
-                        isViewReports, idProv }:
+                        isViewReports, idProv, filterData, maxAmount, minAmount }:
                         {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
                         handleExpensesSelected:Function, idProv:string, 
-                        isViewReports: boolean}){
+                        isViewReports: boolean, filterData: Function, minAmount: number, maxAmount: number}){
   
   const columnHelper = createColumnHelper<HistoryExpensesTable>();
   const refExpenses = useRef(expenses);
   const refFilter = useRef(false);
 
-  const [dataExpenses, setDataExpenses] = useState(data);
-  const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
+  // const [dataExpenses, setDataExpenses] = useState(data);
+  // const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
   
   const handleIsFilter = (value: boolean) => {
     // if(value){
@@ -187,119 +187,10 @@ export default function TableHistoryCosts({data, token, expenses,
   //   "Folio fiscal": false,
   // }
 
-  const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
+  const view = <Table columns={columns} data={data} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable="costProvider" />
-  const [maxAmount, setMaxAmount] = useState<number>(0);
-  const [minAmount, setMinAmount] = useState<number>(0);
-  
-  useEffect(() => {
-    const expenseM = expenses.reduce((previous, current) => {
-      return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
-    });
-    const expenseMin = expenses.reduce((previous, current) => {
-      return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
-    });
-    setMaxAmount(expenseM.cost?.subtotal);
-    setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
-  }, [])
-
-  const paidValidation = (exp:Expense, isPaid:number) => {
-    if(isPaid===1){
-      return true;
-    }else{
-      if(isPaid===2){
-        if(exp.ispaid){
-          return true;
-        }
-        return false;
-      }else{
-        if(!exp.ispaid){
-          return true;
-        }
-        return false;
-      }
-    }
-  }
-
-  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
-    let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
-    if(d >= startDate && d <= endDate){
-      return paidValidation(exp, isPaid);
-      //return true;
-    }
-    return false;
-  }
-
-  const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                              startDate:number, endDate:number, isPaid: number) => {
-    if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
-      return dateValidation(exp, startDate, endDate, isPaid);
-    }
-    return false;
-  }
-
-  // const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-  //                     startDate:number, endDate:number, projects:string[], 
-  //                     isPaid: number) => {
-  //   if(projects.includes('all')){
-  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //   }else{
-  //     if(exp.project){
-  //       if(projects.includes(exp.project._id)){
-  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-  //             startDate:number, endDate:number, projects:string[], 
-  //             reports:string[], isPaid: number) => {
-  //   if(reports.includes('all')){
-  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
-  //   }else{
-  //     if(exp.report){
-  //       if(reports.includes(exp.report._id)){
-  //         return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-                  startDate:number, endDate:number, conditions:string[], isPaid: number) => {
-
-    if(conditions.includes('all')){
-      return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-    }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
-      if(conditions.includes(exp.estatus._id)){
-        return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-      }
-    }
-    return false;
-  }
-
-  const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
-    startDate:number, endDate:number, isPaid: number) => {
-  
-    let filtered: Expense[] = [];
-    refExpenses.current.map((expense) => {
-      if(conditionValidation(expense, minAmount, maxAmount, startDate, 
-          endDate, conditions, isPaid)){
-        filtered.push(expense);
-      }
-    });
-
-    setExpensesFiltered(filtered);
-    setDataExpenses(ExpenseDataToTableHistoryProviderData(filtered));
-  }
+  // const [maxAmount, setMaxAmount] = useState<number>(0);
+  // const [minAmount, setMinAmount] = useState<number>(0);
 
   return(
     <>

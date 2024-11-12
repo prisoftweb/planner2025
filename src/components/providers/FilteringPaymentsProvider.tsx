@@ -9,9 +9,9 @@ import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
-import { getCatalogsByNameAndCondition, getCatalogsByName } from "@/app/api/routeCatalogs"
+import { getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs"
 
-export default function FilteringExpensesProvider({showForm, FilterData, maxAmount, minAmount, 
+export default function FilteringPaymentsProvider({showForm, FilterData, maxAmount, minAmount, 
                       token }: 
                     {showForm:Function, FilterData:Function, maxAmount:number, 
                       minAmount:number, token: string}){
@@ -24,7 +24,7 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
 
   // const [isPaid, setIsPaid] = useState<boolean>(false);
-  const [isPaid, setIsPaid] = useState<number>(1);
+  // const [isPaid, setIsPaid] = useState<number>(1);
 
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
@@ -35,9 +35,8 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
     const fetchApis = async () => {
       let optConditions: Options[] = [];
       try {
-        // optConditions = await getCatalogsByNameAndCondition(token, 'payments');
-        // optConditions = await getCatalogsByName(token, 'payments');
-        optConditions = await getCatalogsByNameAndCondition(token, 'cost');
+        //optConditions = await getCatalogsByNameAndCondition(token, 'cost');
+        optConditions = await getCatalogsByNameAndCondition(token, 'payments');
         if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
       } catch (error) {
         return <h1>Error al consultar catalogos!!</h1>
@@ -93,12 +92,12 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
   useEffect(() => {
     //console.log('providers sel => ', providersSel);
     FilterData(conditionsSel, minValue, maxValue, 
-      firstDate?.getTime(), secondDate?.getTime(), isPaid);
+      firstDate?.getTime(), secondDate?.getTime(), 1);
   }, [ conditionsSel, minValue, maxValue, firstDate, secondDate]);
 
   useEffect (() => {
     FilterData(conditionsSel, minValue, maxValue,
-      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), isPaid);
+      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), 1);
   }, []);
 
   const allArray = [{
@@ -127,7 +126,7 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
 
-        <div className="flex justify-end px-5 items-center">
+        {/* <div className="flex justify-end px-5 items-center">
           <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
           <div>
             <div className="inline-flex rounded-md shadow-sm mx-2">
@@ -151,7 +150,7 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
         
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>

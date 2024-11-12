@@ -41,6 +41,7 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
   const updateStateExpenses = async () => {
     try {
       const res = await getPaymentsProvider(token, provider._id);
+      console.log('res update expenses => ', res);
       if(typeof(res) === 'string'){
         showToastMessageError('Error al actulizar tabla!!!');
       }else{
