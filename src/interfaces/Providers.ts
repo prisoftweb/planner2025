@@ -69,7 +69,8 @@ export interface ExpensesTableProvider {
   date: string
   Quantity: string
   paid: string
-  archivos: string[],
+  pending: string
+  archivos: boolean,
 }
 
 export interface DetailExpensesTableProvider {
@@ -85,5 +86,6 @@ export interface DetailExpensesTableProvider {
   paid: boolean
   date: string
   archivos: string[],
-  total: string
+  total: string,
+  importe: string
 }

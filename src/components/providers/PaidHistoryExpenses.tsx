@@ -8,9 +8,10 @@ import { Provider } from "@/interfaces/Providers";
 import TableListExpensesPaid from "./TableListsExpensesPaid";
 import PaidExpensesHistory from "./PaidExpensesHistory";
 
-export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user}: 
+export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
+    updateTable, condition}: 
   {showForm:Function, dataTable: HistoryExpensesTable[], provider: Provider, 
-    token:string, user: string}) {
+    token:string, user: string, updateTable: Function, condition: string}) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
@@ -57,8 +58,8 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   });
 
   let viewComponent = indexStepper===1? 
-      <PaidExpensesHistory id={provider._id} token={token} showForm={showForm}
-          user={user} costs={costs} maxDate={maxDate} minDate={minDate} />:
+      <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
+          user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} />:
       <TableListExpensesPaid data={dataTable} nextPage={handleIndexStepper} />;
   
   return(

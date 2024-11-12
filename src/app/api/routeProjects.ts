@@ -429,6 +429,7 @@ export async function getDashboardListProjectsByDate(auth_token:string, dateStar
     })
     console.log('data primer grafico');
     console.log('este no debe venir => ', projects);
+    console.log('res => ', res);
     console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;

@@ -8,11 +8,13 @@ import { useState, useEffect, useCallback } from "react";
 import { useDropzone} from 'react-dropzone';
 import { createPayments, createPaymentsWithVoucher } from "@/app/api/routePayments";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import { pendingPaymentProvider } from "@/interfaces/Payments";
+import { getPendingPaymentProvider } from "@/app/api/routePayments";
 
 export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
-  minDate, showForm}: 
-          {token:string, id:string, user:string, costs: string[], 
-            minDate:string, maxDate: string, showForm: Function}) {
+  minDate, showForm, updateTable, condition}: 
+          {token:string, id:string, user:string, costs: string[], condition: string, 
+            minDate:string, maxDate: string, showForm: Function, updateTable: Function}) {
 
   const [amount, setAmount] = useState<string>('');
   const [reference, setReference] = useState<string>('');
@@ -24,6 +26,20 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   const [referenceLabel, setReferenceLabel] = useState<string>('');
   const [dateLabel, setDateLabel] = useState<string>('');
   const [commentsLabel, setCommentsLabel] = useState<string>('');
+
+  const [pending, setPending] = useState<number>(-1);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res :(pendingPaymentProvider[] | string) = await getPendingPaymentProvider(id, token);
+      if(typeof(res) !== 'string'){
+        setPending(res[0].totalPendingPayment);
+      }else{
+        showToastMessageError(res);
+      }
+    }
+    fetch();
+  })
 
   const validationData = () => {
     let band = true;
@@ -55,11 +71,16 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
     if(band){
       //console.log('guardar');
-      paidExpenses();
+      if(pending===-1){
+        showToastMessageError('Error al calcular pendiente por pagar, intente otra vez!!!')
+      }else{
+        paidExpenses();
+      }
     }
   }
 
   const paidExpenses = async() => {
+    let pen = pending - Number(amount.replace(/[$,","]/g, ""));
     if(acceptedFiles.length > 0){
       const data = new FormData();
       data.append("reference",reference);
@@ -74,10 +95,14 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         data.append("costs", c);
       })
       data.append("notes",comments);
-      // data.append("pending", "1000");
+      data.append("pending", pen.toString());
       data.append("provider",id);
       data.append("user",user);
       data.append("voucher", acceptedFiles[0]);
+      data.append("condition", JSON.stringify([{
+        glossary: condition,
+        user
+      }]));
       // acceptedFiles.map((f) => {
       //   data.append("voucher", f);
       // })
@@ -91,13 +116,14 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         showToastMessageError(res);
       }else{ 
         showToastMessage('Costos pagados exitosamente!!!');
+        updateTable();
         showForm(false);
       }
     }else{
       const data = {
         reference:reference,
-        payout:amount.replace(/[$,","]/g, ""),
-        //pending:31902.33,
+        payout:Number(amount.replace(/[$,","]/g, "")),
+        pending:pen,
         date,
         range: {
             min:minDate,
@@ -106,7 +132,11 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         costs,
         notes:comments,
         provider:id,
-        user
+        user,
+        condition: [{
+          glossary: condition,
+          user
+        }]
       }
 
       console.log('data payment => ', JSON.stringify(data));
@@ -116,6 +146,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         showToastMessageError(res);
       }else{ 
         showToastMessage('Costos pagados exitosamente!!!');
+        updateTable();
         showForm(false);
       }
     }

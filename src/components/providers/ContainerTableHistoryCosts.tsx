@@ -13,15 +13,25 @@ import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
 import PaidHistoryExpenses from "./PaidHistoryExpenses"
 import { TbPaywall } from "react-icons/tb"
+import { GetCostsMIN } from "@/app/api/routeProviders";
+import { showToastMessageError } from "../Alert"
+import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions"
+import { useEffect } from "react"
 
 export default function ContainerTableHistoryCosts({data, token, expenses, user, 
-    provider, options}:
+    provider, options, condition}:
   {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
-    user: string, provider: Provider, options: Options[]}) {
+    user: string, provider: Provider, options: Options[], condition: string}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
   const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
+  const [dataTable, setDataTable] = useState<HistoryExpensesTable[]>(data);
+  const [costsProvider, setCostProvider] = useState<Expense[]>(expenses);
+  const [currentCostsProvider, setCurrentCostProvider] = useState<Expense[]>(expenses);
+  
+  const [maxAmount, setMaxAmount] = useState<number>(0);
+  const [minAmount, setMinAmount] = useState<number>(0);
 
   const handleFilter = (value: boolean) => {
     setFilter(value);
@@ -33,6 +43,142 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
 
   const handleExpensesSelected = (value: HistoryExpensesTable[]) => {
     setExpensesSelected(value);
+  }
+
+  const updateTable = async () => {
+    let costs: Expense[];
+    try {
+      costs = await GetCostsMIN(token, provider._id);
+      if(typeof(costs) === "string")
+        showToastMessageError('Error al actualizar tabla!!!');
+      else{
+        const table: HistoryExpensesTable[] = ExpenseDataToTableHistoryProviderData(costs);
+        setDataTable(table);
+        setCurrentCostProvider(costs);
+        setCostProvider(costs);
+      }
+    } catch (error) {
+      showToastMessageError('Error al actualizar tabla!!!');  
+    }
+  }
+
+  useEffect(() => {
+    const expenseM = expenses.reduce((previous, current) => {
+      return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
+    });
+    const expenseMin = expenses.reduce((previous, current) => {
+      return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
+    });
+    setMaxAmount(expenseM.cost?.subtotal);
+    setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
+  }, [])
+
+  const paidValidation = (exp:Expense, isPaid:number) => {
+    if(isPaid===1){
+      return true;
+    }else{
+      if(isPaid===2){
+        if(exp.ispaid){
+          return true;
+        }
+        return false;
+      }else{
+        if(!exp.ispaid){
+          return true;
+        }
+        return false;
+      }
+    }
+  }
+
+  const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
+    let d = new Date(exp.date).getTime();
+    //console.log('get time ', d);
+    if(d >= startDate && d <= endDate){
+      return paidValidation(exp, isPaid);
+      //return true;
+    }
+    return false;
+  }
+
+  const amountValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                              startDate:number, endDate:number, isPaid: number) => {
+    if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
+      return dateValidation(exp, startDate, endDate, isPaid);
+    }
+    return false;
+  }
+
+  // const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  //                     startDate:number, endDate:number, projects:string[], 
+  //                     isPaid: number) => {
+  //   if(projects.includes('all')){
+  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
+  //   }else{
+  //     if(exp.project){
+  //       if(projects.includes(exp.project._id)){
+  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  // const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+  //             startDate:number, endDate:number, projects:string[], 
+  //             reports:string[], isPaid: number) => {
+  //   if(reports.includes('all')){
+  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
+  //   }else{
+  //     if(exp.report){
+  //       if(reports.includes(exp.report._id)){
+  //         return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
+
+  const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
+                  startDate:number, endDate:number, conditions:string[], isPaid: number) => {
+
+    console.log('conditions => ', conditions);
+    if(conditions.includes('all')){
+      console.log('conditions all');
+      return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
+    }else{
+      console.log('validation condition');
+      console.log('expense => ', exp);
+      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
+      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
+      //               reports, categories, types, costcenters);
+      // }
+      if(conditions.includes(exp.estatus._id)){
+        return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
+      }
+    }
+    return false;
+  }
+
+  const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
+    startDate:number, endDate:number, isPaid: number) => {
+
+    console.log('filter data ');
+  
+    let filtered: Expense[] = [];
+    console.log('costs providers => ', costsProvider);
+    currentCostsProvider.map((expense) => {
+      console.log('expense map => ', expense);
+      if(conditionValidation(expense, minAmount, maxAmount, startDate, 
+          endDate, conditions, isPaid)){
+        filtered.push(expense);
+      }
+    });
+
+    setCostProvider(filtered);
+    setDataTable(ExpenseDataToTableHistoryProviderData(filtered));
+    // setExpensesFiltered(filtered);
+    // setDataExpenses(ExpenseDataToTableHistoryProviderData(filtered));
   }
   
   return (
@@ -61,12 +207,13 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
         </div>
       </div>
       <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
-        expenses={expenses} isFilter={filter} setIsFilter={handleFilter}
-        user={user} isViewReports={false} data={data} idProv={provider._id}
+        expenses={costsProvider} isFilter={filter} setIsFilter={handleFilter}
+        user={user} isViewReports={false} data={dataTable} idProv={provider._id}
+        filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
       />
       {paidExpenses && (
-        <PaidHistoryExpenses dataTable={expensesSelected} token={token}
-            showForm={handlePaidExpenses} provider={provider} user={user} />
+        <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
+            showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable} />
       )}
     </div>
   )

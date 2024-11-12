@@ -53,7 +53,7 @@ export function BarChartComponent({data, colors, categories}:
         categories={categories}
         colors={colors}
         //colors={['blue']}
-        yAxisWidth={56}
+        yAxisWidth={76}
         customTooltip={customTooltip}
       />
     </>

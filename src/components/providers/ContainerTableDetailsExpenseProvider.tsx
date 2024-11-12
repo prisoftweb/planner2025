@@ -18,6 +18,11 @@ import { CurrencyFormatter } from "@/app/functions/Globals"
 import Chip from "./Chip"
 import { ProgressCircle } from "@tremor/react"
 
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import {Tooltip} from "@nextui-org/react";
+import { BsFileEarmarkPdf } from "react-icons/bs"
+import ReportPaymentPDF from "./ReportPaymentPDF"
+
 export default function ContainerTableDetailsExpenseProvider({data, token, expenses, user, 
     provider, payment}:
   {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
@@ -29,6 +34,25 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
 
   const handleFilter = (value: boolean) => {
     setFilter(value);
+  }
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
   }
 
   return (
@@ -47,6 +71,24 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
+              
+              <PDFDownloadLink document={<ReportPaymentPDF costs={data} />} fileName={`${provider.name}.pdf`} >
+              {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      {/* // <button type="button">Loading document...</button> */}
+                    </Tooltip>
+                  ) : (
+                    <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    </Tooltip>
+                    // <button type="button">Download now!</button>
+                  ) }
+              </PDFDownloadLink>
             </div>
           </div>
         </div>

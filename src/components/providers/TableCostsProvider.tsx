@@ -9,7 +9,8 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
 import { ExpensesTableProvider } from "@/interfaces/Providers";
-import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
+// import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
+import FilteringPaymentsProvider from "./FilteringPaymentsProvider";
 import { PaymentProvider } from "@/interfaces/Payments";
 import RemoveElement from "../RemoveElement";
 import { showToastMessageError } from "../Alert";
@@ -41,9 +42,9 @@ export default function TableCostsProvider({data, token, expenses, idProv,
   }
 
   const deletePayment = (id:string) => {
-    const exp = expenses.find((e) => e._id=== id);
-    console.log(exp);
-    const auxExp = expenses.filter((e) => e._id===id);
+    // const exp = expenses.find((e) => e._id=== id);
+    // console.log(exp);
+    const auxExp = expenses.filter((e) => e._id!==id);
     setExpensesFiltered(auxExp);
     refExpenses.current = auxExp;
     const dataAux = ExpenseDataToTablePaidExpensesProviderData(auxExp);
@@ -83,6 +84,7 @@ export default function TableCostsProvider({data, token, expenses, idProv,
           {/* <button type="button" onClick={() => deletePayment(row.original.id)}>eliminar</button> */}
           <RemovePaymentComponent expenses={expenses} id={row.original.id} name={row.original.notes} 
               token={token} updateTable={deletePayment} />
+          {row.original.archivos? <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />: <IoAlert className="w-6 h-6 text-red-500" />}
           {/* <RemoveElement id={row.original.id} name={row.original.notes} token={token} 
               remove={removePayment} removeElement={delPayment} /> */}
           {/* <div className="w-20 flex gap-x-1 items-center">
@@ -170,13 +172,22 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         >{row.original.paid}</p>
       ),
     }),
+    columnHelper.accessor('pending', {
+      header: 'Pendiente',
+      id: 'Pendiente',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+        >{row.original.pending}</p>
+      ),
+    }),
   ]
   
 
   // const view = <Table columns={columns} data={dataExpenses} selectFunction={handleExpensesSelected}
   //               placeH="Buscar gasto.." />
   const view = <Table columns={columns} data={dataExpenses}
-                placeH="Buscar gasto.." />
+                placeH="Buscar gasto.." typeTable="payments" />
 
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [minAmount, setMinAmount] = useState<number>(0);
@@ -233,6 +244,7 @@ export default function TableCostsProvider({data, token, expenses, idProv,
                   startDate:number, endDate:number, conditions:string[], isPaid: number) => {
 
     if(conditions.includes('all')){
+      console.log('conditions => ', exp);
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
@@ -273,7 +285,7 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
           className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
         /> */}
-          {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
+          {isFilter && <FilteringPaymentsProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} />}
       </div>

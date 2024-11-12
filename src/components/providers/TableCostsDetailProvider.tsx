@@ -136,9 +136,17 @@ export default function TableCostsDetailProvider({data, token, expenses,
         ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} /></p>
       ),
     }),
-    columnHelper.accessor('total', {
+    columnHelper.accessor('importe', {
       header: 'Importe',
       id: 'Importe',
+      cell: ({row}) => (
+        <p className="py-2 font-semibold cursor-pointer"
+        >{row.original.importe}</p>
+      )
+    }),
+    columnHelper.accessor('total', {
+      header: 'Total',
+      id: 'Total',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
         >{row.original.total}</p>
