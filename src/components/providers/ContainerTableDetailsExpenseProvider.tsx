@@ -72,7 +72,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
               
-              <PDFDownloadLink document={<ReportPaymentPDF costs={data} />} fileName={`${provider.name}.pdf`} >
+              <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider} />} fileName={`${provider.name}.pdf`} >
               {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
                 {({loading, url, error, blob}) => 
                   loading? (

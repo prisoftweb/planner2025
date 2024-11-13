@@ -76,7 +76,9 @@ export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
       },
       condition: expense.estatus.name,
       archivos: elements,
-      isPaid: expense.ispaid
+      isPaid: expense.ispaid,
+      folio: expense.folio,
+      folioFiscal: expense.taxfolio
     });
   });
 

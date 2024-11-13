@@ -9,6 +9,7 @@ import { BarChartTreeInOne } from "./BarChartTreeInOne"
 import { LineChartComponent } from "./LineChartComponent"
 import NewDonutChartComponent from "./NewDonutChartComponent"
 import { Options } from "@/interfaces/Common"
+import { showToastMessageError } from "@/components/Alert"
 
 import { getDashboardProjectsAmount, getDashboardListProjects, 
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
@@ -131,10 +132,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
         if(typeof(amountPrjs)==='string'){
-          return <h1>{amountPrjs}</h1>
+          showToastMessageError(amountPrjs);
         }
       } catch (error) {
-        return <h1>Error al obtener monto total de proyectos!!!</h1>
+        showToastMessageError('Error al obtener monto total de proyectos!!!');
       }
 
       // let listPrjs: ListProjects[] = [];
@@ -150,127 +151,127 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       try {
         listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
         if(typeof(listPrjsDate)==='string'){
-          return <h1>{listPrjsDate}</h1>
+          showToastMessageError(listPrjsDate);
         }
       } catch (error) {
-        return <h1>Error al obtener lista de proyectos!!!</h1>
+        showToastMessageError('Error al obtener lista de proyectos!!!');
       }
 
       try {
         prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, []);
         if(typeof(prjsClient)==='string'){
-          return <h1>{prjsClient}</h1>
+          showToastMessageError(prjsClient);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por clientes!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por clientes!!!');
       }
 
       try {
         prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, []);
         if(typeof(prjsSegment)==='string'){
-          return <h1>{prjsSegment}</h1>
+          showToastMessageError(prjsSegment);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por segmento!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por segmento!!!');
       }
 
       try {
         prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, []);
         if(typeof(prjStatus)==='string'){
-          return <h1>{prjStatus}</h1>
+          showToastMessageError(prjStatus);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por estatus!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por estatus!!!');
       }
 
       try {
         prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, []);
         if(typeof(prjsProgress)==='string'){
-          return <h1>{prjsProgress}</h1>
+          showToastMessageError(prjsProgress);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por progreso!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por progreso!!!');
       }
 
       try {
         listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, []);
         if(typeof(listprjnotCompleted)==='string'){
-          return <h1>{listprjnotCompleted} list not completed</h1>
+          showToastMessageError(listprjnotCompleted);
         }
       } catch (error) {
-        return <h1>Error al obtener lista de proyectos no completos!!!</h1>
+        showToastMessageError('Error al obtener lista de proyectos no completos!!!');
       }
 
       try {
         prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
         if(typeof(prjsTop10)==='string'){
-          return <h1>{prjsTop10}</h1>
+          showToastMessageError(prjsTop10);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos top 10!!!</h1>
+        showToastMessageError('Error al obtener proyectos top 10!!!');
       }
 
       try {
         totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, []);
         if(typeof(totalCost)==='string'){
-          return <h1>{totalCost}</h1>
+          showToastMessageError(totalCost);
         }
       } catch (error) {
-        return <h1>Error al obtener costo total de los proyectos!!!</h1>
+        showToastMessageError('Error al obtener costo total de los proyectos!!!');
       }
 
       try {
         confMin = await getConfigMin(token);
         if(typeof(confMin)==='string'){
-          return <h1>{confMin}</h1>
+          showToastMessageError(confMin);
         }
       } catch (error) {
-        return <h1>Error al obtener configuracion!!!</h1>
+        showToastMessageError('Error al obtener configuracion!!!');
       }
 
       try {
         prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
         if(typeof(prjsBudgeted)==='string'){
-          return <h1>{prjsBudgeted}</h1>
+          showToastMessageError(prjsBudgeted);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos presupuestados!!!</h1>
+        showToastMessageError('Error al obtener proyectos presupuestados!!!');
       }
 
       try {
         prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
         if(typeof(prjsSpent)==='string'){
-          return <h1>{prjsSpent}</h1>
+          showToastMessageError(prjsSpent);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos por gastos!!!</h1>
+        showToastMessageError('Error al obtener proyectos por gastos!!!');
       }
 
       try {
         prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
         if(typeof(prjsControlBudgeted)==='string'){
-          return <h1>{prjsControlBudgeted}</h1>
+          showToastMessageError(prjsControlBudgeted);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos por control presupuestal!!!</h1>
+        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
       }
 
       try {
         prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
         if(typeof(prjandTypes)==='string'){
-          return <h1>{prjandTypes} list</h1>
+          showToastMessageError(prjandTypes);
         }
       } catch (error) {
-        return <h1>Error al obtener costos por proyecto y tipo!!!</h1>
+        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
       }
     }else{
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
         if(typeof(amountPrjs)==='string'){
-          return <h1>{amountPrjs}</h1>
+          showToastMessageError(amountPrjs);
         }
       } catch (error) {
-        return <h1>Error al obtener monto total de proyectos!!!</h1>
+        showToastMessageError('Error al obtener monto total de proyectos!!!');
       }
 
       // let listPrjs: ListProjects[] = [];
@@ -286,118 +287,118 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       try {
         listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
         if(typeof(listPrjsDate)==='string'){
-          return <h1>{listPrjsDate}</h1>
+          showToastMessageError(listPrjsDate);
         }
       } catch (error) {
-        return <h1>Error al obtener lista de proyectos!!!</h1>
+        showToastMessageError('Error al obtener lista de proyectos!!!');
       }
 
       try {
         prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, prj);
         if(typeof(prjsClient)==='string'){
-          return <h1>{prjsClient}</h1>
+          showToastMessageError(prjsClient);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por clientes!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por clientes!!!');
       }
 
       try {
         prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, prj);
         if(typeof(prjsSegment)==='string'){
-          return <h1>{prjsSegment}</h1>
+          showToastMessageError(prjsSegment);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por segmento!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por segmento!!!');
       }
 
       try {
         prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, prj);
         if(typeof(prjStatus)==='string'){
-          return <h1>{prjStatus}</h1>
+          showToastMessageError(prjStatus);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por estatus!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por estatus!!!');
       }
 
       try {
         prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, prj);
         if(typeof(prjsProgress)==='string'){
-          return <h1>{prjsProgress}</h1>
+          showToastMessageError(prjsProgress);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos agrupados por progreso!!!</h1>
+        showToastMessageError('Error al obtener proyectos agrupados por progreso!!!');
       }
 
       try {
         listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, prj);
         if(typeof(listprjnotCompleted)==='string'){
-          return <h1>{listprjnotCompleted} list not completed</h1>
+          showToastMessageError(listprjnotCompleted);
         }
       } catch (error) {
-        return <h1>Error al obtener lista de proyectos no completos!!!</h1>
+        showToastMessageError('Error al obtener lista de proyectos no completos!!!');
       }
 
       try {
         prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', prj);
         if(typeof(prjsTop10)==='string'){
-          return <h1>{prjsTop10}</h1>
+          showToastMessageError(prjsTop10);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos top 10!!!</h1>
+        showToastMessageError('Error al obtener proyectos top 10!!!');
       }
 
       try {
         totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, prj);
         if(typeof(totalCost)==='string'){
-          return <h1>{totalCost}</h1>
+          showToastMessageError(totalCost);
         }
       } catch (error) {
-        return <h1>Error al obtener costo total de los proyectos!!!</h1>
+        showToastMessageError('Error al obtener costo total de los proyectos!!!');
       }
 
       try {
         confMin = await getConfigMin(token);
         if(typeof(confMin)==='string'){
-          return <h1>{confMin}</h1>
+          showToastMessageError(confMin);
         }
       } catch (error) {
-        return <h1>Error al obtener configuracion!!!</h1>
+        showToastMessageError('Error al obtener configuracion!!!');
       }
 
       try {
         prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
         if(typeof(prjsBudgeted)==='string'){
-          return <h1>{prjsBudgeted}</h1>
+          showToastMessageError(prjsBudgeted);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos presupuestados!!!</h1>
+        showToastMessageError('Error al obtener proyectos presupuestados!!!');
       }
 
       try {
         prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
         if(typeof(prjsSpent)==='string'){
-          return <h1>{prjsSpent}</h1>
+          showToastMessageError(prjsSpent);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos por gastos!!!</h1>
+        showToastMessageError('Error al obtener proyectos por gastos!!!');
       }
 
       try {
         prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
         if(typeof(prjsControlBudgeted)==='string'){
-          return <h1>{prjsControlBudgeted}</h1>
+          showToastMessageError(prjsControlBudgeted);
         }
       } catch (error) {
-        return <h1>Error al obtener proyectos por control presupuestal!!!</h1>
+        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
       }
 
       try {
         prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
         if(typeof(prjandTypes)==='string'){
-          return <h1>{prjandTypes} list</h1>
+          showToastMessageError(prjandTypes);
         }
       } catch (error) {
-        return <h1>Error al obtener costos por proyecto y tipo!!!</h1>
+        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
       }
       // let auxPrjProgress = prjsProgress.filter((p) => !prj.includes(p.title));
       

@@ -1,5 +1,4 @@
 import Label from "../Label"
-import { CurrencyFormatter } from "@/app/functions/Globals"
 import Button from "../Button";
 import CurrencyInput from "react-currency-input-field";
 import Input from "../Input";
@@ -10,11 +9,13 @@ import { createPayments, createPaymentsWithVoucher } from "@/app/api/routePaymen
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { pendingPaymentProvider } from "@/interfaces/Payments";
 import { getPendingPaymentProvider } from "@/app/api/routePayments";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
 
 export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
-  minDate, showForm, updateTable, condition}: 
+  minDate, showForm, updateTable, condition, optTypes}: 
           {token:string, id:string, user:string, costs: string[], condition: string, 
-            minDate:string, maxDate: string, showForm: Function, updateTable: Function}) {
+            minDate:string, maxDate: string, showForm: Function, updateTable: Function, optTypes: Options[]}) {
 
   const [amount, setAmount] = useState<string>('');
   const [reference, setReference] = useState<string>('');
@@ -28,6 +29,11 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   const [commentsLabel, setCommentsLabel] = useState<string>('');
 
   const [pending, setPending] = useState<number>(-1);
+  const [paidMethod, setPaidMethod] = useState<string>(optTypes[0].value);
+
+  const handlePaidMethod = (value: string) => {
+    setPaidMethod(value);
+  }
 
   useEffect(() => {
     const fetch = async () => {
@@ -103,6 +109,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         glossary: condition,
         user
       }]));
+      data.append("methodofpayment", paidMethod);
       // acceptedFiles.map((f) => {
       //   data.append("voucher", f);
       // })
@@ -136,7 +143,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         condition: [{
           glossary: condition,
           user
-        }]
+        }],
+        methodofpayment: paidMethod
       }
 
       console.log('data payment => ', JSON.stringify(data));
@@ -199,6 +207,10 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
           <Label htmlFor="date">Fecha </Label>
           <Input type="date" onChange={(e) => setDate(e.target.value)} />
           <p className="text-red-500" >{dateLabel}</p>
+        </div>
+        <div>
+          <Label htmlFor="paidMethod">Forma de pago </Label>
+          <SelectReact index={0} opts={optTypes} setValue={handlePaidMethod} />
         </div>
       </div>
       <div>

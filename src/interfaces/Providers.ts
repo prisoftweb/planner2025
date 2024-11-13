@@ -52,7 +52,9 @@ export interface HistoryExpensesTable {
   Total: string
   condition: string,
   archivos: string[],
-  isPaid: boolean
+  isPaid: boolean,
+  folio: string,
+  folioFiscal: string
 }
 
 export interface ExpensesTableProvider {

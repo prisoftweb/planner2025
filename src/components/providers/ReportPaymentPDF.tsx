@@ -3,9 +3,10 @@ import { Report, CostReport } from '@/interfaces/Reports'
 //import { Expense } from '@/interfaces/Expenses'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { DetailExpensesTableProvider } from '@/interfaces/Providers'
+import { Provider } from "@/interfaces/Providers"
 
-export default function ReportPaymentPDF({costs}: 
-                {costs: DetailExpensesTableProvider[]}){
+export default function ReportPaymentPDF({costs, provider}: 
+                {costs: DetailExpensesTableProvider[], provider: Provider}){
   
   const style = StyleSheet.create({
     table: {
@@ -54,7 +55,7 @@ export default function ReportPaymentPDF({costs}:
       flexDirection: 'row',
       gap: '2px',
       fontSize: '10px',
-      alignItems: 'center'
+      // alignItems: 'center'
     },
     headerPage: {
       alignItems: 'center',
@@ -69,13 +70,14 @@ export default function ReportPaymentPDF({costs}:
       border: '1px solid gray',
     },
     textLeft: {
-      width: '30%',
-      textAlign: 'right',
+      // width: '30%',
+      // textAlign: 'right',
       margin: '2px',
+      color: 'gray'
     }, 
     textRight: {
-      width: '30%',
-      textAlign: 'left',
+      // width: '30%',
+      // textAlign: 'left',
       margin: '2px',
     },
     chip: {
@@ -95,48 +97,48 @@ export default function ReportPaymentPDF({costs}:
   return(
     <Document>
       <Page>
-        {/* <View style={style.headerPage}>
+        <View style={style.headerPage}>
           <Image src={'/isologo_palacios.png'} style={{width: '40px'}} />
-          <Text style={style.subTitle}>Informe de gastos</Text>
-          <Text style={style.title}>{report.name}</Text>
-        </View> */}
+          <Text style={style.subTitle}>Resumen de pago a proveedor</Text>
+          <Text style={style.title}>RESUMEN DE PAGO A PROVEEDOR</Text>
+          <Text style={style.subTitle}>Palacios construcciones</Text>
+        </View>
 
-        {/* <View style={style.containerData}>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Numero de informe:</Text>
-            <Text style={style.textRight}>{report.account}</Text>
-          </View>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Id. del informe:</Text>
-            <Text style={style.textRight}>{report._id}</Text>
-          </View>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Nombre del empleado:</Text>
-            <Text style={style.textRight}>{report.user.name}</Text>
-          </View>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Fecha del informe:</Text>
-            <Text style={style.textRight}>{report.date.substring(0, 10)}</Text>
-          </View>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Estado del informe: </Text>
-            <View style={[style.textRight, style.chip]}>
-              <Text>{report.moves[report.moves.length -1].condition.name}</Text>
+        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: '30px'}}>
+          <View >
+            <View style={style.inLineText}>
+              <Text style={style.textLeft}>Proveedor:</Text>
+              <Text style={style.textRight}>{provider.name}</Text>
+            </View>
+            <View style={style.inLineText}>
+              <Text style={style.textLeft}>RFC:</Text>
+              <Text style={style.textRight}>{provider.rfc}</Text>
+            </View>
+            <View style={style.inLineText}>
+              <Text style={style.textLeft}>CUENTA:</Text>
+              <Text style={style.textRight}>{provider.account}</Text>
+            </View>
+            <View style={style.inLineText}>
+              <Text style={style.textLeft}>Por pagar:</Text>
+              <Text style={style.textRight}>{0}</Text>
             </View>
           </View>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Empresa:</Text>
-            <Text style={style.textRight}>{report.company.name}</Text>
+
+          <View style={{textAlign: 'right'}}>
+            <View style={style.inLineText}>
+              <Text style={style.textLeft}>Fecha:</Text>
+              <Text style={style.textRight}>{'Fecha'}</Text>
+            </View>
+            <View style={style.inLineText}>
+              <Text style={style.textLeft}>Forma de pago:</Text>
+              <Text style={style.textRight}>{'forma de pago'}</Text>
+            </View>
+            <View style={style.inLineText}>
+              <Text style={style.textLeft}>Usuario:</Text>
+              <Text style={style.textRight}>{'user'}</Text>
+            </View>
           </View>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Proyecto:</Text>
-            <Text style={style.textRight}>{report.project.title}</Text>
-          </View>
-          <View style={style.inLineText}>
-            <Text style={style.textLeft}>Departamento:</Text>
-            <Text style={style.textRight}>{report.department.name}</Text>
-          </View>
-        </View> */}
+        </View>
         
         <View style={style.containerTable}>
           <View style={style.table}>

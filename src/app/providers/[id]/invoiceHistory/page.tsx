@@ -14,6 +14,7 @@ import TableExpenses from "@/components/expenses/TableExpenses";
 // import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableHistoryCosts from "@/components/providers/ContainerTableHistoryCosts";
+import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -49,6 +50,14 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
   }
 
+  let optTypes: Options[] = [];
+  try {
+    optTypes = await getCatalogsByNameAndType(token, 'payments');
+    if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+  } catch (error) {
+    return <h1>Error al consultar catalogos de pagos!!</h1>
+  }
+
   let options: Options[] = [];
 
   if(providers.length <= 0){
@@ -70,7 +79,7 @@ export default async function Page({ params }: { params: { id: string }}){
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='2' />
         <ContainerTableHistoryCosts data={table} expenses={costs} token={token} 
-          user={user._id} options={options} provider={provider} condition="67318a51ceaf47ece0d3aa72" />
+          user={user._id} optTypes={optTypes} provider={provider} condition="67318a51ceaf47ece0d3aa72" />
       </div>
     </>
   )
