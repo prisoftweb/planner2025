@@ -19,9 +19,9 @@ import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providers
 import { useEffect } from "react"
 
 export default function ContainerTableHistoryCosts({data, token, expenses, user, 
-    provider, options, condition}:
+    provider, optTypes, condition}:
   {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
-    user: string, provider: Provider, options: Options[], condition: string}) {
+    user: string, provider: Provider, optTypes: Options[], condition: string}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
@@ -213,7 +213,8 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
       />
       {paidExpenses && (
         <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
-            showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable} />
+            showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable}
+            optTypes={optTypes} />
       )}
     </div>
   )

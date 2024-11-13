@@ -96,7 +96,7 @@ export default function TableHistoryCosts({data, token, expenses,
       header: () => (
         <p>Proyecto</p>
       )
-    }),
+    }), 
     columnHelper.accessor('Informe', {
       header: 'Informe',
       id: 'Informe',
@@ -168,27 +168,43 @@ export default function TableHistoryCosts({data, token, expenses,
         >{row.original.Total}</p>
       ),
     }),
+    columnHelper.accessor('folio', {
+      header: 'Folio',
+      id: 'folio',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
+        >{row.original.folio}</p>
+      ),
+    }),
+    columnHelper.accessor('folioFiscal', {
+      header: 'Folio fiscal',
+      id: 'folio fiscal',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
+        >{row.original.folioFiscal}</p>
+      ),
+    }),
   ]
   
-  // const initialVisibilityColumns: any = {
-  //   seleccion: true,
-  //   Responsable: true, 
-  //   Proyecto: true, 
-  //   Informe: true, 
-  //   "Centro de costos": true, 
-  //   descripcion: true, 
-  //   proveedor: true, 
-  //   estatus: true, 
-  //   fecha: true, 
-  //   importe: true,
-  //   iva: false,
-  //   descuento: false,
-  //   total: false,
-  //   "Folio fiscal": false,
-  // }
+  const initialVisibilityColumns: any = {
+    seleccion : true,
+    Responsable : true, 
+    Proyecto : true, 
+    Informe : true, 
+    descripcion : true,
+    pagado : true, 
+    estatus : true, 
+    fecha : true, 
+    importe : true, 
+    total : true, 
+    folio : false, 
+    "folio fiscal" : false,
+  }
 
   const view = <Table columns={columns} data={data} selectFunction={handleExpensesSelected}
-                placeH="Buscar gasto.." typeTable="costProvider" />
+                placeH="Buscar gasto.." typeTable="costProvider" initialColumns={initialVisibilityColumns} />
   // const [maxAmount, setMaxAmount] = useState<number>(0);
   // const [minAmount, setMinAmount] = useState<number>(0);
 

@@ -7,11 +7,12 @@ import HeaderPaidHistoryExpenses from "./HeaderPaidHistoryExpenses";
 import { Provider } from "@/interfaces/Providers";
 import TableListExpensesPaid from "./TableListsExpensesPaid";
 import PaidExpensesHistory from "./PaidExpensesHistory";
+import { Options } from "@/interfaces/Common";
 
 export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
-    updateTable, condition}: 
+    updateTable, condition, optTypes}: 
   {showForm:Function, dataTable: HistoryExpensesTable[], provider: Provider, 
-    token:string, user: string, updateTable: Function, condition: string}) {
+    token:string, user: string, updateTable: Function, condition: string, optTypes: Options[]}) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
@@ -59,7 +60,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
 
   let viewComponent = indexStepper===1? 
       <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
-          user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} />:
+          user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} optTypes={optTypes} />:
       <TableListExpensesPaid data={dataTable} nextPage={handleIndexStepper} />;
   
   return(
