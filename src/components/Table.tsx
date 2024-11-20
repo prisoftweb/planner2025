@@ -12,7 +12,7 @@ import { useTableStates } from "@/app/store/tableStates";
 import { ExpensesTable } from "@/interfaces/Expenses";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { ProjectsTable } from "@/interfaces/Projects";
-import { HistoryExpensesTable, ExpensesTableProvider } from "@/interfaces/Providers";
+import { HistoryExpensesTable, ExpensesTableProvider, DetailExpensesTableProvider } from "@/interfaces/Providers";
 
 type MyData = {
   numRows: string
@@ -223,8 +223,8 @@ export default function Table({data, columns, placeH, typeTable='',
               </div>)
         }
       }else{
-        if(typeTable === 'payments'){
-          data.map((exp:ExpensesTableProvider) => total += Number(exp.paid.replace(/[$, M, X, N,]/g, "")));
+        if(typeTable === 'paymentDetails'){
+          data.map((exp:DetailExpensesTableProvider) => total += Number(exp.total.replace(/[$, M, X, N,]/g, "")));
           const t = CurrencyFormatter({
             currency: 'MXN',
             value: total
@@ -232,7 +232,7 @@ export default function Table({data, columns, placeH, typeTable='',
           
           if(table.getSelectedRowModel().flatRows.length > 0){
             let totalSeleccionados: number = 0;
-            table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.paid.replace(/[$, M, X, N,]/g, "")));
+            table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.total.replace(/[$, M, X, N,]/g, "")));
             //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
             const tSeleccionados = CurrencyFormatter({
               currency: 'MXN',
@@ -253,6 +253,39 @@ export default function Table({data, columns, placeH, typeTable='',
                   <p>Cantidad: {data.length}</p>
                   <p>Total de gastos: {t}</p>
                 </div>)
+          }
+        }else{
+          if(typeTable === 'payments'){
+            data.map((exp:ExpensesTableProvider) => total += Number(exp.paid.replace(/[$, M, X, N,]/g, "")));
+            const t = CurrencyFormatter({
+              currency: 'MXN',
+              value: total
+            });
+            
+            if(table.getSelectedRowModel().flatRows.length > 0){
+              let totalSeleccionados: number = 0;
+              table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.paid.replace(/[$, M, X, N,]/g, "")));
+              //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
+              const tSeleccionados = CurrencyFormatter({
+                currency: 'MXN',
+                value: totalSeleccionados
+              });
+              labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
+                  <div className="flex gap-x-5 text-white pl-5">
+                    <p>Cantidad: {data.length}</p>
+                    <p>Total de pagos: {t}</p>
+                  </div>
+                  <div className="flex gap-x-5 text-white pl-5">
+                    <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
+                    <p>Total de pagos seleccionados: {tSeleccionados}</p>
+                  </div>
+              </div>)
+            }else{
+              labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
+                    <p>Cantidad: {data.length}</p>
+                    <p>Total de gastos: {t}</p>
+                  </div>)
+            }
           }
         }
       }

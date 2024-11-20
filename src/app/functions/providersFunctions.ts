@@ -74,11 +74,15 @@ export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
         responsible: expense.user?.name,
         photo: expense.user?.photo
       },
-      condition: expense.estatus.name,
+      condition: expense.estatus,
       archivos: elements,
       isPaid: expense.ispaid,
       folio: expense.folio,
-      folioFiscal: expense.taxfolio
+      folioFiscal: expense.taxfolio,
+      discount: expense.cost.discount,
+      iva: expense.cost.vat?.value || expense.cost.iva,
+      typeCFDI: expense.typeCFDI.name,
+      conceptCostoCenter: expense.costocenter.concept.name
     });
   });
 
@@ -299,7 +303,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       elements.push('none');
     }
     table.push({
-      id: expense._id,
+      id: expense.costs.folio,
       Estatus: expense.costs.estatus,
       date: expense.costs.date,
       Responsable: {

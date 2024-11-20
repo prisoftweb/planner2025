@@ -8,6 +8,8 @@ import { Provider } from "@/interfaces/Providers";
 import TableListExpensesPaid from "./TableListsExpensesPaid";
 import PaidExpensesHistory from "./PaidExpensesHistory";
 import { Options } from "@/interfaces/Common";
+import { CostInPayment } from "@/interfaces/Payments";
+import { CostsPaymentTable } from "@/interfaces/Providers";
 
 export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
     updateTable, condition, optTypes}: 
@@ -16,6 +18,39 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
+
+  const [costsInPayment, setCostInPayment] = useState<CostsPaymentTable[]>([]);
+
+  useEffect(() => {
+    const aux: CostsPaymentTable[] = [];
+    dataTable.map((c) => {
+      aux.push({
+        archivos: c.archivos,
+        condition: c.Estatus,
+        Fecha: c.Fecha,
+        id: c.id,
+        isPaid: c.isPaid,
+        Responsable: c.Responsable,
+        Total: c.Total,
+        paid: Number(c.Total.replace(/[$,",", M, X]/g, "")),
+        pending: 0,
+        parciality: 1,
+        conceptCostoCenter: c.conceptCostoCenter,
+        discount: c.discount,
+        Importe: c.Importe,
+        iva: c.iva,
+        typeCFDI: c.typeCFDI,
+        folio: c.folio,
+        folioFiscal: c.folioFiscal
+      });
+    });
+    setCostInPayment(aux);
+  }, []);
+
+  const updateCostPartiality = (value: CostsPaymentTable) => {
+    const filtered = costsInPayment.filter((c) => c.id !== value.id);
+    setCostInPayment([...filtered, value]);
+  }
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -60,8 +95,9 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
 
   let viewComponent = indexStepper===1? 
       <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
-          user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} optTypes={optTypes} />:
-      <TableListExpensesPaid data={dataTable} nextPage={handleIndexStepper} />;
+          user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} 
+          optTypes={optTypes} costsPayment={costsInPayment} />:
+      <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />;
   
   return(
     <>
@@ -82,7 +118,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
         
         <NavStepperPaidExpenses index={indexStepper} changeTab={handleIndexStepper} />
         <div className="mt-3">
-          <HeaderPaidHistoryExpenses expensesTable={dataTable} provider={provider} token={token} />
+          <HeaderPaidHistoryExpenses expensesTable={costsInPayment} provider={provider} token={token} />
         </div>
         <div className="mt-3">
           {viewComponent}

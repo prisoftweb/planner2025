@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         {/* <NavTab idProv={params.id} tab='4' /> */}
         <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token}
-          user={user._id} provider={provider} payment={payment} />
+          user={user} provider={provider} payment={payment} />
       </div>
     </>
   )

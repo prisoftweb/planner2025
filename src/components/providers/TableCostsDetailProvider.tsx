@@ -155,7 +155,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
   ]
   
 
-  const view = <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />
+  const view = <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="paymentDetails" />
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [minAmount, setMinAmount] = useState<number>(0);
   

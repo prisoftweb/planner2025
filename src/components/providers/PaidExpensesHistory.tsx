@@ -7,17 +7,24 @@ import { useState, useEffect, useCallback } from "react";
 import { useDropzone} from 'react-dropzone';
 import { createPayments, createPaymentsWithVoucher } from "@/app/api/routePayments";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { pendingPaymentProvider } from "@/interfaces/Payments";
+import { pendingPaymentProvider, CostInPayment } from "@/interfaces/Payments";
 import { getPendingPaymentProvider } from "@/app/api/routePayments";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
+import { CostsPaymentTable } from "@/interfaces/Providers";
 
 export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
-  minDate, showForm, updateTable, condition, optTypes}: 
+  minDate, showForm, updateTable, condition, optTypes, costsPayment}: 
           {token:string, id:string, user:string, costs: string[], condition: string, 
-            minDate:string, maxDate: string, showForm: Function, updateTable: Function, optTypes: Options[]}) {
+            minDate:string, maxDate: string, showForm: Function, updateTable: Function, 
+            optTypes: Options[], costsPayment: CostsPaymentTable[]}) {
 
-  const [amount, setAmount] = useState<string>('');
+  let a = 0;
+  costsPayment.map((c) => {
+    a += c.paid;
+  });
+              
+  const [amount, setAmount] = useState<string>(a.toString());
   const [reference, setReference] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [comments, setComments] = useState<string>('');
@@ -30,6 +37,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
   const [pending, setPending] = useState<number>(-1);
   const [paidMethod, setPaidMethod] = useState<string>(optTypes[0].value);
+  // const [previousbalanceamount, setPreviousbalanceamount] = useState<number>(0);
 
   const handlePaidMethod = (value: string) => {
     setPaidMethod(value);
@@ -45,7 +53,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       }
     }
     fetch();
-  })
+  }, []);
 
   const validationData = () => {
     let band = true;
@@ -87,6 +95,39 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
   const paidExpenses = async() => {
     let pen = pending - Number(amount.replace(/[$,","]/g, ""));
+
+    const arrCosts: CostInPayment[] = [];
+    console.log('costs payment => ', costsPayment);
+    // costs.map((c, index: number) => {
+    //   console.log('cost p => ', costsPayment[index], ' index => ', index);
+    //   arrCosts.push({
+    //     cost: c,
+    //     payment: [{
+    //       previousbalanceamount: Number(costsPayment[index].Total.replace(/[$,",", M, X]/g, "")),
+    //       payout: costsPayment[index].paid,
+    //       unpaidbalanceamount: costsPayment[index].pending,
+    //       partialitynumber: costsPayment[index].parciality
+    //     }]
+    //   });
+    // });
+
+    costsPayment.map((c) => {
+      console.log('cost p => ', c);
+      arrCosts.push({
+        cost: c.id,
+        previousbalanceamount: Number(c.Total.replace(/[$,",", M, X]/g, "")),
+        payout: c.paid,
+        unpaidbalanceamount: c.pending,
+        partialitynumber: c.parciality
+        // payment: [{
+        //   previousbalanceamount: Number(c.Total.replace(/[$,",", M, X]/g, "")),
+        //   payout: c.paid,
+        //   unpaidbalanceamount: c.pending,
+        //   partialitynumber: c.parciality
+        // }]
+      });
+    });
+
     if(acceptedFiles.length > 0){
       const data = new FormData();
       data.append("reference",reference);
@@ -96,9 +137,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       //     max:maxDate
       //   }));
       data.append("date",date);
-      // data.append("costs",JSON.stringify(costs));
-      costs.map((c) => {
-        data.append("costs", c);
+      arrCosts.map((c) => {
+        data.append("paymentInCosts", JSON.stringify(c));
       })
       data.append("notes",comments);
       data.append("pending", pen.toString());
@@ -136,7 +176,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
             min:minDate,
             max:maxDate
         },
-        costs,
+        //costs,
+        paymentInCosts: JSON.stringify(arrCosts),
         notes:comments,
         provider:id,
         user,
@@ -189,9 +230,10 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
             onChange={(e) => setAmount(e.target.value.replace(/[$]/g, ""))}
-            //defaultValue={creditlimitI || 0}
+            defaultValue={amount.replace(/[$,","]/g, "") || 0}
             decimalsLimit={2}
             prefix="$"
+            autoFocus
           />
           <p className="text-red-500" >{amountLabel}</p>
         </div>

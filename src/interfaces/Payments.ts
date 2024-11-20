@@ -112,6 +112,7 @@ export interface OnePayment {
   costs: Expense[]
   user: UsrBack
   provider: Provider
+  methodofpayment: string | Glossary
   status: boolean
   __v: number
   id: string
@@ -125,3 +126,15 @@ export interface pendingPaymentProvider {
   totalPendingPayment: number
 }
 
+export interface CostInPayment {
+  cost: string
+  previousbalanceamount: number
+  payout: number
+  unpaidbalanceamount: number
+  partialitynumber: number
+  // payment: PaymentOfCost[]
+}
+
+// export interface PaymentOfCost {
+  
+// }

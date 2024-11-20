@@ -50,11 +50,38 @@ export interface HistoryExpensesTable {
   Fecha: string 
   Importe: string
   Total: string
-  condition: string,
+  condition: Glossary,
   archivos: string[],
   isPaid: boolean,
   folio: string,
   folioFiscal: string
+  iva: number,
+  discount: number
+  typeCFDI: string,
+  conceptCostoCenter: string,
+}
+
+export interface CostsPaymentTable {
+  id: string
+  Responsable: {
+    responsible: string,
+    photo: string
+  } 
+  Fecha: string 
+  Importe: string
+  Total: string,
+  paid: number,
+  pending: number,
+  condition: Glossary,
+  archivos: string[],
+  isPaid: boolean,
+  parciality: number
+  folio: string,
+  folioFiscal: string
+  iva: number,
+  discount: number
+  typeCFDI: string,
+  conceptCostoCenter: string
 }
 
 export interface ExpensesTableProvider {
