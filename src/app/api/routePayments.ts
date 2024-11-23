@@ -121,17 +121,30 @@ export async function getCostsPayment(auth_token:string, payment:string) {
   }
 }
 
-export async function removePayment(id:string, auth_token:string, costs: string[]) {
+export interface PaymentInCosts {
+  cost: string
+  _id: string
+  paymentelements: number
+}
+
+export async function removePayment(id:string, auth_token:string, costs: PaymentInCosts[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/${id}`;
+  const data = {
+    paymentInCosts: costs,
+    condition: [{                        
+        glossary: "67318dacceaf47ece0d3aabb",
+        user: "65d3836974045152c0c4378c"                    
+    }]        
+  }
+
+  console.log('data elimina send => ', data);
   try {
     const res = await axios.delete(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       }, 
-      data: {
-        costs: costs
-      }
+      data: data
     });
     console.log('res eliminar => ', res);
     if(res.status===204)

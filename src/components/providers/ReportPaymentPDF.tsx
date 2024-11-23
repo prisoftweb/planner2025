@@ -94,7 +94,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
 
   let totalAllCosts = 0;
   costs.map((c) => {
-    totalAllCosts += Number(c.total.replace(/[$,",", M, X]/g, ""));
+    totalAllCosts += Number(c.payout.replace(/[$,",", M, X]/g, ""));
   });
   
   return(
@@ -168,8 +168,10 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
             <View style={[style.header, {flex: 1}]}><Text>INFORME</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>DESCRIPCION</Text></View>
             <View style={[style.header, {flex: 1}]}><Text>FECHA</Text></View>
-            <View style={[style.header, {flex: 1}]}><Text>IMPORTE</Text></View>
-            <View style={[style.header, {flex: 1}]}><Text>TOTAL</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>SALDO ANTERIOR</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>PAGADO</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>SALDO PENDIENTE</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>PARCIALIDAD</Text></View>
           </View>
           {costs.map((cost) => (
             <View style={style.table} key={cost.id}>
@@ -178,9 +180,11 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
               <View style={[style.element, {flex: 3}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text>{cost.date.substring(0, 10)}</Text></View>
               <View style={[style.element, {flex: 1}]}>
-                <Text>{cost.importe}</Text>
+                <Text>{cost.previoudbalanceamount}</Text>
               </View>
-              <View style={[style.element, {flex: 1}]}><Text>{cost.total}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{cost.payout}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{cost.unpaidbalanceamount}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{cost.partitialnumber}</Text></View>
             </View>
           ) )}
         </View>

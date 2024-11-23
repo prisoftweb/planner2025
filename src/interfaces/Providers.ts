@@ -115,6 +115,10 @@ export interface DetailExpensesTableProvider {
   paid: boolean
   date: string
   archivos: string[],
-  total: string,
-  importe: string
+  // total: string,
+  // importe: string
+  previoudbalanceamount: string,
+  payout: string,
+  partitialnumber: number,
+  unpaidbalanceamount: string
 }

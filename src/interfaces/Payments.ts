@@ -42,7 +42,10 @@ export interface CostPayment {
   notes: string
   voucher: string
   provider: Provider
-  user: UsrBack
+  user: UsrBack,
+  // costos: {
+  //   costito: number
+  // }
   costs: {
     folio: string
     taxfolio: string
@@ -54,6 +57,18 @@ export interface CostPayment {
       total: number
       vat: string
     }
+    paymentelements: 4,
+    pay: [
+        {
+            paid: string,
+            previousbalanceamount: number,
+            payout: number,
+            unpaidbalanceamount: number,
+            partialitynumber: number,
+            _id: string
+        }
+    ]
+    estatus: Glossary
     description: string
     taxapply: boolean
     isticket: boolean
@@ -79,7 +94,7 @@ export interface CostPayment {
       _id: string
       name: string
     }
-    estatus: Glossary
+    // estatus: Glossary
     costocenter: {
       _id: string
       category: string
@@ -132,6 +147,7 @@ export interface CostInPayment {
   payout: number
   unpaidbalanceamount: number
   partialitynumber: number
+  paymentelements: number
   // payment: PaymentOfCost[]
 }
 

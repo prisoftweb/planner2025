@@ -111,15 +111,15 @@ export default function TableCostsDetailProvider({data, token, expenses,
         )
       ),
     }),
-    columnHelper.accessor('paid', {
-      header: 'Pagado',
-      id: 'Pagado',
-      cell: ({row}) => (
-        <div className="cursor-pointer" >
-            <Chip label={row.original.paid? 'Pagado': 'No pagado'} color={row.original.paid? '#0f0': '#f00'} />
-        </div>
-      ),
-    }),
+    // columnHelper.accessor('paid', {
+    //   header: 'Pagado',
+    //   id: 'Pagado',
+    //   cell: ({row}) => (
+    //     <div className="cursor-pointer" >
+    //         <Chip label={row.original.paid? 'Pagado': 'No pagado'} color={row.original.paid? '#0f0': '#f00'} />
+    //     </div>
+    //   ),
+    // }),
     columnHelper.accessor('date', {
       header: 'Fecha',
       id: 'fecha',
@@ -136,20 +136,36 @@ export default function TableCostsDetailProvider({data, token, expenses,
         ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} /></p>
       ),
     }),
-    columnHelper.accessor('importe', {
-      header: 'Importe',
-      id: 'Importe',
+    columnHelper.accessor('previoudbalanceamount', {
+      header: 'Saldo anterior',
+      id: 'saldo anterior',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.importe}</p>
+        >{row.original.previoudbalanceamount}</p>
       )
     }),
-    columnHelper.accessor('total', {
-      header: 'Total',
-      id: 'Total',
+    columnHelper.accessor('payout', {
+      header: 'Pagado',
+      id: 'pagado',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.total}</p>
+        >{row.original.payout}</p>
+      )
+    }),
+    columnHelper.accessor('unpaidbalanceamount', {
+      header: 'Saldo pendiente',
+      id: 'pendiente',
+      cell: ({row}) => (
+        <p className="py-2 font-semibold cursor-pointer"
+        >{row.original.unpaidbalanceamount}</p>
+      )
+    }),
+    columnHelper.accessor('partitialnumber', {
+      header: 'Parcialidad',
+      id: 'parcialidad',
+      cell: ({row}) => (
+        <p className="py-2 font-semibold cursor-pointer"
+        >{row.original.partitialnumber}</p>
       )
     }),
   ]

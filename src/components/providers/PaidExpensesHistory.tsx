@@ -118,7 +118,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         previousbalanceamount: Number(c.Total.replace(/[$,",", M, X]/g, "")),
         payout: c.paid,
         unpaidbalanceamount: c.pending,
-        partialitynumber: c.parciality
+        partialitynumber: c.parciality,
+        paymentelements: 1
         // payment: [{
         //   previousbalanceamount: Number(c.Total.replace(/[$,",", M, X]/g, "")),
         //   payout: c.paid,
@@ -139,7 +140,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       data.append("date",date);
       arrCosts.map((c) => {
         data.append("paymentInCosts", JSON.stringify(c));
-      })
+      });
+      costs.map((c) => data.append('costs', c));
       data.append("notes",comments);
       data.append("pending", pen.toString());
       data.append("provider",id);
@@ -147,6 +149,10 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       data.append("voucher", acceptedFiles[0]);
       data.append("condition", JSON.stringify([{
         glossary: condition,
+        user
+      }]));
+      data.append("conditionpartial", JSON.stringify([{
+        glossary: "67378f77d846bbd16e1a8714",
         user
       }]));
       data.append("methodofpayment", paidMethod);
@@ -176,14 +182,18 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
             min:minDate,
             max:maxDate
         },
-        //costs,
-        paymentInCosts: JSON.stringify(arrCosts),
+        costs,
+        paymentInCosts: arrCosts,
         notes:comments,
         provider:id,
         user,
         condition: [{
           glossary: condition,
           user
+        }],
+        conditionpartial: [{                        
+            glossary: "67378f77d846bbd16e1a8714",
+            user                    
         }],
         methodofpayment: paidMethod
       }

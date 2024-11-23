@@ -7,6 +7,12 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { removePayment } from '@/app/api/routePayments';
 import { PaymentProvider } from '@/interfaces/Payments';
 
+export interface PaymentInCosts {
+  cost: string
+  _id: string
+  paymentelements: number
+}
+
 export default function RemovePaymentComponent({token, id, name, expenses, updateTable } : 
     {token : string, name:string, id:string, expenses: PaymentProvider[], 
       updateTable: Function}){
@@ -27,7 +33,17 @@ export default function RemovePaymentComponent({token, id, name, expenses, updat
               try {
                 const exp = expenses.find((e) => e._id=== id);
                 if(exp){
-                  res = await removePayment(id, token, exp.quantity);
+                  const data: PaymentInCosts[] = []
+                  exp.quantity.map((e) => {
+                    console.log('exp quantity => ', e);
+                    data.push({
+                      _id: '',
+                      cost: e,
+                      paymentelements: 1
+                    })
+                  });
+                  console.log('data remove => ', data);
+                  res = await removePayment(id, token, data);
                   if(res === 204) {
                     showToastMessage(`${name} eliminado exitosamente!`);
                     updateTable(id);

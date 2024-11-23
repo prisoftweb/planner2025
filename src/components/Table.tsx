@@ -224,7 +224,7 @@ export default function Table({data, columns, placeH, typeTable='',
         }
       }else{
         if(typeTable === 'paymentDetails'){
-          data.map((exp:DetailExpensesTableProvider) => total += Number(exp.total.replace(/[$, M, X, N,]/g, "")));
+          data.map((exp:DetailExpensesTableProvider) => total += Number(exp.payout.replace(/[$, M, X, N,]/g, "")));
           const t = CurrencyFormatter({
             currency: 'MXN',
             value: total
