@@ -7,9 +7,10 @@ import { getPendingPaymentProvider } from "@/app/api/routePayments";
 import { useState, useEffect } from "react";
 import { pendingPaymentProvider } from "@/interfaces/Payments";
 import { showToastMessageError } from "../Alert";
+import { CostsPaymentTable } from "@/interfaces/Providers";
 
 export default function HeaderPaidHistoryExpenses({expensesTable, provider, token}:
-   {expensesTable: HistoryExpensesTable[], provider: Provider, token: string}) {
+   {expensesTable: CostsPaymentTable[], provider: Provider, token: string}) {
 
   const [pending, setPending] = useState<number>(0);
 
@@ -28,10 +29,11 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
   let amount = 0;
   // let amountP = 0;
   expensesTable.map((exp) => {
-    amount += Number(exp.Total.replace(/[$,%,M,N,X]/g,""));
-    // if(!exp.isPaid){
-    //   amountP += Number(exp.Importe.replace(/[$,%,M,N,X]/g,""));
-    // }
+    // amount += Number(exp.Total.replace(/[$,%,M,N,X]/g,""));
+    console.log('amount => ', amount);
+    console.log('paid => ', exp.paid);
+    amount += Number(exp.paid);
+    console.log('new amount => ', amount);
   });
  
   return (

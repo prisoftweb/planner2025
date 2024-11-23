@@ -192,7 +192,16 @@ const NavItems = ({role}: {role:string}) => {
           link: '/roles/trees'
         }
       ]}/>
-      <NavItem name="Proveedores" link="/providers" items={[]}/>
+      <NavItem name="Proveedores" link="" items={[
+        {
+          name: 'Proveedores',
+          link: '/providers'
+        },
+        {
+          name: 'Dashboards',
+          link: '/providers/dashboards'
+        },
+      ]}/>
       <NavItem name="Clientes" link="/clients" items={[]}/>
       {/* <NavItem name="Roles" link="/roles/role" items={[]}/> */}
       <NavItem name="Proyectos" link="" items={[

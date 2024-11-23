@@ -22,11 +22,12 @@ import { PDFDownloadLink } from "@react-pdf/renderer"
 import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs"
 import ReportPaymentPDF from "./ReportPaymentPDF"
+import { UsrBack } from "@/interfaces/User"
 
 export default function ContainerTableDetailsExpenseProvider({data, token, expenses, user, 
     provider, payment}:
   {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
-    user: string, provider: Provider, payment: OnePayment}) {
+    user: UsrBack, provider: Provider, payment: OnePayment}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   // const [expensesSelected, setExpensesSelected] = useState<ExpensesTableProvider[]>([]);
@@ -72,7 +73,8 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
               
-              <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider} />} fileName={`${provider.name}.pdf`} >
+              <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider}
+                                            payment={payment} user={user} />} fileName={`${provider.name}.pdf`} >
               {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
                 {({loading, url, error, blob}) => 
                   loading? (
@@ -148,16 +150,16 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
           <div className="mb-2">
             <Chip label="Pagado" color="#0f0" />
           </div>
-          <ProgressCircle value={82}>
+          <ProgressCircle value={(payment.payout / (payment.payout + payment.pending)) * 100}>
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
-              {82}%
+              {((payment.payout / (payment.payout + payment.pending)) * 100).toFixed(2)}%
             </span>
           </ProgressCircle>
         </div>
 
       </div>
       <TableCostsDetailProvider token={token} expenses={expenses} isFilter={filter} setIsFilter={handleFilter}
-        user={user} data={data} />
+        user={user._id} data={data} />
     </div>
   )
 }

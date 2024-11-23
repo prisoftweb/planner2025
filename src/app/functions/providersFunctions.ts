@@ -74,11 +74,15 @@ export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
         responsible: expense.user?.name,
         photo: expense.user?.photo
       },
-      condition: expense.estatus.name,
+      condition: expense.estatus,
       archivos: elements,
       isPaid: expense.ispaid,
       folio: expense.folio,
-      folioFiscal: expense.taxfolio
+      folioFiscal: expense.taxfolio,
+      discount: expense.cost.discount,
+      iva: expense.cost.vat?.value || expense.cost.iva,
+      typeCFDI: expense.typeCFDI.name,
+      conceptCostoCenter: expense.costocenter.concept.name
     });
   });
 
@@ -280,15 +284,30 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
   const table: DetailExpensesTableProvider[] = [];
   
   expenses.map((expense) => {
+    console.log('expense completo => ', expense);
+    console.log('pay parse => ', JSON.stringify(expense));
+    console.log('expense pay => ', expense.costs.pay);
     const dollar = CurrencyFormatter({
           currency: "MXN",
-          value: expense.costs.cost.subtotal || 0
+          // value: expense.costs.cost.subtotal || 0
+          // value: expense.costos.costito || 0
+          value: expense.costs.pay[0]?.previousbalanceamount || 0
         });
     
     const total = CurrencyFormatter({
       currency: "MXN",
-      value: expense.costs.cost.total || 0
+      // value: expense.costs.cost.total || 0
+      // value: expense.payout || 0
+      value: expense.costs.pay[0]?.payout || 0
     })
+
+    const unpaid = CurrencyFormatter({
+      currency: "MXN",
+      // value: expense.costs.cost.subtotal || 0
+      // value: expense.costos.costito || 0
+      value: expense.costs.pay[0]?.unpaidbalanceamount || 0
+    });
+
     const elements: string[] = [];
     // const typeFiles = getTypeFiles(expense);
     if(expense.voucher.includes('pdf')){
@@ -299,20 +318,27 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       elements.push('none');
     }
     table.push({
+      // id: expense.costs.folio,
       id: expense._id,
+      // Estatus: expense.costs.estatus,
       Estatus: expense.costs.estatus,
-      date: expense.costs.date,
+      // date: expense.costs.date,
+      date: expense.date,
       Responsable: {
-        responsible: expense.costs.user?.name,
-        photo: expense.costs.user?.photo
+        // responsible: expense.costs.user?.name,
+        // photo: expense.costs.user?.photo
+        responsible: expense.user?.name,
+        photo: expense.user?.photo
       },
       archivos: elements,
       description: expense.costs.description,
       paid: expense.costs.ispaid, 
       project: expense.costs.project.title,
       report: expense.costs.report.name,
-      importe: dollar,
-      total: total
+      previoudbalanceamount: dollar,
+      payout: total,
+      partitialnumber: expense.costs.pay[0]?.partialitynumber || 1,
+      unpaidbalanceamount: unpaid
     });
   });
   return table;
