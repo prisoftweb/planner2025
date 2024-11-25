@@ -83,7 +83,7 @@ export default function TableCostsProvider({data, token, expenses, idProv,
           <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
           {/* <button type="button" onClick={() => deletePayment(row.original.id)}>eliminar</button> */}
           <RemovePaymentComponent expenses={expenses} id={row.original.id} name={row.original.notes} 
-              token={token} updateTable={deletePayment} />
+              token={token} updateTable={deletePayment} user={user} />
           {row.original.archivos? <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />: <IoAlert className="w-6 h-6 text-red-500" />}
           {/* <RemoveElement id={row.original.id} name={row.original.notes} token={token} 
               remove={removePayment} removeElement={delPayment} /> */}

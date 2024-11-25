@@ -13,6 +13,7 @@ import { useOutsideClick } from "@/app/functions/useOutsideClick";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 import CurrencyInput from "react-currency-input-field";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 
 export default function NewPartialCost({setShowForm, updateCost, cost}: {setShowForm:Function, updateCost:Function, cost: CostsPaymentTable}){
   
@@ -73,13 +74,16 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
   });
 
   return(
-    <div className="w-full z-50 sm:max-w-lg absolute top-0 bg-white p-3 right-0"
+    <div className="w-full max-w-5xl z-50 absolute top-0 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}} 
       ref={ref}
     >
-      <HeaderForm img="/img/payments/payments.svg" subtitle="Agrega parcialidad a una factura" 
-        title="Agregar parcialidad"
-      />
+      <div className="p-3 flex items-center justify-between">
+        <HeaderForm img="/img/payments/payments.svg" subtitle="Agrega parcialidad a una factura" 
+          title="Agregar parcialidad"
+        />
+        {/* <XCircleIcon className="text-red-500 w-8 h-8" onClick={() => setShowForm(false)} /> */}
+      </div>
       <div className="shadow-md shadow-slate-500 m-3 p-3">
         <Label htmlFor="concept">{cost.conceptCostoCenter}</Label>
         <Label htmlFor="taxFolio">{cost.folioFiscal}</Label>
@@ -120,7 +124,7 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
           </div>
         </div>
       </div>
-      <form className="mt-4 max-w-md rounded-lg grid grid-cols-2 gap-x-3 gap-y-3">
+      <form className="m-3 mt-4 rounded-lg grid grid-cols-2 gap-x-3 gap-y-3">
         <div>
           <Label htmlFor="previousImport"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe Saldo anterior</p></Label>
           <CurrencyInput
@@ -128,6 +132,7 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
               focus:border-slate-700 outline-0" 
             value={previousImport}
             onChange={(e) => setPreviosImport(e.target.value.replace(/[$,",", M, X]/g, ""))}
+            autoFocus
           />
         </div>
         <div>
@@ -156,7 +161,7 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
           />
         </div>
       </form>
-      <div className="flex justify-center mt-8 space-x-5">
+      <div className="flex justify-center mt-8 space-x-5 m-3 p-3">
         <button type="button"
           className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
           hover:bg-slate-200"

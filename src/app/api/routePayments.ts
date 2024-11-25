@@ -127,15 +127,15 @@ export interface PaymentInCosts {
   paymentelements: number
 }
 
-export async function removePayment(id:string, auth_token:string, costs: PaymentInCosts[]) {
+export async function removePayment(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/${id}`;
-  const data = {
-    paymentInCosts: costs,
-    condition: [{                        
-        glossary: "67318dacceaf47ece0d3aabb",
-        user: "65d3836974045152c0c4378c"                    
-    }]        
-  }
+  // const data = {
+  //   paymentInCosts: costs,
+  //   condition: [{                        
+  //       glossary: "67318dacceaf47ece0d3aabb",
+  //       user: "65d3836974045152c0c4378c"                    
+  //   }]        
+  // }
 
   console.log('data elimina send => ', data);
   try {
@@ -175,5 +175,25 @@ export async function getPendingPaymentProvider(id:string, auth_token:string) {
       return error.message || error.response?.data.message;
     }
     return 'Error al consultar total pendiente!!';
+  }
+}
+
+export async function getAllCostsPaymentByID(auth_token:string, payment:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllCostByPaymentIDMIN/${payment}`;
+  try {
+    console.log('url, => ', url);
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status===200)
+      return res.data.data.resdata;
+    return 'Error al obtener costos del pago!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar costos del pago!!';
   }
 }

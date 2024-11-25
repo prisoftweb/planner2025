@@ -101,7 +101,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   
   return(
     <>
-      <form className="z-10 top-16 w-full max-w-2xl absolute bg-white space-y-5 p-3 right-0"
+      <form className="z-10 top-16 w-full max-w-5xl absolute bg-white space-y-5 p-3 right-0"
         style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">

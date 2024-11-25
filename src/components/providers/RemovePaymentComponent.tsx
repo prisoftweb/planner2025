@@ -4,7 +4,7 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { removePayment } from '@/app/api/routePayments';
+import { removePayment, getAllCostsPaymentByID } from '@/app/api/routePayments';
 import { PaymentProvider } from '@/interfaces/Payments';
 
 export interface PaymentInCosts {
@@ -13,9 +13,9 @@ export interface PaymentInCosts {
   paymentelements: number
 }
 
-export default function RemovePaymentComponent({token, id, name, expenses, updateTable } : 
+export default function RemovePaymentComponent({token, id, name, expenses, updateTable, user } : 
     {token : string, name:string, id:string, expenses: PaymentProvider[], 
-      updateTable: Function}){
+      updateTable: Function, user: string}){
   
   const deleteElement = async ()  => {
   
@@ -31,33 +31,56 @@ export default function RemovePaymentComponent({token, id, name, expenses, updat
           switch('user'){
             case 'user':
               try {
-                const exp = expenses.find((e) => e._id=== id);
-                if(exp){
-                  const data: PaymentInCosts[] = []
-                  exp.quantity.map((e) => {
-                    console.log('exp quantity => ', e);
-                    data.push({
-                      _id: '',
-                      cost: e,
-                      paymentelements: 1
-                    })
-                  });
-                  console.log('data remove => ', data);
-                  res = await removePayment(id, token, data);
-                  if(res === 204) {
+
+                const res = await getAllCostsPaymentByID(token, id);
+                if(typeof(res)==='string'){
+                  showToastMessageError('Error al consultar costos del pago!!!');
+                }else{
+                  const data = {
+                    // paymentInCosts: res,
+                    resdata: res,
+                    condition: [{                        
+                        glossary: "67318dacceaf47ece0d3aabb",
+                        user                    
+                    }]        
+                  }
+                  console.log('data remove payment => ', data);
+                  const res2 = await removePayment(id, token, data);
+                  if(res2 === 204) {
                     showToastMessage(`${name} eliminado exitosamente!`);
                     updateTable(id);
-                    // removeElement(id);
-                    // setTimeout(() => {
-                    //   window.location.reload();
-                    // }, 500)
                   } else {
-                    console.log('res rem elem => ', res);
+                    console.log('res rem elem => ', res2);
                     showToastMessageError(`${name} no pudo ser eliminado..`);
                   }
-                }else{
-                  showToastMessageError('No se pudieron encontrar los costos del pago!!!');
                 }
+                // const exp = expenses.find((e) => e._id=== id);
+                // if(exp){
+                //   const data: PaymentInCosts[] = []
+                //   exp.quantity.map((e) => {
+                //     console.log('exp quantity => ', e);
+                //     data.push({
+                //       _id: '',
+                //       cost: e,
+                //       paymentelements: 1
+                //     })
+                //   });
+                //   console.log('data remove => ', data);
+                //   res = await removePayment(id, token, data);
+                //   if(res === 204) {
+                //     showToastMessage(`${name} eliminado exitosamente!`);
+                //     updateTable(id);
+                //     // removeElement(id);
+                //     // setTimeout(() => {
+                //     //   window.location.reload();
+                //     // }, 500)
+                //   } else {
+                //     console.log('res rem elem => ', res);
+                //     showToastMessageError(`${name} no pudo ser eliminado..`);
+                //   }
+                // }else{
+                //   showToastMessageError('No se pudieron encontrar los costos del pago!!!');
+                // }
               } catch (error) {
                 console.log('Error al eliminar');
               }

@@ -49,9 +49,9 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
           </div>
         </div>
 
-        <div>
+        {/* <div>
           <ProgressCircle value={85} title={'85'} />
-        </div>
+        </div> */}
       </div>
 
       <div className="grid grid-cols-3 mt-3">
