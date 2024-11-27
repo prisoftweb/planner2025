@@ -29,7 +29,7 @@ export default function ProfileBudget({budget, token, id, user}: {budget: FullBu
 
   const view = <div className="mt-3 w-full bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
-                  <TableCostCenter dataTable={tableData} token={token} id={id} user={user} />
+                  <TableCostCenter dataTable={tableData} token={token} id={id} user={user} budget={budget} />
               </div>;
 
   const optsChart: OptionsDashboard[] = [];

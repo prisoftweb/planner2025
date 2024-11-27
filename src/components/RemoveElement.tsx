@@ -6,12 +6,13 @@ import {showToastMessage, showToastMessageError, showToastMessageWarning, showTo
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export default function RemoveElement({token, id, name, remove, removeElement, 
-                               colorIcon='text-red-500 hover:text-red-300'} : 
+                               colorIcon='text-red-500 hover:text-red-300', isCostcenterBudget=false, progreesAverage=0, 
+                               totalAverage=0} : 
                                 {token : string, name:string, id:string, 
                                   remove:Function, removeElement: Function, 
-                                  colorIcon?: string}){
+                                  colorIcon?: string, isCostcenterBudget?:boolean, progreesAverage?: number, totalAverage?: number}){
   
-  const deleteElement = async ()  => {
+  const deleteElement = async (progress: number, total: number)  => {
   
     confirmAlert({
       title: 'Confirmacion para eliminar?',
@@ -25,7 +26,7 @@ export default function RemoveElement({token, id, name, remove, removeElement,
           switch('user'){
             case 'user':
               try {
-                res = await remove(id, token);
+                res = await remove(id, token, progreesAverage, totalAverage);
                 if(res === 204) {
                   showToastMessage(`${name} eliminado exitosamente!`);
                   removeElement(id);
@@ -73,7 +74,7 @@ export default function RemoveElement({token, id, name, remove, removeElement,
       {/* <TrashIcon width={20} height={20} className="text-red-500 hover:text-red-300 cursor-pointer" */}
       <TrashIcon className={`cursor-pointer w-6 h-6 ${colorIcon}`}  
         onClick={() => {
-          deleteElement();
+          deleteElement(progreesAverage, totalAverage);
         }}
       />
     </>

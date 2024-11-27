@@ -2,19 +2,72 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import DashboardContainer from "@/components/providers/dashboard/DashboardContainer";
+import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
+import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
+import { TableDashboardProviders } from "@/interfaces/DasboardProviders";
+import { ProvidersDataToTableData } from "@/app/functions/DashboardProviderFunctions";
 
-export default function page() {
+export default async function page() {
 
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
+  let totalCost: TotalCostsByProvidersTradeLine[] = [];
+  try {
+    totalCost = await getAllCostsTOTALGroupByPROVIDERTRADELINE(token);
+    if(typeof(totalCost)==='string'){
+      return <h1 className="text-red-500 text-center text-lg">{totalCost}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-red-500 text-center text-lg">Error al obtener total de los costos por proveedor!!</h1>
+  }
+
+  let providersTradeLine: ProviderWithTradeLine[] = [];
+  try {
+    providersTradeLine = await getAllProvidersWithTradeLine(token);
+    if(typeof(providersTradeLine)==='string'){
+      return <h1 className="text-red-500 text-center text-lg">{providersTradeLine}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-red-500 text-center text-lg">Error al obtener proveedores con linea de credito!!</h1>
+  }
+
+  let costsProviderWithTradeLine: CostsByProvider[] = [];
+  try {
+    costsProviderWithTradeLine = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true');
+    console.log('costs linea de credito => ', costsProviderWithTradeLine);
+    if(typeof(costsProviderWithTradeLine)==='string'){
+      return <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+  }
+
+  let costsProvider: CostsByProvider[] = [];
+  try {
+    costsProvider = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false');
+    console.log('all costs provider => ', costsProvider);
+    if(typeof(costsProvider)==='string'){
+      return <h1 className="text-red-500 text-center text-lg">{costsProvider}</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+  }
+
+  // console.log('total costs +> ', totalCost);
+  // console.log('proveedores +> ', providersTradeLine);
+
+  const data = ProvidersDataToTableData(providersTradeLine);
+
   return (
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <DashboardContainer />
+        <DashboardContainer costsProvider={costsProvider} totalCost={totalCost}
+          costsProviderWithTradeLine={costsProviderWithTradeLine} 
+          providersTradeLine={providersTradeLine} data={data} />
       </div>
     </>
   )

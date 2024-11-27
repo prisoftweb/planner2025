@@ -12,9 +12,9 @@ import { GiSettingsKnobs } from "react-icons/gi"
 import { getCatalogsByNameAndCondition, getCatalogsByName } from "@/app/api/routeCatalogs"
 
 export default function FilteringExpensesProvider({showForm, FilterData, maxAmount, minAmount, 
-                      token }: 
+                      token, showPaidValidation=true }: 
                     {showForm:Function, FilterData:Function, maxAmount:number, 
-                      minAmount:number, token: string}){
+                      minAmount:number, token: string, showPaidValidation?: boolean}){
 
   const [conditionsSel, setConditionsSel] = useState<string[]>(['all']);
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -127,31 +127,33 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
 
-        <div className="flex justify-end px-5 items-center">
-          <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
-          <div>
-            <div className="inline-flex rounded-md shadow-sm mx-2">
-            <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
-                        ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
-                onClick={() => setIsPaid(1)}
-              >
-                Ambos
-              </button>
-              <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
-                        ${isPaid===2? 'bg-green-500 text-white': ''}`}
-                onClick={() => setIsPaid(2)}
-              >
-                Pagado
-              </button>
-              <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
-                        ${isPaid===3? 'bg-red-500 text-white': ''}`}
-                onClick={() => setIsPaid(3)}
-              >
-                No Pagado
-              </button>
+        {showPaidValidation && (
+          <div className="flex justify-end px-5 items-center">
+            <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
+            <div>
+              <div className="inline-flex rounded-md shadow-sm mx-2">
+              <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
+                          ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
+                  onClick={() => setIsPaid(1)}
+                >
+                  Ambos
+                </button>
+                <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                          ${isPaid===2? 'bg-green-500 text-white': ''}`}
+                  onClick={() => setIsPaid(2)}
+                >
+                  Pagado
+                </button>
+                <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                          ${isPaid===3? 'bg-red-500 text-white': ''}`}
+                  onClick={() => setIsPaid(3)}
+                >
+                  No Pagado
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
         
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>

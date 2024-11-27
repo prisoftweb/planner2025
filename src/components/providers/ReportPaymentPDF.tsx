@@ -101,8 +101,8 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
     <Document>
       <Page>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: '30px', alignItems: 'center'}}>
-          <View style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
-            <Image src={'/isologo_palacios.png'} style={{width: '90px'}} />
+          <View style={{display:'flex', flexDirection: 'row', alignItems: 'center', gap: '5px'}}>
+            <Image src={'/Palaciosconstrucciones-isologo.png'} style={{width: '60px'}} />
             <View>
               <Text style={{fontSize: '10px', color: 'gray'}}>Resumen de pago a proveedor</Text>
               <Text style={{fontSize: '12px', color: 'gray'}}>RESUMEN DE PAGO</Text>
@@ -166,27 +166,27 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
           <View style={style.table}>
           <View style={[style.header, {flex: 1}]}><Text>#</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>PROYECTO</Text></View>
-            <View style={[style.header, {flex: 3}]}><Text>INFORME</Text></View>
-            <View style={[style.header, {flex: 5}]}><Text>DESCRIPCION</Text></View>
+            {/* <View style={[style.header, {flex: 3}]}><Text>INFORME</Text></View> */}
+            <View style={[style.header, {flex: 7}]}><Text>DESCRIPCION</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>FECHA</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>SALDO ANTERIOR</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>PAGADO</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>SALDO PENDIENTE</Text></View>
-            <View style={[style.header, {flex: 3}]}><Text>PARCIALIDAD</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>DIF</Text></View>
           </View>
           {costs.map((cost, index: number) => (
             <View style={style.table} key={cost.id}>
               <View style={[style.element, {flex: 1}]}><Text>{index + 1}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.project}</Text></View>
-              <View style={[style.element, {flex: 3}]}><Text>{cost.report }</Text></View>
-              <View style={[style.element, {flex: 5}]}><Text>{cost.description}</Text></View>
+              {/* <View style={[style.element, {flex: 3}]}><Text>{cost.report }</Text></View> */}
+              <View style={[style.element, {flex: 7}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.date.substring(0, 10)}</Text></View>
               <View style={[style.element, {flex: 3}]}>
                 <Text>{cost.previoudbalanceamount}</Text>
               </View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.payout}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.unpaidbalanceamount}</Text></View>
-              <View style={[style.element, {flex: 3}]}><Text>{cost.partitialnumber}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{cost.partitialnumber}</Text></View>
             </View>
           ) )}
         </View>
