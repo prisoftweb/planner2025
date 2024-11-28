@@ -232,8 +232,8 @@ export default function Table({data, columns, placeH, typeTable='',
           
           if(table.getSelectedRowModel().flatRows.length > 0){
             let totalSeleccionados: number = 0;
-            table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.total.replace(/[$, M, X, N,]/g, "")));
-            //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
+            table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.payout.replace(/[$, M, X, N,]/g, "")));
+            // table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp.original.payout, ' type ', typeof(exp.original.payout)));
             const tSeleccionados = CurrencyFormatter({
               currency: 'MXN',
               value: totalSeleccionados

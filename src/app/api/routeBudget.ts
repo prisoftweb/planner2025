@@ -134,12 +134,16 @@ export async function InsertNewBudgetInBudgetByID(id:string, auth_token:string, 
   }
 }
 
-export async function DeleteNewBudgetInBudget(id:string, auth_token:string){
+export async function DeleteNewBudgetInBudget(id:string, auth_token:string, progressAverage: number, totalAverage: number){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/budgets/deleteNewBudgetInBudget/${id}`;
   try {
     const res = await axios.delete(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
+      },
+      data: {
+        "progressAverage":progressAverage,
+        "totalAverage":totalAverage
       }
     });
     console.log('res remove bud => ', res);

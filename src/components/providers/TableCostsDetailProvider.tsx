@@ -217,68 +217,68 @@ export default function TableCostsDetailProvider({data, token, expenses,
 
   const amountValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number, isPaid: number) => {
-    if(exp.payout >= minAmount && exp.payout <= maxAmount){
+    if(exp.costs.pay[0].payout >= minAmount && exp.costs.pay[0].payout <= maxAmount){
       return dateValidation(exp, startDate, endDate, isPaid);
     }
     return false;
   }
 
-  const projectValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
-                      startDate:number, endDate:number, projects:string[], 
-                      isPaid: number) => {
-    if(projects.includes('all')){
-      return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-    }else{
-      if(exp.costs.project){
-        if(projects.includes(exp.costs.project._id)){
-          return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-        }
-      }
-    }
-    return false;
-  }
+  // const projectValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
+  //                     startDate:number, endDate:number, projects:string[], 
+  //                     isPaid: number) => {
+  //   if(projects.includes('all')){
+  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
+  //   }else{
+  //     if(exp.costs.project){
+  //       if(projects.includes(exp.costs.project._id)){
+  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  const reportValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
-              startDate:number, endDate:number, projects:string[], 
-              reports:string[], isPaid: number) => {
-    if(reports.includes('all')){
-      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
-    }else{
-      if(exp.costs.report){
-        if(reports.includes(exp.costs.report._id)){
-          return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
-        }
-      }
-    }
-    return false;
-  }
+  // const reportValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
+  //             startDate:number, endDate:number, projects:string[], 
+  //             reports:string[], isPaid: number) => {
+  //   if(reports.includes('all')){
+  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
+  //   }else{
+  //     if(exp.costs.report){
+  //       if(reports.includes(exp.costs.report._id)){
+  //         return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
 
   const conditionValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
-                  startDate:number, endDate:number, projects:string[], 
-                  reports:string[], conditions:string[], isPaid: number) => {
+                  startDate:number, endDate:number, conditions:string[], isPaid: number) => {
 
     if(conditions.includes('all')){
-      return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
+      // return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
+      return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
       // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
       //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
       //               reports, categories, types, costcenters);
       // }
       if(conditions.includes(exp.costs.estatus._id)){
-        return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
+        // return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
+        return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
       }
     }
     return false;
   }
 
   const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
-    reports:string[], projects:string[], startDate:number, 
-    endDate:number, isPaid: number) => {
+    startDate:number, endDate:number, isPaid: number) => {
   
     let filtered: CostPayment[] = [];
     refExpenses.current.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
-          endDate, projects, reports, conditions, isPaid)){
+          endDate, conditions, isPaid)){
         filtered.push(expense);
       }
     });
@@ -296,7 +296,7 @@ export default function TableCostsDetailProvider({data, token, expenses,
       <div className="flex justify-end my-5">
         {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
-                          minAmount={minAmount} token={token} />}
+                          minAmount={minAmount} token={token} showPaidValidation={false} />}
       </div>
       {view}
     </>

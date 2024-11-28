@@ -319,7 +319,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
     }
     table.push({
       // id: expense.costs.folio,
-      id: expense._id,
+      id: expense.costs.cost.exempttax,
       // Estatus: expense.costs.estatus,
       Estatus: expense.costs.estatus,
       // date: expense.costs.date,

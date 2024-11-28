@@ -8,9 +8,10 @@ import { showToastMessageError } from "@/components/Alert";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import EditBudget from "./EditBudget";
+import { FullBudget } from "@/interfaces/BudgetProfile";
 
 export default function TableCostCenter({dataTable, token, id, user}: 
-  {dataTable:BudgetTableCostCenter[], token: string, id:string, user: string}) {
+  {dataTable:BudgetTableCostCenter[], token: string, id:string, user: string, budget:FullBudget}) {
   
   const columnHelper = createColumnHelper<BudgetTableCostCenter>();
   const {updateOneBudget} = useOneBudget();
@@ -63,7 +64,7 @@ export default function TableCostCenter({dataTable, token, id, user}:
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <RemoveElement id={id+'/'+row.original.id} name={row.original.concept.name} remove={DeleteNewBudgetInBudget} 
-              removeElement={delBudget} token={token} />
+              removeElement={delBudget} token={token} isCostcenterBudget={true} progreesAverage={Number(row.original.percentage.replace(/[$, M, X, N,%]/g, ""))} totalAverage={Number(row.original.amount.replace(/[$, M, X, N,]/g, ""))} />
         </div>
       ),
       enableSorting:false,

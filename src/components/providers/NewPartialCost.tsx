@@ -13,16 +13,20 @@ import { useOutsideClick } from "@/app/functions/useOutsideClick";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 import CurrencyInput from "react-currency-input-field";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { XCircleIcon } from "@heroicons/react/24/solid";
 
 export default function NewPartialCost({setShowForm, updateCost, cost}: {setShowForm:Function, updateCost:Function, cost: CostsPaymentTable}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [previousImport, setPreviosImport] = useState<string>(cost.Total.replace(/[$,",", M, X]/g, ""));
   const [paid, setPaid] = useState<string>(cost.paid.toString());
-  const [pending, setPending] = useState<string>(cost.pending.toString());
+  const [pending, setPending] = useState<string>((Number(cost.Total.replace(/[$,",", M, X]/g, ""))-cost.paid).toString());
   const [numPartial, setNumPartial] = useState<number>(cost.parciality);
   const refRequest = useRef(true);
+
+  const updatePending = (prev: string, pay: string) => {
+    const pen = Number(prev.replace(/[$,",", M, X]/g, "")) - Number(pay.replace(/[$,",", M, X]/g, ""));
+    setPending(pen.toString());
+  }
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -131,7 +135,11 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0" 
             value={previousImport}
-            onChange={(e) => setPreviosImport(e.target.value.replace(/[$,",", M, X]/g, ""))}
+            prefix="$"
+            onChange={(e) => {
+              setPreviosImport(e.target.value.replace(/[$,",", M, X]/g, ""));
+              updatePending(e.target.value.replace(/[$,",", M, X]/g, ""), pending);
+            }}
             autoFocus
           />
         </div>
@@ -141,7 +149,11 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0" 
             value={paid}
-            onChange={(e) => setPaid(e.target.value.replace(/[$,",", M, X]/g, ""))}
+            prefix="$"
+            onChange={(e) => {
+              setPaid(e.target.value.replace(/[$,",", M, X]/g, ""));
+              updatePending(previousImport, e.target.value.replace(/[$,",", M, X]/g, ""));
+            }}
           />
         </div>
         <div>
@@ -150,6 +162,7 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0" 
             value={pending}
+            prefix="$"
             onChange={(e) => setPending(e.target.value.replace(/[$,",", M, X]/g, ""))}
           />
         </div>
