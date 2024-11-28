@@ -101,8 +101,8 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
     <Document>
       <Page>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: '30px', alignItems: 'center'}}>
-          <View style={{display:'flex', flexDirection: 'row', alignItems: 'center', gap: '5px'}}>
-            <Image src={'/Palaciosconstrucciones-isologo.png'} style={{width: '60px'}} />
+          <View style={{display:'flex', flexDirection: 'row', alignItems: 'center', gap: '10px'}}>
+            <Image src={'/Palaciosconstrucciones-isologo.png'} style={{width: '40px'}} />
             <View>
               <Text style={{fontSize: '10px', color: 'gray'}}>Resumen de pago a proveedor</Text>
               <Text style={{fontSize: '12px', color: 'gray'}}>RESUMEN DE PAGO</Text>
@@ -122,7 +122,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
           </View>
         </View>
 
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: '30px', paddingBottom: '10px', borderBottom: '1px solid gray'}}>
+        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: '30px', paddingBottom: '10px', borderBottom: '1px solid gray', marginTop: '7px'}}>
           <View >
             <View style={style.inLineText}>
               <Text style={style.textLeft}>Proveedor:</Text>
