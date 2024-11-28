@@ -11,7 +11,7 @@ import CurrencyInput from "react-currency-input-field";
 import { useRef } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
 
-export default function CreditLineStepper({token, id}:{token:string, id:string}){
+export default function CreditLineStepper({token, id, user}:{token:string, id:string, user: string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -88,6 +88,10 @@ export default function CreditLineStepper({token, id}:{token:string, id:string})
           tradeline,
           user: id,
           contact,
+          condition: [{
+            glossary: '663d2fe61d1c43ae98d77bc3',
+            user
+          }]
         }
         const res = await SaveProvider(data, token);
         if(res.status){

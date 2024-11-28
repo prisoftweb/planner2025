@@ -7,7 +7,7 @@ import {confirmAlert} from 'react-confirm-alert';
 import { useState, useEffect } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
 
-export default function NewProviderContainer({token, id, showForm}: {token:string, id:string, showForm:Function}){
+export default function NewProviderContainer({token, id, showForm, user}: {token:string, id:string, showForm:Function, user: string}){
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -86,7 +86,7 @@ export default function NewProviderContainer({token, id, showForm}: {token:strin
         <XMarkIcon className="w-6 h-6 text-slate-500
           hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
       </div>
-      <ContainerStepper token={token} id={id} />
+      <ContainerStepper token={token} id={id} user={user} />
     </div>
   )
 }

@@ -9,7 +9,7 @@ export default function ButtonNewProvider({token, id}: {token:string, id:string}
   return(
     <>
       <Button type="button" onClick={() => setNewProvider(true)}>Nuevo</Button>
-        {newProvider && <NewProvider showForm={setNewProvider} token={token} id={id} />}
+        {newProvider && <NewProvider showForm={setNewProvider} token={token} id={id} user={id} />}
     </>
   )
 }

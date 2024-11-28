@@ -6,7 +6,7 @@ import FormContact from "./FormContact";
 import BasicBarStepper from "./BasicBarStepper";
 import { useProviderStore } from "@/app/store/providerStore";
 
-export default function ContactsStepper({id, token}: {id:string, token:string}){
+export default function ContactsStepper({id, token, user}: {id:string, token:string, user: string}){
   
   const [state, dispatch] = useRegFormContext();
   const [contacts, setContacts] = useState<string[]>([]);
@@ -41,6 +41,10 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
             tradeline,
             contact: contacts,
             user: id,
+            condition: [{
+              glossary: '663d2fe61d1c43ae98d77bc3',
+              user
+            }]
           }
 
           const res = await SaveProvider(data, token);
