@@ -93,7 +93,7 @@ export default function ContainerClient({token, optClients, optCategories,
         </div>
         <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end">
           <SearchInTable placeH="Buscar proyecto.." />
-          <div className="">
+          <div>
             <div className="flex gap-x-3 items-center">
               <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
                 onClick={() => setIsTable(true)}
@@ -115,8 +115,8 @@ export default function ContainerClient({token, optClients, optCategories,
         <TableProjects data={dataTable} token={token} projects={projectStore.length > 0? projectStore: projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}
           optConditions={optConditionsFilter} isFilter={isFilter} 
-          setIsFilter={handleFilter} isTable={isTable}
-        />
+          setIsFilter={handleFilter} isTable={isTable}>            
+        </TableProjects>        
       </div>
     </div>
   )
