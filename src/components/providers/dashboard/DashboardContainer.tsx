@@ -96,11 +96,11 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
         <div className="w-1/3"></div>
       </div> */}
       <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-3">
-        <h1>Costos de proveedores con linea de credito</h1>
+        <h1>Costos proveedores con linea de credito</h1>
         <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />    
       </div>
       <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
-        <h1>Costos de proveedores</h1>
+        <h1>Costos proveedores</h1>
         <BarChartComponent categories={['costo']} colors={colors} data={dataAllProviders} />    
       </div>
 
