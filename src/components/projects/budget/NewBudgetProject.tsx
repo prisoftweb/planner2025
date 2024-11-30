@@ -44,8 +44,14 @@ export default function NewBudgetProject({token, showForm, user, projects}:
     showForm(false);
   }
 
+  //filtrados por projectos que no sean presupuestados!!!
+  console.log('projects len => ', projects.length);
+  const projectsWithOutBudget = projects.filter((p) => p.category._id !== '66350d80144933050f66a194');
+  console.log('proyect wit len => ', projectsWithOutBudget.length);
+
   const component = 
-    indexStepper === 0? <SelectBudgetProject projects={projects} token={token} />: 
+    // indexStepper === 0? <SelectBudgetProject projects={projects} token={token} />:
+    indexStepper === 0? <SelectBudgetProject projects={projectsWithOutBudget} token={token} />: 
     indexStepper === 1? <AddCostCenter token={token} user={user} closeForm={showForm} />:
       <></>;
 

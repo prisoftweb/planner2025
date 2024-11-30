@@ -63,8 +63,6 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
   const dataAllProviders: OptionsBarChart[] = [];
   const categoriesAllProviders: string[] = [];
 
-  // console.log('all providers => ', costsProvider);
-
   costsProvider.map((prov) => {
     dataAllProviders.push({
       costo: prov.totalCost,
@@ -73,20 +71,18 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     categoriesAllProviders.push(prov.provider);
   });
 
-  // console.log('data providers => ', dataAllProviders);
-
   return (
     <>
-      <div className="flex justify-around p-5">
-        <div className="shadow-md shadow-slate-500 p-5 bg-white">
-          <p className="text-5xl text-center font-bold">{providersTradeLine.length}</p>
-          <p className="text-3xl text-center font-semibold">proveedores</p>
-          <p className="text-2xl text-red-500 text-center font-semibold">{'Con credito >'}</p>
+      <div className="flex gap-x-4">
+        <div className="shadow-md shadow-slate-500 p-2 bg-white">
+          <p className="text-xl text-center font-bold">{providersTradeLine.length}</p>
+          <p className="text-md text-center font-semibold">proveedores</p>
+          <p className="text-md text-red-500 text-center font-semibold">{'Con credito >'}</p>
         </div>
-        <div className="shadow-md shadow-slate-500 p-5 bg-white">
-          <p className="text-9xl text-center font-bold">CxP</p>
-          <p className="text-3xl text-center font-semibold">{pendingText}</p>
-          <p className="text-2xl text-red-500 text-center font-semibold">{'Por pagar >'}</p>
+        <div className="shadow-md shadow-slate-500 p-2 bg-white">
+          <p className="text-xl text-center font-bold">CxP</p>
+          <p className="text-md text-center font-semibold">{pendingText}</p>
+          <p className="text-md text-red-500 text-center font-semibold">{'Por pagar >'}</p>
         </div>
       </div>
       {/* <div className="mt-10 flex">
@@ -99,7 +95,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
         </div>
         <div className="w-1/3"></div>
       </div> */}
-      <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
+      <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-3">
         <h1>Costos de proveedores con linea de credito</h1>
         <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />    
       </div>

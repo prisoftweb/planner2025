@@ -35,7 +35,7 @@ export default function TableExpenses({data, token, expenses,
 
   const cloneCost = async (id: string) => {
     try {
-      const res = await CloneCost(token, id);
+      const res = await CloneCost(token, id, user);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{

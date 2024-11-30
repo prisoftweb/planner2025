@@ -271,6 +271,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
       formdata.append('iscard', JSON.stringify(isCard));
       formdata.append('type', 'PROVEEDOR');
       formdata.append('exempttax', taxExempt.replace(/[$,]/g, ""));
+      formdata.append('conditionprovider', JSON.stringify([{
+        glossary: '674643dd734d5ab78ab98ddb',
+        user
+      }]));
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
@@ -371,7 +375,11 @@ export default function DataStepper({token, user}: {token:string, user:string })
         },
         folio, provider, user:responsibleS, 
         taxfolio:taxFolio, typeCFDI: typeCFDIS, project, ispaid:supplierCredit,
-        report, isticket:false, category:categoryS, 
+        report, isticket:false, category:categoryS,
+        conditionprovider: [{
+          glossary: '674643dd734d5ab78ab98ddb',
+          user
+        }], 
         condition: [{
           glossary: condition,
           user

@@ -155,6 +155,10 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         glossary: "67378f77d846bbd16e1a8714",
         user
       }]));
+      data.append("conditioncurrent", JSON.stringify([{
+        glossary: '6746442a734d5ab78ab98ddd',
+        user
+      }]));
       data.append("methodofpayment", paidMethod);
       // acceptedFiles.map((f) => {
       //   data.append("voucher", f);
@@ -163,6 +167,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       console.log('acceoted files 0 => ', acceptedFiles[0]);
       console.log(data.getAll('voucher'));
       console.log(data.getAll('costs'));
+      console.log('paymentInCosts => ', data.getAll('paymentInCosts'));
   
       const res = await createPaymentsWithVoucher(token, data);
       if(typeof(res) === 'string'){
@@ -189,6 +194,10 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         user,
         condition: [{
           glossary: condition,
+          user
+        }],
+        conditioncurrent: [{
+          glossary: '6746442a734d5ab78ab98ddd',
           user
         }],
         conditionpartial: [{                        

@@ -228,12 +228,15 @@ export async function CreateCostWithFiles(auth_token:string, data:FormData) {
   }
 }
 
-export async function CloneCost(auth_token:string, id:string) {
+export async function CloneCost(auth_token:string, id:string, user:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/cloneCost/${id}`;
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
+      }, data: {
+        glossary: '674643dd734d5ab78ab98ddb',
+        user
       }
     });
     if(res.status === 201) return res.status;

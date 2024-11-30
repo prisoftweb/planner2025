@@ -61,8 +61,10 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
 
   const updateCostCenter = async () => {
     const data = {
-      cost:total.replace(/[$,%,]/g, ""),
-      percent:percentage.replace(/[$,%,]/g, ""),
+      cost:Number(total.replace(/[$,%,M,X,]/g, "")),
+      percent:Number(percentage.replace(/[$,%,M,X,]/g, "")),
+      progressAverageOld: Number(budget.percentage.replace(/[$,%,M,X,]/g, "")),
+      totalAverageOld: Number(budget.amount.replace(/[$,%,M,X,]/g, "")),
       date: new Date(),
       user,
       costocenter: {
@@ -71,6 +73,7 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
       }
     }
     try {
+      console.log('budget => ', JSON.stringify(budget));
       console.log('data new budget => ', data);
       const res = await UpdateNewBudgetInBudget(token, data, idBudget+'/'+budget.id);
       if(typeof(res)==='string'){

@@ -14,7 +14,14 @@ export interface Provider {
   "tradeline": Tradeline,
   "contact"?:Contact[],
   "user"?:string,
-  "status"?:boolean
+  "status"?:boolean,
+  condition: [{
+    glossary: string | Glossary
+    user: string
+    status: boolean
+    _id: string
+    id: string
+  }]
 }
 
 export interface TableProvider{

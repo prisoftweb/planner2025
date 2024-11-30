@@ -111,7 +111,9 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
           </View>
           <View>
             <View style={{display: 'flex', flexDirection: 'row', border: '1px solid gray', width: '170px'}}>
-              <View style={{backgroundColor: 'green', color: 'white', padding: '3px', width: '50%'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>Al corriente</Text></View>
+              <View style={{backgroundColor: 'green', color: 'white', padding: '3px', width: '50%'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>
+                {provider.condition[0]? (typeof(provider.condition[0].glossary)==='string'? provider.condition[0].glossary : provider.condition[0].glossary.name) : 'Sin condicion'}
+                </Text></View>
               <View style={{padding: '3px', display:'flex', flexDirection:'row', justifyContent:'center', width: '50%'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>Pago</Text></View>
             </View>
             <View style={{ display:'flex', flexDirection: 'row', justifyContent: 'center', border: '1px solid gray', padding: '3px'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>

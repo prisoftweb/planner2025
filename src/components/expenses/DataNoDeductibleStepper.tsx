@@ -174,6 +174,10 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
         glossary: condition,
         user
       }]));
+      formdata.append('conditionprovider', JSON.stringify([{
+        glossary: '674643dd734d5ab78ab98ddb',
+        user
+      }]));
       if(voucher){
         formdata.append('files', voucher);
         formdata.append('types', voucher.type);
@@ -257,6 +261,10 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
         },
         user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
           glossary: condition,
+          user
+        }], 
+        conditionprovider: [{
+          glossary: '674643dd734d5ab78ab98ddb',
           user
         }], iscard:isCard, type
       }

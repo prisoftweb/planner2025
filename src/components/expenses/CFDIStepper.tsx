@@ -71,6 +71,10 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         glossary: condition,
         user
       }]));
+      formdata.append('conditionprovider', JSON.stringify([{
+        glossary: '674643dd734d5ab78ab98ddb',
+        user
+      }]));
       formdata.append('cost', JSON.stringify({
         discount: discount.replace(/[$,]/g, ""),
         subtotal:amount.replace(/[$,]/g, ""),
@@ -158,6 +162,10 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project,
         report, isticket:false, category, ispaid:supplierCredit, condition: [{
           glossary: condition,
+          user
+        }], 
+        conditionprovider: [{
+          glossary: '674643dd734d5ab78ab98ddb',
           user
         }], iscard:isCard, type,
       }

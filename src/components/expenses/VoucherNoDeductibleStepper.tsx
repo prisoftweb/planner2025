@@ -60,7 +60,11 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
       formdata.append('condition', JSON.stringify([{
         glossary: condition,
         user
-      }]))
+      }]));
+      formdata.append('conditionprovider', JSON.stringify([{
+        glossary: '674643dd734d5ab78ab98ddb',
+        user
+      }]));
       if(file){
         updateVoucher(file);
         formdata.append('files', file);
@@ -130,7 +134,11 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
         user:responsible, report, isticket:true, project, category, condition: {
           glossary: condition,
           user
-        }, iscard:isCard, type
+        }, 
+        conditionprovider: [{
+          glossary: '674643dd734d5ab78ab98ddb',
+          user
+        }], iscard:isCard, type
       }
   
       if(reportObject && reportObject.ispettycash){
