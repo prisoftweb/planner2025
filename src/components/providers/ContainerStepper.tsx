@@ -14,8 +14,10 @@ export default function ContainerStepper({token, id, user}: {token:string, id:st
 
   useEffect(() => {
     setStepForm(<DataBasicStepper token={token} id={id} user={user} />)
+    return () => setStepForm(<></>);
   }, [])
 
+  //aqui se puede usar el usememo
   try {
     useEffect(() => {
       try {

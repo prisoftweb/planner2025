@@ -8,6 +8,8 @@ import DonutChartProviderComponent from "./DonutChartProviderComponent";
 import { TableDashboardProviders } from "@/interfaces/DasboardProviders";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
+import CardDashboardProvider from "./CardDashboardProvider";
+import { EnvelopeIcon, CursorArrowRaysIcon } from "@heroicons/react/24/solid";
 
 interface OptionsDashboard {
   label: string,
@@ -25,14 +27,25 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     costsProviderWithTradeLine: CostsByProvider[], costsProvider: CostsByProvider[], data: TableDashboardProviders[]}) {
 
   let pending = 0;
+  // let countProviders = 0;
+  let totalPending = 0;
   providersTradeLine.map((p) => {
-    pending+=(p.tradeline?.currentbalance? p.tradeline?.currentbalance: 0);
+    // pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance <= 0? 1: 0): 0;
+    // countProviders+= p.tradeline?.currentbalance? (p.tradeline?.currentbalance > 0? 1: 0) : 0;
+    // totalPending+= p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0
+    pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0;
   })
 
   const pendingText = CurrencyFormatter({
-    currency: 'MXN',
-    value: pending
-  })
+    currency: 'USD',
+    // value: pending
+    value: totalCost[0].totalCost
+  });
+
+  const totalPendingText = CurrencyFormatter({
+    currency: 'USD',
+    value: totalPending
+  });
 
   // console.log('pending => ', pending);
 
@@ -71,9 +84,11 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     categoriesAllProviders.push(prov.provider);
   });
 
+  console.log('total cost => ', totalCost);
+
   return (
     <>
-      <div className="flex gap-x-4">
+      {/* <div className="flex gap-x-4">
         <div className="shadow-md shadow-slate-500 p-2 bg-white">
           <p className="text-xl text-center font-bold">{providersTradeLine.length}</p>
           <p className="text-md text-center font-semibold">proveedores</p>
@@ -83,6 +98,39 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           <p className="text-xl text-center font-bold">CxP</p>
           <p className="text-md text-center font-semibold">{pendingText}</p>
           <p className="text-md text-red-500 text-center font-semibold">{'Por pagar >'}</p>
+        </div>
+      </div> */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5">
+        <div className="p-1 bg-white">
+          <CardDashboardProvider p1={'INTERES DE DEUDA VENCIDA'} 
+            p2={'0'} p3="intereses cobrados de un % de la decuda vencida"
+            link="" textColor="text-blue-700" textLink="Ver detalles" >
+              <EnvelopeIcon className="w-8 h-8" />
+          </ CardDashboardProvider>
+        </div>
+        
+        <div className="p-1 bg-white">
+          <CardDashboardProvider p1={'TOTAL PROVEEDORES'} 
+            p2={providersTradeLine.length.toString()} p3="accede a ver los proveedores con credito"
+            link="" textColor="text-violet-900" textLink="Ver aqui" >
+              <CursorArrowRaysIcon className="w-8 h-8" />
+          </CardDashboardProvider>
+        </div>
+
+        <div className="p-1 bg-white">
+          <CardDashboardProvider p1={'TOTAL CUENTAS POR PAGAR (CXP)'} 
+            p2={pendingText } p3="Saldo actual calculado solo en facturas pendientes de pago"
+            link="" textColor="text-blue-700	" textLink="Ver detalles" >
+              <EnvelopeIcon className="w-8 h-8" />
+          </CardDashboardProvider>
+        </div>
+
+        <div className="p-1 bg-white">
+          <CardDashboardProvider p1={'FACTURAS POR PAGAR (CXP)'} 
+            p2={totalCost[0].quantity.toString()} p3="s Consulta las facturas pendientes de pago de todos los proveedores"
+            link="" textColor="text-emerald-300" textLink="Detalles" >
+              <EnvelopeIcon className="w-8 h-8" />
+          </CardDashboardProvider>
         </div>
       </div>
       {/* <div className="mt-10 flex">

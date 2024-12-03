@@ -21,7 +21,7 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
   const [paid, setPaid] = useState<number>(cost.paid);
   const [pending, setPending] = useState<string>((Number(cost.Total.replace(/[$,",", M, X]/g, ""))-cost.paid).toString());
   const [numPartial, setNumPartial] = useState<number>(cost.parciality);
-  const refRequest = useRef(true);
+  // const refRequest = useRef(true);
 
   const updatePending = (prev: number, pay: number) => {
     console.log('prev partial => ', Number(prev));
@@ -38,10 +38,6 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
       document.body.clientHeight, document.documentElement.clientHeight
     ));
   }
-
-  // useEffect(() => {
-
-  // }, [paid])
 
   const update = () => {
     const costAux: CostsPaymentTable = {
