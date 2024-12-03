@@ -13,7 +13,7 @@ import { useOneProviderStore } from "@/app/store/providerStore"
 export default function ProviderClient({provider, token, id}: 
                             {provider:Provider, token:string, id:string}){
 
-  const [opt, setOpt] = useState<number>(1);
+  const [opt, setOpt] = useState<number>(provider.tradeline?.creditlimit ? 1: 2);
   const {updateOneProviderStore} = useOneProviderStore();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -33,7 +33,7 @@ export default function ProviderClient({provider, token, id}:
               </div>): 
       (<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
         style={{borderColor:'#F8FAFC'}}>
-          <Sumary provider={provider} token={token} />
+          {provider.tradeline?.creditlimit ? <Sumary provider={provider} token={token} /> : <DataBasic id={id} provider={provider} token={token} /> }
         </div>) ))
   );
 
@@ -46,7 +46,8 @@ export default function ProviderClient({provider, token, id}:
       <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
-            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
+            <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt}
+              tradeline={provider.tradeline?.creditlimit ? true: false} />
           </div>
         </div>
         <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 

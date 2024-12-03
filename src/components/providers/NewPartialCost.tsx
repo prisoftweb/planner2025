@@ -24,7 +24,10 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
   const refRequest = useRef(true);
 
   const updatePending = (prev: string, pay: string) => {
+    console.log('prev partial => ', Number(prev.replace(/[$,",", M, X]/g, "")));
+    console.log('pay partial => ', Number(pay.replace(/[$,",", M, X]/g, "")));
     const pen = Number(prev.replace(/[$,",", M, X]/g, "")) - Number(pay.replace(/[$,",", M, X]/g, ""));
+    console.log('pend => partial => ', pen);
     setPending(pen.toString());
   }
 

@@ -42,7 +42,9 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
   }
 
   const handleExpensesSelected = (value: HistoryExpensesTable[]) => {
-    setExpensesSelected(value);
+    const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' 
+                        && c.Estatus._id !== '67378f77d846bbd16e1a8714');
+    setExpensesSelected(noPaid);
   }
 
   const updateTable = async () => {

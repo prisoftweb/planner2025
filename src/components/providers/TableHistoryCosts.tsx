@@ -48,11 +48,14 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2 justify-center">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            className="w-24 cursor-pointer"
-          />
+          {row.original.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
+              row.original.Estatus._id !== '67378f77d846bbd16e1a8714' && (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+              className="w-24 cursor-pointer"
+            />
+          )}
         </div>
       ),
       enableSorting:false,

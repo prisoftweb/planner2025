@@ -7,8 +7,8 @@ import { FaPeopleRoof } from "react-icons/fa6";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { RiContactsBook3Line } from "react-icons/ri";
 
-export default function NavResponsive({open, setOpen, option, changeOption}: 
-                {open:boolean, setOpen:Function, option:number, changeOption:Function}){
+export default function NavResponsive({open, setOpen, option, changeOption, tradeline}: 
+                {open:boolean, setOpen:Function, option:number, changeOption:Function, tradeline: boolean}){
 
   let props = {
     variants: {
@@ -43,7 +43,8 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
             text-slate-500 my-1 bg-white rounded-md rotate-90" 
             onClick={() => setOpen(true)} /></div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen' 
+        {tradeline && (
+          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen' 
             placement="right" className="text-blue-500 bg-white"> 
               <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
                 <PiPresentationChartLight 
@@ -54,17 +55,9 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                     ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
                     onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
                 />
-                {/* <ChartBarIcon 
-                  style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
-                          color: isHover===1 || option===1 ? 'white' : '',}}
-                  className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                  text-slate-500 my-1 bg-white rounded-md
-                    ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
-                    onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
-                    
-                /> */}
               </div>
           </Tooltip>
+        )}
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
           placement="right" className="text-blue-500 bg-white">
             <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>

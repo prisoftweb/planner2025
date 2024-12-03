@@ -35,8 +35,8 @@ export default function Sumary({provider, token}:{provider:Provider, token:strin
           </Card>
         </div>
         <div className="w-72 p-1">
-          <Card p1="INTERES DE DEUDA VENCIDA" p2={"$8,278.44"} 
-            p3={`intereses cobrados del ${provider.tradeline.percentoverduedebt}% de la deuda vencida`}
+          <Card p1="SALDO DISPONIBLE" p2={"$"+ ((provider.tradeline?.creditlimit || 0) - (provider.tradeline?.currentbalance || 0)).toLocaleString('en')} 
+            p3={`intereses cobrados del ${provider.tradeline.percentoverduedebt}% del saldo actual`}
             link="" >
               <CursorArrowRaysIcon className="w-8 h-8" />
           </Card>
