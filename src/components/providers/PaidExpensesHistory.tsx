@@ -94,7 +94,11 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   }
 
   const paidExpenses = async() => {
+    console.log('pending => ',pending);
+    console.log('pago => ', Number(amount.replace(/[$,","]/g, "")));
     let pen = pending - Number(amount.replace(/[$,","]/g, ""));
+
+    console.log('res pen => ', pen);
 
     const arrCosts: CostInPayment[] = [];
     console.log('costs payment => ', costsPayment);
@@ -208,7 +212,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       }
 
       console.log('data payment => ', JSON.stringify(data));
-  
+      // showToastMessage('pagado!!!');
       const res = await createPayments(token, data);
       if(typeof(res) === 'string'){
         showToastMessageError(res);

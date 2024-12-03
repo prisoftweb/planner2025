@@ -17,14 +17,17 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 export default function NewPartialCost({setShowForm, updateCost, cost}: {setShowForm:Function, updateCost:Function, cost: CostsPaymentTable}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
-  const [previousImport, setPreviosImport] = useState<string>(cost.Total.replace(/[$,",", M, X]/g, ""));
-  const [paid, setPaid] = useState<string>(cost.paid.toString());
+  const [previousImport, setPreviosImport] = useState<number>(Number(cost.Total.replace(/[$,",", M, X]/g, "")));
+  const [paid, setPaid] = useState<number>(cost.paid);
   const [pending, setPending] = useState<string>((Number(cost.Total.replace(/[$,",", M, X]/g, ""))-cost.paid).toString());
   const [numPartial, setNumPartial] = useState<number>(cost.parciality);
   const refRequest = useRef(true);
 
-  const updatePending = (prev: string, pay: string) => {
-    const pen = Number(prev.replace(/[$,",", M, X]/g, "")) - Number(pay.replace(/[$,",", M, X]/g, ""));
+  const updatePending = (prev: number, pay: number) => {
+    console.log('prev partial => ', Number(prev));
+    console.log('pay partial => ', Number(pay));
+    const pen = Number(prev) - Number(pay);
+    console.log('pend => partial => ', pen);
     setPending(pen.toString());
   }
 
@@ -35,6 +38,10 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
       document.body.clientHeight, document.documentElement.clientHeight
     ));
   }
+
+  // useEffect(() => {
+
+  // }, [paid])
 
   const update = () => {
     const costAux: CostsPaymentTable = {
@@ -51,12 +58,12 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
       Responsable: cost.Responsable,
       typeCFDI: cost.typeCFDI,
       Importe: cost.Importe,
-      paid: Number(paid.replace(/[$,",", M, X]/g, "")),
+      paid: paid,
       parciality: numPartial,
       pending: Number(pending.replace(/[$,",", M, X]/g, "")),
       Total: CurrencyFormatter({
         currency: 'MXN',
-        value: Number(previousImport.replace(/[$,",", M, X]/g, ""))
+        value: previousImport
       })
     }
 
@@ -137,8 +144,10 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             value={previousImport}
             prefix="$"
             onChange={(e) => {
-              setPreviosImport(e.target.value.replace(/[$,",", M, X]/g, ""));
-              updatePending(e.target.value.replace(/[$,",", M, X]/g, ""), pending);
+              setPreviosImport(Number(e.target.value.replace(/[$,",", M, X]/g, "")));
+              console.log('previous current => ', previousImport);
+              console.log('input previous => ', e.target.value);
+              updatePending(Number(e.target.value.replace(/[$,",", M, X]/g, "")), paid);
             }}
             autoFocus
           />
@@ -151,8 +160,8 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             value={paid}
             prefix="$"
             onChange={(e) => {
-              setPaid(e.target.value.replace(/[$,",", M, X]/g, ""));
-              updatePending(previousImport, e.target.value.replace(/[$,",", M, X]/g, ""));
+              setPaid(Number(e.target.value.replace(/[$,",", M, X]/g, "")));
+              updatePending(previousImport, Number(e.target.value.replace(/[$,",", M, X]/g, "")));
             }}
           />
         </div>
