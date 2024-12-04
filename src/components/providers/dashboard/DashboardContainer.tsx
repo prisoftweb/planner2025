@@ -10,6 +10,11 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import CardDashboardProvider from "./CardDashboardProvider";
 import { EnvelopeIcon, CursorArrowRaysIcon } from "@heroicons/react/24/solid";
+import Chip from "../Chip";
+import { GrServices } from "react-icons/gr";
+import { TbBrandCashapp } from "react-icons/tb";
+import { BsReceiptCutoff } from "react-icons/bs";
+import { LuTicket } from "react-icons/lu";
 
 interface OptionsDashboard {
   label: string,
@@ -105,7 +110,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           <CardDashboardProvider p1={'INTERES DE DEUDA VENCIDA'} 
             p2={'0'} p3="intereses cobrados de un % de la decuda vencida"
             link="" textColor="text-blue-700" textLink="Ver detalles" >
-              <EnvelopeIcon className="w-8 h-8" />
+              <LuTicket className="w-8 h-8" />
           </ CardDashboardProvider>
         </div>
         
@@ -113,7 +118,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           <CardDashboardProvider p1={'TOTAL PROVEEDORES'} 
             p2={providersTradeLine.length.toString()} p3="accede a ver los proveedores con credito"
             link="" textColor="text-violet-900" textLink="Ver aqui" >
-              <CursorArrowRaysIcon className="w-8 h-8" />
+              <GrServices className="w-8 h-8" />
           </CardDashboardProvider>
         </div>
 
@@ -121,7 +126,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           <CardDashboardProvider p1={'TOTAL CUENTAS POR PAGAR (CXP)'} 
             p2={pendingText } p3="Saldo actual calculado solo en facturas pendientes de pago"
             link="" textColor="text-blue-700	" textLink="Ver detalles" >
-              <EnvelopeIcon className="w-8 h-8" />
+              <TbBrandCashapp className="w-8 h-8" />
           </CardDashboardProvider>
         </div>
 
@@ -129,7 +134,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           <CardDashboardProvider p1={'FACTURAS POR PAGAR (CXP)'} 
             p2={totalCost[0].quantity.toString()} p3="s Consulta las facturas pendientes de pago de todos los proveedores"
             link="" textColor="text-emerald-300" textLink="Detalles" >
-              <EnvelopeIcon className="w-8 h-8" />
+              <BsReceiptCutoff className="w-8 h-8" />
           </CardDashboardProvider>
         </div>
       </div>
@@ -144,16 +149,16 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
         <div className="w-1/3"></div>
       </div> */}
       <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-3">
-        <h1>Costos de proveedores con linea de credito</h1>
+        <h1>SALDOS DE PROVEEDORES CON LINEA DE CREDITO</h1>
         <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />    
       </div>
       <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
-        <h1>Costos de proveedores</h1>
+        <h1>SALDOS DE PROVEEDORES</h1>
         <BarChartComponent categories={['costo']} colors={colors} data={dataAllProviders} />    
       </div>
 
       <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
-        <h1>Proveedores con linea de credito</h1>
+        <h1>PROVEEDORES CUENTAS POR PAGAR (CXP)</h1>
         <TableDashboardProviderComponent data={data} />    
       </div>
     </>
@@ -189,23 +194,6 @@ export function TableDashboardProviderComponent({data}: {data: TableDashboardPro
         </div>
       )
     }),
-    // columnHelper.accessor('name', {
-    //   id: 'Responsable',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-1 items-center">
-    //       <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
-    //       <div className="w-20 flex gap-x-1 items-center">
-    //         {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
-    //         {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
-    //         {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
-    //       </div>
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: () => (
-    //     <p>Responsable</p>
-    //   )
-    // }),
     columnHelper.accessor('name', {
       id: 'Nombre',
       cell: ({row}) => (
@@ -231,6 +219,16 @@ export function TableDashboardProviderComponent({data}: {data: TableDashboardPro
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
         >{row.original.account}</p>
+      ),
+    }),
+    columnHelper.accessor('status', {
+      header: 'Estatus',
+      id: 'Estatus',
+      cell: ({row}) => (
+        <>
+          {row.original.status && 
+            <Chip label={row.original.status.name? row.original.status.name: 'Sin estatus' } color={row.original.status.color} />}
+        </>
       ),
     }),
     columnHelper.accessor('currentBalance', {

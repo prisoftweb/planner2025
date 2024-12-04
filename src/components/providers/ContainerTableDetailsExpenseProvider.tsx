@@ -23,11 +23,12 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs"
 import ReportPaymentPDF from "./ReportPaymentPDF"
 import { UsrBack } from "@/interfaces/User"
+import { ProviderMin } from "@/interfaces/Providers"
 
 export default function ContainerTableDetailsExpenseProvider({data, token, expenses, user, 
     provider, payment}:
   {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
-    user: UsrBack, provider: Provider, payment: OnePayment}) {
+    user: UsrBack, provider: ProviderMin, payment: OnePayment}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   // const [expensesSelected, setExpensesSelected] = useState<ExpensesTableProvider[]>([]);

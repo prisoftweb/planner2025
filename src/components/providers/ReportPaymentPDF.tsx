@@ -3,12 +3,12 @@ import { Report, CostReport } from '@/interfaces/Reports'
 //import { Expense } from '@/interfaces/Expenses'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { DetailExpensesTableProvider } from '@/interfaces/Providers'
-import { Provider } from "@/interfaces/Providers"
+import { ProviderMin } from "@/interfaces/Providers"
 import { OnePayment } from '@/interfaces/Payments'
 import { UsrBack } from '@/interfaces/User'
 
 export default function ReportPaymentPDF({costs, provider, payment, user}: 
-    {costs: DetailExpensesTableProvider[], provider: Provider, user: UsrBack, payment: OnePayment}){
+    {costs: DetailExpensesTableProvider[], provider: ProviderMin, user: UsrBack, payment: OnePayment}){
   
   const style = StyleSheet.create({
     table: {
@@ -112,7 +112,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
           <View>
             <View style={{display: 'flex', flexDirection: 'row', border: '1px solid gray', width: '170px'}}>
               <View style={{backgroundColor: 'green', color: 'white', padding: '3px', width: '50%'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>
-                {provider.condition[0]? (typeof(provider.condition[0].glossary)==='string'? provider.condition[0].glossary : provider.condition[0].glossary.name) : 'Sin condicion'}
+                {provider.estatus? (typeof(provider.estatus)==='string'? provider.estatus : provider.estatus.name) : 'Sin condicion'}
                 </Text></View>
               <View style={{padding: '3px', display:'flex', flexDirection:'row', justifyContent:'center', width: '50%'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>Pago</Text></View>
             </View>

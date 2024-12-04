@@ -18,7 +18,7 @@ export default async function page() {
   try {
     totalCost = await getAllCostsTOTALGroupByPROVIDERTRADELINE(token);
     if(typeof(totalCost)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{totalCost}</h1>
+      return <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1>
     }
   } catch (error) {
     return <h1 className="text-red-500 text-center text-lg">Error al obtener total de los costos por proveedor!!</h1>
@@ -28,7 +28,7 @@ export default async function page() {
   try {
     providersTradeLine = await getAllProvidersWithTradeLine(token);
     if(typeof(providersTradeLine)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{providersTradeLine}</h1>
+      return <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1>
     }
   } catch (error) {
     return <h1 className="text-red-500 text-center text-lg">Error al obtener proveedores con linea de credito!!</h1>
@@ -39,7 +39,7 @@ export default async function page() {
     costsProviderWithTradeLine = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true');
     console.log('costs linea de credito => ', costsProviderWithTradeLine);
     if(typeof(costsProviderWithTradeLine)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}</h1>
+      return <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1>
     }
   } catch (error) {
     return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
@@ -50,14 +50,11 @@ export default async function page() {
     costsProvider = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false');
     console.log('all costs provider => ', costsProvider);
     if(typeof(costsProvider)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{costsProvider}</h1>
+      return <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1>
     }
   } catch (error) {
     return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
   }
-
-  // console.log('total costs +> ', totalCost);
-  // console.log('proveedores +> ', providersTradeLine);
 
   const data = ProvidersDataToTableData(providersTradeLine);
 

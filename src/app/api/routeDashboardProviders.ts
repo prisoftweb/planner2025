@@ -24,6 +24,8 @@ export async function getAllCostsTOTALGroupByPROVIDERTRADELINE(auth_token:string
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
+      }, data: {
+        "conditionCost": ["PAGADO", "DIFERIDO"]
       }
     });
     if(res.status===200) return res.data.data.stats;

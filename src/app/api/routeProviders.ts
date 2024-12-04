@@ -77,6 +77,26 @@ export async function getProvider(id:string, auth_token:string) {
   }
 }
 
+export async function getProviderMin(id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getProviderMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message
+    }else{
+      console.log(error);
+      return 'Ocurrio un problema al consultar proveedor min';
+    }
+  }
+}
+
 export async function updateProvider(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/${id}`;
 
