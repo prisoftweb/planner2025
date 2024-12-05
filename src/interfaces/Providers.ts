@@ -1,5 +1,6 @@
 import { Contact } from "./Common"
 import { Glossary } from "./Glossary"
+import { UsrBack } from "./User"
 
 export interface Provider {
   "_id":string,
@@ -23,6 +24,25 @@ export interface Provider {
     id: string
   }]
 }
+
+export interface ProviderMin {
+  _id: string
+  name: string
+  tradename: string
+  rfc: string
+  suppliercredit: boolean
+  tradeline: Tradeline
+  user: UsrBack
+  account: string
+  estatus: Glossary
+}
+
+// export interface Tradeline {
+//   creditdays: number
+//   creditlimit: number
+//   currentbalance: number
+//   percentoverduedebt: number
+// }
 
 export interface TableProvider{
   "id": string,

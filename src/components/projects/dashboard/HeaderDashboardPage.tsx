@@ -59,15 +59,16 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             />
           </div>
           <div className='sm:w-56 w-96'>
-            <Label htmlFor='project'>Proyecto</Label>
+            <Label htmlFor='project'>Omitir proyecto</Label>
             {/* <SelectReact index={0} opts={projects} setValue={handleProjects} /> */}
             <SelectMultipleReact opts={projects} setValue={handleProjects} index={0} />
           </div>
         </div>
       </div>
       <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-3'>
-        <div className='w-full bg-cyan-500 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            h-full'>
+        {/* <div className='w-full bg-cyan-500 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1  */}
+        <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
+            style={{backgroundColor: '#8EA7FF'}}>
           {amountProjects.length > 0 && (
             <>
               <p className='text-lg'>{amountProjects[0].projects}</p>
@@ -96,8 +97,8 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </p>
           </div>
         </div>
-        <div className='w-full h-full bg-cyan-300 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            flex flex-col justify-center items-center'>
+        <div className='w-full h-full border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+            flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}>
           {projectsTotalCost.length > 0 && (
             <>
               <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
@@ -122,8 +123,8 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </>
           )}
         </div>
-        <div className='w-full h-full bg-rose-400 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-              flex flex-col justify-center items-center'>
+        <div className='w-full h-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+              flex flex-col justify-center items-center' style={{backgroundColor: '#FF9C89'}}>
           {amountProjects.length > 0 && (
             <>
               <p className=' text-lg sm:text-xl'>{CurrencyFormatter({

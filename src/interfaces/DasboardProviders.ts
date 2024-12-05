@@ -20,6 +20,7 @@ export interface ProviderWithTradeLine {
     percentoverduedebt: number
   }
   account: string
+  estatus: Glossary
 }
 
 export interface CostsByProvider {

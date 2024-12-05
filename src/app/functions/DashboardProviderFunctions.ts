@@ -8,15 +8,7 @@ export function ProvidersDataToTableData(providers:ProviderWithTradeLine[]){
       currentBalance: prov.tradeline.currentbalance,
       name: prov.name,
       rfc: prov.rfc,
-      status: {
-        _id: '',
-        __v: 0,
-        description: '',
-        id: '',
-        name: '',
-        status: true,
-        color: ''
-      },
+      status: prov.estatus,
       account: prov.account
     })
   });

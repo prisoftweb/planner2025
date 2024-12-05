@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: { id: string }}){
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='2' />
         <ContainerTableHistoryCosts data={table} expenses={costs} token={token} 
-          user={user._id} optTypes={optTypes} provider={provider} condition="67318a51ceaf47ece0d3aa72" />
+          user={user._id} optTypes={optTypes} provider={provider} condition="674643dd734d5ab78ab98ddb" />
       </div>
     </>
   )

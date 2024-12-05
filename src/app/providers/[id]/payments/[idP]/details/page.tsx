@@ -1,9 +1,9 @@
 //import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
-import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders";
+import { getProvider, getProviderMin, getProviders } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { DetailExpensesTableProvider, ExpensesTableProvider, Provider } from "@/interfaces/Providers";
+import { DetailExpensesTableProvider, Provider, ProviderMin } from "@/interfaces/Providers";
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
 // import { Expense } from "@/interfaces/Expenses";
@@ -17,11 +17,13 @@ export default async function Page({ params }: { params: { id: string, idP: stri
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let provider: any;
+  let provider: ProviderMin;
   try {
-    provider = await getProvider(params.id, token);
-    if(typeof(provider) === "string")
-      return <h1 className="text-center text-red-500">{provider}provedor</h1>
+    const arrProvider = await getProviderMin(params.id, token);
+    if(typeof(arrProvider) === "string")
+      return <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
+    else
+      provider = arrProvider[0];
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
   }

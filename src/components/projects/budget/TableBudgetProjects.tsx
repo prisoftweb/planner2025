@@ -78,7 +78,7 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       id: 'porcentaje',
       cell: ({row}) => (
         <div className="">
-          <p>{row.original.percentage}</p>
+          <p>{Number(row.original.percentage.replace(/[$, M, X, N,%]/g, "")).toFixed(2)}%</p>
           <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
             <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
               style={{"width": row.original.percentage}}></div>

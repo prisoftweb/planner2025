@@ -66,7 +66,7 @@ export default function ProfileBudget({budget, token, id, user}: {budget: FullBu
               <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
                 style={{"width": budget.progressAverage ? budget.progressAverage + '%': 0 + '%'}}></div>
             </div>
-            <p>{budget.progressAverage?? 0}%</p>
+            <p>{budget.progressAverage? budget.progressAverage.toFixed(2): 0}%</p>
           </div>
         </div>
         
