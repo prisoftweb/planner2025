@@ -6,6 +6,7 @@ import Link from "next/link";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "@/components/providers/Chip";
 import { BudgetMin } from "@/interfaces/Budget";
+import { MoneyFormatter } from "@/app/functions/Globals";
 
 export default function CardBudgetProject({budget, token}:
                       {budget:BudgetMin, token:string}){
@@ -27,10 +28,12 @@ export default function CardBudgetProject({budget, token}:
             <div className="col-span-2 flex flex-col justify-between">
               <div>
                 <p>{budget.title}</p>
-                <p className="text-base font-bold">{CurrencyFormatter({
-                      currency: "MXN",
-                      value: budget.pending
-                    })}
+                <p className="text-base font-bold">
+                  {/* {CurrencyFormatter({
+                    currency: "MXN",
+                    value: budget.pending
+                  })} */}
+                  {MoneyFormatter(budget.pending)}
                 </p>
                 {/* <Chip label={budget.category.name} /> */}
                 <Chip label={budget.lastmove.condition.name} color={budget.lastmove.condition.color} />

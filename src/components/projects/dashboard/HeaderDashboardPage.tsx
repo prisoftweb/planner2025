@@ -11,11 +11,33 @@ import SelectReact from '@/components/SelectReact';
 import { Options } from '@/interfaces/Common';
 // import MultiSelectReact from '@/components/MultiSelectReact';
 import SelectMultipleReact from '@/components/SelectMultipleReact';
+import { MoneyFormatter } from '@/app/functions/Globals';
+import {Tooltip} from "@nextui-org/react";
+import { ChartBarIcon } from '@heroicons/react/24/solid';
 
 export default function HeaderDashboardPage({handleDate, amountProjects, 
     projectsTotalCost, configMin, activeProjects, projects}: 
   {handleDate: Function, amountProjects: TotalAmountProjects[], projects:Options[], 
     projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[], activeProjects: number}) {
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
   
   const [project, setProject] = useState<string[]>([projects[0].value]);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
@@ -87,10 +109,19 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
           </ProgressCircle>
           <div>
             <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-              {CurrencyFormatter({
+              {/* {CurrencyFormatter({
                 currency: 'MXN',
                 value: configMin[0].lastmeta.amount
-              })}
+              })} */}
+              {MoneyFormatter(configMin[0].lastmeta.amount)}
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={CurrencyFormatter({
+                    currency: 'MXN',
+                    value: configMin[0].lastmeta.amount
+                  })} 
+                  className="text-slate-900 bg-white" placement="top">
+                <ChartBarIcon className='text-white w-20 h-2' />
+              </Tooltip>
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-500">
               META {configMin[0].lastmeta.year}
@@ -101,11 +132,23 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}>
           {projectsTotalCost.length > 0 && (
             <>
-              <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: projectsTotalCost[0].totalCost
-              })}</p>
+              <p className=' text-lg sm:text-xl'>
+                {/* {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
+                })} */}
+                {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
+              </p>
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={CurrencyFormatter({
+                    currency: 'MXN',
+                    value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
+                  })} 
+                  className="text-slate-900 bg-white" placement="top">
+                <ChartBarIcon className='text-white w-20 h-2' />
+              </Tooltip>
               <p className='text-xs'>COSTO TOTAL</p>
+              <p className='text-xs'>Subtotal + Iva</p>
             </>
           )}
         </div>
@@ -116,10 +159,21 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               {/* <p className='text-xs'>MX 1.2M</p> */}
               <p className='text-xs'>UTILIDAD</p>
               {/* <p className='text-xs'>$1,205,704</p> */}
-              <p className='text-xs'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
-              })}</p>
+              <p className='text-xs'>
+                {/* {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
+                })} */}
+                {MoneyFormatter(amountProjects[0].totalAmount - projectsTotalCost[0].totalCost)}
+              </p>
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={CurrencyFormatter({
+                    currency: 'MXN',
+                    value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
+                  })} 
+                  className="text-slate-900 bg-white" placement="top">
+                <ChartBarIcon className='text-white w-20 h-2' />
+              </Tooltip>
             </>
           )}
         </div>
@@ -127,10 +181,21 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               flex flex-col justify-center items-center' style={{backgroundColor: '#FF9C89'}}>
           {amountProjects.length > 0 && (
             <>
-              <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: amountProjects[0].totalAmount
-              })}</p>
+              <p className=' text-lg sm:text-xl'>
+                {/* {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: amountProjects[0].totalAmount
+                })} */}
+                {MoneyFormatter(amountProjects[0].totalAmount)}
+              </p>
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={CurrencyFormatter({
+                    currency: 'MXN',
+                    value: amountProjects[0].totalAmount
+                  })} 
+                  className="text-slate-900 bg-white" placement="top">
+                <ChartBarIcon className='text-white w-20 h-2' />
+              </Tooltip>
               <p className='text-xs'>VENTA TOTAL</p>
             </>
           )}

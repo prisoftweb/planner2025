@@ -59,13 +59,6 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
   }
 
-  // const arrCosts : Expense[] = [];
-  // arrCosts.push(costs);
-
-  
-  // console.log('expenses one', JSON.stringify(costs[0]));
-  // console.log('pay => ', JSON.stringify(costs[0].costs.pay));
-
   const table: DetailExpensesTableProvider[] = ExpenseDataToTableDetailExpensesProviderData(costs);
   // const table: DetailExpensesTableProvider[] = [];
   

@@ -6,6 +6,7 @@ import { DetailExpensesTableProvider } from '@/interfaces/Providers'
 import { ProviderMin } from "@/interfaces/Providers"
 import { OnePayment } from '@/interfaces/Payments'
 import { UsrBack } from '@/interfaces/User'
+import { MoneyFormatter } from '@/app/functions/Globals'
 
 export default function ReportPaymentPDF({costs, provider, payment, user}: 
     {costs: DetailExpensesTableProvider[], provider: ProviderMin, user: UsrBack, payment: OnePayment}){
@@ -120,7 +121,9 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
                 {CurrencyFormatter({
                   currency: 'MXN',
                   value: totalAllCosts
-                })}</Text></View>
+                })}
+                {/* {MoneyFormatter(totalAllCosts)} */}
+              </Text></View>
           </View>
         </View>
 
@@ -141,10 +144,12 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
             <View style={style.inLineText}>
               <Text style={style.textLeft}>Por pagar:</Text>
               <Text style={style.textRight}>
-              {CurrencyFormatter({
+                {CurrencyFormatter({
                   currency: 'MXN',
                   value: payment.pending
-                })}</Text>
+                })}
+                {/* {MoneyFormatter(payment.pending)} */}
+              </Text>
             </View>
           </View>
 

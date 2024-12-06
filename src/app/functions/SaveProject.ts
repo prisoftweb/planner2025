@@ -6,6 +6,7 @@ import { CurrencyFormatter } from "./Globals";
 import { BudgetMin } from "@/interfaces/Budget";
 import { BudgetTableCostCenter } from "@/interfaces/Budget";
 import { FullBudget } from "@/interfaces/BudgetProfile";
+import { MoneyFormatter } from "./Globals";
 
 export default async function SaveProject(data:Object, token:string){
   
@@ -107,21 +108,23 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       p = '0%';
     }
     //La moneda mexicana lleva el mx antes del $
-    const dollar = CurrencyFormatter({
-      currency: "MXN",
-      value: project.amount
-    })
+    // const dollar = CurrencyFormatter({
+    //   currency: "MXN",
+    //   value: project.amount
+    // })
 
     const total = CurrencyFormatter({
       currency: "MXN",
       value: project.amount
     });
+    // const total = MoneyFormatter(project.amount);
 
     //se puede usar dolares si no se quiere el mx antes del $
-    // const dollar = CurrencyFormatter({
-    //   currency: "USD",
-    //   value: project.amount
-    // })
+    const dollar = CurrencyFormatter({
+      currency: "USD",
+      value: project.amount
+    })
+    // const dollar = MoneyFormatter(project.amount);
 
     let cond: string;
 
@@ -163,23 +166,25 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
     }
     //p='0%';
     //La moneda mexicana lleva el mx antes del $
-    const dollar = CurrencyFormatter({
-      currency: "MXN",
-      //value: budget.amount
-      value: budget.pending
-    })
+    // const dollar = CurrencyFormatter({
+    //   currency: "MXN",
+    //   //value: budget.amount
+    //   value: budget.pending
+    // })
+    const dollar = MoneyFormatter(budget.pending);
 
-    const amountBudget = CurrencyFormatter({
-      currency: "MXN",
-      //value: budget.amount
-      value: budget.amount
-    });
+    // const amountBudget = CurrencyFormatter({
+    //   currency: "MXN",
+    //   value: budget.amount
+    // });
+    const amountBudget = MoneyFormatter(budget.amount);
 
-    const budgeted = CurrencyFormatter({
-      currency: "MXN",
-      //value: budget.amount
-      value: budget.budgeted
-    });
+    // const budgeted = CurrencyFormatter({
+    //   currency: "MXN",
+    //   //value: budget.amount
+    //   value: budget.budgeted
+    // });
+    const budgeted = MoneyFormatter(budget.budgeted);
     
     table.push({
       //amount: budget.amount.toString(),

@@ -15,6 +15,7 @@ import { GrServices } from "react-icons/gr";
 import { TbBrandCashapp } from "react-icons/tb";
 import { BsReceiptCutoff } from "react-icons/bs";
 import { LuTicket } from "react-icons/lu";
+import { MoneyFormatter } from "@/app/functions/Globals";
 
 interface OptionsDashboard {
   label: string,
@@ -41,16 +42,18 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0;
   })
 
-  const pendingText = CurrencyFormatter({
-    currency: 'USD',
-    // value: pending
-    value: totalCost[0].totalCost
-  });
+  // const pendingText = CurrencyFormatter({
+  //   currency: 'USD',
+  //   // value: pending
+  //   value: totalCost[0].totalCost
+  // });
 
-  const totalPendingText = CurrencyFormatter({
-    currency: 'USD',
-    value: totalPending
-  });
+  const pendingText = MoneyFormatter(totalCost[0].totalCost);
+
+  // const totalPendingText = CurrencyFormatter({
+  //   currency: 'USD',
+  //   value: totalPending
+  // });
 
   // console.log('pending => ', pending);
 
@@ -236,10 +239,13 @@ export function TableDashboardProviderComponent({data}: {data: TableDashboardPro
       id: 'Saldo',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{CurrencyFormatter({
-          currency: 'MXN',
-          value: row.original.currentBalance
-        })}</p>
+        >
+          {/* {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.currentBalance
+          })} */}
+          {MoneyFormatter(row.original.currentBalance)}
+        </p>
       ),
     }),
   ];

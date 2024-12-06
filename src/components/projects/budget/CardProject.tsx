@@ -1,7 +1,7 @@
 import { ProjectMin } from "@/interfaces/Projects";
 import DeleteElement from "@/components/DeleteElement";
 import { RemoveProject } from "@/app/api/routeProjects";
-import { CurrencyFormatter } from "@/app/functions/Globals";
+import { CurrencyFormatter, MoneyFormatter } from "@/app/functions/Globals";
 import { useNewBudget } from "@/app/store/budgetProject";
 
 export default function CardProject({project, token}:
@@ -39,10 +39,12 @@ export default function CardProject({project, token}:
           </div>
         </div>
         <div className="text-right flex flex-col justify-between">
-          <p className="text-base">{CurrencyFormatter({
-                currency: "MXN",
-                value: project.amount
-              })}
+          <p className="text-base">
+            {/* {CurrencyFormatter({
+              currency: "MXN",
+              value: project.amount
+            })} */}
+            {MoneyFormatter(project.amount)}
           </p>
           <p>{ project.date? 
                   Math.round((new Date().getTime() - new Date(project.date).getTime()) 
