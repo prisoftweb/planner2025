@@ -108,7 +108,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           <p className="text-md text-red-500 text-center font-semibold">{'Por pagar >'}</p>
         </div>
       </div> */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-3">
         <div className="p-1 bg-white">
           <CardDashboardProvider p1={'INTERES DE DEUDA VENCIDA'} 
             p2={'0'} p3="intereses cobrados de un % de la decuda vencida"

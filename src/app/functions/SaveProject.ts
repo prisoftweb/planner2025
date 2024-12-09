@@ -113,18 +113,18 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
     //   value: project.amount
     // })
 
-    const total = CurrencyFormatter({
-      currency: "MXN",
-      value: project.amount
-    });
-    // const total = MoneyFormatter(project.amount);
+    // const total = CurrencyFormatter({
+    //   currency: "MXN",
+    //   value: project.amountotal
+    // });
+    const total = MoneyFormatter(project.amountotal);
 
     //se puede usar dolares si no se quiere el mx antes del $
-    const dollar = CurrencyFormatter({
-      currency: "USD",
-      value: project.amount
-    })
-    // const dollar = MoneyFormatter(project.amount);
+    // const dollar = CurrencyFormatter({
+    //   currency: "USD",
+    //   value: project.amount
+    // })
+    const dollar = MoneyFormatter(project.amount);
 
     let cond: string;
 

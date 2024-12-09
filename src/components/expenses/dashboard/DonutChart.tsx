@@ -1,9 +1,10 @@
 'use client'
-import { CurrencyFormatter } from '@/app/functions/Globals';
+import { CurrencyFormatter, MoneyFormatter } from '@/app/functions/Globals';
 import { DonutChart, Legend } from '@tremor/react';
 
-const valueFormatter = (number: number) =>
-  `$ ${Intl.NumberFormat('us').format(number).toString()}`;
+// const valueFormatter = (number: number) =>
+//   `$ ${Intl.NumberFormat('us').format(number).toString()}`;
+const valueFormatter = (number: number) => MoneyFormatter(number);
 
 export default function DonutChartt({data, colors, categories, category}: 
     {data:any, colors: string[], categories: string[], category: string}) {
@@ -36,10 +37,11 @@ export default function DonutChartt({data, colors, categories, category}:
               <p className="whitespace-nowrap text-right font-medium ">
               {/* text-tremor-content-emphasis */}
                 {/* {categoryPayload.value} */}
-                {CurrencyFormatter({
+                {/* {CurrencyFormatter({
                   currency: 'MXN',
                   value: categoryPayload.value
-                })}
+                })} */}
+                {MoneyFormatter(categoryPayload.value)}
               </p>
             </div>
           </div>

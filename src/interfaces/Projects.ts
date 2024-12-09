@@ -121,6 +121,7 @@ export interface ProjectMin {
   type: Glossary
   segment: Glossary
   progress: number
+  amountotal: number
 }
 
 export interface Location {

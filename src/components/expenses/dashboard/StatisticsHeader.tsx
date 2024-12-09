@@ -12,11 +12,32 @@ import { useState } from 'react';
 import { DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CostsGroupByResumen, CostsGroupResumenByType } from '@/interfaces/DashboardsCosts';
-import { CurrencyFormatter } from '@/app/functions/Globals';
+import { CurrencyFormatter, MoneyFormatter } from '@/app/functions/Globals';
+import {Tooltip} from "@nextui-org/react";
 
 export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType}: 
     {handleDate: Function, projects:Options[], costsResumen:CostsGroupByResumen[], 
       costsResumenType:CostsGroupResumenByType[]}) {
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   const [project, setProject] = useState<string>(projects[0].value);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(),
@@ -71,10 +92,13 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 0 && (
               <>
                 <p className='text-xs'>{costsResumenType[0].tipo}</p>
-                <p className=' text-lg sm:text-xl'>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: costsResumenType[0].subtotalCost
-                })}</p>
+                <p className=' text-lg sm:text-xl'>
+                  {/* {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: costsResumenType[0].subtotalCost
+                  })} */}
+                  {MoneyFormatter(costsResumenType[0].subtotalCost)}
+                </p>
               </>
             )}
           </div>
@@ -84,10 +108,13 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 1 && (
               <>
                 <p className='text-xs'>{costsResumenType[1].tipo}</p>
-                <p className='text-lg sm:text-xl'>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: costsResumenType[1].subtotalCost
-                })}</p>
+                <p className='text-lg sm:text-xl'>
+                  {/* {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: costsResumenType[1].subtotalCost
+                  })} */}
+                  {MoneyFormatter(costsResumenType[1].subtotalCost)}
+                </p>
               </>
             )}
           </div>
@@ -97,10 +124,13 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 2 && (
               <>
                 <p className='text-xs'>{costsResumenType[2].tipo}</p>
-                <p className='text-lg sm:text-xl'>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: costsResumenType[2].subtotalCost
-                })}</p>
+                <p className='text-lg sm:text-xl'>
+                  {/* {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: costsResumenType[2].subtotalCost
+                  })} */}
+                  {MoneyFormatter(costsResumenType[2].subtotalCost)}
+                </p>
               </>
             )}
           </div>
@@ -116,18 +146,24 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           <div>
             <div>
               {/* <p className='text-2xl'>$1,370,972.00</p> */}
-              <p className='text-2xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: costsResumen.length > 0? costsResumen[0].subtotalCost : 0
-              })}</p>
+              <p className='text-2xl'>
+                {/* {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: costsResumen.length > 0? costsResumen[0].subtotalCost : 0
+                })} */}
+                {MoneyFormatter(costsResumen.length > 0? costsResumen[0].subtotalCost : 0)}
+              </p>
               <p className='text-xs'>Costo</p>
             </div>
             <div className='mt-3'>
               {/* <p className='text-2xl'>$135,934.00</p> */}
-              <p className='text-2xl'>{CurrencyFormatter({
-                currency: 'MXN',
-                value: costsResumen.length > 0? costsResumen[0].totalIVA : 0
-              })}</p>
+              <p className='text-2xl'>
+                {/* {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: costsResumen.length > 0? costsResumen[0].totalIVA : 0
+                })} */}
+                {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalIVA : 0)}
+              </p>
               <p className='text-xs'>Iva</p>
             </div>
           </div>
@@ -140,10 +176,13 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <p className='text-2xl'>{costsResumen.length > 0? costsResumen[0].quantity: 0}</p>
             <p className='text-xs'>GRANTOTAL</p>
             {/* <p>$2,709,333</p> */}
-            <p className='text-2xl'>{CurrencyFormatter({
-              currency: 'MXN',
-              value: costsResumen.length > 0? costsResumen[0].totalCost : 0
-            })}</p>
+            <p className='text-2xl'>
+              {/* {CurrencyFormatter({
+                currency: 'MXN',
+                value: costsResumen.length > 0? costsResumen[0].totalCost : 0
+              })} */}
+              {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalCost : 0)}
+            </p>
           </div>
           <div>
             <BsBarChartFill className='w-12 h-auto' />

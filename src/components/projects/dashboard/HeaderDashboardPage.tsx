@@ -13,7 +13,7 @@ import { Options } from '@/interfaces/Common';
 import SelectMultipleReact from '@/components/SelectMultipleReact';
 import { MoneyFormatter } from '@/app/functions/Globals';
 import {Tooltip} from "@nextui-org/react";
-import { ChartBarIcon } from '@heroicons/react/24/solid';
+// import { ChartBarIcon } from '@heroicons/react/24/solid';
 
 export default function HeaderDashboardPage({handleDate, amountProjects, 
     projectsTotalCost, configMin, activeProjects, projects}: 
@@ -41,8 +41,8 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
   
   const [project, setProject] = useState<string[]>([projects[0].value]);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date(),
-    to: new Date(),
+    from: new Date('2024-01-02'),
+    to: new Date('2024-10-30'),
   });
 
   const handleProjects = (value: string[]) => {
@@ -58,7 +58,13 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
     }
   };
 
-  const progress = ((amountProjects[0].totalAmount / configMin[0].lastmeta.amount) * 100).toFixed(2);
+  let progress;
+  if(amountProjects.length > 0){
+    progress = (((amountProjects[0]?.totalAmount || 0) / configMin[0].lastmeta.amount) * 100).toFixed(2);
+  }else{
+    progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
+  }
+  
 
   console.log('proyects => => ', project);
   return (

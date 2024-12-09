@@ -131,6 +131,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     if(prj.includes('all')){
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
+        console.log('amountPrjs => => ', amountPrjs);
         if(typeof(amountPrjs)==='string'){
           showToastMessageError(amountPrjs);
         }
@@ -267,6 +268,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     }else{
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
+        console.log('amountPrjs => ', amountPrjs);
         if(typeof(amountPrjs)==='string'){
           showToastMessageError(amountPrjs);
         }
@@ -447,6 +449,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     setStateListProjects(listPrjsDate);
     setStateProjectsClient(prjsClient);
     setStateProjectsSegment(prjsSegment);
+    console.log('amount prjs => ', amountPrjs);
     setTotalAmount(amountPrjs);
     setStateProjectsStatus(prjStatus);
     setStateProjectsProgress(prjsProgress);
@@ -578,6 +581,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   });
 
   let dataControlBudgeted: DataControlBudgeted[] = [];
+  console.log('state projetcs budgeted => ', stateProjectsBudgeted);
+  console.log('state Projects control budjeted => ', stateProjectscontrolBudgeted);
+  console.log('state projects spent => ', stateProjectsSpent);
   if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && stateProjectsBudgeted.length >= stateProjectsSpent.length){
     dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
   }else{

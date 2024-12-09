@@ -96,7 +96,8 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
           </div>
         </div>
       </div>
-      <div className=" grid grid-cols-6 gap-x-3">
+
+      <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-x-3 gap-y-3">
         <div className="bg-white col-span-3 p-3">
           <div className="flex gap-x-2 items-center">
             <IconText text={provider?.name || ''} size="w-8 h-8" sizeText="" />
