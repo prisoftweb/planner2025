@@ -39,7 +39,7 @@ export async function getProjectsMin(auth_token:string) {
 export async function getActiveProjectsMin(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsMINAndNECondition/66e0a1a4c6d95ffb8aa0ff31`;
   try {
-    const res = await axios.get(url, {
+    const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
@@ -541,7 +541,7 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
 export async function getDashboardProjectCostoCenters(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostByProject-groupByCOSTOCENTERONLY/${id}`;
   try {
-    const res = await axios.get(url, {
+    const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'

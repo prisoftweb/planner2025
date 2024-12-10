@@ -92,13 +92,16 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 0 && (
               <>
                 <p className='text-xs'>{costsResumenType[0].tipo}</p>
-                <p className=' text-lg sm:text-xl'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: costsResumenType[0].subtotalCost
-                  })} */}
+                <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    content={costsResumenType[0].subtotalCost} 
+                    className="text-slate-900 bg-white" placement="top">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
+                    {MoneyFormatter(costsResumenType[0].subtotalCost)}
+                  </p>
+                </Tooltip>
+                {/* <p className=' text-lg sm:text-xl'>
                   {MoneyFormatter(costsResumenType[0].subtotalCost)}
-                </p>
+                </p> */}
               </>
             )}
           </div>
@@ -108,13 +111,13 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 1 && (
               <>
                 <p className='text-xs'>{costsResumenType[1].tipo}</p>
-                <p className='text-lg sm:text-xl'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: costsResumenType[1].subtotalCost
-                  })} */}
-                  {MoneyFormatter(costsResumenType[1].subtotalCost)}
-                </p>
+                <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    content={costsResumenType[1].subtotalCost} 
+                    className="text-slate-900 bg-white" placement="top">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
+                    {MoneyFormatter(costsResumenType[1].subtotalCost)}
+                  </p>
+                </Tooltip>
               </>
             )}
           </div>
@@ -124,13 +127,13 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 2 && (
               <>
                 <p className='text-xs'>{costsResumenType[2].tipo}</p>
-                <p className='text-lg sm:text-xl'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: costsResumenType[2].subtotalCost
-                  })} */}
-                  {MoneyFormatter(costsResumenType[2].subtotalCost)}
-                </p>
+                <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    content={costsResumenType[2].subtotalCost} 
+                    className="text-slate-900 bg-white" placement="top">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
+                    {MoneyFormatter(costsResumenType[2].subtotalCost)}
+                  </p>
+                </Tooltip>
               </>
             )}
           </div>
@@ -146,24 +149,24 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           <div>
             <div>
               {/* <p className='text-2xl'>$1,370,972.00</p> */}
-              <p className='text-2xl'>
-                {/* {CurrencyFormatter({
-                  currency: 'MXN',
-                  value: costsResumen.length > 0? costsResumen[0].subtotalCost : 0
-                })} */}
-                {MoneyFormatter(costsResumen.length > 0? costsResumen[0].subtotalCost : 0)}
-              </p>
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={costsResumen.length > 0? costsResumen[0].subtotalCost : 0} 
+                  className="text-slate-900 bg-white" placement="top">
+                <p className="text-2xl">
+                  {MoneyFormatter(costsResumen.length > 0? costsResumen[0].subtotalCost : 0)}
+                </p>
+              </Tooltip>
               <p className='text-xs'>Costo</p>
             </div>
             <div className='mt-3'>
               {/* <p className='text-2xl'>$135,934.00</p> */}
-              <p className='text-2xl'>
-                {/* {CurrencyFormatter({
-                  currency: 'MXN',
-                  value: costsResumen.length > 0? costsResumen[0].totalIVA : 0
-                })} */}
-                {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalIVA : 0)}
-              </p>
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={costsResumen.length > 0? costsResumen[0].totalIVA : 0} 
+                  className="text-slate-900 bg-white" placement="top">
+                <p className="text-2xl">
+                  {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalIVA : 0)}
+                </p>
+              </Tooltip>
               <p className='text-xs'>Iva</p>
             </div>
           </div>
@@ -176,13 +179,13 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <p className='text-2xl'>{costsResumen.length > 0? costsResumen[0].quantity: 0}</p>
             <p className='text-xs'>GRANTOTAL</p>
             {/* <p>$2,709,333</p> */}
-            <p className='text-2xl'>
-              {/* {CurrencyFormatter({
-                currency: 'MXN',
-                value: costsResumen.length > 0? costsResumen[0].totalCost : 0
-              })} */}
-              {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalCost : 0)}
-            </p>
+            <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={costsResumen.length > 0? costsResumen[0].totalCost : 0} 
+                  className="text-slate-900 bg-white" placement="top">
+                <p className="text-2xl">
+                  {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalCost : 0)}
+                </p>
+              </Tooltip>
           </div>
           <div>
             <BsBarChartFill className='w-12 h-auto' />
