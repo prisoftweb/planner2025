@@ -2,12 +2,11 @@
 
 import { DateRangePicker } from '@tremor/react';
 import { es } from "date-fns/locale"
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CurrencyFormatter } from '@/app/functions/Globals';
 import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';
-import SelectReact from '@/components/SelectReact';
 import { Options } from '@/interfaces/Common';
 // import MultiSelectReact from '@/components/MultiSelectReact';
 import SelectMultipleReact from '@/components/SelectMultipleReact';
@@ -39,6 +38,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
     },
   }
   
+  const refHability = useRef(true);
   const [project, setProject] = useState<string[]>([projects[0].value]);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date('2024-01-02'),
@@ -66,7 +66,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
   }
   
 
-  console.log('proyects => => ', project);
+  // console.log('proyects => => ', project);
   return (
     <div>
       <div>
@@ -79,6 +79,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               onValueChange={(e) => {
                 setRangeDate(e);
                 if(e.from && e.to){
+                  refHability.current = false;
                   handleDate(getDate(e.from), getDate(e.to), project);
                 }
               }}
@@ -88,8 +89,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
           </div>
           <div className='sm:w-56 w-96'>
             <Label htmlFor='project'>Omitir proyecto</Label>
-            {/* <SelectReact index={0} opts={projects} setValue={handleProjects} /> */}
-            <SelectMultipleReact opts={projects} setValue={handleProjects} index={0} />
+            <SelectMultipleReact opts={projects} setValue={handleProjects} index={0} disabledSelect={refHability.current} />
           </div>
         </div>
       </div>
@@ -140,15 +140,25 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
                     currency: 'MXN',
+                    value: projectsTotalCost[0].subtotalCost
+                  })} 
+                  className="text-slate-900 bg-white" placement="top">
+                <p className='text-slate-700 text-lg sm:text-xl'>
+                  {MoneyFormatter(projectsTotalCost[0].subtotalCost)}
+                </p>
+                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#86DDFS'}} /> */}
+              </Tooltip>
+              <p className='text-xs'>COSTO TOTAL</p>
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={CurrencyFormatter({
+                    currency: 'MXN',
                     value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
                   })} 
                   className="text-slate-900 bg-white" placement="top">
                 <p className='text-slate-700 text-lg sm:text-xl'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
                 </p>
-                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#86DDFS'}} /> */}
               </Tooltip>
-              <p className='text-xs'>COSTO TOTAL</p>
               <p className='text-xs'>Subtotal + Iva</p>
             </>
           )}

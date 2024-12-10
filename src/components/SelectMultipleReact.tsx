@@ -2,8 +2,8 @@ import Select from 'react-select'
 import { Options } from '@/interfaces/Common'
 import { useState } from 'react'
 
-export default function SelectMultipleReact({opts, setValue, index}: 
-                          {opts:Options[], setValue:Function, index:number}){
+export default function SelectMultipleReact({opts, setValue, index, disabledSelect=false}: 
+                          {opts:Options[], setValue:Function, index:number, disabledSelect?: boolean}){
   //const [selOpt, setSelOpt] = useState<Options[]>([opts[index]]);
   const [selOpt, setSelOpt] = useState<Options[]>([opts[index]]);
 
@@ -12,6 +12,7 @@ export default function SelectMultipleReact({opts, setValue, index}:
       value={selOpt}
       options={opts}
       isMulti
+      isDisabled={disabledSelect}
       //onChange={(e:any) => console.log(e)}
       onChange={(e:any) => 
         {

@@ -44,3 +44,18 @@ export function MoneyFormatter(amount: number){
     }
   }
 }
+
+export function MoneyFormatterToNumber(amount: string){
+  if(amount[amount.length-1]==='M'){
+    const num = Number(amount.replace(/[$, M, X, N, K,]/g, "")) * 1000000;
+    return num;
+  }else{
+    if(amount[amount.length-1]==='K'){
+      const num = Number(amount.replace(/[$, M, X, N, K,]/g, "")) * 1000;
+      return num;
+    }else{
+      const num = Number(amount.replace(/[$, M, X, N, K,]/g, ""));
+      return num;
+    }
+  }
+}

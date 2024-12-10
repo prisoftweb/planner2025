@@ -10,7 +10,7 @@ from "@heroicons/react/24/solid";
 import { useOutsideClick } from "@/app/functions/useOutsideClick";
 import { useTableStates } from "@/app/store/tableStates";
 import { ExpensesTable } from "@/interfaces/Expenses";
-import { CurrencyFormatter } from "@/app/functions/Globals";
+import { CurrencyFormatter, MoneyFormatterToNumber } from "@/app/functions/Globals";
 import { ProjectsTable } from "@/interfaces/Projects";
 import { HistoryExpensesTable, ExpensesTableProvider, DetailExpensesTableProvider } from "@/interfaces/Providers";
 
@@ -160,7 +160,8 @@ export default function Table({data, columns, placeH, typeTable='',
     }
   }else{
     if(typeTable === 'projects'){
-      data.map((proj:ProjectsTable) => total += Number(proj.amount.replace(/[$, M, X, N,]/g, "")));
+      data.map((proj:ProjectsTable) => total += MoneyFormatterToNumber(proj.amount));
+      // data.map((proj:ProjectsTable) => total += Number(proj.amount.replace(/[$, M, X, N,]/g, "")));
       const t = CurrencyFormatter({
         currency: 'MXN',
         value: total
@@ -168,7 +169,8 @@ export default function Table({data, columns, placeH, typeTable='',
       
       if(table.getSelectedRowModel().flatRows.length > 0){
         let totalSeleccionados: number = 0;
-        table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += Number(proj.original.amount.replace(/[$, M, X, N,]/g, "")));
+        // table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += Number(proj.original.amount.replace(/[$, M, X, N,]/g, "")));
+        table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += MoneyFormatterToNumber(proj.original.amount));
         //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
         const tSeleccionados = CurrencyFormatter({
           currency: 'MXN',

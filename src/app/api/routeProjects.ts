@@ -349,6 +349,8 @@ export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart
   const data = {
     project: prj.substring(1)
   }
+  console.log('url estatus => ', url);
+  console.log('data estatus => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
