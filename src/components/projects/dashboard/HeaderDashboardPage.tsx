@@ -143,7 +143,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     value: projectsTotalCost[0].subtotalCost
                   })} 
                   className="text-slate-900 bg-white" placement="top">
-                <p className='text-slate-700 text-lg sm:text-xl'>
+                <p className='text-slate-700 text-sm'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost)}
                 </p>
                 {/* <ChartBarIcon className='w-32 h-6' style={{color: '#86DDFS'}} /> */}
@@ -155,11 +155,11 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
                   })} 
                   className="text-slate-900 bg-white" placement="top">
-                <p className='text-slate-700 text-lg sm:text-xl'>
+                <p className='text-slate-700 text-sm'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
                 </p>
               </Tooltip>
-              <p className='text-xs'>Subtotal + Iva</p>
+              <p className='text-xs'> + Iva</p>
             </>
           )}
         </div>
@@ -208,6 +208,21 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                 </p>
               </Tooltip>
               <p className='text-xs'>VENTA TOTAL</p>
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={CurrencyFormatter({
+                    currency: 'MXN',
+                    value: amountProjects[0].totalAmountTotal
+                  })} 
+                  className="text-slate-900 bg-white" placement="top">
+                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#FF9C89'}} /> */}
+                <p className=' text-lg sm:text-sm'>
+                  {/* {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: amountProjects[0].totalAmount
+                  })} */}
+                  {MoneyFormatter(amountProjects[0].totalAmountTotal)}
+                </p>
+              </Tooltip>
             </>
           )}
         </div>

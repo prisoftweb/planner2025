@@ -1,6 +1,7 @@
 export interface TotalAmountProjects {
   totalAmount: number
   projects: number
+  totalAmountTotal: number
 }
 
 export interface ListProjects {
