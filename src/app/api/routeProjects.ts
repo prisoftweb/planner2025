@@ -523,16 +523,19 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
 
 export async function getDashboardProjectByBudgetControl(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/2024-01-01/2024-10-30`;
+  // console.log('url control presupuestal => ', url);
   try {
-    const res = await axios.get(url, {
+    const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
     })
+    // console.log('res control pres => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
+    // console.log('error control pres => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -568,6 +571,7 @@ export async function getDashboardProjectTotalCost(auth_token:string, dateStart:
   const data = {
     project: prj.substring(1)
   }
+  console.log('url total cost => ',url);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {

@@ -65,7 +65,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
     progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
   }
   
-
+  console.log('projects total cost dashboard => ', projectsTotalCost);
   // console.log('proyects => => ', project);
   return (
     <div>
@@ -117,7 +117,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
           <div>
             <Tooltip closeDelay={0} delay={100} motionProps={props} 
                 content={CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: configMin[0].lastmeta.amount
                 })} 
                 className="text-slate-900 bg-white" placement="top">
@@ -140,7 +140,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               </p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost
                   })} 
                   className="text-slate-900 bg-white" placement="top">
@@ -152,7 +152,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               <p className='text-xs'>COSTO TOTAL</p>
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
                   })} 
                   className="text-slate-900 bg-white" placement="top">
@@ -173,7 +173,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               {/* <p className='text-xs'>$1,205,704</p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
                   })} 
                   className="text-slate-900 bg-white" placement="top">
@@ -195,7 +195,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             <>
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: amountProjects[0].totalAmount
                   })} 
                   className="text-slate-900 bg-white" placement="top">
@@ -211,7 +211,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               <p className='text-xs'>VENTA TOTAL</p>
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
-                    currency: 'MXN',
+                    currency: 'USD',
                     value: amountProjects[0].totalAmountTotal
                   })} 
                   className="text-slate-900 bg-white" placement="top">
@@ -240,9 +240,9 @@ function getDate(date: Date){
 
   if(month < 10){
     console.log(`${day}-0${month}-${year}`);
-    return `${day}-0${month}-${year}`;
+    return `${year}-0${month}-${day}`;
   }else{
     console.log(`${day}-${month}-${year}`)
-    return `${day}-${month}-${year}`;
+    return `${year}-${month}-${day}`;
   }
 }

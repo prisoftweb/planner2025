@@ -40,19 +40,6 @@ export default async function Page({ params }: { params: { id: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proyectos!!</h1>  
   }
 
-  // let options: Options[] = [];
-
-  // if(projects.length <= 0){
-  //   return <h1 className="text-center text-red-500">Error al obtener proyectos...</h1>
-  // }
-
-  // projects.map((proj) => {
-  //   options.push({
-  //     value: proj._id,
-  //     label: proj.title,
-  //   })
-  // })
-
   let clients: ClientBack[];
   try {
     clients = await getClients(token);
@@ -68,15 +55,7 @@ export default async function Page({ params }: { params: { id: string }}){
   } catch (error) {
     return <h1>Error al consultar catalogos!!</h1>
   }
-  
-  // let companies: Company[];
-  // try {
-  //   companies = await getCompanies(token);
-  //   if(typeof(companies)==='string') return <h1 className="text-red-500 text-center text-lg">{companies}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-red-500 text-center text-lg">Error al consultar compañias!!</h1>
-  // }
-
+ 
   const optClients: Options[] = [];
   clients.map((client) => {
     optClients.push({
@@ -109,18 +88,6 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
-  // if(companies.length <= 0){
-  //   <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
-  // }
-
-  // const optCompanies: Options[] = [];
-  // companies.map((company) => {
-  //   optCompanies.push({
-  //     label: company.name,
-  //     value: company._id
-  //   })
-  // })
-
   return(
     <>
       <Navigation user={user} />
@@ -128,15 +95,6 @@ export default async function Page({ params }: { params: { id: string }}){
         <Header title={project.title} previousPage="/projects">
           <Selectize options={options} routePage="projects" subpath="/profile" />
         </Header>
-        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
-          <div className="flex items-center my-2">
-            <ArrowReturn link="/projects" />
-            <img src={project.photo? project.photo: '/img/projects.svg'} 
-                      alt="logo cliente" className="w-12 h-12" />
-            <p className="text-slate-500 mx-3">{project.title}</p>
-          </div>
-          <Selectize options={options} routePage="projects" subpath="/profile" />
-        </div> */}
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>
           <ProjectCli token={token} id={params.id} project={project}

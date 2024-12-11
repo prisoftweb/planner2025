@@ -36,7 +36,7 @@ export default function CardDashboardProvider({children, link, p1, p2, p3, textC
           {valueTooltip && (
             <Tooltip closeDelay={0} delay={100} motionProps={props} 
                 content={CurrencyFormatter({
-                  currency: 'MXN',
+                  currency: 'USD',
                   value: MoneyFormatterToNumber(p2)
                 })} 
                 className="text-slate-900 bg-white" placement="top">

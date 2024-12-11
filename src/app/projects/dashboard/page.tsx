@@ -132,6 +132,7 @@ export default async function Page() {
   let projectsTotalCost: DashboardTotalCost[] = [];
   try {
     projectsTotalCost = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
+    console.log('projects total cost => ', projectsTotalCost);
     if(typeof(projectsTotalCost)==='string'){
       return <h1>{projectsTotalCost} list</h1>
     }
