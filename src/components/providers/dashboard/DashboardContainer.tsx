@@ -1,15 +1,15 @@
 'use client'
 
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent"
-import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
-import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
-import { CurrencyFormatter } from "@/app/functions/Globals";
-import DonutChartProviderComponent from "./DonutChartProviderComponent";
+// import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
+import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine, TotalPayments } from "@/interfaces/DasboardProviders";
+// import { CurrencyFormatter } from "@/app/functions/Globals";
+// import DonutChartProviderComponent from "./DonutChartProviderComponent";
 import { TableDashboardProviders } from "@/interfaces/DasboardProviders";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import CardDashboardProvider from "./CardDashboardProvider";
-import { EnvelopeIcon, CursorArrowRaysIcon } from "@heroicons/react/24/solid";
+// import { EnvelopeIcon, CursorArrowRaysIcon } from "@heroicons/react/24/solid";
 import Chip from "../Chip";
 import { GrServices } from "react-icons/gr";
 import { TbBrandCashapp } from "react-icons/tb";
@@ -28,9 +28,9 @@ interface OptionsBarChart {
 }
 
 export default function DashboardContainer({costsProvider, costsProviderWithTradeLine, 
-    providersTradeLine, totalCost, data}: 
+    providersTradeLine, totalCost, data, totalPayments}: 
   {totalCost: TotalCostsByProvidersTradeLine[], providersTradeLine: ProviderWithTradeLine[], 
-    costsProviderWithTradeLine: CostsByProvider[], costsProvider: CostsByProvider[], data: TableDashboardProviders[]}) {
+    costsProviderWithTradeLine: CostsByProvider[], costsProvider: CostsByProvider[], data: TableDashboardProviders[], totalPayments: TotalPayments}) {
 
   let pending = 0;
   // let countProviders = 0;
@@ -49,6 +49,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
   // });
 
   const pendingText = MoneyFormatter(totalCost[0].totalCost);
+  const totalPaymentsProv = MoneyFormatter(totalPayments.totalPayout);
 
   // const totalPendingText = CurrencyFormatter({
   //   currency: 'USD',
@@ -110,9 +111,9 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
       </div> */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-3">
         <div className="p-1 bg-white">
-          <CardDashboardProvider p1={'INTERES DE DEUDA VENCIDA'} 
-            p2={'0'} p3="intereses cobrados de un % de la decuda vencida"
-            link="" textColor="text-blue-700" textLink="Ver detalles" >
+          <CardDashboardProvider p1={'TOTAL PAGADO'} 
+            p2={totalPaymentsProv} p3="intereses cobrados de un % de la decuda vencida"
+            link="" textColor="text-blue-700" textLink="Ver detalles" valueTooltip={true} >
               <LuTicket className="w-8 h-8" />
           </ CardDashboardProvider>
         </div>
@@ -128,7 +129,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
         <div className="p-1 bg-white">
           <CardDashboardProvider p1={'TOTAL CUENTAS POR PAGAR (CXP)'} 
             p2={pendingText } p3="Saldo actual calculado solo en facturas pendientes de pago"
-            link="" textColor="text-blue-700	" textLink="Ver detalles" >
+            link="" textColor="text-blue-700	" textLink="Ver detalles" valueTooltip={true} >
               <TbBrandCashapp className="w-8 h-8" />
           </CardDashboardProvider>
         </div>

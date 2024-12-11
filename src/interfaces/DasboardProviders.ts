@@ -42,3 +42,8 @@ export interface TableDashboardProviders {
   account: string,
   currentBalance: number
 }
+
+export interface TotalPayments {
+  quantity: number,
+  totalPayout: number
+}

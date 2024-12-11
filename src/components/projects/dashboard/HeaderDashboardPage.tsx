@@ -99,6 +99,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             style={{backgroundColor: '#8EA7FF'}}>
           {amountProjects.length > 0 && (
             <>
+              {/* <p className='text-lg'>{amountProjects[0].projects}</p> */}
               <p className='text-lg'>{amountProjects[0].projects}</p>
               <p className='text-xs'>PROYECTOS TODOS</p>
               <p className='text-lg text-right mt-2'>{activeProjects}</p>

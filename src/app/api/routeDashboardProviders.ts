@@ -56,3 +56,22 @@ export async function getAllCostsGroupByPROVIDERWithoutTRADELINE(auth_token:stri
     return 'Error al consultar costos agrupados por proveedor';
   }
 }
+
+export async function getTotalPayments(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllPaymentsTOTAL`;
+  console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total de pagos';
+  }
+}

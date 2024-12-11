@@ -2,9 +2,10 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import DashboardContainer from "@/components/providers/dashboard/DashboardContainer";
-import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
+import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE,
+  getAllProvidersWithTradeLine, getTotalPayments } from "@/app/api/routeDashboardProviders";
 import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
-import { TableDashboardProviders } from "@/interfaces/DasboardProviders";
+import { TotalPayments } from "@/interfaces/DasboardProviders";
 import { ProvidersDataToTableData } from "@/app/functions/DashboardProviderFunctions";
 
 export default async function page() {
@@ -56,6 +57,16 @@ export default async function page() {
     return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
   }
 
+  let totalPayments: TotalPayments[] = [];
+  try {
+    totalPayments = await getTotalPayments(token);
+    if(typeof(totalPayments)==='string'){
+      return <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1>
+    }
+  } catch (error) {
+    return <h1 className="text-red-500 text-center text-lg">Error al obtener total de pagos de proveedores!!</h1>
+  }
+
   const data = ProvidersDataToTableData(providersTradeLine);
 
   return (
@@ -64,7 +75,7 @@ export default async function page() {
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <DashboardContainer costsProvider={costsProvider} totalCost={totalCost}
           costsProviderWithTradeLine={costsProviderWithTradeLine} 
-          providersTradeLine={providersTradeLine} data={data} />
+          providersTradeLine={providersTradeLine} data={data} totalPayments={totalPayments[0]} />
       </div>
     </>
   )
