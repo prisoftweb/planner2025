@@ -461,9 +461,9 @@ export async function getDashboardListProjectsNotComplete(auth_token:string, dat
 
 export async function getDashboardListProjectsByDate(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLISTByDate/${dateStart}/${dateEnd}`;
-  console.log('url => ', url);
-  console.log('date start => ', dateStart);
-  console.log('projects => ', projects);
+  //console.log('url => ', url);
+  //console.log('date start => ', dateStart);
+  //console.log('projects => ', projects);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -479,14 +479,14 @@ export async function getDashboardListProjectsByDate(auth_token:string, dateStar
       },
       // data: data
     })
-    console.log('data primer grafico => ', JSON.stringify(data));
-    console.log('este no debe venir => ', projects);
-    console.log('res => ', res);
-    console.log('res => ', res.data.data.stats);
+    //console.log('data primer grafico => ', JSON.stringify(data));
+    //console.log('este no debe venir => ', projects);
+    //console.log('res => ', res);
+    //console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    console.log('catch => ', error);
+    //console.log('catch => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -523,7 +523,7 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
 
 export async function getDashboardProjectByBudgetControl(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/2024-01-01/2024-10-30`;
-  // console.log('url control presupuestal => ', url);
+  // //console.log('url control presupuestal => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
@@ -531,11 +531,11 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
         'Content-Type': 'application/json'
       },
     })
-    // console.log('res control pres => ', res);
+    // //console.log('res control pres => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    // console.log('error control pres => ', error);
+    // //console.log('error control pres => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -571,7 +571,7 @@ export async function getDashboardProjectTotalCost(auth_token:string, dateStart:
   const data = {
     project: prj.substring(1)
   }
-  console.log('url total cost => ',url);
+  //console.log('url total cost => ',url);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -620,6 +620,7 @@ export async function getProjectsBudgeted(auth_token:string, dateStart: string, 
     project: prj.substring(1)
   }
   try {
+    console.log('url presupuestado => ', url);
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -627,9 +628,11 @@ export async function getProjectsBudgeted(auth_token:string, dateStart: string, 
       },
       // data: data
     })
+    console.log('res presupuestado => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
+    console.log('error presupuestado => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -666,10 +669,10 @@ export async function getProjectsSpent(auth_token:string, dateStart: string, dat
 
 export async function getProjectsControlBudgeted(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsByBudgetControl/${dateStart}/${dateEnd}`;
-  console.log('url control prsu =>', url);
-  console.log('fecha ini => ', dateStart);
-  console.log('fecha fin => ', dateEnd);
-  console.log('proyectos => ', projects);
+  //console.log('url control prsu =>', url);
+  //console.log('fecha ini => ', dateStart);
+  //console.log('fecha fin => ', dateEnd);
+  //console.log('proyectos => ', projects);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -680,7 +683,7 @@ export async function getProjectsControlBudgeted(auth_token:string, dateStart: s
   // const data = {
   //   project: projects.length > 0? projects[0]: ''
   // }
-  console.log(JSON.stringify(data));
+  //console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {

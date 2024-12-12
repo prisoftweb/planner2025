@@ -77,6 +77,9 @@ export default function TableExpenses({data, token, expenses,
     setIsFilter(value);
   }
 
+  console.log('data expesnes => ');
+  data.map((c) => !c.Descripcion || typeof(c.Descripcion) !== 'string' ? console.log('desc => ', c) : '');
+
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
@@ -168,21 +171,18 @@ export default function TableExpenses({data, token, expenses,
       header: 'Descripcion',
       id: 'descripcion',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   {row.original.Descripcion.length < 100? (
-        //     <p className="">{row.original.Descripcion}</p>
-        //   ): (
-        //     <p className="">{row.original.Descripcion.substring(0, 100)}</p>
-        //   )}
-        // </Link>
-        row.original.Descripcion.length < 100? (
-          <p className="cursor-pointer" 
-            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-          >{row.original.Descripcion}</p>
-        ): (
-          <p className="cursor-pointer" 
-            onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-          >{row.original.Descripcion.substring(0, 100)}</p>
+        row.original.Descripcion && (
+          <>
+            {row.original.Descripcion.length < 100? (
+              <p className="cursor-pointer" 
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+              >{row.original.Descripcion}</p>
+            ): (
+              <p className="cursor-pointer" 
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+              >{row.original.Descripcion.substring(0, 100)}</p>
+            )}
+          </>
         )
       ),
     }),

@@ -65,7 +65,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
     progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
   }
   
-  console.log('projects total cost dashboard => ', projectsTotalCost);
+  // console.log('projects total cost dashboard => ', projectsTotalCost);
   // console.log('proyects => => ', project);
   return (
     <div>
@@ -239,10 +239,10 @@ function getDate(date: Date){
   let year = date.getFullYear()
 
   if(month < 10){
-    console.log(`${day}-0${month}-${year}`);
+    // console.log(`${day}-0${month}-${year}`);
     return `${year}-0${month}-${day}`;
   }else{
-    console.log(`${day}-${month}-${year}`)
+    // console.log(`${day}-${month}-${year}`)
     return `${year}-${month}-${day}`;
   }
 }

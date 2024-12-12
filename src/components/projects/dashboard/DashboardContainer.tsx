@@ -131,7 +131,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     if(prj.includes('all')){
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
-        console.log('amountPrjs => => ', amountPrjs);
+        // console.log('amountPrjs => => ', amountPrjs);
         if(typeof(amountPrjs)==='string'){
           showToastMessageError(amountPrjs);
         }
@@ -268,7 +268,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     }else{
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
-        console.log('amountPrjs => ', amountPrjs);
+        // console.log('amountPrjs => ', amountPrjs);
         if(typeof(amountPrjs)==='string'){
           showToastMessageError(amountPrjs);
         }
@@ -449,7 +449,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     setStateListProjects(listPrjsDate);
     setStateProjectsClient(prjsClient);
     setStateProjectsSegment(prjsSegment);
-    console.log('amount prjs => ', amountPrjs);
+    // console.log('amount prjs => ', amountPrjs);
     setTotalAmount(amountPrjs);
     setStateProjectsStatus(prjStatus);
     setStateProjectsProgress(prjsProgress);
