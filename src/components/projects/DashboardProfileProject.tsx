@@ -55,6 +55,16 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
   });
 
   // console.log('budgeted control => ', budgetedControl);
+  // Colores para el grafico Progress-bar de control presupuestal
+  const colorsRandom = ['#E4D831', '#71B2F2', '#617178', '#FFA145', '#8579F0', '#ff5252', '#69f0ae', '#7D9F2D', '#289399', '#f08080']
+  const getRandomArbi = (min: any, max: any) => {
+    const res = parseInt(Math.random() * (max - min) + min);   
+    return res;
+  }
+
+  const c1 = getRandomArbi(0, 9);
+  const c2 = getRandomArbi(0, 9);
+  const c3 = getRandomArbi(0, 9);
   
   return(
     <div className="w-full">
@@ -80,30 +90,30 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
             <p className="mb-2">CONTROL PRESUPUESTAL</p>
             {budgetedControl && (
               <div>
-                <p>Monto total ({
+                <p className=" text-sm">Monto total ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.amountInfo.amount?? 0
                   })}) 
                 </p>
                 <ProgressBarComponent label={''} progress={budgetedControl.amountInfo.porcentage} 
-                  widthBar="w-full" color="#00f" hei="h-5" />
-                <p>Presupuestado ({
+                  widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
+                <p className=" text-sm">Presupuestado ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.budgetedInfo.budgeted
                   })}) 
                 </p>
                 <ProgressBarComponent label={''} progress={budgetedControl.budgetedInfo.porcentage} 
-                  widthBar="w-full" color="#0f0" hei="h-5" />
-                <p>Costo ({
+                  widthBar="w-full" color={colorsRandom[c2]} hei="h-5" />
+                <p className=" text-sm">Costo ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.spentInfo.spent
                   })}) 
                 </p>
                 <ProgressBarComponent label={''} progress={budgetedControl.spentInfo.porcentage} 
-                  widthBar="w-full" color="#f00" hei="h-5" />
+                  widthBar="w-full" color={colorsRandom[c3]} hei="h-5" />
               </div>
             )}
           </div>

@@ -12,12 +12,12 @@ export const ProgressBarComponent = ({label, progress, widthBar, color= '#00f', 
         <p>{label}</p>
       </div> */}
       <div className='flex gap-x-2'>
-        <div className={`${widthBar} bg-gray-200 rounded-full ${hei} dark:bg-gray-700`}>
-          <div className={`bg-purple-600 ${hei} rounded-full dark:bg-purple-500`} 
+        <div className={`${widthBar} bg-gray-200 ${hei} dark:bg-gray-700`}>
+          <div className={`bg-purple-600 ${hei} dark:bg-purple-500`} 
             style={{"width": progress + '%', "backgroundColor": color}}></div>
         </div>
-        <p>{progress.toString() + '%'}</p>
-        <p>{label}</p>
+        <p className=" text-sm font-bold">{progress.toString() + '%'}</p>
+        <p className=" text-xs">{label}</p>
       </div>
     </>
   )
