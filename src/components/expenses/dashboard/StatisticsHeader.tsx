@@ -93,7 +93,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               <>
                 <p className='text-xs'>{costsResumenType[0].tipo}</p>
                 <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                    content={costsResumenType[0].subtotalCost} 
+                    content={CurrencyFormatter({
+                      currency: 'USD',
+                      value: costsResumenType[0].subtotalCost
+                    })} 
                     className="text-slate-900 bg-white" placement="top">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     {MoneyFormatter(costsResumenType[0].subtotalCost)}
@@ -112,7 +115,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               <>
                 <p className='text-xs'>{costsResumenType[1].tipo}</p>
                 <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                    content={costsResumenType[1].subtotalCost} 
+                    content={CurrencyFormatter({
+                      currency: 'USD',
+                      value: costsResumenType[1].subtotalCost
+                    })} 
                     className="text-slate-900 bg-white" placement="top">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     {MoneyFormatter(costsResumenType[1].subtotalCost)}
@@ -128,7 +134,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               <>
                 <p className='text-xs'>{costsResumenType[2].tipo}</p>
                 <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                    content={costsResumenType[2].subtotalCost} 
+                    content={CurrencyFormatter({
+                      currency: 'USD',
+                      value: costsResumenType[2].subtotalCost
+                    })} 
                     className="text-slate-900 bg-white" placement="top">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     {MoneyFormatter(costsResumenType[2].subtotalCost)}
@@ -150,7 +159,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <div>
               {/* <p className='text-2xl'>$1,370,972.00</p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                  content={costsResumen.length > 0? costsResumen[0].subtotalCost : 0} 
+                  content={CurrencyFormatter({
+                    currency: 'USD',
+                    value: costsResumen.length > 0? costsResumen[0].subtotalCost : 0
+                  })} 
                   className="text-slate-900 bg-white" placement="top">
                 <p className="text-2xl">
                   {MoneyFormatter(costsResumen.length > 0? costsResumen[0].subtotalCost : 0)}
@@ -161,7 +173,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <div className='mt-3'>
               {/* <p className='text-2xl'>$135,934.00</p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                  content={costsResumen.length > 0? costsResumen[0].totalIVA : 0} 
+                  content={CurrencyFormatter({
+                    currency: 'USD',
+                    value: costsResumen.length > 0? costsResumen[0].totalIVA : 0
+                  })} 
                   className="text-slate-900 bg-white" placement="top">
                 <p className="text-2xl">
                   {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalIVA : 0)}
@@ -180,7 +195,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <p className='text-xs'>GRANTOTAL</p>
             {/* <p>$2,709,333</p> */}
             <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                  content={costsResumen.length > 0? costsResumen[0].totalCost : 0} 
+                  content={CurrencyFormatter({
+                    currency: 'USD',
+                    value: costsResumen.length > 0? costsResumen[0].totalCost : 0
+                  })} 
                   className="text-slate-900 bg-white" placement="top">
                 <p className="text-2xl">
                   {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalCost : 0)}

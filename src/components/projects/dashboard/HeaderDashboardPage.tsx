@@ -160,7 +160,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
                 </p>
               </Tooltip>
-              <p className='text-xs'> + Iva</p>
+              {/* <p className='text-xs'> + Iva</p> */}
             </>
           )}
         </div>
