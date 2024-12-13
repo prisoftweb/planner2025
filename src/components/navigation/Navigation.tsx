@@ -221,6 +221,10 @@ const NavItems = ({role}: {role:string}) => {
           name: 'Dashboard',
           link: '/projects/dashboard'
         },
+        {
+          name: 'Estimaciones',
+          link: '/projects/estimates'
+        },
       ]}/>
       <NavItem name="Costos" link="" items={[
           {
