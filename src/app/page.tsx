@@ -1,7 +1,8 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-// import NewDonutChartComponent from "@/components/projects/dashboard/NewDonutChartComponent";
+import NewDonutChartComponent from "@/components/projects/dashboard/NewDonutChartComponent";
+import { ChartLine } from "@/components/projects/dashboard/NewDonutChartComponent";
 
 export default function Home() {
   const cookieStore = cookies();
@@ -18,7 +19,16 @@ export default function Home() {
           />
         </div>
       </div>
-      {/* <NewDonutChartComponent data={[]} /> */}
+      {/* <ChartLine />
+      <NewDonutChartComponent data={[]} /> */}
+      {/* {
+        true && (
+          <>
+            <canvas id='charClient'></canvas>
+            <NewDonutChartComponent data={[]} />
+          </>
+        )
+      } */}
     </>
   );
 }

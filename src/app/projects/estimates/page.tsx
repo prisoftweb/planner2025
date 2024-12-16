@@ -1,20 +1,13 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { getClients } from "@/app/api/routeClients";
-import { Options } from "@/interfaces/Common";
-import { ClientBack } from "@/interfaces/Clients";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
-// import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-// import { getCompaniesLV } from "../api/routeCompany";
-// import { getActiveProjectsMin } from "../api/routeProjects";
 import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
-// import { ProjectDataToTableDataMin } from "../functions/SaveProject";
-import ContainerClient from "@/components/projects/ContainerClient";
-import { getCompaniesLV } from "@/app/api/routeCompany";
 import { getActiveProjectsMin } from "@/app/api/routeProjects";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
+import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";
+import { Options } from "@/interfaces/Common";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -29,22 +22,6 @@ export default async function Page(){
     return <h1>Error al consultar los proyectos!!</h1>
   }
 
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients)==='string') return <h1 className="text-red-500 text-center text-lg">{clients}</h1>
-  } catch (error) {
-    return <h1>Error al consultar clientes!!</h1>
-  }
-
-  const optClients: Options[] = [];
-  clients.map((client) => {
-    optClients.push({
-      label: client.name,
-      value: client._id
-    })
-  })
-
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'projects');
@@ -52,28 +29,6 @@ export default async function Page(){
   } catch (error) {
     return <h1>Error al consultar catalogos!!</h1>
   }
-
-  const condition = catalogs[0].condition[0].glossary._id;
-  
-  let optCompanies: Options[] = [];
-  try {
-    optCompanies = await getCompaniesLV(token);
-    if(typeof(optCompanies)==='string') return <h1 className="text-red-500 text-center text-lg">{optCompanies}</h1>
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al consultar compañias!!</h1>
-  }
-
-  // if(companies.length <= 0){
-  //   <h1 className="text-red-500 text-center text-lg">Error no hay compañias!!</h1>
-  // }
-
-  // const optCompanies: Options[] = [];
-  // companies.map((company) => {
-  //   optCompanies.push({
-  //     label: company.name,
-  //     value: company._id
-  //   })
-  // })
 
   const optCategories: Options[] = [{
     label: 'Todas',
@@ -123,30 +78,13 @@ export default async function Page(){
     })
   })
 
-  // if(!projects || projects.length <= 0){
-  //   return (
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-  //         <WithOut img="/img/projects.jpg" subtitle="Proyectos"
-  //           text="Aqui puedes agregar nuevos proyectos
-  //                   para la gestion desde Planner"
-  //           title="Proyectos">
-  //             <ButtonNew token={token} optClients={optClients} 
-  //                     optCategories={optCategories} optTypes={optTypes}
-  //                     user={user._id} optCompanies={optCompanies} 
-  //                     condition={condition}  />
-  //         </WithOut>
-  //       </div>
-  //     </>
-  //   )
-  // }
-
   const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
   
   return(
     <>
       <Navigation user={user} />
+      <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
+        optTypes={optTypes} projects={projects} token={token} user={user} />
       {/* <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
         optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
         optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 

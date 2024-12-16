@@ -70,13 +70,14 @@ interface OptionsDashboard {
 //   },
 // ]
 
-export const LineChartComponent = ({dataProjectsTop}:{dataProjectsTop: OptionsDashboard[]}) => (
+export const LineChartComponent = ({dataProjectsTop, colors}:{dataProjectsTop: OptionsDashboard[], colors: string[]}) => (
   <LineChart
     className="h-80"
     //data={chartdata}
     data={dataProjectsTop}
     //index="date"
     index="label"
+    colors={colors}
     //categories={["SolarPanels", "Inverters"]}
     categories={["costo"]}
     valueFormatter={(number: number) =>

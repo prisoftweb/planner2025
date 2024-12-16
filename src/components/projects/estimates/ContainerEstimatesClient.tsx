@@ -1,59 +1,40 @@
 'use client'
-//import Header from "../Header"
-// import ButtonNew from "./ButtonNew"
-import ButtonNewBudgetProject from "./ButtonNewBudgetProject"
-import TableBudgetProjects from "./TableBudgetProjects"
+// import ButtonNewBudgetProject from "./ButtonNewBudgetProject"
+// import TableBudgetProjects from "./TableBudgetProjects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { ProjectsBudgetTable, ProjectMin } from "@/interfaces/Projects"
+import { ProjectMin, ProjectsTable } from "@/interfaces/Projects"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
-import { PiTableThin } from "react-icons/pi";
 import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "@/components/SearchInTable"
-import { useProjectsStore } from "@/app/store/projectsStore"
 
 import WithOut from "@/components/WithOut"
 import { UsrBack } from "@/interfaces/User"
-import { showToastMessageError } from "@/components/Alert"
-import { ProjectBudgetDataToTableDataMin } from "@/app/functions/SaveProject"
-import { getProjectsMin } from "@/app/api/routeProjects"
-import { CostoCenterLV } from "@/interfaces/CostCenter"
-import { BudgetMin } from "@/interfaces/Budget"
-import { useBudgetStore } from "@/app/store/budgetProject"
 import { Squares2X2Icon } from "@heroicons/react/24/solid"
+import TableProjectsToEstimate from "./TableProjectsToEstimated"
 
-export default function ContainerBudgetClient({token, user, optConditionsFilter, 
-                          projects, budgets, optProjectsFilter }: 
+export default function ContainerEstimatesClient({token, user, optConditionsFilter, 
+                          projects, optCategories, optTypes, data }: 
                         {token:string, user:UsrBack, projects: ProjectMin[], optConditionsFilter: Options[], 
-                          budgets:BudgetMin[], optProjectsFilter:Options[]}){
+                          optCategories: Options[], optTypes: Options[], data: ProjectsTable[]}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
-  //const [dataTable, setDataTable] = useState<ProjectsBudgetTable[]>(data);
-
-  // const {haveNewProject, projectStore, 
-  //   updateProjectStore, updateHaveNewProject} = useProjectsStore();
-  const {budgetsStore, updateBudgetsStore} = useBudgetStore();
-
-  useEffect(() => {
-    updateBudgetsStore(budgets);
-  }, []);
 
   const handleFilter = (value:boolean) => {
     setIsFilter(value);
   }
 
-  if(!budgetsStore || budgetsStore.length <= 0){
+  if(!projects || projects.length <= 0){
     return (
       <>
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/projects.jpg" subtitle="Presupuestos"
-            text="Agregar un presupuesto a
-                    un proyecto determinado"
-            title="Presupuestos">
-              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
+          <WithOut img="/img/projects.jpg" subtitle="Proyectos para estimar"
+            text="Aqui se mostraran los proyectos a los que se les puede realizar o consultar una estimacion"
+            title="Proyectos para estimar">
+              <></>
           </WithOut>
         </div>
       </>
@@ -66,9 +47,9 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
         <div className="flex items-center">
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600"
+          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" 
               onClick={() => window.location.replace('/')} />
-          <p className="text-xl ml-4 font-medium">Presupuestos</p>
+          <p className="text-xl ml-4 font-medium w-56">Proyectos para estimar</p>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
           <div className="flex gap-x-3 gap-y-3 justify-end">
@@ -88,16 +69,15 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
-              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
             </div>
           </div>
         </div>
       </div>
       <div className="mt-5">
-        <TableBudgetProjects token={token} 
-          budgets={ budgetsStore} optProjects={optProjectsFilter}
+        <TableProjectsToEstimate token={token} 
           optConditions={optConditionsFilter} isFilter={isFilter} 
-          setIsFilter={handleFilter} isTable={isTable}
+          setIsFilter={handleFilter} isTable={isTable} projects={projects} 
+          data={data} optCategories={optCategories} optTypes={optTypes}
         />
       </div>
     </div>

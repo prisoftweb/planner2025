@@ -464,7 +464,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   }
 
   // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
-  const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
+  const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colorsBudgeted = ['green', 'red', 'blue'];
 
   const dataProjectsStatus: OptionsDashboard[] = [];
@@ -515,19 +515,20 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       {
         label: 'Projectos por cliente',
         data: values,
-        backgroundColor: [
-          'rgb(255, 99, 132)',
-          'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)',
+        backgroundColor:[ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'],
+        // backgroundColor: [
+        //   'rgb(255, 99, 132)',
+        //   'rgb(54, 162, 235)',
+        //   'rgb(255, 205, 86)',
 
-          'rgb(255, 132, 99)',
-          'rgb(54, 235, 162)',
-          'rgb(255, 86, 205)',
+        //   'rgb(255, 132, 99)',
+        //   'rgb(54, 235, 162)',
+        //   'rgb(255, 86, 205)',
 
-          'rgb(132, 99, 255)',
-          'rgb(235, 162, 54)',
-          'rgb(86, 205, 255)'
-        ],
+        //   'rgb(132, 99, 255)',
+        //   'rgb(235, 162, 54)',
+        //   'rgb(86, 205, 255)'
+        // ],
         hoverOffset: 4
       }
     ]
@@ -596,6 +597,15 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
   const randomColors = [ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'];
 
+  const colorSegments = ['green', 'orange', 'blue', 'gray'];
+
+  function getRandomInt(max: number) {
+    return Math.floor(Math.random() * max);
+  }
+
+  const colorRandom = getRandomInt(10);
+  const colorRandom2 = getRandomInt(10);
+
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <HeaderDashboardPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
@@ -629,7 +639,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           </div>
           {/* <DonutChartComponent data={dataProjectsSegment} colors={colors} category="costo"
               categories={categoriesSegment}  /> */}
-          <PieChartComponent data={dataProjectsSegment} colors={colors} category="costo"
+          <PieChartComponent data={dataProjectsSegment} colors={colorSegments} category="costo"
             categories={categoriesSegment}  />
         </div>
 
@@ -637,7 +647,8 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOTAL PROJECTS   | Montos de proyectos</p>
           </div>
-          <BarChartComponent categories={['costo']} colors={colors} data={dataListProjects} />
+          {/* <BarChartComponent categories={['costo']} colors={colors} data={dataListProjects} /> */}
+          <BarChartComponent categories={['costo']} colors={[colors[colorRandom]]} data={dataListProjects} />
         </div>
       </div>
 
@@ -646,7 +657,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOP 10 PROYECTOS</p>
           </div>
-          <LineChartComponent dataProjectsTop={dataProjectsTop} />
+          <LineChartComponent dataProjectsTop={dataProjectsTop} colors={[colors[colorRandom2]]} />
         </div>
 
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
@@ -655,7 +666,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           </div>
           {/* <PieChartComponent data={dataProjectsClient} colors={colors} category="costo"
               categories={categoriesClient}  /> */}
-            <div className="flex flex-wrap gap-x-1 gap-y-1 items-center">
+            {/* <div className="flex flex-wrap gap-x-1 gap-y-1 items-center">
               {titles.map((title, index: number) => (
                 <div key={title} className="flex gap-x-1 items-center">
                   <div className="w-2 h-2" style={{backgroundColor: 
@@ -663,7 +674,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
                   <p className="text-xs">{title}</p>
                 </div>
               ))}
-            </div>
+            </div> */}
             <NewDonutChartComponent data={dataProjectsClient} />
         </div>
       </div>

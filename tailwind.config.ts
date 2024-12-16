@@ -25,6 +25,10 @@ const config: Config = {
     current: 'currentColor',
     extend: {
       colors: {
+        'segment1': '#00AF74', 
+        'segment2': '#FF4B00', 
+        'segment3': '#00B8F9', 
+        'segment4': 'FFC100',
         // light mode
         tremor: {
           brand: {

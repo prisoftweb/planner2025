@@ -1,8 +1,10 @@
 'use client'
-import { Doughnut } from 'react-chartjs-2';
-import { Chart, registerables, ArcElement, defaults } from "chart.js";
+import { Doughnut, Line } from 'react-chartjs-2';
+import { Chart, registerables, ArcElement, defaults, plugins } from "chart.js";
 //Chart.register(...registerables);
+import 'chart.js/auto'; // ADD THIS
 Chart.register(ArcElement);
+import { useRef } from 'react';
 import { DonutChartJS } from '@/interfaces/DashboardProjects';
 
 // defaults.maintainAspectRatio = false;
@@ -13,6 +15,7 @@ import { DonutChartJS } from '@/interfaces/DashboardProjects';
 // defaults.plugins.title.color = 'black';
 
 export default function NewDonutChartComponent({data}: {data: DonutChartJS}) {
+  // export default function NewDonutChartComponent({data}: {data: any}) {
   // const dataP = {
   //   labels: [
   //     'Red',
@@ -65,6 +68,29 @@ export default function NewDonutChartComponent({data}: {data: DonutChartJS}) {
   //   ],
   // }
 
+  console.log('new donut');
+
+  // renderChar();
+
+  const ref = useRef();
+
+  // const options = {
+  //   plugins: {
+  //     legend : {position: "left"}
+  //   }
+  // }
+
+  return <Doughnut ref={ref} data={data} />
+
+  // return (
+  //   <>
+  //     {/* <Doughnut data={data} /> */}
+  //     {/* <RenderChar /> */}
+  //   </>
+  // )
+}
+
+export const RenderChar = (): JSX.Element => {
   const newData = {
     labels: ['data 1', 'data 2', 'data 3'],
     datasets: [
@@ -81,16 +107,37 @@ export default function NewDonutChartComponent({data}: {data: DonutChartJS}) {
     ]
   };
 
-  return (
-    <>
-      <Doughnut data={data} />
-      {/* <Doughnut data={newData} options={{
-        plugins: {
-          title: {
-            text: "titulo"
-          }
-        }
-      }} /> */}
-    </>
-  )
+  // if(myChart){
+  //   myChart.destroy();
+  // }
+
+  // myChart = new Chart('charClient', {type: 'doughnut', data: newData});
+  const ref = useRef();
+
+  return <Doughnut ref={ref} data={newData} />
 }
+
+export const ChartLine = (): JSX.Element => {
+  const ref = useRef();
+
+  const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [
+      {
+        label: 'First dataset',
+        data: [33, 53, 85, 41, 44, 65],
+        fill: true,
+        backgroundColor: 'rgba(75,192,192,0.2)',
+        borderColor: 'rgba(75,192,192,1)'
+      },
+      {
+        label: 'Second dataset',
+        data: [33, 25, 35, 51, 54, 76],
+        fill: false,
+        borderColor: '#742774',
+      },
+    ],
+  };
+
+  return <Line ref={ref} data={data} />
+};

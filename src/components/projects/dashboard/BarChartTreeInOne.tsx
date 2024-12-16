@@ -128,7 +128,7 @@ export function BarChartTreeInOne({data}:{data: DataProjectsByType[]}) {
         index='status'
         categories={["PROVEEDOR", "MANO DE OBRA", "OTROS"]}
         //type="stacked"
-        colors={["blue", "cyan", "violet"]}
+        colors={["blue", "red", "green"]}
         valueFormatter={valueFormatter}
         yAxisWidth={76}
         showLegend={false}

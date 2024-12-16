@@ -64,6 +64,10 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
   }else{
     progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
   }
+
+  console.log('total amount -> ', amountProjects[0].totalAmount);
+  console.log('total cost => ', projectsTotalCost[0].totalCost);
+  console.log('res => ', amountProjects[0].totalAmount - projectsTotalCost[0].totalCost);
   
   // console.log('projects total cost dashboard => ', projectsTotalCost);
   // console.log('proyects => => ', project);

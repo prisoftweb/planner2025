@@ -4,11 +4,11 @@ import { RemoveProject } from "@/app/api/routeProjects";
 import Link from "next/link";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
-export default function CardProject({project, token}:
-                      {project:ProjectMin, token:string}){
+export default function CardProject({project, token, deleteIcon=true, url=`/projects/${project._id}/profile`}:
+                      {project:ProjectMin, token:string, deleteIcon?:boolean, url?:string}){
   return(
     <>
-      <Link href={`/projects/${project._id}/profile`}>
+      <Link href={url}>
         <div className="grid grid-cols-3 gap-x-2 p-3 border border-slate-700 
               rounded-xl bg-white shadow-md shadow-slate-500 hover:shadow-xl 
               hover:shadow-slate-600">
@@ -23,8 +23,8 @@ export default function CardProject({project, token}:
                 <p>{project.account}</p>
               </div>
               <div>
-                <DeleteElement id={project._id} name={project.title} 
-                    token={token} remove={RemoveProject} />
+                {deleteIcon && <DeleteElement id={project._id} name={project.title} 
+                    token={token} remove={RemoveProject} />}
               </div>
             </div>
             <div className="flex items-center">
