@@ -7,8 +7,8 @@ import { DonutChart, Legend } from '@tremor/react';
 const valueFormatter = (number: number) =>
   `${Intl.NumberFormat('us').format(number).toString()} %`;
 
-export default function DonutChartComponent({data, colors, categories, category}: 
-    {data:any, colors: string[], categories: string[], category: string}) {
+export default function DonutChartComponent({data, colors, categories, category, size='w-96 h-96', flexWrap='md:flex-wrap'}: 
+    {data:any, colors: string[], categories: string[], category: string, size?: string, flexWrap?: string}) {
   
   type CustomTooltipTypeDonut = {
     payload: any;
@@ -86,14 +86,14 @@ export default function DonutChartComponent({data, colors, categories, category}
   
   return (
     <>
-      <div className="flex md:flex-wrap items-center justify-center space-x-6">
+      <div className={`flex items-center justify-center space-x-6 ${flexWrap}`}>
         <DonutChart
           data={data}
           category={category}
           index='label'
           valueFormatter={valueFormatter}
           colors={colors}
-          className="w-96 h-96"
+          className={size}
           customTooltip={customTooltip}
         />
         <Legend

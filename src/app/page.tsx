@@ -19,16 +19,6 @@ export default function Home() {
           />
         </div>
       </div>
-      {/* <ChartLine />
-      <NewDonutChartComponent data={[]} /> */}
-      {/* {
-        true && (
-          <>
-            <canvas id='charClient'></canvas>
-            <NewDonutChartComponent data={[]} />
-          </>
-        )
-      } */}
     </>
   );
 }
