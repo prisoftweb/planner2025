@@ -80,7 +80,7 @@ export default function NewDonutChartComponent({data}: {data: DonutChartJS}) {
   //   }
   // }
 
-  return <Doughnut ref={ref} data={data} />
+  return <Doughnut ref={ref} data={data} width={3} height={3} />
 
   // return (
   //   <>

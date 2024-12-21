@@ -11,11 +11,11 @@ import { CurrencyFormatter } from "@/app/functions/Globals"
 import { ProgressBarComponent } from "../dashboard/ProgressBarComponent"
 import { useState, useEffect } from "react"
 import CurrencyInput from "react-currency-input-field"
-import { createEstimate } from "@/app/api/routeEstimates"
+import { createConceptEstimate } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 
-export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token}: 
-  {showForm:Function, project: OneProjectMin, updateEstimates:Function, user:string, token:string}) {
+export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token}: 
+  {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string}) {
   // const refRequest = useRef(true);
 
   const [name, setName] = useState<string>('');
@@ -131,66 +131,205 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         user
       }
 
-      const res = await createEstimate(token, data);
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        updateEstimates();
-        showForm(false);
-      }
+      // const res = await createConceptEstimate(token, data);
+      // if(typeof(res)==='string'){
+      //   showToastMessageError(res);
+      // }else{
+      //   updateEstimates();
+      //   showForm(false);
+      // }
     }
   }
   
   return(
     <>
-      <form className="z-10 absolute top-16 w-full max-w-lg bg-white space-y-5 p-3 right-0"
+      <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
-          <HeaderForm img="/img/projects/default.svg" subtitle="Agrega los datos para la nueva estimacion" 
-            title="Nueva estimacion"
+          <HeaderForm img="/img/projects/default.svg" subtitle="Modifica y agrega mas conceptos a una estimacion existente" 
+            title="Agregar conceptos a estimacion"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
 
         <div className="bg-white p-3">
-          <div className="flex items-center justify-between gap-x-2">
-            <div className="flex gap-x-1">
-              <div className="flex items-end">
-                <div className={`w-3 h-3 ${project.status? 'bg-green-500': 'bg-red-500'}`}></div>
-                <img src={project.photo} alt={project.title} className="rounded-full w-14 h-14" />
+          <div className="grid grid-cols-2 gap-x-2">
+            <div>
+              <div className="flex items-center justify-between gap-x-2">
+                <div className="flex gap-x-1">
+                  <div className="flex items-end">
+                    <div className={`w-3 h-3 ${project.status? 'bg-green-500': 'bg-red-500'}`}></div>
+                    <img src={project.photo} alt={project.title} className="rounded-full w-14 h-14" />
+                  </div>
+                  <div>
+                    <p className="text-blue-500">{project.title}</p>
+                    <p className="text-slate-600">{project.account}</p>
+                  </div>
+                </div>
+                <div>
+                  <Chip label={project.category.name} color={project.category.color} />
+                </div>
               </div>
               <div>
-                <p className="text-blue-500">{project.title}</p>
-                <p className="text-slate-600">{project.account}</p>
+                <p className=" text-sm">Estimacion total</p>
+                <ProgressBarComponent label={''} progress={79} 
+                  widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
               </div>
             </div>
             <div>
-              <p className="text-blue-500">{project.title}</p>
-              <p className="text-blue-300">{CurrencyFormatter({
-                currency: 'MXN',
-                value: project.amount
-              })}</p>
-              <Chip label={project.category.name} color={project.category.color} />
+              agregar grafico
             </div>
           </div>
-          <div>
-            <p className=" text-sm">Estimacion total</p>
-            <ProgressBarComponent label={''} progress={79} 
-              widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
+        </div>
+
+        <div className="flex gap-x-2">
+          <div className="p-2 w-2/3">
+            <div className="grid grid-cols-3 gap-x-1">
+              <div className="">
+                <Label htmlFor="clave"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Clave</p></Label>
+                <Input type="text" name="clave" autoFocus 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {bandName && (
+                  <p className="text-red-500">La clave es obligatoria!!!</p>
+                )}
+              </div>
+              <div className="">
+                <Label htmlFor="unidad"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
+                <Input type="text" name="unidad" autoFocus 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                {bandName && (
+                  <p className="text-red-500">La unidad es obligatoria!!!</p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="costo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Costo</p></Label>
+                <CurrencyInput
+                  id="costo"
+                  name="costo"
+                  className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                    focus:border-slate-700 outline-0"
+                  // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
+                  // value={formik.values.amount.replace(/[$,]/g, "")}
+                  value={amount}
+                  decimalsLimit={2}
+                  prefix="$"
+                  onValueChange={(value) => {try {
+                    setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
+                    updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
+                  } catch (error) {
+                    setAmount(0);
+                    updateValues(0);
+                  }}}
+                />
+                {bandAmount && (
+                  <p className="text-red-500">El precio unitario es obligatorio!!!</p>
+                )}
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="descripcion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
+              <TextArea value={description} onChange={(e) => setDescription(e.target.value)}></TextArea>
+              {bandDescription && (
+                <p className="text-red-500">La descripcion es obligatoria!!!</p>
+              )}
+            </div>
+          </div>
+          <div className="p-2 w-1/3">
+            <Label htmlFor="area"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Area</p></Label>
+            <Input type="text" name="area" autoFocus 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            {bandName && (
+              <p className="text-red-500">El area es obligatoria!!!</p>
+            )}
+
+            <Label htmlFor="section"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Seccion</p></Label>
+            <Input type="text" name="section" autoFocus 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            {bandName && (
+              <p className="text-red-500">La seccion es obligatoria!!!</p>
+            )}
+
+            <Label htmlFor="cantidad"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cantidad</p></Label>
+            <Input type="text" name="cantidad" autoFocus 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            {bandName && (
+              <p className="text-red-500">La cantidad es obligatoria!!!</p>
+            )}
+
+            <div>
+              <Label htmlFor="pu"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">P.U.</p></Label>
+              <CurrencyInput
+                id="pu"
+                name="pu"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                  focus:border-slate-700 outline-0"
+                // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
+                // value={formik.values.amount.replace(/[$,]/g, "")}
+                value={amount}
+                decimalsLimit={2}
+                prefix="$"
+                onValueChange={(value) => {try {
+                  setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
+                  updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
+                } catch (error) {
+                  setAmount(0);
+                  updateValues(0);
+                }}}
+              />
+              {bandAmount && (
+                <p className="text-red-500">El precio unitario es obligatorio!!!</p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="importe"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
+              <CurrencyInput
+                id="importe"
+                name="importe"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                  focus:border-slate-700 outline-0"
+                // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
+                // value={formik.values.amount.replace(/[$,]/g, "")}
+                value={amount}
+                decimalsLimit={2}
+                prefix="$"
+                onValueChange={(value) => {try {
+                  setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
+                  updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
+                } catch (error) {
+                  setAmount(0);
+                  updateValues(0);
+                }}}
+              />
+              {bandAmount && (
+                <p className="text-red-500">El importe es obligatorio!!!</p>
+              )}
+            </div>
+
           </div>
         </div>
         
-        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+        {/* <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
         <Input type="text" name="name" autoFocus 
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         {bandName && (
           <p className="text-red-500">El nombre es obligatorio!!!</p>
-        )}
+        )} */}
 
-        <div className="grid grid-cols-2 gap-x-2">
+        {/* <div className="grid grid-cols-2 gap-x-2">
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 
@@ -279,14 +418,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
               disabled
             />
           </div>
-        </div>
-        <div>
-          <Label htmlFor="descripcion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
-          <TextArea value={description} onChange={(e) => setDescription(e.target.value)}></TextArea>
-          {bandDescription && (
-            <p className="text-red-500">La descripcion es obligatoria!!!</p>
-          )}
-        </div>
+        </div> */}
         <div className="flex justify-center mt-2">
           <Button type="button" onClick={saveEstimate}>Guardar</Button>
         </div>

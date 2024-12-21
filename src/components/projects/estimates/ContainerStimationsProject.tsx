@@ -10,42 +10,61 @@ import DonutChartComponent from "../dashboard/DonutChartComponent";
 import TableEstimatesByProject from "./TableEstimatesByProject";
 import AddNewEstimateProject from "./AddNewEstimateProject";
 import { Options } from "@/interfaces/Common";
+import { IEstimateProject } from "@/interfaces/Estimate";
+import { getEstimatesByProject } from "@/app/api/routeEstimates";
 interface OptionsDashboard {
   label: string,
   costo: number
 }
 
-export default function ContainerStimationsProject({project, optConditions, optProjects}: 
-  {project: OneProjectMin, optProjects: Options[], optConditions: Options[]}) {
+export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, token, user}: 
+  {project: OneProjectMin, optProjects: Options[], optConditions: Options[], estimates:IEstimateProject[], 
+    token: string, user: string}) {
 
   const [openNewStimate, setOpenNewStimate] = useState<boolean>(false);
+  const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
+  const [estimatesData, setEstimatesData] = useState<IEstimateProject[]>(estimates);
+
+  const handleFilterTable = (value: boolean) => {
+    setIsFilterTable(value);
+  }
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
-  const categoriesEstimates = ['estimacion 1', 'estimacion 2', 'estimacion 3', 'estimacion 4', 'estimacion 5']
-  const dataEstimatesDashboard: OptionsDashboard[] = [{
-    costo: 10,
-    label: 'estimacion 1'
-  },
-  {
-    costo: 15,
-    label: 'estimacion 2'
-  },
-  {
-    costo: 20,
-    label: 'estimacion 3'
-  },
-  {
-    costo: 25,
-    label: 'estimacion 4'
-  },
-  {
-    costo: 30,
-    label: 'estimacion 5'
-  }];  
+  const categoriesEstimates: string[] = [];
+  const dataEstimatesDashboard: OptionsDashboard[] = [];  
+
+  estimates.map((e) => {
+    dataEstimatesDashboard.push({
+      costo: e.amount,
+      label: e.name
+    });
+    categoriesEstimates.push(e.name);
+  });
 
   const handleShowForm = (value: boolean) => {
     setOpenNewStimate(value);
+  }
+
+  const updateEstimatesProject = async () => {
+    let estimates: IEstimateProject[];
+    try {
+      estimates = await getEstimatesByProject(token, project._id);
+      console.log('estimates min => ', estimates);
+      if(typeof(estimates) === "string")
+        return <h1 className="text-center text-red-500">{estimates}</h1>
+    } catch (error) {
+      return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
+    }
+
+    setIsFilterTable(false);
+    setEstimatesData(estimates);
+  }
+
+  const delEstimate = (id:string) => {
+    const newData=estimatesData.filter((e) => e._id !== id);
+    setIsFilterTable(false);
+    setEstimatesData(newData);
   }
 
   return (
@@ -67,10 +86,10 @@ export default function ContainerStimationsProject({project, optConditions, optP
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5">
         <div className="bg-white p-3">
           <img src={project.client.logo} 
-            alt={project.client.name} className="w-full h-auto" />
+            alt={project.client.name} className="h-32 w-auto " />
           {/* <img src={project.client.logo} alt={project.client.name} /> */}
-          <div className="flex justify-center gap-x-2">
-          <img src={project.photo} alt={project.title} className="rounded-full w-14 h-14" />
+          <div className="flex items-center gap-x-2">
+            <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
             <div>
               <p className="text-blue-500">{project.title}</p>
               <p className="text-blue-300">{CurrencyFormatter({
@@ -131,8 +150,11 @@ export default function ContainerStimationsProject({project, optConditions, optP
         </div>
 
       </div>
-      <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} />
-      {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} />}
+      <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
+        estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
+        delEstimate={delEstimate} token={token} />
+      {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
+      updateEstimates={updateEstimatesProject} token={token} />}
     </>
   )
 }

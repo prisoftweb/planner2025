@@ -652,7 +652,23 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
       </div>
 
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5">
+      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
+        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+          <div className="flex mb-3 gap-x-2 justify-between">
+            <p>TOP 10 PROYECTOS</p>
+          </div>
+          <LineChartComponent dataProjectsTop={dataProjectsTop} colors={[colors[colorRandom2]]} />
+        </div>
+
+        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+          <div className="flex mb-3 gap-x-2 justify-between">
+            <p>PROYECTOS POR Cliente</p>
+          </div>
+          <NewDonutChartComponent data={dataProjectsClient} />
+        </div>
+      </div>
+
+      {/* <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5">
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOP 10 PROYECTOS</p>
@@ -664,20 +680,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR Cliente</p>
           </div>
-          {/* <PieChartComponent data={dataProjectsClient} colors={colors} category="costo"
-              categories={categoriesClient}  /> */}
-            {/* <div className="flex flex-wrap gap-x-1 gap-y-1 items-center">
-              {titles.map((title, index: number) => (
-                <div key={title} className="flex gap-x-1 items-center">
-                  <div className="w-2 h-2" style={{backgroundColor: 
-                        (index > colorsDonutClientChart.length? colorsDonutClientChart[index%colorsDonutClientChart.length]: colorsDonutClientChart[index])}}></div>
-                  <p className="text-xs">{title}</p>
-                </div>
-              ))}
-            </div> */}
-            <NewDonutChartComponent data={dataProjectsClient} />
+          <NewDonutChartComponent data={dataProjectsClient} />
         </div>
-      </div>
+      </div> */}
       
       <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
         <div className="mb-3">

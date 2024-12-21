@@ -7,6 +7,8 @@ import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
+import { IEstimateProject } from "@/interfaces/Estimate";
+import { getEstimatesByProject } from "@/app/api/routeEstimates";
 
 export default async function Page({ params }: { params: { idp: string }}){
   const cookieStore = cookies();
@@ -21,6 +23,16 @@ export default async function Page({ params }: { params: { idp: string }}){
       return <h1 className="text-center text-red-500">{project}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
+  }
+
+  let estimates: IEstimateProject[];
+  try {
+    estimates = await getEstimatesByProject(token, params.idp);
+    console.log('estimates min => ', estimates);
+    if(typeof(estimates) === "string")
+      return <h1 className="text-center text-red-500">{estimates}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
   }
 
   let projects: Options[];
@@ -58,7 +70,7 @@ export default async function Page({ params }: { params: { idp: string }}){
         <ContainerStimationsProject project={project} optConditions={optConditions} optProjects={[{
             label: 'Todos',
             value: 'all'
-          }, ...projects]} />
+          }, ...projects]} estimates={estimates} token={token} user={user._id} />
       </div>
     </>
   )
