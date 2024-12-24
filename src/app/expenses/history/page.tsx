@@ -255,7 +255,7 @@ export default async function Page() {
   // } catch (error) {
   //   return <h1>Error al consultar costos por proyecto!!</h1>
   // }
-
+console.log('table data => ', table);
   return(
     <>
       <Navigation user={user} />

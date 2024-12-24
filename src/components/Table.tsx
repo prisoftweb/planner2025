@@ -195,6 +195,7 @@ export default function Table({data, columns, placeH, typeTable='',
       }
     }else{
       if(typeTable === 'costProvider'){
+        // row.original.Estatus._id !== '67318a51ceaf47ece0d3aa72'
         data.map((exp:HistoryExpensesTable) => total += Number(exp.Total.replace(/[$, M, X, N,]/g, "")));
         const t = CurrencyFormatter({
           currency: 'MXN',
@@ -203,7 +204,14 @@ export default function Table({data, columns, placeH, typeTable='',
         
         if(table.getSelectedRowModel().flatRows.length > 0){
           let totalSeleccionados: number = 0;
-          table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.Total.replace(/[$, M, X, N,]/g, "")));
+          let numSel: number = 0;
+          // table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += exp.Estatus._id!=='67318a51ceaf47ece0d3aa72'? Number(exp.original.Total.replace(/[$, M, X, N,]/g, "")): 0);
+          // console.log('seleccionados =>', table.getSelectedRowModel().flatRows);
+          table.getSelectedRowModel().flatRows.map((exp:any) => {
+            console.log('exp  => ', exp.original);
+            totalSeleccionados += exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72'? Number(exp.original.Total.replace(/[$, M, X, N,]/g, "")): 0
+            numSel+= exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72'? 1: 0;
+          });
           //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
           const tSeleccionados = CurrencyFormatter({
             currency: 'MXN',
@@ -215,7 +223,8 @@ export default function Table({data, columns, placeH, typeTable='',
                 <p>Total de gastos: {t}</p>
               </div>
               <div className="flex gap-x-5 text-white pl-5">
-                <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
+                {/* <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p> */}
+                <p>Cantidad: {numSel}</p>
                 <p>Total de gastos seleccionados: {tSeleccionados}</p>
               </div>
           </div>)

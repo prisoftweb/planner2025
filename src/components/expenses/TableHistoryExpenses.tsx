@@ -101,7 +101,7 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'descripcion',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          {row.original.Descripcion.length < 100? (
+          {!row.original.Descripcion? "Sin descripcion": row.original.Descripcion.length < 100? (
             <p className="">{row.original.Descripcion}</p>
           ): (
             <p className="">{row.original.Descripcion.substring(0, 100)}</p>

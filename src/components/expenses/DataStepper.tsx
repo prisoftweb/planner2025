@@ -392,14 +392,16 @@ export default function DataStepper({token, user}: {token:string, user:string })
           const fechaReport = new Date(reportObject.date);
           const currentDate = new Date();
           const expiration = new Date(reportObject.expirationdate);
-          console.log(fechaGasto, ' mayor => ', fechaReport);
-          console.log(currentDate, ' menor => ', expiration);
-          console.log('fecha gasto time => ', fechaGasto.getTime());
-          console.log('fecha report time => ', fechaReport.getTime());
-          console.log('fecha current => ', currentDate.getTime());
-          console.log('fecha expiration => ', expiration.getTime());
+          // console.log(fechaGasto, ' mayor => ', fechaReport);
+          // console.log(currentDate, ' menor => ', expiration);
+          // console.log('fecha gasto time => ', fechaGasto.getTime());
+          // console.log('fecha report time => ', fechaReport.getTime());
+          // console.log('fecha current => ', currentDate.getTime());
+          // console.log('fecha expiration => ', expiration.getTime());
           if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
               (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+            console.log('descripcion expense => ', formik.values.description);
+            console.log('desc => ', data.description);
             const res = await SaveExpense(data, token);
             if(res===201){
               //setView(<></>);

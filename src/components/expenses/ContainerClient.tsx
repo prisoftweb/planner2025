@@ -52,6 +52,7 @@ export default function ContainerClient({data, token, expenses,
 
   if(expensesTable.length <= 0 && expenses.length > 0){
     //console.log('actualizar expenses table => ');
+    // console.log('primer lengt => ');
     updateExpensesTable(expenses);
   }
 
@@ -220,6 +221,7 @@ export default function ContainerClient({data, token, expenses,
 
   const changeConditionInCost = async () => {
     //
+    // console.log('segundo length');
     if(expensesSelected.length > 0){
       const filter: string[] = [];
       expensesSelected.map((row) => {
@@ -251,6 +253,7 @@ export default function ContainerClient({data, token, expenses,
 
   //console.log('expenses table container client => ', expensesTable);
 
+  // console.log('tercer leng')
   if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
     //console.log('entro en el if => ');
     const aux = async () =>{
@@ -275,6 +278,9 @@ export default function ContainerClient({data, token, expenses,
     updateRefresh(false);
   }
 
+  // console.log('cuarto len');
+  // console.log('expenses => ', expenses );
+  // console.log('expsens table => ', expensesTable);
   //if( expensesTable.length <= 0 && expenses.length <= 0){
   if( expenses.length <= 0 && expensesTable.length <= 0){
     //console.log('entro en el return length 0 => ');
@@ -301,6 +307,13 @@ export default function ContainerClient({data, token, expenses,
       </>
     )
   }
+  // console.log('ahi no era');
+
+  // data.map((d) => {
+  //   if(!d.Descripcion){
+  //     console.log('d => ', d);
+  //   }
+  // })
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
@@ -344,6 +357,7 @@ export default function ContainerClient({data, token, expenses,
             //data={data}
             data={tableData}
           />
+          // <></>
         ): (
           <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
             expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
