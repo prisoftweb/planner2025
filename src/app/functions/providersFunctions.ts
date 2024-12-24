@@ -283,29 +283,39 @@ export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvi
 export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPayment[]){
   const table: DetailExpensesTableProvider[] = [];
   
-  expenses.map((expense) => {
+  expenses.map((expense, index:number) => {
     console.log('expense completo => ', expense);
     console.log('pay parse => ', JSON.stringify(expense));
     console.log('expense pay => ', expense.costs.pay);
-    const dollar = CurrencyFormatter({
-          currency: "MXN",
-          // value: expense.costs.cost.subtotal || 0
-          // value: expense.costos.costito || 0
-          value: expense.costs.pay[0]?.previousbalanceamount || 0
-        });
+    let dollar = '0';
+    if(expense.costs.pay){
+      dollar =CurrencyFormatter({
+        currency: "MXN",
+        // value: expense.costs.cost.subtotal || 0
+        // value: expense.costos.costito || 0
+        value: expense.costs.pay[0]?.previousbalanceamount || 0
+      });
+    }else{
+      dollar=CurrencyFormatter({
+        currency: "MXN",
+        // value: expense.costs.cost.subtotal || 0
+        // value: expense.costos.costito || 0
+        value: 0
+      });
+    }
     
     const total = CurrencyFormatter({
       currency: "MXN",
       // value: expense.costs.cost.total || 0
       // value: expense.payout || 0
-      value: expense.costs.pay[0]?.payout || 0
+      value: expense.costs.pay? expense.costs.pay[0]?.payout : 0 || 0
     })
 
     const unpaid = CurrencyFormatter({
       currency: "MXN",
       // value: expense.costs.cost.subtotal || 0
       // value: expense.costos.costito || 0
-      value: expense.costs.pay[0]?.unpaidbalanceamount || 0
+      value: expense.costs.pay? expense.costs.pay[0]?.unpaidbalanceamount : 0 || 0
     });
 
     const elements: string[] = [];
@@ -319,11 +329,11 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
     }
     table.push({
       // id: expense.costs.folio,
-      id: expense.costs.cost.exempttax,
+      id: expense.costs.cost.exempttax + index.toString(),
       // Estatus: expense.costs.estatus,
       Estatus: expense.costs.estatus,
-      // date: expense.costs.date,
-      date: expense.date,
+      date: expense.costs.date,
+      // date: expense.date,
       Responsable: {
         // responsible: expense.costs.user?.name,
         // photo: expense.costs.user?.photo
@@ -337,7 +347,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       report: expense.costs.report.name,
       previoudbalanceamount: dollar,
       payout: total,
-      partitialnumber: expense.costs.pay[0]?.partialitynumber || 1,
+      partitialnumber: expense.costs.pay? expense.costs.pay[0]?.partialitynumber: 1 || 1,
       unpaidbalanceamount: unpaid
     });
   });

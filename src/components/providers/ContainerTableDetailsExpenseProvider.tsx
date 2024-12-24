@@ -6,7 +6,7 @@ import { ExpensesTableProvider } from "@/interfaces/Providers"
 //import Selectize from "../Selectize"
 import ArrowReturn from "../ArrowReturn"
 import IconText from "./IconText"
-import { Provider } from "@/interfaces/Providers"
+// import { Provider } from "@/interfaces/Providers"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
@@ -37,6 +37,11 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
   const handleFilter = (value: boolean) => {
     setFilter(value);
   }
+
+  // useEffect(() => {
+  //   console.log('costos => ', expenses);
+  //   console.log('data tabla => ', data);
+  // }, []);
 
   let props = {
     variants: {

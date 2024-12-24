@@ -17,8 +17,11 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 export default function NewPartialCost({setShowForm, updateCost, cost}: {setShowForm:Function, updateCost:Function, cost: CostsPaymentTable}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
-  const [previousImport, setPreviosImport] = useState<number>(Number(cost.Total.replace(/[$,",", M, X]/g, "")));
-  const [paid, setPaid] = useState<number>(cost.paid);
+  // const [previousImport, setPreviosImport] = useState<number>(Number(cost.Total.replace(/[$,",", M, X]/g, "")));
+  // const [paid, setPaid] = useState<number>(cost.paid);
+  // const [pending, setPending] = useState<string>((Number(cost.Total.replace(/[$,",", M, X]/g, ""))-cost.paid).toString());
+  const [previousImport, setPreviosImport] = useState<string>(Number(cost.Total.replace(/[$,",", M, X]/g, "")).toString());
+  const [paid, setPaid] = useState<string>(cost.paid.toString());
   const [pending, setPending] = useState<string>((Number(cost.Total.replace(/[$,",", M, X]/g, ""))-cost.paid).toString());
   const [numPartial, setNumPartial] = useState<number>(cost.parciality);
   // const refRequest = useRef(true);
@@ -54,12 +57,12 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
       Responsable: cost.Responsable,
       typeCFDI: cost.typeCFDI,
       Importe: cost.Importe,
-      paid: paid,
+      paid: Number(paid.replace(/[$,",", M, X]/g, "")),
       parciality: numPartial,
       pending: Number(pending.replace(/[$,",", M, X]/g, "")),
       Total: CurrencyFormatter({
         currency: 'MXN',
-        value: previousImport
+        value: Number(previousImport.replace(/[$,",", M, X]/g, ""))
       })
     }
 
@@ -140,10 +143,11 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             value={previousImport}
             prefix="$"
             onChange={(e) => {
-              setPreviosImport(Number(e.target.value.replace(/[$,",", M, X]/g, "")));
+              // setPreviosImport(Number(e.target.value.replace(/[$,",", M, X]/g, "")));
+              setPreviosImport(e.target.value.replace(/[$,",", M, X]/g, ""));
               console.log('previous current => ', previousImport);
               console.log('input previous => ', e.target.value);
-              updatePending(Number(e.target.value.replace(/[$,",", M, X]/g, "")), paid);
+              updatePending(Number(e.target.value.replace(/[$,",", M, X]/g, "")), Number(paid.replace(/[$,",", M, X]/g, "")));
             }}
             autoFocus
           />
@@ -156,8 +160,8 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             value={paid}
             prefix="$"
             onChange={(e) => {
-              setPaid(Number(e.target.value.replace(/[$,",", M, X]/g, "")));
-              updatePending(previousImport, Number(e.target.value.replace(/[$,",", M, X]/g, "")));
+              setPaid(e.target.value.replace(/[$,",", M, X]/g, ""));
+              updatePending(Number(previousImport.replace(/[$,",", M, X]/g, "")), Number(e.target.value.replace(/[$,",", M, X]/g, "")));
             }}
           />
         </div>

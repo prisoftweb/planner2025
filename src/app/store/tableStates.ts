@@ -16,6 +16,6 @@ export const useTableStates = create<TablesStates & Actions>((set) => ({
   ...initialStates,
   updateSearch: (value: string) => set(state => ({
     ...state,
-    search: value
+    search: value,
   }))
 }))

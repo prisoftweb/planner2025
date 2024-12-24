@@ -11,8 +11,9 @@ import DonutChartComponent from "../dashboard/DonutChartComponent";
 import TableConceptsEstimate from "./TableConceptsEstimate";
 import AddNewEstimateProject from "./AddNewEstimateProject";
 import { IEstimateProject, IEstimate, IConceptEstimate } from "@/interfaces/Estimate";
-import { getEstimatesByProject } from "@/app/api/routeEstimates";
+import { getConeptsEstimate } from "@/app/api/routeEstimates";
 import AddNewConceptEstimate from "./AddNewConceptEstimate";
+import { Options } from "@/interfaces/Common";
 
 export default function ContainerDetailEstimate({project, token, user, estimate, concepts}: 
   {project: OneProjectMin, token: string, user: string, estimate:IEstimate, concepts:IConceptEstimate[]}) {
@@ -44,13 +45,35 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
 
     // setIsFilterTable(false);
     // setEstimatesData(estimates);
+    let concepts: IConceptEstimate[];
+    try {
+      concepts = await getConeptsEstimate(token, estimate._id);
+      console.log('concepts min => ', concepts);
+      if(typeof(concepts) === "string")
+        return <h1 className="text-center text-red-500">{concepts}</h1>
+    } catch (error) {
+      return <h1 className="text-center text-red-500">Ocurrio un error al actualizar conceptos de la estimacion!!</h1>  
+    }
+    setIsFilterTable(false);
+    setConceptsData(concepts);
   }
 
   const delConcept = (id:string) => {
+    const newData = conceptsData.filter((c) => c._id!==id);
+    setIsFilterTable(false);
+    setConceptsData(newData);
     // const newData=estimatesData.filter((e) => e._id !== id);
     // setIsFilterTable(false);
     // setEstimatesData(newData);
   }
+
+  const conceptsLV: Options[] = [];
+  concepts.map((c) => {
+    conceptsLV.push({
+      label: c.name,
+      value: c._id
+    });
+  });
 
   return (
     <>
@@ -132,7 +155,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} handleFilterTable={handleFilterTable} 
         isFilterTable={isfilterTable} project={project} token={token} />
       {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
-                            updateConcepts={updateConceptsEstimate} user={user} />}
+                            updateConcepts={updateConceptsEstimate} user={user} conceptsLV={conceptsLV} />}
       {/* {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
       updateEstimates={updateEstimatesProject} token={token} />} */}
     </>

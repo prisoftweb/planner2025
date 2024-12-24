@@ -13,26 +13,38 @@ import { useState, useEffect } from "react"
 import CurrencyInput from "react-currency-input-field"
 import { createConceptEstimate } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
+import { Options } from "@/interfaces/Common"
+import SelectReact from "@/components/SelectReact"
+import {PlusCircleIcon} from "@heroicons/react/24/solid"
+import FormNewConcept from "./FormNewConcept"
 
-export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token}: 
-  {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string}) {
+export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, conceptsLV}: 
+  {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
+    conceptsLV:Options[]}) {
   // const refRequest = useRef(true);
 
-  const [name, setName] = useState<string>('');
-  const [startDate, setStartDate] = useState<string>('');
-  const [order, setOrder] = useState<string>('');
+  const [idConcept, setIdConcept] = useState<string>(conceptsLV[0].value);
+  // const [name, setName] = useState<string>('');
+  const [area, setArea] = useState<string>('');
+  const [section, setSection] = useState<string>('');
+  const [quantity, setQuantity] = useState<number>(0);
+  const [pu, setPu] = useState<number>(0);
+  const [code, setCode] = useState<string>('');
+  // const [startDate, setStartDate] = useState<string>('');
+  // const [order, setOrder] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);
-  const [amortization, setAmortization] = useState<number>(0);
-  const [guarantee, setGuarantee] = useState<number>(0);
-  const [amountPay, setAmountPay] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
 
-  const [bandName, setBandName] = useState<boolean>(false);
-  const [bandOrder, setBandOrder] = useState<boolean>(false);
+  // const [bandName, setBandName] = useState<boolean>(false);
   const [bandAmount, setBandAmount] = useState<boolean>(false);
-  const [bandDate, setBandDate] = useState<boolean>(false);
   const [bandDescription, setBandDescription] = useState<boolean>(false);
+  const [bandArea, setBandArea] = useState<boolean>(false);
+  const [bandSection, setBandSection] = useState<boolean>(false);
+  const [bandQuantity, setBandQuantity] = useState<boolean>(false);
+  const [bandPu, setBandPu] = useState<boolean>(false);
+  const [bandCode, setBandCode] = useState<boolean>(false);
 
+  const [showNewConcept, setShowNewConcept] = useState<boolean>(false);
   const [heightPage, setHeightPage] = useState<number>(900);
   // const refRequest = useRef(true);
 
@@ -62,37 +74,55 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   const c1 = getRandomArbi(0, 9);
 
-  const updateValues = (val: number) => {
-    const amor = (val * 30) / 100;
-    const guaran = (val * Number(project.guaranteefund?.porcentage || '0')) / 100;
-    const total = val - amor - guaran;
+  // const updateValues = (val: number) => {
+  //   const amor = (val * 30) / 100;
+  //   const guaran = (val * Number(project.guaranteefund?.porcentage || '0')) / 100;
+  //   const total = val - amor - guaran;
 
-    setAmortization(amor);
-    setGuarantee(guaran);
-    setAmountPay(total);
-  }
+  //   setAmortization(amor);
+  //   setGuarantee(guaran);
+  //   setAmountPay(total);
+  // }
 
   const validationData = () =>{
     let validation = true;
-    if(!name || name===''){
-      setBandName(true);
+    // if(!name || name===''){
+    //   setBandName(true);
+    //   validation = false;
+    // }else{
+    //   setBandName(false);
+    // }
+    if(!code || code===''){
+      setBandCode(true);
       validation = false;
     }else{
-      setBandName(false);
+      setBandCode(false);
     }
-    if(!startDate || startDate===''){
-      setBandDate(true);
+    if(!area || area===''){
+      setBandArea(true);
       validation = false;
     }else{
-      setBandDate(false);
+      setBandArea(false);
     }
-    if(!order || order===''){
-      setBandOrder(true);
+    if(!section || section===''){
+      setBandSection(true);
       validation = false;
     }else{
-      setBandOrder(false);
+      setBandSection(false);
     }
-    if(!amount || amount===0){
+    if(!quantity || quantity<=0){
+      setBandQuantity(true);
+      validation = false;
+    }else{
+      setBandQuantity(false);
+    }
+    if(!pu || pu<=0){
+      setBandPu(true);
+      validation = false;
+    }else{
+      setBandPu(false);
+    }
+    if(!amount || amount<=0){
       setBandAmount(true);
       validation = false;
     }else{
@@ -112,20 +142,8 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
     if(val){
       const data = {
-        name,
+        // name,
         description,
-        purschaseOrder:order,
-        amount,
-        amountGuaranteeFund:guarantee,
-        amountChargeOff: amortization,
-        amountPayable: amountPay,
-        date: startDate,        
-        condition: [
-            {
-                glossary: "676359f2a4077026b9c37660",
-                user
-            }
-        ],
         company: "65d3813c74045152c0c4377e",
         project: project._id,
         user
@@ -139,6 +157,18 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
       //   showForm(false);
       // }
     }
+  }
+
+  const handleConceptID = (value: string) => {
+    setIdConcept(value);
+  }
+
+  const handleShowNewConcept = (value:boolean) => {
+    setShowNewConcept(value);
+  }
+
+  const handleAddNewConcept = (value: Options) => {
+
   }
   
   return(
@@ -185,28 +215,37 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
         <div className="flex gap-x-2">
           <div className="p-2 w-2/3">
+            <div>
+              <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Concepto</p></Label>
+              {/* <SelectReact opts={conceptsLV} index={0} setValue={handleConceptID} /> */}
+              <div className="flex gap-x-2 items-center">
+                <SelectReact opts={conceptsLV} index={0} setValue={handleConceptID} />
+                <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+                onClick={() => setShowNewConcept(true)} />
+              </div>
+            </div>
             <div className="grid grid-cols-3 gap-x-1">
               <div className="">
                 <Label htmlFor="clave"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Clave</p></Label>
                 <Input type="text" name="clave" autoFocus 
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
                 />
-                {bandName && (
+                {bandCode && (
                   <p className="text-red-500">La clave es obligatoria!!!</p>
                 )}
               </div>
-              <div className="">
+              {/* <div className="">
                 <Label htmlFor="unidad"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
-                <Input type="text" name="unidad" autoFocus 
+                <Input type="text" name="unidad" 
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 {bandName && (
                   <p className="text-red-500">La unidad es obligatoria!!!</p>
                 )}
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <Label htmlFor="costo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Costo</p></Label>
                 <CurrencyInput
                   id="costo"
@@ -220,16 +259,16 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
                   prefix="$"
                   onValueChange={(value) => {try {
                     setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
-                    updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
+                    // updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
                   } catch (error) {
                     setAmount(0);
-                    updateValues(0);
+                    // updateValues(0);
                   }}}
                 />
                 {bandAmount && (
                   <p className="text-red-500">El precio unitario es obligatorio!!!</p>
                 )}
-              </div>
+              </div> */}
             </div>
             <div>
               <Label htmlFor="descripcion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
@@ -241,29 +280,29 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
           </div>
           <div className="p-2 w-1/3">
             <Label htmlFor="area"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Area</p></Label>
-            <Input type="text" name="area" autoFocus 
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+            <Input type="text" name="area" 
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
             />
-            {bandName && (
+            {bandArea && (
               <p className="text-red-500">El area es obligatoria!!!</p>
             )}
 
             <Label htmlFor="section"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Seccion</p></Label>
-            <Input type="text" name="section" autoFocus 
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+            <Input type="text" name="section" 
+              value={section}
+              onChange={(e) => setSection(e.target.value)}
             />
-            {bandName && (
+            {bandSection && (
               <p className="text-red-500">La seccion es obligatoria!!!</p>
             )}
 
             <Label htmlFor="cantidad"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cantidad</p></Label>
-            <Input type="text" name="cantidad" autoFocus 
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+            <Input type="text" name="cantidad" 
+              value={quantity}
+              onChange={(e) => setQuantity(Number(e.target.value))}
             />
-            {bandName && (
+            {bandQuantity && (
               <p className="text-red-500">La cantidad es obligatoria!!!</p>
             )}
 
@@ -274,20 +313,18 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
                 name="pu"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                   focus:border-slate-700 outline-0"
-                // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-                // value={formik.values.amount.replace(/[$,]/g, "")}
-                value={amount}
+                value={pu}
                 decimalsLimit={2}
                 prefix="$"
                 onValueChange={(value) => {try {
-                  setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
-                  updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
+                  setPu(Number(value?.replace(/[$,]/g, "") || '0'));
+                  // updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
                 } catch (error) {
-                  setAmount(0);
-                  updateValues(0);
+                  setPu(0);
+                  // updateValues(0);
                 }}}
               />
-              {bandAmount && (
+              {bandPu && (
                 <p className="text-red-500">El precio unitario es obligatorio!!!</p>
               )}
             </div>
@@ -299,17 +336,15 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
                 name="importe"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                   focus:border-slate-700 outline-0"
-                // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-                // value={formik.values.amount.replace(/[$,]/g, "")}
                 value={amount}
                 decimalsLimit={2}
                 prefix="$"
                 onValueChange={(value) => {try {
                   setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
-                  updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
+                  // updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
                 } catch (error) {
                   setAmount(0);
-                  updateValues(0);
+                  // updateValues(0);
                 }}}
               />
               {bandAmount && (
@@ -319,110 +354,12 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
           </div>
         </div>
-        
-        {/* <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-        <Input type="text" name="name" autoFocus 
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        {bandName && (
-          <p className="text-red-500">El nombre es obligatorio!!!</p>
-        )} */}
-
-        {/* <div className="grid grid-cols-2 gap-x-2">
-          <div>
-            <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-            <Input 
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            {bandDate && (
-              <p className="text-red-500">La fecha es obligatoria!!!</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="order"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Orden de compra</p></Label>
-            <Input type="text" name="order" 
-              value={order}
-              onChange={(e) => setOrder(e.target.value)}
-            />
-            {bandOrder && (
-              <p className="text-red-500">La orden es obligatorio!!!</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
-            <CurrencyInput
-              id="amount"
-              name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                focus:border-slate-700 outline-0"
-              // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-              // value={formik.values.amount.replace(/[$,]/g, "")}
-              value={amount}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => {try {
-                setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
-                updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
-              } catch (error) {
-                setAmount(0);
-                updateValues(0);
-              }}}
-            />
-            {bandAmount && (
-              <p className="text-red-500">El monto es obligatorio!!!</p>
-            )}
-          </div>
-
-          <div>
-            <Label htmlFor="amortization"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Amortizacion</p></Label>
-            <CurrencyInput
-              id="amortization"
-              name="amortization"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                focus:border-slate-700 outline-0"
-              // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-              // value={formik.values.amount.replace(/[$,]/g, "")}
-              value={amortization}
-              decimalsLimit={2}
-              prefix="$"
-              disabled
-            />
-          </div>
-          <div>
-            <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
-            <CurrencyInput
-              id="guarantee"
-              name="guarantee"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                focus:border-slate-700 outline-0"
-              value={guarantee}
-              decimalsLimit={2}
-              prefix="$"
-              disabled
-            />
-          </div>
-          <div>
-            <Label htmlFor="amountPay"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto a pagar</p></Label>
-            <CurrencyInput
-              id="amountPay"
-              name="amountPay"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                focus:border-slate-700 outline-0"
-              value={amountPay}
-              decimalsLimit={2}
-              prefix="$"
-              disabled
-            />
-          </div>
-        </div> */}
         <div className="flex justify-center mt-2">
           <Button type="button" onClick={saveEstimate}>Guardar</Button>
         </div>
       </form>
+      {showNewConcept && <FormNewConcept addConcept={handleAddNewConcept} setShowForm={handleShowNewConcept} 
+                              token={token}  />}
     </>
   )
 }

@@ -80,6 +80,7 @@ export default function Table({data, columns, placeH, typeTable='',
 
   useEffect(() => {
     setFiltering(search);
+    console.log('search value => ', search);
   }, [search]);
 
   useEffect(() => {
