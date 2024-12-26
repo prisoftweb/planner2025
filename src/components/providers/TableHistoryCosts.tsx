@@ -79,6 +79,7 @@ export default function TableHistoryCosts({data, token, expenses,
             {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
+            <div className={`${row.original.isPaid? 'bg-green-500': 'bg-red-500'} w-3 h-3 rounded-full`}></div>
           </div>
         </div>
       ),
@@ -123,16 +124,16 @@ export default function TableHistoryCosts({data, token, expenses,
         )
       ),
     }),
-    columnHelper.accessor('isPaid', {
-      header: 'Pagado',
-      id: 'pagado',
-      cell: ({row}) => (
-        <div className="cursor-pointer" 
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
-            <Chip label={row.original.isPaid? 'Pagado': 'No pagado'} color={row.original.isPaid? '#0f0': '#f00'} />
-        </div>
-      ),
-    }),
+    // columnHelper.accessor('isPaid', {
+    //   header: 'Pagado',
+    //   id: 'pagado',
+    //   cell: ({row}) => (
+    //     <div className="cursor-pointer" 
+    //       onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
+    //         <Chip label={row.original.isPaid? 'Pagado': 'No pagado'} color={row.original.isPaid? '#0f0': '#f00'} />
+    //     </div>
+    //   ),
+    // }),
     columnHelper.accessor('Estatus', {
       header: 'Estatus',
       id: 'estatus',

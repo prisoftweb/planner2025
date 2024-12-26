@@ -148,55 +148,86 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
       concept
     }
     //console.log('cost center no deductible => ', JSON.stringify(costcenter));
-    if(voucher){
-      const formdata = new FormData();
-      //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
-      formdata.append('costocenter', JSON.stringify(costcenter));
-      formdata.append('date', startDate);
-      formdata.append('description', description);
-      formdata.append('user', responsibleS);
-      formdata.append('report', report);
-      formdata.append('isticket', JSON.stringify(true));
-      formdata.append('project', project);
-      formdata.append('category', categoryS);
-      formdata.append('iscard', JSON.stringify(isCard));
-      formdata.append('type', type);
-      formdata.append('cost', JSON.stringify({
-        discount: 0,
-        subtotal:amount.replace(/[$,]/g, ""),
-        iva: 0,
-        total: amount.replace(/[$,]/g, ""),
-        //vat: idVat, 
-        // vatvalue: number no se usa 
-        // total: number no se usa 
-      }));
-      formdata.append('condition', JSON.stringify([{
-        glossary: condition,
-        user
-      }]));
-      formdata.append('conditionprovider', JSON.stringify([{
-        glossary: '674643dd734d5ab78ab98ddb',
-        user
-      }]));
-      if(voucher){
-        formdata.append('files', voucher);
-        formdata.append('types', voucher.type);
-      }
-
-      reset();
-      setClearAmount(true);
-      updateRefresh(true);
-      setTimeout(() => {
-        setResetBand(true);
-      }, 300);
+    if(!formik.values.description || formik.values.description===''){
       refRequest.current = true;
-      if(reportObject && reportObject.ispettycash){
-        const fechaGasto = new Date(startDate);
-        const fechaReport = new Date(reportObject.date);
-        const currentDate = new Date();
-        const expiration = new Date(reportObject.expirationdate);
-        if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
-            (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+      showToastMessageError('Aun no se ha agregado una descripcion al gasto!!');
+    }else{
+      if(voucher){
+        const formdata = new FormData();
+        //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
+        formdata.append('costocenter', JSON.stringify(costcenter));
+        formdata.append('date', startDate);
+        formdata.append('description', description);
+        formdata.append('user', responsibleS);
+        formdata.append('report', report);
+        formdata.append('isticket', JSON.stringify(true));
+        formdata.append('project', project);
+        formdata.append('category', categoryS);
+        formdata.append('iscard', JSON.stringify(isCard));
+        formdata.append('type', type);
+        formdata.append('cost', JSON.stringify({
+          discount: 0,
+          subtotal:amount.replace(/[$,]/g, ""),
+          iva: 0,
+          total: amount.replace(/[$,]/g, ""),
+          //vat: idVat, 
+          // vatvalue: number no se usa 
+          // total: number no se usa 
+        }));
+        formdata.append('condition', JSON.stringify([{
+          glossary: condition,
+          user
+        }]));
+        formdata.append('conditionprovider', JSON.stringify([{
+          glossary: '674643dd734d5ab78ab98ddb',
+          user
+        }]));
+        if(voucher){
+          formdata.append('files', voucher);
+          formdata.append('types', voucher.type);
+        }
+  
+        reset();
+        setClearAmount(true);
+        updateRefresh(true);
+        setTimeout(() => {
+          setResetBand(true);
+        }, 300);
+        refRequest.current = true;
+        if(reportObject && reportObject.ispettycash){
+          const fechaGasto = new Date(startDate);
+          const fechaReport = new Date(reportObject.date);
+          const currentDate = new Date();
+          const expiration = new Date(reportObject.expirationdate);
+          if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+              (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+            try {
+              const res = await CreateCostWithFiles(token, formdata);
+              if(res === 201){
+                setView(<></>);
+                reset();
+                formik.values.amount = '';
+                formik.values.description = '';
+                showToastMessage('Costo creado satisfactoriamente!!!');
+                setClearAmount(true);
+                updateRefresh(true);
+                setTimeout(() => {
+                  setResetBand(true);
+                }, 300);
+                refRequest.current = true;
+              }else{
+                showToastMessageError(res);
+                refRequest.current = true;
+              }
+            } catch (error) {
+              refRequest.current = true;
+              showToastMessageError('Ocurrio un error al guardar costo!!');
+            }
+          }else{
+            refRequest.current = true;
+            showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
+          }
+        }else{
           try {
             const res = await CreateCostWithFiles(token, formdata);
             if(res === 201){
@@ -219,63 +250,66 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
             refRequest.current = true;
             showToastMessageError('Ocurrio un error al guardar costo!!');
           }
-        }else{
-          refRequest.current = true;
-          showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
         }
       }else{
-        try {
-          const res = await CreateCostWithFiles(token, formdata);
-          if(res === 201){
-            setView(<></>);
-            reset();
-            formik.values.amount = '';
-            formik.values.description = '';
-            showToastMessage('Costo creado satisfactoriamente!!!');
-            setClearAmount(true);
-            updateRefresh(true);
-            setTimeout(() => {
-              setResetBand(true);
-            }, 300);
-            refRequest.current = true;
+        const data = {
+          costocenter:costcenter, date:startDate, description, 
+          cost: {
+            discount: 0,
+            subtotal:amount.replace(/[$,]/g, ""),
+            iva: 0,
+            total: amount.replace(/[$,]/g, ""),
+            //vat: idVat,
+            // vatvalue: number no se usa 
+            // total: number no se usa 
+          },
+          user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
+            glossary: condition,
+            user
+          }], 
+          conditionprovider: [{
+            glossary: '674643dd734d5ab78ab98ddb',
+            user
+          }], iscard:isCard, type
+        }
+    
+        if(reportObject && reportObject.ispettycash){
+          const fechaGasto = new Date(startDate);
+          const fechaReport = new Date(reportObject.date);
+          const currentDate = new Date();
+          const expiration = new Date(reportObject.expirationdate);
+          if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+                (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+            try {
+              const res = await SaveExpense(data, token);
+              //console.log('save cost no deductible', JSON.stringify(data));
+              if(res===201){
+                setView(<></>);
+                reset();
+                formik.values.amount = '';
+                formik.values.description = '';
+                showToastMessage('Costo creado satisfactoriamente!!!');
+                setClearAmount(true);
+                updateRefresh(true);
+                updateIndexStepper(3);
+                setTimeout(() => {
+                  setResetBand(true);
+                }, 300);
+                refRequest.current = true;
+              }
+              else{
+                showToastMessageError(res);
+                refRequest.current = true;
+              }
+            } catch (error) {
+              refRequest.current = true;
+              showToastMessageError('Ocurrio un error al guardar costo!!');
+            }
           }else{
-            showToastMessageError(res);
+            showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
             refRequest.current = true;
           }
-        } catch (error) {
-          refRequest.current = true;
-          showToastMessageError('Ocurrio un error al guardar costo!!');
-        }
-      }
-    }else{
-      const data = {
-        costocenter:costcenter, date:startDate, description, 
-        cost: {
-          discount: 0,
-          subtotal:amount.replace(/[$,]/g, ""),
-          iva: 0,
-          total: amount.replace(/[$,]/g, ""),
-          //vat: idVat,
-          // vatvalue: number no se usa 
-          // total: number no se usa 
-        },
-        user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
-          glossary: condition,
-          user
-        }], 
-        conditionprovider: [{
-          glossary: '674643dd734d5ab78ab98ddb',
-          user
-        }], iscard:isCard, type
-      }
-  
-      if(reportObject && reportObject.ispettycash){
-        const fechaGasto = new Date(startDate);
-        const fechaReport = new Date(reportObject.date);
-        const currentDate = new Date();
-        const expiration = new Date(reportObject.expirationdate);
-        if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
-              (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+        }else{
           try {
             const res = await SaveExpense(data, token);
             //console.log('save cost no deductible', JSON.stringify(data));
@@ -301,37 +335,8 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
             refRequest.current = true;
             showToastMessageError('Ocurrio un error al guardar costo!!');
           }
-        }else{
-          showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
-          refRequest.current = true;
-        }
-      }else{
-        try {
-          const res = await SaveExpense(data, token);
-          //console.log('save cost no deductible', JSON.stringify(data));
-          if(res===201){
-            setView(<></>);
-            reset();
-            formik.values.amount = '';
-            formik.values.description = '';
-            showToastMessage('Costo creado satisfactoriamente!!!');
-            setClearAmount(true);
-            updateRefresh(true);
-            updateIndexStepper(3);
-            setTimeout(() => {
-              setResetBand(true);
-            }, 300);
-            refRequest.current = true;
-          }
-          else{
-            showToastMessageError(res);
-            refRequest.current = true;
-          }
-        } catch (error) {
-          refRequest.current = true;
-          showToastMessageError('Ocurrio un error al guardar costo!!');
-        }
-      }     
+        }     
+      }
     }
   }
 
