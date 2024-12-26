@@ -98,7 +98,6 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
     //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return paidValidation(exp, isPaid);
-      //return true;
     }
     return false;
   }
