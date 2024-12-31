@@ -129,7 +129,8 @@ export default function Table({data, columns, placeH, typeTable='',
   let labelJSX : JSX.Element = <div></div>;
   //const [labelJSX, setLabelJSX] = useState<JSX.Element>(<></>)
   if(typeTable === 'cost'){
-    data.map((exp:ExpensesTable) => total += Number(exp.Importe.replace(/[$, M, X, N,]/g, "")));
+    // data.map((exp:ExpensesTable) => total += Number(exp.Importe.replace(/[$, M, X, N,]/g, "")));
+    data.map((exp:ExpensesTable) => total += exp.Importe);
     const t = CurrencyFormatter({
       currency: 'MXN',
       value: total
@@ -137,7 +138,8 @@ export default function Table({data, columns, placeH, typeTable='',
     
     if(table.getSelectedRowModel().flatRows.length > 0){
       let totalSeleccionados: number = 0;
-      table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.Importe.replace(/[$, M, X, N,]/g, "")));
+      // table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.Importe.replace(/[$, M, X, N,]/g, "")));
+      table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += exp.original.Importe);
       //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
       const tSeleccionados = CurrencyFormatter({
         currency: 'MXN',
@@ -161,7 +163,8 @@ export default function Table({data, columns, placeH, typeTable='',
     }
   }else{
     if(typeTable === 'projects'){
-      data.map((proj:ProjectsTable) => total += MoneyFormatterToNumber(proj.amount));
+      // data.map((proj:ProjectsTable) => total += MoneyFormatterToNumber(proj.amount));
+      data.map((proj:ProjectsTable) => total += proj.amount);
       // data.map((proj:ProjectsTable) => total += Number(proj.amount.replace(/[$, M, X, N,]/g, "")));
       const t = CurrencyFormatter({
         currency: 'MXN',
@@ -171,7 +174,8 @@ export default function Table({data, columns, placeH, typeTable='',
       if(table.getSelectedRowModel().flatRows.length > 0){
         let totalSeleccionados: number = 0;
         // table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += Number(proj.original.amount.replace(/[$, M, X, N,]/g, "")));
-        table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += MoneyFormatterToNumber(proj.original.amount));
+        // table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += MoneyFormatterToNumber(proj.original.amount));
+        table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += proj.original.amount);
         //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
         const tSeleccionados = CurrencyFormatter({
           currency: 'MXN',

@@ -86,12 +86,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   const validationData = () =>{
     let validation = true;
-    // if(!name || name===''){
-    //   setBandName(true);
-    //   validation = false;
-    // }else{
-    //   setBandName(false);
-    // }
     if(!code || code===''){
       setBandCode(true);
       validation = false;

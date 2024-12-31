@@ -1,5 +1,4 @@
 'use client'
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
@@ -9,13 +8,6 @@ import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
-
-import { useOptionsReports } from "@/app/store/reportsStore";
-import { getCompaniesLV } from "@/app/api/routeCompany";
-import { getProjectsLV } from "@/app/api/routeProjects";
-import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { getDepartmentsLV } from "@/app/api/routeDepartments";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 
 export default function Filtering({showForm, optCompanies, 
                       optConditions, FilterData, maxAmount, optProjects }: 
@@ -33,7 +25,30 @@ export default function Filtering({showForm, optCompanies,
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
     new DateObject().setDay(4).add(1, "month")
-  ])
+  ]);
+
+  const handleValues = (dateValues: DateObject[]) => {
+    console.log('handle values => ', dateValues);
+    setValues(dateValues);
+    // if(values.length > 1){
+      if(dateValues.length > 1){
+      console.log('filter date ');
+      setFirstDate(new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day));
+      setSecondDate(new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
+      filterfunction(conditions, minValue, maxValue, companies, 
+        new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day), 
+        new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day), 
+        projects, isPettyCash);
+      // filterfunction(conditions, types, categories, minValue, maxValue, 
+      //   new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day), 
+      //   new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
+    }else{
+      console.log('else => ');
+      if(values.length > 0){
+        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+      }
+    }
+  }
 
   const [minValue, set_minValue] = useState(0);
   const [maxValue, set_maxValue] = useState(maxAmount);
@@ -43,93 +58,50 @@ export default function Filtering({showForm, optCompanies,
     set_maxValue(e.maxValue);
   };
 
-  // const {companies, conditions, projects, updateCompanies, updateConditions, updateProjects} = useOptionsReports();
+  // useEffect(() => {
+  //   if(values.length > 1){
+  //     setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+  //     setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
+  //   }else{
+  //     if(values.length > 0){
+  //       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+  //     }
+  //   }
+  // }, [values]);
 
   // useEffect(() => {
-  //   const fetchOptions = async () => {
-  //     let optComp: Options[] = [];
-  //     try {
-  //       optComp = await getCompaniesLV(token);
-  //     } catch (error) {
-  //       return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
-  //     }
-
-  //     let optDepts: Options[] = [];
-  //     try {
-  //       optDepts = await getDepartmentsLV(token);
-  //     } catch (error) {
-  //       return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
-  //     }
-
-  //     let optProjs:Options[];
-  //     try {
-  //       optProjs = await getProjectsLV(token);
-  //       if(typeof(optProjs)==='string'){
-  //         return <h1 className="text-center text-lg text-red-500">{optProjs}</h1>
-  //       }    
-  //     } catch (error) {
-  //       return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-  //     }
-
-  //     let catalogs: GlossaryCatalog[];
-  //     try {
-  //       catalogs = await getCatalogsByName(token, 'reports');
-  //       if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  //     } catch (error) {
-  //       return <h1>Error al consultar catalogos!!</h1>
-  //     }
-
-  //     //const condition = catalogs[0].condition[0].glossary._id;
-
-  //     const optConds:Options[] = [];
-  //     catalogs[0].condition.map((cond) => {
-  //       let c = {
-  //         label: cond.glossary.name,
-  //         value: cond.glossary._id
-  //       }
-  //       optConds.push(c);
-  //     });
-
-  //     updateCompanies(optComp);
-  //     updateConditions(optConds);
-  //     updateProjects(optProjs);
-
-  //   };
-
-  //   if(projects.length <= 0 || companies.length <= 0 || conditions.length <= 0){
-  //     fetchOptions();
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    if(values.length > 1){
-      setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-      setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
-    }else{
-      if(values.length > 0){
-        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-      }
-    }
-  }, [values]);
+  //   FilterData(conditions, minValue, maxValue, companies, projects, firstDate?.getTime(), secondDate?.getTime(), isPettyCash);
+  // }, [ companies, projects, conditions, minValue, maxValue, isPettyCash]);
 
   useEffect(() => {
     FilterData(conditions, minValue, maxValue, companies, projects, firstDate?.getTime(), secondDate?.getTime(), isPettyCash);
-  }, [ companies, projects, conditions, minValue, maxValue, isPettyCash]);
-
-  // useEffect (() => {
-  //   FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
-  // }, []);
+  }, [ minValue, maxValue]);
 
   const handleCondition = (value:string[]) => {
     setConditions(value);
+    filterfunction(value, minValue, maxValue, companies, firstDate, secondDate, projects, isPettyCash);
+  }
+
+  const handleIsPettyCash = (value:boolean) => {
+    setIsPettyCash(value);
+    filterfunction(conditions, minValue, maxValue, companies, firstDate, secondDate, projects, value);
   }
 
   const handleProjects = (value:string[]) => {
     setProjects(value);
+    filterfunction(conditions, minValue, maxValue, companies, firstDate, secondDate, value, isPettyCash);
   }
 
   const handleCompanies = (value:string[]) => {
     setCompanies(value);
+    filterfunction(conditions, minValue, maxValue, value, firstDate, secondDate, projects, isPettyCash);
+  }
+
+  const filterfunction = (condSel:string[], minVal:number, maxVal:number, compSel:string[], dateini:Date, 
+      dateend:Date, proSel:string[], isPC:boolean ) => {
+      // FilterData(condSel, typSel, catSel, minVal, maxVal, dateini?.getTime(), dateend?.getTime());
+      FilterData(condSel, minVal, maxVal, compSel, proSel, dateini?.getTime(), 
+        dateend?.getTime(), isPC);
   }
 
   return(
@@ -157,7 +129,9 @@ export default function Filtering({showForm, optCompanies,
             <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
               <input checked={isPettyCash} 
                 //onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
-                onChange={() => setIsPettyCash(!isPettyCash)} id="switch-3" type="checkbox"
+                // onChange={() => setIsPettyCash(!isPettyCash)}
+                onChange={() => handleIsPettyCash(!isPettyCash)} 
+                id="switch-3" type="checkbox"
                 className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                   appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                   peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -224,7 +198,10 @@ export default function Filtering({showForm, optCompanies,
               focus:border-slate-700 outline-0"
             value={values}
             //onChange={setValues}
-            onChange={(e: any) => setValues(e)}
+            // onChange={(e: any) => setValues(e)}
+            onChange={(e: any) => {
+              handleValues(e);
+            }}
             range
             numberOfMonths={2}
             showOtherDays

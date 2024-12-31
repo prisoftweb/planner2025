@@ -13,6 +13,7 @@ import { useProjectsStore } from "@/app/store/projectsStore";
 import { getProjectsMin } from "@/app/api/routeProjects";
 import { showToastMessageError } from "../Alert";
 import Chip from "../providers/Chip";
+import { MoneyFormatter } from "@/app/functions/Globals";
 
 export default function TableProjects({data, token, projects, optCategories, 
                           optTypes, optConditions, isFilter, setIsFilter, isTable, isHistory=false}:
@@ -257,7 +258,10 @@ export default function TableProjects({data, token, projects, optCategories,
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
-        >{row.original.amount}</p>
+        >
+          {/* {row.original.amount} */}
+          {MoneyFormatter(row.original.amount)}
+        </p>
       ),
     }),
     columnHelper.accessor('amount', {
@@ -266,7 +270,10 @@ export default function TableProjects({data, token, projects, optCategories,
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
-        >{row.original.total}</p>
+        >
+          {/* {row.original.total} */}
+          {MoneyFormatter(row.original.total)}
+        </p>
       ),
     }),
     columnHelper.accessor('total', {

@@ -14,6 +14,7 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import RemoveElement from "../RemoveElement";
 import {IoMdCopy} from 'react-icons/io';
+import { MoneyFormatter } from "@/app/functions/Globals";
 
 export default function TableExpenses({data, token, expenses, 
                             handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
@@ -232,7 +233,10 @@ export default function TableExpenses({data, token, expenses,
         // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.Importe}</p>
+        >
+          {/* {row.original.Importe} */}
+          {MoneyFormatter(row.original.Importe)}
+        </p>
       ),
     }),
     columnHelper.accessor('vat', {
@@ -244,7 +248,10 @@ export default function TableExpenses({data, token, expenses,
         // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.vat}</p>
+        >
+          {/* {row.original.vat} */}
+          {MoneyFormatter(row.original.vat)}
+        </p>
       ),
     }),
     columnHelper.accessor('discount', {
@@ -256,7 +263,10 @@ export default function TableExpenses({data, token, expenses,
         // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.discount}</p>
+        >
+          {/* {row.original.discount} */}
+          {MoneyFormatter(row.original.discount)}
+        </p>
       ),
     }),
     columnHelper.accessor('total', {
@@ -268,7 +278,10 @@ export default function TableExpenses({data, token, expenses,
         // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.total}</p>
+        >
+          {/* {row.original.total} */}
+          {MoneyFormatter(row.original.total)}
+        </p>
       ),
     }),
     columnHelper.accessor('taxFolio', {

@@ -55,10 +55,10 @@ export default function TableEstimatesByProject({project, optConditions, optProj
             >Agregar una estimacion al proyecto de {project.title}</p>
           <img src="/img/projects.jpg" alt="image" className="w-60 h-auto" />
         </div>
-        <div className="mt-5 flex justify-between items-center bg-white">
+        {/* <div className="mt-5 flex justify-between items-center bg-white">
           <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
           <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />          
-        </div>
+        </div> */}
       </>
     )
   }

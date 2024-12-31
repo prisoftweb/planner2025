@@ -153,22 +153,10 @@ export default function ContainerClient({data, token, expenses,
 
       let reps: ReportParse[];
       try {
-        // if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
-        //   reps = await GetReportsMin(token);
-        // }else{
-        //   reps = await GetReportsByUserMin(token, user._id);
-        // }
         if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-          //reps = await GetReportsByUserMin(token, user._id);
           reps = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
         }else{
-          //reps = await GetAllReportsMINAndNECondition(token);
           reps = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-          // if(user.department.name.toLowerCase().includes('direccion')){
-          //   reports = await GetAllReportsMINAndNECondition(token);
-          // }else{
-          //   reports = await GetReportsMin(token);
-          // }
         }
         
         if(typeof(reps)==='string'){
@@ -220,8 +208,6 @@ export default function ContainerClient({data, token, expenses,
   }
 
   const changeConditionInCost = async () => {
-    //
-    // console.log('segundo length');
     if(expensesSelected.length > 0){
       const filter: string[] = [];
       expensesSelected.map((row) => {
@@ -251,9 +237,6 @@ export default function ContainerClient({data, token, expenses,
     }
   }
 
-  //console.log('expenses table container client => ', expensesTable);
-
-  // console.log('tercer leng')
   if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
     //console.log('entro en el if => ');
     const aux = async () =>{
@@ -278,9 +261,6 @@ export default function ContainerClient({data, token, expenses,
     updateRefresh(false);
   }
 
-  // console.log('cuarto len');
-  // console.log('expenses => ', expenses );
-  // console.log('expsens table => ', expensesTable);
   //if( expensesTable.length <= 0 && expenses.length <= 0){
   if( expenses.length <= 0 && expensesTable.length <= 0){
     //console.log('entro en el return length 0 => ');
@@ -307,14 +287,7 @@ export default function ContainerClient({data, token, expenses,
       </>
     )
   }
-  // console.log('ahi no era');
-
-  // data.map((d) => {
-  //   if(!d.Descripcion){
-  //     console.log('d => ', d);
-  //   }
-  // })
-
+  
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center">

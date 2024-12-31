@@ -18,13 +18,17 @@ export interface ExpensesTable {
   Proveedor: string 
   Estatus: string 
   Fecha: string 
-  Importe: string
+  // Importe: string
+  Importe: number
   condition: string,
   archivos: string[],
   costcenter: string,
-  vat: string,
-  discount: string,
-  total: string
+  // vat: string,
+  vat: number,
+  // discount: string,
+  discount: number,
+  // total: string
+  total: number
   taxFolio: string
   color: string
 }

@@ -136,7 +136,8 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
 
     table.push({
       //amount: project.amount.toString(),
-      amount: dollar,
+      // amount: dollar,
+      amount: project.amount,
       category: project.category?.name || 'Sin Categoria',
       client: project.client?.name || 'Sin cliente',
       code: project.code,
@@ -148,7 +149,8 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       percentage: p,
       imgProject: project.photo,
       account: project.account,
-      total: total
+      // total: total
+      total: project.amountotal
     })
   });
 

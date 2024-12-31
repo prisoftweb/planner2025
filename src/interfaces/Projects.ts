@@ -13,10 +13,12 @@ export interface ProjectsTable{
   category:string, 
   client:string, 
   date:string,
-  amount:string,
+  // amount:string,
+  amount:number
   percentage: string
   account: string
-  total: string
+  // total: string
+  total: number
 }
 
 export interface ProjectsBudgetTable{

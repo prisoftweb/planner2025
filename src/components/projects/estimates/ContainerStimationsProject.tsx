@@ -83,7 +83,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
         </div>
         <Button onClick={() => setOpenNewStimate(true)}>Agregar estimacion</Button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
           <img src={project.client.logo} 
             alt={project.client.name} className="h-32 w-auto " />

@@ -37,7 +37,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
 
-  // const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<number>(1);
 
   const [values, setValues] = useState([
@@ -45,24 +44,33 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
     new DateObject().setDay(4).add(1, "month")
   ])
 
-  // console.log('expenses no filtered => ', expenses);
-  // const expenseM = expenses.reduce((previous, current) => {
-  //   return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
-  // });
-  // const expenseMin = expenses.reduce((previous, current) => {
-  //   return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
-  // });
-  //setMaxAmount(expenseM.cost?.subtotal);
-  //setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
-  // const minA = expenseM.cost?.subtotal;
-  // const maxA = expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0;
+  const handleValues = (dateValues: DateObject[]) => {
+    console.log('handle values => ');
+    setValues(dateValues);
+    if(values.length > 1){
+      setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+      setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
+      filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+        maxValue, new Date(values[0].year, values[0].month.number - 1, values[0].day), 
+        new Date(values[1].year, values[1].month.number - 1, values[1].day), projectsSel, reportsSel, 
+        costcentersSel, providersSel, isPaid);
+    }else{
+      if(values.length > 0){
+        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+      }
+    }
+  }
 
   const [minValue, set_minValue] = useState(minAmount);
   const [maxValue, set_maxValue] = useState(maxAmount);
 
   const handleInput = (e:any) => {
+    console.log('handle input');
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
+    // filterfunction(categoriesSel, typesSel, conditionsSel, e.minValue, 
+    //   e.maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+    //   costcentersSel, providersSel, isPaid);
   };
 
   const handleResize = () => {
@@ -74,39 +82,62 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleConditions = (value: string[]) => {
+    console.log('handle conditions');
     setConditionsSel(value);
+    filterfunction(categoriesSel, typesSel, value, minValue, 
+      maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+      costcentersSel, providersSel, isPaid);
   }
 
   const handleTypes = (value: string[]) => {
+    console.log('handle types');
     setTypesSel(value);
+    filterfunction(categoriesSel, value, conditionsSel, minValue, 
+      maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+      costcentersSel, providersSel, isPaid);
   }
 
   const handleCategories = (value: string[]) => {
+    console.log('handle categories');
     setCategoriesSel(value);
+    filterfunction(value, typesSel, conditionsSel, minValue, 
+      maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+      costcentersSel, providersSel, isPaid);
   }
 
   const handleReports = (value: string[]) => {
+    console.log('handle reps');
     setReportsSel(value);
+    filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+      maxValue, firstDate, secondDate, projectsSel, value, 
+      costcentersSel, providersSel, isPaid);
   }
 
   const handleProjects = (value: string[]) => {
+    console.log('handle proyects');
     setProjectsSel(value);
+    filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+      maxValue, firstDate, secondDate, value, reportsSel, 
+      costcentersSel, providersSel, isPaid);
   }
 
   const handleCostCenters = (value: string[]) => {
+    console.log('handle costs');
     setCostCentersSel(value);
+    filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+      maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+      value, providersSel, isPaid);
   }
 
   const handleProviders = (value: string[]) => {
+    console.log('handle provs');
     setProvidersSel(value);
+    filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+      maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+      costcentersSel, value, isPaid);
   }
 
-  //const {costCenter, providers, responsibles, vats} = useOptionsExpense();
-
   useEffect(() => {
-
-    //console.log('options expense => ', costCenter, providers, responsibles, vats);
-
     window.addEventListener("resize", handleResize, false);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -116,47 +147,52 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  useEffect(() => {
-    if(values.length > 1){
-      setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-      setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
-    }else{
-      if(values.length > 0){
-        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-      }
-    }
-  }, [values]);
-
-  useEffect(() => {
-    console.log('providers sel => ', providersSel);
-    FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
-      firstDate?.getTime(), secondDate?.getTime(), costcentersSel, providersSel, isPaid);
-  }, [ categoriesSel, typesSel, conditionsSel, minValue, maxValue, firstDate, secondDate, 
-        projectsSel, reportsSel, costcentersSel, providersSel, isPaid]);
-
-  useEffect (() => {
-    FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
-      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcentersSel, providersSel, isPaid);
-  }, []);
+  // useEffect(() => {
+  //   if(values.length > 1){
+  //     setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+  //     setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
+  //   }else{
+  //     if(values.length > 0){
+  //       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+  //     }
+  //   }
+  // }, [values]);
 
   // useEffect(() => {
-  //   FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  // }, [firstDate, secondDate]);
+  //   console.log('providers sel => ', providersSel);
+  //   FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
+  //     firstDate?.getTime(), secondDate?.getTime(), costcentersSel, providersSel, isPaid);
+  // }, [ categoriesSel, typesSel, conditionsSel, minValue, maxValue, firstDate, secondDate, 
+  //       projectsSel, reportsSel, costcentersSel, providersSel, isPaid]);
+
+  useEffect(() => {
+    FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
+      firstDate?.getTime(), secondDate?.getTime(), costcentersSel, providersSel, isPaid);
+  }, [ minValue, maxValue]);
+
+  const filterfunction = (catSel:string[], typSel:string[], condSel:string[], minVal:number, 
+    maxVal:number, dateini:Date, dateend:Date, proSel:string[], repSel:string[], ccSel:string[], 
+    provSel:string[], ispay:number ) => {
+      FilterData(condSel, typSel, catSel, minVal, maxVal, repSel, proSel, 
+        dateini?.getTime(), dateend?.getTime(), ccSel, provSel, ispay);
+  }
+
+  // useEffect (() => {
+  //   FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
+  //     new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcentersSel, providersSel, isPaid);
+  // }, []);
 
   const allArray = [{
     label: 'TODOS',
     value: 'all'
   }];
-
+console.log('is paid => ', isPaid);
   return(
     <>
       <form className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
         style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
-          {/* <HeaderForm img="/img/role.svg" subtitle="Filtra gastos por diferentes caracteristicas" 
-            title="Filtrar gasto"
-          /> */}
           <div className="flex mt-2 items-center">
             {/* <img src={img} alt="logo" className="rounded-full w-14 h-auto" /> */}
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
@@ -170,40 +206,42 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
         </div>
 
         <div className="flex justify-end px-5 items-center">
-          {/* <div className="inline-flex items-center">
-            <Label>Pagado? </Label>
-            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-              <input checked={isPaid} 
-                onChange={() => setIsPaid(!isPaid)} id="switch-3" type="checkbox"
-                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-                  peer-checked:border-green-500 peer-checked:before:bg-green-500
-                  border border-slate-300" />
-              <label htmlFor="switch-3"
-                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                  data-ripple-dark="true"></div>
-              </label>
-            </div>
-          </div> */}
           <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
           <div>
             <div className="inline-flex rounded-md shadow-sm mx-2">
             <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
                         ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
-                onClick={() => setIsPaid(1)}
+                // onClick={() => setIsPaid(1)}
+                onClick={() => {
+                  setIsPaid(1);
+                  filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+                    maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+                    costcentersSel, providersSel, 1);
+                }}
               >
                 Ambos
               </button>
               <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
                         ${isPaid===2? 'bg-green-500 text-white': ''}`}
-                onClick={() => setIsPaid(2)}
+                // onClick={() => setIsPaid(2)}
+                onClick={() => {
+                  setIsPaid(2);
+                  filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+                    maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+                    costcentersSel, providersSel, 2);
+                }}
               >
                 Pagado
               </button>
               <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
                         ${isPaid===3? 'bg-red-500 text-white': ''}`}
-                onClick={() => setIsPaid(3)}
+                // onClick={() => setIsPaid(3)}
+                onClick={() => {
+                  setIsPaid(3);
+                  filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
+                    maxValue, firstDate, secondDate, projectsSel, reportsSel, 
+                    costcentersSel, providersSel, 3);
+                }}
               >
                 No Pagado
               </button>
@@ -248,6 +286,9 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
             step={5}
             minValue={minValue}
             maxValue={maxValue}
+            // onChange={(e) => {
+            //   handleInput(e);
+            // }}
             onInput={(e) => {
               handleInput(e);
             }}
@@ -281,7 +322,11 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
               focus:border-slate-700 outline-0"
             value={values}
             //onChange={setValues}
-            onChange={(e: any) => setValues(e)}
+            // onChange={(e: any) => setValues(e)}
+            onChange={(e: any) => {
+              console.log('handle values => ');
+              handleValues(e)
+            }}
             range
             numberOfMonths={2}
             showOtherDays
