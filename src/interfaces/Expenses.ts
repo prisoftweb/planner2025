@@ -20,15 +20,19 @@ export interface ExpensesTable {
   Fecha: string 
   // Importe: string
   Importe: number
+  ImporteMoneda: string
   condition: string,
   archivos: string[],
   costcenter: string,
   // vat: string,
   vat: number,
+  vatMoneda: string
   // discount: string,
   discount: number,
+  discountMoneda: string
   // total: string
   total: number
+  totalMoneda: string
   taxFolio: string
   color: string
 }

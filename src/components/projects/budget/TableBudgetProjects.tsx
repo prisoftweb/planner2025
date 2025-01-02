@@ -1,13 +1,9 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-//import DeleteElement from "@/components/DeleteElement";
-//import { RemoveProject } from "@/app/api/routeProjects";
-import { ProjectMin, ProjectsBudgetTable } from "@/interfaces/Projects";
-//import CardProject from "../CardProject";
+import { ProjectsBudgetTable } from "@/interfaces/Projects";
 import CardBudgetProject from "./CardBudgetProject";
 import { useState, useEffect } from "react";
-//import Filtering from "../Filtering";
 import Filtering from "./FilteringBudgets";
 import { Options } from "@/interfaces/Common";
 import { ProjectBudgetDataToTableDataMin } from "@/app/functions/SaveProject";
@@ -17,6 +13,7 @@ import { BudgetMin } from "@/interfaces/Budget";
 import { removeBudget } from "@/app/api/routeBudget";
 import { useBudgetStore } from "@/app/store/budgetProject";
 import RemoveElement from "@/components/RemoveElement";
+import { MoneyFormatter } from "@/app/functions/Globals";
 
 export default function TableBudgetProjects({token, budgets, optConditions, isFilter, 
                           setIsFilter, isTable, optProjects}:
@@ -121,7 +118,10 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.amountBudget}</p>
+        >
+          {/* {row.original.amountBudget} */}
+          {MoneyFormatter(row.original.amountBudget)}
+        </p>
       ),
     }),
     columnHelper.accessor('budgeted', {
@@ -130,7 +130,10 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.budgeted}</p>
+        >
+          {/* {row.original.budgeted} */}
+          {MoneyFormatter(row.original.budgeted)}
+        </p>
       ),
     }),
     columnHelper.accessor('pending', {
@@ -139,7 +142,10 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.pending}</p>
+        >
+          {/* {row.original.pending} */}
+          {MoneyFormatter(row.original.pending)}
+        </p>
       ),
     }),
   ]

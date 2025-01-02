@@ -7,6 +7,7 @@ import { Options } from "@/interfaces/Common";
 import CardProject from "../CardProject";
 import Filtering from "../Filtering";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
+import { MoneyFormatter } from "@/app/functions/Globals";
 
 export default function TableProjectsToEstimate({token, optConditions, isFilter, 
                           setIsFilter, isTable, projects, data, optCategories, optTypes}:
@@ -119,7 +120,10 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/estimates/${row.original.id}`)}
-        >{row.original.amount}</p>
+        >
+          {/* {row.original.amount} */}
+          {MoneyFormatter(row.original.amount)}
+        </p>
       ),
     }),
   ]

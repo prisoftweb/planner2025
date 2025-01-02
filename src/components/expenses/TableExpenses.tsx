@@ -14,7 +14,7 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import RemoveElement from "../RemoveElement";
 import {IoMdCopy} from 'react-icons/io';
-import { MoneyFormatter } from "@/app/functions/Globals";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function TableExpenses({data, token, expenses, 
                             handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
@@ -235,7 +235,11 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
         >
           {/* {row.original.Importe} */}
-          {MoneyFormatter(row.original.Importe)}
+          {/* {MoneyFormatter(row.original.Importe)} */}
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.Importe
+          })}
         </p>
       ),
     }),
@@ -250,7 +254,11 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
         >
           {/* {row.original.vat} */}
-          {MoneyFormatter(row.original.vat)}
+          {/* {MoneyFormatter(row.original.vat)} */}
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.vat
+          })}
         </p>
       ),
     }),
@@ -265,7 +273,11 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
         >
           {/* {row.original.discount} */}
-          {MoneyFormatter(row.original.discount)}
+          {/* {MoneyFormatter(row.original.discount)} */}
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.discount
+          })}
         </p>
       ),
     }),
@@ -280,7 +292,11 @@ export default function TableExpenses({data, token, expenses,
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
         >
           {/* {row.original.total} */}
-          {MoneyFormatter(row.original.total)}
+          {/* {MoneyFormatter(row.original.total)} */}
+          {CurrencyFormatter({
+            currency: "MXN",
+            value: row.original.total
+          })}
         </p>
       ),
     }),

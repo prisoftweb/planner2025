@@ -288,6 +288,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
     console.log('pay parse => ', JSON.stringify(expense));
     console.log('expense pay => ', expense.costs.pay);
     let dollar = '0';
+    let d=0;
     if(expense.costs.pay){
       dollar =CurrencyFormatter({
         currency: "MXN",
@@ -295,6 +296,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
         // value: expense.costos.costito || 0
         value: expense.costs.pay[0]?.previousbalanceamount || 0
       });
+      d = expense.costs.pay[0]?.previousbalanceamount || 0;
     }else{
       dollar=CurrencyFormatter({
         currency: "MXN",
@@ -303,7 +305,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
         value: 0
       });
     }
-    
+    let t = expense.costs.pay? expense.costs.pay[0]?.payout : 0 || 0;
     const total = CurrencyFormatter({
       currency: "MXN",
       // value: expense.costs.cost.total || 0
@@ -311,6 +313,7 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       value: expense.costs.pay? expense.costs.pay[0]?.payout : 0 || 0
     })
 
+    const u = expense.costs.pay? expense.costs.pay[0]?.unpaidbalanceamount : 0 || 0;
     const unpaid = CurrencyFormatter({
       currency: "MXN",
       // value: expense.costs.cost.subtotal || 0
@@ -345,10 +348,13 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       paid: expense.costs.ispaid, 
       project: expense.costs.project.title,
       report: expense.costs.report.name,
-      previoudbalanceamount: dollar,
-      payout: total,
+      // previoudbalanceamount: dollar,
+      previoudbalanceamount: d,
+      // payout: total,
+      payout: t,
       partitialnumber: expense.costs.pay? expense.costs.pay[0]?.partialitynumber: 1 || 1,
-      unpaidbalanceamount: unpaid
+      // unpaidbalanceamount: unpaid,
+      unpaidbalanceamount: u
     });
   });
   return table;

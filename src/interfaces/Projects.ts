@@ -30,9 +30,12 @@ export interface ProjectsBudgetTable{
   },
   status: boolean
   segment: string
-  amountBudget:string,
-  pending:string,
-  budgeted: string,
+  // amountBudget:string,
+  // pending:string,
+  // budgeted: string,
+  amountBudget:number,
+  pending:number,
+  budgeted: number,
   color: string  
 }
 

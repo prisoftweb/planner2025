@@ -13,7 +13,7 @@ import Filtering from "./ExpensesFiltered";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-import { MoneyFormatter } from "@/app/functions/Globals";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function TableHistoryExpenses({data, token, expenses, 
                             isFilter, setIsFilter, isViewReports}:
@@ -143,7 +143,11 @@ export default function TableHistoryExpenses({data, token, expenses,
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
             {/* {row.original.Importe} */}
-            {MoneyFormatter(row.original.Importe)}
+            {/* {MoneyFormatter(row.original.Importe)} */}
+            {CurrencyFormatter({
+              currency: 'MXN',
+              value: row.original.Importe
+            })}
           </p>
         </Link>
       ),
@@ -155,7 +159,11 @@ export default function TableHistoryExpenses({data, token, expenses,
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
             {/* {row.original.vat} */}
-            {MoneyFormatter(row.original.vat)}
+            {/* {MoneyFormatter(row.original.vat)} */}
+            {CurrencyFormatter({
+              currency: "MXN",
+              value: row.original.vat
+            })}
           </p>
         </Link>
       ),
@@ -167,7 +175,11 @@ export default function TableHistoryExpenses({data, token, expenses,
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
             {/* {row.original.discount} */}
-            {MoneyFormatter(row.original.discount)}
+            {/* {MoneyFormatter(row.original.discount)} */}
+            {CurrencyFormatter({
+              currency: 'MXN',
+              value: row.original.discount
+            })}
           </p>
         </Link>
       ),
@@ -179,7 +191,11 @@ export default function TableHistoryExpenses({data, token, expenses,
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
             {/* {row.original.total} */}
-            {MoneyFormatter(row.original.total)}
+            {/* {MoneyFormatter(row.original.total)} */}
+            {CurrencyFormatter({
+              currency: 'MXN',
+              value: row.original.total
+            })}
           </p>
         </Link>
       ),

@@ -11,6 +11,7 @@ import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/pr
 import { DetailExpensesTableProvider } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 import { CostPayment } from "@/interfaces/Payments";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function TableCostsDetailProvider({data, token, expenses, 
                           user, isFilter, setIsFilter }:
@@ -141,7 +142,13 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'saldo anterior',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.previoudbalanceamount}</p>
+        >
+          {/* {row.original.previoudbalanceamount} */}
+          {CurrencyFormatter({
+            currency: "MXN",
+            value: row.original.previoudbalanceamount
+          })}
+        </p>
       )
     }),
     columnHelper.accessor('payout', {
@@ -149,7 +156,13 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'pagado',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.payout}</p>
+        >
+          {/* {row.original.payout} */}
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.payout
+          })}
+        </p>
       )
     }),
     columnHelper.accessor('unpaidbalanceamount', {
@@ -157,7 +170,13 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'pendiente',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.unpaidbalanceamount}</p>
+        >
+          {/* {row.original.unpaidbalanceamount} */}
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.unpaidbalanceamount
+          })}
+        </p>
       )
     }),
     columnHelper.accessor('partitialnumber', {

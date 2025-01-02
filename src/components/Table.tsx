@@ -240,7 +240,8 @@ export default function Table({data, columns, placeH, typeTable='',
         }
       }else{
         if(typeTable === 'paymentDetails'){
-          data.map((exp:DetailExpensesTableProvider) => total += Number(exp.payout.replace(/[$, M, X, N,]/g, "")));
+          // data.map((exp:DetailExpensesTableProvider) => total += Number(exp.payout.replace(/[$, M, X, N,]/g, "")));
+          data.map((exp:DetailExpensesTableProvider) => total += exp.payout);
           const t = CurrencyFormatter({
             currency: 'MXN',
             value: total
@@ -248,7 +249,8 @@ export default function Table({data, columns, placeH, typeTable='',
           
           if(table.getSelectedRowModel().flatRows.length > 0){
             let totalSeleccionados: number = 0;
-            table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.payout.replace(/[$, M, X, N,]/g, "")));
+            // table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += Number(exp.original.payout.replace(/[$, M, X, N,]/g, "")));
+            table.getSelectedRowModel().flatRows.map((exp:any) => totalSeleccionados += exp.original.payout);
             // table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp.original.payout, ' type ', typeof(exp.original.payout)));
             const tSeleccionados = CurrencyFormatter({
               currency: 'MXN',

@@ -168,29 +168,16 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
     }
     //p='0%';
     //La moneda mexicana lleva el mx antes del $
-    // const dollar = CurrencyFormatter({
-    //   currency: "MXN",
-    //   //value: budget.amount
-    //   value: budget.pending
-    // })
     const dollar = MoneyFormatter(budget.pending);
 
-    // const amountBudget = CurrencyFormatter({
-    //   currency: "MXN",
-    //   value: budget.amount
-    // });
-    const amountBudget = MoneyFormatter(budget.amount);
+    // const amountBudget = MoneyFormatter(budget.amount);
 
-    // const budgeted = CurrencyFormatter({
-    //   currency: "MXN",
-    //   //value: budget.amount
-    //   value: budget.budgeted
-    // });
-    const budgeted = MoneyFormatter(budget.budgeted);
+    // const budgeted = MoneyFormatter(budget.budgeted);
     
     table.push({
       //amount: budget.amount.toString(),
-      pending: dollar,
+      // pending: dollar,
+      pending: budget.pending,
       id: budget._id,
       project: {
         budget: budget.title,
@@ -199,11 +186,13 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
       status: budget.status,
       //condition: cond,
       percentage: p,
-      amountBudget: amountBudget,
+      // amountBudget: amountBudget,
+      amountBudget: budget.amount,
       //segment: budget.category?.name
       segment: budget.lastmove.condition.name,
       color: budget.lastmove.condition.color,
-      budgeted
+      // budgeted
+      budgeted: budget.budgeted
     })
   });
 

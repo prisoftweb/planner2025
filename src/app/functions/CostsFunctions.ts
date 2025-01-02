@@ -93,6 +93,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       costcenter: expense.costocenter.concept.name,
       // Importe: dollar,
       Importe: expense.cost?.subtotal || 0,
+      ImporteMoneda: dollar,
       Informe: expense.report?.name || 'sin reporte',
       Proveedor: expense.provider? expense.provider.name: 'sin proveedor',
       Proyecto: expense.project?.title || 'sin proyecto',
@@ -105,10 +106,13 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       archivos: elements,
       // vat,
       vat: expense.cost?.iva || 0,
+      vatMoneda: vat,
       // discount,
       discount: expense.cost?.discount || 0,
+      discountMoneda: discount,
       // total,
       total: expense.cost?.total || 0,
+      totalMoneda: total,
       taxFolio: expense.taxfolio || '',
       color: expense.estatus.color || 'gray'
     });

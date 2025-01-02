@@ -95,7 +95,8 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
 
   let totalAllCosts = 0;
   costs.map((c) => {
-    totalAllCosts += Number(c.payout.replace(/[$,",", M, X]/g, ""));
+    // totalAllCosts += Number(c.payout.replace(/[$,",", M, X]/g, ""));
+    totalAllCosts += c.payout;
   });
   
   return(
@@ -188,11 +189,23 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
               {/* <View style={[style.element, {flex: 3}]}><Text>{cost.report }</Text></View> */}
               <View style={[style.element, {flex: 7}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.date.substring(0, 10)}</Text></View>
-              <View style={[style.element, {flex: 3}]}>
+              {/* <View style={[style.element, {flex: 3}]}>
                 <Text>{cost.previoudbalanceamount}</Text>
               </View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.payout}</Text></View>
-              <View style={[style.element, {flex: 3}]}><Text>{cost.unpaidbalanceamount}</Text></View>
+              <View style={[style.element, {flex: 3}]}><Text>{cost.unpaidbalanceamount}</Text></View> */}
+              <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
+                currency: 'MXN',
+                value: cost.previoudbalanceamount
+              })}</Text></View>
+              <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
+                currency: 'MXN',
+                value: cost.payout
+              })}</Text></View>
+              <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
+                currency: 'MXN',
+                value: cost.unpaidbalanceamount
+              })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text>{cost.partitialnumber}</Text></View>
             </View>
           ) )}
