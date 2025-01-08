@@ -8,8 +8,9 @@ import { Provider } from "@/interfaces/Providers";
 import TableListExpensesPaid from "./TableListsExpensesPaid";
 import PaidExpensesHistory from "./PaidExpensesHistory";
 import { Options } from "@/interfaces/Common";
-import { CostInPayment } from "@/interfaces/Payments";
+// import { CostInPayment } from "@/interfaces/Payments";
 import { CostsPaymentTable } from "@/interfaces/Providers";
+import PaymentPlugin from "./PaymentPlugin";
 
 export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
     updateTable, condition, optTypes}: 
@@ -20,6 +21,23 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   const [indexStepper, setIndexStepper] = useState<number>(0);
 
   const [costsInPayment, setCostInPayment] = useState<CostsPaymentTable[]>([]);
+
+  const [paymentPlugin, setPaymentPlugin] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const [comments, setComments] = useState<string>('');
+
+  const handlePaymentPlugin = (value:string) => {
+    console.log('handle payment plugin => ', value);
+    setPaymentPlugin(value);
+  }
+
+  const handleDate = (value:string) => {
+    setDate(value);
+  }
+
+  const handleComments = (value:string) => {
+    setComments(value);
+  }
 
   useEffect(() => {
     const aux: CostsPaymentTable[] = [];
@@ -94,10 +112,13 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   });
 
   let viewComponent = indexStepper===1? 
-      <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
+      <PaymentPlugin comments={comments} date={date} nextStep={handleIndexStepper} paymentPlugin={paymentPlugin} 
+        setComments={handleComments} setDate={handleDate} setPaymentPlugin={handlePaymentPlugin} />:
+      (indexStepper==2? <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
           user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} 
-          optTypes={optTypes} costsPayment={costsInPayment} />:
-      <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />;
+          commentsPayment={comments} datePayment={date} paymentPlugin={paymentPlugin} 
+          optTypes={optTypes} costsPayment={costsInPayment} />: 
+        <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />);
   
   return(
     <>

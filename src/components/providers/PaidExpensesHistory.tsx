@@ -14,15 +14,19 @@ import SelectReact from "../SelectReact";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 
 export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
-  minDate, showForm, updateTable, condition, optTypes, costsPayment}: 
+  minDate, showForm, updateTable, condition, optTypes, costsPayment, commentsPayment, 
+  datePayment, paymentPlugin}: 
           {token:string, id:string, user:string, costs: string[], condition: string, 
             minDate:string, maxDate: string, showForm: Function, updateTable: Function, 
-            optTypes: Options[], costsPayment: CostsPaymentTable[]}) {
+            optTypes: Options[], costsPayment: CostsPaymentTable[], paymentPlugin:string, 
+            datePayment:string, commentsPayment:string}) {
 
   let a = 0;
   costsPayment.map((c) => {
     a += c.paid;
   });
+
+  // console.log('Payment plugin recivido => ', paymentPlugin);
               
   const [amount, setAmount] = useState<string>(a.toString());
   const [reference, setReference] = useState<string>('');
@@ -100,6 +104,14 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
     console.log('res pen => ', pen);
 
+    console.log('payment plugin => ', paymentPlugin);
+
+    const paymentplugin = {
+      amount: Number(paymentPlugin.replace(/[$,","]/g, "")),
+      date: datePayment,
+      notes: commentsPayment
+    }
+
     const arrCosts: CostInPayment[] = [];
     console.log('costs payment => ', costsPayment);
     // costs.map((c, index: number) => {
@@ -164,6 +176,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         user
       }]));
       data.append("methodofpayment", paidMethod);
+      data.append("paymentplugin", JSON.stringify(paymentplugin));
       // acceptedFiles.map((f) => {
       //   data.append("voucher", f);
       // })
@@ -208,7 +221,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
             glossary: "67378f77d846bbd16e1a8714",
             user                    
         }],
-        methodofpayment: paidMethod
+        methodofpayment: paidMethod,
+        paymentplugin
       }
 
       console.log('data payment => ', JSON.stringify(data));

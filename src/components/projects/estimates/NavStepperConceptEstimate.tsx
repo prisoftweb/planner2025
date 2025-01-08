@@ -1,5 +1,5 @@
 
-export default function NavStepperPaidExpenses({index, changeTab}: {index:number, changeTab: Function}){
+export default function NavStepperConceptEstimate({index, changeTab}: {index:number, changeTab: Function}){
   
   return(
     <>
@@ -17,7 +17,7 @@ export default function NavStepperPaidExpenses({index, changeTab}: {index:number
             </span>
 
             <p className="leading-none">
-              <strong className="block font-medium"> Lista de facturas </strong>
+              <strong className="block font-medium"> Concepto </strong>
             </p>
           </li>
 
@@ -31,7 +31,7 @@ export default function NavStepperPaidExpenses({index, changeTab}: {index:number
               </span>
 
               <p className="leading-none">
-                <strong className="block font-medium"> Complemento </strong>
+                <strong className="block font-medium"> Precios unitarios </strong>
               </p>
             </div>
           </li>
@@ -46,7 +46,7 @@ export default function NavStepperPaidExpenses({index, changeTab}: {index:number
               </span>
 
               <p className="leading-none">
-                <strong className="block font-medium"> Datos de pago </strong>
+                <strong className="block font-medium"> Datos </strong>
               </p>
             </div>
           </li>

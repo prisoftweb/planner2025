@@ -15,8 +15,9 @@ import { getConeptsEstimate } from "@/app/api/routeEstimates";
 import AddNewConceptEstimate from "./AddNewConceptEstimate";
 import { Options } from "@/interfaces/Common";
 
-export default function ContainerDetailEstimate({project, token, user, estimate, concepts}: 
-  {project: OneProjectMin, token: string, user: string, estimate:IEstimate, concepts:IConceptEstimate[]}) {
+export default function ContainerDetailEstimate({project, token, user, estimate, concepts, idEstimate}: 
+  {project: OneProjectMin, token: string, user: string, estimate:IEstimate, 
+    concepts:IConceptEstimate[], idEstimate:string}) {
 
   const [openNewConcept, setOpenNewConcept] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -155,7 +156,8 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} handleFilterTable={handleFilterTable} 
         isFilterTable={isfilterTable} project={project} token={token} />
       {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
-                            updateConcepts={updateConceptsEstimate} user={user} conceptsLV={conceptsLV} />}
+                            updateConcepts={updateConceptsEstimate} user={user} conceptSLV={conceptsLV}
+                            idEstimate={idEstimate} />}
       {/* {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
       updateEstimates={updateEstimatesProject} token={token} />} */}
     </>

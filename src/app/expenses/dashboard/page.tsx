@@ -116,7 +116,8 @@ export default async function Page() {
           costsConcepts={optConcepts} costsDays={optDays} projects={[{
             label: 'TODOS',
             value: 'TODOS'
-          }].concat(projects)} costsResumen={costsResumen} costsResumenType={costsResumenType} />
+          }].concat(projects)} costsResumen={costsResumen} costsResumenType={costsResumenType}
+          costsCat={costsCategory} costsCon={costsConcept} />
       {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <StatisticsHeader />
         <div className="mt-5 grid grid-cols-2 gap-x-5">

@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: { idp: string, ide:stri
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerDetailEstimate estimate={estimate} project={project} token={token} user={user._id} 
-          concepts={concepts} />
+          concepts={concepts} idEstimate={params.ide} />
         {/* <ContainerStimationsProject project={project} optConditions={optConditions} optProjects={[{
             label: 'Todos',
             value: 'all'

@@ -1,6 +1,5 @@
 import ProfileReport from "./ProfileReport"
 import UpdateReport from "./UpdateReport"
-import { Options } from "@/interfaces/Common"
 import { Report, DateReport } from "@/interfaces/Reports"
 import { useState, useRef } from "react"
 import SendReport from "./SendReport"
@@ -16,12 +15,12 @@ export default function DataReports({token, report, user, node, id, dates}:
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
 
-  const {oneReport} = useOneReportStore();
+  // const {oneReport} = useOneReportStore();
   //const [isClose, setIsClose] = useState<boolean>(false);
 
   const handleSend = (value: boolean, valueClose: boolean) => {
     refClose.current = valueClose;
-    console.log('handle send close ', valueClose);
+    // console.log('handle send close ', valueClose);
     setIsSend(value);
     //setIsClose(valueClose);
   }

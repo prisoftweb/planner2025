@@ -10,9 +10,9 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
   const dateIni = dates[0]?.minDate? new Date(dates[0].minDate): new Date();
   const dateEnd = dates[0]?.maxDate? new Date(dates[0].maxDate): new Date();
 
-  console.log('dates anexo => ', dates);
-  console.log('date i => ', dateIni);
-  console.log('date f => ', dateEnd);
+  // console.log('dates anexo => ', dates);
+  // console.log('date i => ', dateIni);
+  // console.log('date f => ', dateEnd);
 
   const bandMonth = dateIni.getMonth() === dateEnd.getMonth()
 

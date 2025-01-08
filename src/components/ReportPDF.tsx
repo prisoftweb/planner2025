@@ -82,7 +82,7 @@ export default function ReportPDF({report, costs}:
       backgroundColor: '#056FBA',
       color: 'white',
       padding: '3px',
-      width: '60px',
+      width: '150px',
     }
   })
 
@@ -105,21 +105,32 @@ export default function ReportPDF({report, costs}:
             <Text style={style.textLeft}>Numero de informe:</Text>
             <Text style={style.textRight}>{report.account}</Text>
           </View>
-          <View style={style.inLineText}>
+          {/* <View style={style.inLineText}>
             <Text style={style.textLeft}>Id. del informe:</Text>
             <Text style={style.textRight}>{report._id}</Text>
+          </View> */}
+          <View style={style.inLineText}>
+            <Text style={style.textLeft}>Importe del informe:</Text>
+            <Text style={style.textRight}>{CurrencyFormatter({
+              currency: 'MXN',
+              value: totalAllCosts
+            })}</Text>
           </View>
           <View style={style.inLineText}>
             <Text style={style.textLeft}>Nombre del empleado:</Text>
             <Text style={style.textRight}>{report.user.name}</Text>
           </View>
           <View style={style.inLineText}>
-            <Text style={style.textLeft}>Fecha del informe:</Text>
+            <Text style={style.textLeft}>Fecha de creacion:</Text>
+            <Text style={style.textRight}>{report.date.substring(0, 10)}</Text>
+          </View>
+          <View style={style.inLineText}>
+            <Text style={style.textLeft}>Fecha:</Text>
             <Text style={style.textRight}>{report.date.substring(0, 10)}</Text>
           </View>
           <View style={style.inLineText}>
             <Text style={style.textLeft}>Estado del informe: </Text>
-            <View style={[style.textRight, style.chip]}>
+            <View style={[{ textAlign: 'center', margin: '2px', }, style.chip]}>
               <Text>{report.moves[report.moves.length -1].condition.name}</Text>
             </View>
           </View>
@@ -139,41 +150,43 @@ export default function ReportPDF({report, costs}:
         
         <View style={style.containerTable}>
           <View style={style.table}>
-            <View style={[style.header, {flex: 1}]}><Text>PROYECTO</Text></View>
-            <View style={[style.header, {flex: 2}]}><Text>CENTRO DE COSTO</Text></View>
-            <View style={[style.header, {flex: 2}]}><Text>PROVEEDOR</Text></View>
-            <View style={[style.header, {flex: 3}]}><Text>DESCRIPCION</Text></View>
-            <View style={[style.header, {flex: 1}]}><Text>TOTAL</Text></View>
-            <View style={[style.header, {flex: 1}]}><Text>FECHA</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>#</Text></View>
+            <View style={[style.header, {flex: 3}]}><Text>PROYECTO</Text></View>
+            <View style={[style.header, {flex: 4}]}><Text>CENTRO DE COSTO</Text></View>
+            <View style={[style.header, {flex: 4}]}><Text>PROVEEDOR</Text></View>
+            <View style={[style.header, {flex: 5}]}><Text>DESCRIPCION</Text></View>
+            <View style={[style.header, {flex: 3}]}><Text>TOTAL</Text></View>
+            <View style={[style.header, {flex: 3}]}><Text>FECHA</Text></View>
           </View>
-          {costs.map((cost) => (
+          {costs.map((cost, index:number) => (
             <View style={style.table} key={cost._id}>
-              <View style={[style.element, {flex: 1}]}><Text>{cost.project?.title}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{index + 1}</Text></View>
+              <View style={[style.element, {flex: 3}]}><Text>{cost.project?.title}</Text></View>
               {/* <View style={[style.element, {flex: 2}]}><Text>{cost.costcenter? (typeof(cost.costcenter)==='string'? cost.costcenter: cost.costcenter.name): 'Sin centro de costos'}</Text></View>
               <View style={[style.element, {flex: 2}]}><Text>{cost.provider?.name || 'NA'}</Text></View> */}
-              <View style={[style.element, {flex: 2}]}><Text>{cost.costocenter.concept.name + ' ( ' + cost.costocenter.category + ' )' }</Text></View>
-              <View style={[style.element, {flex: 2}]}><Text>{cost.provider.name}</Text></View>
-              <View style={[style.element, {flex: 3}]}><Text>{cost.description}</Text></View>
-              <View style={[style.element, {flex: 1}]}>
+              <View style={[style.element, {flex: 4}]}><Text>{cost.costocenter.concept.name + ' ( ' + cost.costocenter.category + ' )' }</Text></View>
+              <View style={[style.element, {flex: 4}]}><Text>{cost.provider.name}</Text></View>
+              <View style={[style.element, {flex: 5}]}><Text>{cost.description}</Text></View>
+              <View style={[style.element, {flex: 3}]}>
                 <Text>{CurrencyFormatter({
                     currency: 'MXN',
                     value: (cost.costo.total) || 0
                     //value: cost.total
                   })}</Text>
               </View>
-              <View style={[style.element, {flex: 1}]}><Text>{cost.date.substring(0, 10)}</Text></View>
+              <View style={[style.element, {flex: 3}]}><Text>{cost.date.substring(0, 10)}</Text></View>
             </View>
           ) )}
         </View>
-
+{/**
         <View style={[style.inLineText, {marginLeft: '30px', marginTop: '10px'}]}>
           <Text style={{textDecoration: 'underline'}}>Importe del informe :</Text>
           <Text style={{textDecoration: 'underline'}}>{CurrencyFormatter({
               currency: 'MXN',
-              // value: report.total
               value: totalAllCosts
             })}</Text>
         </View>
+ */}
       </Page>
     </Document>
   )

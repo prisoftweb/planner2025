@@ -14,16 +14,20 @@ interface OptionsDashboard {
 }
 
 export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, 
-            projects, costsResumen, costsResumenType}:
+            projects, costsResumen, costsResumenType, costsCat, costsCon}:
           {token: string, costsConcepts: OptionsDashboard[], costsCategories: OptionsDashboard[], 
             costsDays: OptionsDashboard[], projects:Options[], costsResumen:CostsGroupByResumen[], 
-            costsResumenType:CostsGroupResumenByType[] }) {
+            costsResumenType:CostsGroupResumenByType[], costsCat: CostsByConceptAndCategory[], 
+            costsCon: CostsByConceptAndCategory[]}) {
   
   const [costsByConcept, setCostsByConcept] = useState<OptionsDashboard[]>(costsConcepts);
   const [costsByCategory, setCostsByCategory] = useState<OptionsDashboard[]>(costsCategories);
   const [costsByDay, setCostsByDay] = useState<OptionsDashboard[]>(costsDays);
   const [costsByResumen, setCostsByResumen] = useState<CostsGroupByResumen[]>(costsResumen);
   const [costsByResumenType, setCostsByResumenType] = useState<CostsGroupResumenByType[]>(costsResumenType)
+
+  const [dataCostsCategory, setDataCostsCategory ] = useState<CostsByConceptAndCategory[]>(costsCat);
+  const [dataCostsConcept, setDataCostsConcept ] = useState<CostsByConceptAndCategory[]>(costsCon);
 
   const fetchData = async (dateS: string, dateE: string, project:string) => {
     let costsCategory: CostsByConceptAndCategory[] = [];
@@ -37,6 +41,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
       return <h1>Error al obtener costos agrupados por categoria!!!</h1>
     }
 
+    setDataCostsCategory(costsCategory);
+
     let costsConcept: CostsByConceptAndCategory[] = [];
     try {
       costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project);
@@ -46,6 +52,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     } catch (error) {
       return <h1>Error al obtener costos agrupados por concepto!!!</h1>
     }
+
+    setDataCostsConcept(costsConcept);
 
     let costsDays: CostsByDay[] = [];
     try {
@@ -132,7 +140,7 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
-        costsResumenType={costsByResumenType} />
+        costsResumenType={costsByResumenType} dataCostsCatagory={dataCostsCategory} dataCostsConcept={dataCostsConcept} />
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5">
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">

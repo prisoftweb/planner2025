@@ -22,17 +22,17 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
   // const [order, setOrder] = useState<string>('');
   // const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const [cost, setCost] = useState<number>(0);
-  const [unity, setUnity] = useState<string>('');
+  // const [name, setName] = useState<string>('');
+  // const [cost, setCost] = useState<number>(0);
+  // const [unity, setUnity] = useState<string>('');
 
   // const [bandName, setBandName] = useState<boolean>(false);
   // const [bandAmount, setBandAmount] = useState<boolean>(false);
   const [bandDescription, setBandDescription] = useState<boolean>(false);
   const [bandCode, setBandCode] = useState<boolean>(false);
-  const [bandName, setBandName] = useState<boolean>(false);
-  const [bandUnity, setBandUnity] = useState<boolean>(false);
-  const [bandCost, setBandCost] = useState<boolean>(false);
+  // const [bandName, setBandName] = useState<boolean>(false);
+  // const [bandUnity, setBandUnity] = useState<boolean>(false);
+  // const [bandCost, setBandCost] = useState<boolean>(false);
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -64,24 +64,24 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
     }else{
       setBandCode(false);
     }
-    if(!name || name===''){
-      setBandName(true);
-      validation = false;
-    }else{
-      setBandName(false);
-    }
-    if(!unity || unity===''){
-      setBandUnity(true);
-      validation = false;
-    }else{
-      setBandUnity(false);
-    }
-    if(!cost || cost<=0){
-      setBandCost(true);
-      validation = false;
-    }else{
-      setBandCost(false);
-    }
+    // if(!name || name===''){
+    //   setBandName(true);
+    //   validation = false;
+    // }else{
+    //   setBandName(false);
+    // }
+    // if(!unity || unity===''){
+    //   setBandUnity(true);
+    //   validation = false;
+    // }else{
+    //   setBandUnity(false);
+    // }
+    // if(!cost || cost<=0){
+    //   setBandCost(true);
+    //   validation = false;
+    // }else{
+    //   setBandCost(false);
+    // }
     if(!description || description===''){
       setBandDescription(true);
       validation = false;
@@ -98,9 +98,9 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
       const data = {
         code,
         description,
-        name,
-        cost,
-        unity
+        // name,
+        // cost,
+        // unity
       }
       try {
         const res = await createConceptEstimate(token, data);
@@ -139,7 +139,7 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
             <p className="text-red-500">La clave es obligatoria!!!</p>
           )}
         </div>
-        <div className="">
+        {/* <div className="">
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input type="text" name="name"
             value={name}
@@ -148,8 +148,8 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
           {bandName && (
             <p className="text-red-500">El nombre es obligatorio!!!</p>
           )}
-        </div>
-        <div className="grid grid-cols-2 gap-x-2">
+        </div> */}
+        {/* <div className="grid grid-cols-2 gap-x-2">
           <div className="">
             <Label htmlFor="unity"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
             <Input type="text" name="unity" 
@@ -182,7 +182,7 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
               <p className="text-red-500">El precio unitario es obligatorio!!!</p>
             )}
           </div>
-        </div>
+        </div> */}
         <div>
           <Label htmlFor="descripcion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <TextArea value={description} onChange={(e) => setDescription(e.target.value)}></TextArea>

@@ -1,52 +1,92 @@
 'use client'
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import Button from "@/components/Button"
-import Input from "@/components/Input"
-import Label from "@/components/Label"
-import TextArea from "@/components/TextArea"
+// import Button from "@/components/Button"
+// import Input from "@/components/Input"
+// import Label from "@/components/Label"
+// import TextArea from "@/components/TextArea"
 import HeaderForm from "@/components/HeaderForm"
 import Chip from "@/components/providers/Chip"
 import { OneProjectMin } from "@/interfaces/Projects"
-import { CurrencyFormatter } from "@/app/functions/Globals"
+// import { CurrencyFormatter } from "@/app/functions/Globals"
 import { ProgressBarComponent } from "../dashboard/ProgressBarComponent"
 import { useState, useEffect } from "react"
-import CurrencyInput from "react-currency-input-field"
-import { createConceptEstimate } from "@/app/api/routeEstimates"
-import { showToastMessage, showToastMessageError } from "@/components/Alert"
+// import CurrencyInput from "react-currency-input-field"
+// import { createConceptEstimate } from "@/app/api/routeEstimates"
+// import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { Options } from "@/interfaces/Common"
-import SelectReact from "@/components/SelectReact"
-import {PlusCircleIcon} from "@heroicons/react/24/solid"
-import FormNewConcept from "./FormNewConcept"
+// import SelectReact from "@/components/SelectReact"
+// import {PlusCircleIcon} from "@heroicons/react/24/solid"
+// import FormNewConcept from "./FormNewConcept"
+import NavStepperConceptEstimate from "./NavStepperConceptEstimate"
+import ConceptStepperComponent from "./ConceptStepperComponent"
+import PriceUnityStepper from "./PriceUnityStepper"
+import DataStepperComponent from "./DataStepperComponent"
+import { getConeptsEstimate } from "@/app/api/routeEstimates"
+import { IConceptEstimate } from "@/interfaces/Estimate"
 
-export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, conceptsLV}: 
+export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
+    conceptSLV, idEstimate}: 
   {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
-    conceptsLV:Options[]}) {
+    conceptSLV:Options[], idEstimate:string}) {
   // const refRequest = useRef(true);
 
-  const [idConcept, setIdConcept] = useState<string>(conceptsLV[0].value);
-  // const [name, setName] = useState<string>('');
+  const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
+  const [idPrice, setIdPrice] = useState<string>(conceptSLV[0].value);
   const [area, setArea] = useState<string>('');
   const [section, setSection] = useState<string>('');
-  const [quantity, setQuantity] = useState<number>(0);
-  const [pu, setPu] = useState<number>(0);
+  const [quantity, setQuantity] = useState<string>('0');
+  const [pu, setPu] = useState<string>('0');
   const [code, setCode] = useState<string>('');
-  // const [startDate, setStartDate] = useState<string>('');
-  // const [order, setOrder] = useState<string>('');
-  const [amount, setAmount] = useState<number>(0);
+  const [date, setDate] = useState<string>('');
+  const [amount, setAmount] = useState<string>('0');
   const [description, setDescription] = useState<string>('');
+  const [unity, setUnity] = useState<string>('');
+  const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV)
 
-  // const [bandName, setBandName] = useState<boolean>(false);
-  const [bandAmount, setBandAmount] = useState<boolean>(false);
-  const [bandDescription, setBandDescription] = useState<boolean>(false);
-  const [bandArea, setBandArea] = useState<boolean>(false);
-  const [bandSection, setBandSection] = useState<boolean>(false);
-  const [bandQuantity, setBandQuantity] = useState<boolean>(false);
-  const [bandPu, setBandPu] = useState<boolean>(false);
-  const [bandCode, setBandCode] = useState<boolean>(false);
-
-  const [showNewConcept, setShowNewConcept] = useState<boolean>(false);
   const [heightPage, setHeightPage] = useState<number>(900);
   // const refRequest = useRef(true);
+  const [indexStepper, setIndexStepper] = useState<number>(0);
+
+  const handleIndexStepper = (value:number) => {
+    setIndexStepper(value);
+  }
+
+  const handleArea = (value:string) => {
+    setArea(value);
+  }
+
+  const handleSection = (value:string) => {
+    setSection(value);
+  }
+
+  const handleQuantity = (value:string) => {
+    setQuantity(value);
+  }
+
+  const handlePU = (value:string) => {
+    setPu(value);
+  }
+
+  const handleCode = (value:string) => {
+    setCode(value);
+  }
+
+  const handleDate = (value:string) => {
+    setDate(value);
+  }
+
+  const handleAmount = (value:string) => {
+    setAmount(value);
+  }
+
+  const handleDescription = (value:string) => {
+    setDescription(value);
+  }
+
+  const handleUnity = (value:string) => {
+    console.log('unity value => ', value);
+    setUnity(value);
+  }
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -84,87 +124,117 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   //   setAmountPay(total);
   // }
 
-  const validationData = () =>{
-    let validation = true;
-    if(!code || code===''){
-      setBandCode(true);
-      validation = false;
-    }else{
-      setBandCode(false);
-    }
-    if(!area || area===''){
-      setBandArea(true);
-      validation = false;
-    }else{
-      setBandArea(false);
-    }
-    if(!section || section===''){
-      setBandSection(true);
-      validation = false;
-    }else{
-      setBandSection(false);
-    }
-    if(!quantity || quantity<=0){
-      setBandQuantity(true);
-      validation = false;
-    }else{
-      setBandQuantity(false);
-    }
-    if(!pu || pu<=0){
-      setBandPu(true);
-      validation = false;
-    }else{
-      setBandPu(false);
-    }
-    if(!amount || amount<=0){
-      setBandAmount(true);
-      validation = false;
-    }else{
-      setBandAmount(false);
-    }
-    if(!description || description===''){
-      setBandDescription(true);
-      validation = false;
-    }else{
-      setBandDescription(false);
-    }
-    return validation;
-  }
+  // const validationData = () =>{
+  //   let validation = true;
+  //   if(!code || code===''){
+  //     setBandCode(true);
+  //     validation = false;
+  //   }else{
+  //     setBandCode(false);
+  //   }
+  //   if(!area || area===''){
+  //     setBandArea(true);
+  //     validation = false;
+  //   }else{
+  //     setBandArea(false);
+  //   }
+  //   if(!section || section===''){
+  //     setBandSection(true);
+  //     validation = false;
+  //   }else{
+  //     setBandSection(false);
+  //   }
+  //   if(!quantity || quantity<=0){
+  //     setBandQuantity(true);
+  //     validation = false;
+  //   }else{
+  //     setBandQuantity(false);
+  //   }
+  //   if(!pu || pu<=0){
+  //     setBandPu(true);
+  //     validation = false;
+  //   }else{
+  //     setBandPu(false);
+  //   }
+  //   if(!amount || amount<=0){
+  //     setBandAmount(true);
+  //     validation = false;
+  //   }else{
+  //     setBandAmount(false);
+  //   }
+  //   if(!description || description===''){
+  //     setBandDescription(true);
+  //     validation = false;
+  //   }else{
+  //     setBandDescription(false);
+  //   }
+  //   return validation;
+  // }
 
-  const saveEstimate = async () => {
-    const val = validationData();
+  // const saveEstimate = async () => {
+  //   const val = validationData();
 
-    if(val){
-      const data = {
-        // name,
-        description,
-        company: "65d3813c74045152c0c4377e",
-        project: project._id,
-        user
-      }
+  //   if(val){
+  //     const data = {
+  //       // name,
+  //       description,
+  //       company: "65d3813c74045152c0c4377e",
+  //       project: project._id,
+  //       user
+  //     }
 
-      // const res = await createConceptEstimate(token, data);
-      // if(typeof(res)==='string'){
-      //   showToastMessageError(res);
-      // }else{
-      //   updateEstimates();
-      //   showForm(false);
-      // }
-    }
-  }
+  //     // const res = await createConceptEstimate(token, data);
+  //     // if(typeof(res)==='string'){
+  //     //   showToastMessageError(res);
+  //     // }else{
+  //     //   updateEstimates();
+  //     //   showForm(false);
+  //     // }
+  //   }
+  // }
 
   const handleConceptID = (value: string) => {
     setIdConcept(value);
   }
 
-  const handleShowNewConcept = (value:boolean) => {
-    setShowNewConcept(value);
+  const handlePriceId = (value: string) => {
+    setIdPrice(value);
   }
 
-  const handleAddNewConcept = (value: Options) => {
-
+  const handleAddNewConcept = async (value: Options) => {
+    let concepts: IConceptEstimate[];
+    try {
+      concepts = await getConeptsEstimate(token, idEstimate);
+      // console.log('concepts min => ', concepts);
+      if(typeof(concepts) === "string")
+        return <h1 className="text-center text-red-500">{concepts}</h1>
+    } catch (error) {
+      return <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos de la estimacion!!</h1>  
+    }
+    
+    const contsLV: Options[] = [];
+    concepts.map((c) => {
+      contsLV.push({
+        label: c.name,
+        value: c._id
+      });
+    });
+    setConceptLV(contsLV);
   }
+console.log('index stepper => ', indexStepper);
+  let viewComponent = indexStepper===1? 
+        <PriceUnityStepper amount={amount} code={code} conceptID={idConcept} conceptsLV={conceptsLV} 
+          date={date} description={description} handlePriceId={handlePriceId} nextStep={handleIndexStepper} 
+          setAmount={handleAmount} setDate={handleDate} setUnity={handleUnity} token={token} unity={unity} />:
+        (indexStepper===2? <DataStepperComponent amount={amount} area={area} code={code} conceptID={idConcept} 
+            conceptsLV={conceptsLV} date={date} description={description} handlePriceId={handlePriceId} pu={pu}
+            quantity={quantity} section={section} setArea={handleArea} setPU={handlePU} setQuantity={handleQuantity} 
+            setSection={handleSection} token={token} unity={unity} previousStep={handleIndexStepper} /> : 
+          <ConceptStepperComponent code={code} conceptsLV={conceptsLV} description={description} 
+            handleConceptID={handleConceptID} nextStep={handleIndexStepper} setCode={handleCode} 
+            setDescription={handleDescription} token={token} handleAddNewConcept={handleAddNewConcept} />);
   
+            // let viewComponent = <></>;
   return(
     <>
       <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
@@ -198,7 +268,9 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
               <div>
                 <p className=" text-sm">Estimacion total</p>
                 <ProgressBarComponent label={''} progress={79} 
-                  widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
+                  widthBar="w-full"
+                  color={colorsRandom[1]} hei="h-5" /> 
+                  {/* color={colorsRandom[c1]} hei="h-5" /> */}
               </div>
             </div>
             <div>
@@ -207,153 +279,13 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
           </div>
         </div>
 
-        <div className="flex gap-x-2">
-          <div className="p-2 w-2/3">
-            <div>
-              <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Concepto</p></Label>
-              {/* <SelectReact opts={conceptsLV} index={0} setValue={handleConceptID} /> */}
-              <div className="flex gap-x-2 items-center">
-                <SelectReact opts={conceptsLV} index={0} setValue={handleConceptID} />
-                <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-                onClick={() => setShowNewConcept(true)} />
-              </div>
-            </div>
-            <div className="grid grid-cols-3 gap-x-1">
-              <div className="">
-                <Label htmlFor="clave"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Clave</p></Label>
-                <Input type="text" name="clave" autoFocus 
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                />
-                {bandCode && (
-                  <p className="text-red-500">La clave es obligatoria!!!</p>
-                )}
-              </div>
-              {/* <div className="">
-                <Label htmlFor="unidad"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
-                <Input type="text" name="unidad" 
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-                {bandName && (
-                  <p className="text-red-500">La unidad es obligatoria!!!</p>
-                )}
-              </div> */}
-              {/* <div>
-                <Label htmlFor="costo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Costo</p></Label>
-                <CurrencyInput
-                  id="costo"
-                  name="costo"
-                  className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                    focus:border-slate-700 outline-0"
-                  // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-                  // value={formik.values.amount.replace(/[$,]/g, "")}
-                  value={amount}
-                  decimalsLimit={2}
-                  prefix="$"
-                  onValueChange={(value) => {try {
-                    setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
-                    // updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
-                  } catch (error) {
-                    setAmount(0);
-                    // updateValues(0);
-                  }}}
-                />
-                {bandAmount && (
-                  <p className="text-red-500">El precio unitario es obligatorio!!!</p>
-                )}
-              </div> */}
-            </div>
-            <div>
-              <Label htmlFor="descripcion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
-              <TextArea value={description} onChange={(e) => setDescription(e.target.value)}></TextArea>
-              {bandDescription && (
-                <p className="text-red-500">La descripcion es obligatoria!!!</p>
-              )}
-            </div>
-          </div>
-          <div className="p-2 w-1/3">
-            <Label htmlFor="area"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Area</p></Label>
-            <Input type="text" name="area" 
-              value={area}
-              onChange={(e) => setArea(e.target.value)}
-            />
-            {bandArea && (
-              <p className="text-red-500">El area es obligatoria!!!</p>
-            )}
-
-            <Label htmlFor="section"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Seccion</p></Label>
-            <Input type="text" name="section" 
-              value={section}
-              onChange={(e) => setSection(e.target.value)}
-            />
-            {bandSection && (
-              <p className="text-red-500">La seccion es obligatoria!!!</p>
-            )}
-
-            <Label htmlFor="cantidad"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cantidad</p></Label>
-            <Input type="text" name="cantidad" 
-              value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
-            />
-            {bandQuantity && (
-              <p className="text-red-500">La cantidad es obligatoria!!!</p>
-            )}
-
-            <div>
-              <Label htmlFor="pu"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">P.U.</p></Label>
-              <CurrencyInput
-                id="pu"
-                name="pu"
-                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                  focus:border-slate-700 outline-0"
-                value={pu}
-                decimalsLimit={2}
-                prefix="$"
-                onValueChange={(value) => {try {
-                  setPu(Number(value?.replace(/[$,]/g, "") || '0'));
-                  // updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
-                } catch (error) {
-                  setPu(0);
-                  // updateValues(0);
-                }}}
-              />
-              {bandPu && (
-                <p className="text-red-500">El precio unitario es obligatorio!!!</p>
-              )}
-            </div>
-
-            <div>
-              <Label htmlFor="importe"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
-              <CurrencyInput
-                id="importe"
-                name="importe"
-                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                  focus:border-slate-700 outline-0"
-                value={amount}
-                decimalsLimit={2}
-                prefix="$"
-                onValueChange={(value) => {try {
-                  setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
-                  // updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
-                } catch (error) {
-                  setAmount(0);
-                  // updateValues(0);
-                }}}
-              />
-              {bandAmount && (
-                <p className="text-red-500">El importe es obligatorio!!!</p>
-              )}
-            </div>
-
-          </div>
-        </div>
-        <div className="flex justify-center mt-2">
+        <NavStepperConceptEstimate changeTab={handleIndexStepper} index={indexStepper} />
+        {viewComponent}
+        
+        {/* <div className="flex justify-center mt-2">
           <Button type="button" onClick={saveEstimate}>Guardar</Button>
-        </div>
+        </div> */}
       </form>
-      {showNewConcept && <FormNewConcept addConcept={handleAddNewConcept} setShowForm={handleShowNewConcept} 
-                              token={token}  />}
     </>
   )
 }

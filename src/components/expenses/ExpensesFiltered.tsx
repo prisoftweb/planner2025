@@ -186,7 +186,7 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
     label: 'TODOS',
     value: 'all'
   }];
-console.log('is paid => ', isPaid);
+// console.log('is paid => ', isPaid);
   return(
     <>
       <form className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
@@ -262,7 +262,7 @@ console.log('is paid => ', isPaid);
           <SelectMultipleReact index={0} opts={allArray.concat(categories)} setValue={handleCategories} />
         </div>
         <div>
-          <Label htmlFor="reports"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Reporte</p></Label>
+          <Label htmlFor="reports"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Informe</p></Label>
           <SelectMultipleReact index={0} opts={allArray.concat(reportsOptions)} setValue={handleReports} />
         </div>
         <div>

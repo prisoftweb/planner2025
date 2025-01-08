@@ -487,7 +487,7 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:strin
 export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}/${project}`;
   try {
-    //console.log('url => ', url);
+    console.log('url category only => ', url);
     const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
@@ -495,7 +495,7 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_t
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
+      console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText

@@ -14,10 +14,16 @@ import Label from '@/components/Label';
 import { CostsGroupByResumen, CostsGroupResumenByType } from '@/interfaces/DashboardsCosts';
 import { CurrencyFormatter, MoneyFormatter } from '@/app/functions/Globals';
 import {Tooltip} from "@nextui-org/react";
+import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
+import ReportCostsCategoryAndConceptPDF from './ReportCostsCategoryAndConcept';
 
-export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType}: 
+export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType, 
+      dataCostsCatagory, dataCostsConcept }: 
     {handleDate: Function, projects:Options[], costsResumen:CostsGroupByResumen[], 
-      costsResumenType:CostsGroupResumenByType[]}) {
+      costsResumenType:CostsGroupResumenByType[], dataCostsCatagory: CostsByConceptAndCategory[], 
+      dataCostsConcept: CostsByConceptAndCategory[]}) {
 
   let props = {
     variants: {
@@ -57,7 +63,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
   return (
     <div>
       <div>
-        <div className='flex flex-wrap justify-end p-3 gap-x-5 gap-y-3 mt-2'>
+        <div className='flex flex-wrap justify-end items-center p-3 gap-x-5 gap-y-3 mt-2'>
           <div>
             <Label htmlFor='date'>Fecha</Label>
             <DateRangePicker 
@@ -79,6 +85,40 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <Label htmlFor='project'>Proyecto</Label>
             <SelectReact index={0} opts={projects} setValue={handleProjects} />
             {/* <SelectMultipleReact opts={projects} setValue={() => {}} index={0} /> */}
+          </div>
+          <div className='w-5'>
+            {dataCostsCatagory && dataCostsCatagory.length > 0 && (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                content={'categoria'} 
+                className="text-slate-900 bg-white" placement="top">
+                <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} />} 
+                    fileName={`InformeCostosAgrupadosPorCategoria`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                    ) : (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                    ) }
+                </PDFDownloadLink>
+              </Tooltip>
+            )}
+          </div>
+          <div className='w-5'>
+            {dataCostsConcept && dataCostsConcept.length > 0 && (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content={'concepto'} 
+                  className="text-slate-900 bg-white" placement="top">
+                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} />} 
+                    fileName={`InformeCostosAgrupadosPorConcepto`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                    ) : (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                    ) }
+                </PDFDownloadLink>
+              </Tooltip>
+            )}
           </div>
         </div>
       </div>
