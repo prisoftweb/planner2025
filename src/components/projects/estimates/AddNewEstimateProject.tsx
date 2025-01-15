@@ -177,7 +177,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
           <div>
             <p className=" text-sm">Estimacion total</p>
             <ProgressBarComponent label={''} progress={79} 
-              widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
+              widthBar="w-full" color={colorsRandom[2]} hei="h-5" />
           </div>
         </div>
         

@@ -105,7 +105,9 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
             <div className="sm:flex gap-x-3 md:justify-between flex-wrap md:flex-nowrap items-center">
               <div className="flex items-center">
                 <Link href={'/'}>
-                  <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+                  <div className="p-1 border border-slate-400 bg-white rounded-md" >
+                    <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+                  </div>
                 </Link>
                 <p className="text-xl ml-4 font-medium">Catalogos</p>
               </div>

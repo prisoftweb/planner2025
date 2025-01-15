@@ -21,7 +21,7 @@ export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
       Fondo: estimate.amountGuaranteeFund,
       MontoPay: estimate.amountPayable,
       Nombre: estimate.name,
-      Orden: 'order',
+      Orden: estimate.purschaseOrder || 'sin orden',
       No: index++
     });
   });
@@ -39,9 +39,9 @@ export function ConceptsDataToConceptsTable(conepts:IConceptEstimate[]){
       Clave: concept.code,
       Descripcion: concept.description,
       nombre: concept.name,
-      PU: concept.prices[0].cost,
-      Importe: concept.prices[0].cost,
-      Unidad: concept.prices[0].unit
+      PU: concept.prices && concept.prices.length > 0? (concept.prices[0].cost? concept.prices[0].cost: 0) : 0,
+      Importe: concept.prices && concept.prices.length > 0? (concept.prices[0].cost? concept.prices[0].cost: 0 ) : 0,
+      Unidad: concept.prices && concept.prices.length > 0? (concept.prices[0].unit? concept.prices[0].unit : 'NA'): 'NA'
     });
   });
 

@@ -15,12 +15,8 @@ export default function DataReports({token, report, user, node, id, dates}:
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
 
-  // const {oneReport} = useOneReportStore();
-  //const [isClose, setIsClose] = useState<boolean>(false);
-
   const handleSend = (value: boolean, valueClose: boolean) => {
     refClose.current = valueClose;
-    // console.log('handle send close ', valueClose);
     setIsSend(value);
     //setIsClose(valueClose);
   }

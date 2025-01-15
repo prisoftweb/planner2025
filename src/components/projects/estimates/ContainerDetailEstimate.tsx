@@ -23,6 +23,8 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
   const [conceptsData, setConceptsData] = useState<IConceptEstimate[]>(concepts);
 
+  console.log('estimCION RECIVIDA => ', estimate);
+
   const handleFilterTable = (value: boolean) => {
     setIsFilterTable(value);
   }
@@ -75,15 +77,17 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       value: c._id
     });
   });
-
+// console.log('estimate => ', estimate);
   return (
     <>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" 
+          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
             onClick={() => window.location.replace(`/projects/estimates/${project._id}`)}
-          />
-          <p className="text-xl ml-4 font-medium">{project.title} {'->'} {estimate.name} </p>
+          >
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+          </div>
+          <p className="text-xl ml-4 font-medium">{project.title} {'->'} {estimate?.name || 'sin estimacion'} </p>
         </div>
         <Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>
       </div>
@@ -143,12 +147,12 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
 
           </div>
           <div className="flex justify-between ">
-            <p className="text-slate-400">Fecha</p>
-            <p className="text-lg text-slate-600 text-right">{estimate.date.substring(0, 10)}</p>
+            <p className="text-slate-400">Fecha {typeof(estimate.date)}</p>
+            <p className="text-lg text-slate-600 text-right">{estimate.date?.substring(0, 10)}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Orden de compra</p>
-            <p className="text-lg text-slate-600 text-right">hkjhk</p>
+            <p className="text-lg text-slate-600 text-right">{estimate.purschaseOrder}</p>
           </div>
         </div>
 
@@ -157,7 +161,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
         isFilterTable={isfilterTable} project={project} token={token} />
       {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} conceptSLV={conceptsLV}
-                            idEstimate={idEstimate} />}
+                            idEstimate={idEstimate} conceptsEstimate={concepts} />}
       {/* {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
       updateEstimates={updateEstimatesProject} token={token} />} */}
     </>

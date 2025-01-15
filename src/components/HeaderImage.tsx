@@ -13,9 +13,10 @@ export default function HeaderImage({children, title, previousPage, image}:
           {/* <Link href={previousPage}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link> */}
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600 cursor-pointer" 
-            onClick={() => window.location.replace(previousPage)}
-          />
+          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer" onClick={() => window.location.replace(previousPage)}>
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600 cursor-pointer" 
+            />
+          </div>
           <Image 
               src={image}
               alt="profile"

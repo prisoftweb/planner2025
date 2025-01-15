@@ -33,6 +33,7 @@ export interface IEstimateProject {
     photo: string
   }
   status: boolean
+  purschaseOrder: string
 }
 
 export interface IEstimate {
@@ -58,7 +59,8 @@ export interface IEstimate {
   status: boolean
   datets: string
   __v: number
-  id: string
+  id: string,
+  purschaseOrder: string
 }
 
 export interface ITableConceptsEstimate {
@@ -77,9 +79,9 @@ export interface IConceptEstimate {
   code: string
   name: string
   description: string
-  status: boolean
-  datets: string
-  prices: {
+  status?: boolean
+  datets?: string
+  prices?: {
     cost: number
     date: string
     unit: string
@@ -88,6 +90,6 @@ export interface IConceptEstimate {
     _id: string
     id: string
   }[]
-  __v: number
-  id: string
+  __v?: number
+  id?: string
 }

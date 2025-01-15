@@ -11,9 +11,10 @@ export default function Header({children, title, previousPage}:
           {/* <Link href={previousPage}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </Link> */}
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" 
-            onClick={() => window.location.replace(previousPage)}
-          />
+          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer" onClick={() => window.location.replace(previousPage)}>
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" 
+            />
+          </div>
           <p className="text-xl ml-4 font-medium">{title}</p>
         </div>
         {/* <ButtonNewProvider id={id} token={token} /> */}

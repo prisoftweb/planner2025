@@ -42,7 +42,7 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
           <p className="text-xl mt-10 text-slate-700 font-bold" 
             // style={{maxInlineSize: '45ch', textWrap:'balance' }}
             >Agregar un concepto a la estimacion del proyecto {project.title}</p>
-          <img src="/img/projects.jpg" alt="image" className="w-60 h-auto" />
+          <img src="/img/estimates/concepts.svg" alt="image" className="w-60 h-auto" />
         </div>
         <div className="mt-5 flex justify-between items-center bg-white">
           <p className="text-blue-400">CONCEPTOS DE ESTIMACION</p>
@@ -53,7 +53,11 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
   }
 
   const conceptM = concepts.reduce((previous, current) => {
-    return current.prices > previous.prices ? current : previous;
+    if(current.prices && previous.prices){
+      return current.prices > previous.prices ? current : previous;
+    }else{
+      return previous
+    }
   });
 
   const maxAmount = conceptM.prices;

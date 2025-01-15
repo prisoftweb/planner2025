@@ -138,6 +138,7 @@ const NavItems = ({role}: {role:string}) => {
   if(role.toLowerCase().includes('residente')){
     return(
       <>
+        <NavItem name="Proyectos" link="/projects" items={[]}/>
         <NavItem name="Costos" link="" items={[
             {
               name: 'Gastos',

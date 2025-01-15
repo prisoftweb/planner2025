@@ -34,8 +34,8 @@ export default function ReportCostsCategoryAndConceptPDF({data}: {data: CostsByC
     },
   })
 
-  // const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-  // const date = new Date();
+  const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const date = new Date();
   // let total = 0;
   // reports.map((cost) => {
   //   total += cost.totalCost;
@@ -50,7 +50,7 @@ export default function ReportCostsCategoryAndConceptPDF({data}: {data: CostsByC
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Detalle de costo agrupado por proyectos</Text> */}
               {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
-              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text> */}
+              <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
           </View>
           

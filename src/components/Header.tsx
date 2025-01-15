@@ -8,9 +8,11 @@ export default function Header({children, title, placeHolder}:
     <>
       <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">
         <div className="flex items-center gap-x-3 w-full max-w-96">
-          <Link href={'/'}>
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-          </Link>
+          <div className="p-1 border border-slate-400 bg-white rounded-md">
+            <Link href={'/'}>
+              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            </Link>
+          </div>
           <p className="text-xl ml-4 font-medium">{title}</p>
         </div>
         {/* <ButtonNewProvider id={id} token={token} /> */}

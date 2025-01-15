@@ -89,7 +89,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           <div className='w-5'>
             {dataCostsCatagory && dataCostsCatagory.length > 0 && (
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                content={'categoria'} 
+                content='categoria'
                 className="text-slate-900 bg-white" placement="top">
                 <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} />} 
                     fileName={`InformeCostosAgrupadosPorCategoria`} >
@@ -106,7 +106,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           <div className='w-5'>
             {dataCostsConcept && dataCostsConcept.length > 0 && (
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                  content={'concepto'} 
+                  content='concepto' 
                   className="text-slate-900 bg-white" placement="top">
                   <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} />} 
                     fileName={`InformeCostosAgrupadosPorConcepto`} >

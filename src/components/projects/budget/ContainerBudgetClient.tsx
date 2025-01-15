@@ -66,8 +66,9 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
         <div className="flex items-center">
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600"
-              onClick={() => window.location.replace('/')} />
+          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer" onClick={() => window.location.replace('/')}>
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600"/>
+          </div>
           <p className="text-xl ml-4 font-medium">Presupuestos</p>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">

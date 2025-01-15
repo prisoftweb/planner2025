@@ -75,7 +75,8 @@ export default function SendReport({send, report, node,
                     condition: relation.relation.glossary._id,
                     notes,
                     user,
-                    department: res.department._id
+                    department: res.department._id,
+                    date: new Date()
                 }]
               };
       
@@ -130,7 +131,8 @@ export default function SendReport({send, report, node,
                   condition: node?.glossary._id,
                   notes,
                   user,
-                  department: node?.department._id
+                  department: node?.department._id,
+                  date: new Date()
               }]
             };
     
@@ -200,7 +202,7 @@ export default function SendReport({send, report, node,
       )
     }
   }
-  
+  console.log('one report moves => ', oneReport?.moves);
   return(
     <>
       <div className="z-10 w-full sm:max-w-lg absolute top-16 bg-white p-3 right-0"
@@ -238,7 +240,7 @@ export default function SendReport({send, report, node,
                     className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
                     <div className="flex items-center ">
                       <div className="grid mr-4 place-items-center">
-                        <img alt="responsable" src={mov.user.photo || '/img/users/default.jpg'}
+                        <img alt="responsable" src={mov.user?.photo || '/img/users/default.jpg'}
                           className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                       </div>
                       <div className="w-full max-w-72">

@@ -14,6 +14,7 @@ import { useNewProject } from "@/app/store/newProject";
 import CurrencyInput from 'react-currency-input-field';
 import "react-datepicker/dist/react-datepicker.css";
 import { useProjectsStore } from "@/app/store/projectsStore";
+import { useRegFormContext } from "./StepperProjectProvider";
 
 export default function Guarantee({token, condition, showForm}:
   {token:string, condition: string, showForm:Function}){
@@ -28,6 +29,7 @@ export default function Guarantee({token, condition, showForm}:
   const refRequest = useRef(true);
 
   const {updateHaveNewProject} = useProjectsStore();
+  const [state, dispatch] = useRegFormContext();
 
   const formik = useFormik({
     initialValues: {
@@ -41,13 +43,15 @@ export default function Guarantee({token, condition, showForm}:
                   .required('El monto es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      
+      const {amountG, percentage} = valores;
+      updateGuarantee(percentage.replace(/[$,%,]/g, ""), startDate, amountG.replace(/[$,%,]/g, ""));
+      dispatch({type: 'INDEX_STEPPER', data: 4});
     },       
   });
   
   const {amount, category, client, code, community, company, country, cp, date, description, hasguaranteefund,
-    haveAddress, municipy, stateA, street, title, type, user
-  } = useNewProject();
+    haveAddress, municipy, stateA, street, title, type, user, dateCharge, amountCharge, hasamountChargeOff, 
+    percentageCharge, updateGuarantee } = useNewProject();
   const onClickSave = async () => {
     if(refRequest.current){
       refRequest.current = false;
@@ -64,35 +68,74 @@ export default function Guarantee({token, condition, showForm}:
         porcentage:percentage.replace(/[$,%,]/g, ""),
       };
 
-      if(haveAddress && hasguaranteefund){
+      const amountChargeOff = {
+        amount:amountCharge.replace(/[$,%,]/g, ""),
+        date: dateCharge,
+        porcentage:percentageCharge.replace(/[$,%,]/g, "")
+      };
+
+      if(haveAddress && hasguaranteefund && hasamountChargeOff){
         data = {
           amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
           hasguaranteefund, title, types:type, user,
-          location,
+          location, hasamountChargeOff, amountChargeOff,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
-        if(haveAddress){
+        if(haveAddress && hasguaranteefund){
           data = {
             amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user,
+            hasguaranteefund, title, types:type, user, guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}]
           }
         }else{
-          if(hasguaranteefund){
+          if(haveAddress && hasamountChargeOff){
             data = {
               amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+              hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
+              location, condition: [{glossary: condition, user}]
             }
           }else{
-            data = {
-              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
+            if(haveAddress){
+              data = {
+                amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                location, condition: [{glossary: condition, user}]
+              }
+            }else{
+              if(hasguaranteefund && hasamountChargeOff){
+                data = {
+                  amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                  hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
+                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+                }
+              }else{
+                if(hasguaranteefund){
+                  data = {
+                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                    hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
+                  }
+                }else{
+                  if(hasamountChargeOff){
+                    data = {
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                      hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                      location, condition: [{glossary: condition, user}], amountChargeOff
+                    }
+                  }else{
+                    data = {
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                      hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
+      
       try {
         console.log('date => ', date);
         console.log('data new proyect => ', JSON.stringify(data));
@@ -123,7 +166,7 @@ export default function Guarantee({token, condition, showForm}:
       <div className="my-5">
         <NavProjectStepper index={3} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-xl rounded-lg space-y-5">
         <div>
           <Label htmlFor="percentage"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje de fondo</p></Label>
           <CurrencyInput
@@ -195,12 +238,12 @@ export default function Guarantee({token, condition, showForm}:
         </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
-          {/* <button type="submit"
+          <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"
           >
             Siguiente
-          </button> */}
+          </button>
         </div>
       </form>  
     </div>

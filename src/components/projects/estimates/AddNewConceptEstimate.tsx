@@ -25,12 +25,13 @@ import { getConeptsEstimate } from "@/app/api/routeEstimates"
 import { IConceptEstimate } from "@/interfaces/Estimate"
 
 export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
-    conceptSLV, idEstimate}: 
+    conceptSLV, idEstimate, conceptsEstimate}: 
   {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
-    conceptSLV:Options[], idEstimate:string}) {
+    conceptSLV:Options[], idEstimate:string, conceptsEstimate:IConceptEstimate[]}) {
   // const refRequest = useRef(true);
 
-  const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
+  // const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
+  const [conceptSel, setConcepSel] = useState<IConceptEstimate>(conceptsEstimate[0]);
   const [idPrice, setIdPrice] = useState<string>(conceptSLV[0].value);
   const [area, setArea] = useState<string>('');
   const [section, setSection] = useState<string>('');
@@ -41,7 +42,9 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   const [amount, setAmount] = useState<string>('0');
   const [description, setDescription] = useState<string>('');
   const [unity, setUnity] = useState<string>('');
-  const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV)
+  const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV);
+
+  const [concepts, setConcepts] = useState<IConceptEstimate[]>(conceptsEstimate);
 
   const [heightPage, setHeightPage] = useState<number>(900);
   // const refRequest = useRef(true);
@@ -194,53 +197,65 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   // }
 
   const handleConceptID = (value: string) => {
-    setIdConcept(value);
+    // setIdConcept(value);
+    const c = concepts.find((c) => c._id === value);
+    if(c){
+      setConcepSel(c);
+    }
   }
 
   const handlePriceId = (value: string) => {
     setIdPrice(value);
   }
 
-  const handleAddNewConcept = async (value: Options) => {
-    let concepts: IConceptEstimate[];
+  const handleAddNewConcept = async () => {
+    console.log('agregar nuevo concepto');
+    let cons: IConceptEstimate[];
     try {
-      concepts = await getConeptsEstimate(token, idEstimate);
-      // console.log('concepts min => ', concepts);
-      if(typeof(concepts) === "string")
-        return <h1 className="text-center text-red-500">{concepts}</h1>
+      cons = await getConeptsEstimate(token, idEstimate);
+      // console.log('res concepts => ', cons);
+      if(typeof(cons) === "string")
+        return <h1 className="text-center text-red-500">{cons}</h1>
     } catch (error) {
+      console.log('catch error => ', error);
       return <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos de la estimacion!!</h1>  
     }
-    
+  
+    setConcepts(cons);
     const contsLV: Options[] = [];
-    concepts.map((c) => {
+    cons.map((c) => {
       contsLV.push({
         label: c.name,
         value: c._id
       });
     });
+    // console.log('nuevos conceptos => ', contsLV);
     setConceptLV(contsLV);
   }
-console.log('index stepper => ', indexStepper);
+
+  const handleAddNewPrice = () => {
+
+  }
+
+
   let viewComponent = indexStepper===1? 
-        <PriceUnityStepper amount={amount} code={code} conceptID={idConcept} conceptsLV={conceptsLV} 
+        <PriceUnityStepper amount={amount} code={code} conceptID={conceptSel._id} conceptsLV={conceptsLV} 
           date={date} description={description} handlePriceId={handlePriceId} nextStep={handleIndexStepper} 
-          setAmount={handleAmount} setDate={handleDate} setUnity={handleUnity} token={token} unity={unity} />:
-        (indexStepper===2? <DataStepperComponent amount={amount} area={area} code={code} conceptID={idConcept} 
+          setAmount={handleAmount} setDate={handleDate} setUnity={handleUnity} token={token} unity={unity}
+          handleAddNewPrice={handleAddNewPrice} conceptSelected={conceptSel} />:
+        (indexStepper===2? <DataStepperComponent amount={amount} area={area} code={code} conceptID={conceptSel._id} 
             conceptsLV={conceptsLV} date={date} description={description} handlePriceId={handlePriceId} pu={pu}
             quantity={quantity} section={section} setArea={handleArea} setPU={handlePU} setQuantity={handleQuantity} 
             setSection={handleSection} token={token} unity={unity} previousStep={handleIndexStepper} /> : 
-          <ConceptStepperComponent code={code} conceptsLV={conceptsLV} description={description} 
-            handleConceptID={handleConceptID} nextStep={handleIndexStepper} setCode={handleCode} 
-            setDescription={handleDescription} token={token} handleAddNewConcept={handleAddNewConcept} />);
+          <ConceptStepperComponent handleConceptID={handleConceptID} nextStep={handleIndexStepper}
+            token={token} handleAddNewConcept={handleAddNewConcept} concepts={concepts} />);
   
-            // let viewComponent = <></>;
   return(
     <>
       <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
-          <HeaderForm img="/img/projects/default.svg" subtitle="Modifica y agrega mas conceptos a una estimacion existente" 
+          <HeaderForm img="/img/estimates/concepts.svg" subtitle="Modifica y agrega mas conceptos a una estimacion existente" 
             title="Agregar conceptos a estimacion"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500

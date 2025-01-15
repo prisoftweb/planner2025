@@ -1,84 +1,73 @@
-import HeaderForm from "../HeaderForm"
+import DatePicker from "react-datepicker";
+//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import Input from "../Input"
+//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useRef } from "react";
-import { useRegFormContext } from "./StepperProjectProvider";
-import SaveProject from "@/app/functions/SaveProject";
+import { useState, useRef } from "react";
+//import { useRegFormContext } from "./StepperProjectProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
+import SaveProject from "@/app/functions/SaveProject";
 import { useNewProject } from "@/app/store/newProject";
-import { useProjectsStore } from "@/app/store/projectsStore"
+import CurrencyInput from 'react-currency-input-field';
+import "react-datepicker/dist/react-datepicker.css";
+import { useProjectsStore } from "@/app/store/projectsStore";
 
-export default function DataBasicStepper({token, user, condition, showForm}: 
-  {token:string, user:string, condition: string, showForm:Function}){
+export default function AmountChargeStepper({token, condition, showForm}:
+  {token:string, condition: string, showForm:Function}){
   
-  const [,dispatch] = useRegFormContext();
-  const refRequest = useRef(true);
+  let year = new Date().getFullYear().toString();
+  let month = (new Date().getMonth() + 1).toString();
+  let day = new Date().getDate().toString();
+  if(month.length ===1) month = '0'+month;
+  if(day.length ===1) day = '0'+day;
 
-  const {updateBasicData, amount, code, community, country, cp, date, description, hasguaranteefund,
-    municipy, stateA, street, title, category, client, type, haveAddress, 
-    company, amountG, dateG, percentage, hasamountChargeOff, amountCharge, dateCharge,
-    percentageCharge} = useNewProject();
+  const [startDate, setStartDate] = useState<string>(year+'-'+month+'-'+day);
+  const refRequest = useRef(true);
 
   const {updateHaveNewProject} = useProjectsStore();
 
-  // let nameI = '';
-  // let keyProjectI = '';
-  // let descriptionI = '';
-
-  // if(state.databasic){
-  //   nameI = state.databasic.name;
-  //   keyProjectI = state.databasic.keyProject;
-  //   descriptionI = state.databasic.description;
-  // }
-
   const formik = useFormik({
     initialValues: {
-      name:title,
-      keyProject: code,
-      description: description,
+      percentageCharge:'',
+      amountCharge: ''
     }, 
     validationSchema: Yup.object({
-      description: Yup.string()
-                  .required('La descripcion es obligatoria!!'),
-      name: Yup.string()
-                  .required('El nombre es obligatorio'),
-      keyProject: Yup.string()
-                  .required('La clave es obligatoria'),
+      percentageCharge: Yup.string()
+                  .required('El porcentaje es obligatorio'),
+      amountCharge: Yup.string()
+                  .required('El monto es obligatorio'),
     }),
     onSubmit: async (valores) => {            
-      const {name, description, keyProject} = valores;
       
-      updateBasicData(name, keyProject, description);
-      dispatch({type: 'INDEX_STEPPER', data: 1})
     },       
   });
   
+  const {amount, category, client, code, community, company, country, cp, date, description, hasguaranteefund,
+    haveAddress, municipy, stateA, street, title, type, user, amountG, dateG, percentage, hasamountChargeOff
+  } = useNewProject();
   const onClickSave = async () => {
     if(refRequest.current){
       refRequest.current = false;
-      const {description, keyProject, name} = formik.values;
-      updateBasicData(name, keyProject, description);
-      
+      const {amountCharge, percentageCharge} = formik.values;
+      let data;
       const location = {
         community, country, cp, municipy, 
         state: stateA, 
         stret: street
       }
-      let data;
       const guaranteeData = {
-        amount:amountG,
+        amount:amountG.replace(/[$,%,]/g, ""),
         date: dateG,
-        porcentage:percentage
+        porcentage:percentage.replace(/[$,%,]/g, ""),
       };
 
       const amountChargeOff = {
         amount:amountCharge.replace(/[$,%,]/g, ""),
-        date: dateCharge,
-        porcentage:percentageCharge.replace(/[$,%,]/g, "")
+        date: startDate,
+        porcentage:percentageCharge.replace(/[$,%,]/g, ""),
       };
 
       if(haveAddress && hasguaranteefund && hasamountChargeOff){
@@ -119,20 +108,20 @@ export default function DataBasicStepper({token, user, condition, showForm}:
               }else{
                 if(hasguaranteefund){
                   data = {
-                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description, 
+                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
                     hasguaranteefund, hasamountChargeOff, title, types:type, user,
                     location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
                   }
                 }else{
                   if(hasamountChargeOff){
                     data = {
-                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description, 
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
                       hasguaranteefund, hasamountChargeOff, title, types:type, user,
                       location, condition: [{glossary: condition, user}], amountChargeOff
                     }
                   }else{
                     data = {
-                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description, 
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
                       hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
                     }
                   }
@@ -142,7 +131,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
           }
         }
       }
-
+      
       try {
         console.log('date => ', date);
         console.log('data new proyect => ', JSON.stringify(data));
@@ -171,59 +160,71 @@ export default function DataBasicStepper({token, user, condition, showForm}:
   return(
     <div className="w-full">
       <div className="my-5">
-        <NavProjectStepper index={0} />
+        <NavProjectStepper index={4} />
       </div>
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-xl rounded-lg space-y-5">
         <div>
-          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-          <Input type="text" name="name" autoFocus 
-            value={formik.values.name}
+          <Label htmlFor="percentageCharge"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Porcentaje de amortizacion</p></Label>
+          <CurrencyInput
+            id="percentageCharge"
+            name="percentageCharge"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              focus:border-slate-700 outline-0"
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
+            defaultValue={0}
+            decimalsLimit={2}
+            suffix="%"
+            onValueChange={(value) =>formik.values.percentageCharge=value || ''}
           />
-          {formik.touched.name && formik.errors.name ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.name}</p>
-            </div>
-          ) : null}
-        </div>
-        <div>
-          <Label htmlFor="keyProject"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Clave</p></Label>
-          <Input type="text" name="keyProject" 
-            value={formik.values.keyProject}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          />
-          {formik.touched.keyProject && formik.errors.keyProject ? (
+          {formik.touched.percentageCharge && formik.errors.percentageCharge ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                  <p>{formik.errors.keyProject}</p>
+                  <p>{formik.errors.percentageCharge}</p>
               </div>
           ) : null}
         </div>
         <div>
-          <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
-          <textarea name="description"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            focus:border-slate-700 outline-0 overflow-hidden resize-none"
-            rows={4} 
-            value={formik.values.description}
+          <Label htmlFor="amountCharge"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto de amortizacion</p></Label>
+          <CurrencyInput
+            id="amountCharge"
+            name="amountCharge"
+            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              focus:border-slate-700 outline-0"
+            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
+            //placeholder="Please enter a number"
+            defaultValue={0}
+            decimalsLimit={2}
+            prefix="$"
+            onValueChange={(value) =>formik.values.amountCharge=value || ''}
+            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {formik.touched.description && formik.errors.description ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.description}</p>
-            </div>
+          {formik.touched.amountCharge && formik.errors.amountCharge ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                  <p>{formik.errors.amountCharge}</p>
+              </div>
           ) : null}
+        </div>
+        <div>
+          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
+          <DatePicker
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+              focus:border-slate-700 outline-0" 
+            //showIcon
+            selected={new Date(startDate)} onChange={(date:Date) => {
+                setStartDate(date.toDateString()) 
+                console.log(date); console.log(date.toDateString())}} 
+          />
         </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
-          <button type="submit"
+          {/* <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
             hover:bg-slate-200"
           >
             Siguiente
-          </button>
+          </button> */}
         </div>
       </form>  
     </div>

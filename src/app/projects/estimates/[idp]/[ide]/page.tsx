@@ -29,6 +29,7 @@ export default async function Page({ params }: { params: { idp: string, ide:stri
   let estimate: IEstimate;
   try {
     estimate = await getEstimate(token, params.ide);
+    console.log('get estimate => ', estimate);
     // console.log('estimate min => ', estimate);
     if(typeof(estimate) === "string")
       return <h1 className="text-center text-red-500">{estimate}</h1>
@@ -39,7 +40,7 @@ export default async function Page({ params }: { params: { idp: string, ide:stri
   let concepts: IConceptEstimate[];
   try {
     concepts = await getConeptsEstimate(token, params.ide);
-    console.log('concepts min => ', concepts);
+    // console.log('concepts min => ', concepts);
     if(typeof(concepts) === "string")
       return <h1 className="text-center text-red-500">{concepts}</h1>
   } catch (error) {

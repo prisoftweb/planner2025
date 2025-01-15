@@ -85,7 +85,8 @@ export default async function Page({ params }: { params: { id: string }}){
             condition: node.glossary._id,
             notes: 'El informe ha sido visto por el usuario ' + user.name,
             user: user._id,
-            department: typeof(user.department)==='string'? user.department : user.department._id
+            department: typeof(user.department)==='string'? user.department : user.department._id,
+            date: new Date()
         }]
       };
       const res = await insertMovementsInReport(token, report._id, data);

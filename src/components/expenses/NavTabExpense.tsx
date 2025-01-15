@@ -77,25 +77,25 @@ export default function NavTabExpense({tab, idExp}: {tab:string, idExp:string}){
                   </div>                             
   }else{
     tabCli = (
-      <div className="flex mt-5 bg-white py-1">
+      <div className="flex mt-5 py-1 border-b border-blue-300">
         <Link href={`/expenses/${idExp}/profile`}>
           <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
-            <p>Resumen</p>
+            <p className="text-blue-600">Resumen</p>
           </div>
         </Link>
         <Link href={`/expenses/${idExp}/projects`}>
           <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
-            <p>Presupuesto</p>
+            <p className="text-blue-600">Presupuesto</p>
           </div>
         </Link>
         <Link href={`/expenses/${idExp}/estimates`}>
           <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
-            <p>Analisis</p>
+            <p className="text-blue-600">Analisis</p>
           </div>
         </Link>
         <Link href={`/expenses/${idExp}/wallet`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
-            <p>Avances</p>
+            <p className="text-blue-600">Avances</p>
           </div>
         </Link>
       </div>

@@ -87,7 +87,9 @@ export default function ContainerClient({token, optClients, optCategories,
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
         <div className="flex items-center">
           <Link href={'/'}>
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            <div className="p-1 border border-slate-400 bg-white rounded-md">
+              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            </div>
           </Link>
           <p className="text-xl ml-4 font-medium">Proyectos</p>
         </div>

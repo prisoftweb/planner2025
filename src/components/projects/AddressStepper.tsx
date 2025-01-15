@@ -17,12 +17,14 @@ export default function AddressStepper({token, condition, showForm}:
   
   const {updateAddress, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
-    company, amountG, dateG, percentage, user} = useNewProject();
+    company, amountG, dateG, percentage, user, amountCharge, dateCharge, hasamountChargeOff, 
+    percentageCharge} = useNewProject();
   // const {amount, category, client, code, company, date, description, 
   //   hasguaranteefund, haveAddress, title, type, user} = useNewProject();
   
   const [state, dispatch] = useRegFormContext();
   const [guarantee, setGuarantee] = useState<boolean>(hasguaranteefund);
+  // const [haveAmountCharge, sethaveAmountCharge] = useState<boolean>(false);
   const refRequest = useRef(true);
 
   const {updateHaveNewProject} = useProjectsStore();
@@ -95,31 +97,69 @@ export default function AddressStepper({token, condition, showForm}:
         porcentage:percentage
       };
 
-      if(haveAddress && hasguaranteefund){
+      const amountChargeOff = {
+        amount:amountCharge.replace(/[$,%,]/g, ""),
+        date: dateCharge,
+        porcentage:percentageCharge.replace(/[$,%,]/g, "")
+      };
+
+      if(haveAddress && hasguaranteefund && hasamountChargeOff){
         data = {
-          amount, categorys:category, client, code, company, date: date, description, 
+          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
           hasguaranteefund, title, types:type, user,
-          location,
+          location, hasamountChargeOff, amountChargeOff,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
-        if(haveAddress){
+        if(haveAddress && hasguaranteefund){
           data = {
-            amount, categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user,
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+            hasguaranteefund, title, types:type, user, guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}]
           }
         }else{
-          if(hasguaranteefund){
+          if(haveAddress && hasamountChargeOff){
             data = {
-              amount, categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+              hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
+              location, condition: [{glossary: condition, user}]
             }
           }else{
-            data = {
-              amount, categorys:category, client, code, company, date, description, 
-              hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
+            if(haveAddress){
+              data = {
+                amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                location, condition: [{glossary: condition, user}]
+              }
+            }else{
+              if(hasguaranteefund && hasamountChargeOff){
+                data = {
+                  amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                  hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
+                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+                }
+              }else{
+                if(hasguaranteefund){
+                  data = {
+                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                    hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
+                  }
+                }else{
+                  if(hasamountChargeOff){
+                    data = {
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                      hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                      location, condition: [{glossary: condition, user}], amountChargeOff
+                    }
+                  }else{
+                    data = {
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+                      hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -154,7 +194,7 @@ export default function AddressStepper({token, condition, showForm}:
       <div className="my-5">
         <NavProjectStepper index={2} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-xl rounded-lg space-y-5">
         <div>
           <Label htmlFor="street"><p className="">Calle y numero</p></Label>
           <Input type="text" name="street" autoFocus 

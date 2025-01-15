@@ -36,7 +36,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
 
   estimates.map((e) => {
     dataEstimatesDashboard.push({
-      costo: e.amount,
+      costo: (e.amount / project.amount) * 100,
       label: e.name
     });
     categoriesEstimates.push(e.name);
@@ -71,9 +71,11 @@ export default function ContainerStimationsProject({project, optConditions, optP
     <>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" 
+          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
             onClick={() => window.location.replace('/projects/estimates')}
-          />
+          >
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+          </div>
           <p className="text-xl ml-4 font-medium">{project.title}</p>
           <ProgressCircle value={project.progress} color={'orange'} >
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">

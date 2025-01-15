@@ -293,7 +293,9 @@ export default function ContainerClient({data, token, expenses,
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            <div className="p-1 border border-slate-400 bg-white rounded-md">
+              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            </div>
           </Link>
           <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': 'Gastos'}</p>
         </div>
