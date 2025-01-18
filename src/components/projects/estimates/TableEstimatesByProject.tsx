@@ -14,11 +14,12 @@ import { EstimatesDataToEstimatesTable } from "@/app/functions/EstimatesFunction
 import RemoveElement from "@/components/RemoveElement";
 import { removeEstimate } from "@/app/api/routeEstimates";
 import { BsFilePdfFill } from "react-icons/bs";
+import { ResumenEstimateProject } from "@/interfaces/Estimate";
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
-  isFilterTable, delEstimate, token}: 
+  isFilterTable, delEstimate, token }: 
   {project: OneProjectMin, optProjects: Options[], optConditions: Options[], estimates:IEstimateProject[], 
-    isFilterTable:boolean, handleFilterTable:Function, delEstimate:Function, token:string}) {
+    isFilterTable:boolean, handleFilterTable:Function, delEstimate:Function, token:string }) {
 
   // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
   const [filterEstimates, setFilterEstimates] = useState<IEstimateProject[]>(estimates);

@@ -1,4 +1,5 @@
 import { Glossary } from "./Glossary"
+import { UsrBack } from "./User"
 
 export interface TableEstimatesProject {
   id: string,
@@ -34,6 +35,7 @@ export interface IEstimateProject {
   }
   status: boolean
   purschaseOrder: string
+  estimatedTotal: number,
 }
 
 export interface IEstimate {
@@ -45,6 +47,7 @@ export interface IEstimate {
   amountGuaranteeFund: number
   amountChargeOff: number
   amountPayable: number
+  estimatedTotal: number,
   condition: {
     glossary: string
     date: string
@@ -92,4 +95,62 @@ export interface IConceptEstimate {
   }[]
   __v?: number
   id?: string
+}
+
+export interface PriceConcept {
+  user: UsrBack
+  cost: number
+  date: string
+  status: boolean
+}
+
+export interface TotalEstimatedByProject {
+  quantity: number
+  estimatedTotal: number
+  amountGuaranteeFund: number
+  amountChargeOff: number
+  amountPayable: number
+  project: string
+}
+
+export interface ResumenEstimateProject {
+  totalAccumulated: {
+    quantity: number
+    estimatedTotal: number
+    amountGuaranteeFund: number
+    amountChargeOff: number
+    amountPayable: number
+  }
+  totalPrevious: {
+    _id: string
+    estimatedTotal: any
+    amountGuaranteeFund: number
+    amountChargeOff: number
+    amountPayable: number
+  }
+  totalActual: {
+    _id: string
+    estimatedTotal: any
+    amountGuaranteeFund: number
+    amountChargeOff: number
+    amountPayable: number
+  }
+  estimateResume: {
+    _id: string
+    name: string
+    description: string
+    date: string
+    amountGuaranteeFund: number
+    amountChargeOff: number
+    amount: number
+    amountPayable: number
+    purschaseOrder: string
+    project: {
+      _id: string
+      title: string
+      photo: string
+    }
+    user: UsrBack
+    status: boolean
+  }
 }

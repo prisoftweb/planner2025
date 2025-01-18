@@ -22,7 +22,7 @@ import ConceptStepperComponent from "./ConceptStepperComponent"
 import PriceUnityStepper from "./PriceUnityStepper"
 import DataStepperComponent from "./DataStepperComponent"
 import { getConeptsEstimate } from "@/app/api/routeEstimates"
-import { IConceptEstimate } from "@/interfaces/Estimate"
+import { IConceptEstimate, PriceConcept } from "@/interfaces/Estimate"
 
 export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
     conceptSLV, idEstimate, conceptsEstimate}: 
@@ -32,14 +32,11 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   // const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
   const [conceptSel, setConcepSel] = useState<IConceptEstimate>(conceptsEstimate[0]);
-  const [idPrice, setIdPrice] = useState<string>(conceptSLV[0].value);
-  const [area, setArea] = useState<string>('');
-  const [section, setSection] = useState<string>('');
-  const [quantity, setQuantity] = useState<string>('0');
-  const [pu, setPu] = useState<string>('0');
+  const [idPrice, setIdPrice] = useState<PriceConcept>();
+  
   const [code, setCode] = useState<string>('');
   const [date, setDate] = useState<string>('');
-  const [amount, setAmount] = useState<string>('0');
+  
   const [description, setDescription] = useState<string>('');
   const [unity, setUnity] = useState<string>('');
   const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV);
@@ -54,42 +51,21 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     setIndexStepper(value);
   }
 
-  const handleArea = (value:string) => {
-    setArea(value);
-  }
+  // const handleArea = (value:string) => {
+  //   setArea(value);
+  // }
 
-  const handleSection = (value:string) => {
-    setSection(value);
-  }
+  // const handleSection = (value:string) => {
+  //   setSection(value);
+  // }
 
-  const handleQuantity = (value:string) => {
-    setQuantity(value);
-  }
+  // const handleQuantity = (value:string) => {
+  //   setQuantity(value);
+  // }
 
-  const handlePU = (value:string) => {
-    setPu(value);
-  }
-
-  const handleCode = (value:string) => {
-    setCode(value);
-  }
-
-  const handleDate = (value:string) => {
-    setDate(value);
-  }
-
-  const handleAmount = (value:string) => {
-    setAmount(value);
-  }
-
-  const handleDescription = (value:string) => {
-    setDescription(value);
-  }
-
-  const handleUnity = (value:string) => {
-    console.log('unity value => ', value);
-    setUnity(value);
-  }
+  // const handlePU = (value:string) => {
+  //   setPu(value);
+  // }
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -117,85 +93,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   const c1 = getRandomArbi(0, 9);
 
-  // const updateValues = (val: number) => {
-  //   const amor = (val * 30) / 100;
-  //   const guaran = (val * Number(project.guaranteefund?.porcentage || '0')) / 100;
-  //   const total = val - amor - guaran;
-
-  //   setAmortization(amor);
-  //   setGuarantee(guaran);
-  //   setAmountPay(total);
-  // }
-
-  // const validationData = () =>{
-  //   let validation = true;
-  //   if(!code || code===''){
-  //     setBandCode(true);
-  //     validation = false;
-  //   }else{
-  //     setBandCode(false);
-  //   }
-  //   if(!area || area===''){
-  //     setBandArea(true);
-  //     validation = false;
-  //   }else{
-  //     setBandArea(false);
-  //   }
-  //   if(!section || section===''){
-  //     setBandSection(true);
-  //     validation = false;
-  //   }else{
-  //     setBandSection(false);
-  //   }
-  //   if(!quantity || quantity<=0){
-  //     setBandQuantity(true);
-  //     validation = false;
-  //   }else{
-  //     setBandQuantity(false);
-  //   }
-  //   if(!pu || pu<=0){
-  //     setBandPu(true);
-  //     validation = false;
-  //   }else{
-  //     setBandPu(false);
-  //   }
-  //   if(!amount || amount<=0){
-  //     setBandAmount(true);
-  //     validation = false;
-  //   }else{
-  //     setBandAmount(false);
-  //   }
-  //   if(!description || description===''){
-  //     setBandDescription(true);
-  //     validation = false;
-  //   }else{
-  //     setBandDescription(false);
-  //   }
-  //   return validation;
-  // }
-
-  // const saveEstimate = async () => {
-  //   const val = validationData();
-
-  //   if(val){
-  //     const data = {
-  //       // name,
-  //       description,
-  //       company: "65d3813c74045152c0c4377e",
-  //       project: project._id,
-  //       user
-  //     }
-
-  //     // const res = await createConceptEstimate(token, data);
-  //     // if(typeof(res)==='string'){
-  //     //   showToastMessageError(res);
-  //     // }else{
-  //     //   updateEstimates();
-  //     //   showForm(false);
-  //     // }
-  //   }
-  // }
-
   const handleConceptID = (value: string) => {
     // setIdConcept(value);
     const c = concepts.find((c) => c._id === value);
@@ -204,7 +101,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     }
   }
 
-  const handlePriceId = (value: string) => {
+  const handlePriceId = (value: PriceConcept) => {
     setIdPrice(value);
   }
 
@@ -239,14 +136,11 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
 
   let viewComponent = indexStepper===1? 
-        <PriceUnityStepper amount={amount} code={code} conceptID={conceptSel._id} conceptsLV={conceptsLV} 
-          date={date} description={description} handlePriceId={handlePriceId} nextStep={handleIndexStepper} 
-          setAmount={handleAmount} setDate={handleDate} setUnity={handleUnity} token={token} unity={unity}
-          handleAddNewPrice={handleAddNewPrice} conceptSelected={conceptSel} />:
-        (indexStepper===2? <DataStepperComponent amount={amount} area={area} code={code} conceptID={conceptSel._id} 
-            conceptsLV={conceptsLV} date={date} description={description} handlePriceId={handlePriceId} pu={pu}
-            quantity={quantity} section={section} setArea={handleArea} setPU={handlePU} setQuantity={handleQuantity} 
-            setSection={handleSection} token={token} unity={unity} previousStep={handleIndexStepper} /> : 
+        <PriceUnityStepper handlePriceId={handlePriceId} nextStep={handleIndexStepper} 
+          token={token} handleAddNewPrice={handleAddNewPrice} conceptSelected={conceptSel} 
+          user={user} />:
+        (indexStepper===2? <DataStepperComponent conceptSelected={conceptSel} token={token} 
+            previousStep={handleIndexStepper} price={idPrice} user={user} idEstimate={idEstimate} /> : 
           <ConceptStepperComponent handleConceptID={handleConceptID} nextStep={handleIndexStepper}
             token={token} handleAddNewConcept={handleAddNewConcept} concepts={concepts} />);
   

@@ -10,20 +10,21 @@ import DonutChartComponent from "../dashboard/DonutChartComponent";
 // import TableEstimatesByProject from "./TableEstimatesByProject";
 import TableConceptsEstimate from "./TableConceptsEstimate";
 import AddNewEstimateProject from "./AddNewEstimateProject";
-import { IEstimateProject, IEstimate, IConceptEstimate } from "@/interfaces/Estimate";
+import { IEstimateProject, IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
 import { getConeptsEstimate } from "@/app/api/routeEstimates";
 import AddNewConceptEstimate from "./AddNewConceptEstimate";
 import { Options } from "@/interfaces/Common";
 
-export default function ContainerDetailEstimate({project, token, user, estimate, concepts, idEstimate}: 
+export default function ContainerDetailEstimate({project, token, user, estimate, concepts, 
+    idEstimate, totalEstimatedProject}: 
   {project: OneProjectMin, token: string, user: string, estimate:IEstimate, 
-    concepts:IConceptEstimate[], idEstimate:string}) {
+    concepts:IConceptEstimate[], idEstimate:string, totalEstimatedProject: TotalEstimatedByProject[]}) {
 
   const [openNewConcept, setOpenNewConcept] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
   const [conceptsData, setConceptsData] = useState<IConceptEstimate[]>(concepts);
 
-  console.log('estimCION RECIVIDA => ', estimate);
+  // console.log('estimCION RECIVIDA => ', estimate);
 
   const handleFilterTable = (value: boolean) => {
     setIsFilterTable(value);
@@ -77,7 +78,15 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       value: c._id
     });
   });
+
+  // const conceptsPrueba: IConceptEstimate[] = [];
+  // for (let index = 0; index < 2; index++) {
+  //   conceptsPrueba.push(concepts[0]);  
+  // }
 // console.log('estimate => ', estimate);
+
+
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -112,23 +121,38 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
         <div className="bg-white p-3">
           <div className="flex justify-between ">
             <p className="text-slate-400">Acumulado estimado</p>
-            <p className="text-lg text-slate-600 text-right">$2,000,000</p>
+            <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
+              currency: 'MXN',
+              value: totalEstimatedProject[0].estimatedTotal
+            })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Esta estimacion</p>
-            <p className="text-lg text-green-600 text-right">$2,000,000</p>
+            <p className="text-lg text-green-600 text-right">{CurrencyFormatter({
+              currency: 'MXN',
+              value: estimate.estimatedTotal
+            })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Pendiente por estimar</p>
-            <p className="text-lg text-slate-600 text-right">$2,000,000</p>
+            <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
+              currency: 'MXN',
+              value: totalEstimatedProject[0].amountPayable
+            })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Amortizado</p>
-            <p className="text-lg text-slate-600 text-right">$2,000,000</p>
+            <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
+              currency: 'MXN',
+              value: totalEstimatedProject[0].amountChargeOff
+            })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Fondo de garantia</p>
-            <p className="text-lg text-slate-600 text-right">$2,000,000</p>
+            <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
+              currency: 'MXN',
+              value: totalEstimatedProject[0].amountGuaranteeFund
+            })}</p>
           </div>
         </div>
 

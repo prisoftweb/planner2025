@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { getCompaniesLV } from "../api/routeCompany";
 import { getDepartmentsLV } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
-import { getProjectsLV } from "../api/routeProjects";
+import { getProjectsLV, getProjectsLVNoCompleted } from "../api/routeProjects";
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, 
   GetAllReportsWithUSERAndNEConditionMIN
  } from "../api/routeReports";
@@ -62,7 +62,8 @@ export default async function Page() {
       value: 'all'
     }]
   try {
-    optProjects = await getProjectsLV(token);
+    // optProjects = await getProjectsLV(token);
+    optProjects = await getProjectsLVNoCompleted(token);
     if(typeof(optProjects)==='string'){
       return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
     }    

@@ -1,14 +1,14 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import ContainerStimationsProject from "@/components/projects/estimates/ContainerStimationsProject";
+// import ContainerStimationsProject from "@/components/projects/estimates/ContainerStimationsProject";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
-import { Options } from "@/interfaces/Common";
-import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { IEstimateProject, IEstimate, IConceptEstimate } from "@/interfaces/Estimate";
-import { getEstimatesByProject, getEstimate, getConeptsEstimate } from "@/app/api/routeEstimates";
+// import { GlossaryCatalog } from "@/interfaces/Glossary";
+// import { Options } from "@/interfaces/Common";
+// import { getCatalogsByName } from "@/app/api/routeCatalogs";
+import { IEstimateProject, IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
+import { getEstimatesByProject, getTotalEstimatesByProjectMin, getEstimate, getConeptsEstimate } from "@/app/api/routeEstimates";
 import ContainerDetailEstimate from "@/components/projects/estimates/ContainerDetailEstimate";
 
 export default async function Page({ params }: { params: { idp: string, ide:string }}){
@@ -35,6 +35,16 @@ export default async function Page({ params }: { params: { idp: string, ide:stri
       return <h1 className="text-center text-red-500">{estimate}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener estimacion!!</h1>  
+  }
+
+  let totalEstimatedProject: TotalEstimatedByProject[];
+  try {
+    totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
+    // console.log('estimates min => ', estimates);
+    if(typeof(totalEstimatedProject) === "string")
+      return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las estimaciones del proyecto!!</h1>  
   }
   
   let concepts: IConceptEstimate[];
@@ -80,7 +90,7 @@ export default async function Page({ params }: { params: { idp: string, ide:stri
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerDetailEstimate estimate={estimate} project={project} token={token} user={user._id} 
-          concepts={concepts} idEstimate={params.ide} />
+          concepts={concepts} idEstimate={params.ide} totalEstimatedProject={totalEstimatedProject} />
         {/* <ContainerStimationsProject project={project} optConditions={optConditions} optProjects={[{
             label: 'Todos',
             value: 'all'

@@ -10,16 +10,17 @@ import DonutChartComponent from "../dashboard/DonutChartComponent";
 import TableEstimatesByProject from "./TableEstimatesByProject";
 import AddNewEstimateProject from "./AddNewEstimateProject";
 import { Options } from "@/interfaces/Common";
-import { IEstimateProject } from "@/interfaces/Estimate";
+import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } from "@/interfaces/Estimate";
 import { getEstimatesByProject } from "@/app/api/routeEstimates";
 interface OptionsDashboard {
   label: string,
   costo: number
 }
 
-export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, token, user}: 
+export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, 
+    token, user, totalEstimatedProject }: 
   {project: OneProjectMin, optProjects: Options[], optConditions: Options[], estimates:IEstimateProject[], 
-    token: string, user: string}) {
+    token: string, user: string, totalEstimatedProject: TotalEstimatedByProject[] }) {
 
   const [openNewStimate, setOpenNewStimate] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -66,6 +67,9 @@ export default function ContainerStimationsProject({project, optConditions, optP
     setIsFilterTable(false);
     setEstimatesData(newData);
   }
+
+  // let acumulated=0;
+  // estimates.map((e) => acumulated+=e.estimatedTotal);
 
   return (
     <>
@@ -114,14 +118,14 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="bg-green-600 text-white p-2 w-40 text-center">PAGADO</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: totalEstimatedProject[0].amountPayable
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Anticipo del 30%</p>
+              <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentaje || 0}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: totalEstimatedProject[0].amountPayable
               })}</p>
             </div>
 
@@ -129,7 +133,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Estimado acumulado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: totalEstimatedProject[0].estimatedTotal
               })}</p>
             </div>
 
@@ -137,7 +141,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Amortizado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: totalEstimatedProject[0].amountChargeOff
               })}</p>
             </div>
 
@@ -145,7 +149,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Garantia del {project.guaranteefund.porcentage}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: totalEstimatedProject[0].amountGuaranteeFund
               })}</p>
             </div>
           </div>

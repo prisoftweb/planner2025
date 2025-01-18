@@ -262,7 +262,9 @@ export function ParseProjectToOneProjectMin(value: Project){
     segment: value.category,
     status: value.status,
     title: value.title,
-    type: value.glossary
+    type: value.glossary,
+    hasamountChargeOff: value.hasamountChargeOff,
+    amountChargeOff: value.amountChargeOff
   }
 
   return projMin;

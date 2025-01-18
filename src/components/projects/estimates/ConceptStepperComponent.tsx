@@ -30,35 +30,6 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
     filteredConcepts = concepts.filter((c) => c.name.includes(search));
   }
 
-  // const validationData = () =>{
-  //   let validation = true;
-  //   if(!code || code===''){
-  //     setBandCode(true);
-  //     validation = false;
-  //   }else{
-  //     setBandCode(false);
-  //   }
-  //   if(!description || description===''){
-  //     setBandDescription(true);
-  //     validation = false;
-  //   }else{
-  //     setBandDescription(false);
-  //   }
-  //   // return validation;
-  //   if(validation){
-  //     showToastMessage('Aqui pero no avanza!!!');
-  //     nextStep(1)
-  //   }else{
-  //     showToastMessageError('Fallo la validacion!!');
-  //   }
-  // }
-
-  // console.log('concepts sel => ', conceptsLV);
-  // let indexConc: number = 0;
-  // conceptsLV.map((c, index) => {if(c.value===conceptID){indexConc = index}});
-  // console.log('concepts index => ', indexConc);
-  // const selConcept = <SelectReact opts={conceptsLV} index={indexConc} setValue={handleConceptID} />;
-
   const handleConcept = (conceptSel: string) => {
     handleConceptID(conceptSel);
     nextStep(1);
@@ -118,7 +89,8 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
                   onClick={() => setShowNewConcept(true)} />
       </div>
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
-        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
+            overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {filteredConcepts.map((conce) => (
             <div role="button"
               key={conce._id}

@@ -95,6 +95,24 @@ export async function getConeptsEstimate(auth_token:string, estimate: string) {
   }
 }
 
+export async function getAllConceptsEstimateMin(auth_token:string, estimate: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllConceptsOfEstimateMIN/${estimate}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener conceptos de la estimacion!!';
+  }
+}
+
 export async function removeConceptEstimate(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/${id}`;
   try {
@@ -136,6 +154,7 @@ export async function createConceptEstimate(auth_token:string, data: Object) {
 
 export async function insertPriceInConceptEstimate(auth_token:string, data: Object, idC:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/insertPricesInConcep/${idC}`;
+  console.log('price => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -144,13 +163,37 @@ export async function insertPriceInConceptEstimate(auth_token:string, data: Obje
       }
     })
     // if(res.status===200) return res.data.data.data;
-    if(res.status===201) return res.status;
+    console.log('insert price => ', res);
+    if(res.status===201 || res.status===200) return res.status;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message;
     }
     return 'Error al insertar precio en concepto!!';
+  }
+}
+
+export async function insertConceptInEstimate(auth_token:string, data: Object, idE:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/insertConceptsInEstimates/${idE}`;
+  console.log('url insert concept => ', url);
+  console.log('concept => ', JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    // if(res.status===200) return res.data.data.data;
+    console.log('insert concept => ', res);
+    if(res.status===201 || res.status===200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al insertar concepto en la estimacion!!';
   }
 }
 
@@ -171,5 +214,59 @@ export async function deletePriceInConceptEstimate(auth_token:string, idC:string
       return error.response?.data.message || error.message;
     }
     return 'Error al insertar precio en concepto!!';
+  }
+}
+
+export async function getPricesConcept(auth_token:string, idConcept: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/getAllPricesOfConceptEstimateMIN/${idConcept}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener precios de concepto!!';
+  }
+}
+
+export async function getTotalEstimatesByProjectMin(auth_token:string, project: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getTOTALEstimatesByProjectMIN/${project}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener total de estimaciones del proyecto!!';
+  }
+}
+
+export async function getResumenEstimateProject(auth_token:string, project: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllTOTALEStimatesResumeByProjectMIN/${project}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener resumen de estimacion del proyecto!!';
   }
 }

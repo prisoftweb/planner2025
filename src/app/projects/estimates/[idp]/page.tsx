@@ -3,12 +3,12 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import ContainerStimationsProject from "@/components/projects/estimates/ContainerStimationsProject";
 import { OneProjectMin } from "@/interfaces/Projects";
-import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
+import { GetProjectMin, getProjectsLV, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { IEstimateProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject } from "@/app/api/routeEstimates";
+import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } from "@/interfaces/Estimate";
+import { getEstimatesByProject, getTotalEstimatesByProjectMin, getResumenEstimateProject } from "@/app/api/routeEstimates";
 
 export default async function Page({ params }: { params: { idp: string }}){
   const cookieStore = cookies();
@@ -35,9 +35,20 @@ export default async function Page({ params }: { params: { idp: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
   }
 
+  let totalEstimatedProject: TotalEstimatedByProject[];
+  try {
+    totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
+    // console.log('estimates min => ', estimates);
+    if(typeof(totalEstimatedProject) === "string")
+      return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las estimaciones del proyecto!!</h1>  
+  }
+
   let projects: Options[];
   try {
-    projects = await getProjectsLV(token);
+    // projects = await getProjectsLV(token);
+    projects = await getProjectsLVNoCompleted(token);
     if(typeof(projects) === "string")
       return <h1 className="text-center text-red-500">{projects}</h1>
   } catch (error) {
@@ -70,7 +81,8 @@ export default async function Page({ params }: { params: { idp: string }}){
         <ContainerStimationsProject project={project} optConditions={optConditions} optProjects={[{
             label: 'Todos',
             value: 'all'
-          }, ...projects]} estimates={estimates} token={token} user={user._id} />
+          }, ...projects]} estimates={estimates} token={token} user={user._id} 
+          totalEstimatedProject={totalEstimatedProject} />
       </div>
     </>
   )

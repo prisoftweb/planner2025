@@ -33,10 +33,10 @@ import { getAllCostsByCondition } from "@/app/api/routeCost"
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
-                    user, isHistory=false, isViewReports}:
+                    user, isHistory=false, isViewReports, isViewUser=false}:
                   {data:ExpensesTable[], token:string, 
                     expenses:Expense[], user:UsrBack, isHistory?:boolean, 
-                    isViewReports: boolean}){
+                    isViewReports: boolean, isViewUser?: boolean}){
 
   const { categories, conditions, costCenterOpt, projects, providers, responsibles, types, 
     updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
@@ -264,29 +264,69 @@ export default function ContainerClient({data, token, expenses,
   //if( expensesTable.length <= 0 && expenses.length <= 0){
   if( expenses.length <= 0 && expensesTable.length <= 0){
     //console.log('entro en el return length 0 => ');
-    return (
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          {isHistory? (
-            <WithOut img="/img/costs/gastos.svg" subtitle="Historial de Gastos"
-              text="El historial de gastos actualmente esta vacio!!!"
-              title="Historial de Gastos">
+    const view = isHistory? <WithOut img="/img/costs/gastos.svg" subtitle="Historial de Gastos"
+    text="El historial de gastos actualmente esta vacio!!!"
+    title="Historial de Gastos">
+      <></>
+  </WithOut> : (isViewUser? <WithOut img="/img/costs/gastos.svg" subtitle="Gastos por usuario"
+              text="Aqui se mostraran los gastos ingresador por ti!!!"
+              title="Gastos por usuario">
                 <></>
-            </WithOut>
-          ): (
-            <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
+            </WithOut>: <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
               text="Agrega el costo de mano de obra,
                     caja chica o proveedor desde esta
                     seccion a un determinado proyecto"
               title="Gastos">
                 <ButtonNew token={token} user={user} />
-            </WithOut>
-          )}
-        </div>
+            </WithOut>);
+    // return (
+    //   <>
+    //     <Navigation user={user} />
+    //     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+    //       {isHistory? (
+    //         <WithOut img="/img/costs/gastos.svg" subtitle="Historial de Gastos"
+    //           text="El historial de gastos actualmente esta vacio!!!"
+    //           title="Historial de Gastos">
+    //             <></>
+    //         </WithOut>
+    //       ): (
+    //         <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
+    //           text="Agrega el costo de mano de obra,
+    //                 caja chica o proveedor desde esta
+    //                 seccion a un determinado proyecto"
+    //           title="Gastos">
+    //             <ButtonNew token={token} user={user} />
+    //         </WithOut>
+    //       )}
+    //     </div>
+    //   </>
+    // )
+    return (
+      <>
+        {view}
       </>
     )
   }
+
+  const viewTable = 
+    isHistory? (
+      <TableHistoryExpenses  token={token} isViewReports={isViewReports}
+        expenses={expenses} isFilter={isFilter} setIsFilter={setIsFilter}
+        data={tableData}
+      />
+    ): isViewUser? (
+      <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
+        expenses={expenses} isFilter={isFilter} setIsFilter={handleFilter}
+        idValidado={idVal} user={user._id} isViewReports={isViewReports}
+        data={tableData}
+      />
+    ): (
+      <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
+        expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
+        idValidado={idVal} user={user._id} isViewReports={isViewReports}
+        data={tableData}
+      />
+    )
   
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
@@ -312,7 +352,7 @@ export default function ContainerClient({data, token, expenses,
                   />
               )}  
               <>
-                {!isHistory && (
+                {!isHistory && !isViewUser && (
                   <>
                     {expensesSelected.length > 0 && (
                       <Button onClick={changeConditionInCost}>Validar</Button>
@@ -325,23 +365,21 @@ export default function ContainerClient({data, token, expenses,
           </div>
         </div>
       </div>
-      {
+      {viewTable}
+      {/* {
         isHistory? (
           <TableHistoryExpenses  token={token} isViewReports={isViewReports}
             expenses={expenses} isFilter={isFilter} setIsFilter={setIsFilter}
-            //data={data}
             data={tableData}
           />
-          // <></>
         ): (
           <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
             expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
             idValidado={idVal} user={user._id} isViewReports={isViewReports}
-            //data={data}
             data={tableData}
           />
         )
-      }
+      } */}
     </div>
   )
 }

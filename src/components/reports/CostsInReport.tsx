@@ -59,7 +59,7 @@ export default function CostsInReport({report, id, token}:
             <div>
               <p className="text-blue-500">{oneReport?.project.title}</p>
               <p className="text-slate-500">{oneReport?.project.code}</p>
-              <p className="text-slate-500">{oneReport?.project.glossary.name}</p>
+              <p className="text-slate-500">{oneReport?.project.glossary?.name || "Sin condicion"}</p>
               <p className="text-slate-500">{oneReport?.project.account}</p>
               <div className="mt-3 border-t border-slate-500 pt-2">
                 <p className="text-blue-500">{oneReport?.name}</p>

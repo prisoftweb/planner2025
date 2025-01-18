@@ -118,7 +118,7 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
   }
 
   return(
-    <div className="w-full z-50 max-w-xl absolute top-0 bg-white p-3 right-0"
+    <div className="w-full z-50 max-w-xl absolute -top-1 bg-white p-3 right-0"
       style={{height: `${heightPage}px`}} 
       ref={ref}
     >

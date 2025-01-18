@@ -1,16 +1,16 @@
 import { CostsTable, Report } from "@/interfaces/Reports"
 import Chip from "../providers/Chip"
 import Label from "../Label"
-import Table from "../Table"
+// import Table from "../Table"
 import { CurrencyFormatter } from "@/app/functions/Globals"
-import { createColumnHelper } from "@tanstack/react-table"
+// import { createColumnHelper } from "@tanstack/react-table"
 //import { Expense } from "@/interfaces/Expenses"
-import { CostsDataToTableDataMin } from "@/app/functions/ReportsFunctions"
-import DeleteElement from "../DeleteElement"
-import { RemoveCost } from "@/app/api/routeCost"
-import { CostReport } from "@/interfaces/Reports"
-import { useEffect, useState } from "react"
-import { getCostByReportMin } from "@/app/api/routeReports"
+// import { CostsDataToTableDataMin } from "@/app/functions/ReportsFunctions"
+// import DeleteElement from "../DeleteElement"
+// import { RemoveCost } from "@/app/api/routeCost"
+// import { CostReport } from "@/interfaces/Reports"
+// import { useEffect, useState } from "react"
+// import { getCostByReportMin } from "@/app/api/routeReports"
 
 import { useOneReportStore } from "@/app/store/reportsStore"
 
@@ -53,7 +53,7 @@ export default function NuevoComponente({report, id, token}:
             <div>
               <p className="text-blue-500">{oneReport?.project.title}</p>
               <p className="text-slate-500">{oneReport?.project.code}</p>
-              <p className="text-slate-500">{oneReport?.project.glossary.name}</p>
+              <p className="text-slate-500">{oneReport?.project.glossary?.name || "sin condicion"}</p>
               <p className="text-slate-500">{oneReport?.project.account}</p>
               <div className="mt-3 border-t border-slate-500 pt-2">
                 <p className="text-blue-500">{oneReport?.name}</p>

@@ -145,6 +145,10 @@ const NavItems = ({role}: {role:string}) => {
               link: '/expenses'
             },
             {
+              name: 'Gastos por usuario',
+              link: '/expenses/byuser'
+            },
+            {
               name: 'Historial gastos',
               link: '/expenses/history'
             },
@@ -235,6 +239,10 @@ const NavItems = ({role}: {role:string}) => {
           {
             name: 'Gastos',
             link: '/expenses'
+          },
+          {
+            name: 'Gastos por usuario',
+            link: '/expenses/byuser'
           },
           {
             name: 'Historial',

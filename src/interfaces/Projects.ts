@@ -66,6 +66,12 @@ export interface Project {
   category: Glossary
   // types: Glossary
   // categorys: Glossary
+  hasamountChargeOff: boolean
+  amountChargeOff: {
+    date: string,
+    amount: number,
+    porcentaje: number
+  }
 }
 
 export interface OneProjectMin {
@@ -87,6 +93,12 @@ export interface OneProjectMin {
   segment: Glossary
   progress: number
   status: boolean
+  hasamountChargeOff: boolean
+  amountChargeOff: {
+    date: string,
+    amount: number,
+    porcentaje: number
+  }
 }
 
 // export interface ProjectMin {
