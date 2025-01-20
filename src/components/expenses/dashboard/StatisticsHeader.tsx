@@ -91,7 +91,8 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                 content='categoria'
                 className="text-slate-900 bg-white" placement="top">
-                <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} />} 
+                <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
+                                              type={true} rangeDate={rangeDate} />} 
                     fileName={`InformeCostosAgrupadosPorCategoria`} >
                   {({loading, url, error, blob}) => 
                     loading? (
@@ -108,7 +109,8 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content='concepto' 
                   className="text-slate-900 bg-white" placement="top">
-                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} />} 
+                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
+                                                type={false} rangeDate={rangeDate} />} 
                     fileName={`InformeCostosAgrupadosPorConcepto`} >
                   {({loading, url, error, blob}) => 
                     loading? (

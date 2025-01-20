@@ -38,6 +38,7 @@ export default async function Page({ params }: { params: { idp: string }}){
   let totalEstimatedProject: TotalEstimatedByProject[];
   try {
     totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
+    // console.log('res total estimated => ', totalEstimatedProject);
     // console.log('estimates min => ', estimates);
     if(typeof(totalEstimatedProject) === "string")
       return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>

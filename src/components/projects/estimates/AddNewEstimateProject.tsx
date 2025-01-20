@@ -32,6 +32,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   const [bandAmount, setBandAmount] = useState<boolean>(false);
   const [bandDate, setBandDate] = useState<boolean>(false);
   const [bandDescription, setBandDescription] = useState<boolean>(false);
+  const [lengthOrder, setLengthOrder] = useState<string>('');
 
   const [heightPage, setHeightPage] = useState<number>(900);
   // const refRequest = useRef(true);
@@ -63,8 +64,14 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   const c1 = getRandomArbi(0, 9);
 
   const updateValues = (val: number) => {
-    const amor = (val * 30) / 100;
-    const guaran = (val * Number(project.guaranteefund?.porcentage || '0')) / 100;
+    let amor: number = 0;
+    if(project.amountChargeOff){
+      amor = (val * project.amountChargeOff.porcentaje) / 100;
+    }
+    let guaran: number = 0;
+    if(project.guaranteefund){
+      guaran = (val * Number(project.guaranteefund?.porcentage || '0')) / 100;
+    }
     const total = val - amor - guaran;
 
     setAmortization(amor);
@@ -86,11 +93,18 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
     }else{
       setBandDate(false);
     }
-    if(!order || order===''){
+    if(!order || order.trim()===''){
       setBandOrder(true);
       validation = false;
+      setLengthOrder('La orden es obligatoria!!!');
     }else{
-      setBandOrder(false);
+      if(order.length < 3){
+        setBandOrder(true);
+        validation = false;
+        setLengthOrder('La orden debe ser de al menos 3 caracteres!!!');
+      }else{
+        setBandOrder(false);
+      }
     }
     if(!amount || amount===0){
       setBandAmount(true);
@@ -195,6 +209,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 
               type="date"
+              defaultValue={new Date().toISOString()}
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
@@ -209,7 +224,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
               onChange={(e) => setOrder(e.target.value)}
             />
             {bandOrder && (
-              <p className="text-red-500">La orden es obligatorio!!!</p>
+              <p className="text-red-500">{lengthOrder}</p>
             )}
           </div>
 
