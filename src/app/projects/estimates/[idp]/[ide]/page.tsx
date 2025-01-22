@@ -8,7 +8,8 @@ import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
 // import { Options } from "@/interfaces/Common";
 // import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { IEstimateProject, IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject, getTotalEstimatesByProjectMin, getEstimate, getConeptsEstimate } from "@/app/api/routeEstimates";
+import { getEstimatesByProject, getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin, 
+  getEstimate, getConeptsEstimate } from "@/app/api/routeEstimates";
 import ContainerDetailEstimate from "@/components/projects/estimates/ContainerDetailEstimate";
 
 export default async function Page({ params }: { params: { idp: string, ide:string }}){
@@ -49,8 +50,9 @@ export default async function Page({ params }: { params: { idp: string, ide:stri
   
   let concepts: IConceptEstimate[];
   try {
-    concepts = await getConeptsEstimate(token, params.ide);
-    // console.log('concepts min => ', concepts);
+    // concepts = await getConeptsEstimate(token, params.ide);
+    concepts = await getAllConceptsDetailsByEstimateMin(token, params.ide);
+    console.log('concepts min => ', concepts);
     if(typeof(concepts) === "string")
       return <h1 className="text-center text-red-500">{concepts}</h1>
   } catch (error) {

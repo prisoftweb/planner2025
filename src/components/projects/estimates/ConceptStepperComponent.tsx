@@ -27,7 +27,7 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
 
   let filteredConcepts = concepts;
   if(search && search !== ''){
-    filteredConcepts = concepts.filter((c) => c.name.includes(search));
+    filteredConcepts = concepts.filter((c) => c.conceptEstimate.name.includes(search));
   }
 
   const handleConcept = (conceptSel: string) => {
@@ -93,12 +93,12 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {filteredConcepts.map((conce) => (
             <div role="button"
-              key={conce._id}
+              key={conce.conceptEstimate._id}
               className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
                 outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300"
-              onClick={() => handleConcept(conce._id)}
+              onClick={() => handleConcept(conce.conceptEstimate._id)}
             >
               <div className="flex items-center ">
                 <div className="grid mr-4 place-items-center">
@@ -109,12 +109,12 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
                   <div className="flex justify-between items-center">
                     <h6
                       className="block font-sans text-lg antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-                      {conce.name}
+                      {conce.conceptEstimate.name}
                     </h6>
-                    <p className="text-slate-500 text-sm">{conce.code}</p>
+                    <p className="text-slate-500 text-sm">{conce.conceptEstimate.code}</p>
                   </div>
                   <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {conce.description}
+                    {conce.conceptEstimate.description}
                   </p>
                 </div>
               </div>

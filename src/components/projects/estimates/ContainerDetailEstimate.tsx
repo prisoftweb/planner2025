@@ -63,7 +63,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   }
 
   const delConcept = (id:string) => {
-    const newData = conceptsData.filter((c) => c._id!==id);
+    const newData = conceptsData.filter((c) => c.conceptEstimate._id!==id);
     setIsFilterTable(false);
     setConceptsData(newData);
     // const newData=estimatesData.filter((e) => e._id !== id);
@@ -74,8 +74,8 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   const conceptsLV: Options[] = [];
   concepts.map((c) => {
     conceptsLV.push({
-      label: c.name,
-      value: c._id
+      label: c.conceptEstimate.name,
+      value: c.conceptEstimate._id
     });
   });
 

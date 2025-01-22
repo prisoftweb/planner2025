@@ -121,7 +121,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               <div className="p-1" style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': '')}}>
                 <FcAdvance className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md ${option===6? 'bg-blue-500': ''}`} onClick={() => changeOption(6)} 
-                  onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
+                  onMouseEnter={() => {setIsHover(6)} } onMouseLeave={() => setIsHover(-1)}
                   style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': ''), 
                     color: isHover===6 || option===6 ? 'white' : '',}}
                 />

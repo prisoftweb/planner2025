@@ -21,10 +21,10 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   const [name, setName] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [order, setOrder] = useState<string>('');
-  const [amount, setAmount] = useState<number>(0);
-  const [amortization, setAmortization] = useState<number>(0);
-  const [guarantee, setGuarantee] = useState<number>(0);
-  const [amountPay, setAmountPay] = useState<number>(0);
+  const [amount, setAmount] = useState<string>('0');
+  const [amortization, setAmortization] = useState<string>('0');
+  const [guarantee, setGuarantee] = useState<string>('0');
+  const [amountPay, setAmountPay] = useState<string>('0');
   const [description, setDescription] = useState<string>('');
 
   const [bandName, setBandName] = useState<boolean>(false);
@@ -63,20 +63,31 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
 
   const c1 = getRandomArbi(0, 9);
 
-  const updateValues = (val: number) => {
+  const updateValues = (val: string) => {
     let amor: number = 0;
+    // console.log('project => ', project);
     if(project.amountChargeOff){
-      amor = (val * project.amountChargeOff.porcentaje) / 100;
+      // console.log('charge off => ', project.amountChargeOff);
+      // console.log('charge off porcentaje => ', project.amountChargeOff.porcentage);
+      // const mul = val * project.amountChargeOff.porcentage;
+      // console.log('mul => ', mul);
+      // const div = mul / 100;
+      // console.log('div => ', div);
+      amor = (Number(val.replace(/[$,]/g, "")) * project.amountChargeOff.porcentage) / 100;
     }
     let guaran: number = 0;
     if(project.guaranteefund){
-      guaran = (val * Number(project.guaranteefund?.porcentage || '0')) / 100;
+      guaran = (Number(val.replace(/[$,]/g, "")) * Number(project.guaranteefund?.porcentage || '0')) / 100;
     }
-    const total = val - amor - guaran;
+    // console.log('val => ', val);
+    // console.log('amor => ', amor);
+    // console.log('guaran => ', guaran);
+    const total = Number(val.replace(/[$,]/g, "")) - amor - guaran;
+    // console.log('total => ', total);
 
-    setAmortization(amor);
-    setGuarantee(guaran);
-    setAmountPay(total);
+    setAmortization(amor.toFixed(2));
+    setGuarantee(guaran.toFixed(2));
+    setAmountPay(total.toFixed(2));
   }
 
   const validationData = () =>{
@@ -106,7 +117,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         setBandOrder(false);
       }
     }
-    if(!amount || amount===0){
+    if(!amount || amount==='0'){
       setBandAmount(true);
       validation = false;
     }else{
@@ -241,11 +252,11 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {
-                setAmount(Number(value?.replace(/[$,]/g, "") || '0'));
-                updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
+                setAmount(value?.replace(/[$,]/g, "") || '0');
+                updateValues(value?.replace(/[$,]/g, "") || '0')
               } catch (error) {
-                setAmount(0);
-                updateValues(0);
+                setAmount('0');
+                updateValues('0');
               }}}
             />
             {bandAmount && (

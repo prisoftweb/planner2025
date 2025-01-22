@@ -70,7 +70,7 @@ export interface Project {
   amountChargeOff: {
     date: string,
     amount: number,
-    porcentaje: number
+    porcentage: number
   }
 }
 
@@ -97,7 +97,7 @@ export interface OneProjectMin {
   amountChargeOff: {
     date: string,
     amount: number,
-    porcentaje: number
+    porcentage: number
   }
 }
 

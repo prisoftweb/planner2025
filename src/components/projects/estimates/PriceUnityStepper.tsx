@@ -46,7 +46,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await getPricesConcept(token, conceptSelected._id);
+      const res = await getPricesConcept(token, conceptSelected.conceptEstimate._id);
       if(typeof(res) !== 'string'){
         setPrices(res);
       }
@@ -76,11 +76,11 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
           }
         ]
       }
-      const res = await insertPriceInConceptEstimate(token, data, conceptSelected._id);
+      const res = await insertPriceInConceptEstimate(token, data, conceptSelected.conceptEstimate._id);
       if(typeof(res)==='string'){
         showToastMessageError('Error al insertar precio en el concepto!!!');
       }else{
-        const res2 = await getPricesConcept(token, conceptSelected._id);
+        const res2 = await getPricesConcept(token, conceptSelected.conceptEstimate._id);
         if(typeof(res2) !== 'string'){
           setPrices(res2);
           handleAddNewPrice(res2);
@@ -98,11 +98,11 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
       <>
         <div>
           <div className="flex justify-between items-end p-2 bg-slate-100 border border-slate-500 rounded-t-lg">
-            <p className="text-slate-700">{conceptSelected.name}</p>
-            <p className="text-slate-700">{conceptSelected.code}</p>
+            <p className="text-slate-700">{conceptSelected.conceptEstimate.name}</p>
+            <p className="text-slate-700">{conceptSelected.conceptEstimate.code}</p>
           </div>
           <div className="border border-slate-500 p-2 text-xs text-slate-500">
-            <p>{conceptSelected.description}</p>
+            <p>{conceptSelected.conceptEstimate.description}</p>
           </div>
         </div>
 

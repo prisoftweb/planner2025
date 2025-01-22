@@ -65,7 +65,7 @@ export default function DataStepperComponent({token, previousStep, price, concep
     const data = {
       concepts: [
         {
-          conceptEstimate: conceptSelected._id,
+          conceptEstimate: conceptSelected.conceptEstimate._id,
           priceConcepEstimate: {                 
               cost: price?.cost,
               date: price?.date,            
@@ -100,11 +100,11 @@ export default function DataStepperComponent({token, previousStep, price, concep
     <>
       <div>
         <div className="flex justify-between items-end p-2 bg-slate-100 border border-slate-500 rounded-t-lg">
-          <p className="text-slate-700">{conceptSelected.name}</p>
-          <p className="text-slate-700">{conceptSelected.code}</p>
+          <p className="text-slate-700">{conceptSelected.conceptEstimate.name}</p>
+          <p className="text-slate-700">{conceptSelected.conceptEstimate.code}</p>
         </div>
         <div className="border border-slate-500 p-2 text-xs text-slate-500">
-          <p>{conceptSelected.description}</p>
+          <p>{conceptSelected.conceptEstimate.description}</p>
         </div>
       </div>
 

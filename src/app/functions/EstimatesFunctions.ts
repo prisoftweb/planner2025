@@ -34,14 +34,14 @@ export function ConceptsDataToConceptsTable(conepts:IConceptEstimate[]){
   
   conepts.map((concept) => {
     table.push({
-      id: concept._id,
+      id: concept.conceptEstimate._id,
       Cantidad: 1,
-      Clave: concept.code,
-      Descripcion: concept.description,
-      nombre: concept.name,
-      PU: concept.prices && concept.prices.length > 0? (concept.prices[0].cost? concept.prices[0].cost: 0) : 0,
-      Importe: concept.prices && concept.prices.length > 0? (concept.prices[0].cost? concept.prices[0].cost: 0 ) : 0,
-      Unidad: concept.prices && concept.prices.length > 0? (concept.prices[0].unit? concept.prices[0].unit : 'NA'): 'NA'
+      Clave: concept.conceptEstimate.code,
+      Descripcion: concept.conceptEstimate.description,
+      nombre: concept.conceptEstimate.name,
+      PU: concept.conceptEstimate?.priceConcepEstimate? (concept.conceptEstimate?.priceConcepEstimate?.cost? concept.conceptEstimate.priceConcepEstimate.cost: 0) : 0,
+      Importe: concept.conceptEstimate?.priceConcepEstimate? (concept.conceptEstimate?.priceConcepEstimate?.cost? concept.conceptEstimate.priceConcepEstimate.cost: 0) : 0,
+      Unidad: 'NA'
     });
   });
 

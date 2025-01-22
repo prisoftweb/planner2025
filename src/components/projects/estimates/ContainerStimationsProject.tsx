@@ -124,7 +124,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentaje || 0}%</p>
+              <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentage || 0}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
                 value: totalEstimatedProject.length> 0? totalEstimatedProject[0]?.amountPayable || 0 : 0

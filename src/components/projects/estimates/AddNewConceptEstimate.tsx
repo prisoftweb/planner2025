@@ -95,7 +95,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   const handleConceptID = (value: string) => {
     // setIdConcept(value);
-    const c = concepts.find((c) => c._id === value);
+    const c = concepts.find((c) => c.conceptEstimate._id === value);
     if(c){
       setConcepSel(c);
     }
@@ -122,8 +122,8 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     const contsLV: Options[] = [];
     cons.map((c) => {
       contsLV.push({
-        label: c.name,
-        value: c._id
+        label: c.conceptEstimate.name,
+        value: c.conceptEstimate._id
       });
     });
     // console.log('nuevos conceptos => ', contsLV);

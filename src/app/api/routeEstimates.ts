@@ -115,6 +115,26 @@ export async function getAllConceptsEstimateMin(auth_token:string, estimate: str
   }
 }
 
+export async function getAllConceptsDetailsByEstimateMin(auth_token:string, estimate: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllConceptsDetailsByEstimateMIN/${estimate}`;
+  console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    console.log('res => ', res);
+    if(res.status===200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener conceptos de la estimacion!!';
+  }
+}
+
 export async function removeConceptEstimate(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/${id}`;
   try {

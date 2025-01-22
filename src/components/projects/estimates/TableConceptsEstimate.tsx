@@ -52,15 +52,15 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
     )
   }
 
-  const conceptM = concepts.reduce((previous, current) => {
-    if(current.prices && previous.prices){
-      return current.prices > previous.prices ? current : previous;
-    }else{
-      return previous
-    }
-  });
+  // const conceptM = concepts.reduce((previous, current) => {
+  //   if(current.prices && previous.prices){
+  //     return current.prices > previous.prices ? current : previous;
+  //   }else{
+  //     return previous
+  //   }
+  // });
 
-  const maxAmount = conceptM.prices;
+  // const maxAmount = conceptM.prices;
 
   const columnHelper = createColumnHelper<ITableConceptsEstimate>();
   

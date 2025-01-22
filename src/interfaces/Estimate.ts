@@ -77,24 +77,45 @@ export interface ITableConceptsEstimate {
   Importe: number
 }
 
+// export interface IConceptEstimate {
+//   _id: string
+//   code: string
+//   name: string
+//   description: string
+//   status?: boolean
+//   datets?: string
+//   prices?: {
+//     cost: number
+//     date: string
+//     unit: string
+//     user: string
+//     status: boolean
+//     _id: string
+//     id: string
+//   }[]
+//   __v?: number
+//   id?: string
+// }
+
 export interface IConceptEstimate {
-  _id: string
-  code: string
-  name: string
-  description: string
-  status?: boolean
-  datets?: string
-  prices?: {
-    cost: number
-    date: string
-    unit: string
-    user: string
-    status: boolean
+  user: UsrBack
+  conceptEstimate: {
     _id: string
-    id: string
-  }[]
-  __v?: number
-  id?: string
+    code: string
+    name: string
+    description: string
+    unit: {}
+    area: string
+    section: string
+    priceConcepEstimate: {
+      cost: number
+      date: string
+    }
+    quantity: number
+    amount: number
+    date: string
+  }
+  status: boolean
 }
 
 export interface PriceConcept {
