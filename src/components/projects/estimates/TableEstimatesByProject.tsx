@@ -15,6 +15,7 @@ import RemoveElement from "@/components/RemoveElement";
 import { removeEstimate } from "@/app/api/routeEstimates";
 import { BsFilePdfFill } from "react-icons/bs";
 import { ResumenEstimateProject } from "@/interfaces/Estimate";
+import { getResumenEstimateProject } from "@/app/api/routeEstimates";
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
   isFilterTable, delEstimate, token }: 
@@ -25,6 +26,25 @@ export default function TableEstimatesByProject({project, optConditions, optProj
   const [filterEstimates, setFilterEstimates] = useState<IEstimateProject[]>(estimates);
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isShowDetailEstimate, setIsShowDetailEstimate] = useState<boolean>(false);
+
+  // const [resumenEstimate, setResumenEstimate] = useState<ResumenEstimateProject>();
+
+  // useEffect(() => {
+  //   const fetchResumen = async () => {
+  //     try {
+  //       const result = await getResumenEstimateProject(token, project._id);
+  //       // console.log('estimates min => ', estimates);
+  //       if(typeof(result) === "string"){
+  //         return <h1 className="text-center text-red-500">{result}</h1>
+  //       }else{
+  //         setResumenEstimate(result);
+  //       }
+  //     } catch (error) {
+  //       return <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen de las estimaciones del proyecto!!</h1>  
+  //     }
+  //   }
+  //   fetchResumen();
+  // }, []);
 
   const refEstimate = useRef('');
 

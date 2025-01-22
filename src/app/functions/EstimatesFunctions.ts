@@ -22,7 +22,7 @@ export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
       MontoPay: estimate.amountPayable,
       Nombre: estimate.name,
       Orden: estimate.purschaseOrder || 'sin orden',
-      No: index++
+      No: index+1
     });
   });
 

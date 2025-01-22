@@ -5,6 +5,10 @@ import Chip from "@/components/providers/Chip"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { getEstimate, getResumenEstimateProject } from "@/app/api/routeEstimates"
 import { IEstimate, ResumenEstimateProject } from "@/interfaces/Estimate"
+import DetailEstimatePDF from "./DetailEstimatePDF"
+import Button from "@/components/Button"
+import {PDFDownloadLink} from '@react-pdf/renderer'
+import { BsFileEarmarkPdf } from "react-icons/bs";
 
 export default function DetailEstimateComponent({project, numEstimate, nomEstimate, showForm, 
     token}: 
@@ -75,14 +79,27 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
           {/* <img src={project.client.logo} alt={project.client.name} /> */}
           <div className="flex items-center gap-x-2">
             <img src={project.photo} alt={project.title} className="rounded-full w-14 h-14" />
-            <div>
+            <div className="w-full">
               <p className="text-blue-500">{project.title}</p>
               <p className="text-blue-300">{CurrencyFormatter({
                 currency: 'MXN',
                 value: project.amount
               })}</p>
-              <Chip label={project.category.name} color={project.category.color} />
+              <div className="w-full max-w-36">
+                <Chip label={project.category.name} color={project.category.color} />
+              </div>
             </div>
+              {resumenEstimateProject && estimate && (
+                <PDFDownloadLink document={<DetailEstimatePDF project={project} resumenEstimate={resumenEstimateProject}
+                    estimate={estimate} numEstimate={numEstimate} />} fileName={project.title} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    ) : (
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    ) }
+              </PDFDownloadLink>
+              )}
           </div>
         </div>
 
@@ -98,7 +115,7 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
               <p className="w-full text-blue-500 text-right p-2">{estimate?.name}</p>
             </div>
             <div className="text-center border border-slate-700 p-2">
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
+              <p className="text-slate-600 text-center">{CurrencyFormatter({
                 currency: 'MXN',
                 value: estimate?.amount || 0
               })}</p>
