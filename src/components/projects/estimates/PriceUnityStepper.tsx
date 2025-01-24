@@ -1,8 +1,8 @@
 import Label from "@/components/Label";
-import SelectReact from "@/components/SelectReact";
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import TextArea from "@/components/TextArea";
-import Input from "@/components/Input";
+// import SelectReact from "@/components/SelectReact";
+// import { PlusCircleIcon } from "@heroicons/react/24/solid";
+// import TextArea from "@/components/TextArea";
+// import Input from "@/components/Input";
 import { useEffect, useState } from "react";
 import { Options } from "@/interfaces/Common";
 // import FormNewConcept from "./FormNewConcept";
@@ -16,6 +16,7 @@ import {BookmarkSquareIcon} from "@heroicons/react/24/solid";
 import { insertPriceInConceptEstimate } from "@/app/api/routeEstimates";
 import { showToastMessageError } from "@/components/Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import {IoIosSave} from 'react-icons/io';
 
 export default function PriceUnityStepper({token, nextStep, handlePriceId, 
     handleAddNewPrice, conceptSelected, user }: 
@@ -93,7 +94,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
   }
 
   // const valueConcept = conceptsLV.find((e) => e.value===conceptID)?.label || '';
-
+console.log('filtered prices => ', filteredPrices);
   return (
       <>
         <div>
@@ -142,7 +143,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
               >
                 <div className="flex items-center w-full ">
                   <div className="grid mr-4 place-items-center">
-                    <img alt="responsable" src={ '/img/users/default.jpg'}
+                    <img alt="responsable" src={ (price.user?.photo? price.user.photo: '/img/users/default.jpg') || '/img/users/default.jpg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                   </div>
                   <div className="flex justify-between items-center gap-x-2 w-full">
@@ -188,7 +189,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
               setCost('0');
             }}}
           />
-          <BookmarkSquareIcon className="h6 w-6 text-slate-900 hover:text-slate-600" 
+          <IoIosSave className="h6 w-6 text-slate-900 hover:text-slate-600" 
             onClick={addPrice} />
         </div>
         {bandPrice && (

@@ -110,11 +110,11 @@ export default function DataStepperComponent({token, previousStep, price, concep
 
       <div className="border border-slate-500 rounded-lg grid grid-cols-2">
         <div className="flex items-center justify-around gap-x-2">
-          <img alt="responsable" src={ '/img/users/default.jpg'}
+          <img alt="responsable" src={ (price?.user?.photo? price.user.photo: '/img/users/default.jpg') || '/img/users/default.jpg'}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
           <p className="text-slate-600">Nombre</p>
         </div>
-        <div className="border border-slate-500 justify-center items-center">
+        <div className="border border-slate-500 flex w-full h-full justify-center items-center">
           {CurrencyFormatter({
             currency: 'MXN',
             value: price?.cost || 0

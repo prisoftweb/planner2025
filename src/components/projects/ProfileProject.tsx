@@ -75,6 +75,25 @@ export default function ProfileProject({project}:
           </div>
         </div>
 
+        {project.hasamountChargeOff && (
+          <div className="my-2 mt-2 bg-white p-3 rounded-lg 
+              shadow-md py-2">
+            <div className="grid grid-cols-2 gap-x-2">
+              <div className="border-r-1 border-gray-700">
+                <p className="text-slate-500">Amortizacion</p>
+                <p className="text-blue-600">{oneProjectStore?.amountChargeOff.porcentage || '0'} %</p>
+              </div>
+              <div>
+                <p className="text-slate-500">Monto</p>
+                <p className="text-blue-600">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: oneProjectStore?.amountChargeOff?.amount? parseFloat(oneProjectStore.amountChargeOff?.amount.toString()) : 0
+                })}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg 
             shadow-md py-2">
           <div className="mt-3">

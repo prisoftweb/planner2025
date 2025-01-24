@@ -296,7 +296,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
-          {(guarantee || haveAddress) && (<button type="submit"
+          {(guarantee || haveAddress || haveAmountCharge) && (<button type="submit"
                 className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
                 hover:bg-slate-200"
               >

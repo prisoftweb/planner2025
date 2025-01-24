@@ -21,8 +21,9 @@ import NavStepperConceptEstimate from "./NavStepperConceptEstimate"
 import ConceptStepperComponent from "./ConceptStepperComponent"
 import PriceUnityStepper from "./PriceUnityStepper"
 import DataStepperComponent from "./DataStepperComponent"
-import { getConeptsEstimate } from "@/app/api/routeEstimates"
+import { getConeptsEstimate, getAllConceptsDetailsByEstimateMin } from "@/app/api/routeEstimates"
 import { IConceptEstimate, PriceConcept } from "@/interfaces/Estimate"
+import { showToastMessageError } from "@/components/Alert"
 
 export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
     conceptSLV, idEstimate, conceptsEstimate}: 
@@ -109,25 +110,28 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     console.log('agregar nuevo concepto');
     let cons: IConceptEstimate[];
     try {
-      cons = await getConeptsEstimate(token, idEstimate);
-      // console.log('res concepts => ', cons);
+      cons = await getAllConceptsDetailsByEstimateMin(token, idEstimate);
+      console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
-        return <h1 className="text-center text-red-500">{cons}</h1>
+        // return <h1 className="text-center text-red-500">{cons}</h1>
+        showToastMessageError(cons);
+      else{
+        setConcepts(cons);
+        const contsLV: Options[] = [];
+        cons.map((c) => {
+          contsLV.push({
+            label: c.conceptEstimate.name,
+            value: c.conceptEstimate._id
+          });
+        });
+        // console.log('nuevos conceptos => ', contsLV);
+        setConceptLV(contsLV);
+      }
     } catch (error) {
       console.log('catch error => ', error);
-      return <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos de la estimacion!!</h1>  
+      // return <h1 className="text-center text-red-500"></h1>
+      showToastMessageError('Ocurrio un error al obtener los conceptos de la estimacion!!');  
     }
-  
-    setConcepts(cons);
-    const contsLV: Options[] = [];
-    cons.map((c) => {
-      contsLV.push({
-        label: c.conceptEstimate.name,
-        value: c.conceptEstimate._id
-      });
-    });
-    // console.log('nuevos conceptos => ', contsLV);
-    setConceptLV(contsLV);
   }
 
   const handleAddNewPrice = () => {

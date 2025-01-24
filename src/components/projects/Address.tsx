@@ -58,11 +58,12 @@ export default function Address({token, id, project}:
           if(typeof(res)!=='string'){
             refRequest.current = true;
             const r = ParseProjectToOneProjectMin(res);
-            updateOneProjectStore(r);
-            showToastMessage('Proyecto actualizado exitosamente!!');
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+            if(typeof(r)==='string'){
+              showToastMessageError(r);
+            }else{
+              updateOneProjectStore(r);
+              showToastMessage('Proyecto actualizado exitosamente!!');
+            }
           }else{
             refRequest.current = true;
             showToastMessageError(res);

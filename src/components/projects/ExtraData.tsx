@@ -86,14 +86,15 @@ export default function ExtraData({token, optClients, optCategories,
           const res = await UpdateProject(token, id, data);
           if(typeof(res)!=='string'){
             refRequest.current = true;
-            console.log('res router => ', res);
+            // console.log('res router => ', res);
             const r = ParseProjectToOneProjectMin(res);
-            console.log('parse res => ', r);
-            updateOneProjectStore(r);
-            showToastMessage('Proyecto actualizado satisfactoriamente!!');
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
+            // console.log('parse res => ', r);
+            if(typeof(r)==='string'){
+              showToastMessageError(r);
+            }else{
+              updateOneProjectStore(r);
+              showToastMessage('Proyecto actualizado satisfactoriamente!!');
+            }
           }else{
             refRequest.current = true;
             showToastMessageError(res);

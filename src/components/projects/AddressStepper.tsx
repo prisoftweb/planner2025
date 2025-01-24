@@ -74,7 +74,11 @@ export default function AddressStepper({token, condition, showForm}:
     onSubmit: async (valores) => {            
       const {community, country, cp, municipy, stateA, street} = valores;
       updateAddress(community, country, cp, municipy, stateA, street);
-      dispatch({type: 'INDEX_STEPPER', data: 3})
+      if(guarantee){
+        dispatch({type: 'INDEX_STEPPER', data: 3})
+      }else{
+        dispatch({type: 'INDEX_STEPPER', data: 4})
+      }
     },       
   });
   
@@ -275,7 +279,7 @@ export default function AddressStepper({token, condition, showForm}:
         </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
-          {guarantee && (
+          {guarantee || hasamountChargeOff && (
                   <button type="submit"
                     className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
                       border-slate-900 rounded-xl hover:bg-slate-200"

@@ -9,6 +9,9 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import CurrencyInput from "react-currency-input-field";
 import { createConceptEstimate } from "@/app/api/routeEstimates";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
+import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
+import SelectReact from "@/components/SelectReact";
+import { Options } from "@/interfaces/Common";
 
 export default function FormNewConcept({token, setShowForm, addConcept}:
           {token:string, setShowForm:Function, addConcept:Function}){
@@ -33,6 +36,28 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
   const [bandName, setBandName] = useState<boolean>(false);
   // const [bandUnity, setBandUnity] = useState<boolean>(false);
   // const [bandCost, setBandCost] = useState<boolean>(false);
+  
+  const [unit, setUnit] = useState<string>();
+  const [optionsUnit, setOptionsUnit] = useState<Options[]>([]);
+
+  const handleUnit = (value: string) => {
+    // setOptionUnit(value);
+    setUnit(value);
+    console.log('handle unit => ', value);
+  }
+
+  useEffect(() => {
+    const fetchUnits = async () => {
+      const res = await getCatalogsByNameAndType(token, 'conceptestimate');
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptionsUnit(res);
+        setUnit(res[0]);
+      }
+    }
+    fetchUnits();
+  }, []);
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -70,18 +95,6 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
     }else{
       setBandName(false);
     }
-    // if(!unity || unity===''){
-    //   setBandUnity(true);
-    //   validation = false;
-    // }else{
-    //   setBandUnity(false);
-    // }
-    // if(!cost || cost<=0){
-    //   setBandCost(true);
-    //   validation = false;
-    // }else{
-    //   setBandCost(false);
-    // }
     if(!description || description===''){
       setBandDescription(true);
       validation = false;
@@ -95,13 +108,15 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
     const val = validationData();
 
     if(val){
+      console.log('unit => ', unit);
       const data = {
         code,
         description,
         name,
         // cost,
-        // unity
+        unit
       }
+      console.log('data => ', JSON.stringify(data));
       try {
         const res = await createConceptEstimate(token, data);
         if(typeof(res)==='string'){
@@ -150,6 +165,14 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
             <p className="text-red-500">El nombre es obligatorio!!!</p>
           )}
         </div>
+        {
+          optionsUnit.length > 0 && (
+            <div className="">
+              <Label htmlFor="unit"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
+              <SelectReact index={0} opts={optionsUnit} setValue={handleUnit} />
+            </div>
+          )
+        }
         {/* <div className="grid grid-cols-2 gap-x-2">
           <div className="">
             <Label htmlFor="unity"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>

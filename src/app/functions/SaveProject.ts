@@ -243,29 +243,34 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
 }
 
 export function ParseProjectToOneProjectMin(value: Project){
-  const projMin: OneProjectMin = {
-    _id: value._id,
-    account: value.account,
-    amount: value.amount,
-    //category: value.category,
-    category: value.condition[value.condition.length-1].glossary,
-    client: value.client,
-    code: value.code,
-    company: value.company,
-    date: value.date,
-    description: value.description,
-    guaranteefund: value.guaranteefund,
-    hasguaranteefund: value.hasguaranteefund,
-    location: value.location,
-    photo: value.photo,
-    progress: value.progress[value.progress.length -1].progress,
-    segment: value.category,
-    status: value.status,
-    title: value.title,
-    type: value.glossary,
-    hasamountChargeOff: value.hasamountChargeOff,
-    amountChargeOff: value.amountChargeOff
+  try {
+    const p = value.progress?.length > 0? value.progress[value.progress.length -1].progress: 0 || 0;
+    // console.log('p => ', p);
+    const projMin: OneProjectMin = {
+      _id: value._id,
+      account: value.account,
+      amount: value.amount,
+      category: value.condition[value.condition.length-1].glossary,
+      client: value.client,
+      code: value.code,
+      company: value.company,
+      date: value.date,
+      description: value.description,
+      guaranteefund: value.guaranteefund,
+      hasguaranteefund: value.hasguaranteefund,
+      location: value.location,
+      photo: value.photo,
+      progress: p,
+      segment: value.category,
+      status: value.status,
+      title: value.title,
+      type: value.glossary,
+      hasamountChargeOff: value.hasamountChargeOff,
+      amountChargeOff: value.amountChargeOff
+    }
+    return projMin;
+  } catch (error) {
+    console.log('errpr => ', error);
+    return "Error al actualizar proyecto..."
   }
-
-  return projMin;
 }

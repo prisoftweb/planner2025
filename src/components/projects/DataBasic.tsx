@@ -109,12 +109,13 @@ export default function DataBasic({token, id, project, optConditions, user}:
               refRequest.current = true;
               console.log('cat res => ', res.condition);
               const r = ParseProjectToOneProjectMin(res);
-              console.log('r cat => ', r.category);
-              updateOneProjectStore(r);
-              showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
+              // console.log('r cat => ', r.category);
+              if(typeof(r)==='string'){
+                showToastMessageError(r);
+              }else{
+                updateOneProjectStore(r);
+                showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
+              }
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -135,11 +136,12 @@ export default function DataBasic({token, id, project, optConditions, user}:
             if(typeof(res)!=='string'){
               refRequest.current = true;
               const r = ParseProjectToOneProjectMin(res);
-              updateOneProjectStore(r);
-              showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
+              if(typeof(r)==='string'){
+                showToastMessageError(r);
+              }else{
+                updateOneProjectStore(r);
+                showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
+              }
             }else{
               refRequest.current = true;
               showToastMessageError(res);

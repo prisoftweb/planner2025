@@ -43,25 +43,32 @@ export default function GuaranteeProject({token, id, project}:
         const {percentage, amount, amountCharge, percentajeCharge} = valores;
         const amo = amount.toString().replace(/[$,%]/g, "");
         if(hasCharge){
+          // console.log('has charge => ', percentage, ' => ', amountCharge, ' => ', percentajeCharge);
           const data = {
             guaranteefund: {
-              porcentage: percentage.replace(/[$,%,]/g, ""),
+              porcentage: typeof(percentage)==='string'? percentage.replace(/[$,%,]/g, ""): percentage,
               date: startDate,
-              amount: amo
+              amount: Number(amo)
             },
             hasamountChargeOff: hasCharge,
             amountChargeOff: {
-              amount: Number(amountCharge.replace(/[$,%,]/g, "")),
-              porcentage: Number(percentajeCharge.replace(/[$,%,]/g, ""))
+              amount: typeof(amountCharge)==='string'? Number(amountCharge.replace(/[$,%,]/g, "")): amountCharge,
+              porcentage: typeof(percentajeCharge)==='string'? Number(percentajeCharge.replace(/[$,%,]/g, "")): percentajeCharge
             }
           }
+          console.log('update amortizacion => ', JSON.stringify(data));
           try {
             const res = await UpdateProject(token, id, data);
             if(typeof(res)!=='string'){
               refRequest.current = true;
+              console.log('res => ', res);
               const r = ParseProjectToOneProjectMin(res);
-              updateOneProjectStore(r);
-              showToastMessage('Proyecto actualizado satisfactoriamente!!');
+              if(typeof(r)==='string'){
+                showToastMessageError(r);
+              }else{
+                updateOneProjectStore(r);
+                showToastMessage('Proyecto actualizado satisfactoriamente!!');
+              }
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -73,9 +80,9 @@ export default function GuaranteeProject({token, id, project}:
         }else{
           const data = {
             guaranteefund: {
-              porcentage: percentage.replace(/[$,%,]/g, ""),
+              porcentage: typeof(percentage)==='string'? percentage.replace(/[$,%,]/g, ""): percentage,
               date: startDate,
-              amount: amo
+              amount: Number(amo)
             }
           }
           try {
@@ -83,11 +90,12 @@ export default function GuaranteeProject({token, id, project}:
             if(typeof(res)!=='string'){
               refRequest.current = true;
               const r = ParseProjectToOneProjectMin(res);
-              updateOneProjectStore(r);
-              showToastMessage('Proyecto actualizado satisfactoriamente!!');
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
+              if(typeof(r)==='string'){
+                showToastMessageError(r);
+              }else{
+                updateOneProjectStore(r);
+                showToastMessage('Proyecto actualizado satisfactoriamente!!');
+              }
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -133,23 +141,14 @@ export default function GuaranteeProject({token, id, project}:
             name="percentage"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
-            // defaultValue={0}
             defaultValue={formik.values.percentage}
             decimalsLimit={2}
             //prefix="%"
             suffix="%"
             onValueChange={(value) =>formik.values.percentage=value || ''}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="percentage" 
-            value={formik.values.percentage}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.percentage && formik.errors.percentage ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentage}</p>
@@ -227,7 +226,6 @@ export default function GuaranteeProject({token, id, project}:
                 decimalsLimit={2}
                 prefix="$"
                 onValueChange={(value) =>formik.values.amountCharge=value || ''}
-                // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
               />
               {formik.touched.amount && formik.errors.amountCharge ? (
                   <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
