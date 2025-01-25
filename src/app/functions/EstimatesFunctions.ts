@@ -41,7 +41,7 @@ export function ConceptsDataToConceptsTable(conepts:IConceptEstimate[]){
       nombre: concept.conceptEstimate.name,
       PU: concept.conceptEstimate?.priceConcepEstimate? (concept.conceptEstimate?.priceConcepEstimate?.cost? concept.conceptEstimate.priceConcepEstimate.cost: 0) : 0,
       Importe: concept.conceptEstimate?.priceConcepEstimate? (concept.conceptEstimate?.priceConcepEstimate?.cost? concept.conceptEstimate.priceConcepEstimate.cost: 0) : 0,
-      Unidad: 'NA'
+      Unidad: (concept.conceptEstimate.unit?.name? concept.conceptEstimate.unit?.name: 'Sin unidad') || 'Sin unidad'
     });
   });
 

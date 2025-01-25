@@ -11,7 +11,8 @@ import TableEstimatesByProject from "./TableEstimatesByProject";
 import AddNewEstimateProject from "./AddNewEstimateProject";
 import { Options } from "@/interfaces/Common";
 import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject } from "@/app/api/routeEstimates";
+import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
+import { showToastMessageError } from "@/components/Alert";
 interface OptionsDashboard {
   label: string,
   costo: number
@@ -26,22 +27,11 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
   const [estimatesData, setEstimatesData] = useState<IEstimateProject[]>(estimates);
 
+  const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>(totalEstimatedProject);
+
   const handleFilterTable = (value: boolean) => {
     setIsFilterTable(value);
   }
-
-  const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
-
-  const categoriesEstimates: string[] = [];
-  const dataEstimatesDashboard: OptionsDashboard[] = [];  
-
-  estimates.map((e) => {
-    dataEstimatesDashboard.push({
-      costo: (e.amount / project.amount) * 100,
-      label: e.name
-    });
-    categoriesEstimates.push(e.name);
-  });
 
   const handleShowForm = (value: boolean) => {
     setOpenNewStimate(value);
@@ -52,26 +42,54 @@ export default function ContainerStimationsProject({project, optConditions, optP
     try {
       estimates = await getEstimatesByProject(token, project._id);
       console.log('estimates min => ', estimates);
-      if(typeof(estimates) === "string")
-        return <h1 className="text-center text-red-500">{estimates}</h1>
+      if(typeof(estimates) === "string"){
+        showToastMessageError(estimates);
+      }else{
+        setEstimatesData(estimates);
+      }
     } catch (error) {
-      return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
+      showToastMessageError('Ocurrio un error al actualizar las estimaciones del proyecto!!');  
+    }
+
+    let totalEstimated: TotalEstimatedByProject[];
+    try {
+      totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
+      // console.log('res total estimated => ', totalEstimatedProject);
+      if(typeof(totalEstimated) === "string"){
+        showToastMessageError(totalEstimated);
+      }else{
+        // console.log('total estimated estate => ', totalEstimatedProjectState);
+        // console.log('new total estimated => ', totalEstimated);
+        setTotalEstimatedProjectState(totalEstimated);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un error al actualizar el total de las estimaciones del proyecto!!')
+      // return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las estimaciones del proyecto!!</h1>  
     }
 
     setIsFilterTable(false);
-    setEstimatesData(estimates);
   }
 
   const delEstimate = (id:string) => {
-    const newData=estimatesData.filter((e) => e._id !== id);
-    setIsFilterTable(false);
-    setEstimatesData(newData);
+    // const newData=estimatesData.filter((e) => e._id !== id);
+    // setIsFilterTable(false);
+    // setEstimatesData(newData);
+    updateEstimatesProject();
   }
 
-  // let acumulated=0;
-  // estimates.map((e) => acumulated+=e.estimatedTotal);
+  const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
-  // console.log('estimated proyect => ', totalEstimatedProject);
+  const categoriesEstimates: string[] = [];
+  const dataEstimatesDashboard: OptionsDashboard[] = [];  
+
+  estimatesData.map((e) => {
+    dataEstimatesDashboard.push({
+      costo: (e.amount / project.amount) * 100,
+      label: e.name
+    });
+    categoriesEstimates.push(e.name);
+  });
+  console.log('data estimated dashboard => ', dataEstimatesDashboard);
 
   return (
     <>
@@ -120,14 +138,14 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="bg-green-600 text-white p-2 w-40 text-center">PAGADO</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                value: totalEstimatedProject.length> 0? totalEstimatedProject[0]?.amountPayable || 0 : 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentage || 0}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: totalEstimatedProject.length> 0? totalEstimatedProject[0]?.amountPayable || 0 : 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
 
@@ -135,7 +153,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Estimado acumulado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: totalEstimatedProject.length> 0? totalEstimatedProject[0]?.estimatedTotal || 0 : 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.estimatedTotal || 0 : 0
               })}</p>
             </div>
 
@@ -143,7 +161,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Amortizado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: totalEstimatedProject.length> 0? totalEstimatedProject[0]?.amountChargeOff || 0 : 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountChargeOff || 0 : 0
               })}</p>
             </div>
 
@@ -151,7 +169,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Garantia del {project.guaranteefund.porcentage}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value:  totalEstimatedProject.length> 0? totalEstimatedProject[0]?.amountGuaranteeFund || 0 : 0
+                value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountGuaranteeFund || 0 : 0
               })}</p>
             </div>
           </div>

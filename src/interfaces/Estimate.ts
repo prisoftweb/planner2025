@@ -104,7 +104,7 @@ export interface IConceptEstimate {
     code: string
     name: string
     description: string
-    unit: {}
+    unit: Glossary
     area: string
     section: string
     priceConcepEstimate: {

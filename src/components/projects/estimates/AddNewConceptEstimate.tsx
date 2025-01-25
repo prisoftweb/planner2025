@@ -22,27 +22,33 @@ import ConceptStepperComponent from "./ConceptStepperComponent"
 import PriceUnityStepper from "./PriceUnityStepper"
 import DataStepperComponent from "./DataStepperComponent"
 import { getConeptsEstimate, getAllConceptsDetailsByEstimateMin } from "@/app/api/routeEstimates"
-import { IConceptEstimate, PriceConcept } from "@/interfaces/Estimate"
+import { IConceptEstimateNormal, IConceptEstimate, PriceConcept } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
+import DonutChartComponent from "../dashboard/DonutChartComponent"
+
+interface OptionsDashboard {
+  label: string,
+  costo: number
+}
 
 export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
-    conceptSLV, idEstimate, conceptsEstimate}: 
+    idEstimate, conceptsDataChart}: 
   {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
-    conceptSLV:Options[], idEstimate:string, conceptsEstimate:IConceptEstimate[]}) {
+    idEstimate:string, conceptsDataChart:IConceptEstimate[]}) {
   // const refRequest = useRef(true);
 
   // const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
-  const [conceptSel, setConcepSel] = useState<IConceptEstimate>(conceptsEstimate[0]);
+  const [conceptSel, setConcepSel] = useState<IConceptEstimateNormal>();
   const [idPrice, setIdPrice] = useState<PriceConcept>();
   
-  const [code, setCode] = useState<string>('');
-  const [date, setDate] = useState<string>('');
+  // const [code, setCode] = useState<string>('');
+  // const [date, setDate] = useState<string>('');
   
-  const [description, setDescription] = useState<string>('');
-  const [unity, setUnity] = useState<string>('');
-  const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV);
+  // const [description, setDescription] = useState<string>('');
+  // const [unity, setUnity] = useState<string>('');
+  // const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV);
 
-  const [concepts, setConcepts] = useState<IConceptEstimate[]>(conceptsEstimate);
+  const [concepts, setConcepts] = useState<IConceptEstimateNormal[]>([]);
 
   const [heightPage, setHeightPage] = useState<number>(900);
   // const refRequest = useRef(true);
@@ -52,21 +58,26 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     setIndexStepper(value);
   }
 
-  // const handleArea = (value:string) => {
-  //   setArea(value);
-  // }
-
-  // const handleSection = (value:string) => {
-  //   setSection(value);
-  // }
-
-  // const handleQuantity = (value:string) => {
-  //   setQuantity(value);
-  // }
-
-  // const handlePU = (value:string) => {
-  //   setPu(value);
-  // }
+  useEffect(() => {
+    const fetchCocnepts = async () => {
+      let con: IConceptEstimateNormal[];
+      try {
+        con = await getConeptsEstimate(token, '');
+        console.log('concepts min => ', con);
+        if(typeof(con) === "string"){
+          showToastMessageError(con);
+          return <h1 className="text-center text-red-500">{con}</h1>
+        }else{
+          setConcepts(con);
+          setConcepSel(con[0]);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un error al obtener los conceptos');
+        return <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos!!</h1>  
+      }
+    }
+    fetchCocnepts();
+  }, []);
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -96,7 +107,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   const handleConceptID = (value: string) => {
     // setIdConcept(value);
-    const c = concepts.find((c) => c.conceptEstimate._id === value);
+    const c = concepts.find((c) => c._id === value);
     if(c){
       setConcepSel(c);
     }
@@ -108,9 +119,10 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   const handleAddNewConcept = async () => {
     console.log('agregar nuevo concepto');
-    let cons: IConceptEstimate[];
+    let cons: IConceptEstimateNormal[];
     try {
-      cons = await getAllConceptsDetailsByEstimateMin(token, idEstimate);
+      // cons = await getAllConceptsDetailsByEstimateMin(token, idEstimate);
+      cons = await getConeptsEstimate(token, idEstimate);
       console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
         // return <h1 className="text-center text-red-500">{cons}</h1>
@@ -120,12 +132,12 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
         const contsLV: Options[] = [];
         cons.map((c) => {
           contsLV.push({
-            label: c.conceptEstimate.name,
-            value: c.conceptEstimate._id
+            label: c.name,
+            value: c._id
           });
         });
         // console.log('nuevos conceptos => ', contsLV);
-        setConceptLV(contsLV);
+        // setConceptLV(contsLV);
       }
     } catch (error) {
       console.log('catch error => ', error);
@@ -139,14 +151,31 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   }
 
 
+  const priceComp = conceptSel? <PriceUnityStepper handlePriceId={handlePriceId} nextStep={handleIndexStepper} 
+                      token={token} handleAddNewPrice={handleAddNewPrice} conceptSelected={conceptSel} 
+                      user={user} /> : <></>;
+
+  const dataComp = conceptSel? <DataStepperComponent conceptSelected={conceptSel} token={token} 
+                previousStep={handleIndexStepper} price={idPrice} user={user} idEstimate={idEstimate} /> : <></>;
+
   let viewComponent = indexStepper===1? 
-        <PriceUnityStepper handlePriceId={handlePriceId} nextStep={handleIndexStepper} 
-          token={token} handleAddNewPrice={handleAddNewPrice} conceptSelected={conceptSel} 
-          user={user} />:
-        (indexStepper===2? <DataStepperComponent conceptSelected={conceptSel} token={token} 
-            previousStep={handleIndexStepper} price={idPrice} user={user} idEstimate={idEstimate} /> : 
+        priceComp:
+        (indexStepper===2?  dataComp: 
           <ConceptStepperComponent handleConceptID={handleConceptID} nextStep={handleIndexStepper}
             token={token} handleAddNewConcept={handleAddNewConcept} concepts={concepts} />);
+
+  const categoriesConcepts: string[] = [];
+  const dataConceptsDashboard: OptionsDashboard[] = [];  
+
+  conceptsDataChart.map((e) => {
+    dataConceptsDashboard.push({
+      costo: ((e.conceptEstimate.priceConcepEstimate.cost * e.conceptEstimate.quantity) / e.conceptEstimate.amount) * 100,
+      label: e.conceptEstimate.name
+    });
+    categoriesConcepts.push(e.conceptEstimate.name);
+  });
+
+  const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   
   return(
     <>
@@ -187,7 +216,8 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
               </div>
             </div>
             <div>
-              agregar grafico
+              <DonutChartComponent data={dataConceptsDashboard} colors={colors} category="costo"
+                                      categories={categoriesConcepts} flexWrap="" size="w-60 h-60" />
             </div>
           </div>
         </div>

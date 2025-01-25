@@ -6,13 +6,13 @@ import CurrencyInput from "react-currency-input-field";
 import Button from "@/components/Button";
 import { useState } from "react";
 import { showToastMessageError, showToastMessage } from "@/components/Alert";
-import { PriceConcept, IConceptEstimate } from "@/interfaces/Estimate";
+import { PriceConcept, IConceptEstimateNormal } from "@/interfaces/Estimate";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { insertConceptInEstimate } from "@/app/api/routeEstimates";
 
 export default function DataStepperComponent({token, previousStep, price, conceptSelected, 
     user, idEstimate}: 
-  { token:string, conceptSelected: IConceptEstimate, previousStep: Function, 
+  { token:string, conceptSelected: IConceptEstimateNormal, previousStep: Function, 
     price: PriceConcept| undefined, user:string, idEstimate:string}) {
 
   const [area, setArea] = useState<string>('');
@@ -65,8 +65,8 @@ export default function DataStepperComponent({token, previousStep, price, concep
     const data = {
       concepts: [
         {
-          conceptEstimate: conceptSelected.conceptEstimate._id,
-          priceConcepEstimate: {                 
+          conceptEstimate: conceptSelected._id,
+          priceConcepEstimate: {
               cost: price?.cost,
               date: price?.date,            
               user: price?.user._id
@@ -100,11 +100,11 @@ export default function DataStepperComponent({token, previousStep, price, concep
     <>
       <div>
         <div className="flex justify-between items-end p-2 bg-slate-100 border border-slate-500 rounded-t-lg">
-          <p className="text-slate-700">{conceptSelected.conceptEstimate.name}</p>
-          <p className="text-slate-700">{conceptSelected.conceptEstimate.code}</p>
+          <p className="text-slate-700">{conceptSelected.name}</p>
+          <p className="text-slate-700">{conceptSelected.code}</p>
         </div>
         <div className="border border-slate-500 p-2 text-xs text-slate-500">
-          <p>{conceptSelected.conceptEstimate.description}</p>
+          <p>{conceptSelected.description}</p>
         </div>
       </div>
 

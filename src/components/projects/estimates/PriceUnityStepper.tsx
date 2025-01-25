@@ -9,7 +9,7 @@ import { Options } from "@/interfaces/Common";
 // import FormNewPrice from "./FormNewPrice";
 // import Button from "@/components/Button";
 import CurrencyInput from "react-currency-input-field";
-import { IConceptEstimate, PriceConcept } from "@/interfaces/Estimate";
+import { IConceptEstimateNormal, PriceConcept } from "@/interfaces/Estimate";
 import { getPricesConcept, deletePriceInConceptEstimate } from "@/app/api/routeEstimates";
 import RemoveElement from "@/components/RemoveElement";
 import {BookmarkSquareIcon} from "@heroicons/react/24/solid";
@@ -21,7 +21,7 @@ import {IoIosSave} from 'react-icons/io';
 export default function PriceUnityStepper({token, nextStep, handlePriceId, 
     handleAddNewPrice, conceptSelected, user }: 
   { token:string, nextStep:Function, handlePriceId:Function, handleAddNewPrice:Function, 
-    conceptSelected: IConceptEstimate, user:string }) {
+    conceptSelected: IConceptEstimateNormal, user:string }) {
 
   // const [showNewPrice, setShowNewPrice] = useState<boolean>(false);
 
@@ -47,7 +47,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await getPricesConcept(token, conceptSelected.conceptEstimate._id);
+      const res = await getPricesConcept(token, conceptSelected._id);
       if(typeof(res) !== 'string'){
         setPrices(res);
       }
@@ -77,11 +77,11 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
           }
         ]
       }
-      const res = await insertPriceInConceptEstimate(token, data, conceptSelected.conceptEstimate._id);
+      const res = await insertPriceInConceptEstimate(token, data, conceptSelected._id);
       if(typeof(res)==='string'){
         showToastMessageError('Error al insertar precio en el concepto!!!');
       }else{
-        const res2 = await getPricesConcept(token, conceptSelected.conceptEstimate._id);
+        const res2 = await getPricesConcept(token, conceptSelected._id);
         if(typeof(res2) !== 'string'){
           setPrices(res2);
           handleAddNewPrice(res2);
@@ -99,11 +99,11 @@ console.log('filtered prices => ', filteredPrices);
       <>
         <div>
           <div className="flex justify-between items-end p-2 bg-slate-100 border border-slate-500 rounded-t-lg">
-            <p className="text-slate-700">{conceptSelected.conceptEstimate.name}</p>
-            <p className="text-slate-700">{conceptSelected.conceptEstimate.code}</p>
+            <p className="text-slate-700">{conceptSelected.name}</p>
+            <p className="text-slate-700">{conceptSelected.code}</p>
           </div>
           <div className="border border-slate-500 p-2 text-xs text-slate-500">
-            <p>{conceptSelected.conceptEstimate.description}</p>
+            <p>{conceptSelected.description}</p>
           </div>
         </div>
 
