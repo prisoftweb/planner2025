@@ -12,11 +12,11 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IConceptEstimate } from "@/interfaces/Estimate";
 import { ConceptsDataToConceptsTable } from "@/app/functions/EstimatesFunctions";
 import RemoveElement from "@/components/RemoveElement";
-import { removeConceptEstimate } from "@/app/api/routeEstimates";
+import { deleteConceptInEstimate } from "@/app/api/routeEstimates";
 
 export default function TableConceptsEstimate({project, concepts, handleFilterTable, 
-  isFilterTable, delConcept, token}: 
-  {project: OneProjectMin, concepts:IConceptEstimate[], 
+  isFilterTable, delConcept, token, idEstimate}: 
+  {project: OneProjectMin, concepts:IConceptEstimate[], idEstimate:string, 
     isFilterTable:boolean, handleFilterTable:Function, delConcept:Function, token:string}) {
 
   // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
@@ -73,7 +73,7 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           /> */}
-          <RemoveElement id={row.original.id} name={row.original.nombre} remove={removeConceptEstimate} 
+          <RemoveElement id={`${idEstimate}/${row.original.id}`} name={row.original.nombre} remove={deleteConceptInEstimate} 
             removeElement={delConcept} token={token} />
         </div>
       ),

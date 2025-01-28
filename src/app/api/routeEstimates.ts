@@ -219,8 +219,32 @@ export async function insertConceptInEstimate(auth_token:string, data: Object, i
   }
 }
 
-export async function deletePriceInConceptEstimate(auth_token:string, idC:string, idP:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/insertPricesInConcep/${idC}/${idP}`;
+export async function deleteConceptInEstimate(idE:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/deleteConceptsInEstimates/${idE}`;
+  console.log('url delete concept => ', url);
+  try {
+    const res = await axios.post(url, {
+      totalEstimatedInConcept:0
+    }, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    // if(res.status===200) return res.data.data.data;
+    console.log('delete concept => ', res);
+    if(res.status===204) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al eliminar concepto en la estimacion!!';
+  }
+}
+
+export async function deletePriceInConceptEstimate(idP:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/deletePricesInConcep/${idP}`;
   try {
     const res = await axios.post(url, {}, {
       headers: {
@@ -229,7 +253,7 @@ export async function deletePriceInConceptEstimate(auth_token:string, idC:string
       }
     })
     // if(res.status===200) return res.data.data.data;
-    if(res.status===201) return res.status;
+    if(res.status===204) return res.status;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

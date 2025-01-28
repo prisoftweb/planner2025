@@ -168,11 +168,13 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   const dataConceptsDashboard: OptionsDashboard[] = [];  
 
   conceptsDataChart.map((e) => {
-    dataConceptsDashboard.push({
-      costo: ((e.conceptEstimate.priceConcepEstimate.cost * e.conceptEstimate.quantity) / e.conceptEstimate.amount) * 100,
-      label: e.conceptEstimate.name
-    });
-    categoriesConcepts.push(e.conceptEstimate.name);
+    if(e.conceptEstimate?.priceConcepEstimate?.cost){
+      dataConceptsDashboard.push({
+        costo: ((e.conceptEstimate.priceConcepEstimate.cost * e.conceptEstimate.quantity) / e.conceptEstimate.amount) * 100,
+        label: e.conceptEstimate.name
+      });
+      categoriesConcepts.push(e.conceptEstimate.name);
+    }
   });
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];

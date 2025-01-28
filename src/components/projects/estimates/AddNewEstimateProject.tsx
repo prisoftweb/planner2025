@@ -26,6 +26,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   const [guarantee, setGuarantee] = useState<string>('0');
   const [amountPay, setAmountPay] = useState<string>('0');
   const [description, setDescription] = useState<string>('');
+  const [amountPayableVAT, setAmountPayableVAT] = useState<string>('');
 
   const [bandName, setBandName] = useState<boolean>(false);
   const [bandOrder, setBandOrder] = useState<boolean>(false);
@@ -36,6 +37,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [advance, setAdvance]= useState<boolean>(false);
+  const [isdisabled, setIsDisabled]= useState<boolean>(true);
   // const refRequest = useRef(true);
 
   const handleResize = () => {
@@ -95,11 +97,28 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
     }
 
     const total = Number(val.replace(/[$,]/g, "")) - amor - guaran;
+    const totalPayable = total * 1.16;
     // console.log('total => ', total);
 
     setAmortization(amor.toFixed(2));
     setGuarantee(guaran.toFixed(2));
     setAmountPay(total.toFixed(2));
+    setAmountPayableVAT(totalPayable.toFixed(2));
+  }
+
+  const updateAmortization = (val: string) => {
+    const pay = Number(amount.replace(/[$,]/g, ""));
+    const am = Number(val.replace(/[$,]/g, ""));
+    const gu = Number(guarantee.replace(/[$,]/g, ""));
+
+    console.log('pay => ', pay, ' am => ', am, ' gu => ', gu);
+    const total = Number(amount.replace(/[$,]/g, "")) - Number(val.replace(/[$,]/g, "")) - Number(guarantee.replace(/[$,]/g, ""));
+    const totalPayable = total * 1.16;
+    console.log('total => ', total);
+    
+    setAmortization(val.replace(/[$,]/g, ""));
+    setAmountPay(total.toFixed(2));
+    setAmountPayableVAT(totalPayable.toFixed(2));
   }
 
   const validationData = () =>{
@@ -156,6 +175,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         amountGuaranteeFund:guarantee,
         amountChargeOff: amortization,
         amountPayable: amountPay,
+        amountPayableVAT,
         date: startDate,        
         condition: [
             {
@@ -297,7 +317,26 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
           {!advance && (
             <>
               <div>
-                <Label htmlFor="amortization"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Amortizacion</p></Label>
+                <div className="flex justify-between items-center">
+                  <Label htmlFor="amortization"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Amortizacion</p></Label>
+                  <div className="flex items-center gap-x-2">
+                    <Label htmlFor="modification"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label>
+                    <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                      <input checked={!isdisabled} 
+                        onClick={() => setIsDisabled(!isdisabled)} id="disabledAmor" type="checkbox"
+                        // onChange={() => console.log('')}
+                        className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                          appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                          peer-checked:border-green-500 peer-checked:before:bg-green-500
+                          border border-slate-300" />
+                      <label htmlFor="disabledAmor"
+                        className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                        <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                          data-ripple-dark="true"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
                 <CurrencyInput
                   id="amortization"
                   name="amortization"
@@ -306,9 +345,18 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                   // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
                   // value={formik.values.amount.replace(/[$,]/g, "")}
                   value={amortization}
+                  onValueChange={(value) => {try {
+                    // setAmortization(value?.replace(/[$,]/g, "") || '0');
+                    // updateValues(value?.replace(/[$,]/g, "") || '0')
+                    updateAmortization(value?.replace(/[$,]/g, "") || '0');
+                  } catch (error) {
+                    // setAmortization('0');
+                    updateAmortization('0');
+                    // updateValues('0');
+                  }}}
                   decimalsLimit={2}
                   prefix="$"
-                  disabled
+                  disabled={isdisabled}
                 />
               </div>
               <div>
@@ -334,6 +382,19 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
               value={amountPay}
+              decimalsLimit={2}
+              prefix="$"
+              disabled
+            />
+          </div>
+          <div>
+            <Label htmlFor="amountPayable"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto a pagar total</p></Label>
+            <CurrencyInput
+              id="amountPayable"
+              name="amountPayable"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                focus:border-slate-700 outline-0"
+              value={amountPayableVAT}
               decimalsLimit={2}
               prefix="$"
               disabled

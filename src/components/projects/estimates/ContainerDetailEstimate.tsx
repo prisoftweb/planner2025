@@ -178,7 +178,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
 
       </div>
       <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} handleFilterTable={handleFilterTable} 
-        isFilterTable={isfilterTable} project={project} token={token} />
+        isFilterTable={isfilterTable} project={project} token={token} idEstimate={idEstimate} />
       {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={idEstimate}
                             conceptsDataChart={concepts} />}

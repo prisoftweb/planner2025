@@ -85,7 +85,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
         if(typeof(res2) !== 'string'){
           setPrices(res2);
           handleAddNewPrice(res2);
-          nextStep(2);
+          // nextStep(2);
         }
       }
     }else{
