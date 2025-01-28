@@ -36,6 +36,7 @@ export interface IEstimateProject {
   status: boolean
   purschaseOrder: string
   estimatedTotal: number,
+  condition: Glossary
 }
 
 export interface IEstimate {

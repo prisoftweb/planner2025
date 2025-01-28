@@ -7,7 +7,7 @@ import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
-import { GetCosts } from "@/app/api/routeCost";
+import { GetCosts, GetCostsByUserMIN } from "@/app/api/routeCost";
 import { showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
@@ -252,15 +252,19 @@ export default function TableHistoryExpenses({data, token, expenses,
       const aux = async () =>{
         try {
           const res = await GetCosts(token);
+          // const res = await GetCostsByUserMIN(token, user);
           //console.log('res');
+          console.log('refresh table cost user => ', res);
           if(typeof(res) !== 'string'){
             const d = ExpenseDataToTableData(res);
             setDataExpenses(d);
-            setView(<></>);
-            setTimeout(() => {
-              setView(<Table columns={columns} data={d} 
-                    placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-            }, 500);
+            // setView(<></>);
+            // setTimeout(() => {
+            //   setView(<Table columns={columns} data={d} 
+            //         placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
+            // }, 500);
+            setView(<Table columns={columns} data={d} 
+              placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
           }else{
             showToastMessageError(res);
           }

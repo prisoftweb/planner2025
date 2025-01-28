@@ -4,8 +4,9 @@ import Navigation from "@/components/navigation/Navigation";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 // import { getAllCostsByCondition } from "../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
-import { GetCostsByUserMIN } from "@/app/api/routeCost";
+import { getAllCostsByCondition } from "@/app/api/routeCost";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
+
 
 export default async function Page() {
   
@@ -17,9 +18,22 @@ export default async function Page() {
   // const isViewReports = role.toLowerCase().includes('residente')? false: true;
   const isViewReports = false;
   
+  // let expenses: Expense[] = [];
+  // try {
+  //   expenses = await GetCostsByUserMIN(token, user._id);
+  //   if(typeof(expenses)=== 'string')
+  //     return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
+  // } catch (error) {
+  //   console.log('page expanses ', error);
+  //   return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
+  // }
+
+  const role = user.rol?.name || '';
+  // const isViewReports = role.toLowerCase().includes('residente')? false: true;
+  
   let expenses: Expense[] = [];
   try {
-    expenses = await GetCostsByUserMIN(token, user._id);
+    expenses = await getAllCostsByCondition(token);
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {

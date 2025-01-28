@@ -11,9 +11,10 @@ import DonutChartComponent from "../dashboard/DonutChartComponent";
 import TableConceptsEstimate from "./TableConceptsEstimate";
 import AddNewEstimateProject from "./AddNewEstimateProject";
 import { IEstimateProject, IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
-import { getConeptsEstimate } from "@/app/api/routeEstimates";
+import { getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 import AddNewConceptEstimate from "./AddNewConceptEstimate";
 import { Options } from "@/interfaces/Common";
+import { showToastMessageError } from "@/components/Alert";
 
 export default function ContainerDetailEstimate({project, token, user, estimate, concepts, 
     idEstimate, totalEstimatedProject}: 
@@ -24,7 +25,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
   const [conceptsData, setConceptsData] = useState<IConceptEstimate[]>(concepts);
 
-  // console.log('estimCION RECIVIDA => ', estimate);
+  const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>(totalEstimatedProject);
 
   const handleFilterTable = (value: boolean) => {
     setIsFilterTable(value);
@@ -37,38 +38,41 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   }
 
   const updateConceptsEstimate = async () => {
-    // let estimates: IEstimateProject[];
-    // try {
-    //   estimates = await getEstimatesByProject(token, project._id);
-    //   console.log('estimates min => ', estimates);
-    //   if(typeof(estimates) === "string")
-    //     return <h1 className="text-center text-red-500">{estimates}</h1>
-    // } catch (error) {
-    //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
-    // }
-
-    // setIsFilterTable(false);
-    // setEstimatesData(estimates);
     let concepts: IConceptEstimate[];
     try {
-      concepts = await getConeptsEstimate(token, estimate._id);
-      console.log('concepts min => ', concepts);
-      if(typeof(concepts) === "string")
-        return <h1 className="text-center text-red-500">{concepts}</h1>
+      // concepts = await getConeptsEstimate(token, estimate._id);
+      concepts = await getAllConceptsDetailsByEstimateMin(token, estimate._id);
+      // console.log('concepts min => ', concepts);
+      if(typeof(concepts) === "string"){
+        showToastMessageError(concepts);
+      }else{
+        setConceptsData(concepts);
+      }
     } catch (error) {
-      return <h1 className="text-center text-red-500">Ocurrio un error al actualizar conceptos de la estimacion!!</h1>  
+      showToastMessageError('Ocurrio un error al actualizar conceptos de la estimacion!!');
     }
+
+    let totalEstimated: TotalEstimatedByProject[];
+    try {
+      totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
+      if(typeof(totalEstimated) === "string"){
+        showToastMessageError(totalEstimated);
+      }else{
+        setTotalEstimatedProjectState(totalEstimated);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un error al actualizar el total de las estimaciones del proyecto!!')
+    }
+
     setIsFilterTable(false);
-    setConceptsData(concepts);
+    // setConceptsData(concepts);
   }
 
   const delConcept = (id:string) => {
-    const newData = conceptsData.filter((c) => c.conceptEstimate._id!==id);
-    setIsFilterTable(false);
-    setConceptsData(newData);
-    // const newData=estimatesData.filter((e) => e._id !== id);
+    // const newData = conceptsData.filter((c) => c.conceptEstimate._id!==id);
     // setIsFilterTable(false);
-    // setEstimatesData(newData);
+    // setConceptsData(newData);
+    updateConceptsEstimate();
   }
 
   const conceptsLV: Options[] = [];
@@ -78,14 +82,6 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       value: c.conceptEstimate._id
     });
   });
-
-  // const conceptsPrueba: IConceptEstimate[] = [];
-  // for (let index = 0; index < 2; index++) {
-  //   conceptsPrueba.push(concepts[0]);  
-  // }
-// console.log('estimate => ', estimate);
-
-
 
   return (
     <>
@@ -123,7 +119,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
             <p className="text-slate-400">Acumulado estimado</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: totalEstimatedProject[0].estimatedTotal
+              value: totalEstimatedProjectState[0].estimatedTotal
             })}</p>
           </div>
           <div className="flex justify-between ">
@@ -137,21 +133,21 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
             <p className="text-slate-400">Pendiente por estimar</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: totalEstimatedProject[0].amountPayable
+              value: totalEstimatedProjectState[0].amountPayable
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Amortizado</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: totalEstimatedProject[0].amountChargeOff
+              value: totalEstimatedProjectState[0].amountChargeOff
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Fondo de garantia</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: totalEstimatedProject[0].amountGuaranteeFund
+              value: totalEstimatedProjectState[0].amountGuaranteeFund
             })}</p>
           </div>
         </div>

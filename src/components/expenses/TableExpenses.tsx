@@ -4,7 +4,7 @@ import Table from "@/components/Table";
 import { useState, useEffect, useRef } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-import { RemoveCost, getAllCostsByCondition, CloneCost } from "@/app/api/routeCost";
+import { RemoveCost, getAllCostsByCondition, CloneCost, GetCostsByUserMIN } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -41,7 +41,8 @@ export default function TableExpenses({data, token, expenses,
         showToastMessageError(res);
       }else{
         showToastMessage('Costo copiado exitosamente!!!');
-        const fetchCosts = await getAllCostsByCondition(token);
+        // const fetchCosts = await getAllCostsByCondition(token);
+        const fetchCosts = await GetCostsByUserMIN(token, user);
         if(typeof(fetchCosts)==='string'){
           showToastMessageError("Error al actulizar tabla!!!");
         }else{
@@ -357,7 +358,8 @@ export default function TableExpenses({data, token, expenses,
   if(refresh){
     const aux = async () =>{
       try {
-        const res = await getAllCostsByCondition(token);
+        // const res = await getAllCostsByCondition(token);
+        const res = await GetCostsByUserMIN(token, user);
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);

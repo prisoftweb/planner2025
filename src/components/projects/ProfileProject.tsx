@@ -80,7 +80,7 @@ export default function ProfileProject({project}:
               shadow-md py-2">
             <div className="grid grid-cols-2 gap-x-2">
               <div className="border-r-1 border-gray-700">
-                <p className="text-slate-500">Amortizacion</p>
+                <p className="text-slate-500">Anticipo</p>
                 <p className="text-blue-600">{oneProjectStore?.amountChargeOff.porcentage || '0'} %</p>
               </div>
               <div>

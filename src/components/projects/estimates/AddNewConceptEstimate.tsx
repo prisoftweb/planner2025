@@ -150,13 +150,13 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   }
 
-
   const priceComp = conceptSel? <PriceUnityStepper handlePriceId={handlePriceId} nextStep={handleIndexStepper} 
                       token={token} handleAddNewPrice={handleAddNewPrice} conceptSelected={conceptSel} 
                       user={user} /> : <></>;
 
   const dataComp = conceptSel? <DataStepperComponent conceptSelected={conceptSel} token={token} 
-                previousStep={handleIndexStepper} price={idPrice} user={user} idEstimate={idEstimate} /> : <></>;
+                previousStep={handleIndexStepper} price={idPrice} user={user} idEstimate={idEstimate}
+                updateConcepts={updateConcepts} showForm={showForm} /> : <></>;
 
   let viewComponent = indexStepper===1? 
         priceComp:

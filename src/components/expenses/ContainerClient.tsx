@@ -26,10 +26,9 @@ import { GetVatsLV } from "@/app/api/routeCost"
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN
  } from "@/app/api/routeReports";
 import { UsrBack } from "@/interfaces/User"
-import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
 
-import { getAllCostsByCondition } from "@/app/api/routeCost"
+import { getAllCostsByCondition, GetCostsByUserMIN } from "@/app/api/routeCost"
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
@@ -241,7 +240,8 @@ export default function ContainerClient({data, token, expenses,
     //console.log('entro en el if => ');
     const aux = async () =>{
       try {
-        const res = await getAllCostsByCondition(token);
+        // const res = await getAllCostsByCondition(token);
+        const res = await GetCostsByUserMIN(token, user._id);
         //console.log('res');
         if(typeof(res) !== 'string'){
           //refExpenses.current = res;
@@ -268,8 +268,8 @@ export default function ContainerClient({data, token, expenses,
     text="El historial de gastos actualmente esta vacio!!!"
     title="Historial de Gastos">
       <></>
-  </WithOut> : (isViewUser? <WithOut img="/img/costs/gastos.svg" subtitle="Gastos por usuario"
-              text="Aqui se mostraran los gastos ingresador por ti!!!"
+  </WithOut> : (isViewUser? <WithOut img="/img/costs/gastos.svg" subtitle="Gastos en proceso"
+              text="Aqui se mostraran los gastos que aun estan en proceso!!!"
               title="Gastos por usuario">
                 <></>
             </WithOut>: <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
@@ -315,9 +315,9 @@ export default function ContainerClient({data, token, expenses,
         data={tableData}
       />
     ): isViewUser? (
-      <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
+      <TableHistoryExpenses token={token}
         expenses={expenses} isFilter={isFilter} setIsFilter={handleFilter}
-        idValidado={idVal} user={user._id} isViewReports={isViewReports}
+        isViewReports={isViewReports}
         data={tableData}
       />
     ): (

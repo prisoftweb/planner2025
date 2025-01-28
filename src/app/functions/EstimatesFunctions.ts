@@ -2,21 +2,13 @@ import { IEstimateProject, TableEstimatesProject, IConceptEstimate, ITableConcep
 
 export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
   const table: TableEstimatesProject[] = [];
-  
+  // console.log('tabla estimates => ', estimates);
   estimates.map((estimate, index:number) => {
     table.push({
       id: estimate._id,
       Fecha: estimate.date,
       Amortizacion: estimate.amountChargeOff,
-      Condicion: {
-        __v: 0,
-        _id: '',
-        description: '',
-        id: '',
-        name: '',
-        status: true,
-        color: '#fff'
-      },
+      Condicion: estimate.condition,
       Estimacion: estimate.amount,
       Fondo: estimate.amountGuaranteeFund,
       MontoPay: estimate.amountPayable,

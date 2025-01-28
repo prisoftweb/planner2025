@@ -241,8 +241,8 @@ const NavItems = ({role}: {role:string}) => {
             link: '/expenses'
           },
           {
-            name: 'Gastos por usuario',
-            link: '/expenses/byuser'
+            name: 'En proceso',
+            link: '/expenses/pending'
           },
           {
             name: 'Historial',

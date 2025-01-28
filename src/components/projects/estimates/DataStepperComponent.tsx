@@ -11,9 +11,10 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import { insertConceptInEstimate } from "@/app/api/routeEstimates";
 
 export default function DataStepperComponent({token, previousStep, price, conceptSelected, 
-    user, idEstimate}: 
+    user, idEstimate, updateConcepts, showForm}: 
   { token:string, conceptSelected: IConceptEstimateNormal, previousStep: Function, 
-    price: PriceConcept| undefined, user:string, idEstimate:string}) {
+    price: PriceConcept| undefined, user:string, idEstimate:string, updateConcepts: Function, 
+    showForm:Function}) {
 
   const [area, setArea] = useState<string>('');
   const [section, setSection] = useState<string>('');
@@ -85,9 +86,11 @@ export default function DataStepperComponent({token, previousStep, price, concep
       showToastMessageError(res);
     }else{
       showToastMessage('El concepto fue agregado exitosamente!!!');
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 500);
+      updateConcepts();
+      showForm(false);
     }
   }
 
