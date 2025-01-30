@@ -23,6 +23,7 @@ export interface IEstimateProject {
   amountChargeOff: number
   amount: number
   amountPayable: number
+  ismoneyadvance: boolean
   project: {
     _id: string
     title: string

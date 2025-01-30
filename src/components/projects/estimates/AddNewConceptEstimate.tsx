@@ -22,7 +22,7 @@ import ConceptStepperComponent from "./ConceptStepperComponent"
 import PriceUnityStepper from "./PriceUnityStepper"
 import DataStepperComponent from "./DataStepperComponent"
 import { getConeptsEstimate, getAllConceptsDetailsByEstimateMin } from "@/app/api/routeEstimates"
-import { IConceptEstimateNormal, IConceptEstimate, PriceConcept } from "@/interfaces/Estimate"
+import { IConceptEstimateNormal, IConceptEstimate, PriceConcept, IEstimate } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
 import DonutChartComponent from "../dashboard/DonutChartComponent"
 
@@ -34,7 +34,7 @@ interface OptionsDashboard {
 export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
     idEstimate, conceptsDataChart}: 
   {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
-    idEstimate:string, conceptsDataChart:IConceptEstimate[]}) {
+    idEstimate:IEstimate, conceptsDataChart:IConceptEstimate[]}) {
   // const refRequest = useRef(true);
 
   // const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
@@ -122,7 +122,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     let cons: IConceptEstimateNormal[];
     try {
       // cons = await getAllConceptsDetailsByEstimateMin(token, idEstimate);
-      cons = await getConeptsEstimate(token, idEstimate);
+      cons = await getConeptsEstimate(token, idEstimate._id);
       console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
         // return <h1 className="text-center text-red-500">{cons}</h1>
@@ -155,7 +155,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
                       user={user} /> : <></>;
 
   const dataComp = conceptSel? <DataStepperComponent conceptSelected={conceptSel} token={token} 
-                previousStep={handleIndexStepper} price={idPrice} user={user} idEstimate={idEstimate}
+                previousStep={handleIndexStepper} price={idPrice} user={user} idEstimate={idEstimate._id}
                 updateConcepts={updateConcepts} showForm={showForm} /> : <></>;
 
   let viewComponent = indexStepper===1? 
@@ -170,7 +170,8 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   conceptsDataChart.map((e) => {
     if(e.conceptEstimate?.priceConcepEstimate?.cost){
       dataConceptsDashboard.push({
-        costo: ((e.conceptEstimate.priceConcepEstimate.cost * e.conceptEstimate.quantity) / e.conceptEstimate.amount) * 100,
+        // costo: ((e.conceptEstimate.priceConcepEstimate.cost * e.conceptEstimate.quantity) / e.conceptEstimate.amount) * 100,
+        costo: ((e.conceptEstimate?.amount? e.conceptEstimate.amount: 0) / idEstimate.amount) * 100,
         label: e.conceptEstimate.name
       });
       categoriesConcepts.push(e.conceptEstimate.name);
@@ -219,7 +220,8 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
             </div>
             <div>
               <DonutChartComponent data={dataConceptsDashboard} colors={colors} category="costo"
-                                      categories={categoriesConcepts} flexWrap="" size="w-60 h-60" />
+                                      categories={categoriesConcepts} flexWrap="" size="w-28 h-28"  
+                                      showLegend={false} />
             </div>
           </div>
         </div>

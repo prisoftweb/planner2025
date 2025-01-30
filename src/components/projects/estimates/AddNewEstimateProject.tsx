@@ -14,8 +14,9 @@ import CurrencyInput from "react-currency-input-field"
 import { createEstimate } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 
-export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token}: 
-  {showForm:Function, project: OneProjectMin, updateEstimates:Function, user:string, token:string}) {
+export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow}: 
+  {showForm:Function, project: OneProjectMin, updateEstimates:Function, user:string, token:string, 
+    overflow:boolean}) {
   // const refRequest = useRef(true);
 
   const [name, setName] = useState<string>('');
@@ -38,6 +39,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   const [heightPage, setHeightPage] = useState<number>(900);
   const [advance, setAdvance]= useState<boolean>(false);
   const [isdisabled, setIsDisabled]= useState<boolean>(true);
+  const [isdisabledGuarantee, setIsDisabledGuarantee]= useState<boolean>(true);
   // const refRequest = useRef(true);
 
   const handleResize = () => {
@@ -80,7 +82,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   const updateValues = (val: string) => {
     let amor: number = 0;
     // console.log('project => ', project);
-    if(project.amountChargeOff){
+    if(project.amountChargeOff && !overflow){
       amor = (Number(val.replace(/[$,]/g, "")) * project.amountChargeOff.porcentage) / 100;
     }
     let guaran: number = 0;
@@ -107,16 +109,32 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   }
 
   const updateAmortization = (val: string) => {
-    const pay = Number(amount.replace(/[$,]/g, ""));
-    const am = Number(val.replace(/[$,]/g, ""));
-    const gu = Number(guarantee.replace(/[$,]/g, ""));
+    // const pay = Number(amount.replace(/[$,]/g, ""));
+    // const am = Number(val.replace(/[$,]/g, ""));
+    // const gu = Number(guarantee.replace(/[$,]/g, ""));
 
-    console.log('pay => ', pay, ' am => ', am, ' gu => ', gu);
+    // console.log('pay => ', pay, ' am => ', am, ' gu => ', gu);
     const total = Number(amount.replace(/[$,]/g, "")) - Number(val.replace(/[$,]/g, "")) - Number(guarantee.replace(/[$,]/g, ""));
     const totalPayable = total * 1.16;
-    console.log('total => ', total);
+    // console.log('total => ', total);
     
     setAmortization(val.replace(/[$,]/g, ""));
+    setAmountPay(total.toFixed(2));
+    setAmountPayableVAT(totalPayable.toFixed(2));
+  }
+
+  const updateGuarantee = (val: string) => {
+    // const pay = Number(amount.replace(/[$,]/g, ""));
+    // const am = Number(val.replace(/[$,]/g, ""));
+    // const gu = Number(guarantee.replace(/[$,]/g, ""));
+
+    // console.log('pay => ', pay, ' am => ', am, ' gu => ', gu);
+    const total = Number(amount.replace(/[$,]/g, "")) - Number(amortization.replace(/[$,]/g, "")) - Number(val.replace(/[$,]/g, ""));
+    const totalPayable = total * 1.16;
+    // console.log('total => ', total);
+    
+    // setAmortization(val.replace(/[$,]/g, ""));
+    setGuarantee(val.replace(/[$,]/g, ""));
     setAmountPay(total.toFixed(2));
     setAmountPayableVAT(totalPayable.toFixed(2));
   }
@@ -176,7 +194,8 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         amountChargeOff: amortization,
         amountPayable: amountPay,
         amountPayableVAT,
-        date: startDate,        
+        date: startDate,
+        ismoneyadvance: advance,
         condition: [
             {
                 glossary: "676359f2a4077026b9c37660",
@@ -197,7 +216,8 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
       }
     }
   }
-  
+
+  console.log('overflow => ', overflow);
   return(
     <>
       <form className="z-10 absolute top-16 w-full max-w-lg bg-white space-y-5 p-3 right-0"
@@ -348,7 +368,11 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                   onValueChange={(value) => {try {
                     // setAmortization(value?.replace(/[$,]/g, "") || '0');
                     // updateValues(value?.replace(/[$,]/g, "") || '0')
-                    updateAmortization(value?.replace(/[$,]/g, "") || '0');
+                    if(overflow){
+                      updateAmortization('0');
+                    }else{
+                      updateAmortization(value?.replace(/[$,]/g, "") || '0');
+                    }
                   } catch (error) {
                     // setAmortization('0');
                     updateAmortization('0');
@@ -359,17 +383,41 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                   disabled={isdisabled}
                 />
               </div>
-              <div>
+              <div>                
+                <div className="flex justify-between items-center">
                 <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
+                  <div className="flex items-center gap-x-2">
+                    <Label htmlFor="modification Guaran"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label>
+                    <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                      <input checked={!isdisabledGuarantee} 
+                        onClick={() => setIsDisabledGuarantee(!isdisabledGuarantee)} id="disabledGuaran" type="checkbox"
+                        // onChange={() => console.log('')}
+                        className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                          appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                          peer-checked:border-green-500 peer-checked:before:bg-green-500
+                          border border-slate-300" />
+                      <label htmlFor="disabledGuaran"
+                        className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                        <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                          data-ripple-dark="true"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
                 <CurrencyInput
                   id="guarantee"
                   name="guarantee"
                   className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                     focus:border-slate-700 outline-0"
                   value={guarantee}
+                  onValueChange={(value) => {try {
+                    updateGuarantee(value?.replace(/[$,]/g, "") || '0');
+                  } catch (error) {
+                    updateGuarantee('0');
+                  }}}
                   decimalsLimit={2}
                   prefix="$"
-                  disabled
+                  disabled={isdisabledGuarantee}
                 />
               </div>
             </>

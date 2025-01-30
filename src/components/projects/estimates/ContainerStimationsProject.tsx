@@ -82,14 +82,23 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const categoriesEstimates: string[] = [];
   const dataEstimatesDashboard: OptionsDashboard[] = [];  
 
+  let advance = 0;
+
   estimatesData.map((e) => {
     dataEstimatesDashboard.push({
       costo: (e.amount / project.amount) * 100,
       label: e.name
     });
     categoriesEstimates.push(e.name);
+    if(e.ismoneyadvance){
+      advance+=e.amount;
+    }
   });
   console.log('data estimated dashboard => ', dataEstimatesDashboard);
+
+  
+
+  const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
 
   return (
     <>
@@ -145,7 +154,8 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentage || 0}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
+                value: advance
+                // value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
 
@@ -180,7 +190,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
         estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
         delEstimate={delEstimate} token={token} />
       {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-      updateEstimates={updateEstimatesProject} token={token} />}
+      updateEstimates={updateEstimatesProject} token={token} overflow={overflow} />}
     </>
   )
 }

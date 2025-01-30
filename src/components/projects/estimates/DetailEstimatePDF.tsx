@@ -72,7 +72,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
             </View>
 
             <View style={{display:'flex', alignItems:'center', padding:'13px', width:'33%'}}>
-              {/* <Image src={project.photo} style={{width:'auto', height: '70px'}}></Image> */}
+              {/* <Image src={'https://images.app.goo.gl/8sFv8o5JpericNZRKTA'} style={{width:'auto', height: '70px'}}></Image> */}
               <Image src={'/Logotipo_principal.png'} style={{width: 'auto', height:'70px'}} />
               <Text style={{color:'#3b82f6', fontSize:'10px'}}>Samuel Palacios Hernandez</Text>
             </View>
