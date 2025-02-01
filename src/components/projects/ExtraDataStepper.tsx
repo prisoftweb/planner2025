@@ -100,59 +100,59 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         porcentage:percentageCharge.replace(/[$,%,]/g, "")
       }; 
 
-      if(haveAddress && hasguaranteefund && hasamountChargeOff){
+      if(haveAddress && hasguaranteefund && haveAmountCharge){
         data = {
-          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
+          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
           hasguaranteefund, title, types:type, user,
-          location, hasamountChargeOff, amountChargeOff,
+          location, hasamountChargeOff:haveAmountCharge, amountChargeOff,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
         if(haveAddress && hasguaranteefund){
           data = {
-            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user, guaranteefund: guaranteeData,
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+            hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}]
           }
         }else{
-          if(haveAddress && hasamountChargeOff){
+          if(haveAddress && haveAmountCharge){
             data = {
-              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-              hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
+              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+              hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
               location, condition: [{glossary: condition, user}]
             }
           }else{
             if(haveAddress){
               data = {
-                amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-                hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
                 location, condition: [{glossary: condition, user}]
               }
             }else{
-              if(hasguaranteefund && hasamountChargeOff){
+              if(hasguaranteefund && haveAmountCharge){
                 data = {
-                  amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-                  hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
+                  amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                  hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
                   guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
                 }
               }else{
                 if(hasguaranteefund){
                   data = {
-                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-                    hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                    hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
                     location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
                   }
                 }else{
-                  if(hasamountChargeOff){
+                  if(haveAmountCharge){
                     data = {
-                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
                       location, condition: [{glossary: condition, user}], amountChargeOff
                     }
                   }else{
                     data = {
-                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-                      hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, condition: [{glossary: condition, user}],
                     }
                   }
                 }

@@ -81,7 +81,7 @@ export default function AmountChargeStepper({token, condition, showForm}:
         if(haveAddress && hasguaranteefund){
           data = {
             amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-            hasguaranteefund, title, types:type, user, guaranteefund: guaranteeData,
+            hasguaranteefund, hasamountChargeOff, title, types:type, user, guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}]
           }
         }else{
@@ -122,7 +122,7 @@ export default function AmountChargeStepper({token, condition, showForm}:
                   }else{
                     data = {
                       amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description, 
-                      hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
+                      hasguaranteefund, hasamountChargeOff, title, types:type, user, condition: [{glossary: condition, user}],
                     }
                   }
                 }
