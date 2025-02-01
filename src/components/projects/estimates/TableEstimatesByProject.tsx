@@ -146,7 +146,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       header: () => (
         <p>No.</p>
       )
-    }),
+    }), 
     columnHelper.accessor('Nombre', {
       header: 'Nombre',
       id: 'nombre',
@@ -203,6 +203,18 @@ export default function TableEstimatesByProject({project, optConditions, optProj
           value: row.original.MontoPay
         })}</p>
       ),
+    }), 
+    columnHelper.accessor('amountVat', {
+      header: 'Monto con iva',
+      id: 'monto iva',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/projects/${row.original.id}/profile`)}
+        >{CurrencyFormatter({
+          currency: 'MXN',
+          value: row.original.amountVat
+        })}</p>
+      ),
     }),
     columnHelper.accessor('Condicion', {
       header: 'Condicion',
@@ -233,6 +245,20 @@ export default function TableEstimatesByProject({project, optConditions, optProj
     }),
   ]
 
+  const initialVisibilityColumns: any = {
+    Accion: true,
+    numero: true,
+    nombre: true,
+    estimacion: true, 
+    amortizacion: true, 
+    fondo: true,
+    monto: true, 
+    'monto iva': false, 
+    condicion: true, 
+    fecha: true,
+    orden: true,
+  }
+
   let dataTable;
   if(isFilterTable){
     dataTable = EstimatesDataToEstimatesTable(filterEstimates);
@@ -250,7 +276,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
         <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />          
       </div>
-      <Table columns={columns} data={dataTable} placeH="buscar estimacion" />
+      <Table columns={columns} data={dataTable} placeH="buscar estimacion" initialColumns={initialVisibilityColumns} />
       {isFilter && <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
                                 FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />}
       {isShowDetailEstimate && <DetailEstimateComponent project={project} nomEstimate={refEstimate.current} 

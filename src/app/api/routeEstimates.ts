@@ -318,3 +318,21 @@ export async function getResumenEstimateProject(auth_token:string, project: stri
     return 'Error al obtener resumen de estimacion del proyecto!!';
   }
 }
+
+export async function getResumenEstimateByProjectAndEstimate(auth_token:string, project: string, estimate:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllTOTALEStimatesResumeByProjectMINAndByEstimate/${project}/${estimate}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener resumen de estimacion por proyecto y estimacion!!';
+  }
+}

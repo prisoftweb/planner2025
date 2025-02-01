@@ -127,16 +127,16 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Esta estimacion</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
-                    currency: "MXN",
-                    value: resumenEstimate?.totalActual?.estimatedTotal || 0
-                  })}
+                      currency: 'MXN',
+                      value: estimate?.amount || 0
+                    })}
                 </Text>
               </View>
               <View style={style.paragraph}>
                 <Text style={style.textLeft}>Acumulado estimado</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
                     currency: "MXN",
-                    value: resumenEstimate?.totalActual?.estimatedTotal || 0
+                    value: resumenEstimate?.totalAccumulated?.amountPayable || 0
                   })}
                 </Text>
               </View>
@@ -222,7 +222,7 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
                 <Text style={style.textLeft}>Total retenido</Text>
                 <Text style={style.textRight}>{CurrencyFormatter({
                     currency: "MXN",
-                    value: resumenEstimate?.totalActual?.amountGuaranteeFund || 0
+                    value: resumenEstimate?.totalAccumulated?.amountGuaranteeFund || 0
                   })}
                 </Text>
               </View>
@@ -262,6 +262,14 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
                 <Text style={style.textRight}>{CurrencyFormatter({
                     currency: "MXN",
                     value: resumenEstimate?.estimateResume?.amount || 0
+                  })}
+                </Text>
+              </View>
+              <View style={style.paragraph}>
+                <Text style={style.textLeft}>Acumulado Total con impuestos</Text>
+                <Text style={style.textRight}>{CurrencyFormatter({
+                    currency: "MXN",
+                    value: resumenEstimate?.estimateResume?.estimatedTotalVAT || 0
                   })}
                 </Text>
               </View>

@@ -12,6 +12,7 @@ export interface TableEstimatesProject {
   Condicion: Glossary, 
   Fecha: string, 
   Orden: string
+  amountVat: number
 }
 
 export interface IEstimateProject {
@@ -22,7 +23,8 @@ export interface IEstimateProject {
   amountGuaranteeFund: number
   amountChargeOff: number
   amount: number
-  amountPayable: number
+  amountPayable: number,
+  amountPayableVAT: number
   ismoneyadvance: boolean
   project: {
     _id: string
@@ -143,13 +145,15 @@ export interface ResumenEstimateProject {
     amountGuaranteeFund: number
     amountChargeOff: number
     amountPayable: number
+    amountPayableVAT: number
   }
   totalPrevious: {
     _id: string
-    estimatedTotal: any
+    estimatedTotal: number
     amountGuaranteeFund: number
     amountChargeOff: number
     amountPayable: number
+    amountPayableVAT: number
   }
   totalActual: {
     _id: string
@@ -157,6 +161,7 @@ export interface ResumenEstimateProject {
     amountGuaranteeFund: number
     amountChargeOff: number
     amountPayable: number
+    amountPayableVAT: number
   }
   estimateResume: {
     _id: string
@@ -167,7 +172,12 @@ export interface ResumenEstimateProject {
     amountChargeOff: number
     amount: number
     amountPayable: number
+    amountPayableVAT: number
     purschaseOrder: string
+    estimatedTotal: number
+    ismoneyadvance: boolean
+    condition: Glossary
+    concepts: any[]
     project: {
       _id: string
       title: string
@@ -175,5 +185,6 @@ export interface ResumenEstimateProject {
     }
     user: UsrBack
     status: boolean
+    estimatedTotalVAT:number
   }
 }

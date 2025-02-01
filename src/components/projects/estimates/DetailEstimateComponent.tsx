@@ -3,7 +3,7 @@ import { OneProjectMin } from "@/interfaces/Projects"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import Chip from "@/components/providers/Chip"
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import { getEstimate, getResumenEstimateProject } from "@/app/api/routeEstimates"
+import { getEstimate, getResumenEstimateProject, getResumenEstimateByProjectAndEstimate } from "@/app/api/routeEstimates"
 import { IEstimate, ResumenEstimateProject } from "@/interfaces/Estimate"
 import DetailEstimatePDF from "./DetailEstimatePDF"
 import Button from "@/components/Button"
@@ -27,7 +27,8 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
 
       // let resumenEstimateProject: ResumenEstimateProject;
       try {
-        const result = await getResumenEstimateProject(token, project._id);
+        // const result = await getResumenEstimateProject(token, project._id);
+        const result = await getResumenEstimateByProjectAndEstimate(token, project._id, nomEstimate);
         // console.log('estimates min => ', estimates);
         if(typeof(result) === "string"){
           return <h1 className="text-center text-red-500">{result}</h1>
@@ -153,15 +154,15 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
         <div className="flex justify-around flex-wrap">
           <p className="text-blue-400 w-72">Esta estimacion</p>
           <p className="text-lg text-green-600 w-48 text-right">{CurrencyFormatter({
-            currency: "MXN",
-            value: resumenEstimateProject?.totalActual?.estimatedTotal || 0
-          })}</p>
+              currency: 'MXN',
+              value: estimate?.amount || 0
+            })}</p>
         </div>
         <div className="flex justify-around flex-wrap">
           <p className="text-slate-400 w-72">Acumulado estimado</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
-            value: resumenEstimateProject?.totalActual?.estimatedTotal || 0
+            value: resumenEstimateProject?.totalAccumulated?.amountPayable || 0
           })}</p>
         </div>
         <div className="flex justify-around flex-wrap">
@@ -226,7 +227,7 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
           <p className="text-slate-400 w-72">Total retenido</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
-            value: resumenEstimateProject?.totalActual?.amountGuaranteeFund || 0
+            value: resumenEstimateProject?.totalAccumulated?.amountGuaranteeFund || 0
           })}</p>
         </div>
       </div>
@@ -259,6 +260,13 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.estimateResume?.amount || 0
+          })}</p>
+        </div>
+        <div className="flex justify-around flex-wrap">
+          <p className="text-slate-400 w-72">Acumulado Total con impuestos</p>
+          <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
+            currency: "MXN",
+            value: resumenEstimateProject?.estimateResume?.estimatedTotalVAT || 0
           })}</p>
         </div>
       </div>

@@ -13,6 +13,7 @@ import { useState, useEffect } from "react"
 import CurrencyInput from "react-currency-input-field"
 import { createEstimate } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
+import { BsPencil } from "react-icons/bs"
 
 export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow}: 
   {showForm:Function, project: OneProjectMin, updateEstimates:Function, user:string, token:string, 
@@ -337,10 +338,11 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
           {!advance && (
             <>
               <div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center pr-4">
                   <Label htmlFor="amortization"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Amortizacion</p></Label>
                   <div className="flex items-center gap-x-2">
-                    <Label htmlFor="modification"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label>
+                    {/* <Label htmlFor="modification"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label> */}
+                    <BsPencil className="w-4 h-4 text-slate-500" />
                     <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                       <input checked={!isdisabled} 
                         onClick={() => setIsDisabled(!isdisabled)} id="disabledAmor" type="checkbox"
@@ -384,10 +386,11 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                 />
               </div>
               <div>                
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center pr-4">
                 <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
                   <div className="flex items-center gap-x-2">
-                    <Label htmlFor="modification Guaran"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label>
+                    {/* <Label htmlFor="modification Guaran"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label> */}
+                    <BsPencil className="w-4 h-4 text-slate-500" />
                     <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                       <input checked={!isdisabledGuarantee} 
                         onClick={() => setIsDisabledGuarantee(!isdisabledGuarantee)} id="disabledGuaran" type="checkbox"

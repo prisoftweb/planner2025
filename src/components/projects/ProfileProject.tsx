@@ -18,6 +18,8 @@ export default function ProfileProject({project}:
     value: oneProjectStore?.guaranteefund?.amount? parseFloat(oneProjectStore.guaranteefund.amount) : 0
   });
 
+  console.log('one project store => ', oneProjectStore);
+
   return(
     <>
       <div className="w-full h-full mt-3">
@@ -54,10 +56,20 @@ export default function ProfileProject({project}:
               <p className="text-slate-500">Costo de obra</p>
               <p>{''}</p>
             </div>
+            <div className="">
+              <p className="text-slate-500">Fecha ({oneProjectStore?.date?.substring(0, 10) || 'sin fecha'})</p>
+            </div>
+            <div className=" font-bold text-slate-600">
+              <p className="text-slate-500">Monto de obra con IVA</p>
+              <p className="text-red-600 font-bold">{CurrencyFormatter({
+                currency: 'MXN',
+                value: (oneProjectStore?.amount || 0) * 1.16
+              })}</p>
+            </div>
           </div>
-          <div className="my-2">
+          {/* <div className="my-2">
             <p className="text-slate-500">Fecha ({oneProjectStore?.date?.substring(0, 10) || 'sin fecha'})</p>
-          </div>
+          </div> */}
         </div>
         
         <div className="my-2 mt-2 bg-white p-3 rounded-lg 
