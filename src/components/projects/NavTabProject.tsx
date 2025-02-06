@@ -138,6 +138,14 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
+                    <Link href={`/projects/${idPro}/status`}>
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                        placement="bottom" className="bg-white text-blue-500" content='Estatus'>
+                        <CreditCardIcon
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
+                          ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
+                      </Tooltip>
+                    </Link>
                   </div>                             
   }else{
     tabCli=(
@@ -160,6 +168,11 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
         <Link href={`/projects/${idPro}/wallet`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Avances</p>
+          </div>
+        </Link>
+        <Link href={`/projects/${idPro}/status`}>
+          <div className={`w-50 px-5 ${tab==='5'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Estatus</p>
           </div>
         </Link>
       </div>

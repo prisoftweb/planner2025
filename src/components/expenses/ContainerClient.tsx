@@ -315,9 +315,14 @@ export default function ContainerClient({data, token, expenses,
         data={tableData}
       />
     ): isViewUser? (
-      <TableHistoryExpenses token={token}
-        expenses={expenses} isFilter={isFilter} setIsFilter={handleFilter}
-        isViewReports={isViewReports}
+      // <TableHistoryExpenses token={token}
+      //   expenses={expenses} isFilter={isFilter} setIsFilter={handleFilter}
+      //   isViewReports={isViewReports}
+      //   data={tableData}
+      // />
+      <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
+        expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
+        idValidado={idVal} user={user._id} isViewReports={isViewReports}
         data={tableData}
       />
     ): (
@@ -352,13 +357,15 @@ export default function ContainerClient({data, token, expenses,
                   />
               )}  
               <>
-                {!isHistory && !isViewUser && (
+                {!isHistory && (
                   <>
                     {expensesSelected.length > 0 && (
                       <Button onClick={changeConditionInCost}>Validar</Button>
                     )}
-                    <ButtonNew token={token} user={user} />
                   </>
+                )}
+                {!isHistory && !isViewUser && (
+                  <ButtonNew token={token} user={user} />
                 )}
               </>
             </div>

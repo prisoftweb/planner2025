@@ -54,6 +54,13 @@ export default function ProfileHistoryProject({project}: {project:OneProjectMin}
           <div className="my-2">
             <p className="text-slate-500">Fecha ({project?.date?.substring(0, 10) || 'sin fecha'})</p>
           </div>
+          <div className=" font-bold text-slate-600">
+              <p className="text-slate-500">Monto de obra con IVA</p>
+              <p className="text-red-600 font-bold">{CurrencyFormatter({
+                currency: 'MXN',
+                value: (project?.amount || 0) * 1.16
+              })}</p>
+            </div>
         </div>
         
         <div className="my-2 mt-2 bg-white p-3 rounded-lg 
