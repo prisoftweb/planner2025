@@ -8,7 +8,6 @@ import { Provider } from "@/interfaces/Providers";
 import TableListExpensesPaid from "./TableListsExpensesPaid";
 import PaidExpensesHistory from "./PaidExpensesHistory";
 import { Options } from "@/interfaces/Common";
-// import { CostInPayment } from "@/interfaces/Payments";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 import PaymentPlugin from "./PaymentPlugin";
 
