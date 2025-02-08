@@ -671,3 +671,23 @@ export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart
     return 'Error al consultar costos por resumen y tipo!!';
   }
 }
+
+export async function getTimeLineCost(auth_token:string, cost:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getConditionsByCostMIN/${cost}`;
+  
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar linea de tiempo del costo!!';
+  }
+}

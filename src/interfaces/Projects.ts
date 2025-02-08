@@ -174,3 +174,22 @@ export interface Condition {
   _id: string
   id: string
 }
+
+export interface ITimeLineProject {
+  _id: string
+  conditionstatus: {
+    _id: string
+    condition: {
+      _id: string
+      name: string
+      color: string
+    }
+    user: {
+      _id: string
+      name: string
+      photo: string
+    }
+    date: string
+    status: boolean
+  }
+}

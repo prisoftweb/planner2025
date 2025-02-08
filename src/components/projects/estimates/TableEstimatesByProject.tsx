@@ -135,18 +135,18 @@ export default function TableEstimatesByProject({project, optConditions, optProj
     //     <p>accion</p>
     //   )
     // }),
-    columnHelper.accessor(row => row.No, {
-      id: 'numero',
-      cell: ({row}) => (
-        <div className="">
-          <p>{row.original.No}</p>
-        </div>
-      ),
-      enableSorting:false,
-      header: () => (
-        <p>No.</p>
-      )
-    }), 
+    // columnHelper.accessor(row => row.No, {
+    //   id: 'numero',
+    //   cell: ({row}) => (
+    //     <div className="">
+    //       <p>{row.original.No}</p>
+    //     </div>
+    //   ),
+    //   enableSorting:false,
+    //   header: () => (
+    //     <p>No.</p>
+    //   )
+    // }), 
     columnHelper.accessor('Nombre', {
       header: 'Nombre',
       id: 'nombre',
@@ -247,7 +247,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
 
   const initialVisibilityColumns: any = {
     Accion: true,
-    numero: true,
+    // numero: true,
     nombre: true,
     estimacion: true, 
     amortizacion: true, 

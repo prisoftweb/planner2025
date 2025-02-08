@@ -273,7 +273,7 @@ export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvi
       pending: pending,
       Quantity: expense.quantity.length.toString(),
       range: 'sin rango de fechas',
-      reference: expense.reference
+      reference: expense.reference,
     });
   });
 

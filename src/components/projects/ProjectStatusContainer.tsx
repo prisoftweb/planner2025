@@ -32,7 +32,7 @@ export default function ProjectStatusContainer({project, token, id, optCategorie
     opt===1? (<div className="mt-3 w-full md:max-w-2xl lg:w-full bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
         {/* <DashboardProfileProject token={token} id={id} /> */}
-        <StatusProjectComponent />
+        <StatusProjectComponent token={token} project={project._id} />
       </div>) : 
 (opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>

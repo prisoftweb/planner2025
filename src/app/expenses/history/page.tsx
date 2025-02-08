@@ -26,7 +26,12 @@ export default async function Page() {
     return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
   }
 
-  const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
+  const d = new Date();
+  const dIni = new Date(d.getFullYear(), d.getMonth(), 1);
+
+  const expensesFil= expenses.filter((e) => new Date(e.date).getTime() >= dIni.getTime() && new Date(e.date).getTime() <= d.getTime())
+
+  const table: ExpensesTable[] = ExpenseDataToTableData(expensesFil);
 
 // console.log('table data => ', table);
   return(

@@ -342,7 +342,7 @@ export default function ContainerClient({data, token, expenses,
               <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
             </div>
           </Link>
-          <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': 'Gastos'}</p>
+          <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': (isViewUser? 'Gastos en proceso': 'Gastos')}</p>
         </div>
         <div className={`flex gap-x-3 gap-y-3 ${isHistory? '': 'flex-wrap-reverse sm:flex-nowrap'} w-full justify-end`}>
           <SearchInTable placeH={"Buscar gasto.."} />

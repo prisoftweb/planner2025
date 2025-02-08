@@ -48,7 +48,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(providers.length <= 0){
     return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
   }
-
+console.log('costs payment => ', costs);
   const table: ExpensesTableProvider[] = ExpenseDataToTablePaidExpensesProviderData(costs);
   
   return(

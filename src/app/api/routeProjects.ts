@@ -723,3 +723,23 @@ export async function getProjectsControlBudgeted(auth_token:string, dateStart: s
     return 'Error al consultar proyectos por control presupuestal!!';
   }
 }
+
+export async function getTimeLineProject(auth_token:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getConditionsByProjectMIN/${project}`;
+  
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar linea de tiempo del proyecto!!';
+  }
+}

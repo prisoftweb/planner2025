@@ -1,21 +1,21 @@
-import TimelineComponent from "./TimeLineComponent"
+import TimelineComponent from "../projects/TimeLineComponent"
 import HeaderForm from "../HeaderForm"
 import { useState, useEffect } from "react"
 import { ITimeLineProject } from "@/interfaces/Projects"
-import { getTimeLineProject } from "@/app/api/routeProjects"
+import { getTimeLineCost } from "@/app/api/routeCost"
 import { showToastMessageError } from "../Alert"
 
-export default function StatusProjectComponent({project, token}: {token:string, project:string}) {
-  const [statusProject, setStatusProject] = useState<ITimeLineProject[]>([]);
+export default function StatusCostComponent({cost, token}: {token:string, cost:string}) {
+  const [statusCost, setStatusCost] = useState<ITimeLineProject[]>([]);
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const res = await getTimeLineProject(token, project);
+        const res = await getTimeLineCost(token, cost);
         if(typeof(res)==='string'){
           showToastMessageError(res);
         }else{
-          setStatusProject(res);
+          setStatusCost(res);
         }
       } catch (error) {
         showToastMessageError('Error al consultar linea de tiempo!!!');        
@@ -26,11 +26,11 @@ export default function StatusProjectComponent({project, token}: {token:string, 
 
   return (
     <>
-      <HeaderForm img="/img/projects.svg" subtitle="Linea de tiempo de un proyecto" 
-        title="Estatus de proyecto"
+      <HeaderForm img="/img/projects.svg" subtitle="Linea de tiempo de un costo" 
+        title="Estatus de costo"
       />
       <div className="mt-4 max-w-sm rounded-lg space-y-5">
-        <TimelineComponent timeLine={statusProject} />
+        <TimelineComponent timeLine={statusCost} />
       </div>
     </>
   )
