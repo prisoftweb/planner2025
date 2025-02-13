@@ -13,6 +13,10 @@ import { Options } from "@/interfaces/Common";
 import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } from "@/interfaces/Estimate";
 import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 import { showToastMessageError } from "@/components/Alert";
+import NavTabEstimates from "./NavTabEstimates";
+import TableInvoicesComponent from "./TableInvoicesComponent";
+import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
+import { TableEstimatesProject } from "@/interfaces/Estimate";
 interface OptionsDashboard {
   label: string,
   costo: number
@@ -27,6 +31,19 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
   const [estimatesData, setEstimatesData] = useState<IEstimateProject[]>(estimates);
 
+  const [openNewInvoice, setOpenNewInvoice] = useState<boolean>(false);
+  const [selEstimate, setSelEstimate]=useState<TableEstimatesProject>();
+
+  const [tab, setTab] = useState<number>(0);
+
+  const handleTab = (value:number) => {
+    setTab(value);
+  }
+
+  const handleSelEstimate = (value: TableEstimatesProject) => {
+    setSelEstimate(value);
+  }
+
   const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>(totalEstimatedProject);
 
   const handleFilterTable = (value: boolean) => {
@@ -35,6 +52,10 @@ export default function ContainerStimationsProject({project, optConditions, optP
 
   const handleShowForm = (value: boolean) => {
     setOpenNewStimate(value);
+  }
+
+  const handleShowFormInvoice = (value: boolean) => {
+    setOpenNewInvoice(value);
   }
 
   const updateEstimatesProject = async () => {
@@ -54,26 +75,19 @@ export default function ContainerStimationsProject({project, optConditions, optP
     let totalEstimated: TotalEstimatedByProject[];
     try {
       totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
-      // console.log('res total estimated => ', totalEstimatedProject);
       if(typeof(totalEstimated) === "string"){
         showToastMessageError(totalEstimated);
       }else{
-        // console.log('total estimated estate => ', totalEstimatedProjectState);
-        // console.log('new total estimated => ', totalEstimated);
         setTotalEstimatedProjectState(totalEstimated);
       }
     } catch (error) {
       showToastMessageError('Ocurrio un error al actualizar el total de las estimaciones del proyecto!!')
-      // return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las estimaciones del proyecto!!</h1>  
     }
 
     setIsFilterTable(false);
   }
 
   const delEstimate = (id:string) => {
-    // const newData=estimatesData.filter((e) => e._id !== id);
-    // setIsFilterTable(false);
-    // setEstimatesData(newData);
     updateEstimatesProject();
   }
 
@@ -96,9 +110,13 @@ export default function ContainerStimationsProject({project, optConditions, optP
   });
   console.log('data estimated dashboard => ', dataEstimatesDashboard);
 
-  
-
   const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
+
+  let component = tab===1? <TableInvoicesComponent token={token} />: (tab===2? <></>: 
+                    <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
+                      estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
+                      delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
+                      selEstimate={handleSelEstimate}  />)
 
   return (
     <>
@@ -116,7 +134,8 @@ export default function ContainerStimationsProject({project, optConditions, optP
             </span>
           </ProgressCircle>
         </div>
-        <Button onClick={() => setOpenNewStimate(true)}>Agregar estimacion</Button>
+        {tab===1? <></>: 
+            (tab===2? <></>: <Button onClick={() => setOpenNewStimate(true)}>Agregar estimacion</Button>)}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
@@ -186,11 +205,18 @@ export default function ContainerStimationsProject({project, optConditions, optP
         </div>
 
       </div>
-      <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
-        estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-        delEstimate={delEstimate} token={token} />
+
+      <div>
+        <NavTabEstimates setTab={handleTab} tab={tab} />
+      </div>
+      
+      {component}
+
       {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-      updateEstimates={updateEstimatesProject} token={token} overflow={overflow} />}
+        updateEstimates={updateEstimatesProject} token={token} overflow={overflow} />}
+
+      {openNewInvoice && <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
+        updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />}
     </>
   )
 }

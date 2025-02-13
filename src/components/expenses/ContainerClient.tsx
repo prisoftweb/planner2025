@@ -28,7 +28,7 @@ import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWi
 import { UsrBack } from "@/interfaces/User"
 import WithOut from "../WithOut"
 
-import { getAllCostsByCondition, GetCostsByUserMIN } from "@/app/api/routeCost"
+import { getAllCostsByConditionAndUser } from "@/app/api/routeCost"
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
@@ -236,12 +236,43 @@ export default function ContainerClient({data, token, expenses,
     }
   }
 
+  const conciliationCost = async () => {
+    if(expensesSelected.length > 0){
+      const filter: string[] = [];
+      expensesSelected.map((row) => {
+        filter.push(row.id);
+      })
+      const data = {
+        condition: {
+          glossary: '661eaa71f642112488c85f59',
+          user
+        },
+        filter,
+      }
+
+      try {
+        const res = await insertConditionInCost(token, data);
+        if(res===200){
+          showToastMessage('Costos actualizados satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un problema al actualizar condicion!!');
+      }
+    }
+  }
+
   if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
     //console.log('entro en el if => ');
     const aux = async () =>{
       try {
         // const res = await getAllCostsByCondition(token);
-        const res = await GetCostsByUserMIN(token, user._id);
+        // const res = await GetCostsByUserMIN(token, user._id);
+        const res = await getAllCostsByConditionAndUser(token, user._id);
         //console.log('res');
         if(typeof(res) !== 'string'){
           //refExpenses.current = res;
@@ -357,7 +388,14 @@ export default function ContainerClient({data, token, expenses,
                   />
               )}  
               <>
-                {!isHistory && (
+                {!isHistory && !isViewUser && (
+                  <>
+                    {expensesSelected.length > 0 && (
+                      <Button onClick={conciliationCost}>Conciliar</Button>
+                    )}
+                  </>
+                )}
+                {isViewUser && (
                   <>
                     {expensesSelected.length > 0 && (
                       <Button onClick={changeConditionInCost}>Validar</Button>

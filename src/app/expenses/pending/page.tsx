@@ -4,7 +4,7 @@ import Navigation from "@/components/navigation/Navigation";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 // import { getAllCostsByCondition } from "../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
-import { getAllCostsByCondition } from "@/app/api/routeCost";
+import { getAllCostsByCondition, getAllCostsByUserAdmin, getAllCostsByUserNormal } from "@/app/api/routeCost";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 
 
@@ -33,7 +33,13 @@ export default async function Page() {
   
   let expenses: Expense[] = [];
   try {
-    expenses = await getAllCostsByCondition(token);
+    if(role.toLowerCase().includes('admin')){
+      // expenses = await getAllCostsByCondition(token);
+      expenses = await getAllCostsByUserAdmin(token);
+      console.log('expenses result admin => ', expenses);
+    }else{
+      expenses = await getAllCostsByUserNormal(token, user._id);
+    }
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {

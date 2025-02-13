@@ -122,6 +122,48 @@ export interface IConceptEstimate {
   status: boolean
 }
 
+export interface IEstimateMin {
+  _id: string
+  name: string
+  description: string
+  date: string
+  amountGuaranteeFund: number
+  amountChargeOff: number
+  amount: number
+  amountPayable: number
+  amountPayableVAT: number
+  purschaseOrder: string
+  estimatedTotal: number
+  ismoneyadvance: boolean
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  condition: Glossary
+  concepts: {
+    conceptEstimate: string
+    priceConcepEstimate: {
+      cost: number
+      date: string
+    }
+    area: string
+    section: string
+    quantity: number
+    amount: number
+    date: string
+    user: string
+    status: boolean
+    _id: string
+  }[]
+  status: boolean
+}
+
 export interface PriceConcept {
   user: UsrBack
   cost: number

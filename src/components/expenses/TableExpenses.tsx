@@ -358,8 +358,8 @@ export default function TableExpenses({data, token, expenses,
   if(refresh){
     const aux = async () =>{
       try {
-        // const res = await getAllCostsByCondition(token);
-        const res = await GetCostsByUserMIN(token, user);
+        const res = await getAllCostsByCondition(token);
+        // const res = await GetCostsByUserMIN(token, user);
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);

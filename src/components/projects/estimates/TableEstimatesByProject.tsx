@@ -14,13 +14,15 @@ import { EstimatesDataToEstimatesTable } from "@/app/functions/EstimatesFunction
 import RemoveElement from "@/components/RemoveElement";
 import { removeEstimate } from "@/app/api/routeEstimates";
 import { BsFilePdfFill } from "react-icons/bs";
+import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import { ResumenEstimateProject } from "@/interfaces/Estimate";
 import { getResumenEstimateProject } from "@/app/api/routeEstimates";
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
-  isFilterTable, delEstimate, token }: 
+  isFilterTable, delEstimate, token, showNewInvoice, selEstimate }: 
   {project: OneProjectMin, optProjects: Options[], optConditions: Options[], estimates:IEstimateProject[], 
-    isFilterTable:boolean, handleFilterTable:Function, delEstimate:Function, token:string }) {
+    isFilterTable:boolean, handleFilterTable:Function, delEstimate:Function, token:string, 
+    showNewInvoice:Function, selEstimate:Function }) {
 
   // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
   const [filterEstimates, setFilterEstimates] = useState<IEstimateProject[]>(estimates);
@@ -106,6 +108,11 @@ export default function TableEstimatesByProject({project, optConditions, optProj
           <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
               refEstimate.current = row.original.id;
               setIsShowDetailEstimate(true);
+          }} />
+          <DocumentArrowDownIcon className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
+              refEstimate.current = row.original.id;
+              selEstimate(row.original);
+              showNewInvoice(true);
           }} />
         </div>
       ),

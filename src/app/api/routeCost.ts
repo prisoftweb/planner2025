@@ -63,6 +63,27 @@ export async function getAllCostsByCondition(auth_token:string){
   }
 }
 
+export async function getAllCostsByConditionAndUser(auth_token:string, user:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByUserAndByConditionAGG/INGRESADO/${user}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    console.log('res by condition and user => ', res);
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    console.log('catch ', error);
+    return 'Error al consultar costos!!';
+  }
+}
+
 export async function GetCostsByUserMIN(auth_token:string, user:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByUserMIN/${user}`;
   try {
@@ -73,6 +94,48 @@ export async function GetCostsByUserMIN(auth_token:string, user:string){
     });
     //console.log('res', res);
     if(res.status===200) return res.data.data.stats
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    console.log('catch ', error);
+    return 'Error al consultar costos!!';
+  }
+}
+
+export async function getAllCostsByUserNormal(auth_token:string, user:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByUserAndNEConditionMIN/FINALIZADO/${user}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    //console.log('res', res);
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    console.log('catch ', error);
+    return 'Error al consultar costos!!';
+  }
+}
+
+export async function getAllCostsByUserAdmin(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsAndNEConditionMIN/FINALIZADO`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    console.log('res cost by user admin => ', res);
+    if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){

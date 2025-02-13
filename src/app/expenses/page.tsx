@@ -4,7 +4,7 @@ import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
 import ButtonNew from "@/components/expenses/ButtonNew";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-import { getAllCostsByCondition, GetCostsByUserMIN } from "../api/routeCost";
+import { getAllCostsByConditionAndUser } from "../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
 import { ExpenseDataToTableData } from "../functions/CostsFunctions";
 
@@ -17,25 +17,25 @@ export default async function Page() {
   const role = user.rol?.name || '';
   const isViewReports = role.toLowerCase().includes('residente')? false: true;
   
-  // let expenses: Expense[] = [];
-  // try {
-  //   expenses = await getAllCostsByCondition(token);
-  //   if(typeof(expenses)=== 'string')
-  //     return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
-  // } catch (error) {
-  //   console.log('page expanses ', error);
-  //   return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
-  // }
-
   let expenses: Expense[] = [];
   try {
-    expenses = await GetCostsByUserMIN(token, user._id);
+    expenses = await getAllCostsByConditionAndUser(token, user._id);
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {
     console.log('page expanses ', error);
     return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
   }
+
+  // let expenses: Expense[] = [];
+  // try {
+  //   expenses = await GetCostsByUserMIN(token, user._id);
+  //   if(typeof(expenses)=== 'string')
+  //     return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
+  // } catch (error) {
+  //   console.log('page expanses ', error);
+  //   return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
+  // }
 
   // let optConditions: Options[] = [];
   // try {

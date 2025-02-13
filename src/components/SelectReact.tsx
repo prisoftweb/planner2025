@@ -2,8 +2,8 @@ import Select from 'react-select'
 import { Options } from '@/interfaces/Common'
 import { useState } from 'react'
 
-export default function SelectReact({opts, setValue, index}: 
-                          {opts:Options[], setValue:Function, index:number}){
+export default function SelectReact({opts, setValue, index, disabled=false}: 
+                          {opts:Options[], setValue:Function, index:number, disabled?:boolean}){
   
   const [selOpt, setSelOpt] = useState<Options>(index!== undefined? opts[index]: opts[opts.length-1]);
   //console.log('sel opt => ', selOpt);
@@ -25,6 +25,7 @@ export default function SelectReact({opts, setValue, index}:
           //borderColor: state.isFocused ? 'grey' : 'red',
         }),
       }}
+      isDisabled={disabled}
     />
   )
 }

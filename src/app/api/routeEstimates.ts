@@ -38,6 +38,26 @@ export async function getEstimate(auth_token:string, id: string) {
   }
 }
 
+export async function getEstimateMin(auth_token:string, id: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getEstimateByIDMIN/${id}`;
+  console.log('url estimate min => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    console.log('res => ', res);
+    if(res.status===200) return res.data.data.stats[0];
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener estimacion!!';
+  }
+}
+
 export async function createEstimate(auth_token:string, data: Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates`;
   console.log('url => ', url);

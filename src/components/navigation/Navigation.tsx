@@ -226,11 +226,22 @@ const NavItems = ({role}: {role:string}) => {
           name: 'Dashboard',
           link: '/projects/dashboard'
         },
-        {
-          name: 'Estimaciones',
-          link: '/projects/estimates'
-        },
       ]}/>
+      <NavItem name="Estimaciones" link="" items={[
+          {
+            name: 'Por proyecto',
+            link: '/projects/estimates'
+          },
+          {
+            name: 'activas',
+            link: '/projects/estimates/activ'
+          },
+          {
+            name: 'Historial',
+            link: '/projects/estimates/history'
+          },
+        ]}
+      />
       <NavItem name="Costos" link="" items={[
           {
             name: 'Centro de costos',
