@@ -48,15 +48,21 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
       <Page>
         {/* <View style={{padding: '30px'}}> */}
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
-          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            <View style={{margin:'0px'}}>
+              <Text style={[{fontSize: '13px', margin: '1px', color: 'black', fontWeight:'semibold'}]}>
+                Detalle de costo agrupado por {type? 'categoria':'concepto'}
+              </Text>
+            </View>
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Detalle de costo agrupado por proyectos</Text> */}
               {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
               {/* <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text> */}
-              <Text style={[style.subTitle, {textAlign:'right'}]}>
+              <Text style={[style.subTitle, {textAlign:'right', marginTop:'17px'}]}>
                 Del {rangeDate.from?.getDate()} de {months[rangeDate.from?.getMonth() || 0]} de {rangeDate.from?.getFullYear()} {' '}  al {rangeDate.to?.getDate()} de {months[rangeDate.to?.getMonth() || 0]} de {rangeDate.to?.getFullYear()}  
               </Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>{new Date().toISOString().substring(0, 10)}</Text>
             </View>
           </View>
           

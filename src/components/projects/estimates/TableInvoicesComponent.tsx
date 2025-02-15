@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react"
 import { IInvoice, IInvoiceTable } from "@/interfaces/Invoices"
-import { getInvoices } from "@/app/api/routeInvoices"
+import { getInvoices, removeInvoice } from "@/app/api/routeInvoices"
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { InvoiceDataToTableData } from "@/app/functions/InvoicesFunctions";
+import RemoveElement from "@/components/RemoveElement";
 
 export default function TableInvoicesComponent({token}:{token:string}) {
 
@@ -39,6 +40,11 @@ export default function TableInvoicesComponent({token}:{token:string}) {
     )
   }
 
+  const delInvoice = (id:string) => {
+    const fil = invoices.filter((i) => i._id !== id);
+    setInvoices(fil);
+  }
+
   const columnHelper = createColumnHelper<IInvoiceTable>();
   
   const columns = [
@@ -50,7 +56,8 @@ export default function TableInvoicesComponent({token}:{token:string}) {
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           /> */}
-          
+          <RemoveElement id={row.original.id} name={row.original.estimate} remove={removeInvoice} 
+                      removeElement={delInvoice} token={token} />
         </div>
       ),
       size: 300,

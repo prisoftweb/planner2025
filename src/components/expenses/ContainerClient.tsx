@@ -236,6 +236,36 @@ export default function ContainerClient({data, token, expenses,
     }
   }
 
+  const finishCost = async () => {
+    if(expensesSelected.length > 0){
+      const filter: string[] = [];
+      expensesSelected.map((row) => {
+        filter.push(row.id);
+      })
+      const data = {
+        condition: {
+          glossary: "661eade6f642112488c85fad",
+          user
+        },
+        filter,
+      }
+
+      try {
+        const res = await insertConditionInCost(token, data);
+        if(res===200){
+          showToastMessage('Costos actualizados satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un problema al actualizar condicion!!');
+      }
+    }
+  }
+
   const conciliationCost = async () => {
     if(expensesSelected.length > 0){
       const filter: string[] = [];
@@ -339,6 +369,26 @@ export default function ContainerClient({data, token, expenses,
     )
   }
 
+  let isExpensesValidates = true;
+  if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('soporte')){
+    if(expensesSelected.length > 0){
+      const find = expensesSelected.find((e) => !e.condition.toLowerCase().includes('validado'));
+      if(find){
+        isExpensesValidates=false;
+      }
+      // expensesSelected.map((e) => {
+      //   if(!e.condition.toLowerCase().includes('validado')){
+      //     isExpensesValidates=false;
+      //     return;
+      //   }
+      // })
+    }else{
+      isExpensesValidates=false;
+    }
+  }else{
+    isExpensesValidates=false;
+  }
+
   const viewTable = 
     isHistory? (
       <TableHistoryExpenses  token={token} isViewReports={isViewReports}
@@ -395,10 +445,17 @@ export default function ContainerClient({data, token, expenses,
                     )}
                   </>
                 )}
-                {isViewUser && (
+                {isViewUser && !isExpensesValidates && (
                   <>
                     {expensesSelected.length > 0 && (
                       <Button onClick={changeConditionInCost}>Validar</Button>
+                    )}
+                  </>
+                )}
+                {isViewUser && isExpensesValidates && (
+                  <>
+                    {expensesSelected.length > 0 && (
+                      <Button onClick={finishCost}>Finalizar</Button>
                     )}
                   </>
                 )}

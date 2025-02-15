@@ -216,6 +216,14 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
   }
   if(indexCLi<0) indexCLi=0;
 
+  const updateAmounts = (value: string) => {
+    const val = Number(value.replace(/[$,]/g, ""));
+    const v = val * 0.16;
+    setSubTotal(val.toString());
+    setVat(v.toString());
+    setTotal((val + v).toString());
+  }
+
   return(
     <>
       <form className="z-10 absolute top-16 w-full max-w-lg bg-white space-y-5 p-3 right-0"
@@ -345,9 +353,11 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {
-                setSubTotal(value?.replace(/[$,]/g, "") || '0');
+                updateAmounts(value?.replace(/[$,]/g, "") || '0');
+                // setSubTotal(value?.replace(/[$,]/g, "") || '0');
               } catch (error) {
-                setSubTotal('0');
+                updateAmounts('0');
+                // setSubTotal('0');
               }}}
             />
             {bandSubtotal && (
@@ -363,6 +373,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
               value={vat}
+              disabled
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {
@@ -386,6 +397,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               value={total}
               decimalsLimit={2}
               prefix="$"
+              disabled
               onValueChange={(value) => {try {
                 setTotal(value?.replace(/[$,]/g, "") || '0');
               } catch (error) {
