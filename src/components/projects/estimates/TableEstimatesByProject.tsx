@@ -109,11 +109,15 @@ export default function TableEstimatesByProject({project, optConditions, optProj
               refEstimate.current = row.original.id;
               setIsShowDetailEstimate(true);
           }} />
-          <DocumentArrowDownIcon className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
-              refEstimate.current = row.original.id;
-              selEstimate(row.original);
-              showNewInvoice(true);
-          }} />
+          {row.original.haveInvoice? (
+            <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+          ): (
+            <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
+                refEstimate.current = row.original.id;
+                selEstimate(row.original);
+                showNewInvoice(true);
+            }} />
+          )}
         </div>
       ),
       size: 300,

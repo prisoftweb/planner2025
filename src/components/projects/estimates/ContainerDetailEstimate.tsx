@@ -15,6 +15,7 @@ import { getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin } fro
 import AddNewConceptEstimate from "./AddNewConceptEstimate";
 import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "@/components/Alert";
+import NavTabEstimates from "./NavTabEstimates";
 
 export default function ContainerDetailEstimate({project, token, user, estimate, concepts, 
     idEstimate, totalEstimatedProject}: 
@@ -26,6 +27,12 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   const [conceptsData, setConceptsData] = useState<IConceptEstimate[]>(concepts);
 
   const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>(totalEstimatedProject);
+
+  const [tab, setTab] = useState<number>(0);
+
+  const handleTab = (value:number) => {
+    setTab(value);
+  }
 
   const handleFilterTable = (value: boolean) => {
     setIsFilterTable(value);
@@ -82,6 +89,11 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       value: c.conceptEstimate._id
     });
   });
+
+  let component = tab===1? <></>: (tab===2? <></>: 
+                        <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
+                          handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
+                          project={project} token={token} idEstimate={idEstimate} />)
 
   return (
     <>
@@ -177,13 +189,18 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
         </div>
 
       </div>
-      <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} handleFilterTable={handleFilterTable} 
-        isFilterTable={isfilterTable} project={project} token={token} idEstimate={idEstimate} />
+
+      <div>
+        {/* <NavTabEstimates setTab={handleTab} tab={tab} /> */}
+      </div>
+
+      {component}
+
+      {/* <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} handleFilterTable={handleFilterTable} 
+        isFilterTable={isfilterTable} project={project} token={token} idEstimate={idEstimate} /> */}
       {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={estimate}
                             conceptsDataChart={conceptsData} />}
-      {/* {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-      updateEstimates={updateEstimatesProject} token={token} />} */}
     </>
   )
 }

@@ -13,6 +13,7 @@ export interface TableEstimatesProject {
   Fecha: string, 
   Orden: string
   amountVat: number
+  haveInvoice: boolean
 }
 
 export interface IEstimateProject {
@@ -39,7 +40,8 @@ export interface IEstimateProject {
   status: boolean
   purschaseOrder: string
   estimatedTotal: number,
-  condition: Glossary
+  condition: Glossary,
+  haveinvoice: boolean
 }
 
 export interface IEstimate {

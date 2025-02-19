@@ -2,6 +2,8 @@ import { Expense } from "@/interfaces/Expenses";
 import { HistoryExpensesTable, ExpensesTableProvider, DetailExpensesTableProvider } from "@/interfaces/Providers";
 import { CurrencyFormatter } from "./Globals";
 import { Payment, PaymentProvider, CostPayment } from "@/interfaces/Payments";
+import { IConceptInvoice } from "@/interfaces/Invoices";
+import { ITableConceptsEstimate } from "@/interfaces/Estimate";
 
 export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
   const table: HistoryExpensesTable[] = [];

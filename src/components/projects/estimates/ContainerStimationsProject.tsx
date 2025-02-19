@@ -34,12 +34,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const [openNewInvoice, setOpenNewInvoice] = useState<boolean>(false);
   const [selEstimate, setSelEstimate]=useState<TableEstimatesProject>();
 
-  const [tab, setTab] = useState<number>(0);
-
-  const handleTab = (value:number) => {
-    setTab(value);
-  }
-
   const handleSelEstimate = (value: TableEstimatesProject) => {
     setSelEstimate(value);
   }
@@ -112,11 +106,11 @@ export default function ContainerStimationsProject({project, optConditions, optP
 
   const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
 
-  let component = tab===1? <TableInvoicesComponent token={token} />: (tab===2? <></>: 
-                    <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
-                      estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-                      delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
-                      selEstimate={handleSelEstimate}  />)
+  // let component = tab===1? <TableInvoicesComponent token={token} project={project} />: (tab===2? <></>: 
+  //                   <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
+  //                     estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
+  //                     delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
+  //                     selEstimate={handleSelEstimate}  />)
 
   return (
     <>
@@ -134,8 +128,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
             </span>
           </ProgressCircle>
         </div>
-        {tab===1? <></>: 
-            (tab===2? <></>: <Button onClick={() => setOpenNewStimate(true)}>Agregar estimacion</Button>)}
+        <Button onClick={() => setOpenNewStimate(true)}>Agregar estimacion</Button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
@@ -207,10 +200,14 @@ export default function ContainerStimationsProject({project, optConditions, optP
       </div>
 
       <div>
-        <NavTabEstimates setTab={handleTab} tab={tab} />
+        <NavTabEstimates tab={0} id_p={project._id} />
       </div>
       
-      {component}
+      {/* {component} */}
+      <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
+        estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
+        delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
+        selEstimate={handleSelEstimate}  />
 
       {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
         updateEstimates={updateEstimatesProject} token={token} overflow={overflow} />}

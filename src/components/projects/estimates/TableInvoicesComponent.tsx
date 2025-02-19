@@ -1,21 +1,22 @@
 import { useState, useEffect } from "react"
-import { IInvoice, IInvoiceTable } from "@/interfaces/Invoices"
-import { getInvoices, removeInvoice } from "@/app/api/routeInvoices"
+import { IInvoiceByProject, IInvoiceTable } from "@/interfaces/Invoices"
+import { getInvoicesByProject, removeInvoice } from "@/app/api/routeInvoices"
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { TrashIcon } from "@heroicons/react/24/solid";
 import { InvoiceDataToTableData } from "@/app/functions/InvoicesFunctions";
 import RemoveElement from "@/components/RemoveElement";
+import { OneProjectMin } from "@/interfaces/Projects";
+import Chip from "@/components/providers/Chip";
 
-export default function TableInvoicesComponent({token}:{token:string}) {
+export default function TableInvoicesComponent({token, project}:{token:string, project:OneProjectMin}) {
 
-  const [invoices, setInvoices] = useState<IInvoice[]>([]);
+  const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getInvoices(token);
+      const res = await getInvoicesByProject(token, project._id);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
@@ -72,22 +73,65 @@ export default function TableInvoicesComponent({token}:{token:string}) {
         <p>Accion</p>
       )
     }),
-    columnHelper.accessor('estimate', {
-      header: 'Estimacion',
-      id: 'estimacion',
-      cell: ({row}) => (
-        <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates`)}
-        >{row.original.estimate}</p>
-      )
-    }),
     columnHelper.accessor('folio', {
       header: 'Folio',
       id: 'folio',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates`)}
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{row.original.folio}</p>
+      ),
+    }),
+    columnHelper.accessor('usecfdi', {
+      header: 'Uso CFDI',
+      id: 'cdfi',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        >{row.original.usecfdi}</p>
+      ),
+    }),
+    columnHelper.accessor('methodpaid', {
+      header: 'Metodo de pago',
+      id: 'metodo',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        >{row.original.methodpaid}</p>
+      ),
+    }),
+    columnHelper.accessor('formpaid', {
+      header: 'Forma de pago',
+      id: 'forma',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        >{row.original.formpaid}</p>
+      ),
+    }),
+    columnHelper.accessor('estimate', {
+      header: 'Estimacion',
+      id: 'estimacion',
+      cell: ({row}) => (
+        <p className="py-2 font-semibold cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        >{row.original.estimate}</p>
+      )
+    }),
+    columnHelper.accessor('condition', {
+      header: 'Condicion',
+      id: 'condicion',
+      cell: ({row}) => (
+        <Chip label={row.original.condition.name} color={row.original.condition.color} />
+      ),
+    }),
+    columnHelper.accessor('fecha', {
+      header: 'Fecha',
+      id: 'fecha',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        >{row.original.fecha.substring(0, 10)}</p>
       ),
     }),
     columnHelper.accessor('amount', {
@@ -95,7 +139,7 @@ export default function TableInvoicesComponent({token}:{token:string}) {
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates`)}
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.amount
