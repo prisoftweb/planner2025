@@ -234,7 +234,7 @@ const NavItems = ({role}: {role:string}) => {
           },
           {
             name: 'activas',
-            link: '/projects/estimates/activ'
+            link: '/projects/estimates/withoutinvoice'
           },
           {
             name: 'Historial',

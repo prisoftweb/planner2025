@@ -13,7 +13,9 @@ export interface TableEstimatesProject {
   Fecha: string, 
   Orden: string
   amountVat: number
-  haveInvoice: boolean
+  haveInvoice: boolean,
+  idProject: string
+  project: string
 }
 
 export interface IEstimateProject {
@@ -232,3 +234,6 @@ export interface ResumenEstimateProject {
     estimatedTotalVAT:number
   }
 }
+
+
+

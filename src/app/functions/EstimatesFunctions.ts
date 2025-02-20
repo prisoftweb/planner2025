@@ -1,4 +1,4 @@
-import { IEstimateProject, TableEstimatesProject, IConceptEstimate, ITableConceptsEstimate } from "@/interfaces/Estimate";
+import { IEstimateProject, TableEstimatesProject, IConceptEstimate, ITableConceptsEstimate, IEstimateMin } from "@/interfaces/Estimate";
 
 export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
   const table: TableEstimatesProject[] = [];
@@ -16,7 +16,34 @@ export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
       Orden: estimate.purschaseOrder || 'sin orden',
       No: index+1,
       amountVat: estimate.amountPayableVAT?? 0,
-      haveInvoice: estimate.haveinvoice
+      haveInvoice: estimate.haveinvoice,
+      idProject: estimate.project._id,
+      project: estimate.project.title
+    });
+  });
+
+  return table;
+}
+
+export function EstimatesWitoutInvoiceDataToEstimatesTable(estimates:IEstimateMin[]){
+  const table: TableEstimatesProject[] = [];
+  // console.log('tabla estimates => ', estimates);
+  estimates.map((estimate, index:number) => {
+    table.push({
+      id: estimate._id,
+      Fecha: estimate.date,
+      Amortizacion: estimate.amountChargeOff,
+      Condicion: estimate.condition,
+      Estimacion: estimate.amount,
+      Fondo: estimate.amountGuaranteeFund,
+      MontoPay: estimate.amountPayable,
+      Nombre: estimate.name,
+      Orden: estimate.purschaseOrder || 'sin orden',
+      No: index+1,
+      amountVat: estimate.amountPayableVAT?? 0,
+      haveInvoice: false,
+      idProject: estimate.project._id,
+      project: estimate.project.title
     });
   });
 
