@@ -18,8 +18,8 @@ import SelectReact from "@/components/SelectReact"
 import { Options } from "@/interfaces/Common"
 import { getClientsLV } from "@/app/api/routeClients"
 import { getCatalogsByName } from "@/app/api/routeCatalogs"
-import { IEstimateMin, IConceptEstimateNormal, TableEstimatesProject } from "@/interfaces/Estimate"
-import { getConeptsEstimate, getEstimateMin } from "@/app/api/routeEstimates"
+import { IEstimateMin, IConceptEstimate, TableEstimatesProject } from "@/interfaces/Estimate"
+import { getConeptsEstimate, getEstimateMin, getAllConceptsEstimateMin } from "@/app/api/routeEstimates"
 import { createInvoice } from "@/app/api/routeInvoices"
 
 export default function AddNewInvoiceComponent({showForm, updateEstimates, user, token, 
@@ -43,7 +43,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
   const [optMethodPaid, setOptMethodPaid] = useState<Options[]>([]);
   const [optFormPaid, setOptFormPaid] = useState<Options[]>([]);
 
-  const [conceptsEstimate, setConceptsEstimate] = useState<IConceptEstimateNormal[]>([]);
+  const [conceptsEstimate, setConceptsEstimate] = useState<IConceptEstimate[]>([]);
 
   const [editClient, setEditClient] = useState<boolean>(false);
 
@@ -66,7 +66,10 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
         setOptMethodPaid(clients);
       }
 
-      const cons = await await getConeptsEstimate(token, '');
+      // const cons = await await getConeptsEstimate(token, '');
+      console.log('estimate => ', estimate?.id);
+      const cons = await getAllConceptsEstimateMin(token, (estimate?.id || ''));
+      console.log('concetps estimate => ', cons);
       if(typeof(cons)==='string'){
         showToastMessageError(cons);
       }else{
@@ -311,7 +314,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
             {conceptsEstimate.map((conce) => (
               <div role="button"
-                key={conce._id}
+                key={conce.conceptEstimate._id}
                 className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
                   outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
                   focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
@@ -326,12 +329,12 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
                     <div className="flex justify-between items-center">
                       <h6
                         className="block font-sans text-lg antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-                        {conce.name}
+                        {conce.conceptEstimate.name}
                       </h6>
-                      <p className="text-slate-500 text-sm">{conce.code}</p>
+                      <p className="text-slate-500 text-sm">{conce.conceptEstimate.code}</p>
                     </div>
                     <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                      {conce.description}
+                      {conce.conceptEstimate.description}
                     </p>
                   </div>
                 </div>

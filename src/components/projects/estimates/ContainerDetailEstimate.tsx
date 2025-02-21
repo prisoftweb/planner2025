@@ -145,7 +145,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
             <p className="text-slate-400">Pendiente por estimar</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: totalEstimatedProjectState[0].amountPayable
+              value: project.amount - totalEstimatedProjectState[0].estimatedTotal
             })}</p>
           </div>
           <div className="flex justify-between ">

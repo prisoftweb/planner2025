@@ -35,6 +35,7 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
     nextStep(1);
   }
   
+  console.log('concepts => ', concepts);
   return (
     <>
       {/* <div className="p-2">

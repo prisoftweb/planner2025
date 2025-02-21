@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: { idp: string }}){
       label: condition.glossary.name,
       value: condition.glossary._id
     })
-  })
+  });
 
   return (
     <>

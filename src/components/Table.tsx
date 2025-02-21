@@ -385,7 +385,7 @@ export default function Table({data, columns, placeH, typeTable='',
                       <th key={header.id}
                         //colSpan={typeTable=='projects' && header.id.toLowerCase().includes('avance')? 2: 1}
                         className="px-6 py-4 text-xs text-white uppercase bg-gray-400 border-b border-blue-400 
-                        dark:text-white"
+                        dark:text-white cursor-pointer"
                         onClick={header.column.getToggleSortingHandler()}
                         //colSpan={}
                       >

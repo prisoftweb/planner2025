@@ -43,6 +43,7 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
   //   total += cost.totalCost;
   // });
   console.log('data costs => ', data);
+  const currentDate = new Date();
   return(
     <Document>
       <Page>
@@ -52,7 +53,7 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{margin:'0px'}}>
               <Text style={[{fontSize: '13px', margin: '1px', color: 'black', fontWeight:'semibold'}]}>
-                Detalle de costo agrupado por {type? 'categoria':'concepto'}
+                Costos por {type? 'categorias':'conceptos'}
               </Text>
             </View>
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
@@ -62,7 +63,9 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
               <Text style={[style.subTitle, {textAlign:'right', marginTop:'17px'}]}>
                 Del {rangeDate.from?.getDate()} de {months[rangeDate.from?.getMonth() || 0]} de {rangeDate.from?.getFullYear()} {' '}  al {rangeDate.to?.getDate()} de {months[rangeDate.to?.getMonth() || 0]} de {rangeDate.to?.getFullYear()}  
               </Text>
-              <Text style={[style.subTitle, {textAlign:'right'}]}>{new Date().toISOString().substring(0, 10)}</Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>
+              {currentDate.getDate()} de {months[currentDate.getMonth() || 0]} de {currentDate.getFullYear()}
+              </Text>
             </View>
           </View>
           

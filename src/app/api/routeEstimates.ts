@@ -139,13 +139,15 @@ export async function getConeptsEstimate(auth_token:string, estimate: string) {
 
 export async function getAllConceptsEstimateMin(auth_token:string, estimate: string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllConceptsOfEstimateMIN/${estimate}`;
+  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    if(res.status===200) return res.data.data.data;
+    // console.log('res data => ', res);
+    if(res.status===200) return res.data.data.resdata;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){

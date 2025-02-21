@@ -15,9 +15,9 @@ import { createEstimate } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { BsPencil } from "react-icons/bs"
 
-export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow}: 
+export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow, porcentajeAdvange}: 
   {showForm:Function, project: OneProjectMin, updateEstimates:Function, user:string, token:string, 
-    overflow:boolean}) {
+    overflow:boolean, porcentajeAdvange: number}) {
   // const refRequest = useRef(true);
 
   const [name, setName] = useState<string>('');
@@ -254,7 +254,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
           </div>
           <div>
             <p className=" text-sm">Estimacion total</p>
-            <ProgressBarComponent label={''} progress={79} 
+            <ProgressBarComponent label={''} progress={porcentajeAdvange} 
               widthBar="w-full" color={colorsRandom[2]} hei="h-5" />
           </div>
         </div>

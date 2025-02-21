@@ -91,13 +91,15 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const dataEstimatesDashboard: OptionsDashboard[] = [];  
 
   let advance = 0;
+  // let aux =0;
 
   estimatesData.map((e) => {
     dataEstimatesDashboard.push({
-      costo: (e.amount / project.amount) * 100,
+      costo: Number(((e.amount / project.amount) * 100).toFixed(2)),
       label: e.name
     });
     categoriesEstimates.push(e.name);
+    // aux+=e.amount;
     if(e.ismoneyadvance){
       advance+=e.amount;
     }
@@ -105,6 +107,12 @@ export default function ContainerStimationsProject({project, optConditions, optP
   console.log('data estimated dashboard => ', dataEstimatesDashboard);
 
   const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
+  // console.log('avabce => ', advance);
+  // console.log('aux => ', aux);
+  // const percentajeAdvance = Number(((advance / project.amount) * 100).toFixed(2));
+  // console.log('porcentaje adv => ', percentajeAdvance);
+  console.log('estimated total => ', totalEstimatedProject[0].estimatedTotal);
+  const percentajeAdvance = Number(((totalEstimatedProject[0].estimatedTotal / (project.amount * 1.16)) * 100).toFixed(2));
 
   // let component = tab===1? <TableInvoicesComponent token={token} project={project} />: (tab===2? <></>: 
   //                   <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
@@ -210,7 +218,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
         selEstimate={handleSelEstimate}  />
 
       {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-        updateEstimates={updateEstimatesProject} token={token} overflow={overflow} />}
+        updateEstimates={updateEstimatesProject} token={token} overflow={overflow} porcentajeAdvange={percentajeAdvance} />}
 
       {openNewInvoice && <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
         updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />}

@@ -300,6 +300,7 @@ export default function ContainerClient({data, token, expenses,
     //console.log('entro en el if => ');
     const aux = async () =>{
       try {
+        console.log('refresh costos container cli ');
         // const res = await getAllCostsByCondition(token);
         // const res = await GetCostsByUserMIN(token, user._id);
         const res = await getAllCostsByConditionAndUser(token, user._id);
@@ -331,7 +332,7 @@ export default function ContainerClient({data, token, expenses,
       <></>
   </WithOut> : (isViewUser? <WithOut img="/img/costs/gastos.svg" subtitle="Gastos en proceso"
               text="Aqui se mostraran los gastos que aun estan en proceso!!!"
-              title="Gastos por usuario">
+              title="Gastos en proceso">
                 <></>
             </WithOut>: <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
               text="Agrega el costo de mano de obra,
@@ -364,7 +365,9 @@ export default function ContainerClient({data, token, expenses,
     // )
     return (
       <>
-        {view}
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          {view}
+        </div>
       </>
     )
   }
