@@ -147,24 +147,24 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
     }else{
       setBandDate(false);
     }
-    if(!subtotal || subtotal===''){
-      setBandSubTotal(true);
-      validation = false;
-    }else{
-      setBandSubTotal(false);
-    }
-    if(!vat || vat===''){
-      setBandVat(true);
-      validation = false;
-    }else{
-      setBandVat(false);
-    }
-    if(!total || total===''){
-      setBandTotal(true);
-      validation = false;
-    }else{
-      setBandTotal(false);
-    }
+    // if(!subtotal || subtotal===''){
+    //   setBandSubTotal(true);
+    //   validation = false;
+    // }else{
+    //   setBandSubTotal(false);
+    // }
+    // if(!vat || vat===''){
+    //   setBandVat(true);
+    //   validation = false;
+    // }else{
+    //   setBandVat(false);
+    // }
+    // if(!total || total===''){
+    //   setBandTotal(true);
+    //   validation = false;
+    // }else{
+    //   setBandTotal(false);
+    // }
     return validation;
   }
 
@@ -191,9 +191,12 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           concepts: res.concepts,
           notes: res.description,
           cost: {
-            subtotal: Number(subtotal.replace(/[$,]/g, "")), 
-            iva: Number(vat.replace(/[$,]/g, "")),
-            total: Number(total.replace(/[$,]/g, "")),
+            // subtotal: Number(subtotal.replace(/[$,]/g, "")), 
+            // iva: Number(vat.replace(/[$,]/g, "")),
+            // total: Number(total.replace(/[$,]/g, "")),
+            subtotal: estimate.Estimacion, 
+            iva: estimate.Estimacion * 0.16,
+            total: estimate.amountVat,
             // discount: 0,        
             // vat:"6675daf663dfd817c9551b2a" 
           },
@@ -202,6 +205,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           ]
         }
 
+        // console.log('create invoice => ', JSON.stringify(data));
         const resInvoice = await createInvoice(token, data);
         if(typeof(res)==='string'){
           showToastMessageError(resInvoice);
@@ -322,7 +326,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               >
                 <div className="flex items-center ">
                   <div className="grid mr-4 place-items-center">
-                    <img alt="responsable" src={ '/img/users/default.jpg'}
+                    <img alt="responsable" src={ conce.user?.photo || '/img/users/default.jpg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                   </div>
                   <div className="w-full">
@@ -345,15 +349,17 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
         </div>
 
         <div className="grid grid-cols-3 gap-x-2">
-        <div className="">
+          <div className="">
             <Label htmlFor="subtotal"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
             <CurrencyInput
               id="subtotal"
               name="subtotal"
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
-              value={subtotal}
+              // value={subtotal}
+              value={estimate?.Estimacion}
               decimalsLimit={2}
+              disabled
               prefix="$"
               onValueChange={(value) => {try {
                 updateAmounts(value?.replace(/[$,]/g, "") || '0');
@@ -369,13 +375,56 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           </div>
 
           <div className="">
+            <Label htmlFor="amortization"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Amortizacion</p></Label>
+            <CurrencyInput
+              id="amortization"
+              name="amortization"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                focus:border-slate-700 outline-0"
+              value={estimate?.Amortizacion}
+              disabled
+              decimalsLimit={2}
+              prefix="$"
+              onValueChange={(value) => {try {
+                updateAmounts(value?.replace(/[$,]/g, "") || '0');
+                // setSubTotal(value?.replace(/[$,]/g, "") || '0');
+              } catch (error) {
+                updateAmounts('0');
+                // setSubTotal('0');
+              }}}
+            />
+          </div>
+
+          <div className="">
+            <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
+            <CurrencyInput
+              id="guarantee"
+              name="guarantee"
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
+                focus:border-slate-700 outline-0"
+              value={estimate?.Fondo}
+              decimalsLimit={2}
+              disabled
+              prefix="$"
+              onValueChange={(value) => {try {
+                updateAmounts(value?.replace(/[$,]/g, "") || '0');
+                // setSubTotal(value?.replace(/[$,]/g, "") || '0');
+              } catch (error) {
+                updateAmounts('0');
+                // setSubTotal('0');
+              }}}
+            />
+          </div>
+
+          <div className="">
             <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
             <CurrencyInput
               id="vat"
               name="vat"
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
-              value={vat}
+              // value={vat}
+              value={(estimate?.Estimacion || 0) * 0.16}
               disabled
               decimalsLimit={2}
               prefix="$"
@@ -397,7 +446,8 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               name="total"
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
-              value={total}
+              // value={total}
+              value={estimate?.amountVat}
               decimalsLimit={2}
               prefix="$"
               disabled

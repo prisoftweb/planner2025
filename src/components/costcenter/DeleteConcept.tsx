@@ -5,11 +5,16 @@ import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
-export default function DeleteConcept({token, id, name, remove, 
-                                    DeleteElement, indexConcept} : 
-                                {token : string, name:string, id:string, 
-                                  remove:Function, DeleteElement:Function, 
-                                  indexConcept:number }){
+type DeleteConceptProps = {
+  token : string, 
+  name:string, 
+  id:string, 
+  remove:Function, 
+  DeleteElement:Function, 
+  indexConcept:number 
+}
+
+export default function DeleteConcept({token, id, name, remove, DeleteElement, indexConcept} : DeleteConceptProps){
   
   const deleteConcept = async ()  => {
   
@@ -29,9 +34,6 @@ export default function DeleteConcept({token, id, name, remove,
                 if(res === 204) {
                   showToastMessage(`${name} eliminado exitosamente!`);
                   DeleteElement(indexConcept);
-                  // setTimeout(() => {
-                  //   window.location.reload();
-                  // }, 500)
                 } else {
                   showToastMessageError(`${name} no pudo ser eliminado..`);
                 }
@@ -67,7 +69,7 @@ export default function DeleteConcept({token, id, name, remove,
     }); 
   }
   
-    return(
+  return(
     <>
       <XCircleIcon width={16} height={16} className="text-red-500 hover:text-red-300 cursor-pointer"
         onClick={() => {

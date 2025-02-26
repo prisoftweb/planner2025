@@ -12,8 +12,13 @@ import { Catalog, CatalogTable } from "@/interfaces/Catalogs"
 import { useState, useEffect, useRef } from "react"
 import { useListsStore } from "@/app/store/listStore"
 
-export default function NewCatalog({showForm, token, catalog}: 
-                    {showForm:Function, token:string, catalog:(CatalogTable | string)}){
+type NewCatalogProps = {
+  showForm:Function, 
+  token:string, 
+  catalog:(CatalogTable | string)
+}
+
+export default function NewCatalog({showForm, token, catalog}: NewCatalogProps){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);

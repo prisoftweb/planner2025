@@ -1,10 +1,8 @@
 import Chip from "../providers/Chip";
-//import { ClientBack } from "@/interfaces/Clients";
 import Label from "../Label";
 import { useClientProfileStore } from "@/app/store/clientStore";
 
 export default function ProfileClient(){
-
   const {clientProfile} = useClientProfileStore();
 
   return(
@@ -12,7 +10,6 @@ export default function ProfileClient(){
       <div className="w-full h-full mt-3">
         <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
-            {/* <img src={client.logo? client.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" /> */}
             <img src={clientProfile?.logo? clientProfile?.logo : '/img/clients.svg'} alt="logo" className="w-20 h-20" />
           </div>
           <div>
@@ -70,34 +67,6 @@ export default function ProfileClient(){
           </div>
         </div>
       </div>
-      {/* <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex py-2 items-center mt-3 ${option===1? 'bg-slate-200': ''}`}
-        onClick={() => changeOption(1)}
-      >
-        <Squares2X2Icon className="w-4 h-4 mr-2 text-slate-500" />
-        Resumen
-      </div>
-      <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex py-2 items-center ${option===2? 'bg-slate-200': ''}`}
-        onClick={() => changeOption(2)}  
-      >
-        <CalendarDaysIcon className="w-4 h-4 mr-2 text-slate-500" />
-        Datos basicos
-      </div>
-      <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex py-2 items-center ${option===3? 'bg-slate-200': ''}`}
-        onClick={() => changeOption(3)}
-      >
-        <CreditCardIcon className="w-4 h-4 mr-2 text-slate-500" />
-        Linea de credito
-      </div>
-      <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-        flex py-2 items-center ${option===4? 'bg-slate-200': ''}`}
-        onClick={() => changeOption(4)}
-      >
-        <IdentificationIcon className="w-4 h-4 mr-2 text-slate-500" />
-        Contactos
-      </div> */}
     </>
   )
 }

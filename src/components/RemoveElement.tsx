@@ -26,6 +26,7 @@ export default function RemoveElement({token, id, name, remove, removeElement,
           switch('user'){
             case 'user':
               try {
+                console.log('remove element id => ', id);
                 res = await remove(id, token, progreesAverage, totalAverage);
                 if(res === 204) {
                   showToastMessage(`${name} eliminado exitosamente!`);

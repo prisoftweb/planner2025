@@ -1,14 +1,11 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import ContainerStimationsProject from "@/components/projects/estimates/ContainerStimationsProject";
 import { OneProjectMin } from "@/interfaces/Projects";
-import { GetProjectMin, getProjectsLV, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
+import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject, getTotalEstimatesByProjectMin, getResumenEstimateProject } from "@/app/api/routeEstimates";
 import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumenByProject } from "@/app/api/routeInvoices";
 import { ITotalInvoicesByProject, IInvoiceByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
@@ -21,22 +18,12 @@ export default async function Page({ params }: { params: { idp: string }}){
   let project: OneProjectMin;
   try {
     project = await GetProjectMin(token, params.idp);
-    console.log('project min => ', project);
+    // console.log('project min => ', project);
     if(typeof(project) === "string")
       return <h1 className="text-center text-red-500">{project}</h1>
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
   }
-
-  // let estimates: IEstimateProject[];
-  // try {
-  //   estimates = await getEstimatesByProject(token, params.idp);
-  //   console.log('estimates min => ', estimates);
-  //   if(typeof(estimates) === "string")
-  //     return <h1 className="text-center text-red-500">{estimates}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
-  // }
 
   let invoices: IInvoiceByProject[];
   try {
@@ -51,8 +38,6 @@ export default async function Page({ params }: { params: { idp: string }}){
   let totalInvoicesProject: ITotalInvoicesByProject[];
   try {
     totalInvoicesProject = await getTotalInvoicesByProject(token, params.idp);
-    // console.log('res total estimated => ', totalInvoicesProject);
-    // console.log('estimates min => ', estimates);
     if(typeof(totalInvoicesProject) === "string")
       return <h1 className="text-center text-red-500">{totalInvoicesProject}</h1>
   } catch (error) {
@@ -62,8 +47,6 @@ export default async function Page({ params }: { params: { idp: string }}){
   let totalInvoicesResumen: ITotalInvoiceResumen;
   try {
     totalInvoicesResumen = await getTotalInvoiceResumenByProject(token, params.idp);
-    // console.log('res total estimated => ', totalInvoicesResumen);
-    // console.log('estimates min => ', estimates);
     if(typeof(totalInvoicesResumen) === "string")
       return <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1>
   } catch (error) {
@@ -72,7 +55,6 @@ export default async function Page({ params }: { params: { idp: string }}){
 
   let projects: Options[];
   try {
-    // projects = await getProjectsLV(token);
     projects = await getProjectsLVNoCompleted(token);
     if(typeof(projects) === "string")
       return <h1 className="text-center text-red-500">{projects}</h1>

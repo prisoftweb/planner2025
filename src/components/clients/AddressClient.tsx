@@ -1,10 +1,8 @@
 import Button from "../Button";
-//import NavClientsStepper from "./NavClientsStepper";
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Label from "../Label";
 import Input from "../Input";
-//import SaveClient from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ClientBack } from "@/interfaces/Clients";
 import { updateClient } from "@/app/api/routeClients";
@@ -58,8 +56,6 @@ export default function AddressClient({token, client, editInfo}:
 
         const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
 
-        //console.log('update address');
-        //console.log(JSON.stringify(newObj));
         try {
           const res = await updateClient(client._id, token, newObj);
           if(typeof(res)==='string'){

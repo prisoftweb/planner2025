@@ -5,8 +5,7 @@ import { CompanyTable } from "@/interfaces/Companies";
 import { RemoveCompany } from "@/app/api/routeCompany";
 import DeleteElement from "../DeleteElement";
 
-export default function TableCompany({data, token}:
-                        {data:CompanyTable[], token:string}){
+export default function TableCompany({data, token}: {data:CompanyTable[], token:string}){
   
   const columnHelper = createColumnHelper<CompanyTable>();
 
@@ -49,17 +48,6 @@ export default function TableCompany({data, token}:
         <p>accion</p>
       )
     }),
-    // columnHelper.accessor('status', {
-    //   header: 'Status',
-    //   id: 'status',
-    //   cell: ({row}) => (
-    //     <div className="flex text-slate-500 items-end">
-    //       <div 
-    //         className={`w-4 h-4 ml-5 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
-    //       </div>
-    //     </div>       
-    //   ),
-    // }),
     columnHelper.accessor('name', {
       header: 'Nombre',
       id: 'nombre',

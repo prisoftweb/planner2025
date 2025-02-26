@@ -18,16 +18,6 @@ export default async function Page() {
   // const isViewReports = role.toLowerCase().includes('residente')? false: true;
   const isViewReports = false;
   
-  // let expenses: Expense[] = [];
-  // try {
-  //   expenses = await GetCostsByUserMIN(token, user._id);
-  //   if(typeof(expenses)=== 'string')
-  //     return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
-  // } catch (error) {
-  //   console.log('page expanses ', error);
-  //   return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
-  // }
-
   const role = user.rol?.name || '';
   // const isViewReports = role.toLowerCase().includes('residente')? false: true;
   
@@ -43,7 +33,6 @@ export default async function Page() {
     if(typeof(expenses)=== 'string')
       return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
   } catch (error) {
-    console.log('page expanses ', error);
     return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
   }
 

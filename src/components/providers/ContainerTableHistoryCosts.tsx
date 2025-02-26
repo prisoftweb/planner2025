@@ -44,7 +44,10 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
   const handleExpensesSelected = (value: HistoryExpensesTable[]) => {
     // const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' 
     //                     && c.Estatus._id !== '67378f77d846bbd16e1a8714');
-    const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72');
+    const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
+                                        c.Estatus._id !== '661eade6f642112488c85fad' &&
+                                        c.Estatus._id !== '661eaa71f642112488c85f59' &&
+                                        c.Estatus._id !== '661eaa4af642112488c85f56' );
     setExpensesSelected(noPaid);
   }
 
@@ -110,36 +113,6 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
     }
     return false;
   }
-
-  // const projectValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-  //                     startDate:number, endDate:number, projects:string[], 
-  //                     isPaid: number) => {
-  //   if(projects.includes('all')){
-  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //   }else{
-  //     if(exp.project){
-  //       if(projects.includes(exp.project._id)){
-  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const reportValidation = (exp:Expense, minAmount:number, maxAmount:number, 
-  //             startDate:number, endDate:number, projects:string[], 
-  //             reports:string[], isPaid: number) => {
-  //   if(reports.includes('all')){
-  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
-  //   }else{
-  //     if(exp.report){
-  //       if(reports.includes(exp.report._id)){
-  //         return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
 
   const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, conditions:string[], isPaid: number) => {

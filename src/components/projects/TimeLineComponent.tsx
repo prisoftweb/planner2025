@@ -31,7 +31,7 @@ export default function TimelineComponent({timeLine}: {timeLine: ITimeLineProjec
               {/* <time className="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">just now</time>
               <div className="text-sm font-normal text-gray-500 dark:text-gray-300">Bonnie moved <a href="#" className="font-semibold text-blue-600 dark:text-blue-500 hover:underline">Jese Leos</a> to <span className="bg-gray-100 text-gray-800 text-xs font-normal me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-600 dark:text-gray-300">Funny Group</span></div> */}
               <Chip label={t.conditionstatus.condition.name} color={t.conditionstatus.condition.color} width='w-40' />
-             <p>{t.conditionstatus.date.substring(0, 10)}</p>
+             <p className='text-xs'>{t.conditionstatus.date.substring(0, 10)}</p>
             </div>
         </li>
         ))}

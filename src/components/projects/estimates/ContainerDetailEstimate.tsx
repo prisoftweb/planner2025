@@ -17,10 +17,18 @@ import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "@/components/Alert";
 import NavTabEstimates from "./NavTabEstimates";
 
+type ContainerDetailEstimateProps = {
+  project: OneProjectMin, 
+  token: string, 
+  user: string, 
+  estimate:IEstimate, 
+  concepts:IConceptEstimate[], 
+  idEstimate:string, 
+  totalEstimatedProject: TotalEstimatedByProject[]
+}
+
 export default function ContainerDetailEstimate({project, token, user, estimate, concepts, 
-    idEstimate, totalEstimatedProject}: 
-  {project: OneProjectMin, token: string, user: string, estimate:IEstimate, 
-    concepts:IConceptEstimate[], idEstimate:string, totalEstimatedProject: TotalEstimatedByProject[]}) {
+    idEstimate, totalEstimatedProject}: ContainerDetailEstimateProps) {
 
   const [openNewConcept, setOpenNewConcept] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -28,17 +36,9 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
 
   const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>(totalEstimatedProject);
 
-  const [tab, setTab] = useState<number>(0);
-
-  const handleTab = (value:number) => {
-    setTab(value);
-  }
-
   const handleFilterTable = (value: boolean) => {
     setIsFilterTable(value);
   }
-
-  // const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const handleShowForm = (value: boolean) => {
     setOpenNewConcept(value);
@@ -76,9 +76,6 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   }
 
   const delConcept = (id:string) => {
-    // const newData = conceptsData.filter((c) => c.conceptEstimate._id!==id);
-    // setIsFilterTable(false);
-    // setConceptsData(newData);
     updateConceptsEstimate();
   }
 
@@ -90,10 +87,23 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
     });
   });
 
-  let component = tab===1? <></>: (tab===2? <></>: 
-                        <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
-                          handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-                          project={project} token={token} idEstimate={idEstimate} />)
+  // let component = tab===1? <></>: (tab===2? <></>: 
+  //                       <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
+  //                         handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
+  //                         project={project} token={token} idEstimate={idEstimate} />)
+  let component = <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
+      handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
+      project={project} token={token} idEstimate={idEstimate} />;
+console.log('estimate => ', estimate);
+
+  let button = <></>;
+  if(estimate.ismoneyadvance){
+    if(concepts.length===0 || !concepts[0].conceptEstimate?._id){
+      button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
+    }
+  }else{
+    button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
+  }
 
   return (
     <>
@@ -106,7 +116,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
           </div>
           <p className="text-xl ml-4 font-medium">{project.title} {'->'} {estimate?.name || 'sin estimacion'} </p>
         </div>
-        <Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>
+        {button}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 mt-2 sm:mt-3 md:mt-5 gap-y-2">
         <div className="bg-white p-3">
@@ -190,14 +200,11 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
 
       </div>
 
-      <div>
-        {/* <NavTabEstimates setTab={handleTab} tab={tab} /> */}
-      </div>
+      {/* <div>
+        <NavTabEstimates setTab={handleTab} tab={tab} />
+      </div> */}
 
       {component}
-
-      {/* <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} handleFilterTable={handleFilterTable} 
-        isFilterTable={isfilterTable} project={project} token={token} idEstimate={idEstimate} /> */}
       {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={estimate}
                             conceptsDataChart={conceptsData} />}

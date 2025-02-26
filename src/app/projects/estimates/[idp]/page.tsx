@@ -3,12 +3,12 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import ContainerStimationsProject from "@/components/projects/estimates/ContainerStimationsProject";
 import { OneProjectMin } from "@/interfaces/Projects";
-import { GetProjectMin, getProjectsLV, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
+import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject, getTotalEstimatesByProjectMin, getResumenEstimateProject } from "@/app/api/routeEstimates";
+import { IEstimateProject, TotalEstimatedByProject} from "@/interfaces/Estimate";
+import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 
 export default async function Page({ params }: { params: { idp: string }}){
   const cookieStore = cookies();
@@ -38,8 +38,6 @@ export default async function Page({ params }: { params: { idp: string }}){
   let totalEstimatedProject: TotalEstimatedByProject[];
   try {
     totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
-    // console.log('res total estimated => ', totalEstimatedProject);
-    // console.log('estimates min => ', estimates);
     if(typeof(totalEstimatedProject) === "string")
       return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
   } catch (error) {
@@ -48,7 +46,6 @@ export default async function Page({ params }: { params: { idp: string }}){
 
   let projects: Options[];
   try {
-    // projects = await getProjectsLV(token);
     projects = await getProjectsLVNoCompleted(token);
     if(typeof(projects) === "string")
       return <h1 className="text-center text-red-500">{projects}</h1>

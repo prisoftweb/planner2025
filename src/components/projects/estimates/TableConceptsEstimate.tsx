@@ -1,38 +1,38 @@
 import { useState } from "react"
 import { OneProjectMin } from "@/interfaces/Projects";
-// import FilteringEstimatesProject from "./FilteringEstimatesProject";
-// import { Options } from "@/interfaces/Common";
-import { GiSettingsKnobs } from "react-icons/gi"
-// import DetailEstimateComponent from "./DetailEstimateComponent";
 import { ITableConceptsEstimate } from "@/interfaces/Estimate";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-// import Chip from "@/components/providers/Chip";
 import { IConceptEstimate } from "@/interfaces/Estimate";
 import { ConceptsDataToConceptsTable } from "@/app/functions/EstimatesFunctions";
 import RemoveElement from "@/components/RemoveElement";
 import { deleteConceptInEstimate } from "@/app/api/routeEstimates";
 
+type TableConceptsProps = {
+  project: OneProjectMin, 
+  concepts:IConceptEstimate[], 
+  idEstimate:string, 
+  isFilterTable:boolean, 
+  handleFilterTable:Function, 
+  delConcept:Function, 
+  token:string
+}
+
 export default function TableConceptsEstimate({project, concepts, handleFilterTable, 
-  isFilterTable, delConcept, token, idEstimate}: 
-  {project: OneProjectMin, concepts:IConceptEstimate[], idEstimate:string, 
-    isFilterTable:boolean, handleFilterTable:Function, delConcept:Function, token:string}) {
+  isFilterTable, delConcept, token, idEstimate}: TableConceptsProps) {
 
   // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
   const [filterConcepts, setFilterConcepts] = useState<IConceptEstimate[]>(concepts);
   const [isFilter, setIsFilter] = useState<boolean>(false);
-  // const [isShowDetailEstimate, setIsShowDetailEstimate] = useState<boolean>(false);
+  
+  // const handleIsFilter = (value: boolean) => {
+  //   setIsFilter(value);
+  // }
 
-  // const refEstimate = useRef('');
-
-  const handleIsFilter = (value: boolean) => {
-    setIsFilter(value);
-  }
-
-  const handleFilterData = (value: any) => {
-    setFilterConcepts(value);
-  }
+  // const handleFilterData = (value: any) => {
+  //   setFilterConcepts(value);
+  // }
 
   if(concepts.length <= 0){
     return (
@@ -173,10 +173,6 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
   }
 
   return (
-    // <div className="mt-5 flex justify-between items-center bg-white">
-    //   <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
-      
-    // </div>
     <>
       <div className="mt-5 flex justify-between items-center bg-white">
         <p className="text-blue-400">PREELIMINARES</p>

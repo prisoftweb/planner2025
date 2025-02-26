@@ -3,10 +3,9 @@ import { cookies } from "next/headers";
 import WithOut from "@/components/WithOut";
 import ButtonNewClient from "@/components/clients/ButtonNewClient";
 import Navigation from "@/components/navigation/Navigation";
-import { ClientBack, TableClient, Tag } from "@/interfaces/Clients";
+import { TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
 import Header from "@/components/Header";
-//import Header from "@/components/HeaderPage";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
@@ -15,8 +14,6 @@ import { Resource2 } from "@/interfaces/Roles";
 export default async function clients(){
   
   const cookieStore = cookies();
-  //const allCookies = cookieStore.getAll();
-  //console.log('all cookies => ', allCookies);
   const token = cookieStore.get('token')?.value || '';
   
   const clientCookie = cookieStore.get('clients')?.value;
@@ -25,9 +22,7 @@ export default async function clients(){
     permisionsClient = JSON.parse(clientCookie);
   }
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-  //console.log('user back => ', user);
-  //console.log('client cookie => ', clientCookie, ' typeof => ', typeof(clientCookie));
-
+  
   if(!permisionsClient){
     return(
       <>
@@ -111,8 +106,6 @@ export default async function clients(){
   }
   
   let data:TableClient[] = ClientDataToTableClient(clients);
-
-  //console.log('permissions client => ', permisionsClient.permission);
 
   return (
     <>

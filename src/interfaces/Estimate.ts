@@ -72,6 +72,7 @@ export interface IEstimate {
   __v: number
   id: string,
   purschaseOrder: string
+  ismoneyadvance: boolean
 }
 
 export interface ITableConceptsEstimate {

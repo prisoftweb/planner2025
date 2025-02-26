@@ -1,6 +1,4 @@
 'use client'
-// import { BuildingOffice2Icon, BuildingOfficeIcon, 
-//   NewspaperIcon, FolderOpenIcon, Battery50Icon } from "@heroicons/react/24/solid"
 import  { SiAwsorganizations } from "react-icons/si"
 import  { GoOrganization } from "react-icons/go"
 import { LiaListAlt } from "react-icons/lia";

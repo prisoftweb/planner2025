@@ -4,7 +4,6 @@ import Link from "next/link"
 import { useState, useEffect } from "react";
 import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon, DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
-import { Resource2 } from "@/interfaces/Roles";
 
 export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
   
@@ -27,7 +26,6 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
     },
   }
 
-  //const [tabCli, setTabCli] = useState<JSX.Element>(<></>);
   const [width, setWidth] = useState<number>(0);
   const handleResize = () => {
     setWidth(window.innerWidth);

@@ -2,12 +2,7 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { OneProjectMin } from "@/interfaces/Projects";
-import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
-import { IEstimateProject, IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject, getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin, 
-  getEstimate, getConeptsEstimate } from "@/app/api/routeEstimates";
-import ContainerDetailEstimate from "@/components/projects/estimates/ContainerDetailEstimate";
-
+import { GetProjectMin } from "@/app/api/routeProjects";
 import { ITotalInvoicesByProject, IInvoiceMin, IConceptInvoice } from "@/interfaces/Invoices";
 import { getInvoiceMin, getTotalInvoicesByProject, getConceptsInvoice } from "@/app/api/routeInvoices";
 import ContainerDetailInvoice from "@/components/projects/estimates/ContainerDetailInvoice";
@@ -26,16 +21,6 @@ export default async function Page({ params }: { params: { idp: string, idi:stri
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
   }
 
-  // let estimate: IEstimate;
-  // try {
-  //   estimate = await getEstimate(token, params.ide);
-  //   console.log('get estimate => ', estimate);
-  //   if(typeof(estimate) === "string")
-  //     return <h1 className="text-center text-red-500">{estimate}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener estimacion!!</h1>  
-  // }
-
   let invoice: IInvoiceMin;
   try {
     invoice = await getInvoiceMin(token, params.idi);
@@ -45,7 +30,6 @@ export default async function Page({ params }: { params: { idp: string, idi:stri
   } catch (error) {
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener factura!!</h1>  
   }
-
 
   let totalInvoiceProject: ITotalInvoicesByProject[];
   try {
@@ -59,7 +43,7 @@ export default async function Page({ params }: { params: { idp: string, idi:stri
   let concepts: IConceptInvoice[];
   try {
     concepts = await getConceptsInvoice(token, params.idi);
-    console.log('concepts min => ', concepts);
+    console.log('concepts invoice min => ', concepts);
     if(typeof(concepts) === "string")
       return <h1 className="text-center text-red-500">{concepts}</h1>
   } catch (error) {

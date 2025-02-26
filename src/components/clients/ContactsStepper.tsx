@@ -9,7 +9,6 @@ import { useClientStore } from "@/app/store/clientStore";
 export default function ContactsStepper({id, token}: {id:string, token:string}){
   
   const [state, dispatch] = useRegFormContext();
-  //const [contacts, setContacts] = useState<string[]>();
   const [contacts, setContacts] = useState<string[]>(state.contacts? state.contacts: []);
   const refRequest = useRef(true);
 
@@ -31,9 +30,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         if(state.databasic.user){
           data.append('user', state.databasic.user);
         }
-        // if(state.databasic.phone){
-        //   data.append('phone', state.databasic.phone);
-        // }
       }
       if(state.extradata){
         data.append('logo', state.extradata.photo);
@@ -67,9 +63,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -118,7 +111,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         tags, 
         user,
         link,
-        //photo,
         regime,
         location: {
           stret,
@@ -137,9 +129,6 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

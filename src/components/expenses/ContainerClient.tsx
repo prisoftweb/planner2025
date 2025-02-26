@@ -242,6 +242,13 @@ export default function ContainerClient({data, token, expenses,
       expensesSelected.map((row) => {
         filter.push(row.id);
       })
+      const paidData = {
+        condition: {
+          glossary: "67318a51ceaf47ece0d3aa72",
+          user
+        },
+        filter,
+      }
       const data = {
         condition: {
           glossary: "661eade6f642112488c85fad",
@@ -251,14 +258,19 @@ export default function ContainerClient({data, token, expenses,
       }
 
       try {
-        const res = await insertConditionInCost(token, data);
-        if(res===200){
-          showToastMessage('Costos actualizados satisfactoriamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500);
+        const paidExpenses = await insertConditionInCost(token, paidData);
+        if(typeof(paidExpenses)==='string'){
+          showToastMessageError(paidExpenses);
         }else{
-          showToastMessageError(res);
+          const res = await insertConditionInCost(token, data);
+          if(res===200){
+            showToastMessage('Costos actualizados satisfactoriamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            showToastMessageError(res);
+          }
         }
       } catch (error) {
         showToastMessageError('Ocurrio un problema al actualizar condicion!!');
@@ -341,28 +353,6 @@ export default function ContainerClient({data, token, expenses,
               title="Gastos">
                 <ButtonNew token={token} user={user} />
             </WithOut>);
-    // return (
-    //   <>
-    //     <Navigation user={user} />
-    //     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-    //       {isHistory? (
-    //         <WithOut img="/img/costs/gastos.svg" subtitle="Historial de Gastos"
-    //           text="El historial de gastos actualmente esta vacio!!!"
-    //           title="Historial de Gastos">
-    //             <></>
-    //         </WithOut>
-    //       ): (
-    //         <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
-    //           text="Agrega el costo de mano de obra,
-    //                 caja chica o proveedor desde esta
-    //                 seccion a un determinado proyecto"
-    //           title="Gastos">
-    //             <ButtonNew token={token} user={user} />
-    //         </WithOut>
-    //       )}
-    //     </div>
-    //   </>
-    // )
     return (
       <>
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">

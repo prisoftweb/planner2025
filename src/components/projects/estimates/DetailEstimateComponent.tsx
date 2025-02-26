@@ -169,7 +169,8 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
           <p className="text-slate-400 w-72">Saldo pendiente por estimar</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN", 
-            value: 0
+            // value: 0
+            value: project.amount - (resumenEstimateProject?.totalAccumulated.amountPayable || 0)
           })}</p>
         </div>
       </div>
