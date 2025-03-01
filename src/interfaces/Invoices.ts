@@ -77,18 +77,21 @@ export interface IInvoiceByProject {
     total: number
     discount: number
   }
-  useCFDI: {
-    _id: string
-    name: string
-  }
-  paymentMethod: {
-    _id: string
-    name: string
-  }
-  paymentWay: {
-    _id: string
-    name: string
-  }
+  // useCFDI: {
+  //   _id: string
+  //   name: string
+  // }
+  // paymentMethod: {
+  //   _id: string
+  //   name: string
+  // }
+  // paymentWay: {
+  //   _id: string
+  //   name: string
+  // }
+  useCFDI: string
+  paymentMethod: string
+  paymentWay: string
   estimate: {
     _id: string
     name: string

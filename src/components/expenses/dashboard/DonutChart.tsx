@@ -1,5 +1,5 @@
 'use client'
-import { CurrencyFormatter, MoneyFormatter } from '@/app/functions/Globals';
+import { MoneyFormatter } from '@/app/functions/Globals';
 import { DonutChart, Legend } from '@tremor/react';
 
 // const valueFormatter = (number: number) =>
@@ -55,9 +55,7 @@ export default function DonutChartt({data, colors, categories, category}:
       <div className="flex flex-wrap items-center justify-center space-x-6">
         <DonutChart
           data={data}
-          //category="sales"
           category={category}
-          //index="name"
           index='label'
           valueFormatter={valueFormatter}
           colors={colors}
@@ -65,9 +63,7 @@ export default function DonutChartt({data, colors, categories, category}:
           customTooltip={customTooltip}
         />
         <Legend
-          //categories={['New York', 'London', 'Hong Kong', 'San Francisco', 'Singapore']}
           categories={categories}
-          //colors={['blue', 'cyan', 'indigo', 'violet', 'fuchsia']}
           colors={colors}
           className="max-w-xs z-0"
         />

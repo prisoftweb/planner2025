@@ -16,6 +16,7 @@ import RemoveElement from "../RemoveElement";
 import { showToastMessageError } from "../Alert";
 import { removePayment } from "@/app/api/routePayments";
 import RemovePaymentComponent from "./RemovePaymentComponent";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function TableCostsProvider({data, token, expenses, idProv, 
                           user, isFilter, setIsFilter, udpateTable }:
@@ -109,6 +110,21 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       enableSorting:false,
       header: () => (
         <p>Referencia</p>
+      )
+    }),
+    columnHelper.accessor('paymentplugin', {
+      id: 'complemento',
+      cell: ({row}) => (
+        <p className="py-2 font-semibold cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+        >{CurrencyFormatter({
+          currency: 'MXN',
+          value: row.original?.paymentplugin?.amount || 0
+        })}</p>
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>Complemento</p>
       )
     }),
     columnHelper.accessor('range', {

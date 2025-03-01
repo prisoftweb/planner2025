@@ -3,24 +3,214 @@ import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "@/components/Button"
 import Input from "@/components/Input"
 import Label from "@/components/Label"
-import TextArea from "@/components/TextArea"
 import HeaderForm from "@/components/HeaderForm"
-import Chip from "@/components/providers/Chip"
 import { OneProjectMin } from "@/interfaces/Projects"
-import { CurrencyFormatter } from "@/app/functions/Globals"
-import { ProgressBarComponent } from "../dashboard/ProgressBarComponent"
 import { useState, useEffect } from "react"
 import CurrencyInput from "react-currency-input-field"
-import { createEstimate, getEstimate, getEstimatesByProject } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
-import { BsPencil } from "react-icons/bs"
 import SelectReact from "@/components/SelectReact"
 import { Options } from "@/interfaces/Common"
 import { getClientsLV } from "@/app/api/routeClients"
-import { getCatalogsByName } from "@/app/api/routeCatalogs"
 import { IEstimateMin, IConceptEstimate, TableEstimatesProject } from "@/interfaces/Estimate"
-import { getConeptsEstimate, getEstimateMin, getAllConceptsEstimateMin } from "@/app/api/routeEstimates"
+import { getEstimateMin, getAllConceptsEstimateMin } from "@/app/api/routeEstimates"
 import { createInvoice } from "@/app/api/routeInvoices"
+
+const catalogCFDI: Options[] = [
+  {
+    label: 'ADQUISICION_MERCANCIAS',
+    value: 'ADQUISICION_MERCANCIAS G01'
+  },
+  {
+    label: 'DEVOLUCIONES_DESCUENTOS_BONIFICACIONES',
+    value: 'DEVOLUCIONES_DESCUENTOS_BONIFICACIONES G02'
+  },
+  {
+    label: 'GASTOS_EN_GENERAL',
+    value: 'GASTOS_EN_GENERAL G03'
+  },
+  {
+    label: 'CONSTRUCCIONES',
+    value: 'CONSTRUCCIONES I01'
+  },
+  {
+    label: 'MOBILIARIO_Y_EQUIPO_DE_OFICINA',
+    value: 'MOBILIARIO_Y_EQUIPO_DE_OFICINA I02'
+  },
+  {
+    label: 'EQUIPO_DE_TRANSPORTE',
+    value: 'EQUIPO_DE_TRANSPORTE I03'
+  },
+  {
+    label: 'EQUIPO_DE_COMPUTO',
+    value: 'EQUIPO_DE_COMPUTO I04'
+  },
+  {
+    label: 'DADOS_TROQUELES_HERRAMENTAL',
+    value: 'DADOS_TROQUELES_HERRAMENTAL I05'
+  },
+  {
+    label: 'COMUNICACIONES_TELEFONICAS',
+    value: 'COMUNICACIONES_TELEFONICAS I06'
+  },
+  {
+    label: 'COMUNICACIONES_SATELITALES',
+    value: 'COMUNICACIONES_SATELITALES I07'
+  },
+  {
+    label: 'OTRA_MAQUINARIA',
+    value: 'OTRA_MAQUINARIA I08'
+  },
+  {
+    label: 'HONORARIOS_MEDICOS',
+    value: 'HONORARIOS_MEDICOS D01'
+  },
+  {
+    label: 'GASTOS_MEDICOS_POR_INCAPACIDAD',
+    value: 'GASTOS_MEDICOS_POR_INCAPACIDAD D02'
+  },
+  {
+    label: 'GASTOS_FUNERALES',
+    value: 'GASTOS_FUNERALES D03'
+  },
+  {
+    label: 'DONATIVOS',
+    value: 'DONATIVOS D04'
+  },
+  {
+    label: 'INTERESES_POR_CREDITOS_HIPOTECARIOS',
+    value: 'INTERESES_POR_CREDITOS_HIPOTECARIOS D05'
+  },
+  {
+    label: 'APORTACIONES_VOLUNTARIAS_SAR',
+    value: 'APORTACIONES_VOLUNTARIAS_SAR D06'
+  },
+  {
+    label: 'PRIMA_SEGUROS_GASTOS_MEDICOS',
+    value: 'PRIMA_SEGUROS_GASTOS_MEDICOS D07'
+  },
+  {
+    label: 'GASTOS_TRANSPORTACION_ESCOLAR',
+    value: 'GASTOS_TRANSPORTACION_ESCOLAR D08'
+  },
+  {
+    label: 'CUENTAS_AHORRO_PENSIONES',
+    value: 'CUENTAS_AHORRO_PENSIONES D09'
+  },
+  {
+    label: 'SERVICIOS_EDUCATIVOS',
+    value: 'SERVICIOS_EDUCATIVOS D10'
+  },
+  {
+    label: 'POR_DEFINIR',
+    value: 'POR_DEFINIR P01'
+  },
+  {
+    label: 'SIN_EFECTOS_FISCALES',
+    value: 'SIN_EFECTOS_FISCALES S01'
+  },
+  {
+    label: 'PAGOS',
+    value: 'PAGOS CP01'
+  },
+  {
+    label: 'NOMINA',
+    value: 'NOMINA CN01'
+  }
+];
+
+const catalogPaymentMethod: Options[] = [
+  {
+    label: 'PAGO_EN_UNA_EXHIBICION',
+    value: 'PAGO_EN_UNA_EXHIBICION PUE'
+  },
+  {
+    label: 'PAGO_EN_PARCIALIDADES_DIFERIDO',
+    value: 'PAGO_EN_PARCIALIDADES_DIFERIDO PPD'
+  },
+];
+
+const catalogFormPayment: Options[] = [
+  {
+    label: 'EFECTIVO',
+    value: 'EFECTIVO 01'
+  },
+  {
+    label: 'CHEQUE_NOMINATIVO',
+    value: 'CHEQUE_NOMINATIVO 02'
+  },
+  {
+    label: 'TRANSFERENCIA_ELECTRONICA',
+    value: 'TRANSFERENCIA_ELECTRONICA 03'
+  },
+  {
+    label: 'TARJETA_DE_CREDITO',
+    value: 'TARJETA_DE_CREDITO 04'
+  },
+  {
+    label: 'MONEDERO_ELECTRONICO',
+    value: 'MONEDERO_ELECTRONICO 05'
+  },
+  {
+    label: 'DINERO_ELECTRONICO',
+    value: 'DINERO_ELECTRONICO 06'
+  },
+  {
+    label: 'VALES_DE_DESPENSA',
+    value: 'VALES_DE_DESPENSA 08'
+  },
+  {
+    label: 'DACION_EN_PAGO',
+    value: 'DACION_EN_PAGO 12'
+  },
+  {
+    label: 'SUBROGACION',
+    value: 'SUBROGACION 13'
+  },
+  {
+    label: 'CONSIGNACION',
+    value: 'CONSIGNACION 14'
+  },
+  {
+    label: 'CONDONACION',
+    value: 'CONDONACION 15'
+  },
+  {
+    label: 'COMPENSACION',
+    value: 'COMPENSACION 17'
+  },
+  {
+    label: 'NOVACION',
+    value: 'NOVACION 23'
+  },
+  {
+    label: 'CONFUSION',
+    value: 'CONFUSION 24'
+  },
+  {
+    label: 'REMISION_DE_DEUDA',
+    value: 'REMISION_DE_DEUDA 25'
+  },
+  {
+    label: 'PRESCRIPCION_O_CADUCIDAD',
+    value: 'PRESCRIPCION_O_CADUCIDAD 26'
+  },
+  {
+    label: 'A_SATISFACCION_DEL_ACREEDOR',
+    value: 'A_SATISFACCION_DEL_ACREEDOR 27'
+  },
+  {
+    label: 'TARJETA_DE_DEBITO',
+    value: 'TARJETA_DE_DEBITO 28'
+  },
+  {
+    label: 'TARJETA_DE_SERVICIOS',
+    value: 'TARJETA_DE_SERVICIOS 29'
+  },
+  {
+    label: 'POR_DEFINIR',
+    value: 'POR_DEFINIR 99'
+  },
+];
 
 export default function AddNewInvoiceComponent({showForm, updateEstimates, user, token, 
     estimate, project}: 
@@ -35,13 +225,13 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
   const [total, setTotal] = useState<string>('0');
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
   const [client, setClient] = useState<string>(project.client._id);
-  const [type, setType] = useState<string>('');
-  const [methodPaid, setMethodPaid] = useState<string>('');
-  const [formPaid, setFormPaid] = useState<string>('');
+  const [type, setType] = useState<string>(catalogCFDI[0].value);
+  const [methodPaid, setMethodPaid] = useState<string>(catalogPaymentMethod[0].value);
+  const [formPaid, setFormPaid] = useState<string>(catalogFormPayment[0].value);
   const [optClients, setOptClients] = useState<Options[]>([]);
-  const [optTypes, setOptTypes] = useState<Options[]>([]);
-  const [optMethodPaid, setOptMethodPaid] = useState<Options[]>([]);
-  const [optFormPaid, setOptFormPaid] = useState<Options[]>([]);
+  // const [optTypes, setOptTypes] = useState<Options[]>([]);
+  // const [optMethodPaid, setOptMethodPaid] = useState<Options[]>([]);
+  // const [optFormPaid, setOptFormPaid] = useState<Options[]>([]);
 
   const [conceptsEstimate, setConceptsEstimate] = useState<IConceptEstimate[]>([]);
 
@@ -61,10 +251,12 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
         showToastMessageError(clients);
       }else{
         setOptClients(clients);
-        setOptTypes(clients);
-        setOptFormPaid(clients);
-        setOptMethodPaid(clients);
+        // setOptTypes(clients);
+        // setOptFormPaid(clients);
+        // setOptMethodPaid(clients);
       }
+
+
 
       // const cons = await await getConeptsEstimate(token, '');
       console.log('estimate => ', estimate?.id);
@@ -180,9 +372,12 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           folio,
           taxfolio: taxFolio,
           date,
-          useCFDI: "661eaa4af642112488c85f56",
-          paymentMethod: "661eaa4af642112488c85f56",
-          paymentWay: "661eaa4af642112488c85f56",
+          // useCFDI: "661eaa4af642112488c85f56",
+          // paymentMethod: "661eaa4af642112488c85f56",
+          // paymentWay: "661eaa4af642112488c85f56",
+          useCFDI: type,
+          paymentMethod: methodPaid,
+          paymentWay: formPaid,
           user,
           client,
           estimate: estimate?.id,
@@ -190,6 +385,8 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           company: '65d3813c74045152c0c4377e',
           concepts: res.concepts,
           notes: res.description,
+          amountGuaranteeFund: estimate.Fondo,
+          amountChargeOff: estimate.Amortizacion,
           cost: {
             // subtotal: Number(subtotal.replace(/[$,]/g, "")), 
             // iva: Number(vat.replace(/[$,]/g, "")),
@@ -266,10 +463,10 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               <SelectReact index={indexCLi} opts={optClients} setValue={handleClient} disabled={!editClient} />
             </div>
           )}
-          {optTypes.length > 0 && (
+          {catalogCFDI.length > 0 && (
             <div className=" col-span-3">
               <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-              <SelectReact index={0} opts={optTypes} setValue={handleType} />
+              <SelectReact index={0} opts={catalogCFDI} setValue={handleType} />
             </div>
           )}
 
@@ -281,17 +478,17 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
             )}
           </div>
 
-          {optMethodPaid && (
+          {catalogPaymentMethod && (
             <div className=" col-span-2">
               <Label htmlFor="methodPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Metodo de pago</p></Label>
-              <SelectReact index={0} opts={optMethodPaid} setValue={handleMethodPaid} />
+              <SelectReact index={0} opts={catalogPaymentMethod} setValue={handleMethodPaid} />
             </div>
           )}
 
-          {optFormPaid && (
+          {catalogFormPayment && (
             <div className=" col-span-2">
               <Label htmlFor="formPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Forma de pago</p></Label>
-              <SelectReact index={0} opts={optFormPaid} setValue={handleFormPaid} />
+              <SelectReact index={0} opts={catalogFormPayment} setValue={handleFormPaid} />
             </div>
           )}
 

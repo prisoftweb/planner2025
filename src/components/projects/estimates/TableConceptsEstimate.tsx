@@ -73,7 +73,7 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           /> */}
-          <RemoveElement id={`${idEstimate}/${row.original.id}`} name={row.original.nombre} remove={deleteConceptInEstimate} 
+          <RemoveElement id={`${idEstimate}/${row.original.idconcept}`} name={row.original.nombre} remove={deleteConceptInEstimate} 
             removeElement={delConcept} token={token} />
         </div>
       ),

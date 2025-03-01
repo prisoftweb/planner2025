@@ -94,17 +94,19 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   let component = <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
       handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
       project={project} token={token} idEstimate={idEstimate} />;
-console.log('estimate => ', estimate);
+// console.log('estimate => ', estimate);
 
   let button = <></>;
-  if(estimate.ismoneyadvance){
-    if(concepts.length===0 || !concepts[0].conceptEstimate?._id){
+  if(!estimate.haveinvoice){
+    if(estimate.ismoneyadvance){
+      if(concepts.length===0 || !concepts[0].conceptEstimate?._id){
+        button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
+      }
+    }else{
       button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
     }
-  }else{
-    button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
   }
-
+console.log('concepts estimate => ', conceptsData);
   return (
     <>
       <div className="flex justify-between items-center">

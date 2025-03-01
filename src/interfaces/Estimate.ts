@@ -73,6 +73,7 @@ export interface IEstimate {
   id: string,
   purschaseOrder: string
   ismoneyadvance: boolean
+  haveinvoice: boolean
 }
 
 export interface ITableConceptsEstimate {
@@ -84,6 +85,7 @@ export interface ITableConceptsEstimate {
   Cantidad: number, 
   PU: number, 
   Importe: number
+  idconcept: string
 }
 
 export interface IConceptEstimateNormal {
@@ -123,6 +125,7 @@ export interface IConceptEstimate {
     quantity: number
     amount: number
     date: string
+    idconcept: string
   }
   status: boolean
 }

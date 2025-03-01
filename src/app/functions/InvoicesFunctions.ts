@@ -10,10 +10,10 @@ export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
       estimate: inv.estimate.name,
       fecha: inv.date,
       folio: inv.folio,
-      formpaid: inv.paymentWay.name,
+      formpaid: inv.paymentWay,
       id: inv._id,
-      methodpaid: inv.paymentMethod.name,
-      usecfdi: inv.useCFDI.name
+      methodpaid: inv.paymentMethod,
+      usecfdi: inv.useCFDI
     })
   });
 
@@ -35,7 +35,8 @@ export function ConceptsDataToConceptsTable(conepts:IConceptInvoice[]){
       PU: 0,
       // Importe: concept.conceptEstimate?.priceConcepEstimate? (concept.conceptEstimate?.amount? concept.conceptEstimate.amount: 0) : 0,
       Importe: 0,
-      Unidad: (concept.conceptEstimate.unit?.name? concept.conceptEstimate.unit?.name: 'Sin unidad') || 'Sin unidad'
+      Unidad: (concept.conceptEstimate.unit?.name? concept.conceptEstimate.unit?.name: 'Sin unidad') || 'Sin unidad',
+      idconcept: concept.conceptEstimate._id
     });
   });
 

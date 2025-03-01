@@ -31,6 +31,11 @@ export interface PaymentProvider {
   user: UsrBack
   quantity: string[]
   status: boolean
+  paymentplugin: {
+    amount: number,
+    date: string,
+    notes: string
+  }
 }
 
 export interface CostPayment {

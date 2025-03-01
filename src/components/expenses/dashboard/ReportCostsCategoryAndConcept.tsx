@@ -1,6 +1,5 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
-// import { ReportCostsByProjectOnly } from '@/interfaces/ReportsOfCosts';
 import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
 import { DateRangePickerValue } from '@tremor/react';
 
@@ -16,7 +15,6 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
     containerTable: {
       paddingVertical: '10px',
       borderBottom: '1px solid gray',
-      //borderTop: '1px solid gray'
     },
     header: {
       fontSize: '8px',
@@ -37,17 +35,10 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
   })
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-  const date = new Date();
-  // let total = 0;
-  // reports.map((cost) => {
-  //   total += cost.totalCost;
-  // });
-  console.log('data costs => ', data);
   const currentDate = new Date();
   return(
     <Document>
       <Page>
-        {/* <View style={{padding: '30px'}}> */}
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
@@ -57,9 +48,6 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
               </Text>
             </View>
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Detalle de costo agrupado por proyectos</Text> */}
-              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
-              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text> */}
               <Text style={[style.subTitle, {textAlign:'right', marginTop:'17px'}]}>
                 Del {rangeDate.from?.getDate()} de {months[rangeDate.from?.getMonth() || 0]} de {rangeDate.from?.getFullYear()} {' '}  al {rangeDate.to?.getDate()} de {months[rangeDate.to?.getMonth() || 0]} de {rangeDate.to?.getFullYear()}  
               </Text>
@@ -92,10 +80,6 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
               </View>
             ) )}
           </View>
-          {/* <View> <Text style={{marginTop: '7px', fontSize: '14px'}}> Total acumulado:  {CurrencyFormatter({
-                  currency: 'MXN',
-                  value: Number(total.toFixed(2))
-                })} </Text> </View> */}
         </View>
       </Page>
     </Document>

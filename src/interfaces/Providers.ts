@@ -127,6 +127,11 @@ export interface ExpensesTableProvider {
   paid: string
   pending: string
   archivos: boolean,
+  paymentplugin: {
+    amount: number,
+    date: string,
+    notes: string
+  }
 }
 
 export interface DetailExpensesTableProvider {

@@ -1,15 +1,11 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-// import ContainerStimationsProject from "@/components/projects/estimates/ContainerStimationsProject";
 import { OneProjectMin } from "@/interfaces/Projects";
-import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
-// import { GlossaryCatalog } from "@/interfaces/Glossary";
-// import { Options } from "@/interfaces/Common";
-// import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { IEstimateProject, IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject, getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin, 
-  getEstimate, getConeptsEstimate } from "@/app/api/routeEstimates";
+import { GetProjectMin } from "@/app/api/routeProjects";
+import { IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
+import { getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin, 
+  getEstimate } from "@/app/api/routeEstimates";
 import ContainerDetailEstimate from "@/components/projects/estimates/ContainerDetailEstimate";
 
 export default async function Page({ params }: { params: { idp: string, ide:string }}){

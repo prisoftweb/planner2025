@@ -227,6 +227,7 @@ const NavItems = ({role}: {role:string}) => {
           link: '/projects/dashboard'
         },
       ]}/>
+      <NavItem name="Cotizaciones" link="/quotations" items={[]}/>
       <NavItem name="Estimaciones" link="" items={[
           {
             name: 'Por proyecto',

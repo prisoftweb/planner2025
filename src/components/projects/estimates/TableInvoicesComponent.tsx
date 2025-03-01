@@ -25,7 +25,7 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
     }
 
     fetch();
-  })
+  }, []);
 
   if(invoices.length <= 0){
     return (
@@ -147,6 +147,8 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
       ),
     }),
   ]
+
+  console.log('invoices => ', invoices);
 
   const data = InvoiceDataToTableData(invoices);
 

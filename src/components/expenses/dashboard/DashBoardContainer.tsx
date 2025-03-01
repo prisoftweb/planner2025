@@ -13,12 +13,20 @@ interface OptionsDashboard {
   costo: number
 }
 
+type DashBoardContainerProps = {
+  token: string, 
+  costsConcepts: OptionsDashboard[], 
+  costsCategories: OptionsDashboard[], 
+  costsDays: OptionsDashboard[], 
+  projects:Options[], 
+  costsResumen:CostsGroupByResumen[], 
+  costsResumenType:CostsGroupResumenByType[], 
+  costsCat: CostsByConceptAndCategory[], 
+  costsCon: CostsByConceptAndCategory[]
+}
+
 export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, 
-            projects, costsResumen, costsResumenType, costsCat, costsCon}:
-          {token: string, costsConcepts: OptionsDashboard[], costsCategories: OptionsDashboard[], 
-            costsDays: OptionsDashboard[], projects:Options[], costsResumen:CostsGroupByResumen[], 
-            costsResumenType:CostsGroupResumenByType[], costsCat: CostsByConceptAndCategory[], 
-            costsCon: CostsByConceptAndCategory[]}) {
+            projects, costsResumen, costsResumenType, costsCat, costsCon}: DashBoardContainerProps ) {
   
   const [costsByConcept, setCostsByConcept] = useState<OptionsDashboard[]>(costsConcepts);
   const [costsByCategory, setCostsByCategory] = useState<OptionsDashboard[]>(costsCategories);
@@ -32,7 +40,6 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   const fetchData = async (dateS: string, dateE: string, project:string) => {
     let costsCategory: CostsByConceptAndCategory[] = [];
     try {
-      // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(token, dateIni, dateIni);
       costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project);
       if(typeof(costsCategory)==='string'){
         return <h1>Error al obtener costos agrupados por categoria!!!</h1>
@@ -115,11 +122,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     setCostsByDay(optDays);
     setCostsByResumen(costsRes);
     setCostsByResumenType(costsResType);
-    //console.log('cost resumen => ', costsRes);
-    //console.log('cost res type => ', costsResType);
   }
 
-  // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const categoriesCategories: string[] = [];
@@ -131,11 +135,6 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   costsByConcept.map((cc) => {
     categoriesConcepts.push(cc.label);
   });
-
-  // const categoriesDays: string[] = [];
-  // costsByDay.map((cc) => {
-  //   categoriesDays.push(cc.label);
-  // });
 
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
@@ -156,7 +155,6 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
             <p>Conceptos</p>
           </div>
           <DonutChartt data={costsByConcept} colors={colors} category="costo"
-              //categories={['New York', 'London', 'Hong Kong', 'San Francisco', 'Singapore']} 
               categories={categoriesConcepts}  />
         </div>
       </div>
