@@ -137,6 +137,24 @@ export async function getConeptsEstimate(auth_token:string, estimate: string) {
   }
 }
 
+export async function getConceptsMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/getAllConceptsEstimateMIN`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener conceptos!!';
+  }
+}
+
 export async function getAllConceptsEstimateMin(auth_token:string, estimate: string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllConceptsOfEstimateMIN/${estimate}`;
   // console.log('url => ', url);
@@ -261,12 +279,15 @@ export async function insertConceptInEstimate(auth_token:string, data: Object, i
   }
 }
 
-export async function deleteConceptInEstimate(idE:string, auth_token:string) {
+export async function deleteConceptInEstimate(idE:string, auth_token:string, totalEstimated:number) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/deleteConceptsInEstimates/${idE}`;
   console.log('url delete concept => ', url);
+  console.log('data => ', {
+    totalEstimatedInConcept:totalEstimated
+  });
   try {
     const res = await axios.post(url, {
-      totalEstimatedInConcept:0
+      totalEstimatedInConcept:totalEstimated
     }, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,

@@ -8,12 +8,12 @@ import { useState } from "react";
 import FormNewConcept from "./FormNewConcept";
 // import Button from "@/components/Button";
 // import { showToastMessage, showToastMessageError } from "@/components/Alert";
-import { IConceptEstimate, IConceptEstimateNormal } from "@/interfaces/Estimate";
+import { IConceptEstimate, IConceptEstimateNormal, IConceptEstimateMin } from "@/interfaces/Estimate";
 
 export default function ConceptStepperComponent({handleConceptID, token, nextStep, 
     handleAddNewConcept, concepts}: 
   {handleConceptID:Function, token:string, nextStep:Function, handleAddNewConcept:Function, 
-    concepts:IConceptEstimateNormal[]}) {
+    concepts:IConceptEstimateMin[]}) {
 
   const [showNewConcept, setShowNewConcept] = useState<boolean>(false);
   // const [bandDescription, setBandDescription] = useState<boolean>(false);
@@ -38,35 +38,6 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
   console.log('concepts => ', concepts);
   return (
     <>
-      {/* <div className="p-2">
-        <div className="grid grid-cols-3 gap-x-1">
-          <div className="col-span-2">
-            <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Concepto</p></Label>
-            <div className="flex gap-x-2 items-center">
-              {selConcept}
-              <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-                onClick={() => setShowNewConcept(true)} />
-            </div>
-          </div>
-          <div className="">
-            <Label htmlFor="clave"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Clave</p></Label>
-            <Input type="text" name="clave" autoFocus 
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-            {bandCode && (
-              <p className="text-red-500">La clave es obligatoria!!!</p>
-            )}
-          </div>
-        </div>
-        <div>
-          <Label htmlFor="descripcion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
-          <TextArea value={description} onChange={(e) => setDescription(e.target.value)}></TextArea>
-          {bandDescription && (
-            <p className="text-red-500">La descripcion es obligatoria!!!</p>
-          )}
-        </div>
-      </div> */}
       <div className="flex items-center gap-x-2">
         <div className="relative w-full p-2">
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -103,7 +74,7 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
             >
               <div className="flex items-center ">
                 <div className="grid mr-4 place-items-center">
-                  <img alt="responsable" src={ '/img/users/default.jpg'}
+                  <img alt="responsable" src={ conce.user?.photo || '/img/users/default.jpg'}
                     className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                 </div>
                 <div className="w-full">
@@ -119,12 +90,6 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
                   </p>
                 </div>
               </div>
-              {/* <div className="grid place-items-center justify-center w-28">
-                <p className="block font-sans text-sm antialiased font-normal 
-                    leading-normal text-gray-700">{mov.department.name}</p>
-                <img alt="responsable" src={mov.department.company.logo || '/img/users/default.jpg'}
-                  className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-              </div> */}
             </div>
           ))}
 

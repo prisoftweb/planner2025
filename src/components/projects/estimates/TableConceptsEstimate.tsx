@@ -16,11 +16,12 @@ type TableConceptsProps = {
   isFilterTable:boolean, 
   handleFilterTable:Function, 
   delConcept:Function, 
-  token:string
+  token:string,
+  estimatedTotal:number
 }
 
 export default function TableConceptsEstimate({project, concepts, handleFilterTable, 
-  isFilterTable, delConcept, token, idEstimate}: TableConceptsProps) {
+  isFilterTable, delConcept, token, idEstimate, estimatedTotal}: TableConceptsProps) {
 
   // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
   const [filterConcepts, setFilterConcepts] = useState<IConceptEstimate[]>(concepts);
@@ -74,7 +75,7 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
             onChange={row.getToggleSelectedHandler()}
           /> */}
           <RemoveElement id={`${idEstimate}/${row.original.idconcept}`} name={row.original.nombre} remove={deleteConceptInEstimate} 
-            removeElement={delConcept} token={token} />
+            removeElement={delConcept} token={token} progreesAverage={estimatedTotal} />
         </div>
       ),
       size: 300,

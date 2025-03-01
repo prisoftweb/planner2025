@@ -21,8 +21,8 @@ import NavStepperConceptEstimate from "./NavStepperConceptEstimate"
 import ConceptStepperComponent from "./ConceptStepperComponent"
 import PriceUnityStepper from "./PriceUnityStepper"
 import DataStepperComponent from "./DataStepperComponent"
-import { getConeptsEstimate, getAllConceptsDetailsByEstimateMin } from "@/app/api/routeEstimates"
-import { IConceptEstimateNormal, IConceptEstimate, PriceConcept, IEstimate } from "@/interfaces/Estimate"
+import { getConceptsMin, getAllConceptsDetailsByEstimateMin } from "@/app/api/routeEstimates"
+import { IConceptEstimateNormal, IConceptEstimateMin, IConceptEstimate, PriceConcept, IEstimate } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
 import DonutChartComponent from "../dashboard/DonutChartComponent"
 
@@ -38,7 +38,8 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   // const refRequest = useRef(true);
 
   // const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
-  const [conceptSel, setConcepSel] = useState<IConceptEstimateNormal>();
+  // const [conceptSel, setConcepSel] = useState<IConceptEstimateNormal>();
+  const [conceptSel, setConcepSel] = useState<IConceptEstimateMin>();
   const [idPrice, setIdPrice] = useState<PriceConcept>();
   
   // const [code, setCode] = useState<string>('');
@@ -48,7 +49,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   // const [unity, setUnity] = useState<string>('');
   // const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV);
 
-  const [concepts, setConcepts] = useState<IConceptEstimateNormal[]>([]);
+  const [concepts, setConcepts] = useState<IConceptEstimateMin[]>([]);
 
   const [heightPage, setHeightPage] = useState<number>(900);
   // const refRequest = useRef(true);
@@ -60,9 +61,9 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   useEffect(() => {
     const fetchCocnepts = async () => {
-      let con: IConceptEstimateNormal[];
+      let con: IConceptEstimateMin[];
       try {
-        con = await getConeptsEstimate(token, '');
+        con = await getConceptsMin(token);
         console.log('concepts min => ', con);
         if(typeof(con) === "string"){
           showToastMessageError(con);
@@ -119,10 +120,10 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
 
   const handleAddNewConcept = async () => {
     console.log('agregar nuevo concepto');
-    let cons: IConceptEstimateNormal[];
+    let cons: IConceptEstimateMin[];
     try {
       // cons = await getAllConceptsDetailsByEstimateMin(token, idEstimate);
-      cons = await getConeptsEstimate(token, idEstimate._id);
+      cons = await getConceptsMin(token);
       console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
         // return <h1 className="text-center text-red-500">{cons}</h1>
@@ -136,8 +137,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
             value: c._id
           });
         });
-        // console.log('nuevos conceptos => ', contsLV);
-        // setConceptLV(contsLV);
       }
     } catch (error) {
       console.log('catch error => ', error);

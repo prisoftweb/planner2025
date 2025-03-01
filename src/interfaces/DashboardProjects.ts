@@ -94,6 +94,10 @@ export interface ProjectByBudgetedControl {
     spent: number
     porcentage: number
   }
+  estimateInfo: {
+    estimate: number
+    porcentage: number
+  }
 }
 
 export interface ProjectCostoCenters {

@@ -9,7 +9,7 @@ import { Options } from "@/interfaces/Common";
 // import FormNewPrice from "./FormNewPrice";
 // import Button from "@/components/Button";
 import CurrencyInput from "react-currency-input-field";
-import { IConceptEstimateNormal, PriceConcept } from "@/interfaces/Estimate";
+import { IConceptEstimateNormal, IConceptEstimateMin, PriceConcept } from "@/interfaces/Estimate";
 import { getPricesConcept, deletePriceInConceptEstimate } from "@/app/api/routeEstimates";
 import RemoveElement from "@/components/RemoveElement";
 import {BookmarkSquareIcon} from "@heroicons/react/24/solid";
@@ -21,7 +21,7 @@ import {IoIosSave} from 'react-icons/io';
 export default function PriceUnityStepper({token, nextStep, handlePriceId, 
     handleAddNewPrice, conceptSelected, user }: 
   { token:string, nextStep:Function, handlePriceId:Function, handleAddNewPrice:Function, 
-    conceptSelected: IConceptEstimateNormal, user:string }) {
+    conceptSelected: IConceptEstimateMin, user:string }) {
 
   // const [showNewPrice, setShowNewPrice] = useState<boolean>(false);
 

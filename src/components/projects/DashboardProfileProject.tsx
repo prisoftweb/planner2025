@@ -65,6 +65,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
   const c1 = getRandomArbi(0, 9);
   const c2 = getRandomArbi(0, 9);
   const c3 = getRandomArbi(0, 9);
+  const c4 = getRandomArbi(0, 9);
   
   return(
     <div className="w-full">
@@ -96,24 +97,32 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: budgetedControl.amountInfo.amount?? 0
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl.amountInfo.porcentage} 
-                  widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
+                  <ProgressBarComponent label={''} progress={budgetedControl.amountInfo.porcentage} 
+                    widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
                 <p className=" text-sm">Presupuestado ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.budgetedInfo.budgeted
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl.budgetedInfo.porcentage} 
-                  widthBar="w-full" color={colorsRandom[c2]} hei="h-5" />
+                  <ProgressBarComponent label={''} progress={budgetedControl.budgetedInfo.porcentage} 
+                    widthBar="w-full" color={colorsRandom[c2]} hei="h-5" />
                 <p className=" text-sm">Costo ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.spentInfo.spent
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl.spentInfo.porcentage} 
-                  widthBar="w-full" color={colorsRandom[c3]} hei="h-5" />
+                  <ProgressBarComponent label={''} progress={budgetedControl.spentInfo.porcentage} 
+                    widthBar="w-full" color={colorsRandom[c3]} hei="h-5" />
+                <p className=" text-sm">Pagado ({
+                  CurrencyFormatter({
+                    currency:'MXN',
+                    value: budgetedControl.estimateInfo.estimate
+                  })}) 
+                </p>
+                  <ProgressBarComponent label={''} progress={budgetedControl.estimateInfo.porcentage} 
+                    widthBar="w-full" color={colorsRandom[c4]} hei="h-5" />
               </div>
             )}
           </div>

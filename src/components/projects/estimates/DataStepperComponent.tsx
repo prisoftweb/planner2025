@@ -6,13 +6,13 @@ import CurrencyInput from "react-currency-input-field";
 import Button from "@/components/Button";
 import { useState } from "react";
 import { showToastMessageError, showToastMessage } from "@/components/Alert";
-import { PriceConcept, IConceptEstimateNormal } from "@/interfaces/Estimate";
+import { PriceConcept, IConceptEstimateNormal, IConceptEstimateMin } from "@/interfaces/Estimate";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { insertConceptInEstimate } from "@/app/api/routeEstimates";
 
 export default function DataStepperComponent({token, previousStep, price, conceptSelected, 
     user, idEstimate, updateConcepts, showForm}: 
-  { token:string, conceptSelected: IConceptEstimateNormal, previousStep: Function, 
+  { token:string, conceptSelected: IConceptEstimateMin, previousStep: Function, 
     price: PriceConcept| undefined, user:string, idEstimate:string, updateConcepts: Function, 
     showForm:Function}) {
 
@@ -115,7 +115,7 @@ export default function DataStepperComponent({token, previousStep, price, concep
         <div className="flex items-center justify-around gap-x-2">
           <img alt="responsable" src={ (price?.user?.photo? price.user.photo: '/img/users/default.jpg') || '/img/users/default.jpg'}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-          <p className="text-slate-600">Nombre</p>
+          <p className="text-slate-600">{price?.user?.name || 'nombre'}</p>
         </div>
         <div className="border border-slate-500 flex w-full h-full justify-center items-center">
           {CurrencyFormatter({

@@ -9,16 +9,18 @@ import Chip from "@/components/providers/Chip"
 import { OneProjectMin } from "@/interfaces/Projects"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import { ProgressBarComponent } from "../dashboard/ProgressBarComponent"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import CurrencyInput from "react-currency-input-field"
 import { createEstimate } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { BsPencil } from "react-icons/bs"
 
-export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow, porcentajeAdvange}: 
+export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow, 
+  porcentajeAdvange, advange}: 
   {showForm:Function, project: OneProjectMin, updateEstimates:Function, user:string, token:string, 
-    overflow:boolean, porcentajeAdvange: number}) {
+    overflow:boolean, porcentajeAdvange: number, advange: number}) {
   // const refRequest = useRef(true);
+  // const refAmortization = useRef(false);
 
   const [name, setName] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
@@ -371,6 +373,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                     // setAmortization(value?.replace(/[$,]/g, "") || '0');
                     // updateValues(value?.replace(/[$,]/g, "") || '0')
                     if(overflow){
+                      // refAmortization.current=true;
                       updateAmortization('0');
                     }else{
                       updateAmortization(value?.replace(/[$,]/g, "") || '0');
@@ -384,6 +387,12 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                   prefix="$"
                   disabled={isdisabled}
                 />
+                {isdisabled && (
+                  <p className="text-red-500 text-xs">No se puede agregar Amortizacion porque supero el anticipo de {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: advange
+                  })} !!!</p>
+                )}
               </div>
               <div>                
                 <div className="flex justify-between items-center pr-4">

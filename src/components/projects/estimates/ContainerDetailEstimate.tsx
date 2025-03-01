@@ -93,7 +93,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   //                         project={project} token={token} idEstimate={idEstimate} />)
   let component = <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
       handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-      project={project} token={token} idEstimate={idEstimate} />;
+      project={project} token={token} idEstimate={idEstimate} estimatedTotal={totalEstimatedProjectState[0].estimatedTotal} />;
 // console.log('estimate => ', estimate);
 
   let button = <></>;

@@ -108,6 +108,37 @@ export interface IConceptEstimateNormal {
   id?: string
 }
 
+export interface IConceptEstimateMin {
+  _id: string
+  unit: {
+    _id: string
+    name: string
+    color: string
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  company: {
+    _id: string
+    name: string
+    logo: string
+  }
+  code: string
+  name: string
+  description: string
+  datets: string
+  prices: {
+    cost: number
+    date: string
+    user: string
+    status: boolean
+    _id: string
+  }[]
+  status: boolean
+}
+
 export interface IConceptEstimate {
   user: UsrBack
   conceptEstimate: {

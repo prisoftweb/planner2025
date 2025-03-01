@@ -165,14 +165,14 @@ export default function ContainerStimationsProject({project, optConditions, optP
           <div className=" border border-gray-700">
             <div className="flex items-center border border-gray-700">
               <p className="bg-green-600 text-white p-2 w-52 text-center">TOTAL ESTIMADO</p>
-              <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
-                currency: 'MXN',
-                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
-              })}</p>
               {/* <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.estimatedTotal || 0 : 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p> */}
+              <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
+                currency: 'MXN',
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.estimatedTotal || 0 : 0
+              })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentage || 0}%</p>
@@ -230,7 +230,8 @@ export default function ContainerStimationsProject({project, optConditions, optP
         selEstimate={handleSelEstimate}  />
 
       {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-        updateEstimates={updateEstimatesProject} token={token} overflow={overflow} porcentajeAdvange={percentajeAdvance} />}
+        updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
+        porcentajeAdvange={percentajeAdvance} advange={advance} />}
 
       {openNewInvoice && <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
         updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />}
