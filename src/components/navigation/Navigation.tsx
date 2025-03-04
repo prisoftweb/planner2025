@@ -1,6 +1,6 @@
 'use client'
 
-import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, StarIcon, ArrowRightStartOnRectangleIcon } 
+import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, ArrowRightStartOnRectangleIcon } 
   from "@heroicons/react/24/solid"
 import { MdPassword } from "react-icons/md";
   import Image from "next/image"
@@ -36,11 +36,8 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   role = user.rol?.name || '';
-  //console.log('role ', role);
-  //console.log('user role ', user.rol);
-
+  
   const ref = useOutsideClick(() => {
-    //console.log('Clicked outside of MyComponent');
     if(isOpenP){
       setIsOpenP(false);
     }
@@ -49,7 +46,6 @@ export default function Navigation({user}: {user:UsrBack}){
   const router = useRouter();
   
   function logOut(){
-    //console.log('logout ');
     RemoveCookies();
     router.push('/login');
   }
@@ -208,7 +204,6 @@ const NavItems = ({role}: {role:string}) => {
         },
       ]}/>
       <NavItem name="Clientes" link="/clients" items={[]}/>
-      {/* <NavItem name="Roles" link="/roles/role" items={[]}/> */}
       <NavItem name="Proyectos" link="" items={[
         {
           name: 'Proyectos',
@@ -302,14 +297,6 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Catalogos',
             link: '/status'
           },
-          // {
-          //   name: 'Centro de costos',
-          //   link: '/costcenter'
-          // },
-          // {
-          //   name: 'Gastos',
-          //   link: '/expenses'
-          // },
         ]} 
       />
       <NavItem name="Workflow" link="" items={[

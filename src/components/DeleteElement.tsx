@@ -67,7 +67,6 @@ export default function DeleteElement({token, id, name, remove,
   
     return(
     <>
-      {/* <TrashIcon width={20} height={20} className="text-red-500 hover:text-red-300 cursor-pointer" */}
       <TrashIcon className={`${colorIcon} cursor-pointer w-6 h-6`}  
         onClick={() => {
           deleteElement();

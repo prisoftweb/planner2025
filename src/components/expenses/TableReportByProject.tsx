@@ -19,7 +19,6 @@ export default function TableReportByProject({token}: {token:string}){
       let reportProjectOnly: ReportCostsByProjectOnly[] = [];
       try {
         reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
-        //console.log('reports projects page => ', costCostoCenter);
         if(typeof(reportProjectOnly)==='string'){
           return <h1>Error al consultar costos por proyecto!!</h1>
         }
@@ -33,28 +32,6 @@ export default function TableReportByProject({token}: {token:string}){
   }, []);
 
   const columns = [
-    // columnHelper.accessor(row => row._id, {
-    //   id: 'seleccion',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-2">
-    //       <input type="checkbox" 
-    //         checked={row.getIsSelected()}
-    //         onChange={row.getToggleSelectedHandler()}
-    //         className="w-24 cursor-pointer"
-    //       />
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: ({table}:any) => (
-    //     <input type="checkbox"
-    //       className="w-24 cursor-pointer"
-    //       checked={table.getIsAllRowsSelected()}
-    //       onClick={()=> {
-    //         table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-    //       }}
-    //     />
-    //   )
-    // }),
     columnHelper.accessor('project', {
       id: 'Proyecto',
       cell: ({row}) => (

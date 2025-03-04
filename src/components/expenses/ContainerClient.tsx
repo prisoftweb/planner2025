@@ -33,25 +33,20 @@ import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports, isViewUser=false}:
-                  {data:ExpensesTable[], token:string, 
-                    expenses:Expense[], user:UsrBack, isHistory?:boolean, 
-                    isViewReports: boolean, isViewUser?: boolean}){
+  {data:ExpensesTable[], token:string, expenses:Expense[], user:UsrBack, isHistory?:boolean, 
+    isViewReports: boolean, isViewUser?: boolean}){
 
   const { categories, conditions, costCenterOpt, projects, providers, responsibles, types, 
     updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
     updateReportsOptions, updateResponsibles, updateTypes, updateVats, updateProvidersSAT, 
     updateReports} = useOptionsExpense();
 
-  // console.log('costo center concept container => ', costCostoCenter);
-  // console.log('costo center category container => ', costCostoCenterCategory);
   const [idVal, setIdVal] = useState<string>('');
   const [tableData, setTableData] = useState<ExpensesTable[]>(data);
 
   const {expensesTable, updateExpensesTable, updateResponsible, refresh, updateRefresh} = useNewExpense();
 
   if(expensesTable.length <= 0 && expenses.length > 0){
-    //console.log('actualizar expenses table => ');
-    // console.log('primer lengt => ');
     updateExpensesTable(expenses);
   }
 
@@ -148,8 +143,7 @@ export default function ContainerClient({data, token, expenses,
       } catch (error) {
         return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
       }
-      //console.log('optvats => ', optVats);
-
+      
       let reps: ReportParse[];
       try {
         if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
@@ -187,8 +181,6 @@ export default function ContainerClient({data, token, expenses,
       updateVats(optVats);
       updateReports(reps);
       updateReportsOptions(opReports);
-      //console.log('update rep opt => ', opReports);
-      //updateReportsOptions(optReports);
       updateProvidersSAT(optProvidersSAT);
     }
     fetchApis();
@@ -309,25 +301,17 @@ export default function ContainerClient({data, token, expenses,
   }
 
   if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
-    //console.log('entro en el if => ');
     const aux = async () =>{
       try {
-        console.log('refresh costos container cli ');
-        // const res = await getAllCostsByCondition(token);
-        // const res = await GetCostsByUserMIN(token, user._id);
         const res = await getAllCostsByConditionAndUser(token, user._id);
-        //console.log('res');
         if(typeof(res) !== 'string'){
-          //refExpenses.current = res;
           const d = ExpenseDataToTableData(res);
           setTableData(d);
           updateExpensesTable(res);
-          //setDataExpenses(d);
         }else{
           showToastMessageError(res);
         }
       } catch (error) {
-        //console.log('catch table expenses => ', error);
         showToastMessageError('Error al actualizar tabla!!');
       }
     }
@@ -335,9 +319,7 @@ export default function ContainerClient({data, token, expenses,
     updateRefresh(false);
   }
 
-  //if( expensesTable.length <= 0 && expenses.length <= 0){
   if( expenses.length <= 0 && expensesTable.length <= 0){
-    //console.log('entro en el return length 0 => ');
     const view = isHistory? <WithOut img="/img/costs/gastos.svg" subtitle="Historial de Gastos"
     text="El historial de gastos actualmente esta vacio!!!"
     title="Historial de Gastos">
@@ -369,12 +351,6 @@ export default function ContainerClient({data, token, expenses,
       if(find){
         isExpensesValidates=false;
       }
-      // expensesSelected.map((e) => {
-      //   if(!e.condition.toLowerCase().includes('validado')){
-      //     isExpensesValidates=false;
-      //     return;
-      //   }
-      // })
     }else{
       isExpensesValidates=false;
     }
@@ -389,11 +365,6 @@ export default function ContainerClient({data, token, expenses,
         data={tableData}
       />
     ): isViewUser? (
-      // <TableHistoryExpenses token={token}
-      //   expenses={expenses} isFilter={isFilter} setIsFilter={handleFilter}
-      //   isViewReports={isViewReports}
-      //   data={tableData}
-      // />
       <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
         idValidado={idVal} user={user._id} isViewReports={isViewReports}
@@ -461,20 +432,6 @@ export default function ContainerClient({data, token, expenses,
         </div>
       </div>
       {viewTable}
-      {/* {
-        isHistory? (
-          <TableHistoryExpenses  token={token} isViewReports={isViewReports}
-            expenses={expenses} isFilter={isFilter} setIsFilter={setIsFilter}
-            data={tableData}
-          />
-        ): (
-          <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
-            expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
-            idValidado={idVal} user={user._id} isViewReports={isViewReports}
-            data={tableData}
-          />
-        )
-      } */}
     </div>
   )
 }

@@ -25,7 +25,6 @@ export default function CardContacts({contact, token, children}:
       <div className="flex flex-col items-center border border-gray-200 rounded-lg p-2">
         <div className="flex items-end">
           <IconText size="w-8 h-8" sizeText="" text={contact.name} />
-          {/* <DeleteContactClient contact={contact} token={token} idCli={idCli} /> */}
           {children}
         </div>
         <p className="text-sm text-slate-400">{contact.name}</p>

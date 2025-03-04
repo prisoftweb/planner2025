@@ -7,7 +7,7 @@ import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
-import { GetCosts, GetCostsByUserMIN } from "@/app/api/routeCost";
+import { GetCosts } from "@/app/api/routeCost";
 import { showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
@@ -23,7 +23,6 @@ export default function TableHistoryExpenses({data, token, expenses,
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
-  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
@@ -142,8 +141,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
-            {/* {row.original.Importe} */}
-            {/* {MoneyFormatter(row.original.Importe)} */}
             {CurrencyFormatter({
               currency: 'MXN',
               value: row.original.Importe
@@ -158,8 +155,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
-            {/* {row.original.vat} */}
-            {/* {MoneyFormatter(row.original.vat)} */}
             {CurrencyFormatter({
               currency: "MXN",
               value: row.original.vat
@@ -174,8 +169,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
-            {/* {row.original.discount} */}
-            {/* {MoneyFormatter(row.original.discount)} */}
             {CurrencyFormatter({
               currency: 'MXN',
               value: row.original.discount
@@ -190,8 +183,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
           <p className="">
-            {/* {row.original.total} */}
-            {/* {MoneyFormatter(row.original.total)} */}
             {CurrencyFormatter({
               currency: 'MXN',
               value: row.original.total
@@ -204,9 +195,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       header: 'Folio fiscal',
       id: 'Folio fiscal',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.taxFolio}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/history/${row.original.id}/profile`)}
         >{row.original.taxFolio}</p>
@@ -252,24 +240,15 @@ export default function TableHistoryExpenses({data, token, expenses,
       const aux = async () =>{
         try {
           const res = await GetCosts(token);
-          // const res = await GetCostsByUserMIN(token, user);
-          //console.log('res');
-          console.log('refresh table cost user => ', res);
           if(typeof(res) !== 'string'){
             const d = ExpenseDataToTableData(res);
             setDataExpenses(d);
-            // setView(<></>);
-            // setTimeout(() => {
-            //   setView(<Table columns={columns} data={d} 
-            //         placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-            // }, 500);
             setView(<Table columns={columns} data={d} 
               placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
           }else{
             showToastMessageError(res);
           }
         } catch (error) {
-          console.log('catch table expenses => ', error);
           showToastMessageError('Error al actualizar tabla!!');
         }
       }
@@ -280,10 +259,8 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   useEffect(() => {
     if(filter){
-      //console.log('data exp ', dataExpenses);
       setView(<></>);
       setTimeout(() => {
-        // const total = da
         setView(<Table columns={columns} data={dataExpenses} 
           placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
       }, 100);
@@ -292,10 +269,6 @@ export default function TableHistoryExpenses({data, token, expenses,
   }, [filter]);
 
   const paidValidation = (exp:Expense, isPaid:number) => {
-    // if(exp.ispaid === isPaid){
-    //   return true;
-    // }
-    // return false;
     if(isPaid===1){
       return true;
     }else{
@@ -315,9 +288,7 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid:number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
-      //return true;
       return paidValidation(exp, isPaid);
     }
     return false;
@@ -445,10 +416,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                 reports, categories, types, costcenters, providers, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.estatus._id)){
         return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                     reports, categories, types, costcenters, providers, isPaid);

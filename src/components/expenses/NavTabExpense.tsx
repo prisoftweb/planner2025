@@ -27,7 +27,6 @@ export default function NavTabExpense({tab, idExp}: {tab:string, idExp:string}){
     },
   }
 
-  //const [tabCli, setTabCli] = useState<JSX.Element>(<></>);
   const [width, setWidth] = useState<number>(0);
   const handleResize = () => {
     setWidth(window.innerWidth);

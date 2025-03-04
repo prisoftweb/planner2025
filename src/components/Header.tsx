@@ -15,7 +15,6 @@ export default function Header({children, title, placeHolder}:
           </div>
           <p className="text-xl ml-4 font-medium">{title}</p>
         </div>
-        {/* <ButtonNewProvider id={id} token={token} /> */}
         <div className="flex gap-x-3 justify-end w-full">
           <SearchInTable placeH={placeHolder} />
           <div className="w-36">

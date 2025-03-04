@@ -1,10 +1,8 @@
 'use client'
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "../SelectMultipleReact"
-import { Options } from "@/interfaces/Common";
 import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
@@ -19,10 +17,10 @@ import { useOptionsExpense } from "@/app/store/newExpense"
 
 export default function Filtering({showForm, FilterData, maxAmount, minAmount, 
                       expensesFiltered, isViewReports, }: 
-                    {showForm:Function, FilterData:Function, maxAmount:number, 
-                      minAmount:number, expensesFiltered: Expense[], isViewReports: boolean}){
+  {showForm:Function, FilterData:Function, maxAmount:number, minAmount:number, 
+    expensesFiltered: Expense[], isViewReports: boolean}){
 
-  const {categories, conditions, costCenterOpt, projects, reportsOptions, types, providers, providersSAT} = useOptionsExpense();
+  const {categories, conditions, costCenterOpt, projects, reportsOptions, types, providers} = useOptionsExpense();
 
   const [typesSel, setTypesSel] = useState<string[]>(['all']);
   const [categoriesSel, setCategoriesSel] = useState<string[]>(['all']);
@@ -45,7 +43,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   ])
 
   const handleValues = (dateValues: DateObject[]) => {
-    console.log('handle values => ');
     setValues(dateValues);
     if(values.length > 1){
       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
@@ -68,9 +65,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
     console.log('handle input');
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
-    // filterfunction(categoriesSel, typesSel, conditionsSel, e.minValue, 
-    //   e.maxValue, firstDate, secondDate, projectsSel, reportsSel, 
-    //   costcentersSel, providersSel, isPaid);
   };
 
   const handleResize = () => {
@@ -82,7 +76,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleConditions = (value: string[]) => {
-    console.log('handle conditions');
     setConditionsSel(value);
     filterfunction(categoriesSel, typesSel, value, minValue, 
       maxValue, firstDate, secondDate, projectsSel, reportsSel, 
@@ -90,7 +83,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleTypes = (value: string[]) => {
-    console.log('handle types');
     setTypesSel(value);
     filterfunction(categoriesSel, value, conditionsSel, minValue, 
       maxValue, firstDate, secondDate, projectsSel, reportsSel, 
@@ -98,7 +90,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleCategories = (value: string[]) => {
-    console.log('handle categories');
     setCategoriesSel(value);
     filterfunction(value, typesSel, conditionsSel, minValue, 
       maxValue, firstDate, secondDate, projectsSel, reportsSel, 
@@ -106,7 +97,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleReports = (value: string[]) => {
-    console.log('handle reps');
     setReportsSel(value);
     filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
       maxValue, firstDate, secondDate, projectsSel, value, 
@@ -114,7 +104,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleProjects = (value: string[]) => {
-    console.log('handle proyects');
     setProjectsSel(value);
     filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
       maxValue, firstDate, secondDate, value, reportsSel, 
@@ -122,7 +111,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleCostCenters = (value: string[]) => {
-    console.log('handle costs');
     setCostCentersSel(value);
     filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
       maxValue, firstDate, secondDate, projectsSel, reportsSel, 
@@ -130,7 +118,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   }
 
   const handleProviders = (value: string[]) => {
-    console.log('handle provs');
     setProvidersSel(value);
     filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
       maxValue, firstDate, secondDate, projectsSel, reportsSel, 
@@ -147,24 +134,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  // useEffect(() => {
-  //   if(values.length > 1){
-  //     setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-  //     setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
-  //   }else{
-  //     if(values.length > 0){
-  //       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-  //     }
-  //   }
-  // }, [values]);
-
-  // useEffect(() => {
-  //   console.log('providers sel => ', providersSel);
-  //   FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
-  //     firstDate?.getTime(), secondDate?.getTime(), costcentersSel, providersSel, isPaid);
-  // }, [ categoriesSel, typesSel, conditionsSel, minValue, maxValue, firstDate, secondDate, 
-  //       projectsSel, reportsSel, costcentersSel, providersSel, isPaid]);
-
   useEffect(() => {
     FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
       firstDate?.getTime(), secondDate?.getTime(), costcentersSel, providersSel, isPaid);
@@ -177,16 +146,11 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
         dateini?.getTime(), dateend?.getTime(), ccSel, provSel, ispay);
   }
 
-  // useEffect (() => {
-  //   FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
-  //     new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), costcentersSel, providersSel, isPaid);
-  // }, []);
-
   const allArray = [{
     label: 'TODOS',
     value: 'all'
   }];
-// console.log('is paid => ', isPaid);
+
   return(
     <>
       <form className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
@@ -194,7 +158,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
       >
         <div className="flex justify-between">
           <div className="flex mt-2 items-center">
-            {/* <img src={img} alt="logo" className="rounded-full w-14 h-auto" /> */}
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">
               <p className="text-xl">Filtrar gasto</p>
@@ -211,7 +174,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
             <div className="inline-flex rounded-md shadow-sm mx-2">
             <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
                         ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
-                // onClick={() => setIsPaid(1)}
                 onClick={() => {
                   setIsPaid(1);
                   filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
@@ -223,7 +185,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
               </button>
               <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
                         ${isPaid===2? 'bg-green-500 text-white': ''}`}
-                // onClick={() => setIsPaid(2)}
                 onClick={() => {
                   setIsPaid(2);
                   filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
@@ -235,7 +196,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
               </button>
               <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
                         ${isPaid===3? 'bg-red-500 text-white': ''}`}
-                // onClick={() => setIsPaid(3)}
                 onClick={() => {
                   setIsPaid(3);
                   filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
@@ -286,14 +246,9 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
             step={5}
             minValue={minValue}
             maxValue={maxValue}
-            // onChange={(e) => {
-            //   handleInput(e);
-            // }}
             onInput={(e) => {
               handleInput(e);
             }}
-            //baseClassName='multi-range-slider-black'
-            //style={{" border: 'none', boxShadow: 'none', padding: '15px 10px' "}}
             style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
                 backgroundColor: 'white', 'zIndex': '0'}}
             label='false'
@@ -321,8 +276,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
-            //onChange={setValues}
-            // onChange={(e: any) => setValues(e)}
             onChange={(e: any) => {
               console.log('handle values => ');
               handleValues(e)

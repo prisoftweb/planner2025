@@ -1,18 +1,13 @@
 'use client'
-import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import Image from "next/image";
 
 export default function HeaderImage({children, title, previousPage, image}: 
-                    {children:JSX.Element, title:string, 
-                      previousPage:string, image:string}){
+  {children:JSX.Element, title:string, previousPage:string, image:string}){
   return(
     <>
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          {/* <Link href={previousPage}>
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-          </Link> */}
           <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer" onClick={() => window.location.replace(previousPage)}>
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600 cursor-pointer" 
             />

@@ -75,3 +75,25 @@ export async function createQuotation(auth_token:string, data:Object) {
     return 'Error al crear cotizacion!!';
   }
 }
+
+export async function updateQuotation(auth_token:string, data:Object, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/quotations/${id}`;
+  try {
+    console.log('url create => ', url);
+    console.log('data => ', JSON.stringify(data));
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log('res update => ', res);
+    if(res.status === 201 || res.status === 200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al actualizar cotizacion!!';
+  }
+}

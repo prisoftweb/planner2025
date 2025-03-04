@@ -10,7 +10,6 @@ export default function ContainerHeaderForm({photo, name, email}:
             <Image    
               className="rounded-full"                      
               src={photo}
-              //src={'/img/default.jpg'}
               alt={name}
               width={156}
               height={156}                                    
@@ -22,7 +21,6 @@ export default function ContainerHeaderForm({photo, name, email}:
           <div className="w-1/3 flex flex-col">
             <Image    
               className=""                      
-              //src='/nuevoIcono.jpg'
               src={'/logoActualizado.jpg'}
               alt={name}
               width={120}

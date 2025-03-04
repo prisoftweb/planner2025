@@ -211,7 +211,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Monto total</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + totalEstimatedProjectState[0]?.amountPayable + totalEstimatedProjectState[0]?.amountChargeOff) || 0 : 0
+                value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + totalEstimatedProjectState[0]?.estimatedTotal) || 0 : 0
               })}</p>
             </div>
           </div>

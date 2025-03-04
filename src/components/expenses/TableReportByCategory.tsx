@@ -32,28 +32,6 @@ export default function TableReportByCategory({token}: {token:string}){
   }, []);
 
   const columns = [
-    // columnHelper.accessor(row => row._id, {
-    //   id: 'seleccion',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-2">
-    //       <input type="checkbox" 
-    //         checked={row.getIsSelected()}
-    //         onChange={row.getToggleSelectedHandler()}
-    //         className="w-24 cursor-pointer"
-    //       />
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: ({table}:any) => (
-    //     <input type="checkbox"
-    //       className="w-24 cursor-pointer"
-    //       checked={table.getIsAllRowsSelected()}
-    //       onClick={()=> {
-    //         table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-    //       }}
-    //     />
-    //   )
-    // }),
     columnHelper.accessor('project', {
       id: 'Proyecto',
       cell: ({row}) => (
@@ -117,22 +95,6 @@ export default function TableReportByCategory({token}: {token:string}){
         <p>Cantidad</p>
       )
     }),
-    // columnHelper.accessor('', {
-    //   id: 'Porcentaje',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-1 items-center">
-    //       <div className="w-20 bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-    //         <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-    //           style={{"width": row.original.porcentage}}></div>
-    //       </div>
-    //       <p>{row.original.porcentage} %</p>
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: () => (
-    //     <p>Porcentaje gastado</p>
-    //   )
-    // }),
   ]
 
   const table = data.length > 0? (

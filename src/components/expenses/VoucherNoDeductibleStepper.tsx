@@ -41,7 +41,6 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
     }else{
       if(file){
         const formdata = new FormData();
-        //formdata.append('subtotal', amount);
         formdata.append('costocenter', JSON.stringify(costcenter));
         formdata.append('date', date);
         formdata.append('description', description);
@@ -57,9 +56,6 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
           subtotal:amount.replace(/[$,]/g, ""),
           iva: 0,
           total: total.replace(/[$,]/g, ""),
-          //vat: idVat, 
-          // vatvalue: number no se usa 
-          // total: number no se usa 
         }));
         formdata.append('condition', JSON.stringify([{
           glossary: condition,
@@ -131,9 +127,6 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
             subtotal:amount.replace(/[$,]/g, ""),
             iva: 0,
             total: total.replace(/[$,]/g, ""),
-            //vat: idVat,
-            // vatvalue: number no se usa 
-            // total: number no se usa 
           },
           user:responsible, report, isticket:true, project, category, condition: {
             glossary: condition,

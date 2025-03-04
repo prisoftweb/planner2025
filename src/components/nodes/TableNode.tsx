@@ -11,9 +11,8 @@ import { Options } from "@/interfaces/Common";
 
 export default function TableNode({data, token, departments, glossaries, workflows, 
                             optDesc, optRels}:
-                        {data:NodeTable[], token:string, departments: Options[], 
-                          workflows: Options[], glossaries:Options[], 
-                          optRels: Options[], optDesc: Options[] }){
+  {data:NodeTable[], token:string, departments: Options[], workflows: Options[], 
+    glossaries:Options[], optRels: Options[], optDesc: Options[] }){
   
   const columnHelper = createColumnHelper<NodeTable>();
 

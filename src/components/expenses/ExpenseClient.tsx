@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Options } from "@/interfaces/Common"
-//import NavResponsive from "../projects/NavResponsive"
 import ProfileExpense from "./ProfileExpense"
 import { OneExpense } from "@/interfaces/Expenses"
 import UpdateExpense from "@/components/expenses/UpdateExpense";
@@ -14,12 +12,10 @@ import { useNewExpense } from "@/app/store/newExpense"
 import StatusCostComponent from "./StatusCostComponent"
 
 export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
-                            { token:string, id:string, user:string, 
-                              expense:OneExpense, isHistory?:boolean}){
+  { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
-    console.log('new expense => ', expense);
     updateCurrentExpense(expense);
 
     return () => updateCurrentExpense(null);
@@ -79,7 +75,6 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
         <div className="flex w-full max-w-5xl px-2 flex-wrap lg:flex-nowrap space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            {/* <ProfileProject project={project} /> */}
             <ProfileExpense expense={expense} />
           </div>
           {view}

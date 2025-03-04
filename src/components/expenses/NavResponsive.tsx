@@ -1,18 +1,14 @@
 import { ArrowDownTrayIcon} from "@heroicons/react/24/solid"
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
-
-//import { PiInvoiceFill } from "react-icons/pi";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { FaFilePdf } from "react-icons/fa6";
 import { BsFiletypeXml } from "react-icons/bs";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
-import {FcAdvance} from "react-icons/fc"
 
 export default function NavResponsive({open, setOpen, option, 
                   changeOption, isticket}: 
-                {open:boolean, setOpen:Function, option:number, 
-                  changeOption:Function, isticket:boolean}){
+  {open:boolean, setOpen:Function, option:number, changeOption:Function, isticket:boolean}){
 
   let props = {
     variants: {
@@ -89,17 +85,6 @@ export default function NavResponsive({open, setOpen, option,
               />
             </div>
         </Tooltip>
-        {/* <Tooltip closeDelay={0} delay={100} motionProps={props} content='status' 
-          className={`text-blue-500 bg-white`} placement="right">
-            <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
-              <FcAdvance className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
-                onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
-                  color: isHover===5 || option===5 ? 'white' : '',}}
-              />
-            </div>
-        </Tooltip> */}
       </div>
     )
   }else{
@@ -137,13 +122,6 @@ export default function NavResponsive({open, setOpen, option,
           <BsFiletypeXml className="w-4 h-4 mr-2 text-slate-500" />
           CFDI
         </div>
-        {/* <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
-          flex py-2 items-center ${option===5? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(5)}
-        >
-          <BsFiletypeXml className="w-4 h-4 mr-2 text-slate-500" />
-          Status
-        </div> */}
       </div>
     )
   }

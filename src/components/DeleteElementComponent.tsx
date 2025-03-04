@@ -25,16 +25,11 @@ export default function DeleteElementComponent({token, id, name, remove,
             res = await remove(token, id);
             if(res === 204) {
               showToastMessage(`${name} eliminado exitosamente!`);
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500)
             } else {
               showToastMessageError(`${name} no pudo ser eliminado..`);
             }
           } catch (error) {
             showToastMessageError(`${name} no pudo ser eliminado..`);
-            console.log('Error al eliminar');
-            console.log('error => ', error);
           }
         }           
       },
@@ -65,7 +60,6 @@ export default function DeleteElementComponent({token, id, name, remove,
   
     return(
     <>
-      {/* <TrashIcon width={20} height={20} className="text-red-500 hover:text-red-300 cursor-pointer" */}
       <TrashIcon className={`${colorIcon} cursor-pointer w-6 h-6`}  
         onClick={() => {
           deleteElement();

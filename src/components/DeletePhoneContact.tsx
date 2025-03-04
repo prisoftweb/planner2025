@@ -28,13 +28,10 @@ export default function DeletePhoneContact({token, phone, idC, numContacts} :
                 if(res === 204) {
                   showToastMessage('Telefono eliminado exitosamente!');
                   setTimeout(() => {
-                    // router.refresh();
-                    // router.push('/users');
                     window.location.reload();
                   }, 500)
                 } else {
                   showToastMessageError('El telefono no pudo ser eliminado..');
-                  //router.refresh()
                 }
               } catch (error) {
                 console.log('Error al eliminar telefono');

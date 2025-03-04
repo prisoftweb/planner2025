@@ -1,7 +1,5 @@
 'use client'
 import { useState, useRef } from "react";
-// import { useCallback } from 'react';
-// import { useDropzone} from 'react-dropzone';
 import NavExpenseStepper from "./NavExpenseStepper";
 import UploadFileDropZone from "../UploadFileDropZone";
 import Button from "../Button";
@@ -52,18 +50,16 @@ export default function VoucherStepper({token, user}: {token:string, user:string
     }else{
       if(file || CFDI){
         const formdata = new FormData();
-        //formdata.append('subtotal', amount);
+        
         formdata.append('costocenter', JSON.stringify(costcenter));
         formdata.append('date', date);
         formdata.append('description', description);
-        //formdata.append('discount', discount);
         formdata.append('folio', folio);
         formdata.append('provider', proveedor);
         formdata.append('user', responsible);
         formdata.append('taxfolio', taxFolio);
         formdata.append('typeCFDI', typeCFDI);
         formdata.append('project', project);
-        //formdata.append('vat', vat);
         formdata.append('report', report);
         formdata.append('category', category);
         formdata.append('isticket', JSON.stringify(false));
@@ -85,8 +81,6 @@ export default function VoucherStepper({token, user}: {token:string, user:string
           vat: idVat,
           exempttax: taxExempt.replace(/[$,]/g, ""),
           total: total.replace(/[$,]/g, ""),
-          // vatvalue: number no se usa 
-          // total: number no se usa 
         }));
         if(file){
           updateVoucher(file);
