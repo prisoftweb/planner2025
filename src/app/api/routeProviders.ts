@@ -231,6 +231,9 @@ export async function GetCostsProviderMINWithoutPay(auth_token:string, id:string
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
+      },
+      data: {
+        filter: "67318a51ceaf47ece0d3aa72"
       }
     });
     if(res.status===200) return res.data.data.stats

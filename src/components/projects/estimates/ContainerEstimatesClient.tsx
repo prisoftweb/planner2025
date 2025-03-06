@@ -31,7 +31,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
     return (
       <>
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <WithOut img="/img/projects.jpg" subtitle="Proyectos para estimar"
+          <WithOut img="/img/estimates/estimates.svg" subtitle="Proyectos para estimar"
             text="Aqui se mostraran los proyectos a los que se les puede realizar o consultar una estimacion"
             title="Proyectos para estimar">
               <></>

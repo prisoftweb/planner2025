@@ -100,18 +100,6 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         <p>Responsable</p>
       )
     }),
-    columnHelper.accessor('reference', {
-      id: 'Referencia',
-      cell: ({row}) => (
-        <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-        >{row.original.reference}</p>
-      ),
-      enableSorting:false,
-      header: () => (
-        <p>Referencia</p>
-      )
-    }),
     columnHelper.accessor('paymentplugin', {
       id: 'complemento',
       cell: ({row}) => (
@@ -124,23 +112,58 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         <p>Complemento</p>
       )
     }),
-    columnHelper.accessor('range', {
-      header: 'Rango',
-      id: 'Rango',
+    columnHelper.accessor('date', {
+      header: 'Fecha',
+      id: 'fecha',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+        >{row.original.date?.substring(0, 10) || ''}</p>
+      ),
+    }),
+    columnHelper.accessor('reference', {
+      id: 'Referencia',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
           onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-        >{row.original.range}</p>
+        >{row.original.reference}</p>
+      ),
+      enableSorting:false,
+      header: () => (
+        <p>Referencia de pago</p>
       )
     }),
+    columnHelper.accessor('datePaid', {
+      header: 'Fecha pago',
+      id: 'fechapago',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+        >{row.original.datePaid?.substring(0, 10) || ''}</p>
+      ),
+    }),
+    // columnHelper.accessor('range', {
+    //   header: 'Rango',
+    //   id: 'Rango',
+    //   cell: ({row}) => (
+    //     <p className="py-2 font-semibold cursor-pointer"
+    //       onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+    //     >{row.original.range}</p>
+    //   )
+    // }),
     columnHelper.accessor('notes', {
       header: 'Notas',
       id: 'Notas',
       cell: ({row}) => (
         row.original.notes.length < 100? (
-          <p className="cursor-pointer" 
-            onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-          >{row.original.notes}</p>
+          <>
+            <p className="cursor-pointer" 
+              onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+            >{row.original.notes}</p>
+            <p className="cursor-pointer" 
+              onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+            >{row.original.paymentplugin.notes}</p>
+          </>
         ): (
           <p className="cursor-pointer" 
             onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
@@ -158,13 +181,14 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         </div>
       ),
     }),
-    columnHelper.accessor('date', {
-      header: 'Fecha',
-      id: 'fecha',
+    columnHelper.accessor('methodofpayment', {
+      header: 'Forma de pago',
+      id: 'formapago',
       cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-        >{row.original.date?.substring(0, 10) || ''}</p>
+        <div className="cursor-pointer" 
+          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}>
+            <Chip label={row.original.methodofpayment.name} color={row.original.methodofpayment.color} />
+        </div>
       ),
     }),
     columnHelper.accessor('Quantity', {

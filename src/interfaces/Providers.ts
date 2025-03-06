@@ -132,6 +132,12 @@ export interface ExpensesTableProvider {
     date: string,
     notes: string
   }
+  datePaid: string,
+  methodofpayment: {
+    _id: string,
+    name: string,
+    color: string
+  }
 }
 
 export interface DetailExpensesTableProvider {

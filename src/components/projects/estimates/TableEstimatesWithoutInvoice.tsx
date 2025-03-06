@@ -30,7 +30,7 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
           <p className="text-xl mt-10 text-slate-700 font-bold" 
             // style={{maxInlineSize: '45ch', textWrap:'balance' }}
             >No hay estimaciones sin factura</p>
-          <img src="/img/projects.jpg" alt="image" className="w-60 h-auto" />
+          <img src="/img/estimates/estimates.svg" alt="image" className="w-60 h-auto" />
         </div>
         {/* <div className="mt-5 flex justify-between items-center bg-white">
           <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>

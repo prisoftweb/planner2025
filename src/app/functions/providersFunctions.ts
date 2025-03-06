@@ -203,7 +203,7 @@ export function getTypeFiles(expense:Expense) {
 
 export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvider[]){
   const table: ExpensesTableProvider[] = [];
-  
+  console.log('expenses payment => ', expenses);
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
@@ -213,64 +213,18 @@ export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvi
       currency: "MXN",
       value: expense.pending || 0
     })
-    // const elements: string[] = [];
-    // if(expense.category && expense.category?.name.toLowerCase().includes('xml') && expense.category?.name.toLowerCase().includes('pdf')){
-    //   const typeFiles = getTypeFiles(expense);
-    //   if(typeFiles.includes('xml')){
-    //     elements.push('xml');
-    //   }else{
-    //     elements.push('none');
-    //   }
-
-    //   if(typeFiles.includes('pdf')){
-    //     elements.push('pdf');
-    //   }else{
-    //     elements.push('none');
-    //   }
-    // }else{
-    //   if(expense.category && expense.category?.name.toLowerCase().includes('xml')){
-    //     const typeFiles = getTypeFiles(expense);
-    //     if(typeFiles.includes('xml')){
-    //       elements.push('xml');
-    //     }else{
-    //       elements.push('none');
-    //     }
-    //   }else{
-    //     if(expense.category && expense.category?.name.toLowerCase().includes('pdf')){
-    //       const typeFiles = getTypeFiles(expense);
-    //       if(typeFiles.includes('pdf')){
-    //         elements.push('pdf');
-    //       }else{
-    //         elements.push('none');
-    //       }
-    //     }else{
-    //       const typeFiles = getTypeFiles(expense);
-    //       if(typeFiles.includes('xml')){
-    //         elements.push('xml');
-    //       }
-    
-    //       if(typeFiles.includes('pdf')){
-    //         elements.push('pdf');
-    //       }
-
-    //       if(elements.length === 0){
-    //         elements.push('none');
-    //       }
-    //     }
-    //   }
-    // }
     table.push({
       id: expense._id,
-      //Estatus: expense.estatus,
       Estatus: expense.status,
       date: expense.date,
+      datePaid: expense.paymentplugin.date.substring(0, 10),
+      methodofpayment: expense.methodofpayment,
       Responsable: {
         responsible: expense.user.name,
         photo: expense.user.photo
       },
       archivos: (!expense.voucher || expense.voucher.includes('default.svg')? false: true),
       notes: expense.notes,
-      //paid: expense.cost.subtotal.toString(),
       paid: dollar,
       pending: pending,
       Quantity: expense.quantity.length.toString(),

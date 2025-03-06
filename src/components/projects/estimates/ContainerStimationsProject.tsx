@@ -111,8 +111,8 @@ export default function ContainerStimationsProject({project, optConditions, optP
   // console.log('aux => ', aux);
   // const percentajeAdvance = Number(((advance / project.amount) * 100).toFixed(2));
   // console.log('porcentaje adv => ', percentajeAdvance);
-  console.log('estimated total => ', totalEstimatedProject[0].estimatedTotal);
-  const percentajeAdvance = Number(((totalEstimatedProject[0].estimatedTotal / (project.amount * 1.16)) * 100).toFixed(2));
+  console.log('estimated total => ', totalEstimatedProject[0]?.estimatedTotal || totalEstimatedProject[0]);
+  const percentajeAdvance = Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
 
   // let component = tab===1? <TableInvoicesComponent token={token} project={project} />: (tab===2? <></>: 
   //                   <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
@@ -187,7 +187,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Monto total</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + totalEstimatedProjectState[0]?.estimatedTotal) || 0 : 0
+                value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + (totalEstimatedProjectState[0]?.estimatedTotal || 0)) || 0 : 0
               })}</p>
             </div>
 

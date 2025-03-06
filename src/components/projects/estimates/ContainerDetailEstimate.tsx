@@ -93,7 +93,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   //                         project={project} token={token} idEstimate={idEstimate} />)
   let component = <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
       handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-      project={project} token={token} idEstimate={idEstimate} estimatedTotal={totalEstimatedProjectState[0].estimatedTotal} />;
+      project={project} token={token} idEstimate={idEstimate} estimatedTotal={totalEstimatedProjectState[0]?.estimatedTotal || 0} />;
 // console.log('estimate => ', estimate);
 
   let button = <></>;
@@ -143,21 +143,21 @@ console.log('concepts estimate => ', conceptsData);
             <p className="text-slate-400">Acumulado estimado</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: totalEstimatedProjectState[0].estimatedTotal
+              value: totalEstimatedProjectState[0]?.estimatedTotal || 0
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Esta estimacion</p>
             <p className="text-lg text-green-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: estimate.estimatedTotal
+              value: estimate?.estimatedTotal || 0
             })}</p>
           </div>
           <div className="flex justify-between ">
             <p className="text-slate-400">Pendiente por estimar</p>
             <p className="text-lg text-slate-600 text-right">{CurrencyFormatter({
               currency: 'MXN',
-              value: project.amount - totalEstimatedProjectState[0].estimatedTotal
+              value: project.amount - (totalEstimatedProjectState[0]?.estimatedTotal || 0)
             })}</p>
           </div>
           <div className="flex justify-between ">

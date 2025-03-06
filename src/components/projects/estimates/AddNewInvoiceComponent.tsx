@@ -433,7 +433,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
       <form className="z-10 absolute top-16 w-full max-w-lg bg-white space-y-5 p-3 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
-          <HeaderForm img="/img/projects/default.svg" subtitle={"Crea factura apartir de "+ estimate?.Nombre} 
+          <HeaderForm img="/img/estimates/invoices.svg" subtitle={"Crea factura apartir de "+ estimate?.Nombre} 
             title={"Nueva factura de " + estimate?.Nombre}
           />
           <XMarkIcon className="w-6 h-6 text-slate-500

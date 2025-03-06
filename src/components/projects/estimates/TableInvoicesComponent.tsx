@@ -35,7 +35,7 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
           <p className="text-xl mt-10 text-slate-700 font-bold" 
             // style={{maxInlineSize: '45ch', textWrap:'balance' }}
             >Agregar una factura a una estimacion determinada de un proyecto.</p>
-          <img src="/img/projects/default.svg" alt="image" className="w-60 h-auto" />
+          <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
         </div>
       </>
     )

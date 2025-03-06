@@ -226,7 +226,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
       <form className="z-10 absolute top-16 w-full max-w-lg bg-white space-y-5 p-3 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
-          <HeaderForm img="/img/projects/default.svg" subtitle="Agrega los datos para la nueva estimacion" 
+          <HeaderForm img="/img/estimates/estimates.svg" subtitle="Agrega los datos para la nueva estimacion" 
             title="Nueva estimacion"
           />
           <XMarkIcon className="w-6 h-6 text-slate-500

@@ -36,6 +36,11 @@ export interface PaymentProvider {
     date: string,
     notes: string
   }
+  methodofpayment: {
+    _id: string,
+    name: string,
+    color: string
+  }
 }
 
 export interface CostPayment {
