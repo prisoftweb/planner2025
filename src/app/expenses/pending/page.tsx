@@ -2,9 +2,8 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
-// import { getAllCostsByCondition } from "../api/routeCost";
 import ContainerClient from "@/components/expenses/ContainerClient";
-import { getAllCostsByCondition, getAllCostsByUserAdmin, getAllCostsByUserNormal } from "@/app/api/routeCost";
+import { getAllCostsByUserAdmin, getAllCostsByUserNormal } from "@/app/api/routeCost";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 
 

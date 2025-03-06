@@ -18,11 +18,11 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function TableExpenses({data, token, expenses, 
                             handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
-                        isViewReports }:
+                        isViewReports, isPending }:
                         {data:ExpensesTable[], token:string, expenses:Expense[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
                         idValidado: string, handleExpensesSelected:Function, 
-                        isViewReports: boolean}){
+                        isViewReports: boolean, isPending:boolean}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
@@ -80,6 +80,8 @@ export default function TableExpenses({data, token, expenses,
 
   data.map((c) => !c.Descripcion || typeof(c.Descripcion) !== 'string' ? console.log('desc => ', c) : '');
 
+  const queryParam= isPending? '?status=pending': '';
+
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
@@ -130,7 +132,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'Proyecto',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Proyecto}</p>
       ),
       enableSorting:false,
@@ -143,7 +145,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'Informe',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Informe}</p>
       )
     }),
@@ -152,7 +154,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'Centro de costos',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.costcenter}</p>
       )
     }),
@@ -164,11 +166,11 @@ export default function TableExpenses({data, token, expenses,
           <>
             {row.original.Descripcion.length < 100? (
               <p className="cursor-pointer" 
-                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
               >{row.original.Descripcion}</p>
             ): (
               <p className="cursor-pointer" 
-                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
               >{row.original.Descripcion.substring(0, 100)}</p>
             )}
           </>
@@ -180,7 +182,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'proveedor',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Proveedor}</p>
       ),
     }),
@@ -189,7 +191,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'estatus',
       cell: ({row}) => (
         <div className="cursor-pointer" 
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}>
             <Chip label={row.original.condition} color={row.original.color} />
         </div>
       ),
@@ -199,7 +201,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
@@ -208,7 +210,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'importe',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
             currency: 'MXN',
@@ -222,7 +224,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'iva',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
             currency: 'MXN',
@@ -236,7 +238,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'descuento',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
             currency: 'MXN',
@@ -250,7 +252,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'total',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >
           {CurrencyFormatter({
             currency: "MXN",
@@ -264,7 +266,7 @@ export default function TableExpenses({data, token, expenses,
       id: 'Folio fiscal',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.taxFolio}</p>
       ),
     }),

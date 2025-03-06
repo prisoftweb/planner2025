@@ -120,6 +120,9 @@ export default function ContainerStimationsProject({project, optConditions, optP
   //                     delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
   //                     selEstimate={handleSelEstimate}  />)
 
+  console.log('total cost => ', totalEstimatedProject);
+  console.log('total cost json => ', JSON.stringify(totalEstimatedProject));
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -138,7 +141,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
         </div>
         <Button onClick={() => setOpenNewStimate(true)}>Agregar estimacion</Button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
           <img src={project.client.logo} 
             alt={project.client.name} className="h-32 w-auto " />
@@ -163,15 +166,49 @@ export default function ContainerStimationsProject({project, optConditions, optP
 
         <div className="bg-white p-3">
           <div className=" border border-gray-700">
-            <div className="flex items-center border border-gray-700">
-              <p className="bg-green-600 text-white p-2 w-52 text-center">TOTAL ESTIMADO</p>
-              {/* <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Monto a pagar</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
+                // value: advance
                 value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
-              })}</p> */}
+              })}</p>
+            </div>
+
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Monto a pagar + IVA</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayableVAT || 0 : 0
+              })}</p>
+            </div>
+
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Monto total</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + totalEstimatedProjectState[0]?.estimatedTotal) || 0 : 0
+              })}</p>
+            </div>
+
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Pendiente de estimar</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.pendingEstimated || 0 : 0
+              })}</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="bg-white p-3">
+          <div className=" border border-gray-700">
+            <div className="flex items-center border border-gray-700">
+              <p className="bg-green-600 text-white p-2 w-52 text-center">ESTIMADO</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.estimatedTotal || 0 : 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountEstimated || 0 : 0
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
@@ -204,14 +241,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
                 value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountGuaranteeFund || 0 : 0
-              })}</p>
-            </div>
-
-            <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Monto total</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
-                value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + totalEstimatedProjectState[0]?.estimatedTotal) || 0 : 0
               })}</p>
             </div>
           </div>

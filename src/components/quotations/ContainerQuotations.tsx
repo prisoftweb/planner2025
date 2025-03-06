@@ -58,8 +58,11 @@ export default function ContainerQuotations({quotations, token, user}:
                       luego en proyectos de la empresa"
               title="Cotizaciones ">
                 <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
+                {/* <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button> */}
             </WithOut>
           </div>
+          {showNewQuotation && <NewQuotation showForm={handleShowNewQuotation} token={token} usr={user._id} 
+              updateQuotations={refreshQuatations} />}
         </>
       )
     }

@@ -1,7 +1,7 @@
 import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
-import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders";
+import { getProvider, getProviders, GetCostsProviderMINWithoutPay } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
 import { HistoryExpensesTable, Provider } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
@@ -9,6 +9,7 @@ import { Expense } from "@/interfaces/Expenses";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableHistoryCosts from "@/components/providers/ContainerTableHistoryCosts";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
+import ContainerTablePendinginvoices from "@/components/providers/ContainerTablePendingInvoices";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -37,7 +38,8 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let costs: Expense[];
   try {
-    costs = await GetCostsMIN(token, params.id);
+    // costs = await GetCostsMIN(token, params.id);
+    costs = await GetCostsProviderMINWithoutPay(token, params.id);
     if(typeof(costs) === "string")
       return <h1 className="text-center text-red-500">{costs}</h1>
   } catch (error) {
@@ -71,8 +73,8 @@ export default async function Page({ params }: { params: { id: string }}){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <NavTab idProv={params.id} tab='3' />
-        <ContainerTableHistoryCosts data={table} expenses={costs} token={token} 
+        <NavTab idProv={params.id} tab='2' />
+        <ContainerTablePendinginvoices data={table} expenses={costs} token={token} 
           user={user._id} optTypes={optTypes} provider={provider} condition={cond} />
       </div>
     </>

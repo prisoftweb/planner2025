@@ -10,10 +10,6 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
   {paymentPlugin:string, setPaymentPlugin:Function, date:string, setDate:Function, 
     comments:string, setComments: Function, nextStep:Function}) {
 
-  // const [paymentPlugin, setPaymentPlugin] = useState<string>('');
-  // const [date, setDate] = useState<string>('');
-  // const [comments, setComments] = useState<string>('');
-  
   const [paymentPluaginLabel, setPaymentPluginLabel] = useState<string>('');
   const [dateLabel, setDateLabel] = useState<string>('');
   const [commentsLabel, setCommentsLabel] = useState<string>('');
@@ -27,7 +23,7 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
 
     if(!paymentPlugin || paymentPlugin===''){
       band=false;
-      setPaymentPluginLabel('El complemeto de pago es obligatorio!!!');
+      setPaymentPluginLabel('El complemento de pago es obligatorio!!!');
     }
 
     if(!date || date===''){
@@ -41,8 +37,6 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
     }
 
     if(band){
-      //Next page
-      // paidExpenses();
       nextStep(2);
     }
   }
@@ -52,7 +46,12 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
       <div className="grid grid-cols-2 gap-x-3 gap-y-3">
         <div>
           <Label htmlFor="payment">Complemento de pago</Label>
-          <CurrencyInput
+          <Input
+            onChange={(e) => setPaymentPlugin(e.target.value)}
+            value={paymentPlugin.replace(/[$,","]/g, "") || ''}
+            autoFocus
+          />
+          {/* <CurrencyInput
             id="creditlimit"
             name="creditlimit"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
@@ -62,7 +61,7 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
             decimalsLimit={2}
             prefix="$"
             autoFocus
-          />
+          /> */}
           <p className="text-red-500" >{paymentPluaginLabel}</p>
         </div>
         <div>

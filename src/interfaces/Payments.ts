@@ -32,7 +32,7 @@ export interface PaymentProvider {
   quantity: string[]
   status: boolean
   paymentplugin: {
-    amount: number,
+    plugin: number,
     date: string,
     notes: string
   }
@@ -136,6 +136,11 @@ export interface OnePayment {
   status: boolean
   __v: number
   id: string
+  paymentplugin: {
+    plugin: number,
+    date: string,
+    notes: string
+  }
 }
 
 export interface pendingPaymentProvider {

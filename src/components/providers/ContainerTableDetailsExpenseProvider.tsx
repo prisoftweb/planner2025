@@ -1,12 +1,7 @@
 'use client'
 
-import { ExpensesTableProvider } from "@/interfaces/Providers"
-// import { Expense, ExpensesTable } from "@/interfaces/Expenses"
-//import TableCostsProvider from "./TableCostsProvider"
-//import Selectize from "../Selectize"
 import ArrowReturn from "../ArrowReturn"
 import IconText from "./IconText"
-// import { Provider } from "@/interfaces/Providers"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
@@ -31,17 +26,10 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
     user: UsrBack, provider: ProviderMin, payment: OnePayment}) {
 
   const [filter, setFilter] = useState<boolean>(false);
-  // const [expensesSelected, setExpensesSelected] = useState<ExpensesTableProvider[]>([]);
-  //const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
-
+  
   const handleFilter = (value: boolean) => {
     setFilter(value);
   }
-
-  // useEffect(() => {
-  //   console.log('costos => ', expenses);
-  //   console.log('data tabla => ', data);
-  // }, []);
 
   let props = {
     variants: {
@@ -62,6 +50,8 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
     },
   }
 
+  console.log('payment => ', payment);
+
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap gap-y-3">
@@ -70,7 +60,6 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
           <IconText text={provider?.tradename || ''} size="w-8 h-8" sizeText="" />
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
-        {/* <Selectize options={options} routePage="providers" subpath="/invoiceHistory" /> */}
         <div className="flex gap-x-2">
           <SearchInTable placeH={"Buscar gasto.."} />
           <div className={`w-24`}>

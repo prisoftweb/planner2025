@@ -1,12 +1,9 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
-import { Report, CostReport } from '@/interfaces/Reports'
-//import { Expense } from '@/interfaces/Expenses'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { DetailExpensesTableProvider } from '@/interfaces/Providers'
 import { ProviderMin } from "@/interfaces/Providers"
 import { OnePayment } from '@/interfaces/Payments'
 import { UsrBack } from '@/interfaces/User'
-import { MoneyFormatter } from '@/app/functions/Globals'
 
 export default function ReportPaymentPDF({costs, provider, payment, user}: 
     {costs: DetailExpensesTableProvider[], provider: ProviderMin, user: UsrBack, payment: OnePayment}){
@@ -116,15 +113,29 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
               <View style={{backgroundColor: 'green', color: 'white', padding: '3px', width: '50%'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>
                 {provider.estatus? (typeof(provider.estatus)==='string'? provider.estatus : provider.estatus.name) : 'Sin condicion'}
                 </Text></View>
-              <View style={{padding: '3px', display:'flex', flexDirection:'row', justifyContent:'center', width: '50%'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>Pago</Text></View>
+              <View style={{padding: '3px', width: '50%'}}>
+                <View style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                  <Text style={{textAlign: 'center', fontSize: '12px'}}>Pago</Text>
+                </View>
+                <View style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+                  <Text style={{textAlign: 'center', fontSize: '12px', color:'green'}}>{payment.paymentplugin.plugin}</Text>
+                </View>
+              </View>
             </View>
-            <View style={{ display:'flex', flexDirection: 'row', justifyContent: 'center', border: '1px solid gray', padding: '3px'}}><Text style={{textAlign: 'center', fontSize: '12px'}}>
-                {CurrencyFormatter({
-                  currency: 'MXN',
-                  value: totalAllCosts
-                })}
-                {/* {MoneyFormatter(totalAllCosts)} */}
-              </Text></View>
+            <View style={{ border: '1px solid gray', padding: '3px'}}>
+              <View style={{display:'flex', flexDirection: 'row', justifyContent: 'center',}} >
+                <Text style={{textAlign: 'center', fontSize: '12px'}}>
+                  {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: totalAllCosts
+                  })}
+                </Text>
+              </View>
+              <View style={[style.inLineText, {justifyContent: 'flex-end', borderTop: '1px solid gray'}]}>
+                <Text style={style.textLeft}>Fecha:</Text>
+                <Text style={style.textRight}> {payment.paymentplugin?.date?.substring(0, 10) || 'sin fecha'}</Text>
+              </View>
+            </View>
           </View>
         </View>
 
@@ -156,8 +167,12 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
 
           <View style={{textAlign: 'right'}}>
             <View style={[style.inLineText, {justifyContent: 'flex-end'}]}>
-              <Text style={style.textLeft}>Fecha:</Text>
+              <Text style={style.textLeft}>Fecha de pago:</Text>
               <Text style={style.textRight}>{payment.date.substring(0, 10)}</Text>
+            </View>
+            <View style={[style.inLineText, {justifyContent: 'flex-end'}]}>
+              <Text style={style.textLeft}>Referencia:</Text>
+              <Text style={style.textRight}>{payment.reference}</Text>
             </View>
             <View style={[style.inLineText, {justifyContent: 'flex-end'}]}>
               <Text style={style.textLeft}>Forma de pago:</Text>

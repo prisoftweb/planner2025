@@ -25,8 +25,6 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   costsPayment.map((c) => {
     a += c.paid;
   });
-
-  // console.log('Payment plugin recivido => ', paymentPlugin);
               
   const [amount, setAmount] = useState<string>(a.toString());
   const [reference, setReference] = useState<string>('');
@@ -41,7 +39,6 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
   const [pending, setPending] = useState<number>(-1);
   const [paidMethod, setPaidMethod] = useState<string>(optTypes[0].value);
-  // const [previousbalanceamount, setPreviousbalanceamount] = useState<number>(0);
 
   const handlePaidMethod = (value: string) => {
     setPaidMethod(value);
@@ -98,16 +95,18 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   }
 
   const paidExpenses = async() => {
-    console.log('pending => ',pending);
-    console.log('pago => ', Number(amount.replace(/[$,","]/g, "")));
     let pen = pending - Number(amount.replace(/[$,","]/g, ""));
-
-    console.log('res pen => ', pen);
 
     console.log('payment plugin => ', paymentPlugin);
 
+    // const paymentplugin = {
+    //   amount: Number(paymentPlugin.replace(/[$,","]/g, "")),
+    //   date: datePayment,
+    //   notes: commentsPayment
+    // }
+
     const paymentplugin = {
-      amount: Number(paymentPlugin.replace(/[$,","]/g, "")),
+      plugin: Number(paymentPlugin.replace(/[$,","]/g, "")),
       date: datePayment,
       notes: commentsPayment
     }
@@ -227,14 +226,16 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
       console.log('data payment => ', JSON.stringify(data));
       // showToastMessage('pagado!!!');
-      const res = await createPayments(token, data);
-      if(typeof(res) === 'string'){
-        showToastMessageError(res);
-      }else{ 
-        showToastMessage('Costos pagados exitosamente!!!');
-        updateTable();
-        showForm(false);
-      }
+      showToastMessage('Costos pagados exitosamente!!!');
+      showForm(false);
+      // const res = await createPayments(token, data);
+      // if(typeof(res) === 'string'){
+      //   showToastMessageError(res);
+      // }else{ 
+      //   showToastMessage('Costos pagados exitosamente!!!');
+      //   updateTable();
+      //   showForm(false);
+      // }
     }
   }
 

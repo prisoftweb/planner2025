@@ -1,15 +1,13 @@
 import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
-import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders";
+import { getProvider, getProviders } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { ExpensesTableProvider, HistoryExpensesTable, Provider } from "@/interfaces/Providers";
-import { Options } from "@/interfaces/Common";
-import { ExpenseDataToTableHistoryProviderData, ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
+import { ExpensesTableProvider, Provider } from "@/interfaces/Providers";
+import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableExpensesProvider from "@/components/providers/ContainerTableExpensesProvider";
-import { Expense } from "@/interfaces/Expenses";
-import { Payment, PaymentProvider } from "@/interfaces/Payments";
-import { getPaymentsProvider, getPayments } from "@/app/api/routePayments";
+import { PaymentProvider } from "@/interfaces/Payments";
+import { getPaymentsProvider } from "@/app/api/routePayments";
 
 export default async function Page({ params }: { params: { id: string }}){
   

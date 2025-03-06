@@ -117,10 +117,7 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
           onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-        >{CurrencyFormatter({
-          currency: 'MXN',
-          value: row.original?.paymentplugin?.amount || 0
-        })}</p>
+        >{row.original?.paymentplugin?.plugin}</p>
       ),
       enableSorting:false,
       header: () => (

@@ -387,7 +387,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                   prefix="$"
                   disabled={isdisabled}
                 />
-                {isdisabled && (
+                {!isdisabled && (
                   <p className="text-red-500 text-xs">No se puede agregar Amortizacion porque supero el anticipo de {CurrencyFormatter({
                     currency: 'MXN',
                     value: advange

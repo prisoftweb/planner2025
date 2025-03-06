@@ -3,7 +3,6 @@
 import { HistoryExpensesTable } from "@/interfaces/Providers"
 import { Expense } from "@/interfaces/Expenses"
 import TableHistoryCosts from "./TableHistoryCosts"
-//import Selectize from "../Selectize"
 import ArrowReturn from "../ArrowReturn"
 import IconText from "./IconText"
 import { Provider } from "@/interfaces/Providers"
@@ -18,14 +17,14 @@ import { showToastMessageError } from "../Alert"
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions"
 import { useEffect } from "react"
 
-export default function ContainerTableHistoryCosts({data, token, expenses, user, 
+export default function ContainerTablePendinginvoices({data, token, expenses, user, 
     provider, optTypes, condition}:
   {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
     user: string, provider: Provider, optTypes: Options[], condition: string}) {
 
   const [filter, setFilter] = useState<boolean>(false);
-  // const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
-  // const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
+  const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
+  const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
   const [dataTable, setDataTable] = useState<HistoryExpensesTable[]>(data);
   const [costsProvider, setCostProvider] = useState<Expense[]>(expenses);
   const [currentCostsProvider, setCurrentCostProvider] = useState<Expense[]>(expenses);
@@ -37,36 +36,36 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
     setFilter(value);
   }
 
-  // const handlePaidExpenses = (value: boolean) => {
-  //   setPaidExpenses(value);
-  // }
+  const handlePaidExpenses = (value: boolean) => {
+    setPaidExpenses(value);
+  }
 
   const handleExpensesSelected = (value: HistoryExpensesTable[]) => {
     // const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' 
     //                     && c.Estatus._id !== '67378f77d846bbd16e1a8714');
-    // const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
-    //                                     c.Estatus._id !== '661eade6f642112488c85fad' &&
-    //                                     c.Estatus._id !== '661eaa71f642112488c85f59' &&
-    //                                     c.Estatus._id !== '661eaa4af642112488c85f56' );
-    // setExpensesSelected(noPaid);
+    const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
+                                        c.Estatus._id !== '661eade6f642112488c85fad' &&
+                                        c.Estatus._id !== '661eaa71f642112488c85f59' &&
+                                        c.Estatus._id !== '661eaa4af642112488c85f56' );
+    setExpensesSelected(noPaid);
   }
 
-  // const updateTable = async () => {
-  //   let costs: Expense[];
-  //   try {
-  //     costs = await GetCostsMIN(token, provider._id);
-  //     if(typeof(costs) === "string")
-  //       showToastMessageError('Error al actualizar tabla!!!');
-  //     else{
-  //       const table: HistoryExpensesTable[] = ExpenseDataToTableHistoryProviderData(costs);
-  //       setDataTable(table);
-  //       setCurrentCostProvider(costs);
-  //       setCostProvider(costs);
-  //     }
-  //   } catch (error) {
-  //     showToastMessageError('Error al actualizar tabla!!!');  
-  //   }
-  // }
+  const updateTable = async () => {
+    let costs: Expense[];
+    try {
+      costs = await GetCostsMIN(token, provider._id);
+      if(typeof(costs) === "string")
+        showToastMessageError('Error al actualizar tabla!!!');
+      else{
+        const table: HistoryExpensesTable[] = ExpenseDataToTableHistoryProviderData(costs);
+        setDataTable(table);
+        setCurrentCostProvider(costs);
+        setCostProvider(costs);
+      }
+    } catch (error) {
+      showToastMessageError('Error al actualizar tabla!!!');  
+    }
+  }
 
   useEffect(() => {
     const expenseM = expenses.reduce((previous, current) => {
@@ -167,7 +166,7 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
         {/* <Selectize options={options} routePage="providers" subpath="/invoiceHistory" /> */}
         <div className="flex gap-x-2">
           <SearchInTable placeH={"Buscar gasto.."} />
-          {/* <div className={`w-24`}>
+          <div className={`w-24`}>
             <div className="flex gap-x-4 justify-end items-center">
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
@@ -178,7 +177,7 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
                 />
               )}
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
       <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
@@ -186,11 +185,11 @@ export default function ContainerTableHistoryCosts({data, token, expenses, user,
         user={user} isViewReports={false} data={dataTable} idProv={provider._id}
         filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
       />
-      {/* {paidExpenses && (
+      {paidExpenses && (
         <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
             showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable}
             optTypes={optTypes} />
-      )} */}
+      )}
     </div>
   )
 }

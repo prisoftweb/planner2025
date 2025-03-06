@@ -18,7 +18,8 @@ export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
       amountVat: estimate.amountPayableVAT?? 0,
       haveInvoice: estimate.haveinvoice,
       idProject: estimate.project._id,
-      project: estimate.project.title
+      project: estimate.project.title,
+      numConcepts: estimate.concepts?.length || 0
     });
   });
 
@@ -43,7 +44,8 @@ export function EstimatesWitoutInvoiceDataToEstimatesTable(estimates:IEstimateMi
       amountVat: estimate.amountPayableVAT?? 0,
       haveInvoice: false,
       idProject: estimate.project._id,
-      project: estimate.project.title
+      project: estimate.project.title,
+      numConcepts: estimate.concepts?.length || 0
     });
   });
 

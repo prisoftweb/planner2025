@@ -15,8 +15,7 @@ import RemoveElement from "@/components/RemoveElement";
 import { removeEstimate } from "@/app/api/routeEstimates";
 import { BsFilePdfFill } from "react-icons/bs";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
-import { ResumenEstimateProject } from "@/interfaces/Estimate";
-import { getResumenEstimateProject } from "@/app/api/routeEstimates";
+import NumberContacts from "@/components/providers/NumberContacts";
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
   isFilterTable, delEstimate, token, showNewInvoice, selEstimate }: 
@@ -118,6 +117,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
                 showNewInvoice(true);
             }} />
           )}
+          <NumberContacts numContacts={row.original.numConcepts} />
         </div>
       ),
       size: 300,
@@ -270,6 +270,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
     orden: true,
   }
 
+  console.log('estimates table  => ', estimates);
   let dataTable;
   if(isFilterTable){
     dataTable = EstimatesDataToEstimatesTable(filterEstimates);

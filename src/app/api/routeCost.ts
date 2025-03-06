@@ -249,16 +249,19 @@ export async function GetCost(auth_token:string, id:string) {
 
 export async function GetCostMIN(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCost/${id}`;
+  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
+    console.log('res => ', res);
     if(res.status===200) return res.data.data.data[0];
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
+      console.log('error => ', error);
       return error.response?.data.message || 'Error al consultar costo!!';
     }
     return 'Error al consultar informacion del costo costo!!';

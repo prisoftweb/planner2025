@@ -16,6 +16,7 @@ export interface TableEstimatesProject {
   haveInvoice: boolean,
   idProject: string
   project: string
+  numConcepts: number
 }
 
 export interface IEstimateProject {
@@ -44,6 +45,21 @@ export interface IEstimateProject {
   estimatedTotal: number,
   condition: Glossary,
   haveinvoice: boolean
+  concepts: {
+    conceptEstimate: string
+    priceConcepEstimate: {
+      cost: number
+      date: string
+    }
+    area: string
+    section: string
+    quantity: number
+    amount: number
+    date: string
+    user: string
+    status: boolean
+    _id: string
+  }[]
 }
 
 export interface IEstimate {
@@ -211,11 +227,21 @@ export interface PriceConcept {
 }
 
 export interface TotalEstimatedByProject {
+  // quantity: number
+  // estimatedTotal: number
+  // amountGuaranteeFund: number
+  // amountChargeOff: number
+  // amountPayable: number
+  // project: string
   quantity: number
   estimatedTotal: number
+  amountEstimated: number
+  moneyAdvance: number
   amountGuaranteeFund: number
   amountChargeOff: number
   amountPayable: number
+  amountPayableVAT: number
+  pendingEstimated: number
   project: string
 }
 
