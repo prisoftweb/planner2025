@@ -10,18 +10,18 @@ console.log('quatation min => ', quatation);
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>
-              <img src={'/img/projects/default.svg'} alt="logo" className="w-full max-w-28 h-auto rounded-sm" />
+              <img src={'/img/estimates/quotations.svg'} alt="logo" className="w-full max-w-28 h-auto rounded-sm" />
             </div>
             <div>
               <p className="text-slate-500">Cliente</p>
-              <p className="text-blue-500 text-lg">{quatation.client.name}</p>
+              <p className="text-blue-500 text-lg">{quatation?.client?.name || ''}</p>
             </div>
           </div>
 
-          <div className="flex gap-x-2 mt-2">
+          <div className="flex gap-x-2 justify-between items-end mt-2">
             <div>
               <p className="text-slate-500">Solicita</p>
-              <p className="text-green-500 text-lg">{quatation.user.name}</p>
+              <p className="text-green-500 text-lg">{quatation.applicant.name}</p>
             </div>
             <div>
               <Chip label={quatation.condition[0].name} color={quatation.condition[0].color} />
@@ -30,9 +30,8 @@ console.log('quatation min => ', quatation);
         </div>
 
         <div className="bg-white p-3 rounded-lg shadow-md mt-2">
-          <p className="text-blue-500">Vichisa fase II</p>
-          <p className="text-slate-500 text-xs mt-1">Cotizacion de fase II, muros exterior y plafones
-              ciegos en cuarto de maquinas.</p>
+          <p className="text-blue-500">Proyecto</p>
+          <p className="text-slate-500 text-xs mt-1">{quatation.description}</p>
         </div>
          
         <div className="my-2 bg-white p-3 rounded-lg shadow-md py-2">
@@ -42,7 +41,7 @@ console.log('quatation min => ', quatation);
                 <p className="text-slate-500">Monto cotizado</p>
                 <p className="text-green-600">{CurrencyFormatter({
                   currency: 'MXN',
-                  value: quatation.amountotal
+                  value: quatation.cost.total
                 })}</p>
               </div>
               <div className="">
@@ -51,11 +50,11 @@ console.log('quatation min => ', quatation);
               </div>
               <div className="">
                 <p className="text-slate-500">Fecha solicitud</p>
-                <p className="text-blue-500">{quatation?.shippingdate?.substring(0, 10) || 'sin fecha'}</p>
+                <p className="text-blue-500">{quatation?.applicationdate?.substring(0, 10) || 'sin fecha'}</p>
               </div>
               <div className="">
                 <p className="text-slate-500">Fecha envio</p>
-                <p className="text-blue-500">{quatation?.shippingdate?.substring(0, 10) || 'sin fecha'}</p>
+                <p className="text-blue-500">{quatation?.expirationdate?.substring(0, 10) || 'sin fecha'}</p>
               </div>
             </div>
           </div>

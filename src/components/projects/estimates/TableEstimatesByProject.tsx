@@ -16,6 +16,8 @@ import { removeEstimate } from "@/app/api/routeEstimates";
 import { BsFilePdfFill } from "react-icons/bs";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import NumberContacts from "@/components/providers/NumberContacts";
+import { IconButton, Badge } from "@mui/material";
+import MailIcon from '@mui/icons-material/Mail';
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
   isFilterTable, delEstimate, token, showNewInvoice, selEstimate }: 
@@ -104,10 +106,13 @@ export default function TableEstimatesByProject({project, optConditions, optProj
           /> */}
           <RemoveElement id={row.original.id} name={row.original.Nombre} remove={removeEstimate} 
             removeElement={delEstimate} token={token} />
-          <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
-              refEstimate.current = row.original.id;
-              setIsShowDetailEstimate(true);
-          }} />
+          <Badge color="secondary" badgeContent={row.original.numConcepts}>
+            <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
+                refEstimate.current = row.original.id;
+                setIsShowDetailEstimate(true);
+            }} />
+          </Badge>
+          
           {row.original.haveInvoice? (
             <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
           ): (
@@ -117,7 +122,10 @@ export default function TableEstimatesByProject({project, optConditions, optProj
                 showNewInvoice(true);
             }} />
           )}
-          <NumberContacts numContacts={row.original.numConcepts} />
+          {/* <NumberContacts numContacts={row.original.numConcepts} /> */}
+          {/* <Badge color="secondary" badgeContent={row.original.numConcepts}>
+            <MailIcon />
+          </Badge> */}
         </div>
       ),
       size: 300,

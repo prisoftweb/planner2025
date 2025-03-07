@@ -22,9 +22,9 @@ export default function UpdateQuatationComponent({token, id, quatation, usr}:
   const [client, setClient] = useState<string>(quatation.client._id);
   const [notes , setNotes] = useState<string>(quatation.description);
   const [title, setTitle] = useState<string>(quatation.title);
-  const [amount, setAmount] = useState<string>(quatation?.amountotal?.toString() || '0');
-  const [total, setTotal] = useState<string>(quatation.amountotal?.toString() || '0');
-  const [vat, setVat] = useState<string>('0');
+  const [amount, setAmount] = useState<string>(quatation?.cost.subtotal?.toString() || '0');
+  const [total, setTotal] = useState<string>(quatation.cost?.total?.toString() || '0');
+  const [vat, setVat] = useState<string>(quatation.cost?.iva?.toString() || '0');
   const [datesol, setDatesol]=useState<string>('');
   const [dateven, setDateven]=useState<string>('');
 

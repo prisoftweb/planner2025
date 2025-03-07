@@ -161,11 +161,19 @@ export default function ContainerStimationsProject({project, optConditions, optP
 
         <div className="bg-white p-3">
           <DonutChartComponent data={dataEstimatesDashboard} colors={colors} category="costo"
-                        categories={categoriesEstimates} flexWrap="" size="w-60 h-60" />
+                        categories={categoriesEstimates} flexWrap="" size="w-60 h-60" showLegend={false} />
         </div>
 
         <div className="bg-white p-3">
           <div className=" border border-gray-700">
+            <div className="flex items-center border border-gray-700">
+              <p className="bg-green-600 text-white p-2 w-52 text-center">Projecto</p>
+              <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
+                currency: 'MXN',
+                value: project.amount || 0
+              })}</p>
+            </div>
+
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Monto a pagar</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({

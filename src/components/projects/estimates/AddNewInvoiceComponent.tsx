@@ -430,7 +430,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
 
   return(
     <>
-      <form className="z-10 absolute top-16 w-full max-w-lg bg-white space-y-5 p-3 right-0"
+      <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
           <HeaderForm img="/img/estimates/invoices.svg" subtitle={"Crea factura apartir de "+ estimate?.Nombre} 
@@ -463,34 +463,14 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               <SelectReact index={indexCLi} opts={optClients} setValue={handleClient} disabled={!editClient} />
             </div>
           )}
-          {catalogCFDI.length > 0 && (
-            <div className=" col-span-3">
-              <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-              <SelectReact index={0} opts={catalogCFDI} setValue={handleType} />
-            </div>
-          )}
-
-          <div className=" col-span-2">
+          
+          <div className=" col-span-3">
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
             {bandDate && (
               <p className="text-red-700">Ingrese una fecha valida!!!!</p>
             )}
           </div>
-
-          {catalogPaymentMethod && (
-            <div className=" col-span-2">
-              <Label htmlFor="methodPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Metodo de pago</p></Label>
-              <SelectReact index={0} opts={catalogPaymentMethod} setValue={handleMethodPaid} />
-            </div>
-          )}
-
-          {catalogFormPayment && (
-            <div className=" col-span-2">
-              <Label htmlFor="formPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Forma de pago</p></Label>
-              <SelectReact index={0} opts={catalogFormPayment} setValue={handleFormPaid} />
-            </div>
-          )}
 
           <div className=" col-span-2">
             <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
@@ -507,7 +487,28 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               <p className="text-red-700">Ingrese un folio fiscal valido!!!!</p>
             )}
           </div>
-      
+
+          {catalogPaymentMethod && (
+            <div className=" col-span-3">
+              <Label htmlFor="methodPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Metodo de pago</p></Label>
+              <SelectReact index={0} opts={catalogPaymentMethod} setValue={handleMethodPaid} />
+            </div>
+          )}
+
+          {catalogFormPayment && (
+            <div className=" col-span-3">
+              <Label htmlFor="formPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Forma de pago</p></Label>
+              <SelectReact index={0} opts={catalogFormPayment} setValue={handleFormPaid} />
+            </div>
+          )}
+
+          {catalogCFDI.length > 0 && (
+            <div className=" col-span-6">
+              <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
+              <SelectReact index={0} opts={catalogCFDI} setValue={handleType} />
+            </div>
+          )}
+
         </div>
 
         <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">

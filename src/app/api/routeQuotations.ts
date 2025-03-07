@@ -97,3 +97,41 @@ export async function updateQuotation(auth_token:string, data:Object, id:string)
     return 'Error al actualizar cotizacion!!';
   }
 }
+
+export async function getContactsClient(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/getAllContactsByClient/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    console.log(typeof(error));
+    console.log(error);
+    return 'Error al obtener contactos';
+  }
+}
+
+export async function getContactsClientLV(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/getAllContactsByClientLV/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener contactos';
+  }
+}

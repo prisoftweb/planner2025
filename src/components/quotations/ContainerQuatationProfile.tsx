@@ -1,10 +1,10 @@
 'use client'
-import { IQuotationMin } from "@/interfaces/Quotations"
+import { IOneQuotationMin } from "@/interfaces/Quotations"
 import UpdateQuatationComponent from "./UpdateQuatationComponent"
 import ProfileQuatation from "./ProfileQuatation"
 
 export default function ContainerQuatationProfile({quatation, token, usr}: 
-  {quatation: IQuotationMin, usr:string, token:string}) {
+  {quatation: IOneQuotationMin, usr:string, token:string}) {
 
   return (
     <>

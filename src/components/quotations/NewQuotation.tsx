@@ -11,7 +11,9 @@ import { getClientsLV } from "@/app/api/routeClients"
 import { Options } from "@/interfaces/Common"
 import { showToastMessageError } from "../Alert"
 import { getUsersLV } from "@/app/api/routeUser"
-import { createQuotation } from "@/app/api/routeQuotations"
+import { createQuotation, getContactsClientLV } from "@/app/api/routeQuotations"
+import RatingComponent from "./RatingComponent"
+import Select from 'react-select'
 
 export default function NewQuotation({showForm, token, usr, updateQuotations}: 
   {showForm:Function, token:string, usr:string, updateQuotations: Function}){
@@ -27,6 +29,11 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const [vat, setVat] = useState<string>('0');
   const [datesol, setDatesol]=useState<string>('');
   const [dateven, setDateven]=useState<string>('');
+  const [score, setScore]=useState<number>(3);
+  const [haveDiscount, setHaveDiscount]=useState<boolean>(false);
+  const [discount, setDiscount]=useState<string>('0');
+  const [optContacts, setoptContacts]=useState<Options[]>([]);
+  const [contact, setContact]=useState<string>('');
 
   const [message, setMessage] = useState<number>(0);
 
@@ -38,6 +45,11 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
       }else{
         setOptClients(opCli);
         setClient(opCli[0].value);
+        const conts = await fetchContacts(token, opCli[0].value);
+        if(conts){
+          setoptContacts(conts);
+          setContact(conts[0].value);
+        }
       }
 
       const opUs: Options[] = await getUsersLV(token);
@@ -58,6 +70,23 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   const handleClient = (value: string) => {
     setClient(value);
+    updateOptionsContacts(value);
+  }
+
+  const handleContact = (value: string) => {
+    setContact(value);
+  }
+
+  const handleScore = (value:number) => {
+    setScore(value);
+  }
+
+  const updateOptionsContacts = async (idCli:string) => {
+    const conts = await fetchContacts(token, idCli);
+    if(conts){
+      setoptContacts(conts);
+      setContact(conts[0].value);
+    }
   }
 
   const validation = () => {
@@ -111,16 +140,21 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         title,
         description:notes,
         applicationdate:datesol,
-        shippingdate:dateven,
-        amountotal:Number(total),
+        expirationdate:dateven,
+        cost: {
+          subtotal: Number(amount),
+          iva: Number(vat),
+          total: Number(total)
+        },
+        score,
         condition: [
-            {
-                glossary: "676359f2a4077026b9c37660",
-                user
-            }
+          {
+            glossary: "67b910014643d85abda93cc0",
+            user
+          }
         ],
         client,
-        applicant: "67b905784643d85abda93c51",
+        applicant: contact,
         user 
       }
 
@@ -131,6 +165,67 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         updateQuotations();
         showForm(false);
       }
+    }
+  }
+
+  const updateIva = (amountVal: string, discounVal: string) => {
+    try {
+      // const foundVat = vats.find((vat) => vat.value === idValue);
+      // const vatvalue = foundVat?.label || '0';
+      const vatvalue = '16';
+      let operation;
+      let t = 0;
+      if(haveDiscount){
+        operation = (Number(amountVal.replace(/[$,]/g, "")) - 
+                      Number(discounVal.replace(/[$,]/g, ""))) * 
+                        Number(vatvalue) / 100;
+
+        t = Number(amountVal.replace(/[$,]/g, "")) -
+              Number(discounVal.replace(/[$,]/g, "")) +
+              operation;
+      }else{
+        operation = (Number(amount.replace(/[$,]/g, ""))) * 
+                      Number(vatvalue) / 100;
+            
+        t = Number(amountVal.replace(/[$,]/g, "")) + operation;
+      }
+      // if(haveDiscount && haveTaxExempt){
+      //   operation = (Number(amount.replace(/[$,]/g, "")) - 
+      //                   Number(discount.replace(/[$,]/g, "")) -
+      //                   Number('0')) * 
+      //                     Number(vatvalue) / 100;
+        
+      //   t = Number(amount.replace(/[$,]/g, "")) -
+      //         Number(discount.replace(/[$,]/g, "")) +
+      //         operation;
+      // }else{
+      //   if(haveDiscount){
+      //     operation = (Number(amount.replace(/[$,]/g, "")) - 
+      //                   Number(discount.replace(/[$,]/g, ""))) * 
+      //                     Number(vatvalue) / 100;
+
+      //     t = Number(amount.replace(/[$,]/g, "")) -
+      //           Number(discount.replace(/[$,]/g, "")) +
+      //           operation;
+      //   }else{
+      //     if(haveTaxExempt){
+      //       operation = (Number(amount.replace(/[$,]/g, "")) - 
+      //                   Number('0')) * 
+      //                     Number(vatvalue) / 100;
+
+      //       t = Number(amount.replace(/[$,]/g, "")) + operation;              
+      //     }else{
+      //       operation = (Number(amount.replace(/[$,]/g, ""))) * 
+      //                     Number(vatvalue) / 100;
+                
+      //       t = Number(amount.replace(/[$,]/g, "")) + operation;
+      //     }
+      //   }
+      // }
+      setVat(operation.toFixed(2).toString());
+      setTotal(t.toFixed(2).toString())
+    } catch (error) {
+      setVat('0');
     }
   }
 
@@ -151,6 +246,28 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
           <XMarkIcon className="w-8 h-8 text-slate-500
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
+
+        <div className="flex gap-x-5 justify-end my-5 pr-3">
+          <div className="inline-flex items-center">
+            <Label>Descuento</Label>  
+            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+              <input checked={haveDiscount} 
+                onClick={() => setHaveDiscount(!haveDiscount)} id="discount" type="checkbox"
+                // onChange={() => console.log('')}
+                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                  peer-checked:border-green-500 peer-checked:before:bg-green-500
+                  border border-slate-300" />
+              <label htmlFor="discount"
+                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                  data-ripple-dark="true"></div>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
         <div className="grid grid-cols-3 gap-x-2 gap-y-2">
           <div className=" col-span-3">
             <Label>Titulo</Label>
@@ -164,7 +281,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
             <CurrencyInput 
               id="amount"
               name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                 focus:border-slate-700 outline-0"
               value={amount}
               // onChange={setTotal}
@@ -172,18 +289,40 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               defaultValue={0}
               decimalsLimit={2}
               prefix="$"
-              onValueChange={(value) => setAmount(value || '0')}
+              onValueChange={(value) => {setAmount(value || '0'); updateIva((value || '0'), discount)}}
             />
             {message===2 && (
               <p className=" text-red-500">El subtotal es obligatorio</p>
             )}
           </div>
+          {haveDiscount && (
+            <div>
+              <Label htmlFor="discount">Descuento</Label>
+              <CurrencyInput
+                id="discount"
+                name="discount"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                  focus:border-slate-700 outline-0"
+                value={discount.replace(/[$,]/g, "") || 0}
+                decimalsLimit={2}
+                prefix="$"
+                onValueChange={(value) => {try {
+                  setDiscount(value?.replace(/[$,]/g, "") || '0');
+                  // handleIdVat(idVat);
+                  updateIva(amount, value?.replace(/[$,]/g, "") || '0');
+                } catch (error) {
+                  setDiscount('0');
+                  // handleIdVat(idVat);
+                }}}
+              />
+            </div>
+          )}
           <div className="">
             <Label>IVA</Label>
             <CurrencyInput
               id="vat"
               name="vat"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                 focus:border-slate-700 outline-0"
               value={vat}
               // onChange={setTotal}
@@ -192,6 +331,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => setVat(value || '0')}
+              disabled
             />
             {message===3 && (
               <p className=" text-red-500">El iva es obligatorio</p>
@@ -202,7 +342,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
             <CurrencyInput
               id="total"
               name="total"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
+              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                 focus:border-slate-700 outline-0"
               value={total}
               // onChange={setTotal}
@@ -211,6 +351,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => setTotal(value || '0')}
+              disabled
             />
             {message===4 && (
               <p className=" text-red-500">El total es obligatorio</p>
@@ -241,7 +382,20 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
           <div className="">
             <Label>Solicita cotizacion</Label>
             {optUsers.length > 0 && (
-              <SelectReact index={0} opts={optUsers} setValue={handleUser} />
+              <SelectReact index={0} opts={optContacts} setValue={handleContact} />
+              // <Select
+              //   // value={selOpt}
+              //   options={optContacts}
+              //   onChange={(e:any) => { setContact(e.value)}} 
+              //   className="w-full text-lg mt-2 text-gray-900  rounded-lg 
+              //     bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
+              //   styles={{
+              //     control: (baseStyles, state) => ({
+              //       ...baseStyles,
+              //       height: '5px',
+              //     }),
+              //   }}
+              // />
             )}
           </div>
           <div className=" col-span-2">
@@ -252,6 +406,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
           </div>
           <div className=" col-span-2">
             <Label>Puntuacion (0 al 5)</Label>
+            <RatingComponent setValue={handleScore} value={score} />
           </div>
           <div className=" col-span-2">
             <Label>Descripcion</Label>
@@ -267,4 +422,14 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
       </form>
     </>
   )
+}
+
+const fetchContacts = async (token:string, id:string) => {
+  const res: Options[] = await getContactsClientLV(token, id);
+  if(typeof(res)==='string'){
+    showToastMessageError(res);
+    return [];
+  }else{
+    return res;
+  }
 }
