@@ -42,8 +42,9 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
   }
 
   const delInvoice = (id:string) => {
-    const fil = invoices.filter((i) => i._id !== id);
-    setInvoices(fil);
+    // const fil = invoices.filter((i) => id.includes(i._id));
+    // setInvoices(fil);
+    window.location.reload();
   }
 
   const columnHelper = createColumnHelper<IInvoiceTable>();
@@ -57,7 +58,7 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           /> */}
-          <RemoveElement id={row.original.id} name={row.original.estimate} remove={removeInvoice} 
+          <RemoveElement id={`${row.original.id}/${row.original.idEstimates}`} name={row.original.estimate} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
         </div>
       ),

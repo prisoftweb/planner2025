@@ -5,7 +5,8 @@ import Stack from '@mui/material/Stack';
 export default function RatingComponent({setValue, value}: {value:number, setValue:Function}) {
   return (
     <Stack spacing={1}>
-      <Rating name="half-rating" 
+      <Rating name="half-rating"
+        size="large" 
         defaultValue={2.5} 
         precision={0.5} 
         value={value}

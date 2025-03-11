@@ -14,6 +14,7 @@ import { getUsersLV } from "@/app/api/routeUser"
 import { createQuotation, getContactsClientLV } from "@/app/api/routeQuotations"
 import RatingComponent from "./RatingComponent"
 import Select from 'react-select'
+import { GetVatsLV } from "@/app/api/routeCost"
 
 export default function NewQuotation({showForm, token, usr, updateQuotations}: 
   {showForm:Function, token:string, usr:string, updateQuotations: Function}){
@@ -34,8 +35,10 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const [discount, setDiscount]=useState<string>('0');
   const [optContacts, setoptContacts]=useState<Options[]>([]);
   const [contact, setContact]=useState<string>('');
-
+  const [optVats, setOptVats]=useState<Options[]>([]);
+  const [idVat, setIdVat]=useState<string>('');
   const [message, setMessage] = useState<number>(0);
+  const [selOpt, setSelOpt] = useState<Options>();
 
   useEffect(() => {
     const fetch = async () => {
@@ -49,6 +52,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         if(conts){
           setoptContacts(conts);
           setContact(conts[0].value);
+          setSelOpt(conts[0]);
         }
       }
 
@@ -59,6 +63,14 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         setOptUsers(opUs);
         const i = opUs.findIndex((o) => o.value===usr);
         setUser(opUs[i].value);
+      }
+
+      const opVat: Options[] = await GetVatsLV(token);
+      if(typeof(opVat)==='string'){
+        showToastMessageError(opVat);
+      }else{
+        setOptVats(opVat);
+        setIdVat(opVat[0].value);
       }
     }
     fetch();
@@ -86,6 +98,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
     if(conts){
       setoptContacts(conts);
       setContact(conts[0].value);
+      setSelOpt(conts[0]);
     }
   }
 
@@ -144,7 +157,8 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         cost: {
           subtotal: Number(amount),
           iva: Number(vat),
-          total: Number(total)
+          total: Number(total),
+          discount:Number(discount)
         },
         score,
         condition: [
@@ -168,60 +182,27 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
     }
   }
 
-  const updateIva = (amountVal: string, discounVal: string) => {
+  const updateIva = (idValue: string, discountValue: string, amountValue:string) => {
     try {
-      // const foundVat = vats.find((vat) => vat.value === idValue);
-      // const vatvalue = foundVat?.label || '0';
-      const vatvalue = '16';
+      const foundVat = optVats.find((vat) => vat.value === idValue);
+      const vatvalue = foundVat?.label || '0';
       let operation;
       let t = 0;
       if(haveDiscount){
-        operation = (Number(amountVal.replace(/[$,]/g, "")) - 
-                      Number(discounVal.replace(/[$,]/g, ""))) * 
+        operation = (Number(amountValue.replace(/[$,]/g, "")) - 
+                      Number(discountValue.replace(/[$,]/g, ""))) * 
                         Number(vatvalue) / 100;
 
-        t = Number(amountVal.replace(/[$,]/g, "")) -
-              Number(discounVal.replace(/[$,]/g, "")) +
+        t = Number(amountValue.replace(/[$,]/g, "")) -
+              Number(discountValue.replace(/[$,]/g, "")) +
               operation;
       }else{
-        operation = (Number(amount.replace(/[$,]/g, ""))) * 
+        operation = (Number(amountValue.replace(/[$,]/g, ""))) * 
                       Number(vatvalue) / 100;
             
-        t = Number(amountVal.replace(/[$,]/g, "")) + operation;
+        t = Number(amountValue.replace(/[$,]/g, "")) + operation;
       }
-      // if(haveDiscount && haveTaxExempt){
-      //   operation = (Number(amount.replace(/[$,]/g, "")) - 
-      //                   Number(discount.replace(/[$,]/g, "")) -
-      //                   Number('0')) * 
-      //                     Number(vatvalue) / 100;
-        
-      //   t = Number(amount.replace(/[$,]/g, "")) -
-      //         Number(discount.replace(/[$,]/g, "")) +
-      //         operation;
-      // }else{
-      //   if(haveDiscount){
-      //     operation = (Number(amount.replace(/[$,]/g, "")) - 
-      //                   Number(discount.replace(/[$,]/g, ""))) * 
-      //                     Number(vatvalue) / 100;
-
-      //     t = Number(amount.replace(/[$,]/g, "")) -
-      //           Number(discount.replace(/[$,]/g, "")) +
-      //           operation;
-      //   }else{
-      //     if(haveTaxExempt){
-      //       operation = (Number(amount.replace(/[$,]/g, "")) - 
-      //                   Number('0')) * 
-      //                     Number(vatvalue) / 100;
-
-      //       t = Number(amount.replace(/[$,]/g, "")) + operation;              
-      //     }else{
-      //       operation = (Number(amount.replace(/[$,]/g, ""))) * 
-      //                     Number(vatvalue) / 100;
-                
-      //       t = Number(amount.replace(/[$,]/g, "")) + operation;
-      //     }
-      //   }
-      // }
+      
       setVat(operation.toFixed(2).toString());
       setTotal(t.toFixed(2).toString())
     } catch (error) {
@@ -229,7 +210,29 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
     }
   }
 
+  const updateTotal = (valueIva: string) => {
+    try {
+      let t = 0;
+      if(haveDiscount){
+        t = Number(amount.replace(/[$,]/g, "")) -
+              Number(discount.replace(/[$,]/g, "")) +
+              Number(valueIva.replace(/[$,]/g, ""));
+      }else{
+        t = Number(amount.replace(/[$,]/g, "")) +
+              Number(valueIva.replace(/[$,]/g, ""));
+      }
+      setTotal(t.toFixed(2).toString());
+    } catch (error) {
+      setTotal('0');
+    }
+  }
+
   const indexUser = optUsers.findIndex((u) => u.value===usr);
+
+  const handleIdVat = (value:string) => {
+    updateIva(value, discount, amount);
+    setIdVat(value);
+  }
 
   return(
     <>
@@ -289,7 +292,10 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               defaultValue={0}
               decimalsLimit={2}
               prefix="$"
-              onValueChange={(value) => {setAmount(value || '0'); updateIva((value || '0'), discount)}}
+              onValueChange={(value) => {
+                setAmount(value || '0'); 
+                updateIva(idVat, discount, (value || '0'));
+              }}
             />
             {message===2 && (
               <p className=" text-red-500">El subtotal es obligatorio</p>
@@ -309,33 +315,38 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
                 onValueChange={(value) => {try {
                   setDiscount(value?.replace(/[$,]/g, "") || '0');
                   // handleIdVat(idVat);
-                  updateIva(amount, value?.replace(/[$,]/g, "") || '0');
+                  updateIva(idVat, value?.replace(/[$,]/g, "") || '0', amount);
                 } catch (error) {
                   setDiscount('0');
-                  // handleIdVat(idVat);
+                  updateIva(idVat, '0', amount);
                 }}}
               />
             </div>
           )}
-          <div className="">
+          <div className="col-span-2">
             <Label>IVA</Label>
-            <CurrencyInput
-              id="vat"
-              name="vat"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
-                focus:border-slate-700 outline-0"
-              value={vat}
-              // onChange={setTotal}
-              //placeholder="Please enter a number"
-              defaultValue={0}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => setVat(value || '0')}
-              disabled
-            />
-            {message===3 && (
+            <div className="flex gap-x-3">
+              <CurrencyInput
+                id="vat"
+                name="vat"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+                  focus:border-slate-700 outline-0"
+                value={vat}
+                // onChange={setTotal}
+                //placeholder="Please enter a number"
+                defaultValue={0}
+                decimalsLimit={2}
+                prefix="$"
+                onValueChange={(value) => {
+                  updateTotal(value || '0');
+                  setVat(value || '0');
+                }}
+              />
+              {optVats.length > 0 && <SelectReact index={0} opts={optVats} setValue={handleIdVat} />}
+            </div>
+            {/* {message===3 && (
               <p className=" text-red-500">El iva es obligatorio</p>
-            )}
+            )} */}
           </div>
           <div className="">
             <Label>Total</Label>
@@ -351,7 +362,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => setTotal(value || '0')}
-              disabled
             />
             {message===4 && (
               <p className=" text-red-500">El total es obligatorio</p>
@@ -382,20 +392,20 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
           <div className="">
             <Label>Solicita cotizacion</Label>
             {optUsers.length > 0 && (
-              <SelectReact index={0} opts={optContacts} setValue={handleContact} />
-              // <Select
-              //   // value={selOpt}
-              //   options={optContacts}
-              //   onChange={(e:any) => { setContact(e.value)}} 
-              //   className="w-full text-lg mt-2 text-gray-900  rounded-lg 
-              //     bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
-              //   styles={{
-              //     control: (baseStyles, state) => ({
-              //       ...baseStyles,
-              //       height: '5px',
-              //     }),
-              //   }}
-              // />
+              // <SelectReact index={0} opts={optContacts} setValue={handleContact} />
+              <Select
+                value={selOpt}
+                options={optContacts}
+                onChange={(e:any) => { setContact(e.value)}} 
+                className="w-full text-lg mt-2 text-gray-900  rounded-lg 
+                  bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
+                styles={{
+                  control: (baseStyles, state) => ({
+                    ...baseStyles,
+                    height: '5px',
+                  }),
+                }}
+              />
             )}
           </div>
           <div className=" col-span-2">

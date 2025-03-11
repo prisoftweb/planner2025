@@ -14,6 +14,9 @@ import CurrencyInput from "react-currency-input-field"
 import { createEstimate } from "@/app/api/routeEstimates"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { BsPencil } from "react-icons/bs"
+import { Options } from "@/interfaces/Common"
+import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs"
+import SelectReact from "@/components/SelectReact"
 
 export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow, 
   porcentajeAdvange, advange}: 
@@ -44,6 +47,8 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   const [isdisabled, setIsDisabled]= useState<boolean>(true);
   const [isdisabledGuarantee, setIsDisabledGuarantee]= useState<boolean>(true);
   // const refRequest = useRef(true);
+  const [optTypes, setOptTypes]=useState<Options[]>([]);
+  const [typeEstimate, setTypeEstimate]=useState<string>('');
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -72,6 +77,19 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
       document.body.clientHeight, document.documentElement.clientHeight
     ));
     return () => window.removeEventListener('scroll', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await getCatalogsByNameAndType(token, 'estimates');
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptTypes(res);
+        setTypeEstimate(res[0].value);
+      }
+    }
+    fetch();
   }, []);
 
   const colorsRandom = ['#E4D831', '#71B2F2', '#617178', '#FFA145', '#8579F0', '#ff5252', '#69f0ae', '#7D9F2D', '#289399', '#f08080']
@@ -207,9 +225,11 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         ],
         company: "65d3813c74045152c0c4377e",
         project: project._id,
-        user
+        user,
+        type:typeEstimate
       }
 
+      // console.log('new estimate => ', JSON.stringify(data));
       const res = await createEstimate(token, data);
       if(typeof(res)==='string'){
         showToastMessageError(res);
@@ -220,7 +240,10 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
     }
   }
 
-  console.log('overflow => ', overflow);
+  const handleType = (value:string) => {
+    setTypeEstimate(value);
+  }
+
   return(
     <>
       <form className="z-10 absolute top-16 w-full max-w-lg bg-white space-y-5 p-3 right-0"
@@ -459,6 +482,12 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
               prefix="$"
               disabled
             />
+          </div>
+          <div>
+            <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
+            {optTypes.length > 0 && (
+              <SelectReact index={0} opts={optTypes} setValue={handleType} />
+            )}
           </div>
         </div>
         <div>

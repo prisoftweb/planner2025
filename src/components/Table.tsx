@@ -213,8 +213,16 @@ export default function Table({data, columns, placeH, typeTable='',
           // console.log('seleccionados =>', table.getSelectedRowModel().flatRows);
           table.getSelectedRowModel().flatRows.map((exp:any) => {
             console.log('exp  => ', exp.original);
-            totalSeleccionados += exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72'? Number(exp.original.Total.replace(/[$, M, X, N,]/g, "")): 0
-            numSel+= exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72'? 1: 0;
+            // totalSeleccionados += exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72'? Number(exp.original.Total.replace(/[$, M, X, N,]/g, "")): 0
+            // numSel+= exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72'? 1: 0;
+            totalSeleccionados += (exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72' && 
+                                    exp.original.Estatus._id!=='661eade6f642112488c85fad' && 
+                                    exp.original.Estatus._id!=='661eaa71f642112488c85f59' && 
+                                    exp.original.Estatus._id!=='661eaa4af642112488c85f56' )? Number(exp.original.Total.replace(/[$, M, X, N,]/g, "")): 0
+            numSel+= (exp.original.Estatus._id!=='67318a51ceaf47ece0d3aa72' && 
+                      exp.original.Estatus._id!=='661eade6f642112488c85fad' && 
+                      exp.original.Estatus._id!=='661eaa71f642112488c85f59' && 
+                      exp.original.Estatus._id!=='661eaa4af642112488c85f56' )? 1: 0;
           });
           //table.getSelectedRowModel().flatRows.map((exp:any) => console.log('exp table => ', exp));
           const tSeleccionados = CurrencyFormatter({

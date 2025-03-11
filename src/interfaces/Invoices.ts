@@ -63,6 +63,7 @@ export interface IInvoiceTable {
   fecha: string
   amount: number,
   id: string
+  idEstimates: string
 }
 
 export interface IInvoiceByProject {
@@ -155,18 +156,9 @@ export interface IInvoiceMin {
     total: number
     discount: number
   }
-  useCFDI: {
-    _id: string
-    name: string
-  }
-  paymentMethod: {
-    _id: string
-    name: string
-  }
-  paymentWay: {
-    _id: string
-    name: string
-  }
+  useCFDI: string
+  paymentMethod: string
+  paymentWay: string
   estimate: {
     _id: string
     name: string

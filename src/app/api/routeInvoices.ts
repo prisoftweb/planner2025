@@ -120,6 +120,7 @@ export async function getTotalInvoiceResumenByProject(auth_token:string, id:stri
 
 export async function removeInvoice(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/${id}`;
+  console.log('url => ', url);
   try {
     const res = await axios.delete(url, {
       headers: {
@@ -127,6 +128,7 @@ export async function removeInvoice(id:string, auth_token:string) {
         'Content-Type': 'application/json'
       }
     })
+    console.log('res => ', res);
     if(res.status===204) return res.status;
     return res.statusText;
   } catch (error) {

@@ -2,21 +2,15 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { useState, useEffect, useRef } from "react";
-import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
-import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
 import { ExpensesTableProvider } from "@/interfaces/Providers";
-// import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 import FilteringPaymentsProvider from "./FilteringPaymentsProvider";
 import { PaymentProvider } from "@/interfaces/Payments";
-import RemoveElement from "../RemoveElement";
-import { showToastMessageError } from "../Alert";
-import { removePayment } from "@/app/api/routePayments";
 import RemovePaymentComponent from "./RemovePaymentComponent";
-import { CurrencyFormatter } from "@/app/functions/Globals";
+import { Badge } from "@mui/material";
 
 export default function TableCostsProvider({data, token, expenses, idProv, 
                           user, isFilter, setIsFilter, udpateTable }:
@@ -81,7 +75,9 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       id: 'Responsable',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
+          <Badge color="secondary" badgeContent={row.original.Quantity}>
+            <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
+          </Badge>
           {/* <button type="button" onClick={() => deletePayment(row.original.id)}>eliminar</button> */}
           <RemovePaymentComponent expenses={expenses} id={row.original.id} name={row.original.notes} 
               token={token} updateTable={deletePayment} user={user} />
@@ -113,12 +109,22 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       )
     }),
     columnHelper.accessor('date', {
-      header: 'Fecha',
+      header: () => (
+        <>
+          <p>Fecha</p>
+          <p>Fecha de pago</p>
+        </>
+      ),
       id: 'fecha',
       cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-        >{row.original.date?.substring(0, 10) || ''}</p>
+        <>
+          <p className="cursor-pointer"
+            onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+          >{row.original.date?.substring(0, 10) || ''}</p>
+          <p className="cursor-pointer"
+            onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+          >{row.original.datePaid?.substring(0, 10) || ''}</p>
+        </>
       ),
     }),
     columnHelper.accessor('reference', {
@@ -133,15 +139,15 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         <p>Referencia de pago</p>
       )
     }),
-    columnHelper.accessor('datePaid', {
-      header: 'Fecha pago',
-      id: 'fechapago',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-        >{row.original.datePaid?.substring(0, 10) || ''}</p>
-      ),
-    }),
+    // columnHelper.accessor('datePaid', {
+    //   header: 'Fecha pago',
+    //   id: 'fechapago',
+    //   cell: ({row}) => (
+    //     <p className="cursor-pointer"
+    //       onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+    //     >{row.original.datePaid?.substring(0, 10) || ''}</p>
+    //   ),
+    // }),
     // columnHelper.accessor('range', {
     //   header: 'Rango',
     //   id: 'Rango',
@@ -191,15 +197,15 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         </div>
       ),
     }),
-    columnHelper.accessor('Quantity', {
-      header: 'Cantidad',
-      id: 'Cantidad',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
-        >{row.original.Quantity}</p>
-      ),
-    }),
+    // columnHelper.accessor('Quantity', {
+    //   header: 'Cantidad',
+    //   id: 'Cantidad',
+    //   cell: ({row}) => (
+    //     <p className="cursor-pointer"
+    //       onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}
+    //     >{row.original.Quantity}</p>
+    //   ),
+    // }),
     columnHelper.accessor('paid', {
       header: 'Pago',
       id: 'Pago',

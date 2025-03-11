@@ -133,17 +133,17 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         <div className="bg-white p-3">
           <div className="flex justify-between ">
             <p className="text-slate-400">Uso CFDI</p>
-            <p className="text-lg text-slate-900 text-right">{invoice.useCFDI?.name || 'Sin CFDI'}</p>
+            <p className="text-lg text-slate-900 text-right">{invoice?.useCFDI || 'Sin CFDI'}</p>
           </div>
 
           <div className="flex justify-between ">
             <p className="text-slate-400">Metodo de pago</p>
-            <p className="text-lg text-slate-900 text-right">{invoice.paymentMethod?.name || 'Sin Metodo'}</p>
+            <p className="text-lg text-slate-900 text-right">{invoice?.paymentMethod || 'Sin Metodo'}</p>
           </div>
 
           <div className="flex justify-between ">
             <p className="text-slate-400">Forma de pago:</p>
-            <p className="text-lg text-slate-900 text-right">{invoice.paymentWay?.name || 'Sin forma'}</p>
+            <p className="text-lg text-slate-900 text-right">{invoice?.paymentWay || 'Sin forma'}</p>
           </div>
         </div>
 

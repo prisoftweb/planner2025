@@ -13,7 +13,8 @@ export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
       formpaid: inv.paymentWay,
       id: inv._id,
       methodpaid: inv.paymentMethod,
-      usecfdi: inv.useCFDI
+      usecfdi: inv.useCFDI,
+      idEstimates:inv.estimate._id
     })
   });
 
