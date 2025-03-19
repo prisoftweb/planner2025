@@ -201,6 +201,7 @@ export interface IConceptInvoice {
     code: string
     name: string
     description: string
+    quantity: number
     unit: {
       _id: string
       name: string

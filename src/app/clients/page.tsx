@@ -23,18 +23,18 @@ export default async function clients(){
   }
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  if(!permisionsClient){
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-            text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
-            title="Clientes"><></></WithOut>
-        </div>
-      </>
-    )
-  }
+  // if(!permisionsClient){
+  //   return(
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+  //           text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
+  //           title="Clientes"><></></WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   let tags;
   try {
@@ -112,15 +112,20 @@ export default async function clients(){
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <Header title="Clientes" placeHolder="Buscar cliente.." >
-          {permisionsClient.permission.create? (
+          {/* {permisionsClient.permission.create? (
             <ButtonNewClient id={user._id} token={token} tags={arrTags} />
           ): (
             <></>
-          )}
+          )} */}
+          <ButtonNewClient id={user._id} token={token} tags={arrTags} />
         </Header>
         <div className="mt-5">
-          <TableClients data={data} token={token} deletePermission={permisionsClient.permission.delete}
-            selectPermission={permisionsClient.permission.select} />
+          <TableClients data={data} token={token} 
+            // deletePermission={permisionsClient.permission.delete}
+            // selectPermission={permisionsClient.permission.select}
+            selectPermission={true}
+            deletePermission={true}
+          />
         </div>
       </div>
     </>

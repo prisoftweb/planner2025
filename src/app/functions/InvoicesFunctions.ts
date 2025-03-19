@@ -27,8 +27,8 @@ export function ConceptsDataToConceptsTable(conepts:IConceptInvoice[]){
   conepts.map((concept) => {
     table.push({
       id: concept.conceptEstimate._id,
-      // Cantidad: concept.conceptEstimate.quantity,
-      Cantidad: 0,
+      Cantidad: concept?.conceptEstimate?.quantity || 0,
+      // Cantidad: 0,
       Clave: concept.conceptEstimate.code,
       Descripcion: concept.conceptEstimate.description,
       nombre: concept.conceptEstimate.name,

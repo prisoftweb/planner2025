@@ -50,7 +50,7 @@ export default async function Page({ params, searchParams }:
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderProfileExpense options={options} subTotal={subTotal} idProv={searchParams.prov} pending={previous} />
-        <NavTabExpense idExp={params.id} tab="5" pending={previous} />
+        <NavTabExpense idExp={params.id} tab="5" pending={previous} idProv={searchParams.prov} />
         <NextUiProviders>
           <ExpenseStatusClient expense={cost} id={params.id} token={token} user={user._id}/>
         </NextUiProviders>

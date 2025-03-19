@@ -177,13 +177,14 @@ export default function TableCostsProvider({data, token, expenses, idProv,
         )
       ),
     }),
-    columnHelper.accessor('Estatus', {
+    columnHelper.accessor('condition', {
       header: 'Estatus',
       id: 'Estatus',
       cell: ({row}) => (
         <div className="cursor-pointer" 
           onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}>
-            <Chip label={row.original.Estatus? 'Pagado': 'No pagado'} color={row.original.Estatus? '#0f0': '#f00'} />
+            {/* <Chip label={row.original.Estatus? 'Pagado': 'No pagado'} color={row.original.Estatus? '#0f0': '#f00'} /> */}
+            <Chip label={row.original.condition.name} color={row.original.condition.color} />
         </div>
       ),
     }),

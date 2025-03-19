@@ -1,216 +1,23 @@
 'use client'
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "@/components/Button"
-import Input from "@/components/Input"
-import Label from "@/components/Label"
+// import Input from "@/components/Input"
+// import Label from "@/components/Label"
 import HeaderForm from "@/components/HeaderForm"
 import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
-import CurrencyInput from "react-currency-input-field"
+// import CurrencyInput from "react-currency-input-field"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
-import SelectReact from "@/components/SelectReact"
+// import SelectReact from "@/components/SelectReact"
 import { Options } from "@/interfaces/Common"
-import { getClientsLV } from "@/app/api/routeClients"
+// import { getClientsLV } from "@/app/api/routeClients"
 import { IEstimateMin, IConceptEstimate, TableEstimatesProject } from "@/interfaces/Estimate"
 import { getEstimateMin, getAllConceptsEstimateMin } from "@/app/api/routeEstimates"
 import { createInvoice } from "@/app/api/routeInvoices"
-
-const catalogCFDI: Options[] = [
-  {
-    label: 'ADQUISICION_MERCANCIAS',
-    value: 'ADQUISICION_MERCANCIAS G01'
-  },
-  {
-    label: 'DEVOLUCIONES_DESCUENTOS_BONIFICACIONES',
-    value: 'DEVOLUCIONES_DESCUENTOS_BONIFICACIONES G02'
-  },
-  {
-    label: 'GASTOS_EN_GENERAL',
-    value: 'GASTOS_EN_GENERAL G03'
-  },
-  {
-    label: 'CONSTRUCCIONES',
-    value: 'CONSTRUCCIONES I01'
-  },
-  {
-    label: 'MOBILIARIO_Y_EQUIPO_DE_OFICINA',
-    value: 'MOBILIARIO_Y_EQUIPO_DE_OFICINA I02'
-  },
-  {
-    label: 'EQUIPO_DE_TRANSPORTE',
-    value: 'EQUIPO_DE_TRANSPORTE I03'
-  },
-  {
-    label: 'EQUIPO_DE_COMPUTO',
-    value: 'EQUIPO_DE_COMPUTO I04'
-  },
-  {
-    label: 'DADOS_TROQUELES_HERRAMENTAL',
-    value: 'DADOS_TROQUELES_HERRAMENTAL I05'
-  },
-  {
-    label: 'COMUNICACIONES_TELEFONICAS',
-    value: 'COMUNICACIONES_TELEFONICAS I06'
-  },
-  {
-    label: 'COMUNICACIONES_SATELITALES',
-    value: 'COMUNICACIONES_SATELITALES I07'
-  },
-  {
-    label: 'OTRA_MAQUINARIA',
-    value: 'OTRA_MAQUINARIA I08'
-  },
-  {
-    label: 'HONORARIOS_MEDICOS',
-    value: 'HONORARIOS_MEDICOS D01'
-  },
-  {
-    label: 'GASTOS_MEDICOS_POR_INCAPACIDAD',
-    value: 'GASTOS_MEDICOS_POR_INCAPACIDAD D02'
-  },
-  {
-    label: 'GASTOS_FUNERALES',
-    value: 'GASTOS_FUNERALES D03'
-  },
-  {
-    label: 'DONATIVOS',
-    value: 'DONATIVOS D04'
-  },
-  {
-    label: 'INTERESES_POR_CREDITOS_HIPOTECARIOS',
-    value: 'INTERESES_POR_CREDITOS_HIPOTECARIOS D05'
-  },
-  {
-    label: 'APORTACIONES_VOLUNTARIAS_SAR',
-    value: 'APORTACIONES_VOLUNTARIAS_SAR D06'
-  },
-  {
-    label: 'PRIMA_SEGUROS_GASTOS_MEDICOS',
-    value: 'PRIMA_SEGUROS_GASTOS_MEDICOS D07'
-  },
-  {
-    label: 'GASTOS_TRANSPORTACION_ESCOLAR',
-    value: 'GASTOS_TRANSPORTACION_ESCOLAR D08'
-  },
-  {
-    label: 'CUENTAS_AHORRO_PENSIONES',
-    value: 'CUENTAS_AHORRO_PENSIONES D09'
-  },
-  {
-    label: 'SERVICIOS_EDUCATIVOS',
-    value: 'SERVICIOS_EDUCATIVOS D10'
-  },
-  {
-    label: 'POR_DEFINIR',
-    value: 'POR_DEFINIR P01'
-  },
-  {
-    label: 'SIN_EFECTOS_FISCALES',
-    value: 'SIN_EFECTOS_FISCALES S01'
-  },
-  {
-    label: 'PAGOS',
-    value: 'PAGOS CP01'
-  },
-  {
-    label: 'NOMINA',
-    value: 'NOMINA CN01'
-  }
-];
-
-const catalogPaymentMethod: Options[] = [
-  {
-    label: 'PAGO_EN_UNA_EXHIBICION',
-    value: 'PAGO_EN_UNA_EXHIBICION PUE'
-  },
-  {
-    label: 'PAGO_EN_PARCIALIDADES_DIFERIDO',
-    value: 'PAGO_EN_PARCIALIDADES_DIFERIDO PPD'
-  },
-];
-
-const catalogFormPayment: Options[] = [
-  {
-    label: 'EFECTIVO',
-    value: 'EFECTIVO 01'
-  },
-  {
-    label: 'CHEQUE_NOMINATIVO',
-    value: 'CHEQUE_NOMINATIVO 02'
-  },
-  {
-    label: 'TRANSFERENCIA_ELECTRONICA',
-    value: 'TRANSFERENCIA_ELECTRONICA 03'
-  },
-  {
-    label: 'TARJETA_DE_CREDITO',
-    value: 'TARJETA_DE_CREDITO 04'
-  },
-  {
-    label: 'MONEDERO_ELECTRONICO',
-    value: 'MONEDERO_ELECTRONICO 05'
-  },
-  {
-    label: 'DINERO_ELECTRONICO',
-    value: 'DINERO_ELECTRONICO 06'
-  },
-  {
-    label: 'VALES_DE_DESPENSA',
-    value: 'VALES_DE_DESPENSA 08'
-  },
-  {
-    label: 'DACION_EN_PAGO',
-    value: 'DACION_EN_PAGO 12'
-  },
-  {
-    label: 'SUBROGACION',
-    value: 'SUBROGACION 13'
-  },
-  {
-    label: 'CONSIGNACION',
-    value: 'CONSIGNACION 14'
-  },
-  {
-    label: 'CONDONACION',
-    value: 'CONDONACION 15'
-  },
-  {
-    label: 'COMPENSACION',
-    value: 'COMPENSACION 17'
-  },
-  {
-    label: 'NOVACION',
-    value: 'NOVACION 23'
-  },
-  {
-    label: 'CONFUSION',
-    value: 'CONFUSION 24'
-  },
-  {
-    label: 'REMISION_DE_DEUDA',
-    value: 'REMISION_DE_DEUDA 25'
-  },
-  {
-    label: 'PRESCRIPCION_O_CADUCIDAD',
-    value: 'PRESCRIPCION_O_CADUCIDAD 26'
-  },
-  {
-    label: 'A_SATISFACCION_DEL_ACREEDOR',
-    value: 'A_SATISFACCION_DEL_ACREEDOR 27'
-  },
-  {
-    label: 'TARJETA_DE_DEBITO',
-    value: 'TARJETA_DE_DEBITO 28'
-  },
-  {
-    label: 'TARJETA_DE_SERVICIOS',
-    value: 'TARJETA_DE_SERVICIOS 29'
-  },
-  {
-    label: 'POR_DEFINIR',
-    value: 'POR_DEFINIR 99'
-  },
-];
+import DataBasicStepper from "./DataBasicStepper"
+import InvoicesConditionsStepper from "./InvoicesConditionsStepper"
+import ConceptsInvoiceStepper from "./ConceptsInvoceStepper"
+import NavInvoiceStepper from "./NavInvoiceStepper"
 
 export default function AddNewInvoiceComponent({showForm, updateEstimates, user, token, 
     estimate, project}: 
@@ -220,56 +27,47 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
 
   const [folio, setFolio] = useState<string>('');
   const [taxFolio, setTaxFolio] = useState<string>('');
-  const [subtotal, setSubTotal] = useState<string>('0');
-  const [vat, setVat] = useState<string>('0');
-  const [total, setTotal] = useState<string>('0');
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
   const [client, setClient] = useState<string>(project.client._id);
-  const [type, setType] = useState<string>(catalogCFDI[0].value);
-  const [methodPaid, setMethodPaid] = useState<string>(catalogPaymentMethod[0].value);
-  const [formPaid, setFormPaid] = useState<string>(catalogFormPayment[0].value);
+  const [type, setType] = useState<string>('ADQUISICION_MERCANCIAS G01');
+  const [methodPaid, setMethodPaid] = useState<string>('PAGO_EN_UNA_EXHIBICION PUE');
+  const [formPaid, setFormPaid] = useState<string>('EFECTIVO 01');
   const [optClients, setOptClients] = useState<Options[]>([]);
-  // const [optTypes, setOptTypes] = useState<Options[]>([]);
-  // const [optMethodPaid, setOptMethodPaid] = useState<Options[]>([]);
-  // const [optFormPaid, setOptFormPaid] = useState<Options[]>([]);
+  const [conditionPayment, setConditionPayment] = useState<string>('');
+  const [odc, setOdc] = useState<string>('');
 
-  const [conceptsEstimate, setConceptsEstimate] = useState<IConceptEstimate[]>([]);
-
-  const [editClient, setEditClient] = useState<boolean>(false);
+  // const [conceptsEstimate, setConceptsEstimate] = useState<IConceptEstimate[]>([]);
 
   const [bandFolio, setBandFolio] = useState<boolean>(false);
   const [bandTaxFolio, setBandTaxFolio] = useState<boolean>(false);
-  const [bandSubtotal, setBandSubTotal] = useState<boolean>(false);
-  const [bandVat, setBandVat] = useState<boolean>(false);
-  const [bandTotal, setBandTotal] = useState<boolean>(false);
+  // const [bandSubtotal, setBandSubTotal] = useState<boolean>(false);
+  // const [bandVat, setBandVat] = useState<boolean>(false);
+  // const [bandTotal, setBandTotal] = useState<boolean>(false);
   const [bandDate, setBandDate] = useState<boolean>(false);
+  const [bandOdc, setBandOdc] = useState<boolean>(false);
 
-  useEffect(() => {
-    const fetch = async () => {
-      const clients = await getClientsLV(token);
-      if(typeof(clients)==='string'){
-        showToastMessageError(clients);
-      }else{
-        setOptClients(clients);
-        // setOptTypes(clients);
-        // setOptFormPaid(clients);
-        // setOptMethodPaid(clients);
-      }
+  const [step, setStep]=useState<number>(0);
 
-
-
-      // const cons = await await getConeptsEstimate(token, '');
-      console.log('estimate => ', estimate?.id);
-      const cons = await getAllConceptsEstimateMin(token, (estimate?.id || ''));
-      console.log('concetps estimate => ', cons);
-      if(typeof(cons)==='string'){
-        showToastMessageError(cons);
-      }else{
-        setConceptsEstimate(cons);
-      }
-    }
-    fetch();
-  }, []);
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     // const clients = await getClientsLV(token);
+  //     // if(typeof(clients)==='string'){
+  //     //   showToastMessageError(clients);
+  //     // }else{
+  //     //   setOptClients(clients);
+  //     // }
+  //     // const cons = await await getConeptsEstimate(token, '');
+  //     console.log('estimate => ', estimate?.id);
+  //     // const cons = await getAllConceptsEstimateMin(token, (estimate?.id || ''));
+  //     // console.log('concetps estimate => ', cons);
+  //     // if(typeof(cons)==='string'){
+  //     //   showToastMessageError(cons);
+  //     // }else{
+  //     //   setConceptsEstimate(cons);
+  //     // }
+  //   }
+  //   fetch();
+  // }, []);
 
   const [heightPage, setHeightPage] = useState<number>(900);
 
@@ -288,7 +86,47 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
   const handleFormPaid = (value: string) => {
     setFormPaid(value);
   }
+
+  const handleStep = (value: number) => {
+    setStep(value);
+  }
+
+  const handleDate = (value:string) => {
+    setDate(value);
+  }
+
+  const handleFolio = (value:string) => {
+    setFolio(value);
+  }
+
+  const handleTaxFolio = (value:string) => {
+    setTaxFolio(value);
+  }
+
+  const handleConditionPayment = (value:string) => {
+    setConditionPayment(value);
+  }
+
+  const handleOdc = (value:string) => {
+    setOdc(value);
+  }
+
+  const handleBandDate = (value:boolean) => {
+    setBandDate(value);
+  }
   
+  const handleBandOdc = (value:boolean) => {
+    setBandOdc(value);
+  }
+
+  const handleBandFolio = (value:boolean) => {
+    setBandFolio(value);
+  }
+
+  const handleBandTaxFolio = (value:boolean) => {
+    setBandTaxFolio(value);
+  }
+
   const handleResize = () => {
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -309,33 +147,36 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
 
   const validationData = () =>{
     let validation = true;
+    console.log('in validation');
     if(!folio || folio===''){
+      console.log('no folio');
       setBandFolio(true);
       validation = false;
-      // folio: {
-      //   type: String,
-      //   required: [false, 'Folio obligatorio'],
-      //   maxlength: [60, 'Folio debe tener maximo 60 caracteres'],
-      //   minlength: [0, 'Folio debe tener minimo 0 caracteres'],            
-      // }
+      return false;
     }else{
       setBandFolio(false);
     }
     if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
       setBandTaxFolio(true);
+      console.log('no tax folio');
       validation = false;
-      // taxfolio: {
-      //   type: String,
-      //   required: [false, 'Folio Fiscal obligatorio'],
-      //   maxlength: [40, 'Folio fiscal debe tener maximo 40 caracteres'],
-      //   minlength: [30, 'Folio fiscal debe tener minimo 30 caracteres'],            
-      // }
+      return false;
     }else{
       setBandTaxFolio(false);
     }
     if(!date || date===''){
+      console.log('no date');
       setBandDate(true);
       validation = false;
+      return false;
+    }else{
+      setBandDate(false);
+    }
+    if(!odc || odc.trim()===''){
+      setBandOdc(true);
+      console.log('no odc');
+      validation = false;
+      return false;
     }else{
       setBandDate(false);
     }
@@ -361,20 +202,29 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
   }
 
   const saveInvoice = async () => {
+    console.log('on save invoice => ');
     const val = validationData();
 
     if(val && estimate){
+      console.log('validation => ');
       const res: IEstimateMin = await getEstimateMin(token, estimate?.id);
       if(typeof(res)==='string'){
         showToastMessageError('Error al obtener los conceptos de la estimacion..');
       }else{
+        const currentDate=new Date(date.substring(0, 10));
+        console.log('current date => ', currentDate);
+        const day=currentDate.getDay();
+        const days = (conditionPayment=="67d20a6a59865f640af92588"? 0: 
+                (conditionPayment=="67d20a8b59865f640af9258a"? 10: (conditionPayment=="67d20aa159865f640af9258c"? 15: 30)));
+        console.log('day => ', day, ' day new => ', (day+7));
+        const newDay =currentDate.setDate(day+days);
+        console.log('new day => ', newDay);
+        const newDate=new Date(newDay);
+        console.log('new date => ', newDate);
         const data = {
           folio,
           taxfolio: taxFolio,
           date,
-          // useCFDI: "661eaa4af642112488c85f56",
-          // paymentMethod: "661eaa4af642112488c85f56",
-          // paymentWay: "661eaa4af642112488c85f56",
           useCFDI: type,
           paymentMethod: methodPaid,
           paymentWay: formPaid,
@@ -398,8 +248,11 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
             // vat:"6675daf663dfd817c9551b2a" 
           },
           condition: [
-            {glossary:"661eaa4af642112488c85f56", user}
-          ]
+            {glossary:"67d20cb359865f640af92638", user}
+          ],
+          termsofpayment:conditionPayment,
+          purchaseorder:odc,
+          duedate:newDate.toISOString()
         }
 
         // console.log('create invoice => ', JSON.stringify(data));
@@ -408,6 +261,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           showToastMessageError(resInvoice);
         }else{
           showToastMessage('Factura agregada satisfactoriamente!!');
+          updateEstimates();
           showForm(false);
         }
       }
@@ -420,13 +274,27 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
   }
   if(indexCLi<0) indexCLi=0;
 
-  const updateAmounts = (value: string) => {
-    const val = Number(value.replace(/[$,]/g, ""));
-    const v = val * 0.16;
-    setSubTotal(val.toString());
-    setVat(v.toString());
-    setTotal((val + v).toString());
-  }
+  // const updateAmounts = (value: string) => {
+  //   const val = Number(value.replace(/[$,]/g, ""));
+  //   const v = val * 0.16;
+  //   // setSubTotal(val.toString());
+  //   // setVat(v.toString());
+  //   // setTotal((val + v).toString());
+  // }
+
+  const component = (step===0? <DataBasicStepper bandDate={bandDate} bandFolio={bandFolio}  
+                        bandTaxFolio={bandTaxFolio} client={client} date={date} folio={folio} 
+                        nextStep={handleStep} setClient={handleClient} setDate={handleDate} 
+                        setFolio={handleFolio} setTaxFolio={handleTaxFolio} taxFolio={taxFolio}
+                        token={token} setBandDate={handleBandDate} setBandFolio={handleBandFolio}
+                        setBandTaxFolio={handleBandTaxFolio} /> : (step===1? <InvoicesConditionsStepper 
+                                  conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
+                                  handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 
+                                  handleType={handleType} nextStep={handleStep} token={token} 
+                                  bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc} />: 
+                                    <ConceptsInvoiceStepper estimate={estimate} 
+                                      idEstimate={estimate?.id || ""} nextStep={handleStep} 
+                                      saveInvoice={saveInvoice} token={token} />))
 
   return(
     <>
@@ -440,15 +308,16 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
         </div>
 
-        <div className="bg-white p-3 grid grid-cols-6 gap-x-2 gap-y-2">
-          {optClients.length > 0 && (
+        <NavInvoiceStepper index={step} setIndex={handleStep} />
+
+        {/* <div className="bg-white p-3 grid grid-cols-6 gap-x-2 gap-y-2"> */}
+          {/* {optClients.length > 0 && (
             <div className=" col-span-3">
               <div className="flex items-center gap-x-2 justify-between">
                 <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
                 <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                   <input checked={editClient} 
                     onClick={() => setEditClient(!editClient)} id="editClient" type="checkbox"
-                    // onChange={() => console.log('')}
                     className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                       appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                       peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -466,7 +335,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           
           <div className=" col-span-3">
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} autoFocus />
             {bandDate && (
               <p className="text-red-700">Ingrese una fecha valida!!!!</p>
             )}
@@ -486,9 +355,9 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
             {bandTaxFolio && (
               <p className="text-red-700">Ingrese un folio fiscal valido!!!!</p>
             )}
-          </div>
+          </div> */}
 
-          {catalogPaymentMethod && (
+          {/* {catalogPaymentMethod && (
             <div className=" col-span-3">
               <Label htmlFor="methodPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Metodo de pago</p></Label>
               <SelectReact index={0} opts={catalogPaymentMethod} setValue={handleMethodPaid} />
@@ -507,11 +376,11 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
               <SelectReact index={0} opts={catalogCFDI} setValue={handleType} />
             </div>
-          )}
+          )} */}
 
-        </div>
+        {/* </div> */}
 
-        <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+        {/* <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
           <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
               overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
             {conceptsEstimate.map((conce) => (
@@ -544,9 +413,9 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
             ))}
 
           </nav>
-        </div>
+        </div> */}
 
-        <div className="grid grid-cols-3 gap-x-2">
+        {/* <div className="grid grid-cols-3 gap-x-2">
           <div className="">
             <Label htmlFor="subtotal"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Importe</p></Label>
             <CurrencyInput
@@ -627,9 +496,9 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               decimalsLimit={2}
               prefix="$"
               onValueChange={(value) => {try {
-                setVat(value?.replace(/[$,]/g, "") || '0');
+                // setVat(value?.replace(/[$,]/g, "") || '0');
               } catch (error) {
-                setVat('0');
+                // setVat('0');
               }}}
             />
             {bandVat && (
@@ -650,20 +519,20 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
               prefix="$"
               disabled
               onValueChange={(value) => {try {
-                setTotal(value?.replace(/[$,]/g, "") || '0');
+                // setTotal(value?.replace(/[$,]/g, "") || '0');
               } catch (error) {
-                setTotal('0');
+                // setTotal('0');
               }}}
             />
             {bandTotal && (
               <p className="text-red-700">Ingrese un total valido!!!!</p>
             )}
           </div>
-        </div>
-
-        <div className="flex justify-center mt-2">
+        </div> */}
+        {component}
+        {/* <div className="flex justify-center mt-2">
           <Button type="button" onClick={saveInvoice}>Guardar</Button>
-        </div>
+        </div> */}
       </form>
     </>
   )

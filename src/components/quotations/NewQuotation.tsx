@@ -85,9 +85,9 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
     updateOptionsContacts(value);
   }
 
-  const handleContact = (value: string) => {
-    setContact(value);
-  }
+  // const handleContact = (value: string) => {
+  //   setContact(value);
+  // }
 
   const handleScore = (value:number) => {
     setScore(value);
@@ -274,7 +274,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         <div className="grid grid-cols-3 gap-x-2 gap-y-2">
           <div className=" col-span-3">
             <Label>Titulo</Label>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
             {message===1 && (
               <p className=" text-red-500">El titulo es obligatorio y minimo 10 caracteres</p>
             )}

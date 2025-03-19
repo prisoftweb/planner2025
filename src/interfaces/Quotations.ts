@@ -50,6 +50,7 @@ export interface IQuotationTable {
   Fechasol: string 
   Fechaenv: string 
   Monto: number
+  score: number
 }
 
 // export interface IOneQuotationMin {

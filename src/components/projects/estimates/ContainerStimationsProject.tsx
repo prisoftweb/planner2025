@@ -56,7 +56,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
     let estimates: IEstimateProject[];
     try {
       estimates = await getEstimatesByProject(token, project._id);
-      console.log('estimates min => ', estimates);
+      console.log('update estimates => ', estimates);
       if(typeof(estimates) === "string"){
         showToastMessageError(estimates);
       }else{
@@ -120,8 +120,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
   //                     delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
   //                     selEstimate={handleSelEstimate}  />)
 
-  console.log('total cost => ', totalEstimatedProject);
-  console.log('total cost json => ', JSON.stringify(totalEstimatedProject));
+  console.log('estimates data => ', estimatesData);
 
   return (
     <>

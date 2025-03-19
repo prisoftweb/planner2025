@@ -100,11 +100,15 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
 
   const c1 = getRandomArbi(0, 9);
 
-  const updateValues = (val: string) => {
+  const updateValues = (value: string) => {
+    let val='0';
+    if(value.replace(/[$,]/g, "").trim()!=''){
+      val=value.replace(/[$,]/g, "");
+    }
     let amor: number = 0;
     // console.log('project => ', project);
     if(project.amountChargeOff && !overflow){
-      amor = (Number(val.replace(/[$,]/g, "")) * project.amountChargeOff.porcentage) / 100;
+      amor = (Number(val.replace(/[$,]/g, "")) * (project.amountChargeOff?.porcentage || 0)) / 100;
     }
     let guaran: number = 0;
     if(project.guaranteefund){
@@ -228,7 +232,6 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         user,
         type:typeEstimate
       }
-
       // console.log('new estimate => ', JSON.stringify(data));
       const res = await createEstimate(token, data);
       if(typeof(res)==='string'){

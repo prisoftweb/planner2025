@@ -6,7 +6,8 @@ import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon,
   DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
 
-export default function NavTabExpense({tab, idExp, pending}: {tab:string, idExp:string, pending: 0|1}){
+export default function NavTabExpense({tab, idExp, pending, idProv}: {tab:string, idExp:string, 
+    pending: 0|1, idProv: string}){
   
   let props = {
     variants: {
@@ -42,7 +43,7 @@ export default function NavTabExpense({tab, idExp, pending}: {tab:string, idExp:
   let tabCli: JSX.Element;
   if(width < 710){
     tabCli = <div className="flex justify-between mt-3">
-                    <Link href={`/expenses/${idExp}/profile${previos}`}>
+                    <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Perfil'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
@@ -50,7 +51,7 @@ export default function NavTabExpense({tab, idExp, pending}: {tab:string, idExp:
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>  
-                    <Link href={`/expenses/${idExp}/budget`}>
+                    <Link href={`/expenses/${idExp}/budget?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Presupuesto'>
                         <DocumentChartBarIcon
@@ -58,7 +59,7 @@ export default function NavTabExpense({tab, idExp, pending}: {tab:string, idExp:
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/expenses/${idExp}/analitics`}>
+                    <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Analisis'>
                         <CurrencyDollarIcon
@@ -66,7 +67,7 @@ export default function NavTabExpense({tab, idExp, pending}: {tab:string, idExp:
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/expenses/${idExp}/advange`}>
+                    <Link href={`/expenses/${idExp}/advange?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Avance'>
                         <CreditCardIcon
@@ -74,7 +75,7 @@ export default function NavTabExpense({tab, idExp, pending}: {tab:string, idExp:
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/expenses/${idExp}/status${previos}`}>
+                    <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Estatus'>
                         <CreditCardIcon
@@ -86,27 +87,27 @@ export default function NavTabExpense({tab, idExp, pending}: {tab:string, idExp:
   }else{
     tabCli = (
       <div className="flex mt-5 py-1 border-b border-blue-300">
-        <Link href={`/expenses/${idExp}/profile${previos}`}>
+        <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Resumen</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/projects`}>
+        <Link href={`/expenses/${idExp}/projects?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Presupuesto</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/analitics`}>
+        <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Analisis</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/wallet`}>
+        <Link href={`/expenses/${idExp}/wallet?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Avances</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/status${previos}`}>
+        <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Estatus</p>
           </div>

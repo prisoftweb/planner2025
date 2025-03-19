@@ -5,7 +5,7 @@ import Link from "next/link"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { IQuotationMin } from "@/interfaces/Quotations"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TableQuotations from "./TableQuotations"
 import { QuotationsDataToQuotationsTable } from "@/app/functions/QuotationsFunctions"
 import { getQuotationsMin } from "@/app/api/routeQuotations"
@@ -13,21 +13,31 @@ import { showToastMessageError } from "../Alert"
 import WithOut from "../WithOut"
 import NewQuotation from "./NewQuotation"
 import { UsrBack } from "@/interfaces/User"
+import FilteringQuatations from "./FilteringQuatations"
 
 export default function ContainerQuotations({quotations, token, user}: 
   {quotations: IQuotationMin[], token:string, user: UsrBack}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [quotationsState, setQuotationsState] = useState<IQuotationMin[]>(quotations);
+  const [quotationsfiltered, setQuotationsFiltered] = useState<IQuotationMin[]>(quotations);
   const [showNewQuotation, setShowNewQuotation] = useState<boolean>(false);
+  const [maxAmount, setMaxAmount] = useState<number>(0);
 
   const handleShowNewQuotation = (value: boolean) => {
     setShowNewQuotation(value);
   }
 
   const handleFilter = (value: boolean) => {
-
+    setFilter(value);
   }
+
+  useEffect(() => {
+    const projectM = quotations.reduce((previous, current) => {
+      return current.cost.total > previous.cost.total ? current : previous;
+    });
+    setMaxAmount(projectM.cost.total);
+  }, [])
 
   const refreshQuatations = async() => {
     let quots: IQuotationMin[];
@@ -37,6 +47,7 @@ export default function ContainerQuotations({quotations, token, user}:
         showToastMessageError(quots);
       else {
         setQuotationsState(quots);
+        setFilter(false);
       }
     } catch (error) {
       return <h1>Error al consultar los proyectos!!</h1>
@@ -67,103 +78,67 @@ export default function ContainerQuotations({quotations, token, user}:
       )
     }
 
-  // const [maxAmount, setMaxAmount] = useState<number>(0);
+  const dateValidation = (date:string, startDate:number, endDate:number) => {
+    let d = new Date(date).getTime();
+    if(d >= startDate && d <= endDate){
+      return true;
+    }
+    return false;
+  }
+
+  const amountValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
+        minAmount:number, maxAmount:number) => {
+    if(quatation.cost.total >= minAmount && quatation.cost.total <= maxAmount){
+      if(dateValidation(quatation.applicationdate, startDate, endDate)){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  const clientsValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
+    minAmount:number, maxAmount:number, clients:string[]) => {
+    if(clients.includes('all')){
+      if(amountValidation(quatation, startDate, endDate, minAmount, maxAmount))
+        return true;
+      return false;
+    }else{
+      if(quatation.client)
+        if(clients.includes(quatation.client._id))
+          if(amountValidation(quatation, startDate, endDate, minAmount, maxAmount))
+            return true;
+      return false;
+    }
+  }
+
+  const conditionsValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
+        minAmount:number, maxAmount:number, clients:string[], conditions:string[]) => {
+    if(conditions.includes('all')){
+      if(clientsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients))
+        return true;
+      return false;
+    }else{
+      if(conditions.includes(quatation.condition[0]._id))
+        if(clientsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients))
+          return true;
+      return false;
+    }
+  }
+
+  const filterData = (conditions:string[], clients:string[], minAmount:number, maxAmount:number, 
+    startDate:number, endDate:number) => {
   
-  // useEffect(() => {
-  //   const projectM = projects.reduce((previous, current) => {
-  //     return current.amount > previous.amount ? current : previous;
-  //   });
-  //   setMaxAmount(projectM.amount);
-  // }, [])
+    let filtered: IQuotationMin[] = [];
+    quotationsState.map((quatation) => {
+      if(conditionsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients, conditions)){
+        filtered.push(quatation);
+      }
+    });
+    setQuotationsFiltered(filtered);
+    setFilter(true);
+  }
 
-  // const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>(projects);
-
-  // const dateValidation = (date:string, startDate:number, endDate:number) => {
-  //   let d = new Date(date).getTime();
-  //   if(d >= startDate && d <= endDate){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // const amountValidation = (project:ProjectMin, startDate:number, endDate:number, 
-  //       minAmount:number, maxAmount:number) => {
-  //   if(project.amount >= minAmount && project.amount <= maxAmount){
-  //     if(dateValidation(project.date, startDate, endDate)){
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const categoriesValidation = (project:ProjectMin, startDate:number, endDate:number, 
-  //           minAmount:number, maxAmount:number, categories:string[]) => {
-  //   if(categories.includes('all')){
-  //     if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-  //       return true
-  //     return false;
-  //   }else{
-  //     if(project.segment)
-  //       if(categories.includes(project.segment._id))
-  //         if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-  //           return true
-  //     return false;
-  //   }
-  // }
-
-  // const typesValidation = (project:ProjectMin, startDate:number, endDate:number, 
-  //   minAmount:number, maxAmount:number, categories:string[], types:string[]) => {
-  //   if(types.includes('all')){
-  //     if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(project.type)
-  //       if(types.includes(project.type._id))
-  //         if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-  //           return true;
-  //     return false;
-  //   }
-  // }
-
-  // const conditionsValidation = (project:ProjectMin, startDate:number, endDate:number, 
-  //       minAmount:number, maxAmount:number, categories:string[], 
-  //       types:string[], conditions:string[]) => {
-  //   if(conditions.includes('all')){
-  //     if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(conditions.includes(project.category._id))
-  //       if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
-  //         return true;
-  //     return false;
-  //   }
-  // }
-
-  // const filterData = (conditions:string[], types:string[], 
-  //   categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
-  
-  //   let filtered: ProjectMin[] = [];
-  //   if(isHistory){
-  //     projects.map((project) => {
-  //       if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
-  //         filtered.push(project);
-  //       }
-  //     });
-  //   }else{
-  //     projectStore.map((project) => {
-  //       if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
-  //         filtered.push(project);
-  //       }
-  //     });
-  //   }
-  //   setFilteredProjects(filtered);
-  //   setDataProjects(ProjectDataToTableDataMin(filtered));
-  //   setFilter(true);
-  // }
-
-  const quotationsData = QuotationsDataToQuotationsTable(quotationsState);
+  const quotationsData = QuotationsDataToQuotationsTable(filter? quotationsfiltered: quotationsState);
 
   return (
     <>
@@ -177,7 +152,7 @@ export default function ContainerQuotations({quotations, token, user}:
           <p className="text-xl ml-4 font-medium">Cotizaciones</p>
         </div>
         <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end">
-          <SearchInTable placeH="Buscar proyecto.." />
+          <SearchInTable placeH="Buscar cotizacion.." />
           <div>
             <div className="flex gap-x-3 items-center">
               <GiSettingsKnobs onClick={() => handleFilter(true)}
@@ -193,6 +168,8 @@ export default function ContainerQuotations({quotations, token, user}:
       </div>
       {showNewQuotation && <NewQuotation showForm={handleShowNewQuotation} token={token} usr={user._id} 
               updateQuotations={refreshQuatations} />}
+      {filter && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
+                    showForm={handleFilter} token={token} />}
     </>
   )
 }

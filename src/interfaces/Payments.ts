@@ -41,6 +41,11 @@ export interface PaymentProvider {
     name: string,
     color: string
   }
+  condition: {
+    _id: string,
+    name: string,
+    color: string
+  }
 }
 
 export interface CostPayment {

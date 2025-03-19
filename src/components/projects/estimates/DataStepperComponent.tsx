@@ -81,6 +81,7 @@ export default function DataStepperComponent({token, previousStep, price, concep
         }
       ]
     }
+    // console.log('data concept => ', JSON.stringify(data));
     const res = await insertConceptInEstimate(token, data, idEstimate);
     if(typeof(res)==='string'){
       showToastMessageError(res);

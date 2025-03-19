@@ -7,6 +7,7 @@ import RemoveElement from "../RemoveElement";
 import Chip from "../providers/Chip";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { removeQuotation } from "@/app/api/routeQuotations";
+import RatingComponent from "./RatingComponent";
 
 export default function TableQuotations({quotationsData, token, deleteQuatation}:
   {quotationsData: IQuotationTable[], token:string, deleteQuatation: Function}){
@@ -57,6 +58,16 @@ export default function TableQuotations({quotationsData, token, deleteQuatation}
           onClick={() => window.location.replace(`/quotations/${row.original.id}`)}
         >{row.original.Folio}</p>
       )
+    }),
+    columnHelper.accessor('score', {
+      header: 'Puntuacion',
+      id: 'puntuacion',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/quotations/${row.original.id}`)}
+        ><RatingComponent setValue={() => {}} 
+            value={row.original.score} isDisabled={true} size="small" /></p>
+      ),
     }),
     columnHelper.accessor('Titulo', {
       header: 'Titulo',

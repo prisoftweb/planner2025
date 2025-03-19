@@ -12,7 +12,8 @@ export function QuotationsDataToQuotationsTable(quotations:IQuotationMin[]){
       Fechasol: quotation.applicationdate,
       Folio: quotation.account,
       Monto: quotation.cost?.total || 0,
-      Titulo: quotation.title
+      Titulo: quotation.title,
+      score: quotation.score
     });
   });
 

@@ -216,6 +216,8 @@ export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvi
     table.push({
       id: expense._id,
       Estatus: expense.status,
+      condition: expense.condition,
+      // Estatus: expense.
       date: expense.date,
       datePaid: expense.paymentplugin.date.substring(0, 10),
       methodofpayment: expense.methodofpayment,

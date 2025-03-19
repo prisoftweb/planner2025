@@ -26,7 +26,7 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   let photo='/img/default.jpg', role='', id='';
-  
+  // photo="https://docs-adminweb.s3.amazonaws.com/user-65d3836974045152c0c4378c-1736450268582.jpeg";
   if(user.photo){
     photo = user.photo;
   }
@@ -51,7 +51,7 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   const firstName = user.name.substring(0, user.name.indexOf(' '));
-  
+  console.log('photo => ', photo);
   return(
     <>
       <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2">
@@ -150,6 +150,8 @@ const NavItems = ({role}: {role:string}) => {
             },
           ]}
         />
+        <NavItem name="Cotizaciones" link="/quotations" items={[]} />
+        <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
         <NavItem name="Informes" link="" items={[
             {
               name: 'Informes',
