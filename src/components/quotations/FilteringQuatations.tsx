@@ -39,7 +39,8 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
           label: 'TODOS',
           value: 'all'
         }, ...res]);
-        setClients([res[0].value]);
+        // setClients([res[0].value]);
+        setClients(['all']);
       }
 
       const cons = await getCatalogsByNameAndCondition(token, 'Quotations');
@@ -51,7 +52,8 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
           label: 'TODOS',
           value: 'all'
         }, ...cons]);
-        setConditions([cons[0].value]);
+        // setConditions([cons[0].value]);
+        setConditions(['all']);
       }
     }
 

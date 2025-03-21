@@ -19,6 +19,7 @@ export default function ContainerQuotations({quotations, token, user}:
   {quotations: IQuotationMin[], token:string, user: UsrBack}) {
 
   const [filter, setFilter] = useState<boolean>(false);
+  const [showFilter, setShowFilter]=useState<boolean>(false);
   const [quotationsState, setQuotationsState] = useState<IQuotationMin[]>(quotations);
   const [quotationsfiltered, setQuotationsFiltered] = useState<IQuotationMin[]>(quotations);
   const [showNewQuotation, setShowNewQuotation] = useState<boolean>(false);
@@ -28,8 +29,12 @@ export default function ContainerQuotations({quotations, token, user}:
     setShowNewQuotation(value);
   }
 
-  const handleFilter = (value: boolean) => {
-    setFilter(value);
+  // const handleFilter = (value: boolean) => {
+  //   setFilter(value);
+  // }
+
+  const handleShowFilter = (value: boolean) => {
+    setShowFilter(value);
   }
 
   useEffect(() => {
@@ -88,7 +93,6 @@ export default function ContainerQuotations({quotations, token, user}:
 
   const amountValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number) => {
-          console.log('quatation => ', quatation, 'minamount => ', minAmount, ' maxamout => ', maxAmount);
     if(quatation.cost.total >= minAmount && quatation.cost.total <= maxAmount){
       if(dateValidation(quatation.applicationdate, startDate, endDate)){
         return true;
@@ -100,7 +104,6 @@ export default function ContainerQuotations({quotations, token, user}:
   const clientsValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
     minAmount:number, maxAmount:number, clients:string[]) => {
     if(clients.includes('all')){
-      console.log('clients => all ');
       if(amountValidation(quatation, startDate, endDate, minAmount, maxAmount))
         return true;
       return false;
@@ -116,7 +119,6 @@ export default function ContainerQuotations({quotations, token, user}:
   const conditionsValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number, clients:string[], conditions:string[]) => {
     if(conditions.includes('all')){
-      console.log('conditions all => ');
       if(clientsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients))
         return true;
       return false;
@@ -131,9 +133,8 @@ export default function ContainerQuotations({quotations, token, user}:
   const filterData = (conditions:string[], clients:string[], minAmount:number, maxAmount:number, 
     startDate:number, endDate:number) => {
   
+      console.log('filter data => ');
     let filtered: IQuotationMin[] = [];
-    console.log('conditions => ', conditions);
-    console.log('clients => ', clients);
     quotationsState.map((quatation) => {
       if(conditionsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients, conditions)){
         filtered.push(quatation);
@@ -142,7 +143,7 @@ export default function ContainerQuotations({quotations, token, user}:
     setQuotationsFiltered(filtered);
     setFilter(true);
   }
-
+console.log('filtered => ', filter);
   const quotationsData = QuotationsDataToQuotationsTable(filter? quotationsfiltered: quotationsState);
 
   return (
@@ -160,7 +161,7 @@ export default function ContainerQuotations({quotations, token, user}:
           <SearchInTable placeH="Buscar cotizacion.." />
           <div>
             <div className="flex gap-x-3 items-center">
-              <GiSettingsKnobs onClick={() => handleFilter(true)}
+              <GiSettingsKnobs onClick={() => setShowFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
               <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
@@ -173,8 +174,8 @@ export default function ContainerQuotations({quotations, token, user}:
       </div>
       {showNewQuotation && <NewQuotation showForm={handleShowNewQuotation} token={token} usr={user._id} 
               updateQuotations={refreshQuatations} />}
-      {filter && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
-                    showForm={handleFilter} token={token} />}
+      {showFilter && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
+                    showForm={handleShowFilter} token={token} />}
     </>
   )
 }
