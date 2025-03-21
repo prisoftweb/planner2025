@@ -81,7 +81,7 @@ export async function updateQuotation(auth_token:string, data:Object, id:string)
   try {
     console.log('url create => ', url);
     console.log('data => ', JSON.stringify(data));
-    const res = await axios.post(url, JSON.stringify(data), {
+    const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'

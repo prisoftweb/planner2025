@@ -1,0 +1,122 @@
+import SelectReact from "@/components/SelectReact"
+import { useState, useEffect } from "react"
+import Label from "@/components/Label";
+import { showToastMessageError } from "@/components/Alert";
+import { getClientsLV } from "@/app/api/routeClients";
+import { Options } from "@/interfaces/Common";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import CurrencyInput from "react-currency-input-field";
+import TextArea from "@/components/TextArea";
+
+type DataBasicProps={
+  token:string,
+  date:string,
+  setDate:Function,
+  bandDate:boolean,
+  reference:string,
+  setReference:Function,
+  bandReference:boolean
+  nextStep:Function
+  setBandReference:Function
+  setBandDate:Function,
+  bandCollection: boolean
+  textConcept:string,
+  bandTextConcept:boolean,
+  setTextConcept:Function
+}
+
+export default function DataCollectionStepper({token, date, setDate, bandDate, bandCollection, 
+  bandReference, reference, setReference, nextStep, setBandDate, setBandReference, 
+  bandTextConcept, setTextConcept, textConcept}: DataBasicProps) {
+
+  const [disperse, setDisperse]=useState<boolean>(false);
+  const [amount, setAmount]=useState<string>('');
+
+  const validationData = () => {
+    let validation = true;
+    console.log('in validation');
+    if(!reference || reference===''){
+      console.log('no folio');
+      setBandReference(true);
+      validation = false;
+      return false;
+    }else{
+      setBandReference(false);
+    }
+    if(!date || date===''){
+      console.log('no date');
+      setBandDate(true);
+      validation = false;
+      return false;
+    }else{
+      setBandDate(false);
+    }
+    if(validation){
+      nextStep(1);
+    }
+  }
+
+  return (
+    <div>
+      <div>
+        <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+          <input checked={disperse} 
+            onClick={() => setDisperse(!disperse)} id="disperse" type="checkbox"
+            // onChange={() => console.log('')}
+            className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+              appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+              peer-checked:border-green-500 peer-checked:before:bg-green-500
+              border border-slate-300" />
+          <label htmlFor="editClient"
+            className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+            <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+              data-ripple-dark="true"></div>
+          </label>
+        </div>
+      </div>
+      <div className="grid grid-cols-3 gap-x-2 gap-y-2">
+
+        <div className="">
+          <Label htmlFor="reference"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Referencia</p></Label>
+          <Input type="text" value={reference} onChange={(e) => setReference(e.target.value)} autoFocus />
+          {bandReference && (
+            <p className="text-red-700">Ingrese una referencia valida!!!!</p>
+          )}
+        </div>
+
+        <div className="">
+          <Label htmlFor="collection"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Por cobrar</p></Label>
+          <CurrencyInput
+            prefix="$"
+            value={amount.replace(/[$,]/g, "")}
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                      focus:border-slate-700 outline-0"
+            onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
+          />
+          {bandCollection && (
+            <p className="text-red-700">Ingrese una cantidad valida!!!!</p>
+          )}
+        </div>
+        
+        <div className="">
+          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
+          <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          {bandDate && (
+            <p className="text-red-700">Ingrese una fecha valida!!!!</p>
+          )}
+        </div>
+        <div className="">
+          <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Concepto</p></Label>
+          <TextArea value={textConcept} onChange={(v) => setTextConcept(v.target.value)}></TextArea>
+          {bandTextConcept && (
+            <p className="text-red-700">Ingrese un concepto!!!!</p>
+          )}
+        </div>
+      </div>
+      <div className="flex justify-center">
+        <Button type="button" onClick={() => validationData()}>Siguiente</Button>
+      </div>
+    </div>
+  )
+}

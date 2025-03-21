@@ -9,7 +9,7 @@ import Button from "../Button"
 import { useState, useEffect } from "react"
 import { getClientsLV } from "@/app/api/routeClients"
 import { Options } from "@/interfaces/Common"
-import { showToastMessageError } from "../Alert"
+import { showToastMessage, showToastMessageError } from "../Alert"
 import { getUsersLV } from "@/app/api/routeUser"
 import { createQuotation, getContactsClientLV } from "@/app/api/routeQuotations"
 import RatingComponent from "./RatingComponent"
@@ -39,6 +39,25 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const [idVat, setIdVat]=useState<string>('');
   const [message, setMessage] = useState<number>(0);
   const [selOpt, setSelOpt] = useState<Options>();
+  const [heightPage, setHeightPage] = useState<number>(900);
+
+  const handleResize = () => {
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
@@ -105,7 +124,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const validation = () => {
     let val = true;
     let m = 0;
-    if(title.trim()==='' || title.length < 10){
+    if(title.trim()==='' || title.length < 5){
       val=false;
       m=1;
     }else{
@@ -176,6 +195,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
       if(typeof(create)==='string'){
         showToastMessageError(create);
       }else{
+        showToastMessage('Cotizacion creada satisfactoriamente!!!');
         updateQuotations();
         showForm(false);
       }
@@ -236,7 +256,8 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   return(
     <>
-      <form className="z-10 absolute top-16 w-full max-w-md bg-white space-y-5 p-3 right-0 h-screen">
+      <form className="z-10 absolute top-16 w-full max-w-md bg-white space-y-5 p-3 right-0" 
+          style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
           <div className="flex mt-2 items-center">
             <img src={"/img/role.svg"} alt="logo" className="rounded-full w-8 h-auto" />
@@ -396,7 +417,11 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               <Select
                 value={selOpt}
                 options={optContacts}
-                onChange={(e:any) => { setContact(e.value)}} 
+                onChange={(e:any) => { 
+                  console.log('value select => ', e);
+                  setContact(e.value);
+                  setSelOpt(e);
+                }} 
                 className="w-full text-lg mt-2 text-gray-900  rounded-lg 
                   bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
                 styles={{

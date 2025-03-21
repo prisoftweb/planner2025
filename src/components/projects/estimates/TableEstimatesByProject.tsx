@@ -25,7 +25,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
     isFilterTable:boolean, handleFilterTable:Function, delEstimate:Function, token:string, 
     showNewInvoice:Function, selEstimate:Function }) {
 
-  // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
   const [filterEstimates, setFilterEstimates] = useState<IEstimateProject[]>(estimates);
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isShowDetailEstimate, setIsShowDetailEstimate] = useState<boolean>(false);

@@ -172,14 +172,14 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
     }else{
       setBandDate(false);
     }
-    if(!odc || odc.trim()===''){
-      setBandOdc(true);
-      console.log('no odc');
-      validation = false;
-      return false;
-    }else{
-      setBandDate(false);
-    }
+    // if(!odc || odc.trim()===''){
+    //   setBandOdc(true);
+    //   console.log('no odc');
+    //   validation = false;
+    //   return false;
+    // }else{
+    //   setBandDate(false);
+    // }
     // if(!subtotal || subtotal===''){
     //   setBandSubTotal(true);
     //   validation = false;

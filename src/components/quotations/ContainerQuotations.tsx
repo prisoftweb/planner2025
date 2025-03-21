@@ -88,6 +88,7 @@ export default function ContainerQuotations({quotations, token, user}:
 
   const amountValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number) => {
+          console.log('quatation => ', quatation, 'minamount => ', minAmount, ' maxamout => ', maxAmount);
     if(quatation.cost.total >= minAmount && quatation.cost.total <= maxAmount){
       if(dateValidation(quatation.applicationdate, startDate, endDate)){
         return true;
@@ -99,6 +100,7 @@ export default function ContainerQuotations({quotations, token, user}:
   const clientsValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
     minAmount:number, maxAmount:number, clients:string[]) => {
     if(clients.includes('all')){
+      console.log('clients => all ');
       if(amountValidation(quatation, startDate, endDate, minAmount, maxAmount))
         return true;
       return false;
@@ -114,6 +116,7 @@ export default function ContainerQuotations({quotations, token, user}:
   const conditionsValidation = (quatation:IQuotationMin, startDate:number, endDate:number, 
         minAmount:number, maxAmount:number, clients:string[], conditions:string[]) => {
     if(conditions.includes('all')){
+      console.log('conditions all => ');
       if(clientsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients))
         return true;
       return false;
@@ -129,6 +132,8 @@ export default function ContainerQuotations({quotations, token, user}:
     startDate:number, endDate:number) => {
   
     let filtered: IQuotationMin[] = [];
+    console.log('conditions => ', conditions);
+    console.log('clients => ', clients);
     quotationsState.map((quatation) => {
       if(conditionsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients, conditions)){
         filtered.push(quatation);

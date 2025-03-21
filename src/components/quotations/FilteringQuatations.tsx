@@ -34,7 +34,11 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        setOptClients(res);
+        // setOptClients(res);
+        setOptClients([{
+          label: 'TODOS',
+          value: 'all'
+        }, ...res]);
         setClients([res[0].value]);
       }
 
@@ -42,7 +46,11 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
       if(typeof(cons)==='string'){
         showToastMessageError(cons);
       }else{
-        setOptConditions(cons);
+        // setOptConditions(cons);
+        setOptConditions([{
+          label: 'TODOS',
+          value: 'all'
+        }, ...cons]);
         setConditions([cons[0].value]);
       }
     }

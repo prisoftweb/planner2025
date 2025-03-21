@@ -17,8 +17,8 @@ import { getContactsClientLV } from "@/app/api/routeQuotations"
 import { GetVatsLV } from "@/app/api/routeCost"
 import Select from 'react-select'
 
-export default function UpdateQuatationComponent({token, id, quatation, usr}: 
-  {token:string, id: string, quatation:IOneQuotationMin, usr:string}){
+export default function UpdateQuatationComponent({token, id, quatation, usr, updateQuotationState}: 
+  {token:string, id: string, quatation:IOneQuotationMin, usr:string, updateQuotationState:Function}){
 
   const [optClients, setOptClients] = useState<Options[]>([]);
   const [optUsers, setOptUsers] = useState<Options[]>([]);
@@ -109,7 +109,7 @@ export default function UpdateQuatationComponent({token, id, quatation, usr}:
   const validation = () => {
     let val = true;
     let m = 0;
-    if(title.trim()==='' || title.length < 10){
+    if(title.trim()==='' || title.length < 5){
       val=false;
       m=1;
     }else{
@@ -173,13 +173,13 @@ export default function UpdateQuatationComponent({token, id, quatation, usr}:
         applicant: contact,
         user 
       }
-      // console.log('data => ', JSON.stringify(data));
+      console.log('data => ', JSON.stringify(data));
       const create = await updateQuotation(token, data, quatation._id);
       if(typeof(create)==='string'){
         showToastMessageError(create);
       }else{
-        //
         showToastMessage('Cotizacion actualizada satisfactoriamente!!');
+        updateQuotationState();
       }
     }
   }
@@ -390,7 +390,10 @@ export default function UpdateQuatationComponent({token, id, quatation, usr}:
             <Select
               value={selOpt}
               options={optContacts}
-              onChange={(e:any) => { setContact(e.value)}} 
+              onChange={(e:any) => { 
+                setContact(e.value);
+                setSelOpt(e);
+              }} 
               className="w-full text-lg mt-2 text-gray-900  rounded-lg 
                 bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
               styles={{

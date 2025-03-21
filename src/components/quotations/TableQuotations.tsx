@@ -78,15 +78,6 @@ export default function TableQuotations({quotationsData, token, deleteQuatation}
         >{row.original.Titulo}</p>
       ),
     }),
-    columnHelper.accessor('Cliente', {
-      header: 'Cliente',
-      id: 'cliente',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/quotations/${row.original.id}`)}
-        >{row.original.Cliente.name}</p>
-      ),
-    }),
     columnHelper.accessor('Estatus', {
       header: 'Estatus',
       id: 'estatus',
@@ -94,6 +85,15 @@ export default function TableQuotations({quotationsData, token, deleteQuatation}
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/quotations/${row.original.id}`)}
         ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} /></p>
+      ),
+    }),
+    columnHelper.accessor('Cliente', {
+      header: 'Cliente',
+      id: 'cliente',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/quotations/${row.original.id}`)}
+        >{row.original.Cliente.name}</p>
       ),
     }),
     columnHelper.accessor('Fechasol', {

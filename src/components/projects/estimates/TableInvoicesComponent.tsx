@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { IInvoiceByProject, IInvoiceTable } from "@/interfaces/Invoices"
 import { getInvoicesByProject, removeInvoice } from "@/app/api/routeInvoices"
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
@@ -9,10 +9,19 @@ import { InvoiceDataToTableData } from "@/app/functions/InvoicesFunctions";
 import RemoveElement from "@/components/RemoveElement";
 import { OneProjectMin } from "@/interfaces/Projects";
 import Chip from "@/components/providers/Chip";
+import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
+import AddNewCollectionComponent from "./collections/AddNewCollection";
 
 export default function TableInvoicesComponent({token, project}:{token:string, project:OneProjectMin}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
+  const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
+  const [showNewCollection, setShowNewCollection]=useState<boolean>(false);
+  const refEstimate = useRef('');
+
+  const handleShowForm = (value:boolean) => {
+    setShowNewCollection(value);
+  }
 
   useEffect(() => {
     const fetch = async() => {
@@ -60,6 +69,15 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
           /> */}
           <RemoveElement id={`${row.original.id}/${row.original.idEstimates}`} name={row.original.estimate} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
+          {row.original.id==''? (
+            <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+          ): (
+            <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
+                refEstimate.current = row.original.id;
+                setSelInvoice(row.original);
+                setShowNewCollection(true);
+            }} />
+          )}
         </div>
       ),
       size: 300,
@@ -156,6 +174,8 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
   return (
     <>
       <Table columns={columns} data={data} placeH="buscar factura" />
+      {showNewCollection && <AddNewCollectionComponent showForm={handleShowForm} user={''}
+               token={token} project={project} />}
     </>
   )
 }

@@ -1,3 +1,5 @@
+import { Glossary } from "./Glossary"
+
 export interface ICollection {
   _id: string
   reference: string
@@ -113,4 +115,38 @@ export interface IOneCollectionMin {
     color: string
   }[]
   account: string
+}
+
+export interface ITableCollection {
+  id:string
+  Accion: string 
+  Referencia: string 
+  Fecha: string 
+  Cuenta: string
+  Estimacion:  string
+  Facturas: {
+    _id: string
+    amountcharged: number
+    project: {
+      _id: string
+      title: string
+    }
+    invoices: {
+      _id: string
+      folio: string
+      taxfolio: string
+      date: string
+      cost: {
+        subtotal: number
+        iva: number
+        total: number
+      }
+    }
+  }[],
+  status: {
+    _id: string
+    name: string
+    color: string
+  }, 
+  Importe: number
 }
