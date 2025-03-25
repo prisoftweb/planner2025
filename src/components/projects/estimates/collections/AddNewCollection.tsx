@@ -23,9 +23,28 @@ import VoucherStepper from "./VoucherStepper"
 import NavCollectionStepper from "./NavCollectionStepper"
 
 import DataCollectionStepper from "./DataCollectionStepper"
+import DispersionCollectionStepper from "./DispersionCollectionStepper"
+import { IInvoiceMin, IInvoiceTable } from "@/interfaces/Invoices"
 
-export default function AddNewCollectionComponent({showForm, user, token, project}: 
-  {showForm:Function, user:string, token:string, 
+type TInvoiceStepper={
+  folio: string,
+  total: number,
+  id:string,
+  project: {
+    title:string,
+    id:string
+  },
+  concepts: string
+}
+
+type TInvoiceSend={
+  invoice: string,
+  amountcharged: number,
+  project: string,
+}
+
+export default function AddNewCollectionComponent({showForm, user, token, project, invoiceTable}: 
+  {showForm:Function, user:string, token:string, invoiceTable:IInvoiceTable, 
     project:OneProjectMin}) {
   // const refRequest = useRef(true);
 
@@ -33,6 +52,17 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
   const [textConcept, setTextConcept]=useState<string>('');
   const [reference, setReference]=useState<string>('');
   const [voucher, setVoucher]=useState<File>();
+  const [amount, setAmount]=useState<string>('')
+  const [invoicesDisp, setInvoicesDisp]=useState<TInvoiceStepper[]>([{
+    id:invoiceTable.id,
+    folio: invoiceTable.folio,
+    project: {
+      id: project._id,
+      title: project.title
+    },
+    total: invoiceTable.amount,
+    concepts: invoiceTable.formpaid+' | '+ invoiceTable.methodpaid + ' | ' + invoiceTable.usecfdi
+  }]);
 
   // const [conceptsEstimate, setConceptsEstimate] = useState<IConceptEstimate[]>([]);
 
@@ -40,8 +70,9 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
   const [bandTaxFolio, setBandTaxFolio] = useState<boolean>(false);
   const [bandDate, setBandDate] = useState<boolean>(false);
   const [bandOdc, setBandOdc] = useState<boolean>(false);
-  const [bandTextConcept, setBandTextDate] = useState<boolean>(false);
+  const [bandTextConcept, setBandTextConcept] = useState<boolean>(false);
   const [bandReference, setBandReference] = useState<boolean>(false);
+  const [bandAmount, setBandAmount] = useState<boolean>(false);
 
   const [step, setStep]=useState<number>(0);
 
@@ -55,12 +86,24 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     setDate(value);
   }
 
+  const handleAmount = (value:string) => {
+    setAmount(value);
+  }
+
   const handleBandDate = (value:boolean) => {
     setBandDate(value);
+  }
+
+  const handleBandAmount = (value:boolean) => {
+    setBandAmount(value);
   }
   
   const handleBandOdc = (value:boolean) => {
     setBandOdc(value);
+  }
+
+  const handleInvoicesDisp = (value: TInvoiceStepper[]) => {
+    setInvoicesDisp(value);
   }
 
   const handleVoucher = (value:File) => {
@@ -79,8 +122,8 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     setTextConcept(value);
   }
 
-  const handleBandFolio = (value:boolean) => {
-    setBandFolio(value);
+  const handleBandTextConcept = (value:boolean) => {
+    setBandTextConcept(value);
   }
 
   const handleBandTaxFolio = (value:boolean) => {
@@ -108,6 +151,14 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
   const validationData = () =>{
     let validation = true;
     console.log('in validation');
+    if(!reference || reference===''){
+      console.log('no folio');
+      setBandReference(true);
+      validation = false;
+      return false;
+    }else{
+      setBandReference(false);
+    }
     if(!date || date===''){
       console.log('no date');
       setBandDate(true);
@@ -116,63 +167,90 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     }else{
       setBandDate(false);
     }
+    if(!amount || amount==='0'){
+      console.log('no amount');
+      setBandAmount(true);
+      validation = false;
+      return false;
+    }else{
+      setBandAmount(false);
+    }
+    if(!textConcept || textConcept===''){
+      console.log('no concept');
+      setBandTextConcept(true);
+      validation = false;
+      return false;
+    }else{
+      setBandTextConcept(false);
+    }
     return validation;
   }
 
-  const saveInvoice = async () => {
-    console.log('on save invoice => ');
+  const saveCollection = async () => {
+    // console.log('on save invoice => ');
     const val = validationData();
 
-    // if(val && estimate){
-    //   console.log('validation => ');
-    //   const res: IEstimateMin = await getEstimateMin(token, estimate?.id);
-    //   const data = {
-    //     date,
-    //     user,
-    //     project: project._id,
-    //     company: '65d3813c74045152c0c4377e',
-    //     concepts: res.concepts,
-    //     notes: res.description,
-    //     amountGuaranteeFund: estimate.Fondo,
-    //     amountChargeOff: estimate.Amortizacion,
-    //     cost: {
-    //       // subtotal: Number(subtotal.replace(/[$,]/g, "")), 
-    //       // iva: Number(vat.replace(/[$,]/g, "")),
-    //       // total: Number(total.replace(/[$,]/g, "")),
-    //       subtotal: estimate.Estimacion, 
-    //       iva: estimate.Estimacion * 0.16,
-    //       total: estimate.amountVat,
-    //       // discount: 0,        
-    //       // vat:"6675daf663dfd817c9551b2a" 
-    //     },
-    //     condition: [
-    //       {glossary:"67d20cb359865f640af92638", user}
-    //     ],
-    //     // termsofpayment:conditionPayment,
-    //     // purchaseorder:odc,
-    //     // duedate:newDate.toISOString()
-    //   }
+    if(val){
+      // const inv =
+      const inv = invoicesDisp.map((i, index) => {
+        if (index === 0) {
+          // Increment the clicked counter
+          const aux: TInvoiceStepper = {
+            id: i.id,
+            folio: i.folio,
+            project: i.project,
+            concepts: i.concepts,
+            total: Number(amount)
+          }
+          return aux;
+        } else {
+          // The rest haven't changed
+          return i;
+        }
+      });
+      const invoices = transformTypes(inv);
+      // setInvoicesDisp(inv); 
+      const data = {
+        reference,
+        concept: textConcept,
+        amount:Number(amount),
+        date,
+        company: "65d3813c74045152c0c4377e", 
+        client: project.client._id,
+        user,
+        condition: [
+          {
+            glossary: "67b910014643d85abda93cc0",
+            user
+          }
+        ],
+        invoices
+      }
 
-    //   // console.log('create invoice => ', JSON.stringify(data));
-    //   const resInvoice = await createInvoice(token, data);
-    //   if(typeof(res)==='string'){
-    //     showToastMessageError(resInvoice);
-    //   }else{
-    //     showToastMessage('Factura agregada satisfactoriamente!!');
-    //     updateInvoices();
-    //     showForm(false);
-    //   }
-    // }
+      const res = await createCollection(token, data);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        showToastMessage('Cobro agregado satisfactoriamente!!!');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2500);
+      }
+    }
   }
 
-  const component = (step===0? <DataCollectionStepper bandCollection bandDate bandReference={bandReference} 
-                                  date="" nextStep={handleStep} reference={reference} setBandDate={handleBandDate} 
-                                  setBandReference={handleBandReference} setDate={handleDate} 
+  const component = (step===0? <DataCollectionStepper bandCollection={bandAmount} bandDate={bandDate} bandReference={bandReference} 
+                                  date={date} nextStep={handleStep} reference={reference} setBandDate={handleBandDate} 
+                                  setBandReference={handleBandReference} setDate={handleDate} amount={amount}
+                                  setAmount={handleAmount} saveCollection={saveCollection} setBandCollection={handleBandAmount}
                                   setReference={handleReference} token={token} bandTextConcept={bandTextConcept} 
-                                  setTextConcept={handleTextConcept} textConcept={textConcept} /> 
+                                  setTextConcept={handleTextConcept} textConcept={textConcept} 
+                                  setBandConcept={handleBandTextConcept} /> 
                                     : (step===1? <VoucherStepper NextStep={handleStep} setVoucher={handleVoucher}
                                           token={token} user={user} />: 
-                                    <></>))
+                                    <DispersionCollectionStepper NextStep={handleStep} token={token}
+                                        user={user} invoicesDisp={invoicesDisp} setInvoicesDisp={handleInvoicesDisp}
+                                        saveCollection={saveCollection} />))
 
   return(
     <>
@@ -193,4 +271,16 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
       </form>
     </>
   )
+}
+
+function transformTypes(invoiceFrom: TInvoiceStepper[]){
+  const invoiceTo: TInvoiceSend[]=[];
+  invoiceFrom.map((i) => {
+    invoiceTo.push({
+      amountcharged:i.total,
+      invoice:i.id,
+      project: i.project.id
+    });
+  });
+  return invoiceTo;
 }

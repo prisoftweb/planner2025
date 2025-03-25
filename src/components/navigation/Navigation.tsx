@@ -26,7 +26,10 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   let photo='/img/default.jpg', role='', id='';
+  //carmen
   // photo="https://docs-adminweb.s3.amazonaws.com/user-65d3836974045152c0c4378c-1736450268582.jpeg";
+  //prisco
+  // photo="https://docs-adminweb.s3.us-east-1.amazonaws.com/user-1708360552272.jpeg";
   if(user.photo){
     photo = user.photo;
   }

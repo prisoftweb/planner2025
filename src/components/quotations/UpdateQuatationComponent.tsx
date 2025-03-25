@@ -17,6 +17,12 @@ import { getContactsClientLV } from "@/app/api/routeQuotations"
 import { GetVatsLV } from "@/app/api/routeCost"
 import Select from 'react-select'
 
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
 export default function UpdateQuatationComponent({token, id, quatation, usr, updateQuotationState}: 
   {token:string, id: string, quatation:IOneQuotationMin, usr:string, updateQuotationState:Function}){
 
@@ -39,6 +45,14 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
   const [idVat, setIdVat]=useState<string>('');
   const [discount, setDiscount]=useState<string>('0');
   const [selOpt, setSelOpt] = useState<Options>();
+
+  const [location, setLocation]=useState<string>('LOCAL');
+
+  const [type, setType]=useState<string>('');
+  const [optTypes, setOptTypes]=useState<Options[]>([]);
+
+  const [category, setCategory]=useState<string>('');
+  const [optCategories, setOptCategory]=useState<Options[]>([]);
 
   const [message, setMessage] = useState<number>(0);
 
@@ -91,6 +105,14 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
 
   const handleScore = (value:number) => {
     setScore(value);
+  }
+
+  const handleType = (value: string) => {
+    setType(value);
+  }
+
+  const handleCategories = (value: string) => {
+    setCategory(value);
   }
 
   // const handleContact = (value: string) => {
@@ -411,10 +433,43 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
             <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
           )}
         </div>
+
+        <div className="">
+          <Label>Plazo</Label>
+          {optCategories.length > 0 && (
+            <SelectReact index={0} opts={optCategories} setValue={handleCategories} />
+          )}
+        </div>
+
+        <div className="">
+          <Label>Tipo cotizacion</Label>
+          {optTypes.length > 0 && (
+            <SelectReact index={0} opts={optTypes} setValue={handleType} />
+          )}
+        </div>
+
         <div className=" col-span-2">
           <Label>Puntuacion (0 al 5)</Label>
           <RatingComponent setValue={handleScore} value={score} />
         </div>
+
+        <div className=" col-span-2">
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">Ubicacion geografica</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="LOCAL"
+              name="radio-buttons-group"
+              className="flex gap-x-2"
+            >
+              <FormControlLabel value="LOCAL" onFocus={() => setLocation('LOCAL')} control={<Radio />} label="LOCAL" />
+              <FormControlLabel value="NACIONAL" onFocus={() => setLocation('NACIONAL')} control={<Radio />} label="NACIONAL" />
+              <FormControlLabel value="INTERNACIONAL" onFocus={() => setLocation('INTERNACIONAL')} control={<Radio />} label="INTERNACIONAL" />
+            </RadioGroup>
+          </FormControl>
+        </div>
+
         <div className=" col-span-2">
           <Label>Descripcion</Label>
           <TextArea value={notes} onChange={(e) => setNotes(e.target.value)} />

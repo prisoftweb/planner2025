@@ -51,7 +51,10 @@ export default function TableCollectionsComponent({token, project}:{token:string
   const delCollection = (id:string) => {
     // const fil = invoices.filter((i) => id.includes(i._id));
     // setInvoices(fil);
-    window.location.reload();
+    showToastMessage('Cobro eliminado satisfactoriamente!!!');
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   }
 
   const columnHelper = createColumnHelper<ITableCollection>();

@@ -1,0 +1,123 @@
+'use client'
+import { useState, useRef, useEffect } from "react";
+// import NavExpenseStepper from "./NavExpenseStepper";
+import UploadFileDropZone from "@/components/UploadFileDropZone";
+import Button from "@/components/Button";
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
+// import { useNewExpense } from "@/app/store/newExpense";
+// import { showToastMessage, showToastMessageError } from "../Alert";
+// import SaveExpense from "@/app/functions/SaveExpense";
+import { CreateCostWithFiles } from "@/app/api/routeCost";
+import { getSupplierCreditProv } from "@/app/functions/CostsFunctions";
+
+import { getInvoices } from "@/app/api/routeInvoices";
+import { IInvoiceMin } from "@/interfaces/Invoices";
+
+export default function DispersionStepper({token, user, NextStep}: 
+  {token:string, user:string, NextStep:Function}) {
+
+  // const Next = () => {
+  //   if(file){
+  //     // updateVoucher(file);
+  //     setVoucher(file);
+  //   }
+  //   NextStep(2);
+  // }
+
+  const [search, setSearch]=useState<string>('');
+  const [invoices, setInvoices]=useState<IInvoiceMin[]>([]);
+  const [selected, setSelected]=useState<string>('');
+
+  useEffect(() => {
+    const fetch = async() => {
+      const res = await getInvoices(token);
+      if(typeof(res)==='string'){
+        showToastMessageError('Error al obtener facturas!!!');
+      }else{
+        setInvoices(res);
+      }
+    }
+    fetch();
+  })
+
+  // const handle = () => {}
+
+  return (
+    <div className="mt-2">
+      <div className="flex items-center gap-x-2">
+        <div className="relative w-full p-2">
+          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+          </div>
+          <input 
+            type="search" 
+            id="default-search"
+            value={search}
+            autoFocus
+            onChange={(e) => setSearch(e.target.value)} 
+            className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 
+              rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500
+              outline-0 outline-none 
+              dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+              dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={'Buscar concepto'} required ></input>
+        </div>
+      </div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
+            overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+          {invoices.map((invoice) => (
+            <div role="button"
+              key={invoice._id}
+              className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+                outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+                focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+                active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300"
+              onClick={() => setSelected(invoice._id)}
+            >
+              <div className="flex items-center ">
+                <div className="grid mr-4 place-items-center">
+                  <img alt="responsable" src={ invoice.project.photo || '/img/users/default.jpg'}
+                    className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+                </div>
+                <div className={`w-full ${invoice._id==selected? 'bg-blue-500': ''}`}>
+                  <div className="flex justify-between items-center">
+                    <h6
+                      className="block font-sans text-lg antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
+                      {invoice.estimate.name}
+                    </h6>
+                    <p className="text-slate-500 text-sm">{invoice.folio}</p>
+                  </div>
+                  <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                    {invoice.notes}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+
+        </nav>
+      </div>
+      <div className="flex justify-center mt-8 space-x-5">
+        <Button type="button" 
+          onClick={() => {
+            NextStep(1); 
+            // if(refRequest.current){
+            //   SaveData();
+            // }
+            // else{
+            //   showToastMessageError('Ya hay una peticion en proceso..!');
+            // }
+          }}>Atras</Button>
+        <button type="button"
+          onClick={() => {}}
+          className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
+            border-slate-900 rounded-xl hover:bg-slate-200"
+        >
+          Guardar
+        </button>         
+      </div>
+    </div>
+  );
+}

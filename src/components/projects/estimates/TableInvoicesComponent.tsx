@@ -12,7 +12,8 @@ import Chip from "@/components/providers/Chip";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import AddNewCollectionComponent from "./collections/AddNewCollection";
 
-export default function TableInvoicesComponent({token, project}:{token:string, project:OneProjectMin}) {
+export default function TableInvoicesComponent({token, project, user}:
+    {token:string, project:OneProjectMin, user:string}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -174,8 +175,8 @@ export default function TableInvoicesComponent({token, project}:{token:string, p
   return (
     <>
       <Table columns={columns} data={data} placeH="buscar factura" />
-      {showNewCollection && <AddNewCollectionComponent showForm={handleShowForm} user={''}
-               token={token} project={project} />}
+      {showNewCollection && selInvoice && <AddNewCollectionComponent showForm={handleShowForm} user={user}
+               token={token} project={project} invoiceTable={selInvoice} />}
     </>
   )
 }

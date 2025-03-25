@@ -6,7 +6,7 @@ import CurrencyInput from "react-currency-input-field"
 import SelectReact from "../SelectReact"
 import TextArea from "../TextArea"
 import Button from "../Button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { getClientsLV } from "@/app/api/routeClients"
 import { Options } from "@/interfaces/Common"
 import { showToastMessage, showToastMessageError } from "../Alert"
@@ -15,6 +15,13 @@ import { createQuotation, getContactsClientLV } from "@/app/api/routeQuotations"
 import RatingComponent from "./RatingComponent"
 import Select from 'react-select'
 import { GetVatsLV } from "@/app/api/routeCost"
+import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs"
+
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 export default function NewQuotation({showForm, token, usr, updateQuotations}: 
   {showForm:Function, token:string, usr:string, updateQuotations: Function}){
@@ -40,6 +47,15 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const [message, setMessage] = useState<number>(0);
   const [selOpt, setSelOpt] = useState<Options>();
   const [heightPage, setHeightPage] = useState<number>(900);
+  const [location, setLocation]=useState<string>('LOCAL');
+
+  // const refArea=useRef();
+
+  const [type, setType]=useState<string>('');
+  const [optTypes, setOptTypes]=useState<Options[]>([]);
+
+  const [category, setCategory]=useState<string>('');
+  const [optCategories, setOptCategory]=useState<Options[]>([]);
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -91,6 +107,22 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         setOptVats(opVat);
         setIdVat(opVat[0].value);
       }
+
+      const opCats: Options[] = await getCatalogsByNameAndCategory(token, 'Quotations');
+      if(typeof(opCats)==='string'){
+        showToastMessageError(opCats);
+      }else{
+        setOptCategory(opCats);
+        setCategory(opCats[0].value);
+      }
+      
+      const opTyps: Options[] = await getCatalogsByNameAndType(token, 'Quotations');
+      if(typeof(opTyps)==='string'){
+        showToastMessageError(opTyps);
+      }else{
+        setOptTypes(opTyps);
+        setType(opTyps[0].value);
+      }
     }
     fetch();
   }, []);
@@ -102,6 +134,14 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const handleClient = (value: string) => {
     setClient(value);
     updateOptionsContacts(value);
+  }
+
+  const handleType = (value: string) => {
+    setType(value);
+  }
+
+  const handleCategories = (value: string) => {
+    setCategory(value);
   }
 
   // const handleContact = (value: string) => {
@@ -186,10 +226,15 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
             user
           }
         ],
+        location,
+        type,
+        category,
         client,
         applicant: contact,
         user 
       }
+
+      console.log('data create => ', JSON.stringify(data));
 
       const create = await createQuotation(token, data);
       if(typeof(create)==='string'){
@@ -253,6 +298,8 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
     updateIva(value, discount, amount);
     setIdVat(value);
   }
+
+  console.log('location => ', location);
 
   return(
     <>
@@ -439,10 +486,44 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
             )}
           </div>
+
+          <div className="">
+            <Label>Plazo</Label>
+            {optCategories.length > 0 && (
+              <SelectReact index={0} opts={optCategories} setValue={handleCategories} />
+            )}
+          </div>
+
+          <div className="">
+            <Label>Tipo cotizacion</Label>
+            {optTypes.length > 0 && (
+              <SelectReact index={0} opts={optTypes} setValue={handleType} />
+            )}
+          </div>
+
           <div className=" col-span-2">
             <Label>Puntuacion (0 al 5)</Label>
             <RatingComponent setValue={handleScore} value={score} />
           </div>
+
+          <div className=" col-span-2">
+            {/* <Label></Label> */}
+            <FormControl>
+              <FormLabel id="demo-radio-buttons-group-label">Ubicacion geografica</FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="demo-radio-buttons-group-label"
+                defaultValue="LOCAL"
+                name="radio-buttons-group"
+                className="flex gap-x-2"
+              >
+                <FormControlLabel value="LOCAL" onFocus={() => setLocation('LOCAL')} control={<Radio />} label="LOCAL" />
+                <FormControlLabel value="NACIONAL" onFocus={() => setLocation('NACIONAL')} control={<Radio />} label="NACIONAL" />
+                <FormControlLabel value="INTERNACIONAL" onFocus={() => setLocation('INTERNACIONAL')} control={<Radio />} label="INTERNACIONAL" />
+              </RadioGroup>
+            </FormControl>
+          </div>
+
           <div className=" col-span-2">
             <Label>Descripcion</Label>
             <TextArea value={notes} onChange={(e) => setNotes(e.target.value)} />

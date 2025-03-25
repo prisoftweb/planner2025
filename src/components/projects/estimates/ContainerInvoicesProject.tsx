@@ -166,7 +166,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
         <NavTabEstimates tab={1} id_p={project._id} />
       </div>
       
-      <TableInvoicesComponent token={token} project={project} />
+      <TableInvoicesComponent token={token} project={project} user={user} />
     </>
   )
 }
