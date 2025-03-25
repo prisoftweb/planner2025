@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react"
-import { IInvoiceByProject, IInvoiceTable } from "@/interfaces/Invoices"
-import { getInvoicesByProject, removeInvoice } from "@/app/api/routeInvoices"
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { InvoiceDataToTableData } from "@/app/functions/InvoicesFunctions";
 import RemoveElement from "@/components/RemoveElement";
 import { OneProjectMin } from "@/interfaces/Projects";
 import Chip from "@/components/providers/Chip";
@@ -13,7 +10,6 @@ import Chip from "@/components/providers/Chip";
 import { getCollectionsMin, deleteCollection } from "@/app/api/routeCollections";
 import { ICollectionMin, ITableCollection } from "@/interfaces/Collections";
 import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
-import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 
 export default function TableCollectionsComponent({token, project}:{token:string, project:OneProjectMin}) {
 
@@ -38,7 +34,6 @@ export default function TableCollectionsComponent({token, project}:{token:string
         <div className="flex flex-col items-center">
           <p className="text-5xl mt-20 font-bold">Cobranza</p>
           <p className="text-xl mt-10 text-slate-700 font-bold" 
-            // style={{maxInlineSize: '45ch', textWrap:'balance' }}
             >Gestiona las cuentas por cobrar,
             recuperacion de cobranza y mas
             desde Planner</p>
@@ -49,8 +44,6 @@ export default function TableCollectionsComponent({token, project}:{token:string
   }
 
   const delCollection = (id:string) => {
-    // const fil = invoices.filter((i) => id.includes(i._id));
-    // setInvoices(fil);
     showToastMessage('Cobro eliminado satisfactoriamente!!!');
     setTimeout(() => {
       window.location.reload();
@@ -129,9 +122,6 @@ export default function TableCollectionsComponent({token, project}:{token:string
             <Chip label={f.invoices.folio} color={'#466'} key={f._id} />
           ))}
         </div>
-        // <p className="py-2 font-semibold cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
-        // >{row.original.estimate}</p>
       )
     }),
     columnHelper.accessor('status', {
@@ -154,8 +144,6 @@ export default function TableCollectionsComponent({token, project}:{token:string
       ),
     }),
   ]
-
-  // console.log('invoices => ', invoices);
 
   const data = CollectionDataToTableData(collections);
 

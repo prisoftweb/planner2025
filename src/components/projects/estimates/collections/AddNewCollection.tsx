@@ -18,7 +18,7 @@ import { createInvoice } from "@/app/api/routeInvoices"
 // import InvoicesConditionsStepper from "./InvoicesConditionsStepper"
 // import ConceptsInvoiceStepper from "./ConceptsInvoceStepper"
 // import NavInvoiceStepper from "./NavInvoiceStepper"
-import { createCollection } from "@/app/api/routeCollections"
+import { createCollection, createCollectionWithVoucher } from "@/app/api/routeCollections"
 import VoucherStepper from "./VoucherStepper"
 import NavCollectionStepper from "./NavCollectionStepper"
 
@@ -52,7 +52,8 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
   const [textConcept, setTextConcept]=useState<string>('');
   const [reference, setReference]=useState<string>('');
   const [voucher, setVoucher]=useState<File>();
-  const [amount, setAmount]=useState<string>('')
+  const [amount, setAmount]=useState<string>('');
+  const [disperse, setDisperse]=useState<boolean>(false);
   const [invoicesDisp, setInvoicesDisp]=useState<TInvoiceStepper[]>([{
     id:invoiceTable.id,
     folio: invoiceTable.folio,
@@ -124,6 +125,10 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
 
   const handleBandTextConcept = (value:boolean) => {
     setBandTextConcept(value);
+  }
+
+  const handleDisperse = (value:boolean) => {
+    setDisperse(value);
   }
 
   const handleBandTaxFolio = (value:boolean) => {
@@ -210,31 +215,72 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
       });
       const invoices = transformTypes(inv);
       // setInvoicesDisp(inv); 
-      const data = {
-        reference,
-        concept: textConcept,
-        amount:Number(amount),
-        date,
-        company: "65d3813c74045152c0c4377e", 
-        client: project.client._id,
-        user,
-        condition: [
+      if(voucher){
+        const data = {
+          reference,
+          concept: textConcept,
+          amount:Number(amount),
+          date,
+          company: "65d3813c74045152c0c4377e", 
+          client: project.client._id,
+          user,
+          condition: [
+            {
+              glossary: "67e31aa81945c0b1e4c9bc76",
+              user
+            }
+          ],
+          type: [
+            {
+              glossary: "67e31c8d1945c0b1e4c9bddf",
+              user
+            }
+          ],
+          invoices
+        }
+        // showToastMessage('cobro sin voucehr');
+        const res = await createCollection(token, data);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          showToastMessage('Cobro agregado satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 2500);
+        }
+      }else{
+        const data = new FormData();
+        data.append('reference', reference);
+        data.append('concept', textConcept);
+        data.append('amount', amount);
+        // data.append('amount', JSON.stringify(amount));
+        data.append('date', date);
+        data.append('company', "65d3813c74045152c0c4377e");
+        data.append('client', project.client._id);
+        data.append('user', user);
+        data.append('condition', JSON.stringify([
           {
-            glossary: "67b910014643d85abda93cc0",
+            glossary: "67e31aa81945c0b1e4c9bc76",
             user
           }
-        ],
-        invoices
-      }
-
-      const res = await createCollection(token, data);
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        showToastMessage('Cobro agregado satisfactoriamente!!!');
-        setTimeout(() => {
-          window.location.reload();
-        }, 2500);
+        ]));
+        data.append('type', JSON.stringify([
+          {
+            glossary: "67e31c8d1945c0b1e4c9bddf",
+            user
+          }
+        ]));
+        data.append('invoices', JSON.stringify(invoices));
+        // showToastMessage('costo con voucehr');
+        const res = await createCollectionWithVoucher(token, data);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          showToastMessage('Cobro agregado satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 2500);
+        }
       }
     }
   }
@@ -245,9 +291,10 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
                                   setAmount={handleAmount} saveCollection={saveCollection} setBandCollection={handleBandAmount}
                                   setReference={handleReference} token={token} bandTextConcept={bandTextConcept} 
                                   setTextConcept={handleTextConcept} textConcept={textConcept} 
-                                  setBandConcept={handleBandTextConcept} /> 
+                                  setBandConcept={handleBandTextConcept} disperse={disperse} setDisperse={handleDisperse} /> 
                                     : (step===1? <VoucherStepper NextStep={handleStep} setVoucher={handleVoucher}
-                                          token={token} user={user} />: 
+                                          token={token} user={user} disperse={disperse} 
+                                          saveCollection={saveCollection} voucher={voucher} />: 
                                     <DispersionCollectionStepper NextStep={handleStep} token={token}
                                         user={user} invoicesDisp={invoicesDisp} setInvoicesDisp={handleInvoicesDisp}
                                         saveCollection={saveCollection} />))

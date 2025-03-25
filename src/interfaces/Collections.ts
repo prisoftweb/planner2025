@@ -34,6 +34,54 @@ export interface ICollection {
   id: string
 }
 
+// export interface ICollectionMin {
+//   _id: string
+//   reference: string
+//   concept: string
+//   amount: number
+//   date: string
+//   account: string
+//   voucher: string
+//   invoices: {
+//     _id: string
+//     amountcharged: number
+//     project: {
+//       _id: string
+//       title: string
+//     }
+//     invoices: {
+//       _id: string
+//       folio: string
+//       taxfolio: string
+//       date: string
+//       cost: {
+//         subtotal: number
+//         iva: number
+//         total: number
+//       }
+//     }
+//   }
+//   company: {
+//     _id: string
+//     name: string
+//     logo: string
+//   }
+//   user: {
+//     _id: string
+//     name: string
+//     photo: string
+//   }
+//   client: {
+//     _id: string
+//     name: string
+//   }
+//   condition: {
+//     _id: string
+//     name: string
+//     color: string
+//   }
+// }
+
 export interface ICollectionMin {
   _id: string
   reference: string

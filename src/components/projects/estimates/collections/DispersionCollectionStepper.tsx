@@ -13,7 +13,7 @@ import { getSupplierCreditProv } from "@/app/functions/CostsFunctions";
 import { getInvoices } from "@/app/api/routeInvoices";
 import { IInvoiceMin } from "@/interfaces/Invoices";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import {PlusCircleIcon} from "@heroicons/react/24/solid";
 import CurrencyInput from "react-currency-input-field";
 
 type TInvoiceStepper={
@@ -60,10 +60,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 
   // const handle = () => {}
 
-  const filteredInvoices = search==''? invoices: invoices.filter((i) => {
-    console.log('folio => ', i.folio, ' search => ', search);
-    i.folio.toString().includes(search);
-  });
+  const filteredInvoices = search==''? invoices: invoices.filter((i) => i.folio.toString().includes(search));
 
   const addNewDispersion = () => {
     if(selected){
@@ -193,7 +190,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
         </nav>
       </div>
 
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 items-center">
         <div className="col-span-3">
           <CurrencyInput
             prefix="$"
@@ -204,7 +201,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
           />
         </div>
         <div className="col-span-3">
-        <CurrencyInput
+          <CurrencyInput
             prefix="$"
             value={amount.replace(/[$,]/g, "")}
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
@@ -213,7 +210,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
             disabled
           />
         </div>
-        <PlusIcon className="w-6 h-6 text-green-500 hover:text-green-300" 
+        <PlusCircleIcon className="w-6 h-6 text-green-500 hover:text-green-300" 
           onClick={addNewDispersion}
         />
       </div>

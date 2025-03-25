@@ -29,13 +29,15 @@ type DataBasicProps={
   saveCollection:Function
   setBandCollection:Function
   setBandConcept: Function
+  disperse:boolean,
+  setDisperse:Function
 }
 
 export default function DataCollectionStepper({token, date, setDate, bandDate, bandCollection, 
   bandReference, reference, setReference, nextStep, setBandDate, setBandReference, setBandConcept, 
-  bandTextConcept, setTextConcept, textConcept, amount, setAmount, saveCollection, setBandCollection}: DataBasicProps) {
+  bandTextConcept, setTextConcept, textConcept, amount, setAmount, saveCollection, setBandCollection, 
+  disperse, setDisperse}: DataBasicProps) {
 
-  const [disperse, setDisperse]=useState<boolean>(false);
   // const [amount, setAmount]=useState<string>('');
 
   const validationData = () => {
@@ -92,7 +94,7 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
 
   return (
     <div>
-      <div>
+      <div className="flex gap-x-5 justify-end my-5 pr-3">
         <div className="inline-flex items-center justify-end gap-x-2">
           <Label>Dispersar cobro</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">

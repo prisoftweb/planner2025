@@ -10,7 +10,7 @@ import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumen
 import { ITotalInvoicesByProject, IInvoiceByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
 
-import { getCollectionsMin } from "@/app/api/routeCollections";
+import { getCollectionsByProjectMin } from "@/app/api/routeCollections";
 import { ICollectionMin } from "@/interfaces/Collections";
 import ContainerCollectionsProject from "@/components/projects/estimates/collections/ContainerCollectionsProject";
 
@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { idp: string }}){
 
   let collections: ICollectionMin[];
   try {
-    collections = await getCollectionsMin(token);
+    collections = await getCollectionsByProjectMin(token, project._id);
     console.log('collections min => ', collections);
     if(typeof(collections) === "string")
       return <h1 className="text-center text-red-500">{collections}</h1>
