@@ -230,12 +230,10 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
               user
             }
           ],
-          type: [
-            {
+          type: {
               glossary: "67e31c8d1945c0b1e4c9bddf",
               user
-            }
-          ],
+            },
           invoices
         }
         // showToastMessage('cobro sin voucehr');
@@ -252,7 +250,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
         const data = new FormData();
         data.append('reference', reference);
         data.append('concept', textConcept);
-        data.append('amount', amount);
+        data.append('amount', JSON.stringify(Number(amount)));
         // data.append('amount', JSON.stringify(amount));
         data.append('date', date);
         data.append('company', "65d3813c74045152c0c4377e");
@@ -264,12 +262,11 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
             user
           }
         ]));
-        data.append('type', JSON.stringify([
+        data.append('type', JSON.stringify(
           {
             glossary: "67e31c8d1945c0b1e4c9bddf",
             user
-          }
-        ]));
+          }));
         data.append('invoices', JSON.stringify(invoices));
         // showToastMessage('costo con voucehr');
         const res = await createCollectionWithVoucher(token, data);
