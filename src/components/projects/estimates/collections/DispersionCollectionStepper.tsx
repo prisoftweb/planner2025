@@ -15,10 +15,12 @@ import { IInvoiceMin } from "@/interfaces/Invoices";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {PlusCircleIcon} from "@heroicons/react/24/solid";
 import CurrencyInput from "react-currency-input-field";
+import Label from "@/components/Label";
 
 type TInvoiceStepper={
   folio: string,
   total: number,
+  totalPending: number
   id:string,
   project: {
     title:string,
@@ -44,6 +46,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
   const [invoices, setInvoices]=useState<TInvoiceStepper[]>([]);
   const [selected, setSelected]=useState<TInvoiceStepper>();
   const [amount, setAmount]=useState<string>('0');
+  const [amountPending, setAmountPending]=useState<string>('0');
 
   useEffect(() => {
     const fetch = async() => {
@@ -72,6 +75,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
           title: selected.project.title
         },
         total: Number(amount),
+        totalPending: Number(amountPending),
         concepts: selected.concepts
       }
       const i = [...invoicesDisp, data];
@@ -192,6 +196,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 
       <div className="grid grid-cols-7 items-center">
         <div className="col-span-3">
+          <Label>Cobrado</Label>
           <CurrencyInput
             prefix="$"
             value={amount.replace(/[$,]/g, "")}
@@ -201,13 +206,13 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
           />
         </div>
         <div className="col-span-3">
+          <Label>Por cobrar</Label>
           <CurrencyInput
             prefix="$"
-            value={amount.replace(/[$,]/g, "")}
+            value={amountPending.replace(/[$,]/g, "")}
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                       focus:border-slate-700 outline-0"
-            onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
-            disabled
+            onChange={(e) => setAmountPending(e.target.value.replace(/[$,]/g, "") || '0')}
           />
         </div>
         <PlusCircleIcon className="w-6 h-6 text-green-500 hover:text-green-300" 
@@ -244,6 +249,7 @@ function transformTypes(invoiceFrom: IInvoiceMin[]){
   invoiceFrom.map((i) => {
     invoiceTo.push({
       total:i.cost.total,
+      totalPending: i.cost.total,
       id:i._id,
       project: {
         id: typeof(i.project)==='string'? i.project: i.project._id,

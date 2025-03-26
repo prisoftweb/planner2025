@@ -10,8 +10,8 @@ import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumen
 import { ITotalInvoicesByProject, IInvoiceByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
 
-import { getCollectionsByProjectMin } from "@/app/api/routeCollections";
-import { ICollectionMin } from "@/interfaces/Collections";
+import { getCollectionsByProjectMin, getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
+import { ICollectionMin, ITotalResumentPayment } from "@/interfaces/Collections";
 import ContainerCollectionsProject from "@/components/projects/estimates/collections/ContainerCollectionsProject";
 
 export default async function Page({ params }: { params: { idp: string }}){
@@ -48,13 +48,13 @@ export default async function Page({ params }: { params: { idp: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las facturas del proyecto!!</h1>  
   }
 
-  let totalInvoicesResumen: ITotalInvoiceResumen;
+  let totalPaymentsResumen: ITotalResumentPayment;
   try {
-    totalInvoicesResumen = await getTotalInvoiceResumenByProject(token, params.idp);
-    if(typeof(totalInvoicesResumen) === "string")
-      return <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1>
+    totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, params.idp);
+    if(typeof(totalPaymentsResumen) === "string")
+      return <h1 className="text-center text-red-500">{totalPaymentsResumen}</h1>
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen de las facturas del proyecto!!</h1>  
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen del proyecto!!</h1>  
   }
 
   let projects: Options[];
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: { idp: string }}){
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerCollectionsProject project={project} collections={collections} token={token} user={user._id} 
-          totalInvoiceProject={totalInvoicesProject} resumenInvoice={totalInvoicesResumen} />
+          totalInvoiceProject={totalInvoicesProject} resumenPayment={totalPaymentsResumen} />
       </div>
     </>
   )

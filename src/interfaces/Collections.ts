@@ -198,3 +198,20 @@ export interface ITableCollection {
   }, 
   Importe: number
 }
+
+export interface ITotalResumentPayment {
+  billedTotal: {
+    quantity: number
+    billedTotal: number
+    subBilledTotal: number
+    vatBilledTotal: number
+    project: string
+    amountotal: number
+    pendingBillingTotal: number
+  }
+  totalPayments: {
+    quantity: number
+    totalPayments: number
+    pendingPaymentTotal: number
+  }
+}

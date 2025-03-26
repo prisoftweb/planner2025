@@ -8,7 +8,7 @@ import DonutChartComponent from "../../dashboard/DonutChartComponent";
 import { ITotalInvoicesByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import NavTabEstimates from "../NavTabEstimates";
 
-import { ICollectionMin } from "@/interfaces/Collections";
+import { ICollectionMin, ITotalResumentPayment } from "@/interfaces/Collections";
 import TableCollectionsComponent from "./TableCollectionsComponent";
 
 interface OptionsDashboard {
@@ -17,9 +17,9 @@ interface OptionsDashboard {
 }
 
 export default function ContainerCollectionsProject({project, token, user, collections, 
-    totalInvoiceProject, resumenInvoice }: 
+    totalInvoiceProject, resumenPayment }: 
   {project: OneProjectMin, collections:ICollectionMin[], token: string, user: string, 
-    totalInvoiceProject: ITotalInvoicesByProject[], resumenInvoice:ITotalInvoiceResumen }) {
+    totalInvoiceProject: ITotalInvoicesByProject[], resumenPayment:ITotalResumentPayment }) {
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
@@ -68,10 +68,10 @@ export default function ContainerCollectionsProject({project, token, user, colle
         <div className="bg-white p-3">
           <div className=" border border-gray-700">
             <div className="flex items-center border border-gray-700">
-              <p className="bg-green-600 text-white p-2 w-40 text-center">Facturado</p>
+              <p className="bg-green-600 text-white p-2 w-40 text-center">COBRADO</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                value: resumenInvoice.billedTotal.billedTotal
+                value: resumenPayment?.totalPayments?.totalPayments || 0
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
@@ -83,28 +83,28 @@ export default function ContainerCollectionsProject({project, token, user, colle
             </div>
 
             <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Estimado acumulado</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
+              <p className="text-xs text-slate-600">Pendiente de cobrar</p>
+              <p className="text-green-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: resumenInvoice.totalAccumulated.estimatedTotal
+                value: resumenPayment?.billedTotal?.billedTotal || 0
               })}</p>
             </div>
 
             <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Pendiente de facturar</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
+              <p className="text-red-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: resumenInvoice.totalAccumulated.estimatedTotal - resumenInvoice.billedTotal.billedTotal
+                value: resumenPayment?.billedTotal?.pendingBillingTotal || 0
               })}</p>
             </div>
 
-            <div className="flex justify-between items-center border border-slate-700 p-2">
+            {/* <div className="flex justify-between items-center border border-slate-700 p-2">
               <p className="text-xs text-slate-600">Pendiente de estimar</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
                 value:  project.amount - resumenInvoice.totalAccumulated.estimatedTotal
               })}</p>
-            </div>
+            </div> */}
           </div>
         </div>
 

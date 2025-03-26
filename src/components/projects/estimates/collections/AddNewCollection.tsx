@@ -13,12 +13,11 @@ import { Options } from "@/interfaces/Common"
 // import { getClientsLV } from "@/app/api/routeClients"
 import { IEstimateMin, IConceptEstimate, TableEstimatesProject } from "@/interfaces/Estimate"
 import { getEstimateMin, getAllConceptsEstimateMin } from "@/app/api/routeEstimates"
-import { createInvoice } from "@/app/api/routeInvoices"
 // import DataBasicStepper from "./DataBasicStepper"
 // import InvoicesConditionsStepper from "./InvoicesConditionsStepper"
 // import ConceptsInvoiceStepper from "./ConceptsInvoceStepper"
 // import NavInvoiceStepper from "./NavInvoiceStepper"
-import { createCollection, createCollectionWithVoucher } from "@/app/api/routeCollections"
+import { createCollectionWithVoucher, createCollectionUpdateMany } from "@/app/api/routeCollections"
 import VoucherStepper from "./VoucherStepper"
 import NavCollectionStepper from "./NavCollectionStepper"
 
@@ -29,6 +28,7 @@ import { IInvoiceMin, IInvoiceTable } from "@/interfaces/Invoices"
 type TInvoiceStepper={
   folio: string,
   total: number,
+  totalPending: number
   id:string,
   project: {
     title:string,
@@ -62,6 +62,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
       title: project.title
     },
     total: invoiceTable.amount,
+    totalPending: invoiceTable.amount,
     concepts: invoiceTable.formpaid+' | '+ invoiceTable.methodpaid + ' | ' + invoiceTable.usecfdi
   }]);
 
@@ -188,6 +189,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     }else{
       setBandTextConcept(false);
     }
+    console.log('ret val => ', validation);
     return validation;
   }
 
@@ -205,7 +207,8 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
             folio: i.folio,
             project: i.project,
             concepts: i.concepts,
-            total: Number(amount)
+            total: Number(amount),
+            totalPending: Number(amount),
           }
           return aux;
         } else {
@@ -214,8 +217,27 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
         }
       });
       const invoices = transformTypes(inv);
-      // setInvoicesDisp(inv); 
-      if(voucher){
+      type TPaymentInvoice = {
+        invoice: string,
+        previousbalanceamount:number,
+        charged: number,
+        unchargedbalanceamount: number,
+        partialitynumber: number,
+        itemscharged: number
+      }
+      const paymentInInvoices: TPaymentInvoice[]=[];
+      inv.map((i) => {
+        paymentInInvoices.push({
+          charged: i.total,
+          invoice: i.id,
+          previousbalanceamount: i.totalPending,
+          itemscharged: 1,
+          partialitynumber: 1,
+          unchargedbalanceamount: i.totalPending
+        });
+      });
+
+      if(!voucher){
         const data = {
           reference,
           concept: textConcept,
@@ -230,21 +252,25 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
               user
             }
           ],
-          type: {
-              glossary: "67e31c8d1945c0b1e4c9bddf",
-              user
-            },
-          invoices
+          conditionpartial: [
+            {
+                glossary: "67d20e2959865f640af92682",
+                user
+            }
+          ],
+          type: "67e31c8d1945c0b1e4c9bddf",
+          invoices,
+          paymentInInvoices
         }
         // showToastMessage('cobro sin voucehr');
-        const res = await createCollection(token, data);
+        const res = await createCollectionUpdateMany(token, data);
         if(typeof(res)==='string'){
           showToastMessageError(res);
         }else{
           showToastMessage('Cobro agregado satisfactoriamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 2500);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2500);
         }
       }else{
         const data = new FormData();
@@ -262,21 +288,24 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
             user
           }
         ]));
-        data.append('type', JSON.stringify(
+        data.append('conditionpartial', JSON.stringify([
           {
-            glossary: "67e31c8d1945c0b1e4c9bddf",
-            user
-          }));
+              glossary: "67d20e2959865f640af92682",
+              user
+          }
+        ]));
+        data.append('type', "67e31c8d1945c0b1e4c9bddf");
         data.append('invoices', JSON.stringify(invoices));
-        // showToastMessage('costo con voucehr');
+        data.append('paymentInInvoices', JSON.stringify(paymentInInvoices));
+        showToastMessage('costo con voucehr');
         const res = await createCollectionWithVoucher(token, data);
         if(typeof(res)==='string'){
           showToastMessageError(res);
         }else{
           showToastMessage('Cobro agregado satisfactoriamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 2500);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2500);
         }
       }
     }
