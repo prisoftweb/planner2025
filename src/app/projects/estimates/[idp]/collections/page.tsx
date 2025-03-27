@@ -29,15 +29,15 @@ export default async function Page({ params }: { params: { idp: string }}){
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
   }
 
-  let collections: ICollectionMin[];
-  try {
-    collections = await getCollectionsByProjectMin(token, project._id);
-    console.log('collections min => ', collections);
-    if(typeof(collections) === "string")
-      return <h1 className="text-center text-red-500">{collections}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener los cobros del proyecto!!</h1>  
-  }
+  let collections: ICollectionMin[]=[];
+  // try {
+  //   collections = await getCollectionsByProjectMin(token, project._id);
+  //   console.log('collections min => ', collections);
+  //   if(typeof(collections) === "string")
+  //     return <h1 className="text-center text-red-500">{collections}</h1>
+  // } catch (error) {
+  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener los cobros del proyecto!!</h1>  
+  // }
 
   let totalInvoicesProject: ITotalInvoicesByProject[];
   try {

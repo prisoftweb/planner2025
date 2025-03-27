@@ -26,6 +26,8 @@ export default function ContainerCollectionsProject({project, token, user, colle
   const categoriesEstimates: string[] = [];
   const dataInvoicesDashboard: OptionsDashboard[] = [];  
 
+  console.log('resumen payment => ', resumenPayment);
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -78,7 +80,7 @@ export default function ContainerCollectionsProject({project, token, user, colle
               <p className="text-xs text-slate-600">Monto de proyecto</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: project.amount
+                value: resumenPayment?.billedTotal?.amountotal || 0
               })}</p>
             </div>
 
@@ -86,7 +88,7 @@ export default function ContainerCollectionsProject({project, token, user, colle
               <p className="text-xs text-slate-600">Pendiente de cobrar</p>
               <p className="text-green-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: resumenPayment?.billedTotal?.billedTotal || 0
+                value: resumenPayment?.totalPayments?.pendingPaymentTotal || 0
               })}</p>
             </div>
 

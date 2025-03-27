@@ -147,12 +147,14 @@ export async function deleteCollection(id:string, auth_token:string){
 
 export async function getAllTotalPaymentsResumeByProjectMin(auth_token:string, id:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTALPaymentsResumeByProjectMIN/${id}`;
+  console.log('url total payments => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
+    console.log('res => ', res.data.data.stats);
     if(res.status===200)
       return res.data.data.stats;
     return 'Error al obtener total payments!!';

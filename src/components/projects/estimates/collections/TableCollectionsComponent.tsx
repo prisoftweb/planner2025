@@ -7,7 +7,7 @@ import RemoveElement from "@/components/RemoveElement";
 import { OneProjectMin } from "@/interfaces/Projects";
 import Chip from "@/components/providers/Chip";
 
-import { getCollectionsMin, deleteCollection } from "@/app/api/routeCollections";
+import { getCollectionsByProjectMin, deleteCollection } from "@/app/api/routeCollections";
 import { ICollectionMin, ITableCollection } from "@/interfaces/Collections";
 import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
 
@@ -17,7 +17,7 @@ export default function TableCollectionsComponent({token, project}:{token:string
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getCollectionsMin(token);
+      const res = await getCollectionsByProjectMin(token, project._id);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{

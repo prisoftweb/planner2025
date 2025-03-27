@@ -89,7 +89,32 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
   }
 
   const handleAmount = (value:string) => {
-    setAmount(value);
+    let auxAmount=0;
+    try {
+      auxAmount=Number(value);
+    } catch (error) {
+      auxAmount=0;
+    }
+    setAmount(auxAmount.toString());
+
+    const inv = invoicesDisp.map((i, index) => {
+      if (index === 0) {
+        // Increment the clicked counter
+        const aux: TInvoiceStepper = {
+          id: i.id,
+          folio: i.folio,
+          project: i.project,
+          concepts: i.concepts,
+          total: auxAmount,
+          totalPending: auxAmount,
+        }
+        return aux;
+      } else {
+        // The rest haven't changed
+        return i;
+      }
+    });
+    setInvoicesDisp(inv);
   }
 
   const handleBandDate = (value:boolean) => {

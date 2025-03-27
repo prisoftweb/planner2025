@@ -194,7 +194,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
         </nav>
       </div>
 
-      <div className="grid grid-cols-7 items-center">
+      <div className="grid grid-cols-7 items-center mt-3">
         <div className="col-span-3">
           <Label>Cobrado</Label>
           <CurrencyInput

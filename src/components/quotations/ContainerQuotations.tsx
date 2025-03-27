@@ -15,6 +15,13 @@ import NewQuotation from "./NewQuotation"
 import { UsrBack } from "@/interfaces/User"
 import FilteringQuatations from "./FilteringQuatations"
 
+import { useOptionsQuotations } from "@/app/store/QuotationStates"
+import { getCatalogsByNameAndCategory, getCatalogsByNameAndType, getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs"
+import { GetVatsLV } from "@/app/api/routeCost"
+import { getUsersLV } from "@/app/api/routeUser"
+import { getClientsLV } from "@/app/api/routeClients"
+import { Options } from "@/interfaces/Common"
+
 export default function ContainerQuotations({quotations, token, user}: 
   {quotations: IQuotationMin[], token:string, user: UsrBack}) {
 
@@ -25,13 +32,12 @@ export default function ContainerQuotations({quotations, token, user}:
   const [showNewQuotation, setShowNewQuotation] = useState<boolean>(false);
   const [maxAmount, setMaxAmount] = useState<number>(0);
 
+  const {updateCategories, updateClients, updateConditions, updateTypes, 
+    updateUsers, updateVats} = useOptionsQuotations();
+
   const handleShowNewQuotation = (value: boolean) => {
     setShowNewQuotation(value);
   }
-
-  // const handleFilter = (value: boolean) => {
-  //   setFilter(value);
-  // }
 
   const handleShowFilter = (value: boolean) => {
     setShowFilter(value);
@@ -42,6 +48,76 @@ export default function ContainerQuotations({quotations, token, user}:
       return current.cost.total > previous.cost.total ? current : previous;
     });
     setMaxAmount(projectM.cost.total);
+
+    const fetchData = async () => {
+      const res = await getClientsLV(token);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        // setOptClients(res);
+        // updateClients([{
+        //   label: 'TODOS',
+        //   value: 'all'
+        // }, ...res]);
+        updateClients(res);
+        // setClients([res[0].value]);
+        // setClients(['all']);
+      }
+
+      const cons = await getCatalogsByNameAndCondition(token, 'Quotations');
+      if(typeof(cons)==='string'){
+        showToastMessageError(cons);
+      }else{
+        // setOptConditions(cons);
+        // setOptConditions([{
+        //   label: 'TODOS',
+        //   value: 'all'
+        // }, ...cons]);
+        // // setConditions([cons[0].value]);
+        // setConditions(['all']);
+        updateConditions(cons);
+      }
+
+      const opUs: Options[] = await getUsersLV(token);
+      if(typeof(opUs)==='string'){
+        showToastMessageError(opUs);
+      }else{
+        updateUsers(opUs);
+        // setOptUsers(opUs);
+        // const i = opUs.findIndex((o) => o.value===usr);
+        // setUser(opUs[i].value);
+      }
+
+      const opVat: Options[] = await GetVatsLV(token);
+      if(typeof(opVat)==='string'){
+        showToastMessageError(opVat);
+      }else{
+        updateVats(opVat);
+        // setOptVats(opVat);
+        // setIdVat(opVat[0].value);
+      }
+
+      const opCats: Options[] = await getCatalogsByNameAndCategory(token, 'Quotations');
+      if(typeof(opCats)==='string'){
+        showToastMessageError(opCats);
+      }else{
+        updateCategories(opCats);
+        // setOptCategory(opCats);
+        // setCategory(opCats[0].value);
+      }
+      
+      const opTyps: Options[] = await getCatalogsByNameAndType(token, 'Quotations');
+      if(typeof(opTyps)==='string'){
+        showToastMessageError(opTyps);
+      }else{
+        updateTypes(opTyps);
+        // setOptTypes(opTyps);
+        // setType(opTyps[0].value);
+      }
+    }
+
+    fetchData();
+
   }, [])
 
   const refreshQuatations = async() => {
