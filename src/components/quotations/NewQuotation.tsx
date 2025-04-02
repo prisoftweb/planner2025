@@ -24,13 +24,17 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 
+import { useOptionsQuotations } from "@/app/store/QuotationStates"
+
 export default function NewQuotation({showForm, token, usr, updateQuotations}: 
   {showForm:Function, token:string, usr:string, updateQuotations: Function}){
 
-  const [optClients, setOptClients] = useState<Options[]>([]);
-  const [optUsers, setOptUsers] = useState<Options[]>([]);
-  const [user, setUser]=useState<string>('');
-  const [client, setClient] = useState<string>('');
+  const {optClients, optUsers, optVats, optCategories, optTypes} = useOptionsQuotations();
+
+  // const [optClients, setOptClients] = useState<Options[]>([]);
+  // const [optUsers, setOptUsers] = useState<Options[]>([]);
+  const [user, setUser]=useState<string>(usr);
+  const [client, setClient] = useState<string>(optClients[0].value);
   const [notes , setNotes] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [amount, setAmount] = useState<string>('0');
@@ -43,7 +47,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const [discount, setDiscount]=useState<string>('0');
   const [optContacts, setoptContacts]=useState<Options[]>([]);
   const [contact, setContact]=useState<string>('');
-  const [optVats, setOptVats]=useState<Options[]>([]);
+  // const [optVats, setOptVats]=useState<Options[]>([]);
   const [idVat, setIdVat]=useState<string>('');
   const [message, setMessage] = useState<number>(0);
   const [selOpt, setSelOpt] = useState<Options>();
@@ -52,11 +56,11 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   // const refArea=useRef();
 
-  const [type, setType]=useState<string>('');
-  const [optTypes, setOptTypes]=useState<Options[]>([]);
+  const [type, setType]=useState<string>(optTypes[0]?.value);
+  // const [optTypes, setOptTypes]=useState<Options[]>([]);
 
-  const [category, setCategory]=useState<string>('');
-  const [optCategories, setOptCategory]=useState<Options[]>([]);
+  const [category, setCategory]=useState<string>(optCategories[0]?.value);
+  // const [optCategories, setOptCategory]=useState<Options[]>([]);
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -78,52 +82,59 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   useEffect(() => {
     const fetch = async () => {
-      const opCli:Options[] = await getClientsLV(token);
-      if(typeof(opCli)==='string'){
-        showToastMessageError(opCli);
-      }else{
-        setOptClients(opCli);
-        setClient(opCli[0].value);
-        const conts = await fetchContacts(token, opCli[0].value);
-        if(conts){
-          setoptContacts(conts);
-          setContact(conts[0].value);
-          setSelOpt(conts[0]);
-        }
+      // const opCli:Options[] = await getClientsLV(token);
+      // if(typeof(opCli)==='string'){
+      //   showToastMessageError(opCli);
+      // }else{
+      //   setOptClients(opCli);
+      //   setClient(opCli[0].value);
+      //   const conts = await fetchContacts(token, opCli[0].value);
+      //   if(conts){
+      //     setoptContacts(conts);
+      //     setContact(conts[0].value);
+      //     setSelOpt(conts[0]);
+      //   }
+      // }
+
+      const conts = await fetchContacts(token, optClients[0].value);
+      if(typeof(conts)!=='string'){
+        setoptContacts(conts);
+        setContact(conts[0].value);
+        setSelOpt(conts[0]);
       }
 
-      const opUs: Options[] = await getUsersLV(token);
-      if(typeof(opUs)==='string'){
-        showToastMessageError(opUs);
-      }else{
-        setOptUsers(opUs);
-        const i = opUs.findIndex((o) => o.value===usr);
-        setUser(opUs[i].value);
-      }
+      // const opUs: Options[] = await getUsersLV(token);
+      // if(typeof(opUs)==='string'){
+      //   showToastMessageError(opUs);
+      // }else{
+      //   setOptUsers(opUs);
+      //   const i = opUs.findIndex((o) => o.value===usr);
+      //   setUser(opUs[i].value);
+      // }
 
-      const opVat: Options[] = await GetVatsLV(token);
-      if(typeof(opVat)==='string'){
-        showToastMessageError(opVat);
-      }else{
-        setOptVats(opVat);
-        setIdVat(opVat[0].value);
-      }
+      // const opVat: Options[] = await GetVatsLV(token);
+      // if(typeof(opVat)==='string'){
+      //   showToastMessageError(opVat);
+      // }else{
+      //   setOptVats(opVat);
+      //   setIdVat(opVat[0].value);
+      // }
 
-      const opCats: Options[] = await getCatalogsByNameAndCategory(token, 'Quotations');
-      if(typeof(opCats)==='string'){
-        showToastMessageError(opCats);
-      }else{
-        setOptCategory(opCats);
-        setCategory(opCats[0].value);
-      }
+      // const opCats: Options[] = await getCatalogsByNameAndCategory(token, 'Quotations');
+      // if(typeof(opCats)==='string'){
+      //   showToastMessageError(opCats);
+      // }else{
+      //   setOptCategory(opCats);
+      //   setCategory(opCats[0].value);
+      // }
       
-      const opTyps: Options[] = await getCatalogsByNameAndType(token, 'Quotations');
-      if(typeof(opTyps)==='string'){
-        showToastMessageError(opTyps);
-      }else{
-        setOptTypes(opTyps);
-        setType(opTyps[0].value);
-      }
+      // const opTyps: Options[] = await getCatalogsByNameAndType(token, 'Quotations');
+      // if(typeof(opTyps)==='string'){
+      //   showToastMessageError(opTyps);
+      // }else{
+      //   setOptTypes(opTyps);
+      //   setType(opTyps[0].value);
+      // }
     }
     fetch();
   }, []);

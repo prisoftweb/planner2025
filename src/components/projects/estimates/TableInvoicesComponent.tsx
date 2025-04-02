@@ -11,6 +11,7 @@ import { OneProjectMin } from "@/interfaces/Projects";
 import Chip from "@/components/providers/Chip";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import AddNewCollectionComponent from "./collections/AddNewCollection";
+import { Badge } from "@mui/material";
 
 export default function TableInvoicesComponent({token, project, user}:
     {token:string, project:OneProjectMin, user:string}) {
@@ -30,6 +31,7 @@ export default function TableInvoicesComponent({token, project, user}:
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
+        console.log('invoices table => ', res);
         setInvoices(res);
       }
     }
@@ -70,14 +72,18 @@ export default function TableInvoicesComponent({token, project, user}:
           /> */}
           <RemoveElement id={`${row.original.id}/${row.original.idEstimates}`} name={row.original.estimate} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
-          {row.original.id==''? (
-            <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+          {row.original.ischargedfull? (
+            <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+              <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+            </Badge>
           ): (
-            <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
+            <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+              <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
                 refEstimate.current = row.original.id;
                 setSelInvoice(row.original);
                 setShowNewCollection(true);
-            }} />
+              }}/>
+            </Badge>
           )}
         </div>
       ),
@@ -163,6 +169,30 @@ export default function TableInvoicesComponent({token, project, user}:
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.amount
+        })}</p>
+      ),
+    }),
+    columnHelper.accessor('charged', {
+      header: 'Cobrado',
+      id: 'cobrado',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        >{CurrencyFormatter({
+          currency: 'MXN',
+          value: row.original.charged
+        })}</p>
+      ),
+    }),
+    columnHelper.accessor('unchargedbalanceamount', {
+      header: 'Pendiente',
+      id: 'pendiente',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        >{CurrencyFormatter({
+          currency: 'MXN',
+          value: row.original.unchargedbalanceamount
         })}</p>
       ),
     }),

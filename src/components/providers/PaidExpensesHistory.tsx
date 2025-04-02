@@ -226,16 +226,16 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
       console.log('data payment => ', JSON.stringify(data));
       // showToastMessage('pagado!!!');
-      showToastMessage('Costos pagados exitosamente!!!');
-      showForm(false);
-      // const res = await createPayments(token, data);
-      // if(typeof(res) === 'string'){
-      //   showToastMessageError(res);
-      // }else{ 
-      //   showToastMessage('Costos pagados exitosamente!!!');
-      //   updateTable();
-      //   showForm(false);
-      // }
+      // showToastMessage('Costos pagados exitosamente!!!');
+      // showForm(false);
+      const res = await createPayments(token, data);
+      if(typeof(res) === 'string'){
+        showToastMessageError(res);
+      }else{ 
+        showToastMessage('Costos pagados exitosamente!!!');
+        updateTable();
+        showForm(false);
+      }
     }
   }
 

@@ -3,8 +3,8 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { GetProjectMin } from "@/app/api/routeProjects";
-import { ITotalInvoicesByProject, IInvoiceMin, IConceptInvoice } from "@/interfaces/Invoices";
-import { getInvoiceMin, getTotalInvoicesByProject, getConceptsInvoice } from "@/app/api/routeInvoices";
+import { ITotalInvoicesByProject, IInvoiceMinFull, IConceptInvoice } from "@/interfaces/Invoices";
+import { getInvoiceMinFull, getTotalInvoicesByProject, getConceptsInvoice } from "@/app/api/routeInvoices";
 import ContainerDetailInvoice from "@/components/projects/estimates/ContainerDetailInvoice";
 
 export default async function Page({ params }: { params: { idp: string, idi:string }}){
@@ -21,9 +21,9 @@ export default async function Page({ params }: { params: { idp: string, idi:stri
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
   }
 
-  let invoice: IInvoiceMin;
+  let invoice: IInvoiceMinFull;
   try {
-    invoice = await getInvoiceMin(token, params.idi);
+    invoice = await getInvoiceMinFull(token, params.idi);
     console.log('get invoice min => ', invoice);
     if(typeof(invoice) === "string")
       return <h1 className="text-center text-red-500">{invoice}</h1>
@@ -40,15 +40,15 @@ export default async function Page({ params }: { params: { idp: string, idi:stri
     return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de la factura del proyecto!!</h1>  
   }
   
-  let concepts: IConceptInvoice[];
-  try {
-    concepts = await getConceptsInvoice(token, params.idi);
-    console.log('concepts invoice min => ', concepts);
-    if(typeof(concepts) === "string")
-      return <h1 className="text-center text-red-500">{concepts}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos de la factura!!</h1>  
-  }
+  let concepts: IConceptInvoice[]=[];
+  // try {
+  //   concepts = await getConceptsInvoice(token, params.idi);
+  //   console.log('concepts invoice min => ', concepts);
+  //   if(typeof(concepts) === "string")
+  //     return <h1 className="text-center text-red-500">{concepts}</h1>
+  // } catch (error) {
+  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos de la factura!!</h1>  
+  // }
 
   return (
     <>

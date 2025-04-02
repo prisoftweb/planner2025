@@ -5,7 +5,7 @@ import Link from "next/link"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { IQuotationMin } from "@/interfaces/Quotations"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import TableQuotations from "./TableQuotations"
 import { QuotationsDataToQuotationsTable } from "@/app/functions/QuotationsFunctions"
 import { getQuotationsMin } from "@/app/api/routeQuotations"
@@ -32,8 +32,10 @@ export default function ContainerQuotations({quotations, token, user}:
   const [showNewQuotation, setShowNewQuotation] = useState<boolean>(false);
   const [maxAmount, setMaxAmount] = useState<number>(0);
 
+  const fetchRef=useRef(false);
+
   const {updateCategories, updateClients, updateConditions, updateTypes, 
-    updateUsers, updateVats} = useOptionsQuotations();
+    updateUsers, updateVats, optCategories, optClients, optTypes, optUsers, optVats, optConditions } = useOptionsQuotations();
 
   const handleShowNewQuotation = (value: boolean) => {
     setShowNewQuotation(value);
@@ -53,6 +55,7 @@ export default function ContainerQuotations({quotations, token, user}:
       const res = await getClientsLV(token);
       if(typeof(res)==='string'){
         showToastMessageError(res);
+        fetchRef.current=false;
       }else{
         // setOptClients(res);
         // updateClients([{
@@ -66,6 +69,7 @@ export default function ContainerQuotations({quotations, token, user}:
 
       const cons = await getCatalogsByNameAndCondition(token, 'Quotations');
       if(typeof(cons)==='string'){
+        fetchRef.current=false;
         showToastMessageError(cons);
       }else{
         // setOptConditions(cons);
@@ -80,6 +84,7 @@ export default function ContainerQuotations({quotations, token, user}:
 
       const opUs: Options[] = await getUsersLV(token);
       if(typeof(opUs)==='string'){
+        fetchRef.current=false;
         showToastMessageError(opUs);
       }else{
         updateUsers(opUs);
@@ -115,9 +120,7 @@ export default function ContainerQuotations({quotations, token, user}:
         // setType(opTyps[0].value);
       }
     }
-
     fetchData();
-
   }, [])
 
   const refreshQuatations = async() => {
@@ -219,7 +222,7 @@ export default function ContainerQuotations({quotations, token, user}:
     setQuotationsFiltered(filtered);
     setFilter(true);
   }
-console.log('filtered => ', filter);
+
   const quotationsData = QuotationsDataToQuotationsTable(filter? quotationsfiltered: quotationsState);
 
   return (
@@ -248,9 +251,10 @@ console.log('filtered => ', filter);
       <div className="mt-5">
         <TableQuotations quotationsData={quotationsData} token={token} deleteQuatation={deleteQuatation} />
       </div>
-      {showNewQuotation && <NewQuotation showForm={handleShowNewQuotation} token={token} usr={user._id} 
-              updateQuotations={refreshQuatations} />}
-      {showFilter && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
+      {showNewQuotation && optCategories.length> 0 && optClients.length> 0 && optTypes.length > 0 && 
+          optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} 
+            token={token} usr={user._id} updateQuotations={refreshQuatations} />}
+      {showFilter && optClients && optConditions && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
                     showForm={handleShowFilter} token={token} />}
     </>
   )

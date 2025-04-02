@@ -78,7 +78,7 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
               focus:border-slate-700 outline-0"
             // value={subtotal}
-            value={estimate?.Estimacion}
+            value={estimate?.MontoPay.toFixed(2)}
             decimalsLimit={2}
             disabled
             prefix="$"
@@ -142,7 +142,7 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
               focus:border-slate-700 outline-0"
             // value={vat}
-            value={(estimate?.Estimacion || 0) * 0.16}
+            value={((estimate?.amountVat || 0) - (estimate?.MontoPay || 0)).toFixed(2)}
             disabled
             decimalsLimit={2}
             prefix="$"
@@ -162,7 +162,7 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
               focus:border-slate-700 outline-0"
             // value={total}
-            value={estimate?.amountVat}
+            value={estimate?.amountVat.toFixed(2)}
             decimalsLimit={2}
             prefix="$"
             disabled

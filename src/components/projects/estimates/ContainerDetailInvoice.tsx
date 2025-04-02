@@ -17,12 +17,12 @@ import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "@/components/Alert";
 import NavTabEstimates from "./NavTabEstimates";
 
-import { IInvoiceMin, IConceptInvoice, ITotalInvoicesByProject } from "@/interfaces/Invoices";
+import { IInvoiceMinFull, IConceptInvoice, ITotalInvoicesByProject } from "@/interfaces/Invoices";
 import TableConceptsInvoice from "./TableConceptsInvoice";
 
 export default function ContainerDetailInvoice({project, token, user, invoice, concepts, 
     totalInvoiceProject}: 
-  {project: OneProjectMin, token: string, user: string, invoice:IInvoiceMin, 
+  {project: OneProjectMin, token: string, user: string, invoice:IInvoiceMinFull, 
     concepts:IConceptInvoice[], totalInvoiceProject: ITotalInvoicesByProject[]}) {
 
   const [openNewConcept, setOpenNewConcept] = useState<boolean>(false);
@@ -176,7 +176,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
   //   </>
   // )
 
-  // console.log('concepts => ', concepts);
+  // console.log('concepts invoice => ', concepts);
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
   return (
@@ -193,11 +193,11 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
       </div>
 
       <div className="flex justify-between gap-x-3 border-b border-slate-500 pb-3">
-        <div className="">
+        <div className="mt-2">
           <p>{invoice?.client?.name}</p>
           <p>{invoice?.client?.rfc}</p>
 
-          <p>{invoice?.client?.location?.address}</p>
+          <p>{invoice?.client?.location?.stret}</p>
           <p>{invoice?.client?.location?.community}</p>
           <p>{invoice?.client?.location?.state}</p>
           <p>{invoice?.client?.location?.cp}</p>
@@ -219,12 +219,12 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         <div>
           <p className="text-slate-500 font-extrabold">PROYECTO</p>
           <p className="text-black font-extrabold">{invoice.project.title}</p>
-          <p>direccion?</p>
+          {/* <p>direccion?</p> */}
         </div>
 
         <div>
           <p className="text-slate-500 font-extrabold">ESTIMACION</p>
-          <p className="text-black font-extrabold">{invoice.estimate.name}</p>
+          <p className="text-black font-extrabold">{invoice?.estimate?.name}</p>
         </div>
 
         <div className="text-right">
@@ -249,17 +249,17 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         <p className="text-slate-600 font-bold text-right">IMPORTE</p>
       </div>
 
-      {concepts.map((c) => (
-        <div className="grid grid-cols-6 gap-x-2 mt-3" key={c.conceptEstimate._id}>
-          <p className="text-black">{c.conceptEstimate?.quantity || 0}</p>
+      {invoice.conceptsInvoiceInfo.map((c) => (
+        <div className="grid grid-cols-6 gap-x-2 mt-3" key={c._id}>
+          <p className="text-black">{c?.quantity || 0}</p>
           <p className="text-black font-bold col-span-3">{c.conceptEstimate.description}</p>
           <p className="text-black text-right">{CurrencyFormatter({
             currency: 'MXN',
-            value: 0
+            value: c?.priceConcepEstimate?.cost || 0
           })}</p>
           <p className="text-black text-right">{CurrencyFormatter({
             currency: 'MXN', 
-            value: 0
+            value: c?.amount || 0
           })}</p>
         </div>
       ))}

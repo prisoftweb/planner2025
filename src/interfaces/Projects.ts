@@ -139,6 +139,16 @@ export interface ProjectMin {
   segment: Glossary
   progress: number
   amountotal: number
+  amountChargeOff?: {
+    date: string
+    porcentage: number,
+    amount: number
+  }
+  guaranteefund: {
+    date: string
+    porcentage: number,
+    amount: number
+  }
 }
 
 export interface Location {

@@ -32,11 +32,11 @@ export const useOptionsQuotations = create<OptionsQuotationState & ActionsOption
   ...optionsExpenseInitial,
   updateCategories: (cats: Options[]) => set(state => ({
     ...state,
-    categories: cats,
+    optCategories: cats,
   })),
   updateConditions: (conds: Options[]) => set(state => ({
     ...state,
-    conditions: conds,
+    optConditions: conds,
   })),
   updateUsers: (users: Options[]) => set(state => ({
     ...state,
@@ -44,11 +44,11 @@ export const useOptionsQuotations = create<OptionsQuotationState & ActionsOption
   })),
   updateTypes: (typs: Options[]) => set(state => ({
     ...state,
-    types: typs,
+    optTypes: typs,
   })),
   updateVats: (vts: Options[]) => set(state => ({
     ...state,
-    vats: vts,
+    optVats: vts,
   })),
   updateClients: (clients: Options[]) => set(state => ({
     ...state,

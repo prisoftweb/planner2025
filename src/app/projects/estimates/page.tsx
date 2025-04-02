@@ -85,10 +85,6 @@ export default async function Page(){
       <Navigation user={user} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
         optTypes={optTypes} projects={projects} token={token} user={user} />
-      {/* <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
-        optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
-        condition={condition} /> */}
     </>
   )
 }

@@ -11,14 +11,23 @@ import { GiSettingsKnobs } from "react-icons/gi"
 import { getClientsLV } from "@/app/api/routeClients"
 import { getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs"
 import { showToastMessageError } from "../Alert"
+import { useOptionsQuotations } from "@/app/store/QuotationStates"
 
 export default function FilteringQuatations({showForm, FilterData, maxAmount, token }: 
   {showForm:Function, FilterData:Function, maxAmount:number, token:string }){
+
+  const {optClients, optConditions} = useOptionsQuotations();
   
   const [clients, setClients] = useState<string[]>([]);
   const [conditions, setConditions] = useState<string[]>([]);
-  const [optClients, setOptClients] = useState<Options[]>([]);
-  const [optConditions, setOptConditions] = useState<Options[]>([]);
+  const [optClientsState, setOptClientsState] = useState<Options[]>([{
+    label: 'TODOS',
+    value: 'all'
+  }, ...optClients]);
+  const [optConditionsState, setOptConditionsState] = useState<Options[]>([{
+    label: 'TODOS',
+    value: 'all'
+  }, ...optConditions]);
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -28,37 +37,37 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
     new DateObject().setDay(4).add(1, "month")
   ]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await getClientsLV(token);
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        // setOptClients(res);
-        setOptClients([{
-          label: 'TODOS',
-          value: 'all'
-        }, ...res]);
-        // setClients([res[0].value]);
-        setClients(['all']);
-      }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const res = await getClientsLV(token);
+  //     if(typeof(res)==='string'){
+  //       showToastMessageError(res);
+  //     }else{
+  //       // setOptClientsState(res);
+  //       setOptClientsState([{
+  //         label: 'TODOS',
+  //         value: 'all'
+  //       }, ...res]);
+  //       // setClients([res[0].value]);
+  //       setClients(['all']);
+  //     }
 
-      const cons = await getCatalogsByNameAndCondition(token, 'Quotations');
-      if(typeof(cons)==='string'){
-        showToastMessageError(cons);
-      }else{
-        // setOptConditions(cons);
-        setOptConditions([{
-          label: 'TODOS',
-          value: 'all'
-        }, ...cons]);
-        // setConditions([cons[0].value]);
-        setConditions(['all']);
-      }
-    }
+  //     const cons = await getCatalogsByNameAndCondition(token, 'Quotations');
+  //     if(typeof(cons)==='string'){
+  //       showToastMessageError(cons);
+  //     }else{
+  //       // setOptConditionsState(cons);
+  //       setOptConditionsState([{
+  //         label: 'TODOS',
+  //         value: 'all'
+  //       }, ...cons]);
+  //       // setConditions([cons[0].value]);
+  //       setConditions(['all']);
+  //     }
+  //   }
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   const handleValues = (dateValues: DateObject[]) => {
     console.log('handle values => ', dateValues);
@@ -125,11 +134,11 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
         
         <div className="">
           <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          {optConditions.length > 0 && <SelectMultipleReact index={0} opts={optConditions} setValue={handleCondition} />}
+          {optConditionsState.length > 0 && <SelectMultipleReact index={0} opts={optConditionsState} setValue={handleCondition} />}
         </div>
         <div className="">
           <Label htmlFor="clients"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
-          {optClients.length > 0 && <SelectMultipleReact index={0} opts={optClients} setValue={handleClients} />}
+          {optClientsState.length > 0 && <SelectMultipleReact index={0} opts={optClientsState} setValue={handleClients} />}
         </div>
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>

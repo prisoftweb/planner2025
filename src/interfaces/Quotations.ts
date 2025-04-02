@@ -106,9 +106,21 @@ export interface IOneQuotationMin {
     name: string
   }
   user: {
+    _id:string
     name: string
     photo: string
-  }
+  },
+  location:string,
+  type:{
+    _id: string
+    name: string
+    color: string
+  },
+  category:{
+    _id: string
+    name: string
+    color: string
+  },
   account: string
 }
 

@@ -14,6 +14,8 @@ import WithOut from "@/components/WithOut"
 import { UsrBack } from "@/interfaces/User"
 import { Squares2X2Icon } from "@heroicons/react/24/solid"
 import TableProjectsToEstimate from "./TableProjectsToEstimated"
+import Button from "@/components/Button"
+import NewEstimateStepper from "./NewEstimateStepper"
 
 export default function ContainerEstimatesClient({token, user, optConditionsFilter, 
                           projects, optCategories, optTypes, data }: 
@@ -22,6 +24,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
+  const [newEstimate, setNewEstimate]=useState<boolean>(false);
 
   const handleFilter = (value:boolean) => {
     setIsFilter(value);
@@ -39,6 +42,10 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
         </div>
       </>
     )
+  }
+
+  const handleNewEstimate = (value:boolean) => {
+    setNewEstimate(value);
   }
 
   //const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(budgetsStore);
@@ -72,6 +79,9 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
+              <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
+                        {newEstimate && <NewEstimateStepper showForm={handleNewEstimate}
+                                          token={token} projects={projects} user={user._id} />}
             </div>
           </div>
         </div>

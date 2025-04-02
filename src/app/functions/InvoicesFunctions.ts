@@ -14,7 +14,12 @@ export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
       id: inv._id,
       methodpaid: inv.paymentMethod,
       usecfdi: inv.useCFDI,
-      idEstimates:inv.estimate._id
+      idEstimates:inv.estimate._id, 
+      charged: inv.lastpayment?.charged || 0,
+      unchargedbalanceamount: inv.lastpayment?.unchargedbalanceamount || 0,
+      previousBalance: inv.lastpayment?.previousbalanceamount || 0,
+      accountreceivablesCount: inv.accountreceivablesCount,
+      ischargedfull: inv.ischargedfull
     })
   });
 

@@ -63,7 +63,12 @@ export interface IInvoiceTable {
   fecha: string
   amount: number,
   id: string
-  idEstimates: string
+  idEstimates: string,
+  charged:number,
+  unchargedbalanceamount: number
+  previousBalance:number
+  accountreceivablesCount:number
+  ischargedfull:boolean
 }
 
 export interface IInvoiceByProject {
@@ -78,18 +83,16 @@ export interface IInvoiceByProject {
     total: number
     discount: number
   }
-  // useCFDI: {
-  //   _id: string
-  //   name: string
-  // }
-  // paymentMethod: {
-  //   _id: string
-  //   name: string
-  // }
-  // paymentWay: {
-  //   _id: string
-  //   name: string
-  // }
+  lastpayment:{
+    accountreceivable: string,
+    charged: number,
+    partialitynumber: number
+    previousbalanceamount: number
+    unchargedbalanceamount: number
+    _id: string
+  }
+  ischargedfull: boolean
+  accountreceivablesCount: number
   useCFDI: string
   paymentMethod: string
   paymentWay: string
@@ -119,7 +122,17 @@ export interface IInvoiceByProject {
   }
   condition: Glossary
   concepts: {
-    conceptEstimate: string
+    conceptEstimate: {
+      _id: string
+      code: string
+      name: string
+      description: string
+      unit: {
+        _id: string
+        name: string
+        color: string
+      }
+    }
     priceConcepEstimate: {
       cost: number
       date: string
@@ -178,6 +191,97 @@ export interface IInvoiceMin {
   condition: Glossary
   concepts: {
     conceptEstimate: string
+    priceConcepEstimate: {
+      cost: number
+      date: string
+      user: string
+    }
+    area: string
+    section: string
+    quantity: number
+    amount: number
+    date: string
+    status: boolean
+    _id: string
+  }[]
+  status: boolean
+}
+
+export interface IInvoiceMinFull {
+  _id: string
+  folio: string
+  taxfolio: string
+  notes: string
+  date: string
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+  }
+  useCFDI: string
+  paymentMethod: string
+  paymentWay: string
+  estimate: {
+    _id: string
+    name: string
+  }
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  client: {
+    _id: string
+    tradename: string
+    name: string
+    rfc: string
+    phone: string
+    location: {
+      country: string
+      municipy: string
+      stret: string
+      cp: number
+      community: string
+      state: string
+    }
+  }
+  company: {
+    _id: string
+    name: string
+    logo: string
+  }
+  condition: {
+    _id: string
+    name: string
+    color: string
+  }
+  lastpayment: {
+    accountreceivable: string
+    previousbalanceamount: number
+    charged: number
+    unchargedbalanceamount: number
+    partialitynumber: number
+    _id: string
+  }
+  ischargedfull: boolean
+  accountreceivablesCount: number
+  conceptsInvoiceInfo: {
+    conceptEstimate: {
+      _id: string
+      code: string
+      name: string
+      description: string
+      unit: {
+        _id: string
+        name: string
+        color: string
+      }
+    }
     priceConcepEstimate: {
       cost: number
       date: string

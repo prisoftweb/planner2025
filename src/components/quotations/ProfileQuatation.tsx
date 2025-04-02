@@ -1,9 +1,18 @@
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IOneQuotationMin } from "@/interfaces/Quotations";
 import Chip from "../providers/Chip";
+import RatingComponent from "./RatingComponent"
+import Label from "../Label";
+
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import CardConfig from "../users/CardConfig";
 
 export default function ProfileQuatation({quatation}: {quatation:IOneQuotationMin}){
-console.log('quatation min => ', quatation);
+// console.log('quatation min => ', quatation);
   return(
     <>
       <div className="w-full h-full mt-3">
@@ -61,6 +70,27 @@ console.log('quatation min => ', quatation);
         </div>
 
         <div className="bg-white p-3 rounded-lg shadow-md mt-2">
+          <Label>Puntuacion</Label>
+          <RatingComponent setValue={()=>{}} value={quatation.score} />
+        </div>
+
+        <div className="bg-white p-3 rounded-lg shadow-md mt-2">
+          {/* <Label>Puntuacion</Label> */}
+          <FormControl>
+            <FormLabel id="demo-radio-buttons-group-label">Ubicacion</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="demo-radio-buttons-group-label"
+              defaultValue="LOCAL"
+              name="radio-buttons-group"
+              className="flex gap-x-2"
+            >
+              <FormControlLabel value="LOCAL" control={<Radio />} label={quatation?.location || "LOCAL"} />
+            </RadioGroup>
+          </FormControl>
+        </div>
+
+        <div className="bg-white p-3 rounded-lg shadow-md mt-2">
           <div className="flex gap-x-2">
             <div>
               <img src={quatation.user?.photo || '/img/users/default.jpg'} alt="logo" className="w-full rounded-3xl max-w-14 h-auto" />
@@ -70,6 +100,15 @@ console.log('quatation min => ', quatation);
               <p className="text-blue-500 text-lg">{quatation.user.name}</p>
             </div>
           </div>
+        </div>
+
+        <div className="bg-white p-3 rounded-lg shadow-md mt-2">
+          <CardConfig text="SE FINALIZA LA COTIZACION, SOLO SE VISUALIZA EN HISTORIAL
+              Y SE CONVIERTE EN NUEVO PROYECTO, VAMOS POR EL!" title="" >
+            <button onClick={() => {}}
+              className="bg-red-600 rounded-full text-white w-full py-2 hover:bg-red-400"
+            >Convertir en proyecto</button>
+          </CardConfig>
         </div>
       </div>
     </>

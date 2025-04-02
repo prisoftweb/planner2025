@@ -57,8 +57,8 @@ export default function ExtraData({token, optClients, optCategories,
   })
 
   const [startDate, setStartDate] = useState<string>(oneProjectStore?.date? 
-                oneProjectStore?.date.substring(0,10) : 
-                    project.date? project.date.substring(0,10): '');
+                oneProjectStore?.date?.substring(0,10) : 
+                    project.date? project.date.substring(0,10): new Date().toISOString().substring(0, 10));
 
   const formik = useFormik({
     initialValues: {

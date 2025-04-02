@@ -20,7 +20,8 @@ import Label from "@/components/Label";
 type TInvoiceStepper={
   folio: string,
   total: number,
-  totalPending: number
+  totalPending: number,
+  previousAmount: number,
   id:string,
   project: {
     title:string,
@@ -30,9 +31,9 @@ type TInvoiceStepper={
 }
 
 export default function DispersionCollectionStepper({token, user, NextStep, invoicesDisp, 
-    setInvoicesDisp, saveCollection}: 
+    setInvoicesDisp, saveCollection, updateAmount}: 
   {token:string, user:string, NextStep:Function, invoicesDisp:TInvoiceStepper[], setInvoicesDisp:Function, 
-    saveCollection:Function}) {
+    saveCollection:Function, updateAmount:Function}) {
 
   // const Next = () => {
   //   if(file){
@@ -76,10 +77,15 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
         },
         total: Number(amount),
         totalPending: Number(amountPending),
+        previousAmount: selected.previousAmount,
         concepts: selected.concepts
       }
+      console.log('invoces disp => ', invoicesDisp);
+      console.log('new disp => ', data);
       const i = [...invoicesDisp, data];
-      setInvoicesDisp(i);
+      console.log('inv send => ', i);
+      // setInvoicesDisp(i);
+      updateAmount(i);
     }else{
       showToastMessageError('Seleccione una factura primero!!!!');
     }
@@ -256,7 +262,8 @@ function transformTypes(invoiceFrom: IInvoiceMin[]){
         title: typeof(i.project)==='string'? i.project: i.project.title
       },
       folio: i.folio,
-      concepts: i.paymentWay+' | '+ i.paymentMethod + ' | ' + i.useCFDI
+      concepts: i.paymentWay+' | '+ i.paymentMethod + ' | ' + i.useCFDI,
+      previousAmount: i.cost.total
     });
   });
   return invoiceTo;

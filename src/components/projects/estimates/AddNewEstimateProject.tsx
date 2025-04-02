@@ -93,12 +93,12 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   }, []);
 
   const colorsRandom = ['#E4D831', '#71B2F2', '#617178', '#FFA145', '#8579F0', '#ff5252', '#69f0ae', '#7D9F2D', '#289399', '#f08080']
-  const getRandomArbi = (min: any, max: any) => {
-    const res = parseInt(Math.random() * (max - min) + min);   
-    return res;
-  }
+  // const getRandomArbi = (min: any, max: any) => {
+  //   const res = parseInt(Math.random() * (max - min) + min);   
+  //   return res;
+  // }
 
-  const c1 = getRandomArbi(0, 9);
+  // const c1 = getRandomArbi(0, 9);
 
   const updateValues = (value: string) => {
     let val='0';

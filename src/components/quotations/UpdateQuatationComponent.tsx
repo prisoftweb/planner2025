@@ -16,6 +16,7 @@ import RatingComponent from "./RatingComponent"
 import { getContactsClientLV } from "@/app/api/routeQuotations"
 import { GetVatsLV } from "@/app/api/routeCost"
 import Select from 'react-select'
+import { getCatalogsByNameAndType, getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs"
 
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -28,7 +29,7 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
 
   const [optClients, setOptClients] = useState<Options[]>([]);
   const [optUsers, setOptUsers] = useState<Options[]>([]);
-  const [user, setUser]=useState<string>(quatation.user.name);
+  const [user, setUser]=useState<string>(quatation.user._id);
   const [client, setClient] = useState<string>(quatation.client._id);
   const [notes , setNotes] = useState<string>(quatation.description);
   const [title, setTitle] = useState<string>(quatation.title);
@@ -46,12 +47,12 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
   const [discount, setDiscount]=useState<string>('0');
   const [selOpt, setSelOpt] = useState<Options>();
 
-  const [location, setLocation]=useState<string>('LOCAL');
+  const [location, setLocation]=useState<string>(quatation?.location || 'LOCAL');
 
-  const [type, setType]=useState<string>('');
+  const [type, setType]=useState<string>(quatation?.type?._id || '');
   const [optTypes, setOptTypes]=useState<Options[]>([]);
 
-  const [category, setCategory]=useState<string>('');
+  const [category, setCategory]=useState<string>(quatation?.category?._id || '');
   const [optCategories, setOptCategory]=useState<Options[]>([]);
 
   const [message, setMessage] = useState<number>(0);
@@ -90,6 +91,24 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         setOptVats(opVat);
         setIdVat(opVat[0].value);
       }
+
+      const opCats: Options[] = await getCatalogsByNameAndCategory(token, 'Quotations');
+      if(typeof(opCats)==='string'){
+        showToastMessageError(opCats);
+      }else{
+        setOptCategory(opCats);
+        // setOptCategory(opCats);
+        setCategory(opCats[0].value);
+      }
+      
+      const opTyps: Options[] = await getCatalogsByNameAndType(token, 'Quotations');
+      if(typeof(opTyps)==='string'){
+        showToastMessageError(opTyps);
+      }else{
+        setOptTypes(opTyps);
+        // setOptTypes(opTyps);
+        setType(opTyps[0].value);
+      }
     }
     fetch();
   }, []);
@@ -114,10 +133,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
   const handleCategories = (value: string) => {
     setCategory(value);
   }
-
-  // const handleContact = (value: string) => {
-  //   setContact(value);
-  // }
 
   const updateOptionsContacts = async (idCli:string) => {
     const conts = await fetchContacts(token, idCli);
@@ -191,6 +206,9 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         //     user
         //   }
         // ],
+        location,
+        type,
+        category,
         client,
         applicant: contact,
         user 
@@ -256,11 +274,24 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
     setIdVat(value);
   }
 
-  const indexUser = optUsers.findIndex((u) => u.value===usr);
+  let indexUser = 0;
+  if(quatation?.user?._id){
+    indexUser=optUsers.findIndex((u) => u.value===quatation.user._id) || 0
+  }
 
   const indexCli = optClients.findIndex((c) => c.value===quatation.client._id);
 
-  const indexApli = optContacts.findIndex((c) => c.value===quatation.applicant._id);
+  // const indexApli = optContacts.findIndex((c) => c.value===quatation.applicant._id);
+
+  let indexType = 0;
+  if(quatation?.type?._id){
+    indexType=optTypes.findIndex((t) => t.value==quatation.type._id);
+  }
+
+  let indexCategory = 0;
+  if(quatation?.category?._id){
+    indexCategory=optCategories.findIndex((c) => c.value==quatation.category._id);
+  }
   
   return(
     <div className="w-full">
@@ -437,14 +468,14 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         <div className="">
           <Label>Plazo</Label>
           {optCategories.length > 0 && (
-            <SelectReact index={0} opts={optCategories} setValue={handleCategories} />
+            <SelectReact index={indexCategory} opts={optCategories} setValue={handleCategories} />
           )}
         </div>
 
         <div className="">
           <Label>Tipo cotizacion</Label>
           {optTypes.length > 0 && (
-            <SelectReact index={0} opts={optTypes} setValue={handleType} />
+            <SelectReact index={indexType} opts={optTypes} setValue={handleType} />
           )}
         </div>
 

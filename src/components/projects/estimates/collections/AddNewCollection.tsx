@@ -28,7 +28,8 @@ import { IInvoiceMin, IInvoiceTable } from "@/interfaces/Invoices"
 type TInvoiceStepper={
   folio: string,
   total: number,
-  totalPending: number
+  totalPending: number,
+  previousAmount: number,
   id:string,
   project: {
     title:string,
@@ -62,7 +63,8 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
       title: project.title
     },
     total: invoiceTable.amount,
-    totalPending: invoiceTable.amount,
+    totalPending: invoiceTable.unchargedbalanceamount,
+    previousAmount: invoiceTable.previousBalance,
     concepts: invoiceTable.formpaid+' | '+ invoiceTable.methodpaid + ' | ' + invoiceTable.usecfdi
   }]);
 
@@ -88,6 +90,47 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     setDate(value);
   }
 
+  const handleUpdateAmount = (invoicesParam: TInvoiceStepper[]) => {
+    // handleAmount(amount);
+    let acum=0;
+    if(invoicesParam.length > 0){
+      console.log('inv disp => ', invoicesDisp);
+      invoicesParam.map((i, index:number) => {
+        if(index > 0){
+          console.log('i total => ', i.total);
+          acum+=i.total;
+          console.log('acum => ', acum);
+        }
+      });
+    }
+    let auxAmount=0;
+    try {
+      auxAmount=Number(amount);
+    } catch (error) {
+      auxAmount=0;
+    }
+
+    const inv = invoicesParam.map((i, index) => {
+      if (index === 0) {
+        // Increment the clicked counter
+        const aux: TInvoiceStepper = {
+          id: i.id,
+          folio: i.folio,
+          project: i.project,
+          concepts: i.concepts,
+          total: auxAmount-acum,
+          totalPending: invoiceTable.unchargedbalanceamount,
+          previousAmount: invoiceTable.previousBalance
+        }
+        return aux;
+      } else {
+        // The rest haven't changed
+        return i;
+      }
+    });
+    setInvoicesDisp(inv);
+  }
+
   const handleAmount = (value:string) => {
     let auxAmount=0;
     try {
@@ -97,16 +140,25 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     }
     setAmount(auxAmount.toString());
 
+    let acum=0;
+    if(invoicesDisp.length > 0){
+      invoicesDisp.map((i, index:number) => {
+        if(index > 0){
+          acum+=i.total;
+        }
+      });
+    }
+
     const inv = invoicesDisp.map((i, index) => {
       if (index === 0) {
-        // Increment the clicked counter
         const aux: TInvoiceStepper = {
           id: i.id,
           folio: i.folio,
           project: i.project,
           concepts: i.concepts,
-          total: auxAmount,
-          totalPending: auxAmount,
+          total: auxAmount-acum,
+          totalPending: invoiceTable.unchargedbalanceamount,
+          previousAmount: invoiceTable.previousBalance
         }
         return aux;
       } else {
@@ -224,24 +276,25 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
 
     if(val){
       // const inv =
-      const inv = invoicesDisp.map((i, index) => {
-        if (index === 0) {
-          // Increment the clicked counter
-          const aux: TInvoiceStepper = {
-            id: i.id,
-            folio: i.folio,
-            project: i.project,
-            concepts: i.concepts,
-            total: Number(amount),
-            totalPending: Number(amount),
-          }
-          return aux;
-        } else {
-          // The rest haven't changed
-          return i;
-        }
-      });
-      const invoices = transformTypes(inv);
+      // const inv = invoicesDisp.map((i, index) => {
+      //   if (index === 0) {
+      //     // Increment the clicked counter
+      //     const aux: TInvoiceStepper = {
+      //       id: i.id,
+      //       folio: i.folio,
+      //       project: i.project,
+      //       concepts: i.concepts,
+      //       total: Number(amount),
+      //       totalPending: Number(amount),
+      //     }
+      //     return aux;
+      //   } else {
+      //     // The rest haven't changed
+      //     return i;
+      //   }
+      // });
+      // const invoices = transformTypes(inv);
+      const invoices = transformTypes(invoicesDisp);
       type TPaymentInvoice = {
         invoice: string,
         previousbalanceamount:number,
@@ -251,11 +304,11 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
         itemscharged: number
       }
       const paymentInInvoices: TPaymentInvoice[]=[];
-      inv.map((i) => {
+      invoicesDisp.map((i) => {
         paymentInInvoices.push({
           charged: i.total,
           invoice: i.id,
-          previousbalanceamount: i.totalPending,
+          previousbalanceamount: i.previousAmount,
           itemscharged: 1,
           partialitynumber: 1,
           unchargedbalanceamount: i.totalPending
@@ -287,16 +340,18 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
           invoices,
           paymentInInvoices
         }
+        console.log('new data => ', JSON.stringify(data));
+        showToastMessage('lsto');
         // showToastMessage('cobro sin voucehr');
-        const res = await createCollectionUpdateMany(token, data);
-        if(typeof(res)==='string'){
-          showToastMessageError(res);
-        }else{
-          showToastMessage('Cobro agregado satisfactoriamente!!!');
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 2500);
-        }
+        // const res = await createCollectionUpdateMany(token, data);
+        // if(typeof(res)==='string'){
+        //   showToastMessageError(res);
+        // }else{
+        //   showToastMessage('Cobro agregado satisfactoriamente!!!');
+        //   // setTimeout(() => {
+        //   //   window.location.reload();
+        //   // }, 2500);
+        // }
       }else{
         const data = new FormData();
         data.append('reference', reference);
@@ -348,7 +403,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
                                           saveCollection={saveCollection} voucher={voucher} />: 
                                     <DispersionCollectionStepper NextStep={handleStep} token={token}
                                         user={user} invoicesDisp={invoicesDisp} setInvoicesDisp={handleInvoicesDisp}
-                                        saveCollection={saveCollection} />))
+                                        saveCollection={saveCollection} updateAmount={handleUpdateAmount} />))
 
   return(
     <>
