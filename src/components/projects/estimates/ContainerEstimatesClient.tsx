@@ -3,7 +3,7 @@
 // import TableBudgetProjects from "./TableBudgetProjects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { ProjectMin, ProjectsTable } from "@/interfaces/Projects"
+import { ProjectsTable, IProjectWithEstimateMin } from "@/interfaces/Projects"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
 import Link from "next/link"
@@ -16,19 +16,32 @@ import { Squares2X2Icon } from "@heroicons/react/24/solid"
 import TableProjectsToEstimate from "./TableProjectsToEstimated"
 import Button from "@/components/Button"
 import NewEstimateStepper from "./NewEstimateStepper"
+import { getProjectsWithEstimatesMin } from "@/app/api/routeProjects"
+import { showToastMessageError } from "@/components/Alert"
 
 export default function ContainerEstimatesClient({token, user, optConditionsFilter, 
-                          projects, optCategories, optTypes, data }: 
-                        {token:string, user:UsrBack, projects: ProjectMin[], optConditionsFilter: Options[], 
+                          projectsParam, optCategories, optTypes, data }: 
+                        {token:string, user:UsrBack, projectsParam: IProjectWithEstimateMin[], optConditionsFilter: Options[], 
                           optCategories: Options[], optTypes: Options[], data: ProjectsTable[]}){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
   const [newEstimate, setNewEstimate]=useState<boolean>(false);
+  const [projects, setProjects]=useState<IProjectWithEstimateMin[]>(projectsParam);
 
   const handleFilter = (value:boolean) => {
     setIsFilter(value);
   }
+
+  const updateProjects = async () => {
+      const res = await getProjectsWithEstimatesMin(token);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+        showToastMessageError('Error al actualizar la tabla!!!');
+      }else{
+        setProjects(res);
+      }
+    }
 
   if(!projects || projects.length <= 0){
     return (
@@ -81,7 +94,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
               />
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
                         {newEstimate && <NewEstimateStepper showForm={handleNewEstimate}
-                                          token={token} projects={projects} user={user._id} />}
+                                          token={token} user={user._id} updateProjects={updateProjects} />}
             </div>
           </div>
         </div>

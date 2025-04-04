@@ -1,7 +1,7 @@
 //import { Provider } from "@/interfaces/Providers";
 import { projectValidation } from "@/schemas/project.schema";
 import { CreateProject } from "../api/routeProjects";
-import { ProjectsTable, ProjectsBudgetTable, Project, ProjectMin, OneProjectMin } from "@/interfaces/Projects";
+import { ProjectsTable, ProjectsBudgetTable, Project, ProjectMin, OneProjectMin, IProjectWithEstimateMin } from "@/interfaces/Projects";
 import { CurrencyFormatter } from "./Globals";
 import { BudgetMin } from "@/interfaces/Budget";
 import { BudgetTableCostCenter } from "@/interfaces/Budget";
@@ -148,6 +148,45 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       condition: cond,
       percentage: p,
       imgProject: project.photo,
+      account: project.account,
+      // total: total
+      total: project.amountotal
+    })
+  });
+
+  return table;
+}
+
+export function ProjectEstimateDataToTableDataMin(projects:IProjectWithEstimateMin[]){
+  const table: ProjectsTable[] = [];
+  projects.map((project) => {
+    let p: string;
+    if(project.porcentage){
+      p = project.porcentage.toString() + '%';
+    }else{
+      p = '0%';
+    }
+    
+    let cond: string;
+
+    if(project?.projectInfoStatusInfo?.color){
+      cond = project.projectInfoStatusInfo.color || '#f00';
+    }else{
+      cond = '#f00';
+    }
+
+    table.push({
+      amount: project.amount,
+      category: project.projectInfoStatusInfo.name,
+      client: project.client || 'Sin cliente',
+      code: 'codigo',
+      date: 'fecha',
+      id: project._id,
+      project:project.title,
+      // status: project.status,
+      condition: cond,
+      percentage: p,
+      imgProject: '/img/projects/default.svg',
       account: project.account,
       // total: total
       total: project.amountotal

@@ -194,13 +194,13 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
 
       <div className="flex justify-between gap-x-3 border-b border-slate-500 pb-3">
         <div className="mt-2">
-          <p>{invoice?.client?.name}</p>
-          <p>{invoice?.client?.rfc}</p>
+          <p className="text-lg">{invoice?.client?.name}</p>
+          <p className="text-lg">{invoice?.client?.rfc}</p>
 
-          <p>{invoice?.client?.location?.stret}</p>
-          <p>{invoice?.client?.location?.community}</p>
-          <p>{invoice?.client?.location?.state}</p>
-          <p>{invoice?.client?.location?.cp}</p>
+          <p className="text-sm">{invoice?.client?.location?.stret}</p>
+          <p className="text-sm">{invoice?.client?.location?.community}</p>
+          <p className="text-sm">{invoice?.client?.location?.state}</p>
+          <p className="text-sm">{invoice?.client?.location?.cp}</p>
         </div>
 
         <div className="text-right">
@@ -252,7 +252,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
       {invoice.conceptsInvoiceInfo.map((c) => (
         <div className="grid grid-cols-6 gap-x-2 mt-3" key={c._id}>
           <p className="text-black">{c?.quantity || 0}</p>
-          <p className="text-black font-bold col-span-3">{c.conceptEstimate.description}</p>
+          <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
           <p className="text-black text-right">{CurrencyFormatter({
             currency: 'MXN',
             value: c?.priceConcepEstimate?.cost || 0

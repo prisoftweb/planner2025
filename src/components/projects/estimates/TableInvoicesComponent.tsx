@@ -114,7 +114,7 @@ export default function TableInvoicesComponent({token, project, user}:
       cell: ({row}) => (
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
-        >{row.original.usecfdi}</p>
+        >{row.original.usecfdi.substring(row.original.usecfdi.length-3)}</p>
       ),
     }),
     columnHelper.accessor('methodpaid', {
@@ -123,7 +123,7 @@ export default function TableInvoicesComponent({token, project, user}:
       cell: ({row}) => (
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
-        >{row.original.methodpaid}</p>
+        >{row.original.methodpaid.substring(row.original.methodpaid.length-3)}</p>
       ),
     }),
     columnHelper.accessor('formpaid', {
@@ -132,7 +132,7 @@ export default function TableInvoicesComponent({token, project, user}:
       cell: ({row}) => (
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
-        >{row.original.formpaid}</p>
+        >{row.original.formpaid.substring(row.original.formpaid.length-3)}</p>
       ),
     }),
     columnHelper.accessor('estimate', {

@@ -203,3 +203,24 @@ export interface ITimeLineProject {
     status: boolean
   }
 }
+
+export interface IProjectWithEstimateMin {
+  _id: string
+  title: string
+  amountPayable: number
+  amountPayableVAT: number
+  account: string
+  amount: number
+  amountotal: number
+  porcentage: number
+  estimates: number
+  client: string
+  projectInfoStatusInfo: {
+    _id: string
+    name: string
+    description: string
+    color: string
+    status: boolean
+    __v: number
+  }
+}

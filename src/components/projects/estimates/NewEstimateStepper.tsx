@@ -8,9 +8,10 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { createEstimate } from "@/app/api/routeEstimates";
 import FormNewEstimate from "./FormNewEstimate";
 import { TotalEstimatedByProject } from "@/interfaces/Estimate";
+import { getProjectsWithOutEstimateMin } from "@/app/api/routeProjects";
 
-export default function NewEstimateStepper({token, showForm, user, projects}: 
-                            {token:string, showForm:Function, user:string, projects: ProjectMin[] }){
+export default function NewEstimateStepper({token, showForm, user, updateProjects}: 
+                            {token:string, showForm:Function, user:string, updateProjects: () => Promise<void> }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper]=useState<number>(0);
@@ -36,6 +37,7 @@ export default function NewEstimateStepper({token, showForm, user, projects}:
   const [bandDescription, setBandDescription] = useState<boolean>(false);
   // const [lengthOrder, setLengthOrder] = useState<string>('');
   const [typeEstimate, setTypeEstimate]=useState<string>('');
+  const [projects, setProjects]=useState<ProjectMin[]>([]);
 
   const [totalEstimatedProject, setTotalEstimatedProject]=useState<TotalEstimatedByProject[]>();
 
@@ -56,6 +58,18 @@ export default function NewEstimateStepper({token, showForm, user, projects}:
       document.body.clientHeight, document.documentElement.clientHeight
     ));
     return () => window.removeEventListener('scroll', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetch = async() => {
+      const res = await getProjectsWithOutEstimateMin(token);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setProjects(res);
+      }
+    }
+    fetch();
   }, []);
 
   const closeForm = () => {
@@ -194,11 +208,12 @@ export default function NewEstimateStepper({token, showForm, user, projects}:
         showToastMessageError(res);
       }else{
         // updateEstimates();
+        // updateProjects();
         showToastMessage('Estimacion creada satisfactoriamente!!!');
         showForm(false);
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 1500);
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
     }
   }

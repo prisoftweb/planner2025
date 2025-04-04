@@ -743,3 +743,39 @@ export async function getTimeLineProject(auth_token:string, project:string) {
     return 'Error al consultar linea de tiempo del proyecto!!';
   }
 }
+
+export async function getProjectsWithEstimatesMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllEstimatesMINGROUPROJECT`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar proyectos!!';
+  }
+}
+
+export async function getProjectsWithOutEstimateMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsMINAndNEConditionAndNEstimates/66e0a1a4c6d95ffb8aa0ff31`;
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar proyectos!!';
+  }
+}

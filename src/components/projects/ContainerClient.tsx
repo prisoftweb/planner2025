@@ -17,7 +17,7 @@ import WithOut from "../WithOut"
 import { UsrBack } from "@/interfaces/User"
 import { showToastMessageError } from "../Alert"
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject"
-import { getProjectsMin } from "@/app/api/routeProjects"
+import { getActiveProjectsMin } from "@/app/api/routeProjects"
 
 export default function ContainerClient({token, optClients, optCategories, 
                           optTypes, user, optCompanies, data, optCategoriesFilter, 
@@ -48,7 +48,7 @@ export default function ContainerClient({token, optClients, optCategories,
     const aux = async () =>{
       let projs: ProjectMin[] = [];
       try {
-        projs = await getProjectsMin(token);
+        projs = await getActiveProjectsMin(token);
         if(typeof(projs)==='string') showToastMessageError(projs);
         else{
           const d = ProjectDataToTableDataMin(projs);

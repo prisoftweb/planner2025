@@ -341,17 +341,17 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
           paymentInInvoices
         }
         console.log('new data => ', JSON.stringify(data));
-        showToastMessage('lsto');
+        // showToastMessage('lsto');
         // showToastMessage('cobro sin voucehr');
-        // const res = await createCollectionUpdateMany(token, data);
-        // if(typeof(res)==='string'){
-        //   showToastMessageError(res);
-        // }else{
-        //   showToastMessage('Cobro agregado satisfactoriamente!!!');
-        //   // setTimeout(() => {
-        //   //   window.location.reload();
-        //   // }, 2500);
-        // }
+        const res = await createCollectionUpdateMany(token, data);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          showToastMessage('Cobro agregado satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }
       }else{
         const data = new FormData();
         data.append('reference', reference);
