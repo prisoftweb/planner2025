@@ -1,37 +1,29 @@
 import Label from "@/components/Label";
-// import SelectReact from "@/components/SelectReact";
-// import { PlusCircleIcon } from "@heroicons/react/24/solid";
-// import TextArea from "@/components/TextArea";
-// import Input from "@/components/Input";
 import { useEffect, useState } from "react";
-import { Options } from "@/interfaces/Common";
-// import FormNewConcept from "./FormNewConcept";
-// import FormNewPrice from "./FormNewPrice";
-// import Button from "@/components/Button";
 import CurrencyInput from "react-currency-input-field";
-import { IConceptEstimateNormal, IConceptEstimateMin, PriceConcept } from "@/interfaces/Estimate";
+import { IConceptEstimateMin, PriceConcept } from "@/interfaces/Estimate";
 import { getPricesConcept, deletePriceInConceptEstimate } from "@/app/api/routeEstimates";
 import RemoveElement from "@/components/RemoveElement";
-import {BookmarkSquareIcon} from "@heroicons/react/24/solid";
 import { insertPriceInConceptEstimate } from "@/app/api/routeEstimates";
 import { showToastMessageError } from "@/components/Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {IoIosSave} from 'react-icons/io';
 
-export default function PriceUnityStepper({token, nextStep, handlePriceId, 
-    handleAddNewPrice, conceptSelected, user }: 
-  { token:string, nextStep:Function, handlePriceId:Function, handleAddNewPrice:Function, 
-    conceptSelected: IConceptEstimateMin, user:string }) {
+type Props = { 
+  token:string, 
+  nextStep:Function, 
+  handlePriceId:Function, 
+  handleAddNewPrice:Function, 
+  conceptSelected: IConceptEstimateMin, 
+  user:string 
+}
 
-  // const [showNewPrice, setShowNewPrice] = useState<boolean>(false);
+export default function PriceUnityStepper({token, nextStep, handlePriceId, 
+  handleAddNewPrice, conceptSelected, user }: Props) {
 
   const [bandPrice, setBandPrice] = useState<boolean>(false);
   const [cost, setCost] = useState<string>('0');
-  // const [bandUnity, setBandUnity] = useState<boolean>(false);
-  // const [bandDate, setBandDate] = useState<boolean>(false);
-
   const [prices, setPrices] = useState<PriceConcept[]>([]);
-
   const [search, setSearch] = useState<string>('');
 
   const handlePrices = () => {
@@ -43,8 +35,6 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
     filteredPrices = prices.filter((p) => p.cost.toString().includes(search));
   }
 
-  console.log('filtered prices => ', filteredPrices);
-
   useEffect(() => {
     const fetch = async () => {
       const res = await getPricesConcept(token, conceptSelected._id);
@@ -55,10 +45,6 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
     fetch();
   }, []);
   
-  // const handleShowNewPrice = (value:boolean) => {
-  //   setShowNewPrice(value);
-  // }
-
   const handlePriceSelected = (price: PriceConcept) => {
     handlePriceId(price);
     nextStep(2);
@@ -85,7 +71,6 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
         if(typeof(res2) !== 'string'){
           setPrices(res2);
           handleAddNewPrice(res2);
-          // nextStep(2);
         }
       }
     }else{
@@ -93,8 +78,6 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
     }
   }
 
-  // const valueConcept = conceptsLV.find((e) => e.value===conceptID)?.label || '';
-console.log('filtered prices => ', filteredPrices);
   return (
       <>
         <div>
@@ -126,8 +109,6 @@ console.log('filtered prices => ', filteredPrices);
                 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={'Buscar precio'} required ></input>
           </div>
-          {/* <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-                    onClick={() => setShowNewPrice(true)} /> */}
         </div>
         <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
           <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
@@ -196,70 +177,11 @@ console.log('filtered prices => ', filteredPrices);
           <p className="text-red-500">El precio unitario es obligatorio!!!</p>
         )}
 
-        {/* <div className="px-2">
-          <div className="grid grid-cols-3 gap-x-1">
-            <div className=" col-span-2">
-              <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Precio</p></Label>
-              <div className="flex gap-x-2 items-center">
-                <SelectReact opts={conceptsLV} index={0} setValue={handlePriceId} />
-                <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-                  onClick={() => setShowNewPrice(true)} />
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-x-1 mt-2">
-            <div>
-              <Label htmlFor="price"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Precio</p></Label>
-              <CurrencyInput
-                id="price"
-                name="price"
-                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                  focus:border-slate-700 outline-0"
-                value={amount}
-                decimalsLimit={2}
-                prefix="$"
-                onValueChange={(value) => {try {
-                  setAmount(value?.replace(/[$,]/g, "") || '0');
-                } catch (error) {
-                  setAmount('0');
-                }}}
-              />
-              {bandPrice && (
-                <p className="text-red-500">El precio unitario es obligatorio!!!</p>
-              )}
-            </div>
-            <div className="">
-              <Label htmlFor="unidad"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
-              <Input type="text" name="unidad" 
-                value={unity}
-                onChange={(e) => setUnity(e.target.value)}
-              />
-              {bandUnity && (
-                <p className="text-red-500">La unidad es obligatoria!!!</p>
-              )}
-            </div>
-            <div className="">
-              <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-              <Input type="date" name="date" 
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-              {bandDate && (
-                <p className="text-red-500">La fecha es obligatoria!!!</p>
-              )}
-            </div>
-          </div>
-        </div> */}
-
         <div className="flex gap-x-2 justify-center mt-2">
           <button className="text-black font-normal text-sm bg-white 
             rounded-xl w-36 h-9 py-2 hover:bg-slate-200 border border-black"
             onClick={() => nextStep(0)}>Atras</button>
-          {/* <Button type="button" onClick={validationData}>Siguiente</Button> */}
         </div>
-        {/* {showNewPrice && <FormNewPrice addPrice={handleAddNewPrice} setShowForm={handleShowNewPrice} 
-                                token={token} valueConcept={valueConcept} code={code} 
-                                description={description} />} */}
       </>
     )
 }

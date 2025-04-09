@@ -1,24 +1,21 @@
-// import Label from "@/components/Label";
-// import SelectReact from "@/components/SelectReact";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
-// import TextArea from "@/components/TextArea";
-// import Input from "@/components/Input";
 import { useState } from "react";
-// import { Options } from "@/interfaces/Common";
 import FormNewConcept from "./FormNewConcept";
-// import Button from "@/components/Button";
-// import { showToastMessage, showToastMessageError } from "@/components/Alert";
-import { IConceptEstimate, IConceptEstimateNormal, IConceptEstimateMin } from "@/interfaces/Estimate";
+import { IConceptEstimateMin } from "@/interfaces/Estimate";
+
+type Params = {
+  handleConceptID:Function, 
+  token:string, 
+  nextStep:Function, 
+  handleAddNewConcept:Function, 
+  concepts:IConceptEstimateMin[]
+}
 
 export default function ConceptStepperComponent({handleConceptID, token, nextStep, 
-    handleAddNewConcept, concepts}: 
-  {handleConceptID:Function, token:string, nextStep:Function, handleAddNewConcept:Function, 
-    concepts:IConceptEstimateMin[]}) {
+    handleAddNewConcept, concepts}: Params) {
 
   const [showNewConcept, setShowNewConcept] = useState<boolean>(false);
-  // const [bandDescription, setBandDescription] = useState<boolean>(false);
-  // const [bandCode, setBandCode] = useState<boolean>(false);
-
+  
   const [search, setSearch] = useState<string>('');
   
   const handleShowNewConcept = (value:boolean) => {
@@ -35,7 +32,6 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
     nextStep(1);
   }
   
-  console.log('concepts => ', concepts);
   return (
     <>
       <div className="flex items-center gap-x-2">
@@ -95,9 +91,6 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
 
         </nav>
       </div>
-      {/* <div className="flex justify-center mt-2">
-        <Button type="button" onClick={validationData}>Siguiente</Button>
-      </div> */}
       {showNewConcept && <FormNewConcept addConcept={handleAddNewConcept} setShowForm={handleShowNewConcept} 
                               token={token} />}
     </>

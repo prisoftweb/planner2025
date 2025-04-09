@@ -4,7 +4,6 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-//import { useState } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { UpdateProject } from "@/app/api/routeProjects";
@@ -12,8 +11,7 @@ import { useRef } from "react";
 import { useOneProjectsStore } from "@/app/store/projectsStore";
 import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
 
-export default function Address({token, id, project}: 
-        {token:string, id:string, project:OneProjectMin}){
+export default function Address({token, id, project}: {token:string, id:string, project:OneProjectMin}){
 
   const refRequest = useRef(true);
   const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
@@ -28,12 +26,6 @@ export default function Address({token, id, project}:
       country: oneProjectStore?.location?.country || project.location?.country,
     }, 
     validationSchema: Yup.object({
-      // stret: Yup.string()
-      //             .required('La calle y numero son obligatorios!!'),
-      // community: Yup.string()
-      //             .required('El colonia es obligatoria'),
-      // cp: Yup.string()
-      //             .required('El codigo postal es obligatorio'),
       municipy: Yup.string()
                   .required('El municipio es obligatorio'),
       stateA: Yup.string()

@@ -124,7 +124,6 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/estimates/${row.original.id}`)}
         >
-          {/* {row.original.amount} */}
           {MoneyFormatter(row.original.amount)}
         </p>
       ),
@@ -140,17 +139,14 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
   }, [])
 
   const [filteredProjects, setFilteredProjects] = useState<IProjectWithEstimateMin[]>(projects);
-  const [filter, setFilter] = useState<boolean>(false);
-  const [dataProjects, setDataProjects] = useState(data);
-
-  const dataTable: ProjectsTable[] = ProjectEstimateDataToTableDataMin(filteredProjects);
+  const dataTable: ProjectsTable[] = ProjectEstimateDataToTableDataMin(isFilter? filteredProjects: projects);
 
   let view = <></>;
   if(isTable){
     view = (<Table columns={columns} data={dataTable} placeH="Buscar proyecto.." />);
   }else{
     view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-              {filteredProjects.map((project, index:number) => (
+              {projects.map((project, index:number) => (
                 <CardProject project={project} token={token} key={index} deleteIcon={false} 
                   url={`/projects/estimates/${project._id}`}  />
               ))}
@@ -165,17 +161,20 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
   //   return false;
   // }
 
-  // const amountValidation = (project:ProjectMin, startDate:number, endDate:number, 
+  // const amountValidation = (project:IProjectWithEstimateMin, startDate:number, endDate:number, 
   //       minAmount:number, maxAmount:number) => {
   //   if(project.amount >= minAmount && project.amount <= maxAmount){
-  //     if(dateValidation(project.date, startDate, endDate)){
+  //     // if(dateValidation(project.date, startDate, endDate)){
+  //     //   return true;
+  //     // }
+  //     if(dateValidation(new Date().toISOString(), startDate, endDate)){
   //       return true;
   //     }
   //   }
   //   return false;
   // }
 
-  // const categoriesValidation = (project:ProjectMin, startDate:number, endDate:number, 
+  // const categoriesValidation = (project:IProjectWithEstimateMin, startDate:number, endDate:number, 
   //           minAmount:number, maxAmount:number, categories:string[]) => {
   //   if(categories.includes('all')){
   //     if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
@@ -190,7 +189,7 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
   //   }
   // }
 
-  // const typesValidation = (project:ProjectMin, startDate:number, endDate:number, 
+  // const typesValidation = (project:IProjectWithEstimateMin, startDate:number, endDate:number, 
   //   minAmount:number, maxAmount:number, categories:string[], types:string[]) => {
   //   if(types.includes('all')){
   //     if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
@@ -231,15 +230,15 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
     // });
     // setFilteredProjects(filtered);
     // setDataProjects(ProjectDataToTableDataMin(filtered));
-    // setFilter(true);
+    // setFilter(true); usar setIsFilter() => parametro
   }
 
   return(
     <>
       <div className="flex justify-end mb-5">
-        {/* {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
+        {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
                                   optTypes={optTypes} optConditions={optConditions} 
-                                  FilterData={filterData} maxAmount={maxAmount}  />} */}
+                                  FilterData={filterData} maxAmount={maxAmount}  />}
       </div>
       {view}
     </>
@@ -259,7 +258,6 @@ return(
           <div className="flex items-center justify-between">
             <div className="flex flex-col items-center gap-y-1">
               <img src={'/img/projects/default.svg'} alt="logo" className="w-8 h-auto rounded-full" />
-              {/* <div className={`w-3 h-3 ${project.status? 'bg-green-500': 'bg-red-500'}`}></div> */}
               <div className={`w-3 h-3 bg-green-500`}></div>
             </div>
             <div>
@@ -285,9 +283,6 @@ return(
                 value: project.amount
               })}
             </p>
-            {/* <p>{ project.date? 
-              Math.round((new Date().getTime() - new Date(project.date).getTime()) 
-                / 86400000): 0 } dias</p> */}
           </div>
         </div>
       </Link>

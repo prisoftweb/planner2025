@@ -13,12 +13,19 @@ import ProgressProject from "./ProgressProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
 import DashboardProfileProject from "./DashboardProfileProject"
 
+type Props = {
+  project:OneProjectMin, 
+  token:string, 
+  id:string,
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  optConditions:Options[],
+  user:string
+}
+
 export default function ProjectCli({project, token, id, optCategories, optClients, 
-                             optTypes, optConditions, user}: 
-                            {project:OneProjectMin, token:string, id:string,
-                              optClients:Options[], optCategories:Options[], 
-                              optTypes:Options[], optConditions:Options[],
-                              user:string}){
+  optTypes, optConditions, user}: Props){
 
   const [opt, setOpt] = useState<number>(1);
   const {updateOneProjectStore} = useOneProjectsStore();

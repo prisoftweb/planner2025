@@ -1,4 +1,3 @@
-import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -24,16 +23,6 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     percentageCharge} = useNewProject();
 
   const {updateHaveNewProject} = useProjectsStore();
-
-  // let nameI = '';
-  // let keyProjectI = '';
-  // let descriptionI = '';
-
-  // if(state.databasic){
-  //   nameI = state.databasic.name;
-  //   keyProjectI = state.databasic.keyProject;
-  //   descriptionI = state.databasic.description;
-  // }
 
   const formik = useFormik({
     initialValues: {
@@ -144,17 +133,12 @@ export default function DataBasicStepper({token, user, condition, showForm}:
       }
 
       try {
-        console.log('date => ', date);
-        console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateHaveNewProject(true);
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

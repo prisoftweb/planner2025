@@ -1,12 +1,9 @@
 import DatePicker from "react-datepicker";
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import { useState, useRef } from "react";
-//import { useRegFormContext } from "./StepperProjectProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
@@ -16,8 +13,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useProjectsStore } from "@/app/store/projectsStore";
 import { useRegFormContext } from "./StepperProjectProvider";
 
-export default function Guarantee({token, condition, showForm}:
-  {token:string, condition: string, showForm:Function}){
+export default function Guarantee({token, condition, showForm}: {token:string, condition: string, showForm:Function}){
   
   let year = new Date().getFullYear().toString();
   let month = (new Date().getMonth() + 1).toString();
@@ -137,17 +133,12 @@ export default function Guarantee({token, condition, showForm}:
       }
       
       try {
-        console.log('date => ', date);
-        console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateHaveNewProject(true);
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -174,23 +165,13 @@ export default function Guarantee({token, condition, showForm}:
             name="percentage"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={0}
             decimalsLimit={2}
-            //prefix="%"
             suffix="%"
             onValueChange={(value) =>formik.values.percentage=value || ''}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="percentage" 
-            value={formik.values.percentage}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            autoFocus
-          /> */}
           {formik.touched.percentage && formik.errors.percentage ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentage}</p>
@@ -204,15 +185,12 @@ export default function Guarantee({token, condition, showForm}:
             name="amountG"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={0}
             decimalsLimit={2}
             prefix="$"
             onValueChange={(value) =>formik.values.amountG=value || ''}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
           {formik.touched.amountG && formik.errors.amountG ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -220,20 +198,12 @@ export default function Guarantee({token, condition, showForm}:
               </div>
           ) : null}
         </div>
-        {/* <Input type="text" name="amountG" 
-          value={formik.values.amountG}
-          onChange={formik.handleChange}
-          onBlur={formik.handleChange}
-        />*/}
         <div>
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
           <DatePicker
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0" 
-            //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {
-                setStartDate(date.toDateString()) 
-                console.log(date); console.log(date.toDateString())}} 
+            selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
           />
         </div>
         <div className="flex justify-center mt-8 space-x-5">

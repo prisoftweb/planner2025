@@ -7,8 +7,6 @@ export default function NavEstimateStepper({indexStepper, setIndexStepper}: {ind
   
   return(
     <>
-      {/* <div className="max-w-md"> */}
-      {/* <div className="max-w-lg"> */}
       <div className="w-full mt-2">
         <ol
           className="grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 

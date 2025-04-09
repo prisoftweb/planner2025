@@ -11,11 +11,17 @@ import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "../SearchInTable"
 import WithOut from "../WithOut"
 
+type Props = {
+  token:string, 
+  data:ProjectsTable[], 
+  projects: ProjectMin[], 
+  optCategoriesFilter: Options[], 
+  optTypesFilter: Options[], 
+  optConditionsFilter: Options[]
+}
+
 export default function ContainerHistoryClient({token, data, optCategoriesFilter, 
-                          optConditionsFilter, optTypesFilter, projects}: 
-                        {token:string, data:ProjectsTable[], 
-                          projects: ProjectMin[], optCategoriesFilter: Options[], 
-                          optTypesFilter: Options[], optConditionsFilter: Options[]}){
+  optConditionsFilter, optTypesFilter, projects}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);

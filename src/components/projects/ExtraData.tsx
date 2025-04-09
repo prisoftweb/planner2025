@@ -1,5 +1,4 @@
 import Label from "../Label"
-//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
@@ -16,18 +15,22 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useOneProjectsStore } from "@/app/store/projectsStore";
 import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
 
+type Props = {
+  token:string, 
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  id:string,
+  project:OneProjectMin
+}
+
 export default function ExtraData({token, optClients, optCategories, 
-                          optTypes, id, project}:
-                        {token:string, optClients:Options[], optCategories:Options[], 
-                          optTypes:Options[], id:string,
-                          project:OneProjectMin}){
+  optTypes, id, project}: Props){
 
   const [client, setClient] = useState<string>(project.client._id);
   const [type, setType] = useState<string>(optTypes[0].value);
   const [category, setCategory] = useState<string>(optCategories[0].value);
-  //const [company, setCompany] = useState<string>(optCompanies[0].value);
   const [guarantee, setGuarantee] = useState<boolean>(project.hasguaranteefund);
-  // const [haveAddress, setHaveAddress] = useState<boolean>(false);
   const refRequest = useRef(true);
 
   const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
@@ -75,9 +78,7 @@ export default function ExtraData({token, optClients, optCategories,
         const data= {
           amount: amount.toString().replace(/[$,]/g, ""),
           date: startDate,
-          //categorys: category,
           category,
-          //types: type,
           glossary: type,
           client,
           hasguaranteefund: guarantee
@@ -86,9 +87,7 @@ export default function ExtraData({token, optClients, optCategories,
           const res = await UpdateProject(token, id, data);
           if(typeof(res)!=='string'){
             refRequest.current = true;
-            // console.log('res router => ', res);
             const r = ParseProjectToOneProjectMin(res);
-            // console.log('parse res => ', r);
             if(typeof(r)==='string'){
               showToastMessageError(r);
             }else{
@@ -130,10 +129,8 @@ export default function ExtraData({token, optClients, optCategories,
             name="amount"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={project.guaranteefund?.amount || 0}
             decimalsLimit={2}
             prefix="$"
@@ -142,7 +139,6 @@ export default function ExtraData({token, optClients, optCategories,
             } catch (error) {
               formik.values.amount=0;
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
           {formik.touched.amount && formik.errors.amount ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -159,10 +155,7 @@ export default function ExtraData({token, optClients, optCategories,
           <DatePicker
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
             focus:border-slate-700 outline-0 outline-none" 
-            //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {
-                setStartDate(date.toDateString()) 
-                console.log(date); console.log(date.toDateString())}} 
+            selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
           />
         </div>
         <div className=" flex gap-x-3">

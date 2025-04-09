@@ -53,9 +53,7 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
 
   const validationData = () => {
     let validation = true;
-    console.log('in validation');
     if(!folio || folio===''){
-      console.log('no folio');
       setBandFolio(true);
       validation = false;
       return false;
@@ -64,14 +62,12 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
     }
     if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
       setBandTaxFolio(true);
-      console.log('no tax folio');
       validation = false;
       return false;
     }else{
       setBandTaxFolio(false);
     }
     if(!date || date===''){
-      console.log('no date');
       setBandDate(true);
       validation = false;
       return false;
@@ -93,7 +89,6 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
               <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                 <input checked={editClient} 
                   onClick={() => setEditClient(!editClient)} id="editClient" type="checkbox"
-                  // onChange={() => console.log('')}
                   className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                     appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                     peer-checked:border-green-500 peer-checked:before:bg-green-500

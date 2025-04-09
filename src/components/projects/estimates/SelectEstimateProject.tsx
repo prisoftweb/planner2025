@@ -42,7 +42,6 @@ export default function SelectEstimateProject({projects, token, updateProject}:
   const filterReports = (value: string) => {
     const filter = projects.filter((pro) => pro.title.toLowerCase().includes(value.toLowerCase()));
     setSelectedProjects(filter);
-    //console.log(filter);
   }
 
   return (
@@ -58,7 +57,6 @@ export default function SelectEstimateProject({projects, token, updateProject}:
             }}
             placeholder='Buscar ...'
             styles={customStyles}
-            //onInputChange={(e) => filterReports(e)}
             onChange={(value:(Options | null)) => filterReports(value?.label || '')}
             autoFocus
           />

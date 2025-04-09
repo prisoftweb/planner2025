@@ -1,5 +1,4 @@
 import Label from "../Label"
-import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
@@ -16,11 +15,19 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useProjectsStore } from "@/app/store/projectsStore";
 
+type Props = {
+  token:string, 
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  user:string, 
+  optCompanies: Options[]
+  condition: string, 
+  showForm:Function
+}
+
 export default function ExtraDataStepper({token, optClients, optCategories, 
-                          optTypes, user, optCompanies, condition, showForm}:
-                        {token:string, optClients:Options[], optCategories:Options[], 
-                          optTypes:Options[], user:string, optCompanies: Options[]
-                          condition: string, showForm:Function}){
+  optTypes, user, optCompanies, condition, showForm}: Props){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -45,8 +52,6 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   if(day.length ===1) day = '0'+day;
 
   const d = (date === '')? year+'-'+month+'-'+day: date;
-
-  //console.log('date dmy => ', d);
 
   const [startDate, setStartDate] = useState<string>(d);
 
@@ -163,17 +168,12 @@ export default function ExtraDataStepper({token, optClients, optCategories,
       }
       
       try {
-        //console.log('date => ', startDate);
-        //console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateHaveNewProject(true);
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -234,11 +234,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
           <DatePicker
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0" 
-            //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {
-                //setDateM(date);
-                setStartDate(date.toDateString()) 
-                console.log(date); console.log(date.toDateString())}} 
+            selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
           />
         </div>
         <div className=" flex gap-x-3">

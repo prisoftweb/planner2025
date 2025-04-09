@@ -1,12 +1,9 @@
 import DatePicker from "react-datepicker";
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import { useState, useRef } from "react";
-//import { useRegFormContext } from "./StepperProjectProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import SaveProject from "@/app/functions/SaveProject";
@@ -133,17 +130,12 @@ export default function AmountChargeStepper({token, condition, showForm}:
       }
       
       try {
-        console.log('date => ', date);
-        console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateHaveNewProject(true);
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -190,15 +182,12 @@ export default function AmountChargeStepper({token, condition, showForm}:
             name="amountCharge"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={0}
             decimalsLimit={2}
             prefix="$"
             onValueChange={(value) =>formik.values.amountCharge=value || ''}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
           {formik.touched.amountCharge && formik.errors.amountCharge ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -211,20 +200,11 @@ export default function AmountChargeStepper({token, condition, showForm}:
           <DatePicker
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0" 
-            //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {
-                setStartDate(date.toDateString()) 
-                console.log(date); console.log(date.toDateString())}} 
+            selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
           />
         </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
-          {/* <button type="submit"
-            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
-            hover:bg-slate-200"
-          >
-            Siguiente
-          </button> */}
         </div>
       </form>  
     </div>

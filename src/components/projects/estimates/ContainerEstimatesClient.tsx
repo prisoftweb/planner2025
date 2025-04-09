@@ -1,12 +1,8 @@
 'use client'
-// import ButtonNewBudgetProject from "./ButtonNewBudgetProject"
-// import TableBudgetProjects from "./TableBudgetProjects"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Options } from "@/interfaces/Common"
 import { ProjectsTable, IProjectWithEstimateMin } from "@/interfaces/Projects"
-import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
-import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "@/components/SearchInTable"
 
@@ -19,10 +15,18 @@ import NewEstimateStepper from "./NewEstimateStepper"
 import { getProjectsWithEstimatesMin } from "@/app/api/routeProjects"
 import { showToastMessageError } from "@/components/Alert"
 
+type Props = {
+  token:string, 
+  user:UsrBack, 
+  projectsParam: IProjectWithEstimateMin[], 
+  optConditionsFilter: Options[], 
+  optCategories: Options[], 
+  optTypes: Options[], 
+  data: ProjectsTable[]
+}
+
 export default function ContainerEstimatesClient({token, user, optConditionsFilter, 
-                          projectsParam, optCategories, optTypes, data }: 
-                        {token:string, user:UsrBack, projectsParam: IProjectWithEstimateMin[], optConditionsFilter: Options[], 
-                          optCategories: Options[], optTypes: Options[], data: ProjectsTable[]}){
+  projectsParam, optCategories, optTypes, data }: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -40,6 +44,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
         showToastMessageError('Error al actualizar la tabla!!!');
       }else{
         setProjects(res);
+        setIsFilter(false);
       }
     }
 
@@ -60,8 +65,6 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
   const handleNewEstimate = (value:boolean) => {
     setNewEstimate(value);
   }
-
-  //const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(budgetsStore);
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
@@ -89,9 +92,6 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           </div>
           <div className="">
             <div className="flex gap-x-3 items-center">
-              <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
                         {newEstimate && <NewEstimateStepper showForm={handleNewEstimate}
                                           token={token} user={user._id} updateProjects={updateProjects} />}

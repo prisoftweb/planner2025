@@ -5,7 +5,6 @@ import HeaderForm from "@/components/HeaderForm";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import Select from 'react-select'
 import { Options } from "@/interfaces/Common";
-import { CostoCenterLV } from "@/interfaces/CostCenter";
 import Label from "@/components/Label";
 import CurrencyInput from "react-currency-input-field";
 import Button from "@/components/Button";
@@ -13,7 +12,6 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { InsertNewBudgetInBudgetByID } from "@/app/api/routeBudget";
 import { getBudget } from "@/app/api/routeBudget";
 
-//import DonutChartt from "@/components/expenses/dashboard/DonutChart";
 import DonutChartBudget from "./DonutChartBudget";
 import { CostCenter } from "@/interfaces/CostCenter";
 
@@ -35,8 +33,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   const [concept, setConcept] = useState<string>('');
 
 
-  //const [focusInput, setFocusInput] = useState<boolean>(true);
-  // const inputRef = useRef<CurrencyInputProps>(null);
   const inputRef = useRef<any>(null);
 
   const options: Options[] = [];
@@ -44,7 +40,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   costoCenters.map((cc) => {
     cc.categorys.map((cat) => {
       options.push({
-        //label: cclv.categoryname,
         label: (cc.name) + ' ' + cat.concept.name,
         value: cc._id+'/'+cat.concept._id
       });
@@ -61,9 +56,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
         setTotal('0');
         setPercentage('0');
       }else{
-        //setTotal(Number(value.replace(/[$,]/g, "")));
         const t = Number(value.replace(/[$,]/g, ""));
-        //const p = Number(percentage.replace(/[$,]/g, ""));
         const p = (t / (oneBudget?.amount || 1)) * 100;
         setTotal(value);
         setPercentage(p.toFixed(2));
@@ -92,7 +85,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
   }
   
   const handleResize = () => {
-    //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -102,7 +94,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
 
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
-    //setHeightPage(document.body.offsetHeight - 110);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -206,7 +197,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
 
   oneBudget?.newbudget.map((newB) => {
     optsChart.push({
-      //costo: newB.cost,
       costo: newB.percent,
       label: newB.costocenter.concept.name
     });
@@ -282,30 +272,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
       </div>
 
       <div className="grid grid-cols-2 gap-x-3 mt-3">
-        {/* <div>
-          <Select options={options} className="mt-2" 
-            onChange={(value:any) => onChangeCostoCenter(value)}
-            value={optSel} />
-          <div className="overflow-y-auto h-64 mt-5">
-            {costoCenters.map((cclv) => (
-              cclv.categorys.map((conc) => (
-                <div key={conc.concept._id} 
-                  className={`p-3 border border-slate-700 flex cursor-pointer hover:bg-slate-200 text-slate-700 hover:text-slate-700
-                    ${optSel.value.includes(conc.concept._id)? 'bg-blue-700 text-white': 'text-slate-700 bg-white'} 
-                    shadow-md shadow-slate-400 justify-between items-center`}
-                    onClick={() => onChangeCardCostoCenter(conc.concept._id)}
-                >
-                  <div className="flex gap-x-2">
-                    <img className="w-6 h-6" src={cclv.icon} alt="icono" />
-                    <p>{cclv.name}</p>
-                  </div>
-                  <p>{conc.concept.name}</p>
-                </div>
-              ))
-            ))}
-          </div>
-        </div> */}
-
         <div>
           <Select options={options} className="mt-2" 
             onChange={(value:any) => onChangeCostoCenter(value)}
@@ -348,24 +314,6 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
 
             </nav>
           </div>
-          {/* <div className="overflow-y-auto h-64 mt-5">
-            {costoCenters.map((cclv) => (
-              cclv.categorys.map((conc) => (
-                <div key={conc.concept._id} 
-                  className={`p-3 border border-slate-700 flex cursor-pointer hover:bg-slate-200 text-slate-700 hover:text-slate-700
-                    ${optSel.value.includes(conc.concept._id)? 'bg-blue-700 text-white': 'text-slate-700 bg-white'} 
-                    shadow-md shadow-slate-400 justify-between items-center`}
-                    onClick={() => onChangeCardCostoCenter(conc.concept._id)}
-                >
-                  <div className="flex gap-x-2">
-                    <img className="w-6 h-6" src={cclv.icon} alt="icono" />
-                    <p>{cclv.name}</p>
-                  </div>
-                  <p>{conc.concept.name}</p>
-                </div>
-              ))
-            ))}
-          </div> */}
         </div>
 
         <div className="p-5">

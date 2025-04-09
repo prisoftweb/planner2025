@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from "react";
 import { useRegFormContext } from "./StepperProjectProvider";
 import DataBasicStepper from "./DataBasicStepper";
 import ExtraDataStepper from "./ExtraDataStepper";
@@ -9,11 +8,19 @@ import Guarantee from "./Guarantee";
 import { Options } from "@/interfaces/Common";
 import AmountChargeStepper from "./AmountChargeStepper";
 
+type Props = {
+  token:string, 
+  optClients:Options[], 
+  optCategories:Options[],
+  optTypes:Options[], 
+  user:string, 
+  showForm:Function,
+  optCompanies: Options[], 
+  condition: string 
+}
+
 export default function ContainerProjectStepper({token, optClients, optCategories, 
-                                optTypes, user, optCompanies, condition, showForm}: 
-                              {token:string, optClients:Options[], optCategories:Options[],
-                                optTypes:Options[], user:string, showForm:Function,
-                                optCompanies: Options[], condition: string }){
+  optTypes, user, optCompanies, condition, showForm}: Props){
   
   const [state] = useRegFormContext();
   

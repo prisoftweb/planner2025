@@ -1,33 +1,36 @@
 import Label from "@/components/Label";
-// import TextArea from "@/components/TextArea";
 import Input from "@/components/Input";
 import CurrencyInput from "react-currency-input-field";
-// import { Options } from "@/interfaces/Common";
 import Button from "@/components/Button";
 import { useState } from "react";
 import { showToastMessageError, showToastMessage } from "@/components/Alert";
-import { PriceConcept, IConceptEstimateNormal, IConceptEstimateMin } from "@/interfaces/Estimate";
+import { PriceConcept, IConceptEstimateMin } from "@/interfaces/Estimate";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { insertConceptInEstimate } from "@/app/api/routeEstimates";
 
+type Props = { 
+  token:string, 
+  conceptSelected: IConceptEstimateMin, 
+  previousStep: Function, 
+  price: PriceConcept| undefined, 
+  user:string, 
+  idEstimate:string, 
+  updateConcepts: Function, 
+  showForm:Function
+}
+
 export default function DataStepperComponent({token, previousStep, price, conceptSelected, 
-    user, idEstimate, updateConcepts, showForm}: 
-  { token:string, conceptSelected: IConceptEstimateMin, previousStep: Function, 
-    price: PriceConcept| undefined, user:string, idEstimate:string, updateConcepts: Function, 
-    showForm:Function}) {
+  user, idEstimate, updateConcepts, showForm}: Props) {
 
   const [area, setArea] = useState<string>('');
   const [section, setSection] = useState<string>('');
   const [quantity, setQuantity] = useState<string>('0');
-  // const [amount, setAmount] = useState<string>('0');
   const [pu, setPu] = useState<string>('0');
   
   const [bandArea, setBandArea] = useState<boolean>(false);
   const [bandSection, setBandSection] = useState<boolean>(false);
   const [bandQuantity, setBandQuantity] = useState<boolean>(false);
   const [bandPU, setBandPU] = useState<boolean>(false);
-
-  // const valueConcept = conceptsLV.find((e) => e.value===conceptID)?.label || '';
 
   const validationData = () => {
     let validation = true;
@@ -57,7 +60,6 @@ export default function DataStepperComponent({token, previousStep, price, concep
     }
     
     if(validation){
-      // nextStep(1)
       saveData();
     }
   }
@@ -81,15 +83,11 @@ export default function DataStepperComponent({token, previousStep, price, concep
         }
       ]
     }
-    // console.log('data concept => ', JSON.stringify(data));
     const res = await insertConceptInEstimate(token, data, idEstimate);
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
       showToastMessage('El concepto fue agregado exitosamente!!!');
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 500);
       updateConcepts();
       showForm(false);
     }
@@ -174,9 +172,7 @@ export default function DataStepperComponent({token, previousStep, price, concep
               prefix="$"
               disabled
               // onValueChange={(value) => {try {
-              //   setPu(value?.replace(/[$,]/g, "") || '0');
               // } catch (error) {
-              //   setPu('0');
               // }}}
             />
             {bandPU && (

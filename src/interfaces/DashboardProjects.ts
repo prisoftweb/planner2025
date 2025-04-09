@@ -153,3 +153,26 @@ export interface Dataset {
   backgroundColor: string[]
   hoverOffset: number
 }
+
+export interface IContractualControlProject {
+  _id: string
+  title: string
+  date: string
+  estatus: string
+  progress: number
+  estimateInfo: {
+    estimatedTotal: number
+    porcentageEstimated: number
+    amountPayable: number
+    porcentagePayable: number
+    amountPayableVAT: number
+    porcentagePayableVAT: number
+    amountGuaranteeFund: number
+    porcentageGuaranteeFund: number
+    amountChargeOff: number
+    porcentageChargeOff: number
+    amount: number
+    amountPro: number
+    porcentage: number
+  }
+}

@@ -1,28 +1,12 @@
 'use client'
 import { useState, useRef, useEffect } from "react";
-// import NavExpenseStepper from "./NavExpenseStepper";
-import UploadFileDropZone from "@/components/UploadFileDropZone";
 import Button from "@/components/Button";
-import { showToastMessage, showToastMessageError } from "@/components/Alert";
-// import { useNewExpense } from "@/app/store/newExpense";
-// import { showToastMessage, showToastMessageError } from "../Alert";
-// import SaveExpense from "@/app/functions/SaveExpense";
-import { CreateCostWithFiles } from "@/app/api/routeCost";
-import { getSupplierCreditProv } from "@/app/functions/CostsFunctions";
-
+import { showToastMessageError } from "@/components/Alert";
 import { getInvoices } from "@/app/api/routeInvoices";
 import { IInvoiceMin } from "@/interfaces/Invoices";
 
 export default function DispersionStepper({token, user, NextStep}: 
   {token:string, user:string, NextStep:Function}) {
-
-  // const Next = () => {
-  //   if(file){
-  //     // updateVoucher(file);
-  //     setVoucher(file);
-  //   }
-  //   NextStep(2);
-  // }
 
   const [search, setSearch]=useState<string>('');
   const [invoices, setInvoices]=useState<IInvoiceMin[]>([]);
@@ -39,8 +23,6 @@ export default function DispersionStepper({token, user, NextStep}:
     }
     fetch();
   })
-
-  // const handle = () => {}
 
   return (
     <div className="mt-2">
@@ -103,12 +85,6 @@ export default function DispersionStepper({token, user, NextStep}:
         <Button type="button" 
           onClick={() => {
             NextStep(1); 
-            // if(refRequest.current){
-            //   SaveData();
-            // }
-            // else{
-            //   showToastMessageError('Ya hay una peticion en proceso..!');
-            // }
           }}>Atras</Button>
         <button type="button"
           onClick={() => {}}

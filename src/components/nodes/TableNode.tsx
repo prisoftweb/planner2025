@@ -9,10 +9,18 @@ import { NodeTable } from "@/interfaces/Nodes";
 import UpdateNode from "./UpdateNode";
 import { Options } from "@/interfaces/Common";
 
+type Params = {
+  data:NodeTable[], 
+  token:string, 
+  departments: Options[], 
+  workflows: Options[], 
+  glossaries:Options[], 
+  optRels: Options[], 
+  optDesc: Options[] 
+}
+
 export default function TableNode({data, token, departments, glossaries, workflows, 
-                            optDesc, optRels}:
-  {data:NodeTable[], token:string, departments: Options[], workflows: Options[], 
-    glossaries:Options[], optRels: Options[], optDesc: Options[] }){
+  optDesc, optRels}: Params){
   
   const columnHelper = createColumnHelper<NodeTable>();
 

@@ -1,29 +1,15 @@
 'use client'
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import Button from "@/components/Button"
-// import Input from "@/components/Input"
-// import Label from "@/components/Label"
-import HeaderForm from "@/components/HeaderForm"
 import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
-// import CurrencyInput from "react-currency-input-field"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
-// import SelectReact from "@/components/SelectReact"
-import { Options } from "@/interfaces/Common"
-// import { getClientsLV } from "@/app/api/routeClients"
-import { IEstimateMin, IConceptEstimate, TableEstimatesProject } from "@/interfaces/Estimate"
-import { getEstimateMin, getAllConceptsEstimateMin } from "@/app/api/routeEstimates"
-// import DataBasicStepper from "./DataBasicStepper"
-// import InvoicesConditionsStepper from "./InvoicesConditionsStepper"
-// import ConceptsInvoiceStepper from "./ConceptsInvoceStepper"
-// import NavInvoiceStepper from "./NavInvoiceStepper"
 import { createCollectionWithVoucher, createCollectionUpdateMany } from "@/app/api/routeCollections"
 import VoucherStepper from "./VoucherStepper"
 import NavCollectionStepper from "./NavCollectionStepper"
 
 import DataCollectionStepper from "./DataCollectionStepper"
 import DispersionCollectionStepper from "./DispersionCollectionStepper"
-import { IInvoiceMin, IInvoiceTable } from "@/interfaces/Invoices"
+import { IInvoiceTable } from "@/interfaces/Invoices"
 
 type TInvoiceStepper={
   folio: string,
@@ -68,9 +54,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     concepts: invoiceTable.formpaid+' | '+ invoiceTable.methodpaid + ' | ' + invoiceTable.usecfdi
   }]);
 
-  // const [conceptsEstimate, setConceptsEstimate] = useState<IConceptEstimate[]>([]);
-
-  const [bandFolio, setBandFolio] = useState<boolean>(false);
+  // const [bandFolio, setBandFolio] = useState<boolean>(false);
   const [bandTaxFolio, setBandTaxFolio] = useState<boolean>(false);
   const [bandDate, setBandDate] = useState<boolean>(false);
   const [bandOdc, setBandOdc] = useState<boolean>(false);
@@ -91,15 +75,11 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
   }
 
   const handleUpdateAmount = (invoicesParam: TInvoiceStepper[]) => {
-    // handleAmount(amount);
     let acum=0;
     if(invoicesParam.length > 0){
-      console.log('inv disp => ', invoicesDisp);
       invoicesParam.map((i, index:number) => {
         if(index > 0){
-          console.log('i total => ', i.total);
           acum+=i.total;
-          console.log('acum => ', acum);
         }
       });
     }
@@ -112,7 +92,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
 
     const inv = invoicesParam.map((i, index) => {
       if (index === 0) {
-        // Increment the clicked counter
         const aux: TInvoiceStepper = {
           id: i.id,
           folio: i.folio,
@@ -124,7 +103,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
         }
         return aux;
       } else {
-        // The rest haven't changed
         return i;
       }
     });
@@ -162,7 +140,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
         }
         return aux;
       } else {
-        // The rest haven't changed
         return i;
       }
     });
@@ -175,10 +152,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
 
   const handleBandAmount = (value:boolean) => {
     setBandAmount(value);
-  }
-  
-  const handleBandOdc = (value:boolean) => {
-    setBandOdc(value);
   }
 
   const handleInvoicesDisp = (value: TInvoiceStepper[]) => {
@@ -209,10 +182,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     setDisperse(value);
   }
 
-  const handleBandTaxFolio = (value:boolean) => {
-    setBandTaxFolio(value);
-  }
-
   const handleResize = () => {
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -233,9 +202,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
 
   const validationData = () =>{
     let validation = true;
-    console.log('in validation');
     if(!reference || reference===''){
-      console.log('no folio');
       setBandReference(true);
       validation = false;
       return false;
@@ -243,7 +210,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
       setBandReference(false);
     }
     if(!date || date===''){
-      console.log('no date');
       setBandDate(true);
       validation = false;
       return false;
@@ -251,7 +217,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
       setBandDate(false);
     }
     if(!amount || amount==='0'){
-      console.log('no amount');
       setBandAmount(true);
       validation = false;
       return false;
@@ -259,41 +224,19 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
       setBandAmount(false);
     }
     if(!textConcept || textConcept===''){
-      console.log('no concept');
       setBandTextConcept(true);
       validation = false;
       return false;
     }else{
       setBandTextConcept(false);
     }
-    console.log('ret val => ', validation);
     return validation;
   }
 
   const saveCollection = async () => {
-    // console.log('on save invoice => ');
     const val = validationData();
 
     if(val){
-      // const inv =
-      // const inv = invoicesDisp.map((i, index) => {
-      //   if (index === 0) {
-      //     // Increment the clicked counter
-      //     const aux: TInvoiceStepper = {
-      //       id: i.id,
-      //       folio: i.folio,
-      //       project: i.project,
-      //       concepts: i.concepts,
-      //       total: Number(amount),
-      //       totalPending: Number(amount),
-      //     }
-      //     return aux;
-      //   } else {
-      //     // The rest haven't changed
-      //     return i;
-      //   }
-      // });
-      // const invoices = transformTypes(inv);
       const invoices = transformTypes(invoicesDisp);
       type TPaymentInvoice = {
         invoice: string,
@@ -340,9 +283,6 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
           invoices,
           paymentInInvoices
         }
-        console.log('new data => ', JSON.stringify(data));
-        // showToastMessage('lsto');
-        // showToastMessage('cobro sin voucehr');
         const res = await createCollectionUpdateMany(token, data);
         if(typeof(res)==='string'){
           showToastMessageError(res);
@@ -377,15 +317,14 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
         data.append('type', "67e31c8d1945c0b1e4c9bddf");
         data.append('invoices', JSON.stringify(invoices));
         data.append('paymentInInvoices', JSON.stringify(paymentInInvoices));
-        showToastMessage('costo con voucehr');
         const res = await createCollectionWithVoucher(token, data);
         if(typeof(res)==='string'){
           showToastMessageError(res);
         }else{
           showToastMessage('Cobro agregado satisfactoriamente!!!');
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 2500);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2500);
         }
       }
     }

@@ -10,10 +10,17 @@ import { createNode } from "@/app/api/routeNodes"
 import SelectReact from "../SelectReact"
 import SelectReactWithDescription from "../SelectReactWithDescription"
 
+type Params = {
+  showForm:Function, 
+  token:string, 
+  glossaries:Options[], 
+  departments:Options[], 
+  workFlows:Options[], 
+  descGlossaries:Options[]
+}
+
 export default function NewNode({showForm, token, departments, glossaries, 
-                          workFlows, descGlossaries}: 
-  {showForm:Function, token:string, glossaries:Options[], departments:Options[], 
-    workFlows:Options[], descGlossaries:Options[]}){
+                          workFlows, descGlossaries}: Params){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [department, setDepartment] = useState<string>(departments[0].value);

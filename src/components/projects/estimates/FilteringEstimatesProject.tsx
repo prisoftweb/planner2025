@@ -9,10 +9,8 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 
-export default function FilteringEstimatesProject({showForm, optProjects, 
-                      optConditions, FilterData, maxAmount }: 
-                    {showForm:Function, optProjects: Options[],
-                      optConditions: Options[], FilterData:Function, maxAmount:number  }){
+export default function FilteringEstimatesProject({showForm, optProjects, optConditions, FilterData, maxAmount }: 
+  {showForm:Function, optProjects: Options[], optConditions: Options[], FilterData:Function, maxAmount:number  }){
   
   const [conditions, setConditions] = useState<string[]>([optConditions[0].value]);
   const [projects, setProjects] = useState<string[]>([optProjects[0].value]);
@@ -60,70 +58,6 @@ export default function FilteringEstimatesProject({showForm, optProjects,
     setProjects(value);
   }
 
-  // const dateValidation = (date:string, startDate:number, endDate:number) => {
-  //   let d = new Date(date).getTime();
-  //   if(d >= startDate && d <= endDate){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // const amountValidation = (budget:BudgetMin, startDate:number, endDate:number, 
-  //       minAmount:number, maxAmount:number) => {
-  //   if(budget.amount >= minAmount && budget.amount <= maxAmount){
-  //     if(dateValidation(budget.date, startDate, endDate)){
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const projectsValidation = (budget:BudgetMin, startDate:number, endDate:number, 
-  //   minAmount:number, maxAmount:number, projects:string[]) => {
-  //   if(projects.includes('all')){
-  //     if(amountValidation(budget, startDate, endDate, minAmount, maxAmount))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(budget.project)
-  //       if(projects.includes(budget.project._id))
-  //         if(amountValidation(budget, startDate, endDate, minAmount, maxAmount))
-  //           return true;
-  //     return false;
-  //   }
-  //   // if(categoriesValidation(budget, startDate, endDate, minAmount, maxAmount, projects))
-  //   //   return true;
-  //   // return false;
-  // }
-
-  // const conditionsValidation = (budget:BudgetMin, startDate:number, endDate:number, 
-  //       minAmount:number, maxAmount:number, conditions:string[], projects: string[]) => {
-  //   if(conditions.includes('all')){
-  //     if(projectsValidation(budget, startDate, endDate, minAmount, maxAmount, projects))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(conditions.includes(budget.lastmove.condition._id))
-  //       if(projectsValidation(budget, startDate, endDate, minAmount, maxAmount, projects))
-  //         return true;
-  //     return false;
-  //   }
-  // }
-
-  // const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
-  //   startDate:number, endDate:number, projects: string[]) => {
-  
-  //   let filtered: BudgetMin[] = [];
-  //   budgetsStore?.map((budget) => {
-  //     if(conditionsValidation(budget, startDate, endDate, minAmount, maxAmount, conditions, projects)){
-  //       filtered.push(budget);
-  //     }
-  //   });
-
-  //   setFilteredBudgets(filtered);
-  //   // setDataProjects(ProjectBudgetDataToTableDataMin(filtered));
-  // }
-
   return(
     <>
       <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
@@ -132,7 +66,6 @@ export default function FilteringEstimatesProject({showForm, optProjects,
             title="Filtrar proyecto"
           /> */}
           <div className="flex mt-2 items-center">
-            {/* <img src={img} alt="logo" className="rounded-full w-14 h-auto" /> */}
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">
               <p className="text-xl">Filtrar estimacion</p>
@@ -151,7 +84,6 @@ export default function FilteringEstimatesProject({showForm, optProjects,
           <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
           <SelectMultipleReact index={0} opts={optProjects} setValue={handleProjects} />
         </div>
-        {/* <div className="pt-9"> */}
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
@@ -190,7 +122,6 @@ export default function FilteringEstimatesProject({showForm, optProjects,
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
-            //onChange={setValues}
             onChange={(e: any) => setValues(e)}
             range
             numberOfMonths={2}

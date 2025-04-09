@@ -5,7 +5,7 @@ import { ProgressCircle } from "@tremor/react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "@/components/providers/Chip";
 import DonutChartComponent from "../../dashboard/DonutChartComponent";
-import { ITotalInvoicesByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
+import { ITotalInvoicesByProject } from "@/interfaces/Invoices";
 import NavTabEstimates from "../NavTabEstimates";
 
 import { ICollectionMin, ITotalResumentPayment } from "@/interfaces/Collections";
@@ -99,14 +99,6 @@ export default function ContainerCollectionsProject({project, token, user, colle
                 value: resumenPayment?.billedTotal?.pendingBillingTotal || 0
               })}</p>
             </div>
-
-            {/* <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Pendiente de estimar</p>
-              <p className="text-slate-600 text-right">{CurrencyFormatter({
-                currency: 'MXN',
-                value:  project.amount - resumenInvoice.totalAccumulated.estimatedTotal
-              })}</p>
-            </div> */}
           </div>
         </div>
 

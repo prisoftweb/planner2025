@@ -3,8 +3,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "@/components/providers/Chip";
-import { IEstimateProject, IEstimateMin } from "@/interfaces/Estimate";
-import { EstimatesDataToEstimatesTable, EstimatesWitoutInvoiceDataToEstimatesTable } from "@/app/functions/EstimatesFunctions";
+import { IEstimateMin } from "@/interfaces/Estimate";
+import { EstimatesWitoutInvoiceDataToEstimatesTable } from "@/app/functions/EstimatesFunctions";
 import RemoveElement from "@/components/RemoveElement";
 import { removeEstimate } from "@/app/api/routeEstimates";
 import DetailEstimateWithoutInvoice from "./DetailEstimateWithoutInvoice";
@@ -32,19 +32,9 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
             >No hay estimaciones sin factura</p>
           <img src="/img/estimates/estimates.svg" alt="image" className="w-60 h-auto" />
         </div>
-        {/* <div className="mt-5 flex justify-between items-center bg-white">
-          <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
-          <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />          
-        </div> */}
       </>
     )
   }
-
-  const estimatetM = estimates.reduce((previous, current) => {
-    return current.amount > previous.amount ? current : previous;
-  });
-
-  const maxAmount = estimatetM.amount;
 
   const columnHelper = createColumnHelper<TableEstimatesProject>();
   
@@ -64,15 +54,6 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
               setShowForm(true);
               setProject(row.original.idProject);
           }} />
-          {/* {row.original.haveInvoice? (
-            <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
-          ): (
-            <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
-                refEstimate.current = row.original.id;
-                selEstimate(row.original);
-                showNewInvoice(true);
-            }} />
-          )} */}
         </div>
       ),
       size: 300,
@@ -196,7 +177,6 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
 
   const initialVisibilityColumns: any = {
     Accion: true,
-    // numero: true,
     nombre: true,
     estimacion: true, 
     amortizacion: true, 
@@ -208,13 +188,6 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
     orden: true,
   }
 
-  // let dataTable;
-  // if(isFilterTable){
-  //   dataTable = EstimatesDataToEstimatesTable(filterEstimates);
-  // }else{
-  //   dataTable = EstimatesDataToEstimatesTable(estimates);
-  // }
-
   let dataTable = EstimatesWitoutInvoiceDataToEstimatesTable(estimates);
 
   return (
@@ -224,12 +197,8 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
         {/* <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />           */}
       </div>
       <Table columns={columns} data={dataTable} placeH="buscar estimacion" initialColumns={initialVisibilityColumns} />
-      {/* {isFilter && <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
-                                FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />} */}
-      {/* {isShowDetailEstimate && <DetailEstimateComponent project={project} nomEstimate={refEstimate.current} 
-                                    numEstimate={1} showForm={handleIsShowDetailEstimate} token={token} />} */}
-                                    {showForm && <DetailEstimateWithoutInvoice prj={project} nomEstimate={idEstimate} 
-                                    numEstimate={1} showForm={handleShowForm} token={token} />}
+      {showForm && <DetailEstimateWithoutInvoice prj={project} nomEstimate={idEstimate} 
+                      numEstimate={1} showForm={handleShowForm} token={token} />}
     </>
   )
 }

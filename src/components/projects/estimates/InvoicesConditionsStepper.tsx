@@ -244,18 +244,6 @@ export default function InvoicesConditionsStepper({token, nextStep, handleFormPa
   if(indexCon<0) indexCon=0;
 
   const validationData = () => {
-    // let validation = true;
-    // console.log('in validation');
-    // if(!odc || odc===''){
-    //   setBandOdc(true);
-    //   validation = false;
-    //   return false;
-    // }else{
-    //   setBandOdc(false);
-    // }
-    // if(validation){
-    //   nextStep(2);
-    // }
     nextStep(2);
   }
 

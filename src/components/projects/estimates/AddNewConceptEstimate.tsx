@@ -1,28 +1,17 @@
 'use client'
 import { XMarkIcon } from "@heroicons/react/24/solid"
-// import Button from "@/components/Button"
-// import Input from "@/components/Input"
-// import Label from "@/components/Label"
-// import TextArea from "@/components/TextArea"
 import HeaderForm from "@/components/HeaderForm"
 import Chip from "@/components/providers/Chip"
 import { OneProjectMin } from "@/interfaces/Projects"
-// import { CurrencyFormatter } from "@/app/functions/Globals"
 import { ProgressBarComponent } from "../dashboard/ProgressBarComponent"
 import { useState, useEffect } from "react"
-// import CurrencyInput from "react-currency-input-field"
-// import { createConceptEstimate } from "@/app/api/routeEstimates"
-// import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { Options } from "@/interfaces/Common"
-// import SelectReact from "@/components/SelectReact"
-// import {PlusCircleIcon} from "@heroicons/react/24/solid"
-// import FormNewConcept from "./FormNewConcept"
 import NavStepperConceptEstimate from "./NavStepperConceptEstimate"
 import ConceptStepperComponent from "./ConceptStepperComponent"
 import PriceUnityStepper from "./PriceUnityStepper"
 import DataStepperComponent from "./DataStepperComponent"
-import { getConceptsMin, getAllConceptsDetailsByEstimateMin } from "@/app/api/routeEstimates"
-import { IConceptEstimateNormal, IConceptEstimateMin, IConceptEstimate, PriceConcept, IEstimate } from "@/interfaces/Estimate"
+import { getConceptsMin, } from "@/app/api/routeEstimates"
+import { IConceptEstimateMin, IConceptEstimate, PriceConcept, IEstimate } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
 import DonutChartComponent from "../dashboard/DonutChartComponent"
 
@@ -37,22 +26,12 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     idEstimate:IEstimate, conceptsDataChart:IConceptEstimate[]}) {
   // const refRequest = useRef(true);
 
-  // const [idConcept, setIdConcept] = useState<string>(conceptSLV[0].value);
-  // const [conceptSel, setConcepSel] = useState<IConceptEstimateNormal>();
   const [conceptSel, setConcepSel] = useState<IConceptEstimateMin>();
   const [idPrice, setIdPrice] = useState<PriceConcept>();
   
-  // const [code, setCode] = useState<string>('');
-  // const [date, setDate] = useState<string>('');
-  
-  // const [description, setDescription] = useState<string>('');
-  // const [unity, setUnity] = useState<string>('');
-  // const [conceptsLV, setConceptLV] = useState<Options[]>(conceptSLV);
-
   const [concepts, setConcepts] = useState<IConceptEstimateMin[]>([]);
 
   const [heightPage, setHeightPage] = useState<number>(900);
-  // const refRequest = useRef(true);
   const [indexStepper, setIndexStepper] = useState<number>(0);
 
   const handleIndexStepper = (value:number) => {
@@ -64,7 +43,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
       let con: IConceptEstimateMin[];
       try {
         con = await getConceptsMin(token);
-        console.log('concepts min => ', con);
         if(typeof(con) === "string"){
           showToastMessageError(con);
           return <h1 className="text-center text-red-500">{con}</h1>
@@ -99,15 +77,9 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   }, []);
 
   const colorsRandom = ['#E4D831', '#71B2F2', '#617178', '#FFA145', '#8579F0', '#ff5252', '#69f0ae', '#7D9F2D', '#289399', '#f08080']
-  const getRandomArbi = (min: any, max: any) => {
-    const res = parseInt(Math.random() * (max - min) + min);   
-    return res;
-  }
-
-  const c1 = getRandomArbi(0, 9);
+  
 
   const handleConceptID = (value: string) => {
-    // setIdConcept(value);
     const c = concepts.find((c) => c._id === value);
     if(c){
       setConcepSel(c);
@@ -119,14 +91,11 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   }
 
   const handleAddNewConcept = async () => {
-    console.log('agregar nuevo concepto');
     let cons: IConceptEstimateMin[];
     try {
-      // cons = await getAllConceptsDetailsByEstimateMin(token, idEstimate);
       cons = await getConceptsMin(token);
       console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
-        // return <h1 className="text-center text-red-500">{cons}</h1>
         showToastMessageError(cons);
       else{
         setConcepts(cons);
@@ -139,8 +108,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
         });
       }
     } catch (error) {
-      console.log('catch error => ', error);
-      // return <h1 className="text-center text-red-500"></h1>
       showToastMessageError('Ocurrio un error al obtener los conceptos de la estimacion!!');  
     }
   }
@@ -169,7 +136,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   conceptsDataChart.map((e) => {
     if(e.conceptEstimate?.priceConcepEstimate?.cost){
       dataConceptsDashboard.push({
-        // costo: ((e.conceptEstimate.priceConcepEstimate.cost * e.conceptEstimate.quantity) / e.conceptEstimate.amount) * 100,
         costo: ((e.conceptEstimate?.amount? e.conceptEstimate.amount: 0) / idEstimate.amount) * 100,
         label: e.conceptEstimate.name
       });
@@ -214,7 +180,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
                 <ProgressBarComponent label={''} progress={79} 
                   widthBar="w-full"
                   color={colorsRandom[1]} hei="h-5" /> 
-                  {/* color={colorsRandom[c1]} hei="h-5" /> */}
               </div>
             </div>
             <div>
@@ -226,11 +191,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
         </div>
 
         <NavStepperConceptEstimate changeTab={handleIndexStepper} index={indexStepper} />
-        {viewComponent}
-        
-        {/* <div className="flex justify-center mt-2">
-          <Button type="button" onClick={saveEstimate}>Guardar</Button>
-        </div> */}
+        {viewComponent}  
       </form>
     </>
   )

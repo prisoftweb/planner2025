@@ -23,17 +23,7 @@ type TableConceptsProps = {
 export default function TableConceptsEstimate({project, concepts, handleFilterTable, 
   isFilterTable, delConcept, token, idEstimate, estimatedTotal}: TableConceptsProps) {
 
-  // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
   const [filterConcepts, setFilterConcepts] = useState<IConceptEstimate[]>(concepts);
-  const [isFilter, setIsFilter] = useState<boolean>(false);
-  
-  // const handleIsFilter = (value: boolean) => {
-  //   setIsFilter(value);
-  // }
-
-  // const handleFilterData = (value: any) => {
-  //   setFilterConcepts(value);
-  // }
 
   if(concepts.length <= 0){
     return (
@@ -52,16 +42,6 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
       </>
     )
   }
-
-  // const conceptM = concepts.reduce((previous, current) => {
-  //   if(current.prices && previous.prices){
-  //     return current.prices > previous.prices ? current : previous;
-  //   }else{
-  //     return previous
-  //   }
-  // });
-
-  // const maxAmount = conceptM.prices;
 
   const columnHelper = createColumnHelper<ITableConceptsEstimate>();
   
@@ -102,20 +82,6 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
         <p>Clave</p>
       )
     }),
-    // columnHelper.accessor('condition', {
-    //   id: 'accion',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-1 items-center">
-    //       <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
-    //       <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
-    //       <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: () => (
-    //     <p>accion</p>
-    //   )
-    // }),
     columnHelper.accessor('nombre', {
       header: 'Nombre',
       id: 'nombre',
@@ -180,8 +146,6 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
         {/* <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />           */}
       </div>
       <Table columns={columns} data={dataTable} placeH="buscar estimacion" />
-      {/* {isFilter && <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
-                                FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />} */}
     </>
   )
 }

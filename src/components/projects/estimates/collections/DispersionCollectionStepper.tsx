@@ -1,14 +1,7 @@
 'use client'
 import { useState, useRef, useEffect } from "react";
-// import NavExpenseStepper from "./NavExpenseStepper";
-import UploadFileDropZone from "@/components/UploadFileDropZone";
 import Button from "@/components/Button";
-import { showToastMessage, showToastMessageError } from "@/components/Alert";
-// import { useNewExpense } from "@/app/store/newExpense";
-// import { showToastMessage, showToastMessageError } from "../Alert";
-// import SaveExpense from "@/app/functions/SaveExpense";
-import { CreateCostWithFiles } from "@/app/api/routeCost";
-import { getSupplierCreditProv } from "@/app/functions/CostsFunctions";
+import { showToastMessageError } from "@/components/Alert";
 
 import { getInvoices } from "@/app/api/routeInvoices";
 import { IInvoiceMin } from "@/interfaces/Invoices";
@@ -35,14 +28,6 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
   {token:string, user:string, NextStep:Function, invoicesDisp:TInvoiceStepper[], setInvoicesDisp:Function, 
     saveCollection:Function, updateAmount:Function}) {
 
-  // const Next = () => {
-  //   if(file){
-  //     // updateVoucher(file);
-  //     setVoucher(file);
-  //   }
-  //   NextStep(2);
-  // }
-
   const [search, setSearch]=useState<string>('');
   const [invoices, setInvoices]=useState<TInvoiceStepper[]>([]);
   const [selected, setSelected]=useState<TInvoiceStepper>();
@@ -62,8 +47,6 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
     fetch();
   }, []);
 
-  // const handle = () => {}
-
   const filteredInvoices = search==''? invoices: invoices.filter((i) => i.folio.toString().includes(search));
 
   const addNewDispersion = () => {
@@ -80,11 +63,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
         previousAmount: selected.previousAmount,
         concepts: selected.concepts
       }
-      console.log('invoces disp => ', invoicesDisp);
-      console.log('new disp => ', data);
       const i = [...invoicesDisp, data];
-      console.log('inv send => ', i);
-      // setInvoicesDisp(i);
       updateAmount(i);
     }else{
       showToastMessageError('Seleccione una factura primero!!!!');
@@ -230,12 +209,6 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
         <Button type="button" 
           onClick={() => {
             NextStep(1); 
-            // if(refRequest.current){
-            //   SaveData();
-            // }
-            // else{
-            //   showToastMessageError('Ya hay una peticion en proceso..!');
-            // }
           }}>Atras</Button>
         <button type="button"
           onClick={() => saveCollection()}
@@ -250,7 +223,6 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 }
 
 function transformTypes(invoiceFrom: IInvoiceMin[]){
-  console.log('invoices from => ', invoiceFrom);
   const invoiceTo: TInvoiceStepper[]=[];
   invoiceFrom.map((i) => {
     invoiceTo.push({

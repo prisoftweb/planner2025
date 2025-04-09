@@ -1,64 +1,34 @@
 'use client'
 import { OneProjectMin } from "@/interfaces/Projects"
-import Button from "@/components/Button";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import { ProgressCircle } from "@tremor/react";
-import { useState } from "react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "@/components/providers/Chip";
 import DonutChartComponent from "../dashboard/DonutChartComponent";
 import { Options } from "@/interfaces/Common";
-// import { IEstimateProject, TotalEstimatedByProject } from "@/interfaces/Estimate";
 import { IInvoiceByProject, ITotalInvoicesByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
-// import { showToastMessageError } from "@/components/Alert";
 import NavTabEstimates from "./NavTabEstimates";
 import TableInvoicesComponent from "./TableInvoicesComponent";
-// import { TableEstimatesProject } from "@/interfaces/Estimate";
 interface OptionsDashboard {
   label: string,
   costo: number
 }
 
+type Props = {
+  project: OneProjectMin, 
+  optProjects: Options[], 
+  optConditions: Options[], 
+  invoices:IInvoiceByProject[], 
+  token: string, 
+  user: string, 
+  totalInvoiceProject: ITotalInvoicesByProject[], 
+  resumenInvoice:ITotalInvoiceResumen 
+}
+
 export default function ContainerInvoicesProject({project, optConditions, optProjects, 
-    token, user, invoices, totalInvoiceProject, resumenInvoice }: 
-  {project: OneProjectMin, optProjects: Options[], optConditions: Options[], invoices:IInvoiceByProject[], 
-    token: string, user: string, totalInvoiceProject: ITotalInvoicesByProject[], resumenInvoice:ITotalInvoiceResumen }) {
+  token, user, invoices, totalInvoiceProject, resumenInvoice }: Props) {
 
-  // const [invoicesState, setInvoicesState] = useState<IInvoiceByProject[]>(invoices);
-  const [totalInvoicesProjectState, setTotalInvoicesProjectState] = useState<ITotalInvoicesByProject[]>(totalInvoiceProject);
-
-  // const updateEstimatesProject = async () => {
-  //   let estimates: IEstimateProject[];
-  //   try {
-  //     estimates = await getEstimatesByProject(token, project._id);
-  //     console.log('estimates min => ', estimates);
-  //     if(typeof(estimates) === "string"){
-  //       showToastMessageError(estimates);
-  //     }else{
-  //       setEstimatesData(estimates);
-  //     }
-  //   } catch (error) {
-  //     showToastMessageError('Ocurrio un error al actualizar las estimaciones del proyecto!!');  
-  //   }
-
-  //   let totalEstimated: TotalEstimatedByProject[];
-  //   try {
-  //     totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
-  //     if(typeof(totalEstimated) === "string"){
-  //       showToastMessageError(totalEstimated);
-  //     }else{
-  //       setTotalEstimatedProjectState(totalEstimated);
-  //     }
-  //   } catch (error) {
-  //     showToastMessageError('Ocurrio un error al actualizar el total de las estimaciones del proyecto!!')
-  //   }
-
-  //   setIsFilterTable(false);
-  // }
-
-  const delInvoice = (id:string) => {
-    // updateEstimatesProject();
-  }
+  // const [totalInvoicesProjectState, setTotalInvoicesProjectState] = useState<ITotalInvoicesByProject[]>(totalInvoiceProject);
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
@@ -67,7 +37,8 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
 
   invoices.map((i) => {
     dataInvoicesDashboard.push({
-      costo: (i.cost.total / totalInvoicesProjectState[0].totalBilled) * 100,
+      // costo: (i.cost.total / totalInvoicesProjectState[0].totalBilled) * 100,
+      costo: (i.cost.total / totalInvoiceProject[0].totalBilled) * 100,
       label: i.folio
     });
     categoriesEstimates.push(i.folio);
@@ -92,9 +63,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
-          <img src={project.client.logo} 
-            alt={project.client.name} className="h-32 w-auto " />
-          {/* <img src={project.client.logo} alt={project.client.name} /> */}
+          <img src={project.client.logo} alt={project.client.name} className="h-32 w-auto " />
           <div className="flex items-center gap-x-2">
             <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
             <div>
@@ -119,7 +88,6 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <p className="bg-green-600 text-white p-2 w-40 text-center">Facturado</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                // value: totalInvoicesProjectState.length> 0? totalInvoicesProjectState[0]?.totalBilled || 0 : 0
                 value: resumenInvoice.billedTotal.billedTotal
               })}</p>
             </div>
@@ -128,7 +96,6 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
                 value: project.amount
-                // value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
 
@@ -136,7 +103,6 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <p className="text-xs text-slate-600">Estimado acumulado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                // value: totalInvoicesProjectState.length> 0? totalInvoicesProjectState[0]?.totalBilled || 0 : 0
                 value: resumenInvoice.totalAccumulated.estimatedTotal
               })}</p>
             </div>
@@ -145,7 +111,6 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <p className="text-xs text-slate-600">Pendiente de facturar</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                // value: totalInvoicesProjectState.length> 0? totalInvoicesProjectState[0]?.totalBilled || 0 : 0
                 value: resumenInvoice.totalAccumulated.estimatedTotal - resumenInvoice.billedTotal.billedTotal
               })}</p>
             </div>

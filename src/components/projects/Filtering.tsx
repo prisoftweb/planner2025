@@ -1,5 +1,4 @@
 'use client'
-import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
@@ -10,11 +9,17 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 
+type Props = {
+  showForm:Function, 
+  optCategories: Options[],
+  optTypes: Options[], 
+  optConditions: Options[],
+  FilterData:Function, 
+  maxAmount:number 
+}
+
 export default function Filtering({showForm, optCategories, optTypes, 
-                      optConditions, FilterData, maxAmount }: 
-                    {showForm:Function, optCategories: Options[],
-                      optTypes: Options[], optConditions: Options[],
-                      FilterData:Function, maxAmount:number  }){
+  optConditions, FilterData, maxAmount }: Props){
   
   const [types, setTypes] = useState<string[]>([optTypes[0].value]);
   const [categories, setCategories] = useState<string[]>([optCategories[0].value]);
@@ -29,24 +34,14 @@ export default function Filtering({showForm, optCategories, optTypes,
   ]);
 
   const handleValues = (dateValues: DateObject[]) => {
-    console.log('handle values => ', dateValues);
-    console.log('handle values leng => ', dateValues.length);
     setValues(dateValues);
-    // if(values.length > 1){
-      if(dateValues.length > 1){
-      console.log('filter date ');
-      // setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-      // setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
-      // filterfunction(conditions, types, categories, minValue, maxValue, 
-      //   new Date(values[0].year, values[0].month.number - 1, values[0].day), 
-      //   new Date(values[1].year, values[1].month.number - 1, values[1].day));
+    if(dateValues.length > 1){
       setFirstDate(new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day));
       setSecondDate(new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
       filterfunction(conditions, types, categories, minValue, maxValue, 
         new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day), 
         new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
     }else{
-      console.log('else => ');
       if(values.length > 0){
         setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
       }
@@ -61,32 +56,9 @@ export default function Filtering({showForm, optCategories, optTypes,
     set_maxValue(e.maxValue);
   };
 
-  // useEffect(() => {
-  //   if(values.length > 1){
-  //     setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-  //     setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
-  //   }else{
-  //     if(values.length > 0){
-  //       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-  //     }
-  //   }
-  // }, [values]);
-
-  // useEffect(() => {
-  //   FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  // }, [ categories, types, conditions, minValue, maxValue]);
-
   useEffect(() => {
     FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
   }, [ minValue, maxValue]);
-
-  // useEffect (() => {
-  //   FilterData(conditions, types, categories, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime());
-  // }, []);
-
-  // useEffect(() => {
-  //   FilterData(conditions, types, categories, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  // }, [firstDate, secondDate]);
 
   const handleCondition = (value:string[]) => {
     setConditions(value);
@@ -108,8 +80,6 @@ export default function Filtering({showForm, optCategories, optTypes,
 
   const filterfunction = (condSel:string[], typSel:string[], catSel:string[], minVal:number, 
     maxVal:number, dateini:Date, dateend:Date ) => {
-      // FilterData(condSel, typSel, catSel, minVal, maxVal, repSel, proSel, 
-      //   dateini?.getTime(), dateend?.getTime(), ccSel, provSel, ispay);
       FilterData(condSel, typSel, catSel, minVal, maxVal, dateini?.getTime(), dateend?.getTime());
   }
 
@@ -117,11 +87,7 @@ export default function Filtering({showForm, optCategories, optTypes,
     <>
       <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
         <div className="flex justify-between">
-          {/* <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
-            title="Filtrar proyecto"
-          /> */}
           <div className="flex mt-2 items-center">
-            {/* <img src={img} alt="logo" className="rounded-full w-14 h-auto" /> */}
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">
               <p className="text-xl">Filtrar proyecto</p>
@@ -144,7 +110,6 @@ export default function Filtering({showForm, optCategories, optTypes,
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectMultipleReact index={0} opts={optCategories} setValue={handleCategories} />
         </div>
-        {/* <div className="pt-9"> */}
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
@@ -185,8 +150,6 @@ export default function Filtering({showForm, optCategories, optTypes,
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
-            //onChange={setValues}
-            // onChange={(e: any) => setValues(e)}
             onChange={(e: any) => {
               handleValues(e);
             }}

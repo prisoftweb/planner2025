@@ -14,7 +14,6 @@ import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } fro
 import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 import { showToastMessageError } from "@/components/Alert";
 import NavTabEstimates from "./NavTabEstimates";
-import TableInvoicesComponent from "./TableInvoicesComponent";
 import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
 import { TableEstimatesProject } from "@/interfaces/Estimate";
 interface OptionsDashboard {
@@ -22,10 +21,18 @@ interface OptionsDashboard {
   costo: number
 }
 
+type Props = {
+  project: OneProjectMin, 
+  optProjects: Options[], 
+  optConditions: Options[], 
+  estimates:IEstimateProject[], 
+  token: string, 
+  user: string, 
+  totalEstimatedProject: TotalEstimatedByProject[] 
+}
+
 export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, 
-    token, user, totalEstimatedProject }: 
-  {project: OneProjectMin, optProjects: Options[], optConditions: Options[], estimates:IEstimateProject[], 
-    token: string, user: string, totalEstimatedProject: TotalEstimatedByProject[] }) {
+    token, user, totalEstimatedProject }: Props) {
 
   const [openNewStimate, setOpenNewStimate] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -91,37 +98,21 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const dataEstimatesDashboard: OptionsDashboard[] = [];  
 
   let advance = 0;
-  // let aux =0;
-
+  
   estimatesData.map((e) => {
     dataEstimatesDashboard.push({
       costo: Number(((e.amount / project.amount) * 100).toFixed(2)),
       label: e.name
     });
     categoriesEstimates.push(e.name);
-    // aux+=e.amount;
     if(e.ismoneyadvance){
       advance+=e.amount;
     }
   });
-  console.log('data estimated dashboard => ', dataEstimatesDashboard);
-
+  
   const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
-  // console.log('avabce => ', advance);
-  // console.log('aux => ', aux);
-  // const percentajeAdvance = Number(((advance / project.amount) * 100).toFixed(2));
-  // console.log('porcentaje adv => ', percentajeAdvance);
-  console.log('estimated total => ', totalEstimatedProject[0]?.estimatedTotal || totalEstimatedProject[0]);
   const percentajeAdvance = Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
-
-  // let component = tab===1? <TableInvoicesComponent token={token} project={project} />: (tab===2? <></>: 
-  //                   <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
-  //                     estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-  //                     delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
-  //                     selEstimate={handleSelEstimate}  />)
-
-  console.log('estimates data => ', estimatesData);
-
+  
   return (
     <>
       <div className="flex justify-between items-center">
@@ -142,9 +133,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
-          <img src={project.client.logo} 
-            alt={project.client.name} className="h-32 w-auto " />
-          {/* <img src={project.client.logo} alt={project.client.name} /> */}
+          <img src={project.client.logo} alt={project.client.name} className="h-32 w-auto " />
           <div className="flex items-center gap-x-2">
             <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
             <div>
@@ -177,7 +166,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Monto a pagar</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                // value: advance
                 value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
@@ -259,7 +247,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
         <NavTabEstimates tab={0} id_p={project._id} />
       </div>
       
-      {/* {component} */}
       <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
         estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
         delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 

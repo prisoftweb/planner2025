@@ -1,4 +1,3 @@
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -19,36 +18,12 @@ export default function AddressStepper({token, condition, showForm}:
     municipy, stateA, street, title, category, client, type, haveAddress, 
     company, amountG, dateG, percentage, user, amountCharge, dateCharge, hasamountChargeOff, 
     percentageCharge} = useNewProject();
-  // const {amount, category, client, code, company, date, description, 
-  //   hasguaranteefund, haveAddress, title, type, user} = useNewProject();
   
-  const [state, dispatch] = useRegFormContext();
+  const [dispatch] = useRegFormContext();
   const [guarantee, setGuarantee] = useState<boolean>(hasguaranteefund);
-  // const [haveAmountCharge, sethaveAmountCharge] = useState<boolean>(false);
   const refRequest = useRef(true);
 
   const {updateHaveNewProject} = useProjectsStore();
-
-  //const {updateAddress} = useNewProject();
-  
-  //console.log('addres stepper = ', amount, category, client, code, company, date, description, title);
-
-  // let streetI = '';
-  // let communityI = '';
-  // let cpI = '';
-  // let municipyI = '';
-  // let stateI = '';
-  // let countryI = '';
-
-  // if(state.address){
-  //   streetI = state.address.street? state.address.street: '';
-  //   communityI = state.address.community? state.address.community: '';
-  //   cpI = state.address.cp? state.address.cp: '';
-  //   municipyI = state.address.municipy? state.address.municipy: '';
-  //   stateI = state.address.state? state.address.state: '';
-  //   countryI = state.address.country? state.address.country: '';
-  //   //setGuarantee(state.address.guarantee);
-  // }
 
   const formik = useFormik({
     initialValues: {
@@ -60,12 +35,6 @@ export default function AddressStepper({token, condition, showForm}:
       country: country,
     }, 
     validationSchema: Yup.object({
-      // street: Yup.string()
-      //             .required('La calle y numero son obligatorios!!'),
-      // community: Yup.string()
-      //             .required('El colonia es obligatoria'),
-      // cp: Yup.string()
-      //             .required('El codigo postal es obligatorio'),
       municipy: Yup.string()
                   .required('El municipio es obligatorio'),
       stateA: Yup.string()
@@ -169,17 +138,12 @@ export default function AddressStepper({token, condition, showForm}:
         }
       }
       try {
-        console.log('date => ', date);
-        console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateHaveNewProject(true);
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

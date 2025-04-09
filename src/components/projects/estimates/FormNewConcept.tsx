@@ -6,44 +6,28 @@ import TextArea from "@/components/TextArea";
 import { useState, useEffect } from "react";
 import { useOutsideClick } from "@/app/functions/useOutsideClick";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-import CurrencyInput from "react-currency-input-field";
 import { createConceptEstimate } from "@/app/api/routeEstimates";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import SelectReact from "@/components/SelectReact";
 import { Options } from "@/interfaces/Common";
 
-export default function FormNewConcept({token, setShowForm, addConcept}:
-          {token:string, setShowForm:Function, addConcept:Function}){
+export default function FormNewConcept({token, setShowForm, addConcept}: {token:string, setShowForm:Function, addConcept:Function}){
   
-  //const [suppliercredit, setSuppliercredit] = useState<boolean>(false);
   const [heightPage, setHeightPage] = useState<number>(900);
-  // const refRequest = useRef(true);
-
+  
   const [code, setCode] = useState<string>('');
-  // const [startDate, setStartDate] = useState<string>('');
-  // const [order, setOrder] = useState<string>('');
-  // const [amount, setAmount] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
   const [name, setName] = useState<string>('');
-  // const [cost, setCost] = useState<number>(0);
-  // const [unity, setUnity] = useState<string>('');
-
-  // const [bandName, setBandName] = useState<boolean>(false);
-  // const [bandAmount, setBandAmount] = useState<boolean>(false);
   const [bandDescription, setBandDescription] = useState<boolean>(false);
   const [bandCode, setBandCode] = useState<boolean>(false);
   const [bandName, setBandName] = useState<boolean>(false);
-  // const [bandUnity, setBandUnity] = useState<boolean>(false);
-  // const [bandCost, setBandCost] = useState<boolean>(false);
   
   const [unit, setUnit] = useState<string>();
   const [optionsUnit, setOptionsUnit] = useState<Options[]>([]);
 
   const handleUnit = (value: string) => {
-    // setOptionUnit(value);
     setUnit(value);
-    console.log('handle unit => ', value);
   }
 
   useEffect(() => {
@@ -108,15 +92,12 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
     const val = validationData();
 
     if(val){
-      console.log('unit => ', unit);
       const data = {
         code,
         description,
         name,
-        // cost,
         unit
       }
-      console.log('data => ', JSON.stringify(data));
       try {
         const res = await createConceptEstimate(token, data);
         if(typeof(res)==='string'){
@@ -173,40 +154,6 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
             </div>
           )
         }
-        {/* <div className="grid grid-cols-2 gap-x-2">
-          <div className="">
-            <Label htmlFor="unity"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Unidad</p></Label>
-            <Input type="text" name="unity" 
-              value={unity}
-              onChange={(e) => setUnity(e.target.value)}
-            />
-            {bandUnity && (
-              <p className="text-red-500">La unidad es obligatoria!!!</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="cost"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Costo</p></Label>
-            <CurrencyInput
-              id="cost"
-              name="cost"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-                focus:border-slate-700 outline-0"
-              value={cost}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => {try {
-                setCost(Number(value?.replace(/[$,]/g, "") || '0'));
-                // updateValues(Number(value?.replace(/[$,]/g, "") || '0'))
-              } catch (error) {
-                setCost(0);
-                // updateValues(0);
-              }}}
-            />
-            {bandCost && (
-              <p className="text-red-500">El precio unitario es obligatorio!!!</p>
-            )}
-          </div>
-        </div> */}
         <div>
           <Label htmlFor="descripcion"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <TextArea value={description} onChange={(e) => setDescription(e.target.value)}></TextArea>
@@ -221,4 +168,3 @@ export default function FormNewConcept({token, setShowForm, addConcept}:
     </div>
   )
 }
-  

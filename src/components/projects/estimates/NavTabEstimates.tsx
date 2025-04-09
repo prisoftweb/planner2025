@@ -1,9 +1,7 @@
 'use client'
 
-import Link from "next/link"
 import { useState, useEffect } from "react";
-import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon, 
-  DocumentChartBarIcon } from "@heroicons/react/24/solid"
+import { UserCircleIcon, CurrencyDollarIcon, DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
 
 export default function NavTabEstimates({tab, id_p}: {tab:number, id_p:string}){
@@ -27,7 +25,6 @@ export default function NavTabEstimates({tab, id_p}: {tab:number, id_p:string}){
     },
   }
 
-  // const [tabCli, setTabCli] = useState<JSX.Element>(<></>);
   const [width, setWidth] = useState<number>(0);
   const handleResize = () => {
     setWidth(window.innerWidth);
@@ -71,7 +68,6 @@ export default function NavTabEstimates({tab, id_p}: {tab:number, id_p:string}){
         <div className={`w-50 px-5 cursor-pointer ${tab===0? 'border-b-4 border-blue-600':''}`}
           onClick={() => window.location.replace(`/projects/estimates/${id_p}`)}
         >
-          {/* <p className="text-blue-600">Estimaciones</p> */}
           <p className="text-black font-semibold">Estimaciones</p>
         </div>
         <div className={`w-50 px-5 cursor-pointer ${tab===1? 'border-b-4 border-blue-600':''}`}

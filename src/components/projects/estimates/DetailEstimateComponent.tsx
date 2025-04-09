@@ -3,16 +3,14 @@ import { OneProjectMin } from "@/interfaces/Projects"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import Chip from "@/components/providers/Chip"
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import { getEstimate, getResumenEstimateProject, getResumenEstimateByProjectAndEstimate } from "@/app/api/routeEstimates"
+import { getEstimate, getResumenEstimateByProjectAndEstimate } from "@/app/api/routeEstimates"
 import { IEstimate, ResumenEstimateProject } from "@/interfaces/Estimate"
 import DetailEstimatePDF from "./DetailEstimatePDF"
-import Button from "@/components/Button"
 import {PDFDownloadLink} from '@react-pdf/renderer'
 import { BsFileEarmarkPdf } from "react-icons/bs";
 
 export default function DetailEstimateComponent({project, numEstimate, nomEstimate, showForm, 
-    token}: 
-  {project:OneProjectMin, numEstimate:number, nomEstimate:string, showForm:Function, token:string}) {
+    token}: {project:OneProjectMin, numEstimate:number, nomEstimate:string, showForm:Function, token:string}) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [estimate, setEstimate] = useState<IEstimate>();
@@ -25,11 +23,8 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
         setEstimate(res);
       }
 
-      // let resumenEstimateProject: ResumenEstimateProject;
       try {
-        // const result = await getResumenEstimateProject(token, project._id);
         const result = await getResumenEstimateByProjectAndEstimate(token, project._id, nomEstimate);
-        // console.log('estimates min => ', estimates);
         if(typeof(result) === "string"){
           return <h1 className="text-center text-red-500">{result}</h1>
         }else{
@@ -60,7 +55,6 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  console.log('estimacion => ', estimate);
   if(!estimate && !resumenEstimateProject){
     return(
       <p className="text-red-500 text-lg">Obteniendo estimacion...</p>
@@ -75,9 +69,7 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5">
         <div className="bg-white p-3">
-          <img src={project.client.logo} 
-            alt={project.client.name} className="h-24 w-auto" />
-          {/* <img src={project.client.logo} alt={project.client.name} /> */}
+          <img src={project.client.logo} alt={project.client.name} className="h-24 w-auto" />
           <div className="flex items-center gap-x-2">
             <img src={project.photo} alt={project.title} className="rounded-full w-14 h-14" />
             <div className="w-full">
@@ -169,7 +161,6 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
           <p className="text-slate-400 w-72">Saldo pendiente por estimar</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN", 
-            // value: 0
             value: project.amount - (resumenEstimateProject?.totalAccumulated.amountPayable || 0)
           })}</p>
         </div>

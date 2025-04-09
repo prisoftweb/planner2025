@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { OneProjectMin } from "@/interfaces/Projects";
 import FilteringEstimatesProject from "./FilteringEstimatesProject";
 import { Options } from "@/interfaces/Common";
@@ -15,48 +15,32 @@ import RemoveElement from "@/components/RemoveElement";
 import { removeEstimate } from "@/app/api/routeEstimates";
 import { BsFilePdfFill } from "react-icons/bs";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
-import NumberContacts from "@/components/providers/NumberContacts";
 import { Badge } from "@mui/material";
-import MailIcon from '@mui/icons-material/Mail';
+
+type Props = {
+  project: OneProjectMin, 
+  optProjects: Options[], 
+  optConditions: Options[], 
+  estimates:IEstimateProject[], 
+  isFilterTable:boolean, 
+  handleFilterTable:Function, 
+  delEstimate:Function, 
+  token:string, 
+  showNewInvoice:Function, 
+  selEstimate:Function 
+}
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
-  isFilterTable, delEstimate, token, showNewInvoice, selEstimate }: 
-  {project: OneProjectMin, optProjects: Options[], optConditions: Options[], estimates:IEstimateProject[], 
-    isFilterTable:boolean, handleFilterTable:Function, delEstimate:Function, token:string, 
-    showNewInvoice:Function, selEstimate:Function }) {
+  isFilterTable, delEstimate, token, showNewInvoice, selEstimate }: Props) {
 
   const [filterEstimates, setFilterEstimates] = useState<IEstimateProject[]>(estimates);
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isShowDetailEstimate, setIsShowDetailEstimate] = useState<boolean>(false);
-
-  // const [resumenEstimate, setResumenEstimate] = useState<ResumenEstimateProject>();
-
-  // useEffect(() => {
-  //   const fetchResumen = async () => {
-  //     try {
-  //       const result = await getResumenEstimateProject(token, project._id);
-  //       // console.log('estimates min => ', estimates);
-  //       if(typeof(result) === "string"){
-  //         return <h1 className="text-center text-red-500">{result}</h1>
-  //       }else{
-  //         setResumenEstimate(result);
-  //       }
-  //     } catch (error) {
-  //       return <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen de las estimaciones del proyecto!!</h1>  
-  //     }
-  //   }
-  //   fetchResumen();
-  // }, []);
-
   const refEstimate = useRef('');
 
   const handleIsFilter = (value: boolean) => {
     setIsFilter(value);
   }
-
-  useEffect(() => {
-
-  }, []);
 
   const handleFilterData = (value: any) => {
     setFilterEstimates(value);
@@ -65,8 +49,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
   const handleIsShowDetailEstimate = (value: boolean) => {
     setIsShowDetailEstimate(value);
   }
-
-  // console.log('estimates => ', estimates);
 
   if(estimates.length <= 0){
     return (
@@ -78,10 +60,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
             >Agregar una estimacion al proyecto de {project.title}</p>
           <img src="/img/estimates/estimates.svg" alt="image" className="w-60 h-auto" />
         </div>
-        {/* <div className="mt-5 flex justify-between items-center bg-white">
-          <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
-          <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />          
-        </div> */}
       </>
     )
   }
@@ -121,10 +99,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
                 showNewInvoice(true);
             }} />
           )}
-          {/* <NumberContacts numContacts={row.original.numConcepts} /> */}
-          {/* <Badge color="secondary" badgeContent={row.original.numConcepts}>
-            <MailIcon />
-          </Badge> */}
         </div>
       ),
       size: 300,
@@ -139,32 +113,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         <p>Accion</p>
       )
     }),
-    // columnHelper.accessor('condition', {
-    //   id: 'accion',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-1 items-center">
-    //       <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
-    //       <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
-    //       <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: () => (
-    //     <p>accion</p>
-    //   )
-    // }),
-    // columnHelper.accessor(row => row.No, {
-    //   id: 'numero',
-    //   cell: ({row}) => (
-    //     <div className="">
-    //       <p>{row.original.No}</p>
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: () => (
-    //     <p>No.</p>
-    //   )
-    // }), 
     columnHelper.accessor('Nombre', {
       header: 'Nombre',
       id: 'nombre',
@@ -265,7 +213,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
 
   const initialVisibilityColumns: any = {
     Accion: true,
-    // numero: true,
     nombre: true,
     estimacion: true, 
     amortizacion: true, 
@@ -277,7 +224,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
     orden: true,
   }
 
-  console.log('estimates table  => ', estimates);
   let dataTable;
   if(isFilterTable){
     dataTable = EstimatesDataToEstimatesTable(filterEstimates);
@@ -286,10 +232,6 @@ export default function TableEstimatesByProject({project, optConditions, optProj
   }
 
   return (
-    // <div className="mt-5 flex justify-between items-center bg-white">
-    //   <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
-      
-    // </div>
     <>
       <div className="mt-5 flex justify-between items-center bg-white">
         <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>

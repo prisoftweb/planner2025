@@ -1,9 +1,4 @@
-import SelectReact from "@/components/SelectReact"
-import { useState, useEffect } from "react"
 import Label from "@/components/Label";
-import { showToastMessageError } from "@/components/Alert";
-import { getClientsLV } from "@/app/api/routeClients";
-import { Options } from "@/interfaces/Common";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import CurrencyInput from "react-currency-input-field";
@@ -38,11 +33,8 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
   bandTextConcept, setTextConcept, textConcept, amount, setAmount, saveCollection, setBandCollection, 
   disperse, setDisperse}: DataBasicProps) {
 
-  // const [amount, setAmount]=useState<string>('');
-
   const validationData = () => {
     let validation = true;
-    console.log('in validation');
     if(!reference || reference===''){
       console.log('no folio');
       setBandReference(true);
@@ -52,7 +44,6 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
       setBandReference(false);
     }
     if(!date || date===''){
-      console.log('no date');
       setBandDate(true);
       validation = false;
       return false;
@@ -60,7 +51,6 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
       setBandDate(false);
     }
     if(!amount || amount==='0'){
-      console.log('no amount');
       setBandCollection(true);
       validation = false;
       return false;
@@ -68,7 +58,6 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
       setBandCollection(false);
     }
     if(!textConcept || textConcept===''){
-      console.log('no concept');
       setBandConcept(true);
       validation = false;
       return false;
@@ -100,7 +89,6 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={disperse} 
               onClick={() => setDisperse(!disperse)} id="disperse" type="checkbox"
-              // onChange={() => console.log('')}
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                 peer-checked:border-green-500 peer-checked:before:bg-green-500

@@ -1,39 +1,13 @@
-import { useState } from "react"
 import { OneProjectMin } from "@/interfaces/Projects";
-// import FilteringEstimatesProject from "./FilteringEstimatesProject";
-// import { Options } from "@/interfaces/Common";
-import { GiSettingsKnobs } from "react-icons/gi"
-// import DetailEstimateComponent from "./DetailEstimateComponent";
 import { ITableConceptsEstimate } from "@/interfaces/Estimate";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-// import Chip from "@/components/providers/Chip";
-import { IConceptEstimate } from "@/interfaces/Estimate";
-// import { ConceptsDataToConceptsTable } from "@/app/functions/EstimatesFunctions";
-import RemoveElement from "@/components/RemoveElement";
-import { deleteConceptInEstimate } from "@/app/api/routeEstimates";
-import { ITotalInvoiceResumen, IConceptInvoice } from "@/interfaces/Invoices";
+import { IConceptInvoice } from "@/interfaces/Invoices";
 import { ConceptsDataToConceptsTable } from "@/app/functions/InvoicesFunctions";
 
-export default function TableConceptsInvoice({project, concepts,
-  isFilterTable}: {project: OneProjectMin, concepts:IConceptInvoice[],  
-    isFilterTable:boolean, token:string}) {
-
-  // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
-  // const [filterConcepts, setFilterConcepts] = useState<IConceptEstimate[]>(concepts);
-  const [isFilter, setIsFilter] = useState<boolean>(false);
-  // const [isShowDetailEstimate, setIsShowDetailEstimate] = useState<boolean>(false);
-
-  // const refEstimate = useRef('');
-
-  const handleIsFilter = (value: boolean) => {
-    setIsFilter(value);
-  }
-
-  // const handleFilterData = (value: any) => {
-  //   setFilterConcepts(value);
-  // }
+export default function TableConceptsInvoice({project, concepts, isFilterTable}: 
+  {project: OneProjectMin, concepts:IConceptInvoice[], isFilterTable:boolean, token:string}) {
 
   if(concepts.length <= 0){
     return (
@@ -52,16 +26,6 @@ export default function TableConceptsInvoice({project, concepts,
       </>
     )
   }
-
-  // const conceptM = concepts.reduce((previous, current) => {
-  //   if(current.prices && previous.prices){
-  //     return current.prices > previous.prices ? current : previous;
-  //   }else{
-  //     return previous
-  //   }
-  // });
-
-  // const maxAmount = conceptM.prices;
 
   const columnHelper = createColumnHelper<ITableConceptsEstimate>();
   
@@ -154,11 +118,6 @@ export default function TableConceptsInvoice({project, concepts,
 
   let dataTable;
   dataTable = ConceptsDataToConceptsTable(concepts);
-  // if(isFilterTable){
-  //   dataTable = ConceptsDataToConceptsTable(filterConcepts);
-  // }else{
-  //   dataTable = ConceptsDataToConceptsTable(concepts);
-  // }
 
   return (
     <>
@@ -166,8 +125,6 @@ export default function TableConceptsInvoice({project, concepts,
         <p className="text-blue-400">PREELIMINARES</p>
       </div>
       <Table columns={columns} data={dataTable} placeH="buscar concepto" />
-      {/* {isFilter && <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
-                                FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />} */}
     </>
   )
 }

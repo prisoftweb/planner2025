@@ -14,7 +14,6 @@ import SelectReact from "@/components/SelectReact";
 import { showToastMessageError } from "@/components/Alert";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import { TotalEstimatedByProject } from "@/interfaces/Estimate";
-import { getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 
 type Params = {
   project:ProjectMin, 
@@ -38,21 +37,14 @@ type Params = {
   amountPayableVAT:string 
   setAmountPayableVAT: (value:string) => void
   bandName:boolean
-  // setBandName: (value:string) 
   bandOrder:boolean
-  // setBandOrder: (value:boolean) => void
   bandAmount: boolean 
-  // setBandAmount
   bandDate: boolean
-  // setBandDate: boolean
-  // typeEstimate: string
   setTypeEstimate: (value:string) => void
   bandDescription: boolean 
   overflow:boolean
   advance:boolean
   setAdvance: (value:boolean) => void
-  // setBandDescription
-  // setLengthOrder
   token:string
   totalEstimatedProject: TotalEstimatedByProject[] | undefined,
   setTotalEstimatesProject: (value: TotalEstimatedByProject[]) => void
@@ -65,16 +57,10 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
   setTotalEstimatesProject, totalEstimatedProject, advance, overflow, setAdvance}: Params) {
 
   const [porcentajeAdvange, setPorcentajeAdvange]=useState(0);
-  // const [advance, setAdvance]= useState<boolean>(false);
-
   const [isdisabled, setIsDisabled]= useState<boolean>(true);
   const [isdisabledGuarantee, setIsDisabledGuarantee]= useState<boolean>(true);
   const [optTypes, setOptTypes]=useState<Options[]>([]);
   
-  // const overflow=true;
-  // const overflow=false;
-  // const advange=0;
-
   const colorsRandom = ['#E4D831', '#71B2F2', '#617178', '#FFA145', '#8579F0', '#ff5252', '#69f0ae', '#7D9F2D', '#289399', '#f08080'];
 
   useEffect(() => {
@@ -86,17 +72,6 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
         setOptTypes(res);
         setTypeEstimate(res[0].value);
       }
-
-      // let tEstimatedProject: TotalEstimatedByProject[];
-      // try {
-      //   tEstimatedProject = await getTotalEstimatesByProjectMin(token, project._id);
-      //   if(typeof(tEstimatedProject) === "string")
-      //     return <h1 className="text-center text-red-500">{tEstimatedProject}</h1>
-      //   else
-      //     setTotalEstimatesProject(tEstimatedProject);
-      // } catch (error) {
-      //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las estimaciones del proyecto!!</h1>  
-      // }
     }
     fetch();
   }, []);
@@ -122,7 +97,6 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
       val=value.replace(/[$,]/g, "");
     }
     let amor: number = 0;
-    // console.log('project => ', project);
     if(project.amountChargeOff && !overflow){
       amor = (Number(val.replace(/[$,]/g, "")) * (project.amountChargeOff?.porcentage || 0)) / 100;
     }
@@ -162,8 +136,6 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
     setAmountPayableVAT(totalPayable.toFixed(2));
   }
 
-  // const percentajeAdvance=Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
-
   return (
     <>
       <div className="bg-white p-3">
@@ -199,7 +171,6 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
         <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
           <input checked={advance} 
             onClick={() => handleAdvance(!advance)} id="switch-3" type="checkbox"
-            // onChange={() => console.log('')}
             className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
               appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
               peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -252,8 +223,6 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
             name="amount"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
               focus:border-slate-700 outline-0"
-            // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-            // value={formik.values.amount.replace(/[$,]/g, "")}
             value={amount}
             decimalsLimit={2}
             prefix="$"
@@ -276,12 +245,10 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
               <div className="flex justify-between items-center pr-4">
                 <Label htmlFor="amortization"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Amortizacion</p></Label>
                 <div className="flex items-center gap-x-2">
-                  {/* <Label htmlFor="modification"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label> */}
                   <BsPencil className="w-4 h-4 text-slate-500" />
                   <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                     <input checked={!isdisabled} 
                       onClick={() => setIsDisabled(!isdisabled)} id="disabledAmor" type="checkbox"
-                      // onChange={() => console.log('')}
                       className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                         appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                         peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -299,44 +266,29 @@ export default function FormNewEstimate({project, saveEstimate, amortization, am
                 name="amortization"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                   focus:border-slate-700 outline-0"
-                // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-                // value={formik.values.amount.replace(/[$,]/g, "")}
                 value={amortization}
                 onValueChange={(value) => {try {
-                  // setAmortization(value?.replace(/[$,]/g, "") || '0');
-                  // updateValues(value?.replace(/[$,]/g, "") || '0')
                   if(overflow){
-                    // refAmortization.current=true;
                     updateAmortization('0');
                   }else{
                     updateAmortization(value?.replace(/[$,]/g, "") || '0');
                   }
                 } catch (error) {
-                  // setAmortization('0');
                   updateAmortization('0');
-                  // updateValues('0');
                 }}}
                 decimalsLimit={2}
                 prefix="$"
                 disabled={isdisabled}
               />
-              {/* {!isdisabled && (
-                <p className="text-red-500 text-xs">No se puede agregar Amortizacion porque supero el anticipo de {CurrencyFormatter({
-                  currency: 'MXN',
-                  value: 0
-                })} !!!</p>
-              )} */}
             </div>
             <div>                
               <div className="flex justify-between items-center pr-4">
               <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
                 <div className="flex items-center gap-x-2">
-                  {/* <Label htmlFor="modification Guaran"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label> */}
                   <BsPencil className="w-4 h-4 text-slate-500" />
                   <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                     <input checked={!isdisabledGuarantee} 
                       onClick={() => setIsDisabledGuarantee(!isdisabledGuarantee)} id="disabledGuaran" type="checkbox"
-                      // onChange={() => console.log('')}
                       className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                         appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                         peer-checked:border-green-500 peer-checked:before:bg-green-500

@@ -1,5 +1,4 @@
 import {Document, Page, Text, Image, View, StyleSheet} from '@react-pdf/renderer'
-import { Report, DateReport } from '@/interfaces/Reports'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ResumenEstimateProject } from '@/interfaces/Estimate';
 import { OneProjectMin } from '@/interfaces/Projects';
@@ -8,14 +7,6 @@ import { IEstimate } from '@/interfaces/Estimate';
 export default function DetailEstimatePDF({resumenEstimate, project, estimate, numEstimate}:
     {resumenEstimate: ResumenEstimateProject, project:OneProjectMin, estimate:IEstimate, numEstimate:number}){
   
-  // const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MARZO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-  // const date = new Date(report.date);
-
-  // const dateIni = dates[0]?.minDate? new Date(dates[0].minDate): new Date();
-  // const dateEnd = dates[0]?.maxDate? new Date(dates[0].maxDate): new Date();
-
-  // const bandMonth = dateIni.getMonth() === dateEnd.getMonth()
-
   const style = StyleSheet.create({
     paragraph: {
       display:"flex", 
@@ -53,10 +44,8 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
         <View style={{padding: '15px'}}>
           <View style={{display: 'flex', flexDirection: 'row', gap:'5px'}}>
             <View style={{width:'33%', textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center'}}>
-              {/* <Image src={project.client.logo} style={{height: '77px', width:'auto'}}></Image> */}
               <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image>
               <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
-                {/* <Image src={project.photo} style={{width:'33px', height: '33px'}}></Image> */}
                 <View>
                   <Text style={{fontSize:'11px', color:'blue'}}>{project.title}</Text>
                   <Text style={{fontSize:'11px', color:'green'}}>{CurrencyFormatter({
@@ -72,7 +61,6 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
             </View>
 
             <View style={{display:'flex', alignItems:'center', padding:'13px', width:'33%'}}>
-              {/* <Image src={'https://images.app.goo.gl/8sFv8o5JpericNZRKTA'} style={{width:'auto', height: '70px'}}></Image> */}
               <Image src={'/Logotipo_principal.png'} style={{width: 'auto', height:'70px'}} />
               <Text style={{color:'#3b82f6', fontSize:'10px'}}>Samuel Palacios Hernandez</Text>
             </View>

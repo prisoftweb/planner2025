@@ -2,20 +2,15 @@
 import { OneProjectMin } from "@/interfaces/Projects"
 import Button from "@/components/Button";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-import { ProgressCircle } from "@tremor/react";
 import { useState } from "react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "@/components/providers/Chip";
-import DonutChartComponent from "../dashboard/DonutChartComponent";
-// import TableEstimatesByProject from "./TableEstimatesByProject";
 import TableConceptsEstimate from "./TableConceptsEstimate";
-import AddNewEstimateProject from "./AddNewEstimateProject";
-import { IEstimateProject, IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
+import { IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
 import { getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 import AddNewConceptEstimate from "./AddNewConceptEstimate";
 import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "@/components/Alert";
-import NavTabEstimates from "./NavTabEstimates";
 
 type ContainerDetailEstimateProps = {
   project: OneProjectMin, 
@@ -47,9 +42,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   const updateConceptsEstimate = async () => {
     let concepts: IConceptEstimate[];
     try {
-      // concepts = await getConeptsEstimate(token, estimate._id);
       concepts = await getAllConceptsDetailsByEstimateMin(token, estimate._id);
-      // console.log('concepts min => ', concepts);
       if(typeof(concepts) === "string"){
         showToastMessageError(concepts);
       }else{
@@ -72,7 +65,6 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
     }
 
     setIsFilterTable(false);
-    // setConceptsData(concepts);
   }
 
   const delConcept = (id:string) => {
@@ -87,14 +79,9 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
     });
   });
 
-  // let component = tab===1? <></>: (tab===2? <></>: 
-  //                       <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
-  //                         handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-  //                         project={project} token={token} idEstimate={idEstimate} />)
   let component = <TableConceptsEstimate concepts={conceptsData} delConcept={delConcept} 
       handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
       project={project} token={token} idEstimate={idEstimate} estimatedTotal={totalEstimatedProjectState[0]?.estimatedTotal || 0} />;
-// console.log('estimate => ', estimate);
 
   let button = <></>;
   if(!estimate.haveinvoice){
@@ -106,7 +93,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
     }
   }
-console.log('concepts estimate => ', conceptsData);
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -122,9 +109,7 @@ console.log('concepts estimate => ', conceptsData);
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 mt-2 sm:mt-3 md:mt-5 gap-y-2">
         <div className="bg-white p-3">
-          <img src={project.client.logo} 
-            alt={project.client.name} className="h-20 w-auto " />
-          {/* <img src={project.client.logo} alt={project.client.name} /> */}
+          <img src={project.client.logo} alt={project.client.name} className="h-20 w-auto " />
           <div className="flex items-center gap-x-2">
             <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
             <div>
@@ -201,11 +186,7 @@ console.log('concepts estimate => ', conceptsData);
         </div>
 
       </div>
-
-      {/* <div>
-        <NavTabEstimates setTab={handleTab} tab={tab} />
-      </div> */}
-
+      
       {component}
       {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={estimate}

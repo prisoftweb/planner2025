@@ -3,17 +3,16 @@ import { OneProjectMin } from "@/interfaces/Projects"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import Chip from "@/components/providers/Chip"
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import { getEstimate, getResumenEstimateProject, getResumenEstimateByProjectAndEstimate } from "@/app/api/routeEstimates"
+import { getEstimate, getResumenEstimateByProjectAndEstimate } from "@/app/api/routeEstimates"
 import { IEstimate, ResumenEstimateProject } from "@/interfaces/Estimate"
 import DetailEstimatePDF from "./DetailEstimatePDF"
 import {PDFDownloadLink} from '@react-pdf/renderer'
 import { BsFileEarmarkPdf } from "react-icons/bs";
-import { GetProjectMin, getProjectsMin } from "@/app/api/routeProjects"
+import { GetProjectMin } from "@/app/api/routeProjects"
 import { showToastMessageError } from "@/components/Alert"
 
 export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstimate, showForm, 
-    token}: 
-  {prj:string, numEstimate:number, nomEstimate:string, showForm:Function, token:string}) {
+    token}: {prj:string, numEstimate:number, nomEstimate:string, showForm:Function, token:string}) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [estimate, setEstimate] = useState<IEstimate>();
@@ -29,17 +28,12 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
 
 			const pr = await GetProjectMin(token, prj);
 			if(typeof(pr)=='string'){
-				// return <h1 className="text-center text-red-500">{pr}</h1>
 				showToastMessageError(pr);
 			}else{
 				setProject(pr);
 			}
-      console.log(pr);
-      // let resumenEstimateProject: ResumenEstimateProject;
       try {
-        // const result = await getResumenEstimateProject(token, project._id);
         const result = await getResumenEstimateByProjectAndEstimate(token, prj, nomEstimate);
-        // console.log('estimates min => ', estimates);
         if(typeof(result) === "string"){
           return <h1 className="text-center text-red-500">{result}</h1>
         }else{
@@ -70,14 +64,11 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  console.log('estimacion => ', estimate);
   if(!estimate || !resumenEstimateProject || !project){
     return(
       <p className="text-red-500 text-lg">Obteniendo estimacion...</p>
     )
   }
-
-  console.log('proyect ddff ', project);
 
   return (
     <div className="z-10 top-16 absolute w-full bg-gray-50 space-y-5 p-1 md:p-3 lg:p-7 right-0" style={{height: heightPage}}>
@@ -87,9 +78,7 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5">
         <div className="bg-white p-3">
-          <img src={project?.client?.logo || '/img/clients/default.jpg'} 
-            alt={project.client.name} className="h-24 w-auto" />
-          {/* <img src={project.client.logo} alt={project.client.name} /> */}
+          <img src={project?.client?.logo || '/img/clients/default.jpg'} alt={project.client.name} className="h-24 w-auto" />
           <div className="flex items-center gap-x-2">
             <img src={project.photo} alt={project.title} className="rounded-full w-14 h-14" />
             <div className="w-full">

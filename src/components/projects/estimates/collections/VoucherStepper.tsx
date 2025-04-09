@@ -39,8 +39,6 @@ export default function VoucherStepper({token, user, NextStep, setVoucher, dispe
 
   return (
     <div className="mt-2">
-      {/* <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} 
-          Validation={validationType} getData={handle} /> */}
       <div className="mt-4">
         <Label>Subir voucher (PDF o imagen)</Label>
         <div {...getRootProps()} className="flex flex-col items-center justify-center w-full p-4 h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
@@ -60,12 +58,6 @@ export default function VoucherStepper({token, user, NextStep, setVoucher, dispe
         <Button type="button" 
           onClick={() => {
             NextStep(0); 
-            // if(refRequest.current){
-            //   SaveData();
-            // }
-            // else{
-            //   showToastMessageError('Ya hay una peticion en proceso..!');
-            // }
           }}>Atras</Button>
         {disperse? <button type="button" onClick={Next}
                       className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 

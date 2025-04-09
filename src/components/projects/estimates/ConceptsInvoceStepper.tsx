@@ -22,7 +22,6 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
   useEffect(() => {
     const fetch = async () => {
       const cons = await getAllConceptsEstimateMin(token, idEstimate);
-      console.log('concetps estimate => ', cons);
       if(typeof(cons)==='string'){
         showToastMessageError(cons);
       }else{
@@ -77,17 +76,12 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             name="subtotal"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
               focus:border-slate-700 outline-0"
-            // value={subtotal}
             value={estimate?.MontoPay.toFixed(2)}
             decimalsLimit={2}
             disabled
             prefix="$"
             // onValueChange={(value) => {try {
-            //   updateAmounts(value?.replace(/[$,]/g, "") || '0');
-            //   // setSubTotal(value?.replace(/[$,]/g, "") || '0');
             // } catch (error) {
-            //   updateAmounts('0');
-            //   // setSubTotal('0');
             // }}}
           />
         </div>
@@ -104,11 +98,7 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             decimalsLimit={2}
             prefix="$"
             // onValueChange={(value) => {try {
-            //   updateAmounts(value?.replace(/[$,]/g, "") || '0');
-            //   // setSubTotal(value?.replace(/[$,]/g, "") || '0');
             // } catch (error) {
-            //   updateAmounts('0');
-            //   // setSubTotal('0');
             // }}}
           />
         </div>
@@ -125,11 +115,7 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             disabled
             prefix="$"
             // onValueChange={(value) => {try {
-            //   updateAmounts(value?.replace(/[$,]/g, "") || '0');
-            //   // setSubTotal(value?.replace(/[$,]/g, "") || '0');
             // } catch (error) {
-            //   updateAmounts('0');
-            //   // setSubTotal('0');
             // }}}
           />
         </div>
@@ -141,16 +127,13 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             name="vat"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
               focus:border-slate-700 outline-0"
-            // value={vat}
             value={((estimate?.amountVat || 0) - (estimate?.MontoPay || 0)).toFixed(2)}
             disabled
             decimalsLimit={2}
             prefix="$"
-            onValueChange={(value) => {try {
-              // setVat(value?.replace(/[$,]/g, "") || '0');
-            } catch (error) {
-              // setVat('0');
-            }}}
+            // onValueChange={(value) => {try {
+            // } catch (error) {
+            // }}}
           />
         </div>
 
@@ -161,16 +144,13 @@ export default function ConceptsInvoiceStepper({token, nextStep, idEstimate, est
             name="total"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
               focus:border-slate-700 outline-0"
-            // value={total}
             value={estimate?.amountVat.toFixed(2)}
             decimalsLimit={2}
             prefix="$"
             disabled
-            onValueChange={(value) => {try {
-              // setTotal(value?.replace(/[$,]/g, "") || '0');
-            } catch (error) {
-              // setTotal('0');
-            }}}
+            // onValueChange={(value) => {try {
+            // } catch (error) {
+            // }}}
           />
         </div>
       </div>

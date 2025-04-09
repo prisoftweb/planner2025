@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { IInvoiceByProject, IInvoiceTable } from "@/interfaces/Invoices"
 import { getInvoicesByProject, removeInvoice } from "@/app/api/routeInvoices"
-import { showToastMessage, showToastMessageError } from "@/components/Alert";
+import { showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
@@ -13,8 +13,7 @@ import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import AddNewCollectionComponent from "./collections/AddNewCollection";
 import { Badge } from "@mui/material";
 
-export default function TableInvoicesComponent({token, project, user}:
-    {token:string, project:OneProjectMin, user:string}) {
+export default function TableInvoicesComponent({token, project, user}: {token:string, project:OneProjectMin, user:string}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -31,7 +30,6 @@ export default function TableInvoicesComponent({token, project, user}:
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        console.log('invoices table => ', res);
         setInvoices(res);
       }
     }
@@ -54,8 +52,6 @@ export default function TableInvoicesComponent({token, project, user}:
   }
 
   const delInvoice = (id:string) => {
-    // const fil = invoices.filter((i) => id.includes(i._id));
-    // setInvoices(fil);
     window.location.reload();
   }
 
@@ -197,9 +193,7 @@ export default function TableInvoicesComponent({token, project, user}:
       ),
     }),
   ]
-
-  console.log('invoices => ', invoices);
-
+  
   const data = InvoiceDataToTableData(invoices);
 
   return (

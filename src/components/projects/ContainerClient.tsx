@@ -1,10 +1,9 @@
 'use client'
-//import Header from "../Header"
 import ButtonNew from "./ButtonNew"
 import TableProjects from "./TableProjects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { ProjectsTable, Project, ProjectMin } from "@/interfaces/Projects"
+import { ProjectsTable, ProjectMin } from "@/interfaces/Projects"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
 import { PiTableThin } from "react-icons/pi";
@@ -12,22 +11,30 @@ import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "../SearchInTable"
 import { useProjectsStore } from "@/app/store/projectsStore"
-import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
 import { UsrBack } from "@/interfaces/User"
 import { showToastMessageError } from "../Alert"
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject"
 import { getActiveProjectsMin } from "@/app/api/routeProjects"
 
+type Props = {
+  token:string, 
+  optClients:Options[], 
+  user:UsrBack,
+  optCategories:Options[], 
+  optTypes:Options[],
+  optCompanies: Options[], 
+  data:ProjectsTable[], 
+  projects: ProjectMin[], 
+  optCategoriesFilter: Options[], 
+  optTypesFilter: Options[], 
+  optConditionsFilter: Options[], 
+  condition: string
+}
+
 export default function ContainerClient({token, optClients, optCategories, 
-                          optTypes, user, optCompanies, data, optCategoriesFilter, 
-                          optConditionsFilter, optTypesFilter, projects, condition}: 
-                        {token:string, optClients:Options[], user:UsrBack,
-                          optCategories:Options[], optTypes:Options[],
-                          optCompanies: Options[], data:ProjectsTable[], 
-                          projects: ProjectMin[], optCategoriesFilter: Options[], 
-                          optTypesFilter: Options[], optConditionsFilter: Options[], 
-                          condition: string}){
+  optTypes, user, optCompanies, data, optCategoriesFilter, optConditionsFilter, 
+  optTypesFilter, projects, condition}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -66,7 +73,6 @@ export default function ContainerClient({token, optClients, optCategories,
   if(projects.length <= 0 && projectStore.length <= 0){
     return (
       <>
-        {/* <Navigation user={user} /> */}
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/projects.jpg" subtitle="Proyectos"
             text="Aqui puedes agregar nuevos proyectos

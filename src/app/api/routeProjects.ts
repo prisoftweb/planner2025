@@ -779,3 +779,21 @@ export async function getProjectsWithOutEstimateMin(auth_token:string) {
     return 'Error al consultar proyectos!!';
   }
 }
+
+export async function getProjectContractualControl(auth_token:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/2024-01-01/2025-12-28`;
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats[0];
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar control contractual!!';
+  }
+}

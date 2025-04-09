@@ -11,13 +11,12 @@ import { TotalEstimatedByProject } from "@/interfaces/Estimate";
 import { getProjectsWithOutEstimateMin } from "@/app/api/routeProjects";
 
 export default function NewEstimateStepper({token, showForm, user, updateProjects}: 
-                            {token:string, showForm:Function, user:string, updateProjects: () => Promise<void> }){
+  {token:string, showForm:Function, user:string, updateProjects: () => Promise<void> }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper]=useState<number>(0);
   const [project, setProject]=useState<ProjectMin>();
 
-  // const [porcentajeAdvange, setPorcentajeAdvange]=useState(0);
   const [advance, setAdvance]= useState<boolean>(false);
 
   const [name, setName] = useState<string>('');
@@ -35,14 +34,12 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
   const [bandAmount, setBandAmount] = useState<boolean>(false);
   const [bandDate, setBandDate] = useState<boolean>(false);
   const [bandDescription, setBandDescription] = useState<boolean>(false);
-  // const [lengthOrder, setLengthOrder] = useState<string>('');
   const [typeEstimate, setTypeEstimate]=useState<string>('');
   const [projects, setProjects]=useState<ProjectMin[]>([]);
 
   const [totalEstimatedProject, setTotalEstimatedProject]=useState<TotalEstimatedByProject[]>();
 
   const handleResize = () => {
-    //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -150,12 +147,10 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
     if(!order || order.trim()===''){
       setBandOrder(true);
       validation = false;
-      // setLengthOrder('La orden es obligatoria!!!');
     }else{
       if(order.length < 3){
         setBandOrder(true);
         validation = false;
-        // setLengthOrder('La orden debe ser de al menos 3 caracteres!!!');
       }else{
         setBandOrder(false);
       }
@@ -176,10 +171,8 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
   }
 
   const saveEstimate = async () => {
-    console.log('save pre val => ');
     const val = validationData();
-    console.log('save pos val => ');
-
+    
     if(val){
       const data = {
         name,
@@ -193,10 +186,10 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
         date: startDate,
         ismoneyadvance: advance,
         condition: [
-            {
-                glossary: "676359f2a4077026b9c37660",
-                user
-            }
+          {
+            glossary: "676359f2a4077026b9c37660",
+            user
+          }
         ],
         company: "65d3813c74045152c0c4377e",
         project: project?._id,
@@ -207,21 +200,12 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        // updateEstimates();
-        // updateProjects();
+        updateProjects();
         showToastMessage('Estimacion creada satisfactoriamente!!!');
         showForm(false);
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
       }
     }
   }
-
-  // let percentajeAdvance = 0;
-  // if(project && totalEstimatedProject){
-  //   percentajeAdvance=Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
-  // }
 
   const component = 
     indexStepper === 0? <SelectEstimateProject projects={projects} token={token} updateProject={handleProyect} />: 

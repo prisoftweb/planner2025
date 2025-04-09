@@ -14,25 +14,13 @@ import SelectReact from "@/components/SelectReact";
 import { getUsersLV } from "@/app/api/routeUser";
 
 export default function FormNewPrice({token, setShowForm, addPrice, valueConcept, 
-    code, description}:
-  {token:string, setShowForm:Function, addPrice:Function, valueConcept:string, 
+  code, description}: {token:string, setShowForm:Function, addPrice:Function, valueConcept:string, 
     code:string, description:string}){
   
-  //const [suppliercredit, setSuppliercredit] = useState<boolean>(false);
   const [heightPage, setHeightPage] = useState<number>(900);
-  // const refRequest = useRef(true);
-
+  
   const [startDate, setStartDate] = useState<string>('');
-  // const [order, setOrder] = useState<string>('');
-  // const [amount, setAmount] = useState<number>(0);
-  // const [name, setName] = useState<string>('');
   const [cost, setCost] = useState<string>('0');
-  // const [unity, setUnity] = useState<string>('');
-
-  // const [bandName, setBandName] = useState<boolean>(false);
-  // const [bandAmount, setBandAmount] = useState<boolean>(false);
-  // const [bandName, setBandName] = useState<boolean>(false);
-  // const [bandUnity, setBandUnity] = useState<boolean>(false);
   const [bandCost, setBandCost] = useState<boolean>(false);
 
   const [users, setUsers] = useState<Options[]>();
@@ -71,40 +59,13 @@ export default function FormNewPrice({token, setShowForm, addPrice, valueConcept
     setShowForm(false);
   });
 
-  const validationData = () =>{
-    let validation = true;
-    
-    // if(!name || name===''){
-    //   setBandName(true);
-    //   validation = false;
-    // }else{
-    //   setBandName(false);
-    // }
-    // if(!unity || unity===''){
-    //   setBandUnity(true);
-    //   validation = false;
-    // }else{
-    //   setBandUnity(false);
-    // }
-    // if(!cost || cost<=0){
-    //   setBandCost(true);
-    //   validation = false;
-    // }else{
-    //   setBandCost(false);
-    // }
-    return validation;
-  }
-
   const saveData = async () => {
-    const val = validationData();
+    const val = true;
 
     if(val){
       const data = {
         code,
         description,
-        // name,
-        // cost,
-        // unity
       }
       try {
         const res = await createConceptEstimate(token, data);

@@ -12,19 +12,25 @@ import { ProgressBarComponent } from "../dashboard/ProgressBarComponent"
 import { useState, useEffect, useRef } from "react"
 import CurrencyInput from "react-currency-input-field"
 import { createEstimate } from "@/app/api/routeEstimates"
-import { showToastMessage, showToastMessageError } from "@/components/Alert"
+import { showToastMessageError } from "@/components/Alert"
 import { BsPencil } from "react-icons/bs"
 import { Options } from "@/interfaces/Common"
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs"
 import SelectReact from "@/components/SelectReact"
 
-export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow, 
-  porcentajeAdvange, advange}: 
-  {showForm:Function, project: OneProjectMin, updateEstimates:Function, user:string, token:string, 
-    overflow:boolean, porcentajeAdvange: number, advange: number}) {
-  // const refRequest = useRef(true);
-  // const refAmortization = useRef(false);
+type Params={
+  showForm:Function, 
+  project: OneProjectMin, 
+  updateEstimates:Function, 
+  user:string, token:string, 
+  overflow:boolean, 
+  porcentajeAdvange: number, 
+  advange: number
+}
 
+export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow, 
+  porcentajeAdvange, advange}: Params ) {
+  
   const [name, setName] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [order, setOrder] = useState<string>('');
@@ -93,20 +99,13 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   }, []);
 
   const colorsRandom = ['#E4D831', '#71B2F2', '#617178', '#FFA145', '#8579F0', '#ff5252', '#69f0ae', '#7D9F2D', '#289399', '#f08080']
-  // const getRandomArbi = (min: any, max: any) => {
-  //   const res = parseInt(Math.random() * (max - min) + min);   
-  //   return res;
-  // }
-
-  // const c1 = getRandomArbi(0, 9);
-
+  
   const updateValues = (value: string) => {
     let val='0';
     if(value.replace(/[$,]/g, "").trim()!=''){
       val=value.replace(/[$,]/g, "");
     }
     let amor: number = 0;
-    // console.log('project => ', project);
     if(project.amountChargeOff && !overflow){
       amor = (Number(val.replace(/[$,]/g, "")) * (project.amountChargeOff?.porcentage || 0)) / 100;
     }
@@ -114,10 +113,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
     if(project.guaranteefund){
       guaran = (Number(val.replace(/[$,]/g, "")) * Number(project.guaranteefund?.porcentage || '0')) / 100;
     }
-    // console.log('val => ', val);
-    // console.log('amor => ', amor);
-    // console.log('guaran => ', guaran);
-
+    
     if(advance){
       amor=0;
       guaran=0;
@@ -125,8 +121,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
 
     const total = Number(val.replace(/[$,]/g, "")) - amor - guaran;
     const totalPayable = total * 1.16;
-    // console.log('total => ', total);
-
+    
     setAmortization(amor.toFixed(2));
     setGuarantee(guaran.toFixed(2));
     setAmountPay(total.toFixed(2));
@@ -134,14 +129,8 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   }
 
   const updateAmortization = (val: string) => {
-    // const pay = Number(amount.replace(/[$,]/g, ""));
-    // const am = Number(val.replace(/[$,]/g, ""));
-    // const gu = Number(guarantee.replace(/[$,]/g, ""));
-
-    // console.log('pay => ', pay, ' am => ', am, ' gu => ', gu);
     const total = Number(amount.replace(/[$,]/g, "")) - Number(val.replace(/[$,]/g, "")) - Number(guarantee.replace(/[$,]/g, ""));
     const totalPayable = total * 1.16;
-    // console.log('total => ', total);
     
     setAmortization(val.replace(/[$,]/g, ""));
     setAmountPay(total.toFixed(2));
@@ -149,16 +138,8 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
   }
 
   const updateGuarantee = (val: string) => {
-    // const pay = Number(amount.replace(/[$,]/g, ""));
-    // const am = Number(val.replace(/[$,]/g, ""));
-    // const gu = Number(guarantee.replace(/[$,]/g, ""));
-
-    // console.log('pay => ', pay, ' am => ', am, ' gu => ', gu);
     const total = Number(amount.replace(/[$,]/g, "")) - Number(amortization.replace(/[$,]/g, "")) - Number(val.replace(/[$,]/g, ""));
     const totalPayable = total * 1.16;
-    // console.log('total => ', total);
-    
-    // setAmortization(val.replace(/[$,]/g, ""));
     setGuarantee(val.replace(/[$,]/g, ""));
     setAmountPay(total.toFixed(2));
     setAmountPayableVAT(totalPayable.toFixed(2));
@@ -232,7 +213,6 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         user,
         type:typeEstimate
       }
-      // console.log('new estimate => ', JSON.stringify(data));
       const res = await createEstimate(token, data);
       if(typeof(res)==='string'){
         showToastMessageError(res);
@@ -292,7 +272,6 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={advance} 
               onClick={() => handleAdvance(!advance)} id="switch-3" type="checkbox"
-              // onChange={() => console.log('')}
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                 peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -345,8 +324,6 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
               name="amount"
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
                 focus:border-slate-700 outline-0"
-              // onChange={(e) => setAmount(Number(e.target.value.replace(/[$,]/g, "")))}
-              // value={formik.values.amount.replace(/[$,]/g, "")}
               value={amount}
               decimalsLimit={2}
               prefix="$"
@@ -369,12 +346,10 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                 <div className="flex justify-between items-center pr-4">
                   <Label htmlFor="amortization"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Amortizacion</p></Label>
                   <div className="flex items-center gap-x-2">
-                    {/* <Label htmlFor="modification"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label> */}
                     <BsPencil className="w-4 h-4 text-slate-500" />
                     <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                       <input checked={!isdisabled} 
                         onClick={() => setIsDisabled(!isdisabled)} id="disabledAmor" type="checkbox"
-                        // onChange={() => console.log('')}
                         className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                           appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                           peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -396,18 +371,13 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                   // value={formik.values.amount.replace(/[$,]/g, "")}
                   value={amortization}
                   onValueChange={(value) => {try {
-                    // setAmortization(value?.replace(/[$,]/g, "") || '0');
-                    // updateValues(value?.replace(/[$,]/g, "") || '0')
                     if(overflow){
-                      // refAmortization.current=true;
                       updateAmortization('0');
                     }else{
                       updateAmortization(value?.replace(/[$,]/g, "") || '0');
                     }
                   } catch (error) {
-                    // setAmortization('0');
                     updateAmortization('0');
-                    // updateValues('0');
                   }}}
                   decimalsLimit={2}
                   prefix="$"
@@ -424,12 +394,10 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                 <div className="flex justify-between items-center pr-4">
                 <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
                   <div className="flex items-center gap-x-2">
-                    {/* <Label htmlFor="modification Guaran"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Modificar</p></Label> */}
                     <BsPencil className="w-4 h-4 text-slate-500" />
                     <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                       <input checked={!isdisabledGuarantee} 
                         onClick={() => setIsDisabledGuarantee(!isdisabledGuarantee)} id="disabledGuaran" type="checkbox"
-                        // onChange={() => console.log('')}
                         className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                           appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                           peer-checked:border-green-500 peer-checked:before:bg-green-500

@@ -11,11 +11,20 @@ import { NodeTable } from "@/interfaces/Nodes"
 import AddElements from "../roles/AddElements"
 import Input from "../Input"
 
+type Params = {
+  showForm:Function, 
+  token:string, 
+  glossaries:Options[], 
+  departments:Options[], 
+  workFlows:Options[], 
+  id:string, 
+  optRels: Options[], 
+  optDesc: Options[], 
+  node:(NodeTable | undefined)
+}
+
 export default function UpdateNode({showForm, token, departments, glossaries, 
-                      workFlows, id, optDesc, optRels, node}: 
-  {showForm:Function, token:string, glossaries:Options[], departments:Options[], 
-    workFlows:Options[], id:string, optRels: Options[], optDesc: Options[], 
-    node:(NodeTable | undefined)}){
+  workFlows, id, optDesc, optRels, node}: Params){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [optRelations, setOptRelations] = useState<Options[]>(optRels);
