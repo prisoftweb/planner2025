@@ -40,8 +40,8 @@ export default async function page({ params }: { params: { idp: string, idc:stri
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <Header title={collection.reference} previousPage={`/estimates/${params.idp}/collections`}>
-          <Selectize options={[]} routePage={`estimates/${params.idp}/collections`} subpath="" />
+        <Header title={collection.reference} previousPage={`/projects/estimates/${params.idp}/collections`}>
+          <Selectize options={[]} routePage={`projects/estimates/${params.idp}/collections`} subpath="" />
         </Header>
         <ContainerCollectionProfile collection={collection} token={token} usr={user._id} />
         {/* <ContainerCollectionsProject project={project} collections={collections} token={token} user={user._id} 
