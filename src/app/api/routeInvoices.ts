@@ -178,21 +178,21 @@ export async function getTotalInvoicesByProject(auth_token:string, id:string) {
   }
 }
 
-// export async function getCatalogCDFI(auth_token:string) {
-//   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices`;
-//   try {
-//     const res = await axios.get(url, {
-//       headers: {
-//         'Authorization': `Bearer ${auth_token}`,
-//         'Content-Type': 'application/json'
-//       }
-//     })
-//     if(res.status===200) return res.data.data.data;
-//     return res.statusText;
-//   } catch (error) {
-//     if(axios.isAxiosError(error)){
-//       return error.response?.data.message || error.message;
-//     }
-//     return 'Error al obtener facturas!!';
-//   }
-// }
+export async function getCollectionsByInvoice(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllCollectionsDetailsByInvoiceMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.status===200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener cobros de la factura!!';
+  }
+}

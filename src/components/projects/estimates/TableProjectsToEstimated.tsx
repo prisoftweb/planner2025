@@ -56,7 +56,8 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
         <p>accion</p>
       )
     }),
-    columnHelper.accessor(row => row.percentage, {
+    columnHelper.accessor('percentage', {
+      header: 'Avance',
       id: 'avance',
       cell: ({row}) => (
         <div className="">
@@ -66,10 +67,6 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
               style={{"width": row.original.percentage}}></div>
           </div>
         </div>
-      ),
-      enableSorting:false,
-      header: () => (
-        <p>Avance</p>
       )
     }),
     columnHelper.accessor('account', {

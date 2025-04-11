@@ -215,3 +215,26 @@ export interface ITotalResumentPayment {
     pendingPaymentTotal: number
   }
 }
+
+export interface IInvoicesByCollection {
+  _id: string
+  reference: string
+  status: boolean
+  paymentInInvoice: {
+    invoice: string
+    folio: string
+    taxfolio: string
+    total: number
+    ischargedfull: boolean
+    project: string
+    pay: {
+      accountreceivable: string
+      previousbalanceamount: number
+      charged: number
+      unchargedbalanceamount: number
+      partialitynumber: number
+      _id: string
+    }[]
+    itemscharged: number
+  }
+}

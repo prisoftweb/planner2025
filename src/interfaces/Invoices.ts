@@ -334,3 +334,31 @@ export interface ITotalInvoiceResumen {
     pendingEstimate: number
   }
 }
+
+export interface ICollectiosByInvoice {
+  _id: string
+  charged: number
+  previousbalanceamount: number
+  partialitynumber: number
+  accountReceivable: {
+    _id: string
+    reference: string
+    concept: string
+    date: string
+    amount: number
+    voucher: string
+    user: {
+      _id: string
+      name: string
+      photo: string
+    }
+  }
+}
+
+export interface IInvoiceCollectionsTable {
+  id:string,
+  reference: string,
+  amount: number,
+  charged: number,
+  concept: string
+}

@@ -1,7 +1,8 @@
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { IOneCollectionMin } from "@/interfaces/Collections";
+import { IOneCollectionMin, IInvoicesByCollection } from "@/interfaces/Collections";
 
-export default function ListInvoicesCollection({collection}: {collection:IOneCollectionMin}){
+export default function ListInvoicesCollection({collection, invoices}: 
+  {collection:IOneCollectionMin, invoices:IInvoicesByCollection[]}){
 
   return(
     <>
@@ -17,7 +18,7 @@ export default function ListInvoicesCollection({collection}: {collection:IOneCol
             </div>
           </div>
 
-          <div className="flex gap-x-2 justify-between items-end mt-2">
+          {/* <div className="flex gap-x-2 justify-between items-end mt-2">
             <div>
               <p className="text-slate-500">Factura</p>
               <p className="text-green-500 text-lg">{collection.invoices[0].invoice}</p>
@@ -26,10 +27,10 @@ export default function ListInvoicesCollection({collection}: {collection:IOneCol
               <p className="text-green-500">{collection?.date?.substring(0, 10)}</p>
               <p className="text-slate-500 text-lg">Fecha</p>
             </div>
-          </div>
+          </div> */}
         </div>
 
-        {collection.invoices.map((invoice) => (
+        {invoices.map((invoice) => (
           <div role="button"
             key={invoice._id}
             className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
@@ -46,17 +47,17 @@ export default function ListInvoicesCollection({collection}: {collection:IOneCol
                 <div className="flex justify-between items-center">
                   <h6
                     className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-2xl text-blue-600">
-                    {invoice.invoice}
+                    {invoice.reference}
                   </h6>
                   <p className="text-slate-500 text-sm">{CurrencyFormatter({
                     currency: 'MXN',
-                    value: invoice.amountcharged
+                    value: invoice.paymentInInvoice.total
                   })}</p>
                 </div>
                 <div className="flex justify-between items-center">
                   <h6
                     className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-green-600">
-                    {invoice.project}
+                    {invoice.paymentInInvoice.project}
                   </h6>
                   {/* <p className="text-slate-500 text-sm">{invoice.project}</p> */}
                 </div>

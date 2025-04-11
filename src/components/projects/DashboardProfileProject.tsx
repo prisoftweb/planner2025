@@ -113,7 +113,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: budgetedControl.amountInfo.amount?? 0
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={budgetedControl.amountInfo.porcentage > 100? 100: budgetedControl.amountInfo.porcentage} 
+                  <ProgressBarComponent label={''} progress={budgetedControl.amountInfo.porcentage} 
                     widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
                 
                 <p className=" text-sm mt-2">Presupuestado ({
@@ -122,7 +122,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: budgetedControl.budgetedInfo.budgeted
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={budgetedControl.budgetedInfo.porcentage > 100? 100: budgetedControl.budgetedInfo.porcentage} 
+                  <ProgressBarComponent label={''} progress={budgetedControl.budgetedInfo.porcentage } 
                     widthBar="w-full" color={colorsRandom[c2]} hei="h-5" />
                 
                 <p className=" text-sm mt-2">Costo ({
@@ -131,7 +131,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: budgetedControl.spentInfo.spent
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={budgetedControl.spentInfo.porcentage > 100? 100: budgetedControl.spentInfo.porcentage} 
+                  <ProgressBarComponent label={''} progress={budgetedControl.spentInfo.porcentage } 
                     widthBar="w-full" color={colorsRandom[c3]} hei="h-5" />
                 
                 <p className=" text-sm mt-2">Pagado ({
@@ -140,7 +140,16 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: budgetedControl.estimateInfo.estimate
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={budgetedControl.estimateInfo.porcentage > 100? 100: budgetedControl.estimateInfo.porcentage} 
+                  <ProgressBarComponent label={''} progress={budgetedControl.estimateInfo.porcentage} 
+                    widthBar="w-full" color={colorsRandom[c4]} hei="h-5" />
+
+                <p className=" text-sm mt-2">Facturado ({
+                  CurrencyFormatter({
+                    currency:'MXN',
+                    value: budgetedControl.billingInfo.billedTotal
+                  })}) 
+                </p>
+                  <ProgressBarComponent label={''} progress={budgetedControl.billingInfo.porcentage} 
                     widthBar="w-full" color={colorsRandom[c4]} hei="h-5" />
               </div>
             )}
@@ -156,7 +165,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: contractualControl.estimateInfo.amountPro
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentage > 100? 100: contractualControl.estimateInfo.porcentage} 
+                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentage} 
                     widthBar="w-full" color={colorsRandom[d1]} hei="h-5" />
                 
                 <p className=" text-sm mt-2">Anticipo ({
@@ -174,7 +183,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: contractualControl.estimateInfo.amountChargeOff
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentageChargeOff > 100? 100: contractualControl.estimateInfo.porcentageChargeOff} 
+                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentageChargeOff} 
                     widthBar="w-full" color={colorsRandom[d3]} hei="h-5" />
                 
                 <p className=" text-sm mt-2">Estimado ({
@@ -183,7 +192,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: contractualControl.estimateInfo.estimatedTotal
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentageEstimated > 100? 100: contractualControl.estimateInfo.porcentageEstimated} 
+                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentageEstimated } 
                     widthBar="w-full" color={colorsRandom[d4]} hei="h-5" />
 
                 <p className=" text-sm mt-2">Garantia ({
@@ -192,7 +201,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                     value: contractualControl.estimateInfo.amountGuaranteeFund
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentageGuaranteeFund > 100 ? 100: contractualControl.estimateInfo.porcentageGuaranteeFund } 
+                  <ProgressBarComponent label={''} progress={contractualControl.estimateInfo.porcentageGuaranteeFund } 
                     widthBar="w-full" color={colorsRandom[d5]} hei="h-5" />
               </div>
             )}

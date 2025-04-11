@@ -2,28 +2,24 @@
 import { OneProjectMin } from "@/interfaces/Projects"
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { Options } from "@/interfaces/Common";
-import { IInvoiceMinFull, IConceptInvoice, ITotalInvoicesByProject } from "@/interfaces/Invoices";
+import { IInvoiceMinFull, ICollectiosByInvoice, ITotalInvoicesByProject, IInvoiceCollectionsTable } from "@/interfaces/Invoices";
+import { useState } from "react";
+import { FaDollarSign } from "react-icons/fa6";
+import { createColumnHelper } from "@tanstack/react-table";
+import Table from "@/components/Table";
 
 type Props = {
   project: OneProjectMin, 
   token: string, 
   user: string, 
   invoice:IInvoiceMinFull, 
-  concepts:IConceptInvoice[], 
+  collections:ICollectiosByInvoice[], 
   totalInvoiceProject: ITotalInvoicesByProject[]
 }
 
-export default function ContainerDetailInvoice({project, token, user, invoice, concepts, totalInvoiceProject}: Props) {
+export default function ContainerDetailInvoice({project, token, user, invoice, collections, totalInvoiceProject}: Props) {
 
-  const conceptsLV: Options[] = [];
-  concepts.map((c) => {
-    conceptsLV.push({
-      label: c.conceptEstimate.name,
-      value: c.conceptEstimate._id
-    });
-  });
-
+  const [showCollections, setShowCollections]=useState<boolean>(false);
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
   return (
@@ -36,6 +32,11 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </div>
           <p className="text-xl ml-4 font-medium">{project.title} {'->'} {invoice?.folio || 'sin factura'} </p>
+          {showCollections? (
+            <FaDollarSign className="text-red-500 w-6 h-6 cursor-pointer hover:text-red-300" onClick={() => setShowCollections(false)} />
+          ): (
+            <FaDollarSign className="text-green-500 w-6 h-6 cursor-pointer hover:text-green-300" onClick={() => setShowCollections(true)} />
+          )}
         </div>
       </div>
 
@@ -85,60 +86,151 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
 
       </div>
 
-      <div className="mt-5 bg-blue-500 py-3">
-        <p className="text-white text-center text-lg font-bold">FACTURA</p>
-      </div>
+      <div className={`grid gap-x-3 ${showCollections? 'grid-cols-2': ''}`}>
+        <div>
+          <div className="mt-5 bg-blue-500 py-3">
+            <p className="text-white text-center text-lg font-bold">FACTURA</p>
+          </div>
 
-      <div className="grid grid-cols-6 gap-x-2 mt-4">
-        <p className="text-slate-600 font-bold">CANTIDAD</p>
-        <p className="text-slate-600 font-bold col-span-3">DESCRIPCION</p>
-        <p className="text-slate-600 font-bold text-right">PRECIO</p>
-        <p className="text-slate-600 font-bold text-right">IMPORTE</p>
-      </div>
+          <div className="grid grid-cols-6 gap-x-2 mt-4">
+            <p className="text-slate-600 font-bold">CANTIDAD</p>
+            <p className="text-slate-600 font-bold col-span-3">DESCRIPCION</p>
+            <p className="text-slate-600 font-bold text-right">PRECIO</p>
+            <p className="text-slate-600 font-bold text-right">IMPORTE</p>
+          </div>
 
-      {invoice.conceptsInvoiceInfo.map((c) => (
-        <div className="grid grid-cols-6 gap-x-2 mt-3" key={c._id}>
-          <p className="text-black">{c?.quantity || 0}</p>
-          <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
-          <p className="text-black text-right">{CurrencyFormatter({
-            currency: 'MXN',
-            value: c?.priceConcepEstimate?.cost || 0
-          })}</p>
-          <p className="text-black text-right">{CurrencyFormatter({
-            currency: 'MXN', 
-            value: c?.amount || 0
-          })}</p>
+          {invoice.conceptsInvoiceInfo.map((c) => (
+            <div className="grid grid-cols-6 gap-x-2 mt-3" key={c._id}>
+              <p className="text-black">{c?.quantity || 0}</p>
+              <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
+              <p className="text-black text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value: c?.priceConcepEstimate?.cost || 0
+              })}</p>
+              <p className="text-black text-right">{CurrencyFormatter({
+                currency: 'MXN', 
+                value: c?.amount || 0
+              })}</p>
+            </div>
+          ))}
+
+          <div className="mt-6 py-3 flex justify-between items-center border-y-2 border-blue-200">
+            <p className="font-extrabold text-slate-600">SUBTOTAL</p>
+            <p className="text-blue-600 font-bold">{CurrencyFormatter({
+              currency: 'MXN',
+              value: invoice.cost.subtotal
+            })}</p>
+          </div>
+          
+          <div className="py-3 flex justify-between items-center">
+            <p className="font-extrabold text-slate-600">(+)IVA</p>
+            <p className="text-blue-600 font-bold">{CurrencyFormatter({
+              currency: 'MXN',
+              value: invoice.cost.iva
+            })}</p>
+          </div>
+
+          <div className="py-3 flex justify-between items-center border-y-2 border-blue-500">
+            <p className="font-extrabold text-slate-600">Total</p>
+            <p className="text-blue-600 font-bold">{CurrencyFormatter({
+              currency: 'MXN',
+              value: invoice.cost.total
+            })}</p>
+          </div>
+
+          <p className="font-extrabold text-slate-600 mt-6">NOTE</p>
+          <p className="text-slate-600 text-sm">Validar estimacion vs factura</p>
+          <p className="text-slate-600 text-sm">Validar abonos de factura completos</p>
         </div>
-      ))}
 
-      <div className="mt-6 py-3 flex justify-between items-center border-y-2 border-blue-200">
-        <p className="font-extrabold text-slate-600">SUBTOTAL</p>
-        <p className="text-blue-600 font-bold">{CurrencyFormatter({
-          currency: 'MXN',
-          value: invoice.cost.subtotal
-        })}</p>
-      </div>
-      
-      <div className="py-3 flex justify-between items-center">
-        <p className="font-extrabold text-slate-600">(+)IVA</p>
-        <p className="text-blue-600 font-bold">{CurrencyFormatter({
-          currency: 'MXN',
-          value: invoice.cost.iva
-        })}</p>
-      </div>
+        {showCollections && (
+          <div>
+            <div className="mt-5 bg-blue-500 py-3">
+              <p className="text-white text-center text-lg font-bold">Cobros</p>
+            </div>
 
-      <div className="py-3 flex justify-between items-center border-y-2 border-blue-500">
-        <p className="font-extrabold text-slate-600">Total</p>
-        <p className="text-blue-600 font-bold">{CurrencyFormatter({
-          currency: 'MXN',
-          value: invoice.cost.total
-        })}</p>
+            <TableCollectionsInvoice collections={collections} />
+          </div>
+        )}
       </div>
-
-      <p className="font-extrabold text-slate-600 mt-6">NOTE</p>
-      <p className="text-slate-600 text-sm">Validar estimacion vs factura</p>
-      <p className="text-slate-600 text-sm">Validar abonos de factura completos</p>
 
     </>
   )
+}
+
+export function TableCollectionsInvoice({collections}: {collections: ICollectiosByInvoice[]}){
+  const columnHelper = createColumnHelper<IInvoiceCollectionsTable>();
+  
+  const columns = [
+    // columnHelper.accessor(row => row.id, {
+    //   id: 'Accion',
+    //   cell: ({row}) => (
+    //     <div className="flex gap-x-2">
+          
+    //     </div>
+    //   ),
+    //   size: 300,
+    //   enableSorting:false,
+    //   header: ({table}:any) => (
+        
+    //     <p>Accion</p>
+    //   )
+    // }),
+    columnHelper.accessor('reference', {
+      header: 'Referencia',
+      id: 'referencia',
+      cell: ({row}) => (
+        <p className="cursor-pointer">{row.original.reference}</p>
+      ),
+    }),
+    columnHelper.accessor('concept', {
+      header: 'Concepto',
+      id: 'concepto',
+      cell: ({row}) => (
+        <p className="cursor-pointer">{row.original.concept}</p>
+      ),
+    }),
+    columnHelper.accessor('amount', {
+      header: 'Monto',
+      id: 'monto',
+      cell: ({row}) => (
+        <p className="cursor-pointer">{CurrencyFormatter({
+          currency: 'MXN',
+          value: row.original.amount ?? 0
+        })}</p>
+      ),
+    }),
+    columnHelper.accessor('charged', {
+      header: 'Cobrado',
+      id: 'cobrado',
+      cell: ({row}) => (
+        <p className="cursor-pointer">{CurrencyFormatter({
+          currency: 'MXN',
+          value: row.original.charged ?? 0
+        })}</p>
+      ),
+    }),
+  ];
+
+  const data = TrasnformFromCollectionDataToTableData(collections);
+
+  return(
+    <Table columns={columns} data={data} placeH="buscar cobro" />
+  )
+}
+
+function TrasnformFromCollectionDataToTableData(collections: ICollectiosByInvoice[]){
+  const data: IInvoiceCollectionsTable[] = [];
+
+  collections.map((c) => {
+    data.push({
+      amount: c.accountReceivable.amount,
+      charged: c.charged,
+      concept: c.accountReceivable.concept,
+      id: c._id,
+      reference: c.accountReceivable.reference
+    });
+  });
+
+  return data;
 }

@@ -165,3 +165,22 @@ export async function getAllTotalPaymentsResumeByProjectMin(auth_token:string, i
     return 'Error al consultar total payments!!';
   }
 }
+
+export async function getInvoicesByCollectionMin(auth_token:string, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllInvoiceByCollectionIDMINIUM/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status===200)
+      return res.data.data.resdata;
+    return 'Error al obtener facturas del cobro!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al facturas del cobro cobro!!';
+  }
+}

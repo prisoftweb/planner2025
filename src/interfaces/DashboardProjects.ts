@@ -98,6 +98,11 @@ export interface ProjectByBudgetedControl {
     estimate: number
     porcentage: number
   }
+  billingInfo: {
+    billedTotal: number, 
+    pendingBillingTotal: number, 
+    porcentage: number
+  }
 }
 
 export interface ProjectCostoCenters {
