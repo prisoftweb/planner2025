@@ -23,7 +23,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
 
   useEffect(() => {
     const fetch = async () => {
-      const resBudCon = await getDashboardProjectByBudgetControl(token, id);
+      const resBudCon = await getDashboardProjectByBudgetControl(token, id, oneProjectStore?.date? new Date(oneProjectStore?.date).getFullYear(): new Date().getFullYear());
       if(typeof(resBudCon) !== 'string'){
         console.log('presupuestado => ', resBudCon);
         setBudgetedControl(resBudCon[0]);
@@ -76,6 +76,8 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
   const c2 = getRandomArbi(0, 9);
   const c3 = getRandomArbi(0, 9);
   const c4 = getRandomArbi(0, 9);
+  const c5 = getRandomArbi(0, 9);
+  const c6 = getRandomArbi(0, 9);
 
   const d1 = getRandomArbi(0, 9);
   const d2 = getRandomArbi(0, 9);
@@ -107,7 +109,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
             <p className="mb-2">CONTROL PRESUPUESTAL</p>
             {budgetedControl && (
               <div>
-                <p className=" text-sm mt-2">Monto total ({
+                <p className=" text-sm mt-2">Monto ({
                   CurrencyFormatter({
                     currency:'MXN',
                     value: budgetedControl.amountInfo.amount?? 0
@@ -137,10 +139,10 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                 <p className=" text-sm mt-2">Pagado ({
                   CurrencyFormatter({
                     currency:'MXN',
-                    value: budgetedControl.estimateInfo.estimate
+                    value: budgetedControl.paymentInfo.totalPayments
                   })}) 
                 </p>
-                  <ProgressBarComponent label={''} progress={budgetedControl.estimateInfo.porcentage} 
+                  <ProgressBarComponent label={''} progress={budgetedControl.paymentInfo.porcentage} 
                     widthBar="w-full" color={colorsRandom[c4]} hei="h-5" />
 
                 <p className=" text-sm mt-2">Facturado ({
@@ -150,7 +152,16 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
                   })}) 
                 </p>
                   <ProgressBarComponent label={''} progress={budgetedControl.billingInfo.porcentage} 
-                    widthBar="w-full" color={colorsRandom[c4]} hei="h-5" />
+                    widthBar="w-full" color={colorsRandom[c5]} hei="h-5" />
+
+                <p className=" text-sm mt-2">Utilidades ({
+                  CurrencyFormatter({
+                    currency:'MXN',
+                    value: budgetedControl.netprofitInfo.netprofitTotal
+                  })}) 
+                </p>
+                  <ProgressBarComponent label={''} progress={budgetedControl.netprofitInfo.porcentage} 
+                    widthBar="w-full" color={colorsRandom[c6]} hei="h-5" />
               </div>
             )}
           </div>

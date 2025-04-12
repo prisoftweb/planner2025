@@ -23,10 +23,19 @@ export default function ContainerCollectionsProject({project, token, user, colle
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
-  const categoriesEstimates: string[] = [];
-  const dataInvoicesDashboard: OptionsDashboard[] = [];  
+  const categoriesCollections: string[] = [];
+  const dataCollectionsDashboard: OptionsDashboard[] = [];
+  
+  collections.map((c) => {
+    dataCollectionsDashboard.push({
+      costo: (c.amount / project.amount) * 100,
+      label: c.reference
+    });
+    categoriesCollections.push(c.reference);
+  });
 
-  console.log('resumen payment => ', resumenPayment);
+  console.log('data col => ', dataCollectionsDashboard);
+  // console.log('resumen payment => ', resumenPayment);
 
   return (
     <>
@@ -63,8 +72,8 @@ export default function ContainerCollectionsProject({project, token, user, colle
         </div>
 
         <div className="bg-white p-3">
-          <DonutChartComponent data={dataInvoicesDashboard} colors={colors} category="costo"
-                        categories={categoriesEstimates} flexWrap="" size="w-60 h-60" />
+          <DonutChartComponent data={dataCollectionsDashboard} colors={colors} category="costo"
+                        categories={categoriesCollections} flexWrap="" size="w-60 h-60" showLegend={false} />
         </div>
 
         <div className="bg-white p-3">

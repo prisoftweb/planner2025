@@ -10,7 +10,7 @@ export const ProgressBarComponent = ({label, progress, widthBar, color= '#00f', 
           <div className={`bg-purple-600 ${hei} dark:bg-purple-500`} 
             style={{"width": porcentaje + '%', "backgroundColor": color}}></div>
         </div>
-        <p className=" text-sm font-bold">{progress.toString() + '%'}</p>
+        <p className=" text-sm font-bold w-14">{progress.toString() + '%'}</p>
         <p className=" text-xs">{label}</p>
       </div>
     </>

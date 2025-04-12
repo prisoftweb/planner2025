@@ -103,6 +103,15 @@ export interface ProjectByBudgetedControl {
     pendingBillingTotal: number, 
     porcentage: number
   }
+  paymentInfo: {
+    totalPayments: number, 
+    pendingPaymentTotal: number, 
+    porcentage: number
+  }
+  netprofitInfo: {
+    netprofitTotal: number,
+    porcentage: number
+  }
 }
 
 export interface ProjectCostoCenters {

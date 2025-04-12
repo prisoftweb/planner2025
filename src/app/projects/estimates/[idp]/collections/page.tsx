@@ -6,11 +6,11 @@ import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumenByProject } from "@/app/api/routeInvoices";
-import { ITotalInvoicesByProject, IInvoiceByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
-import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
+import { getTotalInvoicesByProject } from "@/app/api/routeInvoices";
+import { ITotalInvoicesByProject } from "@/interfaces/Invoices";
+import { getCollectionsByProjectMin } from "@/app/api/routeCollections";
 
-import { getCollectionsByProjectMin, getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
+import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
 import { ICollectionMin, ITotalResumentPayment } from "@/interfaces/Collections";
 import ContainerCollectionsProject from "@/components/projects/estimates/collections/ContainerCollectionsProject";
 
@@ -30,14 +30,14 @@ export default async function Page({ params }: { params: { idp: string }}){
   }
 
   let collections: ICollectionMin[]=[];
-  // try {
-  //   collections = await getCollectionsByProjectMin(token, project._id);
-  //   console.log('collections min => ', collections);
-  //   if(typeof(collections) === "string")
-  //     return <h1 className="text-center text-red-500">{collections}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-red-500">Ocurrio un error al obtener los cobros del proyecto!!</h1>  
-  // }
+  try {
+    collections = await getCollectionsByProjectMin(token, project._id);
+    console.log('collections min => ', collections);
+    if(typeof(collections) === "string")
+      return <h1 className="text-center text-red-500">{collections}</h1>
+  } catch (error) {
+    return <h1 className="text-center text-red-500">Ocurrio un error al obtener los cobros del proyecto!!</h1>  
+  }
 
   let totalInvoicesProject: ITotalInvoicesByProject[];
   try {

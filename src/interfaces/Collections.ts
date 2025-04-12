@@ -197,6 +197,7 @@ export interface ITableCollection {
     color: string
   }, 
   Importe: number
+  concept: string
 }
 
 export interface ITotalResumentPayment {
@@ -238,3 +239,26 @@ export interface IInvoicesByCollection {
     itemscharged: number
   }
 }
+
+// export interface Root {
+//   _id: string
+//   reference: string
+//   status: boolean
+//   paymentInInvoice: {
+//     invoice: string
+//     folio: string
+//     taxfolio: string
+//     total: number
+//     ischargedfull: boolean
+//     project: string
+//     pay: {
+//       accountreceivable: string
+//       previousbalanceamount: number
+//       charged: number
+//       unchargedbalanceamount: number
+//       partialitynumber: number
+//       _id: string
+//     }[]
+//     itemscharged: number
+//   }
+// }

@@ -538,9 +538,19 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
     return 'Error al consultar lista de proyectos top 10!!';
   }
 }
+// (/[$, M, X, N,]/g, "")
+export async function getDashboardProjectByBudgetControl(auth_token:string, id:string, anio:number) {
+  const d = new Date(anio, 0, 1);
+  const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d2 => ', new Date(d).toLocaleDateString());
+  console.log('d fin => ', d_ini);
 
-export async function getDashboardProjectByBudgetControl(auth_token:string, id:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/2024-01-01/2024-10-30`;
+  const d2 = new Date(anio, 11, 31);
+  console.log('d2 => ', new Date(d2).toLocaleDateString());
+  const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d fin => ', d_fin);
+
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/${d_ini}/${d_fin}`;
   // //console.log('url control presupuestal => ', url);
   try {
     const res = await axios.post(url, {}, {
@@ -781,7 +791,17 @@ export async function getProjectsWithOutEstimateMin(auth_token:string) {
 }
 
 export async function getProjectContractualControl(auth_token:string, project:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/2024-01-01/2025-12-28`;
+  const d = new Date(2025, 0, 1);
+  const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d2 => ', new Date(d).toLocaleDateString());
+  console.log('d fin => ', d_ini);
+
+  const d2 = new Date(2025, 11, 31);
+  console.log('d2 => ', new Date(d2).toLocaleDateString());
+  const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d fin => ', d_fin);
+
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/${d_ini}/${d_fin}`;
   try {
     const res = await axios.post(url, {}, {
       headers: {

@@ -95,22 +95,22 @@ export default function TableCollectionsComponent({token, project}:{token:string
         >{row.original.Fecha.substring(0, 10)}</p>
       ),
     }),
-    columnHelper.accessor('Cuenta', {
-      header: 'Cuenta',
-      id: 'cuenta',
+    // columnHelper.accessor('Estimacion', {
+    //   header: 'Estimacion',
+    //   id: 'estimacion',
+    //   cell: ({row}) => (
+    //     <p className="cursor-pointer"
+    //     onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
+    //     >{row.original.Estimacion}</p>
+    //   ),
+    // }),
+    columnHelper.accessor('concept', {
+      header: 'Concepto',
+      id: 'concepto',
       cell: ({row}) => (
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
-        >{row.original.Cuenta}</p>
-      ),
-    }),
-    columnHelper.accessor('Estimacion', {
-      header: 'Estimacion',
-      id: 'estimacion',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
-        >{row.original.Estimacion}</p>
+        >{row.original.concept}</p>
       ),
     }),
     columnHelper.accessor('Facturas', {
@@ -131,8 +131,17 @@ export default function TableCollectionsComponent({token, project}:{token:string
         <Chip label={row.original.status.name} color={row.original.status.color} />
       ),
     }),
+    columnHelper.accessor('Cuenta', {
+      header: 'Cuenta',
+      id: 'cuenta',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
+        >{row.original.Cuenta}</p>
+      ),
+    }),
     columnHelper.accessor('Importe', {
-      header: 'Importe',
+      header: 'Importe depositado',
       id: 'importe',
       cell: ({row}) => (
         <p className="cursor-pointer"

@@ -1,5 +1,6 @@
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IOneCollectionMin, IInvoicesByCollection } from "@/interfaces/Collections";
+import { FaFileInvoiceDollar } from "react-icons/fa6";
 
 export default function ListInvoicesCollection({collection, invoices}: 
   {collection:IOneCollectionMin, invoices:IInvoicesByCollection[]}){
@@ -14,7 +15,7 @@ export default function ListInvoicesCollection({collection, invoices}:
             </div>
             <div>
               <p className="text-slate-500">{'Detalles de un cobro '+ collection.reference}</p>
-              <p className="text-blue-500 text-lg">Detalles de cuentas por cobrar asignadas a facturas</p>
+              <p className="text-blue-500 text-lg">Listado de facturas a las cuales se disperso el cobro</p>
             </div>
           </div>
 
@@ -40,14 +41,15 @@ export default function ListInvoicesCollection({collection, invoices}:
           >
             <div className="flex items-center w-full">
               <div className="grid mr-4 place-items-center">
-                <img alt="responsable" src={ '/img/estimates/invoices.svg'}
-                  className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+                {/* <img alt="responsable" src={ '/img/estimates/invoices.svg'}
+                  className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+                <FaFileInvoiceDollar className={`h-6 w-6 ${invoice.paymentInInvoice.ischargedfull? 'text-green-500': 'text-red-500'}`} />
               </div>
               <div className={`w-full`}>
                 <div className="flex justify-between items-center">
                   <h6
                     className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-2xl text-blue-600">
-                    {invoice.reference}
+                    {invoice.paymentInInvoice.folio}
                   </h6>
                   <p className="text-slate-500 text-sm">{CurrencyFormatter({
                     currency: 'MXN',
@@ -59,7 +61,7 @@ export default function ListInvoicesCollection({collection, invoices}:
                     className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-green-600">
                     {invoice.paymentInInvoice.project}
                   </h6>
-                  {/* <p className="text-slate-500 text-sm">{invoice.project}</p> */}
+                  <p className="text-slate-500 text-sm">{invoice.paymentInInvoice.taxfolio}</p>
                 </div>
                 {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                   {invoice.notes}

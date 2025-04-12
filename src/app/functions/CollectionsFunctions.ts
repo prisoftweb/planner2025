@@ -12,7 +12,8 @@ export function CollectionDataToTableData(collections:ICollectionMin[]){
       id: col._id,
       Importe: col.amount,
       Referencia: col.reference,
-      status: col.condition
+      status: col.condition,
+      concept: col.concept
     })
   });
 
