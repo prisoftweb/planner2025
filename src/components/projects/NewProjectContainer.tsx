@@ -7,11 +7,20 @@ import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
 
+type Props = {
+  token:string, 
+  showForm:Function, 
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  user:string,
+  optCompanies: Options[], 
+  condition: string 
+}
+
 export default function NewProjectContainer({token, showForm, optClients, 
-                              optCategories, optTypes, user, optCompanies, condition}: 
-                            {token:string, showForm:Function, optClients:Options[], 
-                              optCategories:Options[], optTypes:Options[], user:string,
-                              optCompanies: Options[], condition: string }){
+  optCategories, optTypes, user, optCompanies, condition}: Props){
+
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);

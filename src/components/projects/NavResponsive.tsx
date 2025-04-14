@@ -1,5 +1,5 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 
 import { LuConstruction } from "react-icons/lu";
@@ -32,7 +32,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
   }
 
   const [isHover, setIsHover] = useState<number>(-1);
-  // const [nav, setNav] = useState<JSX.Element>(<></>);
   
   let nav = <></>;
   if(!open){
@@ -125,7 +124,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           onClick={() => changeOption(1)}
         >
           <ChartBarIcon className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <ChartBarIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Dashboard
         </div>
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
@@ -133,7 +131,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           onClick={() => changeOption(2)}
         >
           <LuConstruction className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <ChartBarIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Datos basicos
         </div>
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
@@ -141,7 +138,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           onClick={() => changeOption(3)}
         >
           <AiOutlineFundProjectionScreen className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <TableCellsIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Datos extras
         </div>
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
@@ -149,7 +145,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           onClick={() => changeOption(4)}
         >
           <MdOutlineEditLocationAlt className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <GlobeAmericasIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Direccion
         </div>
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
@@ -157,7 +152,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           onClick={() => changeOption(5)}
         >
           <FaRegCreditCard className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <UserCircleIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Garantia
         </div>
         <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
@@ -165,7 +159,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           onClick={() => changeOption(6)}
         >
           <FcAdvance className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <UserCircleIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Avance
         </div>
       </div>

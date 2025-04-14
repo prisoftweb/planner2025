@@ -12,7 +12,7 @@ import FormLabel from '@mui/material/FormLabel';
 import CardConfig from "../users/CardConfig";
 
 export default function ProfileQuatation({quatation}: {quatation:IOneQuotationMin}){
-// console.log('quatation min => ', quatation);
+
   return(
     <>
       <div className="w-full h-full mt-3">
@@ -75,7 +75,6 @@ export default function ProfileQuatation({quatation}: {quatation:IOneQuotationMi
         </div>
 
         <div className="bg-white p-3 rounded-lg shadow-md mt-2">
-          {/* <Label>Puntuacion</Label> */}
           <FormControl>
             <FormLabel id="demo-radio-buttons-group-label">Ubicacion</FormLabel>
             <RadioGroup

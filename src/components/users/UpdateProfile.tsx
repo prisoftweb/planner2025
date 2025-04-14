@@ -16,39 +16,12 @@ import { useUserStore } from "@/app/store/userStore"
 import { useRef } from "react"
 
 export default function UpdateProfile({user, departments, token, optsRoles}: 
-                  {user:UsrBack, departments:Options[], token:string, optsRoles:Options[]}){
+  {user:UsrBack, departments:Options[], token:string, optsRoles:Options[]}){
 
-
-  // let optionsDepartments:Options[] = [];
-  // departments.map((dept:any) => {
-  //   optionsDepartments.push({
-  //     label: dept.name,
-  //     value: dept._id
-  //   });
-  // });
-
-  // let indexRol: number = 0;
-  // if(user.rol){
-  //   optsRoles.map((optRol, index:number) => {
-  //     if(user.rol._id === optRol.value){
-  //       indexRol = index;
-  //     }
-  //   });
-  // }
-
-  // let indexDepto: number = 0;
-  // optionsDepartments.map((dept, index:number) => {
-  //   if(dept.value === user.department._id){
-  //     indexDepto = index;
-  //   }
-  // });
-  
   const {updateUser} = useUserStore();
   const [rolS, setRolS] = useState<string>(user.rol?._id ?? '');
-  //const [optRole, setOptRole] = useState<Options>(optsRoles[indexRol]);
   const [depto, setDepto] = useState<string>
                         (typeof(user.department)==='string'? user.department: user.department._id);
-  //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[indexDepto]);
   const refRequest = useRef(true);
 
   let optRol = optsRoles[0];
@@ -58,29 +31,6 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
   let optDepto = departments[0];
   const opDep = departments.find((opt) => opt.value===depto);
   if(opDep) optDepto = opDep;
-
-  // const [rol, setRol] = useState<string>(optsRoles[0].value);
-  // const [optRole, setOptRole] = useState<Options>(optsRoles[0]);
-  // const [department, setDepartment] = useState<string>(departments[0]._id);
-  // const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
-
-  // useEffect(() => {
-  //   optsRoles.map((optRol) => {
-  //     if(user.rol){
-  //       if(user.rol._id === optRol.value){
-  //         setOptRole(optRol);
-  //         setRol(optRol.value);
-  //       }
-  //     }
-  //   });
-
-  //   optionsDepartments.map((dept) => {
-  //     if(dept.value === user.department._id){
-  //       setDepartment(dept.value);
-  //       setOptDepts(dept);
-  //     }
-  //   });
-  // }, []);
 
   const emailU:string = user.email;
   const nameU:string = user.name;
@@ -106,7 +56,6 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
         }
 
         try {
-          //let res = await updateMeUser(user._id, formData, token);
           const res = await updateApiUser(data, token, user._id);
           if(typeof(res) === 'string'){
             refRequest.current = true;
@@ -116,9 +65,6 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
             showToastMessage(`Usuario ${name} modificado exitosamente!`);            
             setCookie('user', res);
             updateUser(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           } 
         } catch (error) {
           refRequest.current = true;

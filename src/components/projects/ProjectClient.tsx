@@ -78,7 +78,6 @@ export default function ProjectCli({project, token, id, optCategories, optClient
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        {/* <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2"  */}
         <div className="flex w-full px-2 flex-wrap space-x-2"
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>

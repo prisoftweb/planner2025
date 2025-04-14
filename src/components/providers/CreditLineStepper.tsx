@@ -99,9 +99,6 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
           showToastMessage(res.message);
           updateProviderStore([...providerStore, res.prov]);
           updateHaveNewProvider(true);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -117,19 +114,9 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
 
   return(
     <div className="flex flex-col w-full ">
-      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Linea de credito de proveedor" 
-        title="Linea de credito"
-      /> */}
       <div className="my-5">
         <BasicBarStepper index={1} />
       </div>
-      {/* <button type="button" 
-        onClick={onClickSave}
-        className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
-            hover:bg-slate-600"
-      >
-        Guardar
-      </button> */}
       <form onSubmit={formik.handleSubmit} className="mt-4 max-w-md space-y-5">
         <div>
           <Label htmlFor="creditlimit">Limite de credito</Label>
@@ -138,10 +125,8 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             name="creditlimit"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={creditlimitI || 0}
             decimalsLimit={2}
             prefix="$"
@@ -150,13 +135,7 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             } catch (error) {
               formik.values.creditlimit='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="creditlimit" autoFocus 
-            value={formik.values.creditlimit}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.creditlimit && formik.errors.creditlimit ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.creditlimit}</p>
@@ -183,10 +162,8 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             name="currentbalance"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={currentbalanceI || 0}
             decimalsLimit={2}
             prefix="$"
@@ -195,13 +172,7 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             } catch (error) {
               formik.values.currentbalance='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="currentbalance" 
-            value={formik.values.currentbalance}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.currentbalance && formik.errors.currentbalance ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.currentbalance}</p>
@@ -215,26 +186,17 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             name="percentoverduedebt"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //placeholder="Please enter a number"
             defaultValue={percentoverduedebtI || 0}
             decimalsLimit={2}
-            //prefix="%"
             suffix="%"
             onValueChange={(value) => {try {
               formik.values.percentoverduedebt=parseFloat(value || '0').toString();
             } catch (error) {
               formik.values.percentoverduedebt='0';
             }}}
-            // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
           />
-          {/* <Input type="text" name="percentoverduedebt" 
-            value={formik.values.percentoverduedebt}
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-          /> */}
           {formik.touched.percentoverduedebt && formik.errors.percentoverduedebt ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
                   <p>{formik.errors.percentoverduedebt}</p>
@@ -250,9 +212,6 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
             Siguiente
           </button>
         </div>
-        {/* <div className="flex justify-center mt-4">
-          <Button type="submit">Siguiente</Button>
-        </div> */}
       </form>  
     </div>
   )

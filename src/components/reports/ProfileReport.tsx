@@ -5,7 +5,6 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import {PDFDownloadLink} from '@react-pdf/renderer'
 import ReportPDF from "../ReportPDF";
 import { BsFileEarmarkPdf } from "react-icons/bs";
-//import { Expense } from "@/interfaces/Expenses";
 import AttachedPDF from "../AttachedPDF";
 import { UsrBack } from "@/interfaces/User";
 import {Tooltip} from "@nextui-org/react";
@@ -14,9 +13,7 @@ import { getCostByReportMin } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
 
 export default function ProfileReport({report, send, token, user, id, dates}: 
-                        {report:Report, send:Function, id:string, 
-                          token: string, user:UsrBack, dates: DateReport[]}){
-// console.log('report ', report);
+  {report:Report, send:Function, id:string, token: string, user:UsrBack, dates: DateReport[]}){
   const [costsReport, setCostReport] = useState<CostReport[]>([]);
   const {oneReport} = useOneReportStore();
 
@@ -35,7 +32,6 @@ export default function ProfileReport({report, send, token, user, id, dates}:
       } catch (error) {
         return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
       }
-      console.log('costs rep => ', costsRep);
       setCostReport(costsRep);
     }
     fetchCosts();
@@ -65,15 +61,12 @@ export default function ProfileReport({report, send, token, user, id, dates}:
       <div className="w-full h-full mt-3">
         <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
           <div>
-            {/* <p>{report.project.photo? report.project.photo: '/img/projects/default.svg'}</p> */}
             <img src={ oneReport?.project.photo? oneReport.project.photo: '/img/projects/default.svg'} alt="logo" 
               className="w-28 h-auto" />
           </div>
           <div>
             <p className="text-blue-500">{oneReport?.project.title}</p>
             <p className="text-slate-500">{oneReport?.project.code}</p>
-            {/* <p className="text-slate-500">{report.project.types.name}</p>
-            <p className="text-slate-500">{report.project.account}</p> */}
             <div className="mt-3 border-t border-slate-500 pt-2">
               <p className="text-blue-500">{oneReport?.name}</p>
               <p className="text-slate-500">{oneReport?.account}</p>
@@ -141,24 +134,20 @@ export default function ProfileReport({report, send, token, user, id, dates}:
             </div>
             <div>
               <p className="text-slate-500">Descargar</p>
-              {/* <p className="text-blue-600">{"PDF"}</p> */}
               <div className="flex justify-center gap-x-5 mt-2">
                 {costsReport.length > 0 && oneReport && (
                   <PDFDownloadLink document={<ReportPDF report={oneReport} costs={costsReport} />} fileName={oneReport.name} >
-                  {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
                     {({loading, url, error, blob}) => 
                       loading? (
                         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
                             placement="right" className="text-blue-500 bg-white">
                           <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                          {/* // <button type="button">Loading document...</button> */}
                         </Tooltip>
                       ) : (
                         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
                             placement="right" className="text-blue-500 bg-white">
                           <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
                         </Tooltip>
-                        // <button type="button">Download now!</button>
                       ) }
                   </PDFDownloadLink>
                 )}
@@ -171,10 +160,8 @@ export default function ProfileReport({report, send, token, user, id, dates}:
                       {({loading, url, error, blob}) => 
                         loading? (
                           <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                          // <button type="button">Loading document...</button>
                         ) : (
                           <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-                          // <button type="button">Download now!</button>
                         ) }
                     </PDFDownloadLink>
                   </Tooltip>

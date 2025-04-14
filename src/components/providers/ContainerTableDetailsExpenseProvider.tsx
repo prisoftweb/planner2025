@@ -20,10 +20,17 @@ import ReportPaymentPDF from "./ReportPaymentPDF"
 import { UsrBack } from "@/interfaces/User"
 import { ProviderMin } from "@/interfaces/Providers"
 
+type Props = {
+  data:DetailExpensesTableProvider[], 
+  token:string, 
+  expenses:CostPayment[], 
+  user: UsrBack, 
+  provider: ProviderMin, 
+  payment: OnePayment
+}
+
 export default function ContainerTableDetailsExpenseProvider({data, token, expenses, user, 
-    provider, payment}:
-  {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
-    user: UsrBack, provider: ProviderMin, payment: OnePayment}) {
+  provider, payment}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   
@@ -50,8 +57,6 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
     },
   }
 
-  console.log('payment => ', payment);
-
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap gap-y-3">
@@ -70,20 +75,17 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
               
               <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider}
                                             payment={payment} user={user} />} fileName={`${provider.name}.pdf`} >
-              {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
                 {({loading, url, error, blob}) => 
                   loading? (
                     <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
                         placement="right" className="text-blue-500 bg-white">
                       <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                      {/* // <button type="button">Loading document...</button> */}
                     </Tooltip>
                   ) : (
                     <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
                         placement="right" className="text-blue-500 bg-white">
                       <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
                     </Tooltip>
-                    // <button type="button">Download now!</button>
                   ) }
               </PDFDownloadLink>
             </div>

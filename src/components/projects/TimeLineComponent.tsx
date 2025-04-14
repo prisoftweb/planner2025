@@ -1,23 +1,22 @@
 import * as React from 'react';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-// import FastfoodIcon from '@mui/icons-material/Fastfood';
-import LaptopMacIcon from '@mui/icons-material/LaptopMac';
-import HotelIcon from '@mui/icons-material/Hotel';
-import RepeatIcon from '@mui/icons-material/Repeat';
-import Typography from '@mui/material/Typography';
-import Image from 'next/image';
+// import Timeline from '@mui/lab/Timeline';
+// import TimelineItem from '@mui/lab/TimelineItem';
+// import TimelineSeparator from '@mui/lab/TimelineSeparator';
+// import TimelineConnector from '@mui/lab/TimelineConnector';
+// import TimelineContent from '@mui/lab/TimelineContent';
+// import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+// import TimelineDot from '@mui/lab/TimelineDot';
+// // import FastfoodIcon from '@mui/icons-material/Fastfood';
+// import LaptopMacIcon from '@mui/icons-material/LaptopMac';
+// import HotelIcon from '@mui/icons-material/Hotel';
+// import RepeatIcon from '@mui/icons-material/Repeat';
+// import Typography from '@mui/material/Typography';
+// import Image from 'next/image';
 import Chip from '../providers/Chip';
 
 import { ITimeLineProject } from '@/interfaces/Projects';
 
 export default function TimelineComponent({timeLine}: {timeLine: ITimeLineProject[]}) {
-  console.log('time line => ', timeLine);
 
   return(
     <ol className="relative border-s border-gray-400 dark:border-gray-700 ml-10">                  
@@ -26,10 +25,7 @@ export default function TimelineComponent({timeLine}: {timeLine: ITimeLineProjec
             <span className="absolute flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
               <img className="rounded-full shadow-lg" src={t.conditionstatus?.user?.photo || '/img/users/default.jpg' } alt="user"/>
             </span>
-            {/* <div className="items-center justify-between p-4 bg-white border border-gray-200 rounded-lg shadow-xs sm:flex dark:bg-gray-700 dark:border-gray-600"> */}
             <div className="items-center justify-between px-10 bg-white dark:bg-gray-700 dark:border-gray-600">
-              {/* <time className="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">just now</time>
-              <div className="text-sm font-normal text-gray-500 dark:text-gray-300">Bonnie moved <a href="#" className="font-semibold text-blue-600 dark:text-blue-500 hover:underline">Jese Leos</a> to <span className="bg-gray-100 text-gray-800 text-xs font-normal me-2 px-2.5 py-0.5 rounded-sm dark:bg-gray-600 dark:text-gray-300">Funny Group</span></div> */}
               <Chip label={t.conditionstatus.condition.name} color={t.conditionstatus.condition.color} width='w-40' />
              <p className='text-xs'>{t.conditionstatus.date.substring(0, 10)}</p>
             </div>

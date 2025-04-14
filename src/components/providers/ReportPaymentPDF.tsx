@@ -17,22 +17,15 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
     containerTable: {
       paddingVertical: '10px',
       marginTop: '20px'
-      // borderBottom: '1px solid gray',
-      // borderTop: '1px solid gray'
     },
     header: {
-      //flex: 1,
       fontSize: '8px',
-      //textAlign: 'center',
       padding: '2px',
       borderBottom: '1px solid black',
     },
     element: {
-      //flex: 1,
       fontSize: '8px',
-      //textAlign: 'center',
       padding: '4px',
-      //border: '1px solid black',
     },
     title: {
       fontSize: '20px',
@@ -56,7 +49,6 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
       flexDirection: 'row',
       gap: '2px',
       fontSize: '10px',
-      // alignItems: 'center'
     },
     headerPage: {
       alignItems: 'center',
@@ -64,21 +56,16 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
       marginTop: '5px',
     },
     containerData: {
-      //paddingLeft: '20px',
       marginTop: '3px',
       paddingTop: '9px',
       paddingBottom: '3px',
       border: '1px solid gray',
     },
     textLeft: {
-      // width: '30%',
-      // textAlign: 'right',
       margin: '2px',
       color: 'gray'
     }, 
     textRight: {
-      // width: '30%',
-      // textAlign: 'left',
       margin: '2px',
     },
     chip: {
@@ -92,7 +79,6 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
 
   let totalAllCosts = 0;
   costs.map((c) => {
-    // totalAllCosts += Number(c.payout.replace(/[$,",", M, X]/g, ""));
     totalAllCosts += c.payout;
   });
   
@@ -160,7 +146,6 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
                   currency: 'MXN',
                   value: payment.pending
                 })}
-                {/* {MoneyFormatter(payment.pending)} */}
               </Text>
             </View>
           </View>
@@ -189,7 +174,6 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
           <View style={style.table}>
           <View style={[style.header, {flex: 1}]}><Text>#</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>PROYECTO</Text></View>
-            {/* <View style={[style.header, {flex: 3}]}><Text>INFORME</Text></View> */}
             <View style={[style.header, {flex: 7}]}><Text>DESCRIPCION</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>FECHA</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>SALDO ANTERIOR</Text></View>
@@ -201,14 +185,8 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
             <View style={style.table} key={cost.id}>
               <View style={[style.element, {flex: 1}]}><Text>{index + 1}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.project}</Text></View>
-              {/* <View style={[style.element, {flex: 3}]}><Text>{cost.report }</Text></View> */}
               <View style={[style.element, {flex: 7}]}><Text>{cost.description}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.date.substring(0, 10)}</Text></View>
-              {/* <View style={[style.element, {flex: 3}]}>
-                <Text>{cost.previoudbalanceamount}</Text>
-              </View>
-              <View style={[style.element, {flex: 3}]}><Text>{cost.payout}</Text></View>
-              <View style={[style.element, {flex: 3}]}><Text>{cost.unpaidbalanceamount}</Text></View> */}
               <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
                 currency: 'MXN',
                 value: cost.previoudbalanceamount
@@ -225,15 +203,6 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
             </View>
           ) )}
         </View>
-
-        {/* <View style={[style.inLineText, {marginLeft: '30px', marginTop: '10px'}]}>
-          <Text style={{textDecoration: 'underline'}}>Total del pago :</Text>
-          <Text style={{textDecoration: 'underline'}}>{CurrencyFormatter({
-              currency: 'MXN',
-              // value: report.total
-              value: totalAllCosts
-            })}</Text>
-        </View> */}
       </Page>
     </Document>
   )

@@ -4,7 +4,6 @@ import { useEffect } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog } from "@/interfaces/Catalogs";
 import WithOut from "../WithOut";
-import { Glossary } from "@/interfaces/Glossary";
 import CompanyClient from "../companies/CompanyClient";
 import { StatusTable } from "@/interfaces/Status";
 import { Options } from "@/interfaces/Common";
@@ -32,8 +31,6 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
             text="Aqui puedes agregar los estatus a los catalogos"
             title="Estatus">
                 <></>
-                {/* <ButtonNew catalogOptions={catalogOptions} token={token}
-          descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} /> */}
           </WithOut>
         </CompanyClient>
       </>
@@ -66,14 +63,10 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
       types += type.glossary.name + ', ';
     });
 
-    //console.log('arr statuses => ', arrStatuses);
-    //console.log('arr colors => ', arrColors);
-
     table.push({
       catalog: cat.name,
       collection: cat.collection,
       id: cat._id,
-      //statuses: statuses,
       statuses: {
         arrStatuses,
         arrColors
@@ -82,19 +75,6 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
       types
     })
   });
-
-  // const glosariesOptions:Options[] = [];
-  // const descGlossaries:Options[] = [];
-  // glosaries.map((gloss) => {
-  //   glosariesOptions.push({
-  //     label: gloss.name,
-  //     value: gloss._id
-  //   });
-  //   descGlossaries.push({
-  //     label: gloss.description,
-  //     value: gloss.id
-  //   })
-  // });
 
   return(
     <>

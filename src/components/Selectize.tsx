@@ -2,15 +2,11 @@
 
 import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import { useRouter } from 'next/navigation'
 import { Options } from '@/interfaces/Common'
 
 export default function Selectize({options, routePage, subpath, onChangeFunction=() => console.log('')}: 
-                        {options:Options[], routePage:string, 
-                          subpath:string, onChangeFunction?: Function}){
+  {options:Options[], routePage:string, subpath:string, onChangeFunction?: Function}){
   
-  const router = useRouter();
-
   const DropdownIndicator = (props: any) => {
     return (
       components.DropdownIndicator && (
@@ -29,13 +25,7 @@ export default function Selectize({options, routePage, subpath, onChangeFunction
     }),
   }
 
-  // const onChangeUser = (value:string) => {
-  //   router.push(`/users/${value}?tab=1`)
-  // }
-
   const onChange = (value:string) => {
-    //onChangeFunction();
-    //router.push(`/${routePage}/${value}${subpath}`)
     window.location.replace(`/${routePage}/${value}${subpath}`);
   }
   

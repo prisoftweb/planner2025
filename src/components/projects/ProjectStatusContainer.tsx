@@ -11,15 +11,21 @@ import GuaranteeProject from "./GuaranteeProject"
 import ProfileProject from "./ProfileProject"
 import ProgressProject from "./ProgressProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
-import DashboardProfileProject from "./DashboardProfileProject"
 import StatusProjectComponent from "./StatusProjectComponent"
 
+type Props = {
+  project:OneProjectMin, 
+  token:string, 
+  id:string,
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  optConditions:Options[],
+  user:string
+}
+
 export default function ProjectStatusContainer({project, token, id, optCategories, optClients, 
-                             optTypes, optConditions, user}: 
-                            {project:OneProjectMin, token:string, id:string,
-                              optClients:Options[], optCategories:Options[], 
-                              optTypes:Options[], optConditions:Options[],
-                              user:string}){
+  optTypes, optConditions, user}: Props){
 
   const [opt, setOpt] = useState<number>(1);
   const {updateOneProjectStore} = useOneProjectsStore();
@@ -31,7 +37,6 @@ export default function ProjectStatusContainer({project, token, id, optCategorie
   const view = (
     opt===1? (<div className="mt-3 w-full md:max-w-2xl lg:w-full bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
-        {/* <DashboardProfileProject token={token} id={id} /> */}
         <StatusProjectComponent token={token} project={project._id} />
       </div>) : 
 (opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
@@ -73,7 +78,6 @@ export default function ProjectStatusContainer({project, token, id, optCategorie
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        {/* <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2"  */}
         <div className="flex w-full px-2 flex-wrap space-x-2"
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>

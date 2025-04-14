@@ -3,16 +3,13 @@
 import { TrashIcon } from '@heroicons/react/24/solid';
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
-import { useRouter } from 'next/navigation';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { TableProvider } from '@/interfaces/Providers';
 import { removeContactProvider } from '@/app/api/routeContacts';
 import { Contact } from '@/interfaces/Contacts';
 
 export default function DeleteContact({token, contact, idProv} : 
-                    {token : string, contact:Contact, idProv:string}){
-  const router = useRouter()
-
+  {token : string, contact:Contact, idProv:string}){
+  
   const deleteContact = async (idp:string, id:string, name:string)  => {
     confirmAlert({
       title: 'Confirmacion para eliminar contacto?',
@@ -33,12 +30,9 @@ export default function DeleteContact({token, contact, idProv} :
                     window.location.reload();
                   }, 500)
                 } else {
-                  //showToastMessageError('El contacto no pudo ser eliminado..');
                   showToastMessageError(res.toString());
-                  //router.refresh()
                 }
               } catch (error) {
-                console.log(error);
                 console.log('Error al eliminar contacto');
               }
             break;

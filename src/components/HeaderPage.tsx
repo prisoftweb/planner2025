@@ -2,7 +2,7 @@
 import { TbArrowNarrowLeft } from "react-icons/tb";
 
 export default function Header({children, title, previousPage}: 
-                    {children:JSX.Element, title:string, previousPage:string}){
+  {children:JSX.Element, title:string, previousPage:string}){
   return(
     <>
       <div className="flex justify-between items-center">

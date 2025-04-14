@@ -1,14 +1,21 @@
 import Label from "../Label"
 import Button from "../Button";
-import CurrencyInput from "react-currency-input-field";
 import Input from "../Input";
 import TextArea from "../TextArea";
 import { useState } from "react";
 
+type Props = {
+  paymentPlugin:string, 
+  setPaymentPlugin:Function, 
+  date:string, 
+  setDate:Function, 
+  comments:string, 
+  setComments: Function, 
+  nextStep:Function
+}
+
 export default function PaymentPlugin({comments, date, paymentPlugin, setComments, setDate, 
-    setPaymentPlugin, nextStep}: 
-  {paymentPlugin:string, setPaymentPlugin:Function, date:string, setDate:Function, 
-    comments:string, setComments: Function, nextStep:Function}) {
+  setPaymentPlugin, nextStep}: Props) {
 
   const [paymentPluaginLabel, setPaymentPluginLabel] = useState<string>('');
   const [dateLabel, setDateLabel] = useState<string>('');
@@ -51,17 +58,6 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
             value={paymentPlugin.replace(/[$,","]/g, "") || ''}
             autoFocus
           />
-          {/* <CurrencyInput
-            id="creditlimit"
-            name="creditlimit"
-            className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
-              focus:border-slate-700 outline-0"
-            onChange={(e) => setPaymentPlugin(e.target.value.replace(/[$]/g, ""))}
-            defaultValue={paymentPlugin.replace(/[$,","]/g, "") || 0}
-            decimalsLimit={2}
-            prefix="$"
-            autoFocus
-          /> */}
           <p className="text-red-500" >{paymentPluaginLabel}</p>
         </div>
         <div>

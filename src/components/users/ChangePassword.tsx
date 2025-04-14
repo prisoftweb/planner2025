@@ -72,7 +72,6 @@ export default function ChangePassword({token, name, id}:{token:string, name:str
       <HeaderForm img="/img/user.svg" subtitle="Contraseña de acceso" 
         title="Cambiar contraseña"
       />
-        {/* <form onSubmit={formik.handleSubmit} className="mt-4"> */}
         <form onSubmit={formik.handleSubmit} className="mt-4 border border-gray-200 rounded-lg shadow p-4 space-y-5">
           <div>
             <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Contraseña actual</p></Label>

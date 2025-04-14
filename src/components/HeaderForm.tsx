@@ -1,6 +1,6 @@
 
 export default function HeaderForm({img, title, subtitle}: 
-                {img:string, title:string, subtitle:string}){
+  {img:string, title:string, subtitle:string}){
   return(
     <>
       <div className="flex mt-2">

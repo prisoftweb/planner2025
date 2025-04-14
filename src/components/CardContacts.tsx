@@ -1,11 +1,10 @@
-//import DeleteContactClient from "./DeleteContactClient"
 import { Contact } from "@/interfaces/Contacts"
 import Chip from "./providers/Chip"
 import DeletePhoneContact from "./DeletePhoneContact"
 import IconText from "./providers/IconText"
 
 export default function CardContacts({contact, token, children}: 
-                      {contact:Contact, token:string, children:JSX.Element}){
+  {contact:Contact, token:string, children:JSX.Element}){
   
   type Phone = {
     pNumber: string,

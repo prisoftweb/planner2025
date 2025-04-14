@@ -6,9 +6,8 @@ import {showToastMessage, showToastMessageError, showToastMessageWarning, showTo
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export default function DeleteElementComponent({token, id, name, remove, 
-                        colorIcon='text-red-500 hover:text-red-300'} : 
-                                {token : string, name:string, id:string, 
-                                  remove:Function, colorIcon?: string}){
+  colorIcon='text-red-500 hover:text-red-300'} : 
+  {token : string, name:string, id:string, remove:Function, colorIcon?: string}){
   
   const deleteElement = async ()  => {
   

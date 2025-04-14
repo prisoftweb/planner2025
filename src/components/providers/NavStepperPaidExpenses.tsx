@@ -37,7 +37,6 @@ export default function NavStepperPaidExpenses({index, changeTab}: {index:number
           </li>
 
           <li 
-            // onClick={() => changeTab(1)}
           >
             <div className={`flex items-center justify-center border-t sm:border-t-0 sm:border-l border-gray-300
                 gap-2 p-4 ${index === 2? 'bg-blue-500 text-white': (index > 2? 'bg-green-500 text-white': 'text-gray-500')}`}>

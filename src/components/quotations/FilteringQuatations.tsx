@@ -8,9 +8,6 @@ import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
-import { getClientsLV } from "@/app/api/routeClients"
-import { getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs"
-import { showToastMessageError } from "../Alert"
 import { useOptionsQuotations } from "@/app/store/QuotationStates"
 
 export default function FilteringQuatations({showForm, FilterData, maxAmount, token }: 
@@ -37,51 +34,15 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
     new DateObject().setDay(4).add(1, "month")
   ]);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const res = await getClientsLV(token);
-  //     if(typeof(res)==='string'){
-  //       showToastMessageError(res);
-  //     }else{
-  //       // setOptClientsState(res);
-  //       setOptClientsState([{
-  //         label: 'TODOS',
-  //         value: 'all'
-  //       }, ...res]);
-  //       // setClients([res[0].value]);
-  //       setClients(['all']);
-  //     }
-
-  //     const cons = await getCatalogsByNameAndCondition(token, 'Quotations');
-  //     if(typeof(cons)==='string'){
-  //       showToastMessageError(cons);
-  //     }else{
-  //       // setOptConditionsState(cons);
-  //       setOptConditionsState([{
-  //         label: 'TODOS',
-  //         value: 'all'
-  //       }, ...cons]);
-  //       // setConditions([cons[0].value]);
-  //       setConditions(['all']);
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, []);
-
   const handleValues = (dateValues: DateObject[]) => {
-    console.log('handle values => ', dateValues);
-    console.log('handle values leng => ', dateValues.length);
     setValues(dateValues);
     if(dateValues.length > 1){
-      console.log('filter date ');
       setFirstDate(new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day));
       setSecondDate(new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
       filterfunction(conditions, clients, minValue, maxValue, 
         new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day), 
         new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
     }else{
-      console.log('else => ');
       if(values.length > 0){
         setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
       }
@@ -151,8 +112,6 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
             onInput={(e) => {
               handleInput(e);
             }}
-            //baseClassName='multi-range-slider-black'
-            //style={{" border: 'none', boxShadow: 'none', padding: '15px 10px' "}}
             style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
                 backgroundColor: 'white', 'zIndex': '0'}}
             label='false'
@@ -180,8 +139,6 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
-            //onChange={setValues}
-            // onChange={(e: any) => setValues(e)}
             onChange={(e: any) => {
               handleValues(e);
             }}

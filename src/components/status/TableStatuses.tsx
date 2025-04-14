@@ -1,23 +1,17 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
 import RemoveElement from "../RemoveElement";
-//import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
-//import { useState } from "react";
 import { StatusTable } from "@/interfaces/Status";
-//import { RemoveGlossary } from "@/app/api/routeGlossary";
 import { RemoveCatalog } from "@/app/api/routeCatalogs";
 import { showToastMessageError } from "../Alert";
 import { useListsStore } from "@/app/store/listStore";
 
 export default function TableStatus({data, token}:
-                        {data:StatusTable[], token:string}){
+  {data:StatusTable[], token:string}){
   
   const columnHelper = createColumnHelper<StatusTable>();
 
-  // const [editGloss, setEditGloss] = useState<boolean>(false);
-  // const [glossEdit, setGlossEdit] = useState<GlossaryTable>();
   const {listsStore, updateListsStore} = useListsStore();
 
   const delReport = async(id: string) => {
@@ -55,7 +49,6 @@ export default function TableStatus({data, token}:
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <div className="w-5 h-5 bg-blue-700"></div>
-          {/* <DeleteElement id={row.original.id} name={row.original.catalog} remove={RemoveCatalog} token={token} /> */}
           <RemoveElement id={row.original.id} name={row.original.catalog} token={token} 
               remove={RemoveCatalog} removeElement={delReport} />
         </div>
@@ -83,7 +76,6 @@ export default function TableStatus({data, token}:
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        //<p className="">{row.original.statuses}</p>
         <div className="flex items-center gap-x-1 gap-y-1 flex-wrap">
           {row.original.statuses.arrStatuses.map((st, index:number) => (
             <div className="flex items-center gap-x-1" key={index}>
@@ -112,7 +104,6 @@ export default function TableStatus({data, token}:
   
   return(
     <>
-      {/* {editGloss && <NewGlossary token={token} glossary={glossEdit || ''} showForm={setEditGloss} />} */}
       <Table columns={columns} data={data} placeH="Buscar catalogo.." />
     </>
   )

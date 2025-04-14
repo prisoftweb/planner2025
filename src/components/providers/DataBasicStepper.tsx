@@ -1,4 +1,3 @@
-import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -107,9 +106,6 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           showToastMessage(res.message);
           updateProviderStore([...providerStore, res.prov]);
           updateHaveNewProvider(true);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -125,9 +121,6 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
 
   return(
     <div className="w-full">
-      {/* <HeaderForm img="/nuevoIcono.jpg" subtitle="Datos esenciales del proveedor" 
-        title="Información basica"
-      /> */}
       <div className="my-5">
         <BasicBarStepper index={0} />
       </div>
@@ -172,7 +165,6 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           ) : null}
         </div>
         <div className="inline-flex items-center">
-          {/* <p className="mr-3">Linea de credito</p> */}
           <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} 
@@ -190,13 +182,6 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           </div>
         </div>
         <div className="flex justify-end mt-8 space-x-5">
-          {/* <button type="button" 
-            onClick={onClickSave}
-            className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
-                hover:bg-slate-600"
-          >
-            Guardar
-          </button> */}
           <Button onClick={onClickSave} type="button">Guardar</Button>
           <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
@@ -204,7 +189,6 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           >
             Siguiente
           </button>
-          {/* <Button type="submit">Siguiente</Button> */}
         </div>
       </form>  
     </div>

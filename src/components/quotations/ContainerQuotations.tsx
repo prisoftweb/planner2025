@@ -57,14 +57,7 @@ export default function ContainerQuotations({quotations, token, user}:
         showToastMessageError(res);
         fetchRef.current=false;
       }else{
-        // setOptClients(res);
-        // updateClients([{
-        //   label: 'TODOS',
-        //   value: 'all'
-        // }, ...res]);
         updateClients(res);
-        // setClients([res[0].value]);
-        // setClients(['all']);
       }
 
       const cons = await getCatalogsByNameAndCondition(token, 'Quotations');
@@ -72,13 +65,6 @@ export default function ContainerQuotations({quotations, token, user}:
         fetchRef.current=false;
         showToastMessageError(cons);
       }else{
-        // setOptConditions(cons);
-        // setOptConditions([{
-        //   label: 'TODOS',
-        //   value: 'all'
-        // }, ...cons]);
-        // // setConditions([cons[0].value]);
-        // setConditions(['all']);
         updateConditions(cons);
       }
 
@@ -88,9 +74,6 @@ export default function ContainerQuotations({quotations, token, user}:
         showToastMessageError(opUs);
       }else{
         updateUsers(opUs);
-        // setOptUsers(opUs);
-        // const i = opUs.findIndex((o) => o.value===usr);
-        // setUser(opUs[i].value);
       }
 
       const opVat: Options[] = await GetVatsLV(token);
@@ -98,8 +81,6 @@ export default function ContainerQuotations({quotations, token, user}:
         showToastMessageError(opVat);
       }else{
         updateVats(opVat);
-        // setOptVats(opVat);
-        // setIdVat(opVat[0].value);
       }
 
       const opCats: Options[] = await getCatalogsByNameAndCategory(token, 'Quotations');
@@ -107,8 +88,6 @@ export default function ContainerQuotations({quotations, token, user}:
         showToastMessageError(opCats);
       }else{
         updateCategories(opCats);
-        // setOptCategory(opCats);
-        // setCategory(opCats[0].value);
       }
       
       const opTyps: Options[] = await getCatalogsByNameAndType(token, 'Quotations');
@@ -116,8 +95,6 @@ export default function ContainerQuotations({quotations, token, user}:
         showToastMessageError(opTyps);
       }else{
         updateTypes(opTyps);
-        // setOptTypes(opTyps);
-        // setType(opTyps[0].value);
       }
     }
     fetchData();
@@ -146,14 +123,12 @@ export default function ContainerQuotations({quotations, token, user}:
   if(quotationsState.length <= 0 ){
       return (
         <>
-          {/* <Navigation user={user} /> */}
           <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
             <WithOut img="/img/projects.jpg" subtitle="Cotizaciones"
               text="Agregar una cotizacion para asignar
                       luego en proyectos de la empresa"
               title="Cotizaciones ">
                 <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
-                {/* <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button> */}
             </WithOut>
           </div>
           {showNewQuotation && <NewQuotation showForm={handleShowNewQuotation} token={token} usr={user._id} 

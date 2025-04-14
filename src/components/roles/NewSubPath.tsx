@@ -9,11 +9,10 @@ import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { createRoute, updateRoute } from "@/app/api/routeRoles"
 import { Resource } from "@/interfaces/Roles"
-//import TextArea from "../TextArea"
 import { useRef } from "react"
 
 export default function NewSubPath({showForm, token, route}: 
-                    {showForm:Function, token:string, route:Resource}){
+  {showForm:Function, token:string, route:Resource}){
 
   const refRequest = useRef(true);
   const formik = useFormik({
@@ -125,16 +124,6 @@ export default function NewSubPath({showForm, token, route}:
             value={formik.values.description}
             rows={4}
           />
-          {/* <TextArea name="description"
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.description}
-          /> */}
-          {/* <Input type="description" name="description" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.description}
-          /> */}
           {formik.touched.description && formik.errors.description ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.description}</p>

@@ -4,10 +4,16 @@ import { PlusCircleIcon, CheckCircleIcon, TrashIcon } from "@heroicons/react/24/
 import Select from 'react-select'
 import { Options } from '@/interfaces/Common'
 
+type Props = {
+  pushSubPath:Function,
+  bandPlus:boolean, 
+  deleteSubPath:Function, 
+  index:number, 
+  updateCount: Function
+}
+
 export default function NewSubPathComponent({pushSubPath, bandPlus, deleteSubPath,
-                          index, updateCount}: {pushSubPath:Function,
-                          bandPlus:boolean, deleteSubPath:Function, index:number, 
-                          updateCount: Function}){
+  index, updateCount}: Props){
   
   const options:Options[] = [
     {
@@ -37,7 +43,6 @@ export default function NewSubPathComponent({pushSubPath, bandPlus, deleteSubPat
   
 
   const onPlus = () =>{
-    //setAdd(true);
     if(subpath !== '' && description !== '' && saved){
       setAdd(true);
       updateCount();
@@ -75,7 +80,6 @@ export default function NewSubPathComponent({pushSubPath, bandPlus, deleteSubPat
           className='w-40' 
           options={options}
           maxMenuHeight={200}
-          //placeholder='Buscar ...'
           value={optionsType}
           onChange={(value:any) => {setSubpath(value.value); setOptionsType(value)}}
         />

@@ -1,7 +1,6 @@
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { OneProjectMin } from "@/interfaces/Projects";
-import TextArea from "../TextArea";
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
@@ -30,12 +29,6 @@ export default function ProgressHistoryProject({project}: {project:OneProjectMin
             <p className="text-slate-700 text-lg">{project.progress}%</p>
           </div>
         </div>
-        {/* <div>
-          <Label htmlFor="notes"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Notes</p></Label>
-          <TextArea 
-            value={''} disabled
-          />
-        </div> */}
       </div>  
     </div>
   )

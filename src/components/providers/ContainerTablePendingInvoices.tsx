@@ -17,10 +17,18 @@ import { showToastMessageError } from "../Alert"
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions"
 import { useEffect } from "react"
 
+type Props = {
+  data:HistoryExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  user: string, 
+  provider: Provider, 
+  optTypes: Options[], 
+  condition: string
+}
+
 export default function ContainerTablePendinginvoices({data, token, expenses, user, 
-    provider, optTypes, condition}:
-  {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
-    user: string, provider: Provider, optTypes: Options[], condition: string}) {
+  provider, optTypes, condition}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
@@ -41,8 +49,6 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   }
 
   const handleExpensesSelected = (value: HistoryExpensesTable[]) => {
-    // const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' 
-    //                     && c.Estatus._id !== '67378f77d846bbd16e1a8714');
     const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
                                         c.Estatus._id !== '661eade6f642112488c85fad' &&
                                         c.Estatus._id !== '661eaa71f642112488c85f59' &&
@@ -98,7 +104,6 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
 
   const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return paidValidation(exp, isPaid);
     }
@@ -116,13 +121,9 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   const conditionValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, conditions:string[], isPaid: number) => {
 
-    console.log('conditions => ', conditions);
     if(conditions.includes('all')){
-      console.log('conditions all');
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-      console.log('validation condition');
-      console.log('expense => ', exp);
       // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
       //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
       //               reports, categories, types, costcenters);
@@ -137,10 +138,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
     startDate:number, endDate:number, isPaid: number) => {
 
-    console.log('filter data ');
-  
     let filtered: Expense[] = [];
-    console.log('costs providers => ', costsProvider);
     currentCostsProvider.map((expense) => {
       console.log('expense map => ', expense);
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
@@ -151,8 +149,6 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
 
     setCostProvider(filtered);
     setDataTable(ExpenseDataToTableHistoryProviderData(filtered));
-    // setExpensesFiltered(filtered);
-    // setDataExpenses(ExpenseDataToTableHistoryProviderData(filtered));
   }
   
   return (
@@ -163,7 +159,6 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
           <IconText text={provider?.tradename || ''} size="w-8 h-8" sizeText="" />
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
-        {/* <Selectize options={options} routePage="providers" subpath="/invoiceHistory" /> */}
         <div className="flex gap-x-2">
           <SearchInTable placeH={"Buscar gasto.."} />
           <div className={`w-24`}>

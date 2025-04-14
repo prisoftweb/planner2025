@@ -33,7 +33,6 @@ export default function ButtonDeleteUser({token, user} : {token : string, user:a
                   }, 2000)
                 } else {
                   showToastMessageError('El usuario no pudo ser eliminado..');
-                  //router.refresh()
                 }
               } catch (error) {
                 console.log('Error al eliminar usuario');

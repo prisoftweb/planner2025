@@ -3,7 +3,7 @@ import { TbArrowNarrowLeft } from "react-icons/tb";
 import SearchInTable from "./SearchInTable";
 
 export default function Header({children, title, placeHolder}: 
-          {children:JSX.Element, title:string, placeHolder:string}){
+  {children:JSX.Element, title:string, placeHolder:string}){
   return(
     <>
       <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">

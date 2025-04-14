@@ -6,7 +6,7 @@ import { useOneProjectsStore } from "@/app/store/projectsStore";
 export default function ProfileProject({project}: 
   {project:OneProjectMin}){
   
-  const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
+  const {oneProjectStore} = useOneProjectsStore();
 
   const amount = CurrencyFormatter({
     currency: "MXN",
@@ -17,8 +17,6 @@ export default function ProfileProject({project}:
     currency: "MXN",
     value: oneProjectStore?.guaranteefund?.amount? parseFloat(oneProjectStore.guaranteefund.amount) : 0
   });
-
-  console.log('one project store => ', oneProjectStore);
 
   return(
     <>
@@ -67,9 +65,6 @@ export default function ProfileProject({project}:
               })}</p>
             </div>
           </div>
-          {/* <div className="my-2">
-            <p className="text-slate-500">Fecha ({oneProjectStore?.date?.substring(0, 10) || 'sin fecha'})</p>
-          </div> */}
         </div>
         
         <div className="my-2 mt-2 bg-white p-3 rounded-lg 
@@ -77,7 +72,6 @@ export default function ProfileProject({project}:
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Fondo de garantia</p>
-              {/* <p className="text-blue-600">{oneProjectStore?.progress? oneProjectStore.progress: '' || '0'}</p> */}
               <p className="text-blue-600">{oneProjectStore?.guaranteefund?.porcentage || '0'} %</p>
             </div>
             <div>

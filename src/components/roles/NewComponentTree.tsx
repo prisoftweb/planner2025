@@ -10,13 +10,20 @@ import AddComponents from "./AddElements"
 import { useState, useEffect, useRef } from "react"
 import { insertComponentsTree } from "@/app/api/routeRoles"
 
-export default function NewComponentTree({showForm, token, optResources, 
-                          optRoutes, descComponents, optComponents, idTree, 
-                          routesPerResource, descRoutes}: 
-                        {showForm:Function, token:string, optResources:Options[], 
-                        optRoutes:Options[], optComponents: Options[]
-                        descComponents: Options[], idTree:string,
-                        routesPerResource:Options[], descRoutes: Options[]}){
+type Props = {
+  showForm:Function, 
+  token:string, 
+  optResources:Options[], 
+  optRoutes:Options[], 
+  optComponents: Options[]
+  descComponents: Options[], 
+  idTree:string,
+  routesPerResource:Options[], 
+  descRoutes: Options[]
+}
+
+export default function NewComponentTree({showForm, token, optResources, optRoutes, 
+  descComponents, optComponents, idTree, routesPerResource, descRoutes}: Props){
                           
   const [components, setComponents] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);

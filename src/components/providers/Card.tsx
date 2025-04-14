@@ -8,7 +8,6 @@ export default function Card({children, link, p1, p2, p3}:
         <p>{p1}</p>
         <div className="flex items-center text-2xl sm:text-4xl my-2">
           <div className="bg-sky-700 p-2 mr-5 text-white rounded-lg">
-            {/* <EnvelopeIcon width={20} height={20} /> */}
             {children}
           </div>
           <p className="text-sky-700">{p2}</p>

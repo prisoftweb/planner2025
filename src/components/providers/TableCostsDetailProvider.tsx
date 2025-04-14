@@ -2,7 +2,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { useState, useEffect, useRef } from "react";
-import { Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
@@ -13,26 +12,24 @@ import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 import { CostPayment } from "@/interfaces/Payments";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
+type Props = {
+  data:DetailExpensesTableProvider[], 
+  token:string, 
+  expenses:CostPayment[], 
+  user: string, 
+  isFilter:boolean, 
+  setIsFilter:Function 
+}
+
 export default function TableCostsDetailProvider({data, token, expenses, 
-                          user, isFilter, setIsFilter }:
-                        {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
-                        user: string, isFilter:boolean, setIsFilter:Function }){
+  user, isFilter, setIsFilter }: Props){
   
   const columnHelper = createColumnHelper<DetailExpensesTableProvider>();
   const refExpenses = useRef(expenses);
   
   const [dataExpenses, setDataExpenses] = useState(data);
-  const [expensesFiltered, setExpensesFiltered] = useState<CostPayment[]>(expenses);
   
   const handleIsFilter = (value: boolean) => {
-    // if(value){
-    //   if(!refFilter.current){
-    //     refFilter.current = true;
-    //     setDataExpenses(ExpenseDataToTableData(refExpenses.current));
-    //   }
-    // }else{
-    //   refFilter.current = false;
-    // }
     setIsFilter(value);
   }
 
@@ -112,15 +109,6 @@ export default function TableCostsDetailProvider({data, token, expenses,
         )
       ),
     }),
-    // columnHelper.accessor('paid', {
-    //   header: 'Pagado',
-    //   id: 'Pagado',
-    //   cell: ({row}) => (
-    //     <div className="cursor-pointer" >
-    //         <Chip label={row.original.paid? 'Pagado': 'No pagado'} color={row.original.paid? '#0f0': '#f00'} />
-    //     </div>
-    //   ),
-    // }),
     columnHelper.accessor('date', {
       header: 'Fecha',
       id: 'fecha',
@@ -143,7 +131,6 @@ export default function TableCostsDetailProvider({data, token, expenses,
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
         >
-          {/* {row.original.previoudbalanceamount} */}
           {CurrencyFormatter({
             currency: "MXN",
             value: row.original.previoudbalanceamount
@@ -157,7 +144,6 @@ export default function TableCostsDetailProvider({data, token, expenses,
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
         >
-          {/* {row.original.payout} */}
           {CurrencyFormatter({
             currency: 'MXN',
             value: row.original.payout
@@ -171,7 +157,6 @@ export default function TableCostsDetailProvider({data, token, expenses,
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
         >
-          {/* {row.original.unpaidbalanceamount} */}
           {CurrencyFormatter({
             currency: 'MXN',
             value: row.original.unpaidbalanceamount
@@ -206,30 +191,13 @@ export default function TableCostsDetailProvider({data, token, expenses,
   }, [])
 
   const paidValidation = (exp:CostPayment, isPaid:number) => {
-    // if(isPaid===1){
-    //   return true;
-    // }else{
-    //   if(isPaid===2){
-    //     if(exp.ispaid){
-    //       return true;
-    //     }
-    //     return false;
-    //   }else{
-    //     if(!exp.ispaid){
-    //       return true;
-    //     }
-    //     return false;
-    //   }
-    // }
     return true;
   }
 
   const dateValidation = (exp:CostPayment, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return paidValidation(exp, isPaid);
-      //return true;
     }
     return false;
   }
@@ -242,49 +210,13 @@ export default function TableCostsDetailProvider({data, token, expenses,
     return false;
   }
 
-  // const projectValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
-  //                     startDate:number, endDate:number, projects:string[], 
-  //                     isPaid: number) => {
-  //   if(projects.includes('all')){
-  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //   }else{
-  //     if(exp.costs.project){
-  //       if(projects.includes(exp.costs.project._id)){
-  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const reportValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
-  //             startDate:number, endDate:number, projects:string[], 
-  //             reports:string[], isPaid: number) => {
-  //   if(reports.includes('all')){
-  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid); 
-  //   }else{
-  //     if(exp.costs.report){
-  //       if(reports.includes(exp.costs.report._id)){
-  //         return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects, isPaid);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
   const conditionValidation = (exp:CostPayment, minAmount:number, maxAmount:number, 
                   startDate:number, endDate:number, conditions:string[], isPaid: number) => {
 
     if(conditions.includes('all')){
-      // return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.costs.estatus._id)){
-        // return reportValidation(exp, minAmount, maxAmount, startDate, endDate, projects, reports, isPaid);
         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
       }
     }
@@ -302,12 +234,8 @@ export default function TableCostsDetailProvider({data, token, expenses,
       }
     });
 
-    //console.log(filtered);
-    //setFilteredExpenses(filtered);
-    setExpensesFiltered(filtered);
-    //setDataExpenses(ExpenseDataToTableData(filtered));
+    // setExpensesFiltered(filtered);
     setDataExpenses(ExpenseDataToTableDetailExpensesProviderData(filtered));
-    //setFilter(true);
   }
 
   return(

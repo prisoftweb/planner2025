@@ -79,7 +79,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
       const conts: Options[] = await fetchContacts(token, quatation.client._id);
       if(conts){
         setoptContacts(conts);
-        // setContact(conts[0].value);
         const app=conts.find((c) => c.value===quatation.applicant._id);
         setSelOpt(app? app: conts[0]);
       }
@@ -97,7 +96,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         showToastMessageError(opCats);
       }else{
         setOptCategory(opCats);
-        // setOptCategory(opCats);
         setCategory(opCats[0].value);
       }
       
@@ -106,7 +104,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         showToastMessageError(opTyps);
       }else{
         setOptTypes(opTyps);
-        // setOptTypes(opTyps);
         setType(opTyps[0].value);
       }
     }
@@ -180,7 +177,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         }
       }
     }
-    console.log('m val => ', m);
     setMessage(m);
     return val;
   }
@@ -200,12 +196,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
           discount:Number(discount)
         },
         score,
-        // condition: [
-        //   {
-        //     glossary: "67b910014643d85abda93cc0",
-        //     user
-        //   }
-        // ],
         location,
         type,
         category,
@@ -213,7 +203,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         applicant: contact,
         user 
       }
-      console.log('data => ', JSON.stringify(data));
       const create = await updateQuotation(token, data, quatation._id);
       if(typeof(create)==='string'){
         showToastMessageError(create);
@@ -281,8 +270,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
 
   const indexCli = optClients.findIndex((c) => c.value===quatation.client._id);
 
-  // const indexApli = optContacts.findIndex((c) => c.value===quatation.applicant._id);
-
   let indexType = 0;
   if(quatation?.type?._id){
     indexType=optTypes.findIndex((t) => t.value==quatation.type._id);
@@ -304,7 +291,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={haveDiscount} 
               onClick={() => setHaveDiscount(!haveDiscount)} id="discount" type="checkbox"
-              // onChange={() => console.log('')}
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                 peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -334,8 +320,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
             value={amount}
-            // onChange={setTotal}
-            //placeholder="Please enter a number"
             defaultValue={0}
             decimalsLimit={2}
             prefix="$"
@@ -361,7 +345,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
               prefix="$"
               onValueChange={(value) => {try {
                 setDiscount(value?.replace(/[$,]/g, "") || '0');
-                // handleIdVat(idVat);
                 updateIva(idVat, value?.replace(/[$,]/g, "") || '0', amount);
               } catch (error) {
                 setDiscount('0');
@@ -379,8 +362,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
               className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                 focus:border-slate-700 outline-0"
               value={vat}
-              // onChange={setTotal}
-              //placeholder="Please enter a number"
               defaultValue={0}
               decimalsLimit={2}
               prefix="$"
@@ -391,9 +372,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
             />
             {optVats.length > 0 && <SelectReact index={0} opts={optVats} setValue={handleIdVat} />}
           </div>
-          {/* {message===3 && (
-            <p className=" text-red-500">El iva es obligatorio</p>
-          )} */}
         </div>
         <div className="">
           <Label>Total</Label>
@@ -403,8 +381,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
             value={total}
-            // onChange={setTotal}
-            //placeholder="Please enter a number"
             defaultValue={'0'}
             decimalsLimit={2}
             prefix="$"
@@ -439,7 +415,6 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         <div className="">
           <Label>Solicita cotizacion</Label>
           {optUsers.length > 0 && (
-            // <SelectReact index={indexApli} opts={optContacts} setValue={handleContact} />
             <Select
               value={selOpt}
               options={optContacts}

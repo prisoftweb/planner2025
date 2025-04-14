@@ -12,12 +12,18 @@ import { useRef } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog } from "@/interfaces/Catalogs"
 
+type Props = {
+  showForm:Function, 
+  token:string, 
+  catalogOptions:Options[], 
+  glosariesOptions:Options[], 
+  descGlossaries:Options[], 
+  insertFunction:Function, 
+  opt:number
+}
+
 export default function NewStatus({showForm, token, catalogOptions, 
-                                    descGlossaries, glosariesOptions, 
-                                    insertFunction, opt}: 
-                    {showForm:Function, token:string, 
-                      catalogOptions:Options[], glosariesOptions:Options[], 
-                      descGlossaries:Options[], insertFunction:Function, opt:number}){
+  descGlossaries, glosariesOptions, insertFunction, opt}: Props){
   
   const [optCat, setOptCat] = useState<Options>(catalogOptions[0]);
   const [catalog, setCatalog] = useState<string>(catalogOptions[0].value);
@@ -116,9 +122,6 @@ export default function NewStatus({showForm, token, catalogOptions,
               })
               updateListsStore(arrCats);
               showForm(false);
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -142,9 +145,6 @@ export default function NewStatus({showForm, token, catalogOptions,
                 });
                 updateListsStore(arrCats);
                 showForm(false);
-                // setTimeout(() => {
-                //   window.location.reload();
-                // }, 500);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);
@@ -158,7 +158,6 @@ export default function NewStatus({showForm, token, catalogOptions,
                 refRequest.current = true;
                 showToastMessage('Tipos agregados exitosamente!!!');
                 const arrCats: Catalog[] = [];
-                //console.log('list store add type => ', listsStore);
                 listsStore.map((lis) => {
                   if(lis._id!==catalog){
                     arrCats.push(lis);
@@ -166,12 +165,8 @@ export default function NewStatus({showForm, token, catalogOptions,
                     arrCats.push(res);
                   }
                 });
-                //console.log('es este map? = >');
                 updateListsStore(arrCats);
                 showForm(false);
-                // setTimeout(() => {
-                //   window.location.reload();
-                // }, 500);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);

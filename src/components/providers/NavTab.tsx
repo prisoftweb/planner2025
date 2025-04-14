@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link"
 import { useState, useEffect } from "react";
 import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon, DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
@@ -26,7 +25,6 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
     },
   }
 
-  // const [tabProv, setTabProv] = useState<JSX.Element>(<></>);
   const [width, setWidth] = useState<number>(0);
   const handleResize = () => {
     setWidth(window.innerWidth);
@@ -41,7 +39,6 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
   let tabProv = <></>;
   if(width < 710){
     tabProv = <div className="flex justify-between mt-3 border-b border-blue-300">
-                    {/* <Link href={`/providers/${idProv}/profile`}> */}
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Perfil'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
@@ -49,8 +46,6 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`}
                           onClick={() => window.location.replace(`/providers/${idProv}/profile`)} />
                       </Tooltip>
-                    {/* </Link>   */}
-                    {/* <Link href={`/providers/${idProv}/invoiceHistory`}> */}
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Pendientes'>
                           <DocumentChartBarIcon
@@ -65,8 +60,6 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
                             ${tab==='3'? 'bg-green-500 rounded-lg': ''}`}
                             onClick={() => window.location.replace(`/providers/${idProv}/invoiceHistory`)} />
                       </Tooltip>
-                    {/* </Link> */}
-                    {/* <Link href={`/providers/${idProv}/advances`}> */}
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Anticipos'>
                         <CurrencyDollarIcon
@@ -74,8 +67,6 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`}
                           onClick={() => window.location.replace(`/providers/${idProv}/advances`)} />
                       </Tooltip>
-                    {/* </Link> */}
-                    {/* <Link href={`/providers/${idProv}/payments`}> */}
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Pagos'>
                         <CreditCardIcon
@@ -83,14 +74,10 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
                           ${tab==='5'? 'bg-green-500 rounded-lg': ''}`}
                           onClick={() => window.location.replace(`/providers/${idProv}/payments`)} />
                       </Tooltip>
-                    {/* </Link> */}
                   </div>                             
-    // setTabProv(icon)
   }else{
-    // setTabProv(
     tabProv = (
       <div className="flex mt-5 py-1 border-b border-blue-300">
-        {/* <Link href={`/providers/${idProv}/profile`}> */}
           <div className={`w-50 px-5 cursor-pointer ${tab==='1'? 'border-b-4 border-blue-600':''}`}
               onClick={() => window.location.replace(`/providers/${idProv}/profile`)}>
             <p className="text-blue-600">Perfil proveedor</p>

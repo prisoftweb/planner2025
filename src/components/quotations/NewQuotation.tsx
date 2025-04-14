@@ -31,8 +31,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   const {optClients, optUsers, optVats, optCategories, optTypes} = useOptionsQuotations();
 
-  // const [optClients, setOptClients] = useState<Options[]>([]);
-  // const [optUsers, setOptUsers] = useState<Options[]>([]);
   const [user, setUser]=useState<string>(usr);
   const [client, setClient] = useState<string>(optClients[0].value);
   const [notes , setNotes] = useState<string>('');
@@ -47,21 +45,15 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const [discount, setDiscount]=useState<string>('0');
   const [optContacts, setoptContacts]=useState<Options[]>([]);
   const [contact, setContact]=useState<string>('');
-  // const [optVats, setOptVats]=useState<Options[]>([]);
   const [idVat, setIdVat]=useState<string>('');
   const [message, setMessage] = useState<number>(0);
   const [selOpt, setSelOpt] = useState<Options>();
   const [heightPage, setHeightPage] = useState<number>(900);
   const [location, setLocation]=useState<string>('LOCAL');
 
-  // const refArea=useRef();
-
   const [type, setType]=useState<string>(optTypes[0]?.value);
-  // const [optTypes, setOptTypes]=useState<Options[]>([]);
-
   const [category, setCategory]=useState<string>(optCategories[0]?.value);
-  // const [optCategories, setOptCategory]=useState<Options[]>([]);
-
+  
   const handleResize = () => {
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
@@ -82,59 +74,12 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   useEffect(() => {
     const fetch = async () => {
-      // const opCli:Options[] = await getClientsLV(token);
-      // if(typeof(opCli)==='string'){
-      //   showToastMessageError(opCli);
-      // }else{
-      //   setOptClients(opCli);
-      //   setClient(opCli[0].value);
-      //   const conts = await fetchContacts(token, opCli[0].value);
-      //   if(conts){
-      //     setoptContacts(conts);
-      //     setContact(conts[0].value);
-      //     setSelOpt(conts[0]);
-      //   }
-      // }
-
       const conts = await fetchContacts(token, optClients[0].value);
       if(typeof(conts)!=='string'){
         setoptContacts(conts);
         setContact(conts[0].value);
         setSelOpt(conts[0]);
       }
-
-      // const opUs: Options[] = await getUsersLV(token);
-      // if(typeof(opUs)==='string'){
-      //   showToastMessageError(opUs);
-      // }else{
-      //   setOptUsers(opUs);
-      //   const i = opUs.findIndex((o) => o.value===usr);
-      //   setUser(opUs[i].value);
-      // }
-
-      // const opVat: Options[] = await GetVatsLV(token);
-      // if(typeof(opVat)==='string'){
-      //   showToastMessageError(opVat);
-      // }else{
-      //   setOptVats(opVat);
-      //   setIdVat(opVat[0].value);
-      // }
-
-      // const opCats: Options[] = await getCatalogsByNameAndCategory(token, 'Quotations');
-      // if(typeof(opCats)==='string'){
-      //   showToastMessageError(opCats);
-      // }else{
-      //   setOptCategory(opCats);
-      //   setCategory(opCats[0].value);
-      // }
-      
-      // const opTyps: Options[] = await getCatalogsByNameAndType(token, 'Quotations');
-      // if(typeof(opTyps)==='string'){
-      //   showToastMessageError(opTyps);
-      // }else{
-      //   setOptTypes(opTyps);
-      //   setType(opTyps[0].value);
-      // }
     }
     fetch();
   }, []);
@@ -155,10 +100,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
   const handleCategories = (value: string) => {
     setCategory(value);
   }
-
-  // const handleContact = (value: string) => {
-  //   setContact(value);
-  // }
 
   const handleScore = (value:number) => {
     setScore(value);
@@ -210,15 +151,12 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         }
       }
     }
-    console.log('m val => ', m);
     setMessage(m);
     return val;
   }
 
   const createNewQuotation = async () => {
-    console.log('create new quotation => ');
     const val = validation();
-    console.log('validation => ', val);
     if(val){
       const data = {
         title,
@@ -245,8 +183,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         applicant: contact,
         user 
       }
-
-      console.log('data create => ', JSON.stringify(data));
 
       const create = await createQuotation(token, data);
       if(typeof(create)==='string'){
@@ -311,8 +247,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
     setIdVat(value);
   }
 
-  console.log('location => ', location);
-
   return(
     <>
       <form className="z-10 absolute top-16 w-full max-w-md bg-white space-y-5 p-3 right-0" 
@@ -320,7 +254,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
         <div className="flex justify-between">
           <div className="flex mt-2 items-center">
             <img src={"/img/role.svg"} alt="logo" className="rounded-full w-8 h-auto" />
-            {/* <GiSettingsKnobs className="w-8 h-8 text-slate-600" /> */}
             <div className="ml-3">
               <p className="text-xl">Nueva cotizacion</p>
               <p className="text-gray-500 text-sm">Ingresa datos de la nueva cotizacion</p>
@@ -336,7 +269,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
             <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
               <input checked={haveDiscount} 
                 onClick={() => setHaveDiscount(!haveDiscount)} id="discount" type="checkbox"
-                // onChange={() => console.log('')}
                 className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                   appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
                   peer-checked:border-green-500 peer-checked:before:bg-green-500
@@ -367,8 +299,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                 focus:border-slate-700 outline-0"
               value={amount}
-              // onChange={setTotal}
-              //placeholder="Please enter a number"
               defaultValue={0}
               decimalsLimit={2}
               prefix="$"
@@ -394,7 +324,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
                 prefix="$"
                 onValueChange={(value) => {try {
                   setDiscount(value?.replace(/[$,]/g, "") || '0');
-                  // handleIdVat(idVat);
                   updateIva(idVat, value?.replace(/[$,]/g, "") || '0', amount);
                 } catch (error) {
                   setDiscount('0');
@@ -412,8 +341,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
                 className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                   focus:border-slate-700 outline-0"
                 value={vat}
-                // onChange={setTotal}
-                //placeholder="Please enter a number"
                 defaultValue={0}
                 decimalsLimit={2}
                 prefix="$"
@@ -424,9 +351,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               />
               {optVats.length > 0 && <SelectReact index={0} opts={optVats} setValue={handleIdVat} />}
             </div>
-            {/* {message===3 && (
-              <p className=" text-red-500">El iva es obligatorio</p>
-            )} */}
           </div>
           <div className="">
             <Label>Total</Label>
@@ -436,8 +360,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                 focus:border-slate-700 outline-0"
               value={total}
-              // onChange={setTotal}
-              //placeholder="Please enter a number"
               defaultValue={'0'}
               decimalsLimit={2}
               prefix="$"
@@ -472,7 +394,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
           <div className="">
             <Label>Solicita cotizacion</Label>
             {optUsers.length > 0 && (
-              // <SelectReact index={0} opts={optContacts} setValue={handleContact} />
               <Select
                 value={selOpt}
                 options={optContacts}
@@ -519,7 +440,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
           </div>
 
           <div className=" col-span-2">
-            {/* <Label></Label> */}
             <FormControl>
               <FormLabel id="demo-radio-buttons-group-label">Ubicacion geografica</FormLabel>
               <RadioGroup

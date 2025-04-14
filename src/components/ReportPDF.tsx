@@ -1,10 +1,9 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { Report, CostReport } from '@/interfaces/Reports'
-//import { Expense } from '@/interfaces/Expenses'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 
 export default function ReportPDF({report, costs}: 
-                {report: Report, costs: CostReport[]}){
+  {report: Report, costs: CostReport[]}){
   
   const style = StyleSheet.create({
     table: {
@@ -18,18 +17,13 @@ export default function ReportPDF({report, costs}:
       borderTop: '1px solid gray'
     },
     header: {
-      //flex: 1,
       fontSize: '8px',
-      //textAlign: 'center',
       padding: '2px',
       borderBottom: '1px solid black',
     },
     element: {
-      //flex: 1,
       fontSize: '8px',
-      //textAlign: 'center',
       padding: '4px',
-      //border: '1px solid black',
     },
     title: {
       fontSize: '20px',
@@ -61,7 +55,6 @@ export default function ReportPDF({report, costs}:
       marginTop: '5px',
     },
     containerData: {
-      //paddingLeft: '20px',
       marginTop: '3px',
       paddingTop: '9px',
       paddingBottom: '3px',
@@ -105,10 +98,6 @@ export default function ReportPDF({report, costs}:
             <Text style={style.textLeft}>Numero de informe:</Text>
             <Text style={style.textRight}>{report.account}</Text>
           </View>
-          {/* <View style={style.inLineText}>
-            <Text style={style.textLeft}>Id. del informe:</Text>
-            <Text style={style.textRight}>{report._id}</Text>
-          </View> */}
           <View style={style.inLineText}>
             <Text style={style.textLeft}>Importe del informe:</Text>
             <Text style={style.textRight}>{CurrencyFormatter({
@@ -162,8 +151,6 @@ export default function ReportPDF({report, costs}:
             <View style={style.table} key={cost._id}>
               <View style={[style.element, {flex: 1}]}><Text>{index + 1}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.project?.title}</Text></View>
-              {/* <View style={[style.element, {flex: 2}]}><Text>{cost.costcenter? (typeof(cost.costcenter)==='string'? cost.costcenter: cost.costcenter.name): 'Sin centro de costos'}</Text></View>
-              <View style={[style.element, {flex: 2}]}><Text>{cost.provider?.name || 'NA'}</Text></View> */}
               <View style={[style.element, {flex: 4}]}><Text>{cost.costocenter.concept.name + ' ( ' + cost.costocenter.category + ' )' }</Text></View>
               <View style={[style.element, {flex: 4}]}><Text>{cost.provider.name}</Text></View>
               <View style={[style.element, {flex: 5}]}><Text>{cost.description}</Text></View>
@@ -171,22 +158,12 @@ export default function ReportPDF({report, costs}:
                 <Text>{CurrencyFormatter({
                     currency: 'MXN',
                     value: (cost.costo.total) || 0
-                    //value: cost.total
                   })}</Text>
               </View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.date.substring(0, 10)}</Text></View>
             </View>
           ) )}
         </View>
-{/**
-        <View style={[style.inLineText, {marginLeft: '30px', marginTop: '10px'}]}>
-          <Text style={{textDecoration: 'underline'}}>Importe del informe :</Text>
-          <Text style={{textDecoration: 'underline'}}>{CurrencyFormatter({
-              currency: 'MXN',
-              value: totalAllCosts
-            })}</Text>
-        </View>
- */}
       </Page>
     </Document>
   )

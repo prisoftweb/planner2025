@@ -8,7 +8,7 @@ import { Phone } from '@/interfaces/Contacts';
 import { removePhoneContact } from '@/app/api/routeContacts';
 
 export default function DeletePhoneContact({token, phone, idC, numContacts} : 
-                                {token : string, phone:Phone, idC:string, numContacts:number}){
+  {token : string, phone:Phone, idC:string, numContacts:number}){
   
   const deletePhone = async (id:string, name:string)  => {
   

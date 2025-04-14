@@ -8,7 +8,6 @@ export default function RatingComponent({setValue, value, isDisabled=false, size
     <Stack spacing={1}>
       <Rating name="half-rating"
         size={size} 
-        // defaultValue={2.5} 
         precision={0.5} 
         value={value}
         onChange={(event, newValue) => {

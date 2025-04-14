@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Contact } from "@/interfaces/Contacts";
 import FormContact from "./FormContact";
-//import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Button from "../Button";
@@ -18,7 +17,6 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   const refRequest = useRef(true);
 
   const newContact = async (newContact:string) => {
-    //console.log('nuevo contacto');
     if(refRequest.current){
       refRequest.current = false;
       try {
@@ -180,13 +178,7 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
 
   return(
     <>
-      {/* <div className="px-10 mt-2">
-        <Button onClick={showNewContact}>
-          Nuevo contacto
-        </Button>
-      </div> */}
       {showContacts}
-      {/* <FormContact token={token} addNewContact={newContact} /> */}
     </>
   )
 }

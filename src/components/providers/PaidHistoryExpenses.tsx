@@ -11,10 +11,19 @@ import { Options } from "@/interfaces/Common";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 import PaymentPlugin from "./PaymentPlugin";
 
+type Props = {
+  showForm:Function, 
+  dataTable: HistoryExpensesTable[], 
+  provider: Provider, 
+  token:string, 
+  user: string, 
+  updateTable: Function, 
+  condition: string, 
+  optTypes: Options[]
+}
+
 export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
-    updateTable, condition, optTypes}: 
-  {showForm:Function, dataTable: HistoryExpensesTable[], provider: Provider, 
-    token:string, user: string, updateTable: Function, condition: string, optTypes: Options[]}) {
+  updateTable, condition, optTypes}: Props) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
@@ -26,7 +35,6 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   const [comments, setComments] = useState<string>('');
 
   const handlePaymentPlugin = (value:string) => {
-    console.log('handle payment plugin => ', value);
     setPaymentPlugin(value);
   }
 

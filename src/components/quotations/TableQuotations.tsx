@@ -2,7 +2,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { IQuotationTable, IQuotationMin } from "@/interfaces/Quotations";
-// import DeleteElement from "../DeleteElement";
 import RemoveElement from "../RemoveElement";
 import Chip from "../providers/Chip";
 import { CurrencyFormatter } from "@/app/functions/Globals";
@@ -126,18 +125,7 @@ export default function TableQuotations({quotationsData, token, deleteQuatation}
         })}</p>
       ),
     }),
-  ]
-
-  // let view = <></>;
-  // if(isTable){
-  //   view = (<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." typeTable="projects" />);
-  // }else{
-  //   view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-  //             {filteredProjects.map((project, index:number) => (
-  //               <CardProject project={project} token={token} key={index} />
-  //             ))}
-  //           </div>)
-  // }
+  ];
 
   return(
     <>

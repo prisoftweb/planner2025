@@ -4,13 +4,10 @@ import { Report, DateReport } from "@/interfaces/Reports"
 import { useState, useRef } from "react"
 import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
-//import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
-import { useOneReportStore } from "@/app/store/reportsStore"
 
 export default function DataReports({token, report, user, node, id, dates}:
-                              {token:string, report:Report, user:UsrBack, 
-                                node:Node, id:string, dates: DateReport[] }) {
+  {token:string, report:Report, user:UsrBack, node:Node, id:string, dates: DateReport[] }) {
   
   const [isSend, setIsSend] = useState<boolean>(false);
   const refClose = useRef(false);
@@ -18,7 +15,6 @@ export default function DataReports({token, report, user, node, id, dates}:
   const handleSend = (value: boolean, valueClose: boolean) => {
     refClose.current = valueClose;
     setIsSend(value);
-    //setIsClose(valueClose);
   }
 
   return (

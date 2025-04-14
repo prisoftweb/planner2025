@@ -68,7 +68,6 @@ export default function ProfileHistoryProject({project}: {project:OneProjectMin}
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Fondo de garantia</p>
-              {/* <p className="text-blue-600">{project?.progress? project.progress: '' || '0'}</p> */}
               <p className="text-blue-600">{project?.guaranteefund?.porcentage || '0'} %</p>
             </div>
             <div>

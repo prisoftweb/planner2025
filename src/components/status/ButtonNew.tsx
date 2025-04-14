@@ -7,9 +7,15 @@ import { InsertCategoryInCatalog, InsertConditionInCatalog, InsertTypeInCatalog 
 import { FireIcon, TagIcon, Battery50Icon } from "@heroicons/react/24/solid";
 import {Tooltip} from "@nextui-org/react";
 
+type Props = {
+  token:string, 
+  catalogOptions:Options[], 
+  glosariesOptions:Options[], 
+  descGlossaries:Options[], 
+  opt:number}
+
 export default function ButtonNew({token, catalogOptions, descGlossaries, glosariesOptions, opt}:
-                                  {token:string, catalogOptions:Options[], glosariesOptions:Options[], 
-                                    descGlossaries:Options[], opt:number}){
+  Props){
   const [newStatus, setNewStatus] = useState<boolean>(false);
   const [newType, setNewType] = useState<boolean>(false);
   const [newCategory, setNewCategory] = useState<boolean>(false);

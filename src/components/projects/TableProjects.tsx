@@ -15,17 +15,27 @@ import { showToastMessageError } from "../Alert";
 import Chip from "../providers/Chip";
 import { MoneyFormatter } from "@/app/functions/Globals";
 
+type Props= {
+  data:ProjectsTable[], 
+  token:string, 
+  projects: ProjectMin[], 
+  optCategories: Options[], 
+  optTypes: Options[], 
+  optConditions: Options[], 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  isTable:boolean, 
+  isHistory?:boolean
+}
+
 export default function TableProjects({data, token, projects, optCategories, 
-                          optTypes, optConditions, isFilter, setIsFilter, isTable, isHistory=false}:
-                        {data:ProjectsTable[], token:string, projects: ProjectMin[], 
-                          optCategories: Options[], optTypes: Options[], optConditions: Options[], 
-                          isFilter:boolean, setIsFilter:Function, isTable:boolean, 
-                          isHistory?:boolean}){
+  optTypes, optConditions, isFilter, setIsFilter, isTable, isHistory=false}: Props){
   
   const columnHelper = createColumnHelper<ProjectsTable>();
 
-  const [filter, setFilter] = useState<boolean>(false);
+  // const [filter, setFilter] = useState<boolean>(false);
   const [dataProjects, setDataProjects] = useState(data);
+  const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>(projects);
 
   const {haveDeleteProject, haveNewProject, projectStore, updateHaveDeleteProject, 
     updateHaveNewProject, updateProjectStore} = useProjectsStore();
@@ -259,7 +269,6 @@ export default function TableProjects({data, token, projects, optCategories,
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
         >
-          {/* {row.original.amount} */}
           {MoneyFormatter(row.original.amount)}
         </p>
       ),
@@ -271,7 +280,6 @@ export default function TableProjects({data, token, projects, optCategories,
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
         >
-          {/* {row.original.total} */}
           {MoneyFormatter(row.original.total)}
         </p>
       ),
@@ -287,20 +295,6 @@ export default function TableProjects({data, token, projects, optCategories,
     }),
   ]
            
-  // const initialVisibilityColumns: any = {
-  //   seleccion: true,
-  //   accion: true, 
-  //   percentage: true, 
-  //   nada: true, 
-  //   clave: true, 
-  //   proyecto: true, 
-  //   cuenta: true, 
-  //   cliente: true, 
-  //   fecha: true, 
-  //   monto: true,  
-  //   total: false,
-  // }
-  
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {
     const projectM = projects.reduce((previous, current) => {
@@ -308,8 +302,6 @@ export default function TableProjects({data, token, projects, optCategories,
     });
     setMaxAmount(projectM.amount);
   }, [])
-
-  const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>(projects);
 
   const addNewProject = async() => {
     let projs: ProjectMin[];
@@ -430,10 +422,9 @@ export default function TableProjects({data, token, projects, optCategories,
         }
       });
     }
-    //console.log(filtered);
     setFilteredProjects(filtered);
     setDataProjects(ProjectDataToTableDataMin(filtered));
-    setFilter(true);
+    // setFilter(true);
   }
 
   return(
