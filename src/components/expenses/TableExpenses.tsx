@@ -17,8 +17,7 @@ import {IoMdCopy} from 'react-icons/io';
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function TableExpenses({data, token, expenses, 
-                            handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
-                        isViewReports, isPending }:
+  handleExpensesSelected, idValidado, user, isFilter, setIsFilter, isViewReports, isPending }:
                         {data:ExpensesTable[], token:string, expenses:Expense[], 
                         user: string, isFilter:boolean, setIsFilter:Function, 
                         idValidado: string, handleExpensesSelected:Function, 

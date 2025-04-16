@@ -65,7 +65,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/projects/${idPro}/wallet`}>
+                    <Link href={`/projects/${idPro}/costs`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Costo'>
                         <CreditCardIcon
@@ -116,7 +116,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
             <p className="text-blue-600">Presupuesto</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/wallet`}>
+        <Link href={`/projects/${idPro}/costs`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Costo</p>
           </div>
