@@ -14,7 +14,12 @@ export default async function Page(){
   try {
     catalogs = await getCatalogs(token);
     if(typeof(catalogs)=== 'string'){
-      return <h1 className="text-center text-red-500 text-lg">{catalogs}</h1>
+      return (
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500 text-lg">{catalogs}</h1>
+        </>
+      )
     }
   } catch (error) {
     return <h1 className="text-center text-red-500 text-lg">Ocurrio un error al consultar catalogos!!</h1>

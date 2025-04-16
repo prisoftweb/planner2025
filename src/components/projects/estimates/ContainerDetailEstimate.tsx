@@ -20,10 +20,11 @@ type ContainerDetailEstimateProps = {
   concepts:IConceptEstimate[], 
   idEstimate:string, 
   totalEstimatedProject: TotalEstimatedByProject[]
+  page: string | undefined
 }
 
 export default function ContainerDetailEstimate({project, token, user, estimate, concepts, 
-    idEstimate, totalEstimatedProject}: ContainerDetailEstimateProps) {
+    idEstimate, totalEstimatedProject, page}: ContainerDetailEstimateProps) {
 
   const [openNewConcept, setOpenNewConcept] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -99,7 +100,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
           <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
-            onClick={() => window.location.replace(`/projects/estimates/${project._id}`)}
+            onClick={() => window.location.replace(page? `/projects/estimates/${project._id}?page=projects`: `/projects/estimates/${project._id}`)}
           >
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </div>

@@ -28,10 +28,11 @@ type Props = {
   token:string, 
   showNewInvoice:Function, 
   selEstimate:Function 
+  pageProject: string | undefined
 }
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
-  isFilterTable, delEstimate, token, showNewInvoice, selEstimate }: Props) {
+  isFilterTable, delEstimate, token, showNewInvoice, selEstimate, pageProject }: Props) {
 
   const [filterEstimates, setFilterEstimates] = useState<IEstimateProject[]>(estimates);
   const [isFilter, setIsFilter] = useState<boolean>(false);
@@ -118,7 +119,8 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       id: 'nombre',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${project._id}/${row.original.id}`)}
+          onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{row.original.Nombre}</p>
       )
     }),
@@ -127,7 +129,8 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       id: 'estimacion',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${project._id}/${row.original.id}`)}
+          onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.Estimacion
@@ -139,7 +142,8 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       id: 'amortizacion',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${project._id}/${row.original.id}`)}
+          onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.Amortizacion
@@ -151,7 +155,8 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       id: 'fondo',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${project._id}/${row.original.id}`)}
+          onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.Fondo
@@ -187,7 +192,8 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       id: 'condicion',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${project._id}/${row.original.id}`)}
+          onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${row.original.id}`)}
         ><Chip label={row.original.Condicion.name} color={row.original.Condicion.color} /></p>
       ),
     }),
@@ -196,7 +202,8 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${project._id}/${row.original.id}`)}
+          onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
@@ -205,7 +212,8 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       id: 'orden',
       cell: ({row}) => (
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${project._id}/${row.original.id}`)}
+          onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${row.original.id}`)}
         >{row.original.Orden}</p>
       ),
     }),

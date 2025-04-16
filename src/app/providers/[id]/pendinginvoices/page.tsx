@@ -7,7 +7,6 @@ import { HistoryExpensesTable, Provider } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
 import { Expense } from "@/interfaces/Expenses";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
-import ContainerTableHistoryCosts from "@/components/providers/ContainerTableHistoryCosts";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import ContainerTablePendinginvoices from "@/components/providers/ContainerTablePendingInvoices";
 
@@ -22,42 +21,86 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     provider = await getProvider(params.id, token);
     if(typeof(provider) === "string")
-      return <h1 className="text-center text-red-500">{provider}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{provider}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+      </>
+    ) 
   }
 
   let providers: Provider[];
   try {
     providers = await getProviders(token);
     if(typeof(providers) === "string")
-      return <h1 className="text-center text-red-500">{providers}</h1>
+      return(
+        <>
+          <h1 className="text-center text-red-500">{providers}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+      </>
+    )
   }
 
   let costs: Expense[];
   try {
-    // costs = await GetCostsMIN(token, params.id);
     costs = await GetCostsProviderMINWithoutPay(token, params.id);
     if(typeof(costs) === "string")
-      return <h1 className="text-center text-red-500">{costs}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{costs}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>
+      </>
+    )  
   }
 
   let optTypes: Options[] = [];
   try {
     optTypes = await getCatalogsByNameAndType(token, 'payments');
-    if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+    if(typeof(optTypes)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar catalogos de pagos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar catalogos de pagos!!</h1>
+      </>
+    )
   }
 
   let options: Options[] = [];
 
   if(providers.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+      </>
+    )
   }
 
   providers.map((prov: any) => {

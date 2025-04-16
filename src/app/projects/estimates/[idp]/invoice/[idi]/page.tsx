@@ -7,7 +7,8 @@ import { ITotalInvoicesByProject, IInvoiceMinFull, ICollectiosByInvoice } from "
 import { getInvoiceMinFull, getTotalInvoicesByProject, getCollectionsByInvoice } from "@/app/api/routeInvoices";
 import ContainerDetailInvoice from "@/components/projects/estimates/ContainerDetailInvoice";
 
-export default async function Page({ params }: { params: { idp: string, idi:string }}){
+export default async function Page({ params, searchParams }: 
+  { params: { idp: string, idi:string }, searchParams: { page: string }}){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
@@ -43,7 +44,6 @@ export default async function Page({ params }: { params: { idp: string, idi:stri
   let collections: ICollectiosByInvoice[]=[];
   try {
     collections = await getCollectionsByInvoice(token, params.idi);
-    console.log('collections invoice min => ', collections);
     if(typeof(collections) === "string")
       return <h1 className="text-center text-red-500">{collections}</h1>
   } catch (error) {
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: { idp: string, idi:stri
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerDetailInvoice invoice={invoice} project={project} token={token} user={user._id} 
-          collections={collections} totalInvoiceProject={totalInvoiceProject} />
+          collections={collections} totalInvoiceProject={totalInvoiceProject} pageQuery={searchParams.page} />
       </div>
     </>
   )

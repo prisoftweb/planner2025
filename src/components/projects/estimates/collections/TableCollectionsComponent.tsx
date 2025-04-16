@@ -11,7 +11,8 @@ import { getCollectionsByProjectMin, deleteCollection } from "@/app/api/routeCol
 import { ICollectionMin, ITableCollection } from "@/interfaces/Collections";
 import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
 
-export default function TableCollectionsComponent({token, project}:{token:string, project:OneProjectMin}) {
+export default function TableCollectionsComponent({token, project, pageQuery}:
+  {token:string, project:OneProjectMin, pageQuery: string | undefined}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>([]);
 
@@ -82,7 +83,7 @@ export default function TableCollectionsComponent({token, project}:{token:string
       id: 'referencia',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/collections/${row.original.id}?page=projects`: `/projects/estimates/${project._id}/collections/${row.original.id}`)}
         >{row.original.Referencia}</p>
       ),
     }),
@@ -91,25 +92,16 @@ export default function TableCollectionsComponent({token, project}:{token:string
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/collections/${row.original.id}?page=projects`: `/projects/estimates/${project._id}/collections/${row.original.id}`)}
         >{row.original.Fecha.substring(0, 10)}</p>
       ),
     }),
-    // columnHelper.accessor('Estimacion', {
-    //   header: 'Estimacion',
-    //   id: 'estimacion',
-    //   cell: ({row}) => (
-    //     <p className="cursor-pointer"
-    //     onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
-    //     >{row.original.Estimacion}</p>
-    //   ),
-    // }),
     columnHelper.accessor('concept', {
       header: 'Concepto',
       id: 'concepto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/collections/${row.original.id}?page=projects`: `/projects/estimates/${project._id}/collections/${row.original.id}`)}
         >{row.original.concept}</p>
       ),
     }),
@@ -136,7 +128,7 @@ export default function TableCollectionsComponent({token, project}:{token:string
       id: 'cuenta',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/collections/${row.original.id}?page=projects`: `/projects/estimates/${project._id}/collections/${row.original.id}`)}
         >{row.original.Cuenta}</p>
       ),
     }),
@@ -145,7 +137,7 @@ export default function TableCollectionsComponent({token, project}:{token:string
       id: 'importe',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/collections/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/collections/${row.original.id}?page=projects`: `/projects/estimates/${project._id}/collections/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.Importe

@@ -9,18 +9,18 @@ import Header from "@/components/Header";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
-import { Resource2 } from "@/interfaces/Roles";
+// import { Resource2 } from "@/interfaces/Roles";
 
 export default async function clients(){
   
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   
-  const clientCookie = cookieStore.get('clients')?.value;
-  let permisionsClient: Resource2 | undefined;
-  if(clientCookie){
-    permisionsClient = JSON.parse(clientCookie);
-  }
+  // const clientCookie = cookieStore.get('clients')?.value;
+  // let permisionsClient: Resource2 | undefined;
+  // if(clientCookie){
+  //   permisionsClient = JSON.parse(clientCookie);
+  // }
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
   // if(!permisionsClient){
@@ -40,10 +40,20 @@ export default async function clients(){
   try {
     tags = await getTags(token);
     if(typeof(tags)==='string'){
-      return <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+      </>
+    )
   }
   
   let arrTags: Options[] = [];
@@ -55,18 +65,29 @@ export default async function clients(){
       })
     })
   }else{
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+      </>
+    )
   }
 
   let clients;
   try {
     clients = await getClients(token);
     if(typeof(clients)==='string'){
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-          text={clients} 
-          title="Clientes"><></></WithOut>
-      </div>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-2xl text-center">{clients}</h1>
+          {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+            <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+              text={clients} 
+              title="Clientes"><></></WithOut>
+          </div> */}
+        </>
+      )
     }
   } catch (error) {
     return <>

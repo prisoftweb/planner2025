@@ -23,12 +23,11 @@ type Props = {
   user: string, 
   totalInvoiceProject: ITotalInvoicesByProject[], 
   resumenInvoice:ITotalInvoiceResumen 
+  pageQuery:string | undefined
 }
 
 export default function ContainerInvoicesProject({project, optConditions, optProjects, 
-  token, user, invoices, totalInvoiceProject, resumenInvoice }: Props) {
-
-  // const [totalInvoicesProjectState, setTotalInvoicesProjectState] = useState<ITotalInvoicesByProject[]>(totalInvoiceProject);
+  token, user, invoices, totalInvoiceProject, resumenInvoice, pageQuery }: Props) {
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
@@ -37,7 +36,6 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
 
   invoices.map((i) => {
     dataInvoicesDashboard.push({
-      // costo: (i.cost.total / totalInvoicesProjectState[0].totalBilled) * 100,
       costo: (i.cost.total / totalInvoiceProject[0].totalBilled) * 100,
       label: i.folio
     });
@@ -49,7 +47,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
           <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
-            onClick={() => window.location.replace('/projects/estimates')}
+            onClick={() => window.location.replace(pageQuery? `/projects/${project._id}/profile`: '/projects/estimates')}
           >
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </div>
@@ -128,10 +126,10 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
       </div>
 
       <div>
-        <NavTabEstimates tab={1} id_p={project._id} />
+        <NavTabEstimates tab={1} id_p={project._id} pageQuery={pageQuery} />
       </div>
       
-      <TableInvoicesComponent token={token} project={project} user={user} />
+      <TableInvoicesComponent token={token} project={project} user={user} pageQuery={pageQuery} />
     </>
   )
 }

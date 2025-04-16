@@ -1,11 +1,10 @@
-import WithOut from "@/components/WithOut"
 import Navigation from "@/components/navigation/Navigation"
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { getCompaniesLV } from "../api/routeCompany";
 import { getDepartmentsLV } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
-import { getProjectsLV, getProjectsLVNoCompleted } from "../api/routeProjects";
+import { getProjectsLVNoCompleted } from "../api/routeProjects";
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, 
   GetAllReportsWithUSERAndNEConditionMIN
  } from "../api/routeReports";
@@ -29,17 +28,32 @@ export default async function Page() {
       reports = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
     }
     if(typeof(reports)==='string'){
-      return <h1 className="text-lg text-center text-red-500">{reports}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-lg text-center text-red-500">{reports}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+      </>
+    )
   }
   
   let optCompanies: Options[] = [];
   try {
     optCompanies = await getCompaniesLV(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+      </>
+    )
   }
 
   let optCompaniesFilter: Options[] = [{
@@ -53,7 +67,12 @@ export default async function Page() {
   try {
     optDepartments = await getDepartmentsLV(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
+      </>
+    )
   }
 
   let optProjects:Options[];
@@ -62,13 +81,22 @@ export default async function Page() {
       value: 'all'
     }]
   try {
-    // optProjects = await getProjectsLV(token);
     optProjects = await getProjectsLVNoCompleted(token);
     if(typeof(optProjects)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+        </>
+      )
     }    
   } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+      </>
+    )
   }
 
   optProjectsFilter = optProjectsFilter.concat(optProjects);
@@ -76,9 +104,20 @@ export default async function Page() {
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'reports');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    if(typeof(catalogs)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar catalogos!!</h1>
+      </>
+    )
   }
 
   const condition = catalogs[0].condition[0].glossary._id;

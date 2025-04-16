@@ -16,11 +16,20 @@ export default async function Page(){
   let estimates: IEstimateMin[];
   try {
     estimates = await getEstimatesWithoutInvoiceMin(token);
-    console.log('estimates min => ', estimates);
     if(typeof(estimates) === "string")
-      return <h1 className="text-center text-red-500">{estimates}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{estimates}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones sin factura!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones sin factura!!</h1>
+      </>
+    )
   }
 
   return (
@@ -40,9 +49,6 @@ export default async function Page(){
             <SearchInTable placeH="Buscar estimacion.." />
             <div>
               <div className="flex gap-x-3 items-center">
-                {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
-                  className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-                /> */}
               </div>
             </div>
           </div>

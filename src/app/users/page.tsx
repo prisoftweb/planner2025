@@ -1,5 +1,4 @@
 import { getUsers } from "../api/routeUser";
-//import TableUsers from "@/components/users/TableUsers";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { getDepartmentsLV } from "../api/routeDepartments";
@@ -8,8 +7,6 @@ import WithOut from "@/components/WithOut";
 import ButtonNewUser from "@/components/users/ButtonNewUser";
 import { Options } from "@/interfaces/Common";
 import { getRolesLV } from "../api/routeRoles";
-//import { Role } from "@/interfaces/Roles";
-//import { DataUsersToTableData } from "../functions/UsersFunctions";
 import UsersConstext from "@/components/users/UsersContext";
 
 export default async function Users() {  
@@ -23,36 +20,57 @@ export default async function Users() {
   try {
     users = await getUsers(token);
     if(typeof(users)==='string') 
-      return <h1 className="text-center text-red-500">{users}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{users}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Error al obtener usuarios!!</h1>
+    return(
+      <> 
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener usuarios!!</h1>
+      </>
+    )
   }
 
   let optionsRoles:Options[] = [];
   try {
     optionsRoles = await getRolesLV(token);
     if(typeof(optionsRoles)==='string') 
-      return <h1 className="text-center text-red-500">{optionsRoles}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{optionsRoles}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Error al obtener roles!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener roles!!</h1>
+      </>
+    )
   }
-
-  // const optionsRoles:Options[] = [];
-  // roles.map((role) => {
-  //   optionsRoles.push({
-  //     label: role.name,
-  //     value: role._id
-  //   })
-  // });
 
   let departments;
   try {
     departments = await getDepartmentsLV(token);
-    //departments = await getDepartments('');
     if(typeof(departments)==='string') 
-      return <h1 className="text-center text-red-500">{departments}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{departments}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Error al obtener departamentos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener departamentos!!</h1>
+      </>
+    )
   }
 
   if(users.length === 0 || !users){
@@ -68,28 +86,10 @@ export default async function Users() {
     )
   }
   
-  // let data:User[] = [];
-  // users.map((user:any) => {
-  //   data.push({
-  //     'id': user._id,
-  //     'photo': user.photo? user.photo: '/img/default.jpg',
-  //     'name': user.name,
-  //     'profile': {
-  //       'role': user.role,
-  //       'status': user.status
-  //     },
-  //     'email': user.email,
-  //     'department': user.department.name,
-  //     'role': user.rol? user.rol.name : 'sin rol'
-  //   })
-  // })
-  //const data = DataUsersToTableData(users);
-
   return (
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        {/* <TableUsers users={users} token={token} departments={departments} roles={optionsRoles} /> */}
         <UsersConstext departments={departments} optionsRoles={optionsRoles} token={token} users={users} />
       </div>
     </>

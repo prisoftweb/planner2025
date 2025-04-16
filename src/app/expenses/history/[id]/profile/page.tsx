@@ -21,18 +21,38 @@ export default async function Page({ params }: { params: { id: string, idProv:st
   try {
     cost = await GetCostMIN(token, params.id);
     if(typeof(cost) === "string")
-      return <h1 className="text-center text-red-500">{cost}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{cost}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>
+      </>
+    )  
   }
 
   let options: Options[] = [];
   try {
     options = await GetCostsLV(token);
     if(typeof(options) === "string")
-      return <h1 className="text-center text-red-500">{options}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{options}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>
+      </>
+    )
   }
 
 

@@ -29,10 +29,11 @@ type Props = {
   token: string, 
   user: string, 
   totalEstimatedProject: TotalEstimatedByProject[] 
+  pageProject: string | undefined
 }
 
 export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, 
-    token, user, totalEstimatedProject }: Props) {
+    token, user, totalEstimatedProject, pageProject }: Props) {
 
   const [openNewStimate, setOpenNewStimate] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -63,7 +64,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
     let estimates: IEstimateProject[];
     try {
       estimates = await getEstimatesByProject(token, project._id);
-      console.log('update estimates => ', estimates);
       if(typeof(estimates) === "string"){
         showToastMessageError(estimates);
       }else{
@@ -118,7 +118,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
           <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
-            onClick={() => window.location.replace('/projects/estimates')}
+            onClick={() => window.location.replace(pageProject? `/projects/${project._id}/profile`: '/projects/estimates')}
           >
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </div>
@@ -244,13 +244,13 @@ export default function ContainerStimationsProject({project, optConditions, optP
       </div>
 
       <div>
-        <NavTabEstimates tab={0} id_p={project._id} />
+        <NavTabEstimates tab={0} id_p={project._id} pageQuery={pageProject} />
       </div>
       
       <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
         estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
         delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
-        selEstimate={handleSelEstimate}  />
+        selEstimate={handleSelEstimate} pageProject={pageProject} />
 
       {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
         updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 

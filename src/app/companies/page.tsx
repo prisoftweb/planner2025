@@ -18,10 +18,20 @@ export default async function Page(){
   try {
     companies = await getCompanies(token);
     if(typeof(companies)=== 'string'){
-      return <h1 className="text-center text-red-500 text-lg">{companies}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500 text-lg">{companies}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-center text-red-500 text-lg">Error al consultar compañias!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500 text-lg">Error al consultar compañias!!</h1>
+      </>
+    )
   } 
 
   if(!companies || companies.length <= 0){

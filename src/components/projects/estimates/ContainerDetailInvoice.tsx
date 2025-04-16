@@ -15,9 +15,11 @@ type Props = {
   invoice:IInvoiceMinFull, 
   collections:ICollectiosByInvoice[], 
   totalInvoiceProject: ITotalInvoicesByProject[]
+  pageQuery: string | undefined
 }
 
-export default function ContainerDetailInvoice({project, token, user, invoice, collections, totalInvoiceProject}: Props) {
+export default function ContainerDetailInvoice({project, token, user, invoice, collections, 
+  totalInvoiceProject, pageQuery}: Props) {
 
   const [showCollections, setShowCollections]=useState<boolean>(false);
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -27,7 +29,8 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
           <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
-            onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice`)}
+            onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice?page=projects` : 
+                                `/projects/estimates/${project._id}/invoice`)}
           >
             <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
           </div>

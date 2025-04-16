@@ -19,10 +19,19 @@ export default async function Page() {
   try {
     expenses = await getAllCostsByConditionAndUser(token, user._id);
     if(typeof(expenses)=== 'string')
-      return <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
+        </>
+      )
   } catch (error) {
-    // console.log('page expanses ', error);
-    return <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
+      </>
+    )
   }
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);

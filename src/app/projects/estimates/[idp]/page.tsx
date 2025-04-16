@@ -10,7 +10,8 @@ import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { IEstimateProject, TotalEstimatedByProject} from "@/interfaces/Estimate";
 import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 
-export default async function Page({ params }: { params: { idp: string }}){
+export default async function Page({ params, searchParams }: 
+  { params: { idp: string }, searchParams: { page: string }}){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
@@ -18,7 +19,6 @@ export default async function Page({ params }: { params: { idp: string }}){
   let project: OneProjectMin;
   try {
     project = await GetProjectMin(token, params.idp);
-    console.log('project min => ', project);
     if(typeof(project) === "string")
       return <h1 className="text-center text-red-500">{project}</h1>
   } catch (error) {
@@ -28,7 +28,6 @@ export default async function Page({ params }: { params: { idp: string }}){
   let estimates: IEstimateProject[];
   try {
     estimates = await getEstimatesByProject(token, params.idp);
-    console.log('estimates min => ', estimates);
     if(typeof(estimates) === "string")
       return <h1 className="text-center text-red-500">{estimates}</h1>
   } catch (error) {
@@ -80,7 +79,7 @@ export default async function Page({ params }: { params: { idp: string }}){
             label: 'Todos',
             value: 'all'
           }, ...projects]} estimates={estimates} token={token} user={user._id} 
-          totalEstimatedProject={totalEstimatedProject} />
+          totalEstimatedProject={totalEstimatedProject} pageProject={searchParams.page} />
       </div>
     </>
   )

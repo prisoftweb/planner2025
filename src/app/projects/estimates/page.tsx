@@ -17,17 +17,39 @@ export default async function Page(){
   let projects: IProjectWithEstimateMin[];
   try {
     projects = await getProjectsWithEstimatesMin(token);
-    if(typeof(projects)==='string') return <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+    if(typeof(projects)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar los proyectos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar los proyectos!!</h1>
+      </>
+    )
   }
 
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    if(typeof(catalogs)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar catalogos!!</h1>
+      </>
+    )
   }
 
   const optCategories: Options[] = [{

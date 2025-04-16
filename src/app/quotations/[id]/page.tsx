@@ -17,18 +17,38 @@ export default async function Page({params}: {params:{id:string}}){
   try {
     quotation = await getQuotationMin(token, params.id);
     if(typeof(quotation) === "string")
-      return <h1 className="text-center text-red-500">{quotation}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{quotation}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizacion!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizacion!!</h1>
+      </>
+    ) 
   }
 
   let quotations: Options[];
   try {
     quotations = await getQuotationsLV(token);
     if(typeof(quotations) === "string")
-      return <h1 className="text-center text-red-500">{quotations}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{quotations}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizacion!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizacion!!</h1>
+      </>
+    )  
   }
 
   return (

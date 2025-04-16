@@ -13,7 +13,8 @@ import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import AddNewCollectionComponent from "./collections/AddNewCollection";
 import { Badge } from "@mui/material";
 
-export default function TableInvoicesComponent({token, project, user}: {token:string, project:OneProjectMin, user:string}) {
+export default function TableInvoicesComponent({token, project, user, pageQuery}: 
+  {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -100,7 +101,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'folio',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{row.original.folio}</p>
       ),
     }),
@@ -109,7 +111,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'cdfi',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{row.original.usecfdi.substring(row.original.usecfdi.length-3)}</p>
       ),
     }),
@@ -118,7 +121,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'metodo',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{row.original.methodpaid.substring(row.original.methodpaid.length-3)}</p>
       ),
     }),
@@ -127,7 +131,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'forma',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{row.original.formpaid.substring(row.original.formpaid.length-3)}</p>
       ),
     }),
@@ -136,7 +141,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'estimacion',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{row.original.estimate}</p>
       )
     }),
@@ -152,7 +158,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{row.original.fecha.substring(0, 10)}</p>
       ),
     }),
@@ -161,7 +168,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.amount
@@ -173,7 +181,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'cobrado',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.charged
@@ -185,7 +194,8 @@ export default function TableInvoicesComponent({token, project, user}: {token:st
       id: 'pendiente',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${row.original.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${row.original.id}`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.unchargedbalanceamount

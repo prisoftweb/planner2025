@@ -43,15 +43,15 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
     tabCli = <div className="flex justify-between mt-3">
                     <Link href={`/projects/${idPro}/profile`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Perfil'>
+                        placement="bottom" className="bg-white text-blue-500" content='Resumen'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>  
-                    <Link href={`/projects/${idPro}/projects`}>
+                    <Link href={`/projects/${idPro}/analysis`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Proyectos'>
+                        placement="bottom" className="bg-white text-blue-500" content='Analisis'>
                         <DocumentChartBarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
@@ -59,7 +59,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/${idPro}/estimates`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Estimaciones'>
+                        placement="bottom" className="bg-white text-blue-500" content='Presupuesto'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
@@ -67,18 +67,34 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/${idPro}/wallet`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Cartera'>
+                        placement="bottom" className="bg-white text-blue-500" content='Costo'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/projects/${idPro}/status`}>
+                    <Link href={`/projects/estimates/${idPro}?page=projects`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Estatus'>
+                        placement="bottom" className="bg-white text-blue-500" content='Estimaciones'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
+                      </Tooltip>
+                    </Link>
+                    <Link href={`/projects/estimates/${idPro}/invoice?page=projects`}>
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                        placement="bottom" className="bg-white text-blue-500" content='Facturacion'>
+                        <CreditCardIcon
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
+                          ${tab==='6'? 'bg-green-500 rounded-lg': ''}`} />
+                      </Tooltip>
+                    </Link>
+                    <Link href={`/projects/estimates/${idPro}/collections?page=projects`}>
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                        placement="bottom" className="bg-white text-blue-500" content='Cobranza'>
+                        <CreditCardIcon
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
+                          ${tab==='7'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
                   </div>                             
@@ -90,24 +106,34 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
             <p className="text-blue-600">Resumen</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/projects`}>
+        <Link href={`/projects/${idPro}/analysis`}>
           <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Presupuesto</p>
+            <p className="text-blue-600">Analisis</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/estimates`}>
+        <Link href={`/projects/${idPro}/`}>
           <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Analisis</p>
+            <p className="text-blue-600">Presupuesto</p>
           </div>
         </Link>
         <Link href={`/projects/${idPro}/wallet`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Avances</p>
+            <p className="text-blue-600">Costo</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/status`}>
+        <Link href={`/projects/estimates/${idPro}?page=projects`}>
           <div className={`w-50 px-5 ${tab==='5'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Estatus</p>
+            <p className="text-blue-600">Estimaciones</p>
+          </div>
+        </Link>
+        <Link href={`/projects/estimates/${idPro}/invoice?page=projects`}>
+          <div className={`w-50 px-5 ${tab==='6'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Facturacion</p>
+          </div>
+        </Link>
+        <Link href={`/projects/estimates/${idPro}/collections?page=projects`}>
+          <div className={`w-50 px-5 ${tab==='7'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Cobranza</p>
           </div>
         </Link>
       </div>

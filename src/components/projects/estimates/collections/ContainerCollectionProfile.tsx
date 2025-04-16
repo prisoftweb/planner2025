@@ -1,5 +1,3 @@
-// 'use client'
-// import { useState } from "react"
 import { IOneCollectionMin, IInvoicesByCollection } from "@/interfaces/Collections"
 import ProfileCollection from "./ProfileCollection"
 import ListInvoicesCollection from "./ListInvoicesCollection"

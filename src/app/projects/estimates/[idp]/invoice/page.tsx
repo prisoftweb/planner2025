@@ -10,7 +10,9 @@ import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumen
 import { ITotalInvoicesByProject, IInvoiceByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
 
-export default async function Page({ params }: { params: { idp: string }}){
+export default async function Page({ params, searchParams }: 
+  { params: { idp: string }, searchParams: { page: string }}){
+  
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
@@ -18,7 +20,6 @@ export default async function Page({ params }: { params: { idp: string }}){
   let project: OneProjectMin;
   try {
     project = await GetProjectMin(token, params.idp);
-    // console.log('project min => ', project);
     if(typeof(project) === "string")
       return <h1 className="text-center text-red-500">{project}</h1>
   } catch (error) {
@@ -28,7 +29,6 @@ export default async function Page({ params }: { params: { idp: string }}){
   let invoices: IInvoiceByProject[];
   try {
     invoices = await getInvoicesByProject(token, params.idp);
-    console.log('invoices min => ', invoices);
     if(typeof(invoices) === "string")
       return <h1 className="text-center text-red-500">{invoices}</h1>
   } catch (error) {
@@ -88,7 +88,7 @@ export default async function Page({ params }: { params: { idp: string }}){
         <ContainerInvoicesProject project={project} optConditions={optConditions} optProjects={[{
             label: 'Todos',
             value: 'all'
-          }, ...projects]} invoices={invoices} token={token} user={user._id} 
+          }, ...projects]} pageQuery={searchParams.page} invoices={invoices} token={token} user={user._id} 
           totalInvoiceProject={totalInvoicesProject} resumenInvoice={totalInvoicesResumen} />
       </div>
     </>
