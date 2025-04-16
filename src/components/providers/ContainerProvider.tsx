@@ -47,11 +47,10 @@ export default function ContainerProvider({providers, user, token}:
       'id': prov._id,
       'name': prov.name,
       rfc: prov.rfc,
-      //currentbalance: prov.tradeline.currentbalance,
       currentbalance: dollar,
       account: prov.account,
       suppliercredit: prov.suppliercredit,
-      'contacts': nc,
+      contacts: nc,
       tradename: prov.tradename || ' '
     })
   })
@@ -61,11 +60,9 @@ export default function ContainerProvider({providers, user, token}:
       <Navigation user={user} />
       
       <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
-        {/* <HeaderProvider id={id} token={token} /> */}
         <Header title="Proveedores" placeHolder="Buscar proveedor..">
           <ButtonNewProvider id={user._id} token={token} />    
         </Header>
-        {/* <WithOutProvider /> */}
         <div className="mt-5">
           <TableProviders data={data} token={token} />
         </div>

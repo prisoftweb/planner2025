@@ -11,7 +11,7 @@ import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
-export default async function Page({ params }: { params: { id: string }}){
+export default async function Page({ params }: { params: { id: string, idProv:string }}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
@@ -21,18 +21,38 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     cost = await GetCostMIN(token, params.id);
     if(typeof(cost) === "string")
-      return <h1 className="text-center text-red-500">{cost}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{cost}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>
+      </>
+    )  
   }
 
   let options: Options[] = [];
   try {
     options = await GetCostsLV(token);
     if(typeof(options) === "string")
-      return <h1 className="text-center text-red-500">{options}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{options}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>
+      </>
+    )
   }
 
 
@@ -48,7 +68,7 @@ export default async function Page({ params }: { params: { id: string }}){
         <Header title={subTotal} previousPage="/expenses/history">
           <Selectize options={options} routePage="expenses/history" subpath="/profile" />
         </Header>
-        <NavTabExpense idExp={params.id} tab="1" />
+        <NavTabExpense idExp={params.id} tab="1" pending={0} idProv={params.idProv} />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 
               user={user._id} isHistory={true}/>

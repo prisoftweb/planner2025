@@ -52,18 +52,15 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
     }else{
       if(file || voucher){
         const formdata = new FormData();
-        //formdata.append('subtotal', amount);
         formdata.append('costocenter', JSON.stringify(costcenter));
         formdata.append('date', date);
         formdata.append('description', description);
-        //formdata.append('discount', discount);
         formdata.append('folio', folio);
         formdata.append('provider', proveedor);
         formdata.append('user', responsible);
         formdata.append('taxfolio', taxFolio);
         formdata.append('typeCFDI', typeCFDI);
         formdata.append('project', project);
-        //formdata.append('vat', vat);
         formdata.append('report', report);
         formdata.append('category', category);
         formdata.append('isticket', JSON.stringify(false));
@@ -86,8 +83,6 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           vat: idVat,
           exempttax: taxExempt.replace(/[$,]/g, ""),
           total: total.replace(/[$,]/g, ""),
-          // vatvalue: number no se usa 
-          // total: number no se usa 
         }));
         if(voucher){
           formdata.append('files', voucher);
@@ -100,9 +95,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           formdata.append('types', file.type);
         }
         if(await dataCFDIValidation()){
-          //showToastMessage('todo coincide !!');
           try {
-            // console.log('data cost center => ', JSON.stringify(costCenter));
             if(reportObject && reportObject.ispettycash){
               const fechaGasto = new Date(date);
               const fechaReport = new Date(reportObject.date);
@@ -160,8 +153,6 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
             vat: idVat,
             exempttax: taxExempt.replace(/[$,]/g, ""),
             total: total.replace(/[$,]/g, ""),
-            // vatvalue: number no se usa 
-            // total: number no se usa 
           },
           provider: proveedor, user:responsible, taxfolio:taxFolio, typeCFDI, project,
           report, isticket:false, category, ispaid:supplierCredit, condition: [{
@@ -173,9 +164,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
             user
           }], iscard:isCard, type,
         }
-        // console.log('save cost in cfdi stepper => ', JSON.stringify(data));
-        // console.log('costo center => ', JSON.stringify(costcenter));
-    
+        
         if(reportObject && reportObject.ispettycash){
           const fechaGasto = new Date(date);
           const fechaReport = new Date(reportObject.date);
@@ -233,14 +222,10 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   }
 
   const handleCFDI = (value:CFDIValidation) => {
-    console.log('handle cfdi ', value);
     setDataCFDI(value);
   }
 
   const dataCFDIValidation = async() => {
-    console.log('amount ', Number(amount), ' = subtotal cfdi ', Number(dataCFDI?.amount));
-    console.log('date ', date.substring(0, 10), ' = date cfdi ', dataCFDI?.date.substring(0, 10));
-    console.log('folio fis ', taxFolio, ' = folio fis cfdi ', dataCFDI?.taxFolio);
     if(Number(amount) !== Number(dataCFDI?.amount)){
       showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
       return false;
@@ -259,7 +244,6 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
         showToastMessageError('Error al validar proveedor!!');
         return false
       }
-      console.log('rfc pro ', res.rfc, ' = subtotal cfdi ', dataCFDI?.RFCProvider);
       if(res.rfc !== dataCFDI.RFCProvider){
         showToastMessageError('El rfc del proveedor no coincide con el del CFDI!!');
         return false;

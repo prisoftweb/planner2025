@@ -1,25 +1,15 @@
 'use client'
-//import Header from "../Header"
-// import ButtonNew from "./ButtonNew"
 import ButtonNewBudgetProject from "./ButtonNewBudgetProject"
 import TableBudgetProjects from "./TableBudgetProjects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { ProjectsBudgetTable, ProjectMin } from "@/interfaces/Projects"
+import { ProjectMin } from "@/interfaces/Projects"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
-import { PiTableThin } from "react-icons/pi";
-import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "@/components/SearchInTable"
-import { useProjectsStore } from "@/app/store/projectsStore"
-
 import WithOut from "@/components/WithOut"
 import { UsrBack } from "@/interfaces/User"
-import { showToastMessageError } from "@/components/Alert"
-import { ProjectBudgetDataToTableDataMin } from "@/app/functions/SaveProject"
-import { getProjectsMin } from "@/app/api/routeProjects"
-import { CostoCenterLV } from "@/interfaces/CostCenter"
 import { BudgetMin } from "@/interfaces/Budget"
 import { useBudgetStore } from "@/app/store/budgetProject"
 import { Squares2X2Icon } from "@heroicons/react/24/solid"
@@ -31,10 +21,6 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
-  //const [dataTable, setDataTable] = useState<ProjectsBudgetTable[]>(data);
-
-  // const {haveNewProject, projectStore, 
-  //   updateProjectStore, updateHaveNewProject} = useProjectsStore();
   const {budgetsStore, updateBudgetsStore} = useBudgetStore();
 
   useEffect(() => {
@@ -60,14 +46,13 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
     )
   }
 
-  //const dataTable: ProjectsBudgetTable[] = ProjectBudgetDataToTableDataMin(budgetsStore);
-
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
         <div className="flex items-center">
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600"
-              onClick={() => window.location.replace('/')} />
+          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer" onClick={() => window.location.replace('/')}>
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600"/>
+          </div>
           <p className="text-xl ml-4 font-medium">Presupuestos</p>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">

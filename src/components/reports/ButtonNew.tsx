@@ -4,12 +4,17 @@ import { useState } from "react";
 import NewReport from "./NewReport";
 import { Options } from "@/interfaces/Common";
 
+type Props = {
+  token:string, 
+  departments:Options[], 
+  companies:Options[], 
+  projects:Options[], 
+  user:string, 
+  condition:string
+}
+
 export default function ButtonNew({token, companies, departments, 
-                        projects, condition, user}: 
-                      {token:string, departments:Options[], 
-                        companies:Options[], projects:Options[], 
-                        user:string, condition:string
-                      }){
+  projects, condition, user}: Props){
   const [newReport, setNewReport] = useState<boolean>(false);
 
   const handleNewReport = (value: boolean) => {

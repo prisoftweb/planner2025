@@ -8,16 +8,21 @@ import Label from '@/components/Label';
 import { CurrencyFormatter } from '@/app/functions/Globals';
 import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';
 import { Options } from '@/interfaces/Common';
-// import MultiSelectReact from '@/components/MultiSelectReact';
 import SelectMultipleReact from '@/components/SelectMultipleReact';
 import { MoneyFormatter } from '@/app/functions/Globals';
 import {Tooltip} from "@nextui-org/react";
-// import { ChartBarIcon } from '@heroicons/react/24/solid';
+
+type Params = {
+  handleDate: Function, 
+  amountProjects: TotalAmountProjects[], 
+  projects:Options[], 
+  projectsTotalCost: DashboardTotalCost[], 
+  configMin: ConfigMin[], 
+  activeProjects: number
+}
 
 export default function HeaderDashboardPage({handleDate, amountProjects, 
-    projectsTotalCost, configMin, activeProjects, projects}: 
-  {handleDate: Function, amountProjects: TotalAmountProjects[], projects:Options[], 
-    projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[], activeProjects: number}) {
+    projectsTotalCost, configMin, activeProjects, projects}: Params) {
 
   let props = {
     variants: {
@@ -46,12 +51,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
   });
 
   const handleProjects = (value: string[]) => {
-    // const aux: string[] = [];
-    // value.map((v) => {
-    //   aux.push(v.value);
-    // });
-    //console.log('value => ', value);
-    //console.log('aux handle pro => ', value);
     setProject(value);
     if(rangeDate?.from && rangeDate.to){
       handleDate(getDate(rangeDate.from), getDate(rangeDate.to), value);
@@ -65,12 +64,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
     progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
   }
 
-  console.log('total amount -> ', amountProjects[0].totalAmount);
-  console.log('total cost => ', projectsTotalCost[0].totalCost);
-  console.log('res => ', amountProjects[0].totalAmount - projectsTotalCost[0].totalCost);
-  
-  // console.log('projects total cost dashboard => ', projectsTotalCost);
-  // console.log('proyects => => ', project);
   return (
     <div>
       <div>
@@ -98,12 +91,10 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
         </div>
       </div>
       <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-3'>
-        {/* <div className='w-full bg-cyan-500 text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1  */}
         <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
             style={{backgroundColor: '#8EA7FF'}}>
           {amountProjects.length > 0 && (
             <>
-              {/* <p className='text-lg'>{amountProjects[0].projects}</p> */}
               <p className='text-lg'>{amountProjects[0].projects}</p>
               <p className='text-xs'>PROYECTOS TODOS</p>
               <p className='text-lg text-right mt-2'>{activeProjects}</p>
@@ -128,7 +119,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                 {MoneyFormatter(configMin[0].lastmeta.amount)}
               </p>
-              {/* <ChartBarIcon className='text-white w-32 h-6' /> */}
             </Tooltip>
             <p className="text-sm text-gray-500 dark:text-gray-500">
               META {configMin[0].lastmeta.year}
@@ -139,9 +129,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}>
           {projectsTotalCost.length > 0 && (
             <>
-              {/* <p className=' text-lg sm:text-xl'>
-                {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
-              </p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
                     currency: 'USD',
@@ -151,7 +138,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                 <p className='text-slate-700 text-sm'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost)}
                 </p>
-                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#86DDFS'}} /> */}
               </Tooltip>
               <p className='text-xs'>COSTO TOTAL</p>
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
@@ -164,7 +150,6 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
                 </p>
               </Tooltip>
-              {/* <p className='text-xs'> + Iva</p> */}
             </>
           )}
         </div>
@@ -172,9 +157,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             flex flex-col justify-center items-center'>
           {amountProjects.length > 0 && (
             <>
-              {/* <p className='text-xs'>MX 1.2M</p> */}
               <p className='text-xs'>UTILIDAD</p>
-              {/* <p className='text-xs'>$1,205,704</p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
                     currency: 'USD',
@@ -182,13 +165,8 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                   })} 
                   className="text-slate-900 bg-white" placement="top">
                 <p className='text-xs'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
-                  })} */}
                   {MoneyFormatter(amountProjects[0].totalAmount - projectsTotalCost[0].totalCost)}
                 </p>
-                {/* <ChartBarIcon className='text-white w-32 h-6' /> */}
               </Tooltip>
             </>
           )}
@@ -203,12 +181,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     value: amountProjects[0].totalAmount
                   })} 
                   className="text-slate-900 bg-white" placement="top">
-                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#FF9C89'}} /> */}
                 <p className=' text-lg sm:text-xl'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: amountProjects[0].totalAmount
-                  })} */}
                   {MoneyFormatter(amountProjects[0].totalAmount)}
                 </p>
               </Tooltip>
@@ -219,12 +192,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     value: amountProjects[0].totalAmountTotal
                   })} 
                   className="text-slate-900 bg-white" placement="top">
-                {/* <ChartBarIcon className='w-32 h-6' style={{color: '#FF9C89'}} /> */}
                 <p className=' text-lg sm:text-sm'>
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: amountProjects[0].totalAmount
-                  })} */}
                   {MoneyFormatter(amountProjects[0].totalAmountTotal)}
                 </p>
               </Tooltip>
@@ -243,10 +211,8 @@ function getDate(date: Date){
   let year = date.getFullYear()
 
   if(month < 10){
-    // console.log(`${day}-0${month}-${year}`);
     return `${year}-0${month}-${day}`;
   }else{
-    // console.log(`${day}-${month}-${year}`)
     return `${year}-${month}-${day}`;
   }
 }

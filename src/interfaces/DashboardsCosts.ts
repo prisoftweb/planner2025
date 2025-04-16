@@ -5,12 +5,13 @@ export interface CostsByConceptAndCategory {
   totalIVA: number
   totalExemptTAX: number
   totalDiscount: number
-  costocenter: Costocenter
+  costocenter: Costocenter,
 }
 
 export interface Costocenter {
   category?: string
   concept?: string
+  account: string
 }
 
 export interface CostsByDay {

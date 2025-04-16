@@ -3,52 +3,57 @@ import { cookies } from "next/headers";
 import WithOut from "@/components/WithOut";
 import ButtonNewClient from "@/components/clients/ButtonNewClient";
 import Navigation from "@/components/navigation/Navigation";
-import { ClientBack, TableClient, Tag } from "@/interfaces/Clients";
+import { TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
 import Header from "@/components/Header";
-//import Header from "@/components/HeaderPage";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
-import { Resource2 } from "@/interfaces/Roles";
+// import { Resource2 } from "@/interfaces/Roles";
 
 export default async function clients(){
   
   const cookieStore = cookies();
-  //const allCookies = cookieStore.getAll();
-  //console.log('all cookies => ', allCookies);
   const token = cookieStore.get('token')?.value || '';
   
-  const clientCookie = cookieStore.get('clients')?.value;
-  let permisionsClient: Resource2 | undefined;
-  if(clientCookie){
-    permisionsClient = JSON.parse(clientCookie);
-  }
+  // const clientCookie = cookieStore.get('clients')?.value;
+  // let permisionsClient: Resource2 | undefined;
+  // if(clientCookie){
+  //   permisionsClient = JSON.parse(clientCookie);
+  // }
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-  //console.log('user back => ', user);
-  //console.log('client cookie => ', clientCookie, ' typeof => ', typeof(clientCookie));
-
-  if(!permisionsClient){
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-            text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
-            title="Clientes"><></></WithOut>
-        </div>
-      </>
-    )
-  }
+  
+  // if(!permisionsClient){
+  //   return(
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+  //           text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
+  //           title="Clientes"><></></WithOut>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   let tags;
   try {
     tags = await getTags(token);
     if(typeof(tags)==='string'){
-      return <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+      </>
+    )
   }
   
   let arrTags: Options[] = [];
@@ -60,18 +65,29 @@ export default async function clients(){
       })
     })
   }else{
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+      </>
+    )
   }
 
   let clients;
   try {
     clients = await getClients(token);
     if(typeof(clients)==='string'){
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <WithOut img="/img/clientes.svg" subtitle="Clientes" 
-          text={clients} 
-          title="Clientes"><></></WithOut>
-      </div>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-2xl text-center">{clients}</h1>
+          {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+            <WithOut img="/img/clientes.svg" subtitle="Clientes" 
+              text={clients} 
+              title="Clientes"><></></WithOut>
+          </div> */}
+        </>
+      )
     }
   } catch (error) {
     return <>
@@ -112,22 +128,25 @@ export default async function clients(){
   
   let data:TableClient[] = ClientDataToTableClient(clients);
 
-  //console.log('permissions client => ', permisionsClient.permission);
-
   return (
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <Header title="Clientes" placeHolder="Buscar cliente.." >
-          {permisionsClient.permission.create? (
+          {/* {permisionsClient.permission.create? (
             <ButtonNewClient id={user._id} token={token} tags={arrTags} />
           ): (
             <></>
-          )}
+          )} */}
+          <ButtonNewClient id={user._id} token={token} tags={arrTags} />
         </Header>
         <div className="mt-5">
-          <TableClients data={data} token={token} deletePermission={permisionsClient.permission.delete}
-            selectPermission={permisionsClient.permission.select} />
+          <TableClients data={data} token={token} 
+            // deletePermission={permisionsClient.permission.delete}
+            // selectPermission={permisionsClient.permission.select}
+            selectPermission={true}
+            deletePermission={true}
+          />
         </div>
       </div>
     </>

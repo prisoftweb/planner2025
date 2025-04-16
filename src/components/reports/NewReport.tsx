@@ -14,11 +14,18 @@ import { CreateReport } from "@/app/api/routeReports"
 import { useOptionsReports } from "@/app/store/reportsStore"
 import CurrencyInput from "react-currency-input-field"
 
+type Props = {
+  showForm:Function, 
+  token:string, 
+  departments:Options[], 
+  companies:Options[], 
+  projects:Options[], 
+  user:string, 
+  condition:string
+}
+
 export default function NewReport({showForm, token, companies, 
-                          departments, projects, user, condition}: 
-                    {showForm:Function, token:string, 
-                      departments:Options[], companies:Options[], 
-                      projects:Options[], user:string, condition:string}){
+  departments, projects, user, condition}: Props){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [project, setProject] = useState<string>(projects[0].value);
@@ -28,13 +35,7 @@ export default function NewReport({showForm, token, companies,
   const [imprest, setImprest] = useState<boolean>(false);
   const refRequest = useRef(true);
 
-  // const currentDate = new Date();
-  // const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
-          //alert( day);
-          //alert(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59));
-
   const [ammount, setAmmount] = useState<string>('0');
-  //const [closeDate, setCloseDate] = useState<string>(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59).toDateString());
   
   const {updateHaveNewReport} = useOptionsReports();
 
@@ -81,19 +82,12 @@ export default function NewReport({showForm, token, companies,
       name="total"
       className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
         focus:border-slate-700 outline-0"
-      //onChange={formik.handleChange}
-      //onBlur={formik.handleChange}
-      //value={formik.values.amount.replace(/[$,]/g, "")}
       value={ammount.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
-      //disabled={isHistory}
       onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
-        //formik.values.amount=value || '0';
         setAmmount(value || '0');
       } catch (error) {
-        //formik.values.amount='0';
         setAmmount('0');
       }}}
     />
@@ -137,15 +131,7 @@ export default function NewReport({showForm, token, companies,
             }]
           }
 
-          // alert( getLastDayOfMonth(2012, 0) ); // 31
-          // alert( getLastDayOfMonth(2012, 1) ); // 29
-          // alert( getLastDayOfMonth(2013, 1) ); // 28
-          //const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
-          //alert( day);
-          //alert(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59));
-
           refRequest.current = true;
-          //console.log('object informe => ', data);
 
           const res = await CreateReport(token, data);
           if(res === 201){
@@ -153,9 +139,6 @@ export default function NewReport({showForm, token, companies,
             showToastMessage('Informe creado exitosamente!!');
             updateHaveNewReport(true);
             showForm(false);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -186,11 +169,9 @@ export default function NewReport({showForm, token, companies,
         
         <div className="flex justify-end px-5">
           <div className="inline-flex items-center">
-            {/* <p className="mr-3">Linea de credito</p> */}
             <Label>Es Fondo fijo? </Label>
             <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
               <input checked={imprest} 
-                //onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
                 onChange={() => setImprest(!imprest)} id="switch-3" type="checkbox"
                 className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                   appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
@@ -228,15 +209,6 @@ export default function NewReport({showForm, token, companies,
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
-
-          {/* <div>
-            <Label htmlFor="closeDate"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de cierre</p></Label>
-            <Input 
-              type="date"
-              value={closeDate}
-              onChange={(e) => setCloseDate(e.target.value)}
-            />
-          </div> */}
 
           <div>
             <Label htmlFor="ammount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>

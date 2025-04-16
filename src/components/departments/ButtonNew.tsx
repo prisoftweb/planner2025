@@ -5,8 +5,13 @@ import NewDepartment from "./NewDepartment";
 import { Options } from "@/interfaces/Common";
 import { DepartmentTable } from "@/interfaces/Departments";
 
-export default function ButtonNew({token, optionsCompany, dept}: 
-                          {token:string, optionsCompany:Options[], dept:(DepartmentTable | string)}){
+type ButtonNewProps = {
+  token:string, 
+  optionsCompany:Options[], 
+  dept:(DepartmentTable | string)
+}
+
+export default function ButtonNew({token, optionsCompany, dept}: ButtonNewProps){
   const [newCompany, setNewCompany] = useState<boolean>(false);
   
   return(

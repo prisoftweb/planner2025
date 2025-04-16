@@ -23,7 +23,6 @@ export default async function Page() {
     if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')){
       reports = await GetReportsMin(token);
     }else{
-      // reports = await GetReportsByUserMin(token, user._id);
       if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras')){
         reports = await GetReportsByUserMin(token, user._id);
       }else{
@@ -31,17 +30,32 @@ export default async function Page() {
       }
     }
     if(typeof(reports)==='string'){
-      return <h1 className="text-lg text-center text-red-500">{reports}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-lg text-center text-red-500">{reports}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+      </>
+    )
   }
   
   let optCompanies: Options[] = [];
   try {
     optCompanies = await getCompaniesLV(token);
   } catch (error) {
-    return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+      </>
+    )
   }
 
   let optCompaniesFilter: Options[] = [{
@@ -59,10 +73,20 @@ export default async function Page() {
   try {
     optProjects = await getProjectsLV(token);
     if(typeof(optProjects)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+        </>
+      )
     }    
   } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+      </>
+    )
   }
 
   optProjectsFilter = optProjectsFilter.concat(optProjects);
@@ -70,9 +94,20 @@ export default async function Page() {
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'reports');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    if(typeof(catalogs)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar catalogos!!</h1>
+      </>
+    )
   }
 
   const optConditionsFilter: Options[] = [{

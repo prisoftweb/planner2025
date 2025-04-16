@@ -31,13 +31,8 @@ export default function ChangePhoto({id, token}: {id:string, token:string}){
           }else{
             refRequest.current = true;
             showToastMessage('La foto ha sido actualizada!!');
-            //console.log('res updateme user => ', res);            
-            //console.log('photo => ', res.photo);
             setCookie('user', res);
             updateUser(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }
         } catch (error) {
           refRequest.current = true;

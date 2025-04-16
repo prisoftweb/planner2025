@@ -12,13 +12,20 @@ import { Resource } from "@/interfaces/Roles";
 import { CreateTree } from "@/app/api/routeRoles";
 import { showToastMessage, showToastMessageError } from "../Alert";
 
+type Props = {
+  token:string, 
+  opt:number, 
+  optResources:Options[], 
+  optRoutes:Options[], 
+  optComponents: Options[]
+  descRoutes: Options[], 
+  descComponents: Options[],
+  idTree:string, 
+  routesPerResource:Options[]
+}
+
 export default function ButtonNew({token, opt, optResources, optRoutes, 
-                                  descRoutes, descComponents,optComponents, 
-                                  idTree, routesPerResource}: 
-                        {token:string, opt:number, optResources:Options[], 
-                          optRoutes:Options[], optComponents: Options[]
-                          descRoutes: Options[], descComponents: Options[],
-                          idTree:string, routesPerResource:Options[]}){
+  descRoutes, descComponents,optComponents, idTree, routesPerResource}: Props){
   const [newRole, setNewRole] = useState<boolean>(false);
   
   let showButton;

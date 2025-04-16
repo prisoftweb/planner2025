@@ -33,7 +33,6 @@ export default function DataBasicHistory({project}: {project:OneProjectMin}){
             name="condition"
           />
         </div>
-        {/* {showConditions} */}
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"

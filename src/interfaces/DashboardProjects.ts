@@ -94,6 +94,24 @@ export interface ProjectByBudgetedControl {
     spent: number
     porcentage: number
   }
+  estimateInfo: {
+    estimate: number
+    porcentage: number
+  }
+  billingInfo: {
+    billedTotal: number, 
+    pendingBillingTotal: number, 
+    porcentage: number
+  }
+  paymentInfo: {
+    totalPayments: number, 
+    pendingPaymentTotal: number, 
+    porcentage: number
+  }
+  netprofitInfo: {
+    netprofitTotal: number,
+    porcentage: number
+  }
 }
 
 export interface ProjectCostoCenters {
@@ -148,4 +166,27 @@ export interface Dataset {
   data: number[]
   backgroundColor: string[]
   hoverOffset: number
+}
+
+export interface IContractualControlProject {
+  _id: string
+  title: string
+  date: string
+  estatus: string
+  progress: number
+  estimateInfo: {
+    estimatedTotal: number
+    porcentageEstimated: number
+    amountPayable: number
+    porcentagePayable: number
+    amountPayableVAT: number
+    porcentagePayableVAT: number
+    amountGuaranteeFund: number
+    porcentageGuaranteeFund: number
+    amountChargeOff: number
+    porcentageChargeOff: number
+    amount: number
+    amountPro: number
+    porcentage: number
+  }
 }

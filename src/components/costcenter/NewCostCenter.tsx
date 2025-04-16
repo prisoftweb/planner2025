@@ -12,7 +12,6 @@ import AddConcept from "./AddConcept"
 import { CreateCostoCenter, getCostoCenter, DeleteConceptInCostCenter, 
   InsertConceptInCostCenter, UpdateCostoCenter } from "@/app/api/routeCostCenter"
 import { CostCenter, CostCenterTable } from "@/interfaces/CostCenter"
-//import DeleteElement from "../DeleteElement"
 import DeleteConceptCC from "./DeleteConcept"
 import { CreateConcept } from "@/app/api/routeConcepts"
 import { Concept } from "@/interfaces/Concepts"
@@ -22,8 +21,13 @@ interface ConceptCostCenter {
   "account": string
 }
 
-export default function NewCostCenter({showForm, token, costCenter}: 
-                    {showForm:Function, token:string, costCenter:(CostCenterTable | string)}){
+type NewCostCenterProps = {
+  showForm:Function, 
+  token:string, 
+  costCenter:(CostCenterTable | string)
+}
+
+export default function NewCostCenter({showForm, token, costCenter}: NewCostCenterProps){
 
   const [heightPage, setHeightPage] = useState<number>(900);
   
@@ -122,8 +126,6 @@ export default function NewCostCenter({showForm, token, costCenter}:
 
   useEffect(() => {
     if(indexDeleteConcept !== -1){
-      // console.log('index del => ', indexDeleteConcept);
-      // console.log('leng => ', concetpsCostCenter.length);
       const arrConcepts = concetpsCostCenter;
       arrConcepts.splice(indexDeleteConcept, 1);
       console.log('res => ', arrConcepts.length);
@@ -148,17 +150,8 @@ export default function NewCostCenter({showForm, token, costCenter}:
       if(refRequest.current){
         refRequest.current = false;
         try {
-          // const categorys: CategoryCostCenter[] = []; 
-          // concepts.map((concept, index:number) => {
-          //   categorys.push({
-          //     account: accounts[index],
-          //     name: concept
-          //   })
-          // });
-
           const arrConcepts: ConceptCostCenter[] = []; 
           concepts.map((concept, index:number) => {
-            //create concept
             arrConcepts.push({
               name: concept,
               account : accounts[index]
@@ -196,8 +189,7 @@ export default function NewCostCenter({showForm, token, costCenter}:
               showToastMessageError(res);
             }
           }else{
-            //agregar conceptos
-             const data = {
+            const data = {
               categorys: arrIdConcepts
             }
             const res = await UpdateCostoCenter(token, costCenter.id, valores);
@@ -276,10 +268,6 @@ export default function NewCostCenter({showForm, token, costCenter}:
           ))}
         </div>
         <div>
-          {/* <div className=" flex justify-around">
-            <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Concepto</p></Label>
-            <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cuenta</p></Label>
-          </div> */}
           <div className="mt-1">
             {addConcepts.map((concept) => (
               concept

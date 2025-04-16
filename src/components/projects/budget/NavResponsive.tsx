@@ -1,11 +1,7 @@
 import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
-
 import { LuConstruction } from "react-icons/lu";
-import { AiOutlineFundProjectionScreen } from "react-icons/ai";
-import { MdOutlineEditLocationAlt } from "react-icons/md";
-import { FaRegCreditCard } from "react-icons/fa";
 
 export default function NavResponsive({open, setOpen, option, changeOption}: 
                 {open:boolean, setOpen:Function, option:number, changeOption:Function}){
@@ -65,7 +61,6 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
           onClick={() => changeOption(1)}
         >
           <LuConstruction className="w-4 h-4 mr-2 text-slate-500" />
-          {/* <ChartBarIcon className="w-4 h-4 mr-2 text-slate-500" /> */}
           Datos basicos
         </div>
       </div>

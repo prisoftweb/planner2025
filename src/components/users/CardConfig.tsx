@@ -1,7 +1,7 @@
 import { LockClosedIcon } from "@heroicons/react/24/solid"
 
 export default function CardConfig({title, text, children}: 
-        {title:string, text:string, children:JSX.Element}){
+  {title:string, text:string, children:JSX.Element}){
   return(
     <>
       <div className="my-4 w-full">

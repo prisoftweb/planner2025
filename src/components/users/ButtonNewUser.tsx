@@ -5,7 +5,7 @@ import NewUser from "./NewUser";
 import { Options } from "@/interfaces/Common";
 
 export default function ButtonNewUser({token, optionsDepartments, roles}: 
-    {token:string, optionsDepartments:Options[], roles:Options[]}){
+  {token:string, optionsDepartments:Options[], roles:Options[]}){
   const [newUser, setNewUser] = useState<boolean>(false);
   
   const handleNewUser = () => {

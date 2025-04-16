@@ -10,10 +10,6 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
   const dateIni = dates[0]?.minDate? new Date(dates[0].minDate): new Date();
   const dateEnd = dates[0]?.maxDate? new Date(dates[0].maxDate): new Date();
 
-  console.log('dates anexo => ', dates);
-  console.log('date i => ', dateIni);
-  console.log('date f => ', dateEnd);
-
   const bandMonth = dateIni.getMonth() === dateEnd.getMonth()
 
   const style = StyleSheet.create({
@@ -62,7 +58,6 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
             <Text>SAN LUIS POTOSI S.L.P. </Text>
             <Text style={style.textBlue}>a {date.getDate()} DE {months[date.getMonth()]} DE {date.getFullYear()}</Text>
           </View>
-          {/* <Text style={{fontSize: '11px', marginTop: '18px'}}>C. DIANA CAMACHO PALACIOS</Text> */}
           <Text style={{fontSize: '11px', marginTop: '18px'}}>C. {process.env.NEXT_PUBLIC_ADMINISTRATION_USER}</Text>
           <Text style={{fontSize: '11px'}}>DEPARTAMENTO DE ADMINISTRACION</Text>
           <View style={style.textFlex}>
@@ -94,7 +89,6 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
                   value: report.total
                 })} </Text>
               <Text> QUE SE REFIERE A GASTOS REALIZADOS DURANTE EL PERIODO COMPRENDIDO DEL </Text>
-              {/* <Text style={style.textBlue}>DIA 23 al 25 DE MAYO DEL AÑO 2024.</Text> */}
               <Text style={style.textBlue}>DIA {dateIni.getDate()} {!bandMonth? 'de' + ' ' + months[dateIni.getMonth()]: ''} al {dateEnd.getDate()} DE {months[dateEnd.getMonth()]} DEL AÑO {dateEnd.getFullYear()}.</Text>
             </Text>
           </View>

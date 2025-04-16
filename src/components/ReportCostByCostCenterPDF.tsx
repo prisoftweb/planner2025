@@ -11,7 +11,6 @@ export default function ReportCostByCostCenterPDF(){
     containerTable: {
       paddingVertical: '10px',
       borderBottom: '1px solid gray',
-      //borderTop: '1px solid gray'
     },
     header: {
       fontSize: '8px',

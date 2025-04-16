@@ -13,10 +13,14 @@ import Select from 'react-select'
 import { Options } from "@/interfaces/Common"
 import { DepartmentTable } from "@/interfaces/Departments"
 
-export default function NewDepartment({showForm, token, OptionsCompany, dept}: 
-                    {showForm:Function, token:string, OptionsCompany:Options[],
-                      dept: (DepartmentTable | string)
-                    }){
+type NewDepartmentProps = {
+  showForm:Function, 
+  token:string, 
+  OptionsCompany:Options[],
+  dept: (DepartmentTable | string)
+}
+
+export default function NewDepartment({showForm, token, OptionsCompany, dept}: NewDepartmentProps ){
 
   const [company, setCompany] = useState(OptionsCompany[0].value);
   const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
@@ -31,9 +35,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
     setHeightPage(document.body.offsetHeight - 70);
-    // console.log('useefect');
-    // console.log(heightPage, '   ', window.outerHeight );
-
+    
     if(typeof(dept) !== 'string'){
       OptionsCompany.map((optC) => {
         if(optC.value === dept.company.id){
@@ -45,10 +47,6 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}:
     return () => window.removeEventListener('scroll', handleResize);
   }, [])
   
-  // useEffect(() => {
-  //   console.log('inner ', window.outerHeight)
-  // }, [window.outerHeight]);
-
   const formik = useFormik({
     initialValues: {
       name: (typeof(dept)==='string')? '': dept.name,

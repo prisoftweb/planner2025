@@ -9,11 +9,9 @@ export default function HistoryReportData({report}:{report:Report}) {
     <form className="bg-white space-y-5 p-3 right-0 h-full">
       <div className="flex justify-end px-5">
         <div className="inline-flex items-center">
-          {/* <p className="mr-3">Linea de credito</p> */}
           <Label>Es Fondo fijo? </Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={report.ispettycash} 
-              //onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
               id="switch-3" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 

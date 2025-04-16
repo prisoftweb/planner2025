@@ -2,12 +2,10 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { User, UsrBack } from "@/interfaces/User";
-//import DeleteUser from "./DeleteUser";
 import RemoveElement from "../RemoveElement";
 import NewUser from "./NewUser";
 import Button from "../Button";
 import { useState } from "react";
-import Link from "next/link";
 import { Options } from "@/interfaces/Common";
 import Header from "../Header";
 import { DataUsersToTableData } from "@/app/functions/UsersFunctions";
@@ -15,31 +13,24 @@ import { removeUser } from "@/app/api/routeUser";
 import { useUserStore } from "@/app/store/userStore";
 
 export default function TableUsers({token, optionsDepartments, roles}:
-                        {token:string, optionsDepartments:Options[], roles:Options[]}){
+  {token:string, optionsDepartments:Options[], roles:Options[]}){
   
   const columnHelper = createColumnHelper<User>();
   const [newUser, setNewUser] = useState<boolean>(false);
   const {pushUser, users, deleteUser} = useUserStore();
-  //const [usersData, setUsersData] = useState<UsrBack[]>(users);
 
   const handleClickNew = (value:boolean) => {
     setNewUser(value);
   }
 
   const addUser = (usr: UsrBack) => {
-    //setUsersData((oldUsers) => [...oldUsers, usr]);
     pushUser(usr);
   }
 
   const delUser = (id: string) => {
-    // const newUsers = usersData.filter((usr) => {
-    //   if(usr._id !== id) return usr;
-    // });
-    // setUsersData(newUsers);
     deleteUser(id);
   }
 
-  //const data = DataUsersToTableData(usersData);
   const data = DataUsersToTableData(users);
 
   const columns = [
@@ -70,7 +61,6 @@ export default function TableUsers({token, optionsDepartments, roles}:
           </div>
           <RemoveElement token={token} id={row.original.id} 
                 name={row.original.name} remove={removeUser} removeElement={delUser} />
-          {/* <DeleteUser token={token} user={row.original} /> */}
         </div>
       ),
       enableSorting:false,
@@ -82,11 +72,6 @@ export default function TableUsers({token, optionsDepartments, roles}:
       header: 'Foto',
       id: 'foto',
       cell: ({row}) => (
-        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
-        //   <img src={row.original.photo} 
-        //     className="w-12 h-auto rounded-full" 
-        //     onClick={() => console.log(row.original.photo)} alt="profile" />
-        // </Link>
         <img src={row.original.photo} 
           className="w-12 h-auto rounded-full cursor-pointer" 
           onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)} alt="profile" />
@@ -96,9 +81,6 @@ export default function TableUsers({token, optionsDepartments, roles}:
       header: 'Nombre',
       id: 'nombre',
       cell: ({row}) => (
-        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
-        //   <p className="py-2">{row.original.name}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
         >{row.original.name}</p>
@@ -108,9 +90,6 @@ export default function TableUsers({token, optionsDepartments, roles}:
       header: 'Departamento',
       id: 'departamento',
       cell: ({row}) => (
-        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
-        //   <p className="py-2">{row.original.department}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
         >{row.original.department}</p>
@@ -120,9 +99,6 @@ export default function TableUsers({token, optionsDepartments, roles}:
       header: 'Rol',
       id: 'rol',
       cell: ({row}) => (
-        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
-        //   <p className="py-2">{row.original.role}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
         >{row.original.role}</p>
@@ -132,9 +108,6 @@ export default function TableUsers({token, optionsDepartments, roles}:
       header: 'Correo',
       id: 'email',
       cell: ({row}) => (
-        // <Link href={`/users/${row.original.id}/profile?opt=1`}>
-        //   <p className="py-2">{row.original.email}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/users/${row.original.id}/profile?opt=1`)}
         >{row.original.email}</p>

@@ -1,19 +1,6 @@
-//import { cx } from "@/lib/utils"
-//import { BarChart, TooltipProps } from "@/components/BarChart";
 import { BarChart } from "@tremor/react";
 import { CustomTooltipProps } from "@tremor/react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-
-// interface Issue {
-//     status: "completed" | "in progress" | "on hold";
-//     value: number;
-//     percentage: number;
-// }
-
-// interface DataEntry {
-//     date: string;
-//     issues: Issue[];
-// }
 
 export interface DataProjectsByType {
   project: string;
@@ -33,27 +20,14 @@ const valueFormatter = (number: number) => {
 const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) return null;
 
-  console.log('payload => ', payload);
-
-  console.log('payload de payload => ', payload[0].payload);
   const title = payload[0].payload.project;
   const st = payload[0].dataKey;
-  console.log('st => ', st);
   const data = payload.map((item:any) => ({
-      //status: item.category as Issue["status"],
       status: item.dataKey,
-      //value: item.value,
       value: CurrencyFormatter({
         currency: 'MXN',
         value: item.value,
       }),
-      // percentage: (
-      //     (item.value /
-      //         (item.payload.completed +
-      //             item.payload["in progress"] +
-      //             item.payload["on hold"])) *
-      //     100
-      // ).toFixed(2),
       percentage: (
           (item.value /
               ((item.payload.PROVEEDOR || 0) +
@@ -70,7 +44,6 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
           <span className="text-gray-50 dark:text-gray-50">
             Proyecto
           </span>
-          {/* <span className="font-medium text-gray-50 dark:text-gray-50">{label}</span> */}
           <span className="font-medium text-gray-50 dark:text-gray-50">{title}</span>
         </p>
       </div>
@@ -124,10 +97,8 @@ export function BarChartTreeInOne({data}:{data: DataProjectsByType[]}) {
       <BarChart
         className="hidden h-72 sm:block"
         data={formattedArray}
-        //index="project"
         index='status'
         categories={["PROVEEDOR", "MANO DE OBRA", "OTROS"]}
-        //type="stacked"
         colors={["blue", "red", "green"]}
         valueFormatter={valueFormatter}
         yAxisWidth={76}
@@ -138,10 +109,8 @@ export function BarChartTreeInOne({data}:{data: DataProjectsByType[]}) {
       <BarChart
         className="h-80 sm:hidden"
         data={formattedArray}
-        // index="project"
         index='status'
         categories={["PROVEEDOR", "MANO DE OBRA", "OTROS"]}
-        //type="stacked"
         colors={["blue", "cyan", "violet"]}
         valueFormatter={valueFormatter}
         showYAxis={false}

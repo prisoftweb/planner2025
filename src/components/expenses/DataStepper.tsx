@@ -1,5 +1,4 @@
 "use client"
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
 import { useFormik } from "formik"
@@ -34,9 +33,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
-
-    // console.log('cost center data stepper => ', costCenter);
-    // console.log('concept data stepper => ', concept);
 
   const formik = useFormik({
     initialValues: {
@@ -80,26 +76,15 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   const d = year+'-'+month+'-'+day;
   
-  //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(date!== ''? date: d);
-  //const [typeExpenseS, setTypeExpenseS] = useState<string>(optTypes[0].value);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
   const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
-  //const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: responsibles[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
   const [categoryS, setCategoryS] = useState<string>(categories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const refRequest = useRef(true);
-  //const [resetBand, setResetBand] = useState<boolean>(false);
-  //const [view, setView] = useState<JSX.Element>(<></>);
-  //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
-  //const [viewResponsible, setViewResponsible] = useState<JSX.Element>(<></>);
   
-  //actualizacion juntar estos 2 estados en un objeto
-
-  //console.log('vat zustand => ', vat);
-
   const [idVat, setIdVat] = useState<string>(vats[0].value);
   const [vatValue, setVatValue] = useState<string>(vat!==''? vat: '0');
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
@@ -171,7 +156,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
     }
   }
 
-  //console.log('formik amount => ', Number(formik.values.amount.replace(/[$,]/g, "")));
   let viewAmount: JSX.Element = <></>;
   viewAmount = (
     <CurrencyInput
@@ -181,13 +165,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
         focus:border-slate-700 outline-0"
       onChange={formik.handleChange}
       onBlur={formik.handleChange}
-      //defaultValue={Number(formik.values.amount.replace(/[$,]/g, ""))}
-      // value={Number(formik.values.amount.replace(/[$,]/g, ""))}
       value={formik.values.amount.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
         formik.values.amount=value || '0';
         handleIdVat(idVat);
       } catch (error) {
@@ -204,18 +185,12 @@ export default function DataStepper({token, user}: {token:string, user:string })
       name="total"
       className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
         focus:border-slate-700 outline-0"
-      //onChange={formik.handleChange}
-      //onBlur={formik.handleChange}
-      //value={formik.values.amount.replace(/[$,]/g, "")}
       value={totalExpense.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
       onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
-        //formik.values.amount=value || '0';
         setTotalExpense(value || '0');
       } catch (error) {
-        //formik.values.amount='0';
         setTotalExpense('0');
       }}}
     />
@@ -227,8 +202,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
     }
   }, []);
 
-  //console.log('costcenter contex => ', costCenter);
-  //console.log('concept context => ', concept);
   const SaveData = async() => {
     refRequest.current = false;
     const {description, folio, taxFolio, discount, amount, vat, taxExempt} = formik.values
@@ -249,19 +222,15 @@ export default function DataStepper({token, user}: {token:string, user:string })
       concept
     }
 
-    console.log('save data !!!!');
-
     if(!formik.values.description || formik.values.description===''){
       refRequest.current = true;
       showToastMessageError("No se ha agregado una descripcion al gasto!!");
     }else{
       if(voucher || CFDI){
         const formdata = new FormData();
-        //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
         formdata.append('costocenter', JSON.stringify(costcenter));
         formdata.append('date', startDate);
         formdata.append('description', description);
-        //formdata.append('discount', discount.replace(/[$,]/g, ""));
         formdata.append('folio', folio);
         formdata.append('provider', provider);
         formdata.append('user', responsibleS);
@@ -269,7 +238,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
         formdata.append('typeCFDI', typeCFDIS);
         formdata.append('category', categoryS);
         formdata.append('project', project);
-        //formdata.append('vat', vat);
         formdata.append('report', report);
         formdata.append('isticket', JSON.stringify(false));
         formdata.append('iscard', JSON.stringify(isCard));
@@ -310,7 +278,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
               const res = await CreateCostWithFiles(token, formdata);
               if(res === 201){
-                //setView(<></>);
                 reset();
                 formik.values.amount = '';
                 formik.values.description = '';
@@ -319,14 +286,9 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 formik.values.taxFolio = '';
                 formik.values.vat = '';
                 setTotalExpense('0');
-                //setClearAmount(true);
                 showToastMessage('Costo creado satisfactoriamente!!!');
-                //updateHaveExpenses(true);
                 updateRefresh(true);
                 updateIndexStepper(4);
-                // setTimeout(() => {
-                //   setResetBand(true);
-                // }, 300);
                 refRequest.current = true;
               }else{
                 refRequest.current = true;
@@ -339,7 +301,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
           }else{
             const res = await CreateCostWithFiles(token, formdata);
             if(res === 201){
-              //setView(<></>);
               reset();
               formik.values.amount = '';
               formik.values.description = '';
@@ -348,14 +309,9 @@ export default function DataStepper({token, user}: {token:string, user:string })
               formik.values.taxFolio = '';
               formik.values.vat = '';
               setTotalExpense('0');
-              //setClearAmount(true);
               showToastMessage('Costo creado satisfactoriamente!!!');
-              //updateHaveExpenses(true);
               updateRefresh(true);
               updateIndexStepper(4);
-              // setTimeout(() => {
-              //   setResetBand(true);
-              // }, 300);
               refRequest.current = true;
             }else{
               refRequest.current = true;
@@ -396,19 +352,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
             const fechaReport = new Date(reportObject.date);
             const currentDate = new Date();
             const expiration = new Date(reportObject.expirationdate);
-            // console.log(fechaGasto, ' mayor => ', fechaReport);
-            // console.log(currentDate, ' menor => ', expiration);
-            // console.log('fecha gasto time => ', fechaGasto.getTime());
-            // console.log('fecha report time => ', fechaReport.getTime());
-            // console.log('fecha current => ', currentDate.getTime());
-            // console.log('fecha expiration => ', expiration.getTime());
             if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
-              // console.log('descripcion expense => ', formik.values.description);
-              // console.log('desc => ', data.description);
               const res = await SaveExpense(data, token);
               if(res===201){
-                //setView(<></>);
                 reset();
                 formik.values.amount = '';
                 formik.values.description = '';
@@ -418,13 +365,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 formik.values.vat = '';
                 setTotalExpense('0');
                 showToastMessage('Costo creado satisfactoriamente!!!');
-                //setClearAmount(true);
-                //updateHaveExpenses(true);
                 updateRefresh(true);
                 updateIndexStepper(4);
-                // setTimeout(() => {
-                //   setResetBand(true);
-                // }, 300);
                 refRequest.current = true;
               }
               else{
@@ -438,7 +380,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
           }else{
             const res = await SaveExpense(data, token);
             if(res===201){
-              //setView(<></>);
               reset();
               formik.values.amount = '';
               formik.values.description = '';
@@ -448,13 +389,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
               formik.values.vat = '';
               setTotalExpense('0');
               showToastMessage('Costo creado satisfactoriamente!!!');
-              //setClearAmount(true);
-              //updateHaveExpenses(true);
               updateRefresh(true);
               updateIndexStepper(4);
-              // setTimeout(() => {
-              //   setResetBand(true);
-              // }, 300);
               refRequest.current = true;
             }
             else{
@@ -471,15 +407,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
   }
 
   const addProv = (newProviderSAT:Options, newProvider:Options) => {
-    //optProviders.push(newProvider);
-    //console.log('optProviders => ', optProviders);
-    //console.log('new Provider => ', newProvider);
-    //setProvider(newProvider.value);
     addProvider(newProvider);
     addProviderSat(newProviderSAT);
-
-    //console.log('prov length => ', optProviders.length)
-    //setIndexProv(optProviders.length - 1);
   }
 
   let indexProvider = 0;
@@ -503,17 +432,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
   const handleProvider = (value : string) => {
     setProvider(value);
   }
-
-  // const selectProvider = (
-  //   <div>
-  //       <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //       <div className="flex gap-x-2 items-center">
-  //         <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
-  //         <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-  //         onClick={() => setShowProvider(true)} />
-  //     </div>
-  //   </div>
-  // )
 
   const viewProvider = (
     <div className="flex gap-x-2 items-center">
@@ -574,26 +492,18 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   let indexCC = 0;
   if(costCenter !== ''){
-    //console.log('costCenter => ', costCenter);
-    //console.log('concept => ', concept);
     costCenterOpt.map((opt, index:number) => {
       if(opt.value === costCenter + '/' + concept){
-        //console.log('opt => ', opt);
         indexCC = index;
       }
     });
-    //console.log('')
   }
 
   const handleConstCenter = (value : string) => {
-    //console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    //console.log('cad 1 => ', c1);
-    //console.log('cad 2 => ', c2);
     updateCostCenter(c1, c2);
-    //setCostCenter(value);
   }
 
   const viewCC = (
@@ -770,14 +680,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
               <CurrencyInput
                 id="discount"
                 name="discount"
-                // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                //   focus:border-slate-700 outline-0"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                   focus:border-slate-700 outline-0"
                 onChange={formik.handleChange}
                 onBlur={formik.handleChange}
-                //defaultValue={0}
-                //defaultValue={discount}
                 value={formik.values.discount.replace(/[$,]/g, "") || 0}
                 decimalsLimit={2}
                 prefix="$"
@@ -802,14 +708,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
               <CurrencyInput
                 id="taxExemptt"
                 name="taxExemptt"
-                // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                //   focus:border-slate-700 outline-0"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                   focus:border-slate-700 outline-0"
                 onChange={formik.handleChange}
                 onBlur={formik.handleChange}
-                //defaultValue={0}
-                //defaultValue={discount}
                 value={formik.values.taxExempt.replace(/[$,]/g, "") || 0}
                 decimalsLimit={2}
                 prefix="$"
@@ -829,7 +731,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
             </div>
           )}
           <div>
-            {/* <Label htmlFor="vat">Iva</Label> */}
             <div className="flex justify-between">
               <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Iva</p></Label>
               <Label htmlFor="vatt"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Impuestos</p></Label>
@@ -875,7 +776,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
             />
           </div>
           {view}
-          {/* <div className=" col-span-1 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-x-3"> */}
           <div className="col-span-1 sm:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-x-3">
             <div>
               <div className="flex items-center justify-between mr-5">
@@ -906,7 +806,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 )
               }
             </div>
-            {/* {selectProvider} */}
             {viewResponsible}
           </div>
           

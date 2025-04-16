@@ -4,9 +4,7 @@ import Card from "../providers/Card";
 import { ChatBubbleBottomCenterIcon, CursorArrowRaysIcon } from "@heroicons/react/24/solid";
 import DeleteContactClient from "./DeleteContactClient";
 
-
-export default function Sumary({client, token, idCli}: 
-                            {client:ClientBack, token:string, idCli:string}){
+export default function Sumary({client, token, idCli}: {client:ClientBack, token:string, idCli:string}){
   
   let showContacts: JSX.Element[] =[];
   
@@ -17,8 +15,6 @@ export default function Sumary({client, token, idCli}:
                         </CardContacts>)
     })
   }
-
-
 
   return(
     <div className="w-full">

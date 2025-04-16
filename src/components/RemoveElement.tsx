@@ -5,12 +5,21 @@ import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
+type Props = {
+  token : string, 
+  name:string, 
+  id:string, 
+  remove:Function, 
+  removeElement: Function, 
+  colorIcon?: string, 
+  isCostcenterBudget?:boolean, 
+  progreesAverage?: number, 
+  totalAverage?: number
+}
+
 export default function RemoveElement({token, id, name, remove, removeElement, 
-                               colorIcon='text-red-500 hover:text-red-300', isCostcenterBudget=false, progreesAverage=0, 
-                               totalAverage=0} : 
-                                {token : string, name:string, id:string, 
-                                  remove:Function, removeElement: Function, 
-                                  colorIcon?: string, isCostcenterBudget?:boolean, progreesAverage?: number, totalAverage?: number}){
+  colorIcon='text-red-500 hover:text-red-300', isCostcenterBudget=false, progreesAverage=0, 
+  totalAverage=0} : Props){
   
   const deleteElement = async (progress: number, total: number)  => {
   
@@ -30,11 +39,7 @@ export default function RemoveElement({token, id, name, remove, removeElement,
                 if(res === 204) {
                   showToastMessage(`${name} eliminado exitosamente!`);
                   removeElement(id);
-                  // setTimeout(() => {
-                  //   window.location.reload();
-                  // }, 500)
                 } else {
-                  console.log('res rem elem => ', res);
                   showToastMessageError(`${name} no pudo ser eliminado..`);
                 }
               } catch (error) {
@@ -71,7 +76,6 @@ export default function RemoveElement({token, id, name, remove, removeElement,
   
     return(
     <>
-      {/* <TrashIcon width={20} height={20} className="text-red-500 hover:text-red-300 cursor-pointer" */}
       <TrashIcon className={`cursor-pointer w-6 h-6 ${colorIcon}`}  
         onClick={() => {
           deleteElement(progreesAverage, totalAverage);

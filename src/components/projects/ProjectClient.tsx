@@ -13,12 +13,19 @@ import ProgressProject from "./ProgressProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
 import DashboardProfileProject from "./DashboardProfileProject"
 
+type Props = {
+  project:OneProjectMin, 
+  token:string, 
+  id:string,
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  optConditions:Options[],
+  user:string
+}
+
 export default function ProjectCli({project, token, id, optCategories, optClients, 
-                             optTypes, optConditions, user}: 
-                            {project:OneProjectMin, token:string, id:string,
-                              optClients:Options[], optCategories:Options[], 
-                              optTypes:Options[], optConditions:Options[],
-                              user:string}){
+  optTypes, optConditions, user}: Props){
 
   const [opt, setOpt] = useState<number>(1);
   const {updateOneProjectStore} = useOneProjectsStore();
@@ -71,7 +78,6 @@ export default function ProjectCli({project, token, id, optCategories, optClient
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        {/* <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2"  */}
         <div className="flex w-full px-2 flex-wrap space-x-2"
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>

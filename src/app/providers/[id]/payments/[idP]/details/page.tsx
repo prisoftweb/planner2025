@@ -1,12 +1,10 @@
-//import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
-import { getProvider, getProviderMin, getProviders } from "@/app/api/routeProviders";
+import { getProviderMin, getProviders } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
 import { DetailExpensesTableProvider, Provider, ProviderMin } from "@/interfaces/Providers";
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
-// import { Expense } from "@/interfaces/Expenses";
 import { CostPayment, OnePayment } from "@/interfaces/Payments";
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
 
@@ -21,46 +19,90 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   try {
     const arrProvider = await getProviderMin(params.id, token);
     if(typeof(arrProvider) === "string")
-      return <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
+        </>
+      )
     else
       provider = arrProvider[0];
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+      </>
+    ) 
   }
 
   let providers: Provider[];
   try {
     providers = await getProviders(token);
     if(typeof(providers) === "string")
-      return <h1 className="text-center text-red-500">{providers} provedores</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{providers} provedores</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+      </>
+    )  
   }
 
   let costs: CostPayment[];
   try {
     costs = await getCostsPayment(token, params.idP);
     if(typeof(costs) === "string")
-      return <h1 className="text-center text-red-500">{costs} costos</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{costs} costos</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del pago!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del pago!!</h1>
+      </>
+    ) 
   }
 
   let payment: OnePayment;
   try {
     payment = await getPayment(token, params.idP);
     if(typeof(payment) === "string")
-      return <h1 className="text-center text-red-500">{payment} one payment</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{payment} one payment</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del pago!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del pago!!</h1>
+      </>
+    ) 
   }
 
   if(providers.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+      </>
+    )
   }
 
   const table: DetailExpensesTableProvider[] = ExpenseDataToTableDetailExpensesProviderData(costs);
-  // const table: DetailExpensesTableProvider[] = [];
   
   return(
     <>

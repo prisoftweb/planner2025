@@ -11,10 +11,8 @@ import { Provider } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
 import { useOutsideClick } from "@/app/functions/useOutsideClick";
 
-export default function AddProvider({token, setShowForm, addProv}: 
-          {token:string, setShowForm:Function, addProv:Function}){
+export default function AddProvider({token, setShowForm, addProv}: {token:string, setShowForm:Function, addProv:Function}){
   
-  //const [suppliercredit, setSuppliercredit] = useState<boolean>(false);
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);
 
@@ -62,7 +60,6 @@ export default function AddProvider({token, setShowForm, addProv}:
           name, 
           tradename,
           rfc,
-          //"suppliercredit": suppliercredit
         }
         try {
           const res:(Provider | string) = await createNewProvider(data, token);
@@ -141,23 +138,6 @@ export default function AddProvider({token, setShowForm, addProv}:
             </div>
           ) : null}
         </div>
-        {/* <div className="inline-flex items-center">
-          <Label>Linea de credito</Label>
-          <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-            <input checked={suppliercredit} 
-              onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
-              onChange={() => console.log('')}
-              className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-                appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-                peer-checked:border-green-500 peer-checked:before:bg-green-500
-                border border-slate-300" />
-            <label htmlFor="switch-3"
-              className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-              <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                data-ripple-dark="true"></div>
-            </label>
-          </div>
-        </div> */}
         <div className="flex justify-center mt-8 space-x-5">
           <button type="button"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl

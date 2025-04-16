@@ -1,4 +1,4 @@
-import { Project, ProjectMin } from "@/interfaces/Projects";
+import { ProjectMin } from "@/interfaces/Projects";
 import DeleteElement from "../DeleteElement";
 import { RemoveProject } from "@/app/api/routeProjects";
 import Link from "next/link";

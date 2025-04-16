@@ -27,7 +27,6 @@ export default function DataBasicStepper({token, id, tags}:
   let tradenameI = '';
   let nameI = '';
   let rfcI = '';
-  //let supplier = false;
   let emailI= '';
 
   if(state.databasic){
@@ -35,10 +34,7 @@ export default function DataBasicStepper({token, id, tags}:
     nameI = state.databasic.name;
     rfcI = state.databasic.rfc;
     emailI = state.databasic.email? state.databasic.email : '';
-    //supplier = state.databasic.suppliercredit;
   }
-
-  //const [suppliercredit, setSuppliercredit] = useState<boolean>(supplier);
 
   const formik = useFormik({
     initialValues: {
@@ -60,9 +56,8 @@ export default function DataBasicStepper({token, id, tags}:
       const {name, tradename, rfc, email} = valores;
       
       let tagsSelected: string[] = [];
-        optsTags.map((optTag) => {
-          //tagsSelected.push(optTag.value);
-          tagsSelected.push(optTag.label);
+      optsTags.map((optTag) => {
+        tagsSelected.push(optTag.label);
       })
       
       const data: any = {
@@ -76,8 +71,6 @@ export default function DataBasicStepper({token, id, tags}:
         email,
         regime: regime,
       }
-
-      //console.log('data basic', data);
 
       dispatch({ type: 'SET_BASIC_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 1})
@@ -98,11 +91,9 @@ export default function DataBasicStepper({token, id, tags}:
       }
       data.append('rfc', rfc);
       data.append('source', source);
-      //data.append('tags', tags);
       let arrTags: string[]= [];
       optsTags.map((optTag) => {
         arrTags.push(optTag.label);
-        //data.append('tags', optTag.label);
       })
       data.append('regime', regime);
       if(id && id!==''){
@@ -141,9 +132,6 @@ export default function DataBasicStepper({token, id, tags}:
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -162,7 +150,6 @@ export default function DataBasicStepper({token, id, tags}:
 
       let tagsSelected: string[] = [];
       optsTags.map((optTag) => {
-        //tagsSelected.push(optTag.value);
         tagsSelected.push(optTag.label);
       })
 
@@ -217,9 +204,6 @@ export default function DataBasicStepper({token, id, tags}:
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client)pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -232,14 +216,10 @@ export default function DataBasicStepper({token, id, tags}:
   }
 
   const [phone, setPhone] = useState<string>('');
-  //const [typePhone, setTypePhone] = useState<string>(optionsPhone[0].value);
-  //const [optionsType, setOptionsType] = useState(optionsPhone[0]);
   const [regime, setRegime] = useState<string>('Fisica');
   const [source, setSource] = useState<string>(optionsSource[0].value);
   const [optsSource, setOptsSource] = useState(optionsSource[0]);
-  //const [tagsSelected, setTagsSelected] = useState<string[]>([tags[0].value]);
   const [optsTags, setOptstags] = useState([tags[0]]);
-
 
   return(
     <div className="w-full h-full">

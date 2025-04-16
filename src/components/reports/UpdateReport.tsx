@@ -1,8 +1,6 @@
 'use client'
-//import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-//import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -39,15 +37,9 @@ export default function UpdateReport({ token, report, user}:{
 
   const [ammount, setAmmount] = useState<string>(oneReport? oneReport.ammount?.toString() || '0': report.ammount?.toString() || '0');
 
-  // const handleResize = () => {
-  //   setHeightPage(document.body.offsetHeight);
-  // }
-
   const updateDatePermission = typeof(user.department)==='string'? false: user.department.name.toLowerCase().includes('admin');
   
   useEffect (() => {
-    // window.addEventListener("resize", handleResize, false);
-    // setHeightPage(document.body.offsetHeight - 70);
     const fetchOptions = async () => {
       let optComps: Options[] = [];
       try {
@@ -124,19 +116,12 @@ export default function UpdateReport({ token, report, user}:{
       name="total"
       className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
         focus:border-slate-700 outline-0"
-      //onChange={formik.handleChange}
-      //onBlur={formik.handleChange}
-      //value={formik.values.amount.replace(/[$,]/g, "")}
       value={ammount.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
-      //disabled={isHistory}
       onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
-        //formik.values.amount=value || '0';
         setAmmount(value || '0');
       } catch (error) {
-        //formik.values.amount='0';
         setAmmount('0');
       }}}
     />
@@ -188,27 +173,16 @@ export default function UpdateReport({ token, report, user}:{
       }
     }
   });
-
-  // function getLastDayOfMonth(year:number, month:number) {
-  //   let date = new Date(year, month + 1, 0);
-  //   return date.getDate();
-  // }
-  // const currentDate = new Date();
-  // const day = getLastDayOfMonth(currentDate.getFullYear(), currentDate.getMonth());
-  // console.log(new Date(currentDate.getFullYear(), currentDate.getMonth(), day, 23, 59, 59).toDateString());
   
   return (
     <form className="bg-white space-y-5 p-3 right-0 h-full"
       onSubmit={formik.handleSubmit}
-      //style={{height: `${heightPage}px`}}
     >
       <div className="flex justify-end px-5">
         <div className="inline-flex items-center">
-          {/* <p className="mr-3">Linea de credito</p> */}
           <Label>Es Fondo fijo? </Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={imprest} 
-              //onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
               onChange={() => setImprest(!imprest)} id="switch-3" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
@@ -261,12 +235,6 @@ export default function UpdateReport({ token, report, user}:{
           <div>
             <Label htmlFor="ammount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
             {viewAmmount}
-            {/* <Input type="text" name="ammount"
-              onChange={formik.handleChange}
-              onBlur={formik.handleChange}
-              value={formik.values.name}
-              autoFocus
-            /> */}
           </div>
         )}
 

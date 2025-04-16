@@ -11,11 +11,17 @@ import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "../SearchInTable"
 import WithOut from "../WithOut"
 
+type Props = {
+  token:string, 
+  data:ProjectsTable[], 
+  projects: ProjectMin[], 
+  optCategoriesFilter: Options[], 
+  optTypesFilter: Options[], 
+  optConditionsFilter: Options[]
+}
+
 export default function ContainerHistoryClient({token, data, optCategoriesFilter, 
-                          optConditionsFilter, optTypesFilter, projects}: 
-                        {token:string, data:ProjectsTable[], 
-                          projects: ProjectMin[], optCategoriesFilter: Options[], 
-                          optTypesFilter: Options[], optConditionsFilter: Options[]}){
+  optConditionsFilter, optTypesFilter, projects}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -44,7 +50,9 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
         <div className="flex items-center">
           <Link href={'/'}>
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            <div className="p-1 border border-slate-400 bg-white rounded-md">
+              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            </div>
           </Link>
           <p className="text-xl w-56 ml-4 font-medium">Historial de proyectos</p>
         </div>

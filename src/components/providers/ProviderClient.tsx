@@ -11,7 +11,7 @@ import NavResponsive from "./NavResponsive"
 import { useOneProviderStore } from "@/app/store/providerStore"
 
 export default function ProviderClient({provider, token, id}: 
-                            {provider:Provider, token:string, id:string}){
+  {provider:Provider, token:string, id:string}){
 
   const [opt, setOpt] = useState<number>(provider.tradeline?.creditlimit ? 1: 2);
   const {updateOneProviderStore} = useOneProviderStore();
@@ -58,14 +58,6 @@ export default function ProviderClient({provider, token, id}:
           {view}
         </div>
       </div>
-      
-      {/* <div className="flex space-x-2 px-1 mt-3 flex-wrap" 
-        style={{'backgroundColor': '#F8FAFC'}}>
-        <div className="w-full max-w-md lg:max-w-xs ">
-          <ProfileProvider option={opt} provider={provider} setOption={setOpt} />
-        </div>
-        {view}
-      </div> */}
     </>
   )
 }

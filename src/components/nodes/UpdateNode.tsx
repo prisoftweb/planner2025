@@ -7,21 +7,26 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
 import { Options } from "@/interfaces/Common"
 import { insertRelationsInNode } from "@/app/api/routeNodes"
-//import SelectReact from "../SelectReact"
-import { Node, NodeTable } from "@/interfaces/Nodes"
+import { NodeTable } from "@/interfaces/Nodes"
 import AddElements from "../roles/AddElements"
 import Input from "../Input"
 
+type Params = {
+  showForm:Function, 
+  token:string, 
+  glossaries:Options[], 
+  departments:Options[], 
+  workFlows:Options[], 
+  id:string, 
+  optRels: Options[], 
+  optDesc: Options[], 
+  node:(NodeTable | undefined)
+}
+
 export default function UpdateNode({showForm, token, departments, glossaries, 
-                      workFlows, id, optDesc, optRels, node}: 
-                    {showForm:Function, token:string, glossaries:Options[], 
-                      departments:Options[], workFlows:Options[], id:string, 
-                      optRels: Options[], optDesc: Options[], node:(NodeTable | undefined)}){
+  workFlows, id, optDesc, optRels, node}: Params){
   
   const [heightPage, setHeightPage] = useState<number>(900);
-  // const [department, setDepartment] = useState<string>(departments[0].value);
-  // const [glossary, setGlossary] = useState<string>(glossaries[0].value);
-  // const [workflow, setWorkflow] = useState<string>(workFlows[0].value);
   const [optRelations, setOptRelations] = useState<Options[]>(optRels);
   const [descriptions, setDescriptions] = useState<Options[]>(optDesc);
   const [relations, setRelations] = useState<string[]>([]);
@@ -42,37 +47,12 @@ export default function UpdateNode({showForm, token, departments, glossaries,
     setCountFiles(countFiles + 1);
   }
 
-  // const [showRelations, setShowRelations] = 
-  //       useState<JSX.Element[]>([<AddElements DeleteElement={deleteElement} bandPlus={true} 
-  //             descriptions={descriptions} opts={optRelations} pushElement={pushElement} 
-  //             index={0} updateCount={updateCount} />]);
   const [showRelations, setShowRelations] = 
         useState<JSX.Element[]>([]);
 
-  // const handleDepartment = (value:string) => {
-  //   setDepartment(value);
-  // }
-
-  // const handleGlossary = (value:string) => {
-  //   setGlossary(value);
-  // }
-
-  // const handleWorkflow = (value:string) => {
-  //   setWorkflow(value);
-  // }
-  
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
   }
-  
-  // const [showWorkflow, setShowWorkflow] = useState<JSX.Element>(
-  //               <SelectReact index={0} opts={workFlows} setValue={handleWorkflow} />)
-
-  // const [showDept, setShowDept] = useState<JSX.Element>(
-  //           <SelectReact index={0} opts={departments} setValue={handleDepartment} />)
-
-  // const [showCondition, setShowConditions] = useState<JSX.Element>(
-  //           <SelectReact index={0} opts={glossaries} setValue={handleGlossary} />)
 
   useEffect (() => {
     window.addEventListener("resize", handleResize, false);
@@ -157,21 +137,15 @@ export default function UpdateNode({showForm, token, departments, glossaries,
         
         <div>
           <Label htmlFor="workflow"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Workflow</p></Label>
-          {/* <Label htmlFor="workflowValue">{node?.workflow}</Label> */}
           <Input value={node?.workflow} disabled />
-          {/* {showWorkflow} */}
         </div>
         <div>
           <Label htmlFor="department"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Departamento</p></Label>
-          {/* <Label htmlFor="departmentValue"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">{node?.department}</p></Label> */}
           <Input value={node?.department} disabled />
-          {/* {showDept} */}
         </div>
         <div>
           <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
-          {/* <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">{node?.condition}</p></Label> */}
           <Input value={node?.condition} disabled />
-          {/* {showCondition} */}
         </div>
         <div>
           <Label htmlFor="relations"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Relaciones</p></Label>

@@ -30,7 +30,6 @@ export default function CardDashboardProvider({children, link, p1, p2, p3, textC
         <p>{p1}</p>
         <div className="flex items-center text-2xl sm:text-4xl my-2">
           <div className={`${textColor} p-2 mr-3 rounded-lg`}>
-            {/* <EnvelopeIcon width={20} height={20} /> */}
             {children}
           </div>
           {valueTooltip && (

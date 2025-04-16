@@ -13,11 +13,26 @@ import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 
+type Props = {
+  token:string, 
+  id:string, 
+  user:string, 
+  costs: string[], 
+  condition: string, 
+  minDate:string, 
+  maxDate: string, 
+  showForm: Function, 
+  updateTable: Function, 
+  optTypes: Options[], 
+  costsPayment: CostsPaymentTable[], 
+  paymentPlugin:string, 
+  datePayment:string, 
+  commentsPayment:string
+}
+
 export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
-  minDate, showForm, updateTable, condition, optTypes, costsPayment}: 
-          {token:string, id:string, user:string, costs: string[], condition: string, 
-            minDate:string, maxDate: string, showForm: Function, updateTable: Function, 
-            optTypes: Options[], costsPayment: CostsPaymentTable[]}) {
+  minDate, showForm, updateTable, condition, optTypes, costsPayment, commentsPayment, 
+  datePayment, paymentPlugin}: Props) {
 
   let a = 0;
   costsPayment.map((c) => {
@@ -37,7 +52,6 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
 
   const [pending, setPending] = useState<number>(-1);
   const [paidMethod, setPaidMethod] = useState<string>(optTypes[0].value);
-  // const [previousbalanceamount, setPreviousbalanceamount] = useState<number>(0);
 
   const handlePaidMethod = (value: string) => {
     setPaidMethod(value);
@@ -84,7 +98,6 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
     }
 
     if(band){
-      //console.log('guardar');
       if(pending===-1){
         showToastMessageError('Error al calcular pendiente por pagar, intente otra vez!!!')
       }else{
@@ -94,27 +107,16 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   }
 
   const paidExpenses = async() => {
-    console.log('pending => ',pending);
-    console.log('pago => ', Number(amount.replace(/[$,","]/g, "")));
     let pen = pending - Number(amount.replace(/[$,","]/g, ""));
 
-    console.log('res pen => ', pen);
+    const paymentplugin = {
+      plugin: Number(paymentPlugin.replace(/[$,","]/g, "")),
+      date: datePayment,
+      notes: commentsPayment
+    }
 
     const arrCosts: CostInPayment[] = [];
-    console.log('costs payment => ', costsPayment);
-    // costs.map((c, index: number) => {
-    //   console.log('cost p => ', costsPayment[index], ' index => ', index);
-    //   arrCosts.push({
-    //     cost: c,
-    //     payment: [{
-    //       previousbalanceamount: Number(costsPayment[index].Total.replace(/[$,",", M, X]/g, "")),
-    //       payout: costsPayment[index].paid,
-    //       unpaidbalanceamount: costsPayment[index].pending,
-    //       partialitynumber: costsPayment[index].parciality
-    //     }]
-    //   });
-    // });
-
+    
     costsPayment.map((c) => {
       console.log('cost p => ', c);
       arrCosts.push({
@@ -124,12 +126,6 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         unpaidbalanceamount: c.pending,
         partialitynumber: c.parciality,
         paymentelements: 1
-        // payment: [{
-        //   previousbalanceamount: Number(c.Total.replace(/[$,",", M, X]/g, "")),
-        //   payout: c.paid,
-        //   unpaidbalanceamount: c.pending,
-        //   partialitynumber: c.parciality
-        // }]
       });
     });
 
@@ -137,10 +133,6 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       const data = new FormData();
       data.append("reference",reference);
       data.append("payout",amount.replace(/[$]/g, ""));
-      // data.append("range", JSON.stringify({
-      //     min:minDate,
-      //     max:maxDate
-      //   }));
       data.append("date",date);
       arrCosts.map((c) => {
         data.append("paymentInCosts", JSON.stringify(c));
@@ -164,15 +156,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         user
       }]));
       data.append("methodofpayment", paidMethod);
-      // acceptedFiles.map((f) => {
-      //   data.append("voucher", f);
-      // })
+      data.append("paymentplugin", JSON.stringify(paymentplugin));
 
-      console.log('acceoted files 0 => ', acceptedFiles[0]);
-      console.log(data.getAll('voucher'));
-      console.log(data.getAll('costs'));
-      console.log('paymentInCosts => ', data.getAll('paymentInCosts'));
-  
       const res = await createPaymentsWithVoucher(token, data);
       if(typeof(res) === 'string'){
         showToastMessageError(res);
@@ -208,11 +193,10 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
             glossary: "67378f77d846bbd16e1a8714",
             user                    
         }],
-        methodofpayment: paidMethod
+        methodofpayment: paidMethod,
+        paymentplugin
       }
 
-      console.log('data payment => ', JSON.stringify(data));
-      // showToastMessage('pagado!!!');
       const res = await createPayments(token, data);
       if(typeof(res) === 'string'){
         showToastMessageError(res);
@@ -234,7 +218,6 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   });
 
   useEffect(() => {
-    // console.log(acceptedFiles);
     if ( typeof acceptedFiles[0] !== 'undefined' ){
       setPre(acceptedFiles[0]);
     }else{

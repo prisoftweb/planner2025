@@ -1,8 +1,5 @@
 import HeaderForm from "../HeaderForm";
 import { XMarkIcon } from "@heroicons/react/24/solid";
-//import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
-//import {confirmAlert} from 'react-confirm-alert';
-import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
 import { useNewExpense } from "@/app/store/newExpense";
 import DataStepper from "./DataStepper";
@@ -12,10 +9,8 @@ import TabDeductible from "./TabDeductible";
 import DataNoDeductibleStepper from "./DataNoDeductibleStepper";
 import VoucherNoDeductibleStepper from "./VoucherNoDeductibleStepper";
 import SelectProjectStepper from "./SelectProyectStepper";
-//import { Project } from "@/interfaces/Projects";
 import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import { ReportParse } from "@/interfaces/Reports";
 import RefreshStepperComponent from "./RefreshStepperComponent";
 
 import { UsrBack } from "@/interfaces/User";
@@ -30,7 +25,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
 
   const {indexStepper, isDeductible, project, updateProject, 
     report, isPettyCash, condition, updateReport, updateIndexStepper, 
-    updateCondition, updatePettyCash} = useNewExpense();
+    updateCondition} = useNewExpense();
 
   const {vats, projects, conditions, categories} = useOptionsExpense();
 
@@ -44,13 +39,9 @@ export default function NewExpenseContainer({token, showForm, user, }:
     setIdTicket(idT);
   }
 
-  //const idVat = optVats.find((vat) => vat.label === '0')?.value || '';
   const idVat = vats.find((vat) => vat.label === '0')?.value || '';
   
-  // //const [optSelectize, setOptSelectize] = useState<Options>(optProjects.find((optP) => optP.value === project)?? optProjects[0]);
-  // const optSelectize = optProjects.find((optP) => optP.value === project)?? optProjects[0];
   const optSelectize = projects.find((optP) => optP.value === project)?? projects[0];
-  //console.log('find => ', optProjects.find((optP) => optP.value === project));
   const DropdownIndicator = (props: any) => {
     return (
       components.DropdownIndicator && (
@@ -69,16 +60,12 @@ export default function NewExpenseContainer({token, showForm, user, }:
     }),
   }
 
-  //console.log('selectice => ', optSelectize);
-
   const viewSelectProject: JSX.Element = indexStepper === 0 || projects.length===0 ? <></> : (
     <Select
       className={`w-full max-w-sm`} 
       value={optSelectize}
-      //options={optProjects}
       options={projects}
       isDisabled={isPettyCash}
-      //isDisabled={true}
       maxMenuHeight={250}
       components={{
         DropdownIndicator
@@ -88,12 +75,10 @@ export default function NewExpenseContainer({token, showForm, user, }:
       onChange={(value:any) => {
         console.log('onchange => ', value);
         updateProject(value.value); 
-        //setOptSelectize(value);
       }}
     />)
   
   const handleResize = () => {
-    //setHeightPage(window.outerHeight);
     setHeightPage(Math.max(
       document.body.scrollHeight, document.documentElement.scrollHeight,
       document.body.offsetHeight, document.documentElement.offsetHeight,
@@ -108,8 +93,6 @@ export default function NewExpenseContainer({token, showForm, user, }:
       document.body.offsetHeight, document.documentElement.offsetHeight,
       document.body.clientHeight, document.documentElement.clientHeight
     ));
-    // updateCondition(optConditions[0].value);
-    //selectProject();
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 

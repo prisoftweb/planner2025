@@ -1,9 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
 import Table from "../Table";
 import SearchInTable from "../SearchInTable";
 import { useState, useEffect } from "react";
-import ReportCostsByProjectOnlyPDF from "../ReportCostByProjectOnlyPDF"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 
@@ -23,7 +21,6 @@ export default function TableReportByType({token}: {token:string}){
       let reportsProject: ReportByProject[];
       try {
         reportsProject = await GetCostsGroupByProject(token);
-        //console.log('reports projects page => ', reportsProject);
         if(typeof(reportsProject)==='string'){
           return <h1>Error al consultar costos por proyecto!!</h1>
         }
@@ -34,7 +31,6 @@ export default function TableReportByType({token}: {token:string}){
       let costTypes: CostGroupByType[];
       try {
         costTypes = await GetCostsGroupByType(token);
-        //console.log('reports projects page => ', costTypes);
         if(typeof(costTypes)==='string'){
           return <h1>Error al consultar costos por tipo!!</h1>
         }
@@ -50,28 +46,6 @@ export default function TableReportByType({token}: {token:string}){
   }, []);
 
   const columns = [
-    // columnHelper.accessor(row => row._id, {
-    //   id: 'seleccion',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-2">
-    //       <input type="checkbox" 
-    //         checked={row.getIsSelected()}
-    //         onChange={row.getToggleSelectedHandler()}
-    //         className="w-24 cursor-pointer"
-    //       />
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: ({table}:any) => (
-    //     <input type="checkbox"
-    //       className="w-24 cursor-pointer"
-    //       checked={table.getIsAllRowsSelected()}
-    //       onClick={()=> {
-    //         table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-    //       }}
-    //     />
-    //   )
-    // }),
     columnHelper.accessor('project.user._id', {
       id: 'Responsable',
       cell: ({row}) => (

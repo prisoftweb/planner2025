@@ -4,8 +4,6 @@ import { GiShoppingBag } from 'react-icons/gi';
 import { BsBarChartFill } from 'react-icons/bs';
 import { DateRangePicker } from '@tremor/react';
 import { es } from "date-fns/locale"
-//import MultiSelectReact from '@/components/MultiSelectReact';
-//import SelectMultipleReact from '@/components/SelectMultipleReact';
 import SelectReact from '@/components/SelectReact';
 import { Options } from '@/interfaces/Common';
 import { useState } from 'react';
@@ -14,10 +12,22 @@ import Label from '@/components/Label';
 import { CostsGroupByResumen, CostsGroupResumenByType } from '@/interfaces/DashboardsCosts';
 import { CurrencyFormatter, MoneyFormatter } from '@/app/functions/Globals';
 import {Tooltip} from "@nextui-org/react";
+import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
+import ReportCostsCategoryAndConceptPDF from './ReportCostsCategoryAndConcept';
 
-export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType}: 
-    {handleDate: Function, projects:Options[], costsResumen:CostsGroupByResumen[], 
-      costsResumenType:CostsGroupResumenByType[]}) {
+type StatisticsHeaderProps = {
+  handleDate: Function, 
+  projects:Options[], 
+  costsResumen:CostsGroupByResumen[], 
+  costsResumenType:CostsGroupResumenByType[], 
+  dataCostsCatagory: CostsByConceptAndCategory[], 
+  dataCostsConcept: CostsByConceptAndCategory[]
+}
+
+export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType, 
+      dataCostsCatagory, dataCostsConcept }: StatisticsHeaderProps) {
 
   let props = {
     variants: {
@@ -44,30 +54,24 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
     to: new Date(),
   });
 
-  //console.log('header proyects => ', projects);
-  //console.log('header cost resumen => ', costsResumen);
   const handleProjects = (value: string) => {
     setProject(value);
     if(rangeDate?.from && rangeDate.to){
-      //console.log('handle proyect => ');
-      //handleDate(rangeDate.from, rangeDate.to, project);
       handleDate(rangeDate.from, rangeDate.to, value);
     }
   };
   return (
     <div>
       <div>
-        <div className='flex flex-wrap justify-end p-3 gap-x-5 gap-y-3 mt-2'>
+        <div className='flex flex-wrap justify-end items-center p-3 gap-x-5 gap-y-3 mt-2'>
           <div>
             <Label htmlFor='date'>Fecha</Label>
             <DateRangePicker 
               className='mt-2'
               placeholder='Seleccione un rango de fechas'
               onValueChange={(e) => {
-                //console.log('change date range => ', e);
                 setRangeDate(e);
                 if(e.from && e.to){
-                  //setRangeDate(e);
                   handleDate(e.from.toDateString(), e.to.toDateString(), project);
                 }
               }}
@@ -78,7 +82,42 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           <div className='sm:w-56 w-96'>
             <Label htmlFor='project'>Proyecto</Label>
             <SelectReact index={0} opts={projects} setValue={handleProjects} />
-            {/* <SelectMultipleReact opts={projects} setValue={() => {}} index={0} /> */}
+          </div>
+          <div className='w-5'>
+            {dataCostsCatagory && dataCostsCatagory.length > 0 && (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                content='categoria'
+                className="text-slate-900 bg-white" placement="top">
+                <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
+                                              type={true} rangeDate={rangeDate} />} 
+                    fileName={`InformeCostosAgrupadosPorCategoria`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                    ) : (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                    ) }
+                </PDFDownloadLink>
+              </Tooltip>
+            )}
+          </div>
+          <div className='w-5'>
+            {dataCostsConcept && dataCostsConcept.length > 0 && (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                  content='concepto' 
+                  className="text-slate-900 bg-white" placement="top">
+                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
+                                                type={false} rangeDate={rangeDate} />} 
+                    fileName={`InformeCostosAgrupadosPorConcepto`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                    ) : (
+                      <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                    ) }
+                </PDFDownloadLink>
+              </Tooltip>
+            )}
           </div>
         </div>
       </div>
@@ -87,8 +126,6 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             border-slate-100 shadow-lg shadow-slate-500 p-1'>
           <div className='w-full h-full flex flex-col justify-center items-center'>
             <GiShoppingBag className='w-12 h-auto' />
-            {/* <p className='text-xs'>NO DEDUCIBLES</p>
-            <p className='text-3xl'>$4,137</p> */}
             {costsResumenType.length > 0 && (
               <>
                 <p className='text-xs'>{costsResumenType[0].tipo}</p>
@@ -102,15 +139,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                     {MoneyFormatter(costsResumenType[0].subtotalCost)}
                   </p>
                 </Tooltip>
-                {/* <p className=' text-lg sm:text-xl'>
-                  {MoneyFormatter(costsResumenType[0].subtotalCost)}
-                </p> */}
               </>
             )}
           </div>
           <div className='w-full h-full flex flex-col justify-center'>
-            {/* <p className='text-xs'>PROVEEDORES</p>
-            <p className='text-3xl'>$90,083</p> */}
             {costsResumenType.length > 1 && (
               <>
                 <p className='text-xs'>{costsResumenType[1].tipo}</p>
@@ -128,8 +160,6 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             )}
           </div>
           <div>
-            {/* <p className='text-xs'>MANO DE OBRA</p>
-            <p className='text-3xl'>$345,234</p> */}
             {costsResumenType.length > 2 && (
               <>
                 <p className='text-xs'>{costsResumenType[2].tipo}</p>
@@ -157,7 +187,6 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           </div>
           <div>
             <div>
-              {/* <p className='text-2xl'>$1,370,972.00</p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
                     currency: 'USD',
@@ -171,7 +200,6 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               <p className='text-xs'>Costo</p>
             </div>
             <div className='mt-3'>
-              {/* <p className='text-2xl'>$135,934.00</p> */}
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
                     currency: 'USD',
@@ -190,10 +218,8 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
         <div className='flex items-center justify-around gap-x-4 bg-white border border-slate-100 
             shadow-lg shadow-slate-500 p-5'>
           <div>
-            {/* <p className='text-3xl'>316</p> */}
             <p className='text-2xl'>{costsResumen.length > 0? costsResumen[0].quantity: 0}</p>
             <p className='text-xs'>GRANTOTAL</p>
-            {/* <p>$2,709,333</p> */}
             <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
                     currency: 'USD',

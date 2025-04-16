@@ -8,7 +8,6 @@ import { Tag } from "@/interfaces/Clients";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import ClientCli from "@/components/clients/Clientcli";
 import Navigation from "@/components/navigation/Navigation";
-//import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
 import NavTab from "@/components/clients/NavTab";
 import HeaderImage from "@/components/HeaderImage";
@@ -53,25 +52,50 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     clients = await getClients(token);
     if(typeof(clients) === "string")
-      return <h1 className="text-center text-red-500">{clients}</h1>
+      return (
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{clients}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
+      </>
+    )  
   }
 
   let options: Options[] = [];
 
   if(clients.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+    return (
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+      </>
+    )
   }
 
   let tags = [];
   try {
     tags = await getTags(token);
     if(typeof(tags)==='string'){
-      return <h1 className="text-center text-red-500">{tags}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{tags}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-center text-red-500">Error al obtener etiquetas!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener etiquetas!!</h1>
+      </>
+    )
   }
 
   let arrTags: Options[] = [];
@@ -83,7 +107,12 @@ export default async function Page({ params }: { params: { id: string }}){
       })
     })
   }else{
-    return <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    return (
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+      </>
+    )
   }
   
   clients.map((cli: ClientBack) => {
@@ -93,8 +122,6 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
-  console.log('permission client => ', permisionsClient);
-  
   return(
     <>
       <Navigation user={user} />
@@ -105,15 +132,6 @@ export default async function Page({ params }: { params: { id: string }}){
             <Selectize options={options} routePage="clients" subpath="/profile" />
           ): <></>}
         </HeaderImage>
-        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
-          <div className="flex items-center my-2">
-            <ArrowReturn link="/clients" />
-            <img src={client.logo? client.logo: '/img/clients.svg'} 
-                      alt="logo cliente" className="w-12 h-12" />
-            <p className="text-slate-500 mx-3">{client.name}</p>
-          </div>
-          <Selectize options={options} routePage="clients" subpath="/profile" />
-        </div> */}
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
           <ClientCli client={client} token={token} id={params.id} tags={arrTags} clientPermissions={permisionsClient} />

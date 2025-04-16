@@ -1,8 +1,6 @@
-import { HistoryExpensesTable } from "@/interfaces/Providers"
 import IconText from "./IconText"
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { Provider } from "@/interfaces/Providers";
-import { ProgressCircle } from "@tremor/react";
 import { getPendingPaymentProvider } from "@/app/api/routePayments";
 import { useState, useEffect } from "react";
 import { pendingPaymentProvider } from "@/interfaces/Payments";
@@ -27,13 +25,8 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
   })
   
   let amount = 0;
-  // let amountP = 0;
   expensesTable.map((exp) => {
-    // amount += Number(exp.Total.replace(/[$,%,M,N,X]/g,""));
-    console.log('amount => ', amount);
-    console.log('paid => ', exp.paid);
     amount += Number(exp.paid);
-    console.log('new amount => ', amount);
   });
  
   return (
@@ -49,9 +42,6 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
           </div>
         </div>
 
-        {/* <div>
-          <ProgressCircle value={85} title={'85'} />
-        </div> */}
       </div>
 
       <div className="grid grid-cols-3 mt-3">

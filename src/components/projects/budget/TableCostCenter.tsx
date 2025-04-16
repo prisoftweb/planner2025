@@ -5,7 +5,6 @@ import Table from "@/components/Table";
 import { useOneBudget } from "@/app/store/budgetProject";
 import { DeleteNewBudgetInBudget, getBudget } from "@/app/api/routeBudget";
 import { showToastMessageError } from "@/components/Alert";
-import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import EditBudget from "./EditBudget";
 import { FullBudget } from "@/interfaces/BudgetProfile";

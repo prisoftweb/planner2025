@@ -5,7 +5,6 @@ import Chip from "../providers/Chip";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-import { HistoryExpensesTable } from "@/interfaces/Providers";
 import Button from "../Button";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 import { CurrencyFormatter } from "@/app/functions/Globals";
@@ -76,16 +75,6 @@ export default function TableListExpensesPaid({data, nextPage, updateCostPartial
         <p>Responsable</p>
       )
     }),
-    // columnHelper.accessor('isPaid', {
-    //   header: 'Pagado',
-    //   id: 'pagado',
-    //   cell: ({row}) => (
-    //     <div className="cursor-pointer" 
-    //       >
-    //         <Chip label={row.original.isPaid? 'Pagado': 'No pagado'} color={row.original.isPaid? '#0f0': '#f00'} />
-    //     </div>
-    //   ),
-    // }),
     columnHelper.accessor('condition', {
       header: 'Estatus',
       id: 'estatus',

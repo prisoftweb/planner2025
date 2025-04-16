@@ -1,6 +1,5 @@
 'use client'
 import HeaderForm from "../HeaderForm"
-//import Input from "../Input"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
@@ -12,10 +11,17 @@ import { useState, useEffect } from "react"
 import { insertResourceTree } from "@/app/api/routeRoles"
 import { useRef } from "react"
 
+type Props = {
+  showForm:Function, 
+  token:string, 
+  optResources:Options[], 
+  optRoutes:Options[], 
+  descRoutes: Options[], 
+  idTree:string
+}
+
 export default function NewRouteTree({showForm, token, optResources, 
-                                        optRoutes, descRoutes, idTree}: 
-                              {showForm:Function, token:string, optResources:Options[], 
-                                optRoutes:Options[], descRoutes: Options[], idTree:string}){
+  optRoutes, descRoutes, idTree}: Props){
 
   const [routes, setRoutes] = useState<string[]>([]);
   const [indexDelete, setIndexDelete] = useState<number>(-1);

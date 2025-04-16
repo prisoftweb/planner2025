@@ -10,10 +10,8 @@ import NewSubPath from "./NewSubPath";
 import NewComponent from "./NewComponent";
 
 export default function TableResource({data, token, option}:
-                        {data:ResourceTable[], token:string, option:number}){
-  
-//option 1 resources 2 routes y 3 components
-
+  {data:ResourceTable[], token:string, option:number}){
+ 
   const columnHelper = createColumnHelper<ResourceTable>();
   const [dataResource, setDataResource] = useState<Resource>({__v: 0,
                            _id: '', description: '', id: '', name: '', title: ''});
@@ -54,7 +52,6 @@ export default function TableResource({data, token, option}:
     columnHelper.accessor(row => row.id, {
       id: 'accion',
       cell: ({row}) => (
-        // <DeleteClient client={row.original} token={token} />
         <div className="flex">
           <TrashIcon className="text-red-500 w-6 h-6" />
           <PencilSquareIcon className="text-slate-500 w-6 h-6 cursor-pointer" 

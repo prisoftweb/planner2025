@@ -11,19 +11,21 @@ import CurrencyInput from "react-currency-input-field";
 import { UpdateNewBudgetInBudget, getBudget } from "@/app/api/routeBudget";
 import { useOneBudget } from "@/app/store/budgetProject";
 
-export default function EditBudget({showForm, token, budget, idBudget, user}: 
-                    {showForm:Function, token:string, budget:(BudgetTableCostCenter), 
-                      idBudget:string, user: string}){
+type Params = {
+  showForm:Function, 
+  token:string, 
+  budget: BudgetTableCostCenter, 
+  idBudget:string, 
+  user: string
+}
+
+export default function EditBudget({showForm, token, budget, idBudget, user}: Params){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [total, setTotal] = useState<string>(budget.amount.replace(/[$,%, M, X,]/g, ""));
   const [percentage, setPercentage] = useState(budget.percentage.replace(/[$,%,]/g, ""));
 
   const {updateOneBudget, oneBudget} = useOneBudget();
-
-  // console.log('budget => ', budget);
-  // console.log('total => ', total);
-  // console.log('percentage => ', percentage);
 
   const handleResize = () => {
     setHeightPage(document.body.offsetHeight);
@@ -34,30 +36,6 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
     setHeightPage(document.body.offsetHeight - 70);
     return () => window.removeEventListener('scroll', handleResize);
   }, [])
-
-  // const onChangeTotal = (value: string) => {
-  //   if(value.replace(/[$,%,]/g, "").trim()===''){
-  //     setTotal('0');
-  //   }else{
-  //     try {
-  //       setTotal(value.replace(/[$,]/g, ""));
-  //     } catch (error) {
-  //       setTotal('0');
-  //     }
-  //   }
-  // }
-
-  // const onChangePercentage = (value: string) => {
-  //   if(value.replace(/[$,%,]/g, "").trim()===''){
-  //     setPercentage('0');
-  //   }else{
-  //     try {
-  //       setPercentage(value.replace(/[$,%]/g, ""));
-  //     } catch (error) {
-  //       setPercentage('0');
-  //     }
-  //   }
-  // }
 
   const updateCostCenter = async () => {
     const data = {
@@ -73,14 +51,11 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
       }
     }
     try {
-      console.log('budget => ', JSON.stringify(budget));
-      console.log('data new budget => ', data);
       const res = await UpdateNewBudgetInBudget(token, data, idBudget+'/'+budget.id);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
         showToastMessage('El centro de costos ha sido actulizado exitosamente!!');
-        console.log('res update ne bud in bud => ', res);
         const r = await getBudget(token, idBudget);
         if(typeof(r)=== 'string'){
           showToastMessageError('Error al actualizar cambios!!!');
@@ -100,9 +75,7 @@ export default function EditBudget({showForm, token, budget, idBudget, user}:
         setTotal('0');
         setPercentage('0');
       }else{
-        //setTotal(Number(value.replace(/[$,]/g, "")));
         const t = Number(value.replace(/[$,]/g, ""));
-        //const p = Number(percentage.replace(/[$,]/g, ""));
         const p = (t / (oneBudget?.amount || 1)) * 100;
         setTotal(value.replace(/[$,]/g, ""));
         setPercentage(p.toFixed(2));

@@ -1,18 +1,21 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import Link from "next/link";
 import NumberContacts from "../providers/NumberContacts";
 import { TableClient } from "@/interfaces/Clients";
-//import DeleteClient from "./DeleteClient";
 import { useClientStore } from "@/app/store/clientStore";
 import { useEffect } from "react";
 import RemoveElement from "../RemoveElement";
 import { removeClient } from "@/app/api/routeClients";
 
-export default function TableClients({data, token, deletePermission, selectPermission}:
-                        {data:TableClient[], token:string, selectPermission:boolean, 
-                          deletePermission: boolean}){
+type TableClientsProps = {
+  data:TableClient[], 
+  token:string, 
+  selectPermission:boolean, 
+  deletePermission: boolean
+}
+
+export default function TableClients({data, token, deletePermission, selectPermission}: TableClientsProps){
   
   const columnHelper = createColumnHelper<TableClient>();
   const {clients, setClients, deleteClient} = useClientStore();
@@ -36,7 +39,6 @@ export default function TableClients({data, token, deletePermission, selectPermi
               onChange={row.getToggleSelectedHandler()}
             />
           )}
-          {/* <IconText size="w-6 h-6" sizeText="text-sm" text={row.original.name} /> */}
           <img src={row.original.logo} alt="logo" className="w-10 h-auto" />
         </div>
       ),
@@ -59,7 +61,6 @@ export default function TableClients({data, token, deletePermission, selectPermi
           <div 
             className={`w-4 h-4  ${row.original.status? 'bg-green-500': 'bg-red-500'}`}>
           </div>
-          {/* <DeleteClient client={row.original} token={token} /> */}
           {deletePermission && (
             <RemoveElement id={row.original.id} name={row.original.name} token={token}
               remove={removeClient} removeElement={delClient} />
@@ -76,9 +77,6 @@ export default function TableClients({data, token, deletePermission, selectPermi
       header: 'Nombre',
       id: 'nombre',
       cell: ({row}) => (
-        // <Link href={`/clients/${row.original.id}/profile`}>
-        //   <p className="py-2">{row.original.name}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
         >{row.original.name}</p>
@@ -88,9 +86,6 @@ export default function TableClients({data, token, deletePermission, selectPermi
       header: 'RFC',
       id: 'rfc',
       cell: ({row}) => (
-        // <Link href={`/clients/${row.original.id}/profile`}>
-        //   <p className="py-2">{row.original.rfc}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
         >{row.original.rfc}</p>
@@ -100,9 +95,6 @@ export default function TableClients({data, token, deletePermission, selectPermi
       header: 'Cuenta',
       id: 'cuenta',
       cell: ({row}) => (
-        // <Link href={`/providers/${row.original.id}/profile`}>
-        //   <p className="py-2">{row.original.account}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
         >{row.original.account}</p>
@@ -112,9 +104,6 @@ export default function TableClients({data, token, deletePermission, selectPermi
       header: 'Saldo actual',
       id: 'saldo',
       cell: ({row}) => (
-        // <Link href={`/providers/${row.original.id}/profile`}>
-        //   <p className="py-2">{row.original.currentbalance}</p>
-        // </Link>
         <p className="py-2 cursor-pointer"
           onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
         >{row.original.currentbalance}</p>

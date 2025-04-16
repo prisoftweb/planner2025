@@ -1,14 +1,10 @@
 "use client"
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-//import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { useEffect, useState, useRef } from "react";
-//import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import NavExpenseNoDeductibleStepper from "./NavExpenseNoDeductibleStepper";
 import { useNewExpense } from "@/app/store/newExpense"
@@ -20,48 +16,35 @@ import Input from "../Input";
 import { useOptionsExpense } from "@/app/store/newExpense";
 
 export default function DataNoDeductibleStepper({token, user, idLabour, idTicket, idVat }: 
-                                  {token:string, user:string, idLabour:string, 
-                                    idTicket:string, idVat:string}){
+  {token:string, user:string, idLabour:string, idTicket:string, idVat:string}){
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, project, condition, category, 
     reset, updateRefresh, updateCategory, isCard, isPettyCash, concept, 
-    updateIsCard, updateCostCenter, total, reportObject} = useNewExpense();
+    updateIsCard, updateCostCenter, reportObject} = useNewExpense();
 
   const {costCenterOpt, responsibles} = useOptionsExpense();
   
   const [categoryS, setCategoryS] = useState<string>(category===''? idLabour: category);
-  //const [categoryCostCenter, setCategoryCostCenter] = useState<string>(costCenter===''?  )
-  //const [totalExpense, setTotalExpense] = useState<string>(total);
-
+  
   const handleCostCenter = (value:string) => {
-    //setCostCenter(value);
-    //console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    //console.log('cad 1 => ', c1);
-    //console.log('cad 2 => ', c2);
     updateCostCenter(c1, c2);
     const cc = costCenterOpt.find((costC) => costC.value === value);
     if(cc){
       if(cc.label.toLowerCase().includes('mano de obra')){
-        //console.log('idlabour ');
         setCategoryS(idLabour);
         updateCategory(idLabour);
       }else{
-        //console.log('id ticket ');
         setCategoryS(idTicket);
         updateCategory(idTicket);
       }
     }
   }
   
-  // console.log('cost center data stepper nd => ', costCenter);
-  // console.log('concept data stepper nd => ', concept);
-
   if(concept==='' || costCenter === ''){
-    //console.log('if c c => ', concept, ' => ', costCenter);
     handleCostCenter(costCenterOpt[0].value);
   }
 
@@ -83,8 +66,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
       if(cc?.label.toLowerCase().includes('mano de obra')){
         type = 'MANO DE OBRA';
       }
-      console.log('cc => ', cc);
-      console.log('type no deductible => ', type);
       updateBasicData('', description, amount.replace(/[$,]/g, ""), 
           startDate, '', '', '', '', responsibleS, 
           '', '', categoryS, '', type, '', amount.replace(/[$,]/g, ""));
@@ -100,13 +81,10 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
 
   const d = year+'-'+month+'-'+day;
 
-  //const [costcenter, setCostCenter] = useState<string>(optCostCenter[0].value);
   const [startDate, setStartDate] = useState<string>(d);
-  //const [responsibleS, setResponsibleS] = useState<string>(responsibles[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
   const [resetBand, setResetBand] = useState<boolean>(false);
   const [view, setView] = useState<JSX.Element>(<></>);
-  //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [clearAmount, setClearAmount] = useState<boolean>(false);
   const refRequest = useRef(true);
   const [viewAmount, setViewAmount] = useState<JSX.Element>(
@@ -132,11 +110,8 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
   const SaveData = async() => {
     refRequest.current = false;
     let type = 'OTROS';
-    //console.log('cost center a buscar => ', costcenter);
     const cc = costCenterOpt.find((costc) => costc.value === (costCenter + '/' + concept));
-    //console.log('cc find save', cc);
     if(cc?.label.toLowerCase().includes('mano de obra')){
-      //console.log('entro aqui => ', cc?.label.toLowerCase());
       type = 'MANO DE OBRA';
     }
     const {description, amount} = formik.values
@@ -147,14 +122,12 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
       category: costCenter,
       concept
     }
-    //console.log('cost center no deductible => ', JSON.stringify(costcenter));
     if(!formik.values.description || formik.values.description===''){
       refRequest.current = true;
       showToastMessageError('Aun no se ha agregado una descripcion al gasto!!');
     }else{
       if(voucher){
         const formdata = new FormData();
-        //formdata.append('subtotal', amount.replace(/[$,]/g, ""));
         formdata.append('costocenter', JSON.stringify(costcenter));
         formdata.append('date', startDate);
         formdata.append('description', description);
@@ -170,9 +143,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
           subtotal:amount.replace(/[$,]/g, ""),
           iva: 0,
           total: amount.replace(/[$,]/g, ""),
-          //vat: idVat, 
-          // vatvalue: number no se usa 
-          // total: number no se usa 
         }));
         formdata.append('condition', JSON.stringify([{
           glossary: condition,
@@ -259,9 +229,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
             subtotal:amount.replace(/[$,]/g, ""),
             iva: 0,
             total: amount.replace(/[$,]/g, ""),
-            //vat: idVat,
-            // vatvalue: number no se usa 
-            // total: number no se usa 
           },
           user:responsibleS, report, isticket:true, project, category:categoryS, condition: [{
             glossary: condition,
@@ -282,7 +249,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
             try {
               const res = await SaveExpense(data, token);
-              //console.log('save cost no deductible', JSON.stringify(data));
               if(res===201){
                 setView(<></>);
                 reset();
@@ -312,7 +278,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
         }else{
           try {
             const res = await SaveExpense(data, token);
-            //console.log('save cost no deductible', JSON.stringify(data));
             if(res===201){
               setView(<></>);
               reset();
@@ -348,13 +313,10 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
           <CurrencyInput
             id="amount"
             name="amount"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            //   focus:border-slate-700 outline-0"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0"
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            //defaultValue={0}
             defaultValue={amount}
             decimalsLimit={2}
             prefix="$"
@@ -373,15 +335,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
 
 
   useEffect(() => {
-    //handleCostCenter(costCenterOpt[0].value);
-    // let indexCC = 0;
-    // if(costCenter !== ''){
-    //   optCostCenter.map((opt, index:number) => {
-    //     if(opt.value === costCenter){
-    //       indexCC = index;
-    //     }
-    //   });      
-    // }
     if(date !== ''){
       setStartDate(date);
     }
@@ -401,24 +354,10 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
         <SelectReact index={indexResp} opts={responsibles} setValue={setResponsibleS} />
       </div>
     </>)
-
-    // setViewCC(<div className="col-span-1 sm:col-span-2">
-    //       <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-    //       <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
-    //     </div>)
-
   }, []);
 
   useEffect(() => {
     if(resetBand){
-      // let indexCC = 0;
-      // if(costCenter !== ''){
-      //   optCostCenter.map((opt, index:number) => {
-      //     if(opt.value === costCenter){
-      //       indexCC = index;
-      //     }
-      //   });      
-      // }
       if(date !== ''){
         setStartDate(date);
       }
@@ -439,10 +378,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
         </div>
       </>)
 
-      // setViewCC(<div className="col-span-1 sm:col-span-2">
-      //         <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-      //         <SelectReact index={indexCC} opts={optCostCenter} setValue={handleCostCenter} />
-      //       </div>)
       setResetBand(false);
     }
   }, [resetBand]);
@@ -462,30 +397,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
       <SelectReact index={indexCC} opts={costCenterOpt} setValue={handleCostCenter} />
     </div>
   );
-
-  // let viewTotal: JSX.Element = <></>;
-  // viewTotal = (
-  //   <CurrencyInput
-  //     id="total"
-  //     name="total"
-  //     className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
-  //       focus:border-slate-700 outline-0"
-  //     //onChange={formik.handleChange}
-  //     //onBlur={formik.handleChange}
-  //     //value={formik.values.amount.replace(/[$,]/g, "")}
-  //     value={totalExpense.replace(/[$,]/g, "")}
-  //     decimalsLimit={2}
-  //     prefix="$"
-  //     onValueChange={(value) => {try {
-  //       //console.log('value amount data stepper => ', value);
-  //       //formik.values.amount=value || '0';
-  //       setTotalExpense(value || '0');
-  //     } catch (error) {
-  //       //formik.values.amount='0';
-  //       setTotalExpense('0');
-  //     }}}
-  //   />
-  // )
 
   return(
     <div className="w-full bg-white">
@@ -525,10 +436,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
               </div>
             ) : null}
           </div>
-          {/* <div>
-            <Label htmlFor="total"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Total</p></Label>
-            {viewTotal}
-          </div> */}
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 
@@ -543,8 +450,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            // focus:border-slate-700 outline-0 overflow-hidden resize-none"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0 overflow-hidden resize-none"
             rows={4} 

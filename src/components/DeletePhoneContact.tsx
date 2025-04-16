@@ -8,7 +8,7 @@ import { Phone } from '@/interfaces/Contacts';
 import { removePhoneContact } from '@/app/api/routeContacts';
 
 export default function DeletePhoneContact({token, phone, idC, numContacts} : 
-                                {token : string, phone:Phone, idC:string, numContacts:number}){
+  {token : string, phone:Phone, idC:string, numContacts:number}){
   
   const deletePhone = async (id:string, name:string)  => {
   
@@ -28,13 +28,10 @@ export default function DeletePhoneContact({token, phone, idC, numContacts} :
                 if(res === 204) {
                   showToastMessage('Telefono eliminado exitosamente!');
                   setTimeout(() => {
-                    // router.refresh();
-                    // router.push('/users');
                     window.location.reload();
                   }, 500)
                 } else {
                   showToastMessageError('El telefono no pudo ser eliminado..');
-                  //router.refresh()
                 }
               } catch (error) {
                 console.log('Error al eliminar telefono');

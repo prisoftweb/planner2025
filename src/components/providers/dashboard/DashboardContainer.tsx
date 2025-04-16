@@ -1,26 +1,17 @@
 'use client'
 
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent"
-// import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
 import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine, TotalPayments } from "@/interfaces/DasboardProviders";
-// import { CurrencyFormatter } from "@/app/functions/Globals";
-// import DonutChartProviderComponent from "./DonutChartProviderComponent";
 import { TableDashboardProviders } from "@/interfaces/DasboardProviders";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import CardDashboardProvider from "./CardDashboardProvider";
-// import { EnvelopeIcon, CursorArrowRaysIcon } from "@heroicons/react/24/solid";
 import Chip from "../Chip";
 import { GrServices } from "react-icons/gr";
 import { TbBrandCashapp } from "react-icons/tb";
 import { BsReceiptCutoff } from "react-icons/bs";
 import { LuTicket } from "react-icons/lu";
 import { MoneyFormatter } from "@/app/functions/Globals";
-
-interface OptionsDashboard {
-  label: string,
-  saldo: number
-}
 
 interface OptionsBarChart {
   label: string,
@@ -33,43 +24,14 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     costsProviderWithTradeLine: CostsByProvider[], costsProvider: CostsByProvider[], data: TableDashboardProviders[], totalPayments: TotalPayments}) {
 
   let pending = 0;
-  // let countProviders = 0;
-  let totalPending = 0;
   providersTradeLine.map((p) => {
-    // pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance <= 0? 1: 0): 0;
-    // countProviders+= p.tradeline?.currentbalance? (p.tradeline?.currentbalance > 0? 1: 0) : 0;
-    // totalPending+= p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0
     pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0;
   })
-
-  // const pendingText = CurrencyFormatter({
-  //   currency: 'USD',
-  //   // value: pending
-  //   value: totalCost[0].totalCost
-  // });
 
   const pendingText = MoneyFormatter(totalCost[0].totalCost);
   const totalPaymentsProv = MoneyFormatter(totalPayments.totalPayout);
 
-  // const totalPendingText = CurrencyFormatter({
-  //   currency: 'USD',
-  //   value: totalPending
-  // });
-
-  // console.log('pending => ', pending);
-
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
-
-  // const dataProvidersTradeLine: OptionsDashboard[] = [];
-  // const categoriesProvidersTradeline: string[] = [];
-
-  // providersTradeLine.map((prov) => {
-  //   dataProvidersTradeLine.push({
-  //     saldo: prov.tradeline?.currentbalance? prov.tradeline?.currentbalance: 0,
-  //     label: prov.name
-  //   });
-  //   categoriesProvidersTradeline.push(prov.name);
-  // });
 
   const dataProvidersTradeLine: OptionsBarChart[] = [];
   const categoriesProvidersTradeline: string[] = [];
@@ -93,22 +55,8 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     categoriesAllProviders.push(prov.provider);
   });
 
-  console.log('total cost => ', totalCost);
-
   return (
     <>
-      {/* <div className="flex gap-x-4">
-        <div className="shadow-md shadow-slate-500 p-2 bg-white">
-          <p className="text-xl text-center font-bold">{providersTradeLine.length}</p>
-          <p className="text-md text-center font-semibold">proveedores</p>
-          <p className="text-md text-red-500 text-center font-semibold">{'Con credito >'}</p>
-        </div>
-        <div className="shadow-md shadow-slate-500 p-2 bg-white">
-          <p className="text-xl text-center font-bold">CxP</p>
-          <p className="text-md text-center font-semibold">{pendingText}</p>
-          <p className="text-md text-red-500 text-center font-semibold">{'Por pagar >'}</p>
-        </div>
-      </div> */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-3">
         <div className="p-1 bg-white">
           <CardDashboardProvider p1={'TOTAL PAGADO'} 
@@ -142,16 +90,6 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           </CardDashboardProvider>
         </div>
       </div>
-      {/* <div className="mt-10 flex">
-        <div className="bg-white w-1/2 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>Por pagar</p>
-          </div>
-          <DonutChartProviderComponent data={dataProvidersTradeLine} colors={colors} category="saldo"
-              categories={categoriesProvidersTradeline}  />
-        </div>
-        <div className="w-1/3"></div>
-      </div> */}
       <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-3">
         <h1>SALDOS DE PROVEEDORES CON LINEA DE CREDITO</h1>
         <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />    
@@ -168,7 +106,6 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     </>
   )
 }
-
 
 export function TableDashboardProviderComponent({data}: {data: TableDashboardProviders[]}){
   const columnHelper = createColumnHelper<TableDashboardProviders>();
@@ -241,10 +178,6 @@ export function TableDashboardProviderComponent({data}: {data: TableDashboardPro
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
         >
-          {/* {CurrencyFormatter({
-            currency: 'MXN',
-            value: row.original.currentBalance
-          })} */}
           {MoneyFormatter(row.original.currentBalance)}
         </p>
       ),

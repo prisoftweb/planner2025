@@ -13,15 +13,15 @@ import NavResponsive from "./NavResponsive"
 import { Resource2 } from "@/interfaces/Roles"
 import { useClientProfileStore } from "@/app/store/clientStore"
 
-export default function ClientCli({client, token, id, tags, clientPermissions}: 
-                            {client:ClientBack, token:string, id:string, 
-                              tags:Options[], clientPermissions: Resource2}){
+type ClientCliProps = {
+  client:ClientBack, 
+  token:string, 
+  id:string, 
+  tags:Options[], 
+  clientPermissions: Resource2
+}
 
-  // const [view, setView] = useState<JSX.Element>
-  //               (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md
-  //                 pl-2" style={{borderColor:'#F8FAFC'}}>
-  //                   <Sumary client={client} idCli={id} token={token} />
-  //               </div>)
+export default function ClientCli({client, token, id, tags, clientPermissions}: ClientCliProps){
 
   const [opt, setOpt] = useState<number>(1);
   const handleOpt = (value: number) => {
@@ -34,54 +34,25 @@ export default function ClientCli({client, token, id, tags, clientPermissions}:
     updateProfileClient(client);
   }, []);
   
-  // useEffect(() => {
-  //   opt===2? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-  //               style={{borderColor:'#F8FAFC'}}>
-  //                 <DataBasic token={token} client={client} id={id} tags={tags} editInfo={clientPermissions.permission.update} />
-  //               </div>) : 
-  //     (opt===3? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                         style={{borderColor:'#F8FAFC'}}>
-  //                   <ExtraData token={token} id={id} link={client.link? client.link: ''}
-  //                     editInfo={clientPermissions.permission.update} />
-  //                 </div>): 
-  //       (opt===4? setView(<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                           style={{borderColor:'#F8FAFC'}}>
-  //                     <AddressClient client={client} token={token} 
-  //                       editInfo={clientPermissions.permission.update}  />
-  //                   </div>): 
-  //         (opt===5? setView(<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                             style={{borderColor:'#F8FAFC'}}>
-  //                       <Contacts id={id} contacts={client.contact || []} token={token}
-  //                         editInfo={clientPermissions.permission.update} />
-  //                     </div>):  setView(<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
-  //                                         style={{borderColor:'#F8FAFC'}}>
-  //                                   <Sumary client={client} idCli={id} token={token} />
-  //                               </div>)) ))
-  // }, [opt, ])
-
   const view = 
       opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
           style={{borderColor:'#F8FAFC'}}>
             <DataBasic token={token} client={client} id={id} tags={tags} 
-              //editInfo={clientPermissions.permission.update}
               editInfo={true} />
           </div>) : 
       (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
               <ExtraData token={token} id={id} link={client.link? client.link: ''}
-                //editInfo={clientPermissions.permission.update}
                 editInfo={true} />
             </div>): 
       (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
                 <AddressClient client={client} token={token} 
-                  //editInfo={clientPermissions.permission.update} 
                   editInfo={true} />
               </div>): 
       (opt===5? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                   <Contacts id={id} contacts={client.contact || []} token={token}
-                    //editInfo={clientPermissions.permission.update}
                     editInfo={true} />
                 </div>):  (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                                     style={{borderColor:'#F8FAFC'}}>

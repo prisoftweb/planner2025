@@ -8,12 +8,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
-//import { GlossaryTable } from "@/interfaces/Glossary"
 import { Workflow } from "@/interfaces/Workflows"
 import { createWorkFlow } from "@/app/api/routeWorkflows"
 
 export default function NewWorkFlow({showForm, token, workFlow}: 
-                    {showForm:Function, token:string, workFlow: (Workflow | string)}){
+  {showForm:Function, token:string, workFlow: (Workflow | string)}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);

@@ -4,10 +4,9 @@ import { cookies } from "next/headers";
 import { Options } from "@/interfaces/Common";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { getProjectsMin, getProjectsLV } from "@/app/api/routeProjects";
+import { getProjectsMin } from "@/app/api/routeProjects";
 import { ProjectMin } from "@/interfaces/Projects";
 import ContainerBudgetClient from "@/components/projects/budget/ContainerBudgetClient";
-
 import { getBudgetsMin } from "@/app/api/routeBudget";
 import { BudgetMin } from "@/interfaces/Budget";
 
@@ -19,9 +18,20 @@ export default async function Page(){
   let projects: ProjectMin[];
   try {
     projects = await getProjectsMin(token);
-    if(typeof(projects)==='string') return <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+    if(typeof(projects)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar los proyectos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar los proyectos!!</h1>
+      </>
+    )
   }
 
   let optProjects: Options[] = [{
@@ -38,17 +48,39 @@ export default async function Page(){
   let budgets: BudgetMin[];
   try {
     budgets = await getBudgetsMin(token);
-    if(typeof(budgets)==='string') return <h1 className="text-red-500 text-center text-lg">{budgets}</h1>
+    if(typeof(budgets)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{budgets}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar los presupuestos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar los presupuestos!!</h1>
+      </>
+    )
   }
 
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'budgets');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    if(typeof(catalogs)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar catalogos!!</h1>
+      </>
+    )
   }
 
   const optConditions: Options[] = [{

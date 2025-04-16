@@ -12,7 +12,6 @@ export default function Label({children, ...props}:Props){
           peer-placeholder-shown:text-blue-gray-500 peer-focus:text-sm peer-focus:leading-tight 
           peer-focus:text-gray-900 peer-focus:after:scale-x-100 peer-focus:after:border-gray-900 
           peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500"
-        //className="text-blue-gray-500 text-transparent"
         {...props}
       >
         {children}

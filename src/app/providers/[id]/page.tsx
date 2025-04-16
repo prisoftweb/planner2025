@@ -1,16 +1,11 @@
 import TabUser from "@/components/users/TabUsers";
 import NavTab from "@/components/providers/NavTab";
 import Navigation from "@/components/navigation/Navigation";
-import Link from "next/link";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
 import ProviderClient from "@/components/providers/ProviderClient";
 import { getProvider, getProviders } from "@/app/api/routeProviders";
-//import { Provider } from "@/interfaces/Providers";
-//import { getContact } from "@/app/api/routeContacts";
-//import { Contact } from "@/interfaces/Contacts";
 import { UsrBack } from "@/interfaces/User";
 import { Provider } from "@/interfaces/Providers";
 import ArrowReturn from "@/components/ArrowReturn";
@@ -32,24 +27,49 @@ export default async function Page({ params, searchParams }:
   try {
     provider = await getProvider(params.id, token);
     if(typeof(provider) === "string")
-      return <h1 className="text-center text-red-500">{provider}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{provider}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+      </>
+    )
   }
 
   let providers: Provider[];
   try {
     providers = await getProviders(token);
     if(typeof(providers) === "string")
-      return <h1 className="text-center text-red-500">{providers}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{providers}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+      </>
+    ) 
   }
 
   let options: Options[] = [];
 
   if(providers.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+      </>
+    )
   }
 
   providers.map((prov: any) => {
@@ -72,7 +92,6 @@ export default async function Page({ params, searchParams }:
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
             <ArrowReturn link="/providers" />
-            {/* <Link href={'/providers'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link> */}
             <IconText text={provider.tradename} size="w-8 h-8" sizeText="" />
             <p className="text-slate-500 mx-3">{provider.name}</p>
           </div>

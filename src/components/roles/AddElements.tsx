@@ -3,20 +3,26 @@ import { Options } from '@/interfaces/Common'
 import { useState } from 'react'
 import { PlusCircleIcon, CheckCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 
+type Props = {
+  opts:Options[], 
+  descriptions:Options[]
+  pushElement:Function, 
+  bandPlus:boolean, 
+  DeleteElement:Function, 
+  index:number, 
+  updateCount: Function
+}
+
 export default function AddElements({opts, descriptions, bandPlus, DeleteElement, index, 
-                                  pushElement, updateCount}: 
-                              {opts:Options[], descriptions:Options[]
-                                pushElement:Function, bandPlus:boolean, 
-                                DeleteElement:Function, index:number, 
-                                updateCount: Function}){
+  pushElement, updateCount}: Props){
   
   const [desc, setDesc] = useState<string>(descriptions[0].label);
   const [valueE, setValueE] = useState(opts[0]);
   
   const [saved, setSaved] = useState(false);
   const [add, setAdd] = useState(false);
-  const [ok, setOk] = useState<boolean>(true);
-  const [message, setMessage] = useState<string>('');
+  // const [ok, setOk] = useState<boolean>(true);
+  // const [message, setMessage] = useState<string>('');
   const [element, setElement] = useState<string>(opts[0].value);
 
   const onChange = (value:any) => {
@@ -33,10 +39,10 @@ export default function AddElements({opts, descriptions, bandPlus, DeleteElement
       setAdd(true);
       updateCount();
     }else{
-      setOk(false);
-      setTimeout(() => {
-        setOk(true);
-      }, 2000);
+      // setOk(false);
+      // setTimeout(() => {
+      //   setOk(true);
+      // }, 2000);
     }
   }
 
@@ -45,11 +51,11 @@ export default function AddElements({opts, descriptions, bandPlus, DeleteElement
       setSaved(true);
       pushElement(element);
     }else{
-      setMessage('* Todos los campos son obligatorios!!');
-      setOk(false);
-      setTimeout(() => {
-        setOk(true);
-      }, 2000);
+      // setMessage('* Todos los campos son obligatorios!!');
+      // setOk(false);
+      // setTimeout(() => {
+      //   setOk(true);
+      // }, 2000);
     }
   }
 

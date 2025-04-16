@@ -41,7 +41,6 @@ export default function SelectBudgetProject({projects, token}:{projects:ProjectM
   const filterReports = (value: string) => {
     const filter = projects.filter((pro) => pro.title.toLowerCase().includes(value.toLowerCase()));
     setSelectedProjects(filter);
-    //console.log(filter);
   }
 
   return (
@@ -57,7 +56,6 @@ export default function SelectBudgetProject({projects, token}:{projects:ProjectM
             }}
             placeholder='Buscar ...'
             styles={customStyles}
-            //onInputChange={(e) => filterReports(e)}
             onChange={(value:(Options | null)) => filterReports(value?.label || '')}
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-2 mt-2">

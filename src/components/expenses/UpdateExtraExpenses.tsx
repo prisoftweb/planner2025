@@ -20,8 +20,7 @@ import { getUsersLV } from "@/app/api/routeUser";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 
 export default function UpdateExtraExpense({token, id, expense, isHistory}: 
-                                  {token:string, id:string, expense:OneExpense, 
-                                    isHistory:boolean}){
+  {token:string, id:string, expense:OneExpense, isHistory:boolean}){
   
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [typeCFDI, setTypeCFDI] = useState<string>(currentExpense?.typeCFDI._id || expense.typeCFDI._id);
@@ -30,7 +29,6 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
   const [category, setCategory] = useState<string>(currentExpense?.category._id || expense.category._id);
   const [project, setProject] = useState<string>(currentExpense?.project._id || expense.project._id);
   
-  //const [optionsProviders, setOptionProviders] = useState<Options[]>(optProviders);
   const [showProvider, setShowProvider] = useState<boolean>(false);
   
   const [optCostCenter, setOptCostCenter] = useState<Options[]>([]);
@@ -145,18 +143,10 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
   const indexResponsible = optResponsibles.findIndex((res) => res.value === responsible);
   const indexProvider = optProviders.findIndex((prov) => prov.value === provider);
 
-  // const handleCostCenter = (value: string) => {
-  //   setCostCenter(value);
-  // }
-
   const handleCostCenter = (value: string) => {
-    console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    console.log('cad 1 => ', c1);
-    console.log('cad 2 => ', c2);
-    //updateCostCenter(c1, c2);
     setCostCenter(c1);
     setConcept(c2);
   }
@@ -212,21 +202,6 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
     <></>
   )
 
-  // const selectProvider = optProviders.length > 0? (
-  //   <div className="">
-  //     <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-  //     <div className="flex gap-x-2 items-center">
-  //       <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
-  //       {!isHistory && (
-  //         <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-  //           onClick={() => setShowProvider(true)} />
-  //       )}
-  //     </div>
-  //   </div>
-  // ): (
-  //   <></>
-  // )
-
   const selectProvider = optProviders.length > 0 && isNoBusinessName? (
     <div className="flex gap-x-2 items-center">
       <SelectReact index={indexProvider} opts={optProviders} setValue={handleProvider} />
@@ -264,9 +239,6 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
           refRequest.current = true;
           showToastMessage('Costo actualizado satisfactoriamente!!!');
           updateCurrentExpense(res);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res);
@@ -281,20 +253,8 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
   }
   
   const addProvider = (newProvider:Options) => {
-    //optProviders.push(newProvider);
-    console.log('optProviders => ', optProviders);
     setOptProviders((oldValues) => [...oldValues, newProvider])
     setProvider(newProvider.value);
-    console.log('prov length => ', optProviders.length)
-    //setIndexProv(optProviders.length -1);
-    // setSelectProviders(<div className="">
-    //         <Label htmlFor="provider"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedor</p></Label>
-    //         <div className="flex gap-x-2 items-center">
-    //           <SelectReact index={indexProv} opts={optionsProviders} setValue={setProvider} />
-    //           <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
-    //             onClick={() => setShowProvider(true)} />
-    //         </div>
-    //       </div>)
   }
 
   return(

@@ -9,7 +9,7 @@ import { XMLCFDI, Element3 } from "@/interfaces/Expense";
 import { CFDIValidation } from "@/interfaces/Expense";
 
 export default function UploadFileDropZone({label, setFile, Validation, getData}: 
-            {label:string, setFile:Function, Validation:Function, getData:Function}) {
+  {label:string, setFile:Function, Validation:Function, getData:Function}) {
   
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
     const file = new FileReader;
@@ -23,7 +23,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
   const [isCFDI, setIsCFDI] = useState<boolean>(false);
   const [date, setDate] = useState<string>('');
   const [provider, setProvider] = useState<string>();
-  //const [description, setDescription] = useState<string>('');
   const [total, setTotal] = useState<string>('');
   const [rfc, setRfc] = useState<string>('');
   const [folio, setFolio] = useState<string>('');
@@ -43,21 +42,13 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
       if(typeof(res) === 'boolean'){
         setFile(acceptedFiles[0]);
         setPre(acceptedFiles[0]);
-        //console.log(acceptedFiles[0].type);
         if(acceptedFiles[0].type.includes('xml') || acceptedFiles[0].type.includes('XML')){
           const readXML = async () => {
             const t = await acceptedFiles[0].text();
             
-            // const res = xml2json(t, {compact: true, spaces: 4});
-            // console.log(res);
-            
             const res2: (XMLCFDI | any ) = xml2js(t);
-            console.log(res2);
-
-            console.log('elements => ', res2.elements[0].elements);
             const uuid = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('complemento'));
-            console.log('uuid => ', uuid);
-
+  
             let CFDIObj:CFDIValidation = {
               amount: '',
               date: '',
@@ -70,22 +61,14 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
                 if(elem.attributes?.UUID) return elem.attributes?.UUID;
               });
 
-              console.log('uuidXML => ', uuidXML);
               const folioXML = uuidXML?.attributes?.UUID || 'error al leer CFDI';
-              console.log('folio xml => ', folioXML);
               setFolio(folioXML);
 
-              console.log('atributos => ', res2.elements[0].attributes);
               CFDIObj.date = res2.elements[0].attributes.Fecha;
-              //console.log('rfc 1 ', res2.elements[0].elements[1].attributes?.Rfc);
-              console.log('rfc 2 ', res2.elements[0].elements[0].attributes?.Rfc);
               const emisor = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('emisor'));
-              console.log('emisor', emisor);
               CFDIObj.RFCProvider = emisor?.attributes?.Rfc || 'sin rfc de proveedor';
               CFDIObj.amount = res2.elements[0].attributes.SubTotal;
               CFDIObj.taxFolio = folioXML;
-              //CFDIObj.taxFolio = uuid.elements[0].attributes?.UUID || 'error al leer CFDI';
-              //CFDIObj.taxFolio = res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID;
             } catch (error) {
               console.log('error al leer cfdi => ', error);
             }
@@ -104,22 +87,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
             } catch (error) {
               setTotal('$0');
             }
-
-            // try {
-            //   const uuidXML = uuid.elements.find((elem: any) => {
-            //     if(elem.attributes?.UUID) return elem.attributes?.UUID;
-            //   });
-
-            //   console.log('uuidXML => ', uuidXML);
-            //   const folioXML = uuidXML?.attributes?.UUID || 'error al leer CFDI';
-            //   console.log('folio xml => ', folioXML);
-            //   setFolio(folioXML);
-            //   //setFolio(uuid.elements[0].attributes?.UUID || 'error al leer CFDI')
-            //   //setFolio(res2.elements[0].elements[4].elements[0].attributes?.UUID || res2.elements[0].elements[0].elements[0].attributes?.UUID || 'No se pudo leer el folio');
-            // } catch (error) {
-            //   setFolio('No se pudo leer el folio');
-            // }
-            
+          
             try {
               res2.elements[0].elements[2].elements?.map((concept:Element3) => {
                 setAmounts((oldValue) => [...oldValue, concept.attributes?.Importe || '']);
@@ -163,7 +131,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
           }
         </div>
       </div>
-      {/* {pre && <iframe className="w-full h-80 mt-4" src={URL.createObjectURL(pre)} />} */}
       {pre && !isCFDI && <iframe className="w-full h-80 mt-4" src={URL.createObjectURL(pre)} />}
       {isCFDI && (
         <>
@@ -183,7 +150,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
           <div className="mt-5 py-4 px-10 border-t text-sm border-slate-900">
             <p>{folio}</p>
             <p>{date?.substring(0, 10)}</p>
-            {/* <p>{description}</p> */}
           </div>
           <div className="mt-3 grid grid-cols-4 gap-x-2">
             <p>Cantidad</p>
@@ -201,7 +167,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
           ))}
         </>
       )}
-      {/* {pre && <iframe className="w-full h-auto mt-4" src={URL.createObjectURL(pre)} />} */}
     </>
   );
 }

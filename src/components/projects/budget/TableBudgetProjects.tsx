@@ -1,13 +1,9 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-//import DeleteElement from "@/components/DeleteElement";
-//import { RemoveProject } from "@/app/api/routeProjects";
-import { ProjectMin, ProjectsBudgetTable } from "@/interfaces/Projects";
-//import CardProject from "../CardProject";
+import { ProjectsBudgetTable } from "@/interfaces/Projects";
 import CardBudgetProject from "./CardBudgetProject";
 import { useState, useEffect } from "react";
-//import Filtering from "../Filtering";
 import Filtering from "./FilteringBudgets";
 import { Options } from "@/interfaces/Common";
 import { ProjectBudgetDataToTableDataMin } from "@/app/functions/SaveProject";
@@ -17,11 +13,20 @@ import { BudgetMin } from "@/interfaces/Budget";
 import { removeBudget } from "@/app/api/routeBudget";
 import { useBudgetStore } from "@/app/store/budgetProject";
 import RemoveElement from "@/components/RemoveElement";
+import { MoneyFormatter } from "@/app/functions/Globals";
+
+type Params = {
+  token:string, 
+  budgets: BudgetMin[], 
+  optConditions: Options[], 
+  optProjects: Options[], 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  isTable:boolean
+}
 
 export default function TableBudgetProjects({token, budgets, optConditions, isFilter, 
-                          setIsFilter, isTable, optProjects}:
-                        {token:string, budgets: BudgetMin[], optConditions: Options[], 
-                          optProjects: Options[], isFilter:boolean, setIsFilter:Function, isTable:boolean}){
+  setIsFilter, isTable, optProjects}: Params){
   
   const columnHelper = createColumnHelper<ProjectsBudgetTable>();
 
@@ -121,7 +126,9 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.amountBudget}</p>
+        >
+          {MoneyFormatter(row.original.amountBudget)}
+        </p>
       ),
     }),
     columnHelper.accessor('budgeted', {
@@ -130,7 +137,9 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.budgeted}</p>
+        >
+          {MoneyFormatter(row.original.budgeted)}
+        </p>
       ),
     }),
     columnHelper.accessor('pending', {
@@ -139,7 +148,9 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/budget/${row.original.id}`)}
-        >{row.original.pending}</p>
+        >
+          {MoneyFormatter(row.original.pending)}
+        </p>
       ),
     }),
   ]
@@ -166,7 +177,6 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
 
   let view = <></>;
   if(isTable){
-    // view = (<Table columns={columns} data={data} placeH="Buscar proyecto.." />);
     view = (<Table columns={columns} data={dataTable} placeH="Buscar proyecto.." />);
   }else{
     view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
@@ -207,9 +217,6 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
             return true;
       return false;
     }
-    // if(categoriesValidation(budget, startDate, endDate, minAmount, maxAmount, projects))
-    //   return true;
-    // return false;
   }
 
   const conditionsValidation = (budget:BudgetMin, startDate:number, endDate:number, 
@@ -237,7 +244,6 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
     });
 
     setFilteredBudgets(filtered);
-    // setDataProjects(ProjectBudgetDataToTableDataMin(filtered));
   }
 
   return(

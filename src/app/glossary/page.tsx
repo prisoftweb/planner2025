@@ -19,26 +19,19 @@ export default async function Page(){
   try {
     glossaries = await getGlossaries(token);
     if(typeof(glossaries)=== 'string'){
-      return <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
+      return(
+        <>
+          <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-center text-red-500 text-lg">Error al consultar glosarios!!</h1>
+    return(
+      <>
+        <h1 className="text-center text-red-500 text-lg">Error al consultar glosarios!!</h1>
+      </>
+    )
   } 
-
-  // if(!glossaries || glossaries.length <= 0){
-  //   return (
-  //     <div>
-  //       <Navigation user={user} />
-  //       <CompanyClient option={1} >
-  //         <WithOut img="/img/clientes.svg" subtitle="Glosarios"
-  //           text="Aqui puedes agregar los glosarios"
-  //           title="Glosarios">
-  //               <ButtonNew token={token} glossary={''} />
-  //         </WithOut>
-  //       </CompanyClient>
-  //     </div>
-  //   )
-  // }
 
   const table: GlossaryTable[] = [];
 

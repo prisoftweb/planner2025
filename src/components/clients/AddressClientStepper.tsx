@@ -8,7 +8,6 @@ import Input from "../Input";
 import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { useRef } from "react";
-//import { clientValidation } from "@/schemas/client.schema";
 import { useClientStore } from "@/app/store/clientStore";
 
 export default function AddressClientStepper({token}:{token:string}){
@@ -68,7 +67,6 @@ export default function AddressClientStepper({token}:{token:string}){
         stateS
       }
 
-      //dispatch({ type: 'SET_ADDRESS_DATA', data: valores });
       dispatch({ type: 'SET_ADDRESS_DATA', data: data });
       dispatch({type: 'INDEX_STEPPER', data: 3})
     },       
@@ -86,19 +84,10 @@ export default function AddressClientStepper({token}:{token:string}){
         }
         data.append('rfc', state.databasic.rfc);
         data.append('source', state.databasic.source);
-        //data.append('tags', state.databasic.tags);
-        // if(state.databasic.tags){
-        //   state.databasic.tags.map((tag: string) => {
-        //     data.append('tags', tag);
-        //   })
-        // }
         data.append('regime', state.databasic.regime);
         if(state.databasic.user){
           data.append('user', state.databasic.user);
         }
-        // if(state.databasic.phone){
-        //   data.append('phone', state.databasic.phone);
-        // }
       }
       if(state.extradata){
         data.append('logo', state.extradata.photo);
@@ -117,13 +106,6 @@ export default function AddressClientStepper({token}:{token:string}){
         state: stateS,
         stret
       }
-
-      // if(state.contacts){
-      //   state.contacts.map((contact: string) => {
-      //     data.append('contact', contact);
-      //   })
-      // }
-
       try {
         const res = await SaveClientLogo(data, token, location, 
                       state.databasic.tags? state.databasic.tags: [], 
@@ -133,9 +115,6 @@ export default function AddressClientStepper({token}:{token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -144,13 +123,6 @@ export default function AddressClientStepper({token}:{token:string}){
         refRequest.current = true;
         showToastMessageError('Error al crear cliente!!');
       }
-      // const newdata = Object.fromEntries(data);
-      // try {
-      //   const res = clientValidation.safeParse(newdata);
-      //   console.log(res);
-      //  } catch (error) {
-      //   console.log(error);
-      //  }
     }else{
       let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
       if(state.databasic){
@@ -187,7 +159,6 @@ export default function AddressClientStepper({token}:{token:string}){
         tags, 
         user,
         link,
-        //photo,
         regime,
         location: {
           stret,
@@ -206,9 +177,6 @@ export default function AddressClientStepper({token}:{token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

@@ -4,8 +4,7 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "../providers/Chip";
 import { useNewExpense } from "@/app/store/newExpense";
 
-export default function ProfileExpense({expense}: 
-                        {expense:OneExpense}){
+export default function ProfileExpense({expense}: {expense:OneExpense}){
 
   const {currentExpense} = useNewExpense();
   
@@ -29,15 +28,12 @@ export default function ProfileExpense({expense}:
     value: currentExpense?.cost.iva? currentExpense.cost.iva : 0
   });
 
-  currentExpense? console.log('current expense => ', currentExpense) : console.log('expense => ', expense);
-
   return(
     <>
       <div className="w-full h-full mt-3">
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>
-              {/* <img src={expense.project.photo? expense.project.photo : '/img/projects/default.svg'} alt="logo"  */}
               <img src={currentExpense?.project?.photo? currentExpense?.project.photo : '/img/projects/default.svg'} alt="logo"              
                 className="w-28 h-auto" />
             </div>
@@ -50,9 +46,6 @@ export default function ProfileExpense({expense}:
           </div>
           <div className=" flex gap-x-2 items-center">
             <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-              {/* <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-                style={{"width": expense.project?.progress.length > 0? 
-                            expense.project.progress[expense.project.progress.length-1].progress : 0}}></div> */}
               <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
                 style={{"width": expense.project?.progress?.length > 0? 
                             expense.project.progress[expense.project?.progress.length-1].progress : 0 || 0}}></div>
@@ -74,8 +67,6 @@ export default function ProfileExpense({expense}:
                   <p className="text-blue-500">{currentExpense?.provider?.name || 'Sin proveedor'}</p>
                 </div>
                 <div className="h-6">
-                  {/* <Chip label={currentExpense && currentExpense?.condition.length >0? 
-                      currentExpense?.condition[currentExpense?.condition.length-1].glossary.name: 'sin status'} /> */}
                   <Chip label={currentExpense && currentExpense?.estatus? 
                     currentExpense?.estatus.name: 'sin status'} color={currentExpense && currentExpense?.estatus? 
                       currentExpense?.estatus.color: 'gray'} />
@@ -98,12 +89,10 @@ export default function ProfileExpense({expense}:
             <div className="">
               <p className="text-slate-500">IVA</p>
               <p className="text-blue-600 font-semibold">{vat}</p>
-              {/* <p className="text-blue-600 font-semibold">${expense.iva? expense.iva : 0} (16%)</p> */}
             </div>
             <div className="">
               <p className="text-slate-500">Total</p>
               <p className="text-red-600 font-semibold">{total}</p>
-              {/* <p className="text-blue-600 font-semibold">${expense.iva? expense.iva : 0} (16%)</p> */}
             </div>
           </div>
         </div>

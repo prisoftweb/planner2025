@@ -33,20 +33,7 @@ export default function ExtraData({token, id, link, editInfo}:
             refRequest.current = true;
             showToastMessage('Cliente actualizado exitosamente!!');
             updateProfileClient(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }
-          // if(res === 200){
-          //   refRequest.current = true;
-          //   showToastMessage('Cliente actualizado exitosamente!!');
-          //   setTimeout(() => {
-          //     window.location.reload();
-          //   }, 500);
-          // }else{
-          //   refRequest.current = true;
-          //   showToastMessageError(res);
-          // }
         } catch (error) {
           refRequest.current = true;
           showToastMessageError('Error al actualizar link del cliente!!');

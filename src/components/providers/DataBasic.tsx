@@ -51,16 +51,12 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
             refRequest.current = true;
             showToastMessage('La informacion del proveedor ha sido actualizada!!');
             updateOneProviderStore(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
           }
         } catch (error) {
           refRequest.current = true;
-          console.log(typeof(error))
           showToastMessageError('Error al actualizar informacion del proveedor!!');
         }
       }else{
@@ -126,8 +122,6 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           ) : null}
         </div>
         <div className="inline-flex items-center">
-        {/* <p className="mr-3 text-gray-500 text-sm">Linea de credito</p> */}
-
           <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input checked={suppliercredit} onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"

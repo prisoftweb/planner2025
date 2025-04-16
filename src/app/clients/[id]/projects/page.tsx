@@ -19,9 +19,19 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     client = await getClient(token, params.id);
     if(typeof(client) === "string")
-      return <h1 className="text-center text-red-500">{client}</h1>
+      return (
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{client}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>
+      </>
+    )  
   }
 
   let options: Options[] = [];
@@ -30,13 +40,28 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     clients = await getClients(token);
     if(typeof(clients) === "string")
-      return <h1 className="text-center text-red-500">{clients}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{clients}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
+      </>
+    )
   }
 
   if(clients.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+      </>
+    )
   }
 
   clients.map((cli: ClientBack) => {

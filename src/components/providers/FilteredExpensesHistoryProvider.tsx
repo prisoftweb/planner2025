@@ -1,5 +1,4 @@
 'use client'
-//import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
@@ -9,12 +8,19 @@ import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
-import { getCatalogsByNameAndCondition, getCatalogsByName } from "@/app/api/routeCatalogs"
+import { getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs"
+
+type Props = {
+  showForm:Function, 
+  FilterData:Function, 
+  maxAmount:number, 
+  minAmount:number, 
+  token: string, 
+  showPaidValidation?: boolean
+}
 
 export default function FilteringExpensesProvider({showForm, FilterData, maxAmount, minAmount, 
-                      token, showPaidValidation=true }: 
-                    {showForm:Function, FilterData:Function, maxAmount:number, 
-                      minAmount:number, token: string, showPaidValidation?: boolean}){
+  token, showPaidValidation=true }: Props){
 
   const [conditionsSel, setConditionsSel] = useState<string[]>(['all']);
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -23,20 +29,32 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
 
-  // const [isPaid, setIsPaid] = useState<boolean>(false);
   const [isPaid, setIsPaid] = useState<number>(1);
 
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
     new DateObject().setDay(4).add(1, "month")
-  ])
+  ]);
+
+  const handleValues = (dateValues: DateObject[]) => {
+    setValues(dateValues);
+    if(dateValues.length > 1){
+      setFirstDate(new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day));
+      setSecondDate(new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
+      filterfunction(conditionsSel, minValue, maxValue, 
+        new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day), 
+        new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day), isPaid);
+    }else{
+      if(values.length > 0){
+        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
+      }
+    }
+  }
 
   useEffect(() => {
     const fetchApis = async () => {
       let optConditions: Options[] = [];
       try {
-        // optConditions = await getCatalogsByNameAndCondition(token, 'payments');
-        // optConditions = await getCatalogsByName(token, 'payments');
         optConditions = await getCatalogsByNameAndCondition(token, 'cost');
         if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
       } catch (error) {
@@ -67,6 +85,12 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
 
   const handleConditions = (value: string[]) => {
     setConditionsSel(value);
+    filterfunction(value, minValue, maxValue, firstDate, secondDate, isPaid);
+  }
+
+  const handlePaid = (value: number) => {
+    setIsPaid(value);
+    filterfunction(conditionsSel, minValue, maxValue, firstDate, secondDate, value);
   }
 
   useEffect(() => {
@@ -80,26 +104,14 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
   }, []);
 
   useEffect(() => {
-    if(values.length > 1){
-      setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-      setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
-    }else{
-      if(values.length > 0){
-        setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-      }
-    }
-  }, [values]);
-
-  useEffect(() => {
-    //console.log('providers sel => ', providersSel);
     FilterData(conditionsSel, minValue, maxValue, 
       firstDate?.getTime(), secondDate?.getTime(), isPaid);
-  }, [ conditionsSel, minValue, maxValue, firstDate, secondDate]);
+  }, [ minValue, maxValue]);
 
-  useEffect (() => {
-    FilterData(conditionsSel, minValue, maxValue,
-      new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), isPaid);
-  }, []);
+  const filterfunction = (condSel:string[], minVal:number, maxVal:number, dateini:Date, 
+    dateend:Date, isP:number ) => {
+    FilterData(condSel, minVal, maxVal, dateini?.getTime(), dateend?.getTime(), isP);
+  }
 
   const allArray = [{
     label: 'TODOS',
@@ -134,19 +146,19 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
               <div className="inline-flex rounded-md shadow-sm mx-2">
               <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
                           ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
-                  onClick={() => setIsPaid(1)}
+                  onClick={() => handlePaid(1)}
                 >
                   Ambos
                 </button>
                 <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
                           ${isPaid===2? 'bg-green-500 text-white': ''}`}
-                  onClick={() => setIsPaid(2)}
+                  onClick={() => handlePaid(2)}
                 >
                   Pagado
                 </button>
                 <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
                           ${isPaid===3? 'bg-red-500 text-white': ''}`}
-                  onClick={() => setIsPaid(3)}
+                  onClick={() => handlePaid(3)}
                 >
                   No Pagado
                 </button>
@@ -170,8 +182,6 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
             onInput={(e) => {
               handleInput(e);
             }}
-            //baseClassName='multi-range-slider-black'
-            //style={{" border: 'none', boxShadow: 'none', padding: '15px 10px' "}}
             style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
                 backgroundColor: 'white', 'zIndex': '0'}}
             label='false'
@@ -199,8 +209,9 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
-            //onChange={setValues}
-            onChange={(e: any) => setValues(e)}
+            onChange={(e: any) => {
+              handleValues(e);
+            }}
             range
             numberOfMonths={2}
             showOtherDays

@@ -26,33 +26,27 @@ import { GetVatsLV } from "@/app/api/routeCost"
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN
  } from "@/app/api/routeReports";
 import { UsrBack } from "@/interfaces/User"
-import Navigation from "../navigation/Navigation"
 import WithOut from "../WithOut"
 
-import { getAllCostsByCondition } from "@/app/api/routeCost"
+import { getAllCostsByConditionAndUser } from "@/app/api/routeCost"
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 
 export default function ContainerClient({data, token, expenses, 
-                    user, isHistory=false, isViewReports}:
-                  {data:ExpensesTable[], token:string, 
-                    expenses:Expense[], user:UsrBack, isHistory?:boolean, 
-                    isViewReports: boolean}){
+                    user, isHistory=false, isViewReports, isViewUser=false}:
+  {data:ExpensesTable[], token:string, expenses:Expense[], user:UsrBack, isHistory?:boolean, 
+    isViewReports: boolean, isViewUser?: boolean}){
 
   const { categories, conditions, costCenterOpt, projects, providers, responsibles, types, 
     updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
     updateReportsOptions, updateResponsibles, updateTypes, updateVats, updateProvidersSAT, 
     updateReports} = useOptionsExpense();
 
-  // console.log('costo center concept container => ', costCostoCenter);
-  // console.log('costo center category container => ', costCostoCenterCategory);
   const [idVal, setIdVal] = useState<string>('');
   const [tableData, setTableData] = useState<ExpensesTable[]>(data);
 
   const {expensesTable, updateExpensesTable, updateResponsible, refresh, updateRefresh} = useNewExpense();
 
   if(expensesTable.length <= 0 && expenses.length > 0){
-    //console.log('actualizar expenses table => ');
-    // console.log('primer lengt => ');
     updateExpensesTable(expenses);
   }
 
@@ -149,26 +143,13 @@ export default function ContainerClient({data, token, expenses,
       } catch (error) {
         return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
       }
-      //console.log('optvats => ', optVats);
-
+      
       let reps: ReportParse[];
       try {
-        // if(user.rol && (user.rol?.name.toLowerCase().includes('admin') || user.rol?.name.toLowerCase().includes('superadmin'))){
-        //   reps = await GetReportsMin(token);
-        // }else{
-        //   reps = await GetReportsByUserMin(token, user._id);
-        // }
         if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-          //reps = await GetReportsByUserMin(token, user._id);
           reps = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
         }else{
-          //reps = await GetAllReportsMINAndNECondition(token);
           reps = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-          // if(user.department.name.toLowerCase().includes('direccion')){
-          //   reports = await GetAllReportsMINAndNECondition(token);
-          // }else{
-          //   reports = await GetReportsMin(token);
-          // }
         }
         
         if(typeof(reps)==='string'){
@@ -200,8 +181,6 @@ export default function ContainerClient({data, token, expenses,
       updateVats(optVats);
       updateReports(reps);
       updateReportsOptions(opReports);
-      //console.log('update rep opt => ', opReports);
-      //updateReportsOptions(optReports);
       updateProvidersSAT(optProvidersSAT);
     }
     fetchApis();
@@ -220,8 +199,6 @@ export default function ContainerClient({data, token, expenses,
   }
 
   const changeConditionInCost = async () => {
-    //
-    // console.log('segundo length');
     if(expensesSelected.length > 0){
       const filter: string[] = [];
       expensesSelected.map((row) => {
@@ -251,26 +228,90 @@ export default function ContainerClient({data, token, expenses,
     }
   }
 
-  //console.log('expenses table container client => ', expensesTable);
+  const finishCost = async () => {
+    if(expensesSelected.length > 0){
+      const filter: string[] = [];
+      expensesSelected.map((row) => {
+        filter.push(row.id);
+      })
+      const paidData = {
+        condition: {
+          glossary: "67318a51ceaf47ece0d3aa72",
+          user
+        },
+        filter,
+      }
+      const data = {
+        condition: {
+          glossary: "661eade6f642112488c85fad",
+          user
+        },
+        filter,
+      }
 
-  // console.log('tercer leng')
-  if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
-    //console.log('entro en el if => ');
-    const aux = async () =>{
       try {
-        const res = await getAllCostsByCondition(token);
-        //console.log('res');
-        if(typeof(res) !== 'string'){
-          //refExpenses.current = res;
-          const d = ExpenseDataToTableData(res);
-          setTableData(d);
-          updateExpensesTable(res);
-          //setDataExpenses(d);
+        const paidExpenses = await insertConditionInCost(token, paidData);
+        if(typeof(paidExpenses)==='string'){
+          showToastMessageError(paidExpenses);
+        }else{
+          const res = await insertConditionInCost(token, data);
+          if(res===200){
+            showToastMessage('Costos actualizados satisfactoriamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 500);
+          }else{
+            showToastMessageError(res);
+          }
+        }
+      } catch (error) {
+        showToastMessageError('Ocurrio un problema al actualizar condicion!!');
+      }
+    }
+  }
+
+  const conciliationCost = async () => {
+    if(expensesSelected.length > 0){
+      const filter: string[] = [];
+      expensesSelected.map((row) => {
+        filter.push(row.id);
+      })
+      const data = {
+        condition: {
+          glossary: '661eaa71f642112488c85f59',
+          user
+        },
+        filter,
+      }
+
+      try {
+        const res = await insertConditionInCost(token, data);
+        if(res===200){
+          showToastMessage('Costos actualizados satisfactoriamente!!!');
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         }else{
           showToastMessageError(res);
         }
       } catch (error) {
-        //console.log('catch table expenses => ', error);
+        showToastMessageError('Ocurrio un problema al actualizar condicion!!');
+      }
+    }
+  }
+
+  if(refresh && expenses.length <= 0 && expensesTable.length <= 0){
+    const aux = async () =>{
+      try {
+        const res = await getAllCostsByConditionAndUser(token, user._id);
+        if(typeof(res) !== 'string'){
+          const d = ExpenseDataToTableData(res);
+          setTableData(d);
+          updateExpensesTable(res);
+        }else{
+          showToastMessageError(res);
+        }
+      } catch (error) {
         showToastMessageError('Error al actualizar tabla!!');
       }
     }
@@ -278,51 +319,75 @@ export default function ContainerClient({data, token, expenses,
     updateRefresh(false);
   }
 
-  // console.log('cuarto len');
-  // console.log('expenses => ', expenses );
-  // console.log('expsens table => ', expensesTable);
-  //if( expensesTable.length <= 0 && expenses.length <= 0){
   if( expenses.length <= 0 && expensesTable.length <= 0){
-    //console.log('entro en el return length 0 => ');
-    return (
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          {isHistory? (
-            <WithOut img="/img/costs/gastos.svg" subtitle="Historial de Gastos"
-              text="El historial de gastos actualmente esta vacio!!!"
-              title="Historial de Gastos">
+    const view = isHistory? <WithOut img="/img/costs/gastos.svg" subtitle="Historial de Gastos"
+    text="El historial de gastos actualmente esta vacio!!!"
+    title="Historial de Gastos">
+      <></>
+  </WithOut> : (isViewUser? <WithOut img="/img/costs/gastos.svg" subtitle="Gastos en proceso"
+              text="Aqui se mostraran los gastos que aun estan en proceso!!!"
+              title="Gastos en proceso">
                 <></>
-            </WithOut>
-          ): (
-            <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
+            </WithOut>: <WithOut img="/img/costs/gastos.svg" subtitle="Gastos"
               text="Agrega el costo de mano de obra,
                     caja chica o proveedor desde esta
                     seccion a un determinado proyecto"
               title="Gastos">
                 <ButtonNew token={token} user={user} />
-            </WithOut>
-          )}
+            </WithOut>);
+    return (
+      <>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          {view}
         </div>
       </>
     )
   }
-  // console.log('ahi no era');
 
-  // data.map((d) => {
-  //   if(!d.Descripcion){
-  //     console.log('d => ', d);
-  //   }
-  // })
+  let isExpensesValidates = true;
+  if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('soporte')){
+    if(expensesSelected.length > 0){
+      const find = expensesSelected.find((e) => !e.condition.toLowerCase().includes('validado'));
+      if(find){
+        isExpensesValidates=false;
+      }
+    }else{
+      isExpensesValidates=false;
+    }
+  }else{
+    isExpensesValidates=false;
+  }
 
+  const viewTable = 
+    isHistory? (
+      <TableHistoryExpenses  token={token} isViewReports={isViewReports}
+        expenses={expenses} isFilter={isFilter} setIsFilter={setIsFilter}
+        data={tableData}
+      />
+    ): isViewUser? (
+      <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
+        expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
+        idValidado={idVal} user={user._id} isViewReports={isViewReports}
+        data={tableData} isPending={isViewUser}
+      />
+    ): (
+      <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
+        expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
+        idValidado={idVal} user={user._id} isViewReports={isViewReports}
+        data={tableData} isPending={isViewUser}
+      />
+    )
+  
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            <div className="p-1 border border-slate-400 bg-white rounded-md">
+              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            </div>
           </Link>
-          <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': 'Gastos'}</p>
+          <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': (isViewUser? 'Gastos en proceso': 'Gastos')}</p>
         </div>
         <div className={`flex gap-x-3 gap-y-3 ${isHistory? '': 'flex-wrap-reverse sm:flex-nowrap'} w-full justify-end`}>
           <SearchInTable placeH={"Buscar gasto.."} />
@@ -337,36 +402,36 @@ export default function ContainerClient({data, token, expenses,
                   />
               )}  
               <>
-                {!isHistory && (
+                {!isHistory && !isViewUser && (
+                  <>
+                    {expensesSelected.length > 0 && (
+                      <Button onClick={conciliationCost}>Conciliar</Button>
+                    )}
+                  </>
+                )}
+                {isViewUser && !isExpensesValidates && (
                   <>
                     {expensesSelected.length > 0 && (
                       <Button onClick={changeConditionInCost}>Validar</Button>
                     )}
-                    <ButtonNew token={token} user={user} />
                   </>
+                )}
+                {isViewUser && isExpensesValidates && (
+                  <>
+                    {expensesSelected.length > 0 && (
+                      <Button onClick={finishCost}>Finalizar</Button>
+                    )}
+                  </>
+                )}
+                {!isHistory && !isViewUser && (
+                  <ButtonNew token={token} user={user} />
                 )}
               </>
             </div>
           </div>
         </div>
       </div>
-      {
-        isHistory? (
-          <TableHistoryExpenses  token={token} isViewReports={isViewReports}
-            expenses={expenses} isFilter={isFilter} setIsFilter={setIsFilter}
-            //data={data}
-            data={tableData}
-          />
-          // <></>
-        ): (
-          <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
-            expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
-            idValidado={idVal} user={user._id} isViewReports={isViewReports}
-            //data={data}
-            data={tableData}
-          />
-        )
-      }
+      {viewTable}
     </div>
   )
 }

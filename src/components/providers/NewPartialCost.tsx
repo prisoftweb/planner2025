@@ -1,14 +1,8 @@
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Input from "../Input"
-import { useFormik } from "formik"
-import * as Yup from 'yup';
 import Button from "../Button";
-import { useState, useEffect, useRef } from "react";
-import { showToastMessageError } from "../Alert";
-import { createNewProvider } from "@/app/api/routeProviders";
-import { Provider } from "@/interfaces/Providers";
-import { Options } from "@/interfaces/Common";
+import { useState, useEffect } from "react";
 import { useOutsideClick } from "@/app/functions/useOutsideClick";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 import CurrencyInput from "react-currency-input-field";
@@ -17,20 +11,13 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 export default function NewPartialCost({setShowForm, updateCost, cost}: {setShowForm:Function, updateCost:Function, cost: CostsPaymentTable}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
-  // const [previousImport, setPreviosImport] = useState<number>(Number(cost.Total.replace(/[$,",", M, X]/g, "")));
-  // const [paid, setPaid] = useState<number>(cost.paid);
-  // const [pending, setPending] = useState<string>((Number(cost.Total.replace(/[$,",", M, X]/g, ""))-cost.paid).toString());
   const [previousImport, setPreviosImport] = useState<string>(Number(cost.Total.replace(/[$,",", M, X]/g, "")).toString());
   const [paid, setPaid] = useState<string>(cost.paid.toString());
   const [pending, setPending] = useState<string>((Number(cost.Total.replace(/[$,",", M, X]/g, ""))-cost.paid).toString());
   const [numPartial, setNumPartial] = useState<number>(cost.parciality);
-  // const refRequest = useRef(true);
-
+  
   const updatePending = (prev: number, pay: number) => {
-    console.log('prev partial => ', Number(prev));
-    console.log('pay partial => ', Number(pay));
     const pen = Number(prev) - Number(pay);
-    console.log('pend => partial => ', pen);
     setPending(pen.toString());
   }
 
@@ -92,7 +79,6 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
         <HeaderForm img="/img/payments/payments.svg" subtitle="Agrega parcialidad a una factura" 
           title="Agregar parcialidad"
         />
-        {/* <XCircleIcon className="text-red-500 w-8 h-8" onClick={() => setShowForm(false)} /> */}
       </div>
       <div className="shadow-md shadow-slate-500 m-3 p-3">
         <Label htmlFor="concept">{cost.conceptCostoCenter}</Label>
@@ -143,10 +129,7 @@ export default function NewPartialCost({setShowForm, updateCost, cost}: {setShow
             value={previousImport}
             prefix="$"
             onChange={(e) => {
-              // setPreviosImport(Number(e.target.value.replace(/[$,",", M, X]/g, "")));
               setPreviosImport(e.target.value.replace(/[$,",", M, X]/g, ""));
-              console.log('previous current => ', previousImport);
-              console.log('input previous => ', e.target.value);
               updatePending(Number(e.target.value.replace(/[$,",", M, X]/g, "")), Number(paid.replace(/[$,",", M, X]/g, "")));
             }}
             autoFocus

@@ -13,7 +13,6 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
     containerTable: {
       paddingVertical: '10px',
       borderBottom: '1px solid gray',
-      //borderTop: '1px solid gray'
     },
     header: {
       fontSize: '7px',
@@ -47,13 +46,11 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
   return(
     <Document>
       <Page>
-        {/* <View style={{padding: '30px'}}> */}
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos detalle</Text>
-              {/* <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 30 de junio 2024</Text> */}
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
           </View>
@@ -67,7 +64,6 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
               <View style={[style.header, {flex: 1}]}><Text>Fecha</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Importe</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
-              {/* <View style={[style.header, {flex: 1}]}><Text>Acumulado</Text></View> */}
             </View>
             {costs.map((cost, index:number) => (
               <View style={[style.table, {borderTop: '1px solid gray'}]} key={index}>

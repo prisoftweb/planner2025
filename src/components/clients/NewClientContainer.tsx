@@ -7,8 +7,14 @@ import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
 
-export default function NewClientContainer({token, id, showForm, tags}: 
-                            {token:string, id:string, showForm:Function, tags:Options[]}){
+type NewClientContainerProps = {
+  token:string, 
+  id:string, 
+  showForm:Function, 
+  tags:Options[]
+}
+
+export default function NewClientContainer({token, id, showForm, tags}: NewClientContainerProps ){
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -33,8 +39,6 @@ export default function NewClientContainer({token, id, showForm, tags}:
         {
           label: 'Si',
           onClick: () => {
-            //let res = undefined;
-  
             switch('user'){
               case 'user':
                 showForm(false);

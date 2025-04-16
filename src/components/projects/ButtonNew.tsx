@@ -4,11 +4,19 @@ import { useState } from "react";
 import NewProject from "./NewProject";
 import { Options } from "@/interfaces/Common";
 
+type Props = {
+  token:string, 
+  optClients:Options[], 
+  user:string,
+  optCategories:Options[], 
+  optTypes:Options[],
+  optCompanies: Options[], 
+  condition: string
+}
+
 export default function ButtonNew({token, optClients, optCategories, 
-                            optTypes, user, optCompanies, condition}: 
-                          {token:string, optClients:Options[], user:string,
-                            optCategories:Options[], optTypes:Options[],
-                            optCompanies: Options[], condition: string}){
+  optTypes, user, optCompanies, condition}: Props){
+
   const [newProject, setNewProject] = useState<boolean>(false);
   const handleNewProject = (value: boolean) => {
     setNewProject(value);
@@ -17,10 +25,10 @@ export default function ButtonNew({token, optClients, optCategories,
   return(
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
-          {newProject && <NewProject showForm={handleNewProject} optTypes={optTypes} 
-                          token={token} optClients={optClients} 
-                          optCategories={optCategories} user={user} 
-                           optCompanies={optCompanies} condition={condition} />}
+        {newProject && <NewProject showForm={handleNewProject} optTypes={optTypes} 
+                        token={token} optClients={optClients} 
+                        optCategories={optCategories} user={user} 
+                          optCompanies={optCompanies} condition={condition} />}
     </>
   )
 }

@@ -2,11 +2,21 @@ import { Component } from "@/interfaces/Roles"
 import { useEffect, useState } from "react"
 import { updateStatusComponentTree } from "@/app/api/routeRoles"
 
+type Props = {
+  component: Component, 
+  value:boolean, 
+  token:string, 
+  indexComp:number 
+  idT:string, 
+  idRes:string, 
+  idRou:string, 
+  increment:Function, 
+  decrement:Function, 
+  idC:number
+}
+
 export default function StatusComponent({component, value, token, idRes, idRou, idT, decrement, 
-                              increment, indexComp, idC}: 
-                            {component: Component, value:boolean, token:string, indexComp:number 
-                              idT:string, idRes:string, idRou:string, increment:Function, 
-                              decrement:Function, idC:number}){
+  increment, indexComp, idC}: Props){
   
   const [status, setStatus] = useState<boolean>(value);
   const [bandStart, setBandStart] =useState<boolean>(true);
@@ -20,11 +30,7 @@ export default function StatusComponent({component, value, token, idRes, idRou, 
       const request = async() => {
         try {
           const res = await updateStatusComponentTree(token, idT, idRes, idRou, component._id, {status});
-          //updateValue(status);
-          //console.log(res);
           if(res===200){
-            console.log('update value', status);
-            //updateValue(status? (1) : -1);
             (status)? increment(indexComp) : decrement(indexComp);
           }else{
             setStatus(!status);
