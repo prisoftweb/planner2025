@@ -7,7 +7,6 @@ import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
 import NavTabProject from "@/components/projects/NavTabProject";
 import Header from "@/components/HeaderPage";
-import ContainerCostsByProject from "@/components/projects/ContainerCostsByProject";
 import ContainerBudgetsByProject from "@/components/projects/ContainerBudgetsByProjects";
 
 export default async function Page({ params }: 

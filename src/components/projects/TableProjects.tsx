@@ -290,6 +290,39 @@ export default function TableProjects({data, token, projects, optCategories,
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => linkToProfile(row.original.id)}
+        >
+          {MoneyFormatter(row.original.totalCosts?? 0)} 
+        </p>
+      ),
+    }),
+    columnHelper.accessor('totalCosts', {
+      header: 'Costos',
+      id: 'costos',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => linkToProfile(row.original.id)}
+        >
+          {MoneyFormatter(row.original.totalColections?? 0)}
+        </p>
+      ),
+    }),
+    columnHelper.accessor('totalColections', {
+      header: 'Cobros',
+      id: 'cobros',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => linkToProfile(row.original.id)}
+        >
+          {MoneyFormatter(row.original.utilities?? 0)} 
+        </p>
+      ),
+    }),
+    columnHelper.accessor('utilities', {
+      header: 'Utilidad',
+      id: 'utilidad',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => linkToProfile(row.original.id)}
         > </p>
       ),
     }),

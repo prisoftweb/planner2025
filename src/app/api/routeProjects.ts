@@ -853,3 +853,39 @@ export async function GetBudgetsByProjectMin(auth_token:string, id:string) {
     return 'Error al consultar presupuestos del proyecto!!';
   }
 }
+
+export async function GetCollectionsAccumByProjectMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllCollectionsACCUMGroupByProjectMIN`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al consultar cobros de los proyectos!!';
+  }
+}
+
+export async function GetCostsAccumByProjectMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsACCUMGroupByProjectMIN`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al consultar cobros de los proyectos!!';
+  }
+}

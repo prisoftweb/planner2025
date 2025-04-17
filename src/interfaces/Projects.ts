@@ -8,17 +8,17 @@ export interface ProjectsTable{
   code: string, 
   project:string,
   imgProject: string,
-  //status:boolean, 
   condition: string,
   category:string, 
   client:string, 
   date:string,
-  // amount:string,
   amount:number
   percentage: string
   account: string
-  // total: string
   total: number
+  totalCosts?: number
+  totalColections?: number
+  utilities?: number
 }
 
 export interface ProjectsBudgetTable{
@@ -324,4 +324,20 @@ export interface IBudgetByProject {
     }
   }
   status: boolean
+}
+
+export interface ICostsAccumByProject {
+  _id: string
+  title: string
+  quantity: number
+  ivaCost: number
+  subtotalCost: number
+  totalCost: number
+}
+
+export interface ICollectionAccumByProject {
+  id: string
+  title: string
+  quantity: number
+  totalPayments: number
 }

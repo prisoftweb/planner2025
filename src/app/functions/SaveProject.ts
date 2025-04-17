@@ -1,7 +1,8 @@
 //import { Provider } from "@/interfaces/Providers";
 import { projectValidation } from "@/schemas/project.schema";
 import { CreateProject } from "../api/routeProjects";
-import { ProjectsTable, ProjectsBudgetTable, Project, ProjectMin, OneProjectMin, IProjectWithEstimateMin } from "@/interfaces/Projects";
+import { ProjectsTable, ProjectsBudgetTable, Project, ProjectMin, OneProjectMin, 
+  IProjectWithEstimateMin, ICollectionAccumByProject, ICostsAccumByProject } from "@/interfaces/Projects";
 import { CurrencyFormatter } from "./Globals";
 import { BudgetMin } from "@/interfaces/Budget";
 import { BudgetTableCostCenter } from "@/interfaces/Budget";
@@ -145,6 +146,51 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       account: project.account,
       // total: total
       total: project.amountotal
+    })
+  });
+
+  return table;
+}
+
+export function ProjectDataToTableDataWithUtilitiesMin(projects:ProjectMin[], 
+      collections:ICollectionAccumByProject[], costs: ICostsAccumByProject[]){
+
+  const table: ProjectsTable[] = [];
+  projects.map((project) => {
+    let p: string;
+    if(project.progress){
+      p = project.progress.toString() + '%';
+    }else{
+      p = '0%';
+    }
+
+    const collection = collections.find((c) => c.title==project.title);
+    const cost = costs.find(c => c.title==project.title);
+    
+    let cond: string;
+
+    if(project.category){
+      cond = project.category.color || '#f00';
+    }else{
+      cond = '#f00';
+    }
+
+    table.push({
+      amount: project.amount,
+      category: project.category?.name || 'Sin Categoria',
+      client: project.client?.name || 'Sin cliente',
+      code: project.code,
+      date: project.date,
+      id: project._id,
+      project:project.title,
+      condition: cond,
+      percentage: p,
+      imgProject: project.photo,
+      account: project.account,
+      total: project.amountotal,
+      totalColections: collection?.totalPayments?? 0,
+      totalCosts: cost?.totalCost?? 0,
+      utilities: (collection?.totalPayments || 0) - (cost?.totalCost || 0)
     })
   });
 

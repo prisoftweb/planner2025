@@ -7,9 +7,9 @@ import { ClientBack } from "@/interfaces/Clients";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
-import { getActiveProjectsMin } from "../api/routeProjects";
-import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
-import { ProjectDataToTableDataMin } from "../functions/SaveProject";
+import { getActiveProjectsMin, GetCollectionsAccumByProjectMin, GetCostsAccumByProjectMin } from "../api/routeProjects";
+import { ProjectsTable, ProjectMin, ICostsAccumByProject, ICollectionAccumByProject } from "@/interfaces/Projects";
+import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
 
 export default async function Page(){
@@ -51,6 +51,44 @@ export default async function Page(){
       <>
         <Navigation user={user} />
         <h1>Error al consultar clientes!!</h1>
+      </>
+    )
+  }
+
+  let costs: ICostsAccumByProject[];
+  try {
+    costs = await GetCostsAccumByProjectMin(token);
+    if(typeof(costs)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{costs}</h1>
+        </>
+      )
+  } catch (error) {
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar los costos de los proyectos!!</h1>
+      </>
+    )
+  }
+
+  let collections: ICollectionAccumByProject[];
+  try {
+    collections = await GetCollectionsAccumByProjectMin(token);
+    if(typeof(collections)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{collections}</h1>
+        </>
+      )
+  } catch (error) {
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar los cobros de los proyectos!!</h1>
       </>
     )
   }
@@ -138,9 +176,9 @@ export default async function Page(){
       label: condition.glossary.name,
       value: condition.glossary._id
     })
-  })
+  });
 
-  const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
+  const table: ProjectsTable[] = ProjectDataToTableDataWithUtilitiesMin(projects, collections, costs);
   
   return(
     <>

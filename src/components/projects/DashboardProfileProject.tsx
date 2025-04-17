@@ -91,7 +91,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
         title="Analisis del proyecto"
       />
       <div className="mt-4 rounded-lg space-y-5">
-        <div className="grid grid-cols-2 gap-x-3 gap-y-3">
+        <div className="grid grid-cols-2 gap-x-3 gap-y-3 items-start">
           <div className="p-3 w-full flex flex-col justify-center">
             <p className="mb-2">AVANCE DE PROYECTO</p>
             <ProgressCircle 

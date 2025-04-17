@@ -7,7 +7,8 @@ import BudgetCli from "@/components/projects/budget/BudgetClient";
 import { CostCenter } from "@/interfaces/CostCenter";
 import { getCostoCenters } from "@/app/api/routeCostCenter";
 
-export default async function page({ params }: { params: { id: string }}) {
+export default async function page({ params, searchParams }: 
+  { params: { id: string }, searchParams: { project: string }}) {
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
@@ -60,7 +61,7 @@ export default async function page({ params }: { params: { id: string }}) {
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <BudgetCli budget={budget} id={params.id} token={token} 
-          costoCenters={costoCenters} user={user._id} />
+          costoCenters={costoCenters} user={user._id} projectQuery={searchParams.project} />
       </div>
     </>
   )

@@ -28,14 +28,18 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-center text-red-500">{project}</h1>
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+            <h1 className="text-center text-red-500">project min{project}</h1>
+          </div>
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>
+        </div>
       </>
     )
   }
@@ -47,14 +51,18 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-center text-red-500">{collections}</h1>
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+            <h1 className="text-center text-red-500">collections{collections}</h1>
+          </div>
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener los cobros del proyecto!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">Ocurrio un error al obtener los cobros del proyecto!!</h1>
+        </div>
       </>
     ) 
   }
@@ -66,14 +74,18 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-center text-red-500">{totalInvoicesProject}</h1>
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+            <h1 className="text-center text-red-500">total invoice{totalInvoicesProject}</h1>
+          </div>
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las facturas del proyecto!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las facturas del proyecto!!</h1>
+        </div>
       </>
     )
   }
@@ -85,14 +97,18 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-center text-red-500">{totalPaymentsResumen}</h1>
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+            <h1 className="text-center text-red-500">total payments resumen{totalPaymentsResumen}</h1>
+          </div>
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen del proyecto!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen del proyecto!!</h1>
+        </div>
       </>
     )
   }
@@ -104,14 +120,18 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-center text-red-500">{projects}</h1>
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+            <h1 className="text-center text-red-500">opt pro{projects}</h1>
+          </div>
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al consultar proyectos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">Ocurrio un error al consultar proyectos!!</h1>
+        </div>
       </>
     )
   }
@@ -123,14 +143,18 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+            <h1 className="text-red-500 text-center text-lg">catalogs{catalogs}</h1>
+          </div>
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1>Error al consultar catalogos!!</h1>
+        </div>
       </>
     )
   }
