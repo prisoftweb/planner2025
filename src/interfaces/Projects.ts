@@ -287,3 +287,41 @@ export interface ICostsByProject {
   }
   status: boolean
 }
+
+export interface IBudgetByProject {
+  _id: string
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  title: string
+  description: string
+  date: string
+  account: string
+  budgeted: number
+  pending: number
+  amount: number
+  conditionStatus: string
+  progressAverage: number
+  company: {
+    _id: string
+    name: string
+    logo: string
+  }
+  costocenter: {
+    _id: string
+    category: string
+    concept: {
+      _id: string
+      name: string
+      namefull: string
+    }
+  }
+  status: boolean
+}

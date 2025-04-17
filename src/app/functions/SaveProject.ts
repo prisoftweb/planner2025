@@ -9,7 +9,7 @@ import { FullBudget } from "@/interfaces/BudgetProfile";
 import { MoneyFormatter } from "./Globals";
 
 import { ExpensesTable } from "@/interfaces/Expenses";
-import { ICostsByProject } from "@/interfaces/Projects";
+import { ICostsByProject, IBudgetByProject } from "@/interfaces/Projects";
 
 export default async function SaveProject(data:Object, token:string){
   const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]));
@@ -442,4 +442,33 @@ export function getTypeFiles(expense:ICostsByProject) {
     });
   
   return typeFiles;
+}
+
+export function ProjectBudgetDataToTableDataProjectMin(budgets:IBudgetByProject[]){
+  const table: ProjectsBudgetTable[] = [];
+  budgets.map((budget) => {
+    let p: string;
+    if(budget.progressAverage){
+      p = budget.progressAverage.toString() + '%';
+    }else{
+      p = '0%';
+    }
+    
+    table.push({
+      pending: budget.pending,
+      id: budget._id,
+      project: {
+        budget: budget.title,
+        project: budget.project.photo
+      },
+      status: budget.status,
+      percentage: p,
+      amountBudget: budget.amount,
+      segment: '',
+      color: '',
+      budgeted: budget.budgeted
+    })
+  });
+
+  return table;
 }

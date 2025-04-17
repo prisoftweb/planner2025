@@ -11,7 +11,7 @@ import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default async function Page({ params, searchParams }: 
-    { params: { id: string }, searchParams: { prov: string, status:string }}){
+    { params: { id: string }, searchParams: { prov: string, status:string, project:string }}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
@@ -66,8 +66,10 @@ export default async function Page({ params, searchParams }:
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <HeaderProfileExpense options={options} subTotal={subTotal} idProv={searchParams.prov} pending={previous} />
-        <NavTabExpense idExp={params.id} tab="5" pending={previous} idProv={searchParams.prov} />
+        <HeaderProfileExpense options={options} subTotal={subTotal} idProv={searchParams.prov} 
+          pending={previous} idProj={searchParams.project} />
+        <NavTabExpense idExp={params.id} tab="5" pending={previous} 
+          idProv={searchParams.prov} idProj={searchParams.project} />
         <NextUiProviders>
           <ExpenseStatusClient expense={cost} id={params.id} token={token} user={user._id}/>
         </NextUiProviders>

@@ -11,7 +11,7 @@ import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
-export default async function Page({ params }: { params: { id: string, idProv:string }}){
+export default async function Page({ params }: { params: { id: string, idProv:string, project:string }}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
@@ -55,7 +55,6 @@ export default async function Page({ params }: { params: { id: string, idProv:st
     )
   }
 
-
   const subTotal = CurrencyFormatter({
     currency: "MXN",
     value: cost.cost.subtotal
@@ -68,7 +67,8 @@ export default async function Page({ params }: { params: { id: string, idProv:st
         <Header title={subTotal} previousPage="/expenses/history">
           <Selectize options={options} routePage="expenses/history" subpath="/profile" />
         </Header>
-        <NavTabExpense idExp={params.id} tab="1" pending={0} idProv={params.idProv} />
+        <NavTabExpense idExp={params.id} tab="1" pending={0} 
+            idProv={params.idProv} idProj={params.project} />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 
               user={user._id} isHistory={true}/>

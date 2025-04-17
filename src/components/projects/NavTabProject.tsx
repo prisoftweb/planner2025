@@ -57,7 +57,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/projects/${idPro}/estimates`}>
+                    <Link href={`/projects/${idPro}/budgets`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Presupuesto'>
                         <CurrencyDollarIcon
@@ -111,7 +111,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
             <p className="text-blue-600">Analisis</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/`}>
+        <Link href={`/projects/${idPro}/budgets`}>
           <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Presupuesto</p>
           </div>
