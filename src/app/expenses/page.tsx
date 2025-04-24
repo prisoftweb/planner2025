@@ -15,24 +15,17 @@ export default async function Page() {
   const role = user.rol?.name || '';
   const isViewReports = role.toLowerCase().includes('residente')? false: true;
   
-  let expenses: Expense[] = [];
-  try {
-    expenses = await getAllCostsByConditionAndUser(token, user._id);
-    if(typeof(expenses)=== 'string')
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
-        </>
-      )
-  } catch (error) {
+  let expenses: Expense[] = await getAllCostsByConditionAndUser(token, user._id);
+  
+  if(typeof(expenses)=== 'string')
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
+        </div>
       </>
     )
-  }
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 

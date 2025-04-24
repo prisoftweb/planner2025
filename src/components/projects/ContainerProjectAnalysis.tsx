@@ -24,7 +24,8 @@ export default function ContainerProjectAnalysis({project, token, id, user}: Pro
   return(
     <>
       <div className={`flex`}>
-        <div className="flex w-full px-2 flex-wrap space-x-2"
+        <DashboardAnalysisProject token={token} id={id} project={project} />
+        {/* <div className="flex w-full px-2 flex-wrap space-x-2"
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileProject project={project} />
@@ -33,7 +34,7 @@ export default function ContainerProjectAnalysis({project, token, id, user}: Pro
               style={{borderColor:'#F8FAFC'}}>
             <DashboardAnalysisProject token={token} id={id} />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   )

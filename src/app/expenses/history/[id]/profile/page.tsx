@@ -17,43 +17,28 @@ export default async function Page({ params }: { params: { id: string, idProv:st
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let cost: OneExpense;
-  try {
-    cost = await GetCostMIN(token, params.id);
-    if(typeof(cost) === "string")
-      return(
-        <>
-          <Navigation user={user} />
+  let cost: OneExpense = await GetCostMIN(token, params.id);
+  let options: Options[] = await GetCostsLV(token);
+  
+  if(typeof(cost) === "string")
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>
-      </>
-    )  
-  }
-
-  let options: Options[] = [];
-  try {
-    options = await GetCostsLV(token);
-    if(typeof(options) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{options}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>
+        </div>
       </>
     )
-  }
+  
+  if(typeof(options) === "string")
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+         <h1 className="text-center text-red-500">{options}</h1>
+        </div>
+      </>
+    )
 
   const subTotal = CurrencyFormatter({
     currency: "MXN",

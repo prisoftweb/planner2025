@@ -76,6 +76,44 @@ export interface ProjectsTop10 {
   progress: number
 }
 
+// export interface ProjectByBudgetedControl {
+//   _id: string
+//   title: string
+//   date: string
+//   estatus: string
+//   progress: number
+//   amountInfo: {
+//     amount: number
+//     porcentage: number
+//   }
+//   budgetedInfo: {
+//     budgeted: number
+//     porcentage: number
+//   }
+//   spentInfo: {
+//     spent: number
+//     porcentage: number
+//   }
+//   estimateInfo: {
+//     estimate: number
+//     porcentage: number
+//   }
+//   billingInfo: {
+//     billedTotal: number, 
+//     pendingBillingTotal: number, 
+//     porcentage: number
+//   }
+//   paymentInfo: {
+//     totalPayments: number, 
+//     pendingPaymentTotal: number, 
+//     porcentage: number
+//   }
+//   netprofitInfo: {
+//     netprofitTotal: number,
+//     porcentage: number
+//   }
+// }
+
 export interface ProjectByBudgetedControl {
   _id: string
   title: string
@@ -84,33 +122,49 @@ export interface ProjectByBudgetedControl {
   progress: number
   amountInfo: {
     amount: number
+    amountotal: number
     porcentage: number
+    porcentageTotal: any
   }
   budgetedInfo: {
-    budgeted: number
-    porcentage: number
+    budgetedTotal: number
+    porcentageTotal: number
+    pendingBugetedTotal: number
   }
   spentInfo: {
-    spent: number
+    spentTotal: number
+    pendingSpentTotal: number
     porcentage: number
+    spentSubTotal: number
+    pendingSpentSubTotal: number
+    porcentageSubTotal: number
   }
   estimateInfo: {
     estimate: number
+    pendingEstmatedTotal: number
     porcentage: number
   }
   billingInfo: {
-    billedTotal: number, 
-    pendingBillingTotal: number, 
+    billedTotal: number
+    pendingBillingTotal: number
     porcentage: number
+    billedSubTotal: number
+    pendingBillingSubTotal: number
+    porcentageSubTotal: number
   }
   paymentInfo: {
-    totalPayments: number, 
-    pendingPaymentTotal: number, 
+    paymentTotal: number
+    pendingPaymentTotal: number
     porcentage: number
+    paymentSubTotal: number
+    pendingPaymentSubTotal: number
+    porcentageSubTotal: number
   }
   netprofitInfo: {
-    netprofitTotal: number,
+    netprofitTotal: number
     porcentage: number
+    netprofitSubTotal: number
+    porcentageSubtotal: number
   }
 }
 

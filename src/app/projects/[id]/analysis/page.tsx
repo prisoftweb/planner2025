@@ -16,43 +16,28 @@ export default async function Page({ params }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin;
-  try {
-    project = await GetProjectMin(token, params.id);
-    if(typeof(project) === "string")
-      return(
-        <>
-          <Navigation user={user} />
+  let project: OneProjectMin = await GetProjectMin(token, params.id);
+  let options: Options[] = await getProjectsLV(token);
+  if(typeof(project) === "string")
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{project}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>
+        </div>
       </>
-    )  
-  }
+    )
 
-  let options: Options[] = [];
-  try {
-    options = await getProjectsLV(token);
-    if(typeof(options) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{options}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(options) === "string")
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proyectos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500">{options}</h1>
+        </div>
       </>
-    )  
-  }
+    )
+
   
   return(
     <>

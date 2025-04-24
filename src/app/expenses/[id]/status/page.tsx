@@ -17,43 +17,24 @@ export default async function Page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let cost: OneExpense;
-  try {
-    cost = await GetCostMIN(token, params.id);
-    if(typeof(cost) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{cost}</h1>
-        </>
-      )
-  } catch (error) {
+  let cost: OneExpense = await GetCostMIN(token, params.id);
+  let options: Options[] = await GetCostsLVByCond(token);
+  
+  if(typeof(cost) === "string")
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del Costo!!</h1>
+        <h1 className="text-center text-red-500">{cost}</h1>
       </>
-    ) 
-  }
-
-  let options: Options[] = [];
-  try {
-    options = await GetCostsLVByCond(token);
-    if(typeof(options) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{options}</h1>
-        </>
-      )
-  } catch (error) {
+    )
+  
+  if(typeof(options) === "string")
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los costos!!</h1>
+        <h1 className="text-center text-red-500">{options}</h1>
       </>
-    ) 
-  }
+    )
 
   const subTotal = CurrencyFormatter({
     currency: "MXN",

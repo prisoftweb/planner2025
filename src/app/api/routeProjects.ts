@@ -573,6 +573,7 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
 
 export async function getDashboardProjectCostoCenters(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostByProject-groupByCOSTOCENTERONLY/${id}`;
+  // console.log('url dashboard cc => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {

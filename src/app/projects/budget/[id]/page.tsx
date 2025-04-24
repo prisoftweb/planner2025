@@ -15,43 +15,23 @@ export default async function page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let budget: FullBudget;
-  try {
-    budget = await getBudget(token, params.id);
-    if(typeof(budget)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center">{budget}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  let budget: FullBudget = await getBudget(token, params.id);
+  let costoCenters: CostCenter[] = await getCostoCenters(token);
+  
+  if(typeof(budget)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center">Ocurrio un problema al consultar presupuesto!!</h1>
+        <h1 className="text-red-500 text-center">{budget}</h1>
       </>
     )
   }
-
-  let costoCenters: CostCenter[] = [];
   
-  try {
-    costoCenters = await getCostoCenters(token);
-    if(typeof(costoCenters)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <p>{costoCenters}</p>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(costoCenters)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <p>Error al consultas los centros de costos!!!</p>
+        <p>{costoCenters}</p>
       </>
     )
   }

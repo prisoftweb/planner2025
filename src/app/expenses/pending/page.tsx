@@ -17,27 +17,21 @@ export default async function Page() {
   const role = user.rol?.name || '';
   
   let expenses: Expense[] = [];
-  try {
-    if(role.toLowerCase().includes('admin')){
-      expenses = await getAllCostsByUserAdmin(token);
-    }else{
-      expenses = await getAllCostsByUserNormal(token, user._id);
-    }
-    if(typeof(expenses)=== 'string')
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
-        </>
-      )
-  } catch (error) {
+  if(role.toLowerCase().includes('admin')){
+    expenses = await getAllCostsByUserAdmin(token);
+  }else{
+    expenses = await getAllCostsByUserNormal(token, user._id);
+  }
+  
+  if(typeof(expenses)=== 'string')
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-red-500 text-center">Error al obtener costos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-lg text-red-500 text-center">{expenses}</h1>
+        </div>
       </>
     )
-  }
 
   const table: ExpensesTable[] = ExpenseDataToTableData(expenses);
 

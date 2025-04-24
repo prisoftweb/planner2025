@@ -22,81 +22,50 @@ export default async function Page({ params }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin;
-  try {
-    project = await GetProjectMin(token, params.id);
-    if(typeof(project) === "string")
-      return(
-        <>
-          <Navigation user={user} />
+  let project: OneProjectMin = await GetProjectMin(token, params.id);
+  let options: Options[] = await getProjectsLV(token);
+  let clients: ClientBack[] = await getClients(token);
+  let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  
+  if(typeof(project) === "string")
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{project}</h1>
-        </>
-      )
-  } catch (error) {
+        </div>
+      </>
+    )
+  
+  if(typeof(options) === "string")
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>
-      </>
-    )  
-  }
-
-  let options: Options[] = [];
-  try {
-    options = await getProjectsLV(token);
-    if(typeof(options) === "string")
-      return(
-        <>
-          <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{options}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
+        </div>
+      </>
+    )
+  
+  if(typeof(clients)==='string') 
+    return (
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proyectos!!</h1>
-      </>
-    )  
-  }
-
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients)==='string') 
-      return (
-        <>
-          <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{clients}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al consultar clientes!!</h1>
+        </div>
       </>
     )
-  }
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(catalogs)==='string') 
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </div>
       </>
     )
-  }
  
   const optClients: Options[] = [];
   clients.map((client) => {

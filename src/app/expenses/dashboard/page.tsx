@@ -19,122 +19,75 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let costsCategory: CostsByConceptAndCategory[] = [];
-  try {
-    costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-    if(typeof(costsCategory)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  let costsCategory: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  let costsConcept: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  let costsDays: CostsByDay[] = await GetAllCostsGroupByDAYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  let costsResumen: CostsGroupByResumen[] = await GetAllCostsGroupByRESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  let costsResumenType: CostsGroupResumenByType[] = await GetAllCostsGroupByTYPERESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  let projects: Options[] = await getProjectsLV(token);
+  
+  if(typeof(costsCategory)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{costsCategory}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al obtener costos agrupados por categoria!!!</h1>
+        </div>
       </>
     )
   }
-
-  let costsConcept: CostsByConceptAndCategory[] = [];
-  try {
-    costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-    if(typeof(costsConcept)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  
+  if(typeof(costsConcept)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{costsConcept}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al obtener costos agrupados por concepto!!!</h1>
+        </div>
       </>
     )
   }
-
-  let costsDays: CostsByDay[] = [];
-  try {
-    costsDays = await GetAllCostsGroupByDAYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-    if(typeof(costsDays)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  
+  if(typeof(costsDays)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{costsDays}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al obtener costos agrupados por dias!!!</h1>
+        </div>
       </>
     )
   }
-
-  let costsResumen: CostsGroupByResumen[] = [];
-  try {
-    costsResumen = await GetAllCostsGroupByRESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-    if(typeof(costsResumen)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  
+  if(typeof(costsResumen)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{costsResumen}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al obtener costos agrupados por resumen!!!</h1>
+        </div>
       </>
     )
   }
-
-  let costsResumenType: CostsGroupResumenByType[] = [];
-  try {
-    costsResumenType = await GetAllCostsGroupByTYPERESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-    if(typeof(costsResumenType)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  
+  if(typeof(costsResumenType)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{costsResumenType}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al obtener costos agrupados por resumen y tipo!!!</h1>
+        </div>
       </>
     )
   }
-
-  let projects: Options[] = [];
-  try {
-    projects = await getProjectsLV(token);
-    if(typeof(projects)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1>{projects}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  
+  if(typeof(projects)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al obtener proyectos!!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{projects}</h1>
+        </div>
       </>
     )
   }

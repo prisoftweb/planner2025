@@ -22,82 +22,51 @@ export default async function page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let nodes: Node[] = [];
-  try {
-    nodes = await getNodes(token);
-    if(typeof(nodes) ==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  let nodes: Node[] = await getNodes(token);
+  let optDepartments: Options[] = await getDepartmentsLV(token);
+  let glossaries: Glossary[] = await getGlossaries(token);
+  let workflows: Workflow[] = await getWorkFlows(token);
+  
+  if(typeof(nodes) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar nodos!!</h1>
+        </div>
       </>
     )
   }
 
-  let optDepartments: Options[] = [];
-  try {
-    optDepartments = await getDepartmentsLV(token);
-    if(typeof(optDepartments) ==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  if(typeof(optDepartments) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{optDepartments}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar departamentos!!</h1>
+        </div>
       </>
     )
   }
-
-  let glossaries: Glossary[] = [];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries) ==='string'){
-      return(
-        <>
-          <Navigation user={user} />
+  
+  if(typeof(glossaries) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar glosarios!!</h1>
+        </div>
       </>
     )
   }
-
-  let workflows: Workflow[] = [];
-  try {
-    workflows = await getWorkFlows(token);
-    if(typeof(workflows) ==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  
+  if(typeof(workflows) ==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar workflows!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
+        </div>
       </>
     )
   }
@@ -147,7 +116,10 @@ export default async function page() {
     if(typeof(res)==='string'){
       return(
         <>
-          <h1 className="text-red-500 text-xl text-center">{res}</h1>
+          <Navigation user={user} />
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+            <h1 className="text-red-500 text-xl text-center">{res}</h1>
+          </div>
         </>
       )
     }else{
@@ -200,12 +172,8 @@ export default async function page() {
           <TableNode data={tableData} token={token} departments={optDepartments} 
             glossaries={optGlossaries} workflows={optWorkFlows} 
             optDesc={optDescriptions} optRels={optRelations}  />
-          {/* <TableReports data={table} optConditions={optConditionsFilter} 
-              reports={reports} token={token} optCompanies={optCompaniesFilter} 
-              optProjects={optProjectsFilter} /> */}
         </div>
       </div>
     </>
   )
 }
-

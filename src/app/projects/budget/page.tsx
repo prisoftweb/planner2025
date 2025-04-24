@@ -15,24 +15,39 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: ProjectMin[];
-  try {
-    projects = await getProjectsMin(token);
-    if(typeof(projects)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-        </>
-      )
-  } catch (error) {
+  let projects: ProjectMin[] = await getProjectsMin(token);
+  let budgets: BudgetMin[] = await getBudgetsMin(token);
+  let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'budgets');
+  
+  if(typeof(projects)==='string') 
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar los proyectos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+        </div>
       </>
     )
-  }
+  
+  if(typeof(budgets)==='string') 
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-center text-lg">{budgets}</h1>
+        </div>
+      </>
+    )
+
+  if(typeof(catalogs)==='string') 
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </div>        
+      </>
+    )
 
   let optProjects: Options[] = [{
     label: 'Todos',
@@ -44,44 +59,6 @@ export default async function Page(){
       value: prj._id
     });
   });
-
-  let budgets: BudgetMin[];
-  try {
-    budgets = await getBudgetsMin(token);
-    if(typeof(budgets)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{budgets}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al consultar los presupuestos!!</h1>
-      </>
-    )
-  }
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'budgets');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
-      </>
-    )
-  }
 
   const optConditions: Options[] = [{
     label: 'Todos',
