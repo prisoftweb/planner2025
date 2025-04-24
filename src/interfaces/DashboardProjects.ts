@@ -182,6 +182,20 @@ export interface ProjectCostoCenters {
   }
 }
 
+export interface ProjectCostoCentersCategory {
+  quantity: number
+  subtotalCost: number
+  totalCost: number
+  totalIVA: number
+  totalExemptTAX: number
+  totalDiscount: number
+  amountPro: number
+  porcentage: number
+  costocenter: {
+    category: string
+  }
+}
+
 export interface DashboardTotalCost {
   quantity: number
   subtotalCost: number

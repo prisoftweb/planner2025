@@ -1,12 +1,12 @@
 import HeaderForm from "../HeaderForm"
 import { useOneProjectsStore } from "@/app/store/projectsStore";
 import { useEffect, useState } from "react";
-import { getDashboardProjectByBudgetControl, getProjectContractualControl } from "@/app/api/routeProjects";
+import { getDashboardProjectByBudgetControl, getProjectContractualControl, getDashboardProjectCostoCentersCategory } from "@/app/api/routeProjects";
 import { ProjectByBudgetedControl, IContractualControlProject } from "@/interfaces/DashboardProjects";
 import { ProgressBarComponent } from "./dashboard/ProgressBarComponent";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { showToastMessageError } from "../Alert";
-import { ProjectCostoCenters } from "@/interfaces/DashboardProjects";
+import { ProjectCostoCenters, ProjectCostoCentersCategory } from "@/interfaces/DashboardProjects";
 import { ProgressCircle } from "@tremor/react";
 import DonutChartComponent from "./dashboard/DonutChartComponent";
 import { getDashboardProjectCostoCenters } from "@/app/api/routeProjects";
@@ -34,6 +34,7 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
   const [budgetedControl, setBudgetedControl] = useState<ProjectByBudgetedControl>();
   const [contractualControl, setContractualControl]=useState<IContractualControlProject>();
   const [costoCenters, setCostoCenters] = useState<ProjectCostoCenters[]>([]);
+  const [costoCentersCat, setCostoCentersCat] = useState<ProjectCostoCentersCategory[]>([]);
 
   useEffect(() => {
     const fetch = async () => {
@@ -57,6 +58,13 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
         setCostoCenters(resCostoC);
       }else{
         showToastMessageError(resCostoC)
+      }
+
+      const resCostoCat = await getDashboardProjectCostoCentersCategory(token, id);
+      if(typeof(resCostoCat) !== 'string'){
+        setCostoCentersCat(resCostoCat);
+      }else{
+        showToastMessageError(resCostoCat)
       }
 
     };
@@ -90,7 +98,7 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const dataCostoCenters: OptionsDashboard[] = [];
-  // const dataCostoCenters: OptionsBarChart[] = [];
+  const dataCostoCentersCat: OptionsBarChart[] = [];
   const categoriesCostoCenters: string[] = ['Categorias'];
 
   const values: number[] = [];
@@ -123,17 +131,17 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
   }
 
-  // costoCenters.map((prj) => {
-  //   dataCostoCenters.push({
-  //     // backgroundColor: 'rgba(53, 162, 235, 0.5)',
-  //     backgroundColor: random_rgba(),
-  //     data:[prj.porcentage],
-  //     label: prj.costocenter.concept
-  //   });
-  //   // categoriesCostoCenters.push(prj.costocenter.concept);
-  // });
+  costoCentersCat.map((prj) => {
+    console.log('prj cat => ', prj.costocenter);
+    dataCostoCentersCat.push({
+      backgroundColor: random_rgba(),
+      data:[prj.totalCost],
+      label: prj.costocenter.category
+    });
+    // categoriesCostoCenters.push(prj.costocenter.concept);
+  });
 
-  // console.log('costo centers => ', JSON.stringify(dataCostoCenters));
+  console.log('costo centers => ', JSON.stringify(dataCostoCentersCat));
   // console.log('lalbel => ', JSON.stringify(categoriesCostoCenters));
 
   return(
@@ -455,7 +463,12 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
           </div>
 
         </div>
-      </div>  
+      </div>
+
+      <div className="p-3 bg-white">
+        <p className="mb-2">CENTRO DE COSTOS CATEGORIA</p>
+        <VerticalBarChart datasets={dataCostoCentersCat} labels={['Costo total']} />
+      </div>
     </div>
   )
 }

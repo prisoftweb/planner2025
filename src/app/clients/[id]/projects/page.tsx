@@ -4,9 +4,12 @@ import Selectize from "@/components/Selectize"
 import NavTab from "@/components/clients/NavTab"
 import { cookies } from "next/headers"
 import { UsrBack } from "@/interfaces/User"
-import { getClient, getClients } from "@/app/api/routeClients"
+import { getClient, getClients, getProjectsByClient } from "@/app/api/routeClients"
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
+import { ProjectMin } from "@/interfaces/Projects"
+// import { ProjectsTable } from "@/interfaces/Projects"
+import TableProjectsClient from "@/components/clients/projects/TableProjectsClient"
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -15,54 +18,41 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let client: ClientBack;
-  try {
-    client = await getClient(token, params.id);
-    if(typeof(client) === "string")
-      return (
-        <>
-          <Navigation user={user} />
+  let client: ClientBack = await getClient(token, params.id);
+  let clients: ClientBack[] = await getClients(token);
+  let projects: ProjectMin[] = await getProjectsByClient(token, params.id);
+
+  if(typeof(client) === "string")
+    return (
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{client}</h1>
-        </>
-      )
-  } catch (error) {
+        </div>
+      </>
+    )
+
+  if(typeof(clients) === "string")
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500">{clients}</h1>
+        </div>
       </>
-    )  
-  }
+    )
+
+  if(typeof(projects) === "string")
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500">{projects}</h1>
+        </div>
+      </>
+    )
 
   let options: Options[] = [];
-
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{clients}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
-      </>
-    )
-  }
-
-  if(clients.length <= 0){
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
-      </>
-    )
-  }
 
   clients.map((cli: ClientBack) => {
     options.push({
@@ -70,6 +60,8 @@ export default async function Page({ params }: { params: { id: string }}){
       label: cli.name,
     })
   })
+
+  // const table: ProjectsTable[] = ProjectsClientDataToTableDataMin(projects);
   
   return(
     <>
@@ -85,7 +77,45 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={options} routePage="clients" subpath="/projects" />
         </div>
         <NavTab idCli={params.id} tab='2' />
+        <TableProjectsClient projects={projects} />
       </div>
     </>
   )
 }
+
+// function ProjectsClientDataToTableDataMin(projects:ProjectMin[]){
+//   const table: ProjectsTable[] = [];
+//   projects.map((project) => {
+//     let p: string;
+//     if(project.progress){
+//       p = project.progress.toString() + '%';
+//     }else{
+//       p = '0%';
+//     }
+    
+//     let cond: string;
+
+//     if(project?.category){
+//       cond = project.category.color || '#f00';
+//     }else{
+//       cond = '#f00';
+//     }
+
+//     table.push({
+//       amount: project.amount,
+//       category: project?.category?.name ?? 'NA',
+//       client: 'Sin cliente',
+//       code: 'codigo',
+//       date: 'fecha',
+//       id: project._id,
+//       project:project.title,
+//       condition: cond,
+//       percentage: p,
+//       imgProject: '/img/projects/default.svg',
+//       account: project.account,
+//       total: project.amountotal
+//     })
+//   });
+
+//   return table;
+// }
