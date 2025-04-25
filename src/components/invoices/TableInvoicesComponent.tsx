@@ -11,7 +11,7 @@ import RemoveElement from "@/components/RemoveElement";
 import { OneProjectMin } from "@/interfaces/Projects";
 import Chip from "@/components/providers/Chip";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
-import AddNewCollectionComponent from "../projects/estimates/collections/AddNewCollection";
+import AddNewCollectionInvoice from "./AddNewCollectionInvoice";
 import { Badge } from "@mui/material";
 
 export default function TableInvoicesComponent({token, user}: 
@@ -102,7 +102,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'folio',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{row.original.folio}</p>
       ),
     }),
@@ -111,7 +111,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'cdfi',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{row.original.usecfdi.substring(row.original.usecfdi.length-3)}</p>
       ),
     }),
@@ -120,7 +120,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'metodo',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{row.original.methodpaid.substring(row.original.methodpaid.length-3)}</p>
       ),
     }),
@@ -129,7 +129,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'forma',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{row.original.formpaid.substring(row.original.formpaid.length-3)}</p>
       ),
     }),
@@ -138,7 +138,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'estimacion',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{row.original.estimate}</p>
       )
     }),
@@ -154,7 +154,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{row.original.fecha.substring(0, 10)}</p>
       ),
     }),
@@ -163,7 +163,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.amount
@@ -175,7 +175,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'cobrado',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.charged
@@ -187,7 +187,7 @@ export default function TableInvoicesComponent({token, user}:
       id: 'pendiente',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${project._id}/invoice/${row.original.id}`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.unchargedbalanceamount
@@ -201,8 +201,8 @@ export default function TableInvoicesComponent({token, user}:
   return (
     <>
       <Table columns={columns} data={data} placeH="buscar factura" />
-      {/* {showNewCollection && selInvoice && <AddNewCollectionComponent showForm={handleShowForm} user={user}
-               token={token} project={project} invoiceTable={selInvoice} />} */}
+      {showNewCollection && selInvoice && <AddNewCollectionInvoice showForm={handleShowForm} user={user}
+               token={token} invoiceTable={selInvoice} />}
     </>
   )
 }
@@ -227,7 +227,8 @@ function InvoiceDataToTableData(invoices:IInvoiceMin[]){
       unchargedbalanceamount: inv.lastpayment?.unchargedbalanceamount || 0,
       previousBalance: inv.lastpayment?.previousbalanceamount || 0,
       accountreceivablesCount: inv.accountreceivablesCount,
-      ischargedfull: inv.ischargedfull
+      ischargedfull: inv.ischargedfull,
+      project: inv.project._id
     })
   });
 

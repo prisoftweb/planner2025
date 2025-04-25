@@ -245,6 +245,10 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Facturas',
             link: '/invoices'
           },
+          {
+            name: 'Cobros',
+            link: '/collections'
+          },
         ]}
       />
       <NavItem name="Costos" link="" items={[

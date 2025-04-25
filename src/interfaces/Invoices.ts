@@ -69,6 +69,7 @@ export interface IInvoiceTable {
   previousBalance:number
   accountreceivablesCount:number
   ischargedfull:boolean
+  project?: string
 }
 
 export interface IInvoiceByProject {

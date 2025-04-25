@@ -25,7 +25,7 @@ export default async function Page({ params, searchParams }:
   let invoice: IInvoiceMinFull;
   try {
     invoice = await getInvoiceMinFull(token, params.idi);
-    console.log('get invoice min => ', invoice);
+    // console.log('get invoice min => ', invoice);
     if(typeof(invoice) === "string")
       return <h1 className="text-center text-red-500">{invoice}</h1>
   } catch (error) {
