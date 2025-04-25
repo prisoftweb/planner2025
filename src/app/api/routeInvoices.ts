@@ -41,6 +41,25 @@ export async function getInvoices(auth_token:string) {
   }
 }
 
+export async function getInvoicesMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllInvoicesMIN`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener facturas!!';
+  }
+}
+
 export async function getInvoiceMin(auth_token:string, idi:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getInvoiceByIDMIN/${idi}`;
   try {

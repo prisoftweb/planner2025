@@ -205,6 +205,16 @@ export interface IInvoiceMin {
     _id: string
   }[]
   status: boolean
+  accountreceivablesCount: number
+  ischargedfull: boolean
+  lastpayment:{
+    accountreceivable: string,
+    charged: number,
+    partialitynumber: number
+    previousbalanceamount: number
+    unchargedbalanceamount: number
+    _id: string
+  }
 }
 
 export interface IInvoiceMinFull {
