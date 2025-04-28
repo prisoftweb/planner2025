@@ -1,13 +1,6 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-// import { OneProjectMin } from "@/interfaces/Projects";
-// import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
-// import { GlossaryCatalog } from "@/interfaces/Glossary";
-// import { Options } from "@/interfaces/Common";
-// import { getCatalogsByName } from "@/app/api/routeCatalogs";
-// import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumenByProject } from "@/app/api/routeInvoices";
-// import { ITotalInvoicesByProject, IInvoiceByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import TableInvoicesComponent from "@/components/invoices/TableInvoicesComponent";
 import SearchInTable from "@/components/SearchInTable";
 import Header from "@/components/HeaderPage";

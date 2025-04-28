@@ -14,43 +14,28 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: IProjectWithEstimateMin[];
-  try {
-    projects = await getProjectsWithEstimatesMin(token);
-    if(typeof(projects)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
+  let projects: IProjectWithEstimateMin[] = await getProjectsWithEstimatesMin(token);
+  let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  
+  if(typeof(projects)==='string') 
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-        </>
-      )
-  } catch (error) {
+        </div>
+      </>
+    )
+  
+  if(typeof(catalogs)==='string') 
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar los proyectos!!</h1>
-      </>
-    )
-  }
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        </div>
       </>
     )
-  }
 
   const optCategories: Options[] = [{
     label: 'Todas',

@@ -104,6 +104,7 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
 
   const handleUpdateAmount = (invoicesParam: TInvoiceStepper[]) => {
     let acum=0;
+    // console.log('update anount error => ');
     if(invoicesParam.length > 0){
       invoicesParam.map((i, index:number) => {
         if(index > 0){
@@ -139,12 +140,16 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
 
   const handleAmount = (value:string) => {
     let auxAmount=0;
+    // cambiar a estring amount para respetar el punto
     try {
       auxAmount=Number(value);
+      // console.log('set value => ', value);
+      setAmount(value);
     } catch (error) {
       auxAmount=0;
+      setAmount('0');
     }
-    setAmount(auxAmount.toString());
+    // setAmount(auxAmount.toString());
 
     let acum=0;
     if(invoicesDisp.length > 0){

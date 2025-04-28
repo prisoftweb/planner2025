@@ -36,7 +36,6 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
   const validationData = () => {
     let validation = true;
     if(!reference || reference===''){
-      console.log('no folio');
       setBandReference(true);
       validation = false;
       return false;
@@ -81,6 +80,8 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
     }
   }
 
+  console.log('amount => ', amount);
+
   return (
     <div>
       <div className="flex gap-x-5 justify-end my-5 pr-3">
@@ -115,10 +116,17 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
           <Label htmlFor="collection"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Por cobrar</p></Label>
           <CurrencyInput
             prefix="$"
-            value={amount.replace(/[$,]/g, "")}
+            // value={amount.replace(/[$,]/g, "")}
+            value={amount}
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                       focus:border-slate-700 outline-0"
-            onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
+            // onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
+            onChange={(value) => {try {
+              console.log('value => ', value.target.value.replace(/[$,]/g, ""));
+              setAmount(value.target.value.replace(/[$,]/g, "") || '0');
+            } catch (error) {
+              setAmount('0');
+            }}}
           />
           {bandCollection && (
             <p className="text-red-700">Ingrese una cantidad valida!!!!</p>

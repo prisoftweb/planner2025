@@ -1,4 +1,3 @@
-import HeaderForm from "../HeaderForm"
 import { useOneProjectsStore } from "@/app/store/projectsStore";
 import { useEffect, useState } from "react";
 import { getDashboardProjectByBudgetControl, getProjectContractualControl, getDashboardProjectCostoCentersCategory } from "@/app/api/routeProjects";
@@ -8,14 +7,14 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import { showToastMessageError } from "../Alert";
 import { ProjectCostoCenters, ProjectCostoCentersCategory } from "@/interfaces/DashboardProjects";
 import { ProgressCircle } from "@tremor/react";
-import DonutChartComponent from "./dashboard/DonutChartComponent";
 import { getDashboardProjectCostoCenters } from "@/app/api/routeProjects";
 import { OneProjectMin } from "@/interfaces/Projects";
-import { FaSortAmountDown } from "react-icons/fa";
 import VerticalBarChart from "./VerticalBarChart";
 import NewDonutChartComponent from "./dashboard/NewDonutChartComponent";
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
+import { GiProfit } from "react-icons/gi";
+import { LiaMoneyBillWaveAltSolid, LiaMoneyCheckAltSolid } from "react-icons/lia";
 
 interface OptionsDashboard {
   label: string,
@@ -35,12 +34,12 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
   const [contractualControl, setContractualControl]=useState<IContractualControlProject>();
   const [costoCenters, setCostoCenters] = useState<ProjectCostoCenters[]>([]);
   const [costoCentersCat, setCostoCentersCat] = useState<ProjectCostoCentersCategory[]>([]);
+  const [showTotal, setShowTotal] = useState<boolean>(false);
 
   useEffect(() => {
     const fetch = async () => {
       const resBudCon = await getDashboardProjectByBudgetControl(token, id, oneProjectStore?.date? new Date(oneProjectStore?.date).getFullYear(): new Date().getFullYear());
       if(typeof(resBudCon) !== 'string'){
-        console.log('presupuestado => ', resBudCon);
         setBudgetedControl(resBudCon[0]);
       }else{
         showToastMessageError(resBudCon);
@@ -95,7 +94,7 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
   const d4 = getRandomArbi(0, 9);
   const d5 = getRandomArbi(0, 9);
 
-  const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
+  // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const dataCostoCenters: OptionsDashboard[] = [];
   const dataCostoCentersCat: OptionsBarChart[] = [];
@@ -138,11 +137,7 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
       data:[prj.totalCost],
       label: prj.costocenter.category
     });
-    // categoriesCostoCenters.push(prj.costocenter.concept);
   });
-
-  console.log('costo centers => ', JSON.stringify(dataCostoCentersCat));
-  // console.log('lalbel => ', JSON.stringify(categoriesCostoCenters));
 
   return(
     <div className="w-full">
@@ -152,8 +147,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
           <Label>Despues de impuestos</Label>  
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input 
-              // checked={haveDiscount} 
-              // onClick={() => updateHaveDiscount(!haveDiscount)} 
+              checked={showTotal} 
+              onClick={() => setShowTotal(!showTotal)} 
               id="discount" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
@@ -179,15 +174,15 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
         </div>
 
         <Card amount={project.amount} title="Monto" >
-          <FaSortAmountDown className="rounded-full w-7 h-7" />
+          <LiaMoneyCheckAltSolid className="rounded-full w-7 h-7" />
         </Card>
 
         <Card amount={budgetedControl?.spentInfo?.spentTotal || 0} title="Costo" >
-          <FaSortAmountDown className="rounded-full w-7 h-7" />
+          <LiaMoneyBillWaveAltSolid className="rounded-full w-7 h-7" />
         </Card>
 
         <Card amount={budgetedControl?.netprofitInfo.netprofitTotal || 0} title="Utilidad" >
-          <FaSortAmountDown className="rounded-full w-7 h-7" />
+          <GiProfit className="rounded-full w-7 h-7" />
         </Card>
       </div>
 
@@ -250,19 +245,22 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                   <p className=" text-sm mt-2">Contratado ({
                     CurrencyFormatter({
                       currency:'MXN',
-                      value: contractualControl?.estimateInfo?.amountPro || 0
+                      value: (showTotal? contractualControl?.estimateInfo?.amount : 
+                        contractualControl?.estimateInfo?.amountPro) || 0
                     })}) 
                   </p>
-                    <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentage || 0} 
+                    <ProgressBarComponent label={''} 
+                      // progress={contractualControl?.estimateInfo?.porcentage || 0}
+                      progress={100} 
                       widthBar="w-full" color={colorsRandom[d1]} hei="h-5" />
                   
                   <p className=" text-sm mt-2">Anticipo ({
                     CurrencyFormatter({
                       currency:'MXN',
-                      value: 0
+                      value: contractualControl?.estimateInfo?.cashAdvance || 0
                     })}) 
                   </p>
-                    <ProgressBarComponent label={''} progress={0} 
+                    <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageCashAdvance || 0} 
                       widthBar="w-full" color={colorsRandom[d2]} hei="h-5" />
                   
                   <p className=" text-sm mt-2">Amortizado ({
@@ -304,10 +302,11 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 <p className=" text-sm mt-2">Monto ({
                   CurrencyFormatter({
                     currency:'MXN',
-                    value: budgetedControl.amountInfo.amountotal?? 0
+                    value: (showTotal? budgetedControl?.amountInfo?.amountotal: budgetedControl?.amountInfo?.amount) || 0
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl?.amountInfo?.porcentageTotal || 0} 
+                <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.amountInfo?.porcentageTotal: 
+                                                    budgetedControl?.amountInfo?.porcentage) || 0} 
                   widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
                 <div className="flex justify-between">
                   <div>
@@ -333,7 +332,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 <p className=" text-sm mt-2">Presupuestado ({
                   CurrencyFormatter({
                     currency:'MXN',
-                    value: budgetedControl?.budgetedInfo?.budgetedTotal || 0
+                    value: (showTotal? budgetedControl?.budgetedInfo?.budgetedTotal: 
+                      (budgetedControl?.budgetedInfo?.budgetedTotal - (budgetedControl?.budgetedInfo?.budgetedTotal * 0.16) )) || 0
                   })}) 
                 </p>
                 <ProgressBarComponent label={''} progress={budgetedControl?.budgetedInfo?.porcentageTotal || 0 } 
@@ -359,7 +359,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 <p className=" text-sm mt-2">Costo ({
                   CurrencyFormatter({
                     currency:'MXN',
-                    value: budgetedControl?.spentInfo?.spentTotal || 0
+                    value: (showTotal? budgetedControl?.spentInfo?.spentTotal: 
+                              budgetedControl?.spentInfo?.spentSubTotal) || 0
                   })}) 
                 </p>
                 <ProgressBarComponent label={''} progress={budgetedControl?.spentInfo?.porcentage || 0 } 
@@ -369,14 +370,16 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                     <p className="text-xs text-slate-500">
                       {CurrencyFormatter({
                         currency:'MXN',
-                        value: budgetedControl.spentInfo.pendingSpentTotal?? 0
+                        value: (showTotal? budgetedControl?.spentInfo?.pendingSpentTotal: 
+                          budgetedControl?.spentInfo?.pendingSpentSubTotal) || 0
                       })}
                     </p>
                     <p className="text-xs text-slate-700">Sobrante</p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 text-right">
-                      { (100 - (budgetedControl.spentInfo.porcentage?? 0)).toFixed(2)}%
+                      { (100 - ((showTotal? budgetedControl.spentInfo.porcentage: 
+                                  budgetedControl.spentInfo.porcentageSubTotal) || 0)).toFixed(2)}%
                     </p>
                     <p className="text-xs text-slate-700 text-right">Porcentaje</p>
                   </div>
@@ -385,24 +388,29 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 <p className=" text-sm mt-2">Facturado ({
                   CurrencyFormatter({
                     currency:'MXN',
-                    value: budgetedControl?.billingInfo?.billedTotal || 0
+                    value: (showTotal? budgetedControl?.billingInfo?.billedTotal: 
+                      budgetedControl?.billingInfo?.billedSubTotal) || 0
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl?.billingInfo?.porcentage || 0} 
+                <ProgressBarComponent label={''} 
+                  progress={(showTotal? budgetedControl?.billingInfo?.porcentage: 
+                      budgetedControl?.billingInfo?.porcentageSubTotal) || 0} 
                   widthBar="w-full" color={colorsRandom[c5]} hei="h-5" />
                 <div className="flex justify-between">
                   <div>
                     <p className="text-xs text-slate-500">
                       {CurrencyFormatter({
                         currency:'MXN',
-                        value: budgetedControl.billingInfo.pendingBillingTotal?? 0
+                        value: (showTotal? budgetedControl?.billingInfo?.pendingBillingTotal: 
+                          budgetedControl?.billingInfo?.pendingBillingSubTotal) || 0
                       })}
                     </p>
                     <p className="text-xs text-slate-700">Pendiente</p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 text-right">
-                      { (100 - (budgetedControl.billingInfo.porcentage?? 0)).toFixed(2)}%
+                      { (100 - ((showTotal? budgetedControl?.billingInfo?.porcentage: 
+                                  budgetedControl?.billingInfo?.porcentageSubTotal) || 0)).toFixed(2)}%
                     </p>
                     <p className="text-xs text-slate-700 text-right">Porcentaje</p>
                   </div>
@@ -411,24 +419,28 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 <p className=" text-sm mt-2">Pagado ({
                   CurrencyFormatter({
                     currency:'MXN',
-                    value: budgetedControl?.paymentInfo?.paymentTotal || 0
+                    value: (showTotal? budgetedControl?.paymentInfo?.paymentTotal: 
+                      budgetedControl?.paymentInfo?.paymentSubTotal) || 0
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl?.paymentInfo?.porcentage || 0} 
+                <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.paymentInfo?.porcentage: 
+                                                    budgetedControl?.paymentInfo?.porcentageSubTotal) || 0} 
                   widthBar="w-full" color={colorsRandom[c4]} hei="h-5" />
                 <div className="flex justify-between">
                   <div>
                     <p className="text-xs text-slate-500">
                       {CurrencyFormatter({
                         currency:'MXN',
-                        value: budgetedControl.paymentInfo.pendingPaymentTotal?? 0
+                        value: (showTotal? budgetedControl?.paymentInfo?.pendingPaymentTotal: 
+                            budgetedControl?.paymentInfo?.pendingPaymentSubTotal) || 0
                       })}
                     </p>
                     <p className="text-xs text-slate-700">Pendiente</p>
                   </div>
                   <div>
                     <p className="text-xs text-slate-500 text-right">
-                      { (100 - (budgetedControl.paymentInfo.porcentage?? 0)).toFixed(2)}%
+                      { (100 - ((showTotal? budgetedControl.paymentInfo.porcentage: 
+                                  budgetedControl?.paymentInfo?.porcentageSubTotal) || 0)).toFixed(2)}%
                     </p>
                     <p className="text-xs text-slate-700 text-right">Porcentaje</p>
                   </div>
@@ -437,10 +449,12 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 <p className=" text-sm mt-2">Utilidades ({
                   CurrencyFormatter({
                     currency:'MXN',
-                    value: budgetedControl?.netprofitInfo?.netprofitTotal || 0
+                    value: (showTotal? budgetedControl?.netprofitInfo?.netprofitTotal: 
+                              budgetedControl?.netprofitInfo?.netprofitSubTotal) || 0
                   })}) 
                 </p>
-                <ProgressBarComponent label={''} progress={budgetedControl?.netprofitInfo?.porcentage || 0} 
+                <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.netprofitInfo?.porcentage: 
+                                                    budgetedControl?.netprofitInfo?.porcentageSubtotal) || 0} 
                   widthBar="w-full" color={colorsRandom[c6]} hei="h-5" />
               </div>
             )}

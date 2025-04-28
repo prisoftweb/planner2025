@@ -256,5 +256,7 @@ export interface IContractualControlProject {
     amount: number
     amountPro: number
     porcentage: number
+    cashAdvance: number,
+    porcentageCashAdvance: number
   }
 }

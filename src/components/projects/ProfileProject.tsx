@@ -2,6 +2,7 @@ import Label from "../Label";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { useOneProjectsStore } from "@/app/store/projectsStore";
+import Chip from "../providers/Chip";
 
 export default function ProfileProject({project}: 
   {project:OneProjectMin}){
@@ -18,19 +19,27 @@ export default function ProfileProject({project}:
     value: oneProjectStore?.guaranteefund?.amount? parseFloat(oneProjectStore.guaranteefund.amount) : 0
   });
 
+  console.log('one project store => ', oneProjectStore);
+
   return(
     <>
       <div className="w-full h-full mt-3">
-        <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
-          <div>
-            <img src={oneProjectStore?.photo? oneProjectStore?.photo: '/img/projects/default.svg'} alt="logo" 
-              className="max-w-28 h-auto" />
+        <div className="flex justify-between">
+          <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
+            <div>
+              <img src={oneProjectStore?.photo? oneProjectStore?.photo: '/img/projects/default.svg'} alt="logo" 
+                className="max-w-28 h-auto" />
+            </div>
+            <div>
+              <p className="text-blue-500">{oneProjectStore?.title || ''}</p>
+              <p className="text-slate-500">{oneProjectStore?.code || ''}</p>
+              <p className="text-slate-500">{oneProjectStore?.type? oneProjectStore?.type.name : ''}</p>
+              <p className="text-slate-500">{oneProjectStore?.account || ''}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-blue-500">{oneProjectStore?.title || ''}</p>
-            <p className="text-slate-500">{oneProjectStore?.code || ''}</p>
-            <p className="text-slate-500">{oneProjectStore?.type? oneProjectStore?.type.name : ''}</p>
-            <p className="text-slate-500">{oneProjectStore?.account || ''}</p>
+          
+          <div className="w-36 mr-3">
+            <Chip label={oneProjectStore?.category?.name || ''} color={oneProjectStore?.category?.color} />
           </div>
         </div>
         

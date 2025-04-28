@@ -113,10 +113,12 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
     let auxAmount=0;
     try {
       auxAmount=Number(value);
+      setAmount(value);
     } catch (error) {
       auxAmount=0;
+      setAmount('0');
     }
-    setAmount(auxAmount.toString());
+    // setAmount(auxAmount.toString());
 
     let acum=0;
     if(invoicesDisp.length > 0){

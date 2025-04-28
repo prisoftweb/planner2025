@@ -14,51 +14,29 @@ export default async function page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let collection:IOneCollectionMin;
-  try {
-    collection = await getCollectionMin(token, params.idc);
-    if(typeof(collection)==='string'){
-      return (
-        <>
-          <Navigation user={user} />
+  let collection:IOneCollectionMin = await getCollectionMin(token, params.idc);
+  let invoices:IInvoicesByCollection[] = await getInvoicesByCollectionMin(token, params.idc);
+  
+  if(typeof(collection)==='string'){
+    return (
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{collection}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener cobro!!</h1>
+        </div>
       </>
     )
   }
-
-  let invoices:IInvoicesByCollection[];
-  try {
-    invoices = await getInvoicesByCollectionMin(token, params.idc);
-    if(typeof(invoices)==='string'){
-      return (
-        <>
-          <Navigation user={user} />
+  
+  if(typeof(invoices)==='string'){
+    return (
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{invoices}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener facturas!!</h1>
+        </div>
       </>
     )
-  }
-
-  if(!collection){
-    <>
-      <Navigation user={user} />
-      <h1 className="text-center text-red-500">Ocurrio un error al obtener cobro!!</h1>
-    </>
   }
 
   return (
