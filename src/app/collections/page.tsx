@@ -1,8 +1,8 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import Header from "@/components/HeaderPage";
-import SearchInTable from "@/components/SearchInTable";
+// import Header from "@/components/HeaderPage";
+// import SearchInTable from "@/components/SearchInTable";
 import TableCollectionsComponent from "@/components/collections/TableCollectionsComponent";
 
 export default async function Page(){
@@ -38,10 +38,7 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <Header title="Cobros" previousPage="/">
-          <SearchInTable placeH="buscar cobro.." />
-        </Header>
-        <TableCollectionsComponent token={token} />
+        <TableCollectionsComponent token={token} user={user._id} />
       </div>
     </>
   )

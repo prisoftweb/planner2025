@@ -139,6 +139,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
     });
   });
 
+  console.log('project => ', project);
+
   return(
     <div className="w-full">
 
@@ -173,15 +175,15 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
           </div>
         </div>
 
-        <Card amount={project.amount} title="Monto" >
+        <Card amount={showTotal? (project.amount * 1.16): project.amount} title="Monto" >
           <LiaMoneyCheckAltSolid className="rounded-full w-7 h-7" />
         </Card>
 
-        <Card amount={budgetedControl?.spentInfo?.spentTotal || 0} title="Costo" >
+        <Card amount={(showTotal? budgetedControl?.spentInfo?.spentTotal: budgetedControl?.spentInfo?.spentSubTotal) || 0} title="Costo" >
           <LiaMoneyBillWaveAltSolid className="rounded-full w-7 h-7" />
         </Card>
 
-        <Card amount={budgetedControl?.netprofitInfo.netprofitTotal || 0} title="Utilidad" >
+        <Card amount={(showTotal? budgetedControl?.netprofitInfo.netprofitTotal: budgetedControl?.netprofitInfo.netprofitSubTotal) || 0} title="Utilidad" >
           <GiProfit className="rounded-full w-7 h-7" />
         </Card>
       </div>

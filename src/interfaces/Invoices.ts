@@ -215,7 +215,15 @@ export interface IInvoiceMin {
     previousbalanceamount: number
     unchargedbalanceamount: number
     _id: string
-  }
+  },
+  accountreceivables:{
+    accountreceivable: string,
+    charged: number,
+    partialitynumber: number
+    previousbalanceamount: number
+    unchargedbalanceamount: number
+    _id: string
+  }[]
 }
 
 export interface IInvoiceMinFull {
