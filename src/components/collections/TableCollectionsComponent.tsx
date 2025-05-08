@@ -7,8 +7,8 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
-import { getCollectionsMin, deleteCollection } from "@/app/api/routeCollections";
-import { ICollectionMin, ITableCollection } from "@/interfaces/Collections";
+import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
+import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
 import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
 import Button from "../Button";
 import { GiSettingsKnobs } from "react-icons/gi";
@@ -25,6 +25,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
   const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
   const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
+  const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
 
   useEffect(() => {
     const fetch = async() => {
@@ -34,6 +35,13 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       }else{
         setCollections(res);
         setFilteredCollections(res);
+      }
+
+      const rest = await getAllTotalAmountRecoveredCollection(token);
+      if(typeof(rest)==='string'){
+        showToastMessageError(rest);
+      }else{
+        setTotalCollections(rest);
       }
     }
 
@@ -279,9 +287,9 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
             <p className="text-slate-600">Historial de cobranza</p>
           </div>
         </div>
-        <Card amount={2345136.90} title="Recuperado"></Card>
-        <Card amount={456938.07} title="Por cobrar"></Card>
-        <Card amount={356938.07} title="Por cobrar vencido"></Card>
+        <Card amount={totalCollections?.amountRecovered.amount || 0} title="Recuperado"></Card>
+        <Card amount={totalCollections?.totalAccountsReceivable.total || 0} title="Por cobrar"></Card>
+        <Card amount={totalCollections?.totalCharged || 0} title="Por cobrar vencido"></Card>
       </div>
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">

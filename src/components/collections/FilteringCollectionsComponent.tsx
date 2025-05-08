@@ -79,9 +79,9 @@ export default function FilteringCollectionsComponent({showForm, FilterData, max
     FilterData(conditions, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime(), clients);
   }, [ conditions, minValue, maxValue, clients, firstDate, secondDate]);
 
-  useEffect (() => {
-    FilterData(conditions, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), clients);
-  }, []);
+  // useEffect (() => {
+  //   FilterData(conditions, minValue, maxValue, new Date('2024-03-11').getTime(), new Date('2024-07-11').getTime(), clients);
+  // }, []);
 
   const handleCondition = (value:string[]) => {
     setConditions(value);

@@ -184,3 +184,22 @@ export async function getInvoicesByCollectionMin(auth_token:string, id:string){
     return 'Error al facturas del cobro cobro!!';
   }
 }
+
+export async function getAllTotalAmountRecoveredCollection(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecoveredToCollectAndPending/2025-01-01/2025-12-31`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    if(res.status===200)
+      return res.data.data.resdata;
+    return 'Error al obtener los cobros!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar monto total de los cobros!!';
+  }
+}

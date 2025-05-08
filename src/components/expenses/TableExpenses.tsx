@@ -16,12 +16,22 @@ import RemoveElement from "../RemoveElement";
 import {IoMdCopy} from 'react-icons/io';
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
+type Props = {
+  data:ExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  user: string, 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  idValidado: string, 
+  handleExpensesSelected:Function, 
+  isViewReports: boolean, 
+  isPending:boolean
+}
+
 export default function TableExpenses({data, token, expenses, 
-  handleExpensesSelected, idValidado, user, isFilter, setIsFilter, isViewReports, isPending }:
-                        {data:ExpensesTable[], token:string, expenses:Expense[], 
-                        user: string, isFilter:boolean, setIsFilter:Function, 
-                        idValidado: string, handleExpensesSelected:Function, 
-                        isViewReports: boolean, isPending:boolean}){
+  handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
+  isViewReports, isPending }: Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
@@ -501,6 +511,7 @@ export default function TableExpenses({data, token, expenses,
       }
     });
 
+    console.log('filtered => ', filtered);
     setExpensesFiltered(filtered);
     setDataExpenses(ExpenseDataToTableData(filtered));
   }

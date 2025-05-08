@@ -45,6 +45,9 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   const handleValues = (dateValues: DateObject[]) => {
     setValues(dateValues);
     if(values.length > 1){
+      console.log('values 2 => ', values);
+      // console.log('update dates => ', new Date(values[0].year, values[0].month.number - 1, values[0].day) );
+      // console.log('update dates fin => ', new Date(values[1].year, values[1].month.number - 1, values[1].day) );
       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
       setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
       filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
@@ -53,6 +56,7 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
         costcentersSel, providersSel, isPaid);
     }else{
       if(values.length > 0){
+        console.log('values 1 => ', values);
         setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
       }
     }
@@ -137,7 +141,7 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   useEffect(() => {
     FilterData(conditionsSel, typesSel, categoriesSel, minValue, maxValue, reportsSel, projectsSel, 
       firstDate?.getTime(), secondDate?.getTime(), costcentersSel, providersSel, isPaid);
-  }, [ minValue, maxValue]);
+  }, [ minValue, maxValue, firstDate, secondDate]);
 
   const filterfunction = (catSel:string[], typSel:string[], condSel:string[], minVal:number, 
     maxVal:number, dateini:Date, dateend:Date, proSel:string[], repSel:string[], ccSel:string[], 

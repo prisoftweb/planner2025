@@ -262,3 +262,15 @@ export interface IInvoicesByCollection {
 //     itemscharged: number
 //   }
 // }
+
+export interface ITotalAmountCollections {
+  amountRecovered: {
+    quantity: number
+    amount: number
+  }
+  totalAccountsReceivable: {
+    quantity: number
+    total: number
+  }
+  totalCharged: number
+}

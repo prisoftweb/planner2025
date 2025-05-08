@@ -8,7 +8,7 @@ export function CollectionDataToTableData(collections:ICollectionMin[]){
       Cuenta: col.account,
       Estimacion: '',
       Facturas: [col.invoices],
-      Fecha: col.date,
+      Fecha: col.date.substring(0, 10),
       id: col._id,
       Importe: col.amount,
       Referencia: col.reference,
