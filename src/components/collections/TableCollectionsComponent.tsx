@@ -315,7 +315,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       </div>
       <Table columns={columns} data={data} placeH="buscar cobro" />
       {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-                                user="" updateCollections={updateCollections} />}
+                                user={user} updateCollections={updateCollections} />}
       {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />}
     </>
   )

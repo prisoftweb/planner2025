@@ -88,6 +88,9 @@ export default function Table({data, columns, placeH, typeTable='',
     onGlobalFilterChange: setFiltering,
     onColumnVisibilityChange: setColumnVisibility,
   })
+  console.log('data table  => ', data);
+  console.log('sort => ', search);
+  console.log('sorting => ', table.getState().sorting);
 
   let total: number = 0;
   let labelJSX : JSX.Element = <div></div>;
