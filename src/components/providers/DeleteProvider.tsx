@@ -3,13 +3,11 @@
 import { TrashIcon } from '@heroicons/react/24/solid';
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
-import { useRouter } from 'next/navigation';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { RemoveProvider } from '@/app/api/routeProviders';
 import { TableProvider } from '@/interfaces/Providers';
 
 export default function DeleteProvider({token, provider} : {token : string, provider:TableProvider}){
-  const router = useRouter()
 
   const deleteProvider = async (id:string, name:string)  => {
   
@@ -33,11 +31,8 @@ export default function DeleteProvider({token, provider} : {token : string, prov
                   }, 500)
                 } else {
                   showToastMessageError('El proveedor no pudo ser eliminado..');
-                  //router.refresh()
                 }
               } catch (error) {
-                console.log(error);
-                console.log('Error al eliminar proveedor');
               }
             break;
           }

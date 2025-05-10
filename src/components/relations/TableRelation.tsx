@@ -2,18 +2,13 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
-import { PencilIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
 import { RelationTable } from "@/interfaces/Relation";
 import { removeRelation } from "@/app/api/routeRelations";
 
 export default function TableRelations({data, token}:
-                        {data:RelationTable[], token:string}){
+  {data:RelationTable[], token:string}){
   
   const columnHelper = createColumnHelper<RelationTable>();
-
-  const [editRelation, setEditRelation] = useState<boolean>(false);
-  const [relationEdit, setRelationEdit] = useState<RelationTable>();
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -40,9 +35,6 @@ export default function TableRelations({data, token}:
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          {/* <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
-            onClick={() => {setRelationEdit(row.original); setEditRelation(true);}}
-          /> */}
           <DeleteElement id={row.original.id} name={row.original.condition} remove={removeRelation} token={token} />
         </div>
       ),
@@ -76,7 +68,6 @@ export default function TableRelations({data, token}:
   
   return(
     <>
-      {/* {editGloss && <NewGlossary token={token} glossary={glossEdit || ''} showForm={setEditGloss} />} */}
       <Table columns={columns} data={data} placeH="Buscar relation.." />
     </>
   )

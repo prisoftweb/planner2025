@@ -35,9 +35,6 @@ export default function ExtraDataStepper({token}: {token:string}){
         if(state.databasic.user){
           data.append('user', state.databasic.user);
         }
-        // if(state.databasic.phone){
-        //   data.append('phone', state.databasic.phone);
-        // }
       }
 
       let stret='', cp='', municipy='', country='', stateS='', community='';
@@ -59,12 +56,6 @@ export default function ExtraDataStepper({token}: {token:string}){
         stret
       }
 
-      // if(state.contacts){
-      //   state.contacts.map((contact: string) => {
-      //     data.append('contact', contact);
-      //   })
-      // }
-
       data.append('logo', file);
       if(page && page!==''){
         data.append('link', page);
@@ -78,9 +69,6 @@ export default function ExtraDataStepper({token}: {token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -129,7 +117,6 @@ export default function ExtraDataStepper({token}: {token:string}){
         tags, 
         user,
         link:page,
-        //photo: file,
         regime,
         location: {
           stret,
@@ -148,9 +135,6 @@ export default function ExtraDataStepper({token}: {token:string}){
           refRequest.current = true;
           showToastMessage(res.message);
           if(res.client) pushClient(res.client);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -188,7 +172,6 @@ export default function ExtraDataStepper({token}: {token:string}){
         <div className="my-5">
           <NavClientsStepper index={1} />
         </div>
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
         <div className="grid grid-cols-1 gap-4">
           <div>
             <Label>Pagina</Label>

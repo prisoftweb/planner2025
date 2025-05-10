@@ -6,7 +6,8 @@ import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon,
   DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
 
-export default function NavTabExpense({tab, idExp}: {tab:string, idExp:string}){
+export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {tab:string, 
+  idExp:string, pending: 0|1, idProv: string, idProj:string}){
   
   let props = {
     variants: {
@@ -27,7 +28,6 @@ export default function NavTabExpense({tab, idExp}: {tab:string, idExp:string}){
     },
   }
 
-  //const [tabCli, setTabCli] = useState<JSX.Element>(<></>);
   const [width, setWidth] = useState<number>(0);
   const handleResize = () => {
     setWidth(window.innerWidth);
@@ -39,10 +39,11 @@ export default function NavTabExpense({tab, idExp}: {tab:string, idExp:string}){
     return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
+  const previos = pending===1? '?status=pending': '';
   let tabCli: JSX.Element;
   if(width < 710){
     tabCli = <div className="flex justify-between mt-3">
-                    <Link href={`/expenses/${idExp}/profile`}>
+                    <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}&&project=${idProj}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500" content='Perfil'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
@@ -50,122 +51,70 @@ export default function NavTabExpense({tab, idExp}: {tab:string, idExp:string}){
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>  
-                    <Link href={`/expenses/${idExp}/providers`}>
+                    <Link href={`/expenses/${idExp}/budget?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Proveedores'>
+                        placement="bottom" className="bg-white text-blue-500" content='Presupuesto'>
                         <DocumentChartBarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/expenses/${idExp}/labour`}>
+                    <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Mano de obra'>
+                        placement="bottom" className="bg-white text-blue-500" content='Analisis'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
-                    <Link href={`/expenses/${idExp}/imprest`}>
+                    <Link href={`/expenses/${idExp}/advange?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Fondo fijo'>
+                        placement="bottom" className="bg-white text-blue-500" content='Avance'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
+                    <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}&&project=${idProj}`}>
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                        placement="bottom" className="bg-white text-blue-500" content='Estatus'>
+                        <CreditCardIcon
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
+                          ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
+                      </Tooltip>
+                    </Link>
                   </div>                             
   }else{
     tabCli = (
-      <div className="flex mt-5 bg-white py-1">
-        <Link href={`/expenses/${idExp}/profile`}>
+      <div className="flex mt-5 py-1 border-b border-blue-300">
+        <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}&&project=${idProj}`}>
           <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
-            <p>Resumen</p>
+            <p className="text-blue-600">Resumen</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/projects`}>
+        <Link href={`/expenses/${idExp}/projects?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
-            <p>Presupuesto</p>
+            <p className="text-blue-600">Presupuesto</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/estimates`}>
+        <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
-            <p>Analisis</p>
+            <p className="text-blue-600">Analisis</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/wallet`}>
+        <Link href={`/expenses/${idExp}/wallet?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
-            <p>Avances</p>
+            <p className="text-blue-600">Avances</p>
+          </div>
+        </Link>
+        <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}&&project=${idProj}`}>
+          <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Estatus</p>
           </div>
         </Link>
       </div>
     )
   }
-  
-  // useEffect(() => {
-  //   if(width < 710){
-  //     const icon = <div className="flex justify-between mt-3">
-  //                     <Link href={`/expenses/${idExp}/profile`}>
-  //                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-  //                         placement="bottom" className="bg-white text-blue-500" content='Perfil'>
-  //                         <UserCircleIcon data-tooltip-target="tooltip-dark"
-  //                           className={`w-6 h-6 text-slate-600 cursor-pointer 
-  //                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
-  //                       </Tooltip>
-  //                     </Link>  
-  //                     <Link href={`/expenses/${idExp}/providers`}>
-  //                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-  //                         placement="bottom" className="bg-white text-blue-500" content='Proveedores'>
-  //                         <DocumentChartBarIcon
-  //                           className={`w-6 h-6 text-slate-600 cursor-pointer 
-  //                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
-  //                       </Tooltip>
-  //                     </Link>
-  //                     <Link href={`/expenses/${idExp}/labour`}>
-  //                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-  //                         placement="bottom" className="bg-white text-blue-500" content='Mano de obra'>
-  //                         <CurrencyDollarIcon
-  //                           className={`w-6 h-6 text-slate-600 cursor-pointer 
-  //                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
-  //                       </Tooltip>
-  //                     </Link>
-  //                     <Link href={`/expenses/${idExp}/imprest`}>
-  //                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-  //                         placement="bottom" className="bg-white text-blue-500" content='Fondo fijo'>
-  //                         <CreditCardIcon
-  //                           className={`w-6 h-6 text-slate-600 cursor-pointer 
-  //                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
-  //                       </Tooltip>
-  //                     </Link>
-  //                   </div>                             
-  //     setTabCli(icon)
-  //   }else{
-  //     setTabCli(
-  //       <div className="flex mt-5 bg-white py-1">
-  //         <Link href={`/expenses/${idExp}/profile`}>
-  //           <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
-  //             <p>Resumen</p>
-  //           </div>
-  //         </Link>
-  //         <Link href={`/expenses/${idExp}/projects`}>
-  //           <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
-  //             <p>Presupuesto</p>
-  //           </div>
-  //         </Link>
-  //         <Link href={`/expenses/${idExp}/estimates`}>
-  //           <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
-  //             <p>Analisis</p>
-  //           </div>
-  //         </Link>
-  //         <Link href={`/expenses/${idExp}/wallet`}>
-  //           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
-  //             <p>Avances</p>
-  //           </div>
-  //         </Link>
-  //       </div>
-  //     )
-  //   }
-  // }, [width, tab])
   
   return(
     <>

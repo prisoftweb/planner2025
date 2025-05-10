@@ -3,12 +3,21 @@ import { useState, useEffect } from "react"
 import StatusComponent from "./StatusComponent";
 import { updateAllComponentsRouteTree } from "@/app/api/routeRoles";
 
+type Props = {
+  route:Route, 
+  resource:string, 
+  increment:Function, 
+  decrement:Function
+  token:string, 
+  idRes:string, 
+  idTree:string, 
+  indexComp:number,
+  countPermissions:number, 
+  stateComponents:boolean
+}
+
 export default function ComponentsResource({route, resource, token, idRes, idTree, 
-                        increment, decrement, indexComp, countPermissions, 
-                        stateComponents }: 
-                      {route:Route, resource:string, increment:Function, decrement:Function
-                        token:string, idRes:string, idTree:string, indexComp:number,
-                        countPermissions:number, stateComponents:boolean}){
+  increment, decrement, indexComp, countPermissions, stateComponents }: Props){
   
   const [showComponents, setShowComponents] = useState<JSX.Element[]>([]);
   const [stateAllComp, setStateAllComp] = useState<boolean>(false);
@@ -17,15 +26,7 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
   
   const inc = (index: number) => {
     increment(index);
-    route.components.map((component) => {
-      console.log('inc = ', component.status);
-      //console.log(component);
-    })
   }
-
-  useEffect(() => {
-    console.log('count comp res', countPermissions);
-  }, [countPermissions]);
 
   const dec = (index: number) => {
     decrement(index);
@@ -57,7 +58,6 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
             setShowComponents([]);
 
             setTimeout(() => {
-              //console.log('useefect change all ', stateComp);
               route.components.map((component, index:number) => {
                 if(component.component){
                   setShowComponents((oldArray) => [...oldArray, <StatusComponent indexComp={indexComp} component={component} 
@@ -89,10 +89,8 @@ export default function ComponentsResource({route, resource, token, idRes, idTre
             <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
               <input checked={stateComp} 
                 onClick={() => {
-                  //changeCounter(value? -1: 1);
                   setStateAllComp(true);
                   setStateComp(!stateComp);
-                  //changePermission(!permission);
                 }} id={`${route.route.name}${indexComp}`} type="checkbox"
                 onChange={() => console.log('')}
                 className="absolute w-8 h-4 transition-colors duration-300 rounded-full 

@@ -1,7 +1,4 @@
 import { Options } from "@/interfaces/Common";
-// import { getCompaniesLV } from "@/app/api/routeCompany";
-// import { getDepartmentsLV } from "@/app/api/routeDepartments";
-// import { getProjectsLV } from "@/app/api/routeProjects";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
@@ -22,61 +19,61 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     report = await GetReport(token, params.id);
     if(typeof(report)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{report}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-lg text-red-500">{report}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
+      </>
+    )
   }
 
   let dateReport: DateReport[];
   try {
     dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
     if(typeof(dateReport)==='string'){
-      return <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Error al consultar fechas del reporte!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-lg text-red-500">Error al consultar fechas del reporte!!</h1>
+      </>
+    )
   }
   
   let optReports:Options[] = [];
   try {
     optReports = await GetReportsLV(token);
     if(typeof(optReports)==='string'){
-      return <h1 className="text-lg text-center text-red-500">{optReports}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-lg text-center text-red-500">{optReports}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+      </>
+    )
   }
-
-  // let optCompanies: Options[] = [];
-  // try {
-  //   optCompanies = await getCompaniesLV(token);
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
-  // }
-
-  // let optDepartments: Options[] = [];
-  // try {
-  //   optDepartments = await getDepartmentsLV(token);
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
-  // }
-
-  // let optProjects: Options[] = [];
-  // try {
-  //   optProjects = await getProjectsLV(token);
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos</h1>
-  // }
-
-  // let costs:CostReport[] = [];
-  // try {
-  //   costs = await getCostByReportMin(params.id, token);
-  //   if(typeof(costs)==='string') 
-  //     return <h1 className="text-center text-lg text-red-500">{costs}</h1>
-  // } catch (error) {
-  //   return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
-  // }
 
   return(
     <>

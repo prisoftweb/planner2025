@@ -2,11 +2,20 @@ import NewProjectContainer from "./NewProjectContainer"
 import StepperProjectProvider from "./StepperProjectProvider"
 import { Options } from "@/interfaces/Common"
 
+type Props = {
+  token:string, 
+  showForm:Function, 
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  user:string,
+  optCompanies: Options[], 
+  condition: string
+}
+
 export default function NewProject({token, showForm, optClients, optCategories,
-                        optTypes, user, optCompanies, condition }: 
-                      {token:string, showForm:Function, optClients:Options[], 
-                        optCategories:Options[], optTypes:Options[], user:string,
-                        optCompanies: Options[], condition: string}){
+  optTypes, user, optCompanies, condition }: Props){
+  
   return(
     <>
       <StepperProjectProvider >

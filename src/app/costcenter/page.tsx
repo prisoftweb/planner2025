@@ -3,7 +3,6 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import Header from "@/components/Header";
-//import Header from "@/components/HeaderPage";
 import { Options } from "@/interfaces/Common";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
@@ -21,9 +20,20 @@ export default async function Page(){
   let catalogs: GlossaryCatalog[];
   try {
     catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    if(typeof(catalogs)==='string') 
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1>Error al consultar catalogos!!</h1>
+      </>
+    )
   }
 
   const optCategories: Options[] = [];
@@ -37,11 +47,20 @@ export default async function Page(){
   let costs: CostCenter[];
   try {
     costs = await getCostoCenters(token);
-    //console.log('cost => ', costs);
     if(typeof(costs)=== 'string')
-      return <h1 className="text-lg text-red-500 text-center">{costs}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-lg text-red-500 text-center">{costs}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-lg text-red-500 text-center">Error al obtener centro de costos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-lg text-red-500 text-center">Error al obtener centro de costos!!</h1>
+      </>
+    )
   }
 
   
@@ -65,7 +84,6 @@ export default async function Page(){
   costs.map((cost) => {
     let concept = '';
     cost.categorys.map((conc) => {
-      //concept += conc.name + ', ';
       concept += conc.concept.name + ', ';
     })
     table.push({
@@ -79,13 +97,11 @@ export default async function Page(){
   
   return(
     <>
-      <Navigation user={user} />
-      
+      <Navigation user={user} />     
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <Header title="Centro de costos" placeHolder="Buscar centro de costos..">
           <ButtonNew token={token} id="" /></Header>
         <div className="mt-5">
-          {/* <TableClients data={data} token={token} /> */}
           <TableCostCenter data={table} token={token} />
         </div>
       </div>

@@ -1,7 +1,6 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { CatalogTable } from "@/interfaces/Catalogs";
@@ -11,8 +10,7 @@ import RemoveElement from "../RemoveElement";
 import { useListsStore } from "@/app/store/listStore";
 import { showToastMessageError } from "../Alert";
 
-export default function TableCatalogs({data, token}:
-                        {data:CatalogTable[], token:string}){
+export default function TableCatalogs({data, token}: {data:CatalogTable[], token:string}){
   
   const columnHelper = createColumnHelper<CatalogTable>();
 
@@ -58,7 +56,6 @@ export default function TableCatalogs({data, token}:
           <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
             onClick={() => {setCatEdit(row.original); setEditCat(true);}}
           />
-          {/* <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveCatalog} token={token} /> */}
           <RemoveElement id={row.original.id} name={row.original.name} token={token} 
               remove={RemoveCatalog} removeElement={delReport} />
         </div>

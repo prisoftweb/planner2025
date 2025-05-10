@@ -217,3 +217,21 @@ export async function updateClientLogo(data:FormData, auth_token:string, id:stri
     return 'Ocurrio un error al actualizar logo cliente!!';
   }
 }
+
+export async function getProjectsByClient(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsByClient/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.resdata;
+    return res.data?.message?? res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+    return 'Ocurrio un problema al consultar proyectos del cliente!!';
+  }
+}

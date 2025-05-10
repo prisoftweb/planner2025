@@ -10,23 +10,86 @@ import DonutChartComponent from "../dashboard/DonutChartComponent";
 import TableEstimatesByProject from "./TableEstimatesByProject";
 import AddNewEstimateProject from "./AddNewEstimateProject";
 import { Options } from "@/interfaces/Common";
-import { IEstimateProject } from "@/interfaces/Estimate";
-import { getEstimatesByProject } from "@/app/api/routeEstimates";
+import { IEstimateProject, TotalEstimatedByProject, ResumenEstimateProject } from "@/interfaces/Estimate";
+import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
+import { showToastMessageError } from "@/components/Alert";
+import NavTabEstimates from "./NavTabEstimates";
+import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
+import { TableEstimatesProject } from "@/interfaces/Estimate";
 interface OptionsDashboard {
   label: string,
   costo: number
 }
 
-export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, token, user}: 
-  {project: OneProjectMin, optProjects: Options[], optConditions: Options[], estimates:IEstimateProject[], 
-    token: string, user: string}) {
+type Props = {
+  project: OneProjectMin, 
+  optProjects: Options[], 
+  optConditions: Options[], 
+  estimates:IEstimateProject[], 
+  token: string, 
+  user: string, 
+  totalEstimatedProject: TotalEstimatedByProject[] 
+  pageProject: string | undefined
+}
+
+export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, 
+    token, user, totalEstimatedProject, pageProject }: Props) {
 
   const [openNewStimate, setOpenNewStimate] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
   const [estimatesData, setEstimatesData] = useState<IEstimateProject[]>(estimates);
 
+  const [openNewInvoice, setOpenNewInvoice] = useState<boolean>(false);
+  const [selEstimate, setSelEstimate]=useState<TableEstimatesProject>();
+
+  const handleSelEstimate = (value: TableEstimatesProject) => {
+    setSelEstimate(value);
+  }
+
+  const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>(totalEstimatedProject);
+
   const handleFilterTable = (value: boolean) => {
     setIsFilterTable(value);
+  }
+
+  const handleShowForm = (value: boolean) => {
+    setOpenNewStimate(value);
+  }
+
+  const handleShowFormInvoice = (value: boolean) => {
+    setOpenNewInvoice(value);
+  }
+
+  const updateEstimatesProject = async () => {
+    let estimates: IEstimateProject[];
+    try {
+      estimates = await getEstimatesByProject(token, project._id);
+      if(typeof(estimates) === "string"){
+        showToastMessageError(estimates);
+      }else{
+        setEstimatesData(estimates);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un error al actualizar las estimaciones del proyecto!!');  
+    }
+
+    let totalEstimated: TotalEstimatedByProject[];
+    try {
+      totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
+      if(typeof(totalEstimated) === "string"){
+        showToastMessageError(totalEstimated);
+      }else{
+        setTotalEstimatedProjectState(totalEstimated);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un error al actualizar el total de las estimaciones del proyecto!!')
+    }
+
+    setIsFilterTable(false);
+  }
+
+  const delEstimate = (id:string) => {
+    updateEstimatesProject();
   }
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
@@ -34,46 +97,31 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const categoriesEstimates: string[] = [];
   const dataEstimatesDashboard: OptionsDashboard[] = [];  
 
-  estimates.map((e) => {
+  let advance = 0;
+  
+  estimatesData.map((e) => {
     dataEstimatesDashboard.push({
-      costo: e.amount,
+      costo: Number(((e.amount / project.amount) * 100).toFixed(2)),
       label: e.name
     });
     categoriesEstimates.push(e.name);
-  });
-
-  const handleShowForm = (value: boolean) => {
-    setOpenNewStimate(value);
-  }
-
-  const updateEstimatesProject = async () => {
-    let estimates: IEstimateProject[];
-    try {
-      estimates = await getEstimatesByProject(token, project._id);
-      console.log('estimates min => ', estimates);
-      if(typeof(estimates) === "string")
-        return <h1 className="text-center text-red-500">{estimates}</h1>
-    } catch (error) {
-      return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
+    if(e.ismoneyadvance){
+      advance+=e.amount;
     }
-
-    setIsFilterTable(false);
-    setEstimatesData(estimates);
-  }
-
-  const delEstimate = (id:string) => {
-    const newData=estimatesData.filter((e) => e._id !== id);
-    setIsFilterTable(false);
-    setEstimatesData(newData);
-  }
-
+  });
+  
+  const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
+  const percentajeAdvance = Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
+  
   return (
     <>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
-          <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" 
-            onClick={() => window.location.replace('/projects/estimates')}
-          />
+          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
+            onClick={() => window.location.replace(pageProject? `/projects/${project._id}/profile`: '/projects/estimates')}
+          >
+            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+          </div>
           <p className="text-xl ml-4 font-medium">{project.title}</p>
           <ProgressCircle value={project.progress} color={'orange'} >
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
@@ -83,11 +131,9 @@ export default function ContainerStimationsProject({project, optConditions, optP
         </div>
         <Button onClick={() => setOpenNewStimate(true)}>Agregar estimacion</Button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
-          <img src={project.client.logo} 
-            alt={project.client.name} className="h-32 w-auto " />
-          {/* <img src={project.client.logo} alt={project.client.name} /> */}
+          <img src={project.client.logo} alt={project.client.name} className="h-32 w-auto " />
           <div className="flex items-center gap-x-2">
             <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
             <div>
@@ -103,23 +149,69 @@ export default function ContainerStimationsProject({project, optConditions, optP
 
         <div className="bg-white p-3">
           <DonutChartComponent data={dataEstimatesDashboard} colors={colors} category="costo"
-                        categories={categoriesEstimates} flexWrap="" size="w-60 h-60" />
+                        categories={categoriesEstimates} flexWrap="" size="w-60 h-60" showLegend={false} />
         </div>
 
         <div className="bg-white p-3">
           <div className=" border border-gray-700">
             <div className="flex items-center border border-gray-700">
-              <p className="bg-green-600 text-white p-2 w-40 text-center">PAGADO</p>
+              <p className="bg-green-600 text-white p-2 w-52 text-center">Projecto</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: project.amount || 0
+              })}</p>
+            </div>
+
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Monto a pagar</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
+              })}</p>
+            </div>
+
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Monto a pagar + IVA</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayableVAT || 0 : 0
+              })}</p>
+            </div>
+
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Monto total</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value:  totalEstimatedProjectState.length> 0? (totalEstimatedProjectState[0]?.amountGuaranteeFund + (totalEstimatedProjectState[0]?.estimatedTotal || 0)) || 0 : 0
+              })}</p>
+            </div>
+
+            <div className="flex justify-between items-center border border-slate-700 p-2">
+              <p className="text-xs text-slate-600">Pendiente de estimar</p>
+              <p className="text-slate-600 text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.pendingEstimated || 0 : 0
+              })}</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div className="bg-white p-3">
+          <div className=" border border-gray-700">
+            <div className="flex items-center border border-gray-700">
+              <p className="bg-green-600 text-white p-2 w-52 text-center">ESTIMADO</p>
+              <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
+                currency: 'MXN',
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountEstimated || 0 : 0
               })}</p>
             </div>
             <div className="flex justify-between items-center border border-slate-700 p-2">
-              <p className="text-xs text-slate-600">Anticipo del 30%</p>
+              <p className="text-xs text-slate-600">Anticipo del {project.amountChargeOff?.porcentage || 0}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: advance
+                // value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
 
@@ -127,7 +219,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Estimado acumulado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.estimatedTotal || 0 : 0
               })}</p>
             </div>
 
@@ -135,7 +227,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Amortizado</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountChargeOff || 0 : 0
               })}</p>
             </div>
 
@@ -143,18 +235,29 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-xs text-slate-600">Garantia del {project.guaranteefund.porcentage}%</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: 0
+                value:  totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountGuaranteeFund || 0 : 0
               })}</p>
             </div>
           </div>
         </div>
 
       </div>
+
+      <div>
+        <NavTabEstimates tab={0} id_p={project._id} pageQuery={pageProject} />
+      </div>
+      
       <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
         estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
-        delEstimate={delEstimate} token={token} />
+        delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
+        selEstimate={handleSelEstimate} pageProject={pageProject} />
+
       {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-      updateEstimates={updateEstimatesProject} token={token} />}
+        updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
+        porcentajeAdvange={percentajeAdvance} advange={advance} />}
+
+      {openNewInvoice && <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
+        updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />}
     </>
   )
 }

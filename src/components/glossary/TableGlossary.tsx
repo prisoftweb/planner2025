@@ -1,7 +1,6 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import DeleteElement from "../DeleteElement";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { GlossaryTable } from "@/interfaces/Glossary";
@@ -71,7 +70,6 @@ export default function TableLists({data, token, glossaries}:
           />
           <RemoveElement id={row.original.id} name={row.original.name} token={token} 
               remove={RemoveGlossary} removeElement={delGlossary} />
-          {/* <DeleteElement id={row.original.id} name={row.original.name} remove={RemoveGlossary} token={token} /> */}
         </div>
       ),
       enableSorting:false,
@@ -94,12 +92,6 @@ export default function TableLists({data, token, glossaries}:
       ),
     }),
   ]
-
-  // if(glossariesStore.length <= 0){
-  //   return(
-  //     <h1>En construccion!!</h1>
-  //   )
-  // }
 
   if(!glossaries || glossaries.length <= 0){
     return (

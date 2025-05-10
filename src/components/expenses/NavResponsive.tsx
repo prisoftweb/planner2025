@@ -1,8 +1,6 @@
 import { ArrowDownTrayIcon} from "@heroicons/react/24/solid"
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
-
-//import { PiInvoiceFill } from "react-icons/pi";
 import { FaFileInvoiceDollar } from "react-icons/fa6";
 import { FaFilePdf } from "react-icons/fa6";
 import { BsFiletypeXml } from "react-icons/bs";
@@ -10,26 +8,25 @@ import { FaMoneyCheckDollar } from "react-icons/fa6";
 
 export default function NavResponsive({open, setOpen, option, 
                   changeOption, isticket}: 
-                {open:boolean, setOpen:Function, option:number, 
-                  changeOption:Function, isticket:boolean}){
+  {open:boolean, setOpen:Function, option:number, changeOption:Function, isticket:boolean}){
 
   let props = {
-  variants: {
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.1,
-      ease: "easeIn",
-    }
-  },
-  enter: {
-    opacity: 1,
-    transition: {
-      duration: 0.15,
-      ease: "easeOut",
-    }
-  },
-  },
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
   }
 
   const [isHover, setIsHover] = useState<number>(-1);

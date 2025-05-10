@@ -1,8 +1,6 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import NewDonutChartComponent from "@/components/projects/dashboard/NewDonutChartComponent";
-import { ChartLine } from "@/components/projects/dashboard/NewDonutChartComponent";
 
 export default function Home() {
   const cookieStore = cookies();

@@ -54,6 +54,13 @@ export default function ProfileHistoryProject({project}: {project:OneProjectMin}
           <div className="my-2">
             <p className="text-slate-500">Fecha ({project?.date?.substring(0, 10) || 'sin fecha'})</p>
           </div>
+          <div className=" font-bold text-slate-600">
+              <p className="text-slate-500">Monto de obra con IVA</p>
+              <p className="text-red-600 font-bold">{CurrencyFormatter({
+                currency: 'MXN',
+                value: (project?.amount || 0) * 1.16
+              })}</p>
+            </div>
         </div>
         
         <div className="my-2 mt-2 bg-white p-3 rounded-lg 
@@ -61,7 +68,6 @@ export default function ProfileHistoryProject({project}: {project:OneProjectMin}
           <div className="grid grid-cols-2 gap-x-2">
             <div className="border-r-1 border-gray-700">
               <p className="text-slate-500">Fondo de garantia</p>
-              {/* <p className="text-blue-600">{project?.progress? project.progress: '' || '0'}</p> */}
               <p className="text-blue-600">{project?.guaranteefund?.porcentage || '0'} %</p>
             </div>
             <div>
@@ -70,6 +76,25 @@ export default function ProfileHistoryProject({project}: {project:OneProjectMin}
             </div>
           </div>
         </div>
+
+        {project.hasamountChargeOff && (
+          <div className="my-2 mt-2 bg-white p-3 rounded-lg 
+              shadow-md py-2">
+            <div className="grid grid-cols-2 gap-x-2">
+              <div className="border-r-1 border-gray-700">
+                <p className="text-slate-500">Anticipo</p>
+                <p className="text-blue-600">{project?.amountChargeOff.porcentage || '0'} %</p>
+              </div>
+              <div>
+                <p className="text-slate-500">Monto</p>
+                <p className="text-blue-600">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: project?.amountChargeOff?.amount? parseFloat(project.amountChargeOff?.amount.toString()) : 0
+                })}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <div className="mt-2 grid grid-cols-2 gap-x-2 bg-white p-3 rounded-lg 
             shadow-md py-2">

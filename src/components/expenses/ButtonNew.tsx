@@ -2,8 +2,6 @@
 import Button from "../Button"
 import { useState } from "react";
 import NewExpenseContainer from "./NewExpenseContainer";
-import { Options } from "@/interfaces/Common";
-import { ReportParse } from "@/interfaces/Reports";
 import { UsrBack } from "@/interfaces/User";
 
 export default function ButtonNew({token, user}: {token:string, user:UsrBack,}){

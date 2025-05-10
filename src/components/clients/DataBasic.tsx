@@ -14,8 +14,15 @@ import { updateClient } from "@/app/api/routeClients";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { useClientProfileStore } from "@/app/store/clientStore";
 
-export default function DataBasic({client, tags, id, token, editInfo}: 
-                          {client:ClientBack, tags:Options[], id:string, token:string, editInfo: boolean}){
+type DataBasicProps = {
+  client:ClientBack, 
+  tags:Options[], 
+  id:string, 
+  token:string, 
+  editInfo: boolean
+}
+
+export default function DataBasic({client, tags, id, token, editInfo}: DataBasicProps){
   const refRequest = useRef(true);
   const {updateProfileClient} = useClientProfileStore();
 
@@ -204,12 +211,6 @@ export default function DataBasic({client, tags, id, token, editInfo}:
         
         {editInfo && (
           <div className="flex justify-center mt-8 space-x-5">
-            {/* <button type="submit"
-              className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
-              hover:bg-slate-200"
-            >
-              Siguiente
-            </button> */}
             <Button type="submit">Guardar</Button>
           </div>
         )}

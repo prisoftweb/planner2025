@@ -1,5 +1,3 @@
-import { ChartBarIcon, AdjustmentsVerticalIcon, TableCellsIcon, 
-  GlobeAmericasIcon, AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid"
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 import Link from "next/link";
@@ -7,7 +5,6 @@ import { MdAdminPanelSettings } from "react-icons/md"; //Roles
 import { GrResources } from "react-icons/gr"; //Recursos
 import { TbRoute } from "react-icons/tb"; //Rutas
 import { BsWindowStack } from "react-icons/bs"; //Componentes
-//import { PiTreeViewDuotone } from "react-icons/pi"; //Arbol
 import { PiTreeDuotone } from "react-icons/pi";
 
 export default function NavTab({option}: {option:number}){

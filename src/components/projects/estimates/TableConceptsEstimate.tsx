@@ -1,38 +1,29 @@
 import { useState } from "react"
 import { OneProjectMin } from "@/interfaces/Projects";
-// import FilteringEstimatesProject from "./FilteringEstimatesProject";
-// import { Options } from "@/interfaces/Common";
-import { GiSettingsKnobs } from "react-icons/gi"
-// import DetailEstimateComponent from "./DetailEstimateComponent";
 import { ITableConceptsEstimate } from "@/interfaces/Estimate";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-// import Chip from "@/components/providers/Chip";
 import { IConceptEstimate } from "@/interfaces/Estimate";
 import { ConceptsDataToConceptsTable } from "@/app/functions/EstimatesFunctions";
 import RemoveElement from "@/components/RemoveElement";
-import { removeConceptEstimate } from "@/app/api/routeEstimates";
+import { deleteConceptInEstimate } from "@/app/api/routeEstimates";
+
+type TableConceptsProps = {
+  project: OneProjectMin, 
+  concepts:IConceptEstimate[], 
+  idEstimate:string, 
+  isFilterTable:boolean, 
+  handleFilterTable:Function, 
+  delConcept:Function, 
+  token:string,
+  estimatedTotal:number
+}
 
 export default function TableConceptsEstimate({project, concepts, handleFilterTable, 
-  isFilterTable, delConcept, token}: 
-  {project: OneProjectMin, concepts:IConceptEstimate[], 
-    isFilterTable:boolean, handleFilterTable:Function, delConcept:Function, token:string}) {
+  isFilterTable, delConcept, token, idEstimate, estimatedTotal}: TableConceptsProps) {
 
-  // const [estimates, setEstimates] = useState<IEstimateProject[]>(estimatesPro);
   const [filterConcepts, setFilterConcepts] = useState<IConceptEstimate[]>(concepts);
-  const [isFilter, setIsFilter] = useState<boolean>(false);
-  // const [isShowDetailEstimate, setIsShowDetailEstimate] = useState<boolean>(false);
-
-  // const refEstimate = useRef('');
-
-  const handleIsFilter = (value: boolean) => {
-    setIsFilter(value);
-  }
-
-  const handleFilterData = (value: any) => {
-    setFilterConcepts(value);
-  }
 
   if(concepts.length <= 0){
     return (
@@ -42,7 +33,7 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
           <p className="text-xl mt-10 text-slate-700 font-bold" 
             // style={{maxInlineSize: '45ch', textWrap:'balance' }}
             >Agregar un concepto a la estimacion del proyecto {project.title}</p>
-          <img src="/img/projects.jpg" alt="image" className="w-60 h-auto" />
+          <img src="/img/estimates/concepts.svg" alt="image" className="w-60 h-auto" />
         </div>
         <div className="mt-5 flex justify-between items-center bg-white">
           <p className="text-blue-400">CONCEPTOS DE ESTIMACION</p>
@@ -51,12 +42,6 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
       </>
     )
   }
-
-  const conceptM = concepts.reduce((previous, current) => {
-    return current.prices > previous.prices ? current : previous;
-  });
-
-  const maxAmount = conceptM.prices;
 
   const columnHelper = createColumnHelper<ITableConceptsEstimate>();
   
@@ -69,8 +54,8 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           /> */}
-          <RemoveElement id={row.original.id} name={row.original.nombre} remove={removeConceptEstimate} 
-            removeElement={delConcept} token={token} />
+          <RemoveElement id={`${idEstimate}/${row.original.idconcept}`} name={row.original.nombre} remove={deleteConceptInEstimate} 
+            removeElement={delConcept} token={token} progreesAverage={estimatedTotal} />
         </div>
       ),
       size: 300,
@@ -97,20 +82,6 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
         <p>Clave</p>
       )
     }),
-    // columnHelper.accessor('condition', {
-    //   id: 'accion',
-    //   cell: ({row}) => (
-    //     <div className="flex gap-x-1 items-center">
-    //       <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
-    //       <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
-    //       <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />
-    //     </div>
-    //   ),
-    //   enableSorting:false,
-    //   header: () => (
-    //     <p>accion</p>
-    //   )
-    // }),
     columnHelper.accessor('nombre', {
       header: 'Nombre',
       id: 'nombre',
@@ -169,18 +140,12 @@ export default function TableConceptsEstimate({project, concepts, handleFilterTa
   }
 
   return (
-    // <div className="mt-5 flex justify-between items-center bg-white">
-    //   <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
-      
-    // </div>
     <>
       <div className="mt-5 flex justify-between items-center bg-white">
         <p className="text-blue-400">PREELIMINARES</p>
         {/* <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />           */}
       </div>
       <Table columns={columns} data={dataTable} placeH="buscar estimacion" />
-      {/* {isFilter && <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
-                                FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />} */}
     </>
   )
 }

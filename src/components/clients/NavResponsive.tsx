@@ -1,9 +1,6 @@
-import { ArrowDownTrayIcon, ChartBarIcon, 
-        AdjustmentsVerticalIcon, TableCellsIcon, 
-        UserCircleIcon, GlobeAmericasIcon } from "@heroicons/react/24/solid"
-import { useEffect, useState } from "react";
+import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
+import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
-
 import { PiPresentationChartLight } from "react-icons/pi";
 import { ImProfile } from "react-icons/im";
 import { FaRegImage } from "react-icons/fa6";
@@ -11,9 +8,15 @@ import { FaAddressCard } from "react-icons/fa";
 import { MdContactPhone } from "react-icons/md";
 import { Resource2 } from "@/interfaces/Roles";
 
-export default function NavResponsive({open, setOpen, option, changeOption, clientPermission}: 
-                      {open:boolean, setOpen:Function, option:number, changeOption:Function, 
-                        clientPermission: Resource2}){
+type NavResponsiveProps = {
+  open:boolean, 
+  setOpen:Function, 
+  option:number, 
+  changeOption:Function, 
+  clientPermission: Resource2
+}
+
+export default function NavResponsive({open, setOpen, option, changeOption, clientPermission}: NavResponsiveProps){
   
   let props = {
     variants: {
@@ -36,125 +39,17 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
 
   const [isHover, setIsHover] = useState<number>(-1);
   
-  // const [nav, setNav] = useState<JSX.Element>(<div className="bg-white top-52 space-y-4 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
-  //                                   <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                           text-slate-500 my-1 bg-white rounded-md rotate-90" 
-  //                                       onClick={() => setOpen(true)} /></div>
-  //                                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen' 
-  //                                       placement="right" className="text-blue-500 bg-white"> 
-  //                                         <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
-  //                                           <PiPresentationChartLight 
-  //                                             style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
-  //                                                     color: isHover===1 || option===1 ? 'white' : '',}}
-  //                                             className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                             text-slate-500 my-1 bg-white rounded-md
-  //                                               ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
-  //                                             onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
-  //                                           />
-  //                                           {/* <ChartBarIcon 
-  //                                             style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
-  //                                                     color: isHover===1 || option===1 ? 'white' : '',}}
-  //                                             className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                             text-slate-500 my-1 bg-white rounded-md
-  //                                               ${option===1? 'bg-blue-500': ''}`} onClick={() => changeOption(1)} 
-  //                                               onMouseEnter={() => setIsHover(1)} onMouseLeave={() => setIsHover(-1)}
-                                                
-  //                                           /> */}
-  //                                         </div>
-  //                                     </Tooltip>
-  //                                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
-  //                                     placement="right" className="text-blue-500 bg-white">
-  //                                       <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
-  //                                         <ImProfile 
-  //                                           className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                   text-slate-500 my-1 bg-white rounded-md
-  //                                           ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
-  //                                           onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
-  //                                               color: isHover===2 || option===2 ? 'white' : '',}}
-  //                                         />
-  //                                         {/* <AdjustmentsVerticalIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                   text-slate-500 my-1 bg-white rounded-md
-  //                                           ${option===2? 'bg-blue-500': ''}`} onClick={() => changeOption(2)} 
-  //                                           onMouseEnter={() => setIsHover(2)} onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': ''), 
-  //                                               color: isHover===2 || option===2 ? 'white' : '',}}  
-  //                                         /> */}
-  //                                       </div>
-  //                                   </Tooltip>
-  //                                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
-  //                                     placement="right" className="text-blue-500 bg-white">
-  //                                       <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
-  //                                         <FaRegImage className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                   text-slate-500 my-1 bg-white rounded-md
-  //                                           ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
-  //                                           onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-  //                                             color: isHover===3 || option===3 ? 'white' : '',}} 
-  //                                         />
-  //                                         {/* <TableCellsIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                   text-slate-500 my-1 bg-white rounded-md
-  //                                           ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
-  //                                           onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-  //                                             color: isHover===3 || option===3 ? 'white' : '',}}  
-  //                                         /> */}
-  //                                       </div>
-  //                                   </Tooltip>
-  //                                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
-  //                                     placement="right" className="text-blue-500 bg-white">
-  //                                       <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
-  //                                         <FaAddressCard className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                   text-slate-500 my-1 bg-white rounded-md
-  //                                           ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
-  //                                           onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
-  //                                             color: isHover===4 || option===4 ? 'white' : '',}}
-  //                                         />
-  //                                         {/* <GlobeAmericasIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                   text-slate-500 my-1 bg-white rounded-md
-  //                                           ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 
-  //                                           onMouseEnter={() => setIsHover(4)} onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': ''), 
-  //                                             color: isHover===4 || option===4 ? 'white' : '',}}  
-  //                                         /> */}
-  //                                       </div>
-  //                                   </Tooltip>
-  //                                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Contactos' 
-  //                                     placement="right" className="text-blue-500 bg-white">
-  //                                       <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
-  //                                         <MdContactPhone className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                 text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
-  //                                           onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
-  //                                             color: isHover===5 || option===5 ? 'white' : '',}}
-  //                                         />
-  //                                         {/* <UserCircleIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-  //                                                 text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
-  //                                           onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
-  //                                           style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
-  //                                             color: isHover===5 || option===5 ? 'white' : '',}}
-  //                                         />   */}
-  //                                       </div>              
-  //                                   </Tooltip>
-  //                                 </div>);
-
   const permissionProfile = clientPermission.routes.find((route) => route.route.name.toLowerCase() === 'profile');
-  //console.log('permision profile => ', permissionProfile);
-
+  
   if(!permissionProfile){
     return <></>
   }
-
-  console.log('components => ', permissionProfile.components);
 
   const basicData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'basicdata');
   const addressData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'address');
   const resumeData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'resume');
   const contactData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'contact');
   const aditionalData = permissionProfile?.components.find((comp) => comp.component.name.toLowerCase() === 'aditionaldata');
-
-  console.log('contact compoennt => ', contactData);
 
   let nav: JSX.Element = <></>;
   if(!open){

@@ -1,28 +1,51 @@
-import { IEstimateProject, TableEstimatesProject, IConceptEstimate, ITableConceptsEstimate } from "@/interfaces/Estimate";
+import { IEstimateProject, TableEstimatesProject, IConceptEstimate, ITableConceptsEstimate, IEstimateMin } from "@/interfaces/Estimate";
 
 export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
   const table: TableEstimatesProject[] = [];
-  
+  // console.log('tabla estimates => ', estimates);
   estimates.map((estimate, index:number) => {
     table.push({
       id: estimate._id,
       Fecha: estimate.date,
       Amortizacion: estimate.amountChargeOff,
-      Condicion: {
-        __v: 0,
-        _id: '',
-        description: '',
-        id: '',
-        name: '',
-        status: true,
-        color: '#fff'
-      },
+      Condicion: estimate.condition,
       Estimacion: estimate.amount,
       Fondo: estimate.amountGuaranteeFund,
       MontoPay: estimate.amountPayable,
       Nombre: estimate.name,
-      Orden: 'order',
-      No: index++
+      Orden: estimate.purschaseOrder || 'sin orden',
+      No: index+1,
+      amountVat: estimate.amountPayableVAT?? 0,
+      haveInvoice: estimate.haveinvoice,
+      idProject: estimate.project._id,
+      project: estimate.project.title,
+      numConcepts: estimate.concepts?.length || 0
+    });
+  });
+
+  return table;
+}
+
+export function EstimatesWitoutInvoiceDataToEstimatesTable(estimates:IEstimateMin[]){
+  const table: TableEstimatesProject[] = [];
+  // console.log('tabla estimates => ', estimates);
+  estimates.map((estimate, index:number) => {
+    table.push({
+      id: estimate._id,
+      Fecha: estimate.date,
+      Amortizacion: estimate.amountChargeOff,
+      Condicion: estimate.condition,
+      Estimacion: estimate.amount,
+      Fondo: estimate.amountGuaranteeFund,
+      MontoPay: estimate.amountPayable,
+      Nombre: estimate.name,
+      Orden: estimate.purschaseOrder || 'sin orden',
+      No: index+1,
+      amountVat: estimate.amountPayableVAT?? 0,
+      haveInvoice: false,
+      idProject: estimate.project._id,
+      project: estimate.project.title,
+      numConcepts: estimate.concepts?.length || 0
     });
   });
 
@@ -34,14 +57,15 @@ export function ConceptsDataToConceptsTable(conepts:IConceptEstimate[]){
   
   conepts.map((concept) => {
     table.push({
-      id: concept._id,
-      Cantidad: 1,
-      Clave: concept.code,
-      Descripcion: concept.description,
-      nombre: concept.name,
-      PU: concept.prices[0].cost,
-      Importe: concept.prices[0].cost,
-      Unidad: concept.prices[0].unit
+      id: concept.conceptEstimate._id,
+      idconcept: concept.conceptEstimate.idconcept,
+      Cantidad: concept.conceptEstimate.quantity,
+      Clave: concept.conceptEstimate.code,
+      Descripcion: concept.conceptEstimate.description,
+      nombre: concept.conceptEstimate.name,
+      PU: concept.conceptEstimate?.priceConcepEstimate? (concept.conceptEstimate?.priceConcepEstimate?.cost? concept.conceptEstimate.priceConcepEstimate.cost: 0) : 0,
+      Importe: concept.conceptEstimate?.priceConcepEstimate? (concept.conceptEstimate?.amount? concept.conceptEstimate.amount: 0) : 0,
+      Unidad: (concept.conceptEstimate.unit?.name? concept.conceptEstimate.unit?.name: 'Sin unidad') || 'Sin unidad'
     });
   });
 

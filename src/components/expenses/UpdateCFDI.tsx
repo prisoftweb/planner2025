@@ -5,8 +5,6 @@ import { OneExpense } from "@/interfaces/Expenses";
 import { showToastMessageError, showToastMessage } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { CFDIValidation } from "@/interfaces/Expense";
-//import { Provider } from "@/interfaces/Providers";
-//import { getProvider } from "@/app/api/routeProviders";
 
 export default function UpdateCFDI({id, token, expense, isHistory}: 
                   {token: string, id:string, expense:OneExpense, isHistory:boolean}){
@@ -17,11 +15,8 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
   const [dataCFDI, setDataCFDI] = useState<CFDIValidation>();
 
   useEffect(() => {
-    console.log('expense', expense);
     expense.files.map((f) => {
       if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
-          //console.log('aqui entro => ', f);
-          
           setIdFile(f._id);
           setUrlFile(f.file);
       }
@@ -32,12 +27,9 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
     if(file){
       try {
         const data = new FormData();
-        //console.log('send file => ', file);
         data.append('file', file);
         data.append('types', file.type);
-        //console.log('append => ', data.get('file'));
         if(dataCFDIValidation()){
-          //showToastMessage('validado!!')
           const res = await ADDNewFILE(token, id, data);
           if(typeof(res) !== 'string'){
             showToastMessage('Archivo agregado satisfactoriamente');
@@ -48,7 +40,6 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
             showToastMessageError(res);
           }
         }
-        //showToastMessageError('No validado!!');
       } catch (error) {
         showToastMessageError('Ocurrio un error al ingresar archivo!!');
       }
@@ -84,16 +75,10 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
   }
 
   const handleCFDI = (value:CFDIValidation) => {
-    console.log('handle cfdi ', value);
     setDataCFDI(value);
   }
 
   const dataCFDIValidation = () => {
-    // console.log('expense', expense.subtotal);
-    // console.log('expense', expense.date.substring(0, 10));
-    // console.log('expense', expense.taxfolio);
-    // console.log('expense', expense.provider.rfc);
-    // console.log('data dfdi ', dataCFDI);
     if(expense.cost.subtotal !== Number(dataCFDI?.amount)){
       showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
       return false;
@@ -106,11 +91,7 @@ export default function UpdateCFDI({id, token, expense, isHistory}:
       showToastMessageError('El folio fiscal ingresado no coincide con el del CFDI!!');
       return false;
     }
-    console.log('rfc prov expense => ', expense.provider.rfc);
-    console.log('rfc prov xml => ', dataCFDI.RFCProvider);
     if(expense.provider.rfc !== dataCFDI.RFCProvider){
-      console.log('epxense provider => ', expense.provider);
-      console.log('cfdi provider => ', dataCFDI.RFCProvider);
       showToastMessageError('El rfc del proveedor no coincide con el del CFDI!!');
       return false;
     }

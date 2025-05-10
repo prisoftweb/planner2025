@@ -127,6 +127,22 @@ export interface ExpensesTableProvider {
   paid: string
   pending: string
   archivos: boolean,
+  paymentplugin: {
+    plugin: number,
+    date: string,
+    notes: string
+  }
+  datePaid: string,
+  methodofpayment: {
+    _id: string,
+    name: string,
+    color: string
+  }
+  condition: {
+    _id: string,
+    name: string,
+    color: string
+  }
 }
 
 export interface DetailExpensesTableProvider {
@@ -142,10 +158,12 @@ export interface DetailExpensesTableProvider {
   paid: boolean
   date: string
   archivos: string[],
-  // total: string,
-  // importe: string
-  previoudbalanceamount: string,
-  payout: string,
+  // previoudbalanceamount: string,
+  // payout: string,
+  // partitialnumber: number,
+  // unpaidbalanceamount: string
+  previoudbalanceamount: number,
+  payout: number,
   partitialnumber: number,
-  unpaidbalanceamount: string
+  unpaidbalanceamount: number
 }

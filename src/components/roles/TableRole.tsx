@@ -4,12 +4,12 @@ import Table from "@/components/Table";
 import Link from "next/link";
 import IconText from "../providers/IconText";
 import { RoleTable } from "@/interfaces/Roles";
-import { TrashIcon, UserCircleIcon } from "@heroicons/react/24/solid";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { RemoveRole } from "@/app/api/routeRoles";
 import DeleteElement from "../DeleteElement";
 
 export default function TableRole({data, token}:
-                        {data:RoleTable[], token:string}){
+  {data:RoleTable[], token:string}){
   
   const columnHelper = createColumnHelper<RoleTable>();
 
@@ -66,32 +66,6 @@ export default function TableRole({data, token}:
         </Link>
       )
     }),
-    // columnHelper.accessor('status', {
-    //   header: 'Status',
-    //   id: 'status',
-    //   cell: ({row}) => (
-    //     <Link href={`/roles/role/${row.original.id}`}>
-    //       <div className="flex text-slate-500 items-end">
-    //         <div 
-    //           className={`w-4 h-4 ml-5 ${row.original.status.status? 'bg-green-500': 'bg-red-500'}`}>
-    //         </div>
-    //         <p><sub>{row.original.status.routes}</sub></p>
-    //       </div>
-    //     </Link>       
-    //   ),
-    // }),
-    // columnHelper.accessor('users', {
-    //   header: 'Usuarios',
-    //   id: 'users',
-    //   cell: ({row}) => (
-    //     <Link href={`/roles/role/${row.original.id}`}>
-    //       <div className="flex text-slate-500 items-end">
-    //         <UserCircleIcon className="w-6 h-6 text-slate-500" />
-    //         <p><sub>{row.original.status.routes}</sub></p>
-    //       </div>
-    //     </Link>
-    //   ),
-    // }),
     columnHelper.accessor('components', {
       header: 'Componentes',
       id: 'componentes',

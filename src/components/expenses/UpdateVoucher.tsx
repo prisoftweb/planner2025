@@ -10,8 +10,6 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
     {token: string, id:string, expense:OneExpense, isHistory:boolean}){
   
   const [file, setFile] = useState<File | null>();
-  //const [urlFile, setUrlFile] = useState<string>();
-  //const [idFile, setIdFile] = useState<string>('');
   const refRequest = useRef(true);
   const {currentExpense, updateCurrentExpense} = useNewExpense();
 
@@ -22,27 +20,11 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
         || f.types.includes('PNG') || f.types.includes('pdf')){
-          //console.log('aqui entro => ', f);
-          //setIdFile(f._id);
-          //setUrlFile(f.file);
           idFile = f._id;
           urlFile = f.file;
       }
     });
   }
-
-  // useEffect(() => {
-  //   //console.log('expense', expense);
-  //   expense.files.map((f) => {
-  //     if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
-  //       || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-  //       || f.types.includes('PNG')){
-  //         //console.log('aqui entro => ', f);
-  //         setIdFile(f._id);
-  //         setUrlFile(f.file);
-  //     }
-  //   });
-  // }, []);
 
   const sendFile = async () => {
     if(refRequest.current){
@@ -50,18 +32,13 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
       try {
         if(file){
           const data = new FormData();
-          //console.log('send file => ', file);
           data.append('file', file);
           data.append('types', file.type);
-          //console.log('append => ', data.get('file'));
           const res = await ADDNewFILE(token, id, data);
           if(typeof(res) !== 'string'){
             refRequest.current = true;
             showToastMessage('Archivo agregado satisfactoriamente');
             updateCurrentExpense(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -93,7 +70,6 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
       } catch (error) {
         showToastMessageError('Ocurrio un error al eliminar el archivo anterior!!');
       }
-      //showToastMessageError('ya existe un archivo!!');
     }
   }
 
@@ -117,7 +93,6 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
     <div className="mt-2">
       {urlFile && (
         <iframe src={urlFile} 
-          //className="w-full h-80"
           className="w-full h-96"
         ></iframe>
       )}

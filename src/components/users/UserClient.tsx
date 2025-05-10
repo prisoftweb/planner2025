@@ -12,13 +12,8 @@ import { UsrBack } from "@/interfaces/User"
 import { useUserStore } from "@/app/store/userStore"
 
 export default function UserClient({user, token, departments, optQuery, optsRole}: 
-                  {user:UsrBack, token:string, departments:Options[], 
-                    optQuery: number, optsRole:Options[]}){
+  {user:UsrBack, token:string, departments:Options[], optQuery: number, optsRole:Options[]}){
   
-  // const [view, setView] = useState<JSX.Element>
-  //               (<UpdateProfile departments={departments} user={user} 
-  //                     token={token} optsRoles={optsRole} />)
-
   const [opt, setOpt] = useState<number>(optQuery);
   const [open, setOpen] = useState<boolean>(false);
   const {updateUser, name, _id, department, email, photo, role, status, __v, 
@@ -57,20 +52,6 @@ export default function UserClient({user, token, departments, optQuery, optsRole
         (opt===4? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
           view = (<UpdateProfile departments={departments} user={usr.name ===''? user: usr} 
                       token={token} optsRoles={optsRole} />) ))
-
-  // opt===2? setView(<ChangePhoto id={user._id} token={token} />) : 
-  //     (opt===3? setView(<ChangePassword token={token} name={user.name} id={user._id} />): 
-  //       (opt===4? setView(<ConfigUser token={token} user={user} status={user.status} />): 
-  //         setView(<UpdateProfile departments={departments} user={user} 
-  //                     token={token} optsRoles={optsRole} />) ))
-
-  // useEffect(() => {
-  //   opt===2? setView(<ChangePhoto id={user._id} token={token} />) : 
-  //     (opt===3? setView(<ChangePassword token={token} name={user.name} id={user._id} />): 
-  //       (opt===4? setView(<ConfigUser token={token} user={user} status={user.status} />): 
-  //         setView(<UpdateProfile departments={departments} user={user} 
-  //                     token={token} optsRoles={optsRole} />) ))
-  // }, [opt])
 
   return(
     <>

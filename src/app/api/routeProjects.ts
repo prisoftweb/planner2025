@@ -72,6 +72,24 @@ export async function getProjectsLV(auth_token:string) {
   }
 }
 
+export async function getProjectsLVNoCompleted(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsWithNEConditionLV/COMPLETADO`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar proyectos!!';
+  }
+}
+
 export async function CreateProject(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`;
   try {
@@ -520,9 +538,19 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
     return 'Error al consultar lista de proyectos top 10!!';
   }
 }
+// (/[$, M, X, N,]/g, "")
+export async function getDashboardProjectByBudgetControl(auth_token:string, id:string, anio:number) {
+  const d = new Date(anio, 0, 1);
+  const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d2 => ', new Date(d).toLocaleDateString());
+  console.log('d fin => ', d_ini);
 
-export async function getDashboardProjectByBudgetControl(auth_token:string, id:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/2024-01-01/2024-10-30`;
+  const d2 = new Date(anio, 11, 31);
+  console.log('d2 => ', new Date(d2).toLocaleDateString());
+  const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d fin => ', d_fin);
+
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/${d_ini}/${d_fin}`;
   // //console.log('url control presupuestal => ', url);
   try {
     const res = await axios.post(url, {}, {
@@ -545,6 +573,26 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
 
 export async function getDashboardProjectCostoCenters(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostByProject-groupByCOSTOCENTERONLY/${id}`;
+  // console.log('url dashboard cc => ', url);
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar centro de costos!!';
+  }
+}
+
+export async function getDashboardProjectCostoCentersCategory(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostByProject-groupByCOSTOCENTERONLYCate/${id}`;
   try {
     const res = await axios.post(url, {}, {
       headers: {
@@ -703,5 +751,161 @@ export async function getProjectsControlBudgeted(auth_token:string, dateStart: s
       return error.response?.data.message || error.message
     }
     return 'Error al consultar proyectos por control presupuestal!!';
+  }
+}
+
+export async function getTimeLineProject(auth_token:string, project:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getConditionsByProjectMIN/${project}`;
+  
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar linea de tiempo del proyecto!!';
+  }
+}
+
+export async function getProjectsWithEstimatesMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllEstimatesMINGROUPROJECT`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar proyectos!!';
+  }
+}
+
+export async function getProjectsWithOutEstimateMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsMINAndNEConditionAndNEstimates/66e0a1a4c6d95ffb8aa0ff31`;
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar proyectos!!';
+  }
+}
+
+export async function getProjectContractualControl(auth_token:string, project:string) {
+  const d = new Date(2025, 0, 1);
+  const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d2 => ', new Date(d).toLocaleDateString());
+  console.log('d fin => ', d_ini);
+
+  const d2 = new Date(2025, 11, 31);
+  console.log('d2 => ', new Date(d2).toLocaleDateString());
+  const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
+  console.log('d fin => ', d_fin);
+
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/${d_ini}/${d_fin}`;
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats[0];
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar control contractual!!';
+  }
+}
+
+export async function GetCostsByProjectMin(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByProjectMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al consultar costos del proyecto!!';
+  }
+}
+
+export async function GetBudgetsByProjectMin(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/budgets/getBudgetsMINByProject/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.resdata;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al consultar presupuestos del proyecto!!';
+  }
+}
+
+export async function GetCollectionsAccumByProjectMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllCollectionsACCUMGroupByProjectMIN`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al consultar cobros de los proyectos!!';
+  }
+}
+
+export async function GetCostsAccumByProjectMin(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsACCUMGroupByProjectMIN`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al consultar cobros de los proyectos!!';
   }
 }

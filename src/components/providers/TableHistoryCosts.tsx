@@ -1,45 +1,36 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import { useState, useEffect, useRef } from "react";
-import { ExpensesTable, Expense } from "@/interfaces/Expenses";
+import { Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-// import { useNewExpense } from "@/app/store/newExpense";
-// import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
-// import { showToastMessage, showToastMessageError } from "../Alert";
-// import Filtering from "./ExpensesFiltered";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
-import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import { HistoryExpensesTable } from "@/interfaces/Providers";
-//import Filtering from "../expenses/ExpensesFiltered";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 
+type Props = {
+  data:HistoryExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  user: string, 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  handleExpensesSelected:Function, 
+  idProv:string, 
+  isViewReports: boolean, 
+  filterData: Function, 
+  minAmount: number, 
+  maxAmount: number
+}
+
 export default function TableHistoryCosts({data, token, expenses, 
-                            handleExpensesSelected, user, isFilter, setIsFilter, 
-                        isViewReports, idProv, filterData, maxAmount, minAmount }:
-                        {data:HistoryExpensesTable[], token:string, expenses:Expense[], 
-                        user: string, isFilter:boolean, setIsFilter:Function, 
-                        handleExpensesSelected:Function, idProv:string, 
-                        isViewReports: boolean, filterData: Function, minAmount: number, maxAmount: number}){
+  handleExpensesSelected, user, isFilter, setIsFilter, isViewReports, idProv, 
+  filterData, maxAmount, minAmount }: Props){
   
   const columnHelper = createColumnHelper<HistoryExpensesTable>();
-  const refExpenses = useRef(expenses);
-  const refFilter = useRef(false);
-
-  // const [dataExpenses, setDataExpenses] = useState(data);
-  // const [expensesFiltered, setExpensesFiltered] = useState<Expense[]>(expenses);
   
   const handleIsFilter = (value: boolean) => {
-    // if(value){
-    //   if(!refFilter.current){
-    //     refFilter.current = true;
-    //     setDataExpenses(ExpenseDataToTableData(refExpenses.current));
-    //   }
-    // }else{
-    //   refFilter.current = false;
-    // }
     setIsFilter(value);
   }
 
@@ -48,7 +39,10 @@ export default function TableHistoryCosts({data, token, expenses,
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2 justify-center">
-          {row.original.Estatus._id !== '67318a51ceaf47ece0d3aa72' && (
+          {row.original.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
+            row.original.Estatus._id !== '661eade6f642112488c85fad' &&
+            row.original.Estatus._id !== '661eaa71f642112488c85f59' &&
+            row.original.Estatus._id !== '661eaa4af642112488c85f56' && (
             <input type="checkbox" 
               checked={row.getIsSelected()}
               onChange={row.getToggleSelectedHandler()}
@@ -124,16 +118,6 @@ export default function TableHistoryCosts({data, token, expenses,
         )
       ),
     }),
-    // columnHelper.accessor('isPaid', {
-    //   header: 'Pagado',
-    //   id: 'pagado',
-    //   cell: ({row}) => (
-    //     <div className="cursor-pointer" 
-    //       onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
-    //         <Chip label={row.original.isPaid? 'Pagado': 'No pagado'} color={row.original.isPaid? '#0f0': '#f00'} />
-    //     </div>
-    //   ),
-    // }),
     columnHelper.accessor('Estatus', {
       header: 'Estatus',
       id: 'estatus',
@@ -208,21 +192,14 @@ export default function TableHistoryCosts({data, token, expenses,
 
   const view = <Table columns={columns} data={data} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable="costProvider" initialColumns={initialVisibilityColumns} />
-  // const [maxAmount, setMaxAmount] = useState<number>(0);
-  // const [minAmount, setMinAmount] = useState<number>(0);
-
+  
   return(
     <>
       <div className="flex justify-end my-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        /> */}
           {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} />}
       </div>
-      {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
       {view}
     </>
   )

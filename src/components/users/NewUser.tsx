@@ -14,14 +14,12 @@ import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
 
 export default function NewUser({showForm, optionsDepartments, token, roles, addUser}: 
-                    {showForm:Function, optionsDepartments:Options[], token:string
-                    roles:Options[], addUser:Function}){
+  {showForm:Function, optionsDepartments:Options[], token:string, roles:Options[], addUser:Function}){
   
   const [file, setFile] = useState<File>();
   const [department, setDepartment] = useState<string>(optionsDepartments[0].value);
   const [role, setRole] = useState<string>(roles[0].value);
-  //const [optsRoles, setOptsRoles] = useState<Options>(roles[0]);
-
+  
   let optRole = roles.find(r => r.value === role)?? roles[0];
 
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -37,15 +35,6 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
   
-  // let optionsDepartments:Options[] = [];
-  // departments.map((dept:any) => (
-  //   optionsDepartments.push({
-  //     label: dept.name,
-  //     value: dept._id
-  //   })
-  // ))
-
-  //const [optDepts, setOptDepts] = useState<Options>(optionsDepartments[0]);
   let optDepto = optionsDepartments.find(dep => dep.value === department)?? optionsDepartments[0];
 
   const formik = useFormik({
@@ -84,7 +73,6 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
 
           try {
             const res = await createUserPhoto(formdata, token);
-            //console.log('res ', res);
             if(typeof(res)==='string'){
               refRequest.current = true;
               showToastMessageError(res);
@@ -93,13 +81,9 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
               showToastMessage('Usuario creado exitosamente!!!');
               addUser(res);
               showForm(false);
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
             }
           } catch (error) {
             refRequest.current = true;
-            console.log('error ', error);
             showToastMessageError('Error al crear usuario!!');
           }
         }else{
@@ -107,7 +91,6 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
             name, email, password, confirmpassword, department, rol:role
           }
           try {
-            //console.log('send user ', JSON.stringify(data));
             const res = await createUser(data, token);
             if(typeof(res)==='string'){
               refRequest.current = true;
@@ -117,9 +100,6 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
               showToastMessage('Usuario creado exitosamente!!!');
               addUser(res);
               showForm(false);
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
             }
           } catch (error) {
             refRequest.current = true;
@@ -177,9 +157,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
           <div className="mt-1">
             <Select 
               options={roles}
-              //onChange={(e: any) => {setRole(e.value); setOptsRoles(e)}}
               onChange={(e: any) => setRole(e.value)}
-              //value={optsRoles}
               value={optRole}
             />
           </div>
@@ -189,9 +167,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
           <div className="mt-1">
             <Select 
               options={optionsDepartments}
-              // onChange={(e:any) => {setDepartment(e.value); setOptDepts(e)}}
               onChange={(e:any) => setDepartment(e.value)}
-              //value={optDepts}
               value={optDepto}
             />
           </div>

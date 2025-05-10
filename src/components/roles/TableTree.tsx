@@ -6,7 +6,7 @@ import { TreeTable } from "@/interfaces/Roles";
 import { TrashIcon } from "@heroicons/react/24/solid";
 
 export default function TableTree({data, token, idTree}:
-                        {data:TreeTable[], token:string, idTree:string}){
+  {data:TreeTable[], token:string, idTree:string}){
   
   const columnHelper = createColumnHelper<TreeTable>();
 
@@ -44,17 +44,6 @@ export default function TableTree({data, token, idTree}:
         <p>accion</p>
       )
     }),
-    // columnHelper.accessor('status', {
-    //   header: 'Status',
-    //   id: 'status',
-    //   cell: ({row}) => (
-    //     <Link href={`#`}>
-    //       <div className="flex items-center">
-    //         <div className={`w-6 h-6 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
-    //       </div>
-    //     </Link>
-    //   )
-    // }),
     columnHelper.accessor('resource', {
       header: 'Recurso',
       id: 'recurso',

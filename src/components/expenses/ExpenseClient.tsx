@@ -1,8 +1,6 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { Options } from "@/interfaces/Common"
-//import NavResponsive from "../projects/NavResponsive"
 import ProfileExpense from "./ProfileExpense"
 import { OneExpense } from "@/interfaces/Expenses"
 import UpdateExpense from "@/components/expenses/UpdateExpense";
@@ -11,14 +9,13 @@ import UpdateExtraExpense from "./UpdateExtraExpenses"
 import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
 import { useNewExpense } from "@/app/store/newExpense"
+import StatusCostComponent from "./StatusCostComponent"
 
 export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
-                            { token:string, id:string, user:string, 
-                              expense:OneExpense, isHistory?:boolean}){
+  { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
-    console.log('new expense => ', expense);
     updateCurrentExpense(expense);
 
     return () => updateCurrentExpense(null);
@@ -50,13 +47,18 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                           style={{borderColor:'#F8FAFC'}}>
                               <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
                         </div>): 
-              (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+          (opt===5? (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                           <div className=" max-w-lg">
-                            <UpdateExpense id={id} token={token} expense={expense} 
-                              isticket={expense.isticket} isHistory={isHistory}  />
+                            <StatusCostComponent cost={expense._id} token={token} />
                           </div>
-                      </div>))))
+                      </div>): (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+                                style={{borderColor:'#F8FAFC'}}>
+                                  <div className=" max-w-lg">
+                                    <UpdateExpense id={id} token={token} expense={expense} 
+                                      isticket={expense.isticket} isHistory={isHistory}  />
+                                  </div>
+                              </div>)))))
   )
 
   const [open, setOpen] = useState<boolean>(false);
@@ -73,7 +75,6 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
         <div className="flex w-full max-w-5xl px-2 flex-wrap lg:flex-nowrap space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            {/* <ProfileProject project={project} /> */}
             <ProfileExpense expense={expense} />
           </div>
           {view}

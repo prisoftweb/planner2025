@@ -10,10 +10,8 @@ import { UsrBack } from "@/interfaces/User"
 import NuevoComponente from "./NuevoComponente"
 import { useOneReportStore } from "@/app/store/reportsStore"
 
-export default function ReportClient({report, token, id, user, 
-                                node, dates}: 
-                            {report:Report, token:string, id:string, 
-                              user:UsrBack, node:Node, dates: DateReport[] }){
+export default function ReportClient({report, token, id, user, node, dates}: 
+  {report:Report, token:string, id:string, user:UsrBack, node:Node, dates: DateReport[] }){
   const [opt, setOpt] = useState<number>(1);
 
   const {updateOneReportStore, oneReport} = useOneReportStore();
@@ -52,9 +50,6 @@ export default function ReportClient({report, token, id, user,
         </div>
         <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
-          {/* <div className={`w-full max-w-md`}>
-            <ProfileReport />
-          </div> */}
           {view}
         </div>
       </div>

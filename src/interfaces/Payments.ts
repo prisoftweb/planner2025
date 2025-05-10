@@ -31,6 +31,21 @@ export interface PaymentProvider {
   user: UsrBack
   quantity: string[]
   status: boolean
+  paymentplugin: {
+    plugin: number,
+    date: string,
+    notes: string
+  }
+  methodofpayment: {
+    _id: string,
+    name: string,
+    color: string
+  }
+  condition: {
+    _id: string,
+    name: string,
+    color: string
+  }
 }
 
 export interface CostPayment {
@@ -131,6 +146,11 @@ export interface OnePayment {
   status: boolean
   __v: number
   id: string
+  paymentplugin: {
+    plugin: number,
+    date: string,
+    notes: string
+  }
 }
 
 export interface pendingPaymentProvider {

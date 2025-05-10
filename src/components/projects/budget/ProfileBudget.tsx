@@ -10,7 +10,14 @@ interface OptionsDashboard {
   costo: number
 }
 
-export default function ProfileBudget({budget, token, id, user}: {budget: FullBudget, token:string, id: string, user:string}) {
+type Params = {
+  budget: FullBudget, 
+  token:string, 
+  id: string, 
+  user:string
+}
+
+export default function ProfileBudget({budget, token, id, user}: Params) {
 
   const {oneBudget} = useOneBudget();
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
@@ -37,7 +44,6 @@ export default function ProfileBudget({budget, token, id, user}: {budget: FullBu
 
   oneBudget?.newbudget.map((newB) => {
     optsChart.push({
-      //costo: newB.cost,
       costo: newB.percent,
       label: newB.costocenter.concept.name
     });
@@ -48,7 +54,6 @@ export default function ProfileBudget({budget, token, id, user}: {budget: FullBu
     <div className="flex w-full px-2 flex-wrap md:flex-nowrap space-x-2" 
         style={{backgroundColor:'#F8FAFC'}}>
       <div className={`w-full max-w-lg`}>
-        {/* <ProfileProject project={project} /> */}
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>

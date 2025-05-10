@@ -10,10 +10,10 @@ import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { GetCosts } from "@/app/api/routeCost";
 import { showToastMessageError } from "../Alert";
 import Filtering from "./ExpensesFiltered";
-import { Options } from "@/interfaces/Common";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 export default function TableHistoryExpenses({data, token, expenses, 
                             isFilter, setIsFilter, isViewReports}:
@@ -23,7 +23,6 @@ export default function TableHistoryExpenses({data, token, expenses,
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
-  //const [filtering, setFiltering] = useState<boolean>(false);
   const [filter, setFilter] = useState<boolean>(false);
   const [dataExpenses, setDataExpenses] = useState(data);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
@@ -141,7 +140,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'importe',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.Importe}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: 'MXN',
+              value: row.original.Importe
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -150,7 +154,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'iva',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.vat}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: "MXN",
+              value: row.original.vat
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -159,7 +168,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'descuento',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.discount}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: 'MXN',
+              value: row.original.discount
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -168,7 +182,12 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'total',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <p className="">{row.original.total}</p>
+          <p className="">
+            {CurrencyFormatter({
+              currency: 'MXN',
+              value: row.original.total
+            })}
+          </p>
         </Link>
       ),
     }),
@@ -176,9 +195,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       header: 'Folio fiscal',
       id: 'Folio fiscal',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.taxFolio}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/expenses/history/${row.original.id}/profile`)}
         >{row.original.taxFolio}</p>
@@ -224,20 +240,15 @@ export default function TableHistoryExpenses({data, token, expenses,
       const aux = async () =>{
         try {
           const res = await GetCosts(token);
-          //console.log('res');
           if(typeof(res) !== 'string'){
             const d = ExpenseDataToTableData(res);
             setDataExpenses(d);
-            setView(<></>);
-            setTimeout(() => {
-              setView(<Table columns={columns} data={d} 
-                    placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
-            }, 500);
+            setView(<Table columns={columns} data={d} 
+              placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
           }else{
             showToastMessageError(res);
           }
         } catch (error) {
-          console.log('catch table expenses => ', error);
           showToastMessageError('Error al actualizar tabla!!');
         }
       }
@@ -248,10 +259,8 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   useEffect(() => {
     if(filter){
-      //console.log('data exp ', dataExpenses);
       setView(<></>);
       setTimeout(() => {
-        // const total = da
         setView(<Table columns={columns} data={dataExpenses} 
           placeH="Buscar gasto.." typeTable='cost' initialColumns={initialVisibilityColumns} />);
       }, 100);
@@ -260,10 +269,6 @@ export default function TableHistoryExpenses({data, token, expenses,
   }, [filter]);
 
   const paidValidation = (exp:Expense, isPaid:number) => {
-    // if(exp.ispaid === isPaid){
-    //   return true;
-    // }
-    // return false;
     if(isPaid===1){
       return true;
     }else{
@@ -283,9 +288,7 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid:number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
-      //return true;
       return paidValidation(exp, isPaid);
     }
     return false;
@@ -301,11 +304,9 @@ export default function TableHistoryExpenses({data, token, expenses,
 
   const providerValidation = (exp:Expense, minAmount:number, maxAmount:number, 
     startDate:number, endDate:number, providers:string[], isPaid:number) => {
-      //console.log('providers => ', providers);
     if(providers.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-    //console.log('cost center filter => ', costcenters);
       if(exp.provider){
         if(typeof(exp.provider)==='string'){
           if(providers.includes(exp.provider)){
@@ -324,18 +325,15 @@ export default function TableHistoryExpenses({data, token, expenses,
   const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, isPaid:number, 
                       startDate:number, endDate:number, costcenters:string[], providers:string[]) => {
     if(costcenters.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
     }else{
       if(exp.costocenter){
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }else{
           if(costcenters.some((cc) => cc === (exp.costocenter._id + '/' + exp.costocenter.concept._id))){
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }
@@ -348,13 +346,11 @@ export default function TableHistoryExpenses({data, token, expenses,
                       startDate:number, endDate:number, projects:string[], 
                       costcenters:string[], providers:string[], isPaid:number) => {
     if(projects.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return costCenterValidation(exp, minAmount, maxAmount, isPaid, startDate, endDate, costcenters, providers);
     }else{
       if(exp.project){
         if(projects.includes(exp.project._id)){
           return costCenterValidation(exp, minAmount, maxAmount, isPaid, startDate, endDate, costcenters, providers);
-          //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
         }
       }
     }
@@ -420,10 +416,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                 reports, categories, types, costcenters, providers, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.estatus._id)){
         return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                     reports, categories, types, costcenters, providers, isPaid);
@@ -438,7 +430,6 @@ export default function TableHistoryExpenses({data, token, expenses,
     endDate:number, costcenters:string[], providers:string[], isPaid:number) => {
   
     let filtered: Expense[] = [];
-    //console.log('expenses lenght => ', expenses.length);
     expenses.map((expense) => {
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
           endDate, projects, reports, categories, types, conditions, costcenters, providers, isPaid)){
@@ -446,7 +437,6 @@ export default function TableHistoryExpenses({data, token, expenses,
       }
     });
 
-    //console.log(filtered);
     setFilteredExpenses(filtered);
     
     setDataExpenses(ExpenseDataToTableData(filtered));

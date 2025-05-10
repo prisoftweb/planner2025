@@ -6,7 +6,6 @@ export default function TabDeductible(){
   
   const onClick = (value: boolean) => {
     updateDeductible(value);
-    //updateIndexStepper(0);
     if(report === ''){
       updateIndexStepper(0);
     }else{

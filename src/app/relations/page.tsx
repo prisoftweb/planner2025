@@ -22,29 +22,42 @@ export default async function Page() {
   try {
     relations = await getRelations(token);
     if(typeof(relations) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{relations}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-xl text-center">{relations}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar relaciones!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar relaciones!!</h1>
+      </>
+    )
   }
 
   let glossaries: Glossary[] = [];
   try {
     glossaries = await getGlossaries(token);
     if(typeof(glossaries) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar glosarios!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar glosarios!!</h1>
+      </>
+    )
   }
 
-  // const optGlossaries: Options[] = [];
-  // glossaries.map(glossary => {
-  //   optGlossaries.push({
-  //     label: glossary.name,
-  //     value: glossary._id
-  //   });
-  // });
   const optGlossaries: Options[] = [];
   const optDescGlossaries: Options[] = [];
   glossaries.map(glossary => {
@@ -62,10 +75,20 @@ export default async function Page() {
   try {
     nodes = await getNodes(token);
     if(typeof(nodes) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar nodos!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar nodos!!</h1>
+      </>
+    )
   }
 
   const optNodes: Options[] = [];

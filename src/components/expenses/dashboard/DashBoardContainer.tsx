@@ -13,11 +13,20 @@ interface OptionsDashboard {
   costo: number
 }
 
+type DashBoardContainerProps = {
+  token: string, 
+  costsConcepts: OptionsDashboard[], 
+  costsCategories: OptionsDashboard[], 
+  costsDays: OptionsDashboard[], 
+  projects:Options[], 
+  costsResumen:CostsGroupByResumen[], 
+  costsResumenType:CostsGroupResumenByType[], 
+  costsCat: CostsByConceptAndCategory[], 
+  costsCon: CostsByConceptAndCategory[]
+}
+
 export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, 
-            projects, costsResumen, costsResumenType}:
-          {token: string, costsConcepts: OptionsDashboard[], costsCategories: OptionsDashboard[], 
-            costsDays: OptionsDashboard[], projects:Options[], costsResumen:CostsGroupByResumen[], 
-            costsResumenType:CostsGroupResumenByType[] }) {
+            projects, costsResumen, costsResumenType, costsCat, costsCon}: DashBoardContainerProps ) {
   
   const [costsByConcept, setCostsByConcept] = useState<OptionsDashboard[]>(costsConcepts);
   const [costsByCategory, setCostsByCategory] = useState<OptionsDashboard[]>(costsCategories);
@@ -25,10 +34,12 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   const [costsByResumen, setCostsByResumen] = useState<CostsGroupByResumen[]>(costsResumen);
   const [costsByResumenType, setCostsByResumenType] = useState<CostsGroupResumenByType[]>(costsResumenType)
 
+  const [dataCostsCategory, setDataCostsCategory ] = useState<CostsByConceptAndCategory[]>(costsCat);
+  const [dataCostsConcept, setDataCostsConcept ] = useState<CostsByConceptAndCategory[]>(costsCon);
+
   const fetchData = async (dateS: string, dateE: string, project:string) => {
     let costsCategory: CostsByConceptAndCategory[] = [];
     try {
-      // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(token, dateIni, dateIni);
       costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project);
       if(typeof(costsCategory)==='string'){
         return <h1>Error al obtener costos agrupados por categoria!!!</h1>
@@ -36,6 +47,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     } catch (error) {
       return <h1>Error al obtener costos agrupados por categoria!!!</h1>
     }
+
+    setDataCostsCategory(costsCategory);
 
     let costsConcept: CostsByConceptAndCategory[] = [];
     try {
@@ -46,6 +59,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     } catch (error) {
       return <h1>Error al obtener costos agrupados por concepto!!!</h1>
     }
+
+    setDataCostsConcept(costsConcept);
 
     let costsDays: CostsByDay[] = [];
     try {
@@ -107,11 +122,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     setCostsByDay(optDays);
     setCostsByResumen(costsRes);
     setCostsByResumenType(costsResType);
-    //console.log('cost resumen => ', costsRes);
-    //console.log('cost res type => ', costsResType);
   }
 
-  // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
   const categoriesCategories: string[] = [];
@@ -124,15 +136,10 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     categoriesConcepts.push(cc.label);
   });
 
-  // const categoriesDays: string[] = [];
-  // costsByDay.map((cc) => {
-  //   categoriesDays.push(cc.label);
-  // });
-
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
-        costsResumenType={costsByResumenType} />
+        costsResumenType={costsByResumenType} dataCostsCatagory={dataCostsCategory} dataCostsConcept={dataCostsConcept} />
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5">
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
@@ -148,7 +155,6 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
             <p>Conceptos</p>
           </div>
           <DonutChartt data={costsByConcept} colors={colors} category="costo"
-              //categories={['New York', 'London', 'Hong Kong', 'San Francisco', 'Singapore']} 
               categories={categoriesConcepts}  />
         </div>
       </div>

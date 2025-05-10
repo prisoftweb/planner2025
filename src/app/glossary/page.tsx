@@ -15,30 +15,18 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let glossaries: Glossary[];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries)=== 'string'){
-      return <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500 text-lg">Error al consultar glosarios!!</h1>
-  } 
-
-  // if(!glossaries || glossaries.length <= 0){
-  //   return (
-  //     <div>
-  //       <Navigation user={user} />
-  //       <CompanyClient option={1} >
-  //         <WithOut img="/img/clientes.svg" subtitle="Glosarios"
-  //           text="Aqui puedes agregar los glosarios"
-  //           title="Glosarios">
-  //               <ButtonNew token={token} glossary={''} />
-  //         </WithOut>
-  //       </CompanyClient>
-  //     </div>
-  //   )
-  // }
+  let glossaries: Glossary[] = await getGlossaries(token);
+  
+  if(typeof(glossaries)=== 'string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
+        </div>
+      </>
+    )
+  }
 
   const table: GlossaryTable[] = [];
 

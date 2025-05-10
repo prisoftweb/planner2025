@@ -4,7 +4,6 @@ import Label from "../Label"
 import Table from "../Table"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import { createColumnHelper } from "@tanstack/react-table"
-//import { Expense } from "@/interfaces/Expenses"
 import { CostsDataToTableDataMin } from "@/app/functions/ReportsFunctions"
 import DeleteElement from "../DeleteElement"
 import { RemoveCost } from "@/app/api/routeCost"
@@ -16,9 +15,7 @@ import { useOneReportStore } from "@/app/store/reportsStore"
 export default function CostsInReport({report, id, token}: 
     {report:Report, id:string, token: string}) {
 
-  //console.log('costs in report => ', costs);
   const {oneReport} = useOneReportStore();
-  //const costs: Expense[] = getCosts();
   const total = CurrencyFormatter({
     currency: "MXN",
     value: oneReport?.total ?? 0
@@ -43,11 +40,8 @@ export default function CostsInReport({report, id, token}:
   
   const data = CostsDataToTableDataMin(costsReport);
 
-  //console.log('costs min in report', data);
-  
   return (
     <>
-      {/* <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2"  */}
       <div className="flex w-full max-w-screen-2xl px-2 flex-wrap space-x-2"
           style={{'backgroundColor': '#F8FAFC'}}>
         <div className="grid grid-cols-3 gap-x-3 mt-2">
@@ -59,7 +53,7 @@ export default function CostsInReport({report, id, token}:
             <div>
               <p className="text-blue-500">{oneReport?.project.title}</p>
               <p className="text-slate-500">{oneReport?.project.code}</p>
-              <p className="text-slate-500">{oneReport?.project.glossary.name}</p>
+              <p className="text-slate-500">{oneReport?.project.glossary?.name || "Sin condicion"}</p>
               <p className="text-slate-500">{oneReport?.project.account}</p>
               <div className="mt-3 border-t border-slate-500 pt-2">
                 <p className="text-blue-500">{oneReport?.name}</p>
@@ -201,7 +195,6 @@ function CostsTableInReport({data}: {data: CostsTable[]}){
     }),
   ]
 
-  console.log('cost table in report data => ', data);
   return (
     <Table columns={columns} data={data} placeH="buscar costo" />
   )

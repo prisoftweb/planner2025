@@ -6,14 +6,17 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import Button from "../Button";
 import { updateContact } from "@/app/api/routeContacts";
 import { updateContactClient } from "@/app/api/routeClients";
-//import CardContact from "../providers/CardContact";
-//import CardContactClient from "./CardContactClient";
 import { contactUpdateValidation } from "@/schemas/contact.schema";
 import CardContacts from "../CardContacts";
 import DeleteContactClient from "./DeleteContactClient";
 
-export default function Contacts({id, token, contacts, editInfo}: 
-    {id:string, token:string, contacts:(Contact[]), editInfo:boolean}){
+type ContactsProps = {
+  id:string, 
+  token:string, 
+  contacts:Contact[], 
+  editInfo:boolean}
+
+export default function Contacts({id, token, contacts, editInfo}: ContactsProps){
   
   const [index, setIndex] = useState(0);
   const numberContacts = 1;

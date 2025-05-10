@@ -4,7 +4,7 @@ import Table from "@/components/Table";
 import { useState, useEffect, useRef } from "react";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import Chip from "../providers/Chip";
-import { RemoveCost, getAllCostsByCondition, CloneCost } from "@/app/api/routeCost";
+import { RemoveCost, getAllCostsByConditionAndUser, CloneCost, GetCostsByUserMIN } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 import { showToastMessage, showToastMessageError } from "../Alert";
@@ -14,14 +14,24 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import RemoveElement from "../RemoveElement";
 import {IoMdCopy} from 'react-icons/io';
+import { CurrencyFormatter } from "@/app/functions/Globals";
+
+type Props = {
+  data:ExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  user: string, 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  idValidado: string, 
+  handleExpensesSelected:Function, 
+  isViewReports: boolean, 
+  isPending:boolean
+}
 
 export default function TableExpenses({data, token, expenses, 
-                            handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
-                        isViewReports }:
-                        {data:ExpensesTable[], token:string, expenses:Expense[], 
-                        user: string, isFilter:boolean, setIsFilter:Function, 
-                        idValidado: string, handleExpensesSelected:Function, 
-                        isViewReports: boolean}){
+  handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
+  isViewReports, isPending }: Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
@@ -40,7 +50,7 @@ export default function TableExpenses({data, token, expenses,
         showToastMessageError(res);
       }else{
         showToastMessage('Costo copiado exitosamente!!!');
-        const fetchCosts = await getAllCostsByCondition(token);
+        const fetchCosts = await GetCostsByUserMIN(token, user);
         if(typeof(fetchCosts)==='string'){
           showToastMessageError("Error al actulizar tabla!!!");
         }else{
@@ -77,8 +87,9 @@ export default function TableExpenses({data, token, expenses,
     setIsFilter(value);
   }
 
-  console.log('data expesnes => ');
   data.map((c) => !c.Descripcion || typeof(c.Descripcion) !== 'string' ? console.log('desc => ', c) : '');
+
+  const queryParam= isPending? '?status=pending': '';
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -110,8 +121,6 @@ export default function TableExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-10 h-auto rounded-full" alt="user" />
-          {/* <DeleteElement id={row.original.id} name={row.original.Descripcion} 
-            remove={RemoveCost} token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
           <RemoveElement id={row.original.id} name={row.original.Descripcion} 
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
@@ -131,11 +140,8 @@ export default function TableExpenses({data, token, expenses,
     columnHelper.accessor('Proyecto', {
       id: 'Proyecto',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="py-2 font-semibold">{row.original.Proyecto}</p>
-        // </Link>
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Proyecto}</p>
       ),
       enableSorting:false,
@@ -147,11 +153,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Informe',
       id: 'Informe',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="py-2 font-semibold">{row.original.Informe}</p>
-        // </Link>
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Informe}</p>
       )
     }),
@@ -159,11 +162,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Centro de costos',
       id: 'Centro de costos',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="py-2 font-semibold">{row.original.costcenter}</p>
-        // </Link>
         <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.costcenter}</p>
       )
     }),
@@ -175,11 +175,11 @@ export default function TableExpenses({data, token, expenses,
           <>
             {row.original.Descripcion.length < 100? (
               <p className="cursor-pointer" 
-                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
               >{row.original.Descripcion}</p>
             ): (
               <p className="cursor-pointer" 
-                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+                onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
               >{row.original.Descripcion.substring(0, 100)}</p>
             )}
           </>
@@ -190,11 +190,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Proveedor',
       id: 'proveedor',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Proveedor}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Proveedor}</p>
       ),
     }),
@@ -202,11 +199,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <Chip label={row.original.condition} color={row.original.color} />
-        // </Link>
         <div className="cursor-pointer" 
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}>
             <Chip label={row.original.condition} color={row.original.color} />
         </div>
       ),
@@ -215,11 +209,8 @@ export default function TableExpenses({data, token, expenses,
       header: 'Fecha',
       id: 'fecha',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
@@ -227,59 +218,64 @@ export default function TableExpenses({data, token, expenses,
       header: 'Importe',
       id: 'importe',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Importe}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.Importe}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.Importe
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('vat', {
       header: 'IVA',
       id: 'iva',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.vat}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.vat}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.vat
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('discount', {
       header: 'Descuento',
       id: 'descuento',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.discount}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.discount}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: 'MXN',
+            value: row.original.discount
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('total', {
       header: 'Total',
       id: 'total',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.total}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
-        >{row.original.total}</p>
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
+        >
+          {CurrencyFormatter({
+            currency: "MXN",
+            value: row.original.total
+          })}
+        </p>
       ),
     }),
     columnHelper.accessor('taxFolio', {
       header: 'Folio fiscal',
       id: 'Folio fiscal',
       cell: ({row}) => (
-        // <Link href={`/expenses/${row.original.id}/profile`}>
-        //   <p className="">{row.original.taxFolio}</p>
-        // </Link>
         <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile`)}
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}
         >{row.original.taxFolio}</p>
       ),
     }),
@@ -328,13 +324,11 @@ export default function TableExpenses({data, token, expenses,
   if(refresh){
     const aux = async () =>{
       try {
-        const res = await getAllCostsByCondition(token);
+        console.log('refresh table costs ');
+        const res = await getAllCostsByConditionAndUser(token, user);
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
           const d = ExpenseDataToTableData(res);
-          // if(d.length > 0){
-          //   //
-          // }
           setDataExpenses(d);
         }else{
           showToastMessageError(res);
@@ -364,18 +358,12 @@ export default function TableExpenses({data, token, expenses,
         return false;
       }
     }
-    // if(exp.ispaid === isPaid){
-    //   return true;
-    // }
-    // return false;
   }
 
   const dateValidation = (exp:Expense, startDate:number, endDate:number, isPaid: number) => {
     let d = new Date(exp.date).getTime();
-    //console.log('get time ', d);
     if(d >= startDate && d <= endDate){
       return paidValidation(exp, isPaid);
-      //return true;
     }
     return false;
   }
@@ -390,11 +378,9 @@ export default function TableExpenses({data, token, expenses,
 
   const providerValidation = (exp:Expense, minAmount:number, maxAmount:number, 
         startDate:number, endDate:number, providers:string[], isPaid: number) => {
-          //console.log('providers => ', providers);
     if(providers.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-    //console.log('cost center filter => ', costcenters);
       if(exp.provider){
         if(typeof(exp.provider)==='string'){
           if(providers.includes(exp.provider)){
@@ -413,25 +399,15 @@ export default function TableExpenses({data, token, expenses,
   const costCenterValidation = (exp:Expense, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, costcenters:string[], providers:string[], isPaid: number) => {
     if(costcenters.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
     }else{
-      //console.log('cost center filter => ', costcenters);
       if(exp.costocenter){
         if(typeof(exp.costocenter)==='string'){
           if(costcenters.includes(exp.costocenter)){
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }else{
-          // if(exp.costocenter.categorys.every((cat) => costcenters.includes(cat._id))){
-          //   return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-          // }
-          // if(costcenters.includes(exp.costocenter.concept.id)){
-          //console.log('concept cc => ', exp.costocenter.concept._id);
           if(costcenters.some((cc) => cc === (exp.costocenter._id + '/' + exp.costocenter.concept._id))){
-            //console.log('entrooo???');
-            //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
             return providerValidation(exp, minAmount, maxAmount, startDate, endDate, providers, isPaid);
           }
         }
@@ -444,13 +420,11 @@ export default function TableExpenses({data, token, expenses,
                       startDate:number, endDate:number, projects:string[], 
                       costcenters:string[], providers:string[], isPaid: number) => {
     if(projects.includes('all')){
-      //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
       return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters, providers, isPaid);
     }else{
       if(exp.project){
         if(projects.includes(exp.project._id)){
           return costCenterValidation(exp, minAmount, maxAmount, startDate, endDate, costcenters, providers, isPaid);
-          //return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
         }
       }
     }
@@ -516,10 +490,6 @@ export default function TableExpenses({data, token, expenses,
       return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                 reports, categories, types, costcenters, providers, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.estatus._id)){
         return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
                     reports, categories, types, costcenters, providers, isPaid);
@@ -541,26 +511,19 @@ export default function TableExpenses({data, token, expenses,
       }
     });
 
-    //console.log(filtered);
-    //setFilteredExpenses(filtered);
+    console.log('filtered => ', filtered);
     setExpensesFiltered(filtered);
     setDataExpenses(ExpenseDataToTableData(filtered));
-    //setFilter(true);
   }
 
   return(
     <>
       <div className="flex justify-end my-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        /> */}
           {isFilter && <Filtering showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
                         />}
       </div>
-      {/* <Button onClick={changeConditionInCost}>Validar</Button> */}
       {view}
     </>
   )

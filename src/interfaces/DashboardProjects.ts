@@ -76,6 +76,44 @@ export interface ProjectsTop10 {
   progress: number
 }
 
+// export interface ProjectByBudgetedControl {
+//   _id: string
+//   title: string
+//   date: string
+//   estatus: string
+//   progress: number
+//   amountInfo: {
+//     amount: number
+//     porcentage: number
+//   }
+//   budgetedInfo: {
+//     budgeted: number
+//     porcentage: number
+//   }
+//   spentInfo: {
+//     spent: number
+//     porcentage: number
+//   }
+//   estimateInfo: {
+//     estimate: number
+//     porcentage: number
+//   }
+//   billingInfo: {
+//     billedTotal: number, 
+//     pendingBillingTotal: number, 
+//     porcentage: number
+//   }
+//   paymentInfo: {
+//     totalPayments: number, 
+//     pendingPaymentTotal: number, 
+//     porcentage: number
+//   }
+//   netprofitInfo: {
+//     netprofitTotal: number,
+//     porcentage: number
+//   }
+// }
+
 export interface ProjectByBudgetedControl {
   _id: string
   title: string
@@ -84,15 +122,49 @@ export interface ProjectByBudgetedControl {
   progress: number
   amountInfo: {
     amount: number
+    amountotal: number
     porcentage: number
+    porcentageTotal: any
   }
   budgetedInfo: {
-    budgeted: number
-    porcentage: number
+    budgetedTotal: number
+    porcentageTotal: number
+    pendingBugetedTotal: number
   }
   spentInfo: {
-    spent: number
+    spentTotal: number
+    pendingSpentTotal: number
     porcentage: number
+    spentSubTotal: number
+    pendingSpentSubTotal: number
+    porcentageSubTotal: number
+  }
+  estimateInfo: {
+    estimate: number
+    pendingEstmatedTotal: number
+    porcentage: number
+  }
+  billingInfo: {
+    billedTotal: number
+    pendingBillingTotal: number
+    porcentage: number
+    billedSubTotal: number
+    pendingBillingSubTotal: number
+    porcentageSubTotal: number
+  }
+  paymentInfo: {
+    paymentTotal: number
+    pendingPaymentTotal: number
+    porcentage: number
+    paymentSubTotal: number
+    pendingPaymentSubTotal: number
+    porcentageSubTotal: number
+  }
+  netprofitInfo: {
+    netprofitTotal: number
+    porcentage: number
+    netprofitSubTotal: number
+    porcentageSubtotal: number
   }
 }
 
@@ -107,6 +179,20 @@ export interface ProjectCostoCenters {
   porcentage: number
   costocenter: {
     concept: string
+  }
+}
+
+export interface ProjectCostoCentersCategory {
+  quantity: number
+  subtotalCost: number
+  totalCost: number
+  totalIVA: number
+  totalExemptTAX: number
+  totalDiscount: number
+  amountPro: number
+  porcentage: number
+  costocenter: {
+    category: string
   }
 }
 
@@ -148,4 +234,29 @@ export interface Dataset {
   data: number[]
   backgroundColor: string[]
   hoverOffset: number
+}
+
+export interface IContractualControlProject {
+  _id: string
+  title: string
+  date: string
+  estatus: string
+  progress: number
+  estimateInfo: {
+    estimatedTotal: number
+    porcentageEstimated: number
+    amountPayable: number
+    porcentagePayable: number
+    amountPayableVAT: number
+    porcentagePayableVAT: number
+    amountGuaranteeFund: number
+    porcentageGuaranteeFund: number
+    amountChargeOff: number
+    porcentageChargeOff: number
+    amount: number
+    amountPro: number
+    porcentage: number
+    cashAdvance: number,
+    porcentageCashAdvance: number
+  }
 }

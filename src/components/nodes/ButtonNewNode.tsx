@@ -6,9 +6,8 @@ import NewNode from "./NewNode";
 
 export default function ButtonNewNode({token, user, departments, 
               glossaries, workFlows, descGlossaries}: 
-          {token:string, user:string, glossaries:Options[], 
-            departments:Options[], workFlows:Options[], 
-            descGlossaries:Options[]}){
+  {token:string, user:string, glossaries:Options[], departments:Options[], workFlows:Options[], 
+    descGlossaries:Options[]}){
   const [newNode, setNewNode] = useState<boolean>(false);
 
   const handleClick = (value: boolean) => {

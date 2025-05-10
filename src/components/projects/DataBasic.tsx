@@ -4,9 +4,9 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import { OneProjectMin, Project } from "@/interfaces/Projects";
+import { OneProjectMin } from "@/interfaces/Projects";
 import { UpdateProject, UpdateProjectPhoto, InsertConditionInProject } from "@/app/api/routeProjects";
 import UploadImage from "../UploadImage";
 import { Options } from "@/interfaces/Common";
@@ -15,66 +15,31 @@ import { useOneProjectsStore } from "@/app/store/projectsStore";
 import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
 
 export default function DataBasic({token, id, project, optConditions, user}: 
-                                  {token:string, id:string, 
-                                    project:OneProjectMin, optConditions:Options[],
-                                    user:string}){
+  {token:string, id:string, project:OneProjectMin, optConditions:Options[], user:string}){
   
   const [file, setFile] = useState();
   const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
-  oneProjectStore?.category? 
-            console.log('one cat => ', oneProjectStore.category._id): console.log('cat => ', project?.category?._id);
   const [condition, setCondition] = useState<string>(oneProjectStore?.category? 
                           oneProjectStore.category._id: project?.category?._id || optConditions[0].value );
 
   let indexCond = 0;
-  //console.log('oneProjectStore.category._id => ', oneProjectStore?.category?._id);
-  //console.log('project?.category?._id => ', project?.category?._id);
-  //console.log('optConditions[0].value => ', optConditions[0].value);
-  //const [showConditions, setShowConditions] = useState<JSX.Element>(<></>);
   const refRequest = useRef(true);
 
   const handleCondition = (value: string) => {
     setCondition(value);
   }
 
-  //const idCat = oneProjectStore?.category._id || project.category._id
-  console.log('condition => ', condition);
   optConditions.map((cond, index:number) => {
-    //console.log('condicion ', cond.value, 'value ', project.condition[project.condition.length - 1].glossary._id);
     if(cond.value === condition){
-      console.log('index => ', index);
       indexCond = index;
-      //setCondition(cond.value);
     }
   });
 
-  console.log('index cond => ', indexCond);
   const showConditions =(<div>
     <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
     <SelectReact index={indexCond} opts={optConditions} setValue={handleCondition} />
   </div>)
 
-  // useEffect(() => {
-  //   if(oneProjectStore?.category){
-  //     const idCat = oneProjectStore?.category._id || project.category._id
-  //     optConditions.map((cond, index:number) => {
-  //       //console.log('condicion ', cond.value, 'value ', project.condition[project.condition.length - 1].glossary._id);
-  //       if(cond.value === idCat){
-  //         indexCond = index;
-  //         setCondition(cond.value);
-  //       }
-  //     });
-  //   }else{
-  //     setCondition(optConditions[0].value);
-  //   }
-  //   setShowConditions(<div>
-  //                       <Label htmlFor="condition"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condicion</p></Label>
-  //                       <SelectReact index={indexCond} opts={optConditions} setValue={handleCondition} />
-  //                     </div>)
-  // }, []);
-
-
-  //console.log('proyect data => ', project);
   const formik = useFormik({
     initialValues: {
       name: oneProjectStore?.title || project.title,
@@ -107,14 +72,13 @@ export default function DataBasic({token, id, project, optConditions, user}:
             const res = await UpdateProject(token, id, data);
             if(typeof(res)!=='string'){
               refRequest.current = true;
-              console.log('cat res => ', res.condition);
               const r = ParseProjectToOneProjectMin(res);
-              console.log('r cat => ', r.category);
-              updateOneProjectStore(r);
-              showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
+              if(typeof(r)==='string'){
+                showToastMessageError(r);
+              }else{
+                updateOneProjectStore(r);
+                showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
+              }
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -135,11 +99,12 @@ export default function DataBasic({token, id, project, optConditions, user}:
             if(typeof(res)!=='string'){
               refRequest.current = true;
               const r = ParseProjectToOneProjectMin(res);
-              updateOneProjectStore(r);
-              showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
+              if(typeof(r)==='string'){
+                showToastMessageError(r);
+              }else{
+                updateOneProjectStore(r);
+                showToastMessage('El proyecto ha sido actulizado satisfactoriamente!!');
+              }
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -156,32 +121,24 @@ export default function DataBasic({token, id, project, optConditions, user}:
   });
 
   const UpdateCondition = async () => {
-    //if(refRequest.current){
-      //refRequest.current = false;
-      const data = {
-        condition: [
-          {
-            glossary: condition,
-            user
-          }
-        ]
-      }
-      try {
-        const res = await InsertConditionInProject(token, oneProjectStore?._id || project._id, data);
-        if(res === 200){
-          //refRequest.current = true;
-          showToastMessage('Condicion del proyecto actualizada satisfactoriamente!!');
-        }else{
-          //refRequest.current = true;
-          showToastMessageError(res);
+    const data = {
+      condition: [
+        {
+          glossary: condition,
+          user
         }
-      } catch (error) {
-        //refRequest.current = true;
-        showToastMessageError('Error al actualizar condicion del proyecto!!!');
+      ]
+    }
+    try {
+      const res = await InsertConditionInProject(token, oneProjectStore?._id || project._id, data);
+      if(res === 200){
+        showToastMessage('Condicion del proyecto actualizada satisfactoriamente!!');
+      }else{
+        showToastMessageError(res);
       }
-    // }else{
-    //   showToastMessageError('Ya hay una peticion en proceso..!!!');
-    // }
+    } catch (error) {
+      showToastMessageError('Error al actualizar condicion del proyecto!!!');
+    }
   }
 
   return(

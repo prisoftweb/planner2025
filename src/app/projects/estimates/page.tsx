@@ -3,9 +3,9 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
-import { getActiveProjectsMin } from "@/app/api/routeProjects";
-import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
+import { ProjectsTable, IProjectWithEstimateMin } from "@/interfaces/Projects";
+import { getProjectsWithEstimatesMin } from "@/app/api/routeProjects";
+import { ProjectEstimateDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";
 import { Options } from "@/interfaces/Common";
 
@@ -14,21 +14,28 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: ProjectMin[];
-  try {
-    projects = await getActiveProjectsMin(token);
-    if(typeof(projects)==='string') return <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-  } catch (error) {
-    return <h1>Error al consultar los proyectos!!</h1>
-  }
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
-  }
+  let projects: IProjectWithEstimateMin[] = await getProjectsWithEstimatesMin(token);
+  let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  
+  if(typeof(projects)==='string') 
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+        </div>
+      </>
+    )
+  
+  if(typeof(catalogs)==='string') 
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </div>
+      </>
+    )
 
   const optCategories: Options[] = [{
     label: 'Todas',
@@ -78,17 +85,13 @@ export default async function Page(){
     })
   })
 
-  const table: ProjectsTable[] = ProjectDataToTableDataMin(projects);
+  const table: ProjectsTable[] = ProjectEstimateDataToTableDataMin(projects);
   
   return(
     <>
       <Navigation user={user} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
-        optTypes={optTypes} projects={projects} token={token} user={user} />
-      {/* <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
-        optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
-        condition={condition} /> */}
+        optTypes={optTypes} projectsParam={projects} token={token} user={user} />
     </>
   )
 }

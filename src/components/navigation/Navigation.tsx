@@ -1,6 +1,6 @@
 'use client'
 
-import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, StarIcon, ArrowRightStartOnRectangleIcon } 
+import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, ArrowRightStartOnRectangleIcon } 
   from "@heroicons/react/24/solid"
 import { MdPassword } from "react-icons/md";
   import Image from "next/image"
@@ -26,7 +26,10 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   let photo='/img/default.jpg', role='', id='';
-  
+  //carmen
+  // photo="https://docs-adminweb.s3.amazonaws.com/user-65d3836974045152c0c4378c-1736450268582.jpeg";
+  //prisco
+  // photo="https://docs-adminweb.s3.us-east-1.amazonaws.com/user-1708360552272.jpeg";
   if(user.photo){
     photo = user.photo;
   }
@@ -36,11 +39,8 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   role = user.rol?.name || '';
-  //console.log('role ', role);
-  //console.log('user role ', user.rol);
-
+  
   const ref = useOutsideClick(() => {
-    //console.log('Clicked outside of MyComponent');
     if(isOpenP){
       setIsOpenP(false);
     }
@@ -49,13 +49,12 @@ export default function Navigation({user}: {user:UsrBack}){
   const router = useRouter();
   
   function logOut(){
-    //console.log('logout ');
     RemoveCookies();
     router.push('/login');
   }
 
   const firstName = user.name.substring(0, user.name.indexOf(' '));
-  
+  console.log('photo => ', photo);
   return(
     <>
       <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2">
@@ -138,17 +137,24 @@ const NavItems = ({role}: {role:string}) => {
   if(role.toLowerCase().includes('residente')){
     return(
       <>
+        <NavItem name="Proyectos" link="/projects" items={[]}/>
         <NavItem name="Costos" link="" items={[
             {
               name: 'Gastos',
               link: '/expenses'
             },
             {
-              name: 'Historial gastos',
+              name: 'En proceso',
+              link: '/expenses/pending'
+            },
+            {
+              name: 'Historial',
               link: '/expenses/history'
             },
-          ]} 
+          ]}
         />
+        <NavItem name="Cotizaciones" link="/quotations" items={[]} />
+        <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
         <NavItem name="Informes" link="" items={[
             {
               name: 'Informes',
@@ -203,7 +209,6 @@ const NavItems = ({role}: {role:string}) => {
         },
       ]}/>
       <NavItem name="Clientes" link="/clients" items={[]}/>
-      {/* <NavItem name="Roles" link="/roles/role" items={[]}/> */}
       <NavItem name="Proyectos" link="" items={[
         {
           name: 'Proyectos',
@@ -221,11 +226,31 @@ const NavItems = ({role}: {role:string}) => {
           name: 'Dashboard',
           link: '/projects/dashboard'
         },
-        {
-          name: 'Estimaciones',
-          link: '/projects/estimates'
-        },
       ]}/>
+      <NavItem name="Cotizaciones" link="/quotations" items={[]}/>
+      <NavItem name="Estimaciones" link="" items={[
+          {
+            name: 'Por proyecto',
+            link: '/projects/estimates'
+          },
+          {
+            name: 'activas',
+            link: '/projects/estimates/withoutinvoice'
+          },
+          {
+            name: 'Historial',
+            link: '/projects/estimates/history'
+          },
+          {
+            name: 'Facturas',
+            link: '/invoices'
+          },
+          {
+            name: 'Cobros',
+            link: '/collections'
+          },
+        ]}
+      />
       <NavItem name="Costos" link="" items={[
           {
             name: 'Centro de costos',
@@ -234,6 +259,10 @@ const NavItems = ({role}: {role:string}) => {
           {
             name: 'Gastos',
             link: '/expenses'
+          },
+          {
+            name: 'En proceso',
+            link: '/expenses/pending'
           },
           {
             name: 'Historial',
@@ -281,14 +310,6 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Catalogos',
             link: '/status'
           },
-          // {
-          //   name: 'Centro de costos',
-          //   link: '/costcenter'
-          // },
-          // {
-          //   name: 'Gastos',
-          //   link: '/expenses'
-          // },
         ]} 
       />
       <NavItem name="Workflow" link="" items={[

@@ -19,52 +19,100 @@ export default async function page() {
   try {
     totalCost = await getAllCostsTOTALGroupByPROVIDERTRADELINE(token);
     if(typeof(totalCost)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener total de los costos por proveedor!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">Error al obtener total de los costos por proveedor!!</h1>
+      </>
+    )
   }
 
   let providersTradeLine: ProviderWithTradeLine[] = [];
   try {
     providersTradeLine = await getAllProvidersWithTradeLine(token);
     if(typeof(providersTradeLine)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener proveedores con linea de credito!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">Error al obtener proveedores con linea de credito!!</h1>
+      </>
+    )
   }
 
   let costsProviderWithTradeLine: CostsByProvider[] = [];
   try {
     costsProviderWithTradeLine = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true');
-    console.log('costs linea de credito => ', costsProviderWithTradeLine);
     if(typeof(costsProviderWithTradeLine)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+      </>
+    )
   }
 
   let costsProvider: CostsByProvider[] = [];
   try {
     costsProvider = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false');
-    console.log('all costs provider => ', costsProvider);
     if(typeof(costsProvider)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">Error al obtener costos por proveedor con linea de credito!!</h1>
+      </>
+    )
   }
 
   let totalPayments: TotalPayments[] = [];
   try {
     totalPayments = await getTotalPayments(token);
     if(typeof(totalPayments)==='string'){
-      return <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1>
+        </>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Error al obtener total de pagos de proveedores!!</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">Error al obtener total de pagos de proveedores!!</h1>
+      </>
+    )
   }
 
   const data = ProvidersDataToTableData(providersTradeLine);

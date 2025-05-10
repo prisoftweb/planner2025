@@ -20,24 +20,49 @@ export default async function Page({ params }: { params: { id: string }}){
   try {
     provider = await getProvider(params.id, token);
     if(typeof(provider) === "string")
-      return <h1 className="text-center text-red-500">{provider}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{provider}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+      </>
+    )
   }
 
   let providers: Provider[];
   try {
     providers = await getProviders(token);
     if(typeof(providers) === "string")
-      return <h1 className="text-center text-red-500">{providers}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{providers}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+      </>
+    )
   }
 
   let options: Options[] = [];
 
   if(providers.length <= 0){
-    return <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
+      </>
+    )
   }
 
   providers.map((prov: any) => {

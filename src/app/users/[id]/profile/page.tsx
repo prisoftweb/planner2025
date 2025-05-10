@@ -4,7 +4,6 @@ import Navigation from "@/components/navigation/Navigation";
 import { getUser, getUsers } from "@/app/api/routeUser";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
-//import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import HeaderImage from "@/components/HeaderImage";
 
@@ -14,25 +13,43 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  //const userLog: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
   let user;
   let users;
 
   try {
     user = await getUser(params.id, token);
     if(typeof(user) === "string")
-      return <h1 className="text-center text-red-500">{user}</h1>
+      return(
+        <>
+          {/* <Navigation user={user} /> */}
+          <h1 className="text-center text-red-500">{user}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>
+      </>
+    ) 
   }
 
   try {
     users = await getUsers(token);
     if(typeof(users) === "string")
-      return <h1 className="text-center text-red-500">{users}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-red-500">{users}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>  
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>
+      </>
+    )
   }
 
   const photo=user.photo
@@ -54,7 +71,6 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      {/* <Navigation user={userLog} /> */}
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >

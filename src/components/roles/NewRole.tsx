@@ -7,16 +7,13 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-//import { useRouter } from "next/navigation"
 import { createRole } from "@/app/api/routeRoles"
 import { useState, useEffect, useRef } from "react"
 import { getTrees } from "@/app/api/routeRoles"
-//import TextArea from "../TextArea"
 
 export default function NewRole({showForm, token}: 
-                    {showForm:Function, token:string}){
+  {showForm:Function, token:string}){
   
-  //const router = useRouter();
   const refRequest = useRef(true);
 
   const [idTree, setIdTree] = useState<string>('');
@@ -105,11 +102,6 @@ export default function NewRole({showForm, token}:
             value={formik.values.description}
             rows={4}
           />
-          {/* <TextArea name="description"
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.description}
-          /> */}
           {formik.touched.description && formik.errors.description ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
               <p>{formik.errors.description}</p>

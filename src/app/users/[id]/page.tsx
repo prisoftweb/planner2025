@@ -23,17 +23,37 @@ export default async function Page({ params, searchParams }:
   try {
     user = await getUser(params.id, token);
     if(typeof(user) === "string")
-      return <h1 className="text-center text-red-500">{user}</h1>
+      return(
+        <>
+          <Navigation user={userLog} />
+          <h1 className="text-center text-red-500">{user}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>  
+    return(
+      <>
+        <Navigation user={userLog} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>
+      </>
+    )
   }
 
   try {
     users = await getUsers(token);
     if(typeof(users) === "string")
-      return <h1 className="text-center text-red-500">{users}</h1>
+      return(
+        <>
+          <Navigation user={userLog} />
+          <h1 className="text-center text-red-500">{users}</h1>
+        </>
+      )
   } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>  
+    return(
+      <>
+        <Navigation user={userLog} />
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>
+      </>
+    ) 
   }
 
   const photo=user.photo
@@ -67,10 +87,8 @@ export default async function Page({ params, searchParams }:
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center">
             <ArrowReturn link="/users" />
-            {/* <Link href={'/users'}><ArrowLeftIcon className="w-8 h-8 text-slate-500" /></Link> */}
             <Image 
               src={photo? photo: '/img/default.jpg'}
-              //src={'/img/default.jpg'}
               alt="profile"
               width={50}
               height={50}

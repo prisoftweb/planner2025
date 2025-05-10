@@ -53,9 +53,6 @@ export default function ContactsStepper({id, token, user}: {id:string, token:str
             showToastMessage(res.message);
             updateProviderStore([...providerStore, res.prov]);
             updateHaveNewProvider(true);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res.message);
@@ -90,13 +87,6 @@ export default function ContactsStepper({id, token, user}: {id:string, token:str
         <div className="mx-5">
           <BasicBarStepper index={2} />
         </div>
-        {/* <button type="button" 
-          onClick={onClickSave}
-          className="border w-40 h-10 bg-black text-white border-slate-900 rounded-full 
-              hover:bg-slate-600"
-        >
-          Guardar
-        </button> */}
         <FormContact addNewContact={newContact} token={token} contact={''} 
             updateContact={updateContact} >
           <button type="button" 

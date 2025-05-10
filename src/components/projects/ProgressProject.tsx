@@ -10,8 +10,7 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 
 export default function ProgressProject({token, id, project, user}: 
-                                  {token:string, id:string, 
-                                    project:OneProjectMin, user:string}){
+  {token:string, id:string, project:OneProjectMin, user:string}){
   
   const [notes, setNotes] = useState<string>('');
   const [progress, setProgress] = useState<number>(project.progress || 0);

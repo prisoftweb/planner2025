@@ -8,7 +8,6 @@ import Button from "../Button";
 import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { useState, useRef, useEffect } from "react";
-//import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
 import { OneExpense } from "@/interfaces/Expenses"
 import { UpdateCost, GetVatsLV } from "@/app/api/routeCost"
@@ -19,19 +18,15 @@ import { CostoCenterLV } from "@/interfaces/CostCenter";
 import { getCostoCentersLV } from "@/app/api/routeCostCenter";
 
 export default function UpdateExpense({token, id, expense, isticket, isHistory}: 
-                                  {token:string, id:string, expense:OneExpense, 
-                                    isticket:boolean, isHistory: boolean}){
+  {token:string, id:string, expense:OneExpense, isticket:boolean, isHistory: boolean}){
 
   const {currentExpense, updateCurrentExpense} = useNewExpense();
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
                               typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?._id || ''
                               : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?._id || '');
-  //console.log('expense date => ', expense.date);
-  //console.log('expense ?? => ', expense);
   const [startDate, setStartDate] = 
           useState<string>(currentExpense? currentExpense.date.substring(0, 10): expense.date.substring(0, 10));
-  //const [viewCC, setViewCC] = useState<JSX.Element>(<></>);
   const [concept, setConcept] = useState<string>(currentExpense? 
                     typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id || ''
                     : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.concept._id || '');
@@ -43,7 +38,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const [idVat, setIdVat] = useState<string>('');
   const [vatValue, setVatValue] = useState(currentExpense? currentExpense.cost.iva.toString(): expense.cost.iva.toString());
   const [totalExpense, setTotalExpense] = useState<string>(currentExpense? currentExpense.cost?.total?.toString() || '0': expense.cost?.total?.toString() || '0');
-  // const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(false);
   const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(currentExpense? currentExpense.cost?.exempttax? true: false :
                                                 expense.cost?.exempttax? true: false);
   const [haveDiscount, setHaveDiscount] = useState<boolean>(currentExpense? currentExpense.cost?.discount? true: false :
@@ -79,17 +73,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
         });
       });
       
-      // let indexVat = 0;
-      // if(currentExpense){
-      //   indexVat = optVatts.findIndex((ivat) => currentExpense.cost?.iva === Number(ivat.label));
-      //   // console.log('current expense => ', currentExpense.cost.iva);
-      //   // console.log('opt vats => ', optVatts);
-      // }else{
-      //   indexVat = optVatts.findIndex((ivat) => expense.cost?.iva == Number(ivat.label));
-      //   // console.log('expense => ', expense.cost.iva);
-      //   // console.log('opt vats => ', optVatts);
-      // }
-
       setOptCostCenter(optCC);
       setOptVats(optVatts);
       setIdVat(optVatts[0].value);
@@ -97,20 +80,12 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
     fetchCostCenters();
   }, []);
 
-  //const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter);
-  // console.log('cost center ue => ', costcenter);
-  // console.log('options cc ue => ', optCostCenter);
-  // console.log('index cc ue => ', optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept));
   const indexCC = optCostCenter.findIndex((cc) => cc.value === costcenter+'/'+concept);
 
   const handleCostCenter = (value: string) => {
-    console.log('value costoc => ', value);
     const indexCaracter = value.indexOf('/');
     const c1 = value.substring(0, indexCaracter);
     const c2 = value.substring(indexCaracter + 1);
-    //console.log('cad 1 => ', c1);
-    //console.log('cad 2 => ', c2);
-    //updateCostCenter(c1, c2);
     setCostCenter(c1);
     setConcept(c2);
   }
@@ -163,18 +138,12 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               exempttax: taxExempt.replace(/[$,]/g, ""),
               total: totalExpense.replace(/[$,]/g, ""),
             }}
-            //console.log('send data => ', JSON.stringify(data));
-            //console.log('id vat => ', idVat);
         try {
-          console.log('update expense => ', JSON.stringify(data));
           const res = await UpdateCost(token, id, data);
           if(typeof(res) !== 'string'){
             refRequest.current = true;
             showToastMessage('Costo actualizado exitosamente!!!');
             updateCurrentExpense(res);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 500);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
@@ -189,89 +158,10 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
     },       
   });
 
-  // useEffect(() => {
-  //   let indexCC = 0;
-  //   if(expense.costcenter){
-  //     //console.log('expense cc ', expense.costcenter);
-  //     optCostCenter.map((optCC, index:number) => {
-  //       if(typeof(expense.costcenter)==='string'){
-  //         if(optCC.value===expense.costcenter){
-  //           //alert('aquiii');
-  //           setCostCenter(optCostCenter[index].value);
-  //           indexCC = index;
-  //         }
-  //       }else{
-  //         if(optCC.value===expense.costcenter.categorys[0]._id){
-  //           //alert('aquiii');
-  //           setCostCenter(optCostCenter[index].value);
-  //           indexCC = index;
-  //         }
-  //       }
-  //     });
-  //   }
-  //   setViewCC(<></>);
-  //   setTimeout(() => {
-  //     setViewCC(<div className=" col-span-1 sm:col-span-2">
-  //               <Label htmlFor="costcenter"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Centro de costos</p></Label>
-  //               <SelectReact index={indexCC} opts={optCostCenter} setValue={setCostCenter} />
-  //             </div>);
-  //   }, 50);
-  //   setCostCenter(optCostCenter[indexCC].value);
-  // }, []);
-
-  // useEffect(() => {
-  //   if(currentExpense){
-  //     formik.values.amount = currentExpense.cost.subtotal.toString(),
-  //     formik.values.folio = currentExpense.folio;
-  //     formik.values.taxFolio= currentExpense.taxfolio,
-  //     formik.values.vat= currentExpense.cost.iva.toString(),
-  //     formik.values.discount= currentExpense.cost.discount? currentExpense.cost.discount.toString(): '0' ;
-  //     formik.values.description= currentExpense.description;
-  //     setCostCenter(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.category._id || ''); 
-  //     setStartDate(currentExpense.date.substring(0, 10));
-  //     setConcept(typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id)
-  //     setIsCard(currentExpense.iscard);
-  //   }
-  // }, [currentExpense]);
-
   const handleIdVat = (value: string) => {
     updateIva(value);
     setIdVat(value);
   };
-
-  // let vatValue = '0';
-  // try {
-  //   const foundVat = optVats.find((vat) => vat.value === idVat);
-  //   const vatvalue = foundVat?.label || '0';
-  //   const operation = 
-  //     (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-  //       Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-  //   formik.values.vat = operation.toFixed(2).toString();
-  //   vatValue = operation.toFixed(2).toString();
-  //   //setVatValue(operation.toFixed(2).toString());
-  // } catch (error) {
-  //   vatValue = '0';
-  //   formik.values.vat = '0';
-  // }
-
-  // const updateIva = (idvat: string) => {
-  //   try {
-  //     const foundVat = optVats.find((vat) => vat.value === idvat);
-  //     const vatvalue = foundVat?.label || '0';
-  //     const operation = 
-  //       (Number(formik.values.amount.replace(/[$,]/g, "")) - 
-  //         Number(formik.values.discount.replace(/[$,]/g, ""))) * Number(vatvalue) / 100;
-  //     formik.values.vat = operation.toFixed(2).toString();
-  //     //vatValue = operation.toFixed(2).toString();
-  //     setVatValue(operation.toFixed(2).toString());
-  //     //setCurrentVat(operation);
-  //     //setVatValue(operation.toFixed(2).toString());
-  //   } catch (error) {
-  //     //vatValue = '0';
-  //     setVatValue('0');
-  //     formik.values.vat = '0';
-  //   }
-  // }
 
   const updateIva = (idvat: string) => {
     try {
@@ -325,28 +215,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const updateTotal = (valueIva: string) => {
     try {
       let t = 0;
-      // if(haveDiscount && haveTaxExempt){
-      //   t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-      //         Number(formik.values.discount.replace(/[$,]/g, "")) -
-      //         Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-      //         Number(valueIva.replace(/[$,]/g, ""));
-      // }else{
-      //   if(haveDiscount){
-      //     t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-      //           Number(formik.values.discount.replace(/[$,]/g, "")) +
-      //           Number(valueIva.replace(/[$,]/g, ""));
-      //   }else{
-      //     if(haveTaxExempt){
-      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) -
-      //             Number(formik.values.taxExempt.replace(/[$,]/g, "")) +
-      //             Number(valueIva.replace(/[$,]/g, ""));
-      //     }else{
-      //       t = Number(formik.values.amount.replace(/[$,]/g, "")) + 
-      //             Number(valueIva.replace(/[$,]/g, ""));
-      //     }
-      //   }
-      // }
-
+      
       if(haveDiscount){
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
               Number(formik.values.discount.replace(/[$,]/g, "")) +
@@ -354,17 +223,12 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
       }else{
         t = Number(formik.values.amount.replace(/[$,]/g, "")) +
               Number(valueIva.replace(/[$,]/g, ""));
-              //console.log('importe => ', formik.values.amount.replace(/[$,]/g, ""));
-              //console.log('value iva => ', valueIva.replace(/[$,]/g, ""));
       }
-      //console.log('total calculado  => ', t.toFixed(2).toString());
       setTotalExpense(t.toFixed(2).toString());
     } catch (error) {
       setTotalExpense('0');
     }
   }
-
-  //console.log('total render => ', totalExpense);
 
   let viewTotal: JSX.Element = <></>;
   viewTotal = (
@@ -373,19 +237,13 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
       name="total"
       className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white
         focus:border-slate-700 outline-0"
-      //onChange={formik.handleChange}
-      //onBlur={formik.handleChange}
-      //value={formik.values.amount.replace(/[$,]/g, "")}
       value={totalExpense.replace(/[$,]/g, "")}
       decimalsLimit={2}
       prefix="$"
       disabled={isHistory}
       onValueChange={(value) => {try {
-        //console.log('value amount data stepper => ', value);
-        //formik.values.amount=value || '0';
         setTotalExpense(value || '0');
       } catch (error) {
-        //formik.values.amount='0';
         setTotalExpense('0');
       }}}
     />
@@ -499,15 +357,11 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
           <CurrencyInput
             id="amount"
             name="amount"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
-            //   focus:border-slate-700 outline-0"
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
               focus:border-slate-700 outline-0"
-            //value={formik.values.amount}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             disabled={isHistory}
-            //placeholder="Please enter a number"
             defaultValue={currentExpense?.cost.subtotal || expense?.cost.subtotal || 0}
             decimalsLimit={2}
             prefix="$"
@@ -530,29 +384,20 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             <CurrencyInput
               id="discount"
               name="discount"
-              // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
-              //   focus:border-slate-700 outline-0"
               className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                 focus:border-slate-700 outline-0"
-              //value={formik.values.discount}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
-              //placeholder="Please enter a number"
-              //defaultValue={currentExpense?.cost.discount || 0}
               defaultValue={currentExpense?.cost.discount || expense?.cost.discount || 0}
               decimalsLimit={2}
               disabled={isHistory}
               prefix="$"
               onValueChange={(value) => {try {
-                //console.log('value input => ', value);
-                //console.log('formik value => ', formik.values.discount);
-                //updateIva(idVat);
                 handleIdVat(idVat);
                 formik.values.discount=(value || '0');
               } catch (error) {
                 formik.values.discount='0';
               }}}
-              // onValueChange={(value, name, values) => {console.log(value, name, values); formik.values.amount=value || ''}}
             />
             {formik.touched.discount && formik.errors.discount ? (
                 <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -567,14 +412,10 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             <CurrencyInput
               id="taxExemptt"
               name="taxExemptt"
-              // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              //   focus:border-slate-700 outline-0"
               className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
                 focus:border-slate-700 outline-0"
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
-              //defaultValue={0}
-              //defaultValue={discount}
               value={formik.values.taxExempt.replace(/[$,]/g, "") || 0}
               decimalsLimit={2}
               prefix="$"
@@ -610,7 +451,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               decimalsLimit={2}
               disabled={isHistory}
               value={vatValue}
-              //defaultValue={currentExpense?.cost.iva || expense?.cost.iva || 0}
               prefix="$"
               onValueChange={(value) => {try {
                 formik.values.vat=value || '0';
@@ -627,7 +467,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
                 </div>
             ) : null}
             {optVats.length > 0 && (
-              // <SelectReact index={Number(idVat)} opts={optVats} setValue={handleIdVat} />
               <SelectReact index={0} opts={optVats} setValue={handleIdVat} />
             )}
           </div>
@@ -639,8 +478,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
         <div className=" col-span-1 sm:col-span-3">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-            // focus:border-slate-700 outline-0 overflow-hidden resize-none"
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
               focus:border-slate-700 outline-0 overflow-hidden resize-none"
             rows={4}

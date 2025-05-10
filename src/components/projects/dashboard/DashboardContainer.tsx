@@ -20,7 +20,7 @@ import { getDashboardProjectsAmount, getDashboardListProjects,
   getProjectsControlBudgeted, getProjectsSpent } 
 from "@/app/api/routeProjects";
 
-import { ProjectsByClient, ListProjects, ProjectsByProgress, 
+import { ProjectsByClient, ProjectsByProgress, 
   ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
   CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
   ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted, DonutChartJS, Dataset } 
@@ -32,7 +32,6 @@ interface OptionsDashboard {
 }
 
 export interface DataProjectsByType {
-  //project: "PROVEEDOR" | "MANO DE OBRA" | "OTROS"
   project: string
   issues: Issue[]
 }
@@ -63,17 +62,29 @@ function transformProjectsTypesToDataChart(dataProjects: CostsByProjectAndType[]
   return res;
 }
 
+type Params = {
+  token: string, 
+  amountProjects: TotalAmountProjects[], 
+  listProjects: ListProjectsByDate[], 
+  projectsClient: ProjectsByClient[], 
+  projectsSegment: ProjectsBySegment[], 
+  projectsStatus: ProjectsByStatus[], 
+  projectsProgress: ProjectsByProgress[], 
+  listProjectsnotCompleted: ProjectsNotCompleted[], 
+  projectsandTypes: CostsByProjectAndType[], 
+  projectsTop10: ProjectsTop10[], 
+  projectsTotalCost: DashboardTotalCost[], 
+  configMin: ConfigMin[], 
+  projectsBudgeted: ControlBudgeted[], 
+  projectsSpent: ControlBudgeted[], 
+  projectsControlBudgeted: ControlBudgeted[], 
+  projects:Options[] 
+}
+
 export default function DashBoardContainer({token, amountProjects, listProjects, projectsTop10, projectsTotalCost, 
     projectsClient, projectsProgress, projectsSegment, projectsStatus, listProjectsnotCompleted, 
-    projectsandTypes, configMin, projectsBudgeted, projectsControlBudgeted, projectsSpent, projects }:
-  {token: string, amountProjects: TotalAmountProjects[], listProjects: ListProjectsByDate[], 
-    projectsClient: ProjectsByClient[], projectsSegment: ProjectsBySegment[], projectsStatus: ProjectsByStatus[], 
-    projectsProgress: ProjectsByProgress[], listProjectsnotCompleted: ProjectsNotCompleted[], 
-    projectsandTypes: CostsByProjectAndType[], projectsTop10: ProjectsTop10[], 
-    projectsTotalCost: DashboardTotalCost[], configMin: ConfigMin[], projectsBudgeted: ControlBudgeted[], 
-    projectsSpent: ControlBudgeted[], projectsControlBudgeted: ControlBudgeted[], projects:Options[] }) {
+    projectsandTypes, configMin, projectsBudgeted, projectsControlBudgeted, projectsSpent, projects }: Params) {
   
-  // const [dataProjectsStatus, setDataProjectsStatus] = useState<OptionsDashboard[]>([]);
   const [stateListProjects, setStateListProjects] = useState<ListProjectsByDate[]>(listProjects);
   const [stateProjectsClient, setStateProjectsClient] = useState<ProjectsByClient[]>(projectsClient);
   const [stateProjectsSegment, setStateProjectsSegment] = useState<ProjectsBySegment[]>(projectsSegment);
@@ -92,16 +103,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
     let amountPrjs: TotalAmountProjects[] = [];
     
-    // let listPrjs: ListProjects[] = [];
-    // try {
-    //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
-    //   if(typeof(listPrjs)==='string'){
-    //     return <h1>{listPrjs}</h1>
-    //   }
-    // } catch (error) {
-    //   return <h1>Error al obtener lista de proyectos!!!</h1>
-    // }
-
     let listPrjsDate: ListProjectsByDate[] = [];
     
     let prjsClient: ProjectsByClient[] = [];
@@ -131,23 +132,12 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     if(prj.includes('all')){
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
-        // console.log('amountPrjs => => ', amountPrjs);
         if(typeof(amountPrjs)==='string'){
           showToastMessageError(amountPrjs);
         }
       } catch (error) {
         showToastMessageError('Error al obtener monto total de proyectos!!!');
       }
-
-      // let listPrjs: ListProjects[] = [];
-      // try {
-      //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
-      //   if(typeof(listPrjs)==='string'){
-      //     return <h1>{listPrjs}</h1>
-      //   }
-      // } catch (error) {
-      //   return <h1>Error al obtener lista de proyectos!!!</h1>
-      // }
 
       try {
         listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
@@ -268,23 +258,12 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     }else{
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
-        // console.log('amountPrjs => ', amountPrjs);
         if(typeof(amountPrjs)==='string'){
           showToastMessageError(amountPrjs);
         }
       } catch (error) {
         showToastMessageError('Error al obtener monto total de proyectos!!!');
       }
-
-      // let listPrjs: ListProjects[] = [];
-      // try {
-      //   listPrjs = await getDashboardListProjects(token, dateS, dateE);
-      //   if(typeof(listPrjs)==='string'){
-      //     return <h1>{listPrjs}</h1>
-      //   }
-      // } catch (error) {
-      //   return <h1>Error al obtener lista de proyectos!!!</h1>
-      // }
 
       try {
         listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
@@ -402,54 +381,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       } catch (error) {
         showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
       }
-      // let auxPrjProgress = prjsProgress.filter((p) => !prj.includes(p.title));
-      
-      // console.log('prjs progress => ', prjsProgress);
-      // console.log('aux prjs progress => ', auxPrjProgress);
-      // console.log('type data => ', prjsProgress[0]);
-      
-      // let auxListPrj = listPrjsDate.filter((p) => !prj.includes(p._id));
-      // let auxPrjCli = prjsClient.filter((p) => !prj.includes(p.client));
-      // let auxPrjSeg = prjsSegment.filter((p) => !prj.includes(p.client));
-      // // let auxTotalAmount = amountPrjs.filter((p) => !prj.includes(p.));
-      // let auxPrjStatus = prjStatus.filter((p) => !prj.includes(p.client));
-      // let auxPrjNotCompleted = listProjectsnotCompleted.filter((p) => !prj.includes(p._id));
-      // let auxPrjAntTypes = prjandTypes.filter((p) => !prj.includes(p.project));
-      // let auxPrjTop10 = prjsTop10.filter((p) => !prj.includes(p._id));
-      // let auxPrjSpent = prjsSpent.filter((p) => !prj.includes(p.id));
-      // let auxPrjCtrBud = prjsControlBudgeted.filter((p) => !prj.includes(p.id));
-      // let auxBud = prjsBudgeted.filter((p) => !prj.includes(p.id));
-
-      // // setStateListProjects(listPrjsDate);
-      // setStateListProjects(auxListPrj);
-      // // setStateProjectsClient(prjsClient);
-      // setStateProjectsClient(auxPrjCli);
-      // // setStateProjectsSegment(prjsSegment);
-      // setStateProjectsSegment(auxPrjSeg);
-      // setTotalAmount(amountPrjs);
-      // // setStateProjectsStatus(prjStatus);
-      // setStateProjectsStatus(auxPrjStatus);
-      // // setStateProjectsProgress(prjsProgress);
-      // setStateProjectsProgress(auxPrjProgress);
-      // // setStateProjectsNotCompleted(listprjnotCompleted);
-      // setStateProjectsNotCompleted(auxPrjNotCompleted);
-      // // setStateProjectsAndType(prjandTypes);
-      // setStateProjectsAndType(auxPrjAntTypes);
-      // // setStateProjectsTop10(prjsTop10);
-      // setStateProjectsTop10(auxPrjTop10);
-      // setStateTotalCost(totalCost);
-      // setStateConfiMin(confMin);
-      // // setStateProjectsSpent(prjsSpent);
-      // setStateProjectsSpent(auxPrjSpent);
-      // // setStateProjectsControlBudgeted(prjsControlBudgeted);
-      // setStateProjectsControlBudgeted(auxPrjCtrBud);
-      // // setStateProjectsBudgeted(prjsBudgeted);
-      // setStateProjectsBudgeted(auxBud);
     }
     setStateListProjects(listPrjsDate);
     setStateProjectsClient(prjsClient);
     setStateProjectsSegment(prjsSegment);
-    // console.log('amount prjs => ', amountPrjs);
     setTotalAmount(amountPrjs);
     setStateProjectsStatus(prjStatus);
     setStateProjectsProgress(prjsProgress);
@@ -463,7 +398,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     setStateProjectsBudgeted(prjsBudgeted);
   }
 
-  // const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   const colorsBudgeted = ['green', 'red', 'blue'];
 
@@ -500,9 +434,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
   const values: number[] = [];
   const titles: string[] = [];
-  const colorsDonutClientChart: string[] = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)',
-    'rgb(255, 205, 86)', 'rgb(255, 132, 99)', 'rgb(54, 235, 162)', 'rgb(255, 86, 205)',
-    'rgb(132, 99, 255)', 'rgb(235, 162, 54)', 'rgb(86, 205, 255)']
+  // const colorsDonutClientChart: string[] = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)',
+  //   'rgb(255, 205, 86)', 'rgb(255, 132, 99)', 'rgb(54, 235, 162)', 'rgb(255, 86, 205)',
+  //   'rgb(132, 99, 255)', 'rgb(235, 162, 54)', 'rgb(86, 205, 255)']
   
   stateProjectsClient.map((prj) => {
     titles.push(prj.client);
@@ -516,19 +450,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         label: 'Projectos por cliente',
         data: values,
         backgroundColor:[ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'],
-        // backgroundColor: [
-        //   'rgb(255, 99, 132)',
-        //   'rgb(54, 162, 235)',
-        //   'rgb(255, 205, 86)',
-
-        //   'rgb(255, 132, 99)',
-        //   'rgb(54, 235, 162)',
-        //   'rgb(255, 86, 205)',
-
-        //   'rgb(132, 99, 255)',
-        //   'rgb(235, 162, 54)',
-        //   'rgb(86, 205, 255)'
-        // ],
         hoverOffset: 4
       }
     ]
@@ -538,7 +459,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   
   stateProjectsProgress.map((prj) => {
     dataProjectsProgress.push({
-      //costo: prj.porcentage,
       costo: prj.progress?? 0,
       label: prj.title
     });
@@ -582,9 +502,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   });
 
   let dataControlBudgeted: DataControlBudgeted[] = [];
-  console.log('state projetcs budgeted => ', stateProjectsBudgeted);
-  console.log('state Projects control budjeted => ', stateProjectscontrolBudgeted);
-  console.log('state projects spent => ', stateProjectsSpent);
   if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && stateProjectsBudgeted.length >= stateProjectsSpent.length){
     dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
   }else{
@@ -610,8 +527,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <HeaderDashboardPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
         projectsTotalCost={stateTotalCost} configMin={stateConfiMin} activeProjects={dataProjectsProgress.length} />
-      {/* <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
-        costsResumenType={costsByResumenType} /> */}
       <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
         <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
@@ -637,8 +552,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR SEGMENTO</p>
           </div>
-          {/* <DonutChartComponent data={dataProjectsSegment} colors={colors} category="costo"
-              categories={categoriesSegment}  /> */}
           <PieChartComponent data={dataProjectsSegment} colors={colorSegments} category="costo"
             categories={categoriesSegment}  />
         </div>
@@ -647,7 +560,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOTAL PROJECTS   | Montos de proyectos</p>
           </div>
-          {/* <BarChartComponent categories={['costo']} colors={colors} data={dataListProjects} /> */}
           <BarChartComponent categories={['costo']} colors={[colors[colorRandom]]} data={dataListProjects} />
         </div>
       </div>
@@ -668,22 +580,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
       </div>
 
-      {/* <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-5">
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>TOP 10 PROYECTOS</p>
-          </div>
-          <LineChartComponent dataProjectsTop={dataProjectsTop} colors={[colors[colorRandom2]]} />
-        </div>
-
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>PROYECTOS POR Cliente</p>
-          </div>
-          <NewDonutChartComponent data={dataProjectsClient} />
-        </div>
-      </div> */}
-      
       <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
         <div className="mb-3">
           <p>COSTO POR TIPO</p>
@@ -696,17 +592,12 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <p>CONTROL PRESUPUESTAL</p>
         </div>
         <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado']} colors={colorsBudgeted} data={dataControlBudgeted} />
-        {/* <BarChartTreeInOne data={resParse} /> */}
       </div>
-      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-        <BarChartComponent categories={['costo']} colors={colors} data={costsByDay} />
-      </div> */}
     </div>
   )
 }
 
 interface DataControlBudgeted {
-  //project: string,
   label: string,
   "Monto de obra": number,
   Presupuestado: number,
@@ -720,7 +611,6 @@ function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted:
     const prjS = prjSpent.find((pr) => pr.title === prj.title);
 
     res.push({
-      // project: prj.title,
       label: prj.title,
       "Monto de obra": prjCB?.total || 0,
       Gastado: prjS?.total || 0,
@@ -737,7 +627,6 @@ function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudget
     const prjS = prjSpent.find((pr) => pr.title === prj.title);
 
     res.push({
-      //project: prj.title,
       label: prj.title,
       "Monto de obra": prj.total,
       Gastado: prjS?.total || 0,
@@ -754,7 +643,6 @@ function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: Co
     const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
 
     res.push({
-      //project: prj.title,
       label: prj.title,
       "Monto de obra": prjCB?.total || 0,
       Gastado: prj.total,

@@ -63,9 +63,6 @@ export default function NewGlossary({showForm, token, glossary}:
               showToastMessage('Glosario agregado exitosamente!!');
               updateGlossariesStore([res, ...glossariesStore]);
               showForm(false);
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -85,9 +82,6 @@ export default function NewGlossary({showForm, token, glossary}:
               });
               updateGlossariesStore(arrGlo);
               showForm(false);
-              // setTimeout(() => {
-              //   window.location.reload();
-              // }, 500);
             }else{
               refRequest.current = true;
               showToastMessageError(res);
@@ -165,10 +159,6 @@ export default function NewGlossary({showForm, token, glossary}:
             />
           </div>
         </div>
-        {/* <div className="flex items-center gap-x-1" >
-          <div className="w-12 h-12" style={{backgroundColor:color}}></div>
-          Color seleccionado {color}
-        </div> */}
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>
         </div>

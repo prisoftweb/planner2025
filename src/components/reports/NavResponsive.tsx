@@ -6,7 +6,7 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { TbReportMoney } from "react-icons/tb";
 
 export default function NavResponsive({open, setOpen, option, changeOption}: 
-                {open:boolean, setOpen:Function, option:number, changeOption:Function}){
+  {open:boolean, setOpen:Function, option:number, changeOption:Function}){
 
   let props = {
     variants: {

@@ -7,11 +7,9 @@ import { UsrBack } from "@/interfaces/User";
 import { useEffect } from "react";
 
 export default function UsersConstext({departments, optionsRoles, token, users}: 
-                        {token:string, departments:Options[], 
-                          optionsRoles:Options[], users:UsrBack[]}){
+  {token:string, departments:Options[], optionsRoles:Options[], users:UsrBack[]}){
 
   const {setUsers} = useUserStore();
-  //setUsers(users);
   useEffect(() => {
     setUsers(users);
   }, []);

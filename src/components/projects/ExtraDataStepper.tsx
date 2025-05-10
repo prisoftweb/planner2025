@@ -1,5 +1,4 @@
 import Label from "../Label"
-import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
@@ -16,19 +15,27 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useProjectsStore } from "@/app/store/projectsStore";
 
+type Props = {
+  token:string, 
+  optClients:Options[], 
+  optCategories:Options[], 
+  optTypes:Options[], 
+  user:string, 
+  optCompanies: Options[]
+  condition: string, 
+  showForm:Function
+}
+
 export default function ExtraDataStepper({token, optClients, optCategories, 
-                          optTypes, user, optCompanies, condition, showForm}:
-                        {token:string, optClients:Options[], optCategories:Options[], 
-                          optTypes:Options[], user:string, optCompanies: Options[]
-                          condition: string, showForm:Function}){
+  optTypes, user, optCompanies, condition, showForm}: Props){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
   const {updateHaveNewProject} = useProjectsStore();
   
   const {updateExtraData, amount, code, community, country, cp, date, description, hasguaranteefund,
-    municipy, stateA, street, title, amountG, percentage, dateG} = useNewProject();
-
+    municipy, stateA, street, title, amountG, percentage, dateG, amountCharge, dateCharge, 
+    hasamountChargeOff, percentageCharge} = useNewProject();
 
   const [client, setClient] = useState<string>(optClients[0].value);
   const [type, setType] = useState<string>(optTypes[0].value);
@@ -36,6 +43,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   const [company, setCompany] = useState<string>(optCompanies[0].value);
   const [guarantee, setGuarantee] = useState<boolean>(false);
   const [haveAddress, setHaveAddress] = useState<boolean>(false);
+  const [haveAmountCharge, setHaveAmountCharge] = useState<boolean>(false);
 
   let year = new Date().getFullYear().toString();
   let month = (new Date().getMonth() + 1).toString();
@@ -45,13 +53,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
 
   const d = (date === '')? year+'-'+month+'-'+day: date;
 
-  //console.log('date dmy => ', d);
-
   const [startDate, setStartDate] = useState<string>(d);
-
-  //console.log('start date => ', startDate);
-
-  //const [dateM, setDateM] = useState(new Date());
 
   const formik = useFormik({
     initialValues: {
@@ -64,13 +66,17 @@ export default function ExtraDataStepper({token, optClients, optCategories,
     onSubmit: async (valores) => {            
       const {amount} = valores;
       
-      updateExtraData(amount.replace(/[$,]/g, ""), startDate, category, type, client, user, haveAddress, company, guarantee)
+      updateExtraData(amount.replace(/[$,]/g, ""), startDate, category, type, client, user, haveAddress, company, guarantee, haveAmountCharge)
 
       if(haveAddress){
         dispatch({type: 'INDEX_STEPPER', data: 2})
       }else{
         if(guarantee){
           dispatch({type: 'INDEX_STEPPER', data: 3})
+        }else{
+          if(haveAmountCharge){
+            dispatch({type: 'INDEX_STEPPER', data: 4})
+          }
         }
       }
     },       
@@ -93,48 +99,81 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         porcentage:percentage
       };
 
-      if(haveAddress && hasguaranteefund){
+      const amountChargeOff = {
+        amount:amountCharge.replace(/[$,%,]/g, ""),
+        date: dateCharge,
+        porcentage:percentageCharge.replace(/[$,%,]/g, "")
+      }; 
+
+      if(haveAddress && hasguaranteefund && haveAmountCharge){
         data = {
-          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
+          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
           hasguaranteefund, title, types:type, user,
-          location,
+          location, hasamountChargeOff:haveAmountCharge, amountChargeOff,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
-        if(haveAddress){
+        if(haveAddress && hasguaranteefund){
           data = {
-            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
-            hasguaranteefund, title, types:type, user,
+            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+            hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}]
           }
         }else{
-          if(hasguaranteefund){
+          if(haveAddress && haveAmountCharge){
             data = {
-              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
-              hasguaranteefund, title, types:type, user,
-              guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+              hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
+              location, condition: [{glossary: condition, user}]
             }
           }else{
-            data = {
-              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: startDate, description, 
-              hasguaranteefund, title, types:type, user, condition: [{glossary: condition, user}],
+            if(haveAddress){
+              data = {
+                amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
+                location, condition: [{glossary: condition, user}]
+              }
+            }else{
+              if(hasguaranteefund && haveAmountCharge){
+                data = {
+                  amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                  hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
+                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+                }
+              }else{
+                if(hasguaranteefund){
+                  data = {
+                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                    hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
+                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
+                  }
+                }else{
+                  if(haveAmountCharge){
+                    data = {
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
+                      location, condition: [{glossary: condition, user}], amountChargeOff
+                    }
+                  }else{
+                    data = {
+                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, condition: [{glossary: condition, user}],
+                    }
+                  }
+                }
+              }
             }
           }
         }
       }
       
       try {
-        //console.log('date => ', startDate);
-        //console.log('data new proyect => ', JSON.stringify(data));
         const res = await SaveProject(data, token);
         if(res.status){
           refRequest.current = true;
           showToastMessage(res.message);
           updateHaveNewProject(true);
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 500);
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);
@@ -153,7 +192,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
       <div className="my-5">
         <NavProjectStepper index={1} />
       </div>
-      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-lg rounded-lg space-y-5">
+      <form onSubmit={formik.handleSubmit} className="mt-4 max-w-xl rounded-lg space-y-5">
         <div>
           <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
           <SelectReact opts={optCategories} setValue={setCategory} index={0} />
@@ -195,11 +234,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
           <DatePicker
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0" 
-            //showIcon
-            selected={new Date(startDate)} onChange={(date:Date) => {
-                //setDateM(date);
-                setStartDate(date.toDateString()) 
-                console.log(date); console.log(date.toDateString())}} 
+            selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
           />
         </div>
         <div className=" flex gap-x-3">
@@ -237,10 +272,27 @@ export default function ExtraDataStepper({token, optClients, optCategories,
               </button>
             </div>
           </div>
+          <div>
+            <Label htmlFor="haveAmountCharge"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tiene amortizacion?</p></Label>
+            <div className="inline-flex rounded-md shadow-sm mx-2">
+              <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                        ${haveAmountCharge? 'bg-green-500 text-white': ''}`}
+                onClick={() => setHaveAmountCharge(true)}
+              >
+                Si
+              </button>
+              <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                        ${!haveAmountCharge? 'bg-red-500 text-white': ''}`}
+                onClick={() => setHaveAmountCharge(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
         </div>
         <div className="flex justify-center mt-8 space-x-5">
           <Button onClick={onClickSave} type="button">Guardar</Button>
-          {(guarantee || haveAddress) && (<button type="submit"
+          {(guarantee || haveAddress || haveAmountCharge) && (<button type="submit"
                 className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl
                 hover:bg-slate-200"
               >

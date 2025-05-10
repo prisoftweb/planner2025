@@ -8,8 +8,7 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import NewCostCenter from "./NewCostCenter";
 
-export default function TableCostCenter({data, token}:
-                      {data:CostCenterTable[], token:string}){
+export default function TableCostCenter({data, token}: {data:CostCenterTable[], token:string}){
 
   const columnHelper = createColumnHelper<CostCenterTable>();
 

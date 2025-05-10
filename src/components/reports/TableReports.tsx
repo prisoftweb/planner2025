@@ -18,18 +18,24 @@ import { showToastMessageError, showToastMessage } from "../Alert";
 import RemoveElement from "../RemoveElement";
 import { IoCopy } from "react-icons/io5";
 
-export default function TableReports({data, token, reports, 
-                          optCompanies, optConditions, optProjects, 
-                          isFilter, setIsFilter, user}:
-                        {data:ReportTable[], token:string, 
-                          reports: ReportParse[], optCompanies: Options[], 
-                          optProjects: Options[], optConditions: Options[], 
-                          isFilter:boolean, setIsFilter:Function, user:UsrBack}){
+type Props = {
+  data:ReportTable[], 
+  token:string, 
+  reports: ReportParse[], 
+  optCompanies: Options[], 
+  optProjects: Options[], 
+  optConditions: Options[], 
+  isFilter:boolean, 
+  setIsFilter:Function, 
+  user:UsrBack
+}
+
+export default function TableReports({data, token, reports, optCompanies, 
+  optConditions, optProjects, isFilter, setIsFilter, user}: Props){
   
   const columnHelper = createColumnHelper<ReportTable>();
 
-  //const [filtering, setFiltering] = useState<boolean>(false);
-  const [filter, setFilter] = useState<boolean>(false);
+  // const [filter, setFilter] = useState<boolean>(false);
   const [dataReports, setDataReports] = useState(data);
 
   const {haveDeleteReport, haveNewReport, updateHaveDeleteReport, updateHaveNewReport, 
@@ -101,7 +107,6 @@ export default function TableReports({data, token, reports,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
-          {/* <DeleteElement id={row.original.id} name={row.original.Report} remove={RemoveReport} token={token} /> */}
           <RemoveElement id={row.original.id} name={row.original.Report} token={token} 
               remove={RemoveReport} removeElement={delReport} />
           <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneReport(row.original.id)} />
@@ -116,11 +121,6 @@ export default function TableReports({data, token, reports,
     columnHelper.accessor(row => row.Report, {
       id: 'Informe',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <div className="flex gap-x-1 items-center">
-        //     <p>{row.original.Report}</p>
-        //   </div>
-        // </Link>
         <div className="flex gap-x-1 items-center cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >
@@ -135,11 +135,6 @@ export default function TableReports({data, token, reports,
     columnHelper.accessor(row => row.account, {
       id: 'Cuenta',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <div className="flex gap-x-1 items-center">
-        //     <p>{row.original.account}</p>
-        //   </div>
-        // </Link>
         <div className="flex gap-x-1 items-center cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >
@@ -155,11 +150,6 @@ export default function TableReports({data, token, reports,
       header: 'Proyecto',
       id: 'Proyecto',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <div className="flex gap-x-1 items-center">
-        //     <p>{row.original.Project}</p>
-        //   </div>
-        // </Link>
         <div className="flex gap-x-1 items-center cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >
@@ -171,12 +161,6 @@ export default function TableReports({data, token, reports,
       header: 'Empresa/Depto',
       id: 'Departamento',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <div className="flex gap-x-1 items-center">
-        //     <img src={row.original.Company} className="w-12 h-auto" alt="compania" />
-        //     <p>{row.original.Depto}</p>
-        //   </div>
-        // </Link>
         <div className="flex gap-x-1 items-center cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >
@@ -189,9 +173,6 @@ export default function TableReports({data, token, reports,
       header: 'Estatus',
       id: 'Estatus',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <Chip label={row.original.Status} color={row.original.color} />
-        // </Link>
         <div className="cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >
@@ -203,9 +184,6 @@ export default function TableReports({data, token, reports,
       header: 'NºGastos',
       id: 'NºGastos',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <p className="">{row.original.NºGastos}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >{row.original.NºGastos}</p>
@@ -215,9 +193,6 @@ export default function TableReports({data, token, reports,
       header: 'Total',
       id: 'Total',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Total}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >{row.original.Total}</p>
@@ -227,9 +202,6 @@ export default function TableReports({data, token, reports,
       header: 'Fecha',
       id: 'Fecha',
       cell: ({row}) => (
-        // <Link href={`/reports/${row.original.id}/profile`}>
-        //   <p className="">{row.original.Fecha?.substring(0, 10) || ''}</p>
-        // </Link>
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
@@ -247,7 +219,6 @@ export default function TableReports({data, token, reports,
 
   const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
     let d = new Date(rep.date).getTime();
-    console.log('date validation => ');
     if(d >= startDate && d <= endDate){
       console.log('return true ');
       return true;
@@ -257,9 +228,7 @@ export default function TableReports({data, token, reports,
 
   const amountValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                               startDate:number, endDate:number) => {
-    console.log('rep total => ', rep.totalok);
     if(rep.totalok >= 0){
-      console.log('min amo => ', minAmount, ' maxamo => ', maxAmount);
       if(rep.totalok >= minAmount && rep.totalok <= maxAmount){
         return dateValidation(rep, startDate, endDate);
       }
@@ -270,11 +239,9 @@ export default function TableReports({data, token, reports,
   const projectValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
                       startDate:number, endDate:number, projects:string[]) => {
     if(projects.includes('all')){
-      console.log('projects all');
       return amountValidation(rep, minAmount, maxAmount, startDate, endDate);
     }else{
       if(rep.project){
-        console.log('proyects => ', projects);
         if(projects.includes(rep.project._id)){
           return amountValidation(rep, minAmount, maxAmount, startDate, endDate);
         }
@@ -286,11 +253,9 @@ export default function TableReports({data, token, reports,
   const companyValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
               startDate:number, endDate:number, projects:string[], companies:string[]) => {
     if(companies.includes('all')){
-      console.log('companies all');
       return projectValidation(rep, minAmount, maxAmount, startDate, endDate, projects); 
     }else{
       if(rep.company){
-        console.log('companies => ', companies);
         if(companies.includes(rep.company._id)){
           return projectValidation(rep, minAmount, maxAmount, startDate, endDate, projects);
         }
@@ -304,16 +269,11 @@ export default function TableReports({data, token, reports,
                   companies:string[], conditions:string[]) => {
 
     if(conditions.includes('all')){
-      console.log('condition all')
       return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
     }else{
-      console.log('conditions => ', conditions);
       if(conditions.includes(rep.lastmove.condition._id)){
         return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
       }
-      // if(!rep.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
-      // }
     }
     return false;
   }
@@ -322,7 +282,6 @@ export default function TableReports({data, token, reports,
       startDate:number, endDate:number, projects:string[], 
       companies:string[], conditions:string[], isPettyCash:boolean) => {
 
-    console.log('petty cash => ', isPettyCash, ' repCash => ', rep.ispettycash);
     if(isPettyCash === rep.ispettycash){
       return conditionValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies, conditions);
     }
@@ -334,13 +293,6 @@ export default function TableReports({data, token, reports,
     startDate:number, endDate:number, isPettyCash:boolean) => {
   
     let filtered: ReportParse[] = [];
-    console.log('filter data => ');
-    // reports.map((report) => {
-    //   if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
-    //       endDate, projects, companies, conditions, isPettyCash)){
-    //     filtered.push(report);
-    //   }
-    // });
     reportsStore.map((report) => {
       if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
           endDate, projects, companies, conditions, isPettyCash)){
@@ -348,9 +300,8 @@ export default function TableReports({data, token, reports,
       }
     });
 
-    console.log('filteres => ', filtered);
     setDataReports(ReportParseDataToTableData(filtered));
-    setFilter(true);
+    // setFilter(true);
   }
 
   const addNewReport = async() => {
@@ -370,7 +321,6 @@ export default function TableReports({data, token, reports,
       }
     } catch (error) {
       showToastMessageError('Ocurrio un error al actualizar datos de la tabla!!');
-      //return <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
     }
   }
 
@@ -383,7 +333,6 @@ export default function TableReports({data, token, reports,
 
   if(haveDeleteReport){
     const d = ReportParseDataToTableData(reportsStore);
-    //setExpensesFiltered(expensesTable);
     setDataReports(d);
     updateHaveDeleteReport(false);
   }
@@ -391,13 +340,6 @@ export default function TableReports({data, token, reports,
   return(
     <>
       <div className="flex justify-end my-5">
-        {/* <Button type="button" onClick={() => setFiltering(!filtering)}>Filtrar</Button> */}
-        {/* <GiSettingsKnobs onClick={() => setFiltering(!filtering)}
-          className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-        /> */}
-          {/* {filtering && <Filtering showForm={setFiltering} optConditions={optConditions} 
-                          FilterData={filterData} maxAmount={maxAmount} 
-                          optProjects={optProjects} optCompanies={optCompanies} />} */}
         {isFilter && <Filtering showForm={setIsFilter} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optCompanies={optCompanies} />}

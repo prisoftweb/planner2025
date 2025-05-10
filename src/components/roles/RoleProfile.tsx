@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 export default function RoleProfile({role, resources, idRole}: 
-                                {role:RoleUser, resources:Resource2[], idRole:string}){
+  {role:RoleUser, resources:Resource2[], idRole:string}){
  
   const options:Options[] = [];
 

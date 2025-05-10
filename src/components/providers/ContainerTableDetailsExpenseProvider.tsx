@@ -1,12 +1,7 @@
 'use client'
 
-import { ExpensesTableProvider } from "@/interfaces/Providers"
-// import { Expense, ExpensesTable } from "@/interfaces/Expenses"
-//import TableCostsProvider from "./TableCostsProvider"
-//import Selectize from "../Selectize"
 import ArrowReturn from "../ArrowReturn"
 import IconText from "./IconText"
-// import { Provider } from "@/interfaces/Providers"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
 import { useState } from "react"
@@ -25,23 +20,23 @@ import ReportPaymentPDF from "./ReportPaymentPDF"
 import { UsrBack } from "@/interfaces/User"
 import { ProviderMin } from "@/interfaces/Providers"
 
+type Props = {
+  data:DetailExpensesTableProvider[], 
+  token:string, 
+  expenses:CostPayment[], 
+  user: UsrBack, 
+  provider: ProviderMin, 
+  payment: OnePayment
+}
+
 export default function ContainerTableDetailsExpenseProvider({data, token, expenses, user, 
-    provider, payment}:
-  {data:DetailExpensesTableProvider[], token:string, expenses:CostPayment[], 
-    user: UsrBack, provider: ProviderMin, payment: OnePayment}) {
+  provider, payment}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
-  // const [expensesSelected, setExpensesSelected] = useState<ExpensesTableProvider[]>([]);
-  //const [paidExpenses, setPaidExpenses] = useState<boolean>(false);
-
+  
   const handleFilter = (value: boolean) => {
     setFilter(value);
   }
-
-  // useEffect(() => {
-  //   console.log('costos => ', expenses);
-  //   console.log('data tabla => ', data);
-  // }, []);
 
   let props = {
     variants: {
@@ -70,7 +65,6 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
           <IconText text={provider?.tradename || ''} size="w-8 h-8" sizeText="" />
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
-        {/* <Selectize options={options} routePage="providers" subpath="/invoiceHistory" /> */}
         <div className="flex gap-x-2">
           <SearchInTable placeH={"Buscar gasto.."} />
           <div className={`w-24`}>
@@ -81,20 +75,17 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
               
               <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider}
                                             payment={payment} user={user} />} fileName={`${provider.name}.pdf`} >
-              {/* <PDFDownloadLink document={<AttachedPDF report={report} />} fileName={`FF-ANEXO-1-${report.name}`} > */}
                 {({loading, url, error, blob}) => 
                   loading? (
                     <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
                         placement="right" className="text-blue-500 bg-white">
                       <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                      {/* // <button type="button">Loading document...</button> */}
                     </Tooltip>
                   ) : (
                     <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
                         placement="right" className="text-blue-500 bg-white">
                       <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
                     </Tooltip>
-                    // <button type="button">Download now!</button>
                   ) }
               </PDFDownloadLink>
             </div>

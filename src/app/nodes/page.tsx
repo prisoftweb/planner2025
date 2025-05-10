@@ -8,7 +8,6 @@ import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
 import { getDepartmentsLV } from "../api/routeDepartments";
 import { getWorkFlows } from "../api/routeWorkflows";
-//import { Department } from "@/interfaces/Departments";
 import { Glossary } from "@/interfaces/Glossary";
 import { Workflow } from "@/interfaces/Workflows";
 import ButtonNewNode from "@/components/nodes/ButtonNewNode";
@@ -23,53 +22,53 @@ export default async function page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let nodes: Node[] = [];
-  try {
-    nodes = await getNodes(token);
-    if(typeof(nodes) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar nodos!!</h1>
+  let nodes: Node[] = await getNodes(token);
+  let optDepartments: Options[] = await getDepartmentsLV(token);
+  let glossaries: Glossary[] = await getGlossaries(token);
+  let workflows: Workflow[] = await getWorkFlows(token);
+  
+  if(typeof(nodes) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
+        </div>
+      </>
+    )
   }
 
-  //let departments: Department[] = [];
-  let optDepartments: Options[] = [];
-  try {
-    optDepartments = await getDepartmentsLV(token);
-    if(typeof(optDepartments) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{optDepartments}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar departamentos!!</h1>
+  if(typeof(optDepartments) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-xl text-center">{optDepartments}</h1>
+        </div>
+      </>
+    )
   }
-
-  // const optDepartments: Options[] = [];
-  // departments.map(department => {
-  //   optDepartments.push({
-  //     label: department.name,
-  //     value: department._id
-  //   });
-  // });
-
-  let glossaries: Glossary[] = [];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar glosarios!!</h1>
+  
+  if(typeof(glossaries) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
+        </div>
+      </>
+    )
   }
-
-  let workflows: Workflow[] = [];
-  try {
-    workflows = await getWorkFlows(token);
-    if(typeof(workflows) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar workflows!!</h1>
+  
+  if(typeof(workflows) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
+        </div>
+      </>
+    )
   }
 
   const optGlossaries: Options[] = [];
@@ -115,7 +114,14 @@ export default async function page() {
   try {
     const res: Relation[] = await getRelations(token);
     if(typeof(res)==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{res}</h1>
+      return(
+        <>
+          <Navigation user={user} />
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+            <h1 className="text-red-500 text-xl text-center">{res}</h1>
+          </div>
+        </>
+      )
     }else{
       res.map((rel) => {
         optRelations.push({
@@ -129,7 +135,11 @@ export default async function page() {
       });
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar relaciones!!</h1>
+    return(
+      <>
+        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar relaciones!!</h1>
+      </>
+    )
   }
 
   if(!nodes || nodes.length <= 0){
@@ -162,12 +172,8 @@ export default async function page() {
           <TableNode data={tableData} token={token} departments={optDepartments} 
             glossaries={optGlossaries} workflows={optWorkFlows} 
             optDesc={optDescriptions} optRels={optRelations}  />
-          {/* <TableReports data={table} optConditions={optConditionsFilter} 
-              reports={reports} token={token} optCompanies={optCompaniesFilter} 
-              optProjects={optProjectsFilter} /> */}
         </div>
       </div>
     </>
   )
 }
-

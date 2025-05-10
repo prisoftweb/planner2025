@@ -2,17 +2,13 @@
 
 import { useState } from "react"
 import NavResponsive from "./NavResponsive"
-//import { Options } from "@/interfaces/Common"
-//import DataReports from "./DataReports"
 import { Report, DateReport } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
-//import { Expense } from "@/interfaces/Expenses"
 import { UsrBack } from "@/interfaces/User"
 import DataHistoryReports from "./DataHistoryReports"
 
 export default function ReportHistoryClient({report, user, id, token, dates}: 
-                            {report:Report, user:UsrBack, id:string, 
-                              token:string, dates:DateReport[] }){
+  {report:Report, user:UsrBack, id:string, token:string, dates:DateReport[] }){
 
   const [opt, setOpt] = useState<number>(1);
   

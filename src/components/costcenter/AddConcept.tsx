@@ -1,9 +1,7 @@
-//import { Options } from '@/interfaces/Common'
 import { useState } from 'react'
 import { PlusCircleIcon, CheckCircleIcon, TrashIcon } from "@heroicons/react/24/solid";
 import Label from '../Label';
 import Input from '../Input';
-//import CurrencyInput from 'react-currency-input-field';
 
 export default function AddConcept({bandPlus, DeleteElement, index, 
                                   pushElement, updateCount}: 
@@ -70,21 +68,6 @@ export default function AddConcept({bandPlus, DeleteElement, index,
           <Input type='text' name='account' 
             onChange={(e) => onChangeAccount(e.target.value)}
           />
-          {/* <CurrencyInput
-            id="account" name="account"
-            // className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
-            //   focus:border-slate-700 outline-0"
-            className='w-full border border-slate-300 rounded-md px-2 py-1 my-2 
-              bg-slate-100  focus:border-slate-700 outline-0'
-            defaultValue={0}
-            decimalsLimit={2}
-            prefix="$"
-            onValueChange={(value) => {try {
-              onChangeAccount(parseFloat(value || '0').toString());
-            } catch (error) {
-              onChangeAccount('0');
-            }}}
-          /> */}
         </div>
         <div>
           <Label htmlFor=""><p>&nbsp;</p></Label>
