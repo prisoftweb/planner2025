@@ -185,21 +185,50 @@ export async function getInvoicesByCollectionMin(auth_token:string, id:string){
   }
 }
 
-export async function getAllTotalAmountRecoveredCollection(auth_token:string){
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecoveredToCollectAndPending/2025-01-01/2025-12-31`;
+export async function getAllTotalAmountRecoveredCollection(auth_token:string, dateI: string, dateF:string, data:Object){
+  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecoveredToCollectAndPending/${dateI}/${dateF}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecoveredToCollectAndPending/${dateI}/${dateF}`;
+  console.log('ulr total amount => ', url);
+  console.log('data => ', JSON.stringify(data));
   try {
-    const res = await axios.get(url, {
+    const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
       }
     });
+    console.log('res => ', res);
     if(res.status===200)
       return res.data.data.resdata;
     return 'Error al obtener los cobros!!';
   } catch (error) {
+    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.message || error.response?.data.message;
     }
     return 'Error al consultar monto total de los cobros!!';
+  }
+}
+
+export async function insertConditionInCollection(auth_token:string, data:Object, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/insertConditionInCollection/${id}`;
+  // console.log('url coboro => ', url);
+  // console.log('data => ', JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('res condition in cobor => ', res);
+    if(res.status===200)
+      return res.status;
+    return 'Error al insertar condicion en cobro!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al insertar condicion in cobro!!';
   }
 }

@@ -1,9 +1,9 @@
 'use client'
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "@/components/Button";
 import { showToastMessageError } from "@/components/Alert";
 
-import { getInvoices } from "@/app/api/routeInvoices";
+import { getUnpaidInvoices } from "@/app/api/routeInvoices";
 import { IInvoiceMin } from "@/interfaces/Invoices";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {PlusCircleIcon} from "@heroicons/react/24/solid";
@@ -36,7 +36,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getInvoices(token);
+      const res = await getUnpaidInvoices(token);
       if(typeof(res)==='string'){
         showToastMessageError('Error al obtener facturas!!!');
       }else{

@@ -8,12 +8,13 @@ export function CollectionDataToTableData(collections:ICollectionMin[]){
       Cuenta: col.account,
       Estimacion: '',
       Facturas: [col.invoices],
-      Fecha: col.date.substring(0, 10),
+      Fecha: col.date,
       id: col._id,
       Importe: col.amount,
       Referencia: col.reference,
       status: col.condition,
-      concept: col.concept
+      concept: col.concept,
+      confirm: col.condition.name.toLowerCase().includes('confirmado')
     })
   });
 

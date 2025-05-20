@@ -1,12 +1,10 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import TableInvoicesComponent from "@/components/invoices/TableInvoicesComponent";
-import SearchInTable from "@/components/SearchInTable";
-import Header from "@/components/HeaderPage";
+import TableGuaranteeComponent from "@/components/guarantee/TableGuaranteeComponent";
 
 export default async function Page(){
-  
+
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
@@ -15,10 +13,7 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        {/* <Header title="Facturas" previousPage="/">
-          <SearchInTable placeH="buscar factura.." />
-        </Header> */}
-        <TableInvoicesComponent token={token} user={user._id} />
+        <TableGuaranteeComponent token={token} user={user._id} />
       </div>
     </>
   )

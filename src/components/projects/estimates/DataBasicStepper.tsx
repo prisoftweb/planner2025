@@ -40,6 +40,7 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
         showToastMessageError(clients);
       }else{
         setOptClients(clients);
+        setClient(clients[0].value);
       }
     }
     fetch();

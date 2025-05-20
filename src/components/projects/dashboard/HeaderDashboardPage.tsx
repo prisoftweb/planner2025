@@ -1,9 +1,8 @@
 'use client'
 
-import { DateRangePicker } from '@tremor/react';
 import { es } from "date-fns/locale"
 import { useState, useRef } from 'react';
-import { DateRangePickerValue, ProgressCircle } from '@tremor/react';
+import { DateRangePicker, DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CurrencyFormatter } from '@/app/functions/Globals';
 import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';

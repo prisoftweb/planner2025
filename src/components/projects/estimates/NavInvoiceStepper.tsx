@@ -52,7 +52,7 @@ export default function NavInvoiceStepper({index, setIndex}: {index:number, setI
               </span>
 
               <p className="leading-none">
-                <strong className="block font-medium"> Condiciones </strong>
+                <strong className="block font-medium"> Conceptos </strong>
                 <small className="mt-1"> </small>
               </p>
             </div>

@@ -14,21 +14,11 @@ export default function ListInvoicesCollection({collection, invoices}:
               <img src={'/img/estimates/quotations.svg'} alt="logo" className="w-full max-w-28 h-auto rounded-sm" />
             </div>
             <div>
-              <p className="text-slate-500">{'Detalles de un cobro '+ collection.reference}</p>
+              <p className="text-slate-500">{'Numero de cuenta '+ collection.account}</p>
               <p className="text-blue-500 text-lg">Listado de facturas a las cuales se disperso el cobro</p>
             </div>
           </div>
 
-          {/* <div className="flex gap-x-2 justify-between items-end mt-2">
-            <div>
-              <p className="text-slate-500">Factura</p>
-              <p className="text-green-500 text-lg">{collection.invoices[0].invoice}</p>
-            </div>
-            <div>
-              <p className="text-green-500">{collection?.date?.substring(0, 10)}</p>
-              <p className="text-slate-500 text-lg">Fecha</p>
-            </div>
-          </div> */}
         </div>
 
         {invoices.map((invoice) => (

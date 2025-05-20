@@ -5,28 +5,28 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import RemoveElement from "@/components/RemoveElement";
+// import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
 import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
 import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
 import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
-import Button from "../Button";
+// import Button from "../Button";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-import AddNewCollectionComponent from "./AddNewCollection";
-import { insertConditionInCollection } from "@/app/api/routeCollections";
+// import AddNewCollectionComponent from "./AddNewCollection";
+// import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
 
-export default function TableCollectionsComponent({token, user}: {token:string, user:string}) {
+export default function TableHistoryCollectionsComponent({token, user}: {token:string, user:string}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>([]);
   const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
-  const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
+  // const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
-  const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
+  // const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
   
@@ -81,16 +81,16 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     fetch();
   }, []);
 
-  const updateCollections = async() => {
-    const res = await getCollectionsMin(token);
-    if(typeof(res)==='string'){
-      showToastMessageError(res);
-    }else{
-      setCollections(res);
-      setIsFilter(false);
-      // setFilteredCollections(res);
-    }
-  }
+  // const updateCollections = async() => {
+  //   const res = await getCollectionsMin(token);
+  //   if(typeof(res)==='string'){
+  //     showToastMessageError(res);
+  //   }else{
+  //     setCollections(res);
+  //     setIsFilter(false);
+  //     // setFilteredCollections(res);
+  //   }
+  // }
 
   const handleDate = (dateI: Date, dateF: Date) => {
     handleFilter(dateI, dateF, statuses);
@@ -118,10 +118,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }
   }
 
-  const handleShowCollection = (value: boolean) => {
-    setShowNewCollection(value);
-  }
-
   const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
     let statusesFil;
     if(arrStatuses.length > 0){
@@ -140,23 +136,14 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     setFilteredCollections(filtered);
     setIsFilter(true);
     updateTotal(getDate(dateS), getDate(dateE));
-    // setShowIsFilter(false);
-  }
-
-  // const handleIsFilter = (value:boolean) => {
-  //   setIsFilter(value);
-  // }
-
-  const handleShowIsFilter = (value:boolean) => {
-    setShowIsFilter(value);
   }
 
   const updateTotal = async (dateI:string, dateF:string) => {
     const data={
-      condition: statuses,
-      conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
-      conditionAccountsReceivable:['67d20cb359865f640af92638'],
-    }
+        condition: statuses,
+        conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
+        conditionAccountsReceivable:['67d20cb359865f640af92638'],
+      }
     const rest = await getAllTotalAmountRecoveredCollection(token, dateI, dateF, data);
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
@@ -180,36 +167,33 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     )
   }
 
-  const delCollection = (id:string) => {
-    showToastMessage('Cobro eliminado satisfactoriamente!!!');
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
+  // const delCollection = (id:string) => {
+  //   showToastMessage('Cobro eliminado satisfactoriamente!!!');
+  //   setTimeout(() => {
+  //     window.location.reload();
+  //   }, 2000);
+  // }
 
-  const confirmCollection = async( id: string) => {
-    const data = {
-      condition: [
-        {
-          glossary: "67e318171945c0b1e4c9bc72",
-          user
-        }
-      ]
-    }
-    const res = await insertConditionInCollection(token, data, id);
-    if(typeof(res)==='string'){
-      showToastMessageError(res);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    }else{
-      showToastMessage('Cobro actualizado satisfactoriamente!!!');
-      updateCollections();
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1500);
-    }
-  }
+  // const confirmCollection = async( id: string) => {
+  //   const data = {
+  //     condition: [
+  //       {
+  //         glossary: "67e318171945c0b1e4c9bc72",
+  //         user
+  //       }
+  //     ]
+  //   }
+  //   const res = await insertConditionInCollection(token, data, id);
+  //   if(typeof(res)==='string'){
+  //     showToastMessageError(res);
+  //     setTimeout(() => {
+  //       window.location.reload();
+  //     }, 1500);
+  //   }else{
+  //     showToastMessage('Cobro actualizado satisfactoriamente!!!');
+  //     updateCollections();
+  //   }
+  // }
 
   const columnHelper = createColumnHelper<ITableCollection>();
   
@@ -222,8 +206,8 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           />
-          <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
-                      removeElement={delCollection} token={token} />
+          {/* <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
+                      removeElement={delCollection} token={token} /> */}
         </div>
       ),
       size: 300,
@@ -243,7 +227,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       id: 'referencia',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
         >{row.original.Referencia}</p>
       ),
     }),
@@ -252,7 +236,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
         >{row.original.Fecha.substring(0, 10)}</p>
       ),
     }),
@@ -261,32 +245,17 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       id: 'concepto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
         >{row.original.concept}</p>
       ),
     }),
-    columnHelper.accessor('confirm', {
-      header: 'Confirmado',
-      id: 'confirmado',
-      cell: ({row}) => (
-        // <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-        //   <input 
-        //     // checked={row.original.confirm} 
-        //     onClick={() => confirmCollection(row.original.id)} id={row.original.id.toString()} type="checkbox"
-        //     // disabled={row.original.confirm}
-        //     className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-        //       appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-        //       peer-checked:border-green-500 peer-checked:before:bg-green-500
-        //       border border-slate-300" />
-        //   <label htmlFor={row.original.id.toString()}
-        //     className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-        //     <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-        //       data-ripple-dark="true"></div>
-        //   </label>
-        // </div>
-        <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
-      ),
-    }),
+    // columnHelper.accessor('confirm', {
+    //   header: 'Confirmado',
+    //   id: 'confirmado',
+    //   cell: ({row}) => (
+    //     <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
+    //   ),
+    // }),
     columnHelper.accessor('Facturas', {
       header: 'Facturas',
       id: 'facturas',
@@ -310,7 +279,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       id: 'cuenta',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
         >{row.original.Cuenta}</p>
       ),
     }),
@@ -319,7 +288,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       id: 'importe',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.Importe
@@ -328,21 +297,13 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }),
   ]
 
-  // const collectionM = collections.reduce((previous, current) => {
-  //   return current.amount > previous.amount ? current : previous;
-  // });
-
-  // const maxAmount = collectionM.amount;
-
   let data;
   if(isFilter){
     data = CollectionDataToTableData(filteredCollections);
   }else{
     data = CollectionDataToTableData(collections);
   }
-  // const data = CollectionDataToTableData(collections);
-  // console.log('data => ', data);
-
+  
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
                 <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
                 <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
@@ -364,8 +325,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
                 </div>
               </div>
 
-  // console.log('widt pge => ', widthPage);
-console.log('total collections => ', totalCollections);
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
@@ -374,7 +333,7 @@ console.log('total collections => ', totalCollections);
             <p className="text-slate-600">Historial de cobranza</p>
           </div>
         </div>
-        <Card amount={totalCollections?.amountRecovered? totalCollections.amountRecovered.amount: 0} title="Recuperado"></Card>
+        <Card amount={totalCollections?.amountRecovered?.amount || 0} title="Recuperado"></Card>
         <Card amount={totalCollections?.totalAccountsReceivable?.total || 0} title="Por cobrar"></Card>
         <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Por cobrar vencido"></Card>
       </div>
@@ -385,32 +344,30 @@ console.log('total collections => ', totalCollections);
               <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
             </div>
           </Link>
-          <p className="text-xl ml-4 font-medium">Recuperacion de cartera</p>
+          <p className="text-xl ml-4 font-medium">Historial de recuperacion de cartera</p>
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
           <div className="">
             <SearchInTable placeH={"Buscar cobro.."} />
           </div>
-          <div className={''}>
+          {/* <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {widthPage < 1080 && filterElemnts}
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       {widthPage > 1080 && filterElemnts}
       <Table columns={columns} data={data} placeH="buscar cobro" />
-      {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-                                user={user} updateCollections={updateCollections} />}
+      {/* {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
+                                user={user} updateCollections={updateCollections} />} */}
       {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
     </>
   )
 }
 
 export const Card = ({amount, title}: {title:string, amount:number}) => {
-  console.log('amount => ', amount);
-  console.log('title => ', title);
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
       {/* {children} */}

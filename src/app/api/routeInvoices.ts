@@ -215,3 +215,46 @@ export async function getCollectionsByInvoice(auth_token:string, id:string) {
     return 'Error al obtener cobros de la factura!!';
   }
 }
+
+export async function getUnpaidInvoices(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllInvoicesNECondition/PAGADA`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener facturas!!';
+  }
+}
+
+export async function getAllTotalAmountInvoicePending(auth_token:string, dateI: string, dateF:string, data:Object){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTAmountINVOICESIssuedPaymentAndPending/${dateI}/${dateF}`;
+  console.log('ulr total amount => ', url);
+  console.log('data => ', JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+    });
+    console.log('res => ', res);
+    if(res.status===200)
+      return res.data.data.resdata;
+    return 'Error al obtener el total de las facturas!!';
+  } catch (error) {
+    console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar monto total de las facturas!!';
+  }
+}

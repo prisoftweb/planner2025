@@ -197,7 +197,8 @@ export interface ITableCollection {
     color: string
   }, 
   Importe: number
-  concept: string
+  concept: string,
+  confirm: boolean
 }
 
 export interface ITotalResumentPayment {
@@ -272,5 +273,8 @@ export interface ITotalAmountCollections {
     quantity: number
     total: number
   }
-  totalCharged: number
+  totalCharged: {
+    quantity: number,
+    totalCharged: number
+  }
 }

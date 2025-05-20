@@ -177,16 +177,9 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           amountGuaranteeFund: estimate.Fondo,
           amountChargeOff: estimate.Amortizacion,
           cost: {
-            // subtotal: Number(subtotal.replace(/[$,]/g, "")), 
-            // iva: Number(vat.replace(/[$,]/g, "")),
-            // total: Number(total.replace(/[$,]/g, "")),
-            // subtotal: estimate.Estimacion,
             subtotal: estimate.MontoPay, 
-            // iva: estimate.Estimacion * 0.16,
             iva: (estimate?.amountVat || 0) - (estimate?.MontoPay || 0),
             total: estimate.amountVat,
-            // discount: 0,        
-            // vat:"6675daf663dfd817c9551b2a" 
           },
           condition: [
             {glossary:"67d20cb359865f640af92638", user}
@@ -204,6 +197,8 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           updateEstimates();
           showForm(false);
         }
+        // console.log('data invoice ee => ', JSON.stringify(data));
+        // showToastMessage('Factura agregada satisfactoriamente!!');
       }
     }
   }

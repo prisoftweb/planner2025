@@ -9,24 +9,24 @@ import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
 import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
 import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
+import { IGuarantee } from "@/interfaces/Guarantee";
 import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
-import Button from "../Button";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-import AddNewCollectionComponent from "./AddNewCollection";
 import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
+import { getGuarantees, insertConditionInGuarantee } from "@/app/api/routeGuarantee";
+import { ITableGuarantee } from "@/interfaces/Guarantee";
+import { GuaranteeDataToTableData } from "@/app/functions/GuaranteesFunctions";
 
-export default function TableCollectionsComponent({token, user}: {token:string, user:string}) {
+export default function TableGuaranteeComponent({token, user}: {token:string, user:string}) {
 
-  const [collections, setCollections] = useState<ICollectionMin[]>([]);
-  const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
-  const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
+  const [guarantees, setGuarantees] = useState<IGuarantee[]>([]);
+  const [filteredGuarantees, setFilteredGuarantees] = useState<IGuarantee[]>([]);
   const [isFilter, setIsFilter]=useState<boolean>(false);
-  const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
   
@@ -57,36 +57,36 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getCollectionsMin(token);
+      const res = await getGuarantees(token);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        setCollections(res);
-        setFilteredCollections(res);
+        setGuarantees(res);
+        setFilteredGuarantees(res);
       }
 
-      const data={
-        condition: [],
-        conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
-        conditionAccountsReceivable:['67d20cb359865f640af92638'],
-      }
-      const rest = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
-      if(typeof(rest)==='string'){
-        showToastMessageError(rest);
-      }else{
-        setTotalCollections(rest);
-      }
+      // const data={
+      //   condition: [],
+      //   conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
+      //   conditionAccountsReceivable:['67d20cb359865f640af92638'],
+      // }
+      // const rest = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
+      // if(typeof(rest)==='string'){
+      //   showToastMessageError(rest);
+      // }else{
+      //   setTotalCollections(rest);
+      // }
     }
 
     fetch();
   }, []);
 
   const updateCollections = async() => {
-    const res = await getCollectionsMin(token);
+    const res = await getGuarantees(token);
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
-      setCollections(res);
+      setGuarantees(res);
       setIsFilter(false);
       // setFilteredCollections(res);
     }
@@ -118,16 +118,12 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }
   }
 
-  const handleShowCollection = (value: boolean) => {
-    setShowNewCollection(value);
-  }
-
   const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
     let statusesFil;
     if(arrStatuses.length > 0){
-      statusesFil = collections.filter((c) => arrStatuses.includes(c.condition._id));
+      statusesFil = guarantees.filter((g) => arrStatuses.includes(g.condition[g.condition.length-1]._id));
     }else{
-      statusesFil = collections;
+      statusesFil = guarantees;
     }
 
     const filtered = statusesFil.filter((c) => {
@@ -137,18 +133,9 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       }
     });
 
-    setFilteredCollections(filtered);
+    setFilteredGuarantees(filtered);
     setIsFilter(true);
-    updateTotal(getDate(dateS), getDate(dateE));
-    // setShowIsFilter(false);
-  }
-
-  // const handleIsFilter = (value:boolean) => {
-  //   setIsFilter(value);
-  // }
-
-  const handleShowIsFilter = (value:boolean) => {
-    setShowIsFilter(value);
+    // updateTotal(getDate(dateS), getDate(dateE));
   }
 
   const updateTotal = async (dateI:string, dateF:string) => {
@@ -165,15 +152,13 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }
   }
 
-  if(collections.length <= 0){
+  if(guarantees.length <= 0){
     return (
       <>
         <div className="flex flex-col items-center">
-          <p className="text-5xl mt-20 font-bold">Cobranza</p>
+          <p className="text-5xl mt-20 font-bold">Garantias</p>
           <p className="text-xl mt-10 text-slate-700 font-bold" 
-            >Gestiona las cuentas por cobrar,
-            recuperacion de cobranza y mas
-            desde Planner</p>
+            >Gestiona las garantias desde Planner</p>
           <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
         </div>
       </>
@@ -191,7 +176,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     const data = {
       condition: [
         {
-          glossary: "67e318171945c0b1e4c9bc72",
+          glossary: "678ed05cc5f08e8a0f36d5e1",
           user
         }
       ]
@@ -205,13 +190,10 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }else{
       showToastMessage('Cobro actualizado satisfactoriamente!!!');
       updateCollections();
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1500);
     }
   }
 
-  const columnHelper = createColumnHelper<ITableCollection>();
+  const columnHelper = createColumnHelper<ITableGuarantee>();
   
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -222,8 +204,8 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           />
-          <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
-                      removeElement={delCollection} token={token} />
+          {/* <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
+                      removeElement={delCollection} token={token} /> */}
         </div>
       ),
       size: 300,
@@ -238,115 +220,108 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
         <p>Accion</p>
       )
     }),
-    columnHelper.accessor('Referencia', {
-      header: 'Referencia',
-      id: 'referencia',
+    columnHelper.accessor('proyect', {
+      header: 'Proyecto',
+      id: 'proyecto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.Referencia}</p>
+        // onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.proyect}</p>
       ),
     }),
-    columnHelper.accessor('Fecha', {
-      header: 'Fecha',
+    columnHelper.accessor('client', {
+      header: 'Cliente',
+      id: 'cliente',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.client}</p>
+      ),
+    }),
+    columnHelper.accessor('dateGuarantee', {
+      header: 'Fecha de garantia',
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.Fecha.substring(0, 10)}</p>
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.dateGuarantee.substring(0, 10)}</p>
       ),
     }),
-    columnHelper.accessor('concept', {
-      header: 'Concepto',
-      id: 'concepto',
+    columnHelper.accessor('datePayment', {
+      header: 'Fecha de pago',
+      id: 'fechaPago',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.concept}</p>
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.datePayment.substring(0, 10)}</p>
       ),
     }),
-    columnHelper.accessor('confirm', {
-      header: 'Confirmado',
-      id: 'confirmado',
+    columnHelper.accessor('datePayment', {
+      header: 'Confirmar',
+      id: 'confirmar',
       cell: ({row}) => (
-        // <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-        //   <input 
-        //     // checked={row.original.confirm} 
-        //     onClick={() => confirmCollection(row.original.id)} id={row.original.id.toString()} type="checkbox"
-        //     // disabled={row.original.confirm}
-        //     className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-        //       appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-        //       peer-checked:border-green-500 peer-checked:before:bg-green-500
-        //       border border-slate-300" />
-        //   <label htmlFor={row.original.id.toString()}
-        //     className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-        //     <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-        //       data-ripple-dark="true"></div>
-        //   </label>
-        // </div>
-        <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
+        <Toogle value={row.original.isValidate} id={row.original.id} onClick={confirmCollection} />
       ),
     }),
-    columnHelper.accessor('Facturas', {
-      header: 'Facturas',
-      id: 'facturas',
-      cell: ({row}) => (
-        <div>
-          {row.original.Facturas.map((f) => (
-            <Chip label={f.invoices.folio} color={'#466'} key={f._id} />
-          ))}
-        </div>
-      )
-    }),
-    columnHelper.accessor('status', {
-      header: 'Estatus',
-      id: 'estatus',
-      cell: ({row}) => (
-        <Chip label={row.original.status.name} color={row.original.status.color} />
-      ),
-    }),
-    columnHelper.accessor('Cuenta', {
-      header: 'Cuenta',
-      id: 'cuenta',
+    // columnHelper.accessor('confirm', {
+    //   header: 'Confirmado',
+    //   id: 'confirmado',
+    //   cell: ({row}) => (
+    //     // <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+    //     //   <input 
+    //     //     // checked={row.original.confirm} 
+    //     //     onClick={() => confirmCollection(row.original.id)} id={row.original.id.toString()} type="checkbox"
+    //     //     // disabled={row.original.confirm}
+    //     //     className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+    //     //       appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+    //     //       peer-checked:border-green-500 peer-checked:before:bg-green-500
+    //     //       border border-slate-300" />
+    //     //   <label htmlFor={row.original.id.toString()}
+    //     //     className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+    //     //     <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+    //     //       data-ripple-dark="true"></div>
+    //     //   </label>
+    //     // </div>
+    //     <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
+    //   ),
+    // }),
+    columnHelper.accessor('amount', {
+      header: 'Monto de garantia',
+      id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.Cuenta}</p>
-      ),
-    }),
-    columnHelper.accessor('Importe', {
-      header: 'Importe depositado',
-      id: 'importe',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
         >{CurrencyFormatter({
           currency: 'MXN',
-          value: row.original.Importe
+          value: row.original.amount
+        })}</p>
+      ),
+    }),
+    columnHelper.accessor('amountVat', {
+      header: 'Monto con iva',
+      id: 'monto',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{CurrencyFormatter({
+          currency: 'MXN',
+          value: row.original.amountVat
         })}</p>
       ),
     }),
   ]
 
-  // const collectionM = collections.reduce((previous, current) => {
-  //   return current.amount > previous.amount ? current : previous;
-  // });
-
-  // const maxAmount = collectionM.amount;
-
   let data;
   if(isFilter){
-    data = CollectionDataToTableData(filteredCollections);
+    data = GuaranteeDataToTableData(filteredGuarantees);
   }else{
-    data = CollectionDataToTableData(collections);
+    data = GuaranteeDataToTableData(filteredGuarantees);
   }
-  // const data = CollectionDataToTableData(collections);
-  // console.log('data => ', data);
 
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-                <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
-                <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
-                <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
+                <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Vencidos" />
+                <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Por cobrar" />
+                <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Recuperado" />
                 <div>
                   {/* <Label htmlFor='date'>Fecha</Label> */}
                   <DateRangePicker 
@@ -364,19 +339,12 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
                 </div>
               </div>
 
-  // console.log('widt pge => ', widthPage);
-console.log('total collections => ', totalCollections);
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
-        <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
-          <div>
-            <p className="text-slate-600">Historial de cobranza</p>
-          </div>
-        </div>
-        <Card amount={totalCollections?.amountRecovered? totalCollections.amountRecovered.amount: 0} title="Recuperado"></Card>
-        <Card amount={totalCollections?.totalAccountsReceivable?.total || 0} title="Por cobrar"></Card>
-        <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Por cobrar vencido"></Card>
+        <Card amount={totalCollections?.amountRecovered.amount || 0} title="FONDO DE GARANTIA"></Card>
+        <Card amount={totalCollections?.totalAccountsReceivable.total || 0} title=" RECUPERADO"></Card>
+        <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Pendiente porcentaje"></Card>
       </div>
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
@@ -385,32 +353,21 @@ console.log('total collections => ', totalCollections);
               <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
             </div>
           </Link>
-          <p className="text-xl ml-4 font-medium">Recuperacion de cartera</p>
+          <p className="text-xl ml-4 font-medium">FONDO DE GARANTIA </p>
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
           <div className="">
-            <SearchInTable placeH={"Buscar cobro.."} />
-          </div>
-          <div className={''}>
-            <div className="flex gap-x-4 gap-y-4 justify-end items-center">
-              {widthPage < 1080 && filterElemnts}
-              <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
-            </div>
+            <SearchInTable placeH={"Buscar garantia.."} />
           </div>
         </div>
       </div>
       {widthPage > 1080 && filterElemnts}
-      <Table columns={columns} data={data} placeH="buscar cobro" />
-      {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-                                user={user} updateCollections={updateCollections} />}
-      {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
+      <Table columns={columns} data={data} placeH="buscar garantia" />      
     </>
   )
 }
 
 export const Card = ({amount, title}: {title:string, amount:number}) => {
-  console.log('amount => ', amount);
-  console.log('title => ', title);
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
       {/* {children} */}
@@ -465,12 +422,6 @@ function getDate(date: Date){
 const ChipStatus = ({ addStatus, id, removeStatus, title}: 
   {title:string, id:string, addStatus:Function, removeStatus:Function}) => {
   const [active, setActive] = useState<boolean>(false);
-
-  // const view = active? 
-  //                 <ChipUi className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>
-  //                   {title}
-  //                 </ChipUi>: 
-  //                 <ChipUi color="danger" onClick={() => {addStatus(id); setActive(true)}}>{title}</ChipUi>
 
   const view = active? 
                   <ChipMui label={title} className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>

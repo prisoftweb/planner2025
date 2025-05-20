@@ -246,9 +246,24 @@ const NavItems = ({role}: {role:string}) => {
             link: '/invoices'
           },
           {
-            name: 'Cobros',
+            name: 'Garantias',
+            link: '/guarantee'
+          },
+        ]}
+      />
+      <NavItem name="Cobranza" link="" items={[
+          {
+            name: 'Historial',
+            link: '/collections/history'
+          },
+          {
+            name: 'Cuentas por cobrar',
             link: '/collections'
           },
+          {
+            name: 'Fondo de garantias',
+            link: '/collections/guarantee'
+          }
         ]}
       />
       <NavItem name="Costos" link="" items={[

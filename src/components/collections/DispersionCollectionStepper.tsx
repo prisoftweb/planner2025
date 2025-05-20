@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import Button from "@/components/Button";
 import { showToastMessageError } from "@/components/Alert";
 
-import { getInvoices } from "@/app/api/routeInvoices";
+import { getInvoices, getUnpaidInvoices } from "@/app/api/routeInvoices";
 import { IInvoiceMin } from "@/interfaces/Invoices";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {PlusCircleIcon} from "@heroicons/react/24/solid";
@@ -38,12 +38,13 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getInvoices(token);
+      // const res = await getInvoices(token);
+      const res = await getUnpaidInvoices(token);
       if(typeof(res)==='string'){
         showToastMessageError('Error al obtener facturas!!!');
       }else{
-        const resI=transformTypes(res);
         console.log('invoices back => ', res);
+        const resI=transformTypes(res);
         console.log('invoices trnas => ', resI);
         setInvoices(resI);
       }
@@ -294,9 +295,9 @@ function transformTypes(invoiceFrom: IInvoiceMin[]){
     console.log('invoice from => ', i);
     invoiceTo.push({
       // total:i.cost.total,
-      total:i.accountreceivables[0]?.charged || 0,
+      total: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.charged : 0,
       // totalPending: i.cost.total,
-      totalPending: i.accountreceivables[0]?.unchargedbalanceamount || 0,
+      totalPending: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.unchargedbalanceamount : 0,
       id:i._id,
       project: {
         id: typeof(i.project)==='string'? i.project: i.project._id,
@@ -305,7 +306,7 @@ function transformTypes(invoiceFrom: IInvoiceMin[]){
       folio: i.folio,
       concepts: i.paymentWay+' | '+ i.paymentMethod + ' | ' + i.useCFDI,
       // previousAmount: i.cost.total
-      previousAmount: i.accountreceivables[0]?.previousbalanceamount || 0
+      previousAmount: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.previousbalanceamount : 0
     });
   });
   return invoiceTo;

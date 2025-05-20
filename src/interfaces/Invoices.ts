@@ -381,3 +381,45 @@ export interface IInvoiceCollectionsTable {
   charged: number,
   concept: string
 }
+
+export interface IConceptsInvoice {
+  user: {}
+  conceptEstimate: {
+    _id: string
+    code: string
+    name: string
+    description: string
+    unit: {
+      _id: string
+      name: string
+      color: string
+    }
+  }
+  idconcept: string
+  area: string
+  section: string
+  priceConcepEstimate: {
+    cost: number
+    date: string
+    user: string
+  }
+  quantity: number
+  amount: number
+  date: string
+  status: boolean
+}
+
+export interface ITotalAmountInvoicesPending {
+  totalInvoiceIssued: {
+    quantity: number
+    amount: number
+  }
+  totalInvoiceOverdue: {
+    quantity: number
+    total: number
+  }
+  totalInvoicesPayment: {
+    quantity: number
+    total: number
+  }
+}
