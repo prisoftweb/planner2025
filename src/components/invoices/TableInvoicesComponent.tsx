@@ -46,7 +46,7 @@ export default function TableInvoicesComponent({token, user}:
         showToastMessageError(res);
       }else{
         setInvoices(res);
-        console.log('inoice => ', res[0]);
+        // console.log('inoice => ', res[0]);
       }
 
       const data = {
@@ -235,12 +235,13 @@ export default function TableInvoicesComponent({token, user}:
     //   conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
     //   conditionAccountsReceivable:['67d20cb359865f640af92638'],
     // }
+    const statusesFil = statuses.filter((status) => status !== 'all');
 
     const data = {
       // conditionPayment: [
       //     "678ed05cc5f08e8a0f36d5e1","67d20e2959865f640af92682"
       // ],
-      conditionPayment: statuses,
+      conditionPayment: statusesFil,
       conditionIssued: [
           "67d20cb359865f640af92638"
       ],
@@ -249,6 +250,7 @@ export default function TableInvoicesComponent({token, user}:
       ]
     }
 
+    // console.log('update total => ');
     const rest = await getAllTotalAmountInvoicePending(token, dateI, dateF, data);
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
@@ -261,7 +263,9 @@ export default function TableInvoicesComponent({token, user}:
     return current.cost.total > previous.cost.total ? current : previous;
   });
 
+  // console.log('invoiceM => ', invoiceM);
   const maxAmount = invoiceM.cost.total;
+  // const maxAmount = invoiceM;
 
   const dateValidation = (exp:IInvoiceMin, startDate:number, endDate:number) => {
     let d = new Date(exp.date).getTime();
@@ -337,7 +341,7 @@ export default function TableInvoicesComponent({token, user}:
     <>
       <div className="grid grid-cols-4 gap-x-3">
         <Card amount={totalInvoices?.totalInvoicesPayment?.total || 0} title="Pagadas" footer={(totalInvoices?.totalInvoicesPayment?.quantity || 0)+" facturas"}></Card>
-        <Card amount={totalInvoices?.totalInvoiceIssued?.amount || 0} title="Emitidas" footer={(totalInvoices?.totalInvoiceIssued?.quantity || 0)+" facturas"}></Card>
+        <Card amount={totalInvoices?.totalInvoiceIssued?.total || 0} title="Emitidas" footer={(totalInvoices?.totalInvoiceIssued?.quantity || 0)+" facturas"}></Card>
         <Card amount={totalInvoices?.totalInvoiceOverdue?.total || 0} title="Vencidas" footer={(totalInvoices?.totalInvoiceOverdue?.quantity || 0)+" facturas"}></Card>
         <Card amount={0} title="Total" footer="0 facturas"></Card>
       </div>

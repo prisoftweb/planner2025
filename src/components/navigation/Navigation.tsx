@@ -246,7 +246,7 @@ const NavItems = ({role}: {role:string}) => {
             link: '/invoices'
           },
           {
-            name: 'Garantias',
+            name: 'Fondos de Garantia',
             link: '/guarantee'
           },
         ]}

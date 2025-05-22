@@ -253,7 +253,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       cell: ({row}) => (
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.Fecha.substring(0, 10)}</p>
+        >{row.original.Fecha?.substring(0, 10)}</p>
       ),
     }),
     columnHelper.accessor('concept', {

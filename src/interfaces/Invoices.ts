@@ -412,7 +412,7 @@ export interface IConceptsInvoice {
 export interface ITotalAmountInvoicesPending {
   totalInvoiceIssued: {
     quantity: number
-    amount: number
+    total: number
   }
   totalInvoiceOverdue: {
     quantity: number

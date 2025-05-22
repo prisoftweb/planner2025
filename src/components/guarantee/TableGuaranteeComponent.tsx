@@ -14,7 +14,6 @@ import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions"
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
@@ -172,16 +171,16 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
     }, 2000);
   }
 
-  const confirmCollection = async( id: string) => {
+  const confirmGuarantee = async( id: string) => {
     const data = {
       condition: [
         {
-          glossary: "678ed05cc5f08e8a0f36d5e1",
+          glossary: "6827d5c2936cac5913f94ad7",
           user
         }
       ]
     }
-    const res = await insertConditionInCollection(token, data, id);
+    const res = await insertConditionInGuarantee(token, id, data);
     if(typeof(res)==='string'){
       showToastMessageError(res);
       setTimeout(() => {
@@ -260,7 +259,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       header: 'Confirmar',
       id: 'confirmar',
       cell: ({row}) => (
-        <Toogle value={row.original.isValidate} id={row.original.id} onClick={confirmCollection} />
+        <Toogle value={row.original.isValidate} id={row.original.id} onClick={confirmGuarantee} />
       ),
     }),
     // columnHelper.accessor('confirm', {

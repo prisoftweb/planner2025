@@ -10,7 +10,7 @@ export function GuaranteeDataToTableData(guarantees:IGuarantee[]){
       datePayment: gua.datePayment,
       id: gua._id,
       proyect: gua.project,
-      isValidate: gua.condition[gua.condition.length-1].glossary.includes('678ed05cc5f08e8a0f36d5e1')
+      isValidate: gua.condition[gua.condition.length-1].glossary.includes('6827d5c2936cac5913f94ad7')
     })
   });
 
