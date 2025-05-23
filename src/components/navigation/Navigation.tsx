@@ -260,10 +260,6 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Cuentas por cobrar',
             link: '/collections'
           },
-          {
-            name: 'Fondo de garantias',
-            link: '/collections/guarantee'
-          }
         ]}
       />
       <NavItem name="Costos" link="" items={[

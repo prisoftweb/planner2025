@@ -35,3 +35,63 @@ export interface ITableGuarantee {
   amountVat: number,
   isValidate: boolean
 }
+
+export interface IGuaranteeMin {
+  _id: string
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    vat: string
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  estimate: {}
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  date: string
+  dateGuarantee: string
+  datePayment: string
+  estatus: {
+    _id: string
+    name: string
+    color: string
+  }
+  client: {
+    _id: string
+    name: string
+  }
+}
+
+export interface IAmountTotalGuaranteesByDateAndStatus {
+  quantity: number
+  subtotal: number
+  total: number
+}
+
+export interface IGuaranteeGroupByClient {
+  quantity: number
+  subtotal: number
+  total: number
+  client: string
+}
+
+export interface IGuaranteByYear {
+  quantity: number
+  subtotal: number
+  total: number
+  year: number
+}
+
+export interface IGuaranteeByStatus {
+  quantity: number
+  subtotal: number
+  total: number
+  status: string
+}

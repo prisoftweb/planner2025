@@ -10,7 +10,10 @@ import { IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfac
 import { getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 import AddNewConceptEstimate from "./AddNewConceptEstimate";
 import { Options } from "@/interfaces/Common";
-import { showToastMessageError } from "@/components/Alert";
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
+
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { createGuaranteesFound } from "@/app/api/routeGuarantee";
 
 type ContainerDetailEstimateProps = {
   project: OneProjectMin, 
@@ -92,6 +95,34 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       }
     }else{
       button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
+    }
+  }
+
+  // console.log('estimate detail => ', estimate);
+
+  const handleCreateGuaranteeFund = async () => {
+    const data = {
+      cost: {
+          subtotal:estimate?.amountGuaranteeFund ?? 0, 
+          iva:(estimate?.amountGuaranteeFund ?? 0) * 0.16,
+          total:(estimate?.amountGuaranteeFund ?? 0) * 1.16,
+          discount: 0,        
+          vat:"6675daf663dfd817c9551b2a" 
+      },
+      user,
+      project: project._id,
+      estimate: estimate._id,
+      condition: [
+          {glossary:"6827d64a936cac5913f94ad9", user}
+      ],
+      date:new Date().toISOString(),
+    }
+
+    const res = await createGuaranteesFound(token, data);
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }else{
+      showToastMessage('Fondo de garantia creado exitosamente!!!');
     }
   }
 
@@ -183,6 +214,12 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
           <div className="flex justify-between ">
             <p className="text-slate-400">Orden de compra</p>
             <p className="text-lg text-slate-600 text-right">{estimate.purschaseOrder}</p>
+          </div>
+
+          <div className="flex justify-between mt-2">
+            <p className="text-slate-400">Fondo de garantia</p>
+            <CheckCircleIcon className="w-6 h-6 text-green-700 hover:text-green-500 hover:cursor-pointer"
+              onClick={handleCreateGuaranteeFund} />
           </div>
         </div>
 
