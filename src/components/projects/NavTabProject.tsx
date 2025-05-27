@@ -97,6 +97,14 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                           ${tab==='7'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
+                    <Link href={`/projects/${idPro}/guaranteefunds`}>
+                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                        placement="bottom" className="bg-white text-blue-500" content='Fondo garantia'>
+                        <CreditCardIcon
+                          className={`w-6 h-6 text-slate-600 cursor-pointer 
+                          ${tab==='8'? 'bg-green-500 rounded-lg': ''}`} />
+                      </Tooltip>
+                    </Link>
                   </div>                             
   }else{
     tabCli=(
@@ -134,6 +142,11 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
         <Link href={`/projects/estimates/${idPro}/collections?page=projects`}>
           <div className={`w-50 px-5 ${tab==='7'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Cobranza</p>
+          </div>
+        </Link>
+        <Link href={`/projects/${idPro}/guaranteefunds`}>
+          <div className={`w-50 px-5 ${tab==='8'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Fondo garantia</p>
           </div>
         </Link>
       </div>

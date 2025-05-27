@@ -18,8 +18,8 @@ type Props = {
 export default function DataConceptStepperComponent({previousStep, price, conceptSelected, 
   user, updateConcepts, showForm}: Props) {
 
-  const [area, setArea] = useState<string>('');
-  const [section, setSection] = useState<string>('');
+  // const [area, setArea] = useState<string>('');
+  // const [section, setSection] = useState<string>('');
   const [quantity, setQuantity] = useState<string>('0');
   const [pu, setPu] = useState<string>('0');
   
@@ -30,18 +30,18 @@ export default function DataConceptStepperComponent({previousStep, price, concep
 
   const validationData = () => {
     let validation = true;
-    if(!area || area===''){
-      setBandArea(true);
-      validation = false;
-    }else{
-      setBandArea(false);
-    }
-    if(!section || section===''){
-      setBandSection(true);
-      validation = false;
-    }else{
-      setBandSection(false);
-    }
+    // if(!area || area===''){
+    //   setBandArea(true);
+    //   validation = false;
+    // }else{
+    //   setBandArea(false);
+    // }
+    // if(!section || section===''){
+    //   setBandSection(true);
+    //   validation = false;
+    // }else{
+    //   setBandSection(false);
+    // }
     if(!quantity || quantity===''){
       setBandQuantity(true);
       validation = false;
@@ -88,8 +88,8 @@ export default function DataConceptStepperComponent({previousStep, price, concep
           date: price?.date,            
           user: price?.user._id
       },
-      area,
-      section,
+      // area,
+      // section,
       quantity: Number(quantity),
       amount: Number(pu.replace(/[$,]/g, "")),
       date: new Date(),
@@ -132,7 +132,7 @@ export default function DataConceptStepperComponent({previousStep, price, concep
 
       <div className="p-2">
         <div className="grid grid-cols-2 gap-x-1">
-          <div className="">
+          {/* <div className="">
             <Label htmlFor="area"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Area</p></Label>
             <Input type="text" name="area" 
               value={area}
@@ -151,7 +151,7 @@ export default function DataConceptStepperComponent({previousStep, price, concep
             {bandSection && (
               <p className="text-red-500">La seccion es obligatoria!!!</p>
             )}
-          </div>
+          </div> */}
 
           <div className="">
             <Label htmlFor="quantity"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cantidad</p></Label>

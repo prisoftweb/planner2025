@@ -5,11 +5,6 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-// import RemoveElement from "@/components/RemoveElement";
-// import Chip from "@/components/providers/Chip";
-// import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
-// import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
-// import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
@@ -18,11 +13,12 @@ import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
 import { getGuaranteesByDateMin, insertConditionInGuarantee, 
   getAmountTotalGuaranteesByDateAndStatus, getTotalGuaranteesByDateAndStatus, 
-  getGuaranteesGroupByClientAndDateAndStatus, getGuaranteesGroupByYear, getGuaranteesGroupByStatus } 
+  getGuaranteesGroupByClientAndDateAndStatus, getGuaranteesGroupByYear, 
+  getGuaranteesGroupByStatus, getGuaranteesResumeByProjectMin } 
 from "@/app/api/routeGuarantee";
 import { ITableGuarantee, IAmountTotalGuaranteesByDateAndStatus, IGuaranteeGroupByClient, 
-  IGuaranteeByStatus, IGuaranteByYear, IGuaranteeMin} from "@/interfaces/Guarantee";
-import { GuaranteeDataToTableData } from "@/app/functions/GuaranteesFunctions";
+  IGuaranteeByStatus, IGuaranteByYear, IGuaranteeMin, IGuaranteeResumenByProject} from "@/interfaces/Guarantee";
+import { GuaranteeDataToTableData, GuaranteeDataByProjectToTableData } from "@/app/functions/GuaranteesFunctions";
 import NewDonutChartComponent from "../projects/dashboard/NewDonutChartComponent";
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
@@ -32,8 +28,8 @@ import Slider from '@mui/material/Slider';
 
 export default function TableGuaranteeComponent({token, user}: {token:string, user:string}) {
 
-  const [guarantees, setGuarantees] = useState<IGuaranteeMin[]>([]);
-  const [filteredGuarantees, setFilteredGuarantees] = useState<IGuaranteeMin[]>([]);
+  const [guarantees, setGuarantees] = useState<IGuaranteeResumenByProject[]>([]);
+  const [filteredGuarantees, setFilteredGuarantees] = useState<IGuaranteeResumenByProject[]>([]);
   const [isFilter, setIsFilter]=useState<boolean>(false);
   // const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
@@ -74,7 +70,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getGuaranteesByDateMin(token, '2024-01-01', '2025-04-30');
+      const res = await getGuaranteesResumeByProjectMin(token, '2024-01-01', '2025-04-30');
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
@@ -168,22 +164,22 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   }
 
   const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    let statusesFil;
-    if(arrStatuses.length > 0){
-      statusesFil = guarantees.filter((g) => arrStatuses.includes(g.estatus._id));
-    }else{
-      statusesFil = guarantees;
-    }
+    // let statusesFil;
+    // if(arrStatuses.length > 0){
+    //   statusesFil = guarantees.filter((g) => arrStatuses.includes(g.estatus._id));
+    // }else{
+    //   statusesFil = guarantees;
+    // }
 
-    const filtered = statusesFil.filter((c) => {
-      let d = new Date(c.date).getTime();
-      if(d >= dateS.getTime() && d <= dateE.getTime()){
-        return c;
-      }
-    });
+    // const filtered = statusesFil.filter((c) => {
+    //   let d = new Date(c.date).getTime();
+    //   if(d >= dateS.getTime() && d <= dateE.getTime()){
+    //     return c;
+    //   }
+    // });
 
-    setFilteredGuarantees(filtered);
-    setIsFilter(true);
+    // setFilteredGuarantees(filtered);
+    // setIsFilter(true);
     updateTotal(getDate(dateS), getDate(dateE));
   }
 
@@ -321,33 +317,11 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
         >{row.original.datePayment.substring(0, 10)}</p>
       ),
     }),
-    columnHelper.accessor('datePayment', {
-      header: 'Confirmar',
-      id: 'confirmar',
-      cell: ({row}) => (
-        <Toogle value={row.original.isValidate} id={row.original.id} onClick={confirmGuarantee} />
-      ),
-    }),
-    // columnHelper.accessor('confirm', {
-    //   header: 'Confirmado',
-    //   id: 'confirmado',
+    // columnHelper.accessor('datePayment', {
+    //   header: 'Confirmar',
+    //   id: 'confirmar',
     //   cell: ({row}) => (
-    //     // <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-    //     //   <input 
-    //     //     // checked={row.original.confirm} 
-    //     //     onClick={() => confirmCollection(row.original.id)} id={row.original.id.toString()} type="checkbox"
-    //     //     // disabled={row.original.confirm}
-    //     //     className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-    //     //       appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-    //     //       peer-checked:border-green-500 peer-checked:before:bg-green-500
-    //     //       border border-slate-300" />
-    //     //   <label htmlFor={row.original.id.toString()}
-    //     //     className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-    //     //     <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-    //     //       data-ripple-dark="true"></div>
-    //     //   </label>
-    //     // </div>
-    //     <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
+    //     <Toogle value={row.original.isValidate} id={row.original.id} onClick={confirmGuarantee} />
     //   ),
     // }),
     columnHelper.accessor('amount', {
@@ -378,9 +352,9 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
 
   let data;
   if(isFilter){
-    data = GuaranteeDataToTableData(filteredGuarantees);
+    data = GuaranteeDataByProjectToTableData(filteredGuarantees);
   }else{
-    data = GuaranteeDataToTableData(filteredGuarantees);
+    data = GuaranteeDataByProjectToTableData(filteredGuarantees);
   }
 
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">

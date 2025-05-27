@@ -95,3 +95,59 @@ export interface IGuaranteeByStatus {
   total: number
   status: string
 }
+
+export interface IGuaranteeByPojectMin {
+  _id: string
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    vat: string
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  estimate: {
+    _id: string
+    name: string
+  }
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  date: string
+  estatus: {
+    _id: string
+    name: string
+    color: string
+  }
+  client: {
+    _id: string
+    name: string
+  }
+}
+
+
+export interface ITableGuaranteeByProject {
+  id: string
+  client: string,
+  // dateGuarantee: string,
+  // datePayment: string,
+  date: string,
+  amount: number,
+  amountVat: number,
+  // isValidate: boolean
+  estimate: string
+}
+
+export interface IGuaranteeResumenByProject {
+  quantity: number
+  subtotal: number
+  iva: number
+  total: number
+  project: string
+  client: string
+}

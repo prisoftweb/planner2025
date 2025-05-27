@@ -101,7 +101,8 @@ export default function TableInvoicesComponent({token, user}:
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           /> */}
-          <RemoveElement id={`${row.original.id}/${row.original.idEstimates}`} name={row.original.estimate} remove={removeInvoice} 
+          <RemoveElement id={ row.original.idEstimates? `${row.original.id}/${row.original.idEstimates}`: `${row.original.id}`} 
+                      name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
           {row.original.ischargedfull? (
             <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
@@ -139,33 +140,51 @@ export default function TableInvoicesComponent({token, user}:
         >{row.original.folio}</p>
       ),
     }),
+    columnHelper.accessor('nameProject', {
+      header: 'Proyecto',
+      id: 'proyecto',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        >{row.original.nameProject}</p>
+      ),
+    }),
+    columnHelper.accessor('client', {
+      header: 'Cliente',
+      id: 'cliente',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        >{row.original.client}</p>
+      ),
+    }),
     columnHelper.accessor('usecfdi', {
       header: 'Uso CFDI',
       id: 'cdfi',
       cell: ({row}) => (
         <p className="cursor-pointer"
         onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
-        >{row.original.usecfdi.substring(row.original.usecfdi.length-3)}</p>
+        >{row.original.usecfdi}</p>
       ),
     }),
-    columnHelper.accessor('methodpaid', {
-      header: 'Metodo de pago',
-      id: 'metodo',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
-        >{row.original.methodpaid.substring(row.original.methodpaid.length-3)}</p>
-      ),
-    }),
-    columnHelper.accessor('formpaid', {
-      header: 'Forma de pago',
-      id: 'forma',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
-        >{row.original.formpaid.substring(row.original.formpaid.length-3)}</p>
-      ),
-    }),
+    // columnHelper.accessor('methodpaid', {
+    //   header: 'Metodo de pago',
+    //   id: 'metodo',
+    //   cell: ({row}) => (
+    //     <p className="cursor-pointer"
+    //     onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+    //     >{row.original.methodpaid.substring(row.original.methodpaid.length-3)}</p>
+    //   ),
+    // }),
+    // columnHelper.accessor('formpaid', {
+    //   header: 'Forma de pago',
+    //   id: 'forma',
+    //   cell: ({row}) => (
+    //     <p className="cursor-pointer"
+    //     onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+    //     >{row.original.formpaid.substring(row.original.formpaid.length-3)}</p>
+    //   ),
+    // }),
     columnHelper.accessor('estimate', {
       header: 'Estimacion',
       id: 'estimacion',
@@ -380,6 +399,9 @@ export default function TableInvoicesComponent({token, user}:
 function InvoiceDataToTableData(invoices:IInvoiceMin[]){
   const table: IInvoiceTable[] = [];
   invoices.map((inv) => {
+    const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
+    console.log('aux => ', aux);
+    console.log(inv.useCFDI, ' => ', inv.paymentMethod, ' => ' , inv.paymentWay)
     table.push({
       amount: inv.cost.total,
       condition: inv.condition,
@@ -389,7 +411,7 @@ function InvoiceDataToTableData(invoices:IInvoiceMin[]){
       formpaid: inv.paymentWay,
       id: inv._id,
       methodpaid: inv.paymentMethod,
-      usecfdi: inv.useCFDI,
+      usecfdi: aux,
       idEstimates:inv.estimate._id, 
       charged: (inv.lastpayment?.unchargedbalanceamount >= 0 && inv.lastpayment?.unchargedbalanceamount <= 100? 
                               inv.cost.total: inv.cost.total - inv.lastpayment?.previousbalanceamount) || inv.cost.total,
@@ -398,7 +420,9 @@ function InvoiceDataToTableData(invoices:IInvoiceMin[]){
       previousBalance: inv.lastpayment?.previousbalanceamount || 0,
       accountreceivablesCount: inv.accountreceivablesCount,
       ischargedfull: inv.ischargedfull,
-      project: inv.project._id
+      project: inv.project._id,
+      nameProject: inv.project.title,
+      client: inv.client.name
     })
   });
 

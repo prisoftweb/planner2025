@@ -213,3 +213,50 @@ export async function createGuaranteesFound(token: string, data:Object) {
     return 'Error: No se pudo crear fondo de garantía'; 
   }
 }
+
+export async function getGuaranteesByProject(token: string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllGuaranteeFundsMINByIDPROJECT/${id}`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 200) {
+      return response.data.data.stats;
+    }
+    return 'Error: No se pudo obtener la información de las garantías';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data || 'Error: No se pudo obtener la información de las garantías';
+    }
+    return 'Error: No se pudo obtener la información de las garantías'; 
+  }
+}
+
+export async function getGuaranteesResumeByProjectMin(token: string, dateI:string, dateE:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllGuaranteeFundsRESUMEGroupByPROJECT/${dateI}/${dateE}`;
+  const data = {
+    condition: [
+      "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
+    ]
+  };
+  try {
+    const response = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 200) {
+      return response.data.data.stats;
+    }
+    return 'Error: No se pudo obtener la información de las garantías';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data || 'Error: No se pudo obtener la información de las garantías';
+    }
+    return 'Error: No se pudo obtener la información de las garantías'; 
+  }
+}

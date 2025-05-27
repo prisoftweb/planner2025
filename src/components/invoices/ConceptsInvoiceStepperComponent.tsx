@@ -118,7 +118,7 @@ export default function ConceptsInvoiceStepperComponent({token, nextStep, saveIn
   return (
     <div>
       <div className="my-2">
-        <Button type="button" onClick={() => setShowNewConcept(true)}>Nuevo</Button>
+        <Button type="button" onClick={() => setShowNewConcept(true)}>Agregar Concepto</Button>
       </div>
       <Table columns={columns} data={data} placeH="Buscar concepto" />
       

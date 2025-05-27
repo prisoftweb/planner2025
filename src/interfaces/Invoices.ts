@@ -70,6 +70,8 @@ export interface IInvoiceTable {
   accountreceivablesCount:number
   ischargedfull:boolean
   project?: string
+  nameProject?: string
+  client?: string
 }
 
 export interface IInvoiceByProject {

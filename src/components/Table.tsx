@@ -258,6 +258,38 @@ export default function Table({data, columns, placeH, typeTable='',
                     <p>Total de gastos: {t}</p>
                   </div>)
             }
+          }else{
+            if(typeTable === 'guaranteefunds'){
+              data.map((guarantee:ProjectsTable) => total += guarantee.amount);
+              const t = CurrencyFormatter({
+                currency: 'MXN',
+                value: total
+              });
+              
+              if(table.getSelectedRowModel().flatRows.length > 0){
+                let totalSeleccionados: number = 0;
+                table.getSelectedRowModel().flatRows.map((proj:any) => totalSeleccionados += proj.original.amount);
+                const tSeleccionados = CurrencyFormatter({
+                  currency: 'MXN',
+                  value: totalSeleccionados
+                });
+                labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
+                    <div className="flex gap-x-5 text-white pl-5">
+                      <p>Cantidad: {data.length}</p>
+                      <p>Total de fondos de garantia: {t}</p>
+                    </div>
+                    <div className="flex gap-x-5 text-white pl-5">
+                      <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
+                      <p>Total de fondos de garantia seleccionados seleccionados: {tSeleccionados}</p>
+                    </div>
+                </div>)
+              }else{
+                labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
+                      <p>Cantidad: {data.length}</p>
+                      <p>Total de fondos de garantia: {t}</p>
+                    </div>)
+              }
+            }
           }
         }
       }

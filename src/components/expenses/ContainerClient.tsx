@@ -52,14 +52,77 @@ export default function ContainerClient({data, token, expenses,
 
   useEffect(() => {
     const fetchApis = async () => {
-      let costcenters: CostoCenterLV[];
-      try {
-        costcenters = await getCostoCentersLV(token);
-        if(typeof(costcenters)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+      let costcentersData: CostoCenterLV[];
+      costcentersData = await getCostoCentersLV(token);
+
+      let optProvidersData:Options[]= [];
+      optProvidersData = await getProvidersLV(token);
+
+      let optProvidersSATData:Options[]= [];
+      optProvidersSATData = await getProvidersSATLV(token);
+
+      let optResponsiblesData:Options[]= [];
+      optResponsiblesData = await getUsersLV(token);
+
+      let optProjectsData:Options[]=[];
+      optProjectsData = await getProjectsLV(token);
+
+      let optCategoriesData: Options[] = [];
+      optCategoriesData = await getCatalogsByNameAndCategory(token, 'cost');
+      
+      let optTypesData: Options[] = [];
+      optTypesData = await getCatalogsByNameAndType(token, 'cost');
+
+      let optConditionsData: Options[] = [];
+      optConditionsData = await getCatalogsByNameAndCondition(token, 'cost');
+      
+      let optVatsData: Options[];
+      optVatsData = await GetVatsLV(token);
+      
+      let repsData: ReportParse[]=[];
+      if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
+        repsData = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
+      }else{
+        repsData = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
+      }
+
+      const [costcenters, optProviders, optProvidersSAT, optResponsibles, optProjects, 
+        optCategories, optTypes, optConditions, optVats, reps] = await Promise.all([costcentersData, 
+          optProvidersData, optProvidersSATData, optResponsiblesData, optProjectsData, 
+          optCategoriesData, optTypesData, optConditionsData, optVatsData, repsData])
+
+      if(typeof(costcenters)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+      }
+
+      if(typeof(optProviders)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{optProviders}</h1>
+      }
+
+      if(typeof(optProvidersSAT)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{optProvidersSAT}</h1>
+      }
+
+      if(typeof(optResponsibles)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{optResponsibles}</h1>
+      }
+
+      if(typeof(optProjects)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+      }
+
+      if(typeof(optCategories)==='string') return <h1 className="text-red-500 text-center text-lg">{optCategories}</h1>
+
+      if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+
+      if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
+
+      if(typeof(optVats)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{optVats}</h1>
+      }
+      
+      if(typeof(reps)==='string'){
+        return <h1 className="text-center text-lg text-red-500">{reps}</h1>
       }
 
       const optCostCenter:Options[]= [];
@@ -69,95 +132,6 @@ export default function ContainerClient({data, token, expenses,
           value: costcenter.categoryid + '/' + costcenter.value
         });
       });
-
-      let optProviders:Options[]= [];
-      try {
-        optProviders = await getProvidersLV(token);
-        if(typeof(optProviders)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optProviders}</h1>
-        }
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
-      }
-
-      let optProvidersSAT:Options[]= [];
-      try {
-        optProvidersSAT = await getProvidersSATLV(token);
-        if(typeof(optProvidersSAT)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optProvidersSAT}</h1>
-        }
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores del sat!!</h1>
-      }
-
-      let optResponsibles:Options[]= [];
-      try {
-        optResponsibles = await getUsersLV(token);
-        if(typeof(optResponsibles)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optResponsibles}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
-      }
-
-      let optProjects:Options[];
-      try {
-        optProjects = await getProjectsLV(token);
-        if(typeof(optProjects)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-      }
-
-      let optCategories: Options[] = [];
-      try {
-        optCategories = await getCatalogsByNameAndCategory(token, 'cost');
-        if(typeof(optCategories)==='string') return <h1 className="text-red-500 text-center text-lg">{optCategories}</h1>
-      } catch (error) {
-        return <h1>Error al consultar catalogos!!</h1>
-      }
-
-      let optTypes: Options[] = [];
-      try {
-        optTypes = await getCatalogsByNameAndType(token, 'cost');
-        if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
-      } catch (error) {
-        return <h1>Error al consultar catalogos!!</h1>
-      }
-
-      let optConditions: Options[] = [];
-      try {
-        optConditions = await getCatalogsByNameAndCondition(token, 'cost');
-        if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
-      } catch (error) {
-        return <h1>Error al consultar catalogos!!</h1>
-      }
-
-      let optVats: Options[];
-      try {
-        optVats = await GetVatsLV(token);
-        if(typeof(optVats)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optVats}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los ivas!!</h1>
-      }
-      
-      let reps: ReportParse[];
-      try {
-        if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-          reps = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
-        }else{
-          reps = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-        }
-        
-        if(typeof(reps)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{reps}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los reportes!!</h1>
-      }
 
       const opReports:Options[]= [];
       reps.map((rep) => {
