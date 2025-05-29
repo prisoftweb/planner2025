@@ -68,12 +68,15 @@ export async function insertConditionInGuarantee(token: string, id:string, data:
   }
 }
 
-export async function getAmountTotalGuaranteesByDateAndStatus(token: string, dateI:string, dateE:string) {
+export async function getAmountTotalGuaranteesByDateAndStatus(token: string, dateI:string, dateE:string, statuses: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllTOTALGuaranteeFundsResumeByDateAndStatus/${dateI}/${dateE}`;
+  // const data = {
+  //   condition: [
+  //     "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
+  //   ]
+  // };
   const data = {
-    condition: [
-      "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
-    ]
+    condition: statuses
   };
   try {
     const response = await axios.post(url, JSON.stringify(data), {
@@ -115,12 +118,15 @@ export async function getTotalGuaranteesByDateAndStatus(token: string, dateI:str
   }
 }
 
-export async function getGuaranteesGroupByClientAndDateAndStatus(token: string, dateI:string, dateE:string) {
+export async function getGuaranteesGroupByClientAndDateAndStatus(token: string, dateI:string, dateE:string, statuses:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllGuaranteeFundsGroupByCLIENT/${dateI}/${dateE}`;
+  // const data = {
+  //   condition: [
+  //     "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
+  //   ]
+  // };
   const data = {
-    condition: [
-      "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
-    ]
+    condition: statuses
   };
   try {
     const response = await axios.post(url, JSON.stringify(data), {
@@ -141,12 +147,15 @@ export async function getGuaranteesGroupByClientAndDateAndStatus(token: string, 
   }
 }
 
-export async function getGuaranteesGroupByYear(token: string, dateI:string, dateE:string) {
+export async function getGuaranteesGroupByYear(token: string, dateI:string, dateE:string, statuses: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllGuaranteeFundsGroupByYEAR/${dateI}/${dateE}`;
+  // const data = {
+  //   condition: [
+  //     "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
+  //   ]
+  // };
   const data = {
-    condition: [
-      "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
-    ]
+    condition: statuses
   };
   try {
     const response = await axios.post(url, JSON.stringify(data), {
@@ -156,7 +165,7 @@ export async function getGuaranteesGroupByYear(token: string, dateI:string, date
       },
     });
     if (response.status === 200) {
-      return response.data.data.stats;
+      return response.data.data.resultado;
     }
     return 'Error: No se pudo obtener fondos de garantías por anio';
   } catch (error) {
@@ -235,14 +244,19 @@ export async function getGuaranteesByProject(token: string, id:string) {
   }
 }
 
-export async function getGuaranteesResumeByProjectMin(token: string, dateI:string, dateE:string) {
+export async function getGuaranteesResumeByProjectMin(token: string, dateI:string, dateE:string, statuses: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllGuaranteeFundsRESUMEGroupByPROJECT/${dateI}/${dateE}`;
+  // const data = {
+  //   condition: [
+  //     "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
+  //   ]
+  // };
   const data = {
-    condition: [
-      "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
-    ]
+    condition: statuses
   };
   try {
+    console.log('url => ', url);
+    console.log('data => ', JSON.stringify(data));
     const response = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -258,5 +272,34 @@ export async function getGuaranteesResumeByProjectMin(token: string, dateI:strin
       return error.response?.data || 'Error: No se pudo obtener la información de las garantías';
     }
     return 'Error: No se pudo obtener la información de las garantías'; 
+  }
+}
+
+export async function getAllTOTALGuaranteeFundsResumeByDateAndStatus(token: string, dateI:string, dateE:string, statuses:string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllTOTALGuaranteeFundsResumeByDateAndStatus/${dateI}/${dateE}`;
+  // const data = {
+  //   condition: [
+  //     "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
+  //   ]
+  // };
+  const data = {
+    condition: statuses
+  };
+  try {
+    const response = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 200) {
+      return response.data.data.stats;
+    }
+    return 'Error: No se pudo obtener total de fondos de garantías por estatus';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data || 'Error: No se pudo obtener total de fondos de garantías por estatus';
+    }
+    return 'Error: No se pudo obtener total de fondos de garantías por estatus'; 
   }
 }

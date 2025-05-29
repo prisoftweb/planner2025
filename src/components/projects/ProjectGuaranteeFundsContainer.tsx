@@ -7,6 +7,7 @@ import { IGuaranteeByPojectMin, ITableGuaranteeByProject } from "@/interfaces/Gu
 import { createColumnHelper } from "@tanstack/react-table"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import Table from "../Table"
+import Chip from "../providers/Chip"
 
 type Props = {
   project:OneProjectMin, 
@@ -54,6 +55,15 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         <p>Accion</p>
       )
     }),
+    columnHelper.accessor('user', {
+      header: 'Usuario',
+      id: 'usuario',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.user}</p>
+      ),
+    }),
     columnHelper.accessor('client', {
       header: 'Cliente',
       id: 'cliente',
@@ -63,6 +73,15 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         >{row.original.client}</p>
       ),
     }),
+    columnHelper.accessor('estimate', {
+      header: 'Estimacion',
+      id: 'estimacion',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.estimate}</p>
+      ),
+    }),
     columnHelper.accessor('date', {
       header: 'Fecha',
       id: 'fecha',
@@ -70,6 +89,15 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         <p className="cursor-pointer"
         // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
         >{row.original.date.substring(0, 10)}</p>
+      ),
+    }),
+    columnHelper.accessor('status', {
+      header: 'Estatus',
+      id: 'estatus',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        ><Chip label={row.original.status.name} color={row.original.status.color} /> </p>
       ),
     }),
     columnHelper.accessor('amount', {
@@ -118,6 +146,8 @@ function TransformDataGuaranteeTotable(guarantees: IGuaranteeByPojectMin[]): ITa
     date: guarantee.date.substring(0, 10),
     amount: guarantee.cost.subtotal,
     amountVat: guarantee.cost.total,
-    estimate: guarantee.estimate.name
+    estimate: guarantee.estimate.name,
+    user: guarantee.user.name,
+    status: guarantee.estatus
   }));
 }

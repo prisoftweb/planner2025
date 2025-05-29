@@ -20,6 +20,10 @@ import { TbArrowNarrowLeft } from "react-icons/tb";
 import FilteringInvoiceComponent from "./FilteringInvoiceComponent";
 import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
 
+import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
+import { es } from "date-fns/locale"
+import { Chip as ChipMui } from "@mui/material";
+
 export default function TableInvoicesComponent({token, user}: 
   {token:string, user:string}) {
 
@@ -35,9 +39,35 @@ export default function TableInvoicesComponent({token, user}:
   // const refInvoice=useRef('');
   const [totalInvoices, setTotalInvoices]=useState<ITotalAmountInvoicesPending>();
 
+  const [widthPage, setWidthPage] = useState<number>(900);
+  const [statuses, setStatuses]=useState<string[]>([]);
+  
+  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+    from: new Date('2024-01-01'),
+    to: new Date('2025-04-30'),
+  });
+
   const handleShowForm = (value:boolean) => {
     setShowNewCollection(value);
   }
+
+  const handleResize = () => {
+    setWidthPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setWidthPage(Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    ));
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
 
   useEffect(() => {
     const fetch = async() => {
@@ -88,6 +118,46 @@ export default function TableInvoicesComponent({token, user}:
 
   const delInvoice = (id:string) => {
     window.location.reload();
+  }
+
+  const addStatus = (status:string) => {
+    const newStatus = [...statuses, status];
+    setStatuses(newStatus);
+    if(rangeDate.from && rangeDate.to){
+      handleFilter(rangeDate.from, rangeDate.to, newStatus);
+    }else{
+      showToastMessageError('Seleccione un rango de fechas para filtrar');
+    }
+  }
+
+  const deleteStatus = (status:string) => {
+    const newStatus = statuses.filter((s) => s !== status);
+    setStatuses(newStatus);
+    if(rangeDate.from && rangeDate.to){
+      handleFilter(rangeDate.from, rangeDate.to, newStatus);
+    }else{
+      showToastMessageError('Seleccione un rango de fechas para filtrar');
+    }
+  }
+
+  const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
+    // let statusesFil;
+    // if(arrStatuses.length > 0){
+    //   statusesFil = guarantees.filter((g) => arrStatuses.includes(g.estatus._id));
+    // }else{
+    //   statusesFil = guarantees;
+    // }
+
+    // const filtered = statusesFil.filter((c) => {
+    //   let d = new Date(c.date).getTime();
+    //   if(d >= dateS.getTime() && d <= dateE.getTime()){
+    //     return c;
+    //   }
+    // });
+
+    // setFilteredGuarantees(filtered);
+    // setIsFilter(true);
+    updateTotal(getDate(dateS), getDate(dateE), []);
   }
 
   const columnHelper = createColumnHelper<IInvoiceTable>();
@@ -278,6 +348,13 @@ export default function TableInvoicesComponent({token, user}:
     }
   }
 
+  const handleDate = (dateI: Date, dateF: Date) => {
+    handleFilter(dateI, dateF, statuses);
+    
+    //actualizar total con el rango de fechas
+    updateTotal(getDate(dateI), getDate(dateF), statuses);
+  }
+
   const invoiceM = invoices.reduce((previous, current) => {
     return current.cost.total > previous.cost.total ? current : previous;
   });
@@ -356,6 +433,29 @@ export default function TableInvoicesComponent({token, user}:
     data = InvoiceDataToTableData(invoices);
   }
 
+  let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
+                  <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
+                  <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
+                  <ChipStatus id="678ed05cc5f08e8a0f36d5e1" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada" />
+                  <ChipStatus id="67d20e2959865f640af92682" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada parcial" />
+                  <ChipStatus id="678ecf6ec5f08e8a0f36d5dd" addStatus={addStatus} removeStatus={deleteStatus} title="Cancelada" />
+                  <div>
+                    {/* <Label htmlFor='date'>Fecha</Label> */}
+                    <DateRangePicker 
+                      className='mt-2'
+                      placeholder='Seleccione un rango de fechas'
+                      onValueChange={(e) => {
+                        setRangeDate(e);
+                        if(e.from && e.to){
+                          handleDate(e.from, e.to);
+                        }
+                      }}
+                      value={rangeDate}
+                      locale={es}
+                    />
+                  </div>
+                </div>
+
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
@@ -386,6 +486,7 @@ export default function TableInvoicesComponent({token, user}:
           </div>
         </div>
       </div>
+      {widthPage > 1080 && filterElemnts}
       <Table columns={columns} data={data} placeH="buscar factura" />
       {showNewCollection && selInvoice && <AddNewCollectionInvoice showForm={handleShowForm} user={user}
                token={token} invoiceTable={selInvoice} />}
@@ -455,4 +556,20 @@ function getDate(date: Date){
   }else{
     return `${year}-${month}-${day}`;
   }
+}
+
+const ChipStatus = ({ addStatus, id, removeStatus, title}: 
+  {title:string, id:string, addStatus:Function, removeStatus:Function}) => {
+  const [active, setActive] = useState<boolean>(false);
+
+  const view = active? 
+                  <ChipMui label={title} className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>
+                  </ChipMui>: 
+                  <ChipMui label={title} color="default" onClick={() => {addStatus(id); setActive(true)}}></ChipMui>
+
+  return(
+    <>
+      {view }
+    </>
+  )
 }

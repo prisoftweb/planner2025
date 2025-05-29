@@ -14,14 +14,15 @@ import { Chip as ChipMui } from "@mui/material";
 import { getGuaranteesByDateMin, insertConditionInGuarantee, 
   getAmountTotalGuaranteesByDateAndStatus, getTotalGuaranteesByDateAndStatus, 
   getGuaranteesGroupByClientAndDateAndStatus, getGuaranteesGroupByYear, 
-  getGuaranteesGroupByStatus, getGuaranteesResumeByProjectMin } 
+  getGuaranteesResumeByProjectMin, getAllTOTALGuaranteeFundsResumeByDateAndStatus } 
 from "@/app/api/routeGuarantee";
 import { ITableGuarantee, IAmountTotalGuaranteesByDateAndStatus, IGuaranteeGroupByClient, 
-  IGuaranteeByStatus, IGuaranteByYear, IGuaranteeMin, IGuaranteeResumenByProject} from "@/interfaces/Guarantee";
+  IGuaranteeByStatus, IGuaranteByYear, IGuaranteeMin, IGuaranteeResumenByProject, ITotalGuaranteefundsByStatus} from "@/interfaces/Guarantee";
 import { GuaranteeDataToTableData, GuaranteeDataByProjectToTableData } from "@/app/functions/GuaranteesFunctions";
 import NewDonutChartComponent from "../projects/dashboard/NewDonutChartComponent";
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
+import { Progress } from "@nextui-org/react";
 
 // import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
@@ -41,7 +42,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
 
   const [guaranteesByClient, setGuaranteesByClient]=useState<IGuaranteeGroupByClient[]>([]);
   const [guaranteeByYear, setGuaranteeByYear]=useState<IGuaranteByYear[]>([]);
-  const [guaranteeByStatus, setGuaranteeByStatus]=useState<IGuaranteeByStatus>();
+  const [guaranteeByStatus, setGuaranteeByStatus]=useState<ITotalGuaranteefundsByStatus>();
   
   const [widthPage, setWidthPage] = useState<number>(900);
 
@@ -69,59 +70,69 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   }, []);
 
   useEffect(() => {
-    const fetch = async() => {
-      const res = await getGuaranteesResumeByProjectMin(token, '2024-01-01', '2025-04-30');
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        setGuarantees(res);
-        setFilteredGuarantees(res);
-      }
+    updateTotal(getDate(rangeDate?.from ?? new Date('2024-01-01')),
+                getDate(rangeDate?.to ?? new Date('2025-04-30')),
+                ["6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"]);
+    // const fetch = async() => {
+    //   const res = await getGuaranteesResumeByProjectMin(token, '2024-01-01', '2025-04-30');
+    //   if(typeof(res)==='string'){
+    //     showToastMessageError(res);
+    //   }else{
+    //     setGuarantees(res);
+    //     setFilteredGuarantees(res);
+    //   }
 
-      const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30');
-      if(typeof(resTotal)==='string'){
-        showToastMessageError(resTotal);
-      }else{
-        setAmountTotal(resTotal[0]);
-      }
+    //   const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30');
+    //   if(typeof(resTotal)==='string'){
+    //     showToastMessageError(resTotal);
+    //   }else{
+    //     setAmountTotal(resTotal[0]);
+    //   }
 
-      const resCobrar = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'POR COBRAR');
-      if(typeof(resCobrar)==='string'){
-        showToastMessageError(resCobrar);
-      }else{
-        setPorCobrar(resCobrar[0]);
-      }
+    //   const resCobrar = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'POR COBRAR');
+    //   if(typeof(resCobrar)==='string'){
+    //     showToastMessageError(resCobrar);
+    //   }else{
+    //     setPorCobrar(resCobrar[0]);
+    //   }
 
-      const resRecuperado = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'RECUPERADO');
-      if(typeof(resRecuperado)==='string'){
-        showToastMessageError(resRecuperado);
-      }else{
-        setRecuperar(resRecuperado[0]);
-      }
+    //   const resRecuperado = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'RECUPERADO');
+    //   if(typeof(resRecuperado)==='string'){
+    //     showToastMessageError(resRecuperado);
+    //   }else{
+    //     setRecuperar(resRecuperado[0]);
+    //   }
 
-      const resVencido = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'VENCIDO');
-      if(typeof(resVencido)==='string'){
-        showToastMessageError(resVencido);
-      }else{
-        setVencido(resVencido[0]);
-      }
+    //   const resVencido = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'VENCIDO');
+    //   if(typeof(resVencido)==='string'){
+    //     showToastMessageError(resVencido);
+    //   }else{
+    //     setVencido(resVencido[0]);
+    //   }
 
-      const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, '2024-01-01', '2025-04-30');
-      if(typeof(guaranteesClient)==='string'){
-        showToastMessageError(guaranteesClient);
-      }else{
-        setGuaranteesByClient(guaranteesClient);
-      }
+    //   const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, '2024-01-01', '2025-04-30');
+    //   if(typeof(guaranteesClient)==='string'){
+    //     showToastMessageError(guaranteesClient);
+    //   }else{
+    //     setGuaranteesByClient(guaranteesClient);
+    //   }
 
-      const guaranteesYear = await getGuaranteesGroupByYear(token, '2024-01-01', '2025-04-30');
-      if(typeof(guaranteesYear)==='string'){
-        showToastMessageError(guaranteesYear);
-      }else{
-        setGuaranteeByYear(guaranteesYear);
-      }
-    }
+    //   const guaranteesYear = await getGuaranteesGroupByYear(token, '2024-01-01', '2025-04-30');
+    //   if(typeof(guaranteesYear)==='string'){
+    //     showToastMessageError(guaranteesYear);
+    //   }else{
+    //     setGuaranteeByYear(guaranteesYear);
+    //   }
 
-    fetch();
+    //   const guaranteebyStatus = await getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, '2024-01-01', '2025-04-30');
+    //   if(typeof(guaranteebyStatus)==='string'){
+    //     showToastMessageError(guaranteebyStatus);
+    //   }else{
+    //     setGuaranteeByStatus(guaranteebyStatus);
+    //   }
+    // }
+
+    // fetch();
   }, []);
 
   const updateCollections = async() => {
@@ -137,10 +148,10 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   }
 
   const handleDate = (dateI: Date, dateF: Date) => {
-    handleFilter(dateI, dateF, statuses);
+    // handleFilter(dateI, dateF, statuses);
     
     //actualizar total con el rango de fechas
-    updateTotal(getDate(dateI), getDate(dateF));
+    updateTotal(getDate(dateI), getDate(dateF), statuses);
   }
 
   const addStatus = (status:string) => {
@@ -180,11 +191,20 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
 
     // setFilteredGuarantees(filtered);
     // setIsFilter(true);
-    updateTotal(getDate(dateS), getDate(dateE));
+    updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   }
 
-  const updateTotal = async (dateI:string, dateF:string) => {
-    const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, dateI, dateF);
+  const updateTotal = async (dateI:string, dateF:string, arrStatuses:string[]) => {
+
+    const res = await getGuaranteesResumeByProjectMin(token, dateI, dateF, arrStatuses);
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }else{
+      setGuarantees(res);
+      setFilteredGuarantees(res);
+    }
+
+    const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, dateI, dateF, arrStatuses);
     if(typeof(resTotal)==='string'){
       showToastMessageError(resTotal);
     }else{
@@ -211,20 +231,41 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
     }else{
       setVencido(resVencido[0]);
     }
+
+    const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, dateI, dateF, arrStatuses);
+    if(typeof(guaranteesClient)==='string'){
+      showToastMessageError(guaranteesClient);
+    }else{
+      setGuaranteesByClient(guaranteesClient);
+    }
+
+    const guaranteesYear = await getGuaranteesGroupByYear(token, dateI, dateF, arrStatuses);
+    if(typeof(guaranteesYear)==='string'){
+      showToastMessageError(guaranteesYear);
+    }else{
+      setGuaranteeByYear(guaranteesYear);
+    }
+
+    const guaranteebyStatus = await getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, dateI, dateF, arrStatuses);
+    if(typeof(guaranteebyStatus)==='string'){
+      showToastMessageError(guaranteebyStatus);
+    }else{
+      setGuaranteeByStatus(guaranteebyStatus);
+    }
   }
 
-  if(guarantees.length <= 0){
-    return (
-      <>
-        <div className="flex flex-col items-center">
-          <p className="text-5xl mt-20 font-bold">Garantias</p>
-          <p className="text-xl mt-10 text-slate-700 font-bold" 
-            >Gestiona las garantias desde Planner</p>
-          <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
-        </div>
-      </>
-    )
-  }
+  // if(guarantees.length <= 0){
+  //   return (
+  //     <>
+  //       <div className="flex flex-col items-center">
+  //         <p className="text-5xl mt-20 font-bold">Garantias</p>
+  //         <p className="text-xl mt-10 text-slate-700 font-bold" 
+  //           >Gestiona las garantias desde Planner</p>
+  //         <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   const delCollection = (id:string) => {
     showToastMessage('Cobro eliminado satisfactoriamente!!!');
@@ -358,9 +399,10 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   }
 
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-                <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Vencidos" />
-                <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Por cobrar" />
-                <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Recuperado" />
+                <ChipStatus id="6827d56d936cac5913f94ad5" addStatus={addStatus} removeStatus={deleteStatus} title="Vencidos" />
+                <ChipStatus id="6827d64a936cac5913f94ad9" addStatus={addStatus} removeStatus={deleteStatus} title="Por cobrar" />
+                <ChipStatus id="6827d5c2936cac5913f94ad7" addStatus={addStatus} removeStatus={deleteStatus} title="Recuperado" />
+                <ChipStatus id="6827d67b936cac5913f94adb" addStatus={addStatus} removeStatus={deleteStatus} title="Programado" />
                 <div>
                   {/* <Label htmlFor='date'>Fecha</Label> */}
                   <DateRangePicker 
@@ -403,6 +445,8 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       }
     ]
   };
+
+  const colorsSlider: any[]=['error', 'info', 'primary', 'secondary', 'success', 'warning'];
 
   return (
     <>
@@ -450,19 +494,46 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       </div>
       {widthPage > 1080 && filterElemnts}
       <Table columns={columns} data={data} placeH="buscar garantia" />      
-      <div className="mt-5 grid grid-cols-3 gap-x-3">
+      <div className="mt-5 grid grid-cols-3 gap-x-5">
         <div>
-          <NewDonutChartComponent data={DataGuaranteesClient} />
+          <Label>GARANTIA POR CLIENTE</Label>
+          <div className="mt-3">
+            <NewDonutChartComponent data={DataGuaranteesClient} />
+          </div>
         </div>
         <div>
-          {guaranteeByYear.map((g) => (
-            <div className="my-2" key={g.year}>
-              <Label>Año {g.year}</Label>
-              <Slider defaultValue={50} min={0} max={200} aria-label="Default" valueLabelDisplay="auto" />
+          <Label>SEGMENTADA POR AÑO</Label>
+          <div className="mt-3">
+            {guaranteeByYear.map((g, index:number) => (
+              <div className="my-2" key={g.year}>
+                <Label>Año {g.year}</Label>
+                <Slider defaultValue={g.porcentage} color={colorsSlider[index%6]} min={0} max={100} aria-label="Default" valueLabelDisplay="auto" />
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <Label>RECUPERADO VS PENDIENTE</Label>
+          <div className="mt-3">
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-lg font-bold">{(guaranteeByStatus?.porcentage)?.toFixed(2) || 0}%</p>
+              <p className="text-lg font-bold text-right">{(100 - (guaranteeByStatus?.porcentage ?? 0)).toFixed(2)}%</p>
             </div>
-          ))}
+            <div className="w-full h-6 bg-red-700">
+              <div className="h-6 bg-green-600" style={{width: (guaranteeByStatus?.porcentage?.toString() ?? '0')+'%'}}></div>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-lg">{CurrencyFormatter({
+                currency: 'MXN',
+                value: guaranteeByStatus?.recovered?.subtotalRecovered ?? 0
+              })}</p>
+              <p className="text-lg text-right">{CurrencyFormatter({
+                currency: 'MXN',
+                value: (guaranteeByStatus?.guarantee?.subtotal ?? 0) - (guaranteeByStatus?.recovered?.subtotalRecovered ?? 0)
+              })}</p>
+            </div>
+          </div>
         </div>
-        <div></div>
       </div>
     </>
   )

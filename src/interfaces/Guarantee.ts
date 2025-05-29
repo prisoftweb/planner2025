@@ -1,3 +1,5 @@
+import { Glossary } from "./Glossary"
+
 export interface IGuarantee {
   cost: {
     subtotal: number
@@ -82,11 +84,22 @@ export interface IGuaranteeGroupByClient {
   client: string
 }
 
+// export interface IGuaranteByYear {
+//   quantity: number
+//   subtotal: number
+//   total: number
+//   year: number
+// }
+
 export interface IGuaranteByYear {
+  year: number
   quantity: number
   subtotal: number
   total: number
-  year: number
+  porcentage: number
+  quantityRecovered: number
+  subtotalRecovered: number
+  totalRecovered: number
 }
 
 export interface IGuaranteeByStatus {
@@ -140,7 +153,13 @@ export interface ITableGuaranteeByProject {
   amount: number,
   amountVat: number,
   // isValidate: boolean
-  estimate: string
+  estimate: string,
+  user:string,
+  status: {
+    _id: string
+    name: string
+    color: string
+  }
 }
 
 export interface IGuaranteeResumenByProject {
@@ -150,4 +169,18 @@ export interface IGuaranteeResumenByProject {
   total: number
   project: string
   client: string
+}
+
+export interface ITotalGuaranteefundsByStatus {
+  recovered: {
+    quantityRecovered: number
+    subtotalRecovered: number
+    totalRecovered: number
+  }
+  guarantee: {
+    quantity: number
+    subtotal: number
+    total: number
+  }
+  porcentage: number
 }
