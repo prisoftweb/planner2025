@@ -12,6 +12,7 @@ import ProfileProject from "./ProfileProject"
 import ProgressProject from "./ProgressProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
 import DashboardProfileProject from "./DashboardProfileProject"
+import UpdateDateGuaranteeComponent from "./UpdateDateGuaranteeComponent"
 
 type Props = {
   project:OneProjectMin, 
@@ -60,6 +61,10 @@ export default function ProjectCli({project, token, id, optCategories, optClient
     (opt === 6? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
             style={{borderColor:'#F8FAFC'}}>
                     <ProgressProject id={id} project={project} token={token} user={user} />                                  
+              </div> ) :
+      opt === 7? ( <div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+            style={{borderColor:'#F8FAFC'}}>
+                    <UpdateDateGuaranteeComponent id={id} project={project} token={token} user={user} />                                  
               </div> ) : 
           (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>

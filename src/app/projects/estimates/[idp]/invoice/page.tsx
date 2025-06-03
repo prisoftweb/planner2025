@@ -29,6 +29,7 @@ export default async function Page({ params, searchParams }:
   let invoices: IInvoiceByProject[];
   try {
     invoices = await getInvoicesByProject(token, params.idp);
+    console.log('invoices proyect => ', invoices);
     if(typeof(invoices) === "string")
       return <h1 className="text-center text-red-500">{invoices}</h1>
   } catch (error) {

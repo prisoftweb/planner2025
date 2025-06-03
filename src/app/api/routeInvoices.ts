@@ -258,3 +258,26 @@ export async function getAllTotalAmountInvoicePending(auth_token:string, dateI: 
     return 'Error al consultar monto total de las facturas!!';
   }
 }
+
+export async function getAllInvoicesMINByDateAndCondition(auth_token:string, dateI: string, dateF:string, data:Object){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllInvoicesMINByDate/${dateI}/${dateF}`;
+  try {
+    console.log('url => ', url);
+    console.log('data => ', JSON.stringify(data));
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+    });
+    if(res.status===200)
+      return res.data.data.stats;
+    return 'Error al obtener las facturas!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('error => ', error);
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar las facturas!!';
+  }
+}

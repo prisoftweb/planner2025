@@ -46,9 +46,14 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   
   const [widthPage, setWidthPage] = useState<number>(900);
 
+  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+  //   from: new Date('2024-01-01'),
+  //   to: new Date('2025-04-30'),
+  // });
+
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date('2024-01-01'),
-    to: new Date('2025-04-30'),
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
   });
 
   const handleResize = () => {
@@ -418,7 +423,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
                     locale={es}
                   />
                 </div>
-              </div>
+              </div>;
 
   // const DataGuaranteesClient = [];
   const titles:string[]=[];

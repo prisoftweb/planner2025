@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from "react"
-import { IInvoiceMin, IInvoiceTable, ITotalAmountInvoicesPending } from "@/interfaces/Invoices"
-import { getInvoicesMin, removeInvoice, getAllTotalAmountInvoicePending } from "@/app/api/routeInvoices"
+import { IInvoiceMin, IInvoiceTable, ITotalAmountInvoicesPending, IInvoiceByDateAndConditionMin } from "@/interfaces/Invoices"
+import { getInvoicesMin, getAllInvoicesMINByDateAndCondition, removeInvoice, getAllTotalAmountInvoicePending } from "@/app/api/routeInvoices"
 import { showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -27,13 +27,13 @@ import { Chip as ChipMui } from "@mui/material";
 export default function TableInvoicesComponent({token, user}: 
   {token:string, user:string}) {
 
-  const [invoices, setInvoices] = useState<IInvoiceMin[]>([]);
+  const [invoices, setInvoices] = useState<IInvoiceByDateAndConditionMin[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
   const [showNewCollection, setShowNewCollection]=useState<boolean>(false);
 
   const [showNewInvoice, setShowNewinvoice]=useState<boolean>(false);
-  const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
-  const [filteredInvoices, setFilteredInvoices]=useState<IInvoiceMin[]>([]);
+  // const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
+  const [filteredInvoices, setFilteredInvoices]=useState<IInvoiceByDateAndConditionMin[]>([]);
   const [isFilter, setIsFilter]=useState<boolean>(false);
   const refEstimate = useRef('');
   // const refInvoice=useRef('');
@@ -42,9 +42,14 @@ export default function TableInvoicesComponent({token, user}:
   const [widthPage, setWidthPage] = useState<number>(900);
   const [statuses, setStatuses]=useState<string[]>([]);
   
+  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+  //   from: new Date('2024-01-01'),
+  //   to: new Date('2025-04-30'),
+  // });
+
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date('2024-01-01'),
-    to: new Date('2025-04-30'),
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
   });
 
   const handleShowForm = (value:boolean) => {
@@ -53,9 +58,9 @@ export default function TableInvoicesComponent({token, user}:
 
   const handleResize = () => {
     setWidthPage(Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
     ));
   }
 
@@ -71,7 +76,10 @@ export default function TableInvoicesComponent({token, user}:
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getInvoicesMin(token);
+      const dataInvoices = {
+        condition: ["678ed05cc5f08e8a0f36d5e1", "67d20e2959865f640af92682", "67d20cb359865f640af92638"]
+      }
+      const res = await getAllInvoicesMINByDateAndCondition(token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''), dataInvoices);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
@@ -102,19 +110,19 @@ export default function TableInvoicesComponent({token, user}:
     fetch();
   }, []);
 
-  if(invoices.length <= 0){
-    return (
-      <>
-        <div className="flex flex-col items-center">
-          <p className="text-5xl mt-20 font-bold">Facturas</p>
-          <p className="text-xl mt-10 text-slate-700 font-bold" 
-            // style={{maxInlineSize: '45ch', textWrap:'balance' }}
-            >Agregar una factura a una estimacion determinada de un proyecto.</p>
-          <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
-        </div>
-      </>
-    )
-  }
+  // if(invoices.length <= 0){
+  //   return (
+  //     <>
+  //       <div className="flex flex-col items-center">
+  //         <p className="text-5xl mt-20 font-bold">Facturas</p>
+  //         <p className="text-xl mt-10 text-slate-700 font-bold" 
+  //           // style={{maxInlineSize: '45ch', textWrap:'balance' }}
+  //           >Agregar una factura a una estimacion determinada de un proyecto.</p>
+  //         <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   const delInvoice = (id:string) => {
     window.location.reload();
@@ -157,7 +165,7 @@ export default function TableInvoicesComponent({token, user}:
 
     // setFilteredGuarantees(filtered);
     // setIsFilter(true);
-    updateTotal(getDate(dateS), getDate(dateE), []);
+    updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   }
 
   const columnHelper = createColumnHelper<IInvoiceTable>();
@@ -324,13 +332,14 @@ export default function TableInvoicesComponent({token, user}:
     //   conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
     //   conditionAccountsReceivable:['67d20cb359865f640af92638'],
     // }
-    const statusesFil = statuses.filter((status) => status !== 'all');
+    // const statusesFil = statuses.filter((status) => status !== 'all');
 
     const data = {
       // conditionPayment: [
       //     "678ed05cc5f08e8a0f36d5e1","67d20e2959865f640af92682"
       // ],
-      conditionPayment: statusesFil,
+      // conditionPayment: statusesFil,
+      conditionPayment: statuses,
       conditionIssued: [
           "67d20cb359865f640af92638"
       ],
@@ -346,6 +355,18 @@ export default function TableInvoicesComponent({token, user}:
     }else{
       setTotalInvoices(rest);
     }
+
+    const dataInvoices = {
+      condition: statuses
+    }
+
+    const res = await getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices);
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }else{
+      setInvoices(res);
+      // console.log('inoice => ', res[0]);
+    }
   }
 
   const handleDate = (dateI: Date, dateF: Date) => {
@@ -355,83 +376,86 @@ export default function TableInvoicesComponent({token, user}:
     updateTotal(getDate(dateI), getDate(dateF), statuses);
   }
 
-  const invoiceM = invoices.reduce((previous, current) => {
-    return current.cost.total > previous.cost.total ? current : previous;
-  });
+  // const invoiceM = invoices.reduce((previous, current) => {
+  //   return current.cost.total > previous.cost.total ? current : previous;
+  // });
 
   // console.log('invoiceM => ', invoiceM);
-  const maxAmount = invoiceM.cost.total;
+  // const maxAmount = invoiceM.cost.total;
+  // const maxAmount=110;
   // const maxAmount = invoiceM;
 
-  const dateValidation = (exp:IInvoiceMin, startDate:number, endDate:number) => {
-    let d = new Date(exp.date).getTime();
-    if(d >= startDate && d <= endDate){
-      return true;
-    }
-    return false;
-  }
+  // const dateValidation = (exp:IInvoiceByDateAndConditionMin, startDate:number, endDate:number) => {
+  //   let d = new Date(exp.date).getTime();
+  //   if(d >= startDate && d <= endDate){
+  //     return true;
+  //   }
+  //   return false;
+  // }
 
-  const amountValidation = (exp:IInvoiceMin, minAmount:number, maxAmount:number, 
-                              startDate:number, endDate:number) => {
-    if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
-      return dateValidation(exp, startDate, endDate);
-    }
-    return false;
-  }
+  // const amountValidation = (exp:IInvoiceByDateAndConditionMin, minAmount:number, maxAmount:number, 
+  //                             startDate:number, endDate:number) => {
+  //   if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
+  //     return dateValidation(exp, startDate, endDate);
+  //   }
+  //   return false;
+  // }
 
-  const projectValidation = (exp:IInvoiceMin, minAmount:number, maxAmount:number, 
-                      startDate:number, endDate:number, projects:string[]) => {
-    if(projects.includes('all')){
-      return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-    }else{
-      if(exp.project){
-        if(projects.includes(exp.project._id)){
-          return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-        }
-      }
-    }
-    return false;
-  }
+  // const projectValidation = (exp:IInvoiceByDateAndConditionMin, minAmount:number, maxAmount:number, 
+  //                     startDate:number, endDate:number, projects:string[]) => {
+  //   if(projects.includes('all')){
+  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+  //   }else{
+  //     if(exp.project){
+  //       if(projects.includes(exp.project._id)){
+  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
+  //       }
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  const conditionValidation = (exp:IInvoiceMin, minAmount:number, maxAmount:number, 
-                  startDate:number, endDate:number, projects:string[], 
-                  conditions:string[]) => {
+  // const conditionValidation = (exp:IInvoiceByDateAndConditionMin, minAmount:number, maxAmount:number, 
+  //                 startDate:number, endDate:number, projects:string[], 
+  //                 conditions:string[]) => {
 
-    if(conditions.includes('all')){
-      return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
-    }else{
-      if(conditions.includes(exp.condition._id)){
-        return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
-      }
-    }
-    return false;
-  }
+  //   if(conditions.includes('all')){
+  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
+  //   }else{
+  //     if(conditions.includes(exp.condition._id)){
+  //       return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
+  //     }
+  //   }
+  //   return false;
+  // }
 
-  const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
-    projects:string[], startDate:number, endDate:number) => {
+  // const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
+  //   projects:string[], startDate:number, endDate:number) => {
   
-    let filtered: IInvoiceMin[] = [];
-    invoices.map((invoice) => {
-      if(conditionValidation(invoice, minAmount, maxAmount, startDate, 
-          endDate, projects, conditions)){
-        filtered.push(invoice);
-      }
-    });
+  //   let filtered: IInvoiceByDateAndConditionMin[] = [];
+  //   invoices.map((invoice) => {
+  //     if(conditionValidation(invoice, minAmount, maxAmount, startDate, 
+  //         endDate, projects, conditions)){
+  //       filtered.push(invoice);
+  //     }
+  //   });
 
-    // console.log('filtered => ', filtered);
-    setFilteredInvoices(filtered);
-    setIsFilter(true);
-    updateTotal(getDate(new Date(startDate)), getDate(new Date(endDate)), conditions);
-    // setDataExpenses(ExpenseDataToTableData(filtered));
-  }
+  //   // console.log('filtered => ', filtered);
+  //   setFilteredInvoices(filtered);
+  //   setIsFilter(true);
+  //   updateTotal(getDate(new Date(startDate)), getDate(new Date(endDate)), conditions);
+  //   // setDataExpenses(ExpenseDataToTableData(filtered));
+  // }
   
   // const data = InvoiceDataToTableData(invoices);
-  let data = [];
-  if(isFilter){
-    data = InvoiceDataToTableData(filteredInvoices);
-  }else{
-    data = InvoiceDataToTableData(invoices);
-  }
+  // let data = [];
+  // if(isFilter){
+  //   data = InvoiceDataToTableData(filteredInvoices);
+  // }else{
+  //   data = InvoiceDataToTableData(invoices);
+  // }
+
+  const data = InvoiceDataToTableData(invoices);
 
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
                   <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
@@ -477,10 +501,10 @@ export default function TableInvoicesComponent({token, user}:
           <SearchInTable placeH={"Buscar factura.."} />
           <div className={''}>
             <div className="flex gap-x-4 justify-end items-center">
-              <GiSettingsKnobs 
+              {/* <GiSettingsKnobs 
                 onClick={() => setShowIsFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />  
+              />   */}
               <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
             </div>
           </div>
@@ -490,19 +514,18 @@ export default function TableInvoicesComponent({token, user}:
       <Table columns={columns} data={data} placeH="buscar factura" />
       {showNewCollection && selInvoice && <AddNewCollectionInvoice showForm={handleShowForm} user={user}
                token={token} invoiceTable={selInvoice} />}
-      {showIsFilter && <FilteringInvoiceComponent FilterData={filterData} maxAmount={maxAmount} 
-                              showForm={setShowIsFilter} token={token} />}
+      {/* {showIsFilter && <FilteringInvoiceComponent FilterData={filterData} maxAmount={maxAmount} 
+                              showForm={setShowIsFilter} token={token} />} */}
       {showNewInvoice && <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} /> }
     </>
   )
 }
 
-function InvoiceDataToTableData(invoices:IInvoiceMin[]){
+function InvoiceDataToTableData(invoices:IInvoiceByDateAndConditionMin[]){
   const table: IInvoiceTable[] = [];
   invoices.map((inv) => {
     const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
-    console.log('aux => ', aux);
-    console.log(inv.useCFDI, ' => ', inv.paymentMethod, ' => ' , inv.paymentWay)
+    // console.log('inv => ', inv);
     table.push({
       amount: inv.cost.total,
       condition: inv.condition,
@@ -514,11 +537,13 @@ function InvoiceDataToTableData(invoices:IInvoiceMin[]){
       methodpaid: inv.paymentMethod,
       usecfdi: aux,
       idEstimates:inv.estimate._id, 
-      charged: (inv.lastpayment?.unchargedbalanceamount >= 0 && inv.lastpayment?.unchargedbalanceamount <= 100? 
-                              inv.cost.total: inv.cost.total - inv.lastpayment?.previousbalanceamount) || inv.cost.total,
-      // charged: inv.cost.total,
-      unchargedbalanceamount: inv.lastpayment?.unchargedbalanceamount || 0,
-      previousBalance: inv.lastpayment?.previousbalanceamount || 0,
+      // charged: (inv.lastpayment?.unchargedbalanceamount >= 0 && inv.lastpayment?.unchargedbalanceamount <= 100? 
+      //                         inv.cost.total: inv.cost.total - inv.lastpayment?.previousbalanceamount) || inv.cost.total,
+      charged: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].charged: 0,
+      // unchargedbalanceamount: inv.lastpayment?.unchargedbalanceamount || 0,
+      unchargedbalanceamount: inv.accountreceivables?.length > 0 ? inv.accountreceivables[inv.accountreceivables.length-1].unchargedbalanceamount: 0,
+      // previousBalance: inv.lastpayment?.previousbalanceamount || 0,
+      previousBalance: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].previousbalanceamount: 0,
       accountreceivablesCount: inv.accountreceivablesCount,
       ischargedfull: inv.ischargedfull,
       project: inv.project._id,

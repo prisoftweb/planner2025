@@ -32,9 +32,14 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
   
   const [widthPage, setWidthPage] = useState<number>(900);
 
+  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+  //   from: new Date('2024-01-02'),
+  //   to: new Date('2024-10-30'),
+  // });
+
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date('2024-01-02'),
-    to: new Date('2024-10-30'),
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
   });
 
   const handleResize = () => {

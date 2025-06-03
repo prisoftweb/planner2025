@@ -8,6 +8,7 @@ import { MdOutlineEditLocationAlt } from "react-icons/md";
 import { FaRegCreditCard } from "react-icons/fa";
 import {FcAdvance} from "react-icons/fc"
 import {ChartBarIcon} from "@heroicons/react/24/solid";
+import { FaMoneyBill } from "react-icons/fa6";
 
 export default function NavResponsive({open, setOpen, option, changeOption}: 
   {open:boolean, setOpen:Function, option:number, changeOption:Function}){
@@ -110,6 +111,17 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
+        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Fechas garantia' 
+          className="text-blue-500 bg-white" placement="right">
+            <div className="p-1" style={{backgroundColor: isHover===7 ? '#0075c9' : (option===7? '#178DE1': '')}}>
+              <FaMoneyBill className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md ${option===7? 'bg-blue-500': ''}`} onClick={() => changeOption(7)} 
+                onMouseEnter={() => {setIsHover(7)} } onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===7 ? '#0075c9' : (option===7? '#178DE1': ''), 
+                  color: isHover===7 || option===7 ? 'white' : '',}}
+              />
+            </div>
+        </Tooltip>
       </div>
     )
   }else{
@@ -160,6 +172,13 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
         >
           <FcAdvance className="w-4 h-4 mr-2 text-slate-500" />
           Avance
+        </div>
+        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
+          flex py-2 items-center ${option===7? 'bg-slate-200': ''}`}
+          onClick={() => changeOption(7)}
+        >
+          <FaMoneyBill className="w-4 h-4 mr-2 text-slate-500" />
+          Fechas de garantia
         </div>
       </div>
     )

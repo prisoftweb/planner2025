@@ -59,7 +59,12 @@ export interface IInvoiceTable {
   methodpaid: string,
   formpaid: string,
   estimate: string,
-  condition: Glossary
+  // condition: Glossary
+  condition: {
+    _id: string
+    name: string
+    color: string
+  }
   fecha: string
   amount: number,
   id: string
@@ -123,7 +128,12 @@ export interface IInvoiceByProject {
     name: string
     photo: string
   }
-  condition: Glossary
+  // condition: Glossary
+  condition: {
+    _id: string,
+    name: string,
+    color: string
+  }
   concepts: {
     conceptEstimate: {
       _id: string
@@ -424,4 +434,73 @@ export interface ITotalAmountInvoicesPending {
     quantity: number
     total: number
   }
+}
+
+export interface IInvoiceByDateAndConditionMin {
+  _id: string
+  folio: string
+  taxfolio: string
+  notes: string
+  date: string
+  count: number
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+  }
+  paymentMethod: string
+  paymentWay: string
+  useCFDI: string
+  ischargedfull: boolean
+  estimate: {
+    _id: string
+    name: string
+  }
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  client: {
+    _id: string
+    tradename: string
+    name: string
+    rfc: string
+    email: string
+    phone: string
+    location: {
+      stret: string
+      cp: number
+      community: string
+      municipy: string
+      state: string
+      country: string
+      type: string
+      coordinates: any[]
+    }
+  }
+  termsofPayment: {
+    _id: string
+    name: string
+    color: string
+  }
+  duedate: string
+  company: {
+    _id: string
+    name: string
+    logo: string
+  }
+  condition: {
+    _id: string
+    name: string
+    color: string
+  }
+  accountreceivables: any[]
+  accountreceivablesCount: number
+  status: boolean
 }
