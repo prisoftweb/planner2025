@@ -175,10 +175,10 @@ export default function TableInvoicesComponent({token, user}:
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          {/* <input type="checkbox" 
+          <input type="checkbox" 
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
-          /> */}
+          />
           <RemoveElement id={ row.original.idEstimates? `${row.original.id}/${row.original.idEstimates}`: `${row.original.id}`} 
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
@@ -200,13 +200,15 @@ export default function TableInvoicesComponent({token, user}:
       size: 300,
       enableSorting:false,
       header: ({table}:any) => (
-        // <input type="checkbox"
-        //   checked={table.getIsAllRowsSelected()}
-        //   onClick={()=> {
-        //     table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-        //   }}
-        // />
-        <p>Accion</p>
+        <div className="flex gap-x-2 items-center">
+          <input type="checkbox"
+            checked={table.getIsAllRowsSelected()}
+            onClick={()=> {
+              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+            }}
+          />
+          <p>Accion</p>
+        </div>
       )
     }),
     columnHelper.accessor('folio', {
@@ -353,6 +355,7 @@ export default function TableInvoicesComponent({token, user}:
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
     }else{
+      console.log('rest => ', rest);
       setTotalInvoices(rest);
     }
 
@@ -511,7 +514,7 @@ export default function TableInvoicesComponent({token, user}:
         </div>
       </div>
       {widthPage > 1080 && filterElemnts}
-      <Table columns={columns} data={data} placeH="buscar factura" />
+      <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
       {showNewCollection && selInvoice && <AddNewCollectionInvoice showForm={handleShowForm} user={user}
                token={token} invoiceTable={selInvoice} />}
       {/* {showIsFilter && <FilteringInvoiceComponent FilterData={filterData} maxAmount={maxAmount} 

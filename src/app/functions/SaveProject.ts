@@ -214,7 +214,7 @@ export function ProjectEstimateDataToTableDataMin(projects:IProjectWithEstimateM
     }else{
       cond = '#f00';
     }
-
+console.log('project => ', project);
     table.push({
       amount: project.amount,
       category: project.projectInfoStatusInfo.name,

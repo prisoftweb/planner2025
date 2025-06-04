@@ -158,12 +158,15 @@ export async function getGuaranteesGroupByYear(token: string, dateI:string, date
     condition: statuses
   };
   try {
+    console.log('url => ', url);
+    console.log('data => ', JSON.stringify(data));
     const response = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
+    console.log('response => ', response);
     if (response.status === 200) {
       return response.data.data.resultado;
     }

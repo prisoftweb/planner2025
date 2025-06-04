@@ -40,15 +40,20 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
         showToastMessageError(clients);
       }else{
         setOptClients(clients);
-        setClient(clients[0].value);
+        if(!client || client ===''){
+          setClient(clients[0].value);
+        }
       }
     }
     fetch();
   }, []);
 
   let indexCLi = 0;
+  console.log('client', client);
   if(optClients.length > 0){
+    console.log('optClients => ', optClients);
     indexCLi=optClients.findIndex((c) => c.value===client);
+    console.log('index cli => ', indexCLi);
   }
   if(indexCLi<0) indexCLi=0;
 
@@ -85,8 +90,10 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
       <div className="grid grid-cols-2 gap-x-2 gap-y-2">
         {optClients.length > 0 && (
           <div className="">
-            <div className="flex items-center gap-x-2 justify-between">
-              <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
+            <div className="flex items-center gap-x-3">
+              <div className="w-14">
+                <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
+              </div>
               <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
                 <input checked={editClient} 
                   onClick={() => setEditClient(!editClient)} id="editClient" type="checkbox"

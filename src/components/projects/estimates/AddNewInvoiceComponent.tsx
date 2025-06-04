@@ -203,11 +203,11 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
     }
   }
 
-  let indexCLi = 0;
-  if(optClients.length > 0){
-    indexCLi=optClients.findIndex((c) => c.value===project.client._id);
-  }
-  if(indexCLi<0) indexCLi=0;
+  // let indexCLi = 0;
+  // if(optClients.length > 0){
+  //   indexCLi=optClients.findIndex((c) => c.value===project.client._id);
+  // }
+  // if(indexCLi<0) indexCLi=0;
 
   const component = (step===0? <DataBasicStepper bandDate={bandDate} bandFolio={bandFolio}  
                         bandTaxFolio={bandTaxFolio} client={client} date={date} folio={folio} 

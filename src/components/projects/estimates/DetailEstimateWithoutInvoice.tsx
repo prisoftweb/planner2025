@@ -24,6 +24,8 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
       const res = await getEstimate(token, nomEstimate);
       if(typeof(res) !=='string'){
         setEstimate(res);
+      }else{
+        showToastMessageError(res);
       }
 
 			const pr = await GetProjectMin(token, prj);
@@ -35,7 +37,8 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
       try {
         const result = await getResumenEstimateByProjectAndEstimate(token, prj, nomEstimate);
         if(typeof(result) === "string"){
-          return <h1 className="text-center text-red-500">{result}</h1>
+          // return <h1 className="text-center text-red-500">{result}</h1>
+          showToastMessageError(result);
         }else{
           setResumenEstimateProject(result);
         }
