@@ -113,7 +113,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       project: project._id,
       estimate: estimate._id,
       condition: [
-          {glossary:"6827d64a936cac5913f94ad9", user}
+          {glossary:"6840deda0c901d22c05dead1", user}
       ],
       date:new Date().toISOString(),
     }

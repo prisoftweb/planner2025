@@ -75,6 +75,8 @@ export default function ProjectCli({project, token, id, optCategories, optClient
   
   const [open, setOpen] = useState<boolean>(false);
 
+  // console.log('user cli => ', user);
+
   return(
     <>
       <div className={`flex`}>

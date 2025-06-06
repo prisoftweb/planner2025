@@ -105,11 +105,13 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
 
   costoCenters.map((prj) => {
     dataCostoCenters.push({
-      costo: prj.porcentage,
+      // costo: prj.porcentage,
+      costo: prj.subtotalCost,
       label: prj.costocenter.concept
     });
     titles.push(prj.costocenter.concept);
-    values.push(prj.porcentage);
+    // values.push(prj.porcentage);
+    values.push(prj.subtotalCost);
     categoriesCostoCenters.push(prj.costocenter.concept);
   });
 

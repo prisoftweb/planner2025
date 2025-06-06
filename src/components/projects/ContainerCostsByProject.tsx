@@ -225,7 +225,7 @@ export default function ContainerCostsByProject({project, token, user, costs}: P
 
   return(
     <>
-      <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />
+      <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
     </>
   )
 }

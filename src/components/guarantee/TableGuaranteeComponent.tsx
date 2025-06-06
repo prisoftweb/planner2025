@@ -77,7 +77,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   useEffect(() => {
     updateTotal(getDate(rangeDate?.from ?? new Date('2024-01-01')),
                 getDate(rangeDate?.to ?? new Date('2025-04-30')),
-                ["6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"]);
+                ["6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5", "6840deda0c901d22c05dead1"]);
     // const fetch = async() => {
     //   const res = await getGuaranteesResumeByProjectMin(token, '2024-01-01', '2025-04-30');
     //   if(typeof(res)==='string'){
@@ -408,6 +408,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
                 <ChipStatus id="6827d64a936cac5913f94ad9" addStatus={addStatus} removeStatus={deleteStatus} title="Por cobrar" />
                 <ChipStatus id="6827d5c2936cac5913f94ad7" addStatus={addStatus} removeStatus={deleteStatus} title="Recuperado" />
                 <ChipStatus id="6827d67b936cac5913f94adb" addStatus={addStatus} removeStatus={deleteStatus} title="Programado" />
+                <ChipStatus id="6840deda0c901d22c05dead1" addStatus={addStatus} removeStatus={deleteStatus} title="Retenido" />
                 <div>
                   {/* <Label htmlFor='date'>Fecha</Label> */}
                   <DateRangePicker 

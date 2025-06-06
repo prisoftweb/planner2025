@@ -9,7 +9,7 @@ import TextArea from "../TextArea";
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import Input from "../Input";
-import { UpdateProject } from "@/app/api/routeProjects";
+import { UpdateGuaranteeFoundProject, UpdatePaymentGuaranteeFoundProject } from "@/app/api/routeProjects";
 
 export default function UpdateDateGuaranteeComponent({token, id, project, user}: 
   {token:string, id:string, project:OneProjectMin, user:string}){
@@ -17,22 +17,51 @@ export default function UpdateDateGuaranteeComponent({token, id, project, user}:
   const [dateGuarantee, setDateGuarantee]=useState<string>(project.guaranteefund.date.substring(0, 10));
   const [datePayment, setDatePayment]=useState<string>(project.guaranteefund.date.substring(0, 10));
 
+  // console.log('usr rec => ', user);
+
   const updateDateG = async () => {
+    // const data = {
+    //   guaranteefund: {
+    //       porcentage: project.guaranteefund.porcentage,
+    //       date: dateGuarantee,
+    //       amount: project.guaranteefund.amount
+    //   }
+    // }
     const data = {
-      guaranteefund: {
-          porcentage: project.guaranteefund.porcentage,
-          date: dateGuarantee,
-          amount: project.guaranteefund.amount
-      }
+      dateGuarantee:dateGuarantee,
+      condition: [
+        {                        
+            glossary: "6827d64a936cac5913f94ad9",
+            user
+        }
+      ]
     }
-    const res = await UpdateProject(token, id, data);
+    const res = await UpdateGuaranteeFoundProject(token, id, data);
     if(typeof(res)==='string'){
-      showToastMessageError("Error al actualizar la fecha de garantia");
+      showToastMessageError("Error al actualizar la fecha del fondo de garantia");
     }
     else {
-      showToastMessage("Fecha de garantia actualizada correctamente");
+      showToastMessage("Fecha del fondo de garantia actualizada correctamente");
     }
+  }
 
+  const updateDatePaymentG = async () => {
+    const data = {
+      dateScheduled:datePayment,
+      condition: [
+          {                        
+              glossary: "6827d67b936cac5913f94adb",
+              user                    
+          }
+      ]
+    }
+    const res = await UpdatePaymentGuaranteeFoundProject(token, id, data);
+    if(typeof(res)==='string'){
+      showToastMessageError("Error al actualizar la fecha de pago del fondo de garantia");
+    }
+    else {
+      showToastMessage("Fecha de pago del fondo de garantia actualizada correctamente");
+    }
   }
 
   return(
@@ -56,7 +85,7 @@ export default function UpdateDateGuaranteeComponent({token, id, project, user}:
             <Input type="date" value={datePayment} onChange={(e) => setDatePayment(e.target.value)} />
             <div className="mt-3">
               <Button type="button"
-              // onClick={insertProgress}
+              onClick={updateDatePaymentG}
               >Programar pago</Button>
             </div>
           </div>
