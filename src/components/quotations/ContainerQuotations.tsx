@@ -187,7 +187,8 @@ export default function ContainerQuotations({quotations, token, user}:
   const filterData = (conditions:string[], clients:string[], minAmount:number, maxAmount:number, 
     startDate:number, endDate:number) => {
   
-      console.log('filter data => ');
+      console.log('filter data => ', conditions, clients, minAmount, maxAmount, 
+    startDate, endDate);
     let filtered: IQuotationMin[] = [];
     quotationsState.map((quatation) => {
       if(conditionsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients, conditions)){

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export async function getCodes(token: string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes`;
   try {
     const response = await axios.get(url, {
       headers: {
@@ -12,12 +12,33 @@ export async function getCodes(token: string) {
     if (response.status === 200) {
       return response.data.data.data;
     }
-    return 'Error: No se pudo obtener la información de las garantías';
+    return 'Error: No se pudo obtener la información de los codigos';
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      return error.response?.data || 'Error: No se pudo obtener la información de las garantías';
+      return error.response?.data || 'Error: No se pudo obtener la información de los codigos';
     }
-    return 'Error: No se pudo obtener la información de las garantías'; 
+    return 'Error: No se pudo obtener la información de los codigos'; 
+  }
+}
+
+export async function getCodesMin(token: string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/getAllCodesMIN`;
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 200) {
+      return response.data.data.stats;
+    }
+    return 'Error: No se pudo obtener la información de los codigos';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data || 'Error: No se pudo obtener la información de los codigos';
+    }
+    return 'Error: No se pudo obtener la información de los codigos'; 
   }
 }
 

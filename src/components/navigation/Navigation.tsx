@@ -324,6 +324,10 @@ const NavItems = ({role}: {role:string}) => {
             name: 'Catalogos',
             link: '/status'
           },
+          {
+            name: 'Codigos',
+            link: '/codes'
+          },
         ]} 
       />
       <NavItem name="Workflow" link="" items={[

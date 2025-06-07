@@ -11,6 +11,9 @@ import ProgressHistoryProject from "./ProgressHistoryProject"
 import ProfileHistoryProject from "./ProfileHistoryProject"
 import DashboardProfileProject from "./DashboardProfileProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
+import { IConditionProject } from "@/interfaces/Projects"
+import { getConditionsProject } from "@/app/api/routeProjects"
+import { showToastMessageError } from "../Alert"
 
 export default function ProjectHistoryCli({project, id, token}: 
   {project:OneProjectMin, token: string, id:string}){
@@ -23,10 +26,26 @@ export default function ProjectHistoryCli({project, id, token}:
   
   const [opt, setOpt] = useState<number>(1);
 
+  const [conditions, setConditions] = useState<IConditionProject[]>([]);
+    
+  useEffect(() => {
+    updateOneProjectStore(project);
+    const fetchConditions = async () => {
+      const res = await getConditionsProject(token, id);
+      if (typeof(res) !== 'string') {
+        setConditions(res);
+      } else {
+        showToastMessageError(res);
+        console.error('Error fetching conditions:', res);
+      }
+    };
+    fetchConditions();
+  }, []);
+
   const view = (
     opt===1? (<div className="mt-3 w-full max-w-2xl bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
-        <DashboardProfileProject token={token} id={id} />
+        <DashboardProfileProject token={token} id={id} conditions={conditions} />
       </div>) : 
 (opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
@@ -50,7 +69,7 @@ export default function ProjectHistoryCli({project, id, token}:
                   </div> ) : 
           (<div className="mt-3 w-full max-w-2xl p-2 bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
-                <DashboardProfileProject token={token} id={id} />
+                <DashboardProfileProject token={token} id={id} conditions={conditions} />
             </div>)) ))))
   )
   

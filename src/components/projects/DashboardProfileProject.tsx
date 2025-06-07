@@ -14,13 +14,15 @@ import { getDashboardProjectByBudgetControl } from "@/app/api/routeProjects";
 import Label from "../Label";
 import Chip from "../providers/Chip";
 import { ITimeLineProject } from '@/interfaces/Projects';
+import { IConditionProject } from "@/interfaces/Projects";
 
 interface OptionsDashboard {
   label: string,
   costo: number
 }
 
-export default function DashboardProfileProject({token, id}: {token:string, id: string}){
+export default function DashboardProfileProject({token, id, conditions}: 
+  {token:string, id: string, conditions: IConditionProject[]}){
   
   const {oneProjectStore} = useOneProjectsStore();
   const [costoCenters, setCostoCenters] = useState<ProjectCostoCenters[]>([]);
@@ -66,61 +68,83 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
     categoriesCostoCenters.push(prj.costocenter.concept);
   });
  
+  // const timeLine: ITimeLineProject[] = [];
+  // timeLine.push({
+  //   _id: '439878547',
+  //   conditionstatus: {
+  //     _id: '222',
+  //     condition: {
+  //       _id: '222',
+  //       name: 'Creado',
+  //       color: '#527'
+  //     },
+  //     user: {
+  //       _id: '222',
+  //       photo: '/img/users/default.jpg',
+  //       name: 'Yo mero'
+  //     },
+  //     status: true,
+  //     date: new Date().toISOString()
+  //   }
+  // }, 
+  // {
+  //   _id: '439878547',
+  //   conditionstatus: {
+  //     _id: '222',
+  //     condition: {
+  //       _id: '222',
+  //       name: 'Creado',
+  //       color: '#527'
+  //     },
+  //     user: {
+  //       _id: '222',
+  //       photo: '/img/users/default.jpg',
+  //       name: 'Yo mero'
+  //     },
+  //     status: true,
+  //     date: new Date().toISOString()
+  //   }
+  // }, 
+  // {
+  //   _id: '439878547',
+  //   conditionstatus: {
+  //     _id: '222',
+  //     condition: {
+  //       _id: '222',
+  //       name: 'Creado',
+  //       color: '#527'
+  //     },
+  //     user: {
+  //       _id: '222',
+  //       photo: '/img/users/default.jpg',
+  //       name: 'Yo mero'
+  //     },
+  //     status: true,
+  //     date: new Date().toISOString()
+  //   }
+  // });
+
   const timeLine: ITimeLineProject[] = [];
-  timeLine.push({
-    _id: '439878547',
-    conditionstatus: {
-      _id: '222',
-      condition: {
-        _id: '222',
-        name: 'Creado',
-        color: '#527'
-      },
-      user: {
-        _id: '222',
-        photo: '/img/users/default.jpg',
-        name: 'Yo mero'
-      },
-      status: true,
-      date: new Date().toISOString()
-    }
-  }, 
-  {
-    _id: '439878547',
-    conditionstatus: {
-      _id: '222',
-      condition: {
-        _id: '222',
-        name: 'Creado',
-        color: '#527'
-      },
-      user: {
-        _id: '222',
-        photo: '/img/users/default.jpg',
-        name: 'Yo mero'
-      },
-      status: true,
-      date: new Date().toISOString()
-    }
-  }, 
-  {
-    _id: '439878547',
-    conditionstatus: {
-      _id: '222',
-      condition: {
-        _id: '222',
-        name: 'Creado',
-        color: '#527'
-      },
-      user: {
-        _id: '222',
-        photo: '/img/users/default.jpg',
-        name: 'Yo mero'
-      },
-      status: true,
-      date: new Date().toISOString()
-    }
-  });
+  conditions.map((c) => {
+    timeLine.push({
+      _id: c._id,
+      conditionstatus: {
+        _id: c.conditionstatus._id,
+        condition: {
+          _id: c.conditionstatus.condition._id,
+          name: c.conditionstatus.condition.name,
+          color: c.conditionstatus.condition.color
+        },
+        user: {
+          _id: c.conditionstatus.user._id,
+          photo: c.conditionstatus.user.photo || '/img/users/default.jpg',
+          name: c.conditionstatus.user.name
+        },
+        status: c.conditionstatus.status,
+        date: c.conditionstatus.date
+      }
+    });
+  }); 
   
   return(
     <div className="w-full">
@@ -150,7 +174,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
 
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 mt-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-3 mt-3">
         <Card amount={showTotal? ((oneProjectStore?.amount ?? 0) * 1.16): (oneProjectStore?.amount ?? 0)} title="Monto" >
           <LiaMoneyCheckAltSolid className="rounded-full w-7 h-7" />
         </Card>
@@ -200,7 +224,7 @@ export default function DashboardProfileProject({token, id}: {token:string, id: 
         ))}
       </ol> */}
 
-      <ol className="relative flex gap-x-2 ml-10">                  
+      <ol className="relative flex gap-x-2 ml-10 flex-wrap">                  
         {timeLine.map((t) => (
           <li className="mb-10 ms-0" key={t._id}>            
             <div className="items-center justify-center px-0 bg-white dark:bg-gray-700 dark:border-gray-600">

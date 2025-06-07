@@ -951,3 +951,21 @@ export async function UpdatePaymentGuaranteeFoundProject(auth_token:string, id:s
     return 'Error al actualizar fecha de pago del fondo de garantia del proyecto!!'
   }
 }
+
+export async function getConditionsProject(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getConditionsByProjectMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al consultar proyecto!!';
+  }
+}

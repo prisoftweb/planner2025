@@ -9,3 +9,20 @@ export interface ICode {
   __v: number
   id: string
 }
+
+export interface ICodeMin {
+  _id: string
+  code: string
+  date: string
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  project: {
+    _id: string
+    title: string
+    photo: string
+  }
+  status: boolean
+}

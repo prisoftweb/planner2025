@@ -15,16 +15,26 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
 
   const {optClients, optConditions} = useOptionsQuotations();
   
-  const [clients, setClients] = useState<string[]>([]);
-  const [conditions, setConditions] = useState<string[]>([]);
+  const [clients, setClients] = useState<string[]>(['all']);
+  const [conditions, setConditions] = useState<string[]>(['all']);
   const [optClientsState, setOptClientsState] = useState<Options[]>([{
     label: 'TODOS',
     value: 'all'
   }, ...optClients]);
+  // const optClientsState = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }, ...optClients]
+
   const [optConditionsState, setOptConditionsState] = useState<Options[]>([{
     label: 'TODOS',
     value: 'all'
   }, ...optConditions]);
+
+  // const optConditionsState = [{
+  //   label: 'TODOS',
+  //   value: 'all'
+  // }, ...optConditions];
 
   const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
   const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
@@ -36,12 +46,13 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
 
   const handleValues = (dateValues: DateObject[]) => {
     setValues(dateValues);
+    console.log('date => ', dateValues);
     if(dateValues.length > 1){
       setFirstDate(new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day));
       setSecondDate(new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
-      filterfunction(conditions, clients, minValue, maxValue, 
-        new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day), 
-        new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
+      // filterfunction(conditions, clients, minValue, maxValue, 
+      //   new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day), 
+      //   new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
     }else{
       if(values.length > 0){
         setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
@@ -55,28 +66,30 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount, to
   const handleInput = (e:any) => {
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
+    // filterfunction(conditions, clients, e.minValue, 
+    //   e.maxValue, firstDate, secondDate);
   };
 
   useEffect(() => {
     FilterData(conditions, clients, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime());
-  }, [ minValue, maxValue]);
+  }, [ minValue, maxValue, conditions, clients, firstDate, secondDate]);
 
   const handleCondition = (value:string[]) => {
     setConditions(value);
-    filterfunction(value, clients, minValue, 
-      maxValue, firstDate, secondDate);
+    // filterfunction(value, clients, minValue, 
+    //   maxValue, firstDate, secondDate);
   }
 
   const handleClients = (value:string[]) => {
     setClients(value);
-    filterfunction(conditions, value, minValue, 
-      maxValue, firstDate, secondDate);
+    // filterfunction(conditions, value, minValue, 
+    //   maxValue, firstDate, secondDate);
   }
 
-  const filterfunction = (condSel:string[], cliSel:string[], minVal:number, 
-    maxVal:number, dateini:Date, dateend:Date ) => {
-      FilterData(condSel, cliSel, minVal, maxVal, dateini?.getTime(), dateend?.getTime());
-  }
+  // const filterfunction = (condSel:string[], cliSel:string[], minVal:number, 
+  //   maxVal:number, dateini:Date, dateend:Date ) => {
+  //     FilterData(condSel, cliSel, minVal, maxVal, dateini?.getTime(), dateend?.getTime());
+  // }
 
   return(
     <>

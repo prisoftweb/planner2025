@@ -444,7 +444,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
     labels: titles,
     datasets: [
       {
-        label: 'Projectos por cliente',
+        label: 'Proyectos',
         data: values,
         backgroundColor:[ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'],
         hoverOffset: 4

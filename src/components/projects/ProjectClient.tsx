@@ -13,6 +13,9 @@ import ProgressProject from "./ProgressProject"
 import { useOneProjectsStore } from "@/app/store/projectsStore"
 import DashboardProfileProject from "./DashboardProfileProject"
 import UpdateDateGuaranteeComponent from "./UpdateDateGuaranteeComponent"
+import { getConditionsProject } from "@/app/api/routeProjects"
+import { IConditionProject } from "@/interfaces/Projects"
+import { showToastMessageError } from "../Alert"
 
 type Props = {
   project:OneProjectMin, 
@@ -30,15 +33,27 @@ export default function ProjectCli({project, token, id, optCategories, optClient
 
   const [opt, setOpt] = useState<number>(1);
   const {updateOneProjectStore} = useOneProjectsStore();
+
+  const [conditions, setConditions] = useState<IConditionProject[]>([]);
   
   useEffect(() => {
     updateOneProjectStore(project);
+    const fetchConditions = async () => {
+      const res = await getConditionsProject(token, id);
+      if (typeof(res) !== 'string') {
+        setConditions(res);
+      } else {
+        showToastMessageError(res);
+        console.error('Error fetching conditions:', res);
+      }
+    };
+    fetchConditions();
   }, []);
 
   const view = (
-    opt===1? (<div className="mt-3 w-full md:max-w-2xl lg:w-full bg-white rounded-lg shadow-md pl-2 px-3" 
+    opt===1? (<div className="mt-3 w-full max-w-2xl md:max-w-full bg-white rounded-lg shadow-md pl-2 px-3" 
       style={{borderColor:'#F8FAFC'}}>
-        <DashboardProfileProject token={token} id={id} />
+        <DashboardProfileProject token={token} id={id} conditions={conditions} />
       </div>) : 
 (opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                 style={{borderColor:'#F8FAFC'}}>
@@ -85,7 +100,7 @@ export default function ProjectCli({project, token, id, optCategories, optClient
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        <div className="flex w-full px-2 flex-wrap space-x-2"
+        <div className="flex w-full px-2 flex-wrap md:flex-nowrap space-x-2"
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileProject project={project} />

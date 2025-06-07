@@ -341,3 +341,22 @@ export interface ICollectionAccumByProject {
   quantity: number
   totalPayments: number
 }
+
+export interface IConditionProject {
+  _id: string
+  conditionstatus: {
+    _id: string
+    condition: {
+      _id: string
+      name: string
+      color: string
+    }
+    user: {
+      _id: string
+      name: string
+      photo: string
+    }
+    date: string
+    status: boolean
+  }
+}
