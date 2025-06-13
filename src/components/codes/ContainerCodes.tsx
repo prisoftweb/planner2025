@@ -48,7 +48,7 @@ export default function ContainerCodes({codes}: {codes:ICodeMin[]}) {
               >
                 <div className="flex items-center w-full ">
                   <div className="grid mr-4 place-items-center">
-                    <img alt="responsable" src={ '/img/projects/default.svg'}
+                    <img alt="responsable" src={ code?.user?.photo ?? '/img/projects/default.svg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                   </div>
                   <div className="w-full">
