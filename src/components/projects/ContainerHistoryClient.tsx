@@ -10,6 +10,7 @@ import Link from "next/link"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "../SearchInTable"
 import WithOut from "../WithOut"
+import { UsrBack } from "@/interfaces/User"
 
 type Props = {
   token:string, 
@@ -18,10 +19,11 @@ type Props = {
   optCategoriesFilter: Options[], 
   optTypesFilter: Options[], 
   optConditionsFilter: Options[]
+  user:UsrBack
 }
 
 export default function ContainerHistoryClient({token, data, optCategoriesFilter, 
-  optConditionsFilter, optTypesFilter, projects}: Props){
+  optConditionsFilter, optTypesFilter, projects, user}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -77,7 +79,7 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
         <TableProjects data={dataTable} token={token} projects={projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}
           optConditions={optConditionsFilter} isFilter={isFilter} 
-          setIsFilter={handleFilter} isTable={isTable} isHistory={true}
+          setIsFilter={handleFilter} isTable={isTable} isHistory={true} user={user}
         />
       </div>
     </div>

@@ -188,8 +188,8 @@ export async function getInvoicesByCollectionMin(auth_token:string, id:string){
 export async function getAllTotalAmountRecoveredCollection(auth_token:string, dateI: string, dateF:string, data:Object){
   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecoveredToCollectAndPending/${dateI}/${dateF}`;
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecoveredToCollectAndPending/${dateI}/${dateF}`;
-  console.log('ulr total amount => ', url);
-  console.log('data => ', JSON.stringify(data));
+  // console.log('ulr total amount => ', url);
+  // console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -197,7 +197,7 @@ export async function getAllTotalAmountRecoveredCollection(auth_token:string, da
         'Content-Type': 'application/json'
       }
     });
-    console.log('res => ', res);
+    // console.log('res => ', res);
     if(res.status===200)
       return res.data.data.resdata;
     return 'Error al obtener los cobros!!';

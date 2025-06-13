@@ -99,7 +99,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
 
   const handleDate = (dateI: Date, dateF: Date) => {
     handleFilter(dateI, dateF, statuses);
-    
     //actualizar total con el rango de fechas
   }
 

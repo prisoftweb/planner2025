@@ -107,7 +107,7 @@ export default async function Page(){
       <Navigation user={user} />
       <ContainerHistoryClient data={table} optCategoriesFilter={optCategories}
         optConditionsFilter={optConditions} optTypesFilter={optTypes} 
-        projects={projects} token={token} />
+        projects={projects} token={token} user={user} />
     </>
   )
 }

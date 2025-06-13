@@ -8,7 +8,7 @@ import { IQuotationMin } from "@/interfaces/Quotations"
 import { useState, useEffect, useRef } from "react"
 import TableQuotations from "./TableQuotations"
 import { QuotationsDataToQuotationsTable } from "@/app/functions/QuotationsFunctions"
-import { getQuotationsMin } from "@/app/api/routeQuotations"
+import { getQuotationsMin, getQuotationsByUserMin } from "@/app/api/routeQuotations"
 import { showToastMessageError } from "../Alert"
 import WithOut from "../WithOut"
 import NewQuotation from "./NewQuotation"
@@ -22,8 +22,8 @@ import { getUsersLV } from "@/app/api/routeUser"
 import { getClientsLV } from "@/app/api/routeClients"
 import { Options } from "@/interfaces/Common"
 
-export default function ContainerQuotations({quotations, token, user}: 
-  {quotations: IQuotationMin[], token:string, user: UsrBack}) {
+export default function ContainerQuotations({quotations, token, user, isByUser=false}: 
+  {quotations: IQuotationMin[], token:string, user: UsrBack, isByUser?: boolean}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [showFilter, setShowFilter]=useState<boolean>(false);
@@ -103,7 +103,11 @@ export default function ContainerQuotations({quotations, token, user}:
   const refreshQuatations = async() => {
     let quots: IQuotationMin[];
     try {
-      quots = await getQuotationsMin(token);
+      if(isByUser){
+        quots = await getQuotationsByUserMin(token, user._id);
+      }else{
+        quots = await getQuotationsMin(token);
+      }
       if(typeof(quots)==='string') 
         showToastMessageError(quots);
       else {
@@ -187,8 +191,7 @@ export default function ContainerQuotations({quotations, token, user}:
   const filterData = (conditions:string[], clients:string[], minAmount:number, maxAmount:number, 
     startDate:number, endDate:number) => {
   
-      console.log('filter data => ', conditions, clients, minAmount, maxAmount, 
-    startDate, endDate);
+      // console.log('filter data => ', conditions, clients, minAmount, maxAmount, startDate, endDate);
     let filtered: IQuotationMin[] = [];
     quotationsState.map((quatation) => {
       if(conditionsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients, conditions)){
@@ -231,7 +234,7 @@ export default function ContainerQuotations({quotations, token, user}:
           optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} 
             token={token} usr={user._id} updateQuotations={refreshQuatations} />}
       {showFilter && optClients && optConditions && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
-                    showForm={handleShowFilter} token={token} />}
+                    showForm={handleShowFilter} />}
     </>
   )
 }

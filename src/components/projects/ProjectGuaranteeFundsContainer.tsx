@@ -91,6 +91,42 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         >{row.original.date.substring(0, 10)}</p>
       ),
     }),
+    columnHelper.accessor('fechaGarantia', {
+      header: 'Fecha de garantia',
+      id: 'fecha de garantia',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original?.fechaGarantia?.substring(0, 10)}</p>
+      ),
+    }),
+    columnHelper.accessor('fechaPago', {
+      header: 'Fecha de pago',
+      id: 'fecha pago',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.fechaPago?.substring(0, 10)}</p>
+      ),
+    }),
+    columnHelper.accessor('fechaProgramacion', {
+      header: 'Fecha de programacion',
+      id: 'fecha programacion',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.fechaProgramacion?.substring(0, 10)}</p>
+      ),
+    }),
+    columnHelper.accessor('fechaRetencion', {
+      header: 'Fecha retencion',
+      id: 'fecha retencion',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+        >{row.original.fechaRetencion?.substring(0, 10)}</p>
+      ),
+    }),
     columnHelper.accessor('status', {
       header: 'Estatus',
       id: 'estatus',
@@ -148,6 +184,10 @@ function TransformDataGuaranteeTotable(guarantees: IGuaranteeByPojectMin[]): ITa
     amountVat: guarantee.cost.total,
     estimate: guarantee.estimate.name,
     user: guarantee.user.name,
-    status: guarantee.estatus
+    status: guarantee.estatus,
+    fechaGarantia: guarantee.dateguarantee?.substring(0, 10) || '',
+    fechaPago: guarantee.datepayment?.substring(0, 10) || '',
+    fechaProgramacion: guarantee.dateprogramming?.substring(0, 10) || '',
+    fechaRetencion: ''
   }));
 }

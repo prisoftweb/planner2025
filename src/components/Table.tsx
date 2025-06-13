@@ -67,7 +67,7 @@ export default function Table({data, columns, placeH, typeTable='',
     // console.log(table.getSelectedRowModel().flatRows.map((row) => row.original))
     selectFunction(table.getSelectedRowModel().flatRows.map((row) => row.original));
   }, [rowSelection]);
-
+console.log('data table rec => ', data);
   const table = useReactTable({
     data, 
     columns,

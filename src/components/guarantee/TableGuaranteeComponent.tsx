@@ -14,7 +14,7 @@ import { Chip as ChipMui } from "@mui/material";
 import { getGuaranteesByDateMin, insertConditionInGuarantee, 
   getAmountTotalGuaranteesByDateAndStatus, getTotalGuaranteesByDateAndStatus, 
   getGuaranteesGroupByClientAndDateAndStatus, getGuaranteesGroupByYear, 
-  getGuaranteesResumeByProjectMin, getAllTOTALGuaranteeFundsResumeByDateAndStatus } 
+  getGuaranteesResumeByProjectMin, getAllTOTALGuaranteeFundsResumeByDateAndStatus, getGuaranteesGroupByStatus } 
 from "@/app/api/routeGuarantee";
 import { ITableGuarantee, IAmountTotalGuaranteesByDateAndStatus, IGuaranteeGroupByClient, 
   IGuaranteeByStatus, IGuaranteByYear, IGuaranteeMin, IGuaranteeResumenByProject, ITotalGuaranteefundsByStatus} from "@/interfaces/Guarantee";
@@ -39,6 +39,8 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   const [recuperar, setRecuperar]=useState<IAmountTotalGuaranteesByDateAndStatus>();
   const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>();
   const [vencido, setVencido]=useState<IAmountTotalGuaranteesByDateAndStatus>();
+
+  // const [guaranteesByStatus, setGuaranteesByStatus]=useState<IGuaranteeByStatus[]>([]);
 
   const [guaranteesByClient, setGuaranteesByClient]=useState<IGuaranteeGroupByClient[]>([]);
   const [guaranteeByYear, setGuaranteeByYear]=useState<IGuaranteByYear[]>([]);
@@ -78,66 +80,6 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
     updateTotal(getDate(rangeDate?.from ?? new Date('2024-01-01')),
                 getDate(rangeDate?.to ?? new Date('2025-04-30')),
                 ["6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5", "6840deda0c901d22c05dead1"]);
-    // const fetch = async() => {
-    //   const res = await getGuaranteesResumeByProjectMin(token, '2024-01-01', '2025-04-30');
-    //   if(typeof(res)==='string'){
-    //     showToastMessageError(res);
-    //   }else{
-    //     setGuarantees(res);
-    //     setFilteredGuarantees(res);
-    //   }
-
-    //   const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30');
-    //   if(typeof(resTotal)==='string'){
-    //     showToastMessageError(resTotal);
-    //   }else{
-    //     setAmountTotal(resTotal[0]);
-    //   }
-
-    //   const resCobrar = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'POR COBRAR');
-    //   if(typeof(resCobrar)==='string'){
-    //     showToastMessageError(resCobrar);
-    //   }else{
-    //     setPorCobrar(resCobrar[0]);
-    //   }
-
-    //   const resRecuperado = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'RECUPERADO');
-    //   if(typeof(resRecuperado)==='string'){
-    //     showToastMessageError(resRecuperado);
-    //   }else{
-    //     setRecuperar(resRecuperado[0]);
-    //   }
-
-    //   const resVencido = await getTotalGuaranteesByDateAndStatus(token, '2024-01-01', '2025-04-30', 'VENCIDO');
-    //   if(typeof(resVencido)==='string'){
-    //     showToastMessageError(resVencido);
-    //   }else{
-    //     setVencido(resVencido[0]);
-    //   }
-
-    //   const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, '2024-01-01', '2025-04-30');
-    //   if(typeof(guaranteesClient)==='string'){
-    //     showToastMessageError(guaranteesClient);
-    //   }else{
-    //     setGuaranteesByClient(guaranteesClient);
-    //   }
-
-    //   const guaranteesYear = await getGuaranteesGroupByYear(token, '2024-01-01', '2025-04-30');
-    //   if(typeof(guaranteesYear)==='string'){
-    //     showToastMessageError(guaranteesYear);
-    //   }else{
-    //     setGuaranteeByYear(guaranteesYear);
-    //   }
-
-    //   const guaranteebyStatus = await getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, '2024-01-01', '2025-04-30');
-    //   if(typeof(guaranteebyStatus)==='string'){
-    //     showToastMessageError(guaranteebyStatus);
-    //   }else{
-    //     setGuaranteeByStatus(guaranteebyStatus);
-    //   }
-    // }
-
-    // fetch();
   }, []);
 
   const updateCollections = async() => {
@@ -153,8 +95,6 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   }
 
   const handleDate = (dateI: Date, dateF: Date) => {
-    // handleFilter(dateI, dateF, statuses);
-    
     //actualizar total con el rango de fechas
     updateTotal(getDate(dateI), getDate(dateF), statuses);
   }
@@ -180,22 +120,6 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   }
 
   const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    // let statusesFil;
-    // if(arrStatuses.length > 0){
-    //   statusesFil = guarantees.filter((g) => arrStatuses.includes(g.estatus._id));
-    // }else{
-    //   statusesFil = guarantees;
-    // }
-
-    // const filtered = statusesFil.filter((c) => {
-    //   let d = new Date(c.date).getTime();
-    //   if(d >= dateS.getTime() && d <= dateE.getTime()){
-    //     return c;
-    //   }
-    // });
-
-    // setFilteredGuarantees(filtered);
-    // setIsFilter(true);
     updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   }
 
@@ -272,33 +196,33 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   //   )
   // }
 
-  const delCollection = (id:string) => {
-    showToastMessage('Cobro eliminado satisfactoriamente!!!');
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
-  }
+  // const delCollection = (id:string) => {
+  //   showToastMessage('Cobro eliminado satisfactoriamente!!!');
+  //   setTimeout(() => {
+  //     window.location.reload();
+  //   }, 2000);
+  // }
 
-  const confirmGuarantee = async( id: string) => {
-    const data = {
-      condition: [
-        {
-          glossary: "6827d5c2936cac5913f94ad7",
-          user
-        }
-      ]
-    }
-    const res = await insertConditionInGuarantee(token, id, data);
-    if(typeof(res)==='string'){
-      showToastMessageError(res);
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    }else{
-      showToastMessage('Cobro actualizado satisfactoriamente!!!');
-      updateCollections();
-    }
-  }
+  // const confirmGuarantee = async( id: string) => {
+  //   const data = {
+  //     condition: [
+  //       {
+  //         glossary: "6827d5c2936cac5913f94ad7",
+  //         user
+  //       }
+  //     ]
+  //   }
+  //   const res = await insertConditionInGuarantee(token, id, data);
+  //   if(typeof(res)==='string'){
+  //     showToastMessageError(res);
+  //     setTimeout(() => {
+  //       window.location.reload();
+  //     }, 1500);
+  //   }else{
+  //     showToastMessage('Cobro actualizado satisfactoriamente!!!');
+  //     updateCollections();
+  //   }
+  // }
 
   const columnHelper = createColumnHelper<ITableGuarantee>();
   
@@ -457,8 +381,9 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
-        <Card amount={amountTotal?.total || 0} title="FONDO DE GARANTIA"></Card>
-        <div className="p-3 gap-x-3 col-span-2 grid grid-cols-3 bg-white shadow-md shadow-slate-300 rounded-md">
+        {/* <Card amount={amountTotal?.total || 0} title="FONDO DE GARANTIA"></Card> */}
+        <Card amount={guaranteeByStatus?.guarantee?.subtotal || 0} title="FONDO DE GARANTIA" />
+        <div className="p-3 gap-x-3 col-span-3 grid grid-cols-5 bg-white shadow-md shadow-slate-300 rounded-md">
           <div>
             <p className="text-slate-600">Recuperado</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
@@ -480,8 +405,22 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
               value: vencido?.total || 0
             })}</p>
           </div>
+          <div>
+            <p className="text-slate-600">Retenido</p>
+            <p className="text-xl font-bold">{CurrencyFormatter({
+              currency: 'MXN',
+              value: vencido?.total || 0
+            })}</p>
+          </div>
+          <div>
+            <p className="text-slate-600">Programado</p>
+            <p className="text-xl font-bold">{CurrencyFormatter({
+              currency: 'MXN',
+              value: 0
+            })}</p>
+          </div>
         </div>
-        <Card amount={amountTotal?.total || 0} title="Pendiente porcentaje"></Card>
+        {/* <Card amount={amountTotal?.total || 0} title="Pendiente porcentaje"></Card> */}
       </div>
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
@@ -512,7 +451,13 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
           <div className="mt-3">
             {guaranteeByYear.map((g, index:number) => (
               <div className="my-2" key={g.year}>
-                <Label>Año {g.year}</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Año {g.year}</Label>
+                  <Label>{CurrencyFormatter({
+                    currency: 'MXN',
+                    value: g.total
+                  })}</Label>
+                </div>
                 <Slider defaultValue={g.porcentage} color={colorsSlider[index%6]} min={0} max={100} aria-label="Default" valueLabelDisplay="auto" />
               </div>
             ))}

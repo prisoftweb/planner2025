@@ -15,7 +15,7 @@ import WithOut from "../WithOut"
 import { UsrBack } from "@/interfaces/User"
 import { showToastMessageError } from "../Alert"
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject"
-import { getActiveProjectsMin } from "@/app/api/routeProjects"
+import { getActiveProjectsMin, getProjectsByConditionMin } from "@/app/api/routeProjects"
 
 type Props = {
   token:string, 
@@ -55,7 +55,12 @@ export default function ContainerClient({token, optClients, optCategories,
     const aux = async () =>{
       let projs: ProjectMin[] = [];
       try {
-        projs = await getActiveProjectsMin(token);
+        let rol = user.rol?.name || '';
+        if(rol.toLowerCase().includes('residente')){
+          projs = await getProjectsByConditionMin(token);
+        }else{
+          projs = await getActiveProjectsMin(token);
+        }
         if(typeof(projs)==='string') showToastMessageError(projs);
         else{
           const d = ProjectDataToTableDataMin(projs);
@@ -90,27 +95,27 @@ export default function ContainerClient({token, optClients, optCategories,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-      <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
-        <div className="flex items-center">
+      <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap print:hidden">
+        <div className="flex items-center print:hidden">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            <div className="p-1 border border-slate-400 bg-white rounded-md print:hidden">
+              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600 print:hidden" />
             </div>
           </Link>
           <p className="text-xl ml-4 font-medium">Proyectos</p>
         </div>
-        <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end">
+        <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end print:hidden">
           <SearchInTable placeH="Buscar proyecto.." />
           <div>
-            <div className="flex gap-x-3 items-center">
-              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
+            <div className="flex gap-x-3 items-center print:hidden">
+              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300 print:hidden" 
                 onClick={() => setIsTable(true)}
               />
               <PiTableThin onClick={() => setIsTable(false)} 
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
+                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300 print:hidden"
               />
               <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300 print:hidden"
               />
               <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
@@ -123,7 +128,7 @@ export default function ContainerClient({token, optClients, optCategories,
         <TableProjects data={dataTable} token={token} projects={projectStore.length > 0? projectStore: projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}
           optConditions={optConditionsFilter} isFilter={isFilter} 
-          setIsFilter={handleFilter} isTable={isTable}>            
+          setIsFilter={handleFilter} isTable={isTable} user={user}>            
         </TableProjects>        
       </div>
     </div>

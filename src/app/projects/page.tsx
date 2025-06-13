@@ -7,7 +7,7 @@ import { ClientBack } from "@/interfaces/Clients";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
-import { getActiveProjectsMin, GetCollectionsAccumByProjectMin, GetCostsAccumByProjectMin } from "../api/routeProjects";
+import { getActiveProjectsMin, getProjectsByConditionMin, GetCollectionsAccumByProjectMin, GetCostsAccumByProjectMin } from "../api/routeProjects";
 import { ProjectsTable, ProjectMin, ICostsAccumByProject, ICollectionAccumByProject } from "@/interfaces/Projects";
 import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
@@ -17,14 +17,22 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
+  let role = user.rol?.name || '';
+
   let projects: ProjectMin[];
   try {
-    projects = await getActiveProjectsMin(token);
+    if(role.toLowerCase().includes('residente')){
+      projects = await getProjectsByConditionMin(token);
+    }else{
+      projects = await getActiveProjectsMin(token);
+    }
     if(typeof(projects)==='string') 
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+          <div className="p-10">
+            <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+          </div>
         </>
       )
   } catch (error) {
@@ -184,9 +192,9 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
-        optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-        optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
-        condition={condition} />
+          optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
+          optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
+          condition={condition} />
     </>
   )
 }

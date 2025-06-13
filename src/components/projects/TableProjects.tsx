@@ -14,6 +14,7 @@ import { getActiveProjectsMin } from "@/app/api/routeProjects";
 import { showToastMessageError } from "../Alert";
 import Chip from "../providers/Chip";
 import { MoneyFormatter } from "@/app/functions/Globals";
+import { UsrBack } from "@/interfaces/User";
 
 type Props= {
   data:ProjectsTable[], 
@@ -25,11 +26,12 @@ type Props= {
   isFilter:boolean, 
   setIsFilter:Function, 
   isTable:boolean, 
-  isHistory?:boolean
+  isHistory?:boolean,
+  user: UsrBack
 }
 
 export default function TableProjects({data, token, projects, optCategories, 
-  optTypes, optConditions, isFilter, setIsFilter, isTable, isHistory=false}: Props){
+  optTypes, optConditions, isFilter, setIsFilter, isTable, isHistory=false, user}: Props){
   
   const columnHelper = createColumnHelper<ProjectsTable>();
 
@@ -155,178 +157,354 @@ export default function TableProjects({data, token, projects, optCategories,
   //     ),
   //   }),
   // ]
+  let columns: any[] = [];
 
-  const columns = [
-    columnHelper.accessor(row => row.id, {
-      id: 'seleccion',
-      cell: ({row}) => (
-        <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-        </div>
-      ),
-      size: 300,
-      enableSorting:false,
-      header: ({table}:any) => (
-        <input type="checkbox"
-          checked={table.getIsAllRowsSelected()}
-          onClick={()=> {
-            table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-          }}
-        />
-      )
-    }),
-    columnHelper.accessor('condition', {
-      id: 'accion',
-      cell: ({row}) => (
-        <div className="flex gap-x-1 items-center">
-          <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
-          <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
-          {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
-        </div>
-      ),
-      enableSorting:false,
-      header: () => (
-        <p>accion</p>
-      )
-    }),
-    columnHelper.accessor(row => row.percentage, {
-      id: 'avance',
-      cell: ({row}) => (
-        <div className="">
-          <p>{row.original.percentage}</p>
-          <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-            <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
-              style={{"width": row.original.percentage}}></div>
+  let rol = user.rol?.name || '';
+  if(rol.toLowerCase().includes('residente')){
+    columns = [
+      columnHelper.accessor(row => row.id, {
+        id: 'seleccion',
+        cell: ({row}) => (
+          <div className="flex gap-x-2">
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
           </div>
-        </div>
-      ),
-      enableSorting:false,
-      header: () => (
-        <p>Avance</p>
-      )
-    }), 
-    columnHelper.accessor('percentage', {
-      header: 'Avance',
-      id: 'nada',
-      cell: ({row}) => (
-        <p className="py-2 font-semibold cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >{row.original.code}</p>
-      ),
-    }),
-    columnHelper.accessor('code', {
-      header: 'Clave',
-      id: 'clave',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >{row.original.project}</p>
-      ),
-    }),
-    columnHelper.accessor('project', {
-      header: 'Proyecto',
-      id: 'proyecto',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >{row.original.account}</p>
-      ),
-    }),
-    columnHelper.accessor('account', {
-      header: 'Cuenta',
-      id: 'cuenta',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        ><Chip label={row.original.category} color={row.original.condition} /></p>
-      ),
-    }),
-    columnHelper.accessor('category', {
-      header: 'Categoria',
-      id: 'categoria',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >{row.original.client}</p>
-      ),
-    }),
-    columnHelper.accessor('client', {
-      header: 'Cliente',
-      id: 'cliente',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >{row.original.date?.substring(0, 10) || ''}</p>
-      ),
-    }),
-    columnHelper.accessor('date', {
-      header: 'Fecha',
-      id: 'fecha',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >
-          {MoneyFormatter(row.original.amount)}
-        </p>
-      ),
-    }),
-    columnHelper.accessor('amount', {
-      header: 'Monto',
-      id: 'monto',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >
-          {MoneyFormatter(row.original.total)}
-        </p>
-      ),
-    }),
-    columnHelper.accessor('total', {
-      header: 'Total',
-      id: 'total',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >
-          {MoneyFormatter(row.original.totalCosts?? 0)} 
-        </p>
-      ),
-    }),
-    columnHelper.accessor('totalCosts', {
-      header: 'Costos',
-      id: 'costos',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >
-          {MoneyFormatter(row.original.totalColections?? 0)}
-        </p>
-      ),
-    }),
-    columnHelper.accessor('totalColections', {
-      header: 'Cobros',
-      id: 'cobros',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        >
-          {MoneyFormatter(row.original.utilities?? 0)} 
-        </p>
-      ),
-    }),
-    columnHelper.accessor('utilities', {
-      header: 'Utilidad',
-      id: 'utilidad',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => linkToProfile(row.original.id)}
-        > </p>
-      ),
-    }),
-  ]
+        ),
+        size: 300,
+        enableSorting:false,
+        header: ({table}:any) => (
+          <input type="checkbox"
+            checked={table.getIsAllRowsSelected()}
+            onClick={()=> {
+              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+            }}
+          />
+        )
+      }),
+      columnHelper.accessor('condition', {
+        id: 'accion',
+        cell: ({row}) => (
+          <div className="flex gap-x-1 items-center">
+            <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
+            <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
+            {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
+          </div>
+        ),
+        enableSorting:false,
+        header: () => (
+          <p>accion</p>
+        )
+      }),
+      columnHelper.accessor(row => row.percentage, {
+        id: 'avance',
+        cell: ({row}) => (
+          <div className="">
+            <p>{row.original.percentage}</p>
+            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
+                style={{"width": row.original.percentage}}></div>
+            </div>
+          </div>
+        ),
+        enableSorting:false,
+        header: () => (
+          <p>Avance</p>
+        )
+      }), 
+      columnHelper.accessor('percentage', {
+        header: 'Avance',
+        id: 'nada',
+        cell: ({row}) => (
+          <p className="py-2 font-semibold cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.code}</p>
+        ),
+      }),
+      columnHelper.accessor('code', {
+        header: 'Clave',
+        id: 'clave',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.project}</p>
+        ),
+      }),
+      columnHelper.accessor('project', {
+        header: 'Proyecto',
+        id: 'proyecto',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.account}</p>
+        ),
+      }),
+      columnHelper.accessor('account', {
+        header: 'Cuenta',
+        id: 'cuenta',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          ><Chip label={row.original.category} color={row.original.condition} /></p>
+        ),
+      }),
+      columnHelper.accessor('category', {
+        header: 'Categoria',
+        id: 'categoria',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.client}</p>
+        ),
+      }),
+      columnHelper.accessor('client', {
+        header: 'Cliente',
+        id: 'cliente',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.date?.substring(0, 10) || ''}</p>
+        ),
+      }),
+      columnHelper.accessor('date', {
+        header: 'Fecha',
+        id: 'fecha',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {MoneyFormatter(row.original.amount)}
+          </p>
+        ),
+      }),
+      columnHelper.accessor('amount', {
+        header: 'Monto',
+        id: 'monto',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {MoneyFormatter(row.original.total)}
+          </p>
+        ),
+      }),
+      columnHelper.accessor('total', {
+        header: 'Total',
+        id: 'total',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {/* {MoneyFormatter(row.original.totalCosts?? 0)}  */}
+          </p>
+        ),
+      }),
+      // columnHelper.accessor('totalCosts', {
+      //   header: 'Costos',
+      //   id: 'costos',
+      //   cell: ({row}) => (
+      //     <p className="cursor-pointer"
+      //       onClick={() => linkToProfile(row.original.id)}
+      //     >
+      //       {MoneyFormatter(row.original.totalColections?? 0)}
+      //     </p>
+      //   ),
+      // }),
+      // columnHelper.accessor('totalColections', {
+      //   header: 'Cobros',
+      //   id: 'cobros',
+      //   cell: ({row}) => (
+      //     <p className="cursor-pointer"
+      //       onClick={() => linkToProfile(row.original.id)}
+      //     >
+      //       {MoneyFormatter(row.original.utilities?? 0)} 
+      //     </p>
+      //   ),
+      // }),
+      // columnHelper.accessor('utilities', {
+      //   header: 'Utilidad',
+      //   id: 'utilidad',
+      //   cell: ({row}) => (
+      //     <p className="cursor-pointer"
+      //       onClick={() => linkToProfile(row.original.id)}
+      //     > </p>
+      //   ),
+      // }),
+    ]
+  }else{
+    columns = [
+      columnHelper.accessor(row => row.id, {
+        id: 'seleccion',
+        cell: ({row}) => (
+          <div className="flex gap-x-2">
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+          </div>
+        ),
+        size: 300,
+        enableSorting:false,
+        header: ({table}:any) => (
+          <input type="checkbox"
+            checked={table.getIsAllRowsSelected()}
+            onClick={()=> {
+              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+            }}
+          />
+        )
+      }),
+      columnHelper.accessor('condition', {
+        id: 'accion',
+        cell: ({row}) => (
+          <div className="flex gap-x-1 items-center">
+            <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
+            <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
+            {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
+          </div>
+        ),
+        enableSorting:false,
+        header: () => (
+          <p>accion</p>
+        )
+      }),
+      columnHelper.accessor(row => row.percentage, {
+        id: 'avance',
+        cell: ({row}) => (
+          <div className="">
+            <p>{row.original.percentage}</p>
+            <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+              <div className="bg-purple-600 h-2.5 rounded-full dark:bg-purple-500" 
+                style={{"width": row.original.percentage}}></div>
+            </div>
+          </div>
+        ),
+        enableSorting:false,
+        header: () => (
+          <p>Avance</p>
+        )
+      }), 
+      columnHelper.accessor('percentage', {
+        header: 'Avance',
+        id: 'nada',
+        cell: ({row}) => (
+          <p className="py-2 font-semibold cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.code}</p>
+        ),
+      }),
+      columnHelper.accessor('code', {
+        header: 'Clave',
+        id: 'clave',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.project}</p>
+        ),
+      }),
+      columnHelper.accessor('project', {
+        header: 'Proyecto',
+        id: 'proyecto',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.account}</p>
+        ),
+      }),
+      columnHelper.accessor('account', {
+        header: 'Cuenta',
+        id: 'cuenta',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          ><Chip label={row.original.category} color={row.original.condition} /></p>
+        ),
+      }),
+      columnHelper.accessor('category', {
+        header: 'Categoria',
+        id: 'categoria',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.client}</p>
+        ),
+      }),
+      columnHelper.accessor('client', {
+        header: 'Cliente',
+        id: 'cliente',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >{row.original.date?.substring(0, 10) || ''}</p>
+        ),
+      }),
+      columnHelper.accessor('date', {
+        header: 'Fecha',
+        id: 'fecha',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {MoneyFormatter(row.original.amount)}
+          </p>
+        ),
+      }),
+      columnHelper.accessor('amount', {
+        header: 'Monto',
+        id: 'monto',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {MoneyFormatter(row.original.total)}
+          </p>
+        ),
+      }),
+      columnHelper.accessor('total', {
+        header: 'Total',
+        id: 'total',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {MoneyFormatter(row.original.totalCosts?? 0)} 
+          </p>
+        ),
+      }),
+      columnHelper.accessor('totalCosts', {
+        header: 'Costos',
+        id: 'costos',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {MoneyFormatter(row.original.totalColections?? 0)}
+          </p>
+        ),
+      }),
+      columnHelper.accessor('totalColections', {
+        header: 'Cobros',
+        id: 'cobros',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          >
+            {MoneyFormatter(row.original.utilities?? 0)} 
+          </p>
+        ),
+      }),
+      columnHelper.accessor('utilities', {
+        header: 'Utilidad',
+        id: 'utilidad',
+        cell: ({row}) => (
+          <p className="cursor-pointer"
+            onClick={() => linkToProfile(row.original.id)}
+          > </p>
+        ),
+      }),
+    ]
+  }
            
   const [maxAmount, setMaxAmount] = useState<number>(0);
   useEffect(() => {

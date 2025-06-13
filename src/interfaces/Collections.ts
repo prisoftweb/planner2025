@@ -201,6 +201,22 @@ export interface ITableCollection {
   confirm: boolean
 }
 
+export interface ITableCollectionMin {
+  id:string
+  Referencia: string 
+  Fecha: string 
+  Cuenta: string
+  Estimacion:  string
+  folioInvoice: string
+  nameStatus: string
+  colorStatus: string 
+  Importe: number
+  concept: string,
+  confirm: boolean
+  idProject: string
+  idStatus: string
+}
+
 export interface ITotalResumentPayment {
   billedTotal: {
     quantity: number

@@ -132,6 +132,9 @@ export interface IGuaranteeByPojectMin {
     photo: string
   }
   date: string
+  dateguarantee?: string
+  datepayment?: string
+  dateprogramming?: string
   estatus: {
     _id: string
     name: string
@@ -160,6 +163,10 @@ export interface ITableGuaranteeByProject {
     name: string
     color: string
   }
+  fechaRetencion: string,
+  fechaGarantia: string,
+  fechaProgramacion: string,
+  fechaPago: string
 }
 
 export interface IGuaranteeResumenByProject {

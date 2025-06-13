@@ -20,12 +20,12 @@ export default function NavItemComponent({name, items, link}: {name:string, item
   return(
     <>
       <button type="button" ref={ref} 
-        className="text-sm cursor-pointer lg:text-base w-full mr-2 z-50" 
+        className="text-sm cursor-pointer lg:text-base w-full mr-2 z-50 print:hidden" 
         onClick={() => {
           link===''? setIsOpen(!isOpen) : window.location.replace(link);
         }}
       >
-        <p className="p-2 hover:bg-slate-700 text-center font-semibold">{name}</p>
+        <p className="p-2 hover:bg-slate-700 text-center font-semibold print:hidden">{name}</p>
         {isOpen && dropDownItem}
       </button>
     </>
