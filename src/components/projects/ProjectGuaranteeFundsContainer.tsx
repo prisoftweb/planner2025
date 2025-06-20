@@ -185,9 +185,9 @@ function TransformDataGuaranteeTotable(guarantees: IGuaranteeByPojectMin[]): ITa
     estimate: guarantee.estimate.name,
     user: guarantee.user.name,
     status: guarantee.estatus,
-    fechaGarantia: guarantee.dateguarantee?.substring(0, 10) || '',
-    fechaPago: guarantee.datepayment?.substring(0, 10) || '',
-    fechaProgramacion: guarantee.dateprogramming?.substring(0, 10) || '',
+    fechaGarantia: guarantee.dateGuarantee?.substring(0, 10) || '',
+    fechaPago: guarantee.datePayment?.substring(0, 10) || '',
+    fechaProgramacion: guarantee.dateProgramming?.substring(0, 10) || '',
     fechaRetencion: ''
   }));
 }

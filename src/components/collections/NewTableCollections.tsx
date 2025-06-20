@@ -5,40 +5,37 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-// import RemoveElement from "@/components/RemoveElement";
+import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
 import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
 import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
 import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
-// import Button from "../Button";
+import Button from "../Button";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-// import AddNewCollectionComponent from "./AddNewCollection";
-// import { insertConditionInCollection } from "@/app/api/routeCollections";
+import AddNewCollectionComponent from "./AddNewCollection";
+import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
+import ReactTableCollections from "./ReactTableCollections";
+import { ITableCollectionMin } from "@/interfaces/Collections";
 import { useTableStates } from "@/app/store/tableStates";
 
-
-export default function TableHistoryCollectionsComponent({token, user}: {token:string, user:string}) {
+export default function NewTableCollections({token, user}: {token:string, user:string}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>([]);
   const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
-  // const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
+  const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
-  // const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
+  const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
+
+  const {search} = useTableStates();
   
   const [widthPage, setWidthPage] = useState<number>(900);
-  const {search} = useTableStates();
-
-  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date('2024-01-02'),
-    to: new Date('2024-10-30'),
-  });
 
   const handleResize = () => {
     setWidthPage(Math.max(
@@ -84,265 +81,40 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
     fetch();
   }, []);
 
-  // const updateCollections = async() => {
-  //   const res = await getCollectionsMin(token);
-  //   if(typeof(res)==='string'){
-  //     showToastMessageError(res);
-  //   }else{
-  //     setCollections(res);
-  //     setIsFilter(false);
-  //     // setFilteredCollections(res);
-  //   }
-  // }
-
-  const handleDate = (dateI: Date, dateF: Date) => {
-    handleFilter(dateI, dateF, statuses);
-    
-    //actualizar total con el rango de fechas
+  const delCollection = (id:string) => {
+    showToastMessage('Cobro eliminado satisfactoriamente!!!');
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   }
-
-  const addStatus = (status:string) => {
-    const newStatus = [...statuses, status];
-    setStatuses(newStatus);
-    if(rangeDate.from && rangeDate.to){
-      handleFilter(rangeDate.from, rangeDate.to, newStatus);
-    }else{
-      showToastMessageError('Seleccione un rango de fechas para filtrar');
-    }
-  }
-
-  const deleteStatus = (status:string) => {
-    const newStatus = statuses.filter((s) => s !== status);
-    setStatuses(newStatus);
-    if(rangeDate.from && rangeDate.to){
-      handleFilter(rangeDate.from, rangeDate.to, newStatus);
-    }else{
-      showToastMessageError('Seleccione un rango de fechas para filtrar');
-    }
-  }
-
-  const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    let statusesFil;
-    if(arrStatuses.length > 0){
-      statusesFil = collections.filter((c) => arrStatuses.includes(c.condition._id));
-    }else{
-      statusesFil = collections;
-    }
-
-    const filtered = statusesFil.filter((c) => {
-      let d = new Date(c.date).getTime();
-      if(d >= dateS.getTime() && d <= dateE.getTime()){
-        return c;
-      }
-    });
-
-    setFilteredCollections(filtered);
-    setIsFilter(true);
-    updateTotal(getDate(dateS), getDate(dateE));
-  }
-
-  const updateTotal = async (dateI:string, dateF:string) => {
-    const data={
-        condition: statuses,
-        conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
-        conditionAccountsReceivable:['67d20cb359865f640af92638'],
-      }
-    const rest = await getAllTotalAmountRecoveredCollection(token, dateI, dateF, data);
-    if(typeof(rest)==='string'){
-      showToastMessageError(rest);
-    }else{
-      setTotalCollections(rest);
-    }
-  }
-
-  if(collections.length <= 0){
-    return (
-      <>
-        <div className="flex flex-col items-center">
-          <p className="text-5xl mt-20 font-bold">Cobranza</p>
-          <p className="text-xl mt-10 text-slate-700 font-bold" 
-            >Gestiona las cuentas por cobrar,
-            recuperacion de cobranza y mas
-            desde Planner</p>
-          <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
-        </div>
-      </>
-    )
-  }
-
-  // const delCollection = (id:string) => {
-  //   showToastMessage('Cobro eliminado satisfactoriamente!!!');
-  //   setTimeout(() => {
-  //     window.location.reload();
-  //   }, 2000);
-  // }
-
-  // const confirmCollection = async( id: string) => {
-  //   const data = {
-  //     condition: [
-  //       {
-  //         glossary: "67e318171945c0b1e4c9bc72",
-  //         user
-  //       }
-  //     ]
-  //   }
-  //   const res = await insertConditionInCollection(token, data, id);
-  //   if(typeof(res)==='string'){
-  //     showToastMessageError(res);
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1500);
-  //   }else{
-  //     showToastMessage('Cobro actualizado satisfactoriamente!!!');
-  //     updateCollections();
-  //   }
-  // }
-
-  // const columnHelper = createColumnHelper<ITableCollection>();
-  
-  // const columns = [
-  //   columnHelper.accessor(row => row.id, {
-  //     id: 'Accion',
-  //     cell: ({row}) => (
-  //       <div className="flex gap-x-2">
-  //         <input type="checkbox" 
-  //           checked={row.getIsSelected()}
-  //           onChange={row.getToggleSelectedHandler()}
-  //         />
-  //         {/* <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
-  //                     removeElement={delCollection} token={token} /> */}
-  //       </div>
-  //     ),
-  //     size: 300,
-  //     enableSorting:false,
-  //     header: ({table}:any) => (
-  //       // <input type="checkbox"
-  //       //   checked={table.getIsAllRowsSelected()}
-  //       //   onClick={()=> {
-  //       //     table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-  //       //   }}
-  //       // />
-  //       <p>Accion</p>
-  //     )
-  //   }),
-  //   columnHelper.accessor('Referencia', {
-  //     header: 'Referencia',
-  //     id: 'referencia',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.Referencia}</p>
-  //     ),
-  //   }),
-  //   columnHelper.accessor('Fecha', {
-  //     header: 'Fecha',
-  //     id: 'fecha',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.Fecha?.substring(0, 10)}</p>
-  //     ),
-  //   }),
-  //   columnHelper.accessor('concept', {
-  //     header: 'Concepto',
-  //     id: 'concepto',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.concept}</p>
-  //     ),
-  //   }),
-  //   // columnHelper.accessor('confirm', {
-  //   //   header: 'Confirmado',
-  //   //   id: 'confirmado',
-  //   //   cell: ({row}) => (
-  //   //     <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
-  //   //   ),
-  //   // }),
-  //   columnHelper.accessor('Facturas', {
-  //     header: 'Facturas',
-  //     id: 'facturas',
-  //     cell: ({row}) => (
-  //       <div>
-  //         {row.original.Facturas.map((f) => (
-  //           <Chip label={f.invoices.folio} color={'#466'} key={f._id} />
-  //         ))}
-  //       </div>
-  //     )
-  //   }),
-  //   columnHelper.accessor('status', {
-  //     header: 'Estatus',
-  //     id: 'estatus',
-  //     cell: ({row}) => (
-  //       <Chip label={row.original.status.name} color={row.original.status.color} />
-  //     ),
-  //   }),
-  //   columnHelper.accessor('Cuenta', {
-  //     header: 'Cuenta',
-  //     id: 'cuenta',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.Cuenta}</p>
-  //     ),
-  //   }),
-  //   columnHelper.accessor('Importe', {
-  //     header: 'Importe depositado',
-  //     id: 'importe',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{CurrencyFormatter({
-  //         currency: 'MXN',
-  //         value: row.original.Importe
-  //       })}</p>
-  //     ),
-  //   }),
-  // ]
-
-  // let data;
-  // if(isFilter){
-  //   data = CollectionDataToTableData(filteredCollections);
-  // }else{
-  //   data = CollectionDataToTableData(collections);
-  // }
 
   let data
-  if(isFilter){
-    if(search.length>0){
-      data=filteredCollections.filter((f) => f.reference.includes(search));
-    }else{
-      data=filteredCollections;
-    }
+  // if(isFilter){
+  //   if(search.length>0){
+  //     data=filteredCollections.filter((f) => f.reference.includes(search));
+  //   }else{
+  //     data=filteredCollections;
+  //   }
+  // }else{
+  //   console.log('search => ', search);
+  //   console.log('collections => ', collections);
+  //   if(search.length>0){
+  //     data=collections.filter((f) => f.reference.includes(search));
+  //   }else{
+  //     data=collections;
+  //   }
+  // }
+  if(search.length>0){
+    data=collections.filter((f) => f.reference.includes(search));
   }else{
-    if(search.length>0){
-      data=collections.filter((f) => f.reference.includes(search));
-    }else{
-      data=collections;
-    }
+    data=collections;
   }
-  
-  let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-                <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
-                <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
-                <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
-                <div>
-                  {/* <Label htmlFor='date'>Fecha</Label> */}
-                  <DateRangePicker 
-                    className='mt-2'
-                    placeholder='Seleccione un rango de fechas'
-                    onValueChange={(e) => {
-                      setRangeDate(e);
-                      if(e.from && e.to){
-                        handleDate(e.from, e.to);
-                      }
-                    }}
-                    value={rangeDate}
-                    locale={es}
-                  />
-                </div>
-              </div>
+  console.log('data => ', data);
+  // const data = CollectionDataToTableData(collections);
+  // console.log('data => ', data);
 
+  // console.log('widt pge => ', widthPage);
+// console.log('total collections => ', totalCollections);
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
@@ -351,7 +123,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
             <p className="text-slate-600">Historial de cobranza</p>
           </div>
         </div>
-        <Card amount={totalCollections?.amountRecovered?.amount || 0} title="Recuperado"></Card>
+        <Card amount={totalCollections?.amountRecovered? totalCollections.amountRecovered.amount: 0} title="Recuperado"></Card>
         <Card amount={totalCollections?.totalAccountsReceivable?.total || 0} title="Por cobrar"></Card>
         <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Por cobrar vencido"></Card>
       </div>
@@ -362,21 +134,32 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
               <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
             </div>
           </Link>
-          <p className="text-xl ml-4 font-medium">Historial de recuperacion de cartera</p>
+          <p className="text-xl ml-4 font-medium">Recuperacion de cartera</p>
         </div>
         <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
           <div className="">
             <SearchInTable placeH={"Buscar cobro.."} />
           </div>
-          {/* <div className={''}>
+          <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
-              {widthPage < 1080 && filterElemnts}
+              {/* {widthPage < 1080 && filterElemnts} */}
+              {/* {filterElemnts} */}
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
-          </div> */}
+          </div>
         </div>
       </div>
-      {widthPage > 1080 && filterElemnts}
+      {/* {filterElemnts} */}
+      {/* {widthPage > 1080 && filterElemnts} */}
+      {/* <Table columns={columns} data={data} placeH="buscar cobro" /> */}
+      {/* {rangeDate.from && rangeDate.to ? (
+        <ReactTableCollections columns={columns} data={data} arrStatuses={statuses} 
+          dateE={rangeDate.to} dateS={rangeDate.from} isFiter={isFilter} />
+      ): (
+        <ReactTableCollections columns={columns} data={data} arrStatuses={statuses} 
+          dateE={new Date()} dateS={new Date()} isFiter={false} />
+      )} */}
+      {JSON.stringify(data)}
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
@@ -395,8 +178,8 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                   <div className="flex gap-x-1 items-end">
                     <img alt="responsable" src={ '/img/projects/default.svg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-                    {/* <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
-                      removeElement={delCollection} token={token} /> */}
+                    <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
+                      removeElement={delCollection} token={token} />
                   </div>
                   <Chip label={col.condition.name} color={col.condition.color} />
                 </div>
@@ -435,7 +218,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
           ))}
         </nav>
       </div>
-      {/* <Table columns={columns} data={data} placeH="buscar cobro" /> */}
       {/* {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
                                 user={user} updateCollections={updateCollections} />} */}
       {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
@@ -444,6 +226,8 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
 }
 
 export const Card = ({amount, title}: {title:string, amount:number}) => {
+  // console.log('amount => ', amount);
+  // console.log('title => ', title);
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
       {/* {children} */}

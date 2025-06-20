@@ -33,6 +33,8 @@ export default function ExtraData({token, optClients, optCategories,
   const [guarantee, setGuarantee] = useState<boolean>(project.hasguaranteefund);
   const refRequest = useRef(true);
 
+  const [includeVat, setIncludeVat] = useState<boolean>(true);
+
   const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
 
   let idCli = 0;
@@ -75,13 +77,25 @@ export default function ExtraData({token, optClients, optCategories,
       if(refRequest.current){
         refRequest.current = false;
         const {amount} = valores;
-        const data= {
-          amount: amount.toString().replace(/[$,]/g, ""),
-          date: startDate,
-          category,
-          glossary: type,
-          client,
-          hasguaranteefund: guarantee
+        let data;
+        if(includeVat){
+          data= {
+            amount: amount.toString().replace(/[$,]/g, ""),
+            date: startDate,
+            category,
+            glossary: type,
+            client,
+            hasguaranteefund: guarantee
+          }
+        }else{
+          data= {
+            amount: amount.toString().replace(/[$,]/g, ""),
+            date: startDate,
+            category,
+            glossary: type,
+            client,
+            hasguaranteefund: guarantee
+          }
         }
         try {
           const res = await UpdateProject(token, id, data);
@@ -158,7 +172,7 @@ export default function ExtraData({token, optClients, optCategories,
             selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
           />
         </div>
-        <div className=" flex gap-x-3">
+        <div className=" flex gap-x-3 justify-between">
           <div>
             <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
             <div className="inline-flex rounded-md shadow-sm mx-2">
@@ -171,6 +185,24 @@ export default function ExtraData({token, optClients, optCategories,
               <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
                         ${!guarantee? 'bg-red-500 text-white': ''}`}
                 onClick={() => setGuarantee(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="vat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Incluye IVA</p></Label>
+            <div className="inline-flex rounded-md shadow-sm mx-2">
+              <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                        ${includeVat? 'bg-green-500 text-white': ''}`}
+                onClick={() => setIncludeVat(true)}
+              >
+                Si
+              </button>
+              <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                        ${!includeVat? 'bg-red-500 text-white': ''}`}
+                onClick={() => setIncludeVat(false)}
               >
                 No
               </button>

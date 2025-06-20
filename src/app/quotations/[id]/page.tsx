@@ -51,11 +51,13 @@ export default async function Page({params}: {params:{id:string}}){
     )  
   }
 
+  const role = user.rol?.name?.toLowerCase().includes('residente');
+
   return (
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <Header title={quotation.title} previousPage="/quotations">
+        <Header title={quotation.title} previousPage={role? "/quotations/byuser": "/quotations"}>
           <Selectize options={quotations} routePage="quotations" subpath="" />
         </Header>
         <ContainerQuatationProfile quatation={quotation} token={token} usr={user._id} />

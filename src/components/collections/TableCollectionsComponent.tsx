@@ -19,6 +19,9 @@ import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
+import ReactTableCollections from "./ReactTableCollections";
+import { ITableCollectionMin } from "@/interfaces/Collections";
+import { useTableStates } from "@/app/store/tableStates";
 
 export default function TableCollectionsComponent({token, user}: {token:string, user:string}) {
 
@@ -29,6 +32,8 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
   const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
+
+  const {search} = useTableStates();
   
   const [widthPage, setWidthPage] = useState<number>(900);
 
@@ -215,122 +220,135 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }
   }
 
-  const columnHelper = createColumnHelper<ITableCollection>();
+  // const columnHelper = createColumnHelper<ITableCollectionMin>();
   
-  const columns = [
-    columnHelper.accessor(row => row.id, {
-      id: 'Accion',
-      cell: ({row}) => (
-        <div className="flex gap-x-2">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-          <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
-                      removeElement={delCollection} token={token} />
-        </div>
-      ),
-      size: 300,
-      enableSorting:false,
-      header: ({table}:any) => (
-        // <input type="checkbox"
-        //   checked={table.getIsAllRowsSelected()}
-        //   onClick={()=> {
-        //     table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-        //   }}
-        // />
-        <p>Accion</p>
-      )
-    }),
-    columnHelper.accessor('Referencia', {
-      header: 'Referencia',
-      id: 'referencia',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.Referencia}</p>
-      ),
-    }),
-    columnHelper.accessor('Fecha', {
-      header: 'Fecha',
-      id: 'fecha',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.Fecha?.substring(0, 10)}</p>
-      ),
-    }),
-    columnHelper.accessor('concept', {
-      header: 'Concepto',
-      id: 'concepto',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.concept}</p>
-      ),
-    }),
-    columnHelper.accessor('confirm', {
-      header: 'Confirmado',
-      id: 'confirmado',
-      cell: ({row}) => (
-        // <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-        //   <input 
-        //     // checked={row.original.confirm} 
-        //     onClick={() => confirmCollection(row.original.id)} id={row.original.id.toString()} type="checkbox"
-        //     // disabled={row.original.confirm}
-        //     className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-        //       appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-        //       peer-checked:border-green-500 peer-checked:before:bg-green-500
-        //       border border-slate-300" />
-        //   <label htmlFor={row.original.id.toString()}
-        //     className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-        //     <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-        //       data-ripple-dark="true"></div>
-        //   </label>
-        // </div>
-        <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
-      ),
-    }),
-    columnHelper.accessor('Facturas', {
-      header: 'Facturas',
-      id: 'facturas',
-      cell: ({row}) => (
-        <div>
-          {row.original.Facturas.map((f) => (
-            <Chip label={f.invoices.folio} color={'#466'} key={f._id} />
-          ))}
-        </div>
-      )
-    }),
-    columnHelper.accessor('status', {
-      header: 'Estatus',
-      id: 'estatus',
-      cell: ({row}) => (
-        <Chip label={row.original.status.name} color={row.original.status.color} />
-      ),
-    }),
-    columnHelper.accessor('Cuenta', {
-      header: 'Cuenta',
-      id: 'cuenta',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.Cuenta}</p>
-      ),
-    }),
-    columnHelper.accessor('Importe', {
-      header: 'Importe depositado',
-      id: 'importe',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{CurrencyFormatter({
-          currency: 'MXN',
-          value: row.original.Importe
-        })}</p>
-      ),
-    }),
-  ]
+  // const columns = [
+  //   columnHelper.accessor(row => row.id, {
+  //     id: 'Accion',
+  //     cell: ({row}) => (
+  //       <div className="flex gap-x-2">
+  //         <input type="checkbox" 
+  //           checked={row.getIsSelected()}
+  //           onChange={row.getToggleSelectedHandler()}
+  //         />
+  //         <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
+  //                     removeElement={delCollection} token={token} />
+  //       </div>
+  //     ),
+  //     size: 300,
+  //     enableSorting:false,
+  //     header: ({table}:any) => (
+  //       // <input type="checkbox"
+  //       //   checked={table.getIsAllRowsSelected()}
+  //       //   onClick={()=> {
+  //       //     table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
+  //       //   }}
+  //       // />
+  //       <p>Accion</p>
+  //     )
+  //   }),
+  //   columnHelper.accessor('Referencia', {
+  //     header: 'Referencia',
+  //     id: 'referencia',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //       // onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+  //       onClick={() => window.location.replace( `/projects/estimates/${row.original.idProject}/collections/${row.original.id}?page=collections`)}
+  //       >{row.original.Referencia}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('Fecha', {
+  //     header: 'Fecha',
+  //     id: 'fecha',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //       // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/collections/${row.original.id}?page=collections`)}
+  //       >{row.original.Fecha?.substring(0, 10)}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('concept', {
+  //     header: 'Concepto',
+  //     id: 'concepto',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //       // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/collections/${row.original.id}?page=collections`)}
+  //       >{row.original.concept}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('confirm', {
+  //     header: 'Confirmado',
+  //     id: 'confirmado',
+  //     cell: ({row}) => (
+  //       // <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+  //       //   <input 
+  //       //     // checked={row.original.confirm} 
+  //       //     onClick={() => confirmCollection(row.original.id)} id={row.original.id.toString()} type="checkbox"
+  //       //     // disabled={row.original.confirm}
+  //       //     className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+  //       //       appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+  //       //       peer-checked:border-green-500 peer-checked:before:bg-green-500
+  //       //       border border-slate-300" />
+  //       //   <label htmlFor={row.original.id.toString()}
+  //       //     className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+  //       //     <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+  //       //       data-ripple-dark="true"></div>
+  //       //   </label>
+  //       // </div>
+  //       <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
+  //     ),
+  //   }),
+  //   columnHelper.accessor('folioInvoice', {
+  //     header: 'Facturas',
+  //     id: 'facturas',
+  //     cell: ({row}) => (
+  //       <div>
+  //         {/* {row.original.Facturas.map((f) => (
+  //           <Chip label={f.invoices.folio} color={'#466'} key={f._id} />
+  //         ))} */}
+  //         <Chip label={row.original.folioInvoice} color={'#466'} key={row.original.id} />
+  //       </div>
+  //     )
+  //   }),
+  //   // columnHelper.accessor('status', {
+  //   //   header: 'Estatus',
+  //   //   id: 'estatus',
+  //   //   cell: ({row}) => (
+  //   //     <Chip label={row.original.status.name} color={row.original.status.color} />
+  //   //   ),
+  //   // }),
+  //   columnHelper.accessor('idStatus', {
+  //     header: 'Estatus',
+  //     id: 'estatus',
+  //     cell: ({row}) => (
+  //       <Chip label={row.original.nameStatus} color={row.original.colorStatus} />
+  //     ),
+  //   }),
+  //   columnHelper.accessor('Cuenta', {
+  //     header: 'Cuenta',
+  //     id: 'cuenta',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //       // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/collections/${row.original.id}?page=collections`)}
+  //       >{row.original.Cuenta}</p>
+  //     ),
+  //   }),
+  //   columnHelper.accessor('Importe', {
+  //     header: 'Importe depositado',
+  //     id: 'importe',
+  //     cell: ({row}) => (
+  //       <p className="cursor-pointer"
+  //       // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
+  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/collections/${row.original.id}?page=collections`)}
+  //       >{CurrencyFormatter({
+  //         currency: 'MXN',
+  //         value: row.original.Importe
+  //       })}</p>
+  //     ),
+  //   }),
+  // ]
 
   // const collectionM = collections.reduce((previous, current) => {
   //   return current.amount > previous.amount ? current : previous;
@@ -338,12 +356,32 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
 
   // const maxAmount = collectionM.amount;
 
-  let data;
+  // let data;
+  // if(isFilter){
+  //   data = CollectionDataToTableData(filteredCollections);
+  // }else{
+  //   data = CollectionDataToTableData(collections);
+  // }
+
+
+  // const data = CollectionDataToTableDataFunction(collections);
+  let data
   if(isFilter){
-    data = CollectionDataToTableData(filteredCollections);
+    if(search.length>0){
+      data=filteredCollections.filter((f) => f.reference.includes(search));
+    }else{
+      data=filteredCollections;
+    }
   }else{
-    data = CollectionDataToTableData(collections);
+    // console.log('search => ', search);
+    // console.log('collections => ', collections);
+    if(search.length>0){
+      data=collections.filter((f) => f.reference.includes(search));
+    }else{
+      data=collections;
+    }
   }
+  // console.log('data => ', data);
   // const data = CollectionDataToTableData(collections);
   // console.log('data => ', data);
 
@@ -369,7 +407,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
               </div>
 
   // console.log('widt pge => ', widthPage);
-console.log('total collections => ', totalCollections);
+// console.log('total collections => ', totalCollections);
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
@@ -398,13 +436,80 @@ console.log('total collections => ', totalCollections);
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {widthPage < 1080 && filterElemnts}
+              {/* {filterElemnts} */}
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
           </div>
         </div>
       </div>
       {widthPage > 1080 && filterElemnts}
-      <Table columns={columns} data={data} placeH="buscar cobro" />
+      {/* <Table columns={columns} data={data} placeH="buscar cobro" /> */}
+      {/* {rangeDate.from && rangeDate.to ? (
+        <ReactTableCollections columns={columns} data={data} arrStatuses={statuses} 
+          dateE={rangeDate.to} dateS={rangeDate.from} isFiter={isFilter} />
+      ): (
+        <ReactTableCollections columns={columns} data={data} arrStatuses={statuses} 
+          dateE={new Date()} dateS={new Date()} isFiter={false} />
+      )} */}
+      {/* {JSON.stringify(data)} */}
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
+            overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+          {data.map((col, index) => (
+            <div role="button"
+              key={index}
+              className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+                outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+                focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+                active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+                bg-white`}
+              // onClick={() => handleProjectSel(prj._id, prj.title)}
+            >
+              <div className="flex items-center w-full ">
+                <div className="grid mr-4 place-items-center gap-x-1 gap-y-2">
+                  <div className="flex gap-x-1 items-end">
+                    <img alt="responsable" src={ '/img/projects/default.svg'}
+                      className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+                    <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
+                      removeElement={delCollection} token={token} />
+                  </div>
+                  <Chip label={col.condition.name} color={col.condition.color} />
+                </div>
+                <div className="w-full">
+                  <div className="flex gap-x-3 justify-between items-center">
+                    <div>
+                      <h6
+                        className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
+                        {col.reference}
+                      </h6>
+                      <h6
+                        className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
+                        Factura #
+                      </h6>
+                    </div>
+                    <div>
+                      <h6
+                        className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
+                        {CurrencyFormatter({
+                          currency: 'MXN',
+                          value: col.amount
+                        })}
+                      </h6>
+                      <h6
+                        className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
+                        {col.date.substring(0, 10)}
+                      </h6>
+                    </div>
+                  </div>
+                  <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                    {col.concept}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </nav>
+      </div>
       {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
                                 user={user} updateCollections={updateCollections} />}
       {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
@@ -413,8 +518,8 @@ console.log('total collections => ', totalCollections);
 }
 
 export const Card = ({amount, title}: {title:string, amount:number}) => {
-  console.log('amount => ', amount);
-  console.log('title => ', title);
+  // console.log('amount => ', amount);
+  // console.log('title => ', title);
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
       {/* {children} */}
@@ -486,4 +591,29 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
       {view }
     </>
   )
+}
+
+function CollectionDataToTableDataFunction(collections:ICollectionMin[]){
+  const table: ITableCollectionMin[] = [];
+  collections.map((col) => {
+    table.push({
+      Cuenta: col.account,
+      Estimacion: '',
+      // Facturas: [col.invoices],
+      Fecha: col.date,
+      id: col._id,
+      Importe: col.amount,
+      Referencia: col.reference,
+      // status: col.condition,
+      concept: col.concept,
+      confirm: col.condition.name.toLowerCase().includes('confirmado'),
+      idProject: col.invoices.project._id,
+      folioInvoice: col.invoices.invoices.folio,
+      nameStatus: col.condition.name,
+      colorStatus: col.condition.color,
+      idStatus: col.condition._id
+    })
+  });
+
+  return table;
 }

@@ -7,7 +7,7 @@ import { Options } from "@/interfaces/Common"
 import { IEstimateMin, TableEstimatesProject } from "@/interfaces/Estimate"
 import { getEstimateMin } from "@/app/api/routeEstimates"
 import { createInvoice } from "@/app/api/routeInvoices"
-import DataBasicStepper from "../projects/estimates/DataBasicStepper"
+import DataBasicInvoiceStepper from "./DataBasicInvoiceStepper"
 import InvoicesConditionsStepper from "../projects/estimates/InvoicesConditionsStepper"
 // import ConceptsInvoiceStepper from "./ConceptsInvoceStepper"
 import NavInvoiceStepper from "../projects/estimates/NavInvoiceStepper"
@@ -33,6 +33,7 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
   const [formPaid, setFormPaid] = useState<string>('EFECTIVO 01');
   const [conditionPayment, setConditionPayment] = useState<string>('');
   const [odc, setOdc] = useState<string>('');
+  const [project, setProject] = useState<string>('');
 
   const [bandFolio, setBandFolio] = useState<boolean>(false);
   const [bandTaxFolio, setBandTaxFolio] = useState<boolean>(false);
@@ -45,6 +46,10 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
 
   const handleClient = (value: string) => {
     setClient(value);
+  }
+
+  const handleProject = (value: string) => {
+    setProject(value);
   }
 
   const handleType = (value: string) => {
@@ -178,6 +183,7 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
         paymentWay: formPaid,
         user,
         client,
+        project,
         // project: project._id,
         company: '65d3813c74045152c0c4377e',
         concepts: dataConcepts,
@@ -205,64 +211,15 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
         showForm(false);
       }
     }
-    // if(val && estimate){
-    //   const res: IEstimateMin = await getEstimateMin(token, estimate?.id);
-    //   if(typeof(res)==='string'){
-    //     showToastMessageError('Error al obtener los conceptos de la estimacion..');
-    //   }else{
-    //     const currentDate=new Date(date.substring(0, 10));
-    //     const day=currentDate.getDay();
-    //     const days = (conditionPayment=="67d20a6a59865f640af92588"? 0: 
-    //             (conditionPayment=="67d20a8b59865f640af9258a"? 10: (conditionPayment=="67d20aa159865f640af9258c"? 15: 30)));
-    //     const newDay =currentDate.setDate(day+days);
-    //     const newDate=new Date(newDay);
-    //     const data = {
-    //       folio,
-    //       taxfolio: taxFolio,
-    //       date,
-    //       useCFDI: type,
-    //       paymentMethod: methodPaid,
-    //       paymentWay: formPaid,
-    //       user,
-    //       client,
-    //       // estimate: estimate?.id,
-    //       project: project._id,
-    //       company: '65d3813c74045152c0c4377e',
-    //       concepts: res.concepts,
-    //       notes: res.description,
-    //       // amountGuaranteeFund: estimate.Fondo,
-    //       // amountChargeOff: estimate.Amortizacion,
-    //       // cost: {
-    //       //   subtotal: estimate.MontoPay, 
-    //       //   iva: (estimate?.amountVat || 0) - (estimate?.MontoPay || 0),
-    //       //   total: estimate.amountVat,
-    //       // },
-    //       condition: [
-    //         {glossary:"67d20cb359865f640af92638", user}
-    //       ],
-    //       termsofpayment:conditionPayment,
-    //       purchaseorder:odc,
-    //       duedate:newDate.toISOString()
-    //     }
-
-    //     const resInvoice = await createInvoice(token, data);
-    //     if(typeof(res)==='string'){
-    //       showToastMessageError(resInvoice);
-    //     }else{
-    //       showToastMessage('Factura agregada satisfactoriamente!!');
-    //       // updateEstimates();
-    //       showForm(false);
-    //     }
-    //   }
-    // }
   }
 
-  const component = (step===0? <DataBasicStepper bandDate={bandDate} bandFolio={bandFolio}  
+  const component = (step===0? <DataBasicInvoiceStepper bandDate={bandDate} bandFolio={bandFolio}  
                         bandTaxFolio={bandTaxFolio} client={client} date={date} folio={folio} 
                         nextStep={handleStep} setClient={handleClient} setDate={handleDate} 
                         setFolio={handleFolio} setTaxFolio={handleTaxFolio} taxFolio={taxFolio}
                         token={token} setBandDate={handleBandDate} setBandFolio={handleBandFolio}
-                        setBandTaxFolio={handleBandTaxFolio} /> : (step===1? <InvoicesConditionsStepper 
+                        setBandTaxFolio={handleBandTaxFolio} project={project} setProject={handleProject} /> : 
+                        (step===1? <InvoicesConditionsStepper 
                                   conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 
                                   handleType={handleType} nextStep={handleStep} token={token} 

@@ -3,7 +3,7 @@ import { useReactTable, getCoreRowModel, flexRender,
           getPaginationRowModel, getSortedRowModel,
           getFilteredRowModel, RowSelectionState } 
 from "@tanstack/react-table"
-import { useState, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon, 
   ChevronLeftIcon, ChevronRightIcon, AdjustmentsHorizontalIcon } 
 from "@heroicons/react/24/solid";
@@ -31,6 +31,8 @@ export default function ReactTableCollections({data, columns,
   const [showColumns, setShowColumns] = useState<boolean>(false);
   const [startPage, setStarPage] = useState<number>(1);
   const [endPage, setEndPage] = useState<number>(25);
+
+  const colorRef=useRef(0);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0, //initial page index
@@ -106,6 +108,13 @@ console.log('data table rec => ', data);
   }
 
   console.log('statuses => ', arrStatuses, ' dateS => ', dateS, ' dateE => ', dateE, ' isFiter => ', isFiter);
+
+  let sizeData = 0;
+  data.map(d => {
+    if(arrStatuses.includes(d.idStatus) && isValidateDate(d.Fecha, dateS, dateE)){
+      sizeData++;
+    }
+  });
   
   return(
     <div className="">
@@ -184,8 +193,10 @@ console.log('data table rec => ', data);
                           <tr key={row.id}
                             className={`border-b dark:border-gray-700 
                               dark:hover:bg-gray-600`}
-                              style={{'backgroundColor': `${row.getIsSelected()? '#e6e6e6': index%2===0? '#fff': '#f5f5f5' }`}} 
+                              // style={{'backgroundColor': `${row.getIsSelected()? '#e6e6e6': index%2===0? '#fff': '#f5f5f5' }`}} 
+                              style={{'backgroundColor': `${row.getIsSelected()? '#e6e6e6': colorRef.current===0? '#fff': '#f5f5f5' }`}} 
                           >
+                            {colorRef.current===0? colorRef.current=1: colorRef.current=0}
                             {/* <p className="text-black">{JSON.stringify(row.original)}</p> */}
                             {row.getVisibleCells().map((cell) => (
                               <td key={cell.id} className={`px-6 py-4 ${row.getIsSelected()? 'text-slate-900': 'text-slate-900'} `}>
@@ -258,7 +269,8 @@ console.log('data table rec => ', data);
                   ))}
                 </select>
 
-                <p className="hidden sm:block text-md text-slate-700">{startPage} - {endPage} de {data.length} </p>
+                {/* <p className="hidden sm:block text-md text-slate-700">{startPage} - {endPage} de {data.length} </p> */}
+                <p className="hidden sm:block text-md text-slate-700">{startPage} - {endPage} de {sizeData} </p>
 
                 <button type="button"
                   onClick={() => {

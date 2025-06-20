@@ -75,6 +75,7 @@ export interface IAmountTotalGuaranteesByDateAndStatus {
   quantity: number
   subtotal: number
   total: number
+  status: string
 }
 
 export interface IGuaranteeGroupByClient {
@@ -132,9 +133,9 @@ export interface IGuaranteeByPojectMin {
     photo: string
   }
   date: string
-  dateguarantee?: string
-  datepayment?: string
-  dateprogramming?: string
+  dateGuarantee?: string
+  datePayment?: string
+  dateProgramming?: string
   estatus: {
     _id: string
     name: string

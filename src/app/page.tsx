@@ -10,14 +10,17 @@ export default function Home() {
   const token: string = cookieStore.get('token')?.value || '';
 
   const depto = typeof(user.department)==='string'? user.department:  user.department.name;
+  const role = user.rol?.name || '';
   // const depto='direccion'
 
   return (
     <>
       <div className="bg-white">
-        <Navigation user={user} />
+        {role.toLowerCase().includes('invitado')? <></>: (
+          <Navigation user={user} />
+        )}
         <div className="p-2 sm:p-3 md:p-5 flex justify-center">
-          {depto.toLowerCase().includes('direccion')? (
+          {depto.toLowerCase().includes('direccion') || role.toLowerCase().includes('invitado') ? (
             <ContainerNewCode token={token} user={user._id} />
           ): (
           <img src="/img/Palaciosconstrucciones horizontal.svg" alt="logo" 

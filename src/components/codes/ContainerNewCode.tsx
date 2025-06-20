@@ -113,7 +113,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div className={`grid ${widthPage < 500? 'grid-cols-1': 'grid-cols-2'} gap-x-3 p-5`}>
+    <div className={`grid ${widthPage < 500? 'grid-cols-1': 'grid-cols-2'} gap-x-3`}>
       <div>
         <div className="flex items-center gap-x-2">
           <div className="relative w-full p-2">

@@ -85,6 +85,7 @@ export async function getAmountTotalGuaranteesByDateAndStatus(token: string, dat
         'Content-Type': 'application/json',
       },
     });
+    // console.log('res status => ', response);
     if (response.status === 200) {
       return response.data.data.stats;
     }
@@ -179,12 +180,15 @@ export async function getGuaranteesGroupByYear(token: string, dateI:string, date
   }
 }
 
-export async function getGuaranteesGroupByStatus(token: string, dateI:string, dateE:string) {
+export async function getGuaranteesGroupByStatus(token: string, dateI:string, dateE:string, statuses:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/guaranteefunds/getAllGuaranteeFundsGroupByESTATUS/${dateI}/${dateE}`;
+  // const data = {
+  //   condition: [
+  //     "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
+  //   ]
+  // };
   const data = {
-    condition: [
-      "6827d5c2936cac5913f94ad7", "6827d64a936cac5913f94ad9", "6827d67b936cac5913f94adb", "6827d56d936cac5913f94ad5"
-    ]
+    condition: statuses
   };
   try {
     const response = await axios.post(url, JSON.stringify(data), {

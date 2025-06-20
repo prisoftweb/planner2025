@@ -170,6 +170,43 @@ const NavItems = ({role}: {role:string}) => {
       </>
     )
   }
+
+  if(role.toLowerCase().includes('invitado')){
+    return(
+      <>
+        <NavItem name="Clientes" link="/clients" items={[]}/>
+        <NavItem name="Proyectos" link="/projects" items={[]}/>
+        <NavItem name="Costos" link="" items={[
+            {
+              name: 'Gastos',
+              link: '/expenses'
+            },
+            {
+              name: 'En proceso',
+              link: '/expenses/pending'
+            },
+            {
+              name: 'Historial',
+              link: '/expenses/history'
+            },
+          ]}
+        />
+        <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
+        <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
+        <NavItem name="Informes" link="" items={[
+            {
+              name: 'Informes',
+              link: '/reports'
+            },
+            {
+              name: 'Historial',
+              link: '/reports/history'
+            },
+          ]} 
+        />
+      </>
+    )
+  }
   
   return(
     <>

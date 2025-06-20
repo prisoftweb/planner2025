@@ -13,7 +13,7 @@ export const projectValidation = z.object({
   }).min(3, {
     message: 'Codigo  debe tener minimo 3 caracteres'
   }).max(20, {
-    message: 'Codigo debe tener maximo 20 caracteres'
+    message: 'Codigo debe tener maximo 50 caracteres'
   }),
   description: z.string().min(10, {
     message: 'Descripcion debe tener minimo 10 caracteres'

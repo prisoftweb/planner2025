@@ -10,8 +10,34 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import CardConfig from "../users/CardConfig";
+import { CreateProject } from "@/app/api/routeProjects";
+import { showToastMessage, showToastMessageError } from "../Alert";
 
-export default function ProfileQuatation({quatation}: {quatation:IOneQuotationMin}){
+export default function ProfileQuatation({quatation, token, user}: 
+  {quatation:IOneQuotationMin, token:string, user:string}){
+
+  console.log('cotizacion => ', quatation);
+
+  const newProject = async () => {
+    const data = {
+      title: quatation.title,
+      description: quatation.description,
+      amount: quatation.cost.subtotal,
+      user,
+      client: quatation.client._id,
+      date: new Date().toISOString(),
+      code: quatation.title, 
+      company: '65d3813c74045152c0c4377e',
+      condition: {glossary: '661964a1ca3bfa35200c1628', user}
+    }
+    const res = await CreateProject(token, data);
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }
+    else{
+      showToastMessage('Proyecto creado satisfactoriamente!!!!!');
+    }
+  }
 
   return(
     <>
@@ -104,7 +130,7 @@ export default function ProfileQuatation({quatation}: {quatation:IOneQuotationMi
         <div className="bg-white p-3 rounded-lg shadow-md mt-2">
           <CardConfig text="SE FINALIZA LA COTIZACION, SOLO SE VISUALIZA EN HISTORIAL
               Y SE CONVIERTE EN NUEVO PROYECTO, VAMOS POR EL!" title="" >
-            <button onClick={() => {}}
+            <button onClick={newProject}
               className="bg-red-600 rounded-full text-white w-full py-2 hover:bg-red-400"
             >Convertir en proyecto</button>
           </CardConfig>

@@ -34,11 +34,11 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   const [isFilter, setIsFilter]=useState<boolean>(false);
   // const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
-  const [amountTotal, setAmountTotal]=useState<IAmountTotalGuaranteesByDateAndStatus>();
+  const [amountTotalByStatuses, setAmountTotalByStatuses]=useState<IAmountTotalGuaranteesByDateAndStatus[]>();
 
   const [recuperar, setRecuperar]=useState<IAmountTotalGuaranteesByDateAndStatus>();
   const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>();
-  const [vencido, setVencido]=useState<IAmountTotalGuaranteesByDateAndStatus>();
+  // const [vencido, setVencido]=useState<IAmountTotalGuaranteesByDateAndStatus>();
 
   // const [guaranteesByStatus, setGuaranteesByStatus]=useState<IGuaranteeByStatus[]>([]);
 
@@ -133,11 +133,18 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       setFilteredGuarantees(res);
     }
 
-    const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, dateI, dateF, arrStatuses);
+    // const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, dateI, dateF, arrStatuses);
+    // if(typeof(resTotal)==='string'){
+    //   showToastMessageError(resTotal);
+    // }else{
+    //   setAmountTotalByStatuses(resTotal[0]);
+    // }
+
+    const resTotal = await getGuaranteesGroupByStatus(token, dateI, dateF, arrStatuses);
     if(typeof(resTotal)==='string'){
       showToastMessageError(resTotal);
     }else{
-      setAmountTotal(resTotal[0]);
+      setAmountTotalByStatuses(resTotal);
     }
 
     const resCobrar = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
@@ -154,12 +161,12 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       setRecuperar(resRecuperado[0]);
     }
 
-    const resVencido = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'VENCIDO');
-    if(typeof(resVencido)==='string'){
-      showToastMessageError(resVencido);
-    }else{
-      setVencido(resVencido[0]);
-    }
+    // const resVencido = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'VENCIDO');
+    // if(typeof(resVencido)==='string'){
+    //   showToastMessageError(resVencido);
+    // }else{
+    //   setVencido(resVencido[0]);
+    // }
 
     const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, dateI, dateF, arrStatuses);
     if(typeof(guaranteesClient)==='string'){
@@ -378,6 +385,12 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
 
   const colorsSlider: any[]=['error', 'info', 'primary', 'secondary', 'success', 'warning'];
 
+  // console.log('amount total by statuses => ', amountTotalByStatuses);
+
+  const retenido = amountTotalByStatuses?.find(a => a.status.toLowerCase().includes('retenido'));
+  const programado = amountTotalByStatuses?.find(a => a.status.toLowerCase().includes('programado'));
+  const vencido = amountTotalByStatuses?.find(a => a.status.toLowerCase().includes('vencido'));
+
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
@@ -409,14 +422,14 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
             <p className="text-slate-600">Retenido</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
               currency: 'MXN',
-              value: vencido?.total || 0
+              value: retenido?.total || 0
             })}</p>
           </div>
           <div>
             <p className="text-slate-600">Programado</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
               currency: 'MXN',
-              value: 0
+              value: programado?.total || 0
             })}</p>
           </div>
         </div>
@@ -452,11 +465,15 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
             {guaranteeByYear.map((g, index:number) => (
               <div className="my-2" key={g.year}>
                 <div className="flex items-center justify-between">
-                  <Label>Año {g.year}</Label>
-                  <Label>{CurrencyFormatter({
-                    currency: 'MXN',
-                    value: g.total
-                  })}</Label>
+                  <div className="w-full">
+                    <Label>Año {g.year}</Label>
+                  </div>
+                  <div className="text-right">
+                    <Label>{CurrencyFormatter({
+                      currency: 'MXN',
+                      value: g.total
+                    })}</Label>
+                  </div>
                 </div>
                 <Slider defaultValue={g.porcentage} color={colorsSlider[index%6]} min={0} max={100} aria-label="Default" valueLabelDisplay="auto" />
               </div>
