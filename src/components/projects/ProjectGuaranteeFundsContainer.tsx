@@ -26,7 +26,7 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
     updateOneProjectStore(project);
   }, []);
 
-  console.log('guarantees by project => ', guarantees);
+  // console.log('guarantees by project => ', guarantees);
 
   const columnHelper = createColumnHelper<ITableGuaranteeByProject>();
     
@@ -83,7 +83,7 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
       ),
     }),
     columnHelper.accessor('date', {
-      header: 'Fecha',
+      header: 'Fecha de retencion',
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
@@ -100,15 +100,6 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         >{row.original?.fechaGarantia?.substring(0, 10)}</p>
       ),
     }),
-    columnHelper.accessor('fechaPago', {
-      header: 'Fecha de pago',
-      id: 'fecha pago',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-        // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.fechaPago?.substring(0, 10)}</p>
-      ),
-    }),
     columnHelper.accessor('fechaProgramacion', {
       header: 'Fecha de programacion',
       id: 'fecha programacion',
@@ -118,13 +109,13 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
         >{row.original.fechaProgramacion?.substring(0, 10)}</p>
       ),
     }),
-    columnHelper.accessor('fechaRetencion', {
-      header: 'Fecha retencion',
-      id: 'fecha retencion',
+    columnHelper.accessor('fechaPago', {
+      header: 'Fecha de pago',
+      id: 'fecha pago',
       cell: ({row}) => (
         <p className="cursor-pointer"
         // onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        >{row.original.fechaRetencion?.substring(0, 10)}</p>
+        >{row.original.fechaPago?.substring(0, 10)}</p>
       ),
     }),
     columnHelper.accessor('status', {
@@ -187,7 +178,7 @@ function TransformDataGuaranteeTotable(guarantees: IGuaranteeByPojectMin[]): ITa
     status: guarantee.estatus,
     fechaGarantia: guarantee.dateGuarantee?.substring(0, 10) || '',
     fechaPago: guarantee.datePayment?.substring(0, 10) || '',
-    fechaProgramacion: guarantee.dateProgramming?.substring(0, 10) || '',
-    fechaRetencion: ''
+    fechaProgramacion: guarantee.dateScheduled?.substring(0, 10) || '',
+    // fechaRetencion: ''
   }));
 }

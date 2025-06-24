@@ -14,6 +14,7 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import { ProjectsTable } from "@/interfaces/Projects";
 import { HistoryExpensesTable, ExpensesTableProvider, DetailExpensesTableProvider } from "@/interfaces/Providers";
 import { IInvoiceTable } from "@/interfaces/Invoices";
+import { ITableGuarantee } from "@/interfaces/Guarantee";
 
 type MyData = {
   numRows: string
@@ -320,6 +321,38 @@ console.log('data table rec => ', data);
                         <p>Cantidad: {data.length}</p>
                         <p>Total de facturas: {t}</p>
                       </div>)
+                }
+              }else{
+                if(typeTable === 'guarantee'){
+                  data.map((invoice:ITableGuarantee) => total += invoice.amount);
+                  const t = CurrencyFormatter({
+                    currency: 'MXN',
+                    value: total
+                  });
+                  
+                  if(table.getSelectedRowModel().flatRows.length > 0){
+                    let totalSeleccionados: number = 0;
+                    table.getSelectedRowModel().flatRows.map((inv:any) => totalSeleccionados += inv.original.amount);
+                    const tSeleccionados = CurrencyFormatter({
+                      currency: 'MXN',
+                      value: totalSeleccionados
+                    });
+                    labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
+                        <div className="flex gap-x-5 text-white pl-5">
+                          <p>Cantidad: {data.length}</p>
+                          <p>Total de fondos de garantia: {t}</p>
+                        </div>
+                        <div className="flex gap-x-5 text-white pl-5">
+                          <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
+                          <p>Total de fondos de garantia seleccionados: {tSeleccionados}</p>
+                        </div>
+                    </div>)
+                  }else{
+                    labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
+                          <p>Cantidad: {data.length}</p>
+                          <p>Total de fondos de garantia: {t}</p>
+                        </div>)
+                  }
                 }
               }
             }

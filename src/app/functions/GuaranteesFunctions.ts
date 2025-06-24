@@ -20,7 +20,8 @@ export function GuaranteeDataToTableData(guarantees:IGuaranteeMin[]){
 
 export function GuaranteeDataByProjectToTableData(guarantees:IGuaranteeResumenByProject[]){
   const table: ITableGuarantee[] = [];
-  guarantees.map((gua) => {
+  console.log('data table => ', guarantees);
+  guarantees.map((gua, index) => {
     table.push({
       amount: gua.subtotal,
       amountVat: gua.total,
@@ -28,7 +29,7 @@ export function GuaranteeDataByProjectToTableData(guarantees:IGuaranteeResumenBy
       // dateGuarantee: gua.dateGuarantee,
       dateGuarantee: 'Sin fecha',
       datePayment: '',
-      id: '',
+      id: index.toString(),
       proyect: gua.project,
       // isValidate: gua.estatus._id.includes('6827d5c2936cac5913f94ad7')
       isValidate: false

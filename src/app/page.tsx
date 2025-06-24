@@ -11,7 +11,7 @@ export default function Home() {
 
   const depto = typeof(user.department)==='string'? user.department:  user.department.name;
   const role = user.rol?.name || '';
-  // const depto='direccion'
+  // const depto='direccion';
 
   return (
     <>

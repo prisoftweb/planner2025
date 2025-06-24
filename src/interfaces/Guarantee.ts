@@ -135,7 +135,7 @@ export interface IGuaranteeByPojectMin {
   date: string
   dateGuarantee?: string
   datePayment?: string
-  dateProgramming?: string
+  dateScheduled?: string
   estatus: {
     _id: string
     name: string
@@ -164,7 +164,7 @@ export interface ITableGuaranteeByProject {
     name: string
     color: string
   }
-  fechaRetencion: string,
+  // fechaRetencion: string,
   fechaGarantia: string,
   fechaProgramacion: string,
   fechaPago: string

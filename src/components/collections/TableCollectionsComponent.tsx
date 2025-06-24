@@ -373,18 +373,15 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       data=filteredCollections;
     }
   }else{
-    // console.log('search => ', search);
-    // console.log('collections => ', collections);
     if(search.length>0){
       data=collections.filter((f) => f.reference.includes(search));
     }else{
       data=collections;
     }
   }
-  // console.log('data => ', data);
-  // const data = CollectionDataToTableData(collections);
-  // console.log('data => ', data);
 
+  // data = [...data, ...data, ...data];
+  
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
                 <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
                 <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
@@ -452,7 +449,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
           dateE={new Date()} dateS={new Date()} isFiter={false} />
       )} */}
       {/* {JSON.stringify(data)} */}
-      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-317px)]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {data.map((col, index) => (
@@ -464,6 +461,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                 bg-white`}
               // onClick={() => handleProjectSel(prj._id, prj.title)}
+              onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
             >
               <div className="flex items-center w-full ">
                 <div className="grid mr-4 place-items-center gap-x-1 gap-y-2">
@@ -474,6 +472,9 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
                       removeElement={delCollection} token={token} />
                   </div>
                   <Chip label={col.condition.name} color={col.condition.color} />
+                  {col.condition.name.toLowerCase().includes('depositado')? (
+                    <Toogle value={col.condition.name.toLowerCase().includes('confirmado')} id={col._id} onClick={confirmCollection} />
+                  ): <></>}
                 </div>
                 <div className="w-full">
                   <div className="flex gap-x-3 justify-between items-center">
