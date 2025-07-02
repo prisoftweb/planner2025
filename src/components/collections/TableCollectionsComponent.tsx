@@ -450,7 +450,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
       )} */}
       {/* {JSON.stringify(data)} */}
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-317px)]">
-        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-317px)]
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {data.map((col, index) => (
             <div role="button"

@@ -17,6 +17,7 @@ import { IQuotationMin } from "@/interfaces/Quotations";
 import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "../Alert";
 import { insertConditionInQuotation } from "@/app/api/routeQuotations";
+import { CurrencyFormatter } from "@/app/functions/Globals";
 
 import {
   SortableContext,
@@ -126,6 +127,13 @@ function SortableItem(q : IQuotationMin) {
       {/* {content} */}
       <div>
         <p>{q.title}</p>
+        <div className="flex items-center justify-between gap-x-2 mt-2">
+          <p>{q.condition[q.condition.length-1].name}</p>
+          <p>{CurrencyFormatter({
+            currency: 'MXN',
+            value: q.cost.subtotal
+          })}</p>
+        </div>
       </div>
     </div>
   );

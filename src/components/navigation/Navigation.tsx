@@ -155,7 +155,17 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
           ]}
         />
         {user._id === '6834b4df7db7d5015b54a83f'? (
-          <NavItem name="Cotizaciones" link="/quotations" items={[]} />
+          // <NavItem name="Cotizaciones" link="/quotations" items={[]} />
+          <NavItem name="Cotizaciones" link="" items={[
+            {
+                name: 'Cotizaciones',
+                link: '/quotations'
+              },
+              {
+                name: 'Tablero',
+                link: '/quotations/status'
+              }
+          ]}/>
         ): (
           <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
         )}
@@ -275,7 +285,7 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             link: '/quotations'
           },
           {
-            name: 'Estatus',
+            name: 'Tablero',
             link: '/quotations/status'
           }
       ]}/>
