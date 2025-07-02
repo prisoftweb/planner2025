@@ -54,7 +54,7 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   const firstName = user.name.substring(0, user.name.indexOf(' '));
-  console.log('photo => ', photo);
+  // console.log('photo => ', photo);
   return(
     <>
       <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2 print:hidden">
@@ -62,7 +62,7 @@ export default function Navigation({user}: {user:UsrBack}){
         <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} className="rounded-md" priority />
         <div className="w-1/12 md:w-9/12 flex justify-end print:hidden">
           <div className="hidden w-full text-white md:flex justify-between print:hidden ">
-            <NavItems role={role} /> 
+            <NavItems role={role} user={user} /> 
           </div>
         </div>
         
@@ -77,7 +77,7 @@ export default function Navigation({user}: {user:UsrBack}){
       </nav>
       {isOpen && (
           <div className="flex text-gray-200 bg-blue-950 md:hidden flex-col items-start pl-2  basis-full print:hidden">
-            <NavItems role={role} />
+            <NavItems role={role} user={user} />
           </div>
         )}
       {isOpenP && (
@@ -133,7 +133,7 @@ export default function Navigation({user}: {user:UsrBack}){
   )
 }
 
-const NavItems = ({role}: {role:string}) => {
+const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
   if(role.toLowerCase().includes('residente')){
     return(
       <>
@@ -154,7 +154,11 @@ const NavItems = ({role}: {role:string}) => {
             },
           ]}
         />
-        <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
+        {user._id === '6834b4df7db7d5015b54a83f'? (
+          <NavItem name="Cotizaciones" link="/quotations" items={[]} />
+        ): (
+          <NavItem name="Cotizaciones" link="/quotations/byuser" items={[]} />
+        )}
         <NavItem name="Estimaciones" link="/projects/estimates" items={[]} />
         <NavItem name="Informes" link="" items={[
             {
@@ -265,7 +269,16 @@ const NavItems = ({role}: {role:string}) => {
           link: '/projects/dashboard'
         },
       ]}/>
-      <NavItem name="Cotizaciones" link="/quotations" items={[]}/>
+      <NavItem name="Cotizaciones" link="" items={[
+        {
+            name: 'Cotizaciones',
+            link: '/quotations'
+          },
+          {
+            name: 'Estatus',
+            link: '/quotations/status'
+          }
+      ]}/>
       <NavItem name="Estimaciones" link="" items={[
           {
             name: 'Por proyecto',

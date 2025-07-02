@@ -196,7 +196,7 @@ function CostsTableInReport({data}: {data: CostsTable[]}){
   ]
 
   return (
-    <Table columns={columns} data={data} placeH="buscar costo" />
+    <Table columns={columns} data={data} placeH="buscar costo" typeTable="costReport" />
   )
 
 }

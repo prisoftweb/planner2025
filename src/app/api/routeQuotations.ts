@@ -171,3 +171,22 @@ export async function getQuotationsLV(auth_token:string) {
     return 'Error al consultar cotizaciones!!';
   }
 }
+
+export async function insertConditionInQuotation(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/quotations/insertConditionInQuotation/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al actualizar estado de cotizacion!!';
+  }
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { getActiveProjectsMin } from "@/app/api/routeProjects"
+import { getActiveProjectsMin, getExecuteProjectsMin } from "@/app/api/routeProjects"
 import { ProjectMin } from "@/interfaces/Projects"
 import { showToastMessage, showToastMessageError } from "../Alert";
 import NewCode from "./NewCode";
@@ -45,7 +45,8 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await getActiveProjectsMin(token);
+      // const res = await getActiveProjectsMin(token);
+      const res = await getExecuteProjectsMin(token);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
@@ -136,7 +137,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
           </div>
         </div>
         <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
-          <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
+          <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-149px)]
               overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
             {filteredProjects.map((prj) => (
               <div role="button"

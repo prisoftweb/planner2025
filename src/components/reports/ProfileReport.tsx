@@ -12,8 +12,9 @@ import { useState, useEffect } from "react";
 import { getCostByReportMin } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
 
-export default function ProfileReport({report, send, token, user, id, dates}: 
-  {report:Report, send:Function, id:string, token: string, user:UsrBack, dates: DateReport[]}){
+export default function ProfileReport({report, send, token, user, id, dates, isSendReport=true}: 
+  {report:Report, send:Function, id:string, token: string, user:UsrBack, 
+    dates: DateReport[], isSendReport?:boolean}){
   const [costsReport, setCostReport] = useState<CostReport[]>([]);
   const {oneReport} = useOneReportStore();
 
@@ -114,24 +115,26 @@ export default function ProfileReport({report, send, token, user, id, dates}:
         <div className="my-2 mt-2 bg-white p-3 rounded-lg 
             shadow-md py-2">
           <div className="grid grid-cols-2 gap-x-2">
-            <div>
-              <div className="border-r-1 border-gray-700">
-                <p className="text-slate-500">Enviar informe</p>
-                <Button type="button" onClick={() => send(true, false)}>Enviar</Button>
-              </div>
-              {oneReport?.ispettycash? 
-                  new Date(oneReport?.date) > new Date() && (
-                    <div className="border-r-1 border-gray-700 mt-3">
-                      <p className="text-slate-500">Cerrar informe</p>
-                      <Button type="button" onClick={() => send(true, true)}>Cerrar</Button>
-                    </div>
-                  ): (
-                <div className="border-r-1 border-gray-700 mt-3">
-                  <p className="text-slate-500">Cerrar informe</p>
-                  <Button type="button" onClick={() => send(true, true)}>Cerrar</Button>
+            {isSendReport && (
+              <div>
+                <div className="border-r-1 border-gray-700">
+                  <p className="text-slate-500">Enviar informe</p>
+                  <Button type="button" onClick={() => send(true, false)}>Enviar</Button>
                 </div>
-              )}
-            </div>
+                {oneReport?.ispettycash? 
+                    new Date(oneReport?.date) > new Date() && (
+                      <div className="border-r-1 border-gray-700 mt-3">
+                        <p className="text-slate-500">Cerrar informe</p>
+                        <Button type="button" onClick={() => send(true, true)}>Cerrar</Button>
+                      </div>
+                    ): (
+                  <div className="border-r-1 border-gray-700 mt-3">
+                    <p className="text-slate-500">Cerrar informe</p>
+                    <Button type="button" onClick={() => send(true, true)}>Cerrar</Button>
+                  </div>
+                )}
+              </div>
+            )}
             <div>
               <p className="text-slate-500">Descargar</p>
               <div className="flex justify-center gap-x-5 mt-2">

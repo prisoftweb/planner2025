@@ -111,55 +111,55 @@ export default async function Page({ params }: { params: { id: string }}){
 
   node = nodes[0];
 
-  if(!report.wached){
-    try {
-      const data = {wached: true};
-      const res = await updateReport(token, params.id, data);
-      if(typeof(res)==='string'){
-        return(
-          <>
-            <Navigation user={user} />
-            <h1 className="text-center text-lg text-red-500">{res}</h1>
-          </>
-        )
-      }
-    } catch (error) {
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1>
-        </>
-      )
-    }
+  // if(!report.wached){
+  //   try {
+  //     const data = {wached: true};
+  //     const res = await updateReport(token, params.id, data);
+  //     if(typeof(res)==='string'){
+  //       return(
+  //         <>
+  //           <Navigation user={user} />
+  //           <h1 className="text-center text-lg text-red-500">{res}</h1>
+  //         </>
+  //       )
+  //     }
+  //   } catch (error) {
+  //     return(
+  //       <>
+  //         <Navigation user={user} />
+  //         <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1>
+  //       </>
+  //     )
+  //   }
 
-    try {
-      const data = {
-        moves: [{
-            condition: node.glossary._id,
-            notes: 'El informe ha sido visto por el usuario ' + user.name,
-            user: user._id,
-            department: typeof(user.department)==='string'? user.department : user.department._id,
-            date: new Date()
-        }]
-      };
-      const res = await insertMovementsInReport(token, report._id, data);
-      if(res !== 200){
-        return(
-          <>
-            <Navigation user={user} />
-            <h1 className="text-center text-lg text-red-500">{res}</h1>
-          </>
-        )
-      }
-    } catch (error) {
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1>
-        </>
-      )
-    }
-  }
+  //   try {
+  //     const data = {
+  //       moves: [{
+  //           condition: node.glossary._id,
+  //           notes: 'El informe ha sido visto por el usuario ' + user.name,
+  //           user: user._id,
+  //           department: typeof(user.department)==='string'? user.department : user.department._id,
+  //           date: new Date()
+  //       }]
+  //     };
+  //     const res = await insertMovementsInReport(token, report._id, data);
+  //     if(res !== 200){
+  //       return(
+  //         <>
+  //           <Navigation user={user} />
+  //           <h1 className="text-center text-lg text-red-500">{res}</h1>
+  //         </>
+  //       )
+  //     }
+  //   } catch (error) {
+  //     return(
+  //       <>
+  //         <Navigation user={user} />
+  //         <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1>
+  //       </>
+  //     )
+  //   }
+  // }
 
   return(
     <>
@@ -172,7 +172,7 @@ export default async function Page({ params }: { params: { id: string }}){
           </div>
           <Selectize options={optReports} routePage="reports" subpath="/profile" />
         </div>
-        <NavTab idRep={params.id} tab='1' />
+        {/* <NavTab idRep={params.id} tab='1' /> */}
         <ReportClient report={report} token={token} id={params.id} 
           user={user} node={node} dates={dateReport}
         />

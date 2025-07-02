@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
 
-export default function NavTab({tab, idRep}: {tab:string, idRep:string}){
+export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
   
   let props = {
     variants: {
@@ -40,23 +40,58 @@ export default function NavTab({tab, idRep}: {tab:string, idRep:string}){
   let tabProv = <></>;
   if(width < 710){
     tabProv = <div className="flex justify-between mt-3">
-                    <Link href={`/reports/${idRep}/profile`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Informes'>
-                        <UserCircleIcon data-tooltip-target="tooltip-dark"
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>                        
+                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      placement="bottom" className="bg-white text-blue-500" content='Resumen'>
+                      <UserCircleIcon data-tooltip-target="tooltip-dark"
+                        className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        ${tab===1? 'bg-green-500 rounded-lg': ''}`}
+                        onClick={() => setTab(1)} />
+                    </Tooltip>
+                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      placement="bottom" className="bg-white text-blue-500" content='Modificar'>
+                      <UserCircleIcon data-tooltip-target="tooltip-dark"
+                        className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        ${tab===2? 'bg-green-500 rounded-lg': ''}`}
+                        onClick={() => setTab(2)} />
+                    </Tooltip>
+                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      placement="bottom" className="bg-white text-blue-500" content='Formatos'>
+                      <UserCircleIcon data-tooltip-target="tooltip-dark"
+                        className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        ${tab===3? 'bg-green-500 rounded-lg': ''}`}
+                        onClick={() => setTab(3)} />
+                    </Tooltip>
+                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      placement="bottom" className="bg-white text-blue-500" content='Facturas'>
+                      <UserCircleIcon data-tooltip-target="tooltip-dark"
+                        className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        ${tab===4? 'bg-green-500 rounded-lg': ''}`}
+                        onClick={() => setTab(4)} />
+                    </Tooltip>                        
                   </div>                             
   }else{
     tabProv =(
       <div className="flex mt-5 bg-white py-1">
-        <Link href={`/reports/${idRep}/profile`}>
-          <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
-            <p>Informes</p>
-          </div>
-        </Link>
+        <div className={`w-50 px-5 ${tab===1? 'border-b-4 border-blue-600':''}`}
+          onClick={() => setTab(1)}
+        >
+          <p>Resumen</p>
+        </div>
+        <div className={`w-50 px-5 ${tab===2? 'border-b-4 border-blue-600':''}`}
+          onClick={() => setTab(2)}
+        >
+          <p>Modificar</p>
+        </div>
+        <div className={`w-50 px-5 ${tab===3? 'border-b-4 border-blue-600':''}`}
+          onClick={() => setTab(3)}
+        >
+          <p>Formatos</p>
+        </div>
+        <div className={`w-50 px-5 ${tab===4? 'border-b-4 border-blue-600':''}`}
+          onClick={() => setTab(4)}
+        >
+          <p>Facturas</p>
+        </div>
       </div>
     )
   }

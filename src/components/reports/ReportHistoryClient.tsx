@@ -6,6 +6,9 @@ import { Report, DateReport } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
 import { UsrBack } from "@/interfaces/User"
 import DataHistoryReports from "./DataHistoryReports"
+import NavTab from "@/components/reports/NavTab";
+import ProfileReport from "./ProfileReport"
+import NuevoComponente from "./NuevoComponente"
 
 export default function ReportHistoryClient({report, user, id, token, dates}: 
   {report:Report, user:UsrBack, id:string, token:string, dates:DateReport[] }){
@@ -13,14 +16,28 @@ export default function ReportHistoryClient({report, user, id, token, dates}:
   const [opt, setOpt] = useState<number>(1);
   
   let view:JSX.Element = <></>;
-  opt===2? view =(<CostsInReport report={report} id={id} token={token} />) : 
-                  view =(<DataHistoryReports report={report} user={user} id={id} token={token} dates={dates} />)
+  // opt===2? view =(<CostsInReport report={report} id={id} token={token} />) : 
+  //                 view =(<DataHistoryReports report={report} user={user} id={id} token={token} dates={dates} />)
 
-  const [open, setOpen] = useState<boolean>(false);
+  const handleSend = () => {}
+
+  opt===3? view =(<div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+                      style={{'backgroundColor': '#F8FAFC'}}>
+                      <div className={`w-full max-w-md`}>
+                        <ProfileReport report={report} send={handleSend} token={token}
+                          user={user} id={id} dates={dates} isSendReport={false} />
+                      </div>
+                    </div>) : 
+      opt===2?  view =(<DataHistoryReports id={id} token={token} report={report} user={user} 
+                        dates={dates} />):
+        opt===4?  view =(<CostsInReport id={id} token={token} report={report} />): 
+                  view = (<NuevoComponente id={id} token={token} report={report} />)
+
+  // const [open, setOpen] = useState<boolean>(false);
   
-  const handeleOpen = (value:boolean) => {
-    setOpen(value);
-  }
+  // const handeleOpen = (value:boolean) => {
+  //   setOpen(value);
+  // }
 
   const handleOpt = (value:number) => {
     setOpt(value);
@@ -28,7 +45,9 @@ export default function ReportHistoryClient({report, user, id, token, dates}:
 
   return(
     <>
-      <div className={`flex`}>
+      <NavTab setTab={handleOpt} tab={opt} />
+      {view}
+      {/* <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handeleOpen} changeOption={handleOpt} option={opt} />
@@ -38,7 +57,7 @@ export default function ReportHistoryClient({report, user, id, token, dates}:
           style={{'backgroundColor': '#F8FAFC'}}>
           {view}
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

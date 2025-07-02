@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { id: string }}){
           </div>
           <Selectize options={optReports} routePage="reports/history" subpath="" />
         </div>
-        <NavTab idRep={params.id} tab='1' />
+        {/* <NavTab idRep={params.id} tab='1' /> */}
         <ReportHistoryClient report={report} id={params.id} token={token} 
           user={user} dates={dateReport} />
       </div>

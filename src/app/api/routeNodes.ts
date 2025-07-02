@@ -121,12 +121,14 @@ export async function insertRelationsInNode(auth_token:string, data:object, id:s
 //nodos/getAllNodosByDepto
 export async function getNodesByDepto(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/nodos/getAllNodosByDepto/${id}`;
+  // console.log('nodos del depto => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
+    // console.log('res => ', res.data.data);
     if(res.status === 200) return res.data.data.data;
     return res.status;
   } catch (error) {

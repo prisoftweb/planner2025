@@ -9,6 +9,8 @@ import { Node } from "@/interfaces/Nodes"
 import { UsrBack } from "@/interfaces/User"
 import NuevoComponente from "./NuevoComponente"
 import { useOneReportStore } from "@/app/store/reportsStore"
+import NavTab from "@/components/reports/NavTab";
+import ProfileReport from "./ProfileReport"
 
 export default function ReportClient({report, token, id, user, node, dates}: 
   {report:Report, token:string, id:string, user:UsrBack, node:Node, dates: DateReport[] }){
@@ -21,20 +23,29 @@ export default function ReportClient({report, token, id, user, node, dates}:
 
     return () => updateOneReportStore(undefined);
   }, []);
+ 
+  const handleSend = () => {}
   
   let view:JSX.Element = <></>;
   if(oneReport){
-    opt===3? view =(<CostsInReport id={id} token={token} report={report} />) : 
+    opt===3? view =(<div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+                      style={{'backgroundColor': '#F8FAFC'}}>
+                      <div className={`w-full max-w-md`}>
+                        <ProfileReport report={report} send={handleSend} token={token}
+                          user={user} id={id} dates={dates} isSendReport={false} />
+                      </div>
+                    </div>) : 
       opt===2?  view =(<DataReports id={id} token={token} report={report} user={user} 
-                          node={node} dates={dates} />): 
+                          node={node} dates={dates} />):
+        opt===4?  view =(<CostsInReport id={id} token={token} report={report} />): 
                   view = (<NuevoComponente id={id} token={token} report={report} />)
   }
   
-  const [open, setOpen] = useState<boolean>(false);
+  // const [open, setOpen] = useState<boolean>(false);
   
-  const handeleOpen = (value:boolean) => {
-    setOpen(value);
-  }
+  // const handeleOpen = (value:boolean) => {
+  //   setOpen(value);
+  // }
 
   const handleOpt = (value:number) => {
     setOpt(value);
@@ -42,7 +53,11 @@ export default function ReportClient({report, token, id, user, node, dates}:
 
   return(
     <>
-      <div className={`flex`}>
+      <NavTab setTab={handleOpt} tab={opt} />
+      <div>
+        {view}
+      </div>
+      {/* <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handeleOpen} changeOption={handleOpt} option={opt} />
@@ -52,7 +67,7 @@ export default function ReportClient({report, token, id, user, node, dates}:
           style={{'backgroundColor': '#F8FAFC'}}>
           {view}
         </div>
-      </div>
+      </div> */}
     </>
   )
 }
