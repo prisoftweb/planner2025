@@ -1,5 +1,6 @@
 import {ICode} from '@/interfaces/Code'
 import { TbArrowNarrowLeft } from 'react-icons/tb'
+import { useState, useEffect } from 'react';
 
 export default function NewCode({closeForm, returnForm, code, title, size}: 
   {closeForm: (id:string) => void, returnForm: (id:string) => void, code:ICode, title:string, size:number}) {
@@ -31,6 +32,26 @@ export default function NewCode({closeForm, returnForm, code, title, size}:
         //   <></>
         // </div> : <></>
 
+  const [heightPage, setHeightPage] = useState<number>(900);
+
+  const handleResize = () => {
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
+
   const header = <div className="flex gap-x-3 items-center border-slate-400 bg-slate-400 text-white cursor-pointer"
             onClick={() => returnForm(code._id)} >
           <div className="flex items-center gap-x-3">
@@ -46,7 +67,9 @@ export default function NewCode({closeForm, returnForm, code, title, size}:
         </div>;
 
   return (
-    <div className={`${size < 500? 'z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0': ''} `}>
+    <div className={`${size < 500? 'z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0': ''} `}
+      style={{height: `${heightPage}px`}}      
+    >
       {header}
       <p className="text-center text-xl p-5 font-bold">CODIGO PARA COMPRAS</p>
       <div className="p-5 bg-green-400">
