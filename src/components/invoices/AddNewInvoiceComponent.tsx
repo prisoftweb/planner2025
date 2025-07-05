@@ -163,9 +163,13 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
           amount:c.amount,
           date:c.date,
           user:c.user
+      });
+      // console.log('amount => ', c.amount);
+      // console.log('quiantiti => ', c.quantity);
+      // amount += c.amount * c.quantity;
+      // console.log('total => ', amount);
+      amount += c.amount;
     });
-    amount += c.amount * c.quantity;
-  });
 
     if(val){
       const currentDate=new Date(date.substring(0, 10));

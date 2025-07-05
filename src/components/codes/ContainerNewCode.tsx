@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import { getActiveProjectsMin, getExecuteProjectsMin } from "@/app/api/routeProjects"
+import { getExecuteProjectsMin } from "@/app/api/routeProjects"
 import { ProjectMin } from "@/interfaces/Projects"
-import { showToastMessage, showToastMessageError } from "../Alert";
+import { showToastMessageError } from "../Alert";
 import NewCode from "./NewCode";
 import { createCode, removeCode } from "@/app/api/routeCode";
 import {ICode} from "@/interfaces/Code";
@@ -20,7 +20,6 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   const [projects, setProjects] = useState<ProjectMin[]>([]);
   const [projectSel, setProjectSel]=useState<string>();
   const [projectTitle, setProjectTitle]=useState<string>('');
-  // const [showCode, setShowCode]=useState<boolean>(false);
   const [codeData, setCodeData] = useState<ICode | undefined>();
   const [search, setSearch]=useState<string>('');
   const [widthPage, setWidthPage]=useState<number>(500);
@@ -51,7 +50,6 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
         showToastMessageError(res);
       }else{
         setProjects(res);
-        // console.log('projects', res);
       }
     }
     fetch();
@@ -60,7 +58,6 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   const handleProjectSel = async (value: string, title:string) => {
     setProjectSel(value);
     setProjectTitle(title);
-    // setShowCode(true);
 
     const code = generarToken(5);
 
@@ -81,7 +78,8 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   }
 
   function generarToken(longitud = 5) {
-    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    // const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let token = '';
     for (let i = 0; i < longitud; i++) {
       const indice = Math.floor(Math.random() * caracteres.length);
@@ -91,8 +89,6 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   }
 
   const closeform = async (id:string) => {
-    // setShowCode(false);  
-    // console.log('close form => ', widthPage);
     const res = await removeCode(token, id);
     if(typeof(res)==='string'){
       showToastMessageError(res);
@@ -104,11 +100,9 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   }
 
   const returnform = async (id:string) => {
-    // console.log('return form => ', widthPage);
     setProjectSel('');
     setCodeData(undefined);
     setProjectTitle('');
-    // showToastMessage('Se regreso con exito!!');
   }
 
   const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));

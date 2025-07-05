@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect, useRef } from "react"
-import { IInvoiceMin, IInvoiceTable, ITotalAmountInvoicesPending, IInvoiceByDateAndConditionMin } from "@/interfaces/Invoices"
-import { getInvoicesMin, getAllInvoicesMINByDateAndCondition, removeInvoice, getAllTotalAmountInvoicePending } from "@/app/api/routeInvoices"
+import { IInvoiceTable, ITotalAmountInvoicesPending, IInvoiceByDateAndConditionMin } from "@/interfaces/Invoices"
+import { getAllInvoicesMINByDateAndCondition, removeInvoice, getAllTotalAmountInvoicePending } from "@/app/api/routeInvoices"
 import { showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -15,9 +15,7 @@ import { Badge } from "@mui/material";
 import Link from "next/link";
 import Button from "../Button";
 import SearchInTable from "../SearchInTable";
-import { GiSettingsKnobs } from "react-icons/gi";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-import FilteringInvoiceComponent from "./FilteringInvoiceComponent";
 import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
 
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
@@ -32,11 +30,7 @@ export default function TableInvoicesComponent({token, user}:
   const [showNewCollection, setShowNewCollection]=useState<boolean>(false);
 
   const [showNewInvoice, setShowNewinvoice]=useState<boolean>(false);
-  // const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
-  const [filteredInvoices, setFilteredInvoices]=useState<IInvoiceByDateAndConditionMin[]>([]);
-  const [isFilter, setIsFilter]=useState<boolean>(false);
   const refEstimate = useRef('');
-  // const refInvoice=useRef('');
   const [totalInvoices, setTotalInvoices]=useState<ITotalAmountInvoicesPending>();
 
   const [widthPage, setWidthPage] = useState<number>(900);
@@ -84,13 +78,9 @@ export default function TableInvoicesComponent({token, user}:
         showToastMessageError(res);
       }else{
         setInvoices(res);
-        // console.log('inoice => ', res[0]);
       }
 
       const data = {
-        // conditionPayment: [
-        //     "678ed05cc5f08e8a0f36d5e1","67d20e2959865f640af92682"
-        // ],
         conditionPayment: [],
         conditionIssued: [
             "67d20cb359865f640af92638"
@@ -109,20 +99,6 @@ export default function TableInvoicesComponent({token, user}:
 
     fetch();
   }, []);
-
-  // if(invoices.length <= 0){
-  //   return (
-  //     <>
-  //       <div className="flex flex-col items-center">
-  //         <p className="text-5xl mt-20 font-bold">Facturas</p>
-  //         <p className="text-xl mt-10 text-slate-700 font-bold" 
-  //           // style={{maxInlineSize: '45ch', textWrap:'balance' }}
-  //           >Agregar una factura a una estimacion determinada de un proyecto.</p>
-  //         <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
-  //       </div>
-  //     </>
-  //   )
-  // }
 
   const delInvoice = (id:string) => {
     window.location.reload();
@@ -149,22 +125,6 @@ export default function TableInvoicesComponent({token, user}:
   }
 
   const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    // let statusesFil;
-    // if(arrStatuses.length > 0){
-    //   statusesFil = guarantees.filter((g) => arrStatuses.includes(g.estatus._id));
-    // }else{
-    //   statusesFil = guarantees;
-    // }
-
-    // const filtered = statusesFil.filter((c) => {
-    //   let d = new Date(c.date).getTime();
-    //   if(d >= dateS.getTime() && d <= dateE.getTime()){
-    //     return c;
-    //   }
-    // });
-
-    // setFilteredGuarantees(filtered);
-    // setIsFilter(true);
     updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   }
 
@@ -247,24 +207,6 @@ export default function TableInvoicesComponent({token, user}:
         >{row.original.usecfdi}</p>
       ),
     }),
-    // columnHelper.accessor('methodpaid', {
-    //   header: 'Metodo de pago',
-    //   id: 'metodo',
-    //   cell: ({row}) => (
-    //     <p className="cursor-pointer"
-    //     onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
-    //     >{row.original.methodpaid.substring(row.original.methodpaid.length-3)}</p>
-    //   ),
-    // }),
-    // columnHelper.accessor('formpaid', {
-    //   header: 'Forma de pago',
-    //   id: 'forma',
-    //   cell: ({row}) => (
-    //     <p className="cursor-pointer"
-    //     onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
-    //     >{row.original.formpaid.substring(row.original.formpaid.length-3)}</p>
-    //   ),
-    // }),
     columnHelper.accessor('estimate', {
       header: 'Estimacion',
       id: 'estimacion',
@@ -329,18 +271,7 @@ export default function TableInvoicesComponent({token, user}:
   ]
 
   const updateTotal = async (dateI:string, dateF:string, statuses:string[]) => {
-    // const data={
-    //   condition: statuses,
-    //   conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
-    //   conditionAccountsReceivable:['67d20cb359865f640af92638'],
-    // }
-    // const statusesFil = statuses.filter((status) => status !== 'all');
-
     const data = {
-      // conditionPayment: [
-      //     "678ed05cc5f08e8a0f36d5e1","67d20e2959865f640af92682"
-      // ],
-      // conditionPayment: statusesFil,
       conditionPayment: statuses,
       conditionIssued: [
           "67d20cb359865f640af92638"
@@ -350,7 +281,6 @@ export default function TableInvoicesComponent({token, user}:
       ]
     }
 
-    // console.log('update total => ');
     const rest = await getAllTotalAmountInvoicePending(token, dateI, dateF, data);
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
@@ -368,7 +298,6 @@ export default function TableInvoicesComponent({token, user}:
       showToastMessageError(res);
     }else{
       setInvoices(res);
-      // console.log('inoice => ', res[0]);
     }
   }
 
@@ -517,8 +446,6 @@ export default function TableInvoicesComponent({token, user}:
       <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
       {showNewCollection && selInvoice && <AddNewCollectionInvoice showForm={handleShowForm} user={user}
                token={token} invoiceTable={selInvoice} />}
-      {/* {showIsFilter && <FilteringInvoiceComponent FilterData={filterData} maxAmount={maxAmount} 
-                              showForm={setShowIsFilter} token={token} />} */}
       {showNewInvoice && <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} /> }
     </>
   )
@@ -528,7 +455,6 @@ function InvoiceDataToTableData(invoices:IInvoiceByDateAndConditionMin[]){
   const table: IInvoiceTable[] = [];
   invoices.map((inv) => {
     const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
-    // console.log('inv => ', inv);
     table.push({
       amount: inv.cost.total,
       condition: inv.condition,
@@ -540,12 +466,8 @@ function InvoiceDataToTableData(invoices:IInvoiceByDateAndConditionMin[]){
       methodpaid: inv.paymentMethod,
       usecfdi: aux,
       idEstimates:inv.estimate._id, 
-      // charged: (inv.lastpayment?.unchargedbalanceamount >= 0 && inv.lastpayment?.unchargedbalanceamount <= 100? 
-      //                         inv.cost.total: inv.cost.total - inv.lastpayment?.previousbalanceamount) || inv.cost.total,
       charged: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].charged: 0,
-      // unchargedbalanceamount: inv.lastpayment?.unchargedbalanceamount || 0,
       unchargedbalanceamount: inv.accountreceivables?.length > 0 ? inv.accountreceivables[inv.accountreceivables.length-1].unchargedbalanceamount: 0,
-      // previousBalance: inv.lastpayment?.previousbalanceamount || 0,
       previousBalance: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].previousbalanceamount: 0,
       accountreceivablesCount: inv.accountreceivablesCount,
       ischargedfull: inv.ischargedfull,
@@ -561,7 +483,6 @@ function InvoiceDataToTableData(invoices:IInvoiceByDateAndConditionMin[]){
 export const Card = ({amount, title, footer}: {title:string, amount:number, footer:string}) => {
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
-      {/* {children} */}
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({

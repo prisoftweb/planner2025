@@ -2,7 +2,6 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { IQuotationMin } from "@/interfaces/Quotations";
-import ContainerQuotations from "@/components/quotations/ContainerQuotations";
 import { getQuotationsMin } from "@/app/api/routeQuotations";
 import DragAndDropQuotations from "@/components/quotations/DragAndDropQuatations";
 import Header from "@/components/HeaderPage";
@@ -38,7 +37,6 @@ export default async function Page(){
         <Header previousPage="/" title="Cotizaciones">
           <></>
         </Header>
-        {/* <ContainerQuotations quotations={quotations} token={token} user={user} /> */}
         <div className="mt-3">
           <DragAndDropQuotations quotationsParam={quotations} token={token} user={user._id} />
         </div>
