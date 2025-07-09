@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react"
-import { IInvoiceByProject, IInvoiceTable } from "@/interfaces/Invoices"
+import { IInvoiceByProject, IInvoiceTable, ITotalInvoiceResumen } from "@/interfaces/Invoices"
 import { getInvoicesByProject, removeInvoice } from "@/app/api/routeInvoices"
 import { showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
@@ -12,9 +12,13 @@ import Chip from "@/components/providers/Chip";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import AddNewCollectionComponent from "./collections/AddNewCollection";
 import { Badge } from "@mui/material";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import {Tooltip} from "@nextui-org/react";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadInvoicesByProjectPDF from "@/components/invoices/DownloadInvoicesByProjectPDF";
 
-export default function TableInvoicesComponent({token, project, user, pageQuery}: 
-  {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined}) {
+export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice}: 
+  {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, resumenInvoice:ITotalInvoiceResumen}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -206,8 +210,44 @@ export default function TableInvoicesComponent({token, project, user, pageQuery}
   
   const data = InvoiceDataToTableData(invoices);
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   return (
     <>
+      <div className="flex justify-end p-3">
+        <PDFDownloadLink document={<DownloadInvoicesByProjectPDF invoices={invoices} project={project}
+                                      resumenInvoice={resumenInvoice} token={token} />} fileName={project.title} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </Tooltip>
+            ) : (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </Tooltip>
+            ) }
+        </PDFDownloadLink>
+      </div>
       <Table columns={columns} data={data} placeH="buscar factura" />
       {showNewCollection && selInvoice && <AddNewCollectionComponent showForm={handleShowForm} user={user}
                token={token} project={project} invoiceTable={selInvoice} />}

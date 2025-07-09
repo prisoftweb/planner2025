@@ -18,6 +18,7 @@ import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "../Alert";
 import { insertConditionInQuotation } from "@/app/api/routeQuotations";
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import RatingComponent from "./RatingComponent"
 
 import {
   SortableContext,
@@ -126,14 +127,19 @@ function SortableItem(q : IQuotationMin) {
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {/* {content} */}
       <div>
-        <p>{q.title}</p>
-        <div className="flex items-center justify-between gap-x-2 mt-2">
-          <p>{q.condition[q.condition.length-1].name}</p>
-          <p>{CurrencyFormatter({
-            currency: 'MXN',
-            value: q.cost.subtotal
-          })}</p>
+        <div className="flex items-center gap-x-2">
+          <img src={q.user.photo} alt="usuario" className="w-9 h-9 rounded-full" />
+          <div>
+            <RatingComponent setValue={() => {}} value={q.score} />
+            <p className="text-blue-500">{q.client.name}</p>
+          </div>
         </div>
+        {/* <div className="flex items-center justify-between gap-x-2 mt-2"></div> */}
+        <p className="text-slate-500 text-sm">{CurrencyFormatter({
+          currency: 'MXN',
+          value: q.cost.subtotal
+        })}</p>
+        <p className="text-green-500 text-sm">{q.title.substring(0, 17)}{q.title.length > 17? '...': ''}</p>
       </div>
     </div>
   );

@@ -41,6 +41,8 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
     });
     categoriesEstimates.push(i.folio);
   });
+
+  console.log('resume invoice => ', resumenInvoice);
   
   return (
     <>
@@ -124,12 +126,13 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
         </div>
 
       </div>
-
+      
       <div>
         <NavTabEstimates tab={1} id_p={project._id} pageQuery={pageQuery} />
       </div>
       
-      <TableInvoicesComponent token={token} project={project} user={user} pageQuery={pageQuery} />
+      <TableInvoicesComponent token={token} project={project} user={user} pageQuery={pageQuery} 
+        resumenInvoice={resumenInvoice} />
     </>
   )
 }

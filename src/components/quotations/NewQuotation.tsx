@@ -13,11 +13,6 @@ import { createQuotation, getContactsClientLV } from "@/app/api/routeQuotations"
 import RatingComponent from "./RatingComponent"
 import Select from 'react-select'
 
-import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs"
-import { GetVatsLV } from "@/app/api/routeCost"
-import { getUsersLV } from "@/app/api/routeUser"
-import { getClientsLV } from "@/app/api/routeClients"
-
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';

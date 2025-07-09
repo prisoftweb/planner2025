@@ -278,6 +278,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
           name: 'Dashboard',
           link: '/projects/dashboard'
         },
+        {
+          name: 'Tablero',
+          link: '/projects/board'
+        },
       ]}/>
       <NavItem name="Cotizaciones" link="" items={[
         {
