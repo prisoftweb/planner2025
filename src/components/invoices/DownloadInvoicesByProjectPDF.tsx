@@ -30,6 +30,8 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
     fetch();
   }, []);
 
+  const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
   return(
     <Document>
       <Page>
@@ -39,35 +41,37 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
 
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
-                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image>
+                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
+                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
-                    <Text style={{fontSize:'15px', color:'gray'}}>RESUMEN DE FACTURACION</Text>
-                    <Text style={{fontSize:'11px', color:'gray'}}>Palacios Construcciones</Text>
+                    <Text style={{fontSize:'15px', color:'gray'}}>ESTADO DE CUENTA</Text>
+                    <Text style={{fontSize:'11px', color:'gray'}}>{project.title}</Text>
                   </View>
                 </View>
               </View>
-
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>Cliente:</Text>
-                <Text style={{fontSize:'11px', color:'gray', fontWeight: 'bold'}}>{project.client.name}</Text>
+{/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px', justifyContent:'flex-start', alignItems:'center'}}></View> */}
+              <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
+                <Text style={{color:'gray', margin: '2px'}}>Cliente:</Text>
+                <Text style={{margin: '2px'}}>{project.client.name}</Text>
               </View>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>RFC:</Text>
-                <Text style={{fontSize:'11px', color:'gray', fontWeight: 'bold'}}>{project.client.rfc}</Text>
+              <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
+                <Text style={{color:'gray', margin: '2px'}}>RFC:</Text>
+                <Text style={{margin: '2px'}}>{project.client.rfc}</Text>
               </View>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>Proyecto:</Text>
-                <Text style={{fontSize:'11px', color:'gray', fontWeight: 'bold'}}>{project.title}</Text>
+              <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
+                <Text style={{color:'gray', margin: '2px'}}>Proyecto:</Text>
+                <Text style={{margin: '2px'}}>{project.title}</Text>
               </View>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>Monto total del proyecto:</Text>
-                <Text style={{fontSize:'11px', color:'gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
+                <Text style={{color:'gray', margin: '2px'}}>Monto total del proyecto:</Text>
+                <Text style={{margin: '2px'}}>{CurrencyFormatter({
                   currency: 'MXN',
-                  value: project.amount
+                  // value: project.amount
+                  value: project.amount * 1.16
                 })}</Text>
               </View>
 
@@ -89,26 +93,26 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
               </View>
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>Fecha: </Text>
-                <Text style={{fontSize:'11px', color:'gray'}}>{new Date().toISOString().substring(0, 10)}</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>Fecha: </Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>{new Date().toISOString().substring(0, 10)}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>Pendiente de estimar/facturar:</Text>
-                <Text style={{fontSize:'11px', color:'gray'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de estimar/facturar:</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>{CurrencyFormatter({
                   currency: 'MXN',
                   value: totalPaymentsResumen?.billedTotal?.pendingBillingTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>Pendiente de pago:</Text>
-                <Text style={{fontSize:'11px', color:'red'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago:</Text>
+                <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
                   currency: 'MXN',
                   value: totalPaymentsResumen?.totalPayments?.pendingPaymentTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
-                <Text style={{fontSize:'9px', color:'gray'}}>Pendiente de pago total:</Text>
-                <Text style={{fontSize:'11px', color:'red'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago total:</Text>
+                <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
                   currency: 'MXN',
                   value: (totalPaymentsResumen?.billedTotal?.pendingBillingTotal || 0) + (totalPaymentsResumen?.totalPayments?.pendingPaymentTotal || 0)
                 })}</Text>
@@ -127,23 +131,24 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Saldo pendiente pago</Text>
           </View>
 
-          {invoices.map((i) => (
+          {orderInvoices.map((i) => (
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={i._id}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{i.folio}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{i.date.substring(0, 10)}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{i.paymentMethod}{i.paymentWay}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{i.estimate.name} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{i.condition.name}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{CurrencyFormatter({
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.folio}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.date.substring(0, 10)}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.paymentMethod}{i.paymentWay}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.estimate.name} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.condition.name}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: i.lastpayment?.previousbalanceamount || 0
               })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{CurrencyFormatter({
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
-                value: (i.lastpayment?.unchargedbalanceamount >= 0 && i.lastpayment?.unchargedbalanceamount <= 100? 
-                              i.cost.total: i.cost.total - i.lastpayment?.previousbalanceamount) || i.cost.total
+                // value: (i.lastpayment?.unchargedbalanceamount >= 0 && i.lastpayment?.unchargedbalanceamount <= 100? 
+                //               i.cost.total: i.cost.total - i.lastpayment?.previousbalanceamount) || i.cost.total
+                value: i.lastpayment?.charged || 0
               })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{CurrencyFormatter({
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: i.lastpayment?.unchargedbalanceamount || 0
               })}</Text>

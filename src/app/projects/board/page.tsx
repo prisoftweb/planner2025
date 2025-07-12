@@ -29,6 +29,10 @@ export default async function Page(){
       </>
     )
 
+  // console.log('prjs => ', projects);
+  // const p = projects.find(p => p._id === '679424db27f8eaae7dca5d42');
+  // console.log('find => ', p);
+
   return (
     <>
       <Navigation user={user} />

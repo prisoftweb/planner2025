@@ -8,6 +8,10 @@ import { createColumnHelper } from "@tanstack/react-table"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 import Table from "../Table"
 import Chip from "../providers/Chip"
+import DownloadGuaranteeByProjectPDF from "../guarantee/DownloadGuaranteeByProject"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import {Tooltip} from "@nextui-org/react";
+import { BsFileEarmarkPdf } from "react-icons/bs";
 
 type Props = {
   project:OneProjectMin, 
@@ -155,8 +159,43 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
 
   const data = TransformDataGuaranteeTotable(guarantees);
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   return(
     <>
+      <div className="flex w-full justify-end items-center p-3">
+        <PDFDownloadLink document={<DownloadGuaranteeByProjectPDF project={project} token={token} guarantees={guarantees} />} fileName={project.title} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </Tooltip>
+            ) : (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </Tooltip>
+            ) }
+        </PDFDownloadLink>
+      </div>
       <div className={`flex w-full`}>
         <Table columns={columns} data={data} placeH="Buscar fondo de garantia" typeTable="guaranteefunds" />
       </div>

@@ -118,7 +118,7 @@ function SortableItem(p : ProjectMin) {
           <img src={p.photo} alt="projecto" className="w-9 h-9 rounded-full" />
           <div>
             {/* <RatingComponent setValue={() => {}} value={q.score} /> */}
-            <p className="text-blue-500">{p.client.name}</p>
+            <p className="text-blue-500">{p.client.name.substring(0, 10)}{p.client.name.length > 10? '...': ''}</p>
           </div>
         </div>
         {/* <div className="flex items-center justify-between gap-x-2 mt-2"></div> */}
@@ -126,7 +126,7 @@ function SortableItem(p : ProjectMin) {
           currency: 'MXN',
           value: p.amount
         })}</p>
-        <p className="text-green-500 text-sm">{p.title.substring(0, 17)}{p.title.length > 17? '...': ''}</p>
+        <p className="text-green-500 text-sm">{p.title.substring(0, 15)}{p.title.length > 15? '...': ''}</p>
       </div>
     </div>
   );
@@ -180,8 +180,8 @@ export default function DragAndDropProjects({projectsParam, token, user}:
         if(p.category.name.includes("CANCELADO")){
           arr3.push(p);
         }else{
-          if(p.category.name.includes("EVALUADO")){
-            arr4.push(p);
+          if(p.category.name.includes("NO EVALUADO")){
+            arr9.push(p);
           }else{
             if(p.category.name.includes("EN EJECUCION")){
               arr5.push(p);
@@ -195,7 +195,7 @@ export default function DragAndDropProjects({projectsParam, token, user}:
                   if(p.category.name.includes("COMPLETADO")){
                     arr8.push(p);
                   }else{
-                    arr9.push(p);
+                    arr4.push(p);
                   }
                 }
               }
@@ -207,7 +207,7 @@ export default function DragAndDropProjects({projectsParam, token, user}:
   });
 
   
-
+console.log('no evaluados => ', arr9);
   const initialProjects: TProjects = {
     "NUEVO": arr1,
     "PRESUPUESTADO": arr2,

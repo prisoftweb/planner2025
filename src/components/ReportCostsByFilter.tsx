@@ -41,6 +41,8 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
     totalIva += cost.cost?.iva || 0;
   });
 
+  const costsSorted = costs.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const date = new Date();
   return(
@@ -65,7 +67,7 @@ export default function ReportCostsByFilter({costs}: {costs:Expense[]}){
               <View style={[style.header, {flex: 1}]}><Text>Importe</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
             </View>
-            {costs.map((cost, index:number) => (
+            {costsSorted.map((cost, index:number) => (
               <View style={[style.table, {borderTop: '1px solid gray'}]} key={index}>
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{cost.project?.title || ''}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{cost.report?.name ?? ''}</Text></View>

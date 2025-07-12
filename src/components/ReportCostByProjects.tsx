@@ -45,6 +45,8 @@ export default function ReportCostByProjects({reports, costsByTypes}:
     return 0;
   });
 
+  // const costsSorted = costsByTypes.sort((a, b) => new Date(a.).getTime() - new Date(b.date).getTime());
+
   let totalTypes: number = 0;
   costsByTypes.map((costtype) => {
     totalTypes += costtype.totalCost;
