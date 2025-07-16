@@ -94,25 +94,25 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Fecha: </Text>
-                <Text style={{fontSize:'10px', color:'gray'}}>{new Date().toISOString().substring(0, 10)}</Text>
+                <Text style={{fontSize:'10px', color:'gray', fontWeight: 'bold'}}>{new Date().toISOString().substring(0, 10)}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de estimar/facturar:</Text>
-                <Text style={{fontSize:'10px', color:'gray'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', color:'gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                   currency: 'MXN',
                   value: totalPaymentsResumen?.billedTotal?.pendingBillingTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago:</Text>
-                <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', color:'red', fontWeight: 'bold'}}>{CurrencyFormatter({
                   currency: 'MXN',
                   value: totalPaymentsResumen?.totalPayments?.pendingPaymentTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago total:</Text>
-                <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', color:'red', fontWeight: 900}}>{CurrencyFormatter({
                   currency: 'MXN',
                   value: (totalPaymentsResumen?.billedTotal?.pendingBillingTotal || 0) + (totalPaymentsResumen?.totalPayments?.pendingPaymentTotal || 0)
                 })}</Text>

@@ -157,12 +157,15 @@ function DroppableColumn({ columnId, children }: { columnId: string; children: R
       style={{
         padding: 16,
         width: 250,
+        // minWidth: 200,
         minHeight: 400,
         backgroundColor: "#f0f0f0",
+        // backgroundColor: '#4b8fea',
         borderRadius: 6,
+        flexShrink: 0,
       }}
     >
-      <h3>{columnId.toUpperCase()}</h3>
+      <h3 className="text-center">{columnId.toUpperCase()}</h3>
       {children}
     </div>
   );
