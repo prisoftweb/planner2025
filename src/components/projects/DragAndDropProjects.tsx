@@ -126,7 +126,7 @@ function SortableItem(p : ProjectMin) {
           currency: 'MXN',
           value: p.amount
         })}</p>
-        <p className="text-green-500 text-sm">{p.title.substring(0, 15)}{p.title.length > 15? '...': ''}</p>
+        <p className="text-green-500 text-sm">{p.title.substring(0, 25)}{p.title.length > 25? '...': ''}</p>
       </div>
     </div>
   );
@@ -142,14 +142,15 @@ function DroppableColumn({ columnId, children }: { columnId: string; children: R
       ref={setNodeRef} // ✅ marca el contenedor como zona droppable
       key={columnId}
       style={{
-        padding: 16,
+        // padding: 16,
         width: 250,
         minHeight: 400,
         backgroundColor: "#f0f0f0",
         borderRadius: 6,
+        flexShrink: 0,
       }}
     >
-      <h3>{columnId.toUpperCase()}</h3>
+      <h3 className="text-center">{columnId.toUpperCase()}</h3>
       {children}
     </div>
   );

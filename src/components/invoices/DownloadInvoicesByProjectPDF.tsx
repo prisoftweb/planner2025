@@ -32,6 +32,8 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
 
   const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+  console.log('order inv => ', orderInvoices);
+
   return(
     <Document>
       <Page>
@@ -94,11 +96,11 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Fecha: </Text>
-                <Text style={{fontSize:'10px', color:'gray', fontWeight: 'bold'}}>{new Date().toISOString().substring(0, 10)}</Text>
+                <Text style={{fontSize:'10px', fontWeight: 'bold'}}>{new Date().toISOString().substring(0, 10)}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de estimar/facturar:</Text>
-                <Text style={{fontSize:'10px', color:'gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', fontWeight: 'bold'}}>{CurrencyFormatter({
                   currency: 'MXN',
                   value: totalPaymentsResumen?.billedTotal?.pendingBillingTotal || 0
                 })}</Text>
@@ -127,7 +129,7 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Estimacion </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Condicion</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Importe saldo ant.</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Importe saldo pagado</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>saldo pagado</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Saldo pendiente pago</Text>
           </View>
 
@@ -135,7 +137,7 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={i._id}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.folio}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.date.substring(0, 10)}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.paymentMethod}{i.paymentWay}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.paymentMethod} | {i.paymentWay} | {i.useCFDI}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.estimate.name} </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.condition.name}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({

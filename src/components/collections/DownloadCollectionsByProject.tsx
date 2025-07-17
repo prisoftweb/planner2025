@@ -1,31 +1,34 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { OneProjectMin } from "@/interfaces/Projects"
-import { IGuaranteeByPojectMin } from "@/interfaces/Guarantee"
+import { ICollectionMin } from '@/interfaces/Collections';
+import { useState, useEffect } from 'react';
+import { ITotalResumentPayment } from '@/interfaces/Collections';
+import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
 
-export default function DownloadGuaranteeByProjectPDF({guarantees, project, token}:
-  {guarantees: IGuaranteeByPojectMin[], project:OneProjectMin, token:string}) {
+export default function DownloadCollectionsByProjectPDF({collections, project, token}:
+  {collections: ICollectionMin[], project:OneProjectMin, token:string}) {
 
-  // const [totalPaymentsResumen, setTotalPaymentsResumen] = useState<ITotalResumentPayment>();
+  const [resumenPayment, setResumenPayment] = useState<ITotalResumentPayment>();
 
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     let totalPaymentsResumen: ITotalResumentPayment;
-  //     totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, project._id);
-  //     if(typeof(totalPaymentsResumen) !== "string"){
-  //       setTotalPaymentsResumen(totalPaymentsResumen);
-  //     }
-  //   }
-  //   fetch();
-  // }, []);
+  useEffect(() => {
+    const fetch = async () => {
+      let totalPaymentsResumen: ITotalResumentPayment;
+      totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, project._id);
+      if(typeof(totalPaymentsResumen) !== "string"){
+        setResumenPayment(totalPaymentsResumen);
+      }
+    }
+    fetch();
+  }, []);
 
-  let total = 0;
-  guarantees.map((g) => {
-    total += g.cost.subtotal || 0;
-  });
+  // let total = 0;
+  // guarantees.map((g) => {
+  //   total += g.cost.subtotal || 0;
+  // });
 
   // const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  const orderGuarantees = guarantees.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return(
     <Document>
@@ -40,7 +43,7 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
                 <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
-                    <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>ESTADO DE CUENTA DE FONDO DE GARANTIA</Text>
+                    <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>COBRANZA</Text>
                     <Text style={{fontSize:'11px', color:'gray'}}>{project.title}</Text>
                   </View>
                 </View>
@@ -72,7 +75,7 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
-                      value: 0
+                      value: resumenPayment?.totalPayments?.totalPayments || 0
                     })}
                   </Text>
                 </View>
@@ -83,53 +86,41 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
                 <Text style={{fontSize:'10px'}}>{new Date().toISOString().substring(0, 10)}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Fondo de garantia:</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de estimar/facturar: </Text>
                 <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
                   currency: 'MXN',
-                  value: total
+                  value: resumenPayment?.billedTotal?.pendingBillingTotal || 0
                 })}</Text>
               </View>
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago:</Text>
-                <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
+                <Text style={{fontSize:'10px', color:'green'}}>{CurrencyFormatter({
                   currency: 'MXN',
-                  value: total
+                  value: resumenPayment?.totalPayments?.pendingPaymentTotal || 0
                 })}</Text>
               </View>
             </View>
           </View>
 
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha retencion</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha garantia</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha prog.</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha pago</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Estimacion </Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Estatus</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fondo garantia</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Referencia</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha</Text>
+            <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Concepto</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Estatus </Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Factura </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Importe pagado</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Pendiente de pago</Text>
           </View>
 
-          {orderGuarantees.map((g) => (
-            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={g._id}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{g.date.substring(0, 10)}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{g.dateGuarantee?.substring(0, 10) || ''}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{g.dateScheduled?.substring(0, 10) || ''}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{g.datePayment?.substring(0, 10) || ''} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{g.estimate.name}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{g.estatus.name}</Text>
+          {orderCollections.map((c) => (
+            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={c._id}>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.reference}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date.substring(0, 10) || ''}</Text>
+              <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.concept}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.condition.name} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.invoices.invoices.folio}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
-                value: g.cost.subtotal || 0
-              })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
-                value: 0
-              })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
-                value: (g.cost.total - 0) || 0
+                value: c.amount || 0
               })}</Text>
             </View>
           ))}
