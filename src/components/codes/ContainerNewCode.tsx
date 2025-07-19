@@ -106,7 +106,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   }
 
   const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));
-
+console.log('filteredProjects => ', filteredProjects);
   return (
     <div className={`grid ${widthPage < 500? 'grid-cols-1': 'grid-cols-2'} gap-x-3`}>
       <div>

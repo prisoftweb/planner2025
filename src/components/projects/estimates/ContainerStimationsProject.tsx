@@ -16,6 +16,12 @@ import { showToastMessageError } from "@/components/Alert";
 import NavTabEstimates from "./NavTabEstimates";
 import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
 import { TableEstimatesProject } from "@/interfaces/Estimate";
+
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import {Tooltip} from "@nextui-org/react";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadEstimatesByProjectPDF from "./DownloadEstimationsByProjectPDF";
+
 interface OptionsDashboard {
   label: string,
   costo: number
@@ -112,6 +118,25 @@ export default function ContainerStimationsProject({project, optConditions, optP
   
   const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
   const percentajeAdvance = Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
   
   return (
     <>
@@ -245,6 +270,24 @@ export default function ContainerStimationsProject({project, optConditions, optP
 
       <div>
         <NavTabEstimates tab={0} id_p={project._id} pageQuery={pageProject} />
+      </div>
+
+      <div className="flex justify-end p-3">
+        <PDFDownloadLink document={<DownloadEstimatesByProjectPDF estimates={estimates} project={project}
+                                      token={token} anticipo={advance} />} fileName={'Estimaciones - ' + project.title} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </Tooltip>
+            ) : (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </Tooltip>
+            ) }
+        </PDFDownloadLink>
       </div>
       
       <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 

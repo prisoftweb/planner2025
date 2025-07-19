@@ -10,9 +10,9 @@ export default function Home() {
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   const token: string = cookieStore.get('token')?.value || '';
 
-  const depto = typeof(user.department)==='string'? user.department:  user.department.name;
+  // const depto = typeof(user.department)==='string'? user.department:  user.department.name;
   const role = user.rol?.name || '';
-  // const depto='direccion';
+  const depto='direccion';
 
   return (
     <>
