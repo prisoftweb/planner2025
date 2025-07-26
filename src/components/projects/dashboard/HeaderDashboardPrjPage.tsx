@@ -17,11 +17,12 @@ type Params = {
   projects:Options[], 
   projectsTotalCost: DashboardTotalCost[], 
   configMin: ConfigMin[], 
-  activeProjects: number
+  activeProjects: number,
+  numEvaluado: number
 }
 
 export default function HeaderDashboardPrjPage({handleDate, amountProjects, 
-    projectsTotalCost, configMin, activeProjects, projects}: Params) {
+    projectsTotalCost, configMin, activeProjects, projects, numEvaluado}: Params) {
 
   let props = {
     variants: {
@@ -44,9 +45,14 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
   
   const refHability = useRef(true);
   const [project, setProject] = useState<string[]>([projects[0].value]);
+  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+  //   from: new Date('2024-01-02'),
+  //   to: new Date('2024-10-30'),
+  // });
+
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date('2024-01-02'),
-    to: new Date('2024-10-30'),
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
   });
 
   const handleProjects = (value: string[]) => {
@@ -62,6 +68,8 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
   }else{
     progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
   }
+
+  // console.log('amount prjs => ', amountProjects);
 
   return (
     <div>
@@ -112,7 +120,7 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
             style={{backgroundColor: 'white'}}>
           {amountProjects.length > 0 && (
             <>
-              <p className='text-3xl text-center'>{activeProjects}</p>
+              <p className='text-3xl text-center'>{numEvaluado}</p>
               <p className='text-xs text-center'>PROYECTOS EN EVALUACION</p>
             </>
           )}

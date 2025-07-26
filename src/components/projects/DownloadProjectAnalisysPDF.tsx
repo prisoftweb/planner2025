@@ -23,7 +23,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
 //   }, []);
 
   // const orderEstimates = estimates.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
+// console.log('budgeted info => ', budgetedControl.budgetedInfo);
   return(
     <Document>
       <Page>
@@ -122,7 +122,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
 
           <View style={{display: 'flex', flexDirection: 'row', gap: '5px', marginTop: '30px', fontSize:'10px'}}>
             <View style={{width: '50%'}}>
-              <Text style={{marginBottom: '15px'}}>CONTROL CONTRACTUAL</Text>
+              <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL CONTRACTUAL</Text>
 
               {/* <View style={{display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center'}}>
                 <View style={{width: '100%', height: '7px', backgroundColor: 'gray'}}>
@@ -188,7 +188,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             </View>
 
             <View style={{width: '50%'}}>
-              <Text style={{marginBottom: '15px'}}>CONTROL PRESUPUESTAL</Text>
+              <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL PRESUPUESTAL</Text>
 
               <View
                 style={{
@@ -236,13 +236,17 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                     <View
                       style={{
                         width: 10,
-                        height: (30 / 100) * 200, // escalado dinámico
+                        height: ((budgetedControl?.amountInfo?.porcentageTotal || 0) / 100) * 200, // escalado dinámico
                         backgroundColor: '#7D9F2D',
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                       }}
                     />
+                    <Text style={{
+                      transform: 'rotate(-90deg)',
+                      transformOrigin: 'left top',
+                    }}>{(budgetedControl?.amountInfo?.porcentageTotal || 0) + '%'}</Text>
                   </View>
                 </View>
 
@@ -282,13 +286,17 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                     <View
                       style={{
                         width: 10,
-                        height: (30 / 100) * 200, // escalado dinámico
+                        height: ((budgetedControl?.billingInfo?.porcentage || 0) / 100) * 200, // escalado dinámico
                         backgroundColor: '#289399',
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                       }}
                     />
+                    <Text style={{
+                      transform: 'rotate(-90deg)',
+                      transformOrigin: 'left top',
+                    }}>{(budgetedControl?.billingInfo?.porcentage || 0) + '%'}</Text>
                   </View>
                 </View>
 
@@ -328,13 +336,17 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                     <View
                       style={{
                         width: 10,
-                        height: (30 / 100) * 200, // escalado dinámico
+                        height: ((budgetedControl?.paymentInfo?.porcentage || 0) / 100) * 200, // escalado dinámico
                         backgroundColor: '#f08080',
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                       }}
                     />
+                    <Text style={{
+                      transform: 'rotate(-90deg)',
+                      transformOrigin: 'left top',
+                    }}>{(budgetedControl?.paymentInfo?.porcentage || 0) + '%'}</Text>
                   </View>
                 </View>
 
@@ -374,13 +386,17 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                     <View
                       style={{
                         width: 10,
-                        height: (30 / 100) * 200, // escalado dinámico
+                        height: ((budgetedControl?.spentInfo?.porcentage || 0) / 100) * 200, // escalado dinámico
                         backgroundColor: '#E4D831',
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                       }}
                     />
+                    <Text style={{
+                      transform: 'rotate(-90deg)',
+                      transformOrigin: 'left top',
+                    }}>{(budgetedControl?.spentInfo?.porcentage || 0) + '%'}</Text>
                   </View>
                 </View>
 
@@ -420,13 +436,17 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                     <View
                       style={{
                         width: 10,
-                        height: (30 / 100) * 200, // escalado dinámico
+                        height: ((budgetedControl?.budgetedInfo?.porcentageTotal || 0) / 100) * 200, // escalado dinámico
                         backgroundColor: '#71B2F2',
                         position: 'absolute',
                         bottom: 0,
                         left: 0,
                       }}
                     />
+                    <Text style={{
+                      transform: 'rotate(-90deg)',
+                      transformOrigin: 'left top',
+                    }}>{(budgetedControl?.budgetedInfo?.porcentageTotal || 0) + '%'}</Text>
                   </View>
                 </View>
                 
@@ -437,7 +457,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
           </View>
 
           <View style={{marginTop: '30px'}}>
-            <Text>ANALISIS FINANCIERO</Text>
+            <Text style={{fontSize:'11px', color:'gray'}}>ANALISIS FINANCIERO</Text>
 
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>CONCEPTO </Text>
@@ -458,7 +478,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 currency: 'MXN',
                 value: budgetedControl?.budgetedInfo?.pendingBugetedTotal || 0
               })} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{100 - (budgetedControl?.budgetedInfo?.porcentageTotal || 0)}%</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.budgetedInfo?.porcentageTotal || 0)).toFixed(2)}%</Text>
             </View>
 
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
@@ -472,7 +492,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 currency: 'MXN',
                 value: budgetedControl?.spentInfo?.pendingSpentTotal || 0
               })} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{100 - (budgetedControl?.spentInfo?.porcentage || 0)}%</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.spentInfo?.porcentage || 0)).toFixed(2)}%</Text>
             </View>
 
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
@@ -486,7 +506,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 currency: 'MXN',
                 value: budgetedControl?.billingInfo?.pendingBillingTotal || 0
               })} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{100 - (budgetedControl?.billingInfo?.porcentage || 0)}%</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.billingInfo?.porcentage || 0)).toFixed(2)}%</Text>
             </View>
 
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
@@ -500,7 +520,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 currency: 'MXN',
                 value: budgetedControl?.paymentInfo?.pendingPaymentTotal || 0
               })} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{100 - (budgetedControl?.paymentInfo?.porcentage || 0)}%</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{(100 - (budgetedControl?.paymentInfo?.porcentage || 0)).toFixed(2)}%</Text>
             </View>
 
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} >
@@ -517,7 +537,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
           </View>
 
           <View style={{marginTop: '20px', width: '60%'}}>
-            <Text>ANALISIS DE COSTO-BENEFICIO</Text>
+            <Text style={{fontSize:'11px', color:'gray'}}>ANALISIS DE COSTO-BENEFICIO</Text>
 
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', padding: '2px', margin: '0px', border: '1px solid black'}}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>Costes totales </Text>
@@ -536,9 +556,9 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             </View>
 
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', padding: '2px', margin: '0px', border: '1px solid black'}}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>Beneficios totales </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>Relación coste-beneficio (B/C) </Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold', color:'green'}}>
-                {(budgetedControl?.paymentInfo?.paymentTotal || 0) / (budgetedControl?.spentInfo?.spentTotal || 0) }
+                {((budgetedControl?.paymentInfo?.paymentTotal || 0) / (budgetedControl?.spentInfo?.spentTotal || 0)).toFixed(2) }
               </Text>
             </View>
 

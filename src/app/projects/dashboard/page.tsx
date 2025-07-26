@@ -9,14 +9,13 @@ import { getDashboardProjectsAmount,
   getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT, 
   getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
   getDashboardListProjectsByDate, getDashboardListProjectsTop10, 
-  getDashboardProjectTotalCost, getConfigMin, getProjectsBudgeted, 
-  getProjectsControlBudgeted, getProjectsSpent, getProjectsLV } 
+  getDashboardProjectTotalCost, getConfigMin, getProjectsLV, getLenghtProjectsEvaluacion } 
 from "@/app/api/routeProjects";
 
 import { ProjectsByClient, ProjectsByProgress, 
   ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
   CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
-  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted } 
+  ProjectsTop10, DashboardTotalCost, ConfigMin } 
 from "@/interfaces/DashboardProjects";
 
 export default async function Page() {
@@ -40,6 +39,7 @@ export default async function Page() {
   // let projectsSpent: ControlBudgeted[] = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
   // let projectsControlBudgeted: ControlBudgeted[] = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
   let projects: Options[] = await getProjectsLV(token);
+  const numEvaluacion = await getLenghtProjectsEvaluacion(token);
     
   if(typeof(amountProjects)==='string'){
     return(
@@ -212,7 +212,7 @@ export default async function Page() {
       <DashBoardContainer token={token} amountProjects={amountProjects} listProjects={listProjectsdate} 
         projectsClient={projectsClient} projectsProgress={projectsProgress} 
         projectsSegment={projectsSegment} projectsStatus={projectsStatus} projectsTop10={projectsTop10}
-        listProjectsnotCompleted={listProjectsnotCompleted} 
+        listProjectsnotCompleted={listProjectsnotCompleted} numEvaluado={numEvaluacion}
         projectsTotalCost={projectsTotalCost} configMin={configMin} 
         projects={[{
           label: 'Todos',

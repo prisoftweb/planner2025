@@ -79,12 +79,13 @@ type Params = {
   // projectsBudgeted: ControlBudgeted[], 
   // projectsSpent: ControlBudgeted[], 
   // projectsControlBudgeted: ControlBudgeted[], 
-  projects:Options[] 
+  projects:Options[],
+  numEvaluado: number 
 }
 
 export default function DashBoardContainer({token, amountProjects, listProjects, projectsTop10, projectsTotalCost, 
     projectsClient, projectsProgress, projectsSegment, projectsStatus, listProjectsnotCompleted, 
-    configMin, projects }: Params) {
+    configMin, projects, numEvaluado }: Params) {
   
   const [stateListProjects, setStateListProjects] = useState<ListProjectsByDate[]>(listProjects);
   const [stateProjectsClient, setStateProjectsClient] = useState<ProjectsByClient[]>(projectsClient);
@@ -116,7 +117,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     
     let listprjnotCompleted: ProjectsNotCompleted[] = [];
     
-    let prjandTypes: CostsByProjectAndType[] = [];
+    // let prjandTypes: CostsByProjectAndType[] = [];
     
     let prjsTop10: ProjectsTop10[] = [];
     
@@ -124,11 +125,11 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     
     let confMin: ConfigMin[] = [];
     
-    let prjsBudgeted: ControlBudgeted[] = [];
+    // let prjsBudgeted: ControlBudgeted[] = [];
     
-    let prjsSpent: ControlBudgeted[] = [];
+    // let prjsSpent: ControlBudgeted[] = [];
     
-    let prjsControlBudgeted: ControlBudgeted[] = [];
+    // let prjsControlBudgeted: ControlBudgeted[] = [];
     
     if(prj.includes('all')){
       try {
@@ -524,10 +525,13 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   // const colorRandom = getRandomInt(10);
   const colorRandom2 = getRandomInt(10);
 
+
+
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <HeaderDashboardPrjPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
-        projectsTotalCost={stateTotalCost} configMin={stateConfiMin} activeProjects={dataProjectsProgress.length} />
+        projectsTotalCost={stateTotalCost} configMin={stateConfiMin} 
+        activeProjects={dataProjectsProgress.length} numEvaluado={numEvaluado} />
       <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
         <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">

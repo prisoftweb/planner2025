@@ -12,7 +12,7 @@ export const projectValidation = z.object({
     required_error: 'El codigo es obligatorio!!'
   }).min(3, {
     message: 'Codigo  debe tener minimo 3 caracteres'
-  }).max(20, {
+  }).max(50, {
     message: 'Codigo debe tener maximo 50 caracteres'
   }),
   description: z.string().min(10, {

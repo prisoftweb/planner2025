@@ -477,30 +477,67 @@ export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart
   }
 }
 
+// export async function getDashboardProjectsByPROGRESS(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
+//   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYPROGRESS/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
+//   let prj:string = '';
+//   projects.map(p => {
+//     prj+= ','+p;
+//   });
+//   const data = {
+//     project: prj.substring(1)
+//   }
+//   try {
+//     const res = await axios.post(url, JSON.stringify(data), {
+//       headers: {
+//         'Authorization': `Bearer ${auth_token}`,
+//         'Content-Type': 'application/json'
+//       },
+//       // data: data
+//     })
+//     if(res.status === 200) return res.data.data.stats;
+//     return res.statusText;
+//   } catch (error) {
+//     if(axios.isAxiosError(error)){
+//       return error.response?.data.message || error.message
+//     }
+//     return 'Error al consultar lista de proyectos por progreso!!';
+//   }
+// }
+
 export async function getDashboardProjectsByPROGRESS(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYPROGRESS/66e0a1a4c6d95ffb8aa0ff31/${dateStart}/${dateEnd}`;
-  let prj:string = '';
-  projects.map(p => {
-    prj+= ','+p;
-  });
-  const data = {
-    project: prj.substring(1)
-  }
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsMINByCondition/66c3c68c0600ee65ccc0dbb4`;
   try {
-    const res = await axios.post(url, JSON.stringify(data), {
+    const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`,
-        'Content-Type': 'application/json'
-      },
-      // data: data
+        'Authorization': `Bearer ${auth_token}`
+      }
     })
-    if(res.status === 200) return res.data.data.stats;
+    if(res.status === 200) return res.data.data.resdata;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
-    return 'Error al consultar lista de proyectos por progreso!!';
+    return 'Error al consultar proyectos!!';
+  }
+}
+
+export async function getLenghtProjectsEvaluacion(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsMINByCondition/66c3c6ee0600ee65ccc0dbb7`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.resdata.length;
+    return 0;
+  } catch (error) {
+    // if(axios.isAxiosError(error)){
+    //   return error.response?.data.message || error.message
+    // }
+    // return 'Error al consultar proyectos!!';
+    return 0;
   }
 }
 
