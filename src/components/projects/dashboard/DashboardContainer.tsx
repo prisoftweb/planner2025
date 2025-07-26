@@ -1,11 +1,12 @@
 'use client'
 import { useState } from "react"
 import DonutChartComponent from "./DonutChartComponent"
-import { BarChartComponent } from "./BarChartComponent"
+// import { BarChartComponent } from "./BarChartComponent"
 import PieChartComponent from "./PieChartComponent"
 import { ProgressBarComponent } from "./ProgressBarComponent"
-import HeaderDashboardPage from "./HeaderDashboardPage"
-import { BarChartTreeInOne } from "./BarChartTreeInOne"
+// import HeaderDashboardPage from "./HeaderDashboardPage"
+import HeaderDashboardPrjPage from "./HeaderDashboardPrjPage"
+// import { BarChartTreeInOne } from "./BarChartTreeInOne"
 import { LineChartComponent } from "./LineChartComponent"
 import NewDonutChartComponent from "./NewDonutChartComponent"
 import { Options } from "@/interfaces/Common"
@@ -42,25 +43,25 @@ export interface Issue {
   percentage: number
 }
 
-function transformProjectsTypesToDataChart(dataProjects: CostsByProjectAndType[][]){
-  const res: DataProjectsByType[] = [];
-  dataProjects.map((arrData) => {
-    const r: Issue[] = [];
-    arrData.map((prj) => {
-      r.push({
-        percentage: prj.porcentage,
-        status: prj.type,
-        value: prj.subtotalCost
-      });
-    });
-    res.push({
-      project: arrData[0].project,
-      issues: r,
-    });
-  });
+// function transformProjectsTypesToDataChart(dataProjects: CostsByProjectAndType[][]){
+//   const res: DataProjectsByType[] = [];
+//   dataProjects.map((arrData) => {
+//     const r: Issue[] = [];
+//     arrData.map((prj) => {
+//       r.push({
+//         percentage: prj.porcentage,
+//         status: prj.type,
+//         value: prj.subtotalCost
+//       });
+//     });
+//     res.push({
+//       project: arrData[0].project,
+//       issues: r,
+//     });
+//   });
 
-  return res;
-}
+//   return res;
+// }
 
 type Params = {
   token: string, 
@@ -71,19 +72,19 @@ type Params = {
   projectsStatus: ProjectsByStatus[], 
   projectsProgress: ProjectsByProgress[], 
   listProjectsnotCompleted: ProjectsNotCompleted[], 
-  projectsandTypes: CostsByProjectAndType[], 
+  // projectsandTypes: CostsByProjectAndType[], 
   projectsTop10: ProjectsTop10[], 
   projectsTotalCost: DashboardTotalCost[], 
   configMin: ConfigMin[], 
-  projectsBudgeted: ControlBudgeted[], 
-  projectsSpent: ControlBudgeted[], 
-  projectsControlBudgeted: ControlBudgeted[], 
+  // projectsBudgeted: ControlBudgeted[], 
+  // projectsSpent: ControlBudgeted[], 
+  // projectsControlBudgeted: ControlBudgeted[], 
   projects:Options[] 
 }
 
 export default function DashBoardContainer({token, amountProjects, listProjects, projectsTop10, projectsTotalCost, 
     projectsClient, projectsProgress, projectsSegment, projectsStatus, listProjectsnotCompleted, 
-    projectsandTypes, configMin, projectsBudgeted, projectsControlBudgeted, projectsSpent, projects }: Params) {
+    configMin, projects }: Params) {
   
   const [stateListProjects, setStateListProjects] = useState<ListProjectsByDate[]>(listProjects);
   const [stateProjectsClient, setStateProjectsClient] = useState<ProjectsByClient[]>(projectsClient);
@@ -92,13 +93,13 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   const [stateProjectsStatus, setStateProjectsStatus] = useState<ProjectsByStatus[]>(projectsStatus);
   const [stateProjectsProgress, setStateProjectsProgress] = useState<ProjectsByProgress[]>(projectsProgress);
   const [stateProjectsNotCompleted, setStateProjectsNotCompleted] = useState<ProjectsNotCompleted[]>(listProjectsnotCompleted);  
-  const [stateProjectsAndType, setStateProjectsAndType] = useState<CostsByProjectAndType[]>(projectsandTypes);
+  // const [stateProjectsAndType, setStateProjectsAndType] = useState<CostsByProjectAndType[]>(projectsandTypes);
   const [stateProjectsTop10, setStateProjectsTop10] = useState<ProjectsTop10[]>(projectsTop10);
   const [stateTotalCost, setStateTotalCost] = useState<DashboardTotalCost[]>(projectsTotalCost);
   const [stateConfiMin, setStateConfiMin] = useState<ConfigMin[]>(configMin);
-  const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
-  const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
-  const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
+  // const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
+  // const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
+  // const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
 
   const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
     let amountPrjs: TotalAmountProjects[] = [];
@@ -220,41 +221,41 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         showToastMessageError('Error al obtener configuracion!!!');
       }
 
-      try {
-        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
-        if(typeof(prjsBudgeted)==='string'){
-          showToastMessageError(prjsBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos presupuestados!!!');
-      }
+      // try {
+      //   prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
+      //   if(typeof(prjsBudgeted)==='string'){
+      //     showToastMessageError(prjsBudgeted);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener proyectos presupuestados!!!');
+      // }
 
-      try {
-        prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
-        if(typeof(prjsSpent)==='string'){
-          showToastMessageError(prjsSpent);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por gastos!!!');
-      }
+      // try {
+      //   prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
+      //   if(typeof(prjsSpent)==='string'){
+      //     showToastMessageError(prjsSpent);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener proyectos por gastos!!!');
+      // }
 
-      try {
-        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
-        if(typeof(prjsControlBudgeted)==='string'){
-          showToastMessageError(prjsControlBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
-      }
+      // try {
+      //   prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
+      //   if(typeof(prjsControlBudgeted)==='string'){
+      //     showToastMessageError(prjsControlBudgeted);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
+      // }
 
-      try {
-        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
-        if(typeof(prjandTypes)==='string'){
-          showToastMessageError(prjandTypes);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
-      }
+      // try {
+      //   prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
+      //   if(typeof(prjandTypes)==='string'){
+      //     showToastMessageError(prjandTypes);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
+      // }
     }else{
       try {
         amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
@@ -346,41 +347,41 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         showToastMessageError('Error al obtener configuracion!!!');
       }
 
-      try {
-        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
-        if(typeof(prjsBudgeted)==='string'){
-          showToastMessageError(prjsBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos presupuestados!!!');
-      }
+      // try {
+      //   prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
+      //   if(typeof(prjsBudgeted)==='string'){
+      //     showToastMessageError(prjsBudgeted);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener proyectos presupuestados!!!');
+      // }
 
-      try {
-        prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
-        if(typeof(prjsSpent)==='string'){
-          showToastMessageError(prjsSpent);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por gastos!!!');
-      }
+      // try {
+      //   prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
+      //   if(typeof(prjsSpent)==='string'){
+      //     showToastMessageError(prjsSpent);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener proyectos por gastos!!!');
+      // }
 
-      try {
-        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
-        if(typeof(prjsControlBudgeted)==='string'){
-          showToastMessageError(prjsControlBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
-      }
+      // try {
+      //   prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
+      //   if(typeof(prjsControlBudgeted)==='string'){
+      //     showToastMessageError(prjsControlBudgeted);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
+      // }
 
-      try {
-        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
-        if(typeof(prjandTypes)==='string'){
-          showToastMessageError(prjandTypes);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
-      }
+      // try {
+      //   prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
+      //   if(typeof(prjandTypes)==='string'){
+      //     showToastMessageError(prjandTypes);
+      //   }
+      // } catch (error) {
+      //   showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
+      // }
     }
     setStateListProjects(listPrjsDate);
     setStateProjectsClient(prjsClient);
@@ -389,17 +390,17 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     setStateProjectsStatus(prjStatus);
     setStateProjectsProgress(prjsProgress);
     setStateProjectsNotCompleted(listprjnotCompleted);
-    setStateProjectsAndType(prjandTypes);
+    // setStateProjectsAndType(prjandTypes);
     setStateProjectsTop10(prjsTop10);
     setStateTotalCost(totalCost);
     setStateConfiMin(confMin);
-    setStateProjectsSpent(prjsSpent);
-    setStateProjectsControlBudgeted(prjsControlBudgeted);
-    setStateProjectsBudgeted(prjsBudgeted);
+    // setStateProjectsSpent(prjsSpent);
+    // setStateProjectsControlBudgeted(prjsControlBudgeted);
+    // setStateProjectsBudgeted(prjsBudgeted);
   }
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
-  const colorsBudgeted = ['green', 'red', 'blue'];
+  // const colorsBudgeted = ['green', 'red', 'blue'];
 
   const dataProjectsStatus: OptionsDashboard[] = [];
   const categoriesStatus: string[] = [];
@@ -473,25 +474,25 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     });
   });
 
-  const dataProjectsAndTypes: OptionsDashboard[] = [];
-  const categoriesProjectsAndTypes: string[] = [];
+  // const dataProjectsAndTypes: OptionsDashboard[] = [];
+  // const categoriesProjectsAndTypes: string[] = [];
 
-  stateProjectsAndType.map((prj) => {
-    dataProjectsAndTypes.push({
-      costo: prj.subtotalCost,
-      label: prj.project
-    });
-    categoriesProjectsAndTypes.push(prj.project);
-  });
+  // stateProjectsAndType.map((prj) => {
+  //   dataProjectsAndTypes.push({
+  //     costo: prj.subtotalCost,
+  //     label: prj.project
+  //   });
+  //   categoriesProjectsAndTypes.push(prj.project);
+  // });
 
-  const groupedByProject = stateProjectsAndType.reduce((acc: any, prj) => {
-      const project = prj.project;
-      (acc[project] = acc[project] || []).push(prj);
-      return acc;
-  }, {});
+  // const groupedByProject = stateProjectsAndType.reduce((acc: any, prj) => {
+  //     const project = prj.project;
+  //     (acc[project] = acc[project] || []).push(prj);
+  //     return acc;
+  // }, {});
 
-  const resultArray: CostsByProjectAndType[][] = Object.values(groupedByProject);
-  const resParse = transformProjectsTypesToDataChart(resultArray);
+  // const resultArray: CostsByProjectAndType[][] = Object.values(groupedByProject);
+  // const resParse = transformProjectsTypesToDataChart(resultArray);
   const dataProjectsTop: OptionsDashboard[] = [];
 
   stateProjectsTop10.map((prj) => {
@@ -501,16 +502,16 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     });
   });
 
-  let dataControlBudgeted: DataControlBudgeted[] = [];
-  if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && stateProjectsBudgeted.length >= stateProjectsSpent.length){
-    dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
-  }else{
-    if(stateProjectscontrolBudgeted.length >= stateProjectsBudgeted.length && stateProjectscontrolBudgeted.length >= stateProjectsSpent.length){
-      dataControlBudgeted = MoreProjectsCtrBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
-    }else{
-      dataControlBudgeted = MoreProjectsSpent(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
-    }
-  }
+  // let dataControlBudgeted: DataControlBudgeted[] = [];
+  // if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && stateProjectsBudgeted.length >= stateProjectsSpent.length){
+  //   dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+  // }else{
+  //   if(stateProjectscontrolBudgeted.length >= stateProjectsBudgeted.length && stateProjectscontrolBudgeted.length >= stateProjectsSpent.length){
+  //     dataControlBudgeted = MoreProjectsCtrBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+  //   }else{
+  //     dataControlBudgeted = MoreProjectsSpent(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+  //   }
+  // }
 
   const randomColors = [ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'];
 
@@ -520,12 +521,12 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     return Math.floor(Math.random() * max);
   }
 
-  const colorRandom = getRandomInt(10);
+  // const colorRandom = getRandomInt(10);
   const colorRandom2 = getRandomInt(10);
 
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <HeaderDashboardPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
+      <HeaderDashboardPrjPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
         projectsTotalCost={stateTotalCost} configMin={stateConfiMin} activeProjects={dataProjectsProgress.length} />
       <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
         <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
@@ -548,6 +549,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       </div>
 
       <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
+
         <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR SEGMENTO</p>
@@ -556,16 +558,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
             categories={categoriesSegment}  />
         </div>
 
-        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
-            <p>TOTAL PROJECTS   | Montos de proyectos</p>
-          </div>
-          <BarChartComponent categories={['costo']} colors={[colors[colorRandom]]} data={dataListProjects} />
-        </div>
-      </div>
-
-      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
-        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOP 10 PROYECTOS</p>
           </div>
@@ -580,19 +573,19 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
       </div>
 
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
         <div className="mb-3">
           <p>COSTO POR TIPO</p>
         </div>
         <BarChartTreeInOne data={resParse} />
-      </div>
+      </div> */}
 
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
         <div className="mb-3">
           <p>CONTROL PRESUPUESTAL</p>
         </div>
         <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado']} colors={colorsBudgeted} data={dataControlBudgeted} />
-      </div>
+      </div> */}
     </div>
   )
 }
@@ -604,50 +597,50 @@ interface DataControlBudgeted {
   Gastado: number
 }
 
-function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-  const res: DataControlBudgeted[] = [];
-  prjBugeted.map((prj) => {
-    const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
-    const prjS = prjSpent.find((pr) => pr.title === prj.title);
+// function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
+//   const res: DataControlBudgeted[] = [];
+//   prjBugeted.map((prj) => {
+//     const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
+//     const prjS = prjSpent.find((pr) => pr.title === prj.title);
 
-    res.push({
-      label: prj.title,
-      "Monto de obra": prjCB?.total || 0,
-      Gastado: prjS?.total || 0,
-      Presupuestado: prj.total,
-    });
-  });
-  return res;
-}
+//     res.push({
+//       label: prj.title,
+//       "Monto de obra": prjCB?.total || 0,
+//       Gastado: prjS?.total || 0,
+//       Presupuestado: prj.total,
+//     });
+//   });
+//   return res;
+// }
 
-function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-  const res: DataControlBudgeted[] = [];
-  prjControlBudgeted.map((prj) => {
-    const prjB = prjBugeted.find((pr) => pr.title === prj.title);
-    const prjS = prjSpent.find((pr) => pr.title === prj.title);
+// function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
+//   const res: DataControlBudgeted[] = [];
+//   prjControlBudgeted.map((prj) => {
+//     const prjB = prjBugeted.find((pr) => pr.title === prj.title);
+//     const prjS = prjSpent.find((pr) => pr.title === prj.title);
 
-    res.push({
-      label: prj.title,
-      "Monto de obra": prj.total,
-      Gastado: prjS?.total || 0,
-      Presupuestado: prjB?.total || 0,
-    });
-  });
-  return res;
-}
+//     res.push({
+//       label: prj.title,
+//       "Monto de obra": prj.total,
+//       Gastado: prjS?.total || 0,
+//       Presupuestado: prjB?.total || 0,
+//     });
+//   });
+//   return res;
+// }
 
-function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-  const res: DataControlBudgeted[] = [];
-  prjSpent.map((prj) => {
-    const prjB = prjBugeted.find((pr) => pr.title === prj.title);
-    const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
+// function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
+//   const res: DataControlBudgeted[] = [];
+//   prjSpent.map((prj) => {
+//     const prjB = prjBugeted.find((pr) => pr.title === prj.title);
+//     const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
 
-    res.push({
-      label: prj.title,
-      "Monto de obra": prjCB?.total || 0,
-      Gastado: prj.total,
-      Presupuestado: prjB?.total || 0,
-    });
-  });
-  return res;
-}
+//     res.push({
+//       label: prj.title,
+//       "Monto de obra": prjCB?.total || 0,
+//       Gastado: prj.total,
+//       Presupuestado: prjB?.total || 0,
+//     });
+//   });
+//   return res;
+// }

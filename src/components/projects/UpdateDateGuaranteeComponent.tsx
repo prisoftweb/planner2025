@@ -1,13 +1,9 @@
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
 import Button from "../Button";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { OneProjectMin } from "@/interfaces/Projects";
-import { InsertProgressInProject } from "@/app/api/routeProjects";
-import TextArea from "../TextArea";
-import Box from '@mui/material/Box';
-import Slider from '@mui/material/Slider';
 import Input from "../Input";
 import { UpdateGuaranteeFoundProject, UpdatePaymentGuaranteeFoundProject } from "@/app/api/routeProjects";
 
@@ -16,8 +12,6 @@ export default function UpdateDateGuaranteeComponent({token, id, project, user}:
 
   const [dateGuarantee, setDateGuarantee]=useState<string>(project.guaranteefund.date.substring(0, 10));
   const [datePayment, setDatePayment]=useState<string>(project.guaranteefund.date.substring(0, 10));
-
-  // console.log('usr rec => ', user);
 
   const updateDateG = async () => {
     // const data = {

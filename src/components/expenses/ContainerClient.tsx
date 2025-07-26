@@ -20,7 +20,7 @@ import { getCostoCentersLV } from "@/app/api/routeCostCenter";
 import { CostoCenterLV, } from "@/interfaces/CostCenter";
 import { getProvidersLV, getProvidersSATLV } from "@/app/api/routeProviders";
 import { getUsersLV } from "@/app/api/routeUser";
-import { getAllProjectsWithConditionLV } from "@/app/api/routeProjects";
+import { getAllProjectsWithConditionLV, getProjectsLV } from "@/app/api/routeProjects";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndCondition, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import { GetVatsLV } from "@/app/api/routeCost"
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN
@@ -65,7 +65,11 @@ export default function ContainerClient({data, token, expenses,
       optResponsiblesData = await getUsersLV(token);
 
       let optProjectsData:Options[]=[];
-      optProjectsData = await getAllProjectsWithConditionLV(token);
+      if(isHistory){
+        optProjectsData = await getProjectsLV(token);
+      }else{
+        optProjectsData = await getAllProjectsWithConditionLV(token);
+      }
 
       let optCategoriesData: Options[] = [];
       optCategoriesData = await getCatalogsByNameAndCategory(token, 'cost');

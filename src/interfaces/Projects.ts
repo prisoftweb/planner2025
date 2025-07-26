@@ -85,6 +85,7 @@ export interface OneProjectMin {
   title: string
   code: string
   amount: number
+  amountotal?: number
   date: string
   photo: string
   account: string

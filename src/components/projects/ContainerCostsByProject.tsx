@@ -15,6 +15,8 @@ import { CurrencyFormatter } from "@/app/functions/Globals"
 import Chip from "../providers/Chip"
 import Table from "../Table"
 import { ExpenseDataProjectToTableDataProject } from "@/app/functions/SaveProject"
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import DownloadCostsProjectPDF from "./DownloadCostsProjectPDF"
 
 type Props = {
   project:OneProjectMin, 
@@ -225,6 +227,17 @@ export default function ContainerCostsByProject({project, token, user, costs}: P
 
   return(
     <>
+      <div className="flex justify-end">
+        <PDFDownloadLink document={<DownloadCostsProjectPDF costs={costs} project={project} />} 
+            fileName={`InformeCostos${project.title}`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+            ) : (
+              <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+            ) }
+        </PDFDownloadLink>
+      </div>
       <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
     </>
   )

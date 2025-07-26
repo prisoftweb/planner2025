@@ -70,7 +70,8 @@ export default function ProfileProject({project}:
               <p className="text-slate-500">Monto de obra con IVA</p>
               <p className="text-red-600 font-bold">{CurrencyFormatter({
                 currency: 'MXN',
-                value: (oneProjectStore?.amount || 0) * 1.16
+                // value: (oneProjectStore?.amount || 0) * 1.16
+                value: oneProjectStore?.amountotal || 0
               })}</p>
             </div>
           </div>

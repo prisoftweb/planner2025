@@ -95,7 +95,8 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
               <p className="text-xs text-slate-600">Monto de proyecto</p>
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
-                value: project.amount
+                // value: project.amount
+                value: project.amountotal || 0
               })}</p>
             </div>
 

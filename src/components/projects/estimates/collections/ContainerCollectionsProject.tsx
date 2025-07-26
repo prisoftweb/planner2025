@@ -90,6 +90,7 @@ export default function ContainerCollectionsProject({project, token, user, colle
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
                 value: resumenPayment?.billedTotal?.amountotal || 0
+                // value: project
               })}</p>
             </div>
 

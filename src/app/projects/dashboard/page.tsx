@@ -36,9 +36,9 @@ export default async function Page() {
   let projectsTop10: ProjectsTop10[] = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
   let projectsTotalCost: DashboardTotalCost[] = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
   let configMin: ConfigMin[] = await getConfigMin(token);
-  let projectsBudgeted: ControlBudgeted[] = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []);
-  let projectsSpent: ControlBudgeted[] = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
-  let projectsControlBudgeted: ControlBudgeted[] = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
+  // let projectsBudgeted: ControlBudgeted[] = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []);
+  // let projectsSpent: ControlBudgeted[] = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
+  // let projectsControlBudgeted: ControlBudgeted[] = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
   let projects: Options[] = await getProjectsLV(token);
     
   if(typeof(amountProjects)==='string'){
@@ -162,38 +162,38 @@ export default async function Page() {
     )
   }
 
-  if(typeof(projectsBudgeted)==='string'){
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{projectsBudgeted}</h1>
-        </div>
-      </>
-    )
-  }
+  // if(typeof(projectsBudgeted)==='string'){
+  //   return(
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <h1>{projectsBudgeted}</h1>
+  //       </div>
+  //     </>
+  //   )
+  // }
   
-  if(typeof(projectsSpent)==='string'){
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{projectsSpent}</h1>
-        </div>        
-      </>
-    )
-  }
+  // if(typeof(projectsSpent)==='string'){
+  //   return(
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <h1>{projectsSpent}</h1>
+  //       </div>        
+  //     </>
+  //   )
+  // }
   
-  if(typeof(projectsControlBudgeted)==='string'){
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{projectsControlBudgeted}</h1>
-        </div>
-      </>
-    )
-  }
+  // if(typeof(projectsControlBudgeted)==='string'){
+  //   return(
+  //     <>
+  //       <Navigation user={user} />
+  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+  //         <h1>{projectsControlBudgeted}</h1>
+  //       </div>
+  //     </>
+  //   )
+  // }
   
   if(typeof(projects)==='string'){
     return(
@@ -212,9 +212,8 @@ export default async function Page() {
       <DashBoardContainer token={token} amountProjects={amountProjects} listProjects={listProjectsdate} 
         projectsClient={projectsClient} projectsProgress={projectsProgress} 
         projectsSegment={projectsSegment} projectsStatus={projectsStatus} projectsTop10={projectsTop10}
-        listProjectsnotCompleted={listProjectsnotCompleted} projectsandTypes={projectsandTypes}
-        projectsTotalCost={projectsTotalCost} configMin={configMin} projectsBudgeted={projectsBudgeted}
-        projectsControlBudgeted={projectsControlBudgeted} projectsSpent={projectsSpent} 
+        listProjectsnotCompleted={listProjectsnotCompleted} 
+        projectsTotalCost={projectsTotalCost} configMin={configMin} 
         projects={[{
           label: 'Todos',
           value: 'all'

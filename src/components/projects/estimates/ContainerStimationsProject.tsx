@@ -180,10 +180,11 @@ export default function ContainerStimationsProject({project, optConditions, optP
         <div className="bg-white p-3">
           <div className=" border border-gray-700">
             <div className="flex items-center border border-gray-700">
-              <p className="bg-green-600 text-white p-2 w-52 text-center">Projecto</p>
+              <p className="bg-green-600 text-white p-2 w-52 text-center">Proyecto</p>
               <p className="w-full text-blue-500 text-right p-2">{CurrencyFormatter({
                 currency: 'MXN',
-                value: project.amount || 0
+                // value: project.amount || 0
+                value: project.amountotal || 0
               })}</p>
             </div>
 

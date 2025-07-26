@@ -16,6 +16,11 @@ import Label from "../Label";
 import { GiProfit } from "react-icons/gi";
 import { LiaMoneyBillWaveAltSolid, LiaMoneyCheckAltSolid } from "react-icons/lia";
 
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import {Tooltip} from "@nextui-org/react";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadProjectAnalisysPDF from "./DownloadProjectAnalisysPDF"
+
 interface OptionsDashboard {
   label: string,
   costo: number
@@ -143,6 +148,25 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
 
   console.log('project => ', project);
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   return(
     <div className="w-full">
 
@@ -165,6 +189,25 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
             </label>
           </div>
         </div>
+
+        {contractualControl && budgetedControl && (
+          <PDFDownloadLink document={<DownloadProjectAnalisysPDF project={project}
+                                      token={token} contractualControl={contractualControl}
+                                      budgetedControl={budgetedControl} />} fileName={'Analisis - ' + project.title} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        )}
 
       </div>
       

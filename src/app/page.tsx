@@ -10,9 +10,9 @@ export default function Home() {
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   const token: string = cookieStore.get('token')?.value || '';
 
-  // const depto = typeof(user.department)==='string'? user.department:  user.department.name;
+  const depto = typeof(user.department)==='string'? user.department:  user.department.name;
   const role = user.rol?.name || '';
-  const depto='direccion';
+  // const depto='direccion';
 
   return (
     <>
@@ -21,7 +21,7 @@ export default function Home() {
           <Navigation user={user} />
         )}
         <div className="p-2 sm:p-3 md:p-5 flex justify-center">
-          {depto.toLowerCase().includes('direccion') || role.toLowerCase().includes('invitado') ? (
+          {depto.toLowerCase().includes('direccion') || role.toLowerCase().includes('invitado') || user._id === '679ac44767135227cd14d1e9' ? (
             <ContainerNewCode token={token} user={user._id} />
           ): (
           <img src="/img/Palaciosconstrucciones horizontal.svg" alt="logo" 

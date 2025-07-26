@@ -181,6 +181,9 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             },
           ]} 
         />
+        {user._id === '679ac44767135227cd14d1e9' && (
+          <NavItem name="Codigos" link="/codes" items={[]} />
+        )}
       </>
     )
   }
@@ -277,6 +280,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
         {
           name: 'Dashboard',
           link: '/projects/dashboard'
+        },
+        {
+          name: 'Finanzas',
+          link: '/projects/dashboardfinance'
         },
         {
           name: 'Tablero',
