@@ -94,6 +94,10 @@ const arrId: Options[] = [
     label: "NO EVALUADO",
     value: "684842305989ba5421dd583c"
   },
+  {
+    label: "EN COBRANZA",
+    value: "688e8430a9c4a75f38a57b6d"
+  },
 ]
 
 function SortableItem(p : ProjectMin) {
@@ -169,6 +173,7 @@ export default function DragAndDropProjects({projectsParam, token, user}:
   const arr7: ProjectMin[]=[];
   const arr8: ProjectMin[]=[];
   const arr9: ProjectMin[]=[];
+  const arr10: ProjectMin[]=[];
 
   projectsParam.map((p) => {
     // console.log('segement => ', p);
@@ -196,7 +201,11 @@ export default function DragAndDropProjects({projectsParam, token, user}:
                   if(p.category.name.includes("COMPLETADO")){
                     arr8.push(p);
                   }else{
-                    arr4.push(p);
+                    if(p.category.name.includes("EN COBRANZA")){
+                      arr8.push(p);
+                    }else{
+                      arr4.push(p);
+                    }
                   }
                 }
               }
@@ -219,6 +228,7 @@ console.log('no evaluados => ', arr9);
     "EN GARANTIA": arr7,
     "COMPLETADO": arr8,
     "NO EVALUADO": arr9,
+    "EN COBRANZA": arr10
   };
 
   const [projects, setProjects] = useState<TProjects>(initialProjects);

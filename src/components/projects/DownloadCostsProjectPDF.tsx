@@ -42,7 +42,7 @@ export default function DownloadCostsProjectPDF({costs, project}: {costs:ICostsB
     totalIva += cost.cost?.iva || 0;
   });
 
-  const costsSorted = costs.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  const costsSorted = costs.sort((a, b) => new Date(a.date).getTime() + new Date(b.date).getTime());
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const date = new Date();
@@ -53,17 +53,17 @@ export default function DownloadCostsProjectPDF({costs, project}: {costs:ICostsB
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos {project.title} </Text>
-              <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Costo: {CurrencyFormatter({
+              <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Resumen de costos {project.title} </Text>
+              <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
+              <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Costo: {CurrencyFormatter({
                 currency: 'MXN',
                 value: totalCosts
               })} </Text>
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Iva: {CurrencyFormatter({
+              <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Iva: {CurrencyFormatter({
                 currency: 'MXN',
                 value: totalIva
               })} </Text>
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Total: {CurrencyFormatter({
+              <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Total: {CurrencyFormatter({
                 currency: 'MXN',
                 value: totalTypes
               })} </Text>

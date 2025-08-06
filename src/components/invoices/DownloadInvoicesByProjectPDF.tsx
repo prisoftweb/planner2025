@@ -73,7 +73,8 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
                 <Text style={{margin: '2px'}}>{CurrencyFormatter({
                   currency: 'MXN',
                   // value: project.amount
-                  value: project.amount * 1.16
+                  // value: project.amount * 1.16
+                  value: project.amountotal || 0
                 })}</Text>
               </View>
 

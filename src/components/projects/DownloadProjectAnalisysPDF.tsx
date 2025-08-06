@@ -190,266 +190,59 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{width: '50%'}}>
               <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL PRESUPUESTAL</Text>
 
-              <View
-                style={{
-                  flexDirection: 'row', // esto alinea las barras horizontalmente
-                  gap: 10, // espacio entre cada barra
-                  // gap: 2, // espacio entre cada barra
-                  alignItems: 'flex-end', // alinea todas las barras en la base
-                }}
-              >
-
-                <View
-                  style={{
-                    flexDirection: 'row', // texto + barra
-                    alignItems: 'flex-end',
-                    // gap: 2,
-                  }}
-                >
-                  {/* Texto vertical */}
-                  <Text
-                    style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                      fontSize: 10,
-                      marginRight: -1
-                      // marginBottom: 5,
-                    }}
-                  >
-                    Monto ({CurrencyFormatter({
-                      currency: 'MXN',
-                      value: budgetedControl?.amountInfo?.amountotal || 0
-                    })})
-                  </Text>
-
-                  {/* Barra contenedora */}
-                  <View
-                    style={{
-                      width: 10,
-                      height: 200,
-                      backgroundColor: 'gray',
-                      position: 'relative',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    {/* Barra de progreso */}
-                    <View
-                      style={{
-                        width: 10,
-                        height: ((budgetedControl?.amountInfo?.porcentageTotal || 0) / 100) * 200, // escalado dinámico
-                        backgroundColor: '#7D9F2D',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                      }}
-                    />
-                    <Text style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                    }}>{(budgetedControl?.amountInfo?.porcentageTotal || 0) + '%'}</Text>
-                  </View>
+              <Text>Monto ({CurrencyFormatter({
+                currency: 'MXN', 
+                value: budgetedControl?.amountInfo?.amountotal || 0
+              })})</Text>
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                  <View style={{ width: (budgetedControl?.amountInfo?.porcentageTotal || 0) > 100? 200: (budgetedControl?.amountInfo?.porcentageTotal || 0) * 2, height: 7, backgroundColor: '#E4D831', position: 'absolute', top: 0, left: 0 }} />
                 </View>
+                <Text>{budgetedControl?.amountInfo?.porcentageTotal || 0} %</Text>
+              </View>
 
-                <View
-                  style={{
-                    flexDirection: 'row', // texto + barra
-                    alignItems: 'flex-end',
-                    gap: 2,
-                  }}
-                >
-                  {/* Texto vertical */}
-                  <Text
-                    style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                      fontSize: 10,
-                      marginBottom: 5,
-                    }}
-                  >
-                    Facturado ({CurrencyFormatter({
-                      currency: 'MXN',
-                      value: budgetedControl?.billingInfo?.billedTotal || 0
-                    })})
-                  </Text>
-
-                  {/* Barra contenedora */}
-                  <View
-                    style={{
-                      width: 10,
-                      height: 200,
-                      backgroundColor: 'gray',
-                      position: 'relative',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    {/* Barra de progreso */}
-                    <View
-                      style={{
-                        width: 10,
-                        height: ((budgetedControl?.billingInfo?.porcentage || 0) / 100) * 200, // escalado dinámico
-                        backgroundColor: '#289399',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                      }}
-                    />
-                    <Text style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                    }}>{(budgetedControl?.billingInfo?.porcentage || 0) + '%'}</Text>
-                  </View>
+              <Text style={{marginTop: '10px'}}>Facturado ({CurrencyFormatter({
+                currency: 'MXN', 
+                value: budgetedControl?.billingInfo?.billedTotal || 0
+              })})</Text>
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                  <View style={{ width: (budgetedControl?.billingInfo?.porcentage || 0) > 100? 200: (budgetedControl?.billingInfo?.porcentage || 0) * 2, height: 7, backgroundColor: '#71B2F2', position: 'absolute', top: 0, left: 0 }} />
                 </View>
+                <Text>{budgetedControl?.billingInfo?.porcentage || 0} %</Text>
+              </View>
 
-                <View
-                  style={{
-                    flexDirection: 'row', // texto + barra
-                    alignItems: 'flex-end',
-                    gap: 2,
-                  }}
-                >
-                  {/* Texto vertical */}
-                  <Text
-                    style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                      fontSize: 10,
-                      marginBottom: 5,
-                    }}
-                  >
-                    Pagado ({CurrencyFormatter({
-                      currency: 'MXN',
-                      value: budgetedControl?.paymentInfo?.paymentTotal || 0
-                    })})
-                  </Text>
-
-                  {/* Barra contenedora */}
-                  <View
-                    style={{
-                      width: 10,
-                      height: 200,
-                      backgroundColor: 'gray',
-                      position: 'relative',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    {/* Barra de progreso */}
-                    <View
-                      style={{
-                        width: 10,
-                        height: ((budgetedControl?.paymentInfo?.porcentage || 0) / 100) * 200, // escalado dinámico
-                        backgroundColor: '#f08080',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                      }}
-                    />
-                    <Text style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                    }}>{(budgetedControl?.paymentInfo?.porcentage || 0) + '%'}</Text>
-                  </View>
+              <Text style={{marginTop: '10px'}}>Pagado ({CurrencyFormatter({
+                currency: 'MXN', 
+                value: budgetedControl?.paymentInfo?.paymentTotal || 0
+              })})</Text>
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                  <View style={{ width: (budgetedControl?.paymentInfo?.porcentage || 0) > 100 ? 200 : (budgetedControl?.paymentInfo?.porcentage || 0) *2, height: 7, backgroundColor: '#ff5252', position: 'absolute', top: 0, left: 0 }} />
                 </View>
+                <Text>{budgetedControl?.paymentInfo?.porcentage || 0} %</Text>
+              </View>
 
-                <View
-                  style={{
-                    flexDirection: 'row', // texto + barra
-                    alignItems: 'flex-end',
-                    gap: 2,
-                  }}
-                >
-                  {/* Texto vertical */}
-                  <Text
-                    style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                      fontSize: 10,
-                      marginBottom: 5,
-                    }}
-                  >
-                    Costo ({CurrencyFormatter({
-                      currency: 'MXN',
-                      value: budgetedControl?.spentInfo?.spentTotal || 0
-                    })})
-                  </Text>
-
-                  {/* Barra contenedora */}
-                  <View
-                    style={{
-                      width: 10,
-                      height: 200,
-                      backgroundColor: 'gray',
-                      position: 'relative',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    {/* Barra de progreso */}
-                    <View
-                      style={{
-                        width: 10,
-                        height: ((budgetedControl?.spentInfo?.porcentage || 0) / 100) * 200, // escalado dinámico
-                        backgroundColor: '#E4D831',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                      }}
-                    />
-                    <Text style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                    }}>{(budgetedControl?.spentInfo?.porcentage || 0) + '%'}</Text>
-                  </View>
+              <Text style={{marginTop: '10px'}}>Costo ({CurrencyFormatter({
+                currency: 'MXN', 
+                value: budgetedControl?.spentInfo?.spentTotal || 0
+              })})</Text>
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                  <View style={{ width: (budgetedControl?.spentInfo?.porcentage || 0) > 100 ? 200: (budgetedControl?.spentInfo?.porcentage || 0) *2, height: 7, backgroundColor: '#FFA145', position: 'absolute', top: 0, left: 0 }} />
                 </View>
+                <Text>{budgetedControl?.spentInfo?.porcentage || 0} %</Text>
+              </View>
 
-                <View
-                  style={{
-                    flexDirection: 'row', // texto + barra
-                    alignItems: 'flex-end',
-                    gap: 2,
-                  }}
-                >
-                  {/* Texto vertical */}
-                  <Text
-                    style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                      fontSize: 10,
-                      marginBottom: 5,
-                    }}
-                  >
-                    Presupuestado ({CurrencyFormatter({
-                      currency: 'MXN',
-                      value: budgetedControl?.budgetedInfo?.budgetedTotal || 0
-                    })})
-                  </Text>
-
-                  {/* Barra contenedora */}
-                  <View
-                    style={{
-                      width: 10,
-                      height: 200,
-                      backgroundColor: 'gray',
-                      position: 'relative',
-                      justifyContent: 'flex-end',
-                    }}
-                  >
-                    {/* Barra de progreso */}
-                    <View
-                      style={{
-                        width: 10,
-                        height: ((budgetedControl?.budgetedInfo?.porcentageTotal || 0) / 100) * 200, // escalado dinámico
-                        backgroundColor: '#71B2F2',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                      }}
-                    />
-                    <Text style={{
-                      transform: 'rotate(-90deg)',
-                      transformOrigin: 'left top',
-                    }}>{(budgetedControl?.budgetedInfo?.porcentageTotal || 0) + '%'}</Text>
-                  </View>
+              <Text style={{marginTop: '10px'}}>Presupuestado ({CurrencyFormatter({
+                currency: 'MXN', 
+                value: budgetedControl?.budgetedInfo?.budgetedTotal || 0
+              })})</Text>
+              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                  <View style={{ width: ((budgetedControl?.budgetedInfo?.porcentageTotal || 0)*2) > 200 ? 200: ((budgetedControl?.budgetedInfo?.porcentageTotal || 0)*2), height: 7, backgroundColor: '#69f0ae', position: 'absolute', top: 0, left: 0 }} />
                 </View>
-                
+                <Text>{budgetedControl?.budgetedInfo?.porcentageTotal || 0} %</Text>
               </View>
 
             </View>
@@ -570,3 +363,56 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
     </Document>
   )
 }
+
+const BarWithLabel = ({ label, value, percentage, color }: {label:string, value: number, percentage: number, color: string}) => (
+  <View
+    style={{
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      gap: 2,
+    }}
+  >
+    {/* Texto rotado */}
+    <Text
+      style={{
+        transform: 'rotate(-90deg)',
+        transformOrigin: 'left top',
+        fontSize: 10,
+        marginRight: -4, // Ajusta aquí para que se vea pegado
+      }}
+    >
+      {label} ({CurrencyFormatter({ currency: 'MXN', value })})
+    </Text>
+
+    {/* Barra vertical */}
+    <View
+      style={{
+        width: 10,
+        height: 200,
+        backgroundColor: 'gray',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+      }}
+    >
+      {/* Barra de progreso */}
+      <View
+        style={{
+          width: 10,
+          height: (percentage / 100) * 200,
+          backgroundColor: color,
+        }}
+      />
+      {/* Porcentaje rotado */}
+      <Text
+        style={{
+          transform: 'rotate(-90deg)',
+          transformOrigin: 'left top',
+          fontSize: 8,
+          marginTop: 2,
+        }}
+      >
+        {percentage.toFixed(0) + '%'}
+      </Text>
+    </View>
+  </View>
+)

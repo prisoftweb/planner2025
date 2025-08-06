@@ -24,6 +24,8 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
     total += g.cost.subtotal || 0;
   });
 
+  //Falta el pendiente de pago
+
   // const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const orderGuarantees = guarantees.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
