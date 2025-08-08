@@ -202,7 +202,7 @@ export default function DragAndDropProjects({projectsParam, token, user}:
                     arr8.push(p);
                   }else{
                     if(p.category.name.includes("EN COBRANZA")){
-                      arr8.push(p);
+                      arr10.push(p);
                     }else{
                       arr4.push(p);
                     }

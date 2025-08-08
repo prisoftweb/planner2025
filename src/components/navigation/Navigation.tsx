@@ -335,6 +335,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             name: 'Cuentas por cobrar',
             link: '/collections'
           },
+          {
+            name: 'Dashboards',
+            link: '/collections/dashboard'
+          },
         ]}
       />
       <NavItem name="Costos" link="" items={[

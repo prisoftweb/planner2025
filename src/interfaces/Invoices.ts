@@ -504,3 +504,20 @@ export interface IInvoiceByDateAndConditionMin {
   accountreceivablesCount: number
   status: boolean
 }
+
+
+export interface ITotalInvoicesByProject {
+  project: string
+  quantity: number
+  totalBilled: number
+  subtotalBilled: number
+  ivaBilled: number
+}
+
+export interface ITotalInvoiceByClient {
+  client: string
+  quantity: number
+  totalBilled: number
+  subtotalBilled: number
+  ivaBilled: number
+}
