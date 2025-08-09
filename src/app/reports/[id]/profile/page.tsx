@@ -165,16 +165,16 @@ export default async function Page({ params }: { params: { id: string }}){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        <div className="flex justify-between items-center flex-wrap gap-y-3">
+        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
             <ArrowReturn link="/reports" />
             <p className="text-xl ml-4 font-medium">{report.name}</p>
           </div>
           <Selectize options={optReports} routePage="reports" subpath="/profile" />
-        </div>
+        </div> */}
         {/* <NavTab idRep={params.id} tab='1' /> */}
         <ReportClient report={report} token={token} id={params.id} 
-          user={user} node={node} dates={dateReport}
+          user={user} node={node} dates={dateReport} optReports={optReports}
         />
       </div>
     </>

@@ -22,7 +22,7 @@ export default function NuevoComponente({report, id, token}:
     <>
       <div className="flex w-full px-2 flex-wrap space-x-2"
           style={{'backgroundColor': '#F8FAFC'}}>
-        <div className="grid grid-cols-3 gap-x-3 mt-2">
+        <div className="grid grid-cols-3 gap-x-3 mt-2 w-full">
           <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
             <div>
               <img src={ oneReport? oneReport.project.photo ?? '/img/projects/default.svg'  : '/img/projects/default.svg'} alt="logo" 
@@ -31,7 +31,7 @@ export default function NuevoComponente({report, id, token}:
             <div>
               <p className="text-blue-500">{oneReport?.project.title}</p>
               <p className="text-slate-500">{oneReport?.project.code}</p>
-              <p className="text-slate-500">{oneReport?.project.glossary?.name || "sin condicion"}</p>
+              <p className="text-slate-500">{oneReport?.project.category?.name || "sin condicion"}</p>
               <p className="text-slate-500">{oneReport?.project.account}</p>
               <div className="mt-3 border-t border-slate-500 pt-2">
                 <p className="text-blue-500">{oneReport?.name}</p>

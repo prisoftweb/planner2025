@@ -75,7 +75,7 @@ export default function UpdateDateGuaranteeComponent({token, id, project, user}:
             </div>
           </div>
           <div>
-            <Label htmlFor="progress"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de pago</p></Label>
+            <Label htmlFor="progress"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha de programacion</p></Label>
             <Input type="date" value={datePayment} onChange={(e) => setDatePayment(e.target.value)} />
             <div className="mt-3">
               <Button type="button"
@@ -84,9 +84,9 @@ export default function UpdateDateGuaranteeComponent({token, id, project, user}:
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-8 space-x-5">
+        {/* <div className="flex justify-center mt-8 space-x-5">
                    
-        </div>
+        </div> */}
       </div>  
     </div>
   )

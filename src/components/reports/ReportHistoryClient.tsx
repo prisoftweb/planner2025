@@ -9,9 +9,12 @@ import DataHistoryReports from "./DataHistoryReports"
 import NavTab from "@/components/reports/NavTab";
 import ProfileReport from "./ProfileReport"
 import NuevoComponente from "./NuevoComponente"
+import ArrowReturn from "../ArrowReturn"
+import { Options } from "@/interfaces/Common"
+import Selectize from "../Selectize"
 
-export default function ReportHistoryClient({report, user, id, token, dates}: 
-  {report:Report, user:UsrBack, id:string, token:string, dates:DateReport[] }){
+export default function ReportHistoryClient({report, user, id, token, dates, optReports}: 
+  {report:Report, user:UsrBack, id:string, token:string, dates:DateReport[], optReports: Options[] }){
 
   const [opt, setOpt] = useState<number>(1);
   
@@ -46,6 +49,15 @@ export default function ReportHistoryClient({report, user, id, token, dates}:
   return(
     <>
       <NavTab setTab={handleOpt} tab={opt} />
+
+      <div className="flex justify-between items-center flex-wrap gap-y-3">
+        <div className="flex items-center my-2">
+          <ArrowReturn link="/reports/history" />
+          <p className="text-xl ml-4 font-medium">{report.name}</p>
+        </div>
+        <Selectize options={optReports} routePage="reports/history" subpath="" />
+      </div>
+
       {view}
       {/* <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >

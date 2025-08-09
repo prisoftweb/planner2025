@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import NavResponsive from "./NavResponsive"
+// import NavResponsive from "./NavResponsive"
 import DataReports from "./DataReports"
 import { Report, DateReport } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
@@ -11,9 +11,12 @@ import NuevoComponente from "./NuevoComponente"
 import { useOneReportStore } from "@/app/store/reportsStore"
 import NavTab from "@/components/reports/NavTab";
 import ProfileReport from "./ProfileReport"
+import Selectize from "../Selectize"
+import ArrowReturn from "../ArrowReturn"
+import { Options } from "@/interfaces/Common"
 
-export default function ReportClient({report, token, id, user, node, dates}: 
-  {report:Report, token:string, id:string, user:UsrBack, node:Node, dates: DateReport[] }){
+export default function ReportClient({report, token, id, user, node, dates, optReports}: 
+  {report:Report, token:string, id:string, user:UsrBack, node:Node, dates: DateReport[], optReports: Options[] }){
   const [opt, setOpt] = useState<number>(1);
 
   const {updateOneReportStore, oneReport} = useOneReportStore();
@@ -54,6 +57,15 @@ export default function ReportClient({report, token, id, user, node, dates}:
   return(
     <>
       <NavTab setTab={handleOpt} tab={opt} />
+
+      <div className="flex justify-between items-center flex-wrap gap-y-3">
+        <div className="flex items-center my-2">
+          <ArrowReturn link="/reports" />
+          <p className="text-xl ml-4 font-medium">{report.name}</p>
+        </div>
+        <Selectize options={optReports} routePage="reports" subpath="/profile" />
+      </div>
+
       <div>
         {view}
       </div>

@@ -187,8 +187,8 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           termsofpayment:conditionPayment,
           purchaseorder:odc,
           duedate:newDate.toISOString(),
-          accountreceivable: [{
-            previusbalanceamount: estimate.MontoPay,
+          accountreceivables: [{
+            previousbalanceamount: estimate.MontoPay,
             charged: 0,
             unchargedbalanceamount: estimate.MontoPay,
             partialitynumber: 0,

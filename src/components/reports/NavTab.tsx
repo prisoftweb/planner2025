@@ -1,6 +1,5 @@
 'use client'
 
-import Link from "next/link"
 import { useState, useEffect } from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
@@ -39,7 +38,7 @@ export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
 
   let tabProv = <></>;
   if(width < 710){
-    tabProv = <div className="flex justify-between mt-3">
+    tabProv = <div className="flex justify-between mt-3 border-b border-blue-300">
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
                       placement="bottom" className="bg-white text-blue-500" content='Resumen'>
                       <UserCircleIcon data-tooltip-target="tooltip-dark"
@@ -71,26 +70,26 @@ export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
                   </div>                             
   }else{
     tabProv =(
-      <div className="flex mt-5 bg-white py-1">
-        <div className={`w-50 px-5 ${tab===1? 'border-b-4 border-blue-600':''}`}
+      <div className="flex mt-5 py-1 border-b border-blue-300">
+        <div className={`w-50 px-5 cursor-pointer ${tab===1? 'border-b-4 border-blue-600':''}`}
           onClick={() => setTab(1)}
         >
-          <p>Resumen</p>
+          <p className="text-blue-600">Resumen</p>
         </div>
-        <div className={`w-50 px-5 ${tab===2? 'border-b-4 border-blue-600':''}`}
+        <div className={`w-50 px-5 cursor-pointer ${tab===2? 'border-b-4 border-blue-600':''}`}
           onClick={() => setTab(2)}
         >
-          <p>Modificar</p>
+          <p className="text-blue-600">Modificar</p>
         </div>
-        <div className={`w-50 px-5 ${tab===3? 'border-b-4 border-blue-600':''}`}
+        <div className={`w-50 px-5 cursor-pointer ${tab===3? 'border-b-4 border-blue-600':''}`}
           onClick={() => setTab(3)}
         >
-          <p>Formatos</p>
+          <p className="text-blue-600">Formatos</p>
         </div>
-        <div className={`w-50 px-5 ${tab===4? 'border-b-4 border-blue-600':''}`}
+        <div className={`w-50 px-5 cursor-pointer ${tab===4? 'border-b-4 border-blue-600':''}`}
           onClick={() => setTab(4)}
         >
-          <p>Facturas</p>
+          <p className="text-blue-600">Facturas</p>
         </div>
       </div>
     )
