@@ -8,13 +8,12 @@ import { showToastMessageError } from "@/components/Alert"
 
 import { getDashboardProjectsAmount, getDashboardByProjectAndType,
   getDashboardListProjectsByDate, getDashboardProjectTotalCost, getConfigMin, 
-  getProjectsBudgeted, getProjectsControlBudgeted, getProjectsSpent } 
+  getProjectsBudgeted, getProjectsControlBudgeted, getProjectsSpent, getAllPaymentsProjects } 
 from "@/app/api/routeProjects";
 
-import { ProjectsByClient, ProjectsByProgress, 
-  ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
-  CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
-  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted } 
+import { TotalAmountProjects, 
+  CostsByProjectAndType, ListProjectsByDate, 
+  DashboardTotalCost, ConfigMin, ControlBudgeted, ITotalPaymentsProyects } 
 from "@/interfaces/DashboardProjects";
 
 interface OptionsDashboard {
@@ -63,11 +62,13 @@ type Params = {
   projectsBudgeted: ControlBudgeted[], 
   projectsSpent: ControlBudgeted[], 
   projectsControlBudgeted: ControlBudgeted[], 
-  projects:Options[] 
+  projects:Options[],
+  totalPaymentsProjects: ITotalPaymentsProyects[]
 }
 
 export default function DashBoardFinanceContainer({token, amountProjects, listProjects, projectsTotalCost, 
-    projectsandTypes, configMin, projectsBudgeted, projectsControlBudgeted, projectsSpent, projects }: Params) {
+    projectsandTypes, configMin, projectsBudgeted, projectsControlBudgeted, projectsSpent, projects, 
+    totalPaymentsProjects }: Params) {
   
   const [stateListProjects, setStateListProjects] = useState<ListProjectsByDate[]>(listProjects);
   const [totalAmount, setTotalAmount] = useState<TotalAmountProjects[]>(amountProjects);
@@ -77,12 +78,12 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
   const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
   const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
+  const [stateTotalPaymentsProjects, setStateTotalPaymentsProjects] = useState<ITotalPaymentsProyects[]>(totalPaymentsProjects);
 
   const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
     let amountPrjs: TotalAmountProjects[] = [];
     
-    let listPrjsDate: ListProjectsByDate[] = [];
-    
+    let listPrjsDate: ListProjectsByDate[] = [];    
     
     let prjandTypes: CostsByProjectAndType[] = [];
     
@@ -95,6 +96,16 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
     let prjsSpent: ControlBudgeted[] = [];
     
     let prjsControlBudgeted: ControlBudgeted[] = [];
+
+    let allPaymentsProjects: ITotalPaymentsProyects[] = [];
+    try {
+      allPaymentsProjects = await getAllPaymentsProjects(token, dateS, dateE);
+      if(typeof(allPaymentsProjects) === "string"){
+        showToastMessageError(allPaymentsProjects);
+      }
+    } catch (error) {
+      showToastMessageError('Error al obtener pagos de proyectos!!!');
+    }
     
     if(prj.includes('all')){
       try {
@@ -249,10 +260,11 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
     setStateProjectsSpent(prjsSpent);
     setStateProjectsControlBudgeted(prjsControlBudgeted);
     setStateProjectsBudgeted(prjsBudgeted);
+    setStateTotalPaymentsProjects(allPaymentsProjects);
   }
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
-  const colorsBudgeted = ['green', 'red', 'blue'];
+  const colorsBudgeted = ['green', 'blue', 'red', 'violet'];
 
   const dataListProjects: OptionsDashboard[] = [];
   
@@ -275,13 +287,20 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   const resParse = transformProjectsTypesToDataChart(resultArray);
 
   let dataControlBudgeted: DataControlBudgeted[] = [];
-  if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && stateProjectsBudgeted.length >= stateProjectsSpent.length){
-    dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+  if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && 
+    stateProjectsBudgeted.length >= stateProjectsSpent.length && stateProjectsBudgeted.length >= stateTotalPaymentsProjects.length){
+      dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
   }else{
-    if(stateProjectscontrolBudgeted.length >= stateProjectsBudgeted.length && stateProjectscontrolBudgeted.length >= stateProjectsSpent.length){
-      dataControlBudgeted = MoreProjectsCtrBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+    if(stateProjectscontrolBudgeted.length >= stateProjectsBudgeted.length && 
+      stateProjectscontrolBudgeted.length >= stateProjectsSpent.length && stateProjectscontrolBudgeted.length >= stateTotalPaymentsProjects.length){
+        dataControlBudgeted = MoreProjectsCtrBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
     }else{
-      dataControlBudgeted = MoreProjectsSpent(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent);
+      if(stateProjectsSpent.length >= stateProjectsBudgeted.length && 
+        stateProjectsSpent.length >= stateProjectscontrolBudgeted.length && stateProjectsSpent.length >= stateTotalPaymentsProjects.length){
+        dataControlBudgeted = MoreProjectsSpent(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
+      }else{
+        dataControlBudgeted = MoreProjectsPayment(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
+      }      
     }
   }
 
@@ -314,7 +333,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
         <div className="mb-3">
           <p>CONTROL PRESUPUESTAL</p>
         </div>
-        <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado']} colors={colorsBudgeted} data={dataControlBudgeted} />
+        <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado', 'Pagado']} colors={colorsBudgeted} data={dataControlBudgeted} />
       </div>
     </div>
   )
@@ -325,51 +344,84 @@ interface DataControlBudgeted {
   "Monto de obra": number,
   Presupuestado: number,
   Gastado: number
+  Pagado: number
 }
 
-function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
+function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], 
+  prjSpent: ControlBudgeted[], prjPayments: ITotalPaymentsProyects[]){
+
   const res: DataControlBudgeted[] = [];
   prjBugeted.map((prj) => {
     const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
     const prjS = prjSpent.find((pr) => pr.title === prj.title);
+    const prjP = prjPayments.find((pr) => pr.project === prj.title);
 
     res.push({
       label: prj.title,
       "Monto de obra": prjCB?.total || 0,
       Gastado: prjS?.total || 0,
       Presupuestado: prj.total,
+      Pagado: prjP?.fullyCharged || 0,
     });
   });
   return res;
 }
 
-function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
+function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[], 
+  prjPayments: ITotalPaymentsProyects[]){
+  
   const res: DataControlBudgeted[] = [];
   prjControlBudgeted.map((prj) => {
     const prjB = prjBugeted.find((pr) => pr.title === prj.title);
     const prjS = prjSpent.find((pr) => pr.title === prj.title);
+    const prjP = prjPayments.find((pr) => pr.project === prj.title);
 
     res.push({
       label: prj.title,
       "Monto de obra": prj.total,
       Gastado: prjS?.total || 0,
       Presupuestado: prjB?.total || 0,
+      Pagado: prjP?.fullyCharged || 0,
     });
   });
   return res;
 }
 
-function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
+function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], 
+  prjSpent: ControlBudgeted[], prjPayments: ITotalPaymentsProyects[]){
+  
   const res: DataControlBudgeted[] = [];
   prjSpent.map((prj) => {
     const prjB = prjBugeted.find((pr) => pr.title === prj.title);
     const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
+    const prjP = prjPayments.find((pr) => pr.project === prj.title);
 
     res.push({
       label: prj.title,
       "Monto de obra": prjCB?.total || 0,
       Gastado: prj.total,
       Presupuestado: prjB?.total || 0,
+      Pagado: prjP?.fullyCharged || 0,
+    });
+  });
+  return res;
+}
+
+function MoreProjectsPayment(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], 
+  prjSpent: ControlBudgeted[], prjPayments: ITotalPaymentsProyects[]){
+  
+  const res: DataControlBudgeted[] = [];
+  prjPayments.map((prj) => {
+    const prjB = prjBugeted.find((pr) => pr.title === prj.project);
+    const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.project);
+    const prjS = prjSpent.find((pr) => pr.title === prj.project);
+
+    res.push({
+      label: prj.project,
+      "Monto de obra": prjCB?.total || 0,
+      Gastado: prjS?.total || 0,
+      Presupuestado: prjB?.total || 0,
+      Pagado: prj.fullyCharged || 0,
     });
   });
   return res;

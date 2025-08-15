@@ -6,32 +6,51 @@ import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
-import { Chip as ChipMui } from "@mui/material";
-import { IGuaranteeGroupByClient } from "@/interfaces/Guarantee";
-// import NewDonutChartComponent from "../projects/dashboard/NewDonutChartComponent";
 import NewDonutChartComponent from "@/components/projects/dashboard/NewDonutChartComponent";
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "@/components/Label";
-import { ITotalInvoiceByClient, ITotalInvoicesByProject } from "@/interfaces/Invoices";
+import { ITotalInvoiceByClient, ITotalInvoicesByProjectDashboardCollection, 
+  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen } from "@/interfaces/Invoices";
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent";
+import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
+  getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
+  getTotalAccountReceivablesByProjectResumen } from "@/app/api/routeInvoices";
+import { showToastMessageError } from "@/components/Alert";
+import { BsCash } from "react-icons/bs";
+import { IAmountTotalGuaranteesByDateAndStatus } from "@/interfaces/Guarantee";
+import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 
 interface OptionsDashboard {
   label: string,
   cobro: number
 }
 
-export default function DashboardCollectionsContainer({token, user, totalClients, totalProjects}: 
-  {token:string, user:string, totalProjects: ITotalInvoicesByProject[], totalClients: ITotalInvoiceByClient[]}) {
+type DataPendingProject = {
+  label: string,
+  "POR COBRAR": number,
+  "POR ESTIMAR": number,
+}
 
-  // const [guaranteesByClient, setGuaranteesByClient]=useState<IGuaranteeGroupByClient[]>([]);
-  
+export default function DashboardCollectionsContainer({token, user, totalClients, totalProjects, totalPay, 
+  totalPen, resC, toalPrjRes}: 
+  {token:string, user:string, totalProjects: ITotalInvoicesByProjectDashboardCollection[], 
+    totalClients: ITotalInvoiceByClient[], totalPay: ITotalPaymentByDateAndStatus[], 
+    totalPen: ITotalPendingByDateAndStatus[], resC: IAmountTotalGuaranteesByDateAndStatus, 
+    toalPrjRes: ITotalAccountReceivablesByProjectResumen[]}) {
+
+  const [totalCollectionsProjects, setTotalCollectionsProjects]=useState<ITotalInvoicesByProjectDashboardCollection[]>(totalProjects);
+  const [totalCollectionsClients, setTotalCollectionsClients]=useState<ITotalInvoiceByClient[]>(totalClients);
+  const [totalPaymentByDate, setTotalPaymentByDate]=useState<ITotalPaymentByDateAndStatus[]>(totalPay);
+  const [totalPending, setTotalPending]=useState<ITotalPendingByDateAndStatus[]>(totalPen);
   const [widthPage, setWidthPage] = useState<number>(900);
+  const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>(resC);
+  const [totalAccountByPrjRes, setTotalAccountByPrjRes]=useState<ITotalAccountReceivablesByProjectResumen[]>(toalPrjRes);
 
   // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
   //   from: new Date('2024-01-01'),
   //   to: new Date('2025-04-30'),
   // });
-
+  
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
@@ -64,6 +83,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const handleDate = (dateI: Date, dateF: Date) => {
     //actualizar total con el rango de fechas
     // updateTotal(getDate(dateI), getDate(dateF), statuses);
+    updateDashboard(getDate(dateI), getDate(dateF));
   }
 
   // const addStatus = (status:string) => {
@@ -90,58 +110,48 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   //   updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   // }
 
-  // const updateTotal = async (dateI:string, dateF:string, arrStatuses:string[]) => {
+  const updateDashboard = async (dateI:string, dateF:string) => {
 
-  //   const res = await getGuaranteesResumeByProjectMin(token, dateI, dateF, arrStatuses);
-  //   if(typeof(res)==='string'){
-  //     showToastMessageError(res);
-  //   }else{
-  //     setGuarantees(res);
-  //     setFilteredGuarantees(res);
-  //   }
+    let totalPrjs: ITotalInvoicesByProjectDashboardCollection[] =  await getTotalAccountReceivablesByProject(token, dateI, dateF);
+    let totalClis: ITotalInvoiceByClient[] = await getTotalAccountReceivablesByClient(token, dateI, dateF);
+    let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
+    let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
+    const resCob = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
 
-  //   const resTotal = await getGuaranteesGroupByStatus(token, dateI, dateF, arrStatuses);
-  //   if(typeof(resTotal)==='string'){
-  //     showToastMessageError(resTotal);
-  //   }else{
-  //     setAmountTotalByStatuses(resTotal);
-  //   }
+    const [totprj, totcli, totPay, totPen, resCobrar] = await Promise.all([
+      totalPrjs, totalClis, totalPay, totalPen, resCob
+    ]);
 
-  //   const resCobrar = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
-  //   if(typeof(resCobrar)==='string'){
-  //     showToastMessageError(resCobrar);
-  //   }else{
-  //     setPorCobrar(resCobrar[0]);
-  //   }
+    if(typeof(totprj)==='string'){
+      showToastMessageError(totprj);
+    }else{
+      setTotalCollectionsProjects(totprj);
+    }
+  
+    if(typeof(totcli)==='string'){
+      showToastMessageError(totcli);
+    }else{
+      setTotalCollectionsClients(totcli);
+    }
 
-  //   const resRecuperado = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'RECUPERADO');
-  //   if(typeof(resRecuperado)==='string'){
-  //     showToastMessageError(resRecuperado);
-  //   }else{
-  //     setRecuperar(resRecuperado[0]);
-  //   }
+    if(typeof(totPay)==='string'){
+      showToastMessageError(totPay);
+    }else{
+      setTotalPaymentByDate(totPay);
+    }
 
-  //   const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, dateI, dateF, arrStatuses);
-  //   if(typeof(guaranteesClient)==='string'){
-  //     showToastMessageError(guaranteesClient);
-  //   }else{
-  //     setGuaranteesByClient(guaranteesClient);
-  //   }
+    if(typeof(totPen)==='string'){
+      showToastMessageError(totPen);
+    }else{
+      setTotalPending(totPen);
+    }
 
-  //   const guaranteesYear = await getGuaranteesGroupByYear(token, dateI, dateF, arrStatuses);
-  //   if(typeof(guaranteesYear)==='string'){
-  //     showToastMessageError(guaranteesYear);
-  //   }else{
-  //     setGuaranteeByYear(guaranteesYear);
-  //   }
-
-  //   const guaranteebyStatus = await getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, dateI, dateF, arrStatuses);
-  //   if(typeof(guaranteebyStatus)==='string'){
-  //     showToastMessageError(guaranteebyStatus);
-  //   }else{
-  //     setGuaranteeByStatus(guaranteebyStatus);
-  //   }
-  // }
+    if(typeof(resCobrar)==='string'){
+      showToastMessageError(resCobrar);
+    }else{
+      setPorCobrar(resCobrar[0]);
+    }
+  }
 
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
                 {/* <ChipStatus id="6827d56d936cac5913f94ad5" addStatus={addStatus} removeStatus={deleteStatus} title="Vencidos" />
@@ -170,9 +180,9 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const titles:string[]=[];
   const values: number[] = [];
 
-  totalClients.map((prj) => {
+  totalCollectionsClients.map((prj) => {
     titles.push(prj.client);
-    values.push(prj.totalBilled);
+    values.push(prj.fullyCharged);
   });
 
   const totalInvoiceClient: DonutChartJS = {
@@ -196,55 +206,39 @@ export default function DashboardCollectionsContainer({token, user, totalClients
 
   const dataCollectionProjects: OptionsDashboard[] = [];
   
-  totalProjects.map((prj) => {
+  totalCollectionsProjects.map((prj) => {
     dataCollectionProjects.push({
-      cobro: prj.totalBilled,
+      cobro: prj.fullyCharged,
       label: prj.project
+    });
+  });
+
+  const dataPendingProyect: DataPendingProject[] = [];
+  totalAccountByPrjRes.map((prj) => {
+    // const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
+    // const prjS = prjSpent.find((pr) => pr.title === prj.title);
+    // const prjP = prjPayments.find((pr) => pr.project === prj.title);
+
+    dataPendingProyect.push({
+      label: prj.project,
+      "POR COBRAR": prj.pendingPayment || 0,
+      "POR ESTIMAR": 0
     });
   });
 
   return (
     <>
-      {/* <div className="grid grid-cols-4 gap-x-3">
-        <Card amount={guaranteeByStatus?.guarantee?.subtotal || 0} title="FONDO DE GARANTIA" />
-        <div className="p-3 gap-x-3 col-span-3 grid grid-cols-5 bg-white shadow-md shadow-slate-300 rounded-md">
-          <div>
-            <p className="text-slate-600">Recuperado</p>
-            <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
-              value: recuperar?.total || 0
-            })}</p>
-          </div>
-          <div>
-            <p className="text-slate-600">Por cobrar</p>
-            <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
-              value: porCobrar?.total || 0
-            })}</p>
-          </div>
-          <div>
-            <p className="text-slate-600">Vencido</p>
-            <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
-              value: vencido?.total || 0
-            })}</p>
-          </div>
-          <div>
-            <p className="text-slate-600">Retenido</p>
-            <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
-              value: retenido?.total || 0
-            })}</p>
-          </div>
-          <div>
-            <p className="text-slate-600">Programado</p>
-            <p className="text-xl font-bold">{CurrencyFormatter({
-              currency: 'MXN',
-              value: programado?.total || 0
-            })}</p>
-          </div>
-        </div>
-      </div> */}
+      <div className="grid grid-cols-3 gap-x-3">
+        <Card amount={ totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0 } title="TOTAL PAGADO">
+          <BsCash className="w-6 h-6 text-slate-600" />
+        </Card>
+        <Card amount={ totalPending.length > 0? totalPending[0].total: 0 } title="POR COBRAR">
+          <BsCash className="w-6 h-6 text-slate-600" />
+        </Card>
+        <Card amount={ porCobrar?.total || 0 } title="FONDO DE GARANTIA POR COBRAR">
+          <BsCash className="w-6 h-6 text-slate-600" />
+        </Card>
+      </div> 
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
@@ -254,8 +248,9 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           </Link>
           <p className="text-xl ml-4 font-medium">COBRANZA </p>
         </div>
+        {filterElemnts}
       </div>
-      {widthPage > 1080 && filterElemnts}
+      {/* {widthPage > 1080 && filterElemnts} */}
       <div className="mt-5 grid grid-cols-2 gap-x-5">
         <div>
           <Label>COBRANZA POR PROYECTO</Label>
@@ -273,15 +268,25 @@ export default function DashboardCollectionsContainer({token, user, totalClients
             <NewDonutChartComponent data={totalInvoiceClient} />
           </div>
         </div>
+        <div>
+          <Label>SALDOS PENDIENTES POR PROYECTO</Label>
+          <div className="mt-3">
+            <BarChartComponent 
+              colors={['red', 'blue']}
+              categories={['POR COBRAR', 'POR ESTIMAR']}
+              data={dataPendingProyect}
+            />
+          </div>
+        </div>
       </div>
     </>
   )
 }
 
-export const Card = ({amount, title}: {title:string, amount:number}) => {
+export const Card = ({amount, title, children}: {title:string, amount:number, children:JSX.Element}) => {
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
-      {/* {children} */}
+      {children}
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
@@ -291,4 +296,16 @@ export const Card = ({amount, title}: {title:string, amount:number}) => {
       </div>
     </div>
   )
+}
+
+function getDate(date: Date){
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+
+  if(month < 10){
+    return `${year}-0${month}-${day}`;
+  }else{
+    return `${year}-${month}-${day}`;
+  }
 }

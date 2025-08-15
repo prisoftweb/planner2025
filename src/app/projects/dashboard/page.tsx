@@ -35,9 +35,6 @@ export default async function Page() {
   let projectsTop10: ProjectsTop10[] = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
   let projectsTotalCost: DashboardTotalCost[] = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
   let configMin: ConfigMin[] = await getConfigMin(token);
-  // let projectsBudgeted: ControlBudgeted[] = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []);
-  // let projectsSpent: ControlBudgeted[] = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
-  // let projectsControlBudgeted: ControlBudgeted[] = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
   let projects: Options[] = await getProjectsLV(token);
   const numEvaluacion = await getLenghtProjectsEvaluacion(token);
     

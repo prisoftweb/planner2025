@@ -5,8 +5,6 @@ import { ICodeMin } from "@/interfaces/Code"
 import { getCodesMin } from "../api/routeCode";
 import ContainerCodes from "@/components/codes/ContainerCodes";
 import Header from "@/components/HeaderPage";
-// import { TbArrowNarrowLeft } from "react-icons/tb";
-// import Image from "next/image";
 
 export default async function Page() {
 

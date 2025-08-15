@@ -10,19 +10,16 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let catalogs: Catalog[];
-  try {
-    catalogs = await getCatalogs(token);
-    if(typeof(catalogs)=== 'string'){
-      return (
-        <>
-          <Navigation user={user} />
+  let catalogs: Catalog[] = await getCatalogs(token);
+  if(typeof(catalogs)=== 'string'){
+    return (
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500 text-lg">{catalogs}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500 text-lg">Ocurrio un error al consultar catalogos!!</h1>
+        </div>
+      </>
+    )
   } 
 
   return(

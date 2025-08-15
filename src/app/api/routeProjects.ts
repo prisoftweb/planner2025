@@ -842,6 +842,32 @@ export async function getProjectsSpent(auth_token:string, dateStart: string, dat
   }
 }
 
+export async function getAllPaymentsProjects(auth_token:string, dateStart: string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPaymentsByProjectMIN/CANCELADA/${dateStart}/${dateEnd}`;
+  // let prj:string = '';
+  // projects.map(p => {
+  //   prj+= ','+p;
+  // });
+  // const data = {
+  //   project: prj.substring(1)
+  // }
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar total de pagos de los proyectos!!';
+  }
+}
+
 export async function getProjectsControlBudgeted(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsByBudgetControl/${dateStart}/${dateEnd}`;
   //console.log('url control prsu =>', url);

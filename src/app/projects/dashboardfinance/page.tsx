@@ -5,18 +5,14 @@ import DashBoardFinanceContainer from "@/components/projects/dashboard/Dashboard
 import { Options } from "@/interfaces/Common";
 
 import { getDashboardProjectsAmount, 
-  getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
-  getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT, 
-  getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
-  getDashboardListProjectsByDate, getDashboardListProjectsTop10, 
+  getDashboardByProjectAndType, getDashboardListProjectsByDate, 
   getDashboardProjectTotalCost, getConfigMin, getProjectsBudgeted, 
-  getProjectsControlBudgeted, getProjectsSpent, getProjectsLV } 
+  getProjectsControlBudgeted, getProjectsSpent, getProjectsLV, getAllPaymentsProjects } 
 from "@/app/api/routeProjects";
 
-import { ProjectsByClient, ProjectsByProgress, 
-  ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
-  CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
-  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted } 
+import { TotalAmountProjects, 
+  CostsByProjectAndType, ListProjectsByDate, 
+  DashboardTotalCost, ConfigMin, ControlBudgeted, ITotalPaymentsProyects } 
 from "@/interfaces/DashboardProjects";
 
 export default async function Page() {
@@ -27,19 +23,25 @@ export default async function Page() {
   
   let amountProjects: TotalAmountProjects[] =  await getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []);
   let listProjectsdate: ListProjectsByDate[] = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []);
-  // let projectsClient: ProjectsByClient[] = await getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30', []);
-  // let projectsSegment: ProjectsBySegment[] = await getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30', []);
-  // let projectsStatus: ProjectsByStatus[] = await getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30', []);
-  // let projectsProgress: ProjectsByProgress[] = await getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30', []);
-  // let listProjectsnotCompleted: ProjectsNotCompleted[] = await getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30', []);
   let projectsandTypes: CostsByProjectAndType[] = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []);
-  // let projectsTop10: ProjectsTop10[] = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
   let projectsTotalCost: DashboardTotalCost[] = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
   let configMin: ConfigMin[] = await getConfigMin(token);
   let projectsBudgeted: ControlBudgeted[] = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []);
   let projectsSpent: ControlBudgeted[] = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
   let projectsControlBudgeted: ControlBudgeted[] = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
   let projects: Options[] = await getProjectsLV(token);
+
+  let allPaymentsProjects: ITotalPaymentsProyects[] = await getAllPaymentsProjects(token, '2024-01-01', '2024-10-30');
+  if(typeof(allPaymentsProjects) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{allPaymentsProjects}</h1>
+        </div>
+      </>
+    )
+  }
     
   if(typeof(amountProjects)==='string'){
     return(
@@ -51,94 +53,6 @@ export default async function Page() {
       </>
     )
   }
-  
-  // if(typeof(listProjectsdate)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{listProjectsdate} list</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(projectsClient)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsClient} cleint</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-
-  // if(typeof(projectsSegment)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsSegment} segment</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(projectsStatus)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsStatus} status</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(projectsProgress)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsProgress} progress</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(listProjectsnotCompleted)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{listProjectsnotCompleted} list not completed</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(projectsandTypes)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsandTypes} list</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(projectsTop10)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsTop10} list</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
   
   if(typeof(projectsTotalCost)==='string'){
     return(
@@ -212,7 +126,7 @@ export default async function Page() {
       <DashBoardFinanceContainer token={token} amountProjects={amountProjects} listProjects={listProjectsdate} 
         projectsandTypes={projectsandTypes} projectsTotalCost={projectsTotalCost} configMin={configMin} 
         projectsBudgeted={projectsBudgeted} projectsControlBudgeted={projectsControlBudgeted} 
-        projectsSpent={projectsSpent} 
+        projectsSpent={projectsSpent} totalPaymentsProjects={allPaymentsProjects}
         projects={[{
           label: 'Todos',
           value: 'all'

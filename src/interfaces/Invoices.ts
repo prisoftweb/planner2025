@@ -506,18 +506,35 @@ export interface IInvoiceByDateAndConditionMin {
 }
 
 
-export interface ITotalInvoicesByProject {
+export interface ITotalInvoicesByProjectDashboardCollection {
   project: string
   quantity: number
-  totalBilled: number
-  subtotalBilled: number
-  ivaBilled: number
+  // totalBilled: number
+  // subtotalBilled: number
+  // ivaBilled: number
+  fullyCharged: number
 }
 
 export interface ITotalInvoiceByClient {
   client: string
   quantity: number
-  totalBilled: number
-  subtotalBilled: number
-  ivaBilled: number
+  fullyCharged: number
 }
+
+export interface ITotalPaymentByDateAndStatus {
+  quantity: number
+  total: number
+}
+
+export interface ITotalPendingByDateAndStatus {
+  quantity: number
+  total: number
+}
+
+export interface ITotalAccountReceivablesByProjectResumen {
+  project: string
+  quantity: number
+  type: string
+  pendingPayment: number
+}
+

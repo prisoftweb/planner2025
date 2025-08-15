@@ -260,3 +260,11 @@ export interface IContractualControlProject {
     porcentageCashAdvance: number
   }
 }
+
+export interface ITotalPaymentsProyects {
+  project: string
+  quantity: number
+  fullyCharged: number
+  amountotal: number
+  porcentage: number
+}

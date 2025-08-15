@@ -81,7 +81,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         <div className="text-right">
           <p className="text-slate-500 font-extrabold">FACTURA</p>
           <p className="text-blue-500 font-bold">Factura No: {invoice.folio}</p>
-          <p className="text-sm">{invoice.date.substring(8, 10)} de {months[new Date(invoice.date).getMonth()]} {invoice?.date?.substring(0, 4)}</p>
+          <p className="text-sm">{invoice?.date?.substring(8, 10)} de {months[new Date(invoice.date).getMonth()]} {invoice?.date?.substring(0, 4)}</p>
           <p className="text-sm">{invoice.useCFDI}</p>
           <p className="text-sm">{invoice.paymentMethod}</p>
           <p className="text-sm">{invoice.paymentWay}</p>
@@ -179,15 +179,15 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
                     <div className="flex justify-between items-center">
                       <h6
                         className="block font-sans antialiased font-semibold leading-relaxed tracking-normal text-green-600">
-                        {c.accountReceivable.date.substring(0, 10)}
+                        {c.accountReceivable?.date?.substring(0, 10)}
                       </h6>
                       <p className="text-slate-500 text-sm">{CurrencyFormatter({
                         currency: 'MXN',
-                        value: c.accountReceivable.amount
+                        value: c?.accountReceivable?.amount || 0
                       })}</p>
                     </div>
                     <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                      {c.accountReceivable.concept}
+                      {c?.accountReceivable?.concept}
                     </p>
                   </div>
                 </div>
@@ -269,11 +269,11 @@ function TrasnformFromCollectionDataToTableData(collections: ICollectiosByInvoic
 
   collections.map((c) => {
     data.push({
-      amount: c.accountReceivable.amount,
+      amount: c?.accountReceivable?.amount || 0,
       charged: c.charged,
-      concept: c.accountReceivable.concept,
+      concept: c?.accountReceivable?.concept || '',
       id: c._id,
-      reference: c.accountReceivable.reference
+      reference: c?.accountReceivable?.reference || ''
     });
   });
 
