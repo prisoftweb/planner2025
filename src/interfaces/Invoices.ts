@@ -538,3 +538,16 @@ export interface ITotalAccountReceivablesByProjectResumen {
   pendingPayment: number
 }
 
+export interface ITotalAccountReceivablesByClientResumen {
+  client: string
+  quantity: number
+  type: string
+  pendingPayment: number
+}
+
+export interface ITotalEstimatesPendingByProject {
+  project: string
+  quantity: number
+  type: string
+  pendingEstimated: number
+}

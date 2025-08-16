@@ -10,15 +10,49 @@ import NewDonutChartComponent from "@/components/projects/dashboard/NewDonutChar
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "@/components/Label";
 import { ITotalInvoiceByClient, ITotalInvoicesByProjectDashboardCollection, 
-  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen } from "@/interfaces/Invoices";
+  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
+  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject } from "@/interfaces/Invoices";
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
-  getTotalAccountReceivablesByProjectResumen } from "@/app/api/routeInvoices";
+  getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
+  getTotalEstimatesPendingByProject } from "@/app/api/routeInvoices";
 import { showToastMessageError } from "@/components/Alert";
 import { BsCash } from "react-icons/bs";
 import { IAmountTotalGuaranteesByDateAndStatus } from "@/interfaces/Guarantee";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
+import { BarChartTwoInOneCollections } from "./BarChartTwoInOneCollections";
+
+export interface DataProjectsByType {
+  client: string
+  issues: Issue[]
+}
+
+export interface Issue {
+  status: any
+  value: number
+  percentage: number
+}
+
+function transformProjectsTypesToDataChart(dataCollections: ITotalAccountReceivablesByClientResumen[][]){
+  const res: DataProjectsByType[] = [];
+  dataCollections.map((arrData) => {
+    const r: Issue[] = [];
+    arrData.map((prj) => {
+      r.push({
+        percentage: 0,
+        status: prj.type,
+        value: prj.pendingPayment
+      });
+    });
+    res.push({
+      client: arrData[0].client,
+      issues: r,
+    });
+  });
+
+  return res;
+}
 
 interface OptionsDashboard {
   label: string,
@@ -27,16 +61,17 @@ interface OptionsDashboard {
 
 type DataPendingProject = {
   label: string,
-  "POR COBRAR": number,
-  "POR ESTIMAR": number,
+  "FACTURADO POR COBRAR": number,
+  "FACTURADO POR ESTIMAR": number,
 }
 
 export default function DashboardCollectionsContainer({token, user, totalClients, totalProjects, totalPay, 
-  totalPen, resC, toalPrjRes}: 
+  totalPen, resC, toalPrjRes, toalCliRes, totalEstimatesPen}: 
   {token:string, user:string, totalProjects: ITotalInvoicesByProjectDashboardCollection[], 
     totalClients: ITotalInvoiceByClient[], totalPay: ITotalPaymentByDateAndStatus[], 
     totalPen: ITotalPendingByDateAndStatus[], resC: IAmountTotalGuaranteesByDateAndStatus, 
-    toalPrjRes: ITotalAccountReceivablesByProjectResumen[]}) {
+    toalPrjRes: ITotalAccountReceivablesByProjectResumen[], toalCliRes: ITotalAccountReceivablesByClientResumen[], 
+    totalEstimatesPen: ITotalEstimatesPendingByProject[]}) {
 
   const [totalCollectionsProjects, setTotalCollectionsProjects]=useState<ITotalInvoicesByProjectDashboardCollection[]>(totalProjects);
   const [totalCollectionsClients, setTotalCollectionsClients]=useState<ITotalInvoiceByClient[]>(totalClients);
@@ -45,6 +80,8 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const [widthPage, setWidthPage] = useState<number>(900);
   const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>(resC);
   const [totalAccountByPrjRes, setTotalAccountByPrjRes]=useState<ITotalAccountReceivablesByProjectResumen[]>(toalPrjRes);
+  const [totalAccountByCliRes, setTotalAccountByCliRes]=useState<ITotalAccountReceivablesByClientResumen[]>(toalCliRes);
+  const [totalEstimatesPending, setTotalEstimatesPending] = useState<ITotalEstimatesPendingByProject[]>(totalEstimatesPen);
 
   // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
   //   from: new Date('2024-01-01'),
@@ -117,9 +154,11 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
     let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
     const resCob = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
+    const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
+    const resEstPen: ITotalEstimatesPendingByProject[] = await getTotalEstimatesPendingByProject(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
 
-    const [totprj, totcli, totPay, totPen, resCobrar] = await Promise.all([
-      totalPrjs, totalClis, totalPay, totalPen, resCob
+    const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen] = await Promise.all([
+      totalPrjs, totalClis, totalPay, totalPen, resCob, resTotCli, resEstPen
     ]);
 
     if(typeof(totprj)==='string'){
@@ -150,6 +189,18 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       showToastMessageError(resCobrar);
     }else{
       setPorCobrar(resCobrar[0]);
+    }
+
+    if(typeof(totalCliRes)==='string'){
+      showToastMessageError(totalCliRes);
+    }else{
+      setTotalAccountByCliRes(totalCliRes);
+    }
+
+    if(typeof(totEstPen)==='string'){
+      showToastMessageError(totEstPen);
+    }else{
+      setTotalEstimatesPending(totEstPen);
     }
   }
 
@@ -214,17 +265,38 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   });
 
   const dataPendingProyect: DataPendingProject[] = [];
+  // console.log('totalAccountByPrjRes => ', totalAccountByPrjRes);
   totalAccountByPrjRes.map((prj) => {
     // const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
     // const prjS = prjSpent.find((pr) => pr.title === prj.title);
     // const prjP = prjPayments.find((pr) => pr.project === prj.title);
-
+    const prjEst = totalEstimatesPending.find((pr) => pr.project === prj.project);
+    
+    // console.log('pjr pending => ', prj.pendingPayment);
     dataPendingProyect.push({
       label: prj.project,
-      "POR COBRAR": prj.pendingPayment || 0,
-      "POR ESTIMAR": 0
-    });
+      "FACTURADO POR COBRAR": prj.pendingPayment || 0,
+      "FACTURADO POR ESTIMAR": prjEst ? prjEst.pendingEstimated : 0
+    });    
   });
+  // console.log('dataPendingProyect => ', dataPendingProyect);
+
+  const groupedByClient = toalCliRes.reduce((acc: any, prj) => {
+        const client = prj.client;
+        (acc[client] = acc[client] || []).push(prj);
+        return acc;
+    }, {});
+
+  console.log('total cli => ', toalCliRes);
+  console.log('Grouped by client:', groupedByClient);
+  
+  const resultArray: ITotalAccountReceivablesByClientResumen[][] = Object.values(groupedByClient);
+
+  console.log('Result array:', resultArray);
+
+  const resParse = transformProjectsTypesToDataChart(resultArray);
+
+  console.log('resParse => ', resParse);
 
   return (
     <>
@@ -253,6 +325,24 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       {/* {widthPage > 1080 && filterElemnts} */}
       <div className="mt-5 grid grid-cols-2 gap-x-5">
         <div>
+          <Label>SALDOS PENDIENTES POR PROYECTO</Label>
+          <div className="mt-3">
+            <BarChartComponent 
+              colors={['red', 'blue']}
+              categories={['FACTURADO POR COBRAR', 'FACTURADO POR ESTIMAR']}
+              data={dataPendingProyect}
+            />
+          </div>
+        </div>
+        <div>
+          <Label>SALDOS PENDIENTES POR CLIENTE</Label>
+          <div className="mt-3">
+            <BarChartTwoInOneCollections 
+              data={resParse}
+            />
+          </div>
+        </div>
+        <div>
           <Label>COBRANZA POR PROYECTO</Label>
           <div className="mt-3">
             <BarChartComponent 
@@ -266,16 +356,6 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           <Label>COBRANZA X CLIENTE</Label>
           <div className="mt-3">
             <NewDonutChartComponent data={totalInvoiceClient} />
-          </div>
-        </div>
-        <div>
-          <Label>SALDOS PENDIENTES POR PROYECTO</Label>
-          <div className="mt-3">
-            <BarChartComponent 
-              colors={['red', 'blue']}
-              categories={['POR COBRAR', 'POR ESTIMAR']}
-              data={dataPendingProyect}
-            />
           </div>
         </div>
       </div>

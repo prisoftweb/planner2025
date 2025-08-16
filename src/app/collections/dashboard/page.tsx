@@ -3,9 +3,11 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
-  getTotalAccountReceivablesByProjectResumen } from "@/app/api/routeInvoices";
+  getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
+  getTotalEstimatesPendingByProject } from "@/app/api/routeInvoices";
 import { ITotalInvoicesByProjectDashboardCollection, ITotalInvoiceByClient, 
-  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen } from "@/interfaces/Invoices";
+  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
+  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject  } from "@/interfaces/Invoices";
 import DashboardCollectionsContainer from "@/components/collections/dashboard/DashboardCollectionsContainer";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 
@@ -15,15 +17,17 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let totalPrjs: ITotalInvoicesByProjectDashboardCollection[] =  await getTotalAccountReceivablesByProject(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-  let totalClis: ITotalInvoiceByClient[] = await getTotalAccountReceivablesByClient(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-  let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-  let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-  let resCob = await getTotalGuaranteesByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString(), 'POR COBRAR');
-  const resTotPrj: ITotalAccountReceivablesByProjectResumen[] = await getTotalAccountReceivablesByProjectResumen(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
+  let totalPrjs: ITotalInvoicesByProjectDashboardCollection[] =  await getTotalAccountReceivablesByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  let totalClis: ITotalInvoiceByClient[] = await getTotalAccountReceivablesByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  let resCob = await getTotalGuaranteesByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), 'POR COBRAR');
+  const resTotPrj: ITotalAccountReceivablesByProjectResumen[] = await getTotalAccountReceivablesByProjectResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  const resEstPen: ITotalEstimatesPendingByProject[] = await getTotalEstimatesPendingByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
 
-  const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes] = await Promise.all([
-    totalPrjs, totalClis, totalPay, totalPen, resCob, resTotPrj
+  const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, totalEstiatesPen] = await Promise.all([
+    totalPrjs, totalClis, totalPay, totalPen, resCob, resTotPrj, resTotCli, resEstPen
   ]);
     
   if(typeof(totalProjects)==='string'){
@@ -92,6 +96,28 @@ export default async function Page() {
     )
   }
 
+  if(typeof(totalCliRes)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{totalCliRes} </h1>
+        </div>
+      </>
+    )
+  }
+
+  if(typeof(totalEstiatesPen)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{totalEstiatesPen} </h1>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <Navigation user={user} />
@@ -100,8 +126,21 @@ export default async function Page() {
           token={token} toalPrjRes={totalPrjRes}
           user={user._id} resC={resCobrar[0]} 
           totalProjects={totalProjects} totalPen={totalPending}
-          totalClients={totalClients} totalPay={totalPaymentByDate} />
+          totalClients={totalClients} totalPay={totalPaymentByDate}
+          toalCliRes={totalCliRes} totalEstimatesPen={totalEstiatesPen} />
       </div>      
     </>
   )
+}
+
+function getDate(date: Date){
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+
+  if(month < 10){
+    return `${year}-0${month}-${day}`;
+  }else{
+    return `${year}-${month}-${day}`;
+  }
 }
