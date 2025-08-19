@@ -46,10 +46,14 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
   }
 
   useEffect(() => {
-    const projectM = quotations.reduce((previous, current) => {
-      return current.cost.total > previous.cost.total ? current : previous;
-    });
-    setMaxAmount(projectM.cost.total);
+    if(quotations.length > 0){
+      const projectM = quotations.reduce((previous, current) => {
+        return current.cost.total > previous.cost.total ? current : previous;
+      });
+      setMaxAmount(projectM.cost.total);
+    }else{
+      setMaxAmount(0);
+    }
 
     const fetchData = async () => {
       const res = await getClientsLV(token);

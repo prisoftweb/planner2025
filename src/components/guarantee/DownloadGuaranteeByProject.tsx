@@ -20,8 +20,12 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
   // }, []);
 
   let total = 0;
+  let totalVat = 0;
   guarantees.map((g) => {
     total += g.cost.subtotal || 0;
+  });
+  guarantees.map((g) => {
+    totalVat += g.cost.total || 0;
   });
 
   //Falta el pendiente de pago
@@ -95,7 +99,14 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
                 <Text style={{fontSize:'10px', color:'gray'}}>Pendiente de pago:</Text>
                 <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
                   currency: 'MXN',
-                  value: total
+                  value: totalVat
+                })}</Text>
+              </View>
+              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
+                <Text style={{fontSize:'10px', color:'gray'}}>Fondo de garantia total:</Text>
+                <Text style={{fontSize:'10px', color:'red'}}>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: totalVat
                 })}</Text>
               </View>
             </View>

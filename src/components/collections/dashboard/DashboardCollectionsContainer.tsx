@@ -354,7 +354,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         </div>
         <div>
           <Label>COBRANZA X CLIENTE</Label>
-          <div className="mt-3">
+          <div className="mt-3 w-full max-w-96">
             <NewDonutChartComponent data={totalInvoiceClient} />
           </div>
         </div>

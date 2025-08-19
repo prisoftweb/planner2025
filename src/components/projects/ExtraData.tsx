@@ -85,11 +85,13 @@ export default function ExtraData({token, optClients, optCategories,
             category,
             glossary: type,
             client,
-            hasguaranteefund: guarantee
+            hasguaranteefund: guarantee,
+            amountotal: Number((Number(amount.toString().replace(/[$,]/g, "")) * 1.16).toFixed(2))
           }
         }else{
           data= {
             amount: amount.toString().replace(/[$,]/g, ""),
+            amountotal: amount.toString().replace(/[$,]/g, ""),
             date: startDate,
             category,
             glossary: type,

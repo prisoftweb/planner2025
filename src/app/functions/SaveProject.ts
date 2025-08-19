@@ -325,10 +325,12 @@ export function ParseProjectToOneProjectMin(value: Project){
   try {
     const p = value.progress?.length > 0? value.progress[value.progress.length -1].progress: 0 || 0;
     // console.log('p => ', p);
+    console.log('value proyect update => ', value);
     const projMin: OneProjectMin = {
       _id: value._id,
       account: value.account,
       amount: value.amount,
+      amountotal: value.amountotal?? 0,
       category: value.condition[value.condition.length-1].glossary,
       client: value.client,
       code: value.code,

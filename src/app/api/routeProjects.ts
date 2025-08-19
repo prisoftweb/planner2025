@@ -843,7 +843,8 @@ export async function getProjectsSpent(auth_token:string, dateStart: string, dat
 }
 
 export async function getAllPaymentsProjects(auth_token:string, dateStart: string, dateEnd:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPaymentsByProjectMIN/CANCELADA/${dateStart}/${dateEnd}`;
+  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPaymentsByProjectMINRESUME/CANCELADA/${dateStart}/${dateEnd}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPAYSMENTSByProjectMINRESUME/CANCELADA/${dateStart}/${dateEnd}`;
   // let prj:string = '';
   // projects.map(p => {
   //   prj+= ','+p;

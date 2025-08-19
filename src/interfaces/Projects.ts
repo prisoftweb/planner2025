@@ -49,6 +49,7 @@ export interface Project {
   date: string
   counter: number
   amount: number
+  amountotal?: number
   photo: string
   haslocation: boolean
   hasguaranteefund: boolean

@@ -233,7 +233,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
     <>
       <div className="flex justify-end p-3">
         <PDFDownloadLink document={<DownloadInvoicesByProjectPDF invoices={invoices} project={project}
-                                      resumenInvoice={resumenInvoice} token={token} />} fileName={'Estado de cuenta - ' + project.title} >
+                                      resumenInvoice={resumenInvoice} token={token} />} fileName={'Cobranza - ' + project.title} >
           {({loading, url, error, blob}) => 
             loading? (
               <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 

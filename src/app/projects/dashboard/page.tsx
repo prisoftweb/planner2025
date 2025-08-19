@@ -43,7 +43,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{amountProjects} amount</h1>
+          <h1>{amountProjects} amountprojects</h1>
         </div>
       </>
     )

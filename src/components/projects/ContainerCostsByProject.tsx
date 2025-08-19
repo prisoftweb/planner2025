@@ -229,7 +229,7 @@ export default function ContainerCostsByProject({project, token, user, costs}: P
     <>
       <div className="flex justify-end">
         <PDFDownloadLink document={<DownloadCostsProjectPDF costs={costs} project={project} />} 
-            fileName={`InformeCostos${project.title}`} >
+            fileName={`Costos detalles-${project.title}`} >
           {({loading, url, error, blob}) => 
             loading? (
               <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
