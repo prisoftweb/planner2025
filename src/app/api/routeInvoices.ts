@@ -286,14 +286,14 @@ export async function getTotalAccountReceivablesByProject(auth_token:string, dat
   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTotalAccountReceivablesByProjectMIN/PAGADA/CANCELADA`;
   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALAccountReceivablesByProjectMIN/PAGADA/CANCELADA/${dateI}/${dateF}`;
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPAYSMENTSByProjectMINRESUME/CANCELADA/${dateI}/${dateF}`;
-  // console.log('url => ', url);
+  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       },
     });
-    // console.log('res => ', res);
+    console.log('res => ', res.data.data.stats);
     if(res.status===200)
       return res.data.data.stats;
     return 'Error al obtener total de las facturas por protecto!!';
@@ -415,13 +415,37 @@ export async function getTotalAccountReceivablesByClientResumen(auth_token:strin
 }
 
 export async function getTotalEstimatesPendingByProject(auth_token:string, dateI: string, dateF:string){
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALEstimatesPendingByProjectMINRESUME/${dateI}/${dateF}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALEstimatesPendingByProjectMINRESUME/${dateI}/${dateF}/66e0a1a4c6d95ffb8aa0ff31`;
+  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       },
     });
+    console.log('res => ', res.data.data.arrStatsOk);
+    if(res.status===200)
+      return res.data.data.arrStatsOk;
+    return 'Error al obtener total de lo pendiente por estimar!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('error => ', error);
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total de lo pendiente por estimar!!';
+  }
+}
+
+export async function getTotalEstimatesPendingByClient(auth_token:string, dateI: string, dateF:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALEstimatesPendingByClientMINRESUME/${dateI}/${dateF}`;
+  console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      },
+    });
+    console.log('res => ', res.data.data.arrStats);
     if(res.status===200)
       return res.data.data.arrStats;
     return 'Error al obtener total de lo pendiente por estimar!!';

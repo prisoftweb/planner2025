@@ -158,8 +158,11 @@ console.log('filteredProjects => ', filteredProjects);
                         {prj.category.name}
                       </p>
                     </div>
-                    <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                    {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                       PINTURA VINILICA MARCA VIBE, BERELINTE, COLOR BLANCO MATE, A DOS MANOS O LAS NECESARIAS,
+                    </p> */}
+                    <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                      {prj.description}
                     </p>
                   </div>
                 </div>

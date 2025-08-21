@@ -4,10 +4,10 @@ import { UsrBack } from "@/interfaces/User";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
   getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
-  getTotalEstimatesPendingByProject } from "@/app/api/routeInvoices";
+  getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient } from "@/app/api/routeInvoices";
 import { ITotalInvoicesByProjectDashboardCollection, ITotalInvoiceByClient, 
   ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
-  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject  } from "@/interfaces/Invoices";
+  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient  } from "@/interfaces/Invoices";
 import DashboardCollectionsContainer from "@/components/collections/dashboard/DashboardCollectionsContainer";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 
@@ -25,9 +25,10 @@ export default async function Page() {
   const resTotPrj: ITotalAccountReceivablesByProjectResumen[] = await getTotalAccountReceivablesByProjectResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
   const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
   const resEstPen: ITotalEstimatesPendingByProject[] = await getTotalEstimatesPendingByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  const resEstPenCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
 
-  const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, totalEstiatesPen] = await Promise.all([
-    totalPrjs, totalClis, totalPay, totalPen, resCob, resTotPrj, resTotCli, resEstPen
+  const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, totalEstiatesPen, totalPendEstimatesCli] = await Promise.all([
+    totalPrjs, totalClis, totalPay, totalPen, resCob, resTotPrj, resTotCli, resEstPen, resEstPenCli
   ]);
     
   if(typeof(totalProjects)==='string'){
@@ -118,13 +119,24 @@ export default async function Page() {
     )
   }
 
+  if(typeof(totalPendEstimatesCli)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{totalPendEstimatesCli} </h1>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <DashboardCollectionsContainer 
           token={token} toalPrjRes={totalPrjRes}
-          user={user._id} resC={resCobrar[0]} 
+          user={user._id} resC={resCobrar[0]} totalEstimatesCli={totalPendEstimatesCli}
           totalProjects={totalProjects} totalPen={totalPending}
           totalClients={totalClients} totalPay={totalPaymentByDate}
           toalCliRes={totalCliRes} totalEstimatesPen={totalEstiatesPen} />

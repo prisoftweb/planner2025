@@ -8,7 +8,7 @@ export interface DataCollectionsByType {
 }
 
 export interface Issue {
-  status: "FACTURADO POR COBRAR" | "FACTURADO POR ESTIMAR"
+  status: "FACTURADO POR PAGAR" | "FACTURADO POR ESTIMAR"
   value: number
   percentage: number
 }
@@ -20,7 +20,7 @@ const valueFormatter = (number: number) => {
 const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) return null;
 
-  const title = payload[0].payload.project;
+  const title = payload[0].payload.client;
   const st = payload[0].dataKey;
   const data = payload.map((item:any) => ({
       status: item.dataKey,
@@ -30,7 +30,7 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
       }),
       percentage: (
           (item.value /
-              ((item.payload["FACTURADO POR COBRAR"] || 0) +
+              ((item.payload["FACTURADO POR PAGAR"] || 0) +
                   (item.payload["FACTURADO POR ESTIMAR"] || 0))) *
           100
       ).toFixed(2),
@@ -41,7 +41,7 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
       <div className="w-72 rounded-md border border-gray-500/10  bg-blue-500 px-4 py-1.5 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
         <p className="flex items-center justify-between">
           <span className="text-gray-50 dark:text-gray-50">
-            Proyecto
+            Cliente
           </span>
           <span className="font-medium text-gray-50 dark:text-gray-50">{title}</span>
         </p>
@@ -97,7 +97,7 @@ export function BarChartTwoInOneCollections({data}:{data: DataCollectionsByType[
         className="hidden h-72 sm:block"
         data={formattedArray}
         index='status'
-        categories={["FACTURADO POR COBRAR", "FACTURADO POR ESTIMAR"]}
+        categories={["FACTURADO POR PAGAR", "FACTURADO POR ESTIMAR"]}
         colors={["red", "blue"]}
         valueFormatter={valueFormatter}
         yAxisWidth={76}
@@ -109,7 +109,7 @@ export function BarChartTwoInOneCollections({data}:{data: DataCollectionsByType[
         className="h-80 sm:hidden"
         data={formattedArray}
         index='status'
-        categories={["FACTURADO POR COBRAR", "FACTURADO POR ESTIMAR"]}
+        categories={["FACTURADO POR PAGAR", "FACTURADO POR ESTIMAR"]}
         colors={["cyan", "blue"]}
         valueFormatter={valueFormatter}
         showYAxis={false}

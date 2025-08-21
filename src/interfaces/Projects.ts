@@ -133,6 +133,7 @@ export interface ProjectMin {
   client: ClientBack
   status: boolean
   account: string
+  description?: string
   // category: Category
   // type: Type
   // segment: Segment

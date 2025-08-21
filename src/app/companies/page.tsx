@@ -19,10 +19,10 @@ export default async function Page(){
     companies = await getCompanies(token);
     if(typeof(companies)=== 'string'){
       return(
-        <>
+        <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">
           <Navigation user={user} />
           <h1 className="text-center text-red-500 text-lg">{companies}</h1>
-        </>
+        </div>
       )
     }
   } catch (error) {

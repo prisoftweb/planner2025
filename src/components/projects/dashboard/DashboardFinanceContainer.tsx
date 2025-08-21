@@ -277,6 +277,8 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
 
   const dataProjectsProgress: OptionsDashboard[] = [];
 
+  console.log('stateProjectsAndType => ', stateProjectsAndType);
+
   const groupedByProject = stateProjectsAndType.reduce((acc: any, prj) => {
       const project = prj.project;
       (acc[project] = acc[project] || []).push(prj);
@@ -309,6 +311,8 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   }
 
   const colorRandom = getRandomInt(10);
+
+  console.log('res parse => ', resParse);
   
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">

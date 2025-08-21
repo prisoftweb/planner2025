@@ -551,3 +551,11 @@ export interface ITotalEstimatesPendingByProject {
   type: string
   pendingEstimated: number
 }
+
+export interface ITotalEstimatesPendingByClient {
+  client: string
+  quantity: number
+  c: string
+  type: string
+  pendingEstimated: number
+}
