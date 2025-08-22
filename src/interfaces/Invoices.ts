@@ -559,3 +559,16 @@ export interface ITotalEstimatesPendingByClient {
   type: string
   pendingEstimated: number
 }
+
+export interface IAllsProjectsMINAndNEConditionANDNoExistsEstimate {
+  _id: string
+  project: string
+  pendingPayment: number
+  type: string
+}
+
+export interface IAllTOTALPENDINGPAYMENTSByProject {
+  project: string
+  pendingPayment: number
+  porcentagePending: number
+}

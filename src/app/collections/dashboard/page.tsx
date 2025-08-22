@@ -4,10 +4,13 @@ import { UsrBack } from "@/interfaces/User";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
   getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
-  getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient } from "@/app/api/routeInvoices";
+  getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient, 
+  getAllTOTALPENDINGPAYMENTSByProjectMINRESUME, 
+  getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN } from "@/app/api/routeInvoices";
 import { ITotalInvoicesByProjectDashboardCollection, ITotalInvoiceByClient, 
   ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
-  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient  } from "@/interfaces/Invoices";
+  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient, 
+  IAllTOTALPENDINGPAYMENTSByProject, IAllsProjectsMINAndNEConditionANDNoExistsEstimate  } from "@/interfaces/Invoices";
 import DashboardCollectionsContainer from "@/components/collections/dashboard/DashboardCollectionsContainer";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 
@@ -22,9 +25,9 @@ export default async function Page() {
   let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
   let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
   let resCob = await getTotalGuaranteesByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), 'POR COBRAR');
-  const resTotPrj: ITotalAccountReceivablesByProjectResumen[] = await getTotalAccountReceivablesByProjectResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  const resTotPrj: IAllTOTALPENDINGPAYMENTSByProject[] = await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
   const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  const resEstPen: ITotalEstimatesPendingByProject[] = await getTotalEstimatesPendingByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  const resEstPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[] = await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
   const resEstPenCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
 
   const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, totalEstiatesPen, totalPendEstimatesCli] = await Promise.all([

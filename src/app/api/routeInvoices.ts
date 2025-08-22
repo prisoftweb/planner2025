@@ -287,25 +287,25 @@ export async function getTotalAccountReceivablesByProject(auth_token:string, dat
   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALAccountReceivablesByProjectMIN/PAGADA/CANCELADA/${dateI}/${dateF}`;
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPAYSMENTSByProjectMINRESUME/CANCELADA/${dateI}/${dateF}`;
   console.log('url => ', url);
-  try {
-    const res = await axios.get(url, {
-      headers: {
-        'Authorization': `Bearer ${auth_token}`,
-      },
-    });
-    console.log('res => ', res.data.data.stats);
-    if(res.status===200)
-      return res.data.data.stats;
-    return 'Error al obtener total de las facturas por protecto!!';
-  } catch (error) {
-    // console.log('error => ', error);
-    if(axios.isAxiosError(error)){
-      console.log('error => ', error);
-      return error.message || error.response?.data.message;
-    }
-    return 'Error al consultar total de las facturas por protecto!!';
-  }
-  // return [];
+  // try {
+  //   const res = await axios.get(url, {
+  //     headers: {
+  //       'Authorization': `Bearer ${auth_token}`,
+  //     },
+  //   });
+  //   console.log('res => ', res.data.data.stats);
+  //   if(res.status===200)
+  //     return res.data.data.stats;
+  //   return 'Error al obtener total de las facturas por protecto!!';
+  // } catch (error) {
+  //   // console.log('error => ', error);
+  //   if(axios.isAxiosError(error)){
+  //     console.log('error => ', error);
+  //     return error.message || error.response?.data.message;
+  //   }
+  //   return 'Error al consultar total de las facturas por protecto!!';
+  // }
+  return [];
 }
 
 export async function getTotalAccountReceivablesByClient(auth_token:string, dateI: string, dateF:string){
@@ -455,5 +455,50 @@ export async function getTotalEstimatesPendingByClient(auth_token:string, dateI:
       return error.message || error.response?.data.message;
     }
     return 'Error al consultar total de lo pendiente por estimar!!';
+  }
+}
+
+export async function getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(auth_token:string, dateI: string, dateF:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUME/66e0a1a4c6d95ffb8aa0ff31/${dateI}/${dateF}`;
+  console.log('url => ', url);
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+    });
+    // console.log('res => ', res.data.data.arrStats);
+    if(res.status===200)
+      return res.data.data.resdata;
+    return 'Error al obtener total de los proyectos!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('error => ', error);
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total de los proyectos!!';
+  }
+}
+
+export async function getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(auth_token:string, dateI: string, dateF:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPENDINGPAYMENTSByProjectMINRESUME/CANCELADA/${dateI}/${dateF}`;
+  console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      },
+    });
+    console.log('res => ', res.data.data.arrStats);
+    if(res.status===200)
+      return res.data.data.arrStats;
+    return 'Error al obtener total de lo pendiente por proyecto!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('error => ', error);
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total de lo pendiente por proyecto!!';
   }
 }

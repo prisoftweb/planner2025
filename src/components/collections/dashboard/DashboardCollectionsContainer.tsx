@@ -11,12 +11,15 @@ import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "@/components/Label";
 import { ITotalInvoiceByClient, ITotalInvoicesByProjectDashboardCollection, 
   ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
-  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient } from "@/interfaces/Invoices";
+  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient,
+  IAllTOTALPENDINGPAYMENTSByProject, IAllsProjectsMINAndNEConditionANDNoExistsEstimate } from "@/interfaces/Invoices";
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
   getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
-  getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient } from "@/app/api/routeInvoices";
+  getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient, 
+  getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN, 
+  getAllTOTALPENDINGPAYMENTSByProjectMINRESUME } from "@/app/api/routeInvoices";
 import { showToastMessageError } from "@/components/Alert";
 import { BsCash } from "react-icons/bs";
 import { IAmountTotalGuaranteesByDateAndStatus } from "@/interfaces/Guarantee";
@@ -96,8 +99,8 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   {token:string, user:string, totalProjects: ITotalInvoicesByProjectDashboardCollection[], 
     totalClients: ITotalInvoiceByClient[], totalPay: ITotalPaymentByDateAndStatus[], 
     totalPen: ITotalPendingByDateAndStatus[], resC: IAmountTotalGuaranteesByDateAndStatus, 
-    toalPrjRes: ITotalAccountReceivablesByProjectResumen[], toalCliRes: ITotalAccountReceivablesByClientResumen[], 
-    totalEstimatesPen: ITotalEstimatesPendingByProject[], totalEstimatesCli: ITotalEstimatesPendingByClient[]}) {
+    toalPrjRes: IAllTOTALPENDINGPAYMENTSByProject[], toalCliRes: ITotalAccountReceivablesByClientResumen[], 
+    totalEstimatesPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[], totalEstimatesCli: ITotalEstimatesPendingByClient[]}) {
 
   const [totalCollectionsProjects, setTotalCollectionsProjects]=useState<ITotalInvoicesByProjectDashboardCollection[]>(totalProjects);
   const [totalCollectionsClients, setTotalCollectionsClients]=useState<ITotalInvoiceByClient[]>(totalClients);
@@ -105,11 +108,13 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const [totalPending, setTotalPending]=useState<ITotalPendingByDateAndStatus[]>(totalPen);
   const [widthPage, setWidthPage] = useState<number>(900);
   const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>(resC);
-  const [totalAccountByPrjRes, setTotalAccountByPrjRes]=useState<ITotalAccountReceivablesByProjectResumen[]>(toalPrjRes);
+  const [totalAccountByPrjRes, setTotalAccountByPrjRes]=useState<IAllTOTALPENDINGPAYMENTSByProject[]>(toalPrjRes);
   const [totalAccountByCliRes, setTotalAccountByCliRes]=useState<ITotalAccountReceivablesByClientResumen[]>(toalCliRes);
-  const [totalEstimatesPending, setTotalEstimatesPending] = useState<ITotalEstimatesPendingByProject[]>(totalEstimatesPen);
+  const [totalEstimatesPending, setTotalEstimatesPending] = useState<IAllsProjectsMINAndNEConditionANDNoExistsEstimate[]>(totalEstimatesPen);
   const [totalEstimatesPendingCli, setTotalEstimatesPendingCli] = useState<ITotalEstimatesPendingByClient[]>(totalEstimatesCli);
 
+
+  console.log('total parameter => ', totalEstimatesPen);
   // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
   //   from: new Date('2024-01-01'),
   //   to: new Date('2025-04-30'),
@@ -182,11 +187,12 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
     const resCob = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
     const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-    const resEstPen: ITotalEstimatesPendingByProject[] = await getTotalEstimatesPendingByProject(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
+    const resEstPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[] = await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
     const resEstCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
+    const resTotPenPjr: IAllTOTALPENDINGPAYMENTSByProject[] = await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
 
-    const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen, totEstPenCli] = await Promise.all([
-      totalPrjs, totalClis, totalPay, totalPen, resCob, resTotCli, resEstPen, resEstCli
+    const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen, totEstPenCli, totalPenPayPjr] = await Promise.all([
+      totalPrjs, totalClis, totalPay, totalPen, resCob, resTotCli, resEstPen, resEstCli, resTotPenPjr
     ]);
 
     if(typeof(totprj)==='string'){
@@ -235,6 +241,12 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       showToastMessageError(totEstPenCli);
     }else{
       setTotalEstimatesPendingCli(totEstPenCli);
+    }
+    
+    if(typeof(totalPenPayPjr)==='string'){
+      showToastMessageError(totalPenPayPjr);
+    }else{
+      setTotalAccountByPrjRes(totalPenPayPjr);
     }
   }
 
@@ -298,6 +310,8 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     });
   });
 
+  console.log('tot estiamtes exist => ', totalEstimatesPending);
+  console.log('totalAccountByPrjRes => ', totalAccountByPrjRes);
   const dataPendingProyect: DataPendingProject[] = [];
   // console.log('totalAccountByPrjRes => ', totalAccountByPrjRes);
   // console.log('totalEstimatesPending => ', totalEstimatesPending);
@@ -305,13 +319,16 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     // const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
     // const prjS = prjSpent.find((pr) => pr.title === prj.title);
     // const prjP = prjPayments.find((pr) => pr.project === prj.title);
+
     const prjEst = totalEstimatesPending.find((pr) => pr.project === prj.project);
+
+    console.log('pjr est => ', prjEst);
     
     // console.log('pjr pending => ', prj.pendingPayment);
     dataPendingProyect.push({
       label: prj.project,
       "FACTURADO POR COBRAR": prj.pendingPayment || 0,
-      "FACTURADO POR ESTIMAR": prjEst ? prjEst.pendingEstimated : 0
+      "FACTURADO POR ESTIMAR": prjEst ? prjEst.pendingPayment : 0
     });    
   });
   // console.log('dataPendingProyect => ', dataPendingProyect);
@@ -360,8 +377,28 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         {filterElemnts}
       </div>
       {/* {widthPage > 1080 && filterElemnts} */}
+      <div className="mt-5 flex items-center gap-x-3">
+        <div className="w-4/6">
+          <Label>SALDOS PENDIENTES POR PROYECTO</Label>
+          <div className="mt-3">
+            <BarChartComponent 
+              colors={['red', 'blue']}
+              categories={['FACTURADO POR COBRAR', 'FACTURADO POR ESTIMAR']}
+              data={dataPendingProyect}
+            />
+          </div>
+        </div>
+        <div className="w-2/6">
+          <Label>SALDOS PENDIENTES POR CLIENTE</Label>
+          <div className="mt-3">
+            <BarChartTwoInOneCollections 
+              data={resParse}
+            />
+          </div>
+        </div>
+      </div>
       <div className="mt-5 grid grid-cols-2 gap-x-5">
-        <div>
+        {/* <div>
           <Label>SALDOS PENDIENTES POR PROYECTO</Label>
           <div className="mt-3">
             <BarChartComponent 
@@ -378,7 +415,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
               data={resParse}
             />
           </div>
-        </div>
+        </div> */}
         <div>
           <Label>COBRANZA POR PROYECTO</Label>
           <div className="mt-3">
