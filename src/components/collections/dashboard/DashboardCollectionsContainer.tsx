@@ -84,8 +84,8 @@ interface OptionsDashboard {
 
 type DataPendingProject = {
   label: string,
-  "FACTURADO POR COBRAR": number,
-  "FACTURADO POR ESTIMAR": number,
+  "POR COBRAR": number,
+  "POR FACTURAR": number,
 }
 
 type DataPendingClient = {
@@ -327,8 +327,9 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     // console.log('pjr pending => ', prj.pendingPayment);
     dataPendingProyect.push({
       label: prj.project,
-      "FACTURADO POR COBRAR": prj.pendingPayment || 0,
-      "FACTURADO POR ESTIMAR": prjEst ? prjEst.pendingPayment : 0
+      "POR COBRAR": prj.pendingPayment || 0,
+      // "POR FACTURAR": prjEst ? prjEst.pendingPayment : 0
+      "POR FACTURAR": prj.pendingBilling
     });    
   });
   // console.log('dataPendingProyect => ', dataPendingProyect);
@@ -383,7 +384,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           <div className="mt-3">
             <BarChartComponent 
               colors={['red', 'blue']}
-              categories={['FACTURADO POR COBRAR', 'FACTURADO POR ESTIMAR']}
+              categories={['POR COBRAR', 'POR FACTURAR']}
               data={dataPendingProyect}
             />
           </div>

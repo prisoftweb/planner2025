@@ -571,4 +571,5 @@ export interface IAllTOTALPENDINGPAYMENTSByProject {
   project: string
   pendingPayment: number
   porcentagePending: number
+  pendingBilling: number
 }

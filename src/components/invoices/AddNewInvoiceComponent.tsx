@@ -204,9 +204,9 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
         purchaseorder:odc,
         duedate:newDate.toISOString(),
         accountreceivables: [{
-          previousbalanceamount: amount,
+          previousbalanceamount: amount * 1.16,
           charged: 0,
-          unchargedbalanceamount: amount,
+          unchargedbalanceamount: amount * 1.16,
           partialitynumber: 0,
         }]
       }

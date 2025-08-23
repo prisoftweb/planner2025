@@ -262,8 +262,8 @@ export async function getAllTotalAmountInvoicePending(auth_token:string, dateI: 
 export async function getAllInvoicesMINByDateAndCondition(auth_token:string, dateI: string, dateF:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllInvoicesMINByDate/${dateI}/${dateF}`;
   try {
-    console.log('url => ', url);
-    console.log('data => ', JSON.stringify(data));
+    // console.log('url => ', url);
+    // console.log('data => ', JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -285,26 +285,26 @@ export async function getAllInvoicesMINByDateAndCondition(auth_token:string, dat
 export async function getTotalAccountReceivablesByProject(auth_token:string, dateI: string, dateF:string) {
   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTotalAccountReceivablesByProjectMIN/PAGADA/CANCELADA`;
   // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALAccountReceivablesByProjectMIN/PAGADA/CANCELADA/${dateI}/${dateF}`;
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPAYSMENTSByProjectMINRESUME/CANCELADA/${dateI}/${dateF}`;
-  console.log('url => ', url);
-  // try {
-  //   const res = await axios.get(url, {
-  //     headers: {
-  //       'Authorization': `Bearer ${auth_token}`,
-  //     },
-  //   });
-  //   console.log('res => ', res.data.data.stats);
-  //   if(res.status===200)
-  //     return res.data.data.stats;
-  //   return 'Error al obtener total de las facturas por protecto!!';
-  // } catch (error) {
-  //   // console.log('error => ', error);
-  //   if(axios.isAxiosError(error)){
-  //     console.log('error => ', error);
-  //     return error.message || error.response?.data.message;
-  //   }
-  //   return 'Error al consultar total de las facturas por protecto!!';
-  // }
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPAYMENTSByProjectMINRESUME/CANCELADA/${dateI}/${dateF}`;
+  // console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      },
+    });
+    // console.log('res => ', res.data.data.stats);
+    if(res.status===200)
+      return res.data.data.stats;
+    return 'Error al obtener total de las facturas por protecto!!';
+  } catch (error) {
+    // console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      console.log('error => ', error);
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total de las facturas por protecto!!';
+  }
   return [];
 }
 
@@ -416,14 +416,14 @@ export async function getTotalAccountReceivablesByClientResumen(auth_token:strin
 
 export async function getTotalEstimatesPendingByProject(auth_token:string, dateI: string, dateF:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALEstimatesPendingByProjectMINRESUME/${dateI}/${dateF}/66e0a1a4c6d95ffb8aa0ff31`;
-  console.log('url => ', url);
+  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       },
     });
-    console.log('res => ', res.data.data.arrStatsOk);
+    // console.log('res => ', res.data.data.arrStatsOk);
     if(res.status===200)
       return res.data.data.arrStatsOk;
     return 'Error al obtener total de lo pendiente por estimar!!';
@@ -438,14 +438,14 @@ export async function getTotalEstimatesPendingByProject(auth_token:string, dateI
 
 export async function getTotalEstimatesPendingByClient(auth_token:string, dateI: string, dateF:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALEstimatesPendingByClientMINRESUME/${dateI}/${dateF}`;
-  console.log('url => ', url);
+  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       },
     });
-    console.log('res => ', res.data.data.arrStats);
+    // console.log('res => ', res.data.data.arrStats);
     if(res.status===200)
       return res.data.data.arrStats;
     return 'Error al obtener total de lo pendiente por estimar!!';
@@ -460,7 +460,7 @@ export async function getTotalEstimatesPendingByClient(auth_token:string, dateI:
 
 export async function getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(auth_token:string, dateI: string, dateF:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUME/66e0a1a4c6d95ffb8aa0ff31/${dateI}/${dateF}`;
-  console.log('url => ', url);
+  // console.log('url => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
