@@ -17,7 +17,9 @@ export default async function Page(){
       return(
         <>
           <Navigation user={user} />
-          <h1 className="text-center text-red-500">{quotations}</h1>
+          <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+            <h1 className="text-center text-red-500">{quotations}</h1>
+          </div>
         </>
       )
   } catch (error) {

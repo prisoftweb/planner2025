@@ -71,7 +71,7 @@ export default function ReactTableCollections({data, columns,
     // console.log(table.getSelectedRowModel().flatRows.map((row) => row.original))
     selectFunction(table.getSelectedRowModel().flatRows.map((row) => row.original));
   }, [rowSelection]);
-console.log('data table rec => ', data);
+
   const table = useReactTable({
     data, 
     columns,

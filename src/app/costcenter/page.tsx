@@ -17,21 +17,20 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
+  let cats: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  let cos: CostCenter[]= await getCostoCenters(token);
+
+  const [catalogs, costs] = await Promise.all([
+    cats, cos
+  ]);
+
+  if(typeof(catalogs)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </div>
       </>
     )
   }
@@ -44,26 +43,17 @@ export default async function Page(){
     })
   })
 
-  let costs: CostCenter[];
-  try {
-    costs = await getCostoCenters(token);
-    if(typeof(costs)=== 'string')
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-red-500 text-center">{costs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(costs)=== 'string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-red-500 text-center">Error al obtener centro de costos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-lg text-red-500 text-center">{costs}</h1>
+        </div>
       </>
     )
   }
 
-  
   if(!costs || costs.length <= 0){
     return (
       <>

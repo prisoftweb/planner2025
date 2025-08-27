@@ -18,10 +18,18 @@ export default async function page() {
   try {
     workflows = await getWorkFlows(token);
     if(typeof(workflows) ==='string'){
-      return <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
+      return (
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
+        </div>
+      )
     }
   } catch (error) {
-    return <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar workflows!!</h1>
+    return(
+      <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar workflows!!</h1>
+      </div>
+    )
   }
 
   if(!workflows || workflows.length <= 0){

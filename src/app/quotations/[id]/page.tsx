@@ -13,42 +13,33 @@ export default async function Page({params}: {params:{id:string}}){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let quotation: IOneQuotationMin;
-  try {
-    quotation = await getQuotationMin(token, params.id);
-    if(typeof(quotation) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{quotation}</h1>
-        </>
-      )
-  } catch (error) {
+  let quot: IOneQuotationMin = await getQuotationMin(token, params.id);
+  let quots: Options[] = await getQuotationsLV(token);
+
+  const [quotation, quotations] = await Promise.all([
+    quot, quots
+  ]);
+
+  if(typeof(quotation) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizacion!!</h1>
+        <div>
+          <h1 className="text-center text-red-500">{quotation}</h1>
+        </div>
       </>
-    ) 
+    )
   }
 
-  let quotations: Options[];
-  try {
-    quotations = await getQuotationsLV(token);
-    if(typeof(quotations) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{quotations}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(quotations) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizacion!!</h1>
+        <div>
+          <h1 className="text-center text-red-500">{quotations}</h1>
+        </div>
       </>
-    )  
+    )
   }
 
   const role = user.rol?.name?.toLowerCase().includes('residente');

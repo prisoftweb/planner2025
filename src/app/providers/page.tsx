@@ -19,7 +19,9 @@ export default async function Providers(){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-5xl text-center text-red-500 font-semibold">Error al consultar proveedores!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-5xl text-center text-red-500 font-semibold">Error al consultar proveedores!!</h1>
+        </div>
       </>
     )
   }  

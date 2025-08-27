@@ -22,10 +22,14 @@ export default async function page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let nodes: Node[] = await getNodes(token);
-  let optDepartments: Options[] = await getDepartmentsLV(token);
-  let glossaries: Glossary[] = await getGlossaries(token);
-  let workflows: Workflow[] = await getWorkFlows(token);
+  let nods: Node[] = await getNodes(token);
+  let optDepts: Options[] = await getDepartmentsLV(token);
+  let gloss: Glossary[] = await getGlossaries(token);
+  let works: Workflow[] = await getWorkFlows(token);
+
+  const [nodes, optDepartments, glossaries, workflows] = await Promise.all([
+    nods, optDepts, gloss, works
+  ]);
   
   if(typeof(nodes) ==='string'){
     return(

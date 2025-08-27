@@ -12,14 +12,14 @@ import Label from "@/components/Label";
 import { ITotalInvoiceByClient, ITotalInvoicesByProjectDashboardCollection, 
   ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
   ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient,
-  IAllTOTALPENDINGPAYMENTSByProject, IAllsProjectsMINAndNEConditionANDNoExistsEstimate } from "@/interfaces/Invoices";
+  IAllTOTALPENDINGPAYMENTSByProject, IAllsProjectsMINAndNEConditionANDNoExistsEstimate, IAllTOTALPENDINGBillingByProject } from "@/interfaces/Invoices";
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
   getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
   getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient, 
   getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN, 
-  getAllTOTALPENDINGPAYMENTSByProjectMINRESUME } from "@/app/api/routeInvoices";
+  getAllTOTALPENDINGPAYMENTSByProjectMINRESUME, getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED } from "@/app/api/routeInvoices";
 import { showToastMessageError } from "@/components/Alert";
 import { BsCash } from "react-icons/bs";
 import { IAmountTotalGuaranteesByDateAndStatus } from "@/interfaces/Guarantee";
@@ -39,9 +39,9 @@ export interface Issue {
 
 function transformProjectsTypesToDataChart(dataCollections: ITotalAccountReceivablesByClientResumen[][], pendingCli:ITotalEstimatesPendingByClient[]){
   const res: DataProjectsByType[] = [];
-  console.log('dataCollections => ', dataCollections);
+  // console.log('dataCollections => ', dataCollections);
 
-  console.log('pendingCli => ', pendingCli);
+  // console.log('pendingCli => ', pendingCli);
 
   for (let i = 0; i < dataCollections.length; i++) {
     const cli = pendingCli.find((cli) => cli.c === dataCollections[i][0].client);
@@ -56,7 +56,7 @@ function transformProjectsTypesToDataChart(dataCollections: ITotalAccountReceiva
     }
   }
 
-  console.log('new dataCollections => ', dataCollections);
+  // console.log('new dataCollections => ', dataCollections);
 
   dataCollections.map((arrData) => {
     const r: Issue[] = [];
@@ -95,12 +95,13 @@ type DataPendingClient = {
 }
 
 export default function DashboardCollectionsContainer({token, user, totalClients, totalProjects, totalPay, 
-  totalPen, resC, toalPrjRes, toalCliRes, totalEstimatesPen, totalEstimatesCli}: 
+  totalPen, resC, toalPrjRes, toalCliRes, totalEstimatesPen, totalEstimatesCli, totalPendingBillingByPrj}: 
   {token:string, user:string, totalProjects: ITotalInvoicesByProjectDashboardCollection[], 
     totalClients: ITotalInvoiceByClient[], totalPay: ITotalPaymentByDateAndStatus[], 
     totalPen: ITotalPendingByDateAndStatus[], resC: IAmountTotalGuaranteesByDateAndStatus, 
     toalPrjRes: IAllTOTALPENDINGPAYMENTSByProject[], toalCliRes: ITotalAccountReceivablesByClientResumen[], 
-    totalEstimatesPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[], totalEstimatesCli: ITotalEstimatesPendingByClient[]}) {
+    totalEstimatesPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[], 
+    totalEstimatesCli: ITotalEstimatesPendingByClient[], totalPendingBillingByPrj: IAllTOTALPENDINGBillingByProject[]}) {
 
   const [totalCollectionsProjects, setTotalCollectionsProjects]=useState<ITotalInvoicesByProjectDashboardCollection[]>(totalProjects);
   const [totalCollectionsClients, setTotalCollectionsClients]=useState<ITotalInvoiceByClient[]>(totalClients);
@@ -112,9 +113,9 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const [totalAccountByCliRes, setTotalAccountByCliRes]=useState<ITotalAccountReceivablesByClientResumen[]>(toalCliRes);
   const [totalEstimatesPending, setTotalEstimatesPending] = useState<IAllsProjectsMINAndNEConditionANDNoExistsEstimate[]>(totalEstimatesPen);
   const [totalEstimatesPendingCli, setTotalEstimatesPendingCli] = useState<ITotalEstimatesPendingByClient[]>(totalEstimatesCli);
+  const [totalPendingBillingPjr, setTotalPendingBillingPjr] = useState<IAllTOTALPENDINGBillingByProject[]>(totalPendingBillingByPrj);
 
-
-  console.log('total parameter => ', totalEstimatesPen);
+  // console.log('total parameter => ', totalEstimatesPen);
   // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
   //   from: new Date('2024-01-01'),
   //   to: new Date('2025-04-30'),
@@ -190,9 +191,11 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     const resEstPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[] = await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
     const resEstCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
     const resTotPenPjr: IAllTOTALPENDINGPAYMENTSByProject[] = await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
+    const resPenBill: IAllTOTALPENDINGBillingByProject[] = await getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
 
-    const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen, totEstPenCli, totalPenPayPjr] = await Promise.all([
-      totalPrjs, totalClis, totalPay, totalPen, resCob, resTotCli, resEstPen, resEstCli, resTotPenPjr
+    const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen, totEstPenCli, 
+      totalPenPayPjr, pendingBilling] = await Promise.all([
+      totalPrjs, totalClis, totalPay, totalPen, resCob, resTotCli, resEstPen, resEstCli, resTotPenPjr, resPenBill
     ]);
 
     if(typeof(totprj)==='string'){
@@ -247,6 +250,12 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       showToastMessageError(totalPenPayPjr);
     }else{
       setTotalAccountByPrjRes(totalPenPayPjr);
+    }
+
+    if(typeof(pendingBilling)==='string'){
+      showToastMessageError(pendingBilling);
+    }else{
+      setTotalPendingBillingPjr(pendingBilling);
     }
   }
 
@@ -362,9 +371,12 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         <Card amount={ totalPending.length > 0? totalPending[0].total: 0 } title="POR COBRAR">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
-        <Card amount={ porCobrar?.total || 0 } title="FONDO DE GARANTIA POR COBRAR">
+        <Card amount={ totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0 } title="POR FACTURAR">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
+        {/* <Card amount={ porCobrar?.total || 0 } title="FONDO DE GARANTIA POR COBRAR">
+          <BsCash className="w-6 h-6 text-slate-600" />
+        </Card> */}
       </div> 
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">

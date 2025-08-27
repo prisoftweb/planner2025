@@ -573,3 +573,8 @@ export interface IAllTOTALPENDINGPAYMENTSByProject {
   porcentagePending: number
   pendingBilling: number
 }
+
+export interface IAllTOTALPENDINGBillingByProject {
+  quantity: number
+  acumPendingBilling: number
+}

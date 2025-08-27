@@ -18,42 +18,43 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let relations: Relation[] = [];
-  try {
-    relations = await getRelations(token);
-    if(typeof(relations) ==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-xl text-center">{relations}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  let rels: Relation[] = await getRelations(token);
+  let gloss: Glossary[] = await getGlossaries(token);
+  let nods: Node[] = await getNodes(token);
+
+  const [relations, glossaries, nodes] = await Promise.all([
+    rels, gloss, nods
+  ]);
+  
+  if(typeof(relations) ==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar relaciones!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-xl text-center">{relations}</h1>
+        </div>
       </>
     )
   }
 
-  let glossaries: Glossary[] = [];
-  try {
-    glossaries = await getGlossaries(token);
-    if(typeof(glossaries) ==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(glossaries) ==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar glosarios!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
+        </div>
+      </>
+    )
+  }
+
+  if(typeof(nodes) ==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
+        </div>
       </>
     )
   }
@@ -70,26 +71,6 @@ export default async function Page() {
       value: glossary._id
     });
   });
-
-  let nodes: Node[] = [];
-  try {
-    nodes = await getNodes(token);
-    if(typeof(nodes) ==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar nodos!!</h1>
-      </>
-    )
-  }
 
   const optNodes: Options[] = [];
   nodes.map(node => {

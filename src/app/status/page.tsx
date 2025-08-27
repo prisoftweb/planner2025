@@ -14,44 +14,31 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let catalogs: Catalog[];
+  let cats: Catalog[] = await getCatalogs(token);
+  let glos: Glossary[] = await getGlossaries(token);
 
-  try {
-    catalogs = await getCatalogs(token);
-    if(typeof(catalogs)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  const [catalogs, glosaries] = await Promise.all([
+    cats, glos
+  ]);
+
+  if(typeof(catalogs)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">Ocurrio un error al consultar catalogos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        </div>
       </>
     )
   }
 
-  let glosaries: Glossary[];
-
-  try {
-    glosaries = await getGlossaries(token);
-    if(typeof(glosaries)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{glosaries}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(glosaries)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">Ocurrio un error al consultar glosarios!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-red-500 text-center text-lg">{glosaries}</h1>
+        </div>
       </>
     )
   }

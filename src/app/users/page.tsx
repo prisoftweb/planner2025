@@ -16,59 +16,39 @@ export default async function Users() {
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let users;
-  try {
-    users = await getUsers(token);
-    if(typeof(users)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
+  let users = await getUsers(token);
+  let optionsRoles:Options[] = await getRolesLV(token);
+  let departments = await getDepartmentsLV(token);
+
+  if(typeof(users)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{users}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <> 
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Error al obtener usuarios!!</h1>
+        </div>
       </>
     )
   }
 
-  let optionsRoles:Options[] = [];
-  try {
-    optionsRoles = await getRolesLV(token);
-    if(typeof(optionsRoles)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
+  if(typeof(optionsRoles)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{optionsRoles}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Error al obtener roles!!</h1>
+        </div>
       </>
     )
   }
 
-  let departments;
-  try {
-    departments = await getDepartmentsLV(token);
-    if(typeof(departments)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{departments}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(departments)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Error al obtener departamentos!!</h1>
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500">{departments}</h1>
+        </div>
       </>
     )
   }

@@ -13,22 +13,20 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let companies:Company[];
-  try {
-    companies = await getCompanies(token);
-    if(typeof(companies)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className=" text-center text-lg text-red-500">{companies}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  let comps:Company[]= await getCompanies(token);
+  let depts: Department[]= await getDepartments(token);
+
+  const [companies, departments] = await Promise.all([
+    comps, depts
+  ]);
+  
+  if(typeof(companies)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className=" text-center text-lg text-red-500">{'Ocurrio un error al consultar compañias!!'}</h1>
+        <div className="p-2 sm:p-3 md:p-5 lg:p-10">
+          <h1 className=" text-center text-lg text-red-500">{companies}</h1>
+        </div>
       </>
     )
   }
@@ -37,7 +35,9 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} />
-        <h1 className=" text-center text-lg text-red-500">{'Ocurrio un error al consultar compañias!!!'}</h1>
+        <div className="p-2 sm:p-3 md:p-5 lg:p-10">
+          <h1 className=" text-center text-lg text-red-500">{'Ocurrio un error al consultar compañias!!!'}</h1>
+        </div>
       </>
     )
   }
@@ -50,22 +50,13 @@ export default async function Page(){
     });
   });
   
-  let departments: Department[];
-  try {
-    departments = await getDepartments(token);
-    if(typeof(departments)=== 'string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500 text-lg">{departments}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(departments)=== 'string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500 text-lg">Error al consultar departamentos!!</h1>
+        <div className="p-2 sm:p-3 md:p-5 lg:p-10">
+          <h1 className="text-center text-red-500 text-lg">{departments}</h1>
+        </div>
       </>
     )
   } 
