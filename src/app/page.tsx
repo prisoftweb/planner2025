@@ -21,7 +21,9 @@ export default function Home() {
           <Navigation user={user} />
         )}
         <div className="p-2 sm:p-3 md:p-5 flex justify-center">
-          {depto.toLowerCase().includes('direccion') || role.toLowerCase().includes('invitado') || user._id === '679ac44767135227cd14d1e9' ? (
+          {depto.toLowerCase().includes('direccion') || role.toLowerCase().includes('invitado') || 
+              user._id === '679ac44767135227cd14d1e9' || user._id==='666243bfef1d807b24ed9a28'
+              || user._id === '65d3836974045152c0c4378c' ? (
             <ContainerNewCode token={token} user={user._id} />
           ): (
           <img src="/img/Palaciosconstrucciones horizontal.svg" alt="logo" 

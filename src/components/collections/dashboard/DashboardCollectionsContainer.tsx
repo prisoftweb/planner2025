@@ -25,6 +25,9 @@ import { BsCash } from "react-icons/bs";
 import { IAmountTotalGuaranteesByDateAndStatus } from "@/interfaces/Guarantee";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 import { BarChartTwoInOneCollections } from "./BarChartTwoInOneCollections";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import DownloadPendingCollectionsPDF from "./DownloadPendingCollectionsPDF";
+import { BsFileEarmarkPdf } from "react-icons/bs";
 
 export interface DataProjectsByType {
   client: string
@@ -388,6 +391,19 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           <p className="text-xl ml-4 font-medium">COBRANZA </p>
         </div>
         {filterElemnts}
+        <PDFDownloadLink document={<DownloadPendingCollectionsPDF collections={totalAccountByPrjRes} token={token} 
+              pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
+              pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
+              date={rangeDate?.to?.toISOString().substring(0, 10) || ''} 
+              totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
+            fileName={`Cobranza pendiente por proyecto ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+            ) : (
+              <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+            ) }
+        </PDFDownloadLink>
       </div>
       {/* {widthPage > 1080 && filterElemnts} */}
       <div className="mt-5 flex items-center gap-x-3">

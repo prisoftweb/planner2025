@@ -299,10 +299,6 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             name: 'Historial',
             link: '/projects/estimates/history'
           },
-          {
-            name: 'Fondos de Garantia',
-            link: '/guarantee'
-          },
         ]}
       />
       <NavItem name="Facturacion" link="" items={[
@@ -324,6 +320,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
           {
             name: 'Dashboards',
             link: '/collections/dashboard'
+          },
+          {
+            name: 'Fondos de Garantia',
+            link: '/guarantee'
           },
         ]}
       />

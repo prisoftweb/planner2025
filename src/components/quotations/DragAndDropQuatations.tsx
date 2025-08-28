@@ -19,6 +19,7 @@ import { showToastMessageError } from "../Alert";
 import { insertConditionInQuotation } from "@/app/api/routeQuotations";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import RatingComponent from "./RatingComponent"
+import {Tooltip} from "@nextui-org/react";
 
 import {
   SortableContext,
@@ -123,6 +124,25 @@ function SortableItem(q : IQuotationMin) {
     cursor: "grab",
   };
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {/* {content} */}
@@ -139,7 +159,10 @@ function SortableItem(q : IQuotationMin) {
           currency: 'MXN',
           value: q.cost.subtotal
         })}</p>
-        <p className="text-green-500 text-sm">{q.title.substring(0, 17)}{q.title.length > 17? '...': ''}</p>
+        <Tooltip closeDelay={0} delay={100} motionProps={props} content={q.title} 
+          placement="right" className="text-blue-500 bg-white">
+            <p className="text-green-500 text-sm">{q.title.substring(0, 17)}{q.title.length > 17? '...': ''}</p>
+        </Tooltip>
       </div>
     </div>
   );
@@ -155,7 +178,7 @@ function DroppableColumn({ columnId, children }: { columnId: string; children: R
       ref={setNodeRef} // ✅ marca el contenedor como zona droppable
       key={columnId}
       style={{
-        padding: 16,
+        // padding: 16,
         width: 250,
         // minWidth: 200,
         minHeight: 400,

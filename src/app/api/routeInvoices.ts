@@ -482,15 +482,15 @@ export async function getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAcco
 }
 
 export async function getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(auth_token:string, dateI: string, dateF:string){
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPENDINGPAYMENTSByProjectMINRESUME/CANCELADA/${dateI}/${dateF}`;
-  // console.log('url => ', url);
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPENDINGPAYMENTSByProjectMINRESUME/CANCELADA/${dateI}/${dateF}/66e0a1a4c6d95ffb8aa0ff31`;
+  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       },
     });
-    // console.log('res => ', res.data.data.arrStats);
+    console.log('res => ', res.data.data.arrStats);
     if(res.status===200)
       return res.data.data.arrStats;
     return 'Error al obtener total de lo pendiente por proyecto!!';
@@ -501,6 +501,7 @@ export async function getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(auth_token:st
     }
     return 'Error al consultar total de lo pendiente por proyecto!!';
   }
+  // return [];
 }
 
 export async function getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(auth_token:string, dateI: string, dateF:string){

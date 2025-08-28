@@ -18,6 +18,7 @@ import { Options } from "@/interfaces/Common";
 import { showToastMessageError } from "../Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { InsertConditionInProject } from "@/app/api/routeProjects";
+import {Tooltip} from "@nextui-org/react";
 
 import {
   SortableContext,
@@ -114,6 +115,25 @@ function SortableItem(p : ProjectMin) {
     cursor: "grab",
   };
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {/* {content} */}
@@ -130,7 +150,10 @@ function SortableItem(p : ProjectMin) {
           currency: 'MXN',
           value: p.amount
         })}</p>
-        <p className="text-green-500 text-sm">{p.title.substring(0, 25)}{p.title.length > 25? '...': ''}</p>
+        <Tooltip closeDelay={0} delay={100} motionProps={props} content={p.title} 
+          placement="right" className="text-blue-500 bg-white">
+            <p className="text-green-500 text-sm">{p.title.substring(0, 25)}{p.title.length > 25? '...': ''}</p>
+        </Tooltip>
       </div>
     </div>
   );

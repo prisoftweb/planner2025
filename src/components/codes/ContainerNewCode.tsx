@@ -145,11 +145,11 @@ console.log('filteredProjects => ', filteredProjects);
               >
                 <div className="flex items-center w-full ">
                   <div className="grid mr-4 place-items-center">
-                    <img alt="responsable" src={ '/img/projects/default.svg'}
+                    <img alt="responsable" src={ prj.photo? prj.photo : '/img/projects/default.svg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                   </div>
-                  <div className="">
-                    <div className="flex gap-x-3 justify-between items-center">
+                  <div className="w-full">
+                    <div className="flex gap-x-3 justify-between items-center w-full">
                       <h6
                         className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
                         {prj.title}

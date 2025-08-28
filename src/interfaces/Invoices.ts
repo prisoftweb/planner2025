@@ -567,11 +567,21 @@ export interface IAllsProjectsMINAndNEConditionANDNoExistsEstimate {
   type: string
 }
 
+// export interface IAllTOTALPENDINGPAYMENTSByProject {
+//   project: string
+//   pendingPayment: number
+//   porcentagePending: number
+//   pendingBilling: number
+// }
 export interface IAllTOTALPENDINGPAYMENTSByProject {
   project: string
-  pendingPayment: number
-  porcentagePending: number
+  date: string
+  client: string
+  type: string
   pendingBilling: number
+  pendingPayment: number
+  pendingTotal: number
+  porcentagePendingPAY: number
 }
 
 export interface IAllTOTALPENDINGBillingByProject {
