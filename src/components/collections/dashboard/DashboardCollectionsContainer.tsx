@@ -28,6 +28,7 @@ import { BarChartTwoInOneCollections } from "./BarChartTwoInOneCollections";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import DownloadPendingCollectionsPDF from "./DownloadPendingCollectionsPDF";
 import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadPendingCollectionsByClientPDF from "./DownloadPendingCollectionsByClientPDF";
 
 export interface DataProjectsByType {
   client: string
@@ -346,7 +347,13 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   });
   // console.log('dataPendingProyect => ', dataPendingProyect);
 
-  const groupedByClient = toalCliRes.reduce((acc: any, prj) => {
+  // const groupedByClient = toalCliRes.reduce((acc: any, prj) => {
+  //       const client = prj.client;
+  //       (acc[client] = acc[client] || []).push(prj);
+  //       return acc;
+  //   }, {});
+
+  const groupedByClient = totalAccountByCliRes.reduce((acc: any, prj) => {
         const client = prj.client;
         (acc[client] = acc[client] || []).push(prj);
         return acc;
@@ -367,7 +374,48 @@ export default function DashboardCollectionsContainer({token, user, totalClients
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-x-3">
+      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
+        <div className="flex items-center w-full max-w-96">
+          <Link href={'/'}>
+            <div className="p-1 border border-slate-400 bg-white rounded-md">
+              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+            </div>
+          </Link>
+          <p className="text-xl ml-4 font-medium">COBRANZA </p>
+        </div>
+        <div className="flex items-center gap-x-3 justify-end">
+          {filterElemnts}
+          <PDFDownloadLink document={<DownloadPendingCollectionsPDF collections={totalAccountByPrjRes} token={token} 
+                pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
+                pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
+                date={rangeDate?.to?.toISOString().substring(0, 10) || ''} 
+                totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
+              fileName={`Cobranza pendiente por proyecto ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+              ) : (
+                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+              ) }
+          </PDFDownloadLink>
+
+          <PDFDownloadLink document={<DownloadPendingCollectionsByClientPDF collections={totalAccountByCliRes} token={token} 
+                pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
+                pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
+                date={rangeDate?.to?.toISOString().substring(0, 10) || ''} 
+                totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
+              fileName={`Cobranza pendiente por cliente ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+              ) : (
+                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+              ) }
+          </PDFDownloadLink>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-x-3 mt-3">
         <Card amount={ totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0 } title="TOTAL PAGADO">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
@@ -381,30 +429,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card> */}
       </div> 
-      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
-        <div className="flex items-center w-full max-w-96">
-          <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
-          </Link>
-          <p className="text-xl ml-4 font-medium">COBRANZA </p>
-        </div>
-        {filterElemnts}
-        <PDFDownloadLink document={<DownloadPendingCollectionsPDF collections={totalAccountByPrjRes} token={token} 
-              pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
-              pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
-              date={rangeDate?.to?.toISOString().substring(0, 10) || ''} 
-              totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
-            fileName={`Cobranza pendiente por proyecto ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-            ) : (
-              <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-            ) }
-        </PDFDownloadLink>
-      </div>
+      
       {/* {widthPage > 1080 && filterElemnts} */}
       <div className="mt-5 flex items-center gap-x-3">
         <div className="w-4/6">
@@ -423,6 +448,24 @@ export default function DashboardCollectionsContainer({token, user, totalClients
             <BarChartTwoInOneCollections 
               data={resParse}
             />
+          </div>
+        </div>
+      </div>
+      <div className="mt-5 flex items-center gap-x-3">
+        <div className="w-4/6">
+          <Label>COBRANZA POR PROYECTO</Label>
+          <div className="mt-3">
+            <BarChartComponent 
+              colors={[colors[colorRandom]]}
+              categories={['cobro']}
+              data={dataCollectionProjects}
+            />
+          </div>
+        </div>
+        <div className="w-2/6">
+          <Label>COBRANZA X CLIENTE</Label>
+          <div className="mt-3 w-full max-w-96">
+            <NewDonutChartComponent data={totalInvoiceClient} />
           </div>
         </div>
       </div>
@@ -445,7 +488,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
             />
           </div>
         </div> */}
-        <div>
+        {/* <div>
           <Label>COBRANZA POR PROYECTO</Label>
           <div className="mt-3">
             <BarChartComponent 
@@ -460,7 +503,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           <div className="mt-3 w-full max-w-96">
             <NewDonutChartComponent data={totalInvoiceClient} />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   )
