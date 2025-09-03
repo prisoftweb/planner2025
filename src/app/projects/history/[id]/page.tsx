@@ -21,84 +21,61 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin;
-  try {
-    project = await GetProjectMin(token, params.id);
-    if(typeof(project) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{project}</h1>
-        </>
-      )
-  } catch (error) {
+  // let project: OneProjectMin;
+  // let options: Options[] = [];
+  // let clients: ClientBack[];
+  // let catalogs: GlossaryCatalog[];
+  
+  // project = await GetProjectMin(token, params.id);
+  // options = await getProjectsLV(token);
+  // clients = await getClients(token);
+  // catalogs = await getCatalogsByName(token, 'projects');
+
+  const [project, options, clients, catalogs] = await Promise.all([
+    GetProjectMin(token, params.id),
+    getProjectsLV(token),
+    getClients(token),
+    getCatalogsByName(token, 'projects')
+  ]);
+  
+  if(typeof(project) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>
-      </>
-    ) 
-  }
-
-  let options: Options[] = [];
-  try {
-    options = await getProjectsLV(token);
-    if(typeof(options) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{options}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proyectos!!</h1>
-      </>
-    ) 
-  }
-
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{clients}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <> 
-        <Navigation user={user} />
-        <h1>Error al consultar clientes!!</h1>
+        <h1 className="text-center text-red-500">{project}</h1>
       </>
     )
   }
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(options) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        <h1 className="text-center text-red-500">{options}</h1>
+      </>
+    )
+  }
+
+  if(typeof(clients)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">{clients}</h1>
+      </>
+    )
+  }
+
+  if(typeof(catalogs)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
       </>
     )
   }
 
   const optClients: Options[] = [];
-  clients.map((client) => {
+  clients.map((client: any) => {
     optClients.push({
       label: client.name,
       value: client._id
@@ -106,7 +83,7 @@ export default async function Page({ params }: { params: { id: string }}){
   })
 
   const optCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -114,7 +91,7 @@ export default async function Page({ params }: { params: { id: string }}){
   })
 
   const optTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -122,7 +99,7 @@ export default async function Page({ params }: { params: { id: string }}){
   })
 
   const optConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

@@ -11,21 +11,13 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let quotations: IQuotationMin[];
-  try {
-    quotations = await getQuotationsMin(token);
-    if(typeof(quotations) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{quotations}</h1>
-        </>
-      )
-  } catch (error) {
+  let quotations: IQuotationMin[]= await getQuotationsMin(token);
+  
+  if(typeof(quotations) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizaciones!!</h1>
+        <h1 className="text-center text-red-500">{quotations}</h1>
       </>
     )
   }

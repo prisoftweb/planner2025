@@ -43,28 +43,36 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
 
   useEffect(() => {
     const fetch = async () => {
-      const resBudCon = await getDashboardProjectByBudgetControl(token, id, oneProjectStore?.date? new Date(oneProjectStore?.date).getFullYear(): new Date().getFullYear());
+      // const resBudCon = await getDashboardProjectByBudgetControl(token, id, oneProjectStore?.date? new Date(oneProjectStore?.date).getFullYear(): new Date().getFullYear());
+      // const resContractualC = await getProjectContractualControl(token, id);
+      // const resCostoC = await getDashboardProjectCostoCenters(token, id);
+      // const resCostoCat = await getDashboardProjectCostoCentersCategory(token, id);
+
+      const [resBudCon, resContractualC, resCostoC, resCostoCat] = await Promise.all([
+        getDashboardProjectByBudgetControl(token, id, oneProjectStore?.date? new Date(oneProjectStore?.date).getFullYear(): new Date().getFullYear()),
+        getProjectContractualControl(token, id),
+        getDashboardProjectCostoCenters(token, id),
+        getDashboardProjectCostoCentersCategory(token, id)
+      ]);
+      
       if(typeof(resBudCon) !== 'string'){
         setBudgetedControl(resBudCon[0]);
       }else{
         showToastMessageError(resBudCon);
       }
 
-      const resContractualC = await getProjectContractualControl(token, id);
       if(typeof(resContractualC) !== 'string'){
         setContractualControl(resContractualC);
       }else{
         showToastMessageError(resContractualC);
       }
 
-      const resCostoC = await getDashboardProjectCostoCenters(token, id);
       if(typeof(resCostoC) !== 'string'){
         setCostoCenters(resCostoC);
       }else{
         showToastMessageError(resCostoC)
       }
 
-      const resCostoCat = await getDashboardProjectCostoCentersCategory(token, id);
       if(typeof(resCostoCat) !== 'string'){
         setCostoCentersCat(resCostoCat);
       }else{

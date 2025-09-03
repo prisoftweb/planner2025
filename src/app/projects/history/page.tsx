@@ -14,40 +14,31 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: ProjectMin[];
-  try {
-    projects = await getProjectsMin(token);
-    if(typeof(projects)==='string')
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-        </>
-      )
-  } catch (error) {
+  // let projects: ProjectMin[];
+  // let catalogs: GlossaryCatalog[];
+  
+  // projects = await getProjectsMin(token);
+  // catalogs = await getCatalogsByName(token, 'projects');
+
+  const [projects, catalogs] = await Promise.all([
+    getProjectsMin(token),
+    getCatalogsByName(token, 'projects')
+  ]);
+  
+  if(typeof(projects)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar los proyectos!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{projects}</h1>
       </>
     )
   }
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(catalogs)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
       </>
     )
   }
@@ -57,7 +48,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optsCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -73,7 +64,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optsTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -89,7 +80,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optsConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

@@ -16,55 +16,51 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin;
-  try {
-    project = await GetProjectMin(token, params.idp);
-    if(typeof(project) === "string")
-      return <h1 className="text-center text-red-500">{project}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
+  // let project: OneProjectMin;
+  // let estimates: IEstimateProject[];
+  // let totalEstimatedProject: TotalEstimatedByProject[];
+  // let projects: Options[];
+  // let catalogs: GlossaryCatalog[];
+
+  // project = await GetProjectMin(token, params.idp);
+  // estimates = await getEstimatesByProject(token, params.idp);
+  // totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
+  // projects = await getProjectsLVNoCompleted(token);
+  // catalogs = await getCatalogsByName(token, 'projects');
+
+  const [project, estimates, totalEstimatedProject, projects, catalogs] = await Promise.all([
+    GetProjectMin(token, params.idp),
+    getEstimatesByProject(token, params.idp),
+    getTotalEstimatesByProjectMin(token, params.idp),
+    getProjectsLVNoCompleted(token),
+    getCatalogsByName(token, 'projects')
+  ]);
+  
+  if(typeof(project) === "string"){
+    return <h1 className="text-center text-red-500">{project}</h1>
+  }
+  
+  if(typeof(estimates) === "string"){
+    return <h1 className="text-center text-red-500">{estimates}</h1>
   }
 
-  let estimates: IEstimateProject[];
-  try {
-    estimates = await getEstimatesByProject(token, params.idp);
-    if(typeof(estimates) === "string")
-      return <h1 className="text-center text-red-500">{estimates}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
+  if(typeof(totalEstimatedProject) === "string"){
+    return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
   }
 
-  let totalEstimatedProject: TotalEstimatedByProject[];
-  try {
-    totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
-    if(typeof(totalEstimatedProject) === "string")
-      return <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las estimaciones del proyecto!!</h1>  
+  if(typeof(projects) === "string"){
+    return <h1 className="text-center text-red-500">{projects}</h1>
   }
 
-  let projects: Options[];
-  try {
-    projects = await getProjectsLVNoCompleted(token);
-    if(typeof(projects) === "string")
-      return <h1 className="text-center text-red-500">{projects}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al consultar proyectos!!</h1>  
-  }
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+  if(typeof(catalogs)==='string'){
+    return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
   }
 
   const optConditions: Options[] = [{
     label: 'Todos',
     value: 'all'
   }];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition:any) => {
     optConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

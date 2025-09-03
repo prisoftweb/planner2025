@@ -11,15 +11,9 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // if(role.toLowerCase().includes('residente')){
-  //   projects = await getProjectsByConditionMin(token);
-  // }else{
-  //   projects = await getActiveProjectsMin(token);
-  // }
-  let projects: ProjectMin[];
-  projects = await getActiveProjectsMin(token);
+  let projects: ProjectMin[] = await getActiveProjectsMin(token);
 
-  if(typeof(projects) === "string")
+  if(typeof(projects) === "string"){
     return(
       <>
         <Navigation user={user} />
@@ -28,10 +22,7 @@ export default async function Page(){
         </div>
       </>
     )
-
-  // console.log('prjs => ', projects);
-  // const p = projects.find(p => p._id === '679424db27f8eaae7dca5d42');
-  // console.log('find => ', p);
+  }
 
   return (
     <>

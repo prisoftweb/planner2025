@@ -20,14 +20,22 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let client: ClientBack;
-  try {
-    client = await getClient(token, params.id);
-    if(typeof(client) === "string")
-      return <h1 className="text-center text-red-500">{client}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>  
-  }
+  // let client: ClientBack;
+  // let clients: ClientBack[];
+  // let tags = [];
+  
+  // client = await getClient(token, params.id);
+  // clients = await getClients(token);
+  // tags = await getTags(token);
+
+  const [client, clients, tags] = await Promise.all([
+    getClient(token, params.id),
+    getClients(token),
+    getTags(token)
+  ]);
+  
+  if(typeof(client) === "string")
+    return <h1 className="text-center text-red-500">{client}</h1>
 
   const clientCookie = cookieStore.get('clients')?.value;
   let permisionsClient: Resource2 | undefined;
@@ -48,24 +56,13 @@ export default async function Page({ params }: { params: { id: string }}){
     )
   }
 
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients) === "string")
-      return (
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{clients}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
+  if(typeof(clients) === "string")
+    return (
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
+        <h1 className="text-center text-red-500">{clients}</h1>
       </>
-    )  
-  }
+    )
 
   let options: Options[] = [];
 
@@ -78,22 +75,11 @@ export default async function Page({ params }: { params: { id: string }}){
     )
   }
 
-  let tags = [];
-  try {
-    tags = await getTags(token);
-    if(typeof(tags)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{tags}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(tags)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Error al obtener etiquetas!!</h1>
+        <h1 className="text-center text-red-500">{tags}</h1>
       </>
     )
   }

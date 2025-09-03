@@ -24,19 +24,37 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let amountProjects: TotalAmountProjects[] =  await getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []);
-  let listProjectsdate: ListProjectsByDate[] = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []);
-  let projectsClient: ProjectsByClient[] = await getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30', []);
-  let projectsSegment: ProjectsBySegment[] = await getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30', []);
-  let projectsStatus: ProjectsByStatus[] = await getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30', []);
-  let projectsProgress: ProjectsByProgress[] = await getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30', []);
-  let listProjectsnotCompleted: ProjectsNotCompleted[] = await getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30', []);
-  let projectsandTypes: CostsByProjectAndType[] = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []);
-  let projectsTop10: ProjectsTop10[] = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
-  let projectsTotalCost: DashboardTotalCost[] = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
-  let configMin: ConfigMin[] = await getConfigMin(token);
-  let projects: Options[] = await getProjectsLV(token);
-  const numEvaluacion = await getLenghtProjectsEvaluacion(token);
+  // let amountProjects: TotalAmountProjects[] =  await getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []);
+  // let listProjectsdate: ListProjectsByDate[] = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []);
+  // let projectsClient: ProjectsByClient[] = await getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30', []);
+  // let projectsSegment: ProjectsBySegment[] = await getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30', []);
+  // let projectsStatus: ProjectsByStatus[] = await getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30', []);
+  // let projectsProgress: ProjectsByProgress[] = await getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30', []);
+  // let listProjectsnotCompleted: ProjectsNotCompleted[] = await getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30', []);
+  // let projectsandTypes: CostsByProjectAndType[] = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []);
+  // let projectsTop10: ProjectsTop10[] = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
+  // let projectsTotalCost: DashboardTotalCost[] = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
+  // let configMin: ConfigMin[] = await getConfigMin(token);
+  // let projects: Options[] = await getProjectsLV(token);
+  // const numEvaluacion = await getLenghtProjectsEvaluacion(token);
+
+  const [amountProjects, listProjectsdate, projectsClient, projectsSegment, projectsStatus,
+    projectsProgress, listProjectsnotCompleted, projectsandTypes, projectsTop10,
+    projectsTotalCost, configMin, projects, numEvaluacion] = await Promise.all([
+      getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []),
+      getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30', []),
+      getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30', []),
+      getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []),
+      getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []),
+      getConfigMin(token),
+      getProjectsLV(token),
+      getLenghtProjectsEvaluacion(token)
+    ]);
     
   if(typeof(amountProjects)==='string'){
     return(

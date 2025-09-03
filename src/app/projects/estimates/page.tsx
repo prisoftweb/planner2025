@@ -14,8 +14,13 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let projects: IProjectWithEstimateMin[] = await getProjectsWithEstimatesMin(token);
-  let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  // let projects: IProjectWithEstimateMin[] = await getProjectsWithEstimatesMin(token);
+  // let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+
+  const [projects, catalogs] = await Promise.all([
+    getProjectsWithEstimatesMin(token),
+    getCatalogsByName(token, 'projects')
+  ]);
   
   if(typeof(projects)==='string') 
     return(
@@ -42,7 +47,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optsCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -58,7 +63,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optsTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -74,7 +79,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optsConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

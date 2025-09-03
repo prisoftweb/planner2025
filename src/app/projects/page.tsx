@@ -19,121 +19,91 @@ export default async function Page(){
 
   let role = user.rol?.name || '';
 
-  let projects: ProjectMin[];
-  try {
-    if(role.toLowerCase().includes('residente')){
-      projects = await getProjectsByConditionMin(token);
-    }else{
-      projects = await getActiveProjectsMin(token);
-    }
-    if(typeof(projects)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-10">
-            <h1 className="text-red-500 text-center text-lg">{projects}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
+  // let projects: ProjectMin[];
+  // if(role.toLowerCase().includes('residente')){
+  //   projects = await getProjectsByConditionMin(token);
+  // }else{
+  //   projects = await getActiveProjectsMin(token);
+  // }
+
+  // let clients: ClientBack[];
+  // let costs: ICostsAccumByProject[];
+  // let collections: ICollectionAccumByProject[];
+  // let catalogs: GlossaryCatalog[];
+  // let optCompanies: Options[] = [];
+  
+  // clients = await getClients(token);
+  // costs = await GetCostsAccumByProjectMin(token);
+  // collections = await GetCollectionsAccumByProjectMin(token);
+  // catalogs = await getCatalogsByName(token, 'projects');
+  // optCompanies = await getCompaniesLV(token);
+
+  const [projects, clients, costs, collections, catalogs, optCompanies] = await Promise.all([
+    role.toLowerCase().includes('residente') ? getProjectsByConditionMin(token) : getActiveProjectsMin(token),
+    getClients(token), 
+    GetCostsAccumByProjectMin(token),
+    GetCollectionsAccumByProjectMin(token),
+    getCatalogsByName(token, 'projects'),
+    getCompaniesLV(token)
+  ])
+  
+  if(typeof(projects)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar los proyectos!!</h1>
+        <div className="p-10">
+          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+        </div>
+      </>
+    )
+  }
+  
+  if(typeof(clients)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">{clients}</h1>
       </>
     )
   }
 
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{clients}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(costs)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar clientes!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{costs}</h1>
       </>
     )
   }
 
-  let costs: ICostsAccumByProject[];
-  try {
-    costs = await GetCostsAccumByProjectMin(token);
-    if(typeof(costs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{costs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(collections)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar los costos de los proyectos!!</h1>
-      </>
-    )
-  }
-
-  let collections: ICollectionAccumByProject[];
-  try {
-    collections = await GetCollectionsAccumByProjectMin(token);
-    if(typeof(collections)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{collections}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1>Error al consultar los cobros de los proyectos!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{collections}</h1>
       </>
     )
   }
 
   const optClients: Options[] = [];
-  clients.map((client) => {
+  clients.map((client: any) => {
     optClients.push({
       label: client.name,
       value: client._id
     })
   })
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+  if(typeof(catalogs)==='string'){
+    return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
   }
 
   const condition = catalogs[0].condition[0].glossary._id;
   
-  let optCompanies: Options[] = [];
-  try {
-    optCompanies = await getCompaniesLV(token);
-    if(typeof(optCompanies)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{optCompanies}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(optCompanies)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">Error al consultar compañias!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{optCompanies}</h1>
       </>
     )
   }
@@ -143,7 +113,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optsCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -159,7 +129,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optsTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -175,7 +145,7 @@ export default async function Page(){
     value: 'all'
   }];
   const optsConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optsConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

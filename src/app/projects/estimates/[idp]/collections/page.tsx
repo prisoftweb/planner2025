@@ -21,139 +21,90 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin;
-  try {
-    project = await GetProjectMin(token, params.idp);
-    if(typeof(project) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-            <h1 className="text-center text-red-500">project min{project}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
+  // let project: OneProjectMin;
+  // let collections: ICollectionMin[]=[];
+  // let totalInvoicesProject: ITotalInvoicesByProject[];
+  // let totalPaymentsResumen: ITotalResumentPayment;
+  // let projects: Options[];
+  // let catalogs: GlossaryCatalog[];
+  
+  // project = await GetProjectMin(token, params.idp);
+  // collections = await getCollectionsByProjectMin(token, project._id);
+  // totalInvoicesProject = await getTotalInvoicesByProject(token, params.idp);
+  // totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, params.idp);
+  // projects = await getProjectsLVNoCompleted(token);
+  // catalogs = await getCatalogsByName(token, 'projects');
+
+  const [project, collections, totalInvoicesProject, totalPaymentsResumen, projects, catalogs] = await Promise.all([
+    GetProjectMin(token, params.idp),
+    getCollectionsByProjectMin(token, params.idp),
+    getTotalInvoicesByProject(token, params.idp),
+    getAllTotalPaymentsResumeByProjectMin(token, params.idp),
+    getProjectsLVNoCompleted(token),
+    getCatalogsByName(token, 'projects')
+  ]);
+  
+  if(typeof(project) === "string"){
     return(
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>
+          <h1 className="text-center text-red-500">project min{project}</h1>
+        </div>
+      </>
+    )
+  }
+      
+  if(typeof(collections) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">collections{collections}</h1>
+        </div>
+      </>
+    )
+  }  
+
+  if(typeof(totalInvoicesProject) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">total invoice{totalInvoicesProject}</h1>
+        </div>
+      </>
+    )
+  }
+      
+  if(typeof(totalPaymentsResumen) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+          <h1 className="text-center text-red-500">total payments resumen{totalPaymentsResumen}</h1>
         </div>
       </>
     )
   }
 
-  let collections: ICollectionMin[]=[];
-  try {
-    collections = await getCollectionsByProjectMin(token, project._id);
-    if(typeof(collections) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-            <h1 className="text-center text-red-500">collections{collections}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
+  if(typeof(projects) === "string"){
     return(
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <h1 className="text-center text-red-500">Ocurrio un error al obtener los cobros del proyecto!!</h1>
-        </div>
-      </>
-    ) 
-  }
-
-  let totalInvoicesProject: ITotalInvoicesByProject[];
-  try {
-    totalInvoicesProject = await getTotalInvoicesByProject(token, params.idp);
-    if(typeof(totalInvoicesProject) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-            <h1 className="text-center text-red-500">total invoice{totalInvoicesProject}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las facturas del proyecto!!</h1>
+          <h1 className="text-center text-red-500">opt pro{projects}</h1>
         </div>
       </>
     )
   }
 
-  let totalPaymentsResumen: ITotalResumentPayment;
-  try {
-    totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, params.idp);
-    if(typeof(totalPaymentsResumen) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-            <h1 className="text-center text-red-500">total payments resumen{totalPaymentsResumen}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
+  if(typeof(catalogs)==='string'){
     return(
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen del proyecto!!</h1>
-        </div>
-      </>
-    )
-  }
-
-  let projects: Options[];
-  try {
-    projects = await getProjectsLVNoCompleted(token);
-    if(typeof(projects) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-            <h1 className="text-center text-red-500">opt pro{projects}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <h1 className="text-center text-red-500">Ocurrio un error al consultar proyectos!!</h1>
-        </div>
-      </>
-    )
-  }
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-            <h1 className="text-red-500 text-center text-lg">catalogs{catalogs}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <h1>Error al consultar catalogos!!</h1>
+          <h1 className="text-red-500 text-center text-lg">catalogs{catalogs}</h1>
         </div>
       </>
     )
@@ -163,7 +114,7 @@ export default async function Page({ params, searchParams }:
     label: 'Todos',
     value: 'all'
   }];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

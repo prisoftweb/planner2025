@@ -40,7 +40,11 @@ export default function FilteringCollectionsComponent({showForm, FilterData, max
 
   useEffect(() => {
     const fetch = async () => {
-      const res = await getClientsLV(token);
+      const r1 = await getClientsLV(token);
+      const r2 = await getCatalogsByNameAndCondition(token, 'collection');
+
+      const [res, res2] = await Promise.all([r1, r2]); 
+
       if(typeof(res)=='string'){
         showToastMessageError(res);
       }else{
@@ -51,7 +55,6 @@ export default function FilteringCollectionsComponent({showForm, FilterData, max
         setClients(['all']);
       }
 
-      const res2 = await getCatalogsByNameAndCondition(token, 'collection');
       if(typeof(res2)=='string'){
         showToastMessageError(res2);
       }else{

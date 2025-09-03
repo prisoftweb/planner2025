@@ -55,22 +55,24 @@ export default function TableCollectionsComp({token, user}: {token:string, user:
 
   useEffect(() => {
     const fetch = async () => {
-
-      const res = await getCollectionsMin(token);
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        setCollections(res);
-        setFilteredCollections(res);
-        console.log('collections => ', res);
-      }
-
       const data={
         condition: [],
         conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
         conditionAccountsReceivable:['67d20cb359865f640af92638'],
       }
-      const rest = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
+
+      const r = await getCollectionsMin(token);
+      const rt = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
+
+      const [res, rest] = await Promise.all([r, rt]);
+
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setCollections(res);
+        setFilteredCollections(res);
+      }
+      
       if(typeof(rest)==='string'){
         showToastMessageError(rest);
       }else{

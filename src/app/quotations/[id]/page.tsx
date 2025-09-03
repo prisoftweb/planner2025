@@ -13,11 +13,12 @@ export default async function Page({params}: {params:{id:string}}){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let quot: IOneQuotationMin = await getQuotationMin(token, params.id);
-  let quots: Options[] = await getQuotationsLV(token);
+  // let quot: IOneQuotationMin = await getQuotationMin(token, params.id);
+  // let quots: Options[] = await getQuotationsLV(token);
 
   const [quotation, quotations] = await Promise.all([
-    quot, quots
+    getQuotationMin(token, params.id), 
+    getQuotationsLV(token)
   ]);
 
   if(typeof(quotation) === "string"){

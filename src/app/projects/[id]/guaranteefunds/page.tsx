@@ -19,9 +19,15 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin = await GetProjectMin(token, params.id);
-  let options: Options[] = await getProjectsLV(token);
-  let guarantees: IGuaranteeByPojectMin[] = await getGuaranteesByProject(token, params.id);
+  // let project: OneProjectMin = await GetProjectMin(token, params.id);
+  // let options: Options[] = await getProjectsLV(token);
+  // let guarantees: IGuaranteeByPojectMin[] = await getGuaranteesByProject(token, params.id);
+
+  const [project, options, guarantees] = await Promise.all([
+    GetProjectMin(token, params.id),
+    getProjectsLV(token),
+    getGuaranteesByProject(token, params.id)
+  ]);
   
   if(typeof(project) === "string")
     return(

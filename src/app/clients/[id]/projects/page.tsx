@@ -8,7 +8,6 @@ import { getClient, getClients, getProjectsByClient } from "@/app/api/routeClien
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
 import { ProjectMin } from "@/interfaces/Projects"
-// import { ProjectsTable } from "@/interfaces/Projects"
 import TableProjectsClient from "@/components/clients/projects/TableProjectsClient"
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -18,9 +17,15 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let client: ClientBack = await getClient(token, params.id);
-  let clients: ClientBack[] = await getClients(token);
-  let projects: ProjectMin[] = await getProjectsByClient(token, params.id);
+  // let client: ClientBack = await getClient(token, params.id);
+  // let clients: ClientBack[] = await getClients(token);
+  // let projects: ProjectMin[] = await getProjectsByClient(token, params.id);
+
+  const [client, clients, projects] = await Promise.all([
+    getClient(token, params.id),
+    getClients(token),
+    getProjectsByClient(token, params.id)
+  ]);
 
   if(typeof(client) === "string")
     return (

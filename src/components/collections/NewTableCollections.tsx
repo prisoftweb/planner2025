@@ -57,20 +57,24 @@ export default function NewTableCollections({token, user}: {token:string, user:s
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getCollectionsMin(token);
+      const data={
+        condition: [],
+        conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
+        conditionAccountsReceivable:['67d20cb359865f640af92638'],
+      }
+
+      const r = await getCollectionsMin(token);
+      const rt = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
+
+      const [res, rest] = await Promise.all([r, rt]);
+
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
         setCollections(res);
         setFilteredCollections(res);
       }
-
-      const data={
-        condition: [],
-        conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
-        conditionAccountsReceivable:['67d20cb359865f640af92638'],
-      }
-      const rest = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
+      
       if(typeof(rest)==='string'){
         showToastMessageError(rest);
       }else{
@@ -89,32 +93,12 @@ export default function NewTableCollections({token, user}: {token:string, user:s
   }
 
   let data
-  // if(isFilter){
-  //   if(search.length>0){
-  //     data=filteredCollections.filter((f) => f.reference.includes(search));
-  //   }else{
-  //     data=filteredCollections;
-  //   }
-  // }else{
-  //   console.log('search => ', search);
-  //   console.log('collections => ', collections);
-  //   if(search.length>0){
-  //     data=collections.filter((f) => f.reference.includes(search));
-  //   }else{
-  //     data=collections;
-  //   }
-  // }
   if(search.length>0){
     data=collections.filter((f) => f.reference.includes(search));
   }else{
     data=collections;
   }
-  console.log('data => ', data);
-  // const data = CollectionDataToTableData(collections);
-  // console.log('data => ', data);
-
-  // console.log('widt pge => ', widthPage);
-// console.log('total collections => ', totalCollections);
+  
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">

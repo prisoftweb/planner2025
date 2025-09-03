@@ -4,7 +4,6 @@ import { UsrBack } from "@/interfaces/User";
 import { IOneCollectionMin, IInvoicesByCollection } from "@/interfaces/Collections";
 import { getCollectionMin, getInvoicesByCollectionMin } from "@/app/api/routeCollections";
 import ContainerCollectionProfile from "@/components/projects/estimates/collections/ContainerCollectionProfile";
-// import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
 
 export default async function page({ params, searchParams }: 
@@ -14,8 +13,13 @@ export default async function page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let collection:IOneCollectionMin = await getCollectionMin(token, params.idc);
-  let invoices:IInvoicesByCollection[] = await getInvoicesByCollectionMin(token, params.idc);
+  // let collection:IOneCollectionMin = await getCollectionMin(token, params.idc);
+  // let invoices:IInvoicesByCollection[] = await getInvoicesByCollectionMin(token, params.idc);
+
+  const [collection, invoices] = await Promise.all([
+    getCollectionMin(token, params.idc),
+    getInvoicesByCollectionMin(token, params.idc)
+  ]);
   
   if(typeof(collection)==='string'){
     return (

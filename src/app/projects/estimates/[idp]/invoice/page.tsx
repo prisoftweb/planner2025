@@ -17,65 +17,58 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin;
-  try {
-    project = await GetProjectMin(token, params.idp);
-    if(typeof(project) === "string")
-      return <h1 className="text-center text-red-500">{project}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>  
+  // let project: OneProjectMin;
+  // let invoices: IInvoiceByProject[];
+  // let totalInvoicesProject: ITotalInvoicesByProject[];
+  // let totalInvoicesResumen: ITotalInvoiceResumen;
+  // let projects: Options[];
+  // let catalogs: GlossaryCatalog[];
+  
+  // project = await GetProjectMin(token, params.idp);
+  // invoices = await getInvoicesByProject(token, params.idp);
+  // totalInvoicesProject = await getTotalInvoicesByProject(token, params.idp);
+  // totalInvoicesResumen = await getTotalInvoiceResumenByProject(token, params.idp);
+  // projects = await getProjectsLVNoCompleted(token);
+  // catalogs = await getCatalogsByName(token, 'projects');
+
+  const [project, invoices, totalInvoicesProject, totalInvoicesResumen, projects, catalogs] = await Promise.all([
+    GetProjectMin(token, params.idp),
+    getInvoicesByProject(token, params.idp),
+    getTotalInvoicesByProject(token, params.idp),
+    getTotalInvoiceResumenByProject(token, params.idp),
+    getProjectsLVNoCompleted(token),
+    getCatalogsByName(token, 'projects')
+  ]);
+  
+  if(typeof(project) === "string"){
+    return <h1 className="text-center text-red-500">{project}</h1>
   }
 
-  let invoices: IInvoiceByProject[];
-  try {
-    invoices = await getInvoicesByProject(token, params.idp);
-    console.log('invoices proyect => ', invoices);
-    if(typeof(invoices) === "string")
-      return <h1 className="text-center text-red-500">{invoices}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones del proyecto!!</h1>  
+  if(typeof(invoices) === "string"){
+    return <h1 className="text-center text-red-500">{invoices}</h1>
+  }
+  
+  if(typeof(totalInvoicesProject) === "string"){
+    return <h1 className="text-center text-red-500">{totalInvoicesProject}</h1>
   }
 
-  let totalInvoicesProject: ITotalInvoicesByProject[];
-  try {
-    totalInvoicesProject = await getTotalInvoicesByProject(token, params.idp);
-    if(typeof(totalInvoicesProject) === "string")
-      return <h1 className="text-center text-red-500">{totalInvoicesProject}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las facturas del proyecto!!</h1>  
+  if(typeof(totalInvoicesResumen) === "string"){
+    return <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1>
   }
 
-  let totalInvoicesResumen: ITotalInvoiceResumen;
-  try {
-    totalInvoicesResumen = await getTotalInvoiceResumenByProject(token, params.idp);
-    if(typeof(totalInvoicesResumen) === "string")
-      return <h1 className="text-center text-red-500">{totalInvoicesResumen}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener el resumen de las facturas del proyecto!!</h1>  
+  if(typeof(projects) === "string"){
+    return <h1 className="text-center text-red-500">{projects}</h1>
   }
 
-  let projects: Options[];
-  try {
-    projects = await getProjectsLVNoCompleted(token);
-    if(typeof(projects) === "string")
-      return <h1 className="text-center text-red-500">{projects}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al consultar proyectos!!</h1>  
-  }
-
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'projects');
-    if(typeof(catalogs)==='string') return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-  } catch (error) {
-    return <h1>Error al consultar catalogos!!</h1>
+  if(typeof(catalogs)==='string'){
+    return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
   }
 
   const optConditions: Options[] = [{
     label: 'Todos',
     value: 'all'
   }];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

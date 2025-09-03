@@ -15,8 +15,13 @@ export default async function page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let budget: FullBudget = await getBudget(token, params.id);
-  let costoCenters: CostCenter[] = await getCostoCenters(token);
+  // let budget: FullBudget = await getBudget(token, params.id);
+  // let costoCenters: CostCenter[] = await getCostoCenters(token);
+
+  const [budget, costoCenters] = await Promise.all([
+    getBudget(token, params.id),
+    getCostoCenters(token)
+  ]);
   
   if(typeof(budget)==='string'){
     return(

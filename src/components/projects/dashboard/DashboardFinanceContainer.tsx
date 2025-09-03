@@ -81,186 +81,165 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   const [stateTotalPaymentsProjects, setStateTotalPaymentsProjects] = useState<ITotalPaymentsProyects[]>(totalPaymentsProjects);
 
   const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
-    let amountPrjs: TotalAmountProjects[] = [];
+    // let amountPrjs: TotalAmountProjects[] = [];
     
-    let listPrjsDate: ListProjectsByDate[] = [];    
+    // let listPrjsDate: ListProjectsByDate[] = [];    
     
-    let prjandTypes: CostsByProjectAndType[] = [];
+    // let prjandTypes: CostsByProjectAndType[] = [];
     
-    let totalCost: DashboardTotalCost[] = [];
+    // let totalCost: DashboardTotalCost[] = [];
     
-    let confMin: ConfigMin[] = [];
+    // let confMin: ConfigMin[] = [];
     
-    let prjsBudgeted: ControlBudgeted[] = [];
+    // let prjsBudgeted: ControlBudgeted[] = [];
     
-    let prjsSpent: ControlBudgeted[] = [];
+    // let prjsSpent: ControlBudgeted[] = [];
     
-    let prjsControlBudgeted: ControlBudgeted[] = [];
+    // let prjsControlBudgeted: ControlBudgeted[] = [];
 
-    let allPaymentsProjects: ITotalPaymentsProyects[] = [];
-    try {
-      allPaymentsProjects = await getAllPaymentsProjects(token, dateS, dateE);
+    // let allPaymentsProjects: ITotalPaymentsProyects[] = [];
+    
+    if(prj.includes('all')){
+      // amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
+      // listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
+      // totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, []);
+      // confMin = await getConfigMin(token);
+      // prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
+      // prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
+      // prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
+      // prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
+
+      // allPaymentsProjects = await getAllPaymentsProjects(token, dateS, dateE);
+
+      const [amountPrjs, listPrjsDate, totalCost, confMin, prjsBudgeted, prjsSpent, prjsControlBudgeted, prjandTypes, allPaymentsProjects] = await Promise.all([
+        getDashboardProjectsAmount(token, dateS, dateE, []),
+        getDashboardListProjectsByDate(token, dateS, dateE, []),
+        getDashboardProjectTotalCost(token, dateS, dateE, []),
+        getConfigMin(token),
+        getProjectsBudgeted(token, dateS, dateE, []),
+        getProjectsSpent(token, dateS, dateE, []),
+        getProjectsControlBudgeted(token, dateS, dateE, []),
+        getDashboardByProjectAndType(token, dateS, dateE, []),
+        getAllPaymentsProjects(token, dateS, dateE)
+      ]); 
+      
+      if(typeof(amountPrjs)==='string'){
+        showToastMessageError(amountPrjs);
+      }
+
+      if(typeof(listPrjsDate)==='string'){
+        showToastMessageError(listPrjsDate);
+      }
+
+      if(typeof(totalCost)==='string'){
+        showToastMessageError(totalCost);
+      }
+
+      if(typeof(confMin)==='string'){
+        showToastMessageError(confMin);
+      }
+
+      if(typeof(prjsBudgeted)==='string'){
+        showToastMessageError(prjsBudgeted);
+      }
+
+      if(typeof(prjsSpent)==='string'){
+        showToastMessageError(prjsSpent);
+      }
+
+      if(typeof(prjsControlBudgeted)==='string'){
+        showToastMessageError(prjsControlBudgeted);
+      }
+
+      if(typeof(prjandTypes)==='string'){
+        showToastMessageError(prjandTypes);
+      }
+
       if(typeof(allPaymentsProjects) === "string"){
         showToastMessageError(allPaymentsProjects);
       }
-    } catch (error) {
-      showToastMessageError('Error al obtener pagos de proyectos!!!');
-    }
-    
-    if(prj.includes('all')){
-      try {
-        amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
-        if(typeof(amountPrjs)==='string'){
-          showToastMessageError(amountPrjs);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener monto total de proyectos!!!');
-      }
 
-      try {
-        listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
-        if(typeof(listPrjsDate)==='string'){
-          showToastMessageError(listPrjsDate);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener lista de proyectos!!!');
-      }
-
-      try {
-        totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, []);
-        if(typeof(totalCost)==='string'){
-          showToastMessageError(totalCost);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costo total de los proyectos!!!');
-      }
-
-      try {
-        confMin = await getConfigMin(token);
-        if(typeof(confMin)==='string'){
-          showToastMessageError(confMin);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener configuracion!!!');
-      }
-
-      try {
-        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
-        if(typeof(prjsBudgeted)==='string'){
-          showToastMessageError(prjsBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos presupuestados!!!');
-      }
-
-      try {
-        prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
-        if(typeof(prjsSpent)==='string'){
-          showToastMessageError(prjsSpent);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por gastos!!!');
-      }
-
-      try {
-        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
-        if(typeof(prjsControlBudgeted)==='string'){
-          showToastMessageError(prjsControlBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
-      }
-
-      try {
-        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
-        if(typeof(prjandTypes)==='string'){
-          showToastMessageError(prjandTypes);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
-      }
+      setStateListProjects(listPrjsDate);
+      setTotalAmount(amountPrjs);
+      setStateProjectsAndType(prjandTypes);
+      setStateTotalCost(totalCost);
+      setStateConfiMin(confMin);
+      setStateProjectsSpent(prjsSpent);
+      setStateProjectsControlBudgeted(prjsControlBudgeted);
+      setStateProjectsBudgeted(prjsBudgeted);
+      setStateTotalPaymentsProjects(allPaymentsProjects);
     }else{
-      try {
-        amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
-        if(typeof(amountPrjs)==='string'){
-          showToastMessageError(amountPrjs);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener monto total de proyectos!!!');
+      const [amountPrjs, listPrjsDate, totalCost, confMin, prjsBudgeted, prjsSpent, prjsControlBudgeted, prjandTypes, allPaymentsProjects] = await Promise.all([
+        getDashboardProjectsAmount(token, dateS, dateE, prj),
+        getDashboardListProjectsByDate(token, dateS, dateE, prj),
+        getDashboardProjectTotalCost(token, dateS, dateE, prj),
+        getConfigMin(token),
+        getProjectsBudgeted(token, dateS, dateE, prj),
+        getProjectsSpent(token, dateS, dateE, prj),
+        getProjectsControlBudgeted(token, dateS, dateE, prj),
+        getDashboardByProjectAndType(token, dateS, dateE, prj),
+        getAllPaymentsProjects(token, dateS, dateE)
+      ]);
+
+      // amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
+      if(typeof(amountPrjs)==='string'){
+        showToastMessageError(amountPrjs);
       }
 
-      try {
-        listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
-        if(typeof(listPrjsDate)==='string'){
-          showToastMessageError(listPrjsDate);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener lista de proyectos!!!');
+      // listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
+      if(typeof(listPrjsDate)==='string'){
+        showToastMessageError(listPrjsDate);
       }
 
-      try {
-        totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, prj);
-        if(typeof(totalCost)==='string'){
-          showToastMessageError(totalCost);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costo total de los proyectos!!!');
+      // totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, prj);
+      if(typeof(totalCost)==='string'){
+        showToastMessageError(totalCost);
       }
 
-      try {
-        confMin = await getConfigMin(token);
-        if(typeof(confMin)==='string'){
-          showToastMessageError(confMin);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener configuracion!!!');
+      // confMin = await getConfigMin(token);
+      if(typeof(confMin)==='string'){
+        showToastMessageError(confMin);
       }
 
-      try {
-        prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
-        if(typeof(prjsBudgeted)==='string'){
-          showToastMessageError(prjsBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos presupuestados!!!');
+      // prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
+      if(typeof(prjsBudgeted)==='string'){
+        showToastMessageError(prjsBudgeted);
       }
 
-      try {
-        prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
-        if(typeof(prjsSpent)==='string'){
-          showToastMessageError(prjsSpent);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por gastos!!!');
+      // prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
+      if(typeof(prjsSpent)==='string'){
+        showToastMessageError(prjsSpent);
       }
 
-      try {
-        prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
-        if(typeof(prjsControlBudgeted)==='string'){
-          showToastMessageError(prjsControlBudgeted);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener proyectos por control presupuestal!!!');
+      // prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
+      if(typeof(prjsControlBudgeted)==='string'){
+        showToastMessageError(prjsControlBudgeted);
       }
 
-      try {
-        prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
-        if(typeof(prjandTypes)==='string'){
-          showToastMessageError(prjandTypes);
-        }
-      } catch (error) {
-        showToastMessageError('Error al obtener costos por proyecto y tipo!!!');
+      // prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
+      if(typeof(prjandTypes)==='string'){
+        showToastMessageError(prjandTypes);
       }
+
+      setStateListProjects(listPrjsDate);
+      setTotalAmount(amountPrjs);
+      setStateProjectsAndType(prjandTypes);
+      setStateTotalCost(totalCost);
+      setStateConfiMin(confMin);
+      setStateProjectsSpent(prjsSpent);
+      setStateProjectsControlBudgeted(prjsControlBudgeted);
+      setStateProjectsBudgeted(prjsBudgeted);
+      setStateTotalPaymentsProjects(allPaymentsProjects);
     }
-    setStateListProjects(listPrjsDate);
-    setTotalAmount(amountPrjs);
-    setStateProjectsAndType(prjandTypes);
-    setStateTotalCost(totalCost);
-    setStateConfiMin(confMin);
-    setStateProjectsSpent(prjsSpent);
-    setStateProjectsControlBudgeted(prjsControlBudgeted);
-    setStateProjectsBudgeted(prjsBudgeted);
-    setStateTotalPaymentsProjects(allPaymentsProjects);
+    // setStateListProjects(listPrjsDate);
+    // setTotalAmount(amountPrjs);
+    // setStateProjectsAndType(prjandTypes);
+    // setStateTotalCost(totalCost);
+    // setStateConfiMin(confMin);
+    // setStateProjectsSpent(prjsSpent);
+    // setStateProjectsControlBudgeted(prjsControlBudgeted);
+    // setStateProjectsBudgeted(prjsBudgeted);
+    // setStateTotalPaymentsProjects(allPaymentsProjects);
   }
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];

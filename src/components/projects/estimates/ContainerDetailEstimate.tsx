@@ -44,28 +44,27 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   }
 
   const updateConceptsEstimate = async () => {
-    let concepts: IConceptEstimate[];
-    try {
-      concepts = await getAllConceptsDetailsByEstimateMin(token, estimate._id);
-      if(typeof(concepts) === "string"){
-        showToastMessageError(concepts);
-      }else{
-        setConceptsData(concepts);
-      }
-    } catch (error) {
-      showToastMessageError('Ocurrio un error al actualizar conceptos de la estimacion!!');
+    // let concepts: IConceptEstimate[];
+    // let totalEstimated: TotalEstimatedByProject[];
+
+    // concepts = await getAllConceptsDetailsByEstimateMin(token, estimate._id);
+    // totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
+
+    const [concepts, totalEstimated] = await Promise.all([
+      getAllConceptsDetailsByEstimateMin(token, estimate._id),
+      getTotalEstimatesByProjectMin(token, project._id)
+    ]);
+    
+    if(typeof(concepts) === "string"){
+      showToastMessageError(concepts);
+    }else{
+      setConceptsData(concepts);
     }
 
-    let totalEstimated: TotalEstimatedByProject[];
-    try {
-      totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
-      if(typeof(totalEstimated) === "string"){
-        showToastMessageError(totalEstimated);
-      }else{
-        setTotalEstimatedProjectState(totalEstimated);
-      }
-    } catch (error) {
-      showToastMessageError('Ocurrio un error al actualizar el total de las estimaciones del proyecto!!')
+    if(typeof(totalEstimated) === "string"){
+      showToastMessageError(totalEstimated);
+    }else{
+      setTotalEstimatedProjectState(totalEstimated);
     }
 
     setIsFilterTable(false);

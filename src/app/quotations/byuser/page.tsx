@@ -10,24 +10,14 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let quotations: IQuotationMin[];
-  try {
-    quotations = await getQuotationsByUserMin(token, user._id);
-    if(typeof(quotations) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-            <h1 className="text-center text-red-500">{quotations}</h1>
-          </div>
-        </>
-      )
-  } catch (error) {
+  let quotations: IQuotationMin[] = await getQuotationsByUserMin(token, user._id);
+  
+  if(typeof(quotations) === "string"){
     return(
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1 className="text-center text-red-500">Ocurrio un error al obtener cotizaciones!!</h1>
+          <h1 className="text-center text-red-500">{quotations}</h1>
         </div>
       </>
     )

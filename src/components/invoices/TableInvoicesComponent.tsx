@@ -73,12 +73,6 @@ export default function TableInvoicesComponent({token, user}:
       const dataInvoices = {
         condition: ["678ed05cc5f08e8a0f36d5e1", "67d20e2959865f640af92682", "67d20cb359865f640af92638"]
       }
-      const res = await getAllInvoicesMINByDateAndCondition(token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''), dataInvoices);
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        setInvoices(res);
-      }
 
       const data = {
         conditionPayment: [],
@@ -89,7 +83,21 @@ export default function TableInvoicesComponent({token, user}:
             "67d20cb359865f640af92638","67d20e2959865f640af92682"
         ]
       }
-      const rest = await getAllTotalAmountInvoicePending(token, '2025-01-01', '2025-12-31', data);
+      
+      // const res = await getAllInvoicesMINByDateAndCondition(token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''), dataInvoices);
+      // const rest = await getAllTotalAmountInvoicePending(token, '2025-01-01', '2025-12-31', data);
+
+      const [res, rest] = await Promise.all([
+        getAllInvoicesMINByDateAndCondition(token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''), dataInvoices),
+        getAllTotalAmountInvoicePending(token, '2025-01-01', '2025-12-31', data)
+      ]);
+      
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setInvoices(res);
+      }
+
       if(typeof(rest)==='string'){
         showToastMessageError(rest);
       }else{
@@ -281,7 +289,18 @@ export default function TableInvoicesComponent({token, user}:
       ]
     }
 
-    const rest = await getAllTotalAmountInvoicePending(token, dateI, dateF, data);
+    const dataInvoices = {
+      condition: statuses
+    }
+
+    // const rest = await getAllTotalAmountInvoicePending(token, dateI, dateF, data);
+    // const res = await getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices);
+
+    const [res, rest] = await Promise.all([
+      getAllTotalAmountInvoicePending(token, dateI, dateF, data),
+      getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices)
+    ]);
+    
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
     }else{
@@ -289,11 +308,6 @@ export default function TableInvoicesComponent({token, user}:
       setTotalInvoices(rest);
     }
 
-    const dataInvoices = {
-      condition: statuses
-    }
-
-    const res = await getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices);
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{

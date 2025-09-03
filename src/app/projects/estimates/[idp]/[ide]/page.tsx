@@ -14,80 +14,57 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin;
-  try {
-    project = await GetProjectMin(token, params.idp);
-    if(typeof(project) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{project}</h1>
-        </>
-      )
-  } catch (error) {
+  // let project: OneProjectMin;
+  // let estimate: IEstimate;
+  // let totalEstimatedProject: TotalEstimatedByProject[];
+  // let concepts: IConceptEstimate[];
+  
+  // project = await GetProjectMin(token, params.idp);
+  // estimate = await getEstimate(token, params.ide);
+  // totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
+  // concepts = await getAllConceptsDetailsByEstimateMin(token, params.ide);
+
+  const [project, estimate, totalEstimatedProject, concepts] = await Promise.all([
+    GetProjectMin(token, params.idp),
+    getEstimate(token, params.ide),
+    getTotalEstimatesByProjectMin(token, params.idp),
+    getAllConceptsDetailsByEstimateMin(token, params.ide)
+  ]);
+  
+  if(typeof(project) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proyecto!!</h1>
+        <h1 className="text-center text-red-500">{project}</h1>
       </>
-    )  
+    )
   }
 
-  let estimate: IEstimate;
-  try {
-    estimate = await getEstimate(token, params.ide);
-    if(typeof(estimate) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{estimate}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(estimate) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener estimacion!!</h1>
+        <h1 className="text-center text-red-500">{estimate}</h1>
       </>
-    )  
+    )
   }
 
-  let totalEstimatedProject: TotalEstimatedByProject[];
-  try {
-    totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
-    if(typeof(totalEstimatedProject) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(totalEstimatedProject) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener el total de las estimaciones del proyecto!!</h1>
+        <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
       </>
-    ) 
+    )
   }
   
-  let concepts: IConceptEstimate[];
-  try {
-    concepts = await getAllConceptsDetailsByEstimateMin(token, params.ide);
-    if(typeof(concepts) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{concepts}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(concepts) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos de la estimacion!!</h1>
+        <h1 className="text-center text-red-500">{concepts}</h1>
       </>
-    ) 
+    )
   }
 
   return (

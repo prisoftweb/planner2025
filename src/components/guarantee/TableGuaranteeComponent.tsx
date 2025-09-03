@@ -125,7 +125,24 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
 
   const updateTotal = async (dateI:string, dateF:string, arrStatuses:string[]) => {
 
-    const res = await getGuaranteesResumeByProjectMin(token, dateI, dateF, arrStatuses);
+    // const res = await getGuaranteesResumeByProjectMin(token, dateI, dateF, arrStatuses);
+    // const resTotal = await getGuaranteesGroupByStatus(token, dateI, dateF, arrStatuses);
+    // const resCobrar = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
+    // const resRecuperado = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'RECUPERADO');
+    // const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, dateI, dateF, arrStatuses);
+    // const guaranteesYear = await getGuaranteesGroupByYear(token, dateI, dateF, arrStatuses);
+    // const guaranteebyStatus = await getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, dateI, dateF, arrStatuses);
+
+    const [res, resTotal, resCobrar, resRecuperado, guaranteesClient, guaranteesYear, guaranteebyStatus] = await Promise.all([
+      getGuaranteesResumeByProjectMin(token, dateI, dateF, arrStatuses),
+      getGuaranteesGroupByStatus(token, dateI, dateF, arrStatuses),
+      getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR'),
+      getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'RECUPERADO'),
+      getGuaranteesGroupByClientAndDateAndStatus(token, dateI, dateF, arrStatuses),
+      getGuaranteesGroupByYear(token, dateI, dateF, arrStatuses),
+      getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, dateI, dateF, arrStatuses)
+    ]);
+
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
@@ -133,56 +150,36 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       setFilteredGuarantees(res);
     }
 
-    // const resTotal = await getAmountTotalGuaranteesByDateAndStatus(token, dateI, dateF, arrStatuses);
-    // if(typeof(resTotal)==='string'){
-    //   showToastMessageError(resTotal);
-    // }else{
-    //   setAmountTotalByStatuses(resTotal[0]);
-    // }
-
-    const resTotal = await getGuaranteesGroupByStatus(token, dateI, dateF, arrStatuses);
     if(typeof(resTotal)==='string'){
       showToastMessageError(resTotal);
     }else{
       setAmountTotalByStatuses(resTotal);
     }
 
-    const resCobrar = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
     if(typeof(resCobrar)==='string'){
       showToastMessageError(resCobrar);
     }else{
       setPorCobrar(resCobrar[0]);
     }
 
-    const resRecuperado = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'RECUPERADO');
     if(typeof(resRecuperado)==='string'){
       showToastMessageError(resRecuperado);
     }else{
       setRecuperar(resRecuperado[0]);
     }
 
-    // const resVencido = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'VENCIDO');
-    // if(typeof(resVencido)==='string'){
-    //   showToastMessageError(resVencido);
-    // }else{
-    //   setVencido(resVencido[0]);
-    // }
-
-    const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, dateI, dateF, arrStatuses);
     if(typeof(guaranteesClient)==='string'){
       showToastMessageError(guaranteesClient);
     }else{
       setGuaranteesByClient(guaranteesClient);
     }
 
-    const guaranteesYear = await getGuaranteesGroupByYear(token, dateI, dateF, arrStatuses);
     if(typeof(guaranteesYear)==='string'){
       showToastMessageError(guaranteesYear);
     }else{
       setGuaranteeByYear(guaranteesYear);
     }
 
-    const guaranteebyStatus = await getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, dateI, dateF, arrStatuses);
     if(typeof(guaranteebyStatus)==='string'){
       showToastMessageError(guaranteebyStatus);
     }else{

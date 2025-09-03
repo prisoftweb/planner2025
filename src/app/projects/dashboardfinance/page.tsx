@@ -21,17 +21,31 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let amountProjects: TotalAmountProjects[] =  await getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []);
-  let listProjectsdate: ListProjectsByDate[] = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []);
-  let projectsandTypes: CostsByProjectAndType[] = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []);
-  let projectsTotalCost: DashboardTotalCost[] = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
-  let configMin: ConfigMin[] = await getConfigMin(token);
-  let projectsBudgeted: ControlBudgeted[] = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []);
-  let projectsSpent: ControlBudgeted[] = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
-  let projectsControlBudgeted: ControlBudgeted[] = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
-  let projects: Options[] = await getProjectsLV(token);
+  // let amountProjects: TotalAmountProjects[] =  await getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []);
+  // let listProjectsdate: ListProjectsByDate[] = await getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []);
+  // let projectsandTypes: CostsByProjectAndType[] = await getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []);
+  // let projectsTotalCost: DashboardTotalCost[] = await getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []);
+  // let configMin: ConfigMin[] = await getConfigMin(token);
+  // let projectsBudgeted: ControlBudgeted[] = await getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []);
+  // let projectsSpent: ControlBudgeted[] = await getProjectsSpent(token, '2024-01-01', '2024-10-30', []);
+  // let projectsControlBudgeted: ControlBudgeted[] = await getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []);
+  // let projects: Options[] = await getProjectsLV(token);
+  // let allPaymentsProjects: ITotalPaymentsProyects[] = await getAllPaymentsProjects(token, '2024-01-01', '2024-10-30');
 
-  let allPaymentsProjects: ITotalPaymentsProyects[] = await getAllPaymentsProjects(token, '2024-01-01', '2024-10-30');
+  const [amountProjects, listProjectsdate, projectsandTypes, projectsTotalCost, configMin,
+    projectsBudgeted, projectsSpent, projectsControlBudgeted, projects, allPaymentsProjects] = await Promise.all([
+      getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []),
+      getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []),
+      getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []),
+      getConfigMin(token),
+      getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []),
+      getProjectsSpent(token, '2024-01-01', '2024-10-30', []),
+      getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []),
+      getProjectsLV(token),
+      getAllPaymentsProjects(token, '2024-01-01', '2024-10-30')
+    ]); 
+  
   if(typeof(allPaymentsProjects) === "string"){
     return(
       <>

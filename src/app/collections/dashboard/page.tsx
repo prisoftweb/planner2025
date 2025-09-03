@@ -22,20 +22,34 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let totalPrjs: ITotalInvoicesByProjectDashboardCollection[] =  await getTotalAccountReceivablesByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  let totalClis: ITotalInvoiceByClient[] = await getTotalAccountReceivablesByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  let resCob = await getTotalGuaranteesByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), 'POR COBRAR');
-  const resTotPrj: IAllTOTALPENDINGPAYMENTSByProject[] = await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  const resEstPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[] = await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  const resEstPenCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  const resPenBill: IAllTOTALPENDINGBillingByProject[] = await getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // let totalPrjs: ITotalInvoicesByProjectDashboardCollection[] =  await getTotalAccountReceivablesByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // let totalClis: ITotalInvoiceByClient[] = await getTotalAccountReceivablesByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // let resCob = await getTotalGuaranteesByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), 'POR COBRAR');
+  // const resTotPrj: IAllTOTALPENDINGPAYMENTSByProject[] = await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // const resEstPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[] = await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // const resEstPenCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+  // const resPenBill: IAllTOTALPENDINGBillingByProject[] = await getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
+
+  // const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, 
+  //   totalEstiatesPen, totalPendEstimatesCli, pendingBilling] = await Promise.all([
+  //   totalPrjs, totalClis, totalPay, totalPen, resCob, resTotPrj, resTotCli, resEstPen, resEstPenCli, resPenBill
+  // ]);
 
   const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, 
     totalEstiatesPen, totalPendEstimatesCli, pendingBilling] = await Promise.all([
-    totalPrjs, totalClis, totalPay, totalPen, resCob, resTotPrj, resTotCli, resEstPen, resEstPenCli, resPenBill
+    getTotalAccountReceivablesByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getTotalAccountReceivablesByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getTotalAccountReceivablesPaymentByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getTotalAccountReceivablesPendingByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getTotalGuaranteesByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), 'POR COBRAR'), 
+    getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getTotalAccountReceivablesByClientResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 
+    getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()))
   ]);
     
   if(typeof(totalProjects)==='string'){

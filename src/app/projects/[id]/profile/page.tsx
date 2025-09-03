@@ -22,10 +22,17 @@ export default async function Page({ params }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin = await GetProjectMin(token, params.id);
-  let options: Options[] = await getProjectsLV(token);
-  let clients: ClientBack[] = await getClients(token);
-  let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  // let project: OneProjectMin = await GetProjectMin(token, params.id);
+  // let options: Options[] = await getProjectsLV(token);
+  // let clients: ClientBack[] = await getClients(token);
+  // let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+
+  const [project, options, clients, catalogs] = await Promise.all([
+    GetProjectMin(token, params.id),
+    getProjectsLV(token),
+    getClients(token),
+    getCatalogsByName(token, 'projects')
+  ]);
   
   if(typeof(project) === "string")
     return(
@@ -68,7 +75,7 @@ export default async function Page({ params }:
     )
  
   const optClients: Options[] = [];
-  clients.map((client) => {
+  clients.map((client: any) => {
     optClients.push({
       label: client.name,
       value: client._id
@@ -76,7 +83,7 @@ export default async function Page({ params }:
   })
 
   const optCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -84,7 +91,7 @@ export default async function Page({ params }:
   })
 
   const optTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -92,7 +99,7 @@ export default async function Page({ params }:
   })
 
   const optConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

@@ -16,8 +16,14 @@ export default async function Page({ params }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let project: OneProjectMin = await GetProjectMin(token, params.id);
-  let options: Options[] = await getProjectsLV(token);
+  // let project: OneProjectMin = await GetProjectMin(token, params.id);
+  // let options: Options[] = await getProjectsLV(token);
+
+  const [project, options] = await Promise.all([
+    GetProjectMin(token, params.id),
+    getProjectsLV(token)
+  ]);
+
   if(typeof(project) === "string")
     return(
       <>
