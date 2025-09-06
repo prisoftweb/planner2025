@@ -22,13 +22,18 @@ export default async function page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let nods: Node[] = await getNodes(token);
-  let optDepts: Options[] = await getDepartmentsLV(token);
-  let gloss: Glossary[] = await getGlossaries(token);
-  let works: Workflow[] = await getWorkFlows(token);
+  // let nods: Node[] = await getNodes(token);
+  // let optDepts: Options[] = await getDepartmentsLV(token);
+  // let gloss: Glossary[] = await getGlossaries(token);
+  // let works: Workflow[] = await getWorkFlows(token);
+  // const res: Relation[] = await getRelations(token);
 
-  const [nodes, optDepartments, glossaries, workflows] = await Promise.all([
-    nods, optDepts, gloss, works
+  const [nodes, optDepartments, glossaries, workflows, res] = await Promise.all([
+    getNodes(token), 
+    getDepartmentsLV(token), 
+    getGlossaries(token), 
+    getWorkFlows(token),
+    getRelations(token)
   ]);
   
   if(typeof(nodes) ==='string'){
@@ -77,7 +82,7 @@ export default async function page() {
 
   const optGlossaries: Options[] = [];
   const optDescGlossaries: Options[] = [];
-  glossaries.map(glossary => {
+  glossaries.map((glossary:any) => {
     optGlossaries.push({
       label: glossary.name,
       value: glossary._id
@@ -89,7 +94,7 @@ export default async function page() {
   });
 
   const optWorkFlows: Options[] = [];
-  workflows.map(workflow => {
+  workflows.map((workflow:any) => {
     optWorkFlows.push({
       label: workflow.title,
       value: workflow._id
@@ -97,10 +102,10 @@ export default async function page() {
   });
 
   const tableData: NodeTable[] = [];
-  nodes.map((node) => {
+  nodes.map((node:any) => {
     
     let walk = '';
-    node.relations.map((rel) => {
+    node.relations.map((rel:any) => {
       walk += rel.relation?.glossary.name + ", "
     });
 
@@ -115,35 +120,27 @@ export default async function page() {
 
   const optRelations: Options[] = [];
   const optDescriptions: Options[] = [];
-  try {
-    const res: Relation[] = await getRelations(token);
-    if(typeof(res)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-            <h1 className="text-red-500 text-xl text-center">{res}</h1>
-          </div>
-        </>
-      )
-    }else{
-      res.map((rel) => {
-        optRelations.push({
-          label: rel.glossary.name,
-          value: rel._id,
-        });
-        optDescriptions.push({
-          label: rel.description,
-          value: rel._id,
-        });
-      });
-    }
-  } catch (error) {
+  
+  if(typeof(res)==='string'){
     return(
       <>
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar relaciones!!</h1>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-red-500 text-xl text-center">{res}</h1>
+        </div>
       </>
     )
+  }else{
+    res.map((rel:any) => {
+      optRelations.push({
+        label: rel.glossary.name,
+        value: rel._id,
+      });
+      optDescriptions.push({
+        label: rel.description,
+        value: rel._id,
+      });
+    });
   }
 
   if(!nodes || nodes.length <= 0){

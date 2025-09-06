@@ -18,42 +18,52 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let reports: ReportParse[] = [];
-  try {
-    if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')){
-      reports = await GetReportsMin(token);
-    }else{
-      if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras')){
-        reports = await GetReportsByUserMin(token, user._id);
-      }else{
-        reports = await GetReportsMin(token);
-      }
-    }
-    if(typeof(reports)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-center text-red-500">{reports}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  // let reports: ReportParse[] = [];
+  // let optCompanies: Options[] = [];
+  // let optProjects:Options[];
+  let optProjectsFilter: Options[] = [{
+      label: 'TODOS',
+      value: 'all'
+    }]
+  // let catalogs: GlossaryCatalog[];
+  
+  // if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')){
+  //   reports = await GetReportsMin(token);
+  // }else{
+  //   if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras')){
+  //     reports = await GetReportsByUserMin(token, user._id);
+  //   }else{
+  //     reports = await GetReportsMin(token);
+  //   }
+  // }
+  
+  // optCompanies = await getCompaniesLV(token);
+  // optProjects = await getProjectsLV(token);
+  // catalogs = await getCatalogsByName(token, 'reports');
+
+  const [reports, optCompanies, optProjects, catalogs]=await Promise.all([
+    typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')? 
+      GetReportsMin(token) : (typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras') ?
+      GetReportsByUserMin(token, user._id) : GetReportsMin(token)),
+    getCompaniesLV(token),
+    getProjectsLV(token),
+    getCatalogsByName(token, 'reports')
+  ]);
+
+  if(typeof(reports)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+        <h1 className="text-lg text-center text-red-500">{reports}</h1>
       </>
     )
   }
-  
-  let optCompanies: Options[] = [];
-  try {
-    optCompanies = await getCompaniesLV(token);
-  } catch (error) {
+
+  if(typeof(optProjects)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+        <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
       </>
     )
   }
@@ -65,47 +75,13 @@ export default async function Page() {
 
   optCompaniesFilter = optCompaniesFilter.concat(optCompanies);
 
-  let optProjects:Options[];
-  let optProjectsFilter: Options[] = [{
-      label: 'TODOS',
-      value: 'all'
-    }]
-  try {
-    optProjects = await getProjectsLV(token);
-    if(typeof(optProjects)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
-        </>
-      )
-    }    
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
-      </>
-    )
-  }
-
   optProjectsFilter = optProjectsFilter.concat(optProjects);
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'reports');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(catalogs)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
       </>
     )
   }
@@ -114,7 +90,7 @@ export default async function Page() {
     label: 'Todos',
     value: 'all'
   }];
-  catalogs[0].condition.map((cond) => {
+  catalogs[0].condition.map((cond:any) => {
     let c = {
       label: cond.glossary.name,
       value: cond.glossary._id

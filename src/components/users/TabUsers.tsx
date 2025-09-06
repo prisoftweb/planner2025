@@ -10,24 +10,22 @@ export default async function TabUser({user, opt}: {user:UsrBack, opt: number}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  let optionsDepartments:Options[] = [];
-  try {
-    optionsDepartments = await getDepartmentsLV(token);
-    if(typeof(optionsDepartments) === "string")
-      return <h1 className="text-center text-red-500">{optionsDepartments}</h1>
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Ocurrio un error al obtener los departamentos!!</h1>
-  }
+  // let optionsDepartments:Options[] = [];
+  // let optsRole:Options[] = [];
+  
+  // optionsDepartments = await getDepartmentsLV(token);
+  // optsRole = await getRolesLV(token);
 
-  let optsRole:Options[] = [];
+  const [optionsDepartments, optsRole]=await Promise.all([
+    getDepartmentsLV(token),
+    getRolesLV(token)
+  ]);
+  
+  if(typeof(optionsDepartments) === "string")
+    return <h1 className="text-center text-red-500">{optionsDepartments}</h1>
 
-  try {
-    optsRole = await getRolesLV(token);
-    if(typeof(optsRole)==='string')
-        return <h1 className="text-red-500 text-center text-lg">{optsRole}</h1>
-  } catch (error) {
-    return <h1 className="text-red-500 text-center text-lg">Ocurrio un error al obtener roles!!</h1>
-  }
+  if(typeof(optsRole)==='string')
+      return <h1 className="text-red-500 text-center text-lg">{optsRole}</h1>
 
   return(
     <>

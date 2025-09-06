@@ -16,61 +16,45 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let provider: any;
-  try {
-    provider = await getProvider(params.id, token);
-    if(typeof(provider) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{provider} provedor</h1>
-        </>
-      )
-  } catch (error) {
+  // let provider: any;
+  // let providers: Provider[];
+  // let costs: PaymentProvider[];
+  
+  // provider = await getProvider(params.id, token);
+  // providers = await getProviders(token);
+  // costs = await getPaymentsProvider(token, params.id);
+
+  const [provider, providers, costs] = await Promise.all([
+    getProvider(params.id, token),
+    getProviders(token),
+    getPaymentsProvider(token, params.id)
+  ]);
+  
+  if(typeof(provider) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+        <h1 className="text-center text-red-500">{provider} provedor</h1>
       </>
     )
   }
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{providers} provedores</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(providers) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+        <h1 className="text-center text-red-500">{providers} provedores</h1>
       </>
-    ) 
-  }
+    )
+  } 
 
-  let costs: PaymentProvider[];
-  try {
-    costs = await getPaymentsProvider(token, params.id);
-    if(typeof(costs) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{costs} cp</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(costs) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>
+        <h1 className="text-center text-red-500">{costs} cp</h1>
       </>
-    ) 
+    )
   }
 
   if(providers.length <= 0){

@@ -19,8 +19,13 @@ export default async function Page({ params, searchParams }:
 
   const previous = searchParams?.status==='pending' ? 1: 0;
 
-  let cost: OneExpense = await GetCostMIN(token, params.id);
-  let options: Options[] = await GetCostsLVByCond(token);
+  // let cost: OneExpense = await GetCostMIN(token, params.id);
+  // let options: Options[] = await GetCostsLVByCond(token);
+
+  const [cost, options] = await Promise.all([
+    GetCostMIN(token, params.id),
+    GetCostsLVByCond(token)
+  ]);
   
   if(typeof(cost) === "string")
     return(

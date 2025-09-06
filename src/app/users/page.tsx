@@ -16,9 +16,15 @@ export default async function Users() {
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let users = await getUsers(token);
-  let optionsRoles:Options[] = await getRolesLV(token);
-  let departments = await getDepartmentsLV(token);
+  // let users = await getUsers(token);
+  // let optionsRoles:Options[] = await getRolesLV(token);
+  // let departments = await getDepartmentsLV(token);
+
+  const [users, optionsRoles, departments] = await Promise.all([
+    getUsers(token),
+    getRolesLV(token),
+    getDepartmentsLV(token)
+  ]);
 
   if(typeof(users)==='string'){
     return(

@@ -2,9 +2,6 @@ import { Options } from "@/interfaces/Common";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import ArrowReturn from "@/components/ArrowReturn";
-import Selectize from "@/components/Selectize";
-import NavTab from "@/components/reports/NavTab";
 import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX } from "@/app/api/routeReports";
 import { Report, DateReport } from "@/interfaces/Reports";
 import ReportHistoryClient from "@/components/reports/ReportHistoryClient";
@@ -15,62 +12,43 @@ export default async function Page({ params }: { params: { id: string }}){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let report: Report;
-  try {
-    report = await GetReport(token, params.id);
-    if(typeof(report)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">{report}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  // let report: Report;
+  // let dateReport: DateReport[];
+  // let optReports:Options[] = [];
+  
+  // report = await GetReport(token, params.id);
+  // dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
+  // optReports = await GetReportsLV(token);
+
+  const [report, dateReport, optReports]=await Promise.all([
+    GetReport(token, params.id),
+    GetAllCostByReportWithDateMINAndMAX(token, params.id),
+    GetReportsLV(token)
+  ]);
+  
+  if(typeof(report)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
+        <h1 className="text-center text-lg text-red-500">{report}</h1>
       </>
     )
   }
 
-  let dateReport: DateReport[];
-  try {
-    dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
-    if(typeof(dateReport)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(dateReport)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red-500">Error al consultar fechas del reporte!!</h1>
+        <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
       </>
     )
   }
   
-  let optReports:Options[] = [];
-  try {
-    optReports = await GetReportsLV(token);
-    if(typeof(optReports)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-center text-red-500">{optReports}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(optReports)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+        <h1 className="text-lg text-center text-red-500">{optReports}</h1>
       </>
     )
   }

@@ -13,41 +13,31 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
-  let user;
-  let users;
+  // let user;
+  // let users;
 
-  try {
-    user = await getUser(params.id, token);
-    if(typeof(user) === "string")
-      return(
-        <>
-          {/* <Navigation user={user} /> */}
-          <h1 className="text-center text-red-500">{user}</h1>
-        </>
-      )
-  } catch (error) {
+  // user = await getUser(params.id, token);
+  // users = await getUsers(token);
+
+  const [user, users]=await Promise.all([
+    getUser(params.id, token),
+    getUsers(token)
+  ]);
+  
+  if(typeof(user) === "string"){
     return(
       <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>
+        {/* <Navigation user={user} /> */}
+        <h1 className="text-center text-red-500">{user}</h1>
       </>
-    ) 
+    )
   }
 
-  try {
-    users = await getUsers(token);
-    if(typeof(users) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{users}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(users) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>
+        <h1 className="text-center text-red-500">{users}</h1>
       </>
     )
   }

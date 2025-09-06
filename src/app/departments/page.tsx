@@ -13,11 +13,12 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let comps:Company[]= await getCompanies(token);
-  let depts: Department[]= await getDepartments(token);
+  // let comps:Company[]= await getCompanies(token);
+  // let depts: Department[]= await getDepartments(token);
 
   const [companies, departments] = await Promise.all([
-    comps, depts
+    getCompanies(token), 
+    getDepartments(token)
   ]);
   
   if(typeof(companies)==='string'){
@@ -43,7 +44,7 @@ export default async function Page(){
   }
 
   const optsCompanies:Options[] = [];
-  companies.map((comp) => {
+  companies.map((comp:any) => {
     optsCompanies.push({
       label: comp.name,
       value: comp._id

@@ -2,12 +2,9 @@ import { Options } from "@/interfaces/Common";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import ArrowReturn from "@/components/ArrowReturn";
-import Selectize from "@/components/Selectize";
-import NavTab from "@/components/reports/NavTab";
 import ReportClient from "@/components/reports/ReportClient";
-import { GetReport, GetReportsLV, updateReport, 
-    insertMovementsInReport, GetAllCostByReportWithDateMINAndMAX } from "@/app/api/routeReports";
+import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX, 
+  updateReport, insertMovementsInReport  } from "@/app/api/routeReports";
 import { Report, DateReport  } from "@/interfaces/Reports";
 import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
@@ -18,84 +15,57 @@ export default async function Page({ params }: { params: { id: string }}){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let report: Report;
-  try {
-    report = await GetReport(token, params.id);
-    if(typeof(report)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">{report}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  // let report: Report;
+  // let dateReport: DateReport[];
+  // let optReports:Options[] = [];
+  // let nodes:(Node[] | null) = null;
+  
+  // report = await GetReport(token, params.id);
+  // dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
+  // optReports = await GetReportsLV(token);
+  // nodes = await getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id);
+
+  const [report, dateReport, optReports, nodes]=await Promise.all([
+    GetReport(token, params.id),
+    GetAllCostByReportWithDateMINAndMAX(token, params.id),
+    GetReportsLV(token),
+    getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id)
+  ]);
+  
+  if(typeof(report)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red-500">Error al consultar reporte!!</h1>
+        <h1 className="text-center text-lg text-red-500">{report}</h1>
       </>
     )
   }
 
-  let dateReport: DateReport[];
-  try {
-    dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
-    if(typeof(dateReport)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(dateReport)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red-500">Error al consultar fechas del reporte!!</h1>
+        <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
       </>
     )
   }
   
-  let optReports:Options[] = [];
-  try {
-    optReports = await GetReportsLV(token);
-    if(typeof(optReports)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-center text-red-500">{optReports}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(optReports)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
+        <h1 className="text-lg text-center text-red-500">{optReports}</h1>
       </>
     )
   }
 
   let node:(Node | null) = null;
   
-  let nodes:(Node[] | null) = null;
-  try {
-    nodes = await getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id);
-    if(typeof(nodes)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1>
-        </>
-      )
-    }
-  } catch (error) {
+  if(typeof(nodes)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-red-500 text-center-500">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
+        <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1>
       </>
     )
   }
@@ -111,55 +81,55 @@ export default async function Page({ params }: { params: { id: string }}){
 
   node = nodes[0];
 
-  // if(!report.wached){
-  //   try {
-  //     const data = {wached: true};
-  //     const res = await updateReport(token, params.id, data);
-  //     if(typeof(res)==='string'){
-  //       return(
-  //         <>
-  //           <Navigation user={user} />
-  //           <h1 className="text-center text-lg text-red-500">{res}</h1>
-  //         </>
-  //       )
-  //     }
-  //   } catch (error) {
-  //     return(
-  //       <>
-  //         <Navigation user={user} />
-  //         <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1>
-  //       </>
-  //     )
-  //   }
+  if(!report.wached && node != null){
+    try {
+      const data = {wached: true};
+      const res = await updateReport(token, params.id, data);
+      if(typeof(res)==='string'){
+        return(
+          <>
+            <Navigation user={user} />
+            <h1 className="text-center text-lg text-red-500">{res}</h1>
+          </>
+        )
+      }
+    } catch (error) {
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1>
+        </>
+      )
+    }
 
-  //   try {
-  //     const data = {
-  //       moves: [{
-  //           condition: node.glossary._id,
-  //           notes: 'El informe ha sido visto por el usuario ' + user.name,
-  //           user: user._id,
-  //           department: typeof(user.department)==='string'? user.department : user.department._id,
-  //           date: new Date()
-  //       }]
-  //     };
-  //     const res = await insertMovementsInReport(token, report._id, data);
-  //     if(res !== 200){
-  //       return(
-  //         <>
-  //           <Navigation user={user} />
-  //           <h1 className="text-center text-lg text-red-500">{res}</h1>
-  //         </>
-  //       )
-  //     }
-  //   } catch (error) {
-  //     return(
-  //       <>
-  //         <Navigation user={user} />
-  //         <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1>
-  //       </>
-  //     )
-  //   }
-  // }
+    try {
+      const data = {
+        moves: [{
+            condition: node.glossary._id,
+            notes: 'El informe ha sido visto por el usuario ' + user.name,
+            user: user._id,
+            department: typeof(user.department)==='string'? user.department : user.department._id,
+            date: new Date()
+        }]
+      };
+      const res = await insertMovementsInReport(token, report._id, data);
+      if(res !== 200){
+        return(
+          <>
+            <Navigation user={user} />
+            <h1 className="text-center text-lg text-red-500">{res}</h1>
+          </>
+        )
+      }
+    } catch (error) {
+      return(
+        <>
+          <Navigation user={user} />
+          <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1>
+        </>
+      )
+    }
+  }
 
   return(
     <>

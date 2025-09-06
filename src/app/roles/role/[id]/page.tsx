@@ -18,42 +18,29 @@ export default async function Page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let rol:RoleUser;
-  try {
-    rol = await getRole(token, params.id);
-    if(typeof(rol) === 'string'){
-      <h1 className="text-center text-lg text-red-500">{rol}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Ocurrio un error al obtener rol!!</h1>
-  }
+  // let rol:RoleUser;
+  // let options: Options[] = [];
+  
+  // rol = await getRole(token, params.id);
+  // options = await getRolesLV(token);
 
-  let options: Options[] = [];
-  try {
-    options = await getRolesLV(token);
-    if(typeof(options) === 'string'){
-      <h1 className="text-center text-lg text-red-500">{options}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-lg text-red-500">Ocurrio un error al obtener roles!!</h1>
+  const [rol, options] = await Promise.all([
+    getRole(token, params.id),
+    getRolesLV(token)
+  ]);
+  
+  if(typeof(rol) === 'string'){
+    <h1 className="text-center text-lg text-red-500">{rol}</h1>
   }
-
-  // const options: Options[] = [];
-  // roles.map((role) => {
-  //   options.push({
-  //     label: role.name,
-  //     value: role._id
-  //   })
-  // });
+  
+  if(typeof(options) === 'string'){
+    <h1 className="text-center text-lg text-red-500">{options}</h1>
+  }
 
   //660af0683b237344454ad085
   let tree: Tree;
-  try {
-    tree = await getTree(token, rol.tree? rol.tree: '660af0683b237344454ad085');
-    if(typeof(tree)=== 'string') return <h1 className="text-ccenter text-lg text-red-500">{tree}</h1>
-  } catch (error) {
-    return <h1 className="text-ccenter text-lg text-red-500">Ocurrio un error al obter arbol!!</h1>
-  }
+  tree = await getTree(token, rol.tree? rol.tree: '660af0683b237344454ad085');
+  if(typeof(tree)=== 'string') return <h1 className="text-ccenter text-lg text-red-500">{tree}</h1>
 
   return(
     <>

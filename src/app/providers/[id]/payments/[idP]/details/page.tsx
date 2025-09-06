@@ -16,81 +16,59 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let provider: ProviderMin;
-  try {
-    const arrProvider = await getProviderMin(params.id, token);
-    if(typeof(arrProvider) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
-        </>
-      )
-    else
-      provider = arrProvider[0];
-  } catch (error) {
+  // let providers: Provider[];
+  // let costs: CostPayment[];
+  // let payment: OnePayment;
+  
+  // const arrProvider = await getProviderMin(params.id, token);
+  // providers = await getProviders(token);
+  // costs = await getCostsPayment(token, params.idP);
+  // payment = await getPayment(token, params.idP);
+
+  const [arrProvider, providers, costs, payment] = await Promise.all([
+    getProviderMin(params.id, token),
+    getProviders(token),
+    getCostsPayment(token, params.idP),
+    getPayment(token, params.idP)
+  ]);
+  
+  if(typeof(arrProvider) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+        <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
       </>
-    ) 
+    )
+  }
+  else{
+    provider = arrProvider[0];
   }
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{providers} provedores</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(providers) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+        <h1 className="text-center text-red-500">{providers} provedores</h1>
       </>
-    )  
+    )
   }
 
-  let costs: CostPayment[];
-  try {
-    costs = await getCostsPayment(token, params.idP);
-    if(typeof(costs) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{costs} costos</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(costs) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del pago!!</h1>
+        <h1 className="text-center text-red-500">{costs} costos</h1>
       </>
-    ) 
+    )
   }
 
-  let payment: OnePayment;
-  try {
-    payment = await getPayment(token, params.idP);
-    if(typeof(payment) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{payment} one payment</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(payment) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del pago!!</h1>
+        <h1 className="text-center text-red-500">{payment} one payment</h1>
       </>
-    ) 
+    )
   }
 
   if(providers.length <= 0){

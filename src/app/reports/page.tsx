@@ -20,38 +20,41 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let reports: ReportParse[] = [];
-  try {
-    if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-      reports = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
-    }else{
-      reports = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-    }
-    if(typeof(reports)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-lg text-center text-red-500">{reports}</h1>
-        </>
-      )
-    }
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-lg text-center text-red-500">Ocurrio un error al consultar reportes!!</h1>
-      </>
-    )
-  }
+  // let reports: ReportParse[] = [];
+  // let optCompanies: Options[] = [];
+  // let optDepartments: Options[] = [];
+  // let optProjects:Options[];
+  let optProjectsFilter: Options[] = [{
+      label: 'TODOS',
+      value: 'all'
+    }]
+  // let catalogs: GlossaryCatalog[];
   
-  let optCompanies: Options[] = [];
-  try {
-    optCompanies = await getCompaniesLV(token);
-  } catch (error) {
+  // if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
+  //   reports = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
+  // }else{
+  //   reports = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
+  // }
+
+  // optCompanies = await getCompaniesLV(token);
+  // optDepartments = await getDepartmentsLV(token);
+  // optProjects = await getProjectsLVNoCompleted(token);
+  // catalogs = await getCatalogsByName(token, 'reports');
+
+  const [reports, optCompanies, optDepartments, optProjects, catalogs]=await Promise.all([
+    typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')? 
+      GetAllReportsWithUSERAndNEConditionMIN(token, user._id): GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id),
+      getCompaniesLV(token),
+      getDepartmentsLV(token),
+      getProjectsLVNoCompleted(token),
+      getCatalogsByName(token, 'reports')
+  ]);
+  
+  if(typeof(reports)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red">Error al consultar las compañias</h1>
+        <h1 className="text-lg text-center text-red-500">{reports}</h1>
       </>
     )
   }
@@ -63,59 +66,22 @@ export default async function Page() {
 
   optCompaniesFilter = optCompaniesFilter.concat(optCompanies);
 
-  let optDepartments: Options[] = [];
-  try {
-    optDepartments = await getDepartmentsLV(token);
-  } catch (error) {
+  if(typeof(optProjects)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red">Error al consultar los departamentos</h1>
-      </>
-    )
-  }
-
-  let optProjects:Options[];
-  let optProjectsFilter: Options[] = [{
-      label: 'TODOS',
-      value: 'all'
-    }]
-  try {
-    optProjects = await getProjectsLVNoCompleted(token);
-    if(typeof(optProjects)==='string'){
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
-        </>
-      )
-    }    
-  } catch (error) {
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+        <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
       </>
     )
   }
 
   optProjectsFilter = optProjectsFilter.concat(optProjects);
 
-  let catalogs: GlossaryCatalog[];
-  try {
-    catalogs = await getCatalogsByName(token, 'reports');
-    if(typeof(catalogs)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(catalogs)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
       </>
     )
   }
@@ -127,7 +93,7 @@ export default async function Page() {
     label: 'Todos',
     value: 'all'
   }];
-  catalogs[0].condition.map((cond) => {
+  catalogs[0].condition.map((cond:any) => {
     let c = {
       label: cond.glossary.name,
       value: cond.glossary._id

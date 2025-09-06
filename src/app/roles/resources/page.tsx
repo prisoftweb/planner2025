@@ -15,13 +15,11 @@ export default async function Page(){
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let resources: Resource[];
-  try {
-    resources = await getResources(token);
-    if(typeof(resources) === 'string'){
+  
+  resources = await getResources(token);
+  
+  if(typeof(resources) === 'string'){
     return <h1 className="text-center text-red-500">{resources}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar recursos!!</h1>
   }
   
   if(!resources || resources.length <= 0){

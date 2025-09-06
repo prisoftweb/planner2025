@@ -14,15 +14,12 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-
   let components: Resource[];
-  try {
-    components = await getComponents(token);
-    if(typeof(components) === 'string'){
+  
+  components = await getComponents(token);
+  
+  if(typeof(components) === 'string'){
     return <h1 className="text-center text-red-500">{components}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar recursos!!</h1>
   }
   
   if(!components || components.length <= 0){

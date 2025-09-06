@@ -19,12 +19,21 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let costsCategory: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  let costsConcept: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  let costsDays: CostsByDay[] = await GetAllCostsGroupByDAYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  let costsResumen: CostsGroupByResumen[] = await GetAllCostsGroupByRESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  let costsResumenType: CostsGroupResumenByType[] = await GetAllCostsGroupByTYPERESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  let projects: Options[] = await getProjectsLV(token);
+  // let costsCategory: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  // let costsConcept: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  // let costsDays: CostsByDay[] = await GetAllCostsGroupByDAYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  // let costsResumen: CostsGroupByResumen[] = await GetAllCostsGroupByRESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  // let costsResumenType: CostsGroupResumenByType[] = await GetAllCostsGroupByTYPERESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
+  // let projects: Options[] = await getProjectsLV(token);
+
+  const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects] = await Promise.all([
+    GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS'),
+    GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS'),
+    GetAllCostsGroupByDAYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS'),
+    GetAllCostsGroupByRESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS'),
+    GetAllCostsGroupByTYPERESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS'),
+    getProjectsLV(token)
+  ]);
   
   if(typeof(costsCategory)==='string'){
     return(
@@ -96,21 +105,21 @@ export default async function Page() {
   const optConcepts: OptionsDashboard[] = [];
   const optDays: OptionsDashboard[] = [];
 
-  costsCategory.map((cc) => {
+  costsCategory.map((cc:any) => {
     optCategories.push({
       label: cc.costocenter.category ?? '',
       costo: cc.subtotalCost
     })
   });
 
-  costsConcept.map((cc) => {
+  costsConcept.map((cc:any) => {
     optConcepts.push({
       label: cc.costocenter.concept ?? '',
       costo: cc.subtotalCost
     })
   });
 
-  costsDays.map((cc) => {
+  costsDays.map((cc:any) => {
     optDays.push({
       label: cc.day?.toString() || ' ',
       costo: cc.subtotalCost

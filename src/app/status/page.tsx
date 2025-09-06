@@ -14,11 +14,12 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  let cats: Catalog[] = await getCatalogs(token);
-  let glos: Glossary[] = await getGlossaries(token);
+  // let cats: Catalog[] = await getCatalogs(token);
+  // let glos: Glossary[] = await getGlossaries(token);
 
   const [catalogs, glosaries] = await Promise.all([
-    cats, glos
+    getCatalogs(token), 
+    getGlossaries(token)
   ]);
 
   if(typeof(catalogs)==='string'){
@@ -45,7 +46,7 @@ export default async function Page() {
 
   const glosariesOptions:Options[] = [];
   const descGlossaries:Options[] = [];
-  glosaries.map((gloss) => {
+  glosaries.map((gloss:any) => {
     glosariesOptions.push({
       label: gloss.name,
       value: gloss._id

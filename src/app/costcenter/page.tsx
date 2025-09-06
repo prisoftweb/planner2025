@@ -17,11 +17,12 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let cats: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
-  let cos: CostCenter[]= await getCostoCenters(token);
+  // let cats: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  // let cos: CostCenter[]= await getCostoCenters(token);
 
   const [catalogs, costs] = await Promise.all([
-    cats, cos
+    getCatalogsByName(token, 'projects'), 
+    getCostoCenters(token)
   ]);
 
   if(typeof(catalogs)==='string'){
@@ -36,7 +37,7 @@ export default async function Page(){
   }
 
   const optCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category:any) => {
     optCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -71,9 +72,9 @@ export default async function Page(){
   }
 
   const table: CostCenterTable[] = [];
-  costs.map((cost) => {
+  costs.map((cost:any) => {
     let concept = '';
-    cost.categorys.map((conc) => {
+    cost.categorys.map((conc:any) => {
       concept += conc.concept.name + ', ';
     })
     table.push({

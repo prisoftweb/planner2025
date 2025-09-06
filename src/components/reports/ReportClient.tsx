@@ -16,7 +16,7 @@ import ArrowReturn from "../ArrowReturn"
 import { Options } from "@/interfaces/Common"
 
 export default function ReportClient({report, token, id, user, node, dates, optReports}: 
-  {report:Report, token:string, id:string, user:UsrBack, node:Node, dates: DateReport[], optReports: Options[] }){
+  {report:Report, token:string, id:string, user:UsrBack, node:Node|any, dates: DateReport[], optReports: Options[] }){
   const [opt, setOpt] = useState<number>(1);
 
   const {updateOneReportStore, oneReport} = useOneReportStore();

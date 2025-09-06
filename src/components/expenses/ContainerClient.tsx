@@ -52,48 +52,53 @@ export default function ContainerClient({data, token, expenses,
 
   useEffect(() => {
     const fetchApis = async () => {
-      let costcentersData: CostoCenterLV[];
-      costcentersData = await getCostoCentersLV(token);
+      // let costcentersData: CostoCenterLV[];
+      // let optProvidersData:Options[]= [];
+      // let optProvidersSATData:Options[]= [];
+      // let optResponsiblesData:Options[]= [];
+      // let optCategoriesData: Options[] = [];
+      // let optTypesData: Options[] = [];
+      // let optConditionsData: Options[] = [];
+      // let optVatsData: Options[];
+      // let optProjectsData:Options[]=[];
+      // let repsData: ReportParse[]=[];
 
-      let optProvidersData:Options[]= [];
-      optProvidersData = await getProvidersLV(token);
+      // costcentersData = await getCostoCentersLV(token);
+      // optProvidersData = await getProvidersLV(token);
+      // optProvidersSATData = await getProvidersSATLV(token);
+      // optResponsiblesData = await getUsersLV(token);
+      // optCategoriesData = await getCatalogsByNameAndCategory(token, 'cost');
+      // optTypesData = await getCatalogsByNameAndType(token, 'cost');
+      // optConditionsData = await getCatalogsByNameAndCondition(token, 'cost');
+      // optVatsData = await GetVatsLV(token);
 
-      let optProvidersSATData:Options[]= [];
-      optProvidersSATData = await getProvidersSATLV(token);
-
-      let optResponsiblesData:Options[]= [];
-      optResponsiblesData = await getUsersLV(token);
-
-      let optProjectsData:Options[]=[];
-      if(isHistory){
-        optProjectsData = await getProjectsLV(token);
-      }else{
-        optProjectsData = await getAllProjectsWithConditionLV(token);
-      }
-
-      let optCategoriesData: Options[] = [];
-      optCategoriesData = await getCatalogsByNameAndCategory(token, 'cost');
+      // if(isHistory){
+      //   optProjectsData = await getProjectsLV(token);
+      // }else{
+      //   optProjectsData = await getAllProjectsWithConditionLV(token);
+      // }
       
-      let optTypesData: Options[] = [];
-      optTypesData = await getCatalogsByNameAndType(token, 'cost');
-
-      let optConditionsData: Options[] = [];
-      optConditionsData = await getCatalogsByNameAndCondition(token, 'cost');
-      
-      let optVatsData: Options[];
-      optVatsData = await GetVatsLV(token);
-      
-      let repsData: ReportParse[]=[];
-      if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-        repsData = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
-      }else{
-        repsData = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-      }
+      // if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
+      //   repsData = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
+      // }else{
+      //   repsData = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
+      // }
 
       const [costcenters, optProviders, optProvidersSAT, optResponsibles, optProjects, 
-        optCategories, optTypes, optConditions, optVats, reps] = await Promise.all([costcentersData, 
-          optProvidersData, optProvidersSATData, optResponsiblesData, optProjectsData, 
-          optCategoriesData, optTypesData, optConditionsData, optVatsData, repsData])
+        optCategories, optTypes, optConditions, optVats, reps] = await Promise.all([
+          getCostoCentersLV(token), 
+          getProvidersLV(token), 
+          getProvidersSATLV(token), 
+          getUsersLV(token), 
+          isHistory? getProjectsLV(token): getAllProjectsWithConditionLV(token), 
+          getCatalogsByNameAndCategory(token, 'cost'), 
+          getCatalogsByNameAndType(token, 'cost'), 
+          getCatalogsByNameAndCondition(token, 'cost'), 
+          GetVatsLV(token), 
+          typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')?
+            GetAllReportsWithUSERAndNEConditionMIN(token, user._id):
+            GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id)
+        ])
 
       if(typeof(costcenters)==='string'){
         return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
@@ -130,7 +135,7 @@ export default function ContainerClient({data, token, expenses,
       }
 
       const optCostCenter:Options[]= [];
-      costcenters.map((costcenter) => {
+      costcenters.map((costcenter:any) => {
         optCostCenter.push({
           label: costcenter.label || 'sin categoria',
           value: costcenter.categoryid + '/' + costcenter.value
@@ -138,7 +143,7 @@ export default function ContainerClient({data, token, expenses,
       });
 
       const opReports:Options[]= [];
-      reps.map((rep) => {
+      reps.map((rep:any) => {
         const r = {
           label: rep.name,
           value: rep._id
@@ -146,7 +151,7 @@ export default function ContainerClient({data, token, expenses,
         opReports.push(r);
       });
 
-      const val = optConditions.find((cond) => cond.label.toLowerCase().includes('validado'))?.value || '';
+      const val = optConditions.find((cond:any) => cond.label.toLowerCase().includes('validado'))?.value || '';
       setIdVal(val);
 
       updateCostC(optCostCenter);

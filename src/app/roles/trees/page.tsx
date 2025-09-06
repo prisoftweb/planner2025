@@ -3,7 +3,6 @@ import { UsrBack } from "@/interfaces/User";
 import { Tree, TreeTable } from "@/interfaces/Roles";
 import Navigation from "@/components/navigation/Navigation";
 import RolesClient from "@/components/roles/RolesClient";
-import Header from "@/components/Header";
 import TableTree from "@/components/roles/TableTree";
 import ButtonNew from "@/components/roles/ButtonNew";
 import { getResources, getRoutes, getComponents,
@@ -21,14 +20,25 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let trees: Tree[];
-  try {
-    trees = await getTrees(token);
-    if(typeof(trees) === 'string'){
+  // let trees: Tree[];
+  // let resources: Resource[];
+  // let routes: Resource[];
+  // let components: Resource[];
+  
+  // trees = await getTrees(token);
+  // resources = await getResources(token);
+  // routes = await getRoutes(token);
+  // components = await getComponents(token);
+
+  const [trees, resources, routes, components] = await Promise.all([
+    getTrees(token),
+    getResources(token),
+    getRoutes(token),
+    getComponents(token)
+  ]);
+  
+  if(typeof(trees) === 'string'){
     return <h1 className="text-center text-red-500">{trees}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar arboles!!</h1>
   }
 
   const data: TreeTable[] = [];
@@ -47,12 +57,12 @@ export default async function Page() {
             </div>
   }
 
-  trees[0].resources.map((res) => {
+  trees[0].resources.map((res:any) => {
     if(res.resource){
       if(res.routes.length > 0){
-        res.routes.map((route) => {
+        res.routes.map((route:any) => {
           let strComp: string = '';
-          route.components.map((comp) => {
+          route.components.map((comp:any) => {
             strComp += ' ' + comp.component.name;
           })
           data.push({
@@ -75,39 +85,21 @@ export default async function Page() {
     }
   })
 
-  let resources: Resource[];
-  try {
-    resources = await getResources(token);
-    if(typeof(resources) === 'string'){
+  if(typeof(resources) === 'string'){
     return <h1 className="text-center text-red-500">{resources}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar recursos!!</h1>
   }
 
-  let routes: Resource[];
-  try {
-    routes = await getRoutes(token);
-    if(typeof(routes) === 'string'){
+  if(typeof(routes) === 'string'){
     return <h1 className="text-center text-red-500">{routes}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar rutas!!</h1>
   }
 
-  let components: Resource[];
-  try {
-    components = await getComponents(token);
-    if(typeof(components) === 'string'){
+  if(typeof(components) === 'string'){
     return <h1 className="text-center text-red-500">{components}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar rutas!!</h1>
   }
 
   let optionsResource: Options[] = [];
 
-  resources.map((resource) => {
+  resources.map((resource:any) => {
     optionsResource.push({
       label: resource.name,
       value: resource._id,
@@ -116,7 +108,7 @@ export default async function Page() {
 
   let optionsResourceComponents: Options[] = [];
 
-  trees[0].resources.map((resource) => {
+  trees[0].resources.map((resource:any) => {
     if(resource.resource){
       optionsResourceComponents.push({
         label: resource.resource.name,
@@ -128,7 +120,7 @@ export default async function Page() {
   let optionsRoutes: Options[] = [];
   let titleRoutes: Options[] = [];
 
-  routes.map((route) => {
+  routes.map((route:any) => {
     optionsRoutes.push({
       label: route.name,
       value: route._id
@@ -144,8 +136,8 @@ export default async function Page() {
   let routesPerResource: Options[] = [];
   let descRoutes:Options[] = [];
 
-  trees[0].resources.map((resources) => {
-    resources.routes.map((route) => {
+  trees[0].resources.map((resources:any) => {
+    resources.routes.map((route:any) => {
       
       routesPerResource.push({
         label: resources._id,
@@ -167,7 +159,7 @@ export default async function Page() {
   let optionsComponents: Options[] = [];
   let descComponents: Options[] = [];
 
-  components.map((component) => {
+  components.map((component:any) => {
     optionsComponents.push({
       label: component.name,
       value: component._id

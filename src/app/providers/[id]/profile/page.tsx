@@ -16,40 +16,31 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let provider: any;
-  try {
-    provider = await getProvider(params.id, token);
-    if(typeof(provider) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{provider}</h1>
-        </>
-      )
-  } catch (error) {
+  // let provider: any;
+  // let providers: Provider[];
+  
+  // provider = await getProvider(params.id, token);
+  // providers = await getProviders(token);
+
+  const [provider, providers] = await Promise.all([
+    getProvider(params.id, token),
+    getProviders(token)
+  ]);
+  
+  if(typeof(provider) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+        <h1 className="text-center text-red-500">{provider}</h1>
       </>
     )
   }
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{providers}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(providers) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+        <h1 className="text-center text-red-500">{providers}</h1>
       </>
     )
   }

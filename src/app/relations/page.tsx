@@ -18,12 +18,14 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let rels: Relation[] = await getRelations(token);
-  let gloss: Glossary[] = await getGlossaries(token);
-  let nods: Node[] = await getNodes(token);
+  // let rels: Relation[] = await getRelations(token);
+  // let gloss: Glossary[] = await getGlossaries(token);
+  // let nods: Node[] = await getNodes(token);
 
   const [relations, glossaries, nodes] = await Promise.all([
-    rels, gloss, nods
+    getRelations(token), 
+    getGlossaries(token), 
+    getNodes(token)
   ]);
   
   if(typeof(relations) ==='string'){
@@ -61,7 +63,7 @@ export default async function Page() {
 
   const optGlossaries: Options[] = [];
   const optDescGlossaries: Options[] = [];
-  glossaries.map(glossary => {
+  glossaries.map((glossary:any) => {
     optGlossaries.push({
       label: glossary.name,
       value: glossary._id
@@ -73,7 +75,7 @@ export default async function Page() {
   });
 
   const optNodes: Options[] = [];
-  nodes.map(node => {
+  nodes.map((node:any) => {
     optNodes.push({
       label: node.department.name,
       value: node._id
@@ -98,7 +100,7 @@ export default async function Page() {
   }
 
   const dataTable: RelationTable[] = [];
-  relations.map((relation) => {
+  relations.map((relation:any) => {
     dataTable.push({
       condition: relation.glossary.name,
       description: relation.description,

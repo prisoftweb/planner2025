@@ -18,23 +18,22 @@ export default function TableReportByType({token}: {token:string}){
 
   useEffect(() => {
     const fetchData = async() => {
-      let reportsProject: ReportByProject[];
-      try {
-        reportsProject = await GetCostsGroupByProject(token);
-        if(typeof(reportsProject)==='string'){
-          return <h1>Error al consultar costos por proyecto!!</h1>
-        }
-      } catch (error) {
+      // let reportsProject: ReportByProject[];
+      // let costTypes: CostGroupByType[];
+      
+      // reportsProject = await GetCostsGroupByProject(token);
+      // costTypes = await GetCostsGroupByType(token);
+
+      const [reportsProject, costTypes] = await Promise.all([
+        GetCostsGroupByProject(token),
+        GetCostsGroupByType(token)
+      ]);
+      
+      if(typeof(reportsProject)==='string'){
         return <h1>Error al consultar costos por proyecto!!</h1>
       }
 
-      let costTypes: CostGroupByType[];
-      try {
-        costTypes = await GetCostsGroupByType(token);
-        if(typeof(costTypes)==='string'){
-          return <h1>Error al consultar costos por tipo!!</h1>
-        }
-      } catch (error) {
+      if(typeof(costTypes)==='string'){
         return <h1>Error al consultar costos por tipo!!</h1>
       }
 

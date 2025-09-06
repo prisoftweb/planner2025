@@ -17,78 +17,55 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let provider: any;
-  try {
-    provider = await getProvider(params.id, token);
-    if(typeof(provider) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{provider}</h1>
-        </>
-      )
-  } catch (error) {
+  // let provider: any;
+  // let providers: Provider[];
+  // let costs: Expense[];
+  // let optTypes: Options[] = [];
+  
+  // provider = await getProvider(params.id, token);
+  // providers = await getProviders(token);
+  // costs = await GetCostsMIN(token, params.id);
+  // optTypes = await getCatalogsByNameAndType(token, 'payments');
+
+  const [provider, providers, costs, optTypes] = await Promise.all([
+    getProvider(params.id, token),
+    getProviders(token),
+    GetCostsMIN(token, params.id),
+    getCatalogsByNameAndType(token, 'payments')
+  ]);
+  
+  if(typeof(provider) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del proveedor!!</h1>
+        <h1 className="text-center text-red-500">{provider}</h1>
       </>
     )
   }
 
-  let providers: Provider[];
-  try {
-    providers = await getProviders(token);
-    if(typeof(providers) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{providers}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(providers) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los proveedores!!</h1>
+        <h1 className="text-center text-red-500">{providers}</h1>
       </>
     )
   }
 
-  let costs: Expense[];
-  try {
-    costs = await GetCostsMIN(token, params.id);
-    if(typeof(costs) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{costs}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(costs) === "string"){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener costos del proveedor!!</h1>
+        <h1 className="text-center text-red-500">{costs}</h1>
       </>
     )
   }
 
-  let optTypes: Options[] = [];
-  try {
-    optTypes = await getCatalogsByNameAndType(token, 'payments');
-    if(typeof(optTypes)==='string') 
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
-        </>
-      )
-  } catch (error) {
+  if(typeof(optTypes)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1>Error al consultar catalogos de pagos!!</h1>
+        <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
       </>
     )
   }

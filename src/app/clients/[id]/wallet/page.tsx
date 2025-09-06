@@ -15,51 +15,37 @@ export default async function Wallet({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let client: ClientBack;
-  try {
-    client = await getClient(token, params.id);
-    if(typeof(client) === "string")
-      return (
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{client}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
+  const [client, clients] = await Promise.all([
+    getClient(token, params.id),
+    getClients(token),
+  ]);
+  
+  if(typeof(client) === "string"){
+    return (
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del cliente!!</h1>
+        <h1 className="text-center text-red-500">{client}</h1>
       </>
     )
   }
 
   let options: Options[] = [];
 
-  let clients: ClientBack[];
-  try {
-    clients = await getClients(token);
-    if(typeof(clients) === "string")
-      return(
-        <>
-          <Navigation user={user} />
-          <h1 className="text-center text-red-500">{clients}</h1>
-        </>
-      )
-  } catch (error) {
-    return(
+  if(typeof(clients) === "string"){
+    return (
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
+        <h1 className="text-center text-red-500">{clients}</h1>
       </>
     )
   }
+      
 
   if(clients.length <= 0){
-    return(
+    return (
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">Error al obtener clientes...</h1>
+        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
       </>
     )
   }

@@ -38,79 +38,69 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   const [dataCostsConcept, setDataCostsConcept ] = useState<CostsByConceptAndCategory[]>(costsCon);
 
   const fetchData = async (dateS: string, dateE: string, project:string) => {
-    let costsCategory: CostsByConceptAndCategory[] = [];
-    try {
-      costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project);
-      if(typeof(costsCategory)==='string'){
-        return <h1>Error al obtener costos agrupados por categoria!!!</h1>
-      }
-    } catch (error) {
+    // let costsCategory: CostsByConceptAndCategory[] = [];
+    // let costsConcept: CostsByConceptAndCategory[] = [];
+    // let costsDays: CostsByDay[] = [];
+    // let costsRes: CostsGroupByResumen[] = [];
+    // let costsResType: CostsGroupResumenByType[] = [];
+    
+    // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project);
+    // costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project);
+    // costsDays = await GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project);
+    // costsRes = await GetAllCostsGroupByRESUMEN(token, dateS, dateE, project);
+    // costsResType = await GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project);
+
+    const [costsCategory, costsConcept, costsDays, costsRes, costsResType] = await Promise.all([
+      GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project),
+      GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project),
+      GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project),
+      GetAllCostsGroupByRESUMEN(token, dateS, dateE, project),
+      GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project),
+    ]);
+    
+    if(typeof(costsCategory)==='string'){
       return <h1>Error al obtener costos agrupados por categoria!!!</h1>
     }
 
     setDataCostsCategory(costsCategory);
 
-    let costsConcept: CostsByConceptAndCategory[] = [];
-    try {
-      costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project);
-      if(typeof(costsConcept)==='string'){
-        return <h1>Error al obtener costos agrupados por concepto!!!</h1>
-      }
-    } catch (error) {
+    if(typeof(costsConcept)==='string'){
       return <h1>Error al obtener costos agrupados por concepto!!!</h1>
     }
 
     setDataCostsConcept(costsConcept);
 
-    let costsDays: CostsByDay[] = [];
-    try {
-      costsDays = await GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project);
-      if(typeof(costsDays)==='string'){
-        return <h1>Error al obtener costos agrupados por dias!!!</h1>
-      }
-    } catch (error) {
+    if(typeof(costsDays)==='string'){
       return <h1>Error al obtener costos agrupados por dias!!!</h1>
     }
 
-    let costsRes: CostsGroupByResumen[] = [];
-    try {
-      costsRes = await GetAllCostsGroupByRESUMEN(token, dateS, dateE, project);
-      if(typeof(costsRes)==='string'){
-        return <h1>{costsRes}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener costos agrupados por resumen!!!</h1>
+    if(typeof(costsRes)==='string'){
+      return <h1>{costsRes}</h1>
     }
 
-    let costsResType: CostsGroupResumenByType[] = [];
-    try {
-      costsResType = await GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project);
-      if(typeof(costsResType)==='string'){
-        return <h1>{costsResType}</h1>
-      }
-    } catch (error) {
-      return <h1>Error al obtener costos agrupados por resumen y tipo!!!</h1>
+    if(typeof(costsResType)==='string'){
+      return <h1>{costsResType}</h1>
     }
 
     const optCategories: OptionsDashboard[] = [];
     const optConcepts: OptionsDashboard[] = [];
     const optDays: OptionsDashboard[] = [];
 
-    costsCategory.map((cc) => {
+    costsCategory.map((cc:any) => {
       optCategories.push({
         label: cc.costocenter.category ?? '',
         costo: cc.subtotalCost
       })
     });
 
-    costsConcept.map((cc) => {
+    costsConcept.map((cc:any) => {
       optConcepts.push({
         label: cc.costocenter.concept ?? '',
         costo: cc.subtotalCost
       })
     });
 
-    costsDays.map((cc) => {
+    costsDays.map((cc:any) => {
       optDays.push({
         label: cc.day?.toString() || ' ',
         costo: cc.subtotalCost

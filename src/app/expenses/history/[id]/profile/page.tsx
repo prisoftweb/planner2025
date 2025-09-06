@@ -17,8 +17,13 @@ export default async function Page({ params }: { params: { id: string, idProv:st
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  let cost: OneExpense = await GetCostMIN(token, params.id);
-  let options: Options[] = await GetCostsLV(token);
+  // let cost: OneExpense = await GetCostMIN(token, params.id);
+  // let options: Options[] = await GetCostsLV(token);
+
+  const [cost, options] = await Promise.all([
+    GetCostMIN(token, params.id),
+    GetCostsLV(token)
+  ]);
   
   if(typeof(cost) === "string")
     return(

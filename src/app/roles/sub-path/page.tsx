@@ -16,13 +16,11 @@ export default async function Page(){
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let routes: Resource[];
-  try {
-    routes = await getRoutes(token);
-    if(typeof(routes) === 'string'){
+  
+  routes = await getRoutes(token);
+  
+  if(typeof(routes) === 'string'){
     return <h1 className="text-center text-red-500">{routes}</h1>
-    }
-  } catch (error) {
-    return <h1 className="text-center text-red-500">Error al consultar recursos!!</h1>
   }
   
   if(!routes || routes.length <= 0){
