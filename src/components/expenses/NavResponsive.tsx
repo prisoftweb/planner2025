@@ -39,7 +39,7 @@ export default function NavResponsive({open, setOpen, option,
                 text-slate-500 my-1 bg-white rounded-md rotate-90" 
             onClick={() => setOpen(true)} /></div>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
-          className="text-blue-500 bg-white" placement="right">
+          className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
               <FaMoneyCheckDollar className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md
@@ -51,7 +51,7 @@ export default function NavResponsive({open, setOpen, option,
             </div>
         </Tooltip>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
-          className="text-blue-500 bg-white" placement="right">
+          className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
               <FaFileInvoiceDollar className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md
@@ -63,7 +63,7 @@ export default function NavResponsive({open, setOpen, option,
             </div>
         </Tooltip>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Comprobante' 
-          className="text-blue-500 bg-white" placement="right">
+          className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
               <FaFilePdf className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md
@@ -75,7 +75,7 @@ export default function NavResponsive({open, setOpen, option,
             </div>
         </Tooltip>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='CFDI' 
-          className={`text-blue-500 bg-white`} placement="right">
+          className={`text-blue-500 bg-white rounded-md border border-slate-400`} placement="right">
             <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
               <BsFiletypeXml className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                 text-slate-500 my-1 bg-white rounded-md ${option===4? 'bg-blue-500': ''}`} onClick={() => changeOption(4)} 

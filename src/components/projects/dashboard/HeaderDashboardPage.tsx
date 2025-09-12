@@ -44,9 +44,13 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
   
   const refHability = useRef(true);
   const [project, setProject] = useState<string[]>([projects[0].value]);
+  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+  //   from: new Date('2024-01-02'),
+  //   to: new Date('2024-10-30'),
+  // });
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date('2024-01-02'),
-    to: new Date('2024-10-30'),
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
   });
 
   const handleProjects = (value: string[]) => {
@@ -114,7 +118,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                   currency: 'USD',
                   value: configMin[0].lastmeta.amount
                 })} 
-                className="text-slate-900 bg-white" placement="top">
+                className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
               <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                 {MoneyFormatter(configMin[0].lastmeta.amount)}
               </p>
@@ -133,7 +137,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className='text-slate-700 text-sm'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost)}
                 </p>
@@ -144,7 +148,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className='text-slate-700 text-sm'>
                   {MoneyFormatter(projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA)}
                 </p>
@@ -162,7 +166,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     currency: 'USD',
                     value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className='text-xs'>
                   {MoneyFormatter(amountProjects[0].totalAmount - projectsTotalCost[0].totalCost)}
                 </p>
@@ -179,7 +183,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     currency: 'USD',
                     value: amountProjects[0].totalAmount
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className=' text-lg sm:text-xl'>
                   {MoneyFormatter(amountProjects[0].totalAmount)}
                 </p>
@@ -190,7 +194,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     currency: 'USD',
                     value: amountProjects[0].totalAmountTotal
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className=' text-lg sm:text-sm'>
                   {MoneyFormatter(amountProjects[0].totalAmountTotal)}
                 </p>

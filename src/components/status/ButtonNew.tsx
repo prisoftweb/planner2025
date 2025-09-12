@@ -47,7 +47,7 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
         <>
           <div className=" hidden sm:block"><Button type="button" onClick={() => setNewType(true)}>Nuevo tipo</Button></div>
           <Tooltip closeDelay={0} delay={100} motionProps={props} 
-            className="text-blue-500 bg-white" content='Estatus'
+            className="text-blue-500 bg-white rounded-md border border-slate-400" content='Estatus'
             placement="right"  
           >
               <FireIcon className="w-10 h-10 sm:hidden cursor-pointer" onClick={() => setNewType(true)} />

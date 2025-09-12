@@ -40,35 +40,35 @@ export default function NavTab({tab, idProv}: {tab:string, idProv:string}){
   if(width < 710){
     tabProv = <div className="flex justify-between mt-3 border-b border-blue-300">
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Perfil'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`}
                           onClick={() => window.location.replace(`/providers/${idProv}/profile`)} />
                       </Tooltip>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Pendientes'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Pendientes'>
                           <DocumentChartBarIcon
                             className={`w-6 h-6 text-slate-600 cursor-pointer 
                             ${tab==='2'? 'bg-green-500 rounded-lg': ''}`}
                             onClick={() => window.location.replace(`/providers/${idProv}/pendinginvoices`)} />
                       </Tooltip>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Historial'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Historial'>
                           <DocumentChartBarIcon
                             className={`w-6 h-6 text-slate-600 cursor-pointer 
                             ${tab==='3'? 'bg-green-500 rounded-lg': ''}`}
                             onClick={() => window.location.replace(`/providers/${idProv}/invoiceHistory`)} />
                       </Tooltip>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Anticipos'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Anticipos'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`}
                           onClick={() => window.location.replace(`/providers/${idProv}/advances`)} />
                       </Tooltip>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Pagos'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Pagos'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='5'? 'bg-green-500 rounded-lg': ''}`}

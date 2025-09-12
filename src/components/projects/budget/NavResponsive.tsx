@@ -36,7 +36,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
                 text-slate-500 my-1 bg-white rounded-md rotate-90" 
             onClick={() => setOpen(true)} /></div>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
-          className="text-blue-500 bg-white" placement="right">
+          className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
               <LuConstruction className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                   text-slate-500 my-1 bg-white rounded-md

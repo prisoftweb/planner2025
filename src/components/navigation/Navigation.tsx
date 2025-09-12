@@ -26,10 +26,6 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   let photo='/img/default.jpg', role='', id='';
-  //carmen
-  // photo="https://docs-adminweb.s3.amazonaws.com/user-65d3836974045152c0c4378c-1736450268582.jpeg";
-  //prisco
-  // photo="https://docs-adminweb.s3.us-east-1.amazonaws.com/user-1708360552272.jpeg";
   if(user.photo){
     photo = user.photo;
   }
@@ -54,7 +50,7 @@ export default function Navigation({user}: {user:UsrBack}){
   }
 
   const firstName = user.name.substring(0, user.name.indexOf(' '));
-  // console.log('photo => ', photo);
+  
   return(
     <>
       <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2 print:hidden">

@@ -20,7 +20,6 @@ export default function DonutChartProviderComponent({data, colors, categories, c
     const categoryPayload = payload?.[0];
     if (!categoryPayload) return null;
 
-    console.log('props => ', props);
     return (
       // <div className='bg-tremor-background'></div>
       <div className="w-72 rounded-tremor-default border border-tremor-border p-2 

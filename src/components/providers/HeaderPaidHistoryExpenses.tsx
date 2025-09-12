@@ -7,8 +7,13 @@ import { pendingPaymentProvider } from "@/interfaces/Payments";
 import { showToastMessageError } from "../Alert";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 
-export default function HeaderPaidHistoryExpenses({expensesTable, provider, token}:
-   {expensesTable: CostsPaymentTable[], provider: Provider, token: string}) {
+type HeaderProps={
+  expensesTable: CostsPaymentTable[], 
+  provider: Provider, 
+  token: string
+}
+
+export default function HeaderPaidHistoryExpenses({expensesTable, provider, token}: HeaderProps) {
 
   const [pending, setPending] = useState<number>(0);
 

@@ -34,16 +34,16 @@ export default async function Page() {
 
   const [amountProjects, listProjectsdate, projectsandTypes, projectsTotalCost, configMin,
     projectsBudgeted, projectsSpent, projectsControlBudgeted, projects, allPaymentsProjects] = await Promise.all([
-      getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []),
-      getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []),
-      getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []),
-      getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectsAmount(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardListProjectsByDate(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardByProjectAndType(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectTotalCost(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getConfigMin(token),
-      getProjectsBudgeted(token, '2024-01-01', '2024-10-30', []),
-      getProjectsSpent(token, '2024-01-01', '2024-10-30', []),
-      getProjectsControlBudgeted(token, '2024-01-01', '2024-10-30', []),
+      getProjectsBudgeted(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getProjectsSpent(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getProjectsControlBudgeted(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getProjectsLV(token),
-      getAllPaymentsProjects(token, '2024-01-01', '2024-10-30')
+      getAllPaymentsProjects(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString())
     ]); 
   
   if(typeof(allPaymentsProjects) === "string"){

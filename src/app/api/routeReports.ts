@@ -57,12 +57,14 @@ export async function RemoveReport(id:string, auth_token:string) {
 
 export async function GetReport(auth_token:string, id:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/${id}`;
+  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers:{
         'Authorization': `Bearer ${auth_token}`,
       }
     })
+    // console.log('res');
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {

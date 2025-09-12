@@ -124,10 +124,6 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
     if(conditions.includes('all')){
       return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
     }else{
-      // if(!exp.condition.every((cond) => !conditions.includes(cond.glossary._id))){
-      //   return typesValidation(exp, minAmount, maxAmount, startDate, endDate, projects, 
-      //               reports, categories, types, costcenters);
-      // }
       if(conditions.includes(exp.estatus._id)){
         return amountValidation(exp, minAmount, maxAmount, startDate, endDate, isPaid);
       }

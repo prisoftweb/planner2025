@@ -14,8 +14,13 @@ import { GlossaryTable, Glossary } from "@/interfaces/Glossary"
 import { useRef } from "react"
 import { useGlossariesStore } from "@/app/store/glossaryStore"
 
-export default function NewGlossary({showForm, token, glossary}: 
-                    {showForm:Function, token:string, glossary: (GlossaryTable | string)}){
+type glossaryProps={
+  showForm:Function, 
+  token:string, 
+  glossary: (GlossaryTable | string)
+}
+
+export default function NewGlossary({showForm, token, glossary}: glossaryProps ){
   
   const [color, setColor] = useState(typeof(glossary)==='string'? "#b32aa9": glossary.color);
 

@@ -12,8 +12,13 @@ import { useEffect } from "react"
 import { TableProvider } from "@/interfaces/Providers"
 import { CurrencyFormatter } from "@/app/functions/Globals"
 
-export default function ContainerProvider({providers, user, token}: 
-  {providers: Provider[], user:UsrBack, token:string}){
+type ContainerProps={
+  providers: Provider[], 
+  user:UsrBack, 
+  token:string
+}
+
+export default function ContainerProvider({providers, user, token}: ContainerProps ){
 
   const {providerStore, updateProviderStore} = useProviderStore();
 

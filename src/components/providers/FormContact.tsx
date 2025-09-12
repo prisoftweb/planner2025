@@ -214,7 +214,6 @@ export default function FormContact({addNewContact, token, contact,
           email: emailContact,
           name: nameContact,
           companyemail: emailCompany,
-          //phoneNumber,
         }
         
         if(!newContact.companyemail || newContact.companyemail===''){
@@ -309,7 +308,7 @@ export default function FormContact({addNewContact, token, contact,
   let button = typeof(contact)==='string'? 
                       <Button type="submit">Guardar contacto</Button> : 
                       <Button type="button" onClick={() => validationUpdateContact()}>Actualizar contacto</Button>
-                      // <Button type="button" onClick={() => onUpdateContact()}>Actualizar contacto</Button>
+
   return(
     <>
       <form onSubmit={formik.handleSubmit} className="mt-2 space-y-5">

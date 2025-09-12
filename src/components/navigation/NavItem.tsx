@@ -5,7 +5,13 @@ import DropDownItem from "./DropDownItem"
 import  { NavItem } from "@/interfaces/NavItem";
 import { useOutsideClickButton } from "@/app/functions/useOutsideClick";
 
-export default function NavItemComponent({name, items, link}: {name:string, items:NavItem[], link:string}){
+type NavProps={
+  name:string, 
+  items:NavItem[], 
+  link:string
+}
+
+export default function NavItemComponent({name, items, link}: NavProps ){
   
   const [isOpen, setIsOpen] = useState(false);
   

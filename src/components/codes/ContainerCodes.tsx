@@ -1,51 +1,16 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ICodeMin } from "@/interfaces/Code";
-// import { TbArrowNarrowLeft } from "react-icons/tb";
-// import Image from "next/image";
 
 export default function ContainerCodes({codes}: {codes:ICodeMin[]}) {
 
   const [search, setSearch]=useState<string>('');
-  // const [heightPage, setHeightPage] = useState<number>(900);
-
-  // const handleResize = () => {
-  //   setHeightPage(Math.max(
-  //     document.body.scrollHeight, document.documentElement.scrollHeight,
-  //     document.body.offsetHeight, document.documentElement.offsetHeight,
-  //     document.body.clientHeight, document.documentElement.clientHeight
-  //   ));
-  // }
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleResize, false);
-  //   setHeightPage(Math.max(
-  //     document.body.scrollHeight, document.documentElement.scrollHeight,
-  //     document.body.offsetHeight, document.documentElement.offsetHeight,
-  //     document.body.clientHeight, document.documentElement.clientHeight
-  //   ));
-  //   return () => window.removeEventListener('scroll', handleResize);
-  // }, []);
 
   const filteredCodes = search==''? codes: codes.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
 
   return (
-    // <div className={`grid ${widthPage < 500? 'grid-cols-1': 'grid-cols-2'} gap-x-3 p-5`}>
     <>
-      {/* <div className="flex items-center gap-x-3 text-white cursor-pointer" 
-          onClick={() => window.location.replace('/')}>
-        <div className="flex items-center bg-slate-500">
-          <div className="p-1">
-            <TbArrowNarrowLeft className="w-9 h-9 text-white" 
-            />
-          </div>
-          <p className="text-xl ml-4 font-medium">REGRESAR</p>
-        </div>
-        <div className="bg-slate-500">
-          <Image src={'/img/projects/default.svg'} className="rounded-full" width={30} height={30} alt="proyecto" />
-        </div>
-      </div> */}
       <div className="w-full max-w-lg" >
         <div>
           <div className="flex items-center gap-x-2">

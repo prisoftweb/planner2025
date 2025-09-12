@@ -4,17 +4,23 @@ import { useState } from "react";
 import { Options } from "@/interfaces/Common";
 import NewNode from "./NewNode";
 
+type ButtonProps={
+  token:string, 
+  user:string, 
+  glossaries:Options[], 
+  departments:Options[], 
+  workFlows:Options[], 
+  descGlossaries:Options[]
+}
+
 export default function ButtonNewNode({token, user, departments, 
-              glossaries, workFlows, descGlossaries}: 
-  {token:string, user:string, glossaries:Options[], departments:Options[], workFlows:Options[], 
-    descGlossaries:Options[]}){
+  glossaries, workFlows, descGlossaries}: ButtonProps ){
   const [newNode, setNewNode] = useState<boolean>(false);
 
   const handleClick = (value: boolean) => {
     setNewNode(value);
   }
   
-
   return(
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>

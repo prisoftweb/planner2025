@@ -151,7 +151,7 @@ function SortableItem(p : ProjectMin) {
           value: p.amount
         })}</p>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content={p.title} 
-          placement="right" className="text-blue-500 bg-white">
+          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <p className="text-green-500 text-sm">{p.title.substring(0, 25)}{p.title.length > 25? '...': ''}</p>
         </Tooltip>
       </div>

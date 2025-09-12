@@ -1,7 +1,12 @@
 import Image from "next/image"
 
-export default function ContainerHeaderForm({photo, name, email}: 
-              {photo:string, name:string, email:string}){
+type FormProps={
+  photo:string, 
+  name:string, 
+  email:string
+}
+
+export default function ContainerHeaderForm({photo, name, email}: FormProps ){
   return(
     <>
       <div className="flex justify-center">

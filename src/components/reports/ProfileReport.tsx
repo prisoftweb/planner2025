@@ -11,6 +11,7 @@ import {Tooltip} from "@nextui-org/react";
 import { useState, useEffect } from "react";
 import { getCostByReportMin } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
+import { showToastMessageError } from "../Alert";
 
 export default function ProfileReport({report, send, token, user, id, dates, isSendReport=true}: 
   {report:Report, send:Function, id:string, token: string, user:UsrBack, 
@@ -28,10 +29,15 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
       let costsRep:CostReport[] = [];
       try {
         costsRep = await getCostByReportMin(id, token);
-        if(typeof(costsRep)==='string')
-          return <h1 className="text-center text-lg text-red-500">{costsRep}</h1>
+        if(typeof(costsRep)==='string'){
+          // return <h1 className="text-center text-lg text-red-500">{costsRep}</h1>
+          showToastMessageError(costsRep);
+          return;
+        }
       } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
+        // return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
+        showToastMessageError('Error al consultar los costos del reporte!');
+        return;
       }
       setCostReport(costsRep);
     }
@@ -56,6 +62,10 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
       },
     },
   }
+
+  console.log('costs rep => ', costsReport);
+  console.log('cost rep leng => ', costsReport.length);
+  console.log('rep min => ', oneReport);
 
   return(
     <>
@@ -155,7 +165,7 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
                   </PDFDownloadLink>
                 )}
                 {typeof(user.department)!== 'string' && (user.department.name.toLowerCase().includes('soporte') || 
-                    user.department.name.toLowerCase().includes('direccion')) && oneReport && (
+                    user.department.name.toLowerCase().includes('direccion') || user.department.name.toLowerCase().includes('admin')) && oneReport && (
                   <Tooltip closeDelay={0} delay={100} motionProps={props} content='Anexo' 
                       placement="top" className="text-blue-500 bg-white">
                     <PDFDownloadLink document={<AttachedPDF report={oneReport} dates={dates} />} 

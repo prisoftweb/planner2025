@@ -10,8 +10,13 @@ import { Options } from "@/interfaces/Common";
 import TableDepartments from "./TableDepartments";
 import Header from "@/components/Header";
 
-export default function ContainerDepartment({departments, optsCompanies, token}: 
-  {departments:Department[], token:string, optsCompanies:Options[]}) {
+type DeptProps={
+  departments:Department[], 
+  token:string, 
+  optsCompanies:Options[]
+}
+
+export default function ContainerDepartment({departments, optsCompanies, token}: DeptProps ) {
 
   const {departmentStore, updateDepartmentStore} = useDepartmentStore();
 

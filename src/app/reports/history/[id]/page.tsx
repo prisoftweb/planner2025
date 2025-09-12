@@ -25,6 +25,8 @@ export default async function Page({ params }: { params: { id: string }}){
     GetAllCostByReportWithDateMINAndMAX(token, params.id),
     GetReportsLV(token)
   ]);
+
+  console.log('report => ', report);
   
   if(typeof(report)==='string'){
     return(

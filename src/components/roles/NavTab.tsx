@@ -34,7 +34,7 @@ export default function NavTab({option}: {option:number}){
                 <div className="bg-white fixed top-12 left-0 p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
                   <Link href='/roles/role'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Roles'
+                      className="text-blue-500 bg-white rounded-md border border-slate-400" content='Roles'
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
@@ -49,7 +49,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/resources'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Recursos'
+                      className="text-blue-500 bg-white rounded-md border border-slate-400" content='Recursos'
                       placement="right"  
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
@@ -64,7 +64,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/sub-path'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Rutas'
+                      className="text-blue-500 bg-white rounded-md border border-slate-400" content='Rutas'
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
@@ -79,7 +79,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/components'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Componentes'
+                      className="text-blue-500 bg-white rounded-md border border-slate-400" content='Componentes'
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
@@ -94,7 +94,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/roles/trees'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 bg-white" content='Arboles'
+                      className="text-blue-500 bg-white rounded-md border border-slate-400" content='Arboles'
                       placement="right"
                     >
                       <div className="p-1"  style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>

@@ -3,11 +3,16 @@ import { PlusCircleIcon, CheckCircleIcon, TrashIcon } from "@heroicons/react/24/
 import Label from '../Label';
 import Input from '../Input';
 
+type Props={ 
+  pushElement:Function, 
+  bandPlus:boolean, 
+  DeleteElement:Function, 
+  index:number, 
+  updateCount: Function
+}
+
 export default function AddConcept({bandPlus, DeleteElement, index, 
-                                  pushElement, updateCount}: 
-                              { pushElement:Function, bandPlus:boolean, 
-                                DeleteElement:Function, index:number, 
-                                updateCount: Function}){
+  pushElement, updateCount}: Props ){
   
   const [saved, setSaved] = useState(false);
   const [add, setAdd] = useState(false);

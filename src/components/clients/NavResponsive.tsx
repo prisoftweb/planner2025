@@ -56,14 +56,14 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
     nav = (
       <div className="bg-white top-52 space-y-4 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Expandir' 
-          placement="right" className="text-blue-500 bg-white">
+          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                 text-slate-500 my-1 bg-white rounded-md rotate-90" 
               onClick={() => setOpen(true)} /></div>
         </Tooltip>
         {resumeData?.status && (
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen' 
-            placement="right" className="text-blue-500 bg-white"> 
+            placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400"> 
               <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
                 <PiPresentationChartLight 
                   style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': ''), 
@@ -78,7 +78,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
         )}
         {basicData?.status && (
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
-            placement="right" className="text-blue-500 bg-white">
+            placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
                 <ImProfile className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md
@@ -92,7 +92,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
         )}
         {aditionalData?.status && (
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
-            placement="right" className="text-blue-500 bg-white">
+            placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
                 <FaRegImage className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md
@@ -106,7 +106,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
         )}
         {addressData?.status && (
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
-            placement="right" className="text-blue-500 bg-white">
+            placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
                 <FaAddressCard className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                           text-slate-500 my-1 bg-white rounded-md
@@ -120,7 +120,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
         )}
         {contactData && (
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Contactos' 
-            placement="right" className="text-blue-500 bg-white">
+            placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
                 <MdContactPhone className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                         text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
@@ -137,7 +137,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
     nav = (
       <div className="w-full">
         <Tooltip closeDelay={0} delay={100} motionProps={props} content='Reducir' 
-          placement="right" className="text-blue-500 bg-white">
+          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <div className="flex justify-end border-b border-slate-300 pr-2">
               <ArrowDownTrayIcon className="w-4 h-4 sm:w-12 sm:h-12 pb-2 sm:pb-4 cursor-pointer 
                   text-slate-500 rotate-90" onClick={() => setOpen(false)} />

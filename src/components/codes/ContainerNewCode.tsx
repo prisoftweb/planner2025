@@ -106,7 +106,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   }
 
   const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));
-console.log('filteredProjects => ', filteredProjects);
+
   return (
     <div className={`grid ${widthPage < 500? 'grid-cols-1': 'grid-cols-2'} gap-x-3`}>
       <div>
@@ -158,9 +158,6 @@ console.log('filteredProjects => ', filteredProjects);
                         {prj.category.name}
                       </p>
                     </div>
-                    {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                      PINTURA VINILICA MARCA VIBE, BERELINTE, COLOR BLANCO MATE, A DOS MANOS O LAS NECESARIAS,
-                    </p> */}
                     <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                       {prj.description}
                     </p>

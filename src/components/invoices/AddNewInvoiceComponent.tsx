@@ -1,18 +1,12 @@
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import HeaderForm from "@/components/HeaderForm"
-import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
-import { Options } from "@/interfaces/Common"
-import { IEstimateMin, TableEstimatesProject } from "@/interfaces/Estimate"
-import { getEstimateMin } from "@/app/api/routeEstimates"
 import { createInvoice } from "@/app/api/routeInvoices"
 import DataBasicInvoiceStepper from "./DataBasicInvoiceStepper"
 import InvoicesConditionsStepper from "../projects/estimates/InvoicesConditionsStepper"
-// import ConceptsInvoiceStepper from "./ConceptsInvoceStepper"
 import NavInvoiceStepper from "../projects/estimates/NavInvoiceStepper"
 import ConceptsInvoiceStepperComponent from "./ConceptsInvoiceStepperComponent"
-import { IInvoiceTable } from "@/interfaces/Invoices"
 
 type Params = {
   showForm:Function, 
@@ -41,6 +35,7 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
   const [bandOdc, setBandOdc] = useState<boolean>(false);
 
   const [step, setStep]=useState<number>(0);
+  const [isVat, setIsVat]=useState<boolean>(true);
 
   const [heightPage, setHeightPage] = useState<number>(900);
 
@@ -102,6 +97,10 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
 
   const handleBandTaxFolio = (value:boolean) => {
     setBandTaxFolio(value);
+  }
+
+  const handleIsVat = (value:boolean) => {
+    setIsVat(value);
   }
 
   const handleResize = () => {
@@ -193,8 +192,8 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
         concepts: dataConcepts,
         cost: {
           subtotal: amount, 
-          iva: amount * 0.16,
-          total: amount * 1.16,
+          iva: isVat? (amount * 0.16): 0,
+          total: isVat? (amount * 1.16): amount,
         },
         // notes: res.description,
         condition: [
@@ -204,9 +203,9 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
         purchaseorder:odc,
         duedate:newDate.toISOString(),
         accountreceivables: [{
-          previousbalanceamount: amount * 1.16,
+          previousbalanceamount: isVat? (amount * 1.16): amount,
           charged: 0,
-          unchargedbalanceamount: amount * 1.16,
+          unchargedbalanceamount: isVat? (amount * 1.16): amount,
           partialitynumber: 0,
         }]
       }
@@ -228,7 +227,8 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
                         nextStep={handleStep} setClient={handleClient} setDate={handleDate} 
                         setFolio={handleFolio} setTaxFolio={handleTaxFolio} taxFolio={taxFolio}
                         token={token} setBandDate={handleBandDate} setBandFolio={handleBandFolio}
-                        setBandTaxFolio={handleBandTaxFolio} project={project} setProject={handleProject} /> : 
+                        setBandTaxFolio={handleBandTaxFolio} project={project} setProject={handleProject}
+                        handleIsVat={handleIsVat} isVat={isVat} /> : 
                         (step===1? <InvoicesConditionsStepper 
                                   conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 

@@ -42,7 +42,7 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
     tabCli = <div className="flex justify-between mt-3">
                     <Link href={`/clients/${idCli}/profile`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Perfil'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
                           <UserCircleIcon data-tooltip-target="tooltip-dark"
                             className={`w-6 h-6 text-slate-600 cursor-pointer 
                             ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
@@ -50,7 +50,7 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
                     </Link>  
                     <Link href={`/clients/${idCli}/projects`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Proyectos'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Proyectos'>
                         <DocumentChartBarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
@@ -58,7 +58,7 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
                     </Link>
                     <Link href={`/clients/${idCli}/estimates`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Estimaciones'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
@@ -66,7 +66,7 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
                     </Link>
                     <Link href={`/clients/${idCli}/wallet`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Cartera'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cartera'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />

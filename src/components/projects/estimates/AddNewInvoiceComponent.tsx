@@ -43,6 +43,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
   const [bandOdc, setBandOdc] = useState<boolean>(false);
 
   const [step, setStep]=useState<number>(0);
+  const [isVat, setIsVat]=useState<boolean>(true);
 
   const [heightPage, setHeightPage] = useState<number>(900);
 
@@ -100,6 +101,10 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
 
   const handleBandTaxFolio = (value:boolean) => {
     setBandTaxFolio(value);
+  }
+
+  const handleIsVat = (value:boolean) => {
+    setIsVat(value);
   }
 
   const handleResize = () => {
@@ -178,8 +183,8 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           amountChargeOff: estimate.Amortizacion,
           cost: {
             subtotal: estimate.MontoPay, 
-            iva: (estimate?.amountVat || 0) - (estimate?.MontoPay || 0),
-            total: estimate.amountVat,
+            iva: isVat? ((estimate?.amountVat || 0) - (estimate?.MontoPay || 0)): 0,
+            total: isVat? estimate.amountVat: estimate.MontoPay,
           },
           condition: [
             {glossary:"67d20cb359865f640af92638", user}
@@ -189,10 +194,10 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           duedate:newDate.toISOString(),
           accountreceivables: [{
             // previousbalanceamount: estimate.MontoPay,
-            previousbalanceamount: estimate.MontoPay * 1.16,
+            previousbalanceamount: isVat? estimate.MontoPay * 1.16: estimate.MontoPay,
             charged: 0,
             // unchargedbalanceamount: estimate.MontoPay,
-            unchargedbalanceamount: estimate.MontoPay * 1.16,
+            unchargedbalanceamount: isVat? estimate.MontoPay * 1.16: estimate.MontoPay,
             partialitynumber: 0,
           }]
         }
@@ -222,7 +227,8 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
                         nextStep={handleStep} setClient={handleClient} setDate={handleDate} 
                         setFolio={handleFolio} setTaxFolio={handleTaxFolio} taxFolio={taxFolio}
                         token={token} setBandDate={handleBandDate} setBandFolio={handleBandFolio}
-                        setBandTaxFolio={handleBandTaxFolio} /> : (step===1? <InvoicesConditionsStepper 
+                        setBandTaxFolio={handleBandTaxFolio} handleIsVat={handleIsVat} isVat={isVat} /> : 
+                                (step===1? <InvoicesConditionsStepper 
                                   conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 
                                   handleType={handleType} nextStep={handleStep} token={token} 

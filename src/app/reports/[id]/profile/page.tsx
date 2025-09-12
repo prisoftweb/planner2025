@@ -41,6 +41,8 @@ export default async function Page({ params }: { params: { id: string }}){
     )
   }
 
+  console.log('report => ', report);
+
   if(typeof(dateReport)==='string'){
     return(
       <>

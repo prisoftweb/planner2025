@@ -22,6 +22,7 @@ export default function ReportClient({report, token, id, user, node, dates, optR
   const {updateOneReportStore, oneReport} = useOneReportStore();
 
   useEffect(() => {
+    // console.log('update rep => ', report);
     updateOneReportStore(report);
 
     return () => updateOneReportStore(undefined);

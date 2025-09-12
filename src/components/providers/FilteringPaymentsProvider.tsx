@@ -36,12 +36,9 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
   useEffect(() => {
     const fetchApis = async () => {
       let optConditions: Options[] = [];
-      try {
-        optConditions = await getCatalogsByNameAndCondition(token, 'payments');
-        if(typeof(optConditions)==='string') return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
-      } catch (error) {
-        return <h1>Error al consultar catalogos!!</h1>
-      }
+      optConditions = await getCatalogsByNameAndCondition(token, 'payments');
+      if(typeof(optConditions)==='string') 
+        return <h1 className="text-red-500 text-center text-lg">{optConditions}</h1>
 
       setConditions(optConditions);
     }

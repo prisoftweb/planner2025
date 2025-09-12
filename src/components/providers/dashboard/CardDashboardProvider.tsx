@@ -38,7 +38,7 @@ export default function CardDashboardProvider({children, link, p1, p2, p3, textC
                   currency: 'USD',
                   value: MoneyFormatterToNumber(p2)
                 })} 
-                className="text-slate-900 bg-white" placement="top">
+                className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
               <p className={textColor}>{p2}</p>
             </Tooltip>
           )}

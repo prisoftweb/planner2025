@@ -2,35 +2,15 @@ import {ICode} from '@/interfaces/Code'
 import { TbArrowNarrowLeft } from 'react-icons/tb'
 import { useState, useEffect } from 'react';
 
-export default function NewCode({closeForm, returnForm, code, title, size}: 
-  {closeForm: (id:string) => void, returnForm: (id:string) => void, code:ICode, title:string, size:number}) {
-{/* <div className="flex items-center gap-x-3 text-white cursor-pointer" 
-          onClick={() => window.location.replace('/')}>
-        <div className="flex items-center bg-slate-500">
-          <div className="p-1">
-            <TbArrowNarrowLeft className="w-9 h-9 text-white" 
-            />
-          </div>
-          <p className="text-xl ml-4 font-medium">REGRESAR</p>
-        </div>
-        <div className="bg-slate-500">
-          <Image src={'/img/projects/default.svg'} className="rounded-full" width={30} height={30} alt="proyecto" />
-        </div>
-      </div> */}
-  // const header = size < 500? 
-        // <div className="flex gap-x-3 items-center border-slate-400 bg-slate-400 text-white cursor-pointer"
-        //     onClick={() => returnForm(code._id)} >
-        //   <div className="flex items-center">
-        //     <div className="p-1 border rounded-md ">
-        //       <TbArrowNarrowLeft className="w-9 h-9 text-white" 
-        //       />
-        //     </div>
-        //     <p className="text-xl ml-4 font-medium">REGRESAR</p>
-        //     {/* <p className="text-xl ml-4 font-medium">{title}</p> */}
-        //     <img src="/img/projects/default.svg" alt="proyecto" />
-        //   </div>
-        //   <></>
-        // </div> : <></>
+type Props={
+  closeForm: (id:string) => void, 
+  returnForm: (id:string) => void, 
+  code:ICode, 
+  title:string, 
+  size:number
+}
+
+export default function NewCode({closeForm, returnForm, code, title, size}: Props) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
 
@@ -60,7 +40,6 @@ export default function NewCode({closeForm, returnForm, code, title, size}:
               />
             </div>
             <p className="text-xl ml-4 font-medium">REGRESAR</p>
-            {/* <p className="text-xl ml-4 font-medium">{title}</p> */}
             <img src="/img/projects/default.svg" className='rounded-full w-9 h-9' alt="proyecto" />
           </div>
           <></>

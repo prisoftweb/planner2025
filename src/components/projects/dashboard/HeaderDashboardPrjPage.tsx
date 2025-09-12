@@ -138,7 +138,7 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
                   currency: 'USD',
                   value: configMin[0].lastmeta.amount
                 })} 
-                className="text-slate-900 bg-white" placement="top">
+                className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
               <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                 {MoneyFormatter(configMin[0].lastmeta.amount)}
               </p>

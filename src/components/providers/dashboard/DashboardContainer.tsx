@@ -18,10 +18,17 @@ interface OptionsBarChart {
   costo: number
 }
 
+type DashProps={
+  totalCost: TotalCostsByProvidersTradeLine[], 
+  providersTradeLine: ProviderWithTradeLine[], 
+  costsProviderWithTradeLine: CostsByProvider[], 
+  costsProvider: CostsByProvider[], 
+  data: TableDashboardProviders[], 
+  totalPayments: TotalPayments
+}
+
 export default function DashboardContainer({costsProvider, costsProviderWithTradeLine, 
-    providersTradeLine, totalCost, data, totalPayments}: 
-  {totalCost: TotalCostsByProvidersTradeLine[], providersTradeLine: ProviderWithTradeLine[], 
-    costsProviderWithTradeLine: CostsByProvider[], costsProvider: CostsByProvider[], data: TableDashboardProviders[], totalPayments: TotalPayments}) {
+  providersTradeLine, totalCost, data, totalPayments}: DashProps) {
 
   let pending = 0;
   providersTradeLine.map((p) => {

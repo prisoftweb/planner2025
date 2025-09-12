@@ -160,7 +160,7 @@ function SortableItem(q : IQuotationMin) {
           value: q.cost.subtotal
         })}</p>
         <Tooltip closeDelay={0} delay={100} motionProps={props} content={q.title} 
-          placement="right" className="text-blue-500 bg-white">
+          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <p className="text-green-500 text-sm">{q.title.substring(0, 17)}{q.title.length > 17? '...': ''}</p>
         </Tooltip>
       </div>

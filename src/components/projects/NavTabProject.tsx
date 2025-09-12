@@ -43,7 +43,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
     tabCli = <div className="flex justify-between mt-3">
                     <Link href={`/projects/${idPro}/profile`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Resumen'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
@@ -51,7 +51,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>  
                     <Link href={`/projects/${idPro}/analysis`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Analisis'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
                         <DocumentChartBarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
@@ -59,7 +59,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/${idPro}/budgets`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Presupuesto'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
@@ -67,7 +67,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/${idPro}/costs`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Costo'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Costo'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
@@ -75,7 +75,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/estimates/${idPro}?page=projects`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Estimaciones'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
@@ -83,7 +83,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/estimates/${idPro}/invoice?page=projects`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Facturacion'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturacion'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='6'? 'bg-green-500 rounded-lg': ''}`} />
@@ -91,7 +91,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/estimates/${idPro}/collections?page=projects`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Cobranza'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='7'? 'bg-green-500 rounded-lg': ''}`} />
@@ -99,7 +99,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                     </Link>
                     <Link href={`/projects/${idPro}/guaranteefunds`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Fondo garantia'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Fondo garantia'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='8'? 'bg-green-500 rounded-lg': ''}`} />

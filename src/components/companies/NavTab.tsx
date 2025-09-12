@@ -35,8 +35,8 @@ export default function NavTab({option}: {option:number}){
                 <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
                 <Link href='/catalogs'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md" content='Listas'
-                      placement="right"
+                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" 
+                      content='Listas' placement="right"
                     >
                       <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
                         <GrCatalog className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -50,7 +50,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/departments'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3" content='Departamentos'
+                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" content='Departamentos'
                       placement="right" 
                     >
                       <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
@@ -65,7 +65,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/companies'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white rounded-md" content='Compañia'
+                      className="text-blue-500 text-sm font-thin bg-white rounded-md border border-slate-400" content='Compañia'
                       placement="right"
                     >
                       <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
@@ -80,7 +80,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/glossary'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white mx-3" content='Glosarios'
+                      className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" content='Glosarios'
                       placement="right"
                     >
                       <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
@@ -95,7 +95,7 @@ export default function NavTab({option}: {option:number}){
                   </Link>
                   <Link href='/status'>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      className="text-blue-500 text-sm font-thin bg-white" content='Catalogos'
+                      className="text-blue-500 text-sm font-thin bg-white rounded-md border border-slate-400" content='Catalogos'
                       placement="right"  
                     >
                       <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>

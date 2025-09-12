@@ -27,11 +27,13 @@ type DataBasicProps={
   setBandDate:Function,
   project:string,
   setProject:Function
+  handleIsVat: (value: boolean) => void,
+  isVat: boolean
 }
 
 export default function DataBasicInvoiceStepper({token, client, date, setDate, setClient, bandDate, 
   bandFolio, bandTaxFolio, folio, setFolio, setTaxFolio, taxFolio, nextStep, setBandDate, setBandFolio, 
-  setBandTaxFolio, project, setProject}: DataBasicProps) {
+  setBandTaxFolio, project, setProject, handleIsVat, isVat}: DataBasicProps) {
 
   const [editClient, setEditClient]=useState<boolean>(false);
   const [optClients, setOptClients]=useState<Options[]>([]);
@@ -104,8 +106,8 @@ export default function DataBasicInvoiceStepper({token, client, date, setDate, s
           <Label>Incluye iva? </Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
             <input 
-              // checked={disperse} 
-              // onClick={() => setDisperse(!disperse)} 
+              checked={isVat} 
+              onClick={() => handleIsVat(!isVat)} 
               id="includeVat" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
                 appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 

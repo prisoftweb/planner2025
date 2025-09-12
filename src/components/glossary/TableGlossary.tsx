@@ -13,8 +13,13 @@ import ButtonNew from "./ButtonNew";
 import RemoveElement from "../RemoveElement";
 import { showToastMessageError } from "../Alert";
 
-export default function TableLists({data, token, glossaries}:
-                        {data:GlossaryTable[], token:string, glossaries: Glossary[]}){
+type tableProps={
+  data:GlossaryTable[], 
+  token:string, 
+  glossaries: Glossary[]
+}
+
+export default function TableLists({data, token, glossaries}: tableProps){
   
   const columnHelper = createColumnHelper<GlossaryTable>();
   const {glossariesStore, updateGlossariesStore} = useGlossariesStore();

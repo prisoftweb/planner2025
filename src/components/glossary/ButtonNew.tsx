@@ -4,8 +4,12 @@ import { useState } from "react";
 import NewGlossary from "./NewGlossary";
 import { GlossaryTable } from "@/interfaces/Glossary";
 
-export default function ButtonNew({token, glossary}: 
-                                  {token:string, glossary: (GlossaryTable | string)}){
+type buttonProps={
+  token:string, 
+  glossary: (GlossaryTable | string)
+}
+
+export default function ButtonNew({token, glossary}: buttonProps ){
   const [NewList, setNewList] = useState<boolean>(false);
   
   return(

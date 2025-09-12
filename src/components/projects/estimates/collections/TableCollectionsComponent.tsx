@@ -178,12 +178,12 @@ export default function TableCollectionsComponent({token, project, pageQuery}:
           {({loading, url, error, blob}) => 
             loading? (
               <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white">
+                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
               </Tooltip>
             ) : (
               <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white">
+                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
               </Tooltip>
             ) }

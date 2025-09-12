@@ -45,7 +45,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
     tabCli = <div className="flex justify-between mt-3">
                     <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}&&project=${idProj}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Perfil'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
@@ -53,7 +53,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
                     </Link>  
                     <Link href={`/expenses/${idExp}/budget?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Presupuesto'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
                         <DocumentChartBarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
@@ -61,7 +61,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
                     </Link>
                     <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Analisis'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
@@ -69,7 +69,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
                     </Link>
                     <Link href={`/expenses/${idExp}/advange?prov=${idProv}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Avance'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Avance'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
@@ -77,7 +77,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
                     </Link>
                     <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}&&project=${idProj}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                        placement="bottom" className="bg-white text-blue-500" content='Estatus'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estatus'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />

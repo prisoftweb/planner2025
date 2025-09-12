@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import NavResponsive from "./NavResponsive"
 import { Report, DateReport } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
@@ -12,11 +12,21 @@ import NuevoComponente from "./NuevoComponente"
 import ArrowReturn from "../ArrowReturn"
 import { Options } from "@/interfaces/Common"
 import Selectize from "../Selectize"
+import { useOneReportStore } from "@/app/store/reportsStore"
 
 export default function ReportHistoryClient({report, user, id, token, dates, optReports}: 
   {report:Report, user:UsrBack, id:string, token:string, dates:DateReport[], optReports: Options[] }){
 
   const [opt, setOpt] = useState<number>(1);
+
+  const {updateOneReportStore, oneReport} = useOneReportStore();
+  
+  useEffect(() => {
+    // console.log('update rep => ', report);
+    updateOneReportStore(report);
+
+    return () => updateOneReportStore(undefined);
+  }, []);
   
   let view:JSX.Element = <></>;
   // opt===2? view =(<CostsInReport report={report} id={id} token={token} />) : 

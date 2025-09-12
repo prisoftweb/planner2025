@@ -9,8 +9,13 @@ import { useState } from "react";
 import NewDepartment from "./NewDepartment";
 import { Options } from "@/interfaces/Common";
 
-export default function TableDepartments({data, token, optionsCompany}:
-                        {data:DepartmentTable[], token:string, optionsCompany:Options[]}){
+type DeptProps={
+  data:DepartmentTable[], 
+  token:string, 
+  optionsCompany:Options[]
+}
+
+export default function TableDepartments({data, token, optionsCompany}: DeptProps ){
   
   const columnHelper = createColumnHelper<DepartmentTable>();
 

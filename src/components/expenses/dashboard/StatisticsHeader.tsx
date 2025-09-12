@@ -49,8 +49,12 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
   }
 
   const [project, setProject] = useState<string>(projects[0].value);
+  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+  //   from: new Date(),
+  //   to: new Date(),
+  // });
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-    from: new Date(),
+    from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
   });
 
@@ -87,7 +91,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {dataCostsCatagory && dataCostsCatagory.length > 0 && (
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                 content='categoria'
-                className="text-slate-900 bg-white" placement="top">
+                className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
                                               type={true} rangeDate={rangeDate} />} 
                     fileName={`InformeCostosAgrupadosPorCategoria`} >
@@ -105,7 +109,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {dataCostsConcept && dataCostsConcept.length > 0 && (
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content='concepto' 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                   <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
                                                 type={false} rangeDate={rangeDate} />} 
                     fileName={`InformeCostosAgrupadosPorConcepto`} >
@@ -134,7 +138,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                       currency: 'USD',
                       value: costsResumenType[0].subtotalCost
                     })} 
-                    className="text-slate-900 bg-white" placement="top">
+                    className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     {MoneyFormatter(costsResumenType[0].subtotalCost)}
                   </p>
@@ -151,7 +155,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                       currency: 'USD',
                       value: costsResumenType[1].subtotalCost
                     })} 
-                    className="text-slate-900 bg-white" placement="top">
+                    className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     {MoneyFormatter(costsResumenType[1].subtotalCost)}
                   </p>
@@ -168,7 +172,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                       currency: 'USD',
                       value: costsResumenType[2].subtotalCost
                     })} 
-                    className="text-slate-900 bg-white" placement="top">
+                    className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                   <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                     {MoneyFormatter(costsResumenType[2].subtotalCost)}
                   </p>
@@ -192,7 +196,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                     currency: 'USD',
                     value: costsResumen.length > 0? costsResumen[0].subtotalCost : 0
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className="text-2xl">
                   {MoneyFormatter(costsResumen.length > 0? costsResumen[0].subtotalCost : 0)}
                 </p>
@@ -205,7 +209,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                     currency: 'USD',
                     value: costsResumen.length > 0? costsResumen[0].totalIVA : 0
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className="text-2xl">
                   {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalIVA : 0)}
                 </p>
@@ -225,7 +229,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                     currency: 'USD',
                     value: costsResumen.length > 0? costsResumen[0].totalCost : 0
                   })} 
-                  className="text-slate-900 bg-white" placement="top">
+                  className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className="text-2xl">
                   {MoneyFormatter(costsResumen.length > 0? costsResumen[0].totalCost : 0)}
                 </p>

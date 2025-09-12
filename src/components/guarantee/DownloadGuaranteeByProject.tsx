@@ -3,21 +3,12 @@ import { CurrencyFormatter } from '@/app/functions/Globals'
 import { OneProjectMin } from "@/interfaces/Projects"
 import { IGuaranteeByPojectMin } from "@/interfaces/Guarantee"
 
-export default function DownloadGuaranteeByProjectPDF({guarantees, project, token}:
-  {guarantees: IGuaranteeByPojectMin[], project:OneProjectMin, token:string}) {
+type GuaranteeProps={
+  guarantees: IGuaranteeByPojectMin[], 
+  project:OneProjectMin, token:string
+}
 
-  // const [totalPaymentsResumen, setTotalPaymentsResumen] = useState<ITotalResumentPayment>();
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     let totalPaymentsResumen: ITotalResumentPayment;
-  //     totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, project._id);
-  //     if(typeof(totalPaymentsResumen) !== "string"){
-  //       setTotalPaymentsResumen(totalPaymentsResumen);
-  //     }
-  //   }
-  //   fetch();
-  // }, []);
+export default function DownloadGuaranteeByProjectPDF({guarantees, project, token}: GuaranteeProps) {
 
   let total = 0;
   let totalVat = 0;
@@ -30,7 +21,6 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
 
   //Falta el pendiente de pago
 
-  // const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const orderGuarantees = guarantees.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return(
@@ -51,7 +41,7 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
                   </View>
                 </View>
               </View>
-{/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px', justifyContent:'flex-start', alignItems:'center'}}></View> */}
+
               <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
                 <Text style={{color:'gray', margin: '2px'}}>Cliente:</Text>
                 <Text style={{margin: '2px'}}>{project.client.name}</Text>

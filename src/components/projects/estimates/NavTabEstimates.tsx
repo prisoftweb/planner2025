@@ -42,21 +42,21 @@ export default function NavTabEstimates({tab, id_p, pageQuery}:
   if(width < 710){
     tabCli = <div className="flex justify-between mt-3">
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      placement="bottom" className="bg-white text-blue-500" content='Estimaciones'>
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
                       <UserCircleIcon data-tooltip-target="tooltip-dark"
                         className={`w-6 h-6 text-slate-600 cursor-pointer 
                         ${tab===0? 'bg-green-500 rounded-lg': ''}`}
                         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${id_p}?page=projects`: `/projects/estimates/${id_p}`)} />
                     </Tooltip>  
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      placement="bottom" className="bg-white text-blue-500" content='Facturas'>
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturas'>
                       <DocumentChartBarIcon
                         className={`w-6 h-6 text-slate-600 cursor-pointer 
                         ${tab===1? 'bg-green-500 rounded-lg': ''}`}
                         onClick={() => window.location.replace(pageQuery? `/projects/estimates/${id_p}/invoice?page=projects`: `/projects/estimates/${id_p}/invoice`)} />
                     </Tooltip>
                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                      placement="bottom" className="bg-white text-blue-500" content='Cobros'>
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobros'>
                       <CurrencyDollarIcon
                         className={`w-6 h-6 text-slate-600 cursor-pointer 
                         ${tab===2? 'bg-green-500 rounded-lg': ''}`}
