@@ -45,6 +45,8 @@ export default async function Page() {
       getProjectsLV(token),
       getAllPaymentsProjects(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString())
     ]); 
+
+  console.log('prj spent rec => ', projectsSpent);
   
   if(typeof(allPaymentsProjects) === "string"){
     return(

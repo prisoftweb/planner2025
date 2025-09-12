@@ -237,8 +237,8 @@ export async function getUnpaidInvoices(auth_token:string) {
 
 export async function getAllTotalAmountInvoicePending(auth_token:string, dateI: string, dateF:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTAmountINVOICESIssuedPaymentAndPending/${dateI}/${dateF}`;
-  console.log('ulr total amount => ', url);
-  console.log('data => ', JSON.stringify(data));
+  // console.log('ulr total amount => ', url);
+  // console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -246,7 +246,7 @@ export async function getAllTotalAmountInvoicePending(auth_token:string, dateI: 
         'Content-Type': 'application/json'
       },
     });
-    console.log('res => ', res);
+    // console.log('res => ', res);
     if(res.status===200)
       return res.data.data.resdata;
     return 'Error al obtener el total de las facturas!!';
@@ -270,6 +270,7 @@ export async function getAllInvoicesMINByDateAndCondition(auth_token:string, dat
         'Content-Type': 'application/json'
       },
     });
+    // console.log('res invoices => ', res);
     if(res.status===200)
       return res.data.data.stats;
     return 'Error al obtener las facturas!!';

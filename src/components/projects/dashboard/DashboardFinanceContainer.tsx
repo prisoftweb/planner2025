@@ -76,6 +76,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   const [stateTotalCost, setStateTotalCost] = useState<DashboardTotalCost[]>(projectsTotalCost);
   const [stateConfiMin, setStateConfiMin] = useState<ConfigMin[]>(configMin);
   const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
+  console.log('projects spent param => ', projectsSpent);
   const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
   const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
   const [stateTotalPaymentsProjects, setStateTotalPaymentsProjects] = useState<ITotalPaymentsProyects[]>(totalPaymentsProjects);
@@ -164,6 +165,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
       setStateProjectsAndType(prjandTypes);
       setStateTotalCost(totalCost);
       setStateConfiMin(confMin);
+      console.log('all prj spent => ', prjsSpent);
       setStateProjectsSpent(prjsSpent);
       setStateProjectsControlBudgeted(prjsControlBudgeted);
       setStateProjectsBudgeted(prjsBudgeted);
@@ -226,6 +228,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
       setStateProjectsAndType(prjandTypes);
       setStateTotalCost(totalCost);
       setStateConfiMin(confMin);
+      console.log('prj spent 2 => ', prjsSpent);
       setStateProjectsSpent(prjsSpent);
       setStateProjectsControlBudgeted(prjsControlBudgeted);
       setStateProjectsBudgeted(prjsBudgeted);
@@ -256,7 +259,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
 
   const dataProjectsProgress: OptionsDashboard[] = [];
 
-  console.log('stateProjectsAndType => ', stateProjectsAndType);
+  // console.log('stateProjectsAndType => ', stateProjectsAndType);
 
   const groupedByProject = stateProjectsAndType.reduce((acc: any, prj) => {
       const project = prj.project;
@@ -268,16 +271,16 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   const resParse = transformProjectsTypesToDataChart(resultArray);
 
   let dataControlBudgeted: DataControlBudgeted[] = [];
-  if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted.length && 
-    stateProjectsBudgeted.length >= stateProjectsSpent.length && stateProjectsBudgeted.length >= stateTotalPaymentsProjects.length){
+  if(stateProjectsBudgeted.length >= stateProjectscontrolBudgeted?.length && 
+    stateProjectsBudgeted.length >= stateProjectsSpent?.length && stateProjectsBudgeted?.length >= stateTotalPaymentsProjects?.length){
       dataControlBudgeted = MoreProjectsBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
   }else{
     if(stateProjectscontrolBudgeted.length >= stateProjectsBudgeted.length && 
-      stateProjectscontrolBudgeted.length >= stateProjectsSpent.length && stateProjectscontrolBudgeted.length >= stateTotalPaymentsProjects.length){
+      stateProjectscontrolBudgeted.length >= stateProjectsSpent?.length && stateProjectscontrolBudgeted?.length >= stateTotalPaymentsProjects?.length){
         dataControlBudgeted = MoreProjectsCtrBudgeted(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
     }else{
-      if(stateProjectsSpent.length >= stateProjectsBudgeted.length && 
-        stateProjectsSpent.length >= stateProjectscontrolBudgeted.length && stateProjectsSpent.length >= stateTotalPaymentsProjects.length){
+      if(stateProjectsSpent?.length >= stateProjectsBudgeted?.length && 
+        stateProjectsSpent.length >= stateProjectscontrolBudgeted?.length && stateProjectsSpent?.length >= stateTotalPaymentsProjects?.length){
         dataControlBudgeted = MoreProjectsSpent(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
       }else{
         dataControlBudgeted = MoreProjectsPayment(stateProjectsBudgeted, stateProjectscontrolBudgeted, stateProjectsSpent, stateTotalPaymentsProjects);
@@ -290,8 +293,6 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   }
 
   const colorRandom = getRandomInt(10);
-
-  console.log('res parse => ', resParse);
   
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
@@ -393,6 +394,7 @@ function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: Co
 function MoreProjectsPayment(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], 
   prjSpent: ControlBudgeted[], prjPayments: ITotalPaymentsProyects[]){
   
+  console.log('prj spent => ', prjSpent);
   const res: DataControlBudgeted[] = [];
   prjPayments.map((prj) => {
     const prjB = prjBugeted.find((pr) => pr.title === prj.project);

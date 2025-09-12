@@ -67,7 +67,8 @@ export default function NewRole({showForm, token}:
 
   return(
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen"
+      {/* top-16 */}
+      <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-screen"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
@@ -84,6 +85,7 @@ export default function NewRole({showForm, token}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.name}
+            autoFocus
           />
           {formik.touched.name && formik.errors.name ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">

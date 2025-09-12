@@ -349,7 +349,7 @@ export async function getDashboardProjectsAmount(auth_token:string, dateStart: s
         'Content-Type': 'application/json'
       },
     })
-    console.log('res dashboar amount proyects => ', res);
+    // console.log('res dashboar amount proyects => ', res);
     if(res.status === 200) {
       if(res.data.data.result){
         return res.data.data.result;
@@ -543,9 +543,9 @@ export async function getLenghtProjectsEvaluacion(auth_token:string) {
 
 export async function getDashboardByProjectAndType(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByProjectsAndTypes/${dateStart}/${dateEnd}`;
-  console.log('url costs => ', url);
-  console.log('date start costs => ', dateStart);
-  console.log('proyects costs => ', projects);
+  // console.log('url costs => ', url);
+  // console.log('date start costs => ', dateStart);
+  // console.log('proyects costs => ', projects);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -561,11 +561,11 @@ export async function getDashboardByProjectAndType(auth_token:string, dateStart:
       },
       // data: data
     })
-    console.log('res costs => ', res);
+    // console.log('res costs => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    console.log('catch costs => ', error);
+    // console.log('catch costs => ', error);
     return [];
     // if(axios.isAxiosError(error)){
     //   return error.response?.data.message || error.message
@@ -795,7 +795,7 @@ export async function getProjectsBudgeted(auth_token:string, dateStart: string, 
     project: prj.substring(1)
   }
   try {
-    console.log('url presupuestado => ', url);
+    // console.log('url presupuestado => ', url);
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -803,11 +803,11 @@ export async function getProjectsBudgeted(auth_token:string, dateStart: string, 
       },
       // data: data
     })
-    console.log('res presupuestado => ', res);
+    // console.log('res presupuestado => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    console.log('error presupuestado => ', error);
+    // console.log('error presupuestado => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -825,6 +825,8 @@ export async function getProjectsSpent(auth_token:string, dateStart: string, dat
     project: prj.substring(1)
   }
   try {
+    // console.log('url => ', url);
+    // console.log('data => ', data);
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -832,7 +834,8 @@ export async function getProjectsSpent(auth_token:string, dateStart: string, dat
       },
       //data: data
     })
-    if(res.status === 200) return res.data.data.stats;
+    // console.log('res data data => ', res.data.data);
+    if(res.status === 200) return res.data.data.stats0;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
@@ -897,7 +900,7 @@ export async function getProjectsControlBudgeted(auth_token:string, dateStart: s
       //   // project: ['6628118dad51c39004cad07d']
       // }
     })
-    console.log('res control pres => ', res);
+    // console.log('res control pres => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {

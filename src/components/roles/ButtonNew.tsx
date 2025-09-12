@@ -57,45 +57,67 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
     case 1: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewRole showForm={setNewRole} token={token} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewRole showForm={setNewRole} token={token} />
+            </div>
+          )}
       </>
     break;
     case 2: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewRoute showForm={setNewRole} token={token} resource={dataIni} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewRoute showForm={setNewRole} token={token} resource={dataIni} />
+            </div>
+          )}
       </>
     break;
     case 3: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewSubPath showForm={setNewRole} token={token} route={dataIni} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewSubPath showForm={setNewRole} token={token} route={dataIni} />
+            </div>
+          )}
       </>
     break;
     case 4: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Nuevo</Button>
-          {newRole && <NewComponent showForm={setNewRole} token={token} component={dataIni} />}
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewComponent showForm={setNewRole} token={token} component={dataIni} />
+            </div>
+          )}
       </>
     break;
     case 5: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Asignar ruta</Button>
-          {newRole && 
-            <NewRouteTree showForm={setNewRole} token={token} 
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewRouteTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
-                    descRoutes={descRoutes} idTree={idTree} />}
+                    descRoutes={descRoutes} idTree={idTree} />
+            </div>
+          )}
       </>
     break;
     case 6: 
       showButton = <>
         <Button type="button" onClick={() => setNewRole(true)}>Asignar componente</Button>
-          {newRole && 
-            <NewCompoentTree showForm={setNewRole} token={token} 
+          {newRole && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewCompoentTree showForm={setNewRole} token={token} 
                     optResources={optResources} optRoutes={optRoutes}
                     descComponents={descComponents} optComponents={optComponents} 
                     idTree={idTree} routesPerResource={routesPerResource}
-                    descRoutes={descRoutes} />}
+                    descRoutes={descRoutes} />
+            </div>
+          )}
       </>
     break;
     case 7: 

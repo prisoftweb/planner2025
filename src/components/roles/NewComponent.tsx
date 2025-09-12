@@ -72,7 +72,8 @@ export default function NewComponent({showForm, token, component}:
 
   return(
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen"
+    {/* top-16 */}
+      <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-screen"
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">

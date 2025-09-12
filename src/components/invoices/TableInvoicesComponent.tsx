@@ -297,20 +297,21 @@ export default function TableInvoicesComponent({token, user}:
     // const res = await getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices);
 
     const [res, rest] = await Promise.all([
-      getAllTotalAmountInvoicePending(token, dateI, dateF, data),
-      getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices)
+      getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices),
+      getAllTotalAmountInvoicePending(token, dateI, dateF, data)
     ]);
     
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
     }else{
-      console.log('rest => ', rest);
+      // console.log('rest => ', rest);
       setTotalInvoices(rest);
     }
 
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
+      console.log('res invoices => ', res);
       setInvoices(res);
     }
   }
@@ -465,9 +466,11 @@ export default function TableInvoicesComponent({token, user}:
   )
 }
 
-function InvoiceDataToTableData(invoices:IInvoiceByDateAndConditionMin[]){
+function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   const table: IInvoiceTable[] = [];
-  invoices.map((inv) => {
+
+  console.log('invoicess => ', invoicess);
+  invoicess.map((inv) => {
     const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
     table.push({
       amount: inv.cost.total,
