@@ -124,102 +124,105 @@ export default function FilteringExpensesProvider({showForm, FilterData, maxAmou
 
   return(
     <>
-      <form className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
-        style={{height: `${heightPage}px`}}
-      >
-        <div className="flex justify-between">
-          <div className="flex mt-2 items-center">
-            <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
-            <div className="ml-3">
-              <p className="text-xl">Filtrar gasto</p>
-              <p className="text-gray-500 text-sm">Filtra gastos por diferentes caracteristicas</p>
-            </div>
-          </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
-        </div>
-
-        {showPaidValidation && (
-          <div className="flex justify-end px-5 items-center">
-            <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
-            <div>
-              <div className="inline-flex rounded-md shadow-sm mx-2">
-              <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
-                          ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
-                  onClick={() => handlePaid(1)}
-                >
-                  Ambos
-                </button>
-                <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
-                          ${isPaid===2? 'bg-green-500 text-white': ''}`}
-                  onClick={() => handlePaid(2)}
-                >
-                  Pagado
-                </button>
-                <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
-                          ${isPaid===3? 'bg-red-500 text-white': ''}`}
-                  onClick={() => handlePaid(3)}
-                >
-                  No Pagado
-                </button>
+      <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        {/* top-16 */}
+        <form className="z-10 w-full max-w-md absolute bg-white space-y-5 p-5 right-0"
+          style={{height: `${heightPage}px`}}
+        >
+          <div className="flex justify-between">
+            <div className="flex mt-2 items-center">
+              <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
+              <div className="ml-3">
+                <p className="text-xl">Filtrar gasto</p>
+                <p className="text-gray-500 text-sm">Filtra gastos por diferentes caracteristicas</p>
               </div>
             </div>
+            <XMarkIcon className="w-8 h-8 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
           </div>
-        )}
-        
-        <div className="">
-          <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          <SelectMultipleReact index={0} opts={allArray.concat(conditions)} setValue={handleConditions} />
-        </div>
-        <div className="pt-0">
-          <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
-          <MultiRangeSlider
-            min={minAmount}
-            max={maxAmount}
-            step={5}
-            minValue={minValue}
-            maxValue={maxValue}
-            onInput={(e) => {
-              handleInput(e);
-            }}
-            style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
-                backgroundColor: 'white', 'zIndex': '0'}}
-            label='false'
-            ruler='false'
-            barLeftColor='red'
-            barInnerColor='blue'
-            barRightColor='green'
-            thumbLeftColor='lime'
-            thumbRightColor='lime'
-          />
-          <div className="flex justify-between">
-            <p>{CurrencyFormatter({
-                  currency: "MXN",
-                  value: minValue
-                })}</p>
-            <p>{CurrencyFormatter({
-                  currency: "MXN",
-                  value: maxValue
-                })}</p>
+
+          {showPaidValidation && (
+            <div className="flex justify-end px-5 items-center">
+              <p className="text-gray-500 text-sm after:content-['*'] after:ml-0.5 after:text-red-500">Pagado?</p>
+              <div>
+                <div className="inline-flex rounded-md shadow-sm mx-2">
+                <button type="button" className={`px-3 py-1 text-sm border border-blue-400 rounded-md 
+                            ${isPaid === 1? 'bg-blue-500 text-white': ''}`}
+                    onClick={() => handlePaid(1)}
+                  >
+                    Ambos
+                  </button>
+                  <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                            ${isPaid===2? 'bg-green-500 text-white': ''}`}
+                    onClick={() => handlePaid(2)}
+                  >
+                    Pagado
+                  </button>
+                  <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                            ${isPaid===3? 'bg-red-500 text-white': ''}`}
+                    onClick={() => handlePaid(3)}
+                  >
+                    No Pagado
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div className="">
+            <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
+            <SelectMultipleReact index={0} opts={allArray.concat(conditions)} setValue={handleConditions} />
           </div>
-        </div>
-        <div>
-          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Rango de fechas</p></Label>
-          <Calendar
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              focus:border-slate-700 outline-0"
-            value={values}
-            onChange={(e: any) => {
-              handleValues(e);
-            }}
-            range
-            numberOfMonths={2}
-            showOtherDays
-            style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
-              'height': '35px', 'width': '330px'}}
-          /> 
-        </div>
-      </form>
+          <div className="pt-0">
+            <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
+            <MultiRangeSlider
+              min={minAmount}
+              max={maxAmount}
+              step={5}
+              minValue={minValue}
+              maxValue={maxValue}
+              onInput={(e) => {
+                handleInput(e);
+              }}
+              style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
+                  backgroundColor: 'white', 'zIndex': '0'}}
+              label='false'
+              ruler='false'
+              barLeftColor='red'
+              barInnerColor='blue'
+              barRightColor='green'
+              thumbLeftColor='lime'
+              thumbRightColor='lime'
+            />
+            <div className="flex justify-between">
+              <p>{CurrencyFormatter({
+                    currency: "MXN",
+                    value: minValue
+                  })}</p>
+              <p>{CurrencyFormatter({
+                    currency: "MXN",
+                    value: maxValue
+                  })}</p>
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Rango de fechas</p></Label>
+            <Calendar
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                focus:border-slate-700 outline-0"
+              value={values}
+              onChange={(e: any) => {
+                handleValues(e);
+              }}
+              range
+              numberOfMonths={2}
+              showOtherDays
+              style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
+                'height': '35px', 'width': '330px'}}
+            /> 
+          </div>
+        </form>
+      </div>
     </>
   )
 }

@@ -13,7 +13,11 @@ export default function ButtonNew({token, id}: {token:string, id:string}){
   return(
     <>
       <Button type="button" onClick={() => setVarNew(true)}>Nuevo</Button>
-        {varNew && <NewCostCenter showForm={handleNew} token={token} costCenter={''} />}
+        {varNew && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <NewCostCenter showForm={handleNew} token={token} costCenter={''} />
+          </div>
+        )}
     </>
   )
 }

@@ -24,11 +24,15 @@ export default function ButtonNew({token, companies, departments,
   return(
     <>
       <Button type="button" onClick={() => setNewReport(true)}>Nuevo</Button>
-          {newReport && <NewReport showForm={handleNewReport} 
+          {newReport && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewReport showForm={handleNewReport} 
                                   token={token} projects={projects}
                                   companies={companies} departments={departments} 
                                   condition={condition} user={user}
-                        />}
+                        />
+            </div>
+          )}
     </>
   )
 }

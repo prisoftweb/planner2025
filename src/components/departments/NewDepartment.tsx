@@ -113,8 +113,8 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
 
   return(
     <>
-      <form className={`z-10 top-16 absolute bg-white space-y-5 p-3 right-0`}
-        style={{height: `${heightPage}px`}}
+      <form className={`z-10 h-full absolute bg-white space-y-5 p-5 right-0`}
+        // style={{height: `${heightPage}px`}}
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">

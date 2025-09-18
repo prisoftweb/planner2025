@@ -296,12 +296,20 @@ export default function ContainerStimationsProject({project, optConditions, optP
         delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
         selEstimate={handleSelEstimate} pageProject={pageProject} />
 
-      {openNewStimate && <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-        updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
-        porcentajeAdvange={percentajeAdvance} advange={advance} />}
+      {openNewStimate && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
+            updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
+            porcentajeAdvange={percentajeAdvance} advange={advance} />
+        </div>
+      )}
 
-      {openNewInvoice && <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
-        updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />}
+      {openNewInvoice && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
+            updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
+        </div>
+      )}
     </>
   )
 }

@@ -15,6 +15,7 @@ import { showToastMessageError } from "../Alert";
 import Chip from "../providers/Chip";
 import { MoneyFormatter } from "@/app/functions/Globals";
 import { UsrBack } from "@/interfaces/User";
+import {Tooltip} from "@nextui-org/react";
 
 type Props= {
   data:ProjectsTable[], 
@@ -159,6 +160,25 @@ export default function TableProjects({data, token, projects, optCategories,
   // ]
   let columns: any[] = [];
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   let rol = user.rol?.name || '';
   if(rol.toLowerCase().includes('residente')){
     columns = [
@@ -188,7 +208,7 @@ export default function TableProjects({data, token, projects, optCategories,
         cell: ({row}) => (
           <div className="flex gap-x-1 items-center">
             <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
-            <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
+            {/* <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div> */}
             {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
           </div>
         ),
@@ -641,9 +661,13 @@ export default function TableProjects({data, token, projects, optCategories,
   return(
     <>
       <div className="flex justify-end mb-5">
-        {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
+        {isFilter && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <Filtering showForm={setIsFilter} optCategories={optCategories} 
                           optTypes={optTypes} optConditions={optConditions} 
-                          FilterData={filterData} maxAmount={maxAmount}  />}
+                          FilterData={filterData} maxAmount={maxAmount}  />
+          </div>
+        )}
       </div>
       {view}
     </>

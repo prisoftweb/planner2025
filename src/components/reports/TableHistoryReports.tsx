@@ -55,7 +55,7 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
-          {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500" />}
+          {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500 hover:bg-blue-100" />}
         </div>
       ),
       enableSorting:false,
@@ -261,9 +261,13 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
   return(
     <>
       <div className="flex justify-end my-5">
-        {isFilter && <Filtering showForm={setIsFilter} optConditions={optConditions} 
+        {isFilter && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <Filtering showForm={setIsFilter} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
-                        optProjects={optProjects} optCompanies={optCompanies} />}
+                        optProjects={optProjects} optCompanies={optCompanies} />
+          </div>
+        )}
       </div>
       {view}
     </>

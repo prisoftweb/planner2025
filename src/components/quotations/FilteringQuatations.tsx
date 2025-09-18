@@ -68,78 +68,80 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount }:
     setClients(value);
   }
 
-  return(
+  return(//top-16
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
-        <div className="flex justify-between">
-          <div className="flex mt-2 items-center">
-            <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
-            <div className="ml-3">
-              <p className="text-xl">Filtrar Cotizaciones</p>
-              <p className="text-gray-500 text-sm">Filtra cotizaciones por diferentes caracteristicas</p>
+      <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-screen">
+          <div className="flex justify-between">
+            <div className="flex mt-2 items-center">
+              <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
+              <div className="ml-3">
+                <p className="text-xl">Filtrar Cotizaciones</p>
+                <p className="text-gray-500 text-sm">Filtra cotizaciones por diferentes caracteristicas</p>
+              </div>
+            </div>
+            <XMarkIcon className="w-8 h-8 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          </div>
+          
+          <div className="">
+            <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
+            {optConditionsState.length > 0 && <SelectMultipleReact index={0} opts={optConditionsState} setValue={handleCondition} />}
+          </div>
+          <div className="">
+            <Label htmlFor="clients"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
+            {optClientsState.length > 0 && <SelectMultipleReact index={0} opts={optClientsState} setValue={handleClients} />}
+          </div>
+          <div className="pt-0">
+            <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
+            <MultiRangeSlider
+              min={0}
+              max={maxAmount}
+              step={5}
+              minValue={minValue}
+              maxValue={maxValue}
+              onInput={(e) => {
+                handleInput(e);
+              }}
+              style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
+                  backgroundColor: 'white', 'zIndex': '0'}}
+              label='false'
+              ruler='false'
+              barLeftColor='red'
+              barInnerColor='blue'
+              barRightColor='green'
+              thumbLeftColor='lime'
+              thumbRightColor='lime'
+            />
+            <div className="flex justify-between">
+              <p>{CurrencyFormatter({
+                    currency: "MXN",
+                    value: minValue
+                  })}</p>
+              <p>{CurrencyFormatter({
+                    currency: "MXN",
+                    value: maxValue
+                  })}</p>
             </div>
           </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
-        </div>
-        
-        <div className="">
-          <Label htmlFor="status"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Status</p></Label>
-          {optConditionsState.length > 0 && <SelectMultipleReact index={0} opts={optConditionsState} setValue={handleCondition} />}
-        </div>
-        <div className="">
-          <Label htmlFor="clients"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
-          {optClientsState.length > 0 && <SelectMultipleReact index={0} opts={optClientsState} setValue={handleClients} />}
-        </div>
-        <div className="pt-0">
-          <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
-          <MultiRangeSlider
-            min={0}
-            max={maxAmount}
-            step={5}
-            minValue={minValue}
-            maxValue={maxValue}
-            onInput={(e) => {
-              handleInput(e);
-            }}
-            style={{border: 'none', boxShadow: 'none', padding: '15px 10px', 
-                backgroundColor: 'white', 'zIndex': '0'}}
-            label='false'
-            ruler='false'
-            barLeftColor='red'
-            barInnerColor='blue'
-            barRightColor='green'
-            thumbLeftColor='lime'
-            thumbRightColor='lime'
-          />
-          <div className="flex justify-between">
-            <p>{CurrencyFormatter({
-                  currency: "MXN",
-                  value: minValue
-                })}</p>
-            <p>{CurrencyFormatter({
-                  currency: "MXN",
-                  value: maxValue
-                })}</p>
+          <div>
+            <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
+            <Calendar
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                focus:border-slate-700 outline-0"
+              value={values}
+              onChange={(e: any) => {
+                handleValues(e);
+              }}
+              range
+              numberOfMonths={2}
+              showOtherDays
+              style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
+                'height': '35px', 'width': '330px'}}
+            /> 
           </div>
-        </div>
-        <div>
-          <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-          <Calendar
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              focus:border-slate-700 outline-0"
-            value={values}
-            onChange={(e: any) => {
-              handleValues(e);
-            }}
-            range
-            numberOfMonths={2}
-            showOtherDays
-            style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
-              'height': '35px', 'width': '330px'}}
-          /> 
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   )
 }

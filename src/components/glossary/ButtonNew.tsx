@@ -15,7 +15,13 @@ export default function ButtonNew({token, glossary}: buttonProps ){
   return(
     <>
       <Button type="button" onClick={() => setNewList(true)}>Nuevo</Button>
-          {NewList && <NewGlossary showForm={setNewList} token={token} glossary={glossary} />}
+          {NewList && (
+            <div className="fixed inset-0 z-40 flex">
+              <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm">
+                <NewGlossary showForm={setNewList} token={token} glossary={glossary} />
+              </div>
+            </div>
+          )}
     </>
   )
 }

@@ -83,9 +83,9 @@ export default function Filtering({showForm, optCategories, optTypes,
       FilterData(condSel, typSel, catSel, minVal, maxVal, dateini?.getTime(), dateend?.getTime());
   }
 
-  return(
+  return(//top-16
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
+      <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-screen">
         <div className="flex justify-between">
           <div className="flex mt-2 items-center">
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />

@@ -10,8 +10,12 @@ export default function ButtonNew({token, user}: {token:string, user:UsrBack,}){
   return(
     <>
       <Button type="button" onClick={() => setNewExpense(true)}>Nuevo</Button>
-          {newExpense && <NewExpenseContainer showForm={setNewExpense} token={token} 
-                            user={user} />}
+          {newExpense && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewExpenseContainer showForm={setNewExpense} token={token} 
+                            user={user} />
+            </div>
+          )}
     </>
   )
 }

@@ -14,6 +14,7 @@ import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import {Tooltip} from "@nextui-org/react";
 
 export default function TableHistoryExpenses({data, token, expenses, 
                             isFilter, setIsFilter, isViewReports}:
@@ -28,6 +29,25 @@ export default function TableHistoryExpenses({data, token, expenses,
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
 
   const {refresh, updateRefresh} = useNewExpense();
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -55,9 +75,27 @@ export default function TableHistoryExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
-          {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
+          {row.original.archivos.includes('xml') && (
+            <Tooltip closeDelay={0} delay={100} motionProps={props} content='XML' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+            </Tooltip>
+          )}
+          {row.original.archivos.includes('pdf') && (
+            <Tooltip closeDelay={0} delay={100} motionProps={props} content='PDF' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+            </Tooltip>
+          )}
+          {row.original.archivos.includes('none') && (
+            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Sin archivo' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+            </Tooltip>
+          )}
+          {/* {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
           {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
-          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
+          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />} */}
         </div>
       ),
       enableSorting:false,
@@ -446,9 +484,13 @@ export default function TableHistoryExpenses({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-        {isFilter && <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
+        {isFilter && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
                         minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
-                      />}
+                      />
+          </div>
+        )}
       </div>
       {view}
     </>

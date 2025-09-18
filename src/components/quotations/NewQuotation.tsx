@@ -242,227 +242,229 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
     setIdVat(value);
   }
 
-  return(
+  return(//top-16
     <>
-      <form className="z-10 absolute top-16 w-full max-w-md bg-white space-y-5 p-3 right-0" 
-          style={{height: `${heightPage}px`}}>
-        <div className="flex justify-between">
-          <div className="flex mt-2 items-center">
-            <img src={"/img/role.svg"} alt="logo" className="rounded-full w-8 h-auto" />
-            <div className="ml-3">
-              <p className="text-xl">Nueva cotizacion</p>
-              <p className="text-gray-500 text-sm">Ingresa datos de la nueva cotizacion</p>
+      <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <form className="z-10 absolute w-full max-w-md bg-white space-y-5 p-5 right-0" 
+            style={{height: `${heightPage}px`}}>
+          <div className="flex justify-between">
+            <div className="flex mt-2 items-center">
+              <img src={"/img/role.svg"} alt="logo" className="rounded-full w-8 h-auto" />
+              <div className="ml-3">
+                <p className="text-xl">Nueva cotizacion</p>
+                <p className="text-gray-500 text-sm">Ingresa datos de la nueva cotizacion</p>
+              </div>
             </div>
-          </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
-        </div>
-
-        <div className="flex gap-x-5 justify-end my-5 pr-3">
-          <div className="inline-flex items-center">
-            <Label>Descuento</Label>  
-            <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-              <input checked={haveDiscount} 
-                onClick={() => setHaveDiscount(!haveDiscount)} id="discount" type="checkbox"
-                className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-                  appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-                  peer-checked:border-green-500 peer-checked:before:bg-green-500
-                  border border-slate-300" />
-              <label htmlFor="discount"
-                className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-                <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-                  data-ripple-dark="true"></div>
-              </label>
-            </div>
+            <XMarkIcon className="w-8 h-8 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
           </div>
 
-        </div>
-
-        <div className="grid grid-cols-3 gap-x-2 gap-y-2">
-          <div className=" col-span-3">
-            <Label>Titulo</Label>
-            <Input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
-            {message===1 && (
-              <p className=" text-red-500">El titulo es obligatorio y minimo 10 caracteres</p>
-            )}
-          </div>
-          <div className="">
-            <Label>Subtotal</Label>
-            <CurrencyInput 
-              id="amount"
-              name="amount"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
-                focus:border-slate-700 outline-0"
-              value={amount}
-              defaultValue={0}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => {
-                setAmount(value || '0'); 
-                updateIva(idVat, discount, (value || '0'));
-              }}
-            />
-            {message===2 && (
-              <p className=" text-red-500">El subtotal es obligatorio</p>
-            )}
-          </div>
-          {haveDiscount && (
-            <div>
-              <Label htmlFor="discount">Descuento</Label>
-              <CurrencyInput
-                id="discount"
-                name="discount"
-                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                  focus:border-slate-700 outline-0"
-                value={discount.replace(/[$,]/g, "") || 0}
-                decimalsLimit={2}
-                prefix="$"
-                onValueChange={(value) => {try {
-                  setDiscount(value?.replace(/[$,]/g, "") || '0');
-                  updateIva(idVat, value?.replace(/[$,]/g, "") || '0', amount);
-                } catch (error) {
-                  setDiscount('0');
-                  updateIva(idVat, '0', amount);
-                }}}
-              />
+          <div className="flex gap-x-5 justify-end my-5 pr-3">
+            <div className="inline-flex items-center">
+              <Label>Descuento</Label>  
+              <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+                <input checked={haveDiscount} 
+                  onClick={() => setHaveDiscount(!haveDiscount)} id="discount" type="checkbox"
+                  className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
+                    appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
+                    peer-checked:border-green-500 peer-checked:before:bg-green-500
+                    border border-slate-300" />
+                <label htmlFor="discount"
+                  className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
+                  <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+                    data-ripple-dark="true"></div>
+                </label>
+              </div>
             </div>
-          )}
-          <div className="col-span-2">
-            <Label>IVA</Label>
-            <div className="flex gap-x-3">
-              <CurrencyInput
-                id="vat"
-                name="vat"
+
+          </div>
+
+          <div className="grid grid-cols-3 gap-x-2 gap-y-2">
+            <div className=" col-span-3">
+              <Label>Titulo</Label>
+              <Input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
+              {message===1 && (
+                <p className=" text-red-500">El titulo es obligatorio y minimo 10 caracteres</p>
+              )}
+            </div>
+            <div className="">
+              <Label>Subtotal</Label>
+              <CurrencyInput 
+                id="amount"
+                name="amount"
                 className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
                   focus:border-slate-700 outline-0"
-                value={vat}
+                value={amount}
                 defaultValue={0}
                 decimalsLimit={2}
                 prefix="$"
                 onValueChange={(value) => {
-                  updateTotal(value || '0');
-                  setVat(value || '0');
+                  setAmount(value || '0'); 
+                  updateIva(idVat, discount, (value || '0'));
                 }}
               />
-              {optVats.length > 0 && <SelectReact index={0} opts={optVats} setValue={handleIdVat} />}
+              {message===2 && (
+                <p className=" text-red-500">El subtotal es obligatorio</p>
+              )}
+            </div>
+            {haveDiscount && (
+              <div>
+                <Label htmlFor="discount">Descuento</Label>
+                <CurrencyInput
+                  id="discount"
+                  name="discount"
+                  className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
+                    focus:border-slate-700 outline-0"
+                  value={discount.replace(/[$,]/g, "") || 0}
+                  decimalsLimit={2}
+                  prefix="$"
+                  onValueChange={(value) => {try {
+                    setDiscount(value?.replace(/[$,]/g, "") || '0');
+                    updateIva(idVat, value?.replace(/[$,]/g, "") || '0', amount);
+                  } catch (error) {
+                    setDiscount('0');
+                    updateIva(idVat, '0', amount);
+                  }}}
+                />
+              </div>
+            )}
+            <div className="col-span-2">
+              <Label>IVA</Label>
+              <div className="flex gap-x-3">
+                <CurrencyInput
+                  id="vat"
+                  name="vat"
+                  className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+                    focus:border-slate-700 outline-0"
+                  value={vat}
+                  defaultValue={0}
+                  decimalsLimit={2}
+                  prefix="$"
+                  onValueChange={(value) => {
+                    updateTotal(value || '0');
+                    setVat(value || '0');
+                  }}
+                />
+                {optVats.length > 0 && <SelectReact index={0} opts={optVats} setValue={handleIdVat} />}
+              </div>
+            </div>
+            <div className="">
+              <Label>Total</Label>
+              <CurrencyInput
+                id="total"
+                name="total"
+                className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
+                  focus:border-slate-700 outline-0"
+                value={total}
+                defaultValue={'0'}
+                decimalsLimit={2}
+                prefix="$"
+                onValueChange={(value) => setTotal(value || '0')}
+              />
+              {message===4 && (
+                <p className=" text-red-500">El total es obligatorio</p>
+              )}
             </div>
           </div>
-          <div className="">
-            <Label>Total</Label>
-            <CurrencyInput
-              id="total"
-              name="total"
-              className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-white 
-                focus:border-slate-700 outline-0"
-              value={total}
-              defaultValue={'0'}
-              decimalsLimit={2}
-              prefix="$"
-              onValueChange={(value) => setTotal(value || '0')}
-            />
-            {message===4 && (
-              <p className=" text-red-500">El total es obligatorio</p>
-            )}
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-x-2 gap-y-2">
-          <div className="">
-            <Label>Fecha de solicitud</Label>
-            <Input type="date" onChange={(e) => setDatesol(e.target.value)} />
-            {message===5 && (
-              <p className=" text-red-500">La fecha de solicitud es obligatoria</p>
-            )}
-          </div>
-          <div className="">
-            <Label>Fecha de vencimiento</Label>
-            <Input type="date" onChange={(e) => setDateven(e.target.value)} />
-            {message===6 && (
-              <p className=" text-red-500">La fecha de vencimiento es obligatoria</p>
-            )}
-          </div>
-          <div className="">
-            <Label>Cliente</Label>
-            {optClients.length > 0 && (
-              <SelectReact index={0} opts={optClients} setValue={handleClient} />
-            )}
-          </div>
-          <div className="">
-            <Label>Solicita cotizacion</Label>
-            {optUsers.length > 0 && (
-              <Select
-                value={selOpt}
-                options={optContacts}
-                onChange={(e:any) => { 
-                  console.log('value select => ', e);
-                  setContact(e.value);
-                  setSelOpt(e);
-                }} 
-                className="w-full text-lg mt-2 text-gray-900  rounded-lg 
-                  bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
-                styles={{
-                  control: (baseStyles, state) => ({
-                    ...baseStyles,
-                    height: '5px',
-                  }),
-                }}
-              />
-            )}
-          </div>
-          <div className=" col-span-2">
-            <Label>Realiza cotizacion</Label>
-            {optUsers.length > 0 && (
-              <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
-            )}
-          </div>
+          <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+            <div className="">
+              <Label>Fecha de solicitud</Label>
+              <Input type="date" onChange={(e) => setDatesol(e.target.value)} />
+              {message===5 && (
+                <p className=" text-red-500">La fecha de solicitud es obligatoria</p>
+              )}
+            </div>
+            <div className="">
+              <Label>Fecha de vencimiento</Label>
+              <Input type="date" onChange={(e) => setDateven(e.target.value)} />
+              {message===6 && (
+                <p className=" text-red-500">La fecha de vencimiento es obligatoria</p>
+              )}
+            </div>
+            <div className="">
+              <Label>Cliente</Label>
+              {optClients.length > 0 && (
+                <SelectReact index={0} opts={optClients} setValue={handleClient} />
+              )}
+            </div>
+            <div className="">
+              <Label>Solicita cotizacion</Label>
+              {optUsers.length > 0 && (
+                <Select
+                  value={selOpt}
+                  options={optContacts}
+                  onChange={(e:any) => { 
+                    console.log('value select => ', e);
+                    setContact(e.value);
+                    setSelOpt(e);
+                  }} 
+                  className="w-full text-lg mt-2 text-gray-900  rounded-lg 
+                    bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
+                  styles={{
+                    control: (baseStyles, state) => ({
+                      ...baseStyles,
+                      height: '5px',
+                    }),
+                  }}
+                />
+              )}
+            </div>
+            <div className=" col-span-2">
+              <Label>Realiza cotizacion</Label>
+              {optUsers.length > 0 && (
+                <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
+              )}
+            </div>
 
-          <div className="">
-            <Label>Plazo</Label>
-            {optCategories.length > 0 && (
-              <SelectReact index={0} opts={optCategories} setValue={handleCategories} />
-            )}
-          </div>
+            <div className="">
+              <Label>Plazo</Label>
+              {optCategories.length > 0 && (
+                <SelectReact index={0} opts={optCategories} setValue={handleCategories} />
+              )}
+            </div>
 
-          <div className="">
-            <Label>Tipo cotizacion</Label>
-            {optTypes.length > 0 && (
-              <SelectReact index={0} opts={optTypes} setValue={handleType} />
-            )}
-          </div>
+            <div className="">
+              <Label>Tipo cotizacion</Label>
+              {optTypes.length > 0 && (
+                <SelectReact index={0} opts={optTypes} setValue={handleType} />
+              )}
+            </div>
 
-          <div className=" col-span-2">
-            <Label>Puntuacion (0 al 5)</Label>
-            <RatingComponent setValue={handleScore} value={score} />
-          </div>
+            <div className=" col-span-2">
+              <Label>Puntuacion (0 al 5)</Label>
+              <RatingComponent setValue={handleScore} value={score} />
+            </div>
 
-          <div className=" col-span-2">
-            <FormControl>
-              <FormLabel id="demo-radio-buttons-group-label">Ubicacion geografica</FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="LOCAL"
-                name="radio-buttons-group"
-                className="flex gap-x-2"
-              >
-                <FormControlLabel value="LOCAL" onFocus={() => setLocation('LOCAL')} control={<Radio />} label="LOCAL" />
-                <FormControlLabel value="NACIONAL" onFocus={() => setLocation('NACIONAL')} control={<Radio />} label="NACIONAL" />
-                <FormControlLabel value="INTERNACIONAL" onFocus={() => setLocation('INTERNACIONAL')} control={<Radio />} label="INTERNACIONAL" />
-              </RadioGroup>
-            </FormControl>
-          </div>
+            <div className=" col-span-2">
+              <FormControl>
+                <FormLabel id="demo-radio-buttons-group-label">Ubicacion geografica</FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue="LOCAL"
+                  name="radio-buttons-group"
+                  className="flex gap-x-2"
+                >
+                  <FormControlLabel value="LOCAL" onFocus={() => setLocation('LOCAL')} control={<Radio />} label="LOCAL" />
+                  <FormControlLabel value="NACIONAL" onFocus={() => setLocation('NACIONAL')} control={<Radio />} label="NACIONAL" />
+                  <FormControlLabel value="INTERNACIONAL" onFocus={() => setLocation('INTERNACIONAL')} control={<Radio />} label="INTERNACIONAL" />
+                </RadioGroup>
+              </FormControl>
+            </div>
 
-          <div className=" col-span-2">
-            <Label>Descripcion</Label>
-            <TextArea value={notes} onChange={(e) => setNotes(e.target.value)} />
-            {message===8 && (
-              <p className=" text-red-500">Las notas son obligatorias</p>
-            )}
+            <div className=" col-span-2">
+              <Label>Descripcion</Label>
+              <TextArea value={notes} onChange={(e) => setNotes(e.target.value)} />
+              {message===8 && (
+                <p className=" text-red-500">Las notas son obligatorias</p>
+              )}
+            </div>
+            <div className=" col-span-2 flex justify-center">
+              <Button type="button" onClick={() => createNewQuotation() } >Guardar</Button>
+            </div>
           </div>
-          <div className=" col-span-2 flex justify-center">
-            <Button type="button" onClick={() => createNewQuotation() } >Guardar</Button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </>
   )
 }

@@ -28,6 +28,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
   }
 
   const [width, setWidth] = useState<number>(0);
+  
   const handleResize = () => {
     setWidth(window.innerWidth);
   }

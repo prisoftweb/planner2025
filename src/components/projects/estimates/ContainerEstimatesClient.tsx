@@ -93,8 +93,12 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           <div className="">
             <div className="flex gap-x-3 items-center">
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
-                        {newEstimate && <NewEstimateStepper showForm={handleNewEstimate}
-                                          token={token} user={user._id} updateProjects={updateProjects} />}
+                        {newEstimate && (
+                          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+                            <NewEstimateStepper showForm={handleNewEstimate}
+                                          token={token} user={user._id} updateProjects={updateProjects} />
+                          </div>
+                        )}
             </div>
           </div>
         </div>

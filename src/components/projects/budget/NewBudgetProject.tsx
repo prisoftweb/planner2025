@@ -44,8 +44,8 @@ export default function NewBudgetProject({token, showForm, user, projects}:
     indexStepper === 1? <AddCostCenter token={token} user={user} closeForm={showForm} />:
       <></>;
 
-  return(
-    <div className="z-10 w-full sm:max-w-4xl absolute top-16 bg-white p-3 right-0"
+  return(//top-16
+    <div className="z-10 w-full sm:max-w-4xl absolute bg-white p-5 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">

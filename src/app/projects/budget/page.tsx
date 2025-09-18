@@ -2,13 +2,10 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { Options } from "@/interfaces/Common";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getProjectsMin } from "@/app/api/routeProjects";
-import { ProjectMin } from "@/interfaces/Projects";
 import ContainerBudgetClient from "@/components/projects/budget/ContainerBudgetClient";
 import { getBudgetsMin } from "@/app/api/routeBudget";
-import { BudgetMin } from "@/interfaces/Budget";
 
 export default async function Page(){
   const cookieStore = cookies();

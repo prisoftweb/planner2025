@@ -4,7 +4,7 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import ReportClient from "@/components/reports/ReportClient";
 import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX, 
-  updateReport, insertMovementsInReport  } from "@/app/api/routeReports";
+  updateReport, insertMovementsInReport, insertConditionInReportViewer  } from "@/app/api/routeReports";
 import { Report, DateReport  } from "@/interfaces/Reports";
 import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
@@ -114,7 +114,8 @@ export default async function Page({ params }: { params: { id: string }}){
             date: new Date()
         }]
       };
-      const res = await insertMovementsInReport(token, report._id, data);
+      // const res = await insertMovementsInReport(token, report._id, data);
+      const res = await insertConditionInReportViewer(token, report._id, data);
       if(res !== 200){
         return(
           <>

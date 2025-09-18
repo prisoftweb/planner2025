@@ -137,7 +137,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
   }
 
   return(
-    <div className="z-10 w-full sm:max-w-3xl absolute top-16 bg-white p-3 right-0"
+    <div className="z-10 w-full sm:max-w-3xl absolute bg-white p-5 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full p-1 sm:p-3">

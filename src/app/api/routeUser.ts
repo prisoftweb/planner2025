@@ -58,9 +58,12 @@ export async function getUser(id:string, auth_token:string) {
         'Authorization': `Bearer ${auth_token}`
       }
     })
+    console.log('user => ', url);
+    console.log('data => ', user);
     if(user.status === 200) return user.data.data.data;
     return user.statusText;
   } catch (error) {
+    console.log('error => ', error);
     return 'Ocurrio un problema al consultar datos del usuario..';
   }
 }
@@ -167,6 +170,7 @@ export async function getUsers(auth_token:string){
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
 
   //console.log(auth_token);
+  console.log('url => ', url);
   try{
     const res = await axios.get(url, {
       headers: {
@@ -174,11 +178,11 @@ export async function getUsers(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     })
-    
+    console.log('res => ', res);
     if(res.status===200) return res.data.data.data;
     return res.statusText;
   }catch(e:any){
-    //console.log(e.response.data.message);
+    console.log('error => ', e);
     //return 'Ocurrio un problema al consultar usuarios!!';
     return e.response.data.message;
   }

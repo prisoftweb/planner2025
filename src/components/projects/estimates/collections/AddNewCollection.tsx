@@ -348,7 +348,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
 
   return(
     <>
-      <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
+      <form className="z-10 absolute w-full max-w-xl bg-white space-y-5 p-5 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
           {/* <HeaderForm img="/img/estimates/invoices.svg" subtitle={"Crea factura apartir de "+ estimate?.Nombre} 

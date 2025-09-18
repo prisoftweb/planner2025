@@ -192,15 +192,15 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen, totEstPenCli, 
       totalPenPayPjr, pendingBilling] = await Promise.all([
       getTotalAccountReceivablesByProject(token, dateI, dateF),
-      await getTotalAccountReceivablesByClient(token, dateI, dateF), 
-      await getTotalAccountReceivablesPaymentByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
-      await getTotalAccountReceivablesPendingByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
-      await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR'), 
-      await getTotalAccountReceivablesByClientResumen(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
-      await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
-      await getTotalEstimatesPendingByClient(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
-      await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
-      await getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()))
+      getTotalAccountReceivablesByClient(token, dateI, dateF), 
+      getTotalAccountReceivablesPaymentByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
+      getTotalAccountReceivablesPendingByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
+      getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR'), 
+      getTotalAccountReceivablesByClientResumen(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
+      getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
+      getTotalEstimatesPendingByClient(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
+      getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
+      getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()))
     ]);
 
     if(typeof(totprj)==='string'){

@@ -108,66 +108,69 @@ export default function NewGlossary({showForm, token, glossary}: glossaryProps )
 
   return(
     <>
-      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
-        onSubmit={formik.handleSubmit}
-        style={{height: `${heightPage}px`}}
-      >
-        <div className="flex justify-between">
-          <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevos status, categorys, types" 
-            title="Agregar nuevo glosario"
-          />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
-        </div>
-        
-        <div>
-          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-          <Input type="text" name="name" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.name}
-            autoFocus
-          />
-          {formik.touched.name && formik.errors.name ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.name}</p>
-            </div>
-          ) : null}
-        </div>
-        <div>
-          <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
-          <textarea name="description" 
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                focus:border-slate-700 outline-0 overflow-hidden resize-none"
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.description}
-            rows={4}
-          />
-          {formik.touched.description && formik.errors.description ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.description}</p>
-            </div>
-          ) : null}
-        </div>
-        <div>
-          <Label htmlFor="color"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Color</p></Label>
-          <div className="flex gap-x-1" >
-            <HexColorPicker color={color} onChange={handleColor} />
-            <div className="w-12 h-12" style={{backgroundColor:color}}></div>
-          </div>
-          <Label htmlFor="hex"><p className="after:content-['*'] after:ml-0.5 after:text-red-500 mt-2">Codigo</p></Label>
-          <div className="flex gap-x-1" >
-            <Input 
-              value={color}
-              onChange={e => handleColor(e.target.value)}
+      <div className="relative z-50 ml-auto h-full w-80 bg-white p-5 overflow-y-auto">
+        {/* <form className="z-50 absolute bg-white space-y-5 p-5 right-0 h-full min-h-screen" */}
+        <form
+          onSubmit={formik.handleSubmit}
+          style={{height: `${heightPage}px`}}
+        >
+          <div className="flex justify-between">
+            <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevos status, categorys, types" 
+              title="Agregar nuevo glosario"
             />
+            <XMarkIcon className="w-6 h-6 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
           </div>
-        </div>
-        <div className="flex justify-center mt-2">
-          <Button type="submit">Guardar</Button>
-        </div>
-      </form>
+          
+          <div>
+            <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+            <Input type="text" name="name" 
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.name}
+              autoFocus
+            />
+            {formik.touched.name && formik.errors.name ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.name}</p>
+              </div>
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
+            <textarea name="description" 
+              className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+                  focus:border-slate-700 outline-0 overflow-hidden resize-none"
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.description}
+              rows={4}
+            />
+            {formik.touched.description && formik.errors.description ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.description}</p>
+              </div>
+            ) : null}
+          </div>
+          <div>
+            <Label htmlFor="color"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Color</p></Label>
+            <div className="flex gap-x-1" >
+              <HexColorPicker color={color} onChange={handleColor} />
+              <div className="w-12 h-12" style={{backgroundColor:color}}></div>
+            </div>
+            <Label htmlFor="hex"><p className="after:content-['*'] after:ml-0.5 after:text-red-500 mt-2">Codigo</p></Label>
+            <div className="flex gap-x-1" >
+              <Input 
+                value={color}
+                onChange={e => handleColor(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center mt-2">
+            <Button type="submit">Guardar</Button>
+          </div>
+        </form>
+      </div>
     </>
   )
 }

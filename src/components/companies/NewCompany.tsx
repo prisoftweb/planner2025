@@ -114,9 +114,9 @@ export default function NewCompany({showForm, token}:
 
   return(
     <>
-      <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen"
+      <form className="z-10 absolute bg-white space-y-5 p-5 right-0 h-full"
         onSubmit={formik.handleSubmit}
-        style={{height: `${heightPage}px`}}
+        // style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/company.svg" subtitle="Ingresa los datos de la nueva empresa" 

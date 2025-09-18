@@ -147,7 +147,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   
   return(
     <>
-      <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
+      <form className="z-10 absolute w-full max-w-xl bg-white space-y-5 p-5 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
           <HeaderForm img="/img/estimates/concepts.svg" subtitle="Modifica y agrega mas conceptos a una estimacion existente" 

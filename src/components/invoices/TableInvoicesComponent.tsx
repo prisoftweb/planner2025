@@ -17,6 +17,7 @@ import Button from "../Button";
 import SearchInTable from "../SearchInTable";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
+import {Tooltip} from "@nextui-org/react";
 
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
@@ -45,6 +46,25 @@ export default function TableInvoicesComponent({token, user}:
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
 
   const handleShowForm = (value:boolean) => {
     setShowNewCollection(value);
@@ -151,17 +171,23 @@ export default function TableInvoicesComponent({token, user}:
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
           {row.original.ischargedfull? (
-            <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
-              <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
-            </Badge>
+            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrada' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+                  <DocumentArrowDownIcon className="h-6 w-6 hover:bg-blue-100 text-green-500 hover:text-green-300" />
+                </Badge>
+          </Tooltip>
           ): (
-            <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
-              <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
-                refEstimate.current = row.original.id;
-                setSelInvoice(row.original);
-                setShowNewCollection(true);
-              }}/>
-            </Badge>
+            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+                <DocumentArrowDownIcon className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300" onClick={() => {
+                  refEstimate.current = row.original.id;
+                  setSelInvoice(row.original);
+                  setShowNewCollection(true);
+                }}/>
+              </Badge>
+            </Tooltip>
           )}
         </div>
       ),
@@ -459,9 +485,17 @@ export default function TableInvoicesComponent({token, user}:
       </div>
       {widthPage > 1080 && filterElemnts}
       <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
-      {showNewCollection && selInvoice && <AddNewCollectionInvoice showForm={handleShowForm} user={user}
-               token={token} invoiceTable={selInvoice} />}
-      {showNewInvoice && <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} /> }
+      {showNewCollection && selInvoice && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <AddNewCollectionInvoice showForm={handleShowForm} user={user}
+               token={token} invoiceTable={selInvoice} />
+        </div>
+      )}
+      {showNewInvoice && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
+        </div>
+      ) }
     </>
   )
 }

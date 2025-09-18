@@ -15,6 +15,7 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 import RemoveElement from "../RemoveElement";
 import {IoMdCopy} from 'react-icons/io';
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import {Tooltip} from "@nextui-org/react";
 
 type Props = {
   data:ExpensesTable[], 
@@ -91,6 +92,25 @@ export default function TableExpenses({data, token, expenses,
 
   const queryParam= isPending? '?status=pending': '';
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
@@ -124,11 +144,29 @@ export default function TableExpenses({data, token, expenses,
           <RemoveElement id={row.original.id} name={row.original.Descripcion} 
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
-          <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneCost(row.original.id)} />
+          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Copiar' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+            <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneCost(row.original.id)} />
+          </Tooltip>
           <div className="w-20 flex gap-x-1 items-center">
-            {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
-            {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
-            {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
+            {row.original.archivos.includes('xml') && (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='XML' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              </Tooltip>
+            )}
+            {row.original.archivos.includes('pdf') && (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='PDF' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              </Tooltip>
+            )}
+            {row.original.archivos.includes('none') && (
+              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Sin archivo' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+              </Tooltip>
+            )}
           </div>
         </div>
       ),
@@ -519,10 +557,14 @@ export default function TableExpenses({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-          {isFilter && <Filtering showForm={handleIsFilter}  
+          {isFilter && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <Filtering showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
-                        />}
+                        />
+            </div>
+          )}
       </div>
       {view}
     </>

@@ -2,10 +2,9 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { Options } from "@/interfaces/Common";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getProjectsMin } from "@/app/api/routeProjects";
-import { ProjectsTable, ProjectMin } from "@/interfaces/Projects";
+import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerHistoryClient from "@/components/projects/ContainerHistoryClient";
 

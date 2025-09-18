@@ -543,6 +543,7 @@ export interface ITotalAccountReceivablesByClientResumen {
   quantity: number
   type: string
   pendingPayment: number
+  // pendingBilling: number
 }
 
 export interface ITotalEstimatesPendingByProject {

@@ -225,9 +225,13 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       </div>
       
       {component}
-      {openNewConcept && <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
+      {openNewConcept && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={estimate}
-                            conceptsDataChart={conceptsData} />}
+                            conceptsDataChart={conceptsData} />
+        </div>
+      )}
     </>
   )
 }

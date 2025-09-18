@@ -69,11 +69,11 @@ export default function NewWorkFlow({showForm, token, workFlow}:
     }
   });
 
-  return(
+  return(//top-16
     <>
-      <form className="z-10 w-full max-w-md top-16 absolute bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full h-full max-w-md absolute bg-white space-y-5 p-5 right-0"
         onSubmit={formik.handleSubmit}
-        style={{height: `${heightPage}px`}}
+        // style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevo workflow" 

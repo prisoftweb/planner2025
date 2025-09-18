@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import UserClient from "./UserClient";
 import { getDepartmentsLV } from "@/app/api/routeDepartments";
 import { getRolesLV } from "@/app/api/routeRoles";
-import { Options } from "@/interfaces/Common";
+// import { Options } from "@/interfaces/Common";
 import { UsrBack } from "@/interfaces/User";
 
 export default async function TabUser({user, opt}: {user:UsrBack, opt: number}){

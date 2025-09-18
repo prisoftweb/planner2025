@@ -160,6 +160,7 @@ export default function AmountChargeStepper({token, condition, showForm}:
           <CurrencyInput
             id="percentageCharge"
             name="percentageCharge"
+            autoFocus
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             onChange={formik.handleChange}

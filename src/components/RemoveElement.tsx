@@ -4,6 +4,7 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import {Tooltip} from "@nextui-org/react";
 
 type Props = {
   token : string, 
@@ -73,14 +74,38 @@ export default function RemoveElement({token, id, name, remove, removeElement,
       overlayClassName: "overlay-custom-class-name"
     }); 
   }
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
   
-    return(
+  return(
     <>
-      <TrashIcon className={`cursor-pointer w-6 h-6 ${colorIcon}`}  
-        onClick={() => {
-          deleteElement(progreesAverage, totalAverage);
-        }}
-      />
+      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Eliminar' 
+          placement="right" className="text-black bg-white rounded-md border border-slate-400">
+        <div className=''>
+          <TrashIcon className={`cursor-pointer w-6 h-6 ${colorIcon} hover:bg-blue-100`}  
+            onClick={() => {
+              deleteElement(progreesAverage, totalAverage);
+            }}
+          />
+        </div>
+      </Tooltip>
     </>
   )
 }

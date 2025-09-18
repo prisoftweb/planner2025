@@ -246,8 +246,12 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />          
       </div>
       <Table columns={columns} data={dataTable} placeH="buscar estimacion" initialColumns={initialVisibilityColumns} />
-      {isFilter && <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
-                                FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />}
+      {isFilter && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
+                                FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />
+        </div>
+      )}
       {isShowDetailEstimate && <DetailEstimateComponent project={project} nomEstimate={refEstimate.current} 
                                     numEstimate={1} showForm={handleIsShowDetailEstimate} token={token} />}
     </>

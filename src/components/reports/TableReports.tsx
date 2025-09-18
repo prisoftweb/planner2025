@@ -17,6 +17,7 @@ import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWi
 import { showToastMessageError, showToastMessage } from "../Alert";
 import RemoveElement from "../RemoveElement";
 import { IoCopy } from "react-icons/io5";
+import {Tooltip} from "@nextui-org/react";
 
 type Props = {
   data:ReportTable[], 
@@ -40,6 +41,25 @@ export default function TableReports({data, token, reports, optCompanies,
 
   const {haveDeleteReport, haveNewReport, updateHaveDeleteReport, updateHaveNewReport, 
     updateReportStore, reportsStore} = useOptionsReports();
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
 
   const delReport = async(id: string) => {
     try {
@@ -109,8 +129,11 @@ export default function TableReports({data, token, reports, optCompanies,
           <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
           <RemoveElement id={row.original.id} name={row.original.Report} token={token} 
               remove={RemoveReport} removeElement={delReport} />
-          <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer" onClick={() => cloneReport(row.original.id)} />
-          {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500" />}
+          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Copiar' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+            <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneReport(row.original.id)} />
+          </Tooltip>
+          {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500 bg-blue-100" />}
         </div>
       ),
       enableSorting:false,
@@ -340,9 +363,13 @@ export default function TableReports({data, token, reports, optCompanies,
   return(
     <>
       <div className="flex justify-end my-5">
-        {isFilter && <Filtering showForm={setIsFilter} optConditions={optConditions} 
+        {isFilter && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <Filtering showForm={setIsFilter} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
-                        optProjects={optProjects} optCompanies={optCompanies} />}
+                        optProjects={optProjects} optCompanies={optCompanies} />
+          </div>
+        )}
       </div>
       {view}
     </>

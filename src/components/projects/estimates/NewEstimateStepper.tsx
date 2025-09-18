@@ -222,7 +222,7 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
       <></>;
 
   return(
-    <div className="z-10 w-full sm:max-w-4xl absolute top-16 bg-white p-3 right-0"
+    <div className="z-10 w-full sm:max-w-4xl absolute bg-white p-5 right-0"
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">

@@ -396,7 +396,8 @@ export async function getTotalAccountReceivablesByProjectResumen(auth_token:stri
 }
 
 export async function getTotalAccountReceivablesByClientResumen(auth_token:string, dateI: string, dateF:string){
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALAccountReceivablesByClientMINRESUME/PAGADA/CANCELADA/${dateI}/${dateF}`;
+  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALAccountReceivablesByClientMINRESUME/PAGADA/CANCELADA/${dateI}/${dateF}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPENDINGPaymentsANDPENDINGEstimatesByCLIENTMINRESUME/CANCELADA/${dateI}/${dateF}/66e0a1a4c6d95ffb8aa0ff31`;
   try {
     const res = await axios.get(url, {
       headers: {

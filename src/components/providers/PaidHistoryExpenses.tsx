@@ -129,29 +129,32 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   
   return(
     <>
-      <form className="z-10 top-16 w-full max-w-5xl absolute bg-white space-y-5 p-3 right-0"
-        style={{height: `${heightPage}px`}}
-      >
-        <div className="flex justify-between">
-          <div className="flex mt-2 items-center">
-            <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
-            <div className="ml-3">
-              <p className="text-xl">Nuevo pago</p>
-              <p className="text-gray-500 text-sm">Agrega un nuevo pago a proveedores</p>
+      <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        {/* top-16 */}
+        <form className="z-10 w-full max-w-5xl absolute bg-white space-y-5 p-5 right-0"
+          style={{height: `${heightPage}px`}}
+        >
+          <div className="flex justify-between">
+            <div className="flex mt-2 items-center">
+              <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
+              <div className="ml-3">
+                <p className="text-xl">Nuevo pago</p>
+                <p className="text-gray-500 text-sm">Agrega un nuevo pago a proveedores</p>
+              </div>
             </div>
+            <XMarkIcon className="w-8 h-8 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
           </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
-        </div>
-        
-        <NavStepperPaidExpenses index={indexStepper} changeTab={handleIndexStepper} />
-        <div className="mt-3">
-          <HeaderPaidHistoryExpenses expensesTable={costsInPayment} provider={provider} token={token} />
-        </div>
-        <div className="mt-3">
-          {viewComponent}
-        </div>
-      </form>
+          
+          <NavStepperPaidExpenses index={indexStepper} changeTab={handleIndexStepper} />
+          <div className="mt-3">
+            <HeaderPaidHistoryExpenses expensesTable={costsInPayment} provider={provider} token={token} />
+          </div>
+          <div className="mt-3">
+            {viewComponent}
+          </div>
+        </form>
+      </div>
     </>
   )
 }

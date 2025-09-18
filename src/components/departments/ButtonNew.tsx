@@ -17,8 +17,12 @@ export default function ButtonNew({token, optionsCompany, dept}: ButtonNewProps)
   return(
     <>
       <Button type="button" onClick={() => setNewCompany(true)}>Nuevo</Button>
-          {newCompany && <NewDepartment showForm={setNewCompany} token={token} 
-                            OptionsCompany={optionsCompany} dept={dept} />}
+          {newCompany && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewDepartment showForm={setNewCompany} token={token} 
+                            OptionsCompany={optionsCompany} dept={dept} />
+            </div>
+          )}
     </>
   )
 }

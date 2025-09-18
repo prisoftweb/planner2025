@@ -25,10 +25,14 @@ export default function ButtonNew({token, optClients, optCategories,
   return(
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
-        {newProject && <NewProject showForm={handleNewProject} optTypes={optTypes} 
+        {newProject && (
+          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <NewProject showForm={handleNewProject} optTypes={optTypes} 
                         token={token} optClients={optClients} 
                         optCategories={optCategories} user={user} 
-                          optCompanies={optCompanies} condition={condition} />}
+                          optCompanies={optCompanies} condition={condition} />
+          </div>
+        )}
     </>
   )
 }

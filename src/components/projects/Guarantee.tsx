@@ -163,6 +163,7 @@ export default function Guarantee({token, condition, showForm}: {token:string, c
           <CurrencyInput
             id="percentage"
             name="percentage"
+            autoFocus
             className="w-full border border-slate-300 rounded-md px-2 py-1 mt-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             onChange={formik.handleChange}

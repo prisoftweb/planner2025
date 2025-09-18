@@ -60,7 +60,7 @@ export default function FilteringEstimatesProject({showForm, optProjects, optCon
 
   return(
     <>
-      <form className="z-10 top-16 fixed bg-white space-y-5 p-3 right-0 h-screen">
+      <form className="z-10 fixed bg-white space-y-5 p-5 right-0 h-screen">
         <div className="flex justify-between">
           {/* <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
             title="Filtrar proyecto"

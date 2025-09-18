@@ -367,7 +367,6 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
         </div>
       </div>
       {widthPage > 1080 && filterElemnts}
-      <Table columns={columns} data={data} placeH="buscar garantia" typeTable="guarantee" />      
       <div className="mt-5 grid grid-cols-3 gap-x-5">
         <div>
           <Label>GARANTIA POR CLIENTE</Label>
@@ -419,6 +418,7 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
           </div>
         </div>
       </div>
+      <Table columns={columns} data={data} placeH="buscar garantia" typeTable="guarantee" />      
     </>
   )
 }

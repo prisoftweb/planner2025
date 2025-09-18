@@ -520,8 +520,12 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
           ))}
         </nav>
       </div>
-      {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-                                user={user} updateCollections={updateCollections} />}
+      {showNewCollection && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
+                                user={user} updateCollections={updateCollections} />
+        </div>
+      )}
       {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
     </>
   )

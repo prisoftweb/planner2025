@@ -24,9 +24,13 @@ export default function ButtonNewNode({token, user, departments,
   return(
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
-          {newNode && <NewNode showForm={handleClick} token={token} 
+          {newNode && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewNode showForm={handleClick} token={token} 
                           departments={departments} glossaries={glossaries} 
-                          workFlows={workFlows} descGlossaries={descGlossaries} />}
+                          workFlows={workFlows} descGlossaries={descGlossaries} />
+            </div>
+          )}
     </>
   )
 }

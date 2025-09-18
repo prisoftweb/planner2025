@@ -174,15 +174,37 @@ export async function getReportsByUser(auth_token:string, id:string) {
 export async function insertMovementsInReport(auth_token:string, id:string, data:object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/insertConditionInReport/${id}`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(data));
+    // console.log(url);
+    // console.log(JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     });
-    console.log(res);
+    // console.log(res);
+    if(res.status === 200) return res.status
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al realizar movimiento!!!';
+    }
+    return 'Error al realizar movimiento!!!';
+  }
+}
+
+export async function insertConditionInReportViewer(auth_token:string, id:string, data:object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/insertConditionInReportViewer/${id}`;
+  try {
+    // console.log(url);
+    // console.log(JSON.stringify(data));
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    // console.log(res);
     if(res.status === 200) return res.status
     return res.statusText;
   } catch (error) {
@@ -287,15 +309,18 @@ export async function GetReportsLastMovInDeptMIN(auth_token:string, idDept:strin
 
 export async function GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(auth_token:string, idDept:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsWithLastMoveInDepartmentAndNEConditionMIN/${idDept}/CERRADO`;
+  console.log('url reports => ', url)
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
+    console.log('res repor => ', res.data.data);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
+    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Ocurrio un problema al obtener informes';
     }

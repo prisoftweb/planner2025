@@ -9,7 +9,11 @@ export default function ButtonNew({token}: {token:string}){
   return(
     <>
       <Button type="button" onClick={() => setNewCompany(true)}>Nuevo</Button>
-          {newCompany && <NewCompany showForm={setNewCompany} token={token} />}
+          {newCompany && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewCompany showForm={setNewCompany} token={token} />
+            </div>
+          )}
     </>
   )
 }

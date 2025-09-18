@@ -37,8 +37,9 @@ export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
   }, [])
   
   let tabUser: JSX.Element = <></>;
+
   if(width < 710){
-    tabUser = <div className="flex mt-3 gap-x-5 justify-between">
+    tabUser = <div className="flex justify-between mt-3">
                     <Link href={`/users/${idUser}/profile?opt=1`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={props} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
@@ -52,7 +53,7 @@ export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Costos'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='2'? 'bg-yellow-950 rounded-lg': ''}`} />
+                          ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>
                     <Link href={`/users/${idUser}/statistics`}>
@@ -73,34 +74,96 @@ export default function NavTab({tab, idUser}: {tab:string, idUser:string}){
                     </Link>
                   </div>                             
   }else{
-    tabUser = (
-      <div className="flex mt-5 bg-white py-1">
+    tabUser=(
+      <div className="flex mt-5 py-1 border-b border-blue-300">
         <Link href={`/users/${idUser}/profile?opt=1`}>
-          <div className={`flex justify-around w-40 items-center border border-slate-400 ${tab==='1'? 'bg-green-500 text-white':''}`}>
-            <p>Perfil</p>
-            <UserCircleIcon className="w-8 h-8" />
+          <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Perfil</p>
           </div>
         </Link>
         <Link href={`/users/${idUser}/costs`}>
-          <div className={`flex justify-around border border-slate-400 w-40 items-center ${tab==='2'? 'bg-green-500 text-white':''}`}>
-            <p>Costos</p>
-            <CurrencyDollarIcon className="w-8 h-8" />
+          <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Costos</p>
           </div>
         </Link>
         <Link href={`/users/${idUser}/statistics`}>
-          <div className={`flex justify-around border border-slate-400 w-40 items-center ${tab==='3'? 'bg-green-500 text-white':''}`}>
-            <p>Estadisticas</p>
-            <QuestionMarkCircleIcon className="w-8 h-8" />
+          <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Estadisticas</p>
           </div>
         </Link>
         <Link href={`/users/${idUser}/logs`}>
-          <div className={`flex justify-around border border-slate-400 w-40 items-center ${tab==='4'? 'bg-green-500 text-white':''}`}>
-            <p>Logs</p>
-            <QuestionMarkCircleIcon className="w-8 h-8" />
+          <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
+            <p className="text-blue-600">Logs</p>
           </div>
         </Link>
-      </div>)
+      </div>
+    )
   }
+
+  // if(width < 710){
+  //   tabUser = <div className="flex mt-3 gap-x-5 justify-between">
+  //                   <Link href={`/users/${idUser}/profile?opt=1`}>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
+  //                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
+  //                       <UserCircleIcon data-tooltip-target="tooltip-dark"
+  //                         className={`w-6 h-6 text-slate-600 cursor-pointer 
+  //                         ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
+  //                     </Tooltip>
+  //                   </Link>  
+  //                   <Link href={`/users/${idUser}/costs`}>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
+  //                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Costos'>
+  //                       <CurrencyDollarIcon
+  //                         className={`w-6 h-6 text-slate-600 cursor-pointer 
+  //                         ${tab==='2'? 'bg-yellow-950 rounded-lg': ''}`} />
+  //                     </Tooltip>
+  //                   </Link>
+  //                   <Link href={`/users/${idUser}/statistics`}>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
+  //                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estadisticas'>
+  //                       <QuestionMarkCircleIcon
+  //                         className={`w-6 h-6 text-slate-600 cursor-pointer 
+  //                         ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
+  //                     </Tooltip>
+  //                   </Link>
+  //                   <Link href={`/users/${idUser}/logs`}>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={props} 
+  //                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Logs'>
+  //                       <QuestionMarkCircleIcon
+  //                         className={`w-6 h-6 text-slate-600 cursor-pointer 
+  //                         ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
+  //                     </Tooltip>
+  //                   </Link>
+  //                 </div>                             
+  // }else{
+  //   tabUser = (
+  //     <div className="flex mt-5 bg-white py-1">
+  //       <Link href={`/users/${idUser}/profile?opt=1`}>
+  //         <div className={`flex justify-around w-40 items-center border border-slate-400 ${tab==='1'? 'bg-green-500 text-white':''}`}>
+  //           <p>Perfil</p>
+  //           <UserCircleIcon className="w-8 h-8" />
+  //         </div>
+  //       </Link>
+  //       <Link href={`/users/${idUser}/costs`}>
+  //         <div className={`flex justify-around border border-slate-400 w-40 items-center ${tab==='2'? 'bg-green-500 text-white':''}`}>
+  //           <p>Costos</p>
+  //           <CurrencyDollarIcon className="w-8 h-8" />
+  //         </div>
+  //       </Link>
+  //       <Link href={`/users/${idUser}/statistics`}>
+  //         <div className={`flex justify-around border border-slate-400 w-40 items-center ${tab==='3'? 'bg-green-500 text-white':''}`}>
+  //           <p>Estadisticas</p>
+  //           <QuestionMarkCircleIcon className="w-8 h-8" />
+  //         </div>
+  //       </Link>
+  //       <Link href={`/users/${idUser}/logs`}>
+  //         <div className={`flex justify-around border border-slate-400 w-40 items-center ${tab==='4'? 'bg-green-500 text-white':''}`}>
+  //           <p>Logs</p>
+  //           <QuestionMarkCircleIcon className="w-8 h-8" />
+  //         </div>
+  //       </Link>
+  //     </div>)
+  // }
 
   return(
     <>

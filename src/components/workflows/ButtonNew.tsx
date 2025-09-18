@@ -12,8 +12,11 @@ export default function ButtonNew({token, user}: {token:string, user:string}){
   return(
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
-          {newWorkFlow && <NewWorkFlow showForm={handleClick} 
-                                  token={token} workFlow={''} />}
+          {newWorkFlow && (
+            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+              <NewWorkFlow showForm={handleClick} token={token} workFlow={''} />
+            </div>
+          )}
     </>
   )
 }
