@@ -1,17 +1,13 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getTotalInvoicesByProject } from "@/app/api/routeInvoices";
-import { ITotalInvoicesByProject } from "@/interfaces/Invoices";
 import { getCollectionsByProjectMin } from "@/app/api/routeCollections";
 
 import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
-import { ICollectionMin, ITotalResumentPayment } from "@/interfaces/Collections";
 import ContainerCollectionsProject from "@/components/projects/estimates/collections/ContainerCollectionsProject";
 
 export default async function Page({ params, searchParams }: 

@@ -3,8 +3,6 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
-import { ClientBack } from "@/interfaces/Clients";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
 import { getActiveProjectsMin, getProjectsByConditionMin, GetCollectionsAccumByProjectMin, GetCostsAccumByProjectMin } from "../api/routeProjects";

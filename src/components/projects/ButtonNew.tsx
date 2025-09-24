@@ -26,7 +26,7 @@ export default function ButtonNew({token, optClients, optCategories,
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
         {newProject && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <div className="fixed inset-0 bg-black bg-opacity-40 z-40">
             <NewProject showForm={handleNewProject} optTypes={optTypes} 
                         token={token} optClients={optClients} 
                         optCategories={optCategories} user={user} 

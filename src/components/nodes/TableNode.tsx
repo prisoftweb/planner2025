@@ -2,12 +2,14 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import DeleteElement from "../DeleteElement";
-import { PencilIcon } from "@heroicons/react/24/solid";
+// import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { removeNode } from "@/app/api/routeNodes";
 import { NodeTable } from "@/interfaces/Nodes";
 import UpdateNode from "./UpdateNode";
 import { Options } from "@/interfaces/Common";
+// import {Tooltip} from "@nextui-org/react";
+import TooltipPencilIcon from "../tooltipIcons/TooltipPencilIcon";
 
 type Params = {
   data:NodeTable[], 
@@ -30,6 +32,29 @@ export default function TableNode({data, token, departments, glossaries, workflo
   const handleEdit = (value: boolean) => {
     setEditNode(value);
   };
+
+  const handleNodeEdit = (value: NodeTable) => {
+    setNodeEdit(value);
+  };
+
+  // let props = {
+  //   variants: {
+  //     exit: {
+  //       opacity: 0,
+  //       transition: {
+  //         duration: 0.1,
+  //         ease: "easeIn",
+  //       }
+  //     },
+  //     enter: {
+  //       opacity: 1,
+  //       transition: {
+  //         duration: 0.15,
+  //         ease: "easeOut",
+  //       }
+  //     },
+  //   },
+  // }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -56,9 +81,13 @@ export default function TableNode({data, token, departments, glossaries, workflo
       id: 'Accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <PencilIcon className="w-5 h-5 text-slate-500 hover:text-slate-400 cursor-pointer" 
-            onClick={() => {setNodeEdit(row.original); setEditNode(true);}}
-          />
+          {/* <Tooltip closeDelay={0} delay={100} motionProps={props} content='Modificar' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+            <PencilIcon className="w-6 h-6 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
+              onClick={() => {setNodeEdit(row.original); setEditNode(true);}}
+            />
+          </Tooltip> */}
+          <TooltipPencilIcon element={row.original} handleBooleanValue={setEditNode} handleElement={setNodeEdit} />
           <DeleteElement id={row.original.id} name={row.original.department} remove={removeNode} token={token} />
         </div>
       ),

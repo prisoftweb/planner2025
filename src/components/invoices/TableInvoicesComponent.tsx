@@ -18,6 +18,7 @@ import SearchInTable from "../SearchInTable";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import AddNewInvoiceComponent from "./AddNewInvoiceComponent";
 import {Tooltip} from "@nextui-org/react";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
@@ -464,9 +465,11 @@ export default function TableInvoicesComponent({token, user}:
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+              </div>
+            </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">Facturas</p>
         </div>

@@ -78,19 +78,25 @@ export default function TableHistoryExpenses({data, token, expenses,
           {row.original.archivos.includes('xml') && (
             <Tooltip closeDelay={0} delay={100} motionProps={props} content='XML' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
-              <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              <span>
+                <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              </span>
             </Tooltip>
           )}
           {row.original.archivos.includes('pdf') && (
             <Tooltip closeDelay={0} delay={100} motionProps={props} content='PDF' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
-              <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              <span>
+                <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+              </span>
             </Tooltip>
           )}
           {row.original.archivos.includes('none') && (
             <Tooltip closeDelay={0} delay={100} motionProps={props} content='Sin archivo' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
-              <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+              <span>
+                <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+              </span>
             </Tooltip>
           )}
           {/* {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}

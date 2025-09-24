@@ -264,6 +264,7 @@ export async function GetReportsMin(auth_token:string) {
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
+      console.log('axios error => ', error);
       return error.response?.data.message || 'Ocurrio un problema al obtener informes';
     }
     return 'Ocurrio un problema al obtener informes';

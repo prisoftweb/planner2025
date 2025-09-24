@@ -2,25 +2,18 @@
 
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
-import Table from "@/components/Table";
-import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-// import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
 import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
 import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
-import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
-// import Button from "../Button";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-// import AddNewCollectionComponent from "./AddNewCollection";
-// import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
 import { useTableStates } from "@/app/store/tableStates";
-
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 export default function TableHistoryCollectionsComponent({token, user}: {token:string, user:string}) {
 
@@ -365,9 +358,11 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+              </div>
+            </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">Historial de recuperacion de cartera</p>
         </div>

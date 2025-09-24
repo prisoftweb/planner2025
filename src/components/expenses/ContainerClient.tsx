@@ -30,6 +30,8 @@ import WithOut from "../WithOut"
 
 import { getAllCostsByConditionAndUser } from "@/app/api/routeCost"
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
+import {Tooltip} from "@nextui-org/react";
+import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports, isViewUser=false}:
@@ -360,15 +362,39 @@ export default function ContainerClient({data, token, expenses,
         data={tableData} isPending={isViewUser}
       />
     )
+
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
   
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
+            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Regresar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <span>
+                <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                  <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+                </div>
+              </span>
+            </Tooltip>
           </Link>
           <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': (isViewUser? 'Gastos en proceso': 'Gastos')}</p>
         </div>
@@ -380,9 +406,10 @@ export default function ContainerClient({data, token, expenses,
                 conditions.length > 0 && costCenterOpt.length > 0 && 
                 projects.length > 0 && providers.length > 0 && responsibles.length > 0 && 
                 types.length > 0 && (
-                  <GiSettingsKnobs onClick={() => handleFilter(true)}
-                    className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-                  />
+                  // <GiSettingsKnobs onClick={() => handleFilter(true)}
+                  //   className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
+                  // />
+                  <TooltipFilterIcon handleFilter={handleFilter} />
               )}  
               <>
                 {!isHistory && !isViewUser && (

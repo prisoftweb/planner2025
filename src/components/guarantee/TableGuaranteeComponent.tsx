@@ -21,6 +21,7 @@ import { GuaranteeDataByProjectToTableData } from "@/app/functions/GuaranteesFun
 import NewDonutChartComponent from "../projects/dashboard/NewDonutChartComponent";
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 import Slider from '@mui/material/Slider';
 
@@ -354,9 +355,11 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+              </div>
+            </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">FONDO DE GARANTIA </p>
         </div>

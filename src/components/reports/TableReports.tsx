@@ -131,7 +131,9 @@ export default function TableReports({data, token, reports, optCompanies,
               remove={RemoveReport} removeElement={delReport} />
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Copiar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
-            <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneReport(row.original.id)} />
+            <span className="inline-flex items-center justify-center">
+              <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneReport(row.original.id)} />
+            </span>
           </Tooltip>
           {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500 bg-blue-100" />}
         </div>

@@ -14,6 +14,7 @@ import Button from "@/components/Button"
 import NewEstimateStepper from "./NewEstimateStepper"
 import { getProjectsWithEstimatesMin } from "@/app/api/routeProjects"
 import { showToastMessageError } from "@/components/Alert"
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 
 type Props = {
   token:string, 
@@ -70,23 +71,29 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
         <div className="flex items-center">
-          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
-            onClick={() => window.location.replace('/')}
-          >
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-          </div>
+          <TooltipContainerIcon label="Regresar">
+            <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer hover:bg-blue-100"
+              onClick={() => window.location.replace('/')}
+            >
+              <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+            </div>
+          </TooltipContainerIcon>
           <p className="text-xl ml-4 font-medium w-56">Proyectos para estimar</p>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
           <div className="flex gap-x-3 gap-y-3 justify-end">
             <div className="flex gap-x-3 items-center">
               <p>Vista: </p>
-              <Squares2X2Icon onClick={() => setIsTable(true)} 
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
-              />
-              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-                onClick={() => setIsTable(false)}
-              />
+              <TooltipContainerIcon label="Tabla">
+                <Squares2X2Icon onClick={() => setIsTable(true)} 
+                  className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
+                />
+              </TooltipContainerIcon>
+              <TooltipContainerIcon label="Tarjeta">
+                <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
+                  onClick={() => setIsTable(false)}
+                />
+              </TooltipContainerIcon>
             </div>
             <SearchInTable placeH="Buscar presupuesto.." />
           </div>

@@ -29,6 +29,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import DownloadPendingCollectionsPDF from "./DownloadPendingCollectionsPDF";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadPendingCollectionsByClientPDF from "./DownloadPendingCollectionsByClientPDF";
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 
 export interface DataProjectsByType {
   client: string
@@ -84,12 +85,6 @@ type DataPendingProject = {
   label: string,
   "POR COBRAR": number,
   "POR FACTURAR": number,
-}
-
-type DataPendingClient = {
-  label: string,
-  "FACTURADO POR PAGAR": number,
-  "FACTURADO POR ESTIMAR": number,
 }
 
 export default function DashboardCollectionsContainer({token, user, totalClients, totalProjects, totalPay, 
@@ -378,9 +373,11 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+              </div>
+            </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">COBRANZA </p>
         </div>
@@ -396,7 +393,9 @@ export default function DashboardCollectionsContainer({token, user, totalClients
               loading? (
                 <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
               ) : (
-                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                <TooltipContainerIcon label="Descargar PDF">
+                  <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                </TooltipContainerIcon>
               ) }
           </PDFDownloadLink>
 
@@ -410,7 +409,9 @@ export default function DashboardCollectionsContainer({token, user, totalClients
               loading? (
                 <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
               ) : (
-                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                <TooltipContainerIcon label="Descargar PDF">
+                  <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                </TooltipContainerIcon>
               ) }
           </PDFDownloadLink>
         </div>
@@ -426,9 +427,6 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         <Card amount={ totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0 } title="POR FACTURAR">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
-        {/* <Card amount={ porCobrar?.total || 0 } title="FONDO DE GARANTIA POR COBRAR">
-          <BsCash className="w-6 h-6 text-slate-600" />
-        </Card> */}
       </div> 
       
       {/* {widthPage > 1080 && filterElemnts} */}
@@ -469,42 +467,6 @@ export default function DashboardCollectionsContainer({token, user, totalClients
             <NewDonutChartComponent data={totalInvoiceClient} />
           </div>
         </div>
-      </div>
-      <div className="mt-5 grid grid-cols-2 gap-x-5">
-        {/* <div>
-          <Label>SALDOS PENDIENTES POR PROYECTO</Label>
-          <div className="mt-3">
-            <BarChartComponent 
-              colors={['red', 'blue']}
-              categories={['FACTURADO POR COBRAR', 'FACTURADO POR ESTIMAR']}
-              data={dataPendingProyect}
-            />
-          </div>
-        </div>
-        <div>
-          <Label>SALDOS PENDIENTES POR CLIENTE</Label>
-          <div className="mt-3">
-            <BarChartTwoInOneCollections 
-              data={resParse}
-            />
-          </div>
-        </div> */}
-        {/* <div>
-          <Label>COBRANZA POR PROYECTO</Label>
-          <div className="mt-3">
-            <BarChartComponent 
-              colors={[colors[colorRandom]]}
-              categories={['cobro']}
-              data={dataCollectionProjects}
-            />
-          </div>
-        </div>
-        <div>
-          <Label>COBRANZA X CLIENTE</Label>
-          <div className="mt-3 w-full max-w-96">
-            <NewDonutChartComponent data={totalInvoiceClient} />
-          </div>
-        </div> */}
       </div>
     </>
   )

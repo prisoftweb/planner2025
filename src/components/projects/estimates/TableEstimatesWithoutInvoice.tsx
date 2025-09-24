@@ -10,6 +10,7 @@ import { removeEstimate } from "@/app/api/routeEstimates";
 import DetailEstimateWithoutInvoice from "./DetailEstimateWithoutInvoice";
 import { useState } from "react";
 import { BsFilePdfFill } from "react-icons/bs";
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 
 export default function TableEstimatesWithoutInovice({estimates, delEstimate, token }: 
   {estimates:IEstimateMin[], delEstimate:Function, token:string}) {
@@ -49,11 +50,13 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
           /> */}
           <RemoveElement id={row.original.id} name={row.original.Nombre} remove={removeEstimate} 
             removeElement={delEstimate} token={token} />
-          <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
-              setIdEstimate(row.original.id);
-              setShowForm(true);
-              setProject(row.original.idProject);
-          }} />
+          <TooltipContainerIcon label="Detalle">
+            <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
+                setIdEstimate(row.original.id);
+                setShowForm(true);
+                setProject(row.original.idProject);
+            }} />
+          </TooltipContainerIcon>
         </div>
       ),
       size: 300,

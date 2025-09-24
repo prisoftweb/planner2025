@@ -16,6 +16,8 @@ import { UsrBack } from "@/interfaces/User"
 import { showToastMessageError } from "../Alert"
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject"
 import { getActiveProjectsMin, getProjectsByConditionMin } from "@/app/api/routeProjects"
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
+import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 
 type Props = {
   token:string, 
@@ -98,9 +100,11 @@ export default function ContainerClient({token, optClients, optCategories,
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap print:hidden">
         <div className="flex items-center print:hidden">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md print:hidden">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600 print:hidden" />
-            </div>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md print:hidden hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600 print:hidden" />
+              </div>
+            </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">Proyectos</p>
         </div>
@@ -108,15 +112,20 @@ export default function ContainerClient({token, optClients, optCategories,
           <SearchInTable placeH="Buscar proyecto.." />
           <div>
             <div className="flex gap-x-3 items-center print:hidden">
-              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300 print:hidden" 
-                onClick={() => setIsTable(true)}
-              />
-              <PiTableThin onClick={() => setIsTable(false)} 
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300 print:hidden"
-              />
-              <GiSettingsKnobs onClick={() => handleFilter(true)}
+              <TooltipContainerIcon label="Tabla">
+                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:text-red-300 print:hidden hover:bg-blue-100" 
+                  onClick={() => setIsTable(true)}
+                />
+              </TooltipContainerIcon>
+              <TooltipContainerIcon label="Tarjeta">
+                <PiTableThin onClick={() => setIsTable(false)} 
+                  className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
+                />
+              </TooltipContainerIcon>
+              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300 print:hidden"
-              />
+              /> */}
+              <TooltipFilterIcon handleFilter={handleFilter} />
               <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
                       user={user._id} optCompanies={optCompanies} condition={condition} />

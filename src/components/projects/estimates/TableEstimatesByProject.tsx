@@ -16,6 +16,8 @@ import { removeEstimate } from "@/app/api/routeEstimates";
 import { BsFilePdfFill } from "react-icons/bs";
 import { DocumentArrowDownIcon } from "@heroicons/react/24/solid";
 import { Badge } from "@mui/material";
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import TooltipFilterIcon from "@/components/tooltipIcons/TooltipFilterIcon";
 
 type Props = {
   project: OneProjectMin, 
@@ -85,20 +87,26 @@ export default function TableEstimatesByProject({project, optConditions, optProj
           <RemoveElement id={row.original.id} name={row.original.Nombre} remove={removeEstimate} 
             removeElement={delEstimate} token={token} />
           <Badge color="secondary" badgeContent={row.original.numConcepts}>
-            <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
-                refEstimate.current = row.original.id;
-                setIsShowDetailEstimate(true);
-            }} />
+            <TooltipContainerIcon label="Conceptos">
+              <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" onClick={() => {
+                  refEstimate.current = row.original.id;
+                  setIsShowDetailEstimate(true);
+              }} />
+            </TooltipContainerIcon>
           </Badge>
           
           {row.original.haveInvoice? (
-            <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+            <TooltipContainerIcon label="Con factura">
+              <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+            </TooltipContainerIcon>
           ): (
-            <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
-                refEstimate.current = row.original.id;
-                selEstimate(row.original);
-                showNewInvoice(true);
-            }} />
+            <TooltipContainerIcon label="Sin factura">
+              <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
+                  refEstimate.current = row.original.id;
+                  selEstimate(row.original);
+                  showNewInvoice(true);
+              }} />
+            </TooltipContainerIcon>
           )}
         </div>
       ),

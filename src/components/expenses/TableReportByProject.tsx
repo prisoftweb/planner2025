@@ -8,6 +8,7 @@ import ReportCostsByProjectOnlyPDF from "../ReportCostByProjectOnlyPDF"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 export default function TableReportByProject({token}: {token:string}){
   
@@ -101,15 +102,17 @@ export default function TableReportByProject({token}: {token:string}){
       <div className="flex justify-end gap-x-3 mt-7 items-center">
         <SearchInTable placeH={"Buscar gasto.."} />
         {data.length > 0 && (
-          <PDFDownloadLink document={<ReportCostsByProjectOnlyPDF reports={data} />} 
-              fileName={`InformeCostosAgrupadosPorProyecto`} >
-            {({loading, url, error, blob}) => 
-              loading? (
-                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-              ) : (
-                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-              ) }
-          </PDFDownloadLink>
+          <TooltipContainerIcon label="Descargar PDF" >
+            <PDFDownloadLink document={<ReportCostsByProjectOnlyPDF reports={data} />} 
+                fileName={`InformeCostosAgrupadosPorProyecto`} >
+              {({loading, url, error, blob}) => 
+                loading? (
+                  <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                ) : (
+                  <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                ) }
+            </PDFDownloadLink>
+          </TooltipContainerIcon>
         )}
       </div>
       <div className="mt-3">

@@ -146,25 +146,33 @@ export default function TableExpenses({data, token, expenses,
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Copiar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
-            <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneCost(row.original.id)} />
+            <span>
+              <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneCost(row.original.id)} />
+            </span>
           </Tooltip>
           <div className="w-20 flex gap-x-1 items-center">
             {row.original.archivos.includes('xml') && (
               <Tooltip closeDelay={0} delay={100} motionProps={props} content='XML' 
                   placement="right" className="text-black bg-white rounded-md border border-slate-400">
-                <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                <span>
+                  <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                </span>
               </Tooltip>
             )}
             {row.original.archivos.includes('pdf') && (
               <Tooltip closeDelay={0} delay={100} motionProps={props} content='PDF' 
                   placement="right" className="text-black bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                <span>
+                  <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                </span>
               </Tooltip>
             )}
             {row.original.archivos.includes('none') && (
               <Tooltip closeDelay={0} delay={100} motionProps={props} content='Sin archivo' 
                   placement="right" className="text-black bg-white rounded-md border border-slate-400">
-                <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+                <span>
+                  <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+                </span>
               </Tooltip>
             )}
           </div>

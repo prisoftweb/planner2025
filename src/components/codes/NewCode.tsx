@@ -39,7 +39,7 @@ export default function NewCode({closeForm, returnForm, code, title, size}: Prop
               <TbArrowNarrowLeft className="w-9 h-9 text-white" 
               />
             </div>
-            <p className="text-xl ml-4 font-medium">REGRESAR</p>
+            <p className="text-xl ml-4 font-medium">Seleccionar proveedor</p>
             <img src="/img/projects/default.svg" className='rounded-full w-9 h-9' alt="proyecto" />
           </div>
           <></>

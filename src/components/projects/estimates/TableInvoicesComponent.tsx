@@ -16,6 +16,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadInvoicesByProjectPDF from "@/components/invoices/DownloadInvoicesByProjectPDF";
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 
 export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice}: 
   {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, resumenInvoice:ITotalInvoiceResumen}) {
@@ -74,16 +75,20 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
           <RemoveElement id={`${row.original.id}/${row.original.idEstimates}`} name={row.original.estimate} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
           {row.original.ischargedfull? (
-            <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
-              <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
-            </Badge>
+            <TooltipContainerIcon label="Cobrada">
+              <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+                <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+              </Badge>
+            </TooltipContainerIcon>
           ): (
             <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
-              <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
-                refEstimate.current = row.original.id;
-                setSelInvoice(row.original);
-                setShowNewCollection(true);
-              }}/>
+              <TooltipContainerIcon label="Falta cobro">
+                <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
+                  refEstimate.current = row.original.id;
+                  setSelInvoice(row.original);
+                  setShowNewCollection(true);
+                }}/>
+              </TooltipContainerIcon>
             </Badge>
           )}
         </div>

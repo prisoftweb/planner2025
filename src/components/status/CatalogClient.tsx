@@ -13,6 +13,7 @@ import { TbArrowNarrowLeft } from "react-icons/tb";
 import SearchInTable from "@/components/SearchInTable";
 import TableStatus from "./TableStatuses";
 import ButtonNew from "@/components/status/ButtonNew";
+import {Tooltip} from "@nextui-org/react";
 
 export default function CatalogClient({catalogs, token, descGlossaries, glosariesOptions}: 
     {token:string, catalogs:Catalog[], glosariesOptions:Options[], descGlossaries:Options[] }) {
@@ -76,6 +77,25 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
     })
   });
 
+  let props = {
+    variants: {
+      exit: {
+        opacity: 0,
+        transition: {
+          duration: 0.1,
+          ease: "easeIn",
+        }
+      },
+      enter: {
+        opacity: 1,
+        transition: {
+          duration: 0.15,
+          ease: "easeOut",
+        }
+      },
+    },
+  }
+
   return(
     <>
       <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">  
@@ -84,11 +104,14 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
           <div className="">
             <div className="sm:flex gap-x-3 md:justify-between flex-wrap md:flex-nowrap items-center">
               <div className="flex items-center">
-                <Link href={'/'}>
-                  <div className="p-1 border border-slate-400 bg-white rounded-md" >
-                    <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-                  </div>
-                </Link>
+                <Tooltip closeDelay={0} delay={100} motionProps={props} content='Regresar' 
+                    placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                  <Link href={'/'}>
+                    <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-slate-100" >
+                      <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+                    </div>
+                  </Link>
+                </Tooltip>
                 <p className="text-xl ml-4 font-medium">Catalogos</p>
               </div>
               <div className="sm:flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap">

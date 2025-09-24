@@ -21,6 +21,8 @@ import { GetVatsLV } from "@/app/api/routeCost"
 import { getUsersLV } from "@/app/api/routeUser"
 import { getClientsLV } from "@/app/api/routeClients"
 import { Options } from "@/interfaces/Common"
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
+import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 
 export default function ContainerQuotations({quotations, token, user, isByUser=false}: 
   {quotations: IQuotationMin[], token:string, user: UsrBack, isByUser?: boolean}) {
@@ -213,9 +215,11 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
         <div className="flex items-center">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+              </div>
+            </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">Cotizaciones</p>
         </div>
@@ -223,9 +227,10 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
           <SearchInTable placeH="Buscar cotizacion.." />
           <div>
             <div className="flex gap-x-3 items-center">
-              <GiSettingsKnobs onClick={() => setShowFilter(true)}
+              {/* <GiSettingsKnobs onClick={() => setShowFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />
+              /> */}
+              <TooltipFilterIcon handleFilter={handleShowFilter} />
               <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
             </div>
           </div>

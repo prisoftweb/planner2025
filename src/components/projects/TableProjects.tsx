@@ -207,8 +207,8 @@ export default function TableProjects({data, token, projects, optCategories,
         id: 'accion',
         cell: ({row}) => (
           <div className="flex gap-x-1 items-center">
+            {/* <p>condition</p> */}
             <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
-            {/* <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div> */}
             {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
           </div>
         ),
@@ -380,7 +380,7 @@ export default function TableProjects({data, token, projects, optCategories,
         cell: ({row}) => (
           <div className="flex gap-x-1 items-center">
             <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
-            <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div>
+            {/* <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div> */}
             {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
           </div>
         ),

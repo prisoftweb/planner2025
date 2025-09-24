@@ -9,6 +9,7 @@ import { Options } from "@/interfaces/Common";
 import { IInvoiceByProject, ITotalInvoicesByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import NavTabEstimates from "./NavTabEstimates";
 import TableInvoicesComponent from "./TableInvoicesComponent";
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 interface OptionsDashboard {
   label: string,
   costo: number
@@ -48,11 +49,13 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
     <>
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-x-5">
-          <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer"
-            onClick={() => window.location.replace(pageQuery? `/projects/${project._id}/profile`: '/projects/estimates')}
-          >
-            <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-          </div>
+          <TooltipContainerIcon label="Regresar">
+            <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer hover:bg-blue-100"
+              onClick={() => window.location.replace(pageQuery? `/projects/${project._id}/profile`: '/projects/estimates')}
+            >
+              <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+            </div>
+          </TooltipContainerIcon>
           <p className="text-xl ml-4 font-medium">{project.title}</p>
           <ProgressCircle value={project.progress} color={'orange'} >
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
