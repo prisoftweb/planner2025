@@ -489,13 +489,13 @@ export default function TableInvoicesComponent({token, user}:
       {widthPage > 1080 && filterElemnts}
       <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
       {showNewCollection && selInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <AddNewCollectionInvoice showForm={handleShowForm} user={user}
                token={token} invoiceTable={selInvoice} />
         </div>
       )}
       {showNewInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
         </div>
       ) }

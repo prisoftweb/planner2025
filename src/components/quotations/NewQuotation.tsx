@@ -244,7 +244,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   return(//top-16
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+      <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
         <form className="z-10 absolute w-full max-w-md bg-white space-y-5 p-5 right-0" 
             style={{height: `${heightPage}px`}}>
           <div className="flex justify-between">

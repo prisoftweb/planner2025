@@ -255,7 +255,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
       </div>
       <Table columns={columns} data={data} placeH="buscar factura" />
       {showNewCollection && selInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <AddNewCollectionComponent showForm={handleShowForm} user={user}
                token={token} project={project} invoiceTable={selInvoice} />
         </div>

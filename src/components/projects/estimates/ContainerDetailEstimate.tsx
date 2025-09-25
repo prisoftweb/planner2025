@@ -226,7 +226,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       
       {component}
       {openNewConcept && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={estimate}
                             conceptsDataChart={conceptsData} />

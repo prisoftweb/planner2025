@@ -11,6 +11,8 @@ import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "../SearchInTable"
 import WithOut from "../WithOut"
 import { UsrBack } from "@/interfaces/User"
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
+import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 
 type Props = {
   token:string, 
@@ -52,9 +54,11 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
         <div className="flex items-center">
           <Link href={'/'}>
-            <div className="p-1 border border-slate-400 bg-white rounded-md">
-              <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-            </div>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+              </div>
+            </TooltipContainerIcon>
           </Link>
           <p className="text-xl w-56 ml-4 font-medium">Historial de proyectos</p>
         </div>
@@ -62,15 +66,20 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
           <SearchInTable placeH="Buscar proyecto.." />
           <div className="">
             <div className="flex gap-x-3 items-center">
-              <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
-                onClick={() => setIsTable(true)}
-              />
-              <PiTableThin onClick={() => setIsTable(false)} 
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
-              />
-              <GiSettingsKnobs onClick={() => handleFilter(true)}
+              <TooltipContainerIcon label="Tabla">
+                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
+                  onClick={() => setIsTable(true)}
+                />
+              </TooltipContainerIcon>
+              <TooltipContainerIcon label="Tarjeta">
+                <PiTableThin onClick={() => setIsTable(false)} 
+                  className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100"
+                />
+              </TooltipContainerIcon>
+              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />
+              /> */}
+              <TooltipFilterIcon handleFilter={handleFilter} />
             </div>
           </div>
         </div>

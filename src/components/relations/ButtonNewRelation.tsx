@@ -25,7 +25,7 @@ export default function ButtonNewRelation({token, user, nodes,
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
           {newRelation && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
               <NewRelation showForm={handleClick} token={token} 
                           nodes={nodes} glossaries={glossaries}
                           descGlossaries={descGlossaries} />

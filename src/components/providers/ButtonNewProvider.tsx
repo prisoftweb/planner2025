@@ -10,7 +10,7 @@ export default function ButtonNewProvider({token, id}: {token:string, id:string}
     <>
       <Button type="button" onClick={() => setNewProvider(true)}>Nuevo</Button>
         {newProvider && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
             <NewProvider showForm={setNewProvider} token={token} id={id} user={id} />
           </div>
         )}

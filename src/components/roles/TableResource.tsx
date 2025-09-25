@@ -8,6 +8,7 @@ import { useState } from "react";
 import NewRoute from "./NewRoute";
 import NewSubPath from "./NewSubPath";
 import NewComponent from "./NewComponent";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 export default function TableResource({data, token, option}:
   {data:ResourceTable[], token:string, option:number}){
@@ -53,10 +54,14 @@ export default function TableResource({data, token, option}:
       id: 'accion',
       cell: ({row}) => (
         <div className="flex">
-          <TrashIcon className="text-red-500 w-6 h-6" />
-          <PencilSquareIcon className="text-slate-500 w-6 h-6 cursor-pointer" 
-            onClick={() => updateResource(row.original)}
-          />
+          <TooltipContainerIcon label="Eliminar">
+            <TrashIcon className="text-red-500 w-6 h-6 hover:bg-blue-100" />
+          </TooltipContainerIcon>
+          <TooltipContainerIcon label="Modificar">
+            <PencilSquareIcon className="text-slate-500 w-6 h-6 cursor-pointer hover:bg-blue-100" 
+              onClick={() => updateResource(row.original)}
+            />
+          </TooltipContainerIcon>
         </div>
       ),
       enableSorting:false,

@@ -4,6 +4,7 @@ import Table from "@/components/Table";
 import Link from "next/link";
 import { TreeTable } from "@/interfaces/Roles";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 export default function TableTree({data, token, idTree}:
   {data:TreeTable[], token:string, idTree:string}){
@@ -36,7 +37,9 @@ export default function TableTree({data, token, idTree}:
       cell: ({row}) => (
         <div className="flex items-center">
           <div className={`w-6 h-6 ${row.original.status? 'bg-green-500': 'bg-red-500'}`}></div>
-          <TrashIcon className="text-red-500 w-6 h-6" />
+          <TooltipContainerIcon label="Eliminar">
+            <TrashIcon className="text-red-500 w-6 h-6 hover:bg-blue-100 cursor-pointer" />
+          </TooltipContainerIcon>
         </div>
       ),
       enableSorting:false,

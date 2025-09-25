@@ -113,7 +113,7 @@ export default function ContainerClient({token, optClients, optCategories,
           <div>
             <div className="flex gap-x-3 items-center print:hidden">
               <TooltipContainerIcon label="Tabla">
-                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:text-red-300 print:hidden hover:bg-blue-100" 
+                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
                   onClick={() => setIsTable(true)}
                 />
               </TooltipContainerIcon>

@@ -14,6 +14,7 @@ import WithOut from "@/components/WithOut";
 import SearchInTable from "@/components/SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
+import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -179,9 +180,11 @@ export default async function Page() {
           <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap lg:flex-nowrap">
             <div className="flex items-center gap-x-3 w-full max-w-96">
               <Link href={'/'}>
-                <div className="p-1 border border-slate-400 bg-white rounded-md">
-                  <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
-                </div>
+                <TooltipContainerIcon label="Regresar">
+                  <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                    <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+                  </div>
+                </TooltipContainerIcon>
               </Link>
               <p className="text-xl ml-4 font-medium">Arbol</p>
             </div>

@@ -12,7 +12,7 @@ export default function ButtonNewBudget({ token, handleNewBudget, openNewBudget,
     <>
       <Button type="button" onClick={() => handleNewBudget(true)}>Nuevo</Button>
           {openNewBudget && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
               <NewBudgetCostCenter closeForm={handleNewBudget} user={user}
                 costoCenters={costoCenters} token={token}  id={id}/>
             </div>

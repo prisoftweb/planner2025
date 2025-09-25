@@ -300,7 +300,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
         selEstimate={handleSelEstimate} pageProject={pageProject} />
 
       {openNewStimate && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
             updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
             porcentajeAdvange={percentajeAdvance} advange={advance} />
@@ -308,7 +308,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
       )}
 
       {openNewInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
             updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
         </div>

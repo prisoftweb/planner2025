@@ -262,7 +262,7 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
     <>
       <div className="flex justify-end my-5">
         {isFilter && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
             <Filtering showForm={setIsFilter} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optCompanies={optCompanies} />

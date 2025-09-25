@@ -16,7 +16,7 @@ export default function ButtonNewClient({token, id, tags}: {token:string, id:str
     <>
       <Button type="button" onClick={() => setNewClient(true)}>Nuevo</Button>
         {newClient && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+          <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
             <NewClient tags={tags} showForm={handleClick} id={id} token={token} />
           </div>
         )}

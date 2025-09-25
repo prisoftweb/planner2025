@@ -77,21 +77,21 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
     <>
       {button}
       {newType && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <NewStatus showForm={setNewType} token={token} opt={opt}
                   catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
                   glosariesOptions={glosariesOptions} insertFunction={InsertTypeInCatalog} />
         </div>
       )}
       {newCategory && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <NewStatus showForm={setNewCategory} token={token} opt={opt}
                   catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
                   glosariesOptions={glosariesOptions} insertFunction={InsertCategoryInCatalog} />
         </div>
       )}
       {newStatus && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <NewStatus showForm={setNewStatus} token={token} opt={opt}
                   catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
                   glosariesOptions={glosariesOptions} insertFunction={InsertConditionInCatalog} />

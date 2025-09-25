@@ -129,7 +129,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   
   return(
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+      <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
         {/* top-16 */}
         <form className="z-10 w-full max-w-5xl absolute bg-white space-y-5 p-5 right-0"
           style={{height: `${heightPage}px`}}

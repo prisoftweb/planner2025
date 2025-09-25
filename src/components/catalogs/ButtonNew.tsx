@@ -11,7 +11,7 @@ export default function ButtonNew({token, catalog}: {token:string, catalog: (Cat
     <>
       <Button type="button" onClick={() => setNewCollection(true)}>Nuevo</Button>
           {newCollection && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
               <NewCatalog showForm={setNewCollection} 
                                   token={token} catalog={catalog} />
             </div>

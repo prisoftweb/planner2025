@@ -255,7 +255,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       </div>
       <Table columns={columns} data={dataTable} placeH="buscar estimacion" initialColumns={initialVisibilityColumns} />
       {isFilter && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
                                 FilterData={handleFilterData} maxAmount={maxAmount} optProjects={optProjects}  />
         </div>

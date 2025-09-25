@@ -10,7 +10,7 @@ export default function ButtonNew({token}: {token:string}){
     <>
       <Button type="button" onClick={() => setNewCompany(true)}>Nuevo</Button>
           {newCompany && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
               <NewCompany showForm={setNewCompany} token={token} />
             </div>
           )}

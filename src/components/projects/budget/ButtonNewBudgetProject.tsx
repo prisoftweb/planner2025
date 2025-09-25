@@ -16,7 +16,7 @@ export default function ButtonNewBudgetProject({token, user, projects}:
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
           {newProject && (
-            <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40">
+            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
               <NewBudgetProject showForm={handleNewProject}
                             token={token} projects={projects} user={user} />
             </div>
