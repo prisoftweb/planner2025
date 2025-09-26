@@ -25,7 +25,7 @@ type Props= {
   optTypes: Options[], 
   optConditions: Options[], 
   isFilter:boolean, 
-  setIsFilter:Function, 
+  setIsFilter:(value: boolean) => void, 
   isTable:boolean, 
   isHistory?:boolean,
   user: UsrBack

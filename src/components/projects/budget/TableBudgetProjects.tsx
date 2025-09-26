@@ -21,7 +21,7 @@ type Params = {
   optConditions: Options[], 
   optProjects: Options[], 
   isFilter:boolean, 
-  setIsFilter:Function, 
+  setIsFilter:(value: boolean) => void, 
   isTable:boolean
 }
 

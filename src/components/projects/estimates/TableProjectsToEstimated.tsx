@@ -15,7 +15,7 @@ import { RemoveProject } from "@/app/api/routeProjects";
 export default function TableProjectsToEstimate({token, optConditions, isFilter, 
                           setIsFilter, isTable, projects, data, optCategories, optTypes}:
                         {token:string, optConditions: Options[], 
-                          isFilter:boolean, setIsFilter:Function, 
+                          isFilter:boolean, setIsFilter:(value: boolean) => void, 
                           isTable:boolean, projects: IProjectWithEstimateMin[], data: ProjectsTable[], 
                           optCategories: Options[], optTypes: Options[]}){
   

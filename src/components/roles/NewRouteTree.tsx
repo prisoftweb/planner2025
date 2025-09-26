@@ -1,7 +1,7 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
@@ -10,9 +10,10 @@ import AddRoutes from "./AddElements"
 import { useState, useEffect } from "react"
 import { insertResourceTree } from "@/app/api/routeRoles"
 import { useRef } from "react"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type Props = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   optResources:Options[], 
   optRoutes:Options[], 
@@ -137,8 +138,9 @@ export default function NewRouteTree({showForm, token, optResources,
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando rutas" 
           title="Agregar ruta a nuevo arbol"
         />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div>
           <Label><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Recurso</p></Label>

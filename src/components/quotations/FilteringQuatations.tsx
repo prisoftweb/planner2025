@@ -1,6 +1,6 @@
 'use client'
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "../SelectMultipleReact"
 import { Options } from "@/interfaces/Common";
@@ -9,9 +9,10 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 import { useOptionsQuotations } from "@/app/store/QuotationStates"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
 export default function FilteringQuatations({showForm, FilterData, maxAmount }: 
-  {showForm:Function, FilterData:Function, maxAmount:number }){
+  {showForm:(value: boolean) => void, FilterData:Function, maxAmount:number }){
 
   const {optClients, optConditions} = useOptionsQuotations();
   
@@ -80,8 +81,9 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount }:
                 <p className="text-gray-500 text-sm">Filtra cotizaciones por diferentes caracteristicas</p>
               </div>
             </div>
-            <XMarkIcon className="w-8 h-8 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+            {/* <XMarkIcon className="w-8 h-8 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+            <TooltipCloseIcon handleClose={showForm} />
           </div>
           
           <div className="">

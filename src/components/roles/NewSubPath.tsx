@@ -2,7 +2,7 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -10,9 +10,10 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { createRoute, updateRoute } from "@/app/api/routeRoles"
 import { Resource } from "@/interfaces/Roles"
 import { useRef } from "react"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 export default function NewSubPath({showForm, token, route}: 
-  {showForm:Function, token:string, route:Resource}){
+  {showForm:(value: boolean) => void, token:string, route:Resource}){
 
   const refRequest = useRef(true);
   const formik = useFormik({
@@ -84,8 +85,9 @@ export default function NewSubPath({showForm, token, route}:
           <HeaderForm img="/img/route.svg" subtitle="Agregar nueva ruta de hoja de segmento" 
             title="Agregar nueva ruta"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div>
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>

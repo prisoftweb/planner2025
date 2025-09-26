@@ -1,11 +1,12 @@
 import HeaderForm from "@/components/HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { ProjectMin } from "@/interfaces/Projects";
 import SelectBudgetProject from "./SelectBudgetProject";
 import NavBudgetStepper from "./NavBudgetStepper";
 import { useNewBudget } from "@/app/store/budgetProject";
 import AddCostCenter from "./AddCostCenter";
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 
 export default function NewBudgetProject({token, showForm, user, projects}: 
   {token:string, showForm:Function, user:string, projects: ProjectMin[] }){
@@ -53,8 +54,9 @@ export default function NewBudgetProject({token, showForm, user, projects}:
           <HeaderForm img="/img/projects.jpg" subtitle="Selecciona el centro de costos y el monto del presupuesto" 
             title="Nuevo presupuesto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
+          <TooltipCloseIcon handleClose={closeForm} />
         </div>
         <NavBudgetStepper />
         {component}

@@ -4,7 +4,7 @@ import TableBudgetProjects from "./TableBudgetProjects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import { ProjectMin } from "@/interfaces/Projects"
-import { GiSettingsKnobs } from "react-icons/gi"
+// import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import SearchInTable from "@/components/SearchInTable"

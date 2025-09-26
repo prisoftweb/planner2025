@@ -38,19 +38,37 @@ export default async function Page() {
   // let projects: Options[] = await getProjectsLV(token);
   // const numEvaluacion = await getLenghtProjectsEvaluacion(token);
 
+  // const [amountProjects, listProjectsdate, projectsClient, projectsSegment, projectsStatus,
+  //   projectsProgress, listProjectsnotCompleted, projectsandTypes, projectsTop10,
+  //   projectsTotalCost, configMin, projects, numEvaluacion] = await Promise.all([
+  //     getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []),
+  //     getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []),
+  //     getConfigMin(token),
+  //     getProjectsLV(token),
+  //     getLenghtProjectsEvaluacion(token)
+  //   ]);
+
   const [amountProjects, listProjectsdate, projectsClient, projectsSegment, projectsStatus,
     projectsProgress, listProjectsnotCompleted, projectsandTypes, projectsTop10,
     projectsTotalCost, configMin, projects, numEvaluacion] = await Promise.all([
-      getDashboardProjectsAmount(token, '2024-01-01', '2024-10-30', []),
-      getDashboardListProjectsByDate(token, '2024-01-01', '2024-10-30', []),
-      getDashboardProjectsByClient(token, '2024-01-01', '2024-10-30', []),
-      getDashboardProjectsBySEGMENT(token, '2024-01-01', '2024-10-30', []),
-      getDashboardProjectsByESTATUS(token, '2024-01-01', '2024-10-30', []),
-      getDashboardProjectsByPROGRESS(token, '2024-01-01', '2024-10-30', []),
-      getDashboardListProjectsNotComplete(token, '2024-01-01', '2024-10-30', []),
-      getDashboardByProjectAndType(token, '2024-01-01', '2024-10-30', []),
-      getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []),
-      getDashboardProjectTotalCost(token, '2024-01-01', '2024-10-30', []),
+      getDashboardProjectsAmount(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardListProjectsByDate(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectsByClient(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectsBySEGMENT(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectsByESTATUS(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectsByPROGRESS(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardListProjectsNotComplete(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardByProjectAndType(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardListProjectsTop10(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectTotalCost(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getConfigMin(token),
       getProjectsLV(token),
       getLenghtProjectsEvaluacion(token)

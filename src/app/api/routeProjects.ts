@@ -183,8 +183,8 @@ export async function getAllProjectsWithClientLV(auth_token:string, client:strin
 export async function CreateProject(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(data));
+    // console.log(url);
+    // console.log(JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -258,8 +258,8 @@ export async function GetProjectMin(auth_token:string, id:string) {
 export async function UpdateProject(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(data))
+    // console.log(url);
+    // console.log(JSON.stringify(data))
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -394,7 +394,7 @@ export async function getDashboardListProjects(auth_token:string, dateStart: str
 
 export async function getDashboardProjectsByClient(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYCLIENT/${dateStart}/${dateEnd}`;
-  console.log('url > ', url);
+  // console.log('url > ', url);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -410,7 +410,7 @@ export async function getDashboardProjectsByClient(auth_token:string, dateStart:
       }, 
       // data: data
     })
-    console.log('res route => ', res);
+    // console.log('res route => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -457,8 +457,8 @@ export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart
   const data = {
     project: prj.substring(1)
   }
-  console.log('url estatus => ', url);
-  console.log('data estatus => ', JSON.stringify(data));
+  // console.log('url estatus => ', url);
+  // console.log('data estatus => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -467,7 +467,7 @@ export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart
       },
       // data: data
     })
-    console.log('res status => ', res.data.data.stats);
+    // console.log('res status => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -649,6 +649,8 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
   const data = {
     project: prj.substring(1)
   }
+  console.log('url top10 => ', url);
+  console.log('data => ', data);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -657,6 +659,7 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
       },
       // data: data
     })
+    console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -670,13 +673,13 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
 export async function getDashboardProjectByBudgetControl(auth_token:string, id:string, anio:number) {
   const d = new Date(anio, 0, 1);
   const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
-  console.log('d2 => ', new Date(d).toLocaleDateString());
-  console.log('d fin => ', d_ini);
+  // console.log('d2 => ', new Date(d).toLocaleDateString());
+  // console.log('d fin => ', d_ini);
 
   const d2 = new Date(anio, 11, 31);
-  console.log('d2 => ', new Date(d2).toLocaleDateString());
+  // console.log('d2 => ', new Date(d2).toLocaleDateString());
   const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
-  console.log('d fin => ', d_fin);
+  // console.log('d fin => ', d_fin);
 
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/${d_ini}/${d_fin}`;
   // //console.log('url control presupuestal => ', url);
@@ -971,13 +974,13 @@ export async function getProjectsWithOutEstimateMin(auth_token:string) {
 export async function getProjectContractualControl(auth_token:string, project:string) {
   const d = new Date(2025, 0, 1);
   const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
-  console.log('d2 => ', new Date(d).toLocaleDateString());
-  console.log('d fin => ', d_ini);
+  // console.log('d2 => ', new Date(d).toLocaleDateString());
+  // console.log('d fin => ', d_ini);
 
   const d2 = new Date(2025, 11, 31);
-  console.log('d2 => ', new Date(d2).toLocaleDateString());
+  // console.log('d2 => ', new Date(d2).toLocaleDateString());
   const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
-  console.log('d fin => ', d_fin);
+  // console.log('d fin => ', d_fin);
 
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/${d_ini}/${d_fin}`;
   try {
@@ -1071,8 +1074,8 @@ export async function GetCostsAccumByProjectMin(auth_token:string) {
 export async function UpdateGuaranteeFoundProject(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/updateProjectAndManyGuaranteeFunds/${id}`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(data))
+    // console.log(url);
+    // console.log(JSON.stringify(data))
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -1092,8 +1095,8 @@ export async function UpdateGuaranteeFoundProject(auth_token:string, id:string, 
 export async function UpdatePaymentGuaranteeFoundProject(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/updateProjectAndManyGuaranteeFundsScheduledPayment/${id}`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(data))
+    // console.log(url);
+    // console.log(JSON.stringify(data))
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,

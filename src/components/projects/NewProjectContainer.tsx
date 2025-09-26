@@ -1,11 +1,12 @@
 import { useRegFormContext } from "./StepperProjectProvider";
 import HeaderForm from "../HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerProjectStepper from "./ContainerProjectStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
 import { Options } from "@/interfaces/Common";
 import { useState, useEffect } from "react";
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
 type Props = {
   token:string, 
@@ -91,8 +92,9 @@ export default function NewProjectContainer({token, showForm, optClients,
           <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 
             title="Nuevo proyecto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
+          <TooltipCloseIcon handleClose={closeForm} />
         </div>
         <ContainerProjectStepper token={token} optClients={optClients} 
             optCategories={optCategories} optTypes={optTypes} showForm={showForm}

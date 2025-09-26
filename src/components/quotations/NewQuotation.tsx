@@ -1,6 +1,6 @@
 'use client'
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Input from "../Input"
 import CurrencyInput from "react-currency-input-field"
 import SelectReact from "../SelectReact"
@@ -18,11 +18,14 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 import { useOptionsQuotations } from "@/app/store/QuotationStates"
 
+import ContainerSideNav from "../ContainerSideNav"
+
 export default function NewQuotation({showForm, token, usr, updateQuotations}: 
-  {showForm:Function, token:string, usr:string, updateQuotations: Function}){
+  {showForm:(value: boolean) => void, token:string, usr:string, updateQuotations: Function}){
 
   const {optClients, optUsers, optVats, optCategories, optTypes} = useOptionsQuotations();
 
@@ -244,8 +247,14 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   return(//top-16
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+      {/* <div className="fixed inset-0 bg-black bg-opacity-40 z-40">
         <form className="z-10 absolute w-full max-w-md bg-white space-y-5 p-5 right-0" 
+            style={{height: `${heightPage}px`}}>
+          
+        </form>
+      </div> */}
+      <ContainerSideNav width="w-full max-w-md">
+        <div 
             style={{height: `${heightPage}px`}}>
           <div className="flex justify-between">
             <div className="flex mt-2 items-center">
@@ -255,8 +264,9 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
                 <p className="text-gray-500 text-sm">Ingresa datos de la nueva cotizacion</p>
               </div>
             </div>
-            <XMarkIcon className="w-8 h-8 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+            {/* <XMarkIcon className="w-8 h-8 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+            <TooltipCloseIcon handleClose={showForm} />
           </div>
 
           <div className="flex gap-x-5 justify-end my-5 pr-3">
@@ -463,8 +473,8 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
               <Button type="button" onClick={() => createNewQuotation() } >Guardar</Button>
             </div>
           </div>
-        </form>
-      </div>
+        </ div>
+      </ContainerSideNav>
     </>
   )
 }

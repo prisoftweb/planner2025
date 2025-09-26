@@ -98,30 +98,33 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
         </div>
       </div>
       <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3'>
-        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
+        {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
               <p className='text-xs  text-slate-700 mt-2 px-2 font-semibold'>PROYECTOS TODOS</p>
               <p className='text-3xl text-black mt-3 px-2 font-bold'>{amountProjects[0].projects}</p>
             </>
           )}
-        </div>
-        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
+        </div> */}
+        <CardDashboard title="PROYECTOS TODOS" amount={amountProjects.length > 0? amountProjects[0].projects: 0 } />
+        {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
               <p className='text-xs text-slate-600 mt-2 px-2 font-semibold'>PROYECTOS EN EJECUCION</p>
               <p className='text-3xl text-black mt-3 px-2 font-bold'>{activeProjects}</p>
             </>
           )}
-        </div>
-        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
+        </div> */}
+        <CardDashboard title="PROYECTOS EN EJECUCION" amount={activeProjects } />
+        {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
             <p className='text-xs text-slate-600 mt-2 px-2 font-semibold'>PROYECTOS EN EVALUACION</p>
               <p className='text-3xl text-black mt-3 px-2 font-bold'>{numEvaluado}</p>
             </>
           )}
-        </div>
+        </div> */}
+        <CardDashboard title="PROYECTOS EN EVALUACION" amount={numEvaluado } />
         <div className="w-full border border-slate-300 bg-white rounded-xl p-3 h-full">
           <p className="text-xs  text-slate-600 mt-2 px-2 font-semibold">
             AVANCE GENERAL
@@ -139,6 +142,15 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
         </div>
 
       </div>
+    </div>
+  )
+}
+
+export function CardDashboard ({title, amount}: {title: string, amount: number| string}){
+  return(
+    <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
+      <p className='text-xs text-slate-600 mt-2 px-2 font-semibold'>{title}</p>
+      <p className='text-3xl text-black mt-3 px-2 font-bold'>{amount}</p>
     </div>
   )
 }

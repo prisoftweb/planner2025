@@ -1,11 +1,12 @@
 import { useRegFormContext } from "./StepperProvider";
 import HeaderForm from "../HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerStepper from "./ContainerStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
 import { useState, useEffect } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
 export default function NewProviderContainer({token, id, showForm, user}: {token:string, id:string, showForm:Function, user: string}){
   const [state] = useRegFormContext();
@@ -83,8 +84,9 @@ export default function NewProviderContainer({token, id, showForm, user}: {token
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"
         />
-        <XMarkIcon className="w-6 h-6 text-slate-500
-          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+        {/* <XMarkIcon className="w-6 h-6 text-slate-500
+          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
+        <TooltipCloseIcon handleClose={closeForm} />
       </div>
       <ContainerStepper token={token} id={id} user={user} />
     </div>

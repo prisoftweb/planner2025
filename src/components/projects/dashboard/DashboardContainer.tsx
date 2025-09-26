@@ -153,7 +153,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           getDashboardProjectsByESTATUS(token, dateS, dateE, []),
           getDashboardProjectsByPROGRESS(token, dateS, dateE, []),
           getDashboardListProjectsNotComplete(token, dateS, dateE, []),
-          getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []),
+          getDashboardListProjectsTop10(token, dateS, dateE, []),
           getDashboardProjectTotalCost(token, dateS, dateE, []),
           getConfigMin(token)
         ]); 
@@ -221,7 +221,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           getDashboardProjectsByESTATUS(token, dateS, dateE, prj),
           getDashboardProjectsByPROGRESS(token, dateS, dateE, prj),
           getDashboardListProjectsNotComplete(token, dateS, dateE, prj),
-          getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', prj),
+          getDashboardListProjectsTop10(token, dateS, dateE, prj),
           getDashboardProjectTotalCost(token, dateS, dateE, prj),
           getConfigMin(token)
         ]);
@@ -518,8 +518,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       <HeaderDashboardPrjPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
         projectsTotalCost={stateTotalCost} configMin={stateConfiMin} 
         activeProjects={dataProjectsProgress.length} numEvaluado={numEvaluado} />
-      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
-        <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap md:flex-nowrap">
+        {/* <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        <div className="w-full md:w-2/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>AVANCE DE PROYECTOS ACTIVOS {dataProjectsProgress.length}</p>
           </div>
@@ -529,7 +530,8 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           ))}
         </div>
         
-        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>ESTATUS</p>
           </div>
@@ -540,9 +542,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
       </div>
 
-      <div className="mt-5 gap-x-5 gap-y-5 flex flex-wrap md:flex-nowrap">
+      <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap md:flex-nowrap">
 
-        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR SEGMENTO</p>
           </div>
@@ -550,14 +553,16 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
             categories={categoriesSegment}  />
         </div>
 
-        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>TOP 10 PROYECTOS</p>
           </div>
           <LineChartComponent dataProjectsTop={dataProjectsTop} colors={[colors[colorRandom2]]} />
         </div>
 
-        <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5">
+        {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR Cliente</p>
           </div>
