@@ -97,56 +97,45 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
           </div>
         </div>
       </div>
-      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-3'>
-        <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
-            style={{backgroundColor: '#8EA7FF'}}>
+      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3'>
+        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
-              <p className='text-xs text-center'>PROYECTOS TODOS</p>
-              <p className='text-3xl text-center'>{amountProjects[0].projects}</p>
+              <p className='text-xs  text-slate-700 mt-2 px-2 font-semibold'>PROYECTOS TODOS</p>
+              <p className='text-3xl text-black mt-3 px-2 font-bold'>{amountProjects[0].projects}</p>
             </>
           )}
         </div>
-        <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
-            style={{backgroundColor: 'red'}}>
+        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
-              <p className='text-3xl text-center'>{activeProjects}</p>
-              <p className='text-xs text-center'>PROYECTOS EN EJECUCION</p>
+              <p className='text-xs text-slate-600 mt-2 px-2 font-semibold'>PROYECTOS EN EJECUCION</p>
+              <p className='text-3xl text-black mt-3 px-2 font-bold'>{activeProjects}</p>
             </>
           )}
         </div>
-        <div className='w-full text-black border border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
-            style={{backgroundColor: 'white'}}>
+        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
-              <p className='text-3xl text-center'>{numEvaluado}</p>
-              <p className='text-xs text-center'>PROYECTOS EN EVALUACION</p>
+            <p className='text-xs text-slate-600 mt-2 px-2 font-semibold'>PROYECTOS EN EVALUACION</p>
+              <p className='text-3xl text-black mt-3 px-2 font-bold'>{numEvaluado}</p>
             </>
           )}
         </div>
-        <div className="flex items-center bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            justify-center gap-x-5">
-          <ProgressCircle value={Number(progress)}>
-            <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
-              {progress}%
-            </span>
-          </ProgressCircle>
-          <div>
-            <Tooltip closeDelay={0} delay={100} motionProps={props} 
-                content={CurrencyFormatter({
-                  currency: 'USD',
-                  value: configMin[0].lastmeta.amount
-                })} 
-                className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                {MoneyFormatter(configMin[0].lastmeta.amount)}
-              </p>
-            </Tooltip>
-            <p className="text-sm text-gray-500 dark:text-gray-500">
-              AVANCE GENERAL
+        <div className="w-full border border-slate-300 bg-white rounded-xl p-3 h-full">
+          <p className="text-xs  text-slate-600 mt-2 px-2 font-semibold">
+            AVANCE GENERAL
+          </p>
+          <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              content={CurrencyFormatter({
+                currency: 'USD',
+                value: configMin[0].lastmeta.amount
+              })} 
+              className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
+            <p className="text-3xl text-black mt-3 px-2 font-bold">
+              {MoneyFormatter(configMin[0].lastmeta.amount)}
             </p>
-          </div>
+          </Tooltip>
         </div>
 
       </div>

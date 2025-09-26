@@ -12,9 +12,10 @@ import { createUserPhoto, createUser } from "@/app/api/routeUser"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
 import Select from 'react-select'
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 export default function NewUser({showForm, optionsDepartments, token, roles, addUser}: 
-  {showForm:Function, optionsDepartments:Options[], token:string, roles:Options[], addUser:Function}){
+  {showForm:(value: boolean) => void, optionsDepartments:Options[], token:string, roles:Options[], addUser:Function}){
   
   const [file, setFile] = useState<File>();
   const [department, setDepartment] = useState<string>(optionsDepartments[0].value);
@@ -124,8 +125,9 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
             <HeaderForm img="/nuevoIcono.jpg" subtitle="Creacion de nueva cuenta de usuario" 
               title="Nueva cuenta"
             />
-            <XMarkIcon className="w-6 h-6 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+            {/* <XMarkIcon className="w-6 h-6 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+            <TooltipCloseIcon handleClose={showForm} />
           </div>
           
           <div>

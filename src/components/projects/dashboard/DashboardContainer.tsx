@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react"
-import DonutChartComponent from "./DonutChartComponent"
+// import DonutChartComponent from "./DonutChartComponent"
+import { DonutStatusChartComponent } from "./DonutChartComponent"
 // import { BarChartComponent } from "./BarChartComponent"
 import PieChartComponent from "./PieChartComponent"
 import { ProgressBarComponent } from "./ProgressBarComponent"
@@ -30,6 +31,13 @@ from "@/interfaces/DashboardProjects";
 interface OptionsDashboard {
   label: string,
   costo: number
+}
+
+interface OptionsDashboardStatus {
+  label: string,
+  percentaje: number
+  total: number,
+  count: number
 }
 
 export interface DataProjectsByType {
@@ -379,13 +387,15 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   // const colorsBudgeted = ['green', 'red', 'blue'];
 
-  const dataProjectsStatus: OptionsDashboard[] = [];
+  const dataProjectsStatus: OptionsDashboardStatus[] = [];
   const categoriesStatus: string[] = [];
 
   stateProjectsStatus.map((prj) => {
     dataProjectsStatus.push({
-      costo: prj.porcentage,
-      label: prj.client
+      percentaje: prj.porcentage,
+      label: prj.client,
+      count: prj.quantity,
+      total: prj.totalAmount
     });
     categoriesStatus.push(prj.client);
   });
@@ -523,8 +533,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>ESTATUS</p>
           </div>
-          <DonutChartComponent data={dataProjectsStatus} colors={colors} category="costo"
-              categories={categoriesStatus}  />
+          {/* <DonutChartComponent data={dataProjectsStatus} colors={colors} category="costo"
+              categories={categoriesStatus}  /> */}
+          <DonutStatusChartComponent data={dataProjectsStatus} colors={colors} category="percentaje"
+            categories={categoriesStatus}  />
         </div>
       </div>
 

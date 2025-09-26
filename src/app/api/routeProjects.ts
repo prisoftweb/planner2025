@@ -467,6 +467,7 @@ export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart
       },
       // data: data
     })
+    console.log('res status => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
