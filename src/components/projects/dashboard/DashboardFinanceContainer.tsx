@@ -299,21 +299,24 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
       <HeaderDashboardPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
         projectsTotalCost={stateTotalCost} configMin={stateConfiMin} activeProjects={dataProjectsProgress.length} />
 
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+      <div className="mt-5 bg-white border border-slate-300 rounded-xl  p-5">
         <div className="flex mb-3 gap-x-2 justify-between">
           <p>TOTAL PROJECTS   | Montos de proyectos</p>
         </div>
         <BarChartComponent categories={['costo']} colors={[colors[colorRandom]]} data={dataListProjects} />
       </div>
 
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+      <div className="mt-5 bg-white border border-slate-300  rounded-xl p-5">
         <div className="mb-3">
           <p>COSTO POR TIPO</p>
         </div>
         <BarChartTreeInOne data={resParse} />
       </div>
 
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
+      <div className="mt-5 bg-white border border-slate-300 rounded-xl  p-5">
         <div className="mb-3">
           <p>CONTROL PRESUPUESTAL</p>
         </div>

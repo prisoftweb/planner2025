@@ -1,8 +1,68 @@
 'use client'
 import { DonutChart, Legend } from '@tremor/react';
+import { MoneyFormatter } from '@/app/functions/Globals';
 
 const valueFormatter = (number: number) =>
   `${Intl.NumberFormat('us').format(number).toString()} %`;
+
+// export default function PieChartComponent({data, colors, categories, category}: 
+//     {data:any, colors: string[], categories: string[], category: string}) {
+  
+//   type CustomTooltipTypeDonut = {
+//     payload: any;
+//     active: boolean | undefined;
+//     label: any;
+//   };
+
+//   const customTooltip = (props: CustomTooltipTypeDonut) => {
+//     const { payload, active } = props;
+//     if (!active || !payload) return null;
+//     const categoryPayload = payload?.[0];
+//     if (!categoryPayload) return null;
+//     return (
+//       <div className="w-72 rounded-tremor-default border border-tremor-border p-2 
+//           text-tremor-default shadow-tremor-dropdown bg-slate-600 z-50">
+//         <div className="flex flex-1 space-x-2.5 bg-slate-600 z-50">
+//           <div
+//             className={`flex w-1.5 flex-col bg-${categoryPayload?.color}-500 rounded`}
+//           />
+//           <div className="w-full text-white">
+//             <div className="flex items-center justify-between space-x-8">
+//               <p className="whitespace-nowrap text-right ">
+//                 {categoryPayload.name}
+//               </p>
+//               <p className="whitespace-nowrap text-right font-medium ">
+//                 {categoryPayload.value}%
+//               </p>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   };
+  
+//   return (
+//     <>
+//       <div className="flex md:flex-wrap items-center justify-center space-x-6">
+//         <DonutChart
+//           data={data}
+//           category={category}
+//           index='label'
+//           variant="pie"
+//           valueFormatter={valueFormatter}
+//           colors={colors}
+//           className="w-44 h-44"
+//           customTooltip={customTooltip}
+//         />
+//         <Legend
+//           categories={categories}
+//           colors={colors}
+//           className="max-w-xs z-0"
+//         />
+//       </div>
+//     </>
+//   );
+// }
 
 export default function PieChartComponent({data, colors, categories, category}: 
     {data:any, colors: string[], categories: string[], category: string}) {
@@ -18,6 +78,9 @@ export default function PieChartComponent({data, colors, categories, category}:
     if (!active || !payload) return null;
     const categoryPayload = payload?.[0];
     if (!categoryPayload) return null;
+
+    // console.log('categorypayload => ', categoryPayload);
+
     return (
       <div className="w-72 rounded-tremor-default border border-tremor-border p-2 
           text-tremor-default shadow-tremor-dropdown bg-slate-600 z-50">
@@ -36,6 +99,20 @@ export default function PieChartComponent({data, colors, categories, category}:
             </div>
           </div>
         </div>
+
+        <div className="flex flex-1 space-x-2.5 bg-slate-600 z-50">
+          <div className="w-full text-white">
+            <div className="flex items-center justify-between space-x-8">
+              <p className="whitespace-nowrap text-right ">
+                {categoryPayload.payload.payload.count} Proyectos
+              </p>
+              <p className="whitespace-nowrap text-right font-medium ">
+                {MoneyFormatter(categoryPayload.payload.payload.total)}
+              </p>
+            </div>
+          </div>
+        </div>
+
       </div>
     );
   };

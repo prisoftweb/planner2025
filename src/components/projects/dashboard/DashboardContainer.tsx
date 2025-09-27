@@ -9,9 +9,11 @@ import { ProgressBarComponent } from "./ProgressBarComponent"
 import HeaderDashboardPrjPage from "./HeaderDashboardPrjPage"
 // import { BarChartTreeInOne } from "./BarChartTreeInOne"
 import { LineChartComponent } from "./LineChartComponent"
-import NewDonutChartComponent from "./NewDonutChartComponent"
+// import NewDonutChartComponent from "./NewDonutChartComponent"
+import { DonutChartComponentWithDescription } from "./NewDonutChartComponent"
 import { Options } from "@/interfaces/Common"
 import { showToastMessageError } from "@/components/Alert"
+import { MoneyFormatter } from "@/app/functions/Globals"
 
 import { getDashboardProjectsAmount, getDashboardListProjects, 
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
@@ -400,13 +402,16 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     categoriesStatus.push(prj.client);
   });
 
-  const dataProjectsSegment: OptionsDashboard[] = [];
+  // const dataProjectsSegment: OptionsDashboard[] = [];
+  const dataProjectsSegment: OptionsDashboardStatus[] = [];
   const categoriesSegment: string[] = [];
 
   stateProjectsSegment.map((prj) => {
     dataProjectsSegment.push({
-      costo: prj.porcentage,
-      label: prj.client
+      percentaje: prj.porcentage,
+      label: prj.client,
+      count: prj.quantity,
+      total: prj.totalAmount
     });
     categoriesSegment.push(prj.client);
   });
@@ -422,6 +427,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
   const values: number[] = [];
   const titles: string[] = [];
+  const descriptions: string[] = [];
   // const colorsDonutClientChart: string[] = ['rgb(255, 99, 132)', 'rgb(54, 162, 235)',
   //   'rgb(255, 205, 86)', 'rgb(255, 132, 99)', 'rgb(54, 235, 162)', 'rgb(255, 86, 205)',
   //   'rgb(132, 99, 255)', 'rgb(235, 162, 54)', 'rgb(86, 205, 255)']
@@ -429,6 +435,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   stateProjectsClient.map((prj) => {
     titles.push(prj.client);
     values.push(prj.porcentage);
+    descriptions.push(MoneyFormatter(prj.totalAmount));
   });
 
   const dataProjectsClient: DonutChartJS = {
@@ -549,7 +556,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           <div className="flex mb-3 gap-x-2 justify-between">
             <p>PROYECTOS POR SEGMENTO</p>
           </div>
-          <PieChartComponent data={dataProjectsSegment} colors={colorSegments} category="costo"
+          <PieChartComponent data={dataProjectsSegment} colors={colorSegments} category="percentaje"
             categories={categoriesSegment}  />
         </div>
 
@@ -564,9 +571,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
         <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between">
-            <p>PROYECTOS POR Cliente</p>
+            <p>PROYECTOS POR ClIENTE</p>
           </div>
-          <NewDonutChartComponent data={dataProjectsClient} />
+          {/* <NewDonutChartComponent data={dataProjectsClient} /> */}
+          <DonutChartComponentWithDescription data={dataProjectsClient} descriptions={descriptions} />
         </div>
       </div>
 
@@ -641,3 +649,21 @@ interface DataControlBudgeted {
 //   });
 //   return res;
 // }
+
+// import { Doughnut } from 'react-chartjs-2';
+
+// const titles=['prj1', 'prj2'];
+// const values=[123, 234];
+
+// const dataProjects = {
+//     labels: titles,
+//     datasets: [
+//       {
+//         label: 'Projectos',
+//         data: values,
+//         backgroundColor:[ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'],
+//         hoverOffset: 4
+//       }
+//     ]
+//   };
+  

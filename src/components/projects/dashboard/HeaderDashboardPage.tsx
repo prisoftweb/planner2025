@@ -93,9 +93,10 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
           </div>
         </div>
       </div>
-      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-5 gap-y-3'>
-        <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
-            style={{backgroundColor: '#8EA7FF'}}>
+      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-3'>
+        {/* <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
+            style={{backgroundColor: '#8EA7FF'}}> */}
+        <div className='w-full border border-slate-300 bg-white rounded-xl p-1 h-full'>
           {amountProjects.length > 0 && (
             <>
               <p className='text-lg'>{amountProjects[0].projects}</p>
@@ -105,8 +106,9 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </>
           )}
         </div>
-        <div className="flex items-center bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+        <div className="flex items-center bg-white border  border-slate-300 rounded-xl  p-1 
             justify-center gap-x-5">
+        {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-1 h-full'> */}
           <ProgressCircle value={Number(progress)}>
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
               {progress}%
@@ -128,8 +130,10 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </p>
           </div>
         </div>
-        <div className='w-full h-full border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}>
+        {/* <div className='w-full h-full border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+            flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}> */}
+        <div className='w-full h-full border  border-slate-300 p-1 
+            flex flex-col justify-center items-center rounded-xl' >
           {projectsTotalCost.length > 0 && (
             <>
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
@@ -156,8 +160,10 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </>
           )}
         </div>
-        <div className='w-full h-full bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-            flex flex-col justify-center items-center'>
+        {/* <div className='w-full h-full bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+            flex flex-col justify-center items-center'> */}
+        <div className='w-full h-full bg-white border  border-slate-300  p-1 
+            flex flex-col justify-center items-center rounded-xl'>
           {amountProjects.length > 0 && (
             <>
               <p className='text-xs'>UTILIDAD</p>
@@ -174,8 +180,10 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </>
           )}
         </div>
-        <div className='w-full h-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
-              flex flex-col justify-center items-center' style={{backgroundColor: '#FF9C89'}}>
+        {/* <div className='w-full h-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
+              flex flex-col justify-center items-center' style={{backgroundColor: '#FF9C89'}}> */}
+        <div className='w-full h-full border  border-slate-300  p-1 
+              flex flex-col justify-center items-center rounded-xl' >
           {amountProjects.length > 0 && (
             <>
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
@@ -184,18 +192,18 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                     value: amountProjects[0].totalAmount
                   })} 
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
-                <p className=' text-lg sm:text-xl'>
+                <p className=' text-lg sm:text-xl text-slate-900'>
                   {MoneyFormatter(amountProjects[0].totalAmount)}
                 </p>
               </Tooltip>
-              <p className='text-xs'>VENTA TOTAL</p>
+              <p className='text-xs text-slate-900'>VENTA TOTAL</p>
               <Tooltip closeDelay={0} delay={100} motionProps={props} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: amountProjects[0].totalAmountTotal
                   })} 
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
-                <p className=' text-lg sm:text-sm'>
+                <p className=' text-lg sm:text-sm text-slate-900'>
                   {MoneyFormatter(amountProjects[0].totalAmountTotal)}
                 </p>
               </Tooltip>

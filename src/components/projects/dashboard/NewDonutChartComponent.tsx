@@ -1,6 +1,6 @@
 'use client'
 import { Doughnut } from 'react-chartjs-2';
-import { Chart, ArcElement } from "chart.js";
+import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import 'chart.js/auto'; // ADD THIS
 Chart.register(ArcElement);
 import { useRef } from 'react';
@@ -10,7 +10,39 @@ export default function NewDonutChartComponent({data}: {data: DonutChartJS}) {
 
   const ref = useRef();
 
+  console.log('dat cahrt clia => ', data);
+
   return <Doughnut ref={ref} data={data} width={3} height={3} />
+}
+
+export function DonutChartComponentWithDescription({data, descriptions}: {data: DonutChartJS, descriptions:string[]}) {
+
+  const ref = useRef();
+
+  console.log('dat cahrt clia => ', data);
+
+  const options = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context:any) {
+            const index = context.dataIndex;
+            const label = context.label || '';
+            const value = context.raw;
+            const description = descriptions[index] || 'Sin descripción';
+
+            // Cada string es una línea en el tooltip
+            return [
+              `${label}: ${value}%`,       // Línea 1
+              `${description}`            // Línea 2
+            ];
+          },
+        },
+      },
+    },
+  };
+
+  return <Doughnut ref={ref} data={data} width={3} height={3} options={options} />
 }
 
 export const RenderChar = (): JSX.Element => {
