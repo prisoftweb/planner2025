@@ -1,5 +1,5 @@
 'use client'
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "@/components/Button"
 import Input from "@/components/Input"
 import Label from "@/components/Label"
@@ -17,9 +17,10 @@ import { BsPencil } from "react-icons/bs"
 import { Options } from "@/interfaces/Common"
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs"
 import SelectReact from "@/components/SelectReact"
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
 
 type Params={
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   project: OneProjectMin, 
   updateEstimates:Function, 
   user:string, token:string, 
@@ -235,8 +236,9 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
           <HeaderForm img="/img/estimates/estimates.svg" subtitle="Agrega los datos para la nueva estimacion" 
             title="Nueva estimacion"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <div className="bg-white p-3">

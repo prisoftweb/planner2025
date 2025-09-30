@@ -1,5 +1,5 @@
 import HeaderForm from "@/components/HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { ProjectMin } from "@/interfaces/Projects";
 import NavEstimateStepper from "./NavEstimateStepper";
@@ -9,6 +9,7 @@ import { createEstimate } from "@/app/api/routeEstimates";
 import FormNewEstimate from "./FormNewEstimate";
 import { TotalEstimatedByProject } from "@/interfaces/Estimate";
 import { getProjectsWithOutEstimateMin } from "@/app/api/routeProjects";
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 
 export default function NewEstimateStepper({token, showForm, user, updateProjects}: 
   {token:string, showForm:Function, user:string, updateProjects: () => Promise<void> }){
@@ -230,8 +231,9 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
           <HeaderForm img="/img/projects.jpg" subtitle="Selecciona projecto y agrega estimacion" 
             title="Nueva estimacion"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
+          <TooltipCloseIcon handleClose={closeForm} />
         </div>
         <NavEstimateStepper indexStepper={indexStepper} setIndexStepper={handleINdexStepper} />
         {component}

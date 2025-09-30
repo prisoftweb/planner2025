@@ -16,6 +16,7 @@ import RemoveElement from "../RemoveElement";
 import {IoMdCopy} from 'react-icons/io';
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props = {
   data:ExpensesTable[], 
@@ -566,12 +567,18 @@ export default function TableExpenses({data, token, expenses,
     <>
       <div className="flex justify-end my-5">
           {isFilter && (
-            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            <ContainerSideNav width="w-full max-w-md">
               <Filtering showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
                         />
-            </div>
+            </ContainerSideNav>
+            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            //   <Filtering showForm={handleIsFilter}  
+            //               FilterData={filterData} maxAmount={maxAmount} 
+            //               minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
+            //             />
+            // </div>
           )}
       </div>
       {view}

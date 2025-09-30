@@ -130,17 +130,17 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
         costsResumenType={costsByResumenType} dataCostsCatagory={dataCostsCategory} dataCostsConcept={dataCostsConcept} />
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5">
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-6">
+        <div className="bg-white border border-slate-300 py-5">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 px-5 pb-2">
             <p>CENTRO DE COSTOS</p>
             <p>Categorias</p>
           </div>
           <DonutChartt data={costsByCategory} colors={colors} category="costo"
               categories={categoriesCategories}  />
         </div>
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+        <div className="bg-white border border-slate-300 py-5">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 px-5 pb-2">
             <p>CENTRO DE COSTOS</p>
             <p>Conceptos</p>
           </div>
@@ -148,7 +148,7 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
               categories={categoriesConcepts}  />
         </div>
       </div>
-      <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
+      <div className="mt-5 bg-white border border-slate-300 py-5">
         <BarChartComponent categories={['costo']} colors={colors} data={costsByDay} />
       </div>
     </div>

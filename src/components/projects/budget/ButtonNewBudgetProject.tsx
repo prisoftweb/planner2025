@@ -4,6 +4,7 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import NewBudgetProject from "./NewBudgetProject";
 import { ProjectMin } from "@/interfaces/Projects";
+import ContainerSideNav from "@/components/ContainerSideNav";
 
 export default function ButtonNewBudgetProject({token, user, projects}: 
                           {token:string, user:string, projects:ProjectMin[]}){
@@ -16,10 +17,14 @@ export default function ButtonNewBudgetProject({token, user, projects}:
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
           {newProject && (
-            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            <ContainerSideNav width="w-full sm:max-w-4xl">
               <NewBudgetProject showForm={handleNewProject}
                             token={token} projects={projects} user={user} />
-            </div>
+            </ContainerSideNav>
+            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            //   <NewBudgetProject showForm={handleNewProject}
+            //                 token={token} projects={projects} user={user} />
+            // </div>
           )}
     </>
   )

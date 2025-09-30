@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Button from "../Button";
 import NewCostCenter from "./NewCostCenter";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function ButtonNew({token, id}: {token:string, id:string}){
   const [varNew, setVarNew] = useState<boolean>(false);
@@ -14,9 +15,12 @@ export default function ButtonNew({token, id}: {token:string, id:string}){
     <>
       <Button type="button" onClick={() => setVarNew(true)}>Nuevo</Button>
         {varNew && (
-          <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+          //   <NewCostCenter showForm={handleNew} token={token} costCenter={''} />
+          // </div>
+          <ContainerSideNav width="w-full max-w-lg">
             <NewCostCenter showForm={handleNew} token={token} costCenter={''} />
-          </div>
+          </ContainerSideNav>
         )}
     </>
   )

@@ -1,5 +1,5 @@
 'use client'
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 // import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
@@ -10,6 +10,7 @@ import DispersionCollectionStepper from "./DispersionCollectionStepper"
 // import { IInvoiceTable } from "@/interfaces/Invoices"
 import VoucherCollectionStepper from "./VoucherCollectionStepper"
 import HeaderForm from "../HeaderForm"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type TInvoiceStepper={
   folio: string,
@@ -31,7 +32,7 @@ type TInvoiceSend={
 }
 
 export default function AddNewCollectionComponent({showForm, user, token, updateCollections}: 
-  {showForm:Function, user:string, token:string, updateCollections:Function }) {
+  {showForm:(value: boolean) => void, user:string, token:string, updateCollections:Function }) {
   // const refRequest = useRef(true);
 
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
@@ -363,8 +364,9 @@ export default function AddNewCollectionComponent({showForm, user, token, update
           <HeaderForm img="/img/estimates/invoices.svg" subtitle={'Recuperacion de cartera, pagos de facturas '} 
             title={'Nuevo cobro'}
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <NavCollectionStepper index={step} setIndex={handleStep} />

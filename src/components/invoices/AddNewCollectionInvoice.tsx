@@ -1,5 +1,5 @@
 'use client'
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
@@ -10,6 +10,7 @@ import DataCollectionStepper from "../projects/estimates/collections/DataCollect
 import DispersionCollectionStepper from "../projects/estimates/collections/DispersionCollectionStepper"
 import { IInvoiceTable } from "@/interfaces/Invoices"
 import { GetProjectMin } from "@/app/api/routeProjects"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type TInvoiceStepper={
   folio: string,
@@ -31,7 +32,7 @@ type TInvoiceSend={
 }
 
 export default function AddNewCollectionInvoice({showForm, user, token, invoiceTable}: 
-  {showForm:Function, user:string, token:string, invoiceTable:IInvoiceTable }) {
+  {showForm:(value: boolean) => void, user:string, token:string, invoiceTable:IInvoiceTable }) {
   // const refRequest = useRef(true);
 
   const [project, setProject] = useState<OneProjectMin>();
@@ -354,8 +355,9 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
       <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         {/* <NavCollectionStepper index={step} setIndex={handleStep} /> */}
@@ -388,8 +390,9 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
             title={"Nueva factura de " + estimate?.Nombre}
           /> */}
           <></>
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <NavCollectionStepper index={step} setIndex={handleStep} />

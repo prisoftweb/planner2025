@@ -22,6 +22,7 @@ import { Chip as ChipMui } from "@mui/material";
 import { ITableCollectionMin } from "@/interfaces/Collections";
 import { useTableStates } from "@/app/store/tableStates";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function TableCollectionsComponent({token, user}: {token:string, user:string}) {
 
@@ -374,10 +375,14 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
         </nav>
       </div>
       {showNewCollection && (
-        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
                                 user={user} updateCollections={updateCollections} />
-        </div>
+        </ContainerSideNav>
+        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        //   <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
+        //                         user={user} updateCollections={updateCollections} />
+        // </div>
       )}
       {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
     </>

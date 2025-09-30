@@ -17,6 +17,7 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadInvoicesByProjectPDF from "@/components/invoices/DownloadInvoicesByProjectPDF";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import ContainerSideNav from "@/components/ContainerSideNav";
 
 export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice}: 
   {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, resumenInvoice:ITotalInvoiceResumen}) {
@@ -255,10 +256,14 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
       </div>
       <Table columns={columns} data={data} placeH="buscar factura" />
       {showNewCollection && selInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionComponent showForm={handleShowForm} user={user}
                token={token} project={project} invoiceTable={selInvoice} />
-        </div>
+        </ContainerSideNav>
+        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        //   <AddNewCollectionComponent showForm={handleShowForm} user={user}
+        //        token={token} project={project} invoiceTable={selInvoice} />
+        // </div>
       )}
     </>
   )

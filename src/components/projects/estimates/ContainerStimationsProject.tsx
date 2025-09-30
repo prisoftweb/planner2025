@@ -22,6 +22,7 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadEstimatesByProjectPDF from "./DownloadEstimationsByProjectPDF";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import ContainerSideNav from "@/components/ContainerSideNav";
 
 interface OptionsDashboard {
   label: string,
@@ -300,18 +301,27 @@ export default function ContainerStimationsProject({project, optConditions, optP
         selEstimate={handleSelEstimate} pageProject={pageProject} />
 
       {openNewStimate && (
-        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        <ContainerSideNav width="w-full max-w-lg">
           <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
             updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
             porcentajeAdvange={percentajeAdvance} advange={advance} />
-        </div>
+        </ContainerSideNav>
+        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        //   <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
+        //     updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
+        //     porcentajeAdvange={percentajeAdvance} advange={advance} />
+        // </div>
       )}
 
       {openNewInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        <ContainerSideNav width="w-full max-w-xl">
           <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
             updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
-        </div>
+        </ContainerSideNav>
+        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        //   <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
+        //     updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
+        // </div>
       )}
     </>
   )

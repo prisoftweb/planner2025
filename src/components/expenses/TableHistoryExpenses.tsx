@@ -15,11 +15,12 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function TableHistoryExpenses({data, token, expenses, 
                             isFilter, setIsFilter, isViewReports}:
                         {data:ExpensesTable[], token:string, 
-                        expenses:Expense[], isFilter:boolean, setIsFilter:Function, 
+                        expenses:Expense[], isFilter:boolean, setIsFilter:(value: boolean) => void, 
                         isViewReports: boolean}){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
@@ -491,11 +492,16 @@ export default function TableHistoryExpenses({data, token, expenses,
     <>
       <div className="flex justify-end my-5">
         {isFilter && (
-          <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+          <ContainerSideNav width="w-full max-w-md">
             <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
                         minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
                       />
-          </div>
+          </ContainerSideNav>
+          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+          //   <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
+          //               minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
+          //             />
+          // </div>
         )}
       </div>
       {view}

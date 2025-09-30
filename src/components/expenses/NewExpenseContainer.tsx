@@ -1,5 +1,5 @@
 import HeaderForm from "../HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { useNewExpense } from "@/app/store/newExpense";
 import DataStepper from "./DataStepper";
@@ -12,6 +12,7 @@ import SelectProjectStepper from "./SelectProyectStepper";
 import Select, {components} from 'react-select'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import RefreshStepperComponent from "./RefreshStepperComponent";
+import TooltipCloseIcons from "../tooltipIcons/TooltipCloseIcon";
 
 import { UsrBack } from "@/interfaces/User";
 import { useOptionsExpense } from "@/app/store/newExpense";
@@ -142,8 +143,9 @@ export default function NewExpenseContainer({token, showForm, user, }:
     >
       <div className="h-full p-1 sm:p-3">
         <div className="flex justify-end">
-          <XMarkIcon className="w-6 h-6 text-slate-500 
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500 
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
+          <TooltipCloseIcons handleClose={closeForm} />
         </div>
         <div className="flex justify-between items-center flex-wrap sm:flex-nowrap gap-x-3 gap-y-3">
           <HeaderForm img="/img/gastos.svg" subtitle="Ingresa los gastos del informe" 

@@ -125,9 +125,9 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           </div>
         </div>
       </div>
-      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-3'>
+      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3'>
         <div className='grid grid-cols-3 gap-x-1 bg-white border 
-            border-slate-100 shadow-lg shadow-slate-500 p-1'>
+            border-slate-300 p-1'>
           <div className='w-full h-full flex flex-col justify-center items-center'>
             <GiShoppingBag className='w-12 h-auto' />
             {costsResumenType.length > 0 && (
@@ -182,8 +182,8 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           </div>
         </div>
 
-        <div className='flex items-center gap-x-4 bg-white border border-slate-100 
-            shadow-lg shadow-slate-500 p-5'>
+        <div className='flex items-center gap-x-4 bg-white border border-slate-300 
+            p-5'>
           <div>
             <ProgressCircle value={75} size="md">
               <span className="text-xs font-medium text-slate-700">75%</span>
@@ -219,8 +219,8 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           </div>
         </div>
 
-        <div className='flex items-center justify-around gap-x-4 bg-white border border-slate-100 
-            shadow-lg shadow-slate-500 p-5'>
+        <div className='flex items-center justify-around gap-x-4 bg-white border border-slate-300 
+           p-5'>
           <div>
             <p className='text-2xl'>{costsResumen.length > 0? costsResumen[0].quantity: 0}</p>
             <p className='text-xs'>GRANTOTAL</p>

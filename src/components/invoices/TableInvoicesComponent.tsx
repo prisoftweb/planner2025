@@ -23,6 +23,7 @@ import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function TableInvoicesComponent({token, user}: 
   {token:string, user:string}) {
@@ -489,15 +490,22 @@ export default function TableInvoicesComponent({token, user}:
       {widthPage > 1080 && filterElemnts}
       <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
       {showNewCollection && selInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionInvoice showForm={handleShowForm} user={user}
                token={token} invoiceTable={selInvoice} />
-        </div>
+        </ContainerSideNav>
+        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        //   <AddNewCollectionInvoice showForm={handleShowForm} user={user}
+        //        token={token} invoiceTable={selInvoice} />
+        // </div>
       )}
       {showNewInvoice && (
-        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        <ContainerSideNav width="w-full max-w-3xl">
           <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
-        </div>
+        </ContainerSideNav>
+        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+        //   <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
+        // </div>
       ) }
     </>
   )

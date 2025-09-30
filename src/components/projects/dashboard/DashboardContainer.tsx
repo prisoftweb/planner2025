@@ -528,7 +528,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap md:flex-nowrap">
         {/* <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
         <div className="w-full md:w-2/3 border border-slate-300 bg-white rounded-xl p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 pb-2">
             <p>AVANCE DE PROYECTOS ACTIVOS {dataProjectsProgress.length}</p>
           </div>
           {dataProjectsProgress.map((prj, index: number) => (
@@ -539,7 +539,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
         <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 pb-2">
             <p>ESTATUS</p>
           </div>
           {/* <DonutChartComponent data={dataProjectsStatus} colors={colors} category="costo"
@@ -553,7 +553,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
         <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 pb-2">
             <p>PROYECTOS POR SEGMENTO</p>
           </div>
           <PieChartComponent data={dataProjectsSegment} colors={colorSegments} category="percentaje"
@@ -562,7 +562,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
         <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 pb-2">
             <p>TOP 10 PROYECTOS</p>
           </div>
           <LineChartComponent dataProjectsTop={dataProjectsTop} colors={[colors[colorRandom2]]} />
@@ -570,7 +570,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
         <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
-          <div className="flex mb-3 gap-x-2 justify-between">
+          <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 pb-2">
             <p>PROYECTOS POR ClIENTE</p>
           </div>
           {/* <NewDonutChartComponent data={dataProjectsClient} /> */}

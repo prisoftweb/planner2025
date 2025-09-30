@@ -15,6 +15,7 @@ import NewEstimateStepper from "./NewEstimateStepper"
 import { getProjectsWithEstimatesMin } from "@/app/api/routeProjects"
 import { showToastMessageError } from "@/components/Alert"
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import ContainerSideNav from "@/components/ContainerSideNav";
 
 type Props = {
   token:string, 
@@ -86,11 +87,11 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
               <p>Vista: </p>
               <TooltipContainerIcon label="Tabla">
                 <Squares2X2Icon onClick={() => setIsTable(true)} 
-                  className="text-slate-600 w-8 h-8 cursor-pointer hover:slate-slate-300"
+                  className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100"
                 />
               </TooltipContainerIcon>
               <TooltipContainerIcon label="Tarjeta">
-                <VscListUnordered className="text-slate-600 w-8 h-8 cursor-pointer hover:text-red-300" 
+                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
                   onClick={() => setIsTable(false)}
                 />
               </TooltipContainerIcon>
@@ -101,10 +102,14 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
             <div className="flex gap-x-3 items-center">
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
                         {newEstimate && (
-                          <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+                          <ContainerSideNav width="w-full sm:max-w-4xl">
                             <NewEstimateStepper showForm={handleNewEstimate}
                                           token={token} user={user._id} updateProjects={updateProjects} />
-                          </div>
+                          </ContainerSideNav>
+                          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+                          //   <NewEstimateStepper showForm={handleNewEstimate}
+                          //                 token={token} user={user._id} updateProjects={updateProjects} />
+                          // </div>
                         )}
             </div>
           </div>

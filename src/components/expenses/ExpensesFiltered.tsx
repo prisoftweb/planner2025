@@ -1,6 +1,6 @@
 'use client'
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "../SelectMultipleReact"
 import Calendar, { DateObject } from "react-multi-date-picker";
@@ -12,12 +12,13 @@ import Button from "../Button"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import ReportCostsByFilter from "../ReportCostsByFilter"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
 import { useOptionsExpense } from "@/app/store/newExpense"
 
 export default function Filtering({showForm, FilterData, maxAmount, minAmount, 
                       expensesFiltered, isViewReports, }: 
-  {showForm:Function, FilterData:Function, maxAmount:number, minAmount:number, 
+  {showForm:(value: boolean) => void, FilterData:Function, maxAmount:number, minAmount:number, 
     expensesFiltered: Expense[], isViewReports: boolean}){
 
   const {categories, conditions, costCenterOpt, projects, reportsOptions, types, providers} = useOptionsExpense();
@@ -168,8 +169,9 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
               <p className="text-gray-500 text-sm">Filtra gastos por diferentes caracteristicas</p>
             </div>
           </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-8 h-8 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <div className="flex justify-end px-5 items-center">

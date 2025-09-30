@@ -2,7 +2,7 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -15,6 +15,7 @@ import { CostCenter, CostCenterTable } from "@/interfaces/CostCenter"
 import DeleteConceptCC from "./DeleteConcept"
 import { CreateConcept } from "@/app/api/routeConcepts"
 import { Concept } from "@/interfaces/Concepts"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 interface ConceptCostCenter {
   "name": string,
@@ -22,7 +23,7 @@ interface ConceptCostCenter {
 }
 
 type NewCostCenterProps = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   costCenter:(CostCenterTable | string)
 }
@@ -231,8 +232,9 @@ export default function NewCostCenter({showForm, token, costCenter}: NewCostCent
           <HeaderForm img="/img/company.svg" subtitle="Ingresa nueva categoria y concepto" 
             title="Nuevo centro de costo"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>

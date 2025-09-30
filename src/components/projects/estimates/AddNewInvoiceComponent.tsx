@@ -1,5 +1,5 @@
 'use client'
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import HeaderForm from "@/components/HeaderForm"
 import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
@@ -12,9 +12,10 @@ import DataBasicStepper from "./DataBasicStepper"
 import InvoicesConditionsStepper from "./InvoicesConditionsStepper"
 import ConceptsInvoiceStepper from "./ConceptsInvoceStepper"
 import NavInvoiceStepper from "./NavInvoiceStepper"
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
 
 type Params = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   updateEstimates:Function, 
   user:string, 
   token:string, 
@@ -245,8 +246,9 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           <HeaderForm img="/img/estimates/invoices.svg" subtitle={"Crea factura apartir de "+ estimate?.Nombre} 
             title={"Nueva factura de " + estimate?.Nombre}
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <NavInvoiceStepper index={step} setIndex={handleStep} />

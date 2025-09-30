@@ -3,6 +3,7 @@ import Button from "../Button"
 import { useState } from "react";
 import NewExpenseContainer from "./NewExpenseContainer";
 import { UsrBack } from "@/interfaces/User";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function ButtonNew({token, user}: {token:string, user:UsrBack,}){
   const [newExpense, setNewExpense] = useState<boolean>(false);
@@ -11,10 +12,14 @@ export default function ButtonNew({token, user}: {token:string, user:UsrBack,}){
     <>
       <Button type="button" onClick={() => setNewExpense(true)}>Nuevo</Button>
           {newExpense && (
-            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            <ContainerSideNav width="w-full sm:max-w-3xl">
               <NewExpenseContainer showForm={setNewExpense} token={token} 
                             user={user} />
-            </div>
+            </ContainerSideNav>
+            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            //   <NewExpenseContainer showForm={setNewExpense} token={token} 
+            //                 user={user} />
+            // </div>
           )}
     </>
   )
