@@ -8,13 +8,15 @@ import NewCode from "./NewCode";
 import { createCode, removeCode } from "@/app/api/routeCode";
 import {ICode} from "@/interfaces/Code";
 import SelectProviderCode from "./SelectProviderCode";
+import SelectUserCode from "./SelectUserCode";
 
 type TCode = {
   code: string,
   date: string,
   user: string,
   project: string
-  provider: string
+  provider: string,
+  userRequesting: string
 }
 
 export default function ContainerNewCode({token, user}: {token: string, user:string}) {
@@ -22,6 +24,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   const [projects, setProjects] = useState<ProjectMin[]>([]);
   const [projectSel, setProjectSel]=useState<string>();
   const [providerSel, setProviderSel]=useState<string>();
+  const [userSel, setUserSel]=useState<string>();
   const [projectTitle, setProjectTitle]=useState<string>('');
   const [codeData, setCodeData] = useState<ICode | undefined>();
   const [search, setSearch]=useState<string>('');
@@ -97,23 +100,49 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   const handleProvSel = async (value: string) => {
     setProviderSel(value);
     
+    // const code = generarToken(5);
+
+    // if(projectSel){
+    //   const data: TCode = {
+    //     code,
+    //     date: new Date().toISOString(),
+    //     user,
+    //     project: projectSel,
+    //     provider: value,
+    //     userRequesting: value
+    //   }
+
+    //   const res = await createCode(token, data);
+    //   if(typeof(res)==='string'){
+    //     showToastMessageError(res);
+    //   }else{
+    //     setCodeData(res);
+    //   }
+    // }
+  }
+
+  const handleUserSel = async (value: string) => {
+    setUserSel(value);
+    
     const code = generarToken(5);
 
-    if(projectSel){
+    if(projectSel && providerSel && value){
       const data: TCode = {
         code,
         date: new Date().toISOString(),
         user,
         project: projectSel,
-        provider: value
+        provider: providerSel,
+        userRequesting: value
       }
 
-      console.log('data => ', data);
+      console.log('data code => ', data);
 
       const res = await createCode(token, data);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
+        console.log('res ocde => ', res);
         setCodeData(res);
       }
     }
@@ -158,22 +187,30 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
     // setProjectSel('');
     // setCodeData(undefined);
     // setProjectTitle('');
-    setProviderSel(undefined);
+    setUserSel(undefined);
   }
 
-  const viewProv=projectSel? <SelectProviderCode handleProvSel={handleProvSel} returnProject={returnProject} token={token} size={widthPage} />: <></>;
+  const returnProviderSel = async () => {
+    setProviderSel(undefined);
+    console.log('ret prov => ');
+  }
+
+  // const viewProv=projectSel? <SelectProviderCode handleProvSel={handleProvSel} returnProject={returnProject} token={token} size={widthPage} />: <></>;
+  // const viewComponent=(providerSel && codeData ? <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} />: viewProv );
+
+  console.log('user => ', userSel);
+  const viewComponent=(providerSel && codeData && userSel ? 
+                <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} /> : (
+                  userSel ? <></>: (
+                    providerSel? <SelectUserCode handleUserSel={handleUserSel} returnProvider={returnProviderSel} token={token} size={widthPage} /> : (
+                      projectSel? <SelectProviderCode handleProvSel={handleProvSel} returnProject={returnProject} token={token} size={widthPage} /> : <></>
+                    )
+                  )
+                ))
   
-  const viewComponent=(providerSel && codeData ? <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} />: viewProv );
-  // const viewComponent=(codeData? (providerSel!==undefined? <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} />: <SelectProviderCode handleProvSel={handleProvSel} returnProject={returnProject} token={token} size={widthPage} />): <></>);
-
-  // console.log('provdier sel => ', providerSel);
-  // console.log('code data => ', codeData);
-  // console.log('project sel => ', projectSel);
-  // const viewComponentText=(providerSel && codeData ? 'nuevo codigo': (projectSel? 'Provider sel': 'sin texto') );
-
-  // console.log('view text => ', viewComponentText);
-  // console.log('view comp => ', viewComponent);
-
+  // const viewProv=projectSel? <SelectProviderCode handleProvSel={handleProvSel} returnProject={returnProject} token={token} size={widthPage} />: <></>;
+  // const viewComponent=(providerSel && codeData ? <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} />: viewProv );
+  
   const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));
 
   return (

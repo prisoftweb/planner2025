@@ -2,7 +2,7 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -13,9 +13,10 @@ import SelectReact from "../SelectReact"
 import { CreateReport } from "@/app/api/routeReports"
 import { useOptionsReports } from "@/app/store/reportsStore"
 import CurrencyInput from "react-currency-input-field"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type Props = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   departments:Options[], 
   companies:Options[], 
@@ -163,8 +164,9 @@ export default function NewReport({showForm, token, companies,
           <HeaderForm img="/img/catalog.svg" subtitle="Crea un nuevo informe de gastos" 
             title="Nuevo informe"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div className="flex justify-end px-5">

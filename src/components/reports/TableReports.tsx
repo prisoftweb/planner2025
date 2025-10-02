@@ -12,12 +12,12 @@ import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { useOptionsReports } from "@/app/store/reportsStore";
 import { UsrBack } from "@/interfaces/User";
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN,
-  CloneReport
-} from "@/app/api/routeReports";
+  CloneReport } from "@/app/api/routeReports";
 import { showToastMessageError, showToastMessage } from "../Alert";
 import RemoveElement from "../RemoveElement";
 import { IoCopy } from "react-icons/io5";
 import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props = {
   data:ReportTable[], 
@@ -27,7 +27,7 @@ type Props = {
   optProjects: Options[], 
   optConditions: Options[], 
   isFilter:boolean, 
-  setIsFilter:Function, 
+  setIsFilter:(value: boolean) => void, 
   user:UsrBack
 }
 
@@ -366,11 +366,16 @@ export default function TableReports({data, token, reports, optCompanies,
     <>
       <div className="flex justify-end my-5">
         {isFilter && (
-          <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+          <ContainerSideNav width="w-full max-w-md">
             <Filtering showForm={setIsFilter} optConditions={optConditions} 
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optCompanies={optCompanies} />
-          </div>
+          </ContainerSideNav>
+          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+          //   <Filtering showForm={setIsFilter} optConditions={optConditions} 
+          //               FilterData={filterData} maxAmount={maxAmount} 
+          //               optProjects={optProjects} optCompanies={optCompanies} />
+          // </div>
         )}
       </div>
       {view}

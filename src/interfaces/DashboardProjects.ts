@@ -268,3 +268,10 @@ export interface ITotalPaymentsProyects {
   amountotal: number
   porcentage: number
 }
+
+export interface ITotalDashboardProjectsByFeatures {
+  projectfeature: boolean
+  totalAmount: number
+  totalAmountTotal: number
+  projects: number
+}

@@ -2,7 +2,7 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,9 +12,10 @@ import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import UploadImage from "../UploadImage"
 import { CreateCompany, CreateCompanyLogo } from "@/app/api/routeCompany"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 export default function NewCompany({showForm, token}: 
-                    {showForm:Function, token:string}){
+                    {showForm:(value: boolean) => void, token:string}){
 
   const [file, setFile] = useState<any>();
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -122,8 +123,9 @@ export default function NewCompany({showForm, token}:
           <HeaderForm img="/img/company.svg" subtitle="Ingresa los datos de la nueva empresa" 
             title="Nueva compañia"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>

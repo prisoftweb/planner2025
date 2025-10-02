@@ -9,6 +9,7 @@ import { useState } from "react";
 import NewDepartment from "./NewDepartment";
 import { Options } from "@/interfaces/Common";
 import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
 
 type DeptProps={
   data:DepartmentTable[], 
@@ -108,7 +109,11 @@ export default function TableDepartments({data, token, optionsCompany}: DeptProp
   
   return(
     <>
-      {editDept && <NewDepartment token={token} OptionsCompany={optionsCompany} dept={deptEdit || ''} showForm={setEditDept} />}
+      {editDept && (
+        <ContainerSideNav width="w-full max-w-md">
+          <NewDepartment token={token} OptionsCompany={optionsCompany} dept={deptEdit || ''} showForm={setEditDept} />
+        </ContainerSideNav>
+      )}
       <Table columns={columns} data={data} placeH="Buscar departamento.." />
     </>
   )

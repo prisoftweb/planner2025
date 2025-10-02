@@ -1130,3 +1130,87 @@ export async function getConditionsProject(auth_token:string, id:string) {
     return 'Error al consultar proyecto!!';
   }
 }
+
+export async function getDashboardProjectsByFeaturesGuaranteeFund(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsByFEATURESGuaranteeFunds/${dateStart}/${dateEnd}`;
+  let prj:string = '';
+  projects.map(p => {
+    prj+= ','+p;
+  });
+  const data = {
+    project: prj.substring(1)
+  }
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      // data: data
+    })
+    // console.log('res status => ', res.data.data.stats);
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar montos por fondo de garantia!!';
+  }
+}
+
+export async function getDashboardProjectsByFeaturesAmountCharge(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsByFEATURESAmountChargeOff/${dateStart}/${dateEnd}`;
+  let prj:string = '';
+  projects.map(p => {
+    prj+= ','+p;
+  });
+  const data = {
+    project: prj.substring(1)
+  }
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      // data: data
+    })
+    // console.log('res status => ', res.data.data.stats);
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar montos por amortizacion!!';
+  }
+}
+
+export async function getDashboardProjectsByFeaturesTaxes(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsByFEATURESTAXES/${dateStart}/${dateEnd}`;
+  let prj:string = '';
+  projects.map(p => {
+    prj+= ','+p;
+  });
+  const data = {
+    project: prj.substring(1)
+  }
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      },
+      // data: data
+    })
+    // console.log('res status => ', res.data.data.stats);
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar montos por iva!!';
+  }
+}

@@ -2,7 +2,7 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,9 +12,10 @@ import { CreateDepartment, UpdateDepartment } from "@/app/api/routeDepartments"
 import Select from 'react-select'
 import { Options } from "@/interfaces/Common"
 import { DepartmentTable } from "@/interfaces/Departments"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type NewDepartmentProps = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   OptionsCompany:Options[],
   dept: (DepartmentTable | string)
@@ -121,8 +122,9 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
           <HeaderForm img="/img/department.svg" subtitle="Agregar nuevos departamentos de compañias" 
             title="Agregar nuevo departamento"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>

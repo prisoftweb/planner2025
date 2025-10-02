@@ -3,6 +3,7 @@ import Button from "../Button"
 import { useState } from "react";
 import NewCatalog from "./NewCatalog";
 import { CatalogTable } from "@/interfaces/Catalogs";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function ButtonNew({token, catalog}: {token:string, catalog: (CatalogTable | string)}){
   const [newCollection, setNewCollection] = useState<boolean>(false);
@@ -11,10 +12,14 @@ export default function ButtonNew({token, catalog}: {token:string, catalog: (Cat
     <>
       <Button type="button" onClick={() => setNewCollection(true)}>Nuevo</Button>
           {newCollection && (
-            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            <ContainerSideNav width="w-full max-w-xs">
               <NewCatalog showForm={setNewCollection} 
                                   token={token} catalog={catalog} />
-            </div>
+            </ContainerSideNav>
+            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            //   <NewCatalog showForm={setNewCollection} 
+            //                       token={token} catalog={catalog} />
+            // </div>
           )}
     </>
   )

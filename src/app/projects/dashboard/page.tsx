@@ -9,7 +9,9 @@ import { getDashboardProjectsAmount,
   getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT, 
   getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
   getDashboardListProjectsByDate, getDashboardListProjectsTop10, 
-  getDashboardProjectTotalCost, getConfigMin, getProjectsLV, getLenghtProjectsEvaluacion } 
+  getDashboardProjectTotalCost, getConfigMin, getProjectsLV, getLenghtProjectsEvaluacion,
+  getDashboardProjectsByFeaturesGuaranteeFund, getDashboardProjectsByFeaturesAmountCharge, 
+  getDashboardProjectsByFeaturesTaxes } 
 from "@/app/api/routeProjects";
 
 import { ProjectsByClient, ProjectsByProgress, 
@@ -58,7 +60,7 @@ export default async function Page() {
 
   const [amountProjects, listProjectsdate, projectsClient, projectsSegment, projectsStatus,
     projectsProgress, listProjectsnotCompleted, projectsandTypes, projectsTop10,
-    projectsTotalCost, configMin, projects, numEvaluacion] = await Promise.all([
+    projectsTotalCost, configMin, projects, numEvaluacion, totGuaranteeFund, totAmountCharge, totTaxes] = await Promise.all([
       getDashboardProjectsAmount(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardListProjectsByDate(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getDashboardProjectsByClient(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
@@ -71,7 +73,10 @@ export default async function Page() {
       getDashboardProjectTotalCost(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
       getConfigMin(token),
       getProjectsLV(token),
-      getLenghtProjectsEvaluacion(token)
+      getLenghtProjectsEvaluacion(token),
+      getDashboardProjectsByFeaturesGuaranteeFund(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectsByFeaturesAmountCharge(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), []),
+      getDashboardProjectsByFeaturesTaxes(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString(), [])
     ]);
     
   if(typeof(amountProjects)==='string'){
@@ -194,39 +199,6 @@ export default async function Page() {
       </>
     )
   }
-
-  // if(typeof(projectsBudgeted)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsBudgeted}</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(projectsSpent)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsSpent}</h1>
-  //       </div>        
-  //     </>
-  //   )
-  // }
-  
-  // if(typeof(projectsControlBudgeted)==='string'){
-  //   return(
-  //     <>
-  //       <Navigation user={user} />
-  //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-  //         <h1>{projectsControlBudgeted}</h1>
-  //       </div>
-  //     </>
-  //   )
-  // }
   
   if(typeof(projects)==='string'){
     return(
@@ -239,6 +211,39 @@ export default async function Page() {
     )
   }
 
+  if(typeof(totGuaranteeFund)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{totGuaranteeFund}</h1>
+        </div>
+      </>
+    )
+  }
+
+  if(typeof(totAmountCharge)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{totAmountCharge}</h1>
+        </div>
+      </>
+    )
+  }
+
+  if(typeof(totTaxes)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1>{totTaxes}</h1>
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <Navigation user={user} />
@@ -246,7 +251,8 @@ export default async function Page() {
         projectsClient={projectsClient} projectsProgress={projectsProgress} 
         projectsSegment={projectsSegment} projectsStatus={projectsStatus} projectsTop10={projectsTop10}
         listProjectsnotCompleted={listProjectsnotCompleted} numEvaluado={numEvaluacion}
-        projectsTotalCost={projectsTotalCost} configMin={configMin} 
+        projectsTotalCost={projectsTotalCost} configMin={configMin}
+        totalFeaturesAC={totAmountCharge} totalFeaturesGF={totGuaranteeFund} totalFeaturesT={totTaxes} 
         projects={[{
           label: 'Todos',
           value: 'all'

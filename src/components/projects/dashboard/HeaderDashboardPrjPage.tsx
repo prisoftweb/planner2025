@@ -5,11 +5,15 @@ import { useState, useRef } from 'react';
 import { DateRangePicker, DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CurrencyFormatter } from '@/app/functions/Globals';
-import { TotalAmountProjects, ConfigMin, DashboardTotalCost } from '@/interfaces/DashboardProjects';
+import { TotalAmountProjects, ConfigMin, DashboardTotalCost, ITotalDashboardProjectsByFeatures } from '@/interfaces/DashboardProjects';
 import { Options } from '@/interfaces/Common';
 import SelectMultipleReact from '@/components/SelectMultipleReact';
 import { MoneyFormatter } from '@/app/functions/Globals';
-import {Tooltip} from "@nextui-org/react";
+// import {Tooltip} from "@nextui-org/react";
+import { MdHomeRepairService } from "react-icons/md";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { MdOutlineSavings } from "react-icons/md";
+import { FaFileInvoice } from "react-icons/fa6";
 
 type Params = {
   handleDate: Function, 
@@ -19,10 +23,13 @@ type Params = {
   configMin: ConfigMin[], 
   activeProjects: number,
   numEvaluado: number
+  totalFeaturesGF: ITotalDashboardProjectsByFeatures[],
+  totalFeaturesAC: ITotalDashboardProjectsByFeatures[],
+  totalFeaturesT: ITotalDashboardProjectsByFeatures[] 
 }
 
 export default function HeaderDashboardPrjPage({handleDate, amountProjects, 
-    projectsTotalCost, configMin, activeProjects, projects, numEvaluado}: Params) {
+    projectsTotalCost, configMin, activeProjects, projects, numEvaluado, totalFeaturesAC, totalFeaturesGF, totalFeaturesT}: Params) {
 
   let props = {
     variants: {
@@ -71,6 +78,13 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
 
   // console.log('amount prjs => ', amountProjects);
 
+  const trueGF = totalFeaturesGF.find(t => t.projectfeature===true);
+  const falseGF = totalFeaturesGF.find(t => t.projectfeature===false);
+  const trueAC = totalFeaturesAC.find(t => t.projectfeature===true);
+  const falseAC = totalFeaturesAC.find(t => t.projectfeature===false);
+  const trueT = totalFeaturesT.find(t => t.projectfeature===true);
+  const falseT = totalFeaturesT.find(t => t.projectfeature===false);
+
   return (
     <div>
       <div>
@@ -106,7 +120,11 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
             </>
           )}
         </div> */}
-        <CardDashboard title="PROYECTOS TODOS" amount={amountProjects.length > 0? amountProjects[0].projects: 0 } />
+        {/* <CardDashboard title="PROYECTOS TODOS" amount={amountProjects.length > 0? amountProjects[0].projects: 0 } /> */}
+        <NewCardDashboard colorIcon="bg-yellow-300" text1={amountProjects[0].projects} text2={MoneyFormatter(amountProjects[0].totalAmountTotal)} 
+            title="Cantidad de proyectos" styleT1="text-2xl text-green-500 font-bold" styleT2="text-lg text-green-600 font-bold"> 
+          <MdHomeRepairService className="w-6 h-6 text-blue-500" />
+        </NewCardDashboard>
         {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
@@ -115,7 +133,11 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
             </>
           )}
         </div> */}
-        <CardDashboard title="PROYECTOS EN EJECUCION" amount={activeProjects } />
+        {/* <CardDashboard title="PROYECTOS EN EJECUCION" amount={activeProjects } /> */}
+        <NewCardDashboard colorIcon="bg-blue-300" text1={trueAC?.projects || 0} text2={falseAC?.projects || 0} 
+            title="Proyectos que aplican amortizacion" styleT1="text-xl text-green-500 font-bold" styleT2="text-lg text-red-500 font-bold"> 
+          <FaMoneyBillTransfer className="w-6 h-6 text-blue-500" />
+        </NewCardDashboard>
         {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
           {amountProjects.length > 0 && (
             <>
@@ -124,8 +146,17 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
             </>
           )}
         </div> */}
-        <CardDashboard title="PROYECTOS EN EVALUACION" amount={numEvaluado } />
-        <div className="w-full border border-slate-300 bg-white rounded-xl p-3 h-full">
+        {/* <CardDashboard title="PROYECTOS EN EVALUACION" amount={numEvaluado } /> */}
+        <NewCardDashboard colorIcon="bg-green-300" text1={trueGF?.projects || 0} text2={falseGF?.projects || 0} 
+            title="Proyectos con fondo de garantia" styleT1="text-xl text-green-500 font-bold" styleT2="text-lg text-red-500 font-bold"> 
+          <MdOutlineSavings className="w-6 h-6 text-blue-500" />
+        </NewCardDashboard>
+
+        <NewCardDashboard colorIcon="bg-red-300" text1={trueT?.projects || 0} text2={falseT?.projects || 0} 
+            title="Proyectos con IVA" styleT1="text-xl text-green-500 font-bold" styleT2="text-lg text-red-500 font-bold"> 
+          <FaFileInvoice className="w-6 h-6 text-red-700" />
+        </NewCardDashboard>
+        {/* <div className="w-full border border-slate-300 bg-white rounded-xl p-3 h-full">
           <p className="text-xs  text-slate-600 mt-2 px-2 font-semibold">
             AVANCE GENERAL
           </p>
@@ -139,7 +170,7 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
               {MoneyFormatter(configMin[0].lastmeta.amount)}
             </p>
           </Tooltip>
-        </div>
+        </div> */}
 
       </div>
     </div>
@@ -151,6 +182,27 @@ export function CardDashboard ({title, amount}: {title: string, amount: number| 
     <div className='w-full border border-slate-300 bg-white rounded-xl p-3 h-full'>
       <p className='text-xs text-slate-600 mt-2 px-2 font-semibold'>{title}</p>
       <p className='text-3xl text-black mt-3 px-2 font-bold'>{amount}</p>
+    </div>
+  )
+}
+
+export function NewCardDashboard ({title, children, text1, text2, styleT1, styleT2, colorIcon}: 
+    {title: string, children: React.JSX.Element, text1: string| number, text2: string| number, 
+      styleT1: string, styleT2: string, colorIcon: string}){
+  return(
+    <div className="w-full border border-slate-300 bg-white rounded-xl p-3 h-full">
+      <div className="flex gap-x-2 items-center">
+        <div className={`rounded-full p-2 ${colorIcon}`}>
+          {children}
+        </div>
+        <div className="w-full">
+          <p className='text-xs text-slate-600 mt-2 px-2 font-semibold'>{title}</p>
+          <div className="flex items-center justify-between mt-1">
+            <p className={`${styleT1}`}>{text1}</p>
+            <p className={`${styleT2}`}>{text2}</p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

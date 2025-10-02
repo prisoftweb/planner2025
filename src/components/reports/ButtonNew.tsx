@@ -3,6 +3,7 @@ import Button from "../Button"
 import { useState } from "react";
 import NewReport from "./NewReport";
 import { Options } from "@/interfaces/Common";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props = {
   token:string, 
@@ -25,13 +26,20 @@ export default function ButtonNew({token, companies, departments,
     <>
       <Button type="button" onClick={() => setNewReport(true)}>Nuevo</Button>
           {newReport && (
-            <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            <ContainerSideNav width="w-full max-w-xl">
               <NewReport showForm={handleNewReport} 
                                   token={token} projects={projects}
                                   companies={companies} departments={departments} 
                                   condition={condition} user={user}
                         />
-            </div>
+            </ContainerSideNav>
+            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+            //   <NewReport showForm={handleNewReport} 
+            //                       token={token} projects={projects}
+            //                       companies={companies} departments={departments} 
+            //                       condition={condition} user={user}
+            //             />
+            // </div>
           )}
     </>
   )

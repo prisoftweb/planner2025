@@ -2,7 +2,7 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,9 +11,10 @@ import { CreateCatalog, UpdateCatalog } from "@/app/api/routeCatalogs"
 import { Catalog, CatalogTable } from "@/interfaces/Catalogs"
 import { useState, useEffect, useRef } from "react"
 import { useListsStore } from "@/app/store/listStore"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type NewCatalogProps = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   catalog:(CatalogTable | string)
 }
@@ -99,8 +100,9 @@ export default function NewCatalog({showForm, token, catalog}: NewCatalogProps){
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevo catalogo" 
             title="Agregar nuevo catalogo"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>

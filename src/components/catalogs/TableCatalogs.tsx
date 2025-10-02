@@ -10,6 +10,7 @@ import RemoveElement from "../RemoveElement";
 import { useListsStore } from "@/app/store/listStore";
 import { showToastMessageError } from "../Alert";
 import {Tooltip} from "@nextui-org/react";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function TableCatalogs({data, token}: {data:CatalogTable[], token:string}){
   
@@ -106,7 +107,11 @@ export default function TableCatalogs({data, token}: {data:CatalogTable[], token
   
   return(
     <>
-      {editCat && <NewCatalog token={token} catalog={catEdit || ''} showForm={setEditCat} />}
+      {editCat && (
+        <ContainerSideNav width="w-full max-w-xs">
+          <NewCatalog token={token} catalog={catEdit || ''} showForm={setEditCat} />
+        </ContainerSideNav>
+      )}
       <Table columns={columns} data={data} placeH="Buscar catalogo.." />
     </>
   )

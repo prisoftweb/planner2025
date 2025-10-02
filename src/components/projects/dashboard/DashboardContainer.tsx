@@ -15,19 +15,20 @@ import { Options } from "@/interfaces/Common"
 import { showToastMessageError } from "@/components/Alert"
 import { MoneyFormatter } from "@/app/functions/Globals"
 
-import { getDashboardProjectsAmount, getDashboardListProjects, 
+import { getDashboardProjectsAmount,  
   getDashboardProjectsByClient, getDashboardProjectsByESTATUS, 
   getDashboardProjectsByPROGRESS, getDashboardProjectsBySEGMENT,
-  getDashboardByProjectAndType, getDashboardListProjectsNotComplete, 
+  getDashboardListProjectsNotComplete, 
   getDashboardListProjectsByDate, getDashboardListProjectsTop10, 
-  getDashboardProjectTotalCost, getConfigMin, getProjectsBudgeted, 
-  getProjectsControlBudgeted, getProjectsSpent } 
+  getDashboardProjectTotalCost, getConfigMin, getDashboardProjectsByFeaturesGuaranteeFund, 
+  getDashboardProjectsByFeaturesAmountCharge, getDashboardProjectsByFeaturesTaxes} 
 from "@/app/api/routeProjects";
 
 import { ProjectsByClient, ProjectsByProgress, 
   ProjectsBySegment, ProjectsByStatus, TotalAmountProjects, 
   CostsByProjectAndType, ProjectsNotCompleted, ListProjectsByDate, 
-  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted, DonutChartJS, Dataset } 
+  ProjectsTop10, DashboardTotalCost, ConfigMin, ControlBudgeted, DonutChartJS, 
+  ITotalDashboardProjectsByFeatures } 
 from "@/interfaces/DashboardProjects";
 
 interface OptionsDashboard {
@@ -90,12 +91,15 @@ type Params = {
   // projectsSpent: ControlBudgeted[], 
   // projectsControlBudgeted: ControlBudgeted[], 
   projects:Options[],
-  numEvaluado: number 
+  numEvaluado: number,
+  totalFeaturesGF: ITotalDashboardProjectsByFeatures[],
+  totalFeaturesAC: ITotalDashboardProjectsByFeatures[],
+  totalFeaturesT: ITotalDashboardProjectsByFeatures[] 
 }
 
 export default function DashBoardContainer({token, amountProjects, listProjects, projectsTop10, projectsTotalCost, 
     projectsClient, projectsProgress, projectsSegment, projectsStatus, listProjectsnotCompleted, 
-    configMin, projects, numEvaluado }: Params) {
+    configMin, projects, numEvaluado, totalFeaturesAC, totalFeaturesGF, totalFeaturesT }: Params) {
   
   const [stateListProjects, setStateListProjects] = useState<ListProjectsByDate[]>(listProjects);
   const [stateProjectsClient, setStateProjectsClient] = useState<ProjectsByClient[]>(projectsClient);
@@ -108,6 +112,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   const [stateProjectsTop10, setStateProjectsTop10] = useState<ProjectsTop10[]>(projectsTop10);
   const [stateTotalCost, setStateTotalCost] = useState<DashboardTotalCost[]>(projectsTotalCost);
   const [stateConfiMin, setStateConfiMin] = useState<ConfigMin[]>(configMin);
+  const [stateTotalFeatureAmountChargeOff, setStateTotalFeatureAmountChargeOff] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesAC);
+  const [stateTotalFeatureGuaranteeFund, setStateTotalFeatureGuaranteeFund] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesGF);
+  const [stateTotalFeatureTaxes, setStateTotalFeatureTaxes] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesT);
   // const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
   // const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
   // const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
@@ -147,7 +154,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
 
       const [amountPrjs, listPrjsDate, prjsClient, prjsSegment, prjStatus,
         prjsProgress, listprjnotCompleted, prjsTop10,
-        totalCost, confMin] = await Promise.all([
+        totalCost, confMin, totGuaranteeFund, totAmountCharge, totTaxes] = await Promise.all([
           getDashboardProjectsAmount(token, dateS, dateE, []),
           getDashboardListProjectsByDate(token, dateS, dateE, []),
           getDashboardProjectsByClient(token, dateS, dateE, []),
@@ -157,7 +164,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           getDashboardListProjectsNotComplete(token, dateS, dateE, []),
           getDashboardListProjectsTop10(token, dateS, dateE, []),
           getDashboardProjectTotalCost(token, dateS, dateE, []),
-          getConfigMin(token)
+          getConfigMin(token),
+          getDashboardProjectsByFeaturesGuaranteeFund(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesAmountCharge(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesTaxes(token, dateS, dateE, [])
         ]); 
       
       if(typeof(amountPrjs)==='string'){
@@ -200,6 +210,18 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         showToastMessageError(confMin);
       }
 
+      if(typeof(totAmountCharge)==='string'){
+        showToastMessageError(totAmountCharge);
+      }
+
+      if(typeof(totGuaranteeFund)==='string'){
+        showToastMessageError(totGuaranteeFund);
+      }
+
+      if(typeof(totTaxes)==='string'){
+        showToastMessageError(totTaxes);
+      }
+
       setStateListProjects(listPrjsDate);
       setStateProjectsClient(prjsClient);
       setStateProjectsSegment(prjsSegment);
@@ -211,11 +233,14 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       setStateProjectsTop10(prjsTop10);
       setStateTotalCost(totalCost);
       setStateConfiMin(confMin);
+      setStateTotalFeatureAmountChargeOff(totAmountCharge);
+      setStateTotalFeatureGuaranteeFund(totGuaranteeFund);
+      setStateTotalFeatureTaxes(totTaxes);
 
     }else{
       const [amountPrjs, listPrjsDate, prjsClient, prjsSegment, prjStatus,
         prjsProgress, listprjnotCompleted, prjsTop10,
-        totalCost, confMin] = await Promise.all([
+        totalCost, confMin, totGuaranteeFund, totAmountCharge, totTaxes] = await Promise.all([
           getDashboardProjectsAmount(token, dateS, dateE, prj),
           getDashboardListProjectsByDate(token, dateS, dateE, prj),
           getDashboardProjectsByClient(token, dateS, dateE, prj),
@@ -225,7 +250,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
           getDashboardListProjectsNotComplete(token, dateS, dateE, prj),
           getDashboardListProjectsTop10(token, dateS, dateE, prj),
           getDashboardProjectTotalCost(token, dateS, dateE, prj),
-          getConfigMin(token)
+          getConfigMin(token),
+          getDashboardProjectsByFeaturesGuaranteeFund(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesAmountCharge(token, dateS, dateE, []),
+          getDashboardProjectsByFeaturesTaxes(token, dateS, dateE, [])
         ]);
 
       if(typeof(amountPrjs)==='string'){
@@ -268,6 +296,18 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         showToastMessageError(confMin);
       }
 
+      if(typeof(totAmountCharge)==='string'){
+        showToastMessageError(totAmountCharge);
+      }
+
+      if(typeof(totGuaranteeFund)==='string'){
+        showToastMessageError(totGuaranteeFund);
+      }
+
+      if(typeof(totTaxes)==='string'){
+        showToastMessageError(totTaxes);
+      }
+
       setStateListProjects(listPrjsDate);
       setStateProjectsClient(prjsClient);
       setStateProjectsSegment(prjsSegment);
@@ -279,6 +319,10 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       setStateProjectsTop10(prjsTop10);
       setStateTotalCost(totalCost);
       setStateConfiMin(confMin);
+      setStateTotalFeatureAmountChargeOff(totAmountCharge);
+      setStateTotalFeatureGuaranteeFund(totGuaranteeFund);
+      setStateTotalFeatureTaxes(totTaxes);
+
       // try {
       //   amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
       //   if(typeof(amountPrjs)==='string'){
@@ -524,7 +568,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <HeaderDashboardPrjPage amountProjects={totalAmount} handleDate={fetchData} projects={projects}
         projectsTotalCost={stateTotalCost} configMin={stateConfiMin} 
-        activeProjects={dataProjectsProgress.length} numEvaluado={numEvaluado} />
+        activeProjects={dataProjectsProgress.length} numEvaluado={numEvaluado}
+        totalFeaturesAC={stateTotalFeatureAmountChargeOff} totalFeaturesGF={stateTotalFeatureGuaranteeFund}
+        totalFeaturesT={stateTotalFeatureTaxes} />
       <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap md:flex-nowrap">
         {/* <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
         <div className="w-full md:w-2/3 border border-slate-300 bg-white rounded-xl p-5">
