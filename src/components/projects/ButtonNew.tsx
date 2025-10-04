@@ -3,6 +3,7 @@ import Button from "../Button"
 import { useState } from "react";
 import NewProject from "./NewProject";
 import { Options } from "@/interfaces/Common";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props = {
   token:string, 
@@ -26,12 +27,18 @@ export default function ButtonNew({token, optClients, optCategories,
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
         {newProject && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 z-40">
+          <ContainerSideNav width="w-full max-w-xl">
             <NewProject showForm={handleNewProject} optTypes={optTypes} 
                         token={token} optClients={optClients} 
                         optCategories={optCategories} user={user} 
                           optCompanies={optCompanies} condition={condition} />
-          </div>
+          </ContainerSideNav>
+          // <div className="fixed inset-0 bg-black bg-opacity-40 z-40">
+          //   <NewProject showForm={handleNewProject} optTypes={optTypes} 
+          //               token={token} optClients={optClients} 
+          //               optCategories={optCategories} user={user} 
+          //                 optCompanies={optCompanies} condition={condition} />
+          // </div>
         )}
     </>
   )

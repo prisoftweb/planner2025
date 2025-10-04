@@ -10,6 +10,7 @@ import UpdateNode from "./UpdateNode";
 import { Options } from "@/interfaces/Common";
 // import {Tooltip} from "@nextui-org/react";
 import TooltipPencilIcon from "../tooltipIcons/TooltipPencilIcon";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Params = {
   data:NodeTable[], 
@@ -121,9 +122,13 @@ export default function TableNode({data, token, departments, glossaries, workflo
   
   return(
     <>
-      {editNode && <UpdateNode showForm={handleEdit} departments={departments} 
-          glossaries={glossaries} id={nodeEdit?.id || ''} token={token} workFlows={workflows} 
-          optDesc={optDesc} optRels={optRels} node={nodeEdit} /> }
+      {editNode && (
+        <ContainerSideNav width="w-full max-w-md">
+          <UpdateNode showForm={handleEdit} departments={departments} 
+            glossaries={glossaries} id={nodeEdit?.id || ''} token={token} workFlows={workflows} 
+            optDesc={optDesc} optRels={optRels} node={nodeEdit} />
+        </ContainerSideNav>
+      ) }
       <Table columns={columns} data={data} placeH="Buscar nodo.." />
     </>
   )

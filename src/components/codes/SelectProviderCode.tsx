@@ -117,11 +117,11 @@ export default function SelectProviderCode({token, returnProject, handleProvSel,
                   <div className="flex gap-x-3 justify-between items-center w-full">
                     <h6
                       className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
-                      {prov.name}
+                      {prov.tradename}
                     </h6>
                   </div>
                   <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {prov.tradename}
+                    {prov.name}
                   </p>
                 </div>
               </div>

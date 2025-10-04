@@ -13,6 +13,8 @@ import ButtonNew from "./ButtonNew";
 import RemoveElement from "../RemoveElement";
 import { showToastMessageError } from "../Alert";
 import {Tooltip} from "@nextui-org/react";
+import TooltipPencilIcon from "../tooltipIcons/TooltipPencilIcon";
+import ContainerSideNav from "../ContainerSideNav";
 
 type tableProps={
   data:GlossaryTable[], 
@@ -39,6 +41,10 @@ export default function TableLists({data, token, glossaries}: tableProps){
 
   const handleEditGloss = (value: boolean) => {
     setEditGloss(value);
+  }
+
+  const handleGlossToEdit = (value:GlossaryTable) => {
+    setGlossEdit(value);
   }
 
   useEffect(() => {
@@ -92,9 +98,10 @@ export default function TableLists({data, token, glossaries}: tableProps){
           <div className="w-5 h-5" style={{backgroundColor: row.original.color}}></div>
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Modificar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
-            <PencilIcon className="w-6 h-6 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
+            {/* <PencilIcon className="w-6 h-6 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
               onClick={() => {setGlossEdit(row.original); setEditGloss(true);}}
-            />
+            /> */}
+            <TooltipPencilIcon handleBooleanValue={handleEditGloss} handleElement={handleGlossToEdit} element={row.original} />
           </Tooltip>
           <RemoveElement id={row.original.id} name={row.original.name} token={token} 
               remove={RemoveGlossary} removeElement={delGlossary} />
@@ -146,7 +153,11 @@ export default function TableLists({data, token, glossaries}: tableProps){
   
   return(
     <>
-      {editGloss && <NewGlossary token={token} glossary={glossEdit || ''} showForm={handleEditGloss} />}
+      {editGloss && (
+        <ContainerSideNav width="w-full max-w-sm">
+          <NewGlossary token={token} glossary={glossEdit || ''} showForm={handleEditGloss} />
+        </ContainerSideNav>
+      )}
       <Table columns={columns} data={table} placeH="Buscar glosario.." />
     </>
   )

@@ -301,7 +301,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
 
       {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
       <div className="mt-5 bg-white border border-slate-300 rounded-xl  p-5">
-        <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 pb-2">
+        <div className="flex mb-3 gap-x-2 justify-between ">
           <p>TOTAL PROJECTS   | Montos de proyectos</p>
         </div>
         <BarChartComponent categories={['costo']} colors={[colors[colorRandom]]} data={dataListProjects} />
@@ -309,7 +309,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
 
       {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
       <div className="mt-5 bg-white border border-slate-300  rounded-xl p-5">
-        <div className="mb-3 border-b border-slate-300 pb-2">
+        <div className="mb-3 ">
           <p>COSTO POR TIPO</p>
         </div>
         <BarChartTreeInOne data={resParse} />
@@ -317,7 +317,7 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
 
       {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
       <div className="mt-5 bg-white border border-slate-300 rounded-xl  p-5">
-        <div className="mb-3 border-b border-slate-300 pb-2">
+        <div className="mb-3 ">
           <p>CONTROL PRESUPUESTAL</p>
         </div>
         <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado', 'Pagado']} colors={colorsBudgeted} data={dataControlBudgeted} />

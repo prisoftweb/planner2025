@@ -110,7 +110,7 @@ export default function TableDepartments({data, token, optionsCompany}: DeptProp
   return(
     <>
       {editDept && (
-        <ContainerSideNav width="w-full max-w-md">
+        <ContainerSideNav width="w-full max-w-[360px]">
           <NewDepartment token={token} OptionsCompany={optionsCompany} dept={deptEdit || ''} showForm={setEditDept} />
         </ContainerSideNav>
       )}

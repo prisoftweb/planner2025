@@ -107,7 +107,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
 
       if(haveAddress && hasguaranteefund && haveAmountCharge){
         data = {
-          amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+          // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+          amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
           hasguaranteefund, title, types:type, user,
           location, hasamountChargeOff:haveAmountCharge, amountChargeOff,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
@@ -115,48 +116,55 @@ export default function ExtraDataStepper({token, optClients, optCategories,
       }else{
         if(haveAddress && hasguaranteefund){
           data = {
-            amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+            // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+            amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
             hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}]
           }
         }else{
           if(haveAddress && haveAmountCharge){
             data = {
-              amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+              // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+              amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
               hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
               location, condition: [{glossary: condition, user}]
             }
           }else{
             if(haveAddress){
               data = {
-                amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+                amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
                 hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
                 location, condition: [{glossary: condition, user}]
               }
             }else{
               if(hasguaranteefund && haveAmountCharge){
                 data = {
-                  amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                  // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+                  amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
                   hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
                   guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
                 }
               }else{
                 if(hasguaranteefund){
                   data = {
-                    amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                    // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+                    amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
                     hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
                     location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
                   }
                 }else{
                   if(haveAmountCharge){
                     data = {
-                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                      // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+                      amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
                       hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
                       location, condition: [{glossary: condition, user}], amountChargeOff
                     }
                   }else{
                     data = {
-                      amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description, 
+                      // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
+                      amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
                       hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, condition: [{glossary: condition, user}],
                     }
                   }

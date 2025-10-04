@@ -3,6 +3,7 @@ import Button from "../Button"
 import { useState } from "react";
 import NewGlossary from "./NewGlossary";
 import { GlossaryTable } from "@/interfaces/Glossary";
+import ContainerSideNav from "../ContainerSideNav";
 
 type buttonProps={
   token:string, 
@@ -16,11 +17,14 @@ export default function ButtonNew({token, glossary}: buttonProps ){
     <>
       <Button type="button" onClick={() => setNewList(true)}>Nuevo</Button>
           {NewList && (
-            <div className="fixed inset-0 z-40 flex">
-              <div className="fixed inset-0 bg-black bg-opacity-40">
-                <NewGlossary showForm={setNewList} token={token} glossary={glossary} />
-              </div>
-            </div>
+            <ContainerSideNav width="w-full max-w-sm">
+              <NewGlossary showForm={setNewList} token={token} glossary={glossary} />
+            </ContainerSideNav>
+            // <div className="fixed inset-0 z-40 flex">
+            //   <div className="fixed inset-0 bg-black bg-opacity-40">
+            //     <NewGlossary showForm={setNewList} token={token} glossary={glossary} />
+            //   </div>
+            // </div>
           )}
     </>
   )

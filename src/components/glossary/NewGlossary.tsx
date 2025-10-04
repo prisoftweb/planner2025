@@ -108,9 +108,9 @@ export default function NewGlossary({showForm, token, glossary}: glossaryProps )
 
   return(
     <>
-      <div className="relative z-50 ml-auto h-full w-80 bg-white p-5 overflow-y-auto">
-        {/* <form className="z-50 absolute bg-white space-y-5 p-5 right-0 h-full min-h-screen" */}
-        <form
+      {/* <div className="relative z-50 ml-auto h-full w-80 bg-white p-5 overflow-y-auto"> */}
+        {/* <form */}
+        <form className="z-50 absolute bg-white space-y-5 p-5 right-0 h-full min-h-screen"
           onSubmit={formik.handleSubmit}
           style={{height: `${heightPage}px`}}
         >
@@ -170,7 +170,7 @@ export default function NewGlossary({showForm, token, glossary}: glossaryProps )
             <Button type="submit">Guardar</Button>
           </div>
         </form>
-      </div>
+      {/* </div> */}
     </>
   )
 }
