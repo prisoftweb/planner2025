@@ -76,8 +76,6 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
     progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
   }
 
-  // console.log('amount prjs => ', amountProjects);
-
   const trueGF = totalFeaturesGF.find(t => t.projectfeature===true);
   const falseGF = totalFeaturesGF.find(t => t.projectfeature===false);
   const trueAC = totalFeaturesAC.find(t => t.projectfeature===true);

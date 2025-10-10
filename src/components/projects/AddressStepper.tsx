@@ -17,7 +17,7 @@ export default function AddressStepper({token, condition, showForm}:
   const {updateAddress, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
     company, amountG, dateG, percentage, user, amountCharge, dateCharge, hasamountChargeOff, 
-    percentageCharge} = useNewProject();
+    percentageCharge, includesTaxes, responsible} = useNewProject();
   
   const [dispatch] = useRegFormContext();
   const [guarantee, setGuarantee] = useState<boolean>(hasguaranteefund);
@@ -80,8 +80,8 @@ export default function AddressStepper({token, condition, showForm}:
         data = {
           // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
           amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-          hasguaranteefund, title, types:type, user,
-          location, hasamountChargeOff, amountChargeOff,
+          hasguaranteefund, title, types:type, user:responsible,
+          location, hasamountChargeOff, amountChargeOff, includesTaxes,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
@@ -89,54 +89,55 @@ export default function AddressStepper({token, condition, showForm}:
           data = {
             // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
             amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-            hasguaranteefund, hasamountChargeOff, title, types:type, user, guaranteefund: guaranteeData,
-            location, condition: [{glossary: condition, user}]
+            hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, guaranteefund: guaranteeData,
+            location, condition: [{glossary: condition, user}], includesTaxes
           }
         }else{
           if(haveAddress && hasamountChargeOff){
             data = {
               // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
               amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-              hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
-              location, condition: [{glossary: condition, user}]
+              hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+              location, condition: [{glossary: condition, user}], includesTaxes
             }
           }else{
             if(haveAddress){
               data = {
                 // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                 amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                hasguaranteefund, hasamountChargeOff, title, types:type, user,
-                location, condition: [{glossary: condition, user}]
+                hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                location, condition: [{glossary: condition, user}], includesTaxes
               }
             }else{
               if(hasguaranteefund && hasamountChargeOff){
                 data = {
                   // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                   amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                  hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
-                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+                  hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}], includesTaxes
                 }
               }else{
                 if(hasguaranteefund){
                   data = {
                     // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                     amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                    hasguaranteefund, hasamountChargeOff, title, types:type, user,
-                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
+                    hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData, includesTaxes
                   }
                 }else{
                   if(hasamountChargeOff){
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user,
-                      location, condition: [{glossary: condition, user}], amountChargeOff
+                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                      location, condition: [{glossary: condition, user}], amountChargeOff, includesTaxes
                     }
                   }else{
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user, condition: [{glossary: condition, user}],
+                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, 
+                      condition: [{glossary: condition, user}], includesTaxes,
                     }
                   }
                 }

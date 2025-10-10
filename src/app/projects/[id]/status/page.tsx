@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
 import { getClients } from "@/app/api/routeClients";
-import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
+import { GetProjectMin, getProjectsLV, getProjectsByUserLV } from "@/app/api/routeProjects";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
@@ -21,8 +21,10 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
+  let role = user.rol?.name || '';
+
   let project: OneProjectMin = await GetProjectMin(token, params.id);
-  let options: Options[] = await getProjectsLV(token);
+  let options: Options[] = role.toLowerCase().includes('residente') ? await getProjectsByUserLV(token, user._id) : await getProjectsLV(token);
   let clients: ClientBack[] = await getClients(token);
   let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
   

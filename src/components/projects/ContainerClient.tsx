@@ -15,7 +15,8 @@ import WithOut from "../WithOut"
 import { UsrBack } from "@/interfaces/User"
 import { showToastMessageError } from "../Alert"
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject"
-import { getActiveProjectsMin, getProjectsByConditionMin } from "@/app/api/routeProjects"
+import { getActiveProjectsMin, getProjectsByConditionMin, getProjectsMinFinishedUser, 
+  getProjectsMinInEjecucionUser } from "@/app/api/routeProjects"
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 
@@ -59,7 +60,25 @@ export default function ContainerClient({token, optClients, optCategories,
       try {
         let rol = user.rol?.name || '';
         if(rol.toLowerCase().includes('residente')){
-          projs = await getProjectsByConditionMin(token);
+          // projs = await getProjectsByConditionMin(token);
+          const prj1 = await getProjectsMinInEjecucionUser(token, user._id);
+          const prj2 = await getProjectsMinFinishedUser(token, user._id);
+
+          if(typeof(prj1)==='string'){
+            showToastMessageError(prj1);
+            if(typeof(prj2)==='string'){
+              showToastMessageError(prj2);
+            }else{
+              projs=prj2;
+            }
+          }else{
+            if(typeof(prj2)==='string'){
+              showToastMessageError(prj2);
+              projs=prj1;
+            }else{
+              projs=[...prj1, ...prj2];
+            }
+          }
         }else{
           projs = await getActiveProjectsMin(token);
         }
@@ -94,6 +113,10 @@ export default function ContainerClient({token, optClients, optCategories,
       </>
     )
   }
+
+  console.log('data tabla => ', dataTable);
+  console.log('projects => ', projects);
+  console.log('prj sotre => ', projectStore);
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">

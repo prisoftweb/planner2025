@@ -12,7 +12,7 @@ import { Squares2X2Icon } from "@heroicons/react/24/solid"
 import TableProjectsToEstimate from "./TableProjectsToEstimated"
 import Button from "@/components/Button"
 import NewEstimateStepper from "./NewEstimateStepper"
-import { getProjectsWithEstimatesMin } from "@/app/api/routeProjects"
+import { getProjectsWithEstimatesMin, getProjectsWithOutEstimateMin, getProjectsForEstimatedByUser } from "@/app/api/routeProjects"
 import { showToastMessageError } from "@/components/Alert"
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ContainerSideNav from "@/components/ContainerSideNav";
@@ -24,11 +24,12 @@ type Props = {
   optConditionsFilter: Options[], 
   optCategories: Options[], 
   optTypes: Options[], 
-  data: ProjectsTable[]
+  data: ProjectsTable[],
+  rol:string
 }
 
 export default function ContainerEstimatesClient({token, user, optConditionsFilter, 
-  projectsParam, optCategories, optTypes, data }: Props){
+  projectsParam, optCategories, optTypes, data, rol }: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -40,15 +41,22 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
   }
 
   const updateProjects = async () => {
-      const res = await getProjectsWithEstimatesMin(token);
+      // const res = await getProjectsWithEstimatesMin(token);
+      const res = rol.toLowerCase().includes('residente') ? await getProjectsForEstimatedByUser(token, user._id) : await getProjectsWithOutEstimateMin(token);
       if(typeof(res)==='string'){
         showToastMessageError(res);
         showToastMessageError('Error al actualizar la tabla!!!');
       }else{
+        console.log('role => ', rol);
+        console.log('res proyects => ', res);
         setProjects(res);
         setIsFilter(false);
       }
     }
+
+  const handleNewEstimate = (value:boolean) => {
+    setNewEstimate(value);
+  }
 
   if(!projects || projects.length <= 0){
     return (
@@ -57,15 +65,18 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           <WithOut img="/img/estimates/estimates.svg" subtitle="Proyectos para estimar"
             text="Aqui se mostraran los proyectos a los que se les puede realizar o consultar una estimacion"
             title="Proyectos para estimar">
-              <></>
+              {/* <></> */}
+              <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
           </WithOut>
+          {newEstimate && (
+              <ContainerSideNav width="w-full sm:max-w-4xl">
+                <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
+                              token={token} user={user._id} updateProjects={updateProjects} />
+              </ContainerSideNav>
+            )}
         </div>
       </>
     )
-  }
-
-  const handleNewEstimate = (value:boolean) => {
-    setNewEstimate(value);
   }
 
   return(
@@ -103,7 +114,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
                         {newEstimate && (
                           <ContainerSideNav width="w-full sm:max-w-4xl">
-                            <NewEstimateStepper showForm={handleNewEstimate}
+                            <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
                                           token={token} user={user._id} updateProjects={updateProjects} />
                           </ContainerSideNav>
                           // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">

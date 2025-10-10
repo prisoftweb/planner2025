@@ -5,8 +5,9 @@ import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
-import { getActiveProjectsMin, getProjectsByConditionMin, GetCollectionsAccumByProjectMin, GetCostsAccumByProjectMin } from "../api/routeProjects";
-import { ProjectsTable, ProjectMin, ICostsAccumByProject, ICollectionAccumByProject } from "@/interfaces/Projects";
+import { getActiveProjectsMin, getProjectsByConditionMin, GetCollectionsAccumByProjectMin, 
+  GetCostsAccumByProjectMin, getProjectsMinFinishedUser, getProjectsMinInEjecucionUser } from "../api/routeProjects";
+import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
 
@@ -17,33 +18,15 @@ export default async function Page(){
 
   let role = user.rol?.name || '';
 
-  // let projects: ProjectMin[];
-  // if(role.toLowerCase().includes('residente')){
-  //   projects = await getProjectsByConditionMin(token);
-  // }else{
-  //   projects = await getActiveProjectsMin(token);
-  // }
-
-  // let clients: ClientBack[];
-  // let costs: ICostsAccumByProject[];
-  // let collections: ICollectionAccumByProject[];
-  // let catalogs: GlossaryCatalog[];
-  // let optCompanies: Options[] = [];
-  
-  // clients = await getClients(token);
-  // costs = await GetCostsAccumByProjectMin(token);
-  // collections = await GetCollectionsAccumByProjectMin(token);
-  // catalogs = await getCatalogsByName(token, 'projects');
-  // optCompanies = await getCompaniesLV(token);
-
-  const [projects, clients, costs, collections, catalogs, optCompanies] = await Promise.all([
-    role.toLowerCase().includes('residente') ? getProjectsByConditionMin(token) : getActiveProjectsMin(token),
+  const [projects, finished, clients, costs, collections, catalogs, optCompanies] = await Promise.all([
+    role.toLowerCase().includes('residente') ? getProjectsMinInEjecucionUser(token, user._id) : getActiveProjectsMin(token),
+    getProjectsMinFinishedUser(token, user._id),
     getClients(token), 
     GetCostsAccumByProjectMin(token),
     GetCollectionsAccumByProjectMin(token),
     getCatalogsByName(token, 'projects'),
     getCompaniesLV(token)
-  ])
+  ]);
   
   if(typeof(projects)==='string'){
     return(
@@ -154,14 +137,16 @@ export default async function Page(){
     })
   });
 
-  const table: ProjectsTable[] = ProjectDataToTableDataWithUtilitiesMin(projects, collections, costs);
+  const allPrjs = (role.toLowerCase().includes('residente')? [...projects, ...finished]: projects);
   
+  const table: ProjectsTable[] = ProjectDataToTableDataWithUtilitiesMin(allPrjs, collections, costs);
+
   return(
     <>
       <Navigation user={user} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
           optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
-          optTypes={optsTypes} optTypesFilter={optTypes} projects={projects} token={token} user={user} 
+          optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 
           condition={condition} />
     </>
   )

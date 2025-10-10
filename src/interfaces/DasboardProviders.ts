@@ -47,3 +47,8 @@ export interface TotalPayments {
   quantity: number,
   totalPayout: number
 }
+
+export interface ITotalPendingPaymentProvider {
+  quantity: number
+  cosTotal: number
+}

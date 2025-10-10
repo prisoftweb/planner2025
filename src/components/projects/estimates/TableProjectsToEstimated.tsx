@@ -105,15 +105,15 @@ export default function TableProjectsToEstimate({token, optConditions, isFilter,
         >{row.original.client}</p>
       ),
     }),
-    columnHelper.accessor('date', {
-      header: 'Fecha',
-      id: 'fecha',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/projects/estimates/${row.original.id}`)}
-        >{row.original.date?.substring(0, 10) || ''}</p>
-      ),
-    }),
+    // columnHelper.accessor('date', {
+    //   header: 'Fecha',
+    //   id: 'fecha',
+    //   cell: ({row}) => (
+    //     <p className="cursor-pointer"
+    //       onClick={() => window.location.replace(`/projects/estimates/${row.original.id}`)}
+    //     >{row.original.date?.substring(0, 10) || ''}</p>
+    //   ),
+    // }),
     columnHelper.accessor('amount', {
       header: 'Monto',
       id: 'monto',

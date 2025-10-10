@@ -26,9 +26,12 @@ interface NewProjectState {
   dateCharge: string
   percentageCharge: string
   hasamountChargeOff: boolean
-  updateBasicData: (name:string, code:string, description:string) => void,
+  includesTaxes: boolean,
+  responsible:string,
+  updateBasicData: (name:string, code:string, description:string, responsible:string) => void,
   updateExtraData: (amount: string, date:string, category:string,type:string, 
-    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean, haveChargeOff:boolean
+    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean, 
+    haveChargeOff:boolean, includeVat:boolean
    ) => void,
   updateAddress: (community: string, country:string, cp: string, municipy:string, 
     stateA:string, street:string,) => void,
@@ -62,14 +65,18 @@ export const useNewProject = create<NewProjectState>((set) => ({
   dateCharge: '',
   hasamountChargeOff: false,
   percentageCharge: '',
-  updateBasicData: (name:string, code:string, description:string) => set(state => ({
+  includesTaxes: true,
+  responsible: '',
+  updateBasicData: (name:string, code:string, description:string, responsible:string) => set(state => ({
     ...state,
     title: name,
     code: code,
-    description: description
+    description: description,
+    responsible: responsible
   })),
   updateExtraData: (amount: string, date:string, category:string,type:string, 
-    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean, haveChargeOff:boolean
+    client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean, 
+    haveChargeOff:boolean, includeVat:boolean
    ) => set (state => ({
     ...state,
     amount:amount,
@@ -81,7 +88,8 @@ export const useNewProject = create<NewProjectState>((set) => ({
     haveAddress: haveAddress,
     company: company,
     hasguaranteefund: hasguaranteefund,
-    hasamountChargeOff: haveChargeOff
+    hasamountChargeOff: haveChargeOff,
+    includesTaxes: includeVat
   })),
   updateAddress: (community: string, country:string, cp: string, municipy:string, stateA:string, 
     street:string,) => set(state => ({

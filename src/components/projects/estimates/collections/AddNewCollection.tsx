@@ -11,6 +11,7 @@ import DataCollectionStepper from "./DataCollectionStepper"
 import DispersionCollectionStepper from "./DispersionCollectionStepper"
 import { IInvoiceTable } from "@/interfaces/Invoices"
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
+import { UpdateProject } from "@/app/api/routeProjects"
 
 type TInvoiceStepper={
   folio: string,
@@ -291,9 +292,22 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
           showToastMessageError(res);
         }else{
           showToastMessage('Cobro agregado satisfactoriamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
+          const d = {
+            paidProject: true
+          }
+
+          const resP=await UpdateProject(token, project._id, d);
+          if(typeof(resP)==='string'){
+            showToastMessageError(resP);
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }else{
+            showToastMessage('Proyecto actualizado correctamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }
         }
       }else{
         const data = new FormData();
@@ -325,9 +339,22 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
           showToastMessageError(res);
         }else{
           showToastMessage('Cobro agregado satisfactoriamente!!!');
-          setTimeout(() => {
-            window.location.reload();
-          }, 2500);
+          const d = {
+            paidProject: true
+          }
+
+          const resP=await UpdateProject(token, project._id, d);
+          if(typeof(resP)==='string'){
+            showToastMessageError(resP);
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }else{
+            showToastMessage('Proyecto actualizado correctamente!!!');
+            setTimeout(() => {
+              window.location.reload();
+            }, 1000);
+          }
         }
       }
     }

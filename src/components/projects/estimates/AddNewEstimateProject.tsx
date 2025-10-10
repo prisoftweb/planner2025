@@ -18,6 +18,8 @@ import { Options } from "@/interfaces/Common"
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs"
 import SelectReact from "@/components/SelectReact"
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
+import { UpdateProject } from "@/app/api/routeProjects"
+import { showToastMessage } from "@/components/Alert"
 
 type Params={
   showForm:(value: boolean) => void, 
@@ -219,6 +221,15 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
         showToastMessageError(res);
       }else{
         updateEstimates();
+        const d={
+          estimatedProject: true
+        }
+        const upd = await UpdateProject(token, project?._id, d);
+        if(typeof(upd)==='string'){
+          showToastMessageError(upd);
+        }else{
+          showToastMessage('Proyecto actualizado..');
+        }
         showForm(false);
       }
     }

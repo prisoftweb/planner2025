@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
+import { GetProjectMin, getProjectsLV, getProjectsByUserLV } from "@/app/api/routeProjects";
 import { OneProjectMin } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
@@ -23,9 +23,11 @@ export default async function Page({ params }: { params: { id: string }}){
   // let options: Options[] = await getProjectsLV(token);
   // let guarantees: IGuaranteeByPojectMin[] = await getGuaranteesByProject(token, params.id);
 
+  let role = user.rol?.name || '';
+
   const [project, options, guarantees] = await Promise.all([
     GetProjectMin(token, params.id),
-    getProjectsLV(token),
+    role.toLowerCase().includes('residente') ? getProjectsByUserLV(token, user._id) : getProjectsLV(token),
     getGuaranteesByProject(token, params.id)
   ]);
   

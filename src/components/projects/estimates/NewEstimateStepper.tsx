@@ -8,11 +8,12 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { createEstimate } from "@/app/api/routeEstimates";
 import FormNewEstimate from "./FormNewEstimate";
 import { TotalEstimatedByProject } from "@/interfaces/Estimate";
-import { getProjectsWithOutEstimateMin } from "@/app/api/routeProjects";
+import { getProjectsWithOutEstimateMin, getAllsProjectsMINAndNEConditionAndNEstimatesAndUser } from "@/app/api/routeProjects";
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
+import { UpdateProject } from "@/app/api/routeProjects";
 
-export default function NewEstimateStepper({token, showForm, user, updateProjects}: 
-  {token:string, showForm:Function, user:string, updateProjects: () => Promise<void> }){
+export default function NewEstimateStepper({token, showForm, user, updateProjects, rol}: 
+  {token:string, showForm:Function, user:string, rol:string, updateProjects: () => Promise<void> }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper]=useState<number>(0);
@@ -60,7 +61,7 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getProjectsWithOutEstimateMin(token);
+      const res = rol.toLowerCase().includes('residente') ? await getAllsProjectsMINAndNEConditionAndNEstimatesAndUser(token, user) : await getProjectsWithOutEstimateMin(token);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
@@ -201,8 +202,19 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
+        const d={
+          estimatedProject: true
+        }
         updateProjects();
         showToastMessage('Estimacion creada satisfactoriamente!!!');
+        if(project){
+          const upd = await UpdateProject(token, project?._id, d);
+          if(typeof(upd)==='string'){
+            showToastMessageError(upd);
+          }else{
+            showToastMessage('Proyecto actualizado..');
+          }
+        }
         showForm(false);
       }
     }

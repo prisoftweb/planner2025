@@ -58,6 +58,7 @@ export const projectValidation = z.object({
   }).optional(),
   client: z.string().optional(),
   datets: z.string().optional(),
+  includesTaxes: z.boolean().optional(),
 })
 
   // condition: [

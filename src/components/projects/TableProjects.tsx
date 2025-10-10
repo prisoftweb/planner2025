@@ -10,7 +10,7 @@ import Filtering from "./Filtering";
 import { Options } from "@/interfaces/Common";
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject";
 import { useProjectsStore } from "@/app/store/projectsStore";
-import { getActiveProjectsMin } from "@/app/api/routeProjects";
+import { getActiveProjectsMin, getProjectsMinFinishedUser, getProjectsMinInEjecucionUser } from "@/app/api/routeProjects";
 import { showToastMessageError } from "../Alert";
 import Chip from "../providers/Chip";
 import { MoneyFormatter } from "@/app/functions/Globals";
@@ -535,9 +535,33 @@ export default function TableProjects({data, token, projects, optCategories,
   }, [])
 
   const addNewProject = async() => {
-    let projs: ProjectMin[];
     try {
-      projs = await getActiveProjectsMin(token);
+      let projs: ProjectMin[]=[];
+      if(rol.toLowerCase().includes('residente')){
+        // projs = await getProjectsByConditionMin(token);
+        const prj1 = await getProjectsMinInEjecucionUser(token, user._id);
+        const prj2 = await getProjectsMinFinishedUser(token, user._id);
+
+        if(typeof(prj1)==='string'){
+          showToastMessageError(prj1);
+          if(typeof(prj2)==='string'){
+            showToastMessageError(prj2);
+          }else{
+            projs=prj2;
+          }
+        }else{
+          if(typeof(prj2)==='string'){
+            showToastMessageError(prj2);
+            projs=prj1;
+          }else{
+            projs=[...prj1, ...prj2];
+            console.log('donde debe => ', projs);
+          }
+        }
+      }else{
+        projs = await getActiveProjectsMin(token);
+      }
+      
       if(typeof(projs)==='string') 
         showToastMessageError(projs);
       else {

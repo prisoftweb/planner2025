@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { GetProjectMin, getProjectsLV, GetBudgetsByProjectMin } from "@/app/api/routeProjects";
+import { GetProjectMin, getProjectsLV, GetBudgetsByProjectMin, getProjectsByUserLV } from "@/app/api/routeProjects";
 import { OneProjectMin, IBudgetByProject } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import Navigation from "@/components/navigation/Navigation";
@@ -20,10 +20,12 @@ export default async function Page({ params }:
   // let options: Options[] = await getProjectsLV(token);
   // let budgets: IBudgetByProject[]= await GetBudgetsByProjectMin(token, params.id);
 
+  let role = user.rol?.name || '';
+
   const [project, options, budgets] = await Promise.all([
     GetProjectMin(token, params.id),
     getProjectsLV(token),
-    GetBudgetsByProjectMin(token, params.id)
+    role.toLowerCase().includes('residente') ? getProjectsByUserLV(token, user._id) : getProjectsLV(token),
   ]);
   
   if(typeof(project) === "string")

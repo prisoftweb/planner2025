@@ -10,6 +10,10 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import NavProjectStepper from "./NavProjectStepper";
 import { useNewProject } from "@/app/store/newProject";
 import { useProjectsStore } from "@/app/store/projectsStore"
+import { useState, useEffect } from "react";
+import SelectReact from "../SelectReact"
+import { getUsersLV } from "@/app/api/routeUser";
+import { Options } from "@/interfaces/Common";
 
 export default function DataBasicStepper({token, user, condition, showForm}: 
   {token:string, user:string, condition: string, showForm:Function}){
@@ -20,9 +24,30 @@ export default function DataBasicStepper({token, user, condition, showForm}:
   const {updateBasicData, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, category, client, type, haveAddress, 
     company, amountG, dateG, percentage, hasamountChargeOff, amountCharge, dateCharge,
-    percentageCharge} = useNewProject();
+    percentageCharge, includesTaxes} = useNewProject();
 
   const {updateHaveNewProject} = useProjectsStore();
+
+  const [responsible, setResponsible]=useState<string>(user);
+  const [optUsers, setOptUsers]=useState<Options[]>([]);
+
+  const indexUser = optUsers.findIndex((u) => u.value===responsible);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await getUsersLV(token);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptUsers(res);
+      }
+    }
+    fetch();
+  }, []);
+
+  const handleUser = (value:string) => {
+    setResponsible(value);
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +66,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     onSubmit: async (valores) => {            
       const {name, description, keyProject} = valores;
       
-      updateBasicData(name, keyProject, description);
+      updateBasicData(name, keyProject, description, responsible);
       dispatch({type: 'INDEX_STEPPER', data: 1})
     },       
   });
@@ -50,7 +75,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     if(refRequest.current){
       refRequest.current = false;
       const {description, keyProject, name} = formik.values;
-      updateBasicData(name, keyProject, description);
+      updateBasicData(name, keyProject, description, responsible);
       
       const location = {
         community, country, cp, municipy, 
@@ -74,8 +99,8 @@ export default function DataBasicStepper({token, user, condition, showForm}:
         data = {
           // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
           amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-          hasguaranteefund, title, types:type, user,
-          location, hasamountChargeOff, amountChargeOff,
+          hasguaranteefund, title, types:type, user:responsible,
+          location, hasamountChargeOff, amountChargeOff, includesTaxes,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
@@ -83,39 +108,39 @@ export default function DataBasicStepper({token, user, condition, showForm}:
           data = {
             // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
             amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-            hasguaranteefund, hasamountChargeOff, title, types:type, user, guaranteefund: guaranteeData,
-            location, condition: [{glossary: condition, user}]
+            hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, guaranteefund: guaranteeData,
+            location, condition: [{glossary: condition, user}], includesTaxes
           }
         }else{
           if(haveAddress && hasamountChargeOff){
             data = {
               // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
               amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-              hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
-              location, condition: [{glossary: condition, user}]
+              hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+              location, condition: [{glossary: condition, user}], includesTaxes
             }
           }else{
             if(haveAddress){
               data = {
                 // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                 amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                hasguaranteefund, hasamountChargeOff, title, types:type, user,
-                location, condition: [{glossary: condition, user}]
+                hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                location, condition: [{glossary: condition, user}], includesTaxes
               }
             }else{
               if(hasguaranteefund && hasamountChargeOff){
                 data = {
                   // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                   amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                  hasguaranteefund, hasamountChargeOff, title, types:type, user, amountChargeOff,
-                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+                  hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}], includesTaxes
                 }
               }else{
                 if(hasguaranteefund){
                   data = {
                     // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description,
                     amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description, 
-                    hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                    hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, includesTaxes,
                     location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
                   }
                 }else{
@@ -123,14 +148,15 @@ export default function DataBasicStepper({token, user, condition, showForm}:
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description, 
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user,
+                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, includesTaxes,
                       location, condition: [{glossary: condition, user}], amountChargeOff
                     }
                   }else{
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description, 
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description,
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user, condition: [{glossary: condition, user}],
+                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, 
+                      condition: [{glossary: condition, user}], includesTaxes,
                     }
                   }
                 }
@@ -191,6 +217,12 @@ export default function DataBasicStepper({token, user, condition, showForm}:
                   <p>{formik.errors.keyProject}</p>
               </div>
           ) : null}
+        </div>
+        <div>
+          <Label>Responsable</Label>
+          {optUsers.length > 0 && (
+            <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
+          )}
         </div>
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>

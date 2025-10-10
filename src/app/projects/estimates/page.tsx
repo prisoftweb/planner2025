@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { ProjectsTable, IProjectWithEstimateMin } from "@/interfaces/Projects";
-import { getProjectsWithEstimatesMin } from "@/app/api/routeProjects";
+import { getProjectsWithEstimatesMin, getProjectsForEstimatedByUser } from "@/app/api/routeProjects";
 import { ProjectEstimateDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";
 import { Options } from "@/interfaces/Common";
@@ -14,11 +14,10 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let projects: IProjectWithEstimateMin[] = await getProjectsWithEstimatesMin(token);
-  // let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  let role = user.rol?.name || '';
 
   const [projects, catalogs] = await Promise.all([
-    getProjectsWithEstimatesMin(token),
+    role.toLowerCase().includes('residente') ? getProjectsForEstimatedByUser(token, user._id) : getProjectsWithEstimatesMin(token),
     getCatalogsByName(token, 'projects')
   ]);
   
@@ -96,7 +95,7 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
-        optTypes={optTypes} projectsParam={projects} token={token} user={user} />
+        optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} />
     </>
   )
 }

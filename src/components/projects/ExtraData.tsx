@@ -33,7 +33,7 @@ export default function ExtraData({token, optClients, optCategories,
   const [guarantee, setGuarantee] = useState<boolean>(project.hasguaranteefund);
   const refRequest = useRef(true);
 
-  const [includeVat, setIncludeVat] = useState<boolean>(true);
+  const [includeVat, setIncludeVat] = useState<boolean>(project?.includesTaxes || true);
 
   const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
 
@@ -86,7 +86,8 @@ export default function ExtraData({token, optClients, optCategories,
             glossary: type,
             client,
             hasguaranteefund: guarantee,
-            amountotal: Number((Number(amount.toString().replace(/[$,]/g, "")) * 1.16).toFixed(2))
+            amountotal: Number((Number(amount.toString().replace(/[$,]/g, "")) * 1.16).toFixed(2)),
+            includesTaxes: includeVat
           }
         }else{
           data= {
@@ -96,7 +97,8 @@ export default function ExtraData({token, optClients, optCategories,
             category,
             glossary: type,
             client,
-            hasguaranteefund: guarantee
+            hasguaranteefund: guarantee,
+            includesTaxes: includeVat
           }
         }
         try {

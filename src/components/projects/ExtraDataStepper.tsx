@@ -35,7 +35,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   
   const {updateExtraData, amount, code, community, country, cp, date, description, hasguaranteefund,
     municipy, stateA, street, title, amountG, percentage, dateG, amountCharge, dateCharge, 
-    hasamountChargeOff, percentageCharge} = useNewProject();
+    hasamountChargeOff, percentageCharge, responsible} = useNewProject();
 
   const [client, setClient] = useState<string>(optClients[0].value);
   const [type, setType] = useState<string>(optTypes[0].value);
@@ -44,6 +44,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   const [guarantee, setGuarantee] = useState<boolean>(false);
   const [haveAddress, setHaveAddress] = useState<boolean>(false);
   const [haveAmountCharge, setHaveAmountCharge] = useState<boolean>(false);
+  const [includeVat, setIncludeVat] = useState<boolean>(true);
 
   let year = new Date().getFullYear().toString();
   let month = (new Date().getMonth() + 1).toString();
@@ -66,7 +67,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
     onSubmit: async (valores) => {            
       const {amount} = valores;
       
-      updateExtraData(amount.replace(/[$,]/g, ""), startDate, category, type, client, user, haveAddress, company, guarantee, haveAmountCharge)
+      updateExtraData(amount.replace(/[$,]/g, ""), startDate, category, type, client, user, 
+        haveAddress, company, guarantee, haveAmountCharge, includeVat);
 
       if(haveAddress){
         dispatch({type: 'INDEX_STEPPER', data: 2})
@@ -109,8 +111,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         data = {
           // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
           amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-          hasguaranteefund, title, types:type, user,
-          location, hasamountChargeOff:haveAmountCharge, amountChargeOff,
+          hasguaranteefund, title, types:type, user:responsible,
+          location, hasamountChargeOff:haveAmountCharge, amountChargeOff, includesTaxes:includeVat,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
       }else{
@@ -118,54 +120,55 @@ export default function ExtraDataStepper({token, optClients, optCategories,
           data = {
             // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
             amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-            hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, guaranteefund: guaranteeData,
-            location, condition: [{glossary: condition, user}]
+            hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, guaranteefund: guaranteeData,
+            location, condition: [{glossary: condition, user}], includesTaxes:includeVat,
           }
         }else{
           if(haveAddress && haveAmountCharge){
             data = {
               // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
               amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-              hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
-              location, condition: [{glossary: condition, user}]
+              hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, amountChargeOff,
+              location, condition: [{glossary: condition, user}], includesTaxes:includeVat,
             }
           }else{
             if(haveAddress){
               data = {
                 // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                 amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
-                location, condition: [{glossary: condition, user}]
+                hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible,
+                location, condition: [{glossary: condition, user}], includesTaxes:includeVat,
               }
             }else{
               if(hasguaranteefund && haveAmountCharge){
                 data = {
                   // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                   amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                  hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, amountChargeOff,
-                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
+                  hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, amountChargeOff,
+                  guaranteefund: guaranteeData, condition: [{glossary: condition, user}], includesTaxes:includeVat,
                 }
               }else{
                 if(hasguaranteefund){
                   data = {
                     // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                     amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                    hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
-                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
+                    hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible,
+                    location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData, includesTaxes:includeVat,
                   }
                 }else{
                   if(haveAmountCharge){
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user,
-                      location, condition: [{glossary: condition, user}], amountChargeOff
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible,
+                      location, condition: [{glossary: condition, user}], amountChargeOff, includesTaxes:includeVat,
                     }
                   }else{
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user, condition: [{glossary: condition, user}],
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, 
+                      condition: [{glossary: condition, user}], includesTaxes:includeVat,
                     }
                   }
                 }
@@ -292,6 +295,23 @@ export default function ExtraDataStepper({token, optClients, optCategories,
               <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
                         ${!haveAmountCharge? 'bg-red-500 text-white': ''}`}
                 onClick={() => setHaveAmountCharge(false)}
+              >
+                No
+              </button>
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="includeVat"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Incluye iva?</p></Label>
+            <div className="inline-flex rounded-md shadow-sm mx-2">
+              <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 
+                        ${includeVat? 'bg-green-500 text-white': ''}`}
+                onClick={() => setIncludeVat(true)}
+              >
+                Si
+              </button>
+              <button type="button" className={`px-3 py-1 text-sm border border-red-400 rounded-md 
+                        ${!includeVat? 'bg-red-500 text-white': ''}`}
+                onClick={() => setIncludeVat(false)}
               >
                 No
               </button>

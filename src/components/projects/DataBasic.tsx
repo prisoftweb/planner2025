@@ -10,9 +10,11 @@ import { OneProjectMin } from "@/interfaces/Projects";
 import { UpdateProject, UpdateProjectPhoto, InsertConditionInProject } from "@/app/api/routeProjects";
 import UploadImage from "../UploadImage";
 import { Options } from "@/interfaces/Common";
-import SelectReact from "../SelectReact";
 import { useOneProjectsStore } from "@/app/store/projectsStore";
 import { ParseProjectToOneProjectMin } from "@/app/functions/SaveProject";
+import SelectReact from "../SelectReact"
+import { getUsersLV } from "@/app/api/routeUser";
+import { useEffect } from "react";
 
 export default function DataBasic({token, id, project, optConditions, user}: 
   {token:string, id:string, project:OneProjectMin, optConditions:Options[], user:string}){
@@ -21,6 +23,26 @@ export default function DataBasic({token, id, project, optConditions, user}:
   const {oneProjectStore, updateOneProjectStore} = useOneProjectsStore();
   const [condition, setCondition] = useState<string>(oneProjectStore?.category? 
                           oneProjectStore.category._id: project?.category?._id || optConditions[0].value );
+  const [responsible, setResponsible] = useState<string>('');
+  const [optUsers, setOptUsers]=useState<Options[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res = await getUsersLV(token);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptUsers(res);
+      }
+    }
+    fetch();
+  }, []);
+
+  const handleUser = (value:string) => {
+    setResponsible(value);
+  }
+
+  const indexUser = optUsers.findIndex((u) => u.value===responsible) || 0;
 
   let indexCond = 0;
   const refRequest = useRef(true);
@@ -67,6 +89,7 @@ export default function DataBasic({token, id, project, optConditions, user}:
             title: name, 
             description,
             code: keyProject,
+            user:responsible
           }
           try {
             const res = await UpdateProject(token, id, data);
@@ -93,6 +116,7 @@ export default function DataBasic({token, id, project, optConditions, user}:
           formdata.append('description', description);
           formdata.append('code', keyProject);
           formdata.append('photo', file);
+          formdata.append('user', responsible);
 
           try {
             const res = await UpdateProjectPhoto(token, id, formdata);
@@ -174,6 +198,12 @@ export default function DataBasic({token, id, project, optConditions, user}:
           ) : null}
         </div>
         {showConditions}
+        <div>
+          <Label>Responsable</Label>
+          {optUsers.length > 0 && (
+            <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
+          )}
+        </div>
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"
