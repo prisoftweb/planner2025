@@ -52,3 +52,11 @@ export interface ITotalPendingPaymentProvider {
   quantity: number
   cosTotal: number
 }
+
+export interface ITotalCostPendingPaymentByProviderEstatusMIN {
+  provider: string
+  status: string
+  quantity: number
+  porcentageTotal: number
+  totalPendingPayment: number
+}

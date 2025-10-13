@@ -55,7 +55,9 @@ export default function Navigation({user}: {user:UsrBack}){
     <>
       <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2 print:hidden">
         <Bars3Icon width={40} height={40} className="md:hidden cursor-pointer ml-2 rounded-md p-1 bg-slate-500 text-white print:hidden" onClick={toggleNavBar} />
-        <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} className="rounded-md" priority />
+        <Link href={'/'}>
+          <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} className="rounded-md" priority />
+        </Link>
         <div className="w-1/12 md:w-9/12 flex justify-end print:hidden">
           <div className="hidden w-full text-white md:flex justify-between print:hidden ">
             <NavItems role={role} user={user} /> 

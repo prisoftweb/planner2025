@@ -3,7 +3,8 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import DashboardContainer from "@/components/providers/dashboard/DashboardContainer";
 import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE,
-  getAllProvidersWithTradeLine, getTotalPayments, getTotalPendingPaymentsProvider } from "@/app/api/routeDashboardProviders";
+  getAllProvidersWithTradeLine, getTotalPayments, getTotalPendingPaymentsProvider, 
+  getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN } from "@/app/api/routeDashboardProviders";
 import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
 import { TotalPayments } from "@/interfaces/DasboardProviders";
 import { ProvidersDataToTableData } from "@/app/functions/DashboardProviderFunctions";
@@ -28,13 +29,15 @@ export default async function page() {
   // totalPayments = await getTotalPayments(token);
 
   const [totalCost, providersTradeLine, costsProviderWithTradeLine, costsProvider, 
-      totalPayments, penddingPayment] = await Promise.all([
+      totalPayments, penddingPayment, pendingPaymentProv] = await Promise.all([
     getAllCostsTOTALGroupByPROVIDERTRADELINE(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
-    getAllProvidersWithTradeLine(token),
+    // getAllProvidersWithTradeLine(token),
+    getTotalCostPendingPaymentByProviderEstatusMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getTotalPayments(token),
-    getTotalPendingPaymentsProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString())
+    getTotalPendingPaymentsProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getTotalCostPendingPaymentByProvidersMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString())
   ]);
 
   // let providers: ProviderWithTradeLine[] = [];
@@ -93,7 +96,16 @@ export default async function page() {
     )
   }
 
-  const data = ProvidersDataToTableData(providersTradeLine);
+  if(typeof(pendingPaymentProv)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1>
+      </>
+    )
+  }
+
+  // const data = ProvidersDataToTableData(providersTradeLine);
 
   return (
     <>
@@ -101,8 +113,9 @@ export default async function page() {
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <DashboardContainer costsProvider={costsProvider} totalCost={totalCost}
           costsProviderWithTradeLine={costsProviderWithTradeLine} 
-          providersTradeLine={providersTradeLine} data={data} token={token}
-          totalPayments={totalPayments[0]} pendingPay={penddingPayment} />
+          providersTradeLine={providersTradeLine} token={token}
+          totalPayments={totalPayments[0]} pendingPay={penddingPayment}
+          pendingPayProv={pendingPaymentProv} />
       </div>
     </>
   )

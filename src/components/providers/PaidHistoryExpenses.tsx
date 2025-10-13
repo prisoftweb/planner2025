@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { XMarkIcon } from "@heroicons/react/24/solid";
+// import { XMarkIcon } from "@heroicons/react/24/solid";
 import { GiSettingsKnobs } from "react-icons/gi";
 import NavStepperPaidExpenses from "./NavStepperPaidExpenses";
 import { HistoryExpensesTable } from "@/interfaces/Providers";
@@ -10,9 +10,10 @@ import PaidExpensesHistory from "./PaidExpensesHistory";
 import { Options } from "@/interfaces/Common";
 import { CostsPaymentTable } from "@/interfaces/Providers";
 import PaymentPlugin from "./PaymentPlugin";
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
 type Props = {
-  showForm:Function, 
+  showForm: (value: boolean) => void, 
   dataTable: HistoryExpensesTable[], 
   provider: Provider, 
   token:string, 
@@ -129,7 +130,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   
   return(
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+      <div>
         {/* top-16 */}
         <form className="z-10 w-full max-w-5xl absolute bg-white space-y-5 p-5 right-0"
           style={{height: `${heightPage}px`}}
@@ -142,8 +143,9 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
                 <p className="text-gray-500 text-sm">Agrega un nuevo pago a proveedores</p>
               </div>
             </div>
-            <XMarkIcon className="w-8 h-8 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+            {/* <XMarkIcon className="w-8 h-8 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+            <TooltipCloseIcon handleClose={showForm} />
           </div>
           
           <NavStepperPaidExpenses index={indexStepper} changeTab={handleIndexStepper} />

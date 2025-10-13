@@ -2,7 +2,8 @@
 
 import { es } from "date-fns/locale"
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent"
-import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine, TotalPayments } from "@/interfaces/DasboardProviders";
+import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine, 
+  TotalPayments, ITotalCostPendingPaymentByProviderEstatusMIN } from "@/interfaces/DasboardProviders";
 import { TableDashboardProviders, ITotalPendingPaymentProvider } from "@/interfaces/DasboardProviders";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
@@ -16,41 +17,56 @@ import { MoneyFormatter } from "@/app/functions/Globals";
 import { DateRangePicker, DateRangePickerValue } from '@tremor/react';
 import { useState } from "react";
 import { getTotalPendingPaymentsProvider, getAllCostsGroupByPROVIDERWithoutTRADELINE, 
-  getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine, getTotalPayments } from "@/app/api/routeDashboardProviders";
+  getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine, 
+  getTotalPayments, getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN } from "@/app/api/routeDashboardProviders";
 import { showToastMessageError } from "@/components/Alert";
+import IconText from "../IconText";
+import { CurrencyFormatter } from "@/app/functions/Globals";
+import { LineChartComponent } from "@/components/projects/dashboard/LineChartComponent";
+import { DonutPendingPaymentProvidersChartComponent } from "@/components/projects/dashboard/DonutChartComponent";
 
 interface OptionsBarChart {
   label: string,
   costo: number
 }
 
+interface OptionsDashboardStatus {
+  label: string,
+  percentaje: number
+  total: number,
+  // count: number
+}
+
 type DashProps={
   totalCost: TotalCostsByProvidersTradeLine[], 
-  providersTradeLine: ProviderWithTradeLine[], 
+  providersTradeLine: ITotalCostPendingPaymentByProviderEstatusMIN[], 
   costsProviderWithTradeLine: CostsByProvider[], 
   costsProvider: CostsByProvider[], 
-  data: TableDashboardProviders[], 
+  // data: TableDashboardProviders[], 
   totalPayments: TotalPayments,
   pendingPay: ITotalPendingPaymentProvider[],
+  pendingPayProv: ITotalCostPendingPaymentByProviderEstatusMIN[],
   token:string
 }
 
 export default function DashboardContainer({costsProvider, costsProviderWithTradeLine, 
-  providersTradeLine, totalCost, data, totalPayments, pendingPay, token}: DashProps) {
+  providersTradeLine, totalCost, totalPayments, pendingPay, token, pendingPayProv}: DashProps) {
 
-  let pending = 0;
-  providersTradeLine.map((p) => {
-    pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0;
-  })
+  // let pending = 0;
+  // providersTradeLine.map((p) => {
+  //   pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0;
+  // })
 
   const [pendingPaymentProv, setPendingPaymentProv] = useState<ITotalPendingPaymentProvider[]>(pendingPay);
+  const [totalPendingPayment, setTotalPendingProvider] = useState<ITotalCostPendingPaymentByProviderEstatusMIN[]>(providersTradeLine);
+  const [totalPendingPaymentCircle, setTotalPendingProviderCicle] = useState<ITotalCostPendingPaymentByProviderEstatusMIN[]>(pendingPayProv);
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
 
-  const pendingText = MoneyFormatter(totalCost[0].totalCost);
+  // const pendingText = MoneyFormatter(totalCost[0].totalCost);
   const totalPaymentsProv = MoneyFormatter(totalPayments.totalPayout);
 
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
@@ -86,21 +102,25 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     // }
 
     const [totalCost, providersTradeLine, costsProviderWithTradeLine, costsProvider, 
-          totalPayments, penddingPayment] = await Promise.all([
+          totalPayments, penddingPayment, penddingPaymentProv] = await Promise.all([
         getAllCostsTOTALGroupByPROVIDERTRADELINE(token, dateS, dateE),
-        getAllProvidersWithTradeLine(token),
+        // getAllProvidersWithTradeLine(token),
+        getTotalCostPendingPaymentByProviderEstatusMIN(token, dateS, dateE),
         getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true', dateS, dateE),
         getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false', dateS, dateE),
         getTotalPayments(token),
-        getTotalPendingPaymentsProvider(token, dateS, dateE)
+        getTotalPendingPaymentsProvider(token, dateS, dateE),
+        getTotalCostPendingPaymentByProvidersMIN(token, dateS, dateE)
       ]);
 
-    if(typeof(totalCost)==='string'){
-      showToastMessageError(totalCost);
-    }
+    // if(typeof(totalCost)==='string'){
+    //   showToastMessageError(totalCost);
+    // }
   
     if(typeof(providersTradeLine)==='string'){
       showToastMessageError(providersTradeLine);
+    }else{
+      setTotalPendingProvider(providersTradeLine);
     }
   
     if(typeof(costsProviderWithTradeLine)==='string'){
@@ -111,16 +131,34 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
       showToastMessageError(costsProvider)
     }
   
-    if(typeof(totalPayments)==='string'){
-      showToastMessageError(totalPayments)
-    }
+    // if(typeof(totalPayments)==='string'){
+    //   showToastMessageError(totalPayments)
+    // }
   
     if(typeof(penddingPayment)==='string'){
       showToastMessageError(penddingPayment);
     }else{
       setPendingPaymentProv(penddingPayment);
     }
+
+    if(typeof(penddingPaymentProv)==='string'){
+      showToastMessageError(penddingPaymentProv);
+    }else{
+      setTotalPendingProviderCicle(penddingPaymentProv);
+    }
   }
+
+  const dataPendingPayment: OptionsDashboardStatus[] = [];
+  const categoriesPending: string[] = [];
+
+  totalPendingPaymentCircle.map((prj) => {
+    dataPendingPayment.push({
+      percentaje: prj.porcentageTotal,
+      label: prj.provider,
+      total: prj.totalPendingPayment
+    });
+    categoriesPending.push(prj.provider);
+  });
 
   return (
     <>
@@ -162,7 +200,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
               <TbBrandCashapp className="w-8 h-8" />
           </CardDashboardProvider> */}
           <CardDashboardProvider p1={'TOTAL CUENTAS POR PAGAR (CXP)'} 
-            p2={ MoneyFormatter(pendingPaymentProv[0].cosTotal) } p3="Saldo actual calculado solo en facturas pendientes de pago"
+            p2={ MoneyFormatter(pendingPaymentProv && pendingPaymentProv.length > 0? pendingPaymentProv[0].cosTotal: 0) } p3="Saldo actual calculado solo en facturas pendientes de pago"
             link="" textColor="text-blue-700	" textLink="Ver detalles" valueTooltip={true} >
               <TbBrandCashapp className="w-8 h-8" />
           </CardDashboardProvider>
@@ -175,7 +213,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
               <BsReceiptCutoff className="w-8 h-8" />
           </CardDashboardProvider> */}
           <CardDashboardProvider p1={'FACTURAS POR PAGAR (CXP)'} 
-            p2={pendingPaymentProv[0].quantity.toString()} p3="Consulta las facturas pendientes de pago de todos los proveedores"
+            p2={pendingPaymentProv && pendingPaymentProv.length > 0? pendingPaymentProv[0].quantity.toString(): '0'} p3="Consulta las facturas pendientes de pago de todos los proveedores"
             link="" textColor="text-emerald-300" textLink="Detalles" >
               <BsReceiptCutoff className="w-8 h-8" />
           </CardDashboardProvider>
@@ -183,21 +221,79 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
       </div>
       
       <div className="flex gap-x-5">
-        <div className="bg-white border w-2/3 border-slate-100 shadow-lg shadow-slate-500 p-5 mt-3">
-          <h1>GASTOS CON PROVEEDORES</h1>
-          <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />    
-        </div>
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-1/3">
+        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-2/3">
           <h1>PROVEEDORES CON CREDITO</h1>
           <BarChartComponent categories={['costo']} colors={colors} data={dataAllProviders} />    
         </div>
+        <div className="bg-white border w-1/3 border-slate-100 shadow-lg shadow-slate-500 p-5 mt-3">
+          <h1>GASTOS CON PROVEEDORES</h1>
+          {/* <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />     */}
+          <LineChartComponent colors={colors} dataProjectsTop={dataProvidersTradeLine} />
+        </div>
       </div>
 
-      <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
-        <h1>PROVEEDORES CUENTAS POR PAGAR (CXP)</h1>
-        <TableDashboardProviderComponent data={data} />    
+      <div className="flex gap-x-5">
+        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-full md:w-1/2 2xl:w-1/3">
+          *<h1>SALDOS PENDIENTES DE PAGO</h1>
+          <DonutPendingPaymentProvidersChartComponent data={dataPendingPayment} colors={colors} category="percentaje"
+                      categories={categoriesPending}  />
+        </div>
+
+        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-full md:w-1/2 2xl:w-1/3">
+          <h1>SALDOS DE PROVEEDORES PENDIENTES DE PAGAR</h1>
+          {/* <TableDashboardProviderComponent data={data} />     */}
+          <ListCardPendingPaymentProviders data={totalPendingPayment} />
+        </div>
       </div>
     </>
+  )
+}
+
+export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPendingPaymentByProviderEstatusMIN[]}){
+  return(
+    <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+      <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-149px)]
+          overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+        {data.map((prov, index:number) => (
+          <div role="button"
+            key={index}
+            className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+              outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+              focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+              active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 `}
+            // onClick={() => handleProjectSel(prj._id, prj.title)}
+          >
+            <div className="flex items-center w-full ">
+              <div className="grid mr-4 place-items-center">
+                {/* <img alt="responsable" src={ prj.photo? prj.photo : '/img/projects/default.svg'}
+                  className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+                <IconText size="h-12 w-12" text={prov.provider} sizeText="" />
+              </div>
+              <div className="w-full">
+                <div className="flex gap-x-3 justify-between items-center w-full">
+                  <h6
+                    className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
+                    {prov.provider}
+                  </h6>
+                  <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                    {CurrencyFormatter({
+                      currency: 'MXN',
+                      value: prov.totalPendingPayment
+                    })}
+                  </p>
+                </div>
+                <div className="flex gap-x-3 justify-between items-center w-full">
+                  <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                  {prov.provider}
+                  </p>
+                  <Chip label={prov.status} color="#759" width="w-40" />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </nav>
+    </div>
   )
 }
 

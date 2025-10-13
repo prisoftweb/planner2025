@@ -16,6 +16,7 @@ import { GetCostsMIN } from "@/app/api/routeProviders";
 import { showToastMessageError } from "../Alert"
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions"
 import { useEffect } from "react"
+import ContainerSideNav from "../ContainerSideNav"
 
 type Props = {
   data:HistoryExpensesTable[], 
@@ -177,9 +178,11 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
         filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
       />
       {paidExpenses && (
-        <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
+        <ContainerSideNav width="w-full max-w-5xl">
+          <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
             showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable}
             optTypes={optTypes} />
+        </ContainerSideNav>
       )}
     </div>
   )

@@ -187,3 +187,84 @@ export function DonutStatusChartComponent({data, colors, categories, category, s
   //     </div>
   //   );
   // };
+
+
+export function DonutPendingPaymentProvidersChartComponent({data, colors, categories, category, size='w-96 h-96', 
+    flexWrap='md:flex-wrap', showLegend=true}: Params) {
+  
+  type CustomTooltipTypeDonut = {
+    payload: any;
+    active: boolean | undefined;
+    label: any;
+  };
+
+  const customTooltip = (props: CustomTooltipTypeDonut) => {
+    const { payload, active } = props;
+    if (!active || !payload) return null;
+    const categoryPayload = payload?.[0];
+    if (!categoryPayload) return null;
+
+    // console.log('category payload => ', categoryPayload.payload.payload);
+    return (
+      <div className="w-72 rounded-tremor-default border border-tremor-border p-2 
+          text-tremor-default shadow-tremor-dropdown bg-slate-600 z-50">
+        <div className="flex flex-1 space-x-2.5 bg-slate-600 z-50">
+          <div
+            className={`flex w-1.5 flex-col bg-${categoryPayload?.color}-500 rounded`}
+          />
+          <div className="w-full text-white">
+            <div className="flex items-center justify-between space-x-8">
+              <p className="whitespace-nowrap text-right ">
+                {/* {categoryPayload.name} */}
+                {categoryPayload.value}%
+              </p>
+              <p className="whitespace-nowrap text-right font-medium ">
+                {MoneyFormatter(categoryPayload.payload.payload.total)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="flex flex-1 space-x-2.5 bg-slate-600 z-50">
+          <div className="w-full text-white">
+            <div className="flex items-center justify-between space-x-8">
+              <p className="whitespace-nowrap text-right ">
+                {categoryPayload.payload.payload.count} Proyectos
+              </p>
+              <p className="whitespace-nowrap text-right font-medium ">
+                {MoneyFormatter(categoryPayload.payload.payload.total)}
+              </p>
+            </div>
+          </div>
+        </div> */}
+
+      </div>
+    );
+  };
+ 
+  // console.log('data => ', data);
+  // console.log('categories => ', categories);
+
+  return (
+    <>
+      <div className={`flex items-center justify-center space-x-6 ${flexWrap}`}>
+        <DonutChart
+          data={data}
+          category={category}
+          index='label'
+          valueFormatter={valueFormatter}
+          colors={colors}
+          className={size}
+          customTooltip={customTooltip}
+        />
+        {showLegend && (
+          <Legend
+            categories={categories}
+            colors={colors}
+            className="max-w-xs z-0"
+          />
+        )}
+      </div>
+    </>
+  );
+}

@@ -18,6 +18,45 @@ export async function getAllProvidersWithTradeLine(auth_token:string) {
   }
 }
 
+export async function getTotalCostPendingPaymentByProviderEstatusMIN(auth_token:string, dateStart:string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getTotalCostPendingPaymentByProviderEstatusMIN/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total de costos pendientes por proveedor y estatus';
+  }
+}
+
+export async function getTotalCostPendingPaymentByProvidersMIN(auth_token:string, dateStart:string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getTotalCostPendingPaymentByProvidersMIN/${dateStart}/${dateEnd}`;
+  console.log('url circle => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    console.log('stats circle => ', res.data.data.stats);
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    console.log('error circle => ', error);
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar total de costos pendientes';
+  }
+}
+
 export async function getAllCostsTOTALGroupByPROVIDERTRADELINE(auth_token:string, dateStart:string, dateEnd:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsTOTALGroupByPROVIDERTRADELINE/${dateStart}/${dateEnd}`;
   try {
