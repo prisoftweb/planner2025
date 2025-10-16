@@ -50,7 +50,7 @@ export default function NavExpenseStepper({index}: {index:number}){
             </span>
 
             <p className="leading-none">
-              <strong className="block font-medium"> Datos </strong>
+              <strong className="block font-medium"> Comprobante </strong>
               <small className="mt-1">  </small>
             </p>
           </li>
@@ -74,7 +74,7 @@ export default function NavExpenseStepper({index}: {index:number}){
             </span>
 
             <p className="leading-none">
-              <strong className="block font-medium"> Comprobante </strong>
+              <strong className="block font-medium"> CFDI </strong>
               <small className="mt-1">  </small>
             </p>
           </li>
@@ -90,7 +90,7 @@ export default function NavExpenseStepper({index}: {index:number}){
               </span>
 
               <p className="leading-none">
-                <strong className="block font-medium"> CFDI </strong>
+                <strong className="block font-medium"> Datos </strong>
                 <small className="mt-1"> </small>
               </p>
             </div>

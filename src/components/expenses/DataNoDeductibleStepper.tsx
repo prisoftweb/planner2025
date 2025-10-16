@@ -60,16 +60,16 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
                   .required('El importe es obligatorio!!!'),
     }),
     onSubmit: async (valores) => {            
-      const {description, amount} = valores;
-      let type = 'OTROS';
-      const cc = costCenterOpt.find((costc) => costc.value === (costCenter + '/' + concept));
-      if(cc?.label.toLowerCase().includes('mano de obra')){
-        type = 'MANO DE OBRA';
-      }
-      updateBasicData('', description, amount.replace(/[$,]/g, ""), 
-          startDate, '', '', '', '', responsibleS, 
-          '', '', categoryS, '', type, '', amount.replace(/[$,]/g, ""));
-      updateIndexStepper(2);
+      // const {description, amount} = valores;
+      // let type = 'OTROS';
+      // const cc = costCenterOpt.find((costc) => costc.value === (costCenter + '/' + concept));
+      // if(cc?.label.toLowerCase().includes('mano de obra')){
+      //   type = 'MANO DE OBRA';
+      // }
+      // updateBasicData('', description, amount.replace(/[$,]/g, ""), 
+      //     startDate, '', '', '', '', responsibleS, 
+      //     '', '', categoryS, '', type, '', amount.replace(/[$,]/g, ""));
+      // updateIndexStepper(2);
     },       
   });
 
@@ -401,7 +401,7 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
   return(
     <div className="w-full bg-white">
       <div className="mt-2">
-        <NavExpenseNoDeductibleStepper index={1} />
+        <NavExpenseNoDeductibleStepper index={2} />
       </div>
       {isPettyCash && (
         <div className="flex justify-end my-5 pr-3">
@@ -473,12 +473,12 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
               showToastMessageError('Ya hay una peticion en proceso..!');
             }
           }}>Guardar</Button>
-          <button type="submit"
+          {/* <button type="submit"
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
               border-slate-900 rounded-xl hover:bg-slate-200"
           >
             Siguiente
-          </button>         
+          </button>          */}
         </div>
       </form> 
     </div>

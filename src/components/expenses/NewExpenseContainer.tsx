@@ -111,11 +111,11 @@ export default function NewExpenseContainer({token, showForm, user, }:
   if(isDeductible){
     if(indexStepper || indexStepper>=0){
       stepform = indexStepper===1? (
-        <DataStepper token={token} user={user._id} />
-      ): indexStepper===2? (
         <VoucherStepper token={token} user={user._id} />
-      ): indexStepper===3? (
+      ): indexStepper===2? (
         <CFDIStepper token={token} user={user._id} />
+      ): indexStepper===3? (
+        <DataStepper token={token} user={user._id} />
       ): indexStepper===4? (
         <RefreshStepperComponent />
       ): (
@@ -125,10 +125,10 @@ export default function NewExpenseContainer({token, showForm, user, }:
   }else{
     if(indexStepper || indexStepper>=0){
       stepform = indexStepper===1? (
+        <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
+      ): indexStepper===2? (
         <DataNoDeductibleStepper token={token} user={user._id}
           idLabour={idLabour} idTicket={idTicket} idVat={idVat} />
-      ): indexStepper===2? (
-        <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
       ): indexStepper===3? (
         <RefreshStepperComponent />
       ):  (

@@ -8,19 +8,24 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import { XMLCFDI, Element3 } from "@/interfaces/Expense";
 import { CFDIValidation } from "@/interfaces/Expense";
 
-export default function UploadFileDropZone({label, setFile, Validation, getData}: 
-  {label:string, setFile:Function, Validation:Function, getData:Function}) {
+export default function UploadFileDropZone({label, setFile, Validation, getData, fileParam=undefined, isCFDIParam=false}: 
+  {label:string, setFile:Function, Validation:Function, getData:Function, fileParam?: File | undefined, 
+    isCFDIParam?:boolean
+  }) {
   
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
     const file = new FileReader;
     file.readAsDataURL(acceptedFiles[0])
   }, [])
 
+  // console.log('fileParam', fileParam);
+
   const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
   });
 
-  const [isCFDI, setIsCFDI] = useState<boolean>(false);
+  // const [isCFDI, setIsCFDI] = useState<boolean>(false);
+  const [isCFDI, setIsCFDI] = useState<boolean>(isCFDIParam);
   const [date, setDate] = useState<string>('');
   const [provider, setProvider] = useState<string>();
   const [total, setTotal] = useState<string>('');
@@ -32,89 +37,99 @@ export default function UploadFileDropZone({label, setFile, Validation, getData}
   const [prices, setPrices] = useState<string[]>([]);
 
   useEffect(() => {
+    if(isCFDIParam && fileParam){
+      updateCFDIData(fileParam);
+    }
+  }, []);
+
+  useEffect(() => {
     if ( typeof acceptedFiles[0] !== 'undefined' ){
       console.log(acceptedFiles[0]);
-      setAmounts([]);
-      setDescriptions([]);
-      setPrices([]);
-      setQuantities([]);
-      const res: (boolean | string) = Validation(acceptedFiles[0]);
-      if(typeof(res) === 'boolean'){
-        setFile(acceptedFiles[0]);
-        setPre(acceptedFiles[0]);
-        if(acceptedFiles[0].type.includes('xml') || acceptedFiles[0].type.includes('XML')){
-          const readXML = async () => {
-            const t = await acceptedFiles[0].text();
-            
-            const res2: (XMLCFDI | any ) = xml2js(t);
-            const uuid = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('complemento'));
-  
-            let CFDIObj:CFDIValidation = {
-              amount: '',
-              date: '',
-              RFCProvider: '',
-              taxFolio: ''
-            }
-
-            try {
-              const uuidXML = uuid.elements.find((elem: any) => {
-                if(elem.attributes?.UUID) return elem.attributes?.UUID;
-              });
-
-              const folioXML = uuidXML?.attributes?.UUID || 'error al leer CFDI';
-              setFolio(folioXML);
-
-              CFDIObj.date = res2.elements[0].attributes.Fecha;
-              const emisor = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('emisor'));
-              CFDIObj.RFCProvider = emisor?.attributes?.Rfc || 'sin rfc de proveedor';
-              CFDIObj.amount = res2.elements[0].attributes.SubTotal;
-              CFDIObj.taxFolio = folioXML;
-            } catch (error) {
-              console.log('error al leer cfdi => ', error);
-            }
-
-
-            getData(CFDIObj);
-            setDate(res2.elements[0].attributes.Fecha);
-            setRfc(CFDIObj.RFCProvider !== ''?  CFDIObj.RFCProvider: 'sin rfc');
-            setProvider(res2.elements[0].elements[0].attributes?.Nombre);
-            try {
-              const dollar = CurrencyFormatter({
-                currency: "MXN",
-                value: Number(res2.elements[0].attributes.Total)
-              })
-              setTotal(dollar);
-            } catch (error) {
-              setTotal('$0');
-            }
-          
-            try {
-              res2.elements[0].elements[2].elements?.map((concept:Element3) => {
-                setAmounts((oldValue) => [...oldValue, concept.attributes?.Importe || '']);
-                setQuantities((oldValue) => [...oldValue, concept.attributes?.Cantidad || '']);
-                setDescriptions((oldValue) => [...oldValue, concept.attributes?.Descripcion || '']);
-                setPrices((oldValue) => [...oldValue, concept.attributes?.ValorUnitario || '']);
-              })
-            } catch (error) {
-              setAmounts(['error al leer conceptos']);
-              setQuantities(['error al leer conceptos']);
-              setDescriptions(['error al leer conceptos']);
-              setPrices(['error al leer conceptos']);
-            }
-            setIsCFDI(true);
-          }
-          readXML();
-        }else{
-          setIsCFDI(false);
-        }
-      }else{
-        setFile(undefined);
-        setPre(undefined);
-      }
+      updateCFDIData(acceptedFiles[0]);
     }
   }, [acceptedFiles]);
 
-  const [pre, setPre] = useState<(File | undefined)>();
+  const updateCFDIData = (fileData: File) => {
+    setAmounts([]);
+    setDescriptions([]);
+    setPrices([]);
+    setQuantities([]);
+    const res: (boolean | string) = Validation(fileData);
+    if(typeof(res) === 'boolean'){
+      setFile(fileData);
+      setPre(fileData);
+      if(fileData.type.includes('xml') || fileData.type.includes('XML')){
+        const readXML = async () => {
+          const t = await fileData.text();
+          
+          const res2: (XMLCFDI | any ) = xml2js(t);
+          const uuid = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('complemento'));
+
+          let CFDIObj:CFDIValidation = {
+            amount: '',
+            date: '',
+            RFCProvider: '',
+            taxFolio: ''
+          }
+
+          try {
+            const uuidXML = uuid.elements.find((elem: any) => {
+              if(elem.attributes?.UUID) return elem.attributes?.UUID;
+            });
+
+            const folioXML = uuidXML?.attributes?.UUID || 'error al leer CFDI';
+            setFolio(folioXML);
+
+            CFDIObj.date = res2.elements[0].attributes.Fecha;
+            const emisor = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('emisor'));
+            CFDIObj.RFCProvider = emisor?.attributes?.Rfc || 'sin rfc de proveedor';
+            CFDIObj.amount = res2.elements[0].attributes.SubTotal;
+            CFDIObj.taxFolio = folioXML;
+          } catch (error) {
+            console.log('error al leer cfdi => ', error);
+          }
+
+
+          getData(CFDIObj);
+          setDate(res2.elements[0].attributes.Fecha);
+          setRfc(CFDIObj.RFCProvider !== ''?  CFDIObj.RFCProvider: 'sin rfc');
+          setProvider(res2.elements[0].elements[0].attributes?.Nombre);
+          try {
+            const dollar = CurrencyFormatter({
+              currency: "MXN",
+              value: Number(res2.elements[0].attributes.Total)
+            })
+            setTotal(dollar);
+          } catch (error) {
+            setTotal('$0');
+          }
+        
+          try {
+            res2.elements[0].elements[2].elements?.map((concept:Element3) => {
+              setAmounts((oldValue) => [...oldValue, concept.attributes?.Importe || '']);
+              setQuantities((oldValue) => [...oldValue, concept.attributes?.Cantidad || '']);
+              setDescriptions((oldValue) => [...oldValue, concept.attributes?.Descripcion || '']);
+              setPrices((oldValue) => [...oldValue, concept.attributes?.ValorUnitario || '']);
+            })
+          } catch (error) {
+            setAmounts(['error al leer conceptos']);
+            setQuantities(['error al leer conceptos']);
+            setDescriptions(['error al leer conceptos']);
+            setPrices(['error al leer conceptos']);
+          }
+          setIsCFDI(true);
+        }
+        readXML();
+      }else{
+        setIsCFDI(false);
+      }
+    }else{
+      setFile(undefined);
+      setPre(undefined);
+    }
+  }
+
+  const [pre, setPre] = useState<(File | undefined)>(fileParam);
   return (
     <>
       <div className="mt-4">
