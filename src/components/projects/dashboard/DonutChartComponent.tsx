@@ -215,8 +215,22 @@ export function DonutPendingPaymentProvidersChartComponent({data, colors, catego
           <div className="w-full text-white">
             <div className="flex items-center justify-between space-x-8">
               <p className="whitespace-nowrap text-right ">
-                {/* {categoryPayload.name} */}
+                {categoryPayload.name}
+                {/* {categoryPayload.value}% */}
+              </p>
+              <p className="whitespace-nowrap text-right font-medium ">
                 {categoryPayload.value}%
+                {/* {MoneyFormatter(categoryPayload.payload.payload.total)} */}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-1 space-x-2.5 bg-slate-600 z-50">
+          <div className="w-full text-white">
+            <div className="flex items-center justify-between space-x-8">
+              <p className="whitespace-nowrap text-right ">
+                {/* {categoryPayload.payload.payload.count} Proyectos */}
               </p>
               <p className="whitespace-nowrap text-right font-medium ">
                 {MoneyFormatter(categoryPayload.payload.payload.total)}
@@ -224,19 +238,6 @@ export function DonutPendingPaymentProvidersChartComponent({data, colors, catego
             </div>
           </div>
         </div>
-
-        {/* <div className="flex flex-1 space-x-2.5 bg-slate-600 z-50">
-          <div className="w-full text-white">
-            <div className="flex items-center justify-between space-x-8">
-              <p className="whitespace-nowrap text-right ">
-                {categoryPayload.payload.payload.count} Proyectos
-              </p>
-              <p className="whitespace-nowrap text-right font-medium ">
-                {MoneyFormatter(categoryPayload.payload.payload.total)}
-              </p>
-            </div>
-          </div>
-        </div> */}
 
       </div>
     );

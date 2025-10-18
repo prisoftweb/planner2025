@@ -160,6 +160,8 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     categoriesPending.push(prj.provider);
   });
 
+  console.log('info cards => ', pendingPaymentProv);
+
   return (
     <>
       <div className="flex justify-end">
@@ -225,7 +227,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
           <h1>PROVEEDORES CON CREDITO</h1>
           <BarChartComponent categories={['costo']} colors={colors} data={dataAllProviders} />    
         </div>
-        <div className="bg-white border w-1/3 border-slate-100 shadow-lg shadow-slate-500 p-5 mt-3">
+        <div className="bg-white border w-1/3 border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
           <h1>GASTOS CON PROVEEDORES</h1>
           {/* <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />     */}
           <LineChartComponent colors={colors} dataProjectsTop={dataProvidersTradeLine} />
@@ -250,6 +252,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
 }
 
 export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPendingPaymentByProviderEstatusMIN[]}){
+  console.log('provs list card => ', data);
   return(
     <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
       <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-149px)]
@@ -295,86 +298,6 @@ export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPending
       </nav>
     </div>
   )
-}
-
-export function TableDashboardProviderComponent({data}: {data: TableDashboardProviders[]}){
-  const columnHelper = createColumnHelper<TableDashboardProviders>();
-
-  const columns = [
-    columnHelper.accessor(row => row.id, {
-      id: 'seleccion',
-      cell: ({row}) => (
-        <div className="flex gap-x-2 justify-center">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            className="w-24 cursor-pointer"
-          />
-        </div>
-      ),
-      enableSorting:false,
-      header: ({table}:any) => (
-        <div className="w-8">
-          <input type="checkbox"
-            className="w-24 cursor-pointer"
-            checked={table.getIsAllRowsSelected()}
-            onClick={()=> {
-              table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-            }}
-          />
-        </div>
-      )
-    }),
-    columnHelper.accessor('name', {
-      id: 'Nombre',
-      cell: ({row}) => (
-        <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.name}</p>
-      ),
-      enableSorting:false,
-      header: () => (
-        <p>Nombre</p>
-      )
-    }),
-    columnHelper.accessor('rfc', {
-      header: 'RFC',
-      id: 'RFC',
-      cell: ({row}) => (
-        <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.rfc}</p>
-      )
-    }),
-    columnHelper.accessor('account', {
-      header: 'Cuenta',
-      id: 'Cuenta',
-      cell: ({row}) => (
-        <p className="py-2 font-semibold cursor-pointer"
-        >{row.original.account}</p>
-      ),
-    }),
-    columnHelper.accessor('status', {
-      header: 'Estatus',
-      id: 'Estatus',
-      cell: ({row}) => (
-        <>
-          {row.original.status && 
-            <Chip label={row.original.status.name? row.original.status.name: 'Sin estatus' } color={row.original.status.color} />}
-        </>
-      ),
-    }),
-    columnHelper.accessor('currentBalance', {
-      header: 'Saldo actual',
-      id: 'Saldo',
-      cell: ({row}) => (
-        <p className="py-2 font-semibold cursor-pointer"
-        >
-          {MoneyFormatter(row.original.currentBalance)}
-        </p>
-      ),
-    }),
-  ];
-
-  return <Table columns={columns} data={data} placeH="Buscar proveedor.." />
 }
 
 function getDate(date: Date){

@@ -175,20 +175,32 @@ export default function TableInvoicesComponent({token, user}:
           {row.original.ischargedfull? (
             <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrada' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
-                <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+                {row.original.accountreceivablesCount > 1? (
+                  <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+                    <DocumentArrowDownIcon className="h-6 w-6 hover:bg-blue-100 text-green-500 hover:text-green-300" />
+                  </Badge> 
+                ): (
                   <DocumentArrowDownIcon className="h-6 w-6 hover:bg-blue-100 text-green-500 hover:text-green-300" />
-                </Badge>
+                )}
           </Tooltip>
           ): (
             <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrar' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
-              <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+              {row.original.accountreceivablesCount > 1? (
+                <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+                  <DocumentArrowDownIcon className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300" onClick={() => {
+                    refEstimate.current = row.original.id;
+                    setSelInvoice(row.original);
+                    setShowNewCollection(true);
+                  }}/>
+                </Badge>
+              ): (
                 <DocumentArrowDownIcon className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300" onClick={() => {
                   refEstimate.current = row.original.id;
                   setSelInvoice(row.original);
                   setShowNewCollection(true);
                 }}/>
-              </Badge>
+              )}
             </Tooltip>
           )}
         </div>

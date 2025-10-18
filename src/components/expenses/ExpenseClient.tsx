@@ -38,8 +38,8 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                           isHistory={isHistory} token={token}
                         />
                       </div>
-            </div>): 
-    (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+            </div>): //max w-md antes abajo
+    (opt===3? (<div className="mt-3 w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
                         <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
                       </div>): 
@@ -72,7 +72,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                   changeOption={setOpt} option={opt} isticket={expense.isticket} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap lg:flex-nowrap space-x-2" 
+        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileExpense expense={expense} />

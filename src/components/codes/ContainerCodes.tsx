@@ -2,15 +2,76 @@
 
 import { useState } from "react"
 import { ICodeMin } from "@/interfaces/Code";
+import { ProviderWithTradeLine } from "@/interfaces/DasboardProviders";
+import { Chip as ChipMui } from "@mui/material";
+import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
+import { es } from "date-fns/locale"
+import { showToastMessageError } from "../Alert";
 
-export default function ContainerCodes({codes}: {codes:ICodeMin[]}) {
+export default function ContainerCodes({codes, providers}: 
+  {codes:ICodeMin[], providers: ProviderWithTradeLine[]}) {
 
   const [search, setSearch]=useState<string>('');
+  const [statuses, setStatuses]=useState<string[]>([]);
+
+  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+    from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    to: new Date(),
+  });
+
+  const addStatus = (status:string) => {
+    const newStatus = [...statuses, status];
+    setStatuses(newStatus);
+    if(rangeDate.from && rangeDate.to){
+      handleFilter(rangeDate.from, rangeDate.to, newStatus);
+    }else{
+      showToastMessageError('Seleccione un rango de fechas para filtrar');
+    }
+  }
+
+  const deleteStatus = (status:string) => {
+    const newStatus = statuses.filter((s) => s !== status);
+    setStatuses(newStatus);
+    if(rangeDate.from && rangeDate.to){
+      handleFilter(rangeDate.from, rangeDate.to, newStatus);
+    }else{
+      showToastMessageError('Seleccione un rango de fechas para filtrar');
+    }
+  }
+
+  const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
+    // updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
+  }
+
+  const handleDate = (dateI: Date, dateF: Date) => {
+    handleFilter(dateI, dateF, statuses);  
+  }
 
   const filteredCodes = search==''? codes: codes.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
 
   return (
     <>
+      <div className="flex gap-x-4 gap-y-3 flex-wrap items-center mt-3">
+        {providers.map((p) => (
+          <ChipStatus id={p._id} addStatus={addStatus} removeStatus={deleteStatus} 
+            title={p.tradename} key={p._id} />
+        ))}
+      </div>
+      <div className="mt-3">
+        {/* <Label htmlFor='date'>Fecha</Label> */}
+        <DateRangePicker 
+          className='mt-2'
+          placeholder='Seleccione un rango de fechas'
+          onValueChange={(e) => {
+            setRangeDate(e);
+            if(e.from && e.to){
+              handleDate(e.from, e.to);
+            }
+          }}
+          value={rangeDate}
+          locale={es}
+        />
+      </div>
       <div className="w-full max-w-lg" >
         <div>
           <div className="flex items-center gap-x-2">
@@ -48,17 +109,22 @@ export default function ContainerCodes({codes}: {codes:ICodeMin[]}) {
                 >
                   <div className="flex items-center w-full ">
                     <div className="grid mr-4 place-items-center">
-                      <img alt="responsable" src={ code?.user?.photo ?? '/img/projects/default.svg'}
+                      <img alt="responsable" src={ code?.userRequesting?.photo ?? '/img/users/default.jpg'}
                         className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                     </div>
                     <div className="w-full">
                       <div className="flex gap-x-3 w-full justify-between items-center p-3">
-                        <h6
-                          className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                          {code.project.title}
-                        </h6>
+                        <div>
+                          <h6
+                            className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                            {code.project.title}
+                          </h6>
+                          <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                            {code.provider.tradename}
+                          </p>
+                        </div>
                         <div className="text-right">
-                          <p className="block font-sans text-sm antialiased font-normal leading-normal text-blue-600">
+                          <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
                             {code.code}
                           </p>
                           <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
@@ -75,6 +141,22 @@ export default function ContainerCodes({codes}: {codes:ICodeMin[]}) {
         </div>
 
       </div>
+    </>
+  )
+}
+
+const ChipStatus = ({ addStatus, id, removeStatus, title}: 
+  {title:string, id:string, addStatus:Function, removeStatus:Function}) => {
+  const [active, setActive] = useState<boolean>(false);
+
+  const view = active? 
+                  <ChipMui label={title} className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>
+                  </ChipMui>: 
+                  <ChipMui label={title} color="default" onClick={() => {addStatus(id); setActive(true)}}></ChipMui>
+
+  return(
+    <>
+      {view }
     </>
   )
 }
