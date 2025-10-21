@@ -4,10 +4,11 @@ import { UsrBack } from "@/interfaces/User";
 import DashboardContainer from "@/components/providers/dashboard/DashboardContainer";
 import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE,
   getAllProvidersWithTradeLine, getTotalPayments, getTotalPendingPaymentsProvider, 
-  getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN } from "@/app/api/routeDashboardProviders";
-import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
-import { TotalPayments } from "@/interfaces/DasboardProviders";
-import { ProvidersDataToTableData } from "@/app/functions/DashboardProviderFunctions";
+  getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN, 
+  getTotalCostApplyPaymentByProvidersTradelineMIN } from "@/app/api/routeDashboardProviders";
+// import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
+// import { TotalPayments } from "@/interfaces/DasboardProviders";
+// import { ProvidersDataToTableData } from "@/app/functions/DashboardProviderFunctions";
 
 export default async function page() {
 
@@ -30,7 +31,8 @@ export default async function page() {
 
   const [totalCost, providersTradeLine, costsProviderWithTradeLine, costsProvider, 
       totalPayments, penddingPayment, pendingPaymentProv] = await Promise.all([
-    getAllCostsTOTALGroupByPROVIDERTRADELINE(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    // getAllCostsTOTALGroupByPROVIDERTRADELINE(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
+    getTotalCostApplyPaymentByProvidersTradelineMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     // getAllProvidersWithTradeLine(token),
     getTotalCostPendingPaymentByProviderEstatusMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),

@@ -312,7 +312,11 @@ function ProjectsClientDataToTableDataMin(projects:ProjectMin[]){
       percentage: p,
       imgProject: '/img/projects/default.svg',
       account: project.account,
-      total: project.amountotal
+      total: project.amountotal,
+      hasamountChargeOff: project.hasamountChargeOff?? false, 
+      hasguaranteefund: project.hasguaranteefund, 
+      includesTaxes: project.includesTaxes?? false,
+      imgUser: '/img/users/default.jpg'
     })
   });
 

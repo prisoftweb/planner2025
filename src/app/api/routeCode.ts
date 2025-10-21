@@ -42,6 +42,31 @@ export async function getCodesMin(token: string) {
   }
 }
 
+export async function getAllCodesMINByDateANDProvider(token: string, dateStart:string, dateEnd:string, providers:string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/getAllCodesMINByDateANDProvider/${dateStart}/${dateEnd}`;
+  const data = {
+    providers: providers
+  }
+  try {
+    const response = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 200) {
+      console.log('res codes => ', response.data.data.stats);
+      return response.data.data.stats;
+    }
+    return 'Error: No se pudo obtener la información de los codigos';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data || 'Error: No se pudo obtener la información de los codigos';
+    }
+    return 'Error: No se pudo obtener la información de los codigos'; 
+  }
+}
+
 export async function createCode(token: string, data: Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes`;
   try {

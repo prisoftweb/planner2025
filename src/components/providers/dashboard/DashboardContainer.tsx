@@ -3,7 +3,7 @@
 import { es } from "date-fns/locale"
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent"
 import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine, 
-  TotalPayments, ITotalCostPendingPaymentByProviderEstatusMIN } from "@/interfaces/DasboardProviders";
+  TotalPayments, ITotalCostPendingPaymentByProviderEstatusMIN, ITotalCostPaymentProvider } from "@/interfaces/DasboardProviders";
 import { TableDashboardProviders, ITotalPendingPaymentProvider } from "@/interfaces/DasboardProviders";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
@@ -18,7 +18,8 @@ import { DateRangePicker, DateRangePickerValue } from '@tremor/react';
 import { useState } from "react";
 import { getTotalPendingPaymentsProvider, getAllCostsGroupByPROVIDERWithoutTRADELINE, 
   getAllCostsTOTALGroupByPROVIDERTRADELINE, getAllProvidersWithTradeLine, 
-  getTotalPayments, getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN } from "@/app/api/routeDashboardProviders";
+  getTotalPayments, getTotalCostPendingPaymentByProviderEstatusMIN, 
+  getTotalCostPendingPaymentByProvidersMIN, getTotalCostApplyPaymentByProvidersTradelineMIN } from "@/app/api/routeDashboardProviders";
 import { showToastMessageError } from "@/components/Alert";
 import IconText from "../IconText";
 import { CurrencyFormatter } from "@/app/functions/Globals";
@@ -38,7 +39,7 @@ interface OptionsDashboardStatus {
 }
 
 type DashProps={
-  totalCost: TotalCostsByProvidersTradeLine[], 
+  totalCost: ITotalCostPaymentProvider[], 
   providersTradeLine: ITotalCostPendingPaymentByProviderEstatusMIN[], 
   costsProviderWithTradeLine: CostsByProvider[], 
   costsProvider: CostsByProvider[], 
@@ -60,6 +61,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
   const [pendingPaymentProv, setPendingPaymentProv] = useState<ITotalPendingPaymentProvider[]>(pendingPay);
   const [totalPendingPayment, setTotalPendingProvider] = useState<ITotalCostPendingPaymentByProviderEstatusMIN[]>(providersTradeLine);
   const [totalPendingPaymentCircle, setTotalPendingProviderCicle] = useState<ITotalCostPendingPaymentByProviderEstatusMIN[]>(pendingPayProv);
+  const [totalCostProviderState, setTotalCostProviderState] = useState<ITotalCostPaymentProvider[]>(totalCost);
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -103,7 +105,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
 
     const [totalCost, providersTradeLine, costsProviderWithTradeLine, costsProvider, 
           totalPayments, penddingPayment, penddingPaymentProv] = await Promise.all([
-        getAllCostsTOTALGroupByPROVIDERTRADELINE(token, dateS, dateE),
+        getTotalCostApplyPaymentByProvidersTradelineMIN(token, dateS, dateE),
         // getAllProvidersWithTradeLine(token),
         getTotalCostPendingPaymentByProviderEstatusMIN(token, dateS, dateE),
         getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true', dateS, dateE),
@@ -113,9 +115,11 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
         getTotalCostPendingPaymentByProvidersMIN(token, dateS, dateE)
       ]);
 
-    // if(typeof(totalCost)==='string'){
-    //   showToastMessageError(totalCost);
-    // }
+    if(typeof(totalCost)==='string'){
+      showToastMessageError(totalCost);
+    }else{
+      setTotalCostProviderState(totalCost);
+    }
   
     if(typeof(providersTradeLine)==='string'){
       showToastMessageError(providersTradeLine);
@@ -160,7 +164,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     categoriesPending.push(prj.provider);
   });
 
-  console.log('info cards => ', pendingPaymentProv);
+  // console.log('info cards => ', pendingPaymentProv);
 
   return (
     <>
@@ -181,7 +185,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-3 mt-2">
         <div className="p-1 bg-white">
           <CardDashboardProvider p1={'TOTAL PAGADO'} 
-            p2={totalPaymentsProv} p3="intereses cobrados de un % de la decuda vencida"
+            p2={totalCostProviderState?.length > 0? MoneyFormatter(totalCostProviderState[0].cosTotal): '0'} p3="intereses cobrados de un % de la decuda vencida"
             link="" textColor="text-blue-700" textLink="Ver detalles" valueTooltip={true} >
               <LuTicket className="w-8 h-8" />
           </ CardDashboardProvider>
@@ -252,7 +256,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
 }
 
 export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPendingPaymentByProviderEstatusMIN[]}){
-  console.log('provs list card => ', data);
+  // console.log('provs list card => ', data);
   return(
     <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
       <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-149px)]
@@ -289,7 +293,7 @@ export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPending
                   <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                   {prov.provider}
                   </p>
-                  <Chip label={prov.status} color="#759" width="w-40" />
+                  <Chip label={prov.condition.status} color={prov.condition.color} width="w-40" />
                 </div>
               </div>
             </div>

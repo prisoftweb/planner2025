@@ -33,7 +33,7 @@ export default async function Page(){
       <>
         <Navigation user={user} />
         <div className="p-10">
-          <h1 className="text-red-500 text-center text-lg">{projects}</h1>
+          <h1 className="text-red-500 text-center text-lg">{projects}projects</h1>
         </div>
       </>
     )
@@ -43,7 +43,7 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">{clients}</h1>
+        <h1 className="text-red-500 text-center text-lg">{clients}clients</h1>
       </>
     )
   }
@@ -52,7 +52,7 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">{costs}</h1>
+        <h1 className="text-red-500 text-center text-lg">{costs}costs</h1>
       </>
     )
   }
@@ -61,7 +61,7 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">{collections}</h1>
+        <h1 className="text-red-500 text-center text-lg">{collections}collections</h1>
       </>
     )
   }
@@ -75,7 +75,7 @@ export default async function Page(){
   })
 
   if(typeof(catalogs)==='string'){
-    return <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+    return <h1 className="text-red-500 text-center text-lg">{catalogs}catalogs</h1>
   }
 
   const condition = catalogs[0].condition[0].glossary._id;
@@ -84,7 +84,7 @@ export default async function Page(){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">{optCompanies}</h1>
+        <h1 className="text-red-500 text-center text-lg">{optCompanies}comapies</h1>
       </>
     )
   }

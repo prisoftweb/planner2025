@@ -8,6 +8,11 @@ export interface TotalCostsByProvidersTradeLine {
   totalDiscount: number
 }
 
+export interface ITotalCostPaymentProvider {
+  quantity: number
+  cosTotal: number
+}
+
 export interface ProviderWithTradeLine {
   _id: string
   name: string
@@ -55,7 +60,10 @@ export interface ITotalPendingPaymentProvider {
 
 export interface ITotalCostPendingPaymentByProviderEstatusMIN {
   provider: string
-  status: string
+  condition: {
+    status: string,
+    color: string
+  },
   quantity: number
   porcentageTotal: number
   totalPendingPayment: number

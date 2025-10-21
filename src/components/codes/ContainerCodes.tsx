@@ -7,12 +7,14 @@ import { Chip as ChipMui } from "@mui/material";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { showToastMessageError } from "../Alert";
+import { getAllCodesMINByDateANDProvider } from "@/app/api/routeCode";
 
-export default function ContainerCodes({codes, providers}: 
-  {codes:ICodeMin[], providers: ProviderWithTradeLine[]}) {
+export default function ContainerCodes({codes, providers, token}: 
+  {codes:ICodeMin[], providers: ProviderWithTradeLine[], token:string}) {
 
   const [search, setSearch]=useState<string>('');
   const [statuses, setStatuses]=useState<string[]>([]);
+  const [codesState, setCodesState]=useState<ICodeMin[]>(codes);
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
@@ -39,15 +41,24 @@ export default function ContainerCodes({codes, providers}:
     }
   }
 
-  const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
+  const handleFilter = async (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
     // updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
+    const res = await getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses);
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }else{
+      setCodesState(res);
+    }
   }
 
   const handleDate = (dateI: Date, dateF: Date) => {
     handleFilter(dateI, dateF, statuses);  
   }
 
-  const filteredCodes = search==''? codes: codes.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
+  // const filteredCodes = search==''? codes: codes.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
+  console.log('codes state => ', codesState);
+  const filteredCodes = search==''? codesState: codesState.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
+  console.log('filtered codes => ', filteredCodes);
 
   return (
     <>

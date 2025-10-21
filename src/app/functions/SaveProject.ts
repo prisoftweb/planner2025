@@ -145,7 +145,11 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       imgProject: project.photo,
       account: project.account,
       // total: total
-      total: project.amountotal
+      total: project.amountotal,
+      hasamountChargeOff: project.hasamountChargeOff?? false, 
+      hasguaranteefund: project.hasguaranteefund, 
+      includesTaxes: project.includesTaxes?? false,
+      imgUser: project.user?.photo ?? '/img/users/default.jpg'
     })
   });
 
@@ -175,6 +179,9 @@ export function ProjectDataToTableDataWithUtilitiesMin(projects:ProjectMin[],
       cond = '#f00';
     }
 
+    // console.log('projects min => ', projects);
+    // console.log('prj => ', project, ' guar => ', project.hasguaranteefund, ' char => ', project.hasamountChargeOff, ' tax => ', project.includesTaxes);
+
     table.push({
       amount: project.amount,
       category: project.category?.name || 'Sin Categoria',
@@ -190,7 +197,11 @@ export function ProjectDataToTableDataWithUtilitiesMin(projects:ProjectMin[],
       total: project.amountotal,
       totalColections: collection?.totalPayments?? 0,
       totalCosts: cost?.totalCost?? 0,
-      utilities: (collection?.totalPayments || 0) - (cost?.totalCost || 0)
+      utilities: (collection?.totalPayments || 0) - (cost?.totalCost || 0),
+      hasamountChargeOff: project.hasamountChargeOff?? false, 
+      hasguaranteefund: project.hasguaranteefund, 
+      includesTaxes: project.includesTaxes?? false,
+      imgUser: project.user?.photo ?? '/img/users/default.jpg'
     })
   });
 
@@ -229,7 +240,11 @@ console.log('project => ', project);
       imgProject: '/img/projects/default.svg',
       account: project.account,
       // total: total
-      total: project.amountotal
+      total: project.amountotal,
+      hasamountChargeOff: false, 
+      hasguaranteefund: false, 
+      includesTaxes: false,
+      imgUser: '/img/users/default.jpg'
     })
   });
 

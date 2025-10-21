@@ -18,7 +18,11 @@ export interface ProjectsTable{
   total: number
   totalCosts?: number
   totalColections?: number
-  utilities?: number
+  utilities?: number,
+  hasamountChargeOff: boolean, 
+  hasguaranteefund: boolean, 
+  includesTaxes: boolean,
+  imgUser: string
 }
 
 export interface ProjectsBudgetTable{
@@ -129,7 +133,9 @@ export interface ProjectMin {
   date: string
   amount: number
   photo: string
-  hasguaranteefund: boolean
+  hasguaranteefund: boolean,
+  hasamountChargeOff?: boolean, 
+  includesTaxes?: boolean,
   company: Company
   client: ClientBack
   status: boolean
@@ -152,7 +158,8 @@ export interface ProjectMin {
     date: string
     porcentage: number,
     amount: number
-  }
+  },
+  user?: UsrBack
 }
 
 export interface Location {

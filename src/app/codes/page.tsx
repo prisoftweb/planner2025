@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import { ICodeMin } from "@/interfaces/Code"
-import { getCodesMin } from "../api/routeCode";
+import { getCodesMin, getAllCodesMINByDateANDProvider } from "../api/routeCode";
 import ContainerCodes from "@/components/codes/ContainerCodes";
 import Header from "@/components/HeaderPage";
 import { getAllProvidersWithTradeLine } from "../api/routeDashboardProviders";
@@ -16,7 +16,9 @@ export default async function Page() {
   // const codes: ICodeMin[] = await getCodesMin(token);
 
   const [codes, providers] = await Promise.all([
-    getCodesMin(token), 
+    getAllCodesMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
+        new Date().toDateString(), ["664e7332277711ed05dc0424","67b359e34fc894a4dab47b18",
+          "664e7332277711ed05dc0463", "664e7332277711ed05dc0422"]), 
     getAllProvidersWithTradeLine(token)
   ])
   
@@ -49,7 +51,7 @@ export default async function Page() {
         <Header previousPage="/" title="Codigos" >
           <></>
         </Header>
-        <ContainerCodes codes={codes} providers={providers} />
+        <ContainerCodes codes={codes} providers={providers} token={token} />
       </div>
     </div>
   )

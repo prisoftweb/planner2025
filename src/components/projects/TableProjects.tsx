@@ -15,7 +15,10 @@ import { showToastMessageError } from "../Alert";
 import Chip from "../providers/Chip";
 import { MoneyFormatter } from "@/app/functions/Globals";
 import { UsrBack } from "@/interfaces/User";
-import {Tooltip} from "@nextui-org/react";
+import { MdHomeRepairService } from "react-icons/md";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { MdOutlineSavings } from "react-icons/md";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 type Props= {
   data:ProjectsTable[], 
@@ -210,6 +213,22 @@ export default function TableProjects({data, token, projects, optCategories,
             {/* <p>condition</p> */}
             <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
             {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
+            {/* <img src={row.original.imgUser} alt="foto" className="w-8 h-8" /> */}
+            {row.original.hasamountChargeOff && (
+              <TooltipContainerIcon label="Amortizacion">
+                <FaMoneyBillTransfer className="w-6 h-6 text-green-500" />
+              </TooltipContainerIcon>
+            )}
+            {row.original.hasguaranteefund && (
+              <TooltipContainerIcon label="Fondo de garantia">
+                <MdOutlineSavings className="w-6 h-6 text-green-500" />
+              </TooltipContainerIcon>
+            )}
+            {row.original.includesTaxes && (
+              <TooltipContainerIcon label="Incluye iva">
+                <MdHomeRepairService className="w-6 h-6 text-green-500" />
+              </TooltipContainerIcon>
+            )}
           </div>
         ),
         enableSorting:false,
@@ -382,6 +401,22 @@ export default function TableProjects({data, token, projects, optCategories,
             <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
             {/* <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div> */}
             {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
+            <img src={row.original.imgUser} alt="foto" className="w-6 h-6 rounded-full" />
+            {row.original.hasamountChargeOff && (
+              <TooltipContainerIcon label="Amortizacion">
+                <FaMoneyBillTransfer className="w-6 h-6 text-green-500" />
+              </TooltipContainerIcon>
+            )}
+            {row.original.hasguaranteefund && (
+              <TooltipContainerIcon label="Fondo de garantia">
+                <MdOutlineSavings className="w-6 h-6 text-green-500" />
+              </TooltipContainerIcon>
+            )}
+            {row.original.includesTaxes && (
+              <TooltipContainerIcon label="Incluye iva">
+                <MdHomeRepairService className="w-6 h-6 text-green-500" />
+              </TooltipContainerIcon>
+            )}
           </div>
         ),
         enableSorting:false,
