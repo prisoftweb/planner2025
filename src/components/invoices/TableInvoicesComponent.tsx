@@ -175,7 +175,7 @@ export default function TableInvoicesComponent({token, user}:
           {row.original.ischargedfull? (
             <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrada' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
-                {row.original.accountreceivablesCount > 1? (
+                {row.original.accountreceivablesCount > 0? (
                   <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
                     <DocumentArrowDownIcon className="h-6 w-6 hover:bg-blue-100 text-green-500 hover:text-green-300" />
                   </Badge> 
@@ -186,7 +186,7 @@ export default function TableInvoicesComponent({token, user}:
           ): (
             <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrar' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
-              {row.original.accountreceivablesCount > 1? (
+              {row.original.accountreceivablesCount > 0? (
                 <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
                   <DocumentArrowDownIcon className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300" onClick={() => {
                     refEstimate.current = row.original.id;
@@ -543,7 +543,7 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
       charged: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].charged: 0,
       unchargedbalanceamount: inv.accountreceivables?.length > 0 ? inv.accountreceivables[inv.accountreceivables.length-1].unchargedbalanceamount: 0,
       previousBalance: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].previousbalanceamount: 0,
-      accountreceivablesCount: inv.accountreceivablesCount,
+      accountreceivablesCount: inv.accountreceivables[inv.accountreceivables.length - 1].partialitynumber,
       ischargedfull: inv.ischargedfull,
       project: inv.project._id,
       nameProject: inv.project.title,

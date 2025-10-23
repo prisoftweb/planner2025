@@ -247,3 +247,31 @@ export async function GetCostsProviderMINWithoutPay(auth_token:string, id:string
     return 'Error al consultar costos sin pago!!';
   }
 }
+
+export async function getProviderByRFC(auth_token:string, prov: string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getProviderByRFCMIN/${prov}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200){
+      console.log('res stats => ', res.data.data.stats);
+      if(res.data.data.stats.length > 0){
+        console.log('res stats 0 => ', res.data.data.stats[0]);
+        return res.data.data.stats[0]._id;
+      }else{
+        return 'No se encontro el proveedor!!';
+      }
+    }
+    return res.statusText;
+  } catch (error) {
+    return 'No se encontro el proveedor!!';
+    // if(axios.isAxiosError(error)){
+    //   return error.message;
+    // }else{
+    //   return 'Error al obtener proveedor';
+    // }
+  }
+}

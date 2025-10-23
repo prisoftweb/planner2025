@@ -39,11 +39,11 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                         />
                       </div>
             </div>): //max w-md antes abajo
-    (opt===3? (<div className="mt-3 w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" 
+    (opt===3? (<div className="mt-3 w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3 h-screen" 
                       style={{borderColor:'#F8FAFC'}}>
                         <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
                       </div>): 
-      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3 h-screen" 
                           style={{borderColor:'#F8FAFC'}}>
                               <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
                         </div>): 

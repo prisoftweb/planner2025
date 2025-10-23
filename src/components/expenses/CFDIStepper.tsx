@@ -266,7 +266,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
     <div className="mt-2">
       <NavExpenseStepper index={2} />
       <UploadFileDropZone label="Subir archivo .XML" setFile={setFile} 
-          Validation={validationType} getData={handleCFDI} />
+          Validation={validationType} getData={handleCFDI} token={token} />
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" 
           onClick={() => {

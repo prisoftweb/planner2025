@@ -7,10 +7,13 @@ import { xml2js} from 'xml-js'
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { XMLCFDI, Element3 } from "@/interfaces/Expense";
 import { CFDIValidation } from "@/interfaces/Expense";
+import { getProviderByRFC } from "@/app/api/routeProviders";
+import { showToastMessageError } from "./Alert";
 
-export default function UploadFileDropZone({label, setFile, Validation, getData, fileParam=undefined, isCFDIParam=false}: 
+export default function UploadFileDropZone({label, setFile, Validation, getData, fileParam=undefined, 
+  isCFDIParam=false, token=""}: 
   {label:string, setFile:Function, Validation:Function, getData:Function, fileParam?: File | undefined, 
-    isCFDIParam?:boolean
+    isCFDIParam?:boolean, token?: string
   }) {
   
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
@@ -49,6 +52,16 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
     }
   }, [acceptedFiles]);
 
+  const fetchProv = async (rfcParam:string) => {
+    const prov = await getProviderByRFC(token, rfcParam);
+    if(prov==='No se encontro el proveedor!!'){
+      showToastMessageError(prov);
+      return '';
+    }else{
+      return prov;
+    }
+  }
+
   const updateCFDIData = (fileData: File) => {
     setAmounts([]);
     setDescriptions([]);
@@ -63,13 +76,22 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
           const t = await fileData.text();
           
           const res2: (XMLCFDI | any ) = xml2js(t);
+          console.log('res 2 => ', res2);
           const uuid = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('complemento'));
+          const taxes = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('impuestos'));
+          const concepts = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('conceptos'));
 
           let CFDIObj:CFDIValidation = {
             amount: '',
             date: '',
             RFCProvider: '',
-            taxFolio: ''
+            taxFolio: '',
+            folio: '',
+            total: '',
+            vat: '',
+            concepts: '',
+            proveedor: '',
+            discount: '0'
           }
 
           try {
@@ -80,11 +102,25 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
             const folioXML = uuidXML?.attributes?.UUID || 'error al leer CFDI';
             setFolio(folioXML);
 
+            let conAux='';
+            concepts?.elements?.map((c:any) => {
+              conAux += Number(c?.attributes?.Cantidad || 0).toFixed(2) + ' ' + c?.attributes?.Descripcion + ', ';
+            });
+
             CFDIObj.date = res2.elements[0].attributes.Fecha;
             const emisor = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('emisor'));
             CFDIObj.RFCProvider = emisor?.attributes?.Rfc || 'sin rfc de proveedor';
             CFDIObj.amount = res2.elements[0].attributes.SubTotal;
+            CFDIObj.total = res2.elements[0].attributes.Total;
+            CFDIObj.folio = res2.elements[0].attributes.Folio;
+            CFDIObj.discount = res2.elements[0].attributes?.Descuento ? res2.elements[0].attributes?.Descuento : '0' ;
             CFDIObj.taxFolio = folioXML;
+            CFDIObj.vat = taxes.attributes?.TotalImpuestosTrasladados?.toString() || '0';
+            CFDIObj.concepts=conAux;
+            if(CFDIObj.RFCProvider !== 'sin rfc de proveedor'){
+              const provAux = await fetchProv(CFDIObj.RFCProvider);
+              CFDIObj.proveedor = provAux;
+            }
           } catch (error) {
             console.log('error al leer cfdi => ', error);
           }
@@ -146,9 +182,9 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
           }
         </div>
       </div>
-      {pre && !isCFDI && <iframe className="w-full h-80 mt-4" src={URL.createObjectURL(pre)} />}
+      {pre && !isCFDI && <iframe className="w-full h-full mt-4" src={URL.createObjectURL(pre)} />}
       {isCFDI && (
-        <>
+        <div className="h-full">
           <div className="grid grid-cols-2 mt-5">
             <div className=" bg-gray-500 p-4">
               <p className="text-4xl text-white">{total}</p>
@@ -180,7 +216,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
               <p>{amounts[index]}</p>
             </div>  
           ))}
-        </>
+        </div>
       )}
     </>
   );

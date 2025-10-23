@@ -38,11 +38,18 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   const formik = useFormik({
     initialValues: {
-      folio: folio,
-      taxFolio: taxFolio,
-      description: description,
-      discount: discount,
-      amount: amount,
+      // folio: folio,
+      // taxFolio: taxFolio,
+      // description: description,
+      // discount: discount,
+      // amount: amount,
+      // vat: vat,
+      // taxExempt: taxExempt,
+      folio: dataCFDI? dataCFDI.folio: folio,
+      taxFolio: dataCFDI? dataCFDI.taxFolio : taxFolio,
+      description: dataCFDI? dataCFDI.concepts : description,
+      discount: dataCFDI? dataCFDI?.discount : discount,
+      amount: dataCFDI? dataCFDI.amount : amount,
       vat: vat,
       taxExempt: taxExempt,
     }, 
@@ -77,10 +84,13 @@ export default function DataStepper({token, user}: {token:string, user:string })
   if(day.length ===1) day = '0'+day;
 
   const d = year+'-'+month+'-'+day;
+
+  const dateDat = dataCFDI? dataCFDI.date: date;
   
-  const [startDate, setStartDate] = useState<string>(date!== ''? date: d);
+  const [startDate, setStartDate] = useState<string>(dateDat!== ''? dateDat: d);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
-  const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
+  // const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
+  const [provider, setProvider] = useState<string>(dataCFDI? dataCFDI.proveedor: providers[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
   const [categoryS, setCategoryS] = useState<string>(categories[0].value);
   
@@ -88,9 +98,9 @@ export default function DataStepper({token, user}: {token:string, user:string })
   const refRequest = useRef(true);
   
   const [idVat, setIdVat] = useState<string>(vats[0].value);
-  const [vatValue, setVatValue] = useState<string>(vat!==''? vat: '0');
+  const [vatValue, setVatValue] = useState<string>(dataCFDI? dataCFDI.vat: '0');
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
-  const [totalExpense, setTotalExpense] = useState<string>(total);
+  const [totalExpense, setTotalExpense] = useState<string>(dataCFDI? dataCFDI.total : total);
   
   const updateIva = (idValue: string) => {
     try {
@@ -459,18 +469,20 @@ export default function DataStepper({token, user}: {token:string, user:string })
   }
 
   let indexProvider = 0;
-  if(provider !== ''){
+  if(provider !== '' || dataCFDI?.proveedor){
+    const valProv = dataCFDI? dataCFDI.proveedor: proveedor;
     providers.map((opt, index:number) => {
-      if(opt.value === proveedor){
+      if(opt.value === valProv){
         indexProvider = index;
       }
     });
   }
 
   let indexProviderSAT = 0;
-  if(provider !== ''){
+  if(provider !== '' || dataCFDI?.proveedor){
+    const valProv = dataCFDI? dataCFDI.proveedor: proveedor;
     providersSAT.map((opt, index:number) => {
-      if(opt.value === proveedor){
+      if(opt.value === valProv){
         indexProviderSAT = index;
       }
     });
@@ -818,7 +830,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 
               type="date"
-              value={startDate}
+              value={dataCFDI? dataCFDI.date.substring(0, 10) : startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>

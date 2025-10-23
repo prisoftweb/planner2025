@@ -193,7 +193,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
         
         <div className="p-1 bg-white">
           <CardDashboardProvider p1={'TOTAL PROVEEDORES'} 
-            p2={providersTradeLine.length.toString()} p3="accede a ver los proveedores con credito"
+            p2={totalPendingPayment.length.toString()} p3="accede a ver los proveedores con credito"
             link="" textColor="text-violet-900" textLink="Ver aqui" >
               <GrServices className="w-8 h-8" />
           </CardDashboardProvider>
@@ -228,11 +228,11 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
       
       <div className="flex gap-x-5">
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-2/3">
-          <h1>PROVEEDORES CON CREDITO</h1>
+          <h1>GASTOS CON PROVEEDORES</h1>
           <BarChartComponent categories={['costo']} colors={colors} data={dataAllProviders} />    
         </div>
         <div className="bg-white border w-1/3 border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
-          <h1>GASTOS CON PROVEEDORES</h1>
+          <h1>GASTOS CON PROVEEDORES CON CREDITO</h1>
           {/* <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />     */}
           <LineChartComponent colors={colors} dataProjectsTop={dataProvidersTradeLine} />
         </div>

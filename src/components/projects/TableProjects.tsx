@@ -216,17 +216,23 @@ export default function TableProjects({data, token, projects, optCategories,
             {/* <img src={row.original.imgUser} alt="foto" className="w-8 h-8" /> */}
             {row.original.hasamountChargeOff && (
               <TooltipContainerIcon label="Amortizacion">
-                <FaMoneyBillTransfer className="w-6 h-6 text-green-500" />
+                <div className="w-6 h-6 min-w-6 min-h-6">
+                  <FaMoneyBillTransfer className="w-6 h-6 text-green-500" />
+                </div>
               </TooltipContainerIcon>
             )}
             {row.original.hasguaranteefund && (
               <TooltipContainerIcon label="Fondo de garantia">
-                <MdOutlineSavings className="w-6 h-6 text-green-500" />
+                <div className="w-6 h-6 min-w-6 min-h-6">
+                  <MdOutlineSavings className="w-6 h-6 text-green-500" />
+                </div>
               </TooltipContainerIcon>
             )}
             {row.original.includesTaxes && (
               <TooltipContainerIcon label="Incluye iva">
-                <MdHomeRepairService className="w-6 h-6 text-green-500" />
+                <div className="w-6 h-6 min-w-6 min-h-6">
+                  <MdHomeRepairService className="w-6 h-6 text-green-500" />
+                </div>
               </TooltipContainerIcon>
             )}
           </div>
@@ -401,20 +407,26 @@ export default function TableProjects({data, token, projects, optCategories,
             <img src={row.original.imgProject} alt="foto" className="w-8 h-8" />
             {/* <div className={`w-5 h-5`} style={{'backgroundColor': row.original.condition}}></div> */}
             {!isHistory && <DeleteElement id={row.original.id} name={row.original.project} remove={RemoveProject} token={token} />}
-            <img src={row.original.imgUser} alt="foto" className="w-6 h-6 rounded-full" />
+            <img src={row.original.imgUser} alt="foto" className="w-6 h-6 min-h-6 min-w-6 rounded-full" />
             {row.original.hasamountChargeOff && (
               <TooltipContainerIcon label="Amortizacion">
-                <FaMoneyBillTransfer className="w-6 h-6 text-green-500" />
+                <div className="w-6 h-6 min-w-6 min-h-6">
+                  <FaMoneyBillTransfer className="w-6 h-6 text-green-500" />
+                </div>
               </TooltipContainerIcon>
             )}
             {row.original.hasguaranteefund && (
               <TooltipContainerIcon label="Fondo de garantia">
-                <MdOutlineSavings className="w-6 h-6 text-green-500" />
+                <div className="w-6 h-6 min-w-6 min-h-6">
+                  <MdOutlineSavings className="w-6 h-6 text-green-500" />
+                </div>
               </TooltipContainerIcon>
             )}
             {row.original.includesTaxes && (
               <TooltipContainerIcon label="Incluye iva">
-                <MdHomeRepairService className="w-6 h-6 text-green-500" />
+                <div className="w-6 h-6 min-w-6 min-h-6">
+                  <MdHomeRepairService className="w-6 h-6 text-green-500" />
+                </div>
               </TooltipContainerIcon>
             )}
           </div>

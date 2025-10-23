@@ -125,5 +125,11 @@ export interface CFDIValidation{
   date:string,
   amount:string,
   taxFolio:string,
-  RFCProvider:string
+  RFCProvider:string,
+  folio: string,
+  total: string,
+  vat: string,
+  concepts: string,
+  proveedor: string,
+  discount: string
 }

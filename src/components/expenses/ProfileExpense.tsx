@@ -30,7 +30,7 @@ export default function ProfileExpense({expense}: {expense:OneExpense}){
 
   return(
     <>
-      <div className="w-full h-full mt-3">
+      <div className="w-full mt-3">
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>
