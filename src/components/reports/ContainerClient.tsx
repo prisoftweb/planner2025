@@ -30,12 +30,13 @@ type Props = {
   optConditionsFilter: Options[], 
   optCompaniesFilter: Options[], 
   optProjectsFilter:Options[], 
-  isHistory?:boolean
+  isHistory?:boolean,
+  optReps: Options[],
 }
 
 export default function ContainerClient({token, optCompanies, optDepartments, 
   optProjects, condition, user, data, reports, optCompaniesFilter, 
-  optConditionsFilter, optProjectsFilter, isHistory=false}: Props){
+  optConditionsFilter, optProjectsFilter, isHistory=false, optReps}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [dataTable, setDataTable] = useState<ReportTable[]>(data);
@@ -122,7 +123,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
           <TableReports data={dataTable} optConditions={optConditionsFilter} 
             reports={reportsStore.length>0? reportsStore: reports} token={token} optCompanies={optCompaniesFilter} 
             optProjects={optProjectsFilter} isFilter={isFilter} setIsFilter={handleFilter}
-            user={user} />
+            user={user} optReps={optReps} />
         )}
       </div>
     </div>

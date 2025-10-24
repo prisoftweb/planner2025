@@ -422,3 +422,46 @@ export async function CloneReport(auth_token:string, id:string) {
     return 'Error al clonar reporte!!';
   }
 }
+
+export async function getAllReportsNE3ConditionsLV(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/getAllReportsNE3ConditionsLV/666a3e8c868c1b00f613eb76/666a37ca868c1b00f613e8d4/66575b84238ea760fe526aac`;
+  // console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    // console.log('res => ', res);
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    // console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al obtener informes disponibles';
+    }
+    return 'Ocurrio un problema al obtener informes disponibles';
+  }
+}
+
+export async function copyAndMoveCostsReport(auth_token:string, repOrigin:string, repDestiny:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/copyAndMoveCostsReport/${repOrigin}/${repDestiny}`;
+  // console.log('url => ', url);
+  try {
+    const res = await axios.post(url, {}, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    // console.log('res => ', res);
+    if(res.status === 200) return res.status;
+    return res.statusText;
+  } catch (error) {
+    // console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un problema al mover costos del informe';
+    }
+    return 'Ocurrio un problema al mover costos del informe';
+  }
+}

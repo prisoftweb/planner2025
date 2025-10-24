@@ -121,7 +121,8 @@ export default async function Page() {
       <ContainerClient data={table} optCompaniesFilter={optCompaniesFilter} 
           optConditionsFilter={optConditionsFilter} condition="" optCompanies={[]}
           optDepartments={[]} optProjects={[]} user={user} isHistory={true}
-          optProjectsFilter={optProjectsFilter} reports={reports} token={token} />
+          optProjectsFilter={optProjectsFilter} reports={reports} token={token} 
+          optReps={[]} />
     </>
   )
 }

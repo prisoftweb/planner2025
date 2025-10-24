@@ -54,9 +54,12 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
         <div>
           <Label htmlFor="payment">Complemento de pago</Label>
           <Input
-            onChange={(e) => setPaymentPlugin(e.target.value)}
-            value={paymentPlugin.replace(/[$,","]/g, "") || ''}
+            // onChange={(e) => setPaymentPlugin(e.target.value)}
+            onChange={(e) => setPaymentPlugin(e.target.value.replace(/[^0-9]/g, ""))}
+            // value={paymentPlugin.replace(/[$,","]/g, "") || ''}
+            value={paymentPlugin.replace(/[^0-9]/g, "") || ''}
             autoFocus
+            // type="number"
           />
           <p className="text-red-500" >{paymentPluaginLabel}</p>
         </div>

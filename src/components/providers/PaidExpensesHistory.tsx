@@ -109,6 +109,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
   const paidExpenses = async() => {
     let pen = pending - Number(amount.replace(/[$,","]/g, ""));
 
+    console.log('payment plugin param => ', paymentPlugin);
     const paymentplugin = {
       plugin: Number(paymentPlugin.replace(/[$,","]/g, "")),
       date: datePayment,
@@ -197,6 +198,9 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
         paymentplugin
       }
 
+      // console.log('data de pago => ', JSON.stringify(data));
+
+      // showToastMessage('pagado!!!');
       const res = await createPayments(token, data);
       if(typeof(res) === 'string'){
         showToastMessageError(res);

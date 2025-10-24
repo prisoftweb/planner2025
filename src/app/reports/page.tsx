@@ -6,7 +6,7 @@ import { getDepartmentsLV } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
 import { getProjectsLVNoCompleted } from "../api/routeProjects";
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, 
-  GetAllReportsWithUSERAndNEConditionMIN
+  GetAllReportsWithUSERAndNEConditionMIN, getAllReportsNE3ConditionsLV
  } from "../api/routeReports";
 import { ReportParse, ReportTable } from "@/interfaces/Reports";
 import { ReportParseDataToTableData } from "../functions/ReportsFunctions";
@@ -20,41 +20,35 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let reports: ReportParse[] = [];
-  // let optCompanies: Options[] = [];
-  // let optDepartments: Options[] = [];
-  // let optProjects:Options[];
   let optProjectsFilter: Options[] = [{
       label: 'TODOS',
       value: 'all'
     }]
-  // let catalogs: GlossaryCatalog[];
   
-  // if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-  //   reports = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
-  // }else{
-  //   reports = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-  // }
-
-  // optCompanies = await getCompaniesLV(token);
-  // optDepartments = await getDepartmentsLV(token);
-  // optProjects = await getProjectsLVNoCompleted(token);
-  // catalogs = await getCatalogsByName(token, 'reports');
-
-  const [reports, optCompanies, optDepartments, optProjects, catalogs]=await Promise.all([
+  const [reports, optCompanies, optDepartments, optProjects, catalogs, optReps]=await Promise.all([
     typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')? 
       GetAllReportsWithUSERAndNEConditionMIN(token, user._id): GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id),
       getCompaniesLV(token),
       getDepartmentsLV(token),
       getProjectsLVNoCompleted(token),
-      getCatalogsByName(token, 'reports')
+      getCatalogsByName(token, 'reports'), 
+      getAllReportsNE3ConditionsLV(token)
   ]);
   
   if(typeof(reports)==='string'){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-lg text-center text-red-500">{reports}</h1>
+        <h1 className="text-lg text-center text-red-500">{reports} rep</h1>
+      </>
+    )
+  }
+
+  if(typeof(optReps)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-lg text-center text-red-500">{optReps} opr</h1>
       </>
     )
   }
@@ -70,7 +64,7 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
+        <h1 className="text-center text-lg text-red-500">{optProjects} opp</h1>
       </>
     )
   }
@@ -81,7 +75,7 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
+        <h1 className="text-red-500 text-center text-lg">{catalogs} cat</h1>
       </>
     )
   }
@@ -109,7 +103,7 @@ export default async function Page() {
       <Navigation user={user} />
       <ContainerClient data={table} condition={condition} optCompanies={optCompanies} 
           optCompaniesFilter={optCompaniesFilter} optConditionsFilter={optConditionsFilter}
-          optDepartments={optDepartments} optProjects={optProjects} 
+          optDepartments={optDepartments} optProjects={optProjects} optReps={optReps} 
           optProjectsFilter={optProjectsFilter} reports={reports} token={token} user={user} />
     </>
   )

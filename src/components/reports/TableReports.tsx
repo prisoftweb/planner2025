@@ -12,12 +12,15 @@ import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { useOptionsReports } from "@/app/store/reportsStore";
 import { UsrBack } from "@/interfaces/User";
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN,
-  CloneReport } from "@/app/api/routeReports";
-import { showToastMessageError, showToastMessage } from "../Alert";
+  CloneReport, copyAndMoveCostsReport } from "@/app/api/routeReports";
+// import { showToastMessageError, showToastMessage } from "../Alert";
 import RemoveElement from "../RemoveElement";
 import { IoCopy } from "react-icons/io5";
 import {Tooltip} from "@nextui-org/react";
 import ContainerSideNav from "../ContainerSideNav";
+import SelectReact from "../SelectReact";
+import {confirmAlert} from 'react-confirm-alert';
+import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 
 type Props = {
   data:ReportTable[], 
@@ -28,11 +31,12 @@ type Props = {
   optConditions: Options[], 
   isFilter:boolean, 
   setIsFilter:(value: boolean) => void, 
-  user:UsrBack
+  user:UsrBack,
+  optReps: Options[],
 }
 
 export default function TableReports({data, token, reports, optCompanies, 
-  optConditions, optProjects, isFilter, setIsFilter, user}: Props){
+  optConditions, optProjects, isFilter, setIsFilter, user, optReps}: Props){
   
   const columnHelper = createColumnHelper<ReportTable>();
 
@@ -99,6 +103,10 @@ export default function TableReports({data, token, reports, optCompanies,
     } catch (error) {
       showToastMessageError("Ocurrio un problema al clonar costo!!!");
     }
+  }
+
+  const handleMoveCostsToReport = (id:string, destiny:string) => {
+    moveCostsToReport(token, id, destiny);
   }
 
   const columns = [
@@ -202,6 +210,18 @@ export default function TableReports({data, token, reports, optCompanies,
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >
           <Chip label={row.original.Status} color={row.original.color} />
+        </div>
+      ),
+    }),
+    columnHelper.accessor('moveRep', {
+      header: 'Mover a',
+      id: 'Mover',
+      cell: ({row}) => (
+        <div className="w-36 min-w-36">
+          <SelectReact index={0} opts={[{
+            label: 'Seleccione informe',
+            value: '0'
+          }, ...optReps]} setValue={() => {}} moveRep={handleMoveCostsToReport} idRep={row.original.id} />
         </div>
       ),
     }),
@@ -381,4 +401,58 @@ export default function TableReports({data, token, reports, optCompanies,
       {view}
     </>
   )
+}
+
+const moveCostsToReport = async (token:string, origin:string, destiny:string) => {
+
+  if(origin==='0') return;
+  
+  confirmAlert({
+    title: 'Confirmacion para mover gastos',
+    message: `Desea mover los gastos de este informe?`,
+    buttons: [
+    {
+      label: 'Si',
+      onClick: async () => {
+        let res = undefined;
+
+        switch('user'){
+          case 'user':
+            try {
+              res = await copyAndMoveCostsReport(token, origin, destiny);
+              if(res === 200) {
+                showToastMessage(`Los gastos se movieron satisfactoriamente!`);
+              } else {
+                showToastMessageError(`Error al mover gastos del informe..`);
+              }
+            } catch (error) {
+              console.log('Error al mover');
+            }
+          break;
+        }
+      }           
+    },
+    {
+      label: 'No',
+      onClick: () => {
+        showToastMessageInfo('Se ha cancelado el mover gastos del informe!');            
+      }
+    }
+    ],
+    closeOnEscape: true,
+    closeOnClickOutside: true,
+    keyCodeForClose: [8, 32],
+    willUnmount: () => {},
+    //afterClose: () => {},
+    onClickOutside: () => {
+      showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
+    },
+    onkeyPress: () => {
+      showToastMessageInfo('Favor de seleccionar SI o NO');
+    },
+    onKeypressEscape: () => {
+      showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
+    },
+    overlayClassName: "overlay-custom-class-name"
+  });
 }

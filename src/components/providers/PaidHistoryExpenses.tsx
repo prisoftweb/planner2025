@@ -36,6 +36,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   const [comments, setComments] = useState<string>('');
 
   const handlePaymentPlugin = (value:string) => {
+    console.log('handle payment p => ', value);
     setPaymentPlugin(value);
   }
 

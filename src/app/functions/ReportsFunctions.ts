@@ -26,6 +26,7 @@ export function ReportDataToTableData(reports:Report[]){
       color: report.moves[report.moves.length - 1].condition.color || '',
       account: report.account,
       isPettyCash: report.ispettycash,
+      moveRep: true,
     })
   });
 
@@ -56,6 +57,7 @@ export function ReportParseDataToTableData(reports:ReportParse[]){
       color: report.lastmove?.condition.color || '',
       account: report.account,
       isPettyCash: report.ispettycash,
+      moveRep: true
     })
   });
   return table;

@@ -2,8 +2,9 @@ import Select from 'react-select'
 import { Options } from '@/interfaces/Common'
 import { useState } from 'react'
 
-export default function SelectReact({opts, setValue, index, disabled=false}: 
-                          {opts:Options[], setValue:Function, index:number, disabled?:boolean}){
+export default function SelectReact({opts, setValue, index, disabled=false, moveRep=undefined, idRep='0'}: 
+  {opts:Options[], setValue:Function, index:number, disabled?:boolean, 
+    idRep?:string|undefined, moveRep?: ((a:string, b:string) => void)}){
   
   const [selOpt, setSelOpt] = useState<Options>(index!== undefined? opts[index]: opts[opts.length-1]);
   
@@ -11,7 +12,13 @@ export default function SelectReact({opts, setValue, index, disabled=false}:
     <Select
       value={selOpt}
       options={opts}
-      onChange={(e:any) => {setSelOpt(e); setValue(e.value)}} 
+      onChange={(e:any) => {
+        setSelOpt(e); 
+        setValue(e.value)
+        if(idRep && moveRep){
+          moveRep(idRep, e.value);
+        }
+      }} 
       className="w-full text-lg mt-2 text-gray-900  rounded-lg 
         bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
       styles={{

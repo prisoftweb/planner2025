@@ -18,6 +18,7 @@ export interface ReportTable{
   color:string
   account: string
   isPettyCash: boolean
+  moveRep: true
 }
 
 export interface Report {
