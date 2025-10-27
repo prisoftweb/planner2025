@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getDashboardProjectByBudgetControl, getProjectContractualControl, getDashboardProjectCostoCentersCategory } from "@/app/api/routeProjects";
 import { ProjectByBudgetedControl, IContractualControlProject } from "@/interfaces/DashboardProjects";
 import { ProgressBarComponent } from "./dashboard/ProgressBarComponent";
-import { CurrencyFormatter } from "@/app/functions/Globals";
+import { CurrencyFormatter, MoneyFormatter } from "@/app/functions/Globals";
 import { showToastMessageError } from "../Alert";
 import { ProjectCostoCenters, ProjectCostoCentersCategory } from "@/interfaces/DashboardProjects";
 import { ProgressCircle } from "@tremor/react";
@@ -11,6 +11,7 @@ import { getDashboardProjectCostoCenters } from "@/app/api/routeProjects";
 import { OneProjectMin } from "@/interfaces/Projects";
 import VerticalBarChart from "./VerticalBarChart";
 import NewDonutChartComponent from "./dashboard/NewDonutChartComponent";
+import { DonutChartComponentWithDescription } from "./dashboard/NewDonutChartComponent";
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
 import { GiProfit } from "react-icons/gi";
@@ -115,6 +116,7 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
 
   const values: number[] = [];
   const titles: string[] = [];
+  const descriptions: string[] = [];
 
   costoCenters.map((prj) => {
     dataCostoCenters.push({
@@ -124,7 +126,9 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
     });
     titles.push(prj.costocenter.concept);
     // values.push(prj.porcentage);
-    values.push(prj.subtotalCost);
+    // values.push(prj.subtotalCost);
+    values.push(prj.porcentage);
+    descriptions.push(MoneyFormatter(prj.subtotalCost));
     categoriesCostoCenters.push(prj.costocenter.concept);
   });
 
@@ -145,6 +149,11 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
     return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + r().toFixed(1) + ')';
   }
 
+  const valuesCat: number[] = [];
+  const titlesCat: string[] = [];
+  const descriptionsCat: string[] = [];
+  const colorsCat: string[]= [];
+
   costoCentersCat.map((prj) => {
     console.log('prj cat => ', prj.costocenter);
     dataCostoCentersCat.push({
@@ -152,7 +161,25 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
       data:[prj.totalCost],
       label: prj.costocenter.category
     });
+    valuesCat.push(prj.totalCost);
+    descriptionsCat.push(prj.porcentage.toString());
+    colorsCat.push(random_rgba());
+    titlesCat.push(prj.costocenter.category);
+
   });
+
+  const dataCostCenterCategories: DonutChartJS = {
+    labels: titlesCat,
+    datasets: [
+      {
+        label: 'Costo total',
+        data: valuesCat,
+        backgroundColor: colorsCat,
+        // backgroundColor:[ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'],
+        hoverOffset: 4
+      }
+    ]
+  };
 
   console.log('project => ', project);
 
@@ -305,9 +332,9 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                     })}) 
                   </p>
                     <ProgressBarComponent label={''} 
-                      // progress={contractualControl?.estimateInfo?.porcentage || 0}
-                      progress={100} 
-                      widthBar="w-full" color={colorsRandom[d1]} hei="h-5" />
+                        progress={100} amount={(showTotal? contractualControl?.estimateInfo?.amount : 
+                        contractualControl?.estimateInfo?.amountPro) || 0} 
+                        widthBar="w-full" color={colorsRandom[d1]} hei="h-5" />
                   
                   <p className=" text-sm mt-2">Anticipo ({
                     CurrencyFormatter({
@@ -316,7 +343,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                     })}) 
                   </p>
                     <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageCashAdvance || 0} 
-                      widthBar="w-full" color={colorsRandom[d2]} hei="h-5" />
+                      widthBar="w-full" color={colorsRandom[d2]} hei="h-5"
+                      amount={contractualControl?.estimateInfo?.cashAdvance || 0} />
                   
                   <p className=" text-sm mt-2">Amortizado ({
                     CurrencyFormatter({
@@ -325,7 +353,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                     })}) 
                   </p>
                     <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageChargeOff || 0} 
-                      widthBar="w-full" color={colorsRandom[d3]} hei="h-5" />
+                      widthBar="w-full" color={colorsRandom[d3]} hei="h-5"
+                      amount={contractualControl?.estimateInfo?.amountChargeOff || 0} />
                   
                   <p className=" text-sm mt-2">Estimado ({
                     CurrencyFormatter({
@@ -334,7 +363,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                     })}) 
                   </p>
                     <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageEstimated || 0 } 
-                      widthBar="w-full" color={colorsRandom[d4]} hei="h-5" />
+                      widthBar="w-full" color={colorsRandom[d4]} hei="h-5"
+                      amount={contractualControl?.estimateInfo?.estimatedTotal || 0} />
 
                   <p className=" text-sm mt-2">Garantia ({
                     CurrencyFormatter({
@@ -343,7 +373,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                     })}) 
                   </p>
                     <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0 } 
-                      widthBar="w-full" color={colorsRandom[d5]} hei="h-5" />
+                      widthBar="w-full" color={colorsRandom[d5]} hei="h-5"
+                      amount={contractualControl?.estimateInfo?.amountGuaranteeFund || 0} />
                 </div>
               )}
             </div>
@@ -362,7 +393,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 </p>
                 <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.amountInfo?.porcentageTotal: 
                                                     budgetedControl?.amountInfo?.porcentage) || 0} 
-                  widthBar="w-full" color={colorsRandom[c1]} hei="h-5" />
+                  widthBar="w-full" color={colorsRandom[c1]} hei="h-5"
+                  amount={(showTotal? budgetedControl?.amountInfo?.amountotal: budgetedControl?.amountInfo?.amount) || 0} />
                 <div className="flex justify-between">
                   <div>
                     <p className="text-xs text-slate-500">
@@ -392,7 +424,9 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                   })}) 
                 </p>
                 <ProgressBarComponent label={''} progress={budgetedControl?.budgetedInfo?.porcentageTotal || 0 } 
-                  widthBar="w-full" color={colorsRandom[c2]} hei="h-5" />
+                  widthBar="w-full" color={colorsRandom[c2]} hei="h-5"
+                  amount={(showTotal? budgetedControl?.budgetedInfo?.budgetedTotal: 
+                      (budgetedControl?.budgetedInfo?.budgetedTotal - (budgetedControl?.budgetedInfo?.budgetedTotal * 0.16) )) || 0} />
                 <div className="flex justify-between">
                   <div>
                     <p className="text-xs text-slate-500">
@@ -419,7 +453,9 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                   })}) 
                 </p>
                 <ProgressBarComponent label={''} progress={budgetedControl?.spentInfo?.porcentage || 0 } 
-                  widthBar="w-full" color={colorsRandom[c3]} hei="h-5" />
+                  widthBar="w-full" color={colorsRandom[c3]} hei="h-5"
+                  amount={(showTotal? budgetedControl?.spentInfo?.spentTotal: 
+                              budgetedControl?.spentInfo?.spentSubTotal) || 0} />
                 <div className="flex justify-between">
                   <div>
                     <p className="text-xs text-slate-500">
@@ -450,7 +486,9 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 <ProgressBarComponent label={''} 
                   progress={(showTotal? budgetedControl?.billingInfo?.porcentage: 
                       budgetedControl?.billingInfo?.porcentageSubTotal) || 0} 
-                  widthBar="w-full" color={colorsRandom[c5]} hei="h-5" />
+                  widthBar="w-full" color={colorsRandom[c5]} hei="h-5"
+                  amount={(showTotal? budgetedControl?.billingInfo?.billedTotal: 
+                      budgetedControl?.billingInfo?.billedSubTotal) || 0} />
                 <div className="flex justify-between">
                   <div>
                     <p className="text-xs text-slate-500">
@@ -480,7 +518,9 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 </p>
                 <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.paymentInfo?.porcentage: 
                                                     budgetedControl?.paymentInfo?.porcentageSubTotal) || 0} 
-                  widthBar="w-full" color={colorsRandom[c4]} hei="h-5" />
+                  widthBar="w-full" color={colorsRandom[c4]} hei="h-5"
+                  amount={(showTotal? budgetedControl?.paymentInfo?.paymentTotal: 
+                      budgetedControl?.paymentInfo?.paymentSubTotal) || 0} />
                 <div className="flex justify-between">
                   <div>
                     <p className="text-xs text-slate-500">
@@ -510,7 +550,9 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
                 </p>
                 <ProgressBarComponent label={''} progress={(showTotal? budgetedControl?.netprofitInfo?.porcentage: 
                                                     budgetedControl?.netprofitInfo?.porcentageSubtotal) || 0} 
-                  widthBar="w-full" color={colorsRandom[c6]} hei="h-5" />
+                  widthBar="w-full" color={colorsRandom[c6]} hei="h-5"
+                  amount={(showTotal? budgetedControl?.netprofitInfo?.netprofitTotal: 
+                              budgetedControl?.netprofitInfo?.netprofitSubTotal) || 0} />
               </div>
             )}
           </div>
@@ -527,7 +569,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
               <p className="mb-2">CENTRO DE COSTOS CONCEPTOS</p>
               {/* <DonutChartComponent data={dataCostoCenters} colors={colors} category="costo"
                 categories={categoriesCostoCenters}  /> */}
-                <NewDonutChartComponent data={dataCostCenterConcepts} />
+                {/* <NewDonutChartComponent data={dataCostCenterConcepts} /> */}
+                <DonutChartComponentWithDescription data={dataCostCenterConcepts} descriptions={descriptions} />
             </div>
           </div>
 
@@ -536,7 +579,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
 
       <div className="p-3 bg-white">
         <p className="mb-2">CENTRO DE COSTOS CATEGORIA</p>
-        <VerticalBarChart datasets={dataCostoCentersCat} labels={['Costo total']} />
+        {/* <VerticalBarChart datasets={dataCostoCentersCat} labels={['Costo total']} /> */}
+        <VerticalBarChart datasets={dataCostCenterCategories} labels={descriptionsCat} />
       </div>
     </div>
   )

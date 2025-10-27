@@ -83,13 +83,9 @@ type Params = {
   projectsStatus: ProjectsByStatus[], 
   projectsProgress: ProjectsByProgress[], 
   listProjectsnotCompleted: ProjectsNotCompleted[], 
-  // projectsandTypes: CostsByProjectAndType[], 
   projectsTop10: ProjectsTop10[], 
   projectsTotalCost: DashboardTotalCost[], 
   configMin: ConfigMin[], 
-  // projectsBudgeted: ControlBudgeted[], 
-  // projectsSpent: ControlBudgeted[], 
-  // projectsControlBudgeted: ControlBudgeted[], 
   projects:Options[],
   numEvaluado: number,
   totalFeaturesGF: ITotalDashboardProjectsByFeatures[],
@@ -322,112 +318,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
       setStateTotalFeatureAmountChargeOff(totAmountCharge);
       setStateTotalFeatureGuaranteeFund(totGuaranteeFund);
       setStateTotalFeatureTaxes(totTaxes);
-
-      // try {
-      //   amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
-      //   if(typeof(amountPrjs)==='string'){
-      //     showToastMessageError(amountPrjs);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener monto total de proyectos!!!');
-      // }
-
-      // try {
-      //   listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
-      //   if(typeof(listPrjsDate)==='string'){
-      //     showToastMessageError(listPrjsDate);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener lista de proyectos!!!');
-      // }
-
-      // try {
-      //   prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, prj);
-      //   if(typeof(prjsClient)==='string'){
-      //     showToastMessageError(prjsClient);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener proyectos agrupados por clientes!!!');
-      // }
-
-      // try {
-      //   prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, prj);
-      //   if(typeof(prjsSegment)==='string'){
-      //     showToastMessageError(prjsSegment);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener proyectos agrupados por segmento!!!');
-      // }
-
-      // try {
-      //   prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, prj);
-      //   if(typeof(prjStatus)==='string'){
-      //     showToastMessageError(prjStatus);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener proyectos agrupados por estatus!!!');
-      // }
-
-      // try {
-      //   prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, prj);
-      //   if(typeof(prjsProgress)==='string'){
-      //     showToastMessageError(prjsProgress);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener proyectos agrupados por progreso!!!');
-      // }
-
-      // try {
-      //   listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, prj);
-      //   if(typeof(listprjnotCompleted)==='string'){
-      //     showToastMessageError(listprjnotCompleted);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener lista de proyectos no completos!!!');
-      // }
-
-      // try {
-      //   prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', prj);
-      //   if(typeof(prjsTop10)==='string'){
-      //     showToastMessageError(prjsTop10);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener proyectos top 10!!!');
-      // }
-
-      // try {
-      //   totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, prj);
-      //   if(typeof(totalCost)==='string'){
-      //     showToastMessageError(totalCost);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener costo total de los proyectos!!!');
-      // }
-
-      // try {
-      //   confMin = await getConfigMin(token);
-      //   if(typeof(confMin)==='string'){
-      //     showToastMessageError(confMin);
-      //   }
-      // } catch (error) {
-      //   showToastMessageError('Error al obtener configuracion!!!');
-      // }
-
     }
-    // setStateListProjects(listPrjsDate);
-    // setStateProjectsClient(prjsClient);
-    // setStateProjectsSegment(prjsSegment);
-    // setTotalAmount(amountPrjs);
-    // setStateProjectsStatus(prjStatus);
-    // setStateProjectsProgress(prjsProgress);
-    // setStateProjectsNotCompleted(listprjnotCompleted);
-    // // setStateProjectsAndType(prjandTypes);
-    // setStateProjectsTop10(prjsTop10);
-    // setStateTotalCost(totalCost);
-    // setStateConfiMin(confMin);
-    // setStateProjectsSpent(prjsSpent);
-    // setStateProjectsControlBudgeted(prjsControlBudgeted);
-    // setStateProjectsBudgeted(prjsBudgeted);
   }
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];

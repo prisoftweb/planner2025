@@ -32,7 +32,7 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
   return(
     <Document>
       <Page>
-        <View style={{padding: '15px'}}>
+        <View style={{padding: '15px', marginTop: '66px'}}>
 
           <View style={{display: 'flex', flexDirection: 'row', gap:'5px', justifyContent: 'space-between'}}>
 

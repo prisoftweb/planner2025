@@ -28,7 +28,9 @@ export default function TooltipContainerIcon({children, label}: Params) {
 
   return (
     <Tooltip closeDelay={0} delay={100} motionProps={props} content={label} 
-        placement="right" className="text-black bg-white rounded-md border border-slate-400">
+        // placement="right"
+        placement="bottom" 
+        className="text-black bg-white rounded-md border border-slate-400">
       {children}
     </Tooltip>
   )

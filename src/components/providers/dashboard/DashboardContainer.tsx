@@ -53,11 +53,6 @@ type DashProps={
 export default function DashboardContainer({costsProvider, costsProviderWithTradeLine, 
   providersTradeLine, totalCost, totalPayments, pendingPay, token, pendingPayProv}: DashProps) {
 
-  // let pending = 0;
-  // providersTradeLine.map((p) => {
-  //   pending+=p.tradeline?.currentbalance? (p.tradeline?.creditlimit - p.tradeline?.currentbalance): 0;
-  // })
-
   const [pendingPaymentProv, setPendingPaymentProv] = useState<ITotalPendingPaymentProvider[]>(pendingPay);
   const [totalPendingPayment, setTotalPendingProvider] = useState<ITotalCostPendingPaymentByProviderEstatusMIN[]>(providersTradeLine);
   const [totalPendingPaymentCircle, setTotalPendingProviderCicle] = useState<ITotalCostPendingPaymentByProviderEstatusMIN[]>(pendingPayProv);

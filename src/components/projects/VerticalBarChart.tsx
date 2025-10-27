@@ -11,6 +11,9 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
+import { DonutChartJS } from '@/interfaces/DashboardProjects';
+import { MoneyFormatter } from '@/app/functions/Globals';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -33,33 +36,38 @@ const options = {
   },
 };
 
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+// export default function VerticalBarChart({labels, datasets}: {labels: string[], datasets:any[]}) {
+export default function VerticalBarChart({labels, datasets}: {labels: string[], datasets:DonutChartJS}) {
 
-// const data = {
-//   labels,
-//   datasets: [
-//     {
-//       label: 'Dataset 1',
-//       data: [11, 13, 2, 5],
-//       backgroundColor: 'rgba(255, 99, 132, 0.5)',
-//     },
-//     {
-//       label: 'Dataset 2',
-//       data: [1, 3, 7, 11],
-//       backgroundColor: 'rgba(53, 162, 235, 0.5)',
-//     },
-//   ],
-// };
+  // const data = {
+  //   labels,
+  //   datasets
+  // }
 
-export default function VerticalBarChart({labels, datasets}: {labels: string[], datasets:any[]}) {
+  const options = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context:any) {
+            const index = context.dataIndex;
+            const label = context.label || '';
+            const value = context.raw;
+            const description = labels[index] || 'Sin descripción';
 
-  const data = {
-    labels,
-    datasets
-  }
+            // Cada string es una línea en el tooltip
+            return [
+              `${label}: ${description}%`,       // Línea 1
+              `${MoneyFormatter(value)}`            // Línea 2
+            ];
+          },
+        },
+      },
+    },
+  };
+
   return (
     <div>
-      <Bar options={options} data={data} />
+      <Bar options={options} data={datasets} />
     </div>
   )
 }

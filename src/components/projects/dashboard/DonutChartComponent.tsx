@@ -242,9 +242,6 @@ export function DonutPendingPaymentProvidersChartComponent({data, colors, catego
       </div>
     );
   };
- 
-  // console.log('data => ', data);
-  // console.log('categories => ', categories);
 
   return (
     <>

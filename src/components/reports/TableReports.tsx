@@ -13,7 +13,6 @@ import { useOptionsReports } from "@/app/store/reportsStore";
 import { UsrBack } from "@/interfaces/User";
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, GetAllReportsWithUSERAndNEConditionMIN,
   CloneReport, copyAndMoveCostsReport } from "@/app/api/routeReports";
-// import { showToastMessageError, showToastMessage } from "../Alert";
 import RemoveElement from "../RemoveElement";
 import { IoCopy } from "react-icons/io5";
 import {Tooltip} from "@nextui-org/react";
@@ -21,6 +20,7 @@ import ContainerSideNav from "../ContainerSideNav";
 import SelectReact from "../SelectReact";
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
+import { Badge } from "@mui/material";
 
 type Props = {
   data:ReportTable[], 
@@ -134,7 +134,9 @@ export default function TableReports({data, token, reports, optCompanies,
       id: 'Responsable',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
+          <Badge color="secondary" badgeContent={row.original.NºGastos}>
+            <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
+          </Badge>
           <RemoveElement id={row.original.id} name={row.original.Report} token={token} 
               remove={RemoveReport} removeElement={delReport} />
           <Tooltip closeDelay={0} delay={100} motionProps={props} content='Copiar' 
@@ -225,15 +227,15 @@ export default function TableReports({data, token, reports, optCompanies,
         </div>
       ),
     }),
-    columnHelper.accessor('NºGastos', {
-      header: 'NºGastos',
-      id: 'NºGastos',
-      cell: ({row}) => (
-        <p className="cursor-pointer"
-          onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
-        >{row.original.NºGastos}</p>
-      ),
-    }),
+    // columnHelper.accessor('NºGastos', {
+    //   header: 'NºGastos',
+    //   id: 'NºGastos',
+    //   cell: ({row}) => (
+    //     <p className="cursor-pointer"
+    //       onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
+    //     >{row.original.NºGastos}</p>
+    //   ),
+    // }),
     columnHelper.accessor('Total', {
       header: 'Total',
       id: 'Total',

@@ -100,6 +100,8 @@ export async function getProviderMin(id:string, auth_token:string) {
 export async function updateProvider(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/${id}`;
 
+  console.log('update provider => ', url);
+  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       'headers': {

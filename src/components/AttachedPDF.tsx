@@ -5,7 +5,8 @@ import { CurrencyFormatter } from '@/app/functions/Globals'
 export default function AttachedPDF({report, dates} :{report:Report, dates: DateReport[]}){
   
   const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MARZO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-  const date = new Date(report.date);
+  // const date = new Date(report.date);
+  const date = new Date();
 
   const dateIni = dates[0]?.minDate? new Date(dates[0].minDate): new Date();
   const dateEnd = dates[0]?.maxDate? new Date(dates[0].maxDate): new Date();

@@ -42,7 +42,7 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
           name, 
           tradename,
           rfc,
-          "suppliercredit": suppliercredit
+          suppliercredit: suppliercredit
         }
 
         try {

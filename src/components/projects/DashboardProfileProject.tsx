@@ -15,10 +15,18 @@ import Label from "../Label";
 import Chip from "../providers/Chip";
 import { ITimeLineProject } from '@/interfaces/Projects';
 import { IConditionProject } from "@/interfaces/Projects";
+import { DonutPendingPaymentProvidersChartComponent } from "./dashboard/DonutChartComponent";
 
 interface OptionsDashboard {
   label: string,
   costo: number
+}
+
+interface OptionsDashboardStatus {
+  label: string,
+  percentaje: number
+  total: number,
+  // count: number
 }
 
 export default function DashboardProfileProject({token, id, conditions}: 
@@ -57,13 +65,15 @@ export default function DashboardProfileProject({token, id, conditions}:
 
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
-  const dataCostoCenters: OptionsDashboard[] = [];
+  // const dataCostoCenters: OptionsDashboard[] = [];
+  const dataCostoCenters: OptionsDashboardStatus[]= [];
   const categoriesCostoCenters: string[] = [];
 
   costoCenters.map((prj) => {
     dataCostoCenters.push({
-      costo: prj.porcentage,
-      label: prj.costocenter.concept
+      percentaje: prj.porcentage,
+      label: prj.costocenter.concept,
+      total: prj.totalCost
     });
     categoriesCostoCenters.push(prj.costocenter.concept);
   });
@@ -204,7 +214,9 @@ export default function DashboardProfileProject({token, id, conditions}:
 
           <div className="p-3">
             <p className="mb-2">CENTRO DE COSTOS</p>
-            <DonutChartComponent data={dataCostoCenters} colors={colors} category="costo"
+            {/* <DonutChartComponent data={dataCostoCenters} colors={colors} category="costo"
+              categories={categoriesCostoCenters} showLegend={false}  /> */}
+              <DonutPendingPaymentProvidersChartComponent data={dataCostoCenters} colors={colors} category="percentaje"
               categories={categoriesCostoCenters} showLegend={false}  />
           </div>
         </div>

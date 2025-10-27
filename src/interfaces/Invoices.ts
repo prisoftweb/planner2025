@@ -160,6 +160,14 @@ export interface IInvoiceByProject {
     _id: string
   }[]
   status: boolean
+  accountreceivables:{
+    accountreceivable: string,
+    charged: number,
+    partialitynumber: number
+    previousbalanceamount: number
+    unchargedbalanceamount: number
+    _id: string
+  }[]
 }
 
 export interface ITotalInvoicesByProject {

@@ -77,11 +77,15 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
                       removeElement={delInvoice} token={token} />
           {row.original.ischargedfull? (
             <TooltipContainerIcon label="Cobrada">
-              <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+              {row.original.accountreceivablesCount > 0? (
+                <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
+                  <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
+                </Badge>
+              ): (
                 <DocumentArrowDownIcon className="h-6 w-6 text-green-500 hover:text-green-300" />
-              </Badge>
+              )}
             </TooltipContainerIcon>
-          ): (
+          ): row.original.accountreceivablesCount > 0? (
             <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
               <TooltipContainerIcon label="Falta cobro">
                 <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
@@ -91,6 +95,14 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
                 }}/>
               </TooltipContainerIcon>
             </Badge>
+          ): (
+            <TooltipContainerIcon label="Falta cobro">
+              <DocumentArrowDownIcon className="h-6 w-6 text-red-500 cursor-pointer hover:text-red-300" onClick={() => {
+                refEstimate.current = row.original.id;
+                setSelInvoice(row.original);
+                setShowNewCollection(true);
+              }}/>
+            </TooltipContainerIcon>
           )}
         </div>
       ),

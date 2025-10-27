@@ -228,7 +228,7 @@ export function ProjectEstimateDataToTableDataMin(projects:IProjectWithEstimateM
 console.log('project => ', project);
     table.push({
       amount: project.amount,
-      category: project.projectInfoStatusInfo.name,
+      category: project?.projectInfoStatusInfo?.name || 'Sin categoria',
       client: project.client || 'Sin cliente',
       code: 'codigo',
       date: 'fecha',

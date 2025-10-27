@@ -3,8 +3,9 @@ import { ITableConceptsEstimate } from "@/interfaces/Estimate";
 
 export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
   const table: IInvoiceTable[] = [];
+  console.log('invoices table => ', invoices);
   invoices.map((inv) => {
-    console.log('uncharged => ', inv.lastpayment?.unchargedbalanceamount, ' cost total => ', inv.cost.total, ' previous => ', inv.lastpayment?.previousbalanceamount, 'total - previous => ', inv.cost.total - inv.lastpayment?.previousbalanceamount);
+    // console.log('uncharged => ', inv.lastpayment?.unchargedbalanceamount, ' cost total => ', inv.cost.total, ' previous => ', inv.lastpayment?.previousbalanceamount, 'total - previous => ', inv.cost.total - inv.lastpayment?.previousbalanceamount);
     table.push({
       amount: inv.cost.total,
       condition: inv.condition,
@@ -21,7 +22,8 @@ export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
       //                         inv.cost.total: inv.cost.total - inv.lastpayment?.unchargedbalanceamount) || inv.cost.total,
       unchargedbalanceamount: inv.lastpayment?.unchargedbalanceamount || 0,
       previousBalance: inv.lastpayment?.previousbalanceamount || 0,
-      accountreceivablesCount: inv.accountreceivablesCount,
+      // accountreceivablesCount: inv.accountreceivablesCount,
+      accountreceivablesCount: inv.accountreceivables.length > 0? inv.accountreceivables[0].partialitynumber : 0,
       ischargedfull: inv.ischargedfull
     })
   });

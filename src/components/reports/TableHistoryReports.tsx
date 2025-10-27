@@ -10,6 +10,7 @@ import { ReportParseDataToTableData } from "@/app/functions/ReportsFunctions";
 import Filtering from "./FilteringReports";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 import ContainerSideNav from "../ContainerSideNav";
+import { Badge } from "@mui/material";
 
 type Props = {
   data:ReportTable[], 
@@ -55,7 +56,10 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
       id: 'Responsable',
       cell: ({row}) => (
         <div className="flex gap-x-1 items-center">
-          <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
+          {/* <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" /> */}
+          <Badge color="secondary" badgeContent={row.original.NºGastos}>
+            <img src={row.original.Responsible} className="w-12 h-auto rounded-full" alt="responsable" />
+          </Badge>
           {row.original.isPettyCash && <FaMoneyCheckDollar className="w-6 h-6 text-green-500 hover:bg-blue-100" />}
         </div>
       ),
@@ -124,15 +128,15 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
         </Link>
       ),
     }),
-    columnHelper.accessor('NºGastos', {
-      header: 'NºGastos',
-      id: 'NºGastos',
-      cell: ({row}) => (
-        <Link href={`/reports/history/${row.original.id}`}>
-          <p className="">{row.original.NºGastos}</p>
-        </Link>
-      ),
-    }),
+    // columnHelper.accessor('NºGastos', {
+    //   header: 'NºGastos',
+    //   id: 'NºGastos',
+    //   cell: ({row}) => (
+    //     <Link href={`/reports/history/${row.original.id}`}>
+    //       <p className="">{row.original.NºGastos}</p>
+    //     </Link>
+    //   ),
+    // }),
     columnHelper.accessor('Total', {
       header: 'Total',
       id: 'Total',
