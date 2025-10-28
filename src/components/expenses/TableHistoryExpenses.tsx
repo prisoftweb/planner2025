@@ -492,7 +492,7 @@ export default function TableHistoryExpenses({data, token, expenses,
     <>
       <div className="flex justify-end my-5">
         {isFilter && (
-          <ContainerSideNav width="w-full max-w-md">
+          <ContainerSideNav width="w-full max-w-[550px]">
             <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
                         minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
                       />

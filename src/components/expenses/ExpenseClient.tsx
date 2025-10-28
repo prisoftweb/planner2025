@@ -15,7 +15,9 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
   { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
 
   const {updateCurrentExpense} = useNewExpense();
+  console.log('expense param => ', expense);
   useEffect(() => {
+    console.log('Setting current expense in store:', expense);
     updateCurrentExpense(expense);
 
     return () => updateCurrentExpense(null);

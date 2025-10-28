@@ -21,12 +21,16 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   {token:string, id:string, expense:OneExpense, isticket:boolean, isHistory: boolean}){
 
   const {currentExpense, updateCurrentExpense} = useNewExpense();
+
+console.log('Current Expense en UpdateExpense: ', currentExpense);
+
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
                               typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?._id || ''
                               : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?._id || '');
   const [startDate, setStartDate] = 
-          useState<string>(currentExpense? currentExpense.date.substring(0, 10): expense.date.substring(0, 10));
+          useState<string>(currentExpense? (currentExpense?.date?.substring(0, 10) || new Date().toDateString()): 
+            (expense?.date?.substring(0, 10) || new Date().toDateString()));
   const [concept, setConcept] = useState<string>(currentExpense? 
                     typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?.concept?._id || ''
                     : typeof(expense.costocenter)==='string'? expense.costocenter : expense.costocenter?.concept._id || '');
@@ -36,10 +40,10 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
   const [optCostCenter, setOptCostCenter] = useState<Options[]>([]);
   const [optVats, setOptVats] = useState<Options[]>([]);
   const [idVat, setIdVat] = useState<string>('');
-  const [vatValue, setVatValue] = useState(currentExpense? currentExpense.cost.iva.toString(): expense.cost.iva.toString());
-  const [totalExpense, setTotalExpense] = useState<string>(currentExpense? currentExpense.cost?.total?.toString() || '0': expense.cost?.total?.toString() || '0');
+  const [vatValue, setVatValue] = useState(currentExpense? currentExpense?.cost?.iva?.toString(): expense?.cost?.iva?.toString());
+  const [totalExpense, setTotalExpense] = useState<string>(currentExpense? currentExpense?.cost?.total?.toString() || '0': expense?.cost?.total?.toString() || '0');
   const [haveTaxExempt, setHaveTaxExempt] = useState<boolean>(currentExpense? currentExpense.cost?.exempttax? true: false :
-                                                expense.cost?.exempttax? true: false);
+                                                expense?.cost?.exempttax? true: false);
   const [haveDiscount, setHaveDiscount] = useState<boolean>(currentExpense? currentExpense.cost?.discount? true: false :
                                                       expense.cost?.discount? true: false)
 
@@ -497,7 +501,7 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
             <Button type="submit">Guardar</Button>         
           </div>
         )}
-      </form>  
+      </form>
     </div>
   )
 }

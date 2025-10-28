@@ -105,14 +105,14 @@ export default function DataStepper({token, user}: {token:string, user:string })
   const updateIva = (idValue: string) => {
     try {
       const foundVat = vats.find((vat) => vat.value === idValue);
-      const vatvalue = foundVat?.label || '0';
+      const vatval = foundVat?.label || '0';
       let operation;
       let t = 0;
       if(haveDiscount && haveTaxExempt){
         operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
                         Number(formik.values.discount.replace(/[$,]/g, "")) -
                         Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
         
         t = Number(formik.values.amount.replace(/[$,]/g, "")) -
               Number(formik.values.discount.replace(/[$,]/g, "")) +
@@ -121,7 +121,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
         if(haveDiscount){
           operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
                         Number(formik.values.discount.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
 
           t = Number(formik.values.amount.replace(/[$,]/g, "")) -
                 Number(formik.values.discount.replace(/[$,]/g, "")) +
@@ -130,12 +130,12 @@ export default function DataStepper({token, user}: {token:string, user:string })
           if(haveTaxExempt){
             operation = (Number(formik.values.amount.replace(/[$,]/g, "")) - 
                         Number(formik.values.taxExempt.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
 
             t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;              
           }else{
             operation = (Number(formik.values.amount.replace(/[$,]/g, ""))) * 
-                          Number(vatvalue) / 100;
+                          Number(vatval) / 100;
                 
             t = Number(formik.values.amount.replace(/[$,]/g, "")) + operation;
           }
@@ -276,7 +276,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
           formdata.append('cost', JSON.stringify({
             discount: discount.replace(/[$,]/g, ""),
             subtotal:amount.replace(/[$,]/g, ""),
-            iva:vat.replace(/[$,]/g, ""),
+            // iva:vat.replace(/[$,]/g, ""),
+            iva: vatValue.replace(/[$,]/g, ""),
             vat: idVat, 
             exempttax: taxExempt.replace(/[$,]/g, ""),
             total: totalExpense.replace(/[$,]/g, "")
@@ -291,55 +292,57 @@ export default function DataStepper({token, user}: {token:string, user:string })
           }
           try {
             formdata.append('ispaid', JSON.stringify(supplierCredit));
-            if(reportObject && reportObject.ispettycash){
-              const fechaGasto = new Date(startDate);
-              const fechaReport = new Date(reportObject.date);
-              const currentDate = new Date();
-              const expiration = new Date(reportObject.expirationdate);
-              if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
-                  (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
-                const res = await CreateCostWithFiles(token, formdata);
-                if(res === 201){
-                  reset();
-                  formik.values.amount = '';
-                  formik.values.description = '';
-                  formik.values.discount = '';
-                  formik.values.folio = '';
-                  formik.values.taxFolio = '';
-                  formik.values.vat = '';
-                  setTotalExpense('0');
-                  showToastMessage('Costo creado satisfactoriamente!!!');
-                  updateRefresh(true);
-                  updateIndexStepper(4);
-                  refRequest.current = true;
-                }else{
-                  refRequest.current = true;
-                  showToastMessageError(res);
-                }
-              }else{
-                refRequest.current = true;
-                showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
-              }
-            }else{
-              const res = await CreateCostWithFiles(token, formdata);
-              if(res === 201){
-                reset();
-                formik.values.amount = '';
-                formik.values.description = '';
-                formik.values.discount = '';
-                formik.values.folio = '';
-                formik.values.taxFolio = '';
-                formik.values.vat = '';
-                setTotalExpense('0');
-                showToastMessage('Costo creado satisfactoriamente!!!');
-                updateRefresh(true);
-                updateIndexStepper(4);
-                refRequest.current = true;
-              }else{
-                refRequest.current = true;
-                showToastMessageError(res);
-              }
-            }
+            showToastMessage('crear gasto ');
+            console.log('costo => ', formdata.get('cost'));
+            // if(reportObject && reportObject.ispettycash){
+            //   const fechaGasto = new Date(startDate);
+            //   const fechaReport = new Date(reportObject.date);
+            //   const currentDate = new Date();
+            //   const expiration = new Date(reportObject.expirationdate);
+            //   if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+            //       (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+            //     const res = await CreateCostWithFiles(token, formdata);
+            //     if(res === 201){
+            //       reset();
+            //       formik.values.amount = '';
+            //       formik.values.description = '';
+            //       formik.values.discount = '';
+            //       formik.values.folio = '';
+            //       formik.values.taxFolio = '';
+            //       formik.values.vat = '';
+            //       setTotalExpense('0');
+            //       showToastMessage('Costo creado satisfactoriamente!!!');
+            //       updateRefresh(true);
+            //       updateIndexStepper(4);
+            //       refRequest.current = true;
+            //     }else{
+            //       refRequest.current = true;
+            //       showToastMessageError(res);
+            //     }
+            //   }else{
+            //     refRequest.current = true;
+            //     showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
+            //   }
+            // }else{
+            //   const res = await CreateCostWithFiles(token, formdata);
+            //   if(res === 201){
+            //     reset();
+            //     formik.values.amount = '';
+            //     formik.values.description = '';
+            //     formik.values.discount = '';
+            //     formik.values.folio = '';
+            //     formik.values.taxFolio = '';
+            //     formik.values.vat = '';
+            //     setTotalExpense('0');
+            //     showToastMessage('Costo creado satisfactoriamente!!!');
+            //     updateRefresh(true);
+            //     updateIndexStepper(4);
+            //     refRequest.current = true;
+            //   }else{
+            //     refRequest.current = true;
+            //     showToastMessageError(res);
+            //   }
+            // }
           } catch (error) {
             refRequest.current = true;
             showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -352,7 +355,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
           cost: {
             discount: discount.replace(/[$,]/g, ""),
             subtotal:amount.replace(/[$,]/g, ""),
-            iva:vat.replace(/[$,]/g, ""),
+            // iva:vat.replace(/[$,]/g, ""),
+            iva: vatValue.replace(/[$,]/g, ""),
             vat: idVat,
             exempttax: taxExempt.replace(/[$,]/g, ""),
             total: totalExpense.replace(/[$,]/g, "")

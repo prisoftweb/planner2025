@@ -158,7 +158,7 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
 
   return(
     <>
-      <form className="z-10 w-full max-w-md absolute bg-white space-y-5 p-5 right-0"
+      <form className="z-10 w-full max-w-[550px] absolute bg-white space-y-5 p-5 right-0"
         style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
@@ -278,7 +278,7 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
         </div>
         <div>
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Rango de fechas</p></Label>
-          <Calendar
+          {/* <Calendar
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
               focus:border-slate-700 outline-0"
             value={values}
@@ -288,10 +288,69 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
             }}
             range
             numberOfMonths={2}
+            // containerClassName="z-[9999]" // Muy importante esto no estaba
             showOtherDays
-            style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
-              'height': '35px', 'width': '330px'}}
+            // style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
+            //   'height': '35px', 'width': '330px'}}
+            // style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
+            //   'height': '35px', 'width': '100%'}}
+            style={{
+              width: "100%",      // ocupa todo el ancho disponible del sidenav
+              maxWidth: "100%",   // evita que se desborde
+              borderRadius: "5px",
+            }}
           /> 
+
+          <style jsx global>{`
+            .rmdp-wrapper {
+              display: flex !important;
+              flex-wrap: wrap !important;
+              justify-content: center !important;
+              width: 100% !important;
+            }
+
+            .rmdp-calendar {
+              flex: 1 1 45% !important;
+              min-width: 220px !important;
+              max-width: 100% !important;
+            }
+          `}</style> */}
+          <Calendar
+            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 focus:border-slate-700 outline-0"
+            value={values}
+            onChange={handleValues}
+            range
+            numberOfMonths={2}
+            showOtherDays
+            portal={false}
+            style={{
+              width: "100%",
+              maxWidth: "100%",
+              borderRadius: "5px",
+            }}
+          />
+
+          <style jsx global>{`
+            /* Fuerza al wrapper principal del calendario a comportarse como un grid flexible */
+            .rmdp-wrapper {
+              display: grid !important;
+              grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+              gap: 1rem !important;
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+
+            /* Cada calendario (mes) se adapta al ancho del grid */
+            .rmdp-calendar {
+              width: 100% !important;
+              max-width: 100% !important;
+            }
+
+            /* Previene scroll lateral en el sidenav */
+            .relative.z-50.ml-auto.bg-white.p-5.h-full.overflow-y-auto {
+              overflow-x: hidden !important;
+            }
+          `}</style>
         </div>
         {isViewReports && (
           <div className="p-2 flex justify-center">

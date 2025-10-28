@@ -7,58 +7,16 @@ body{
   /* padding-top: 40px; */
 }
 
-/* @media screen and (max-width: 600px) {
-  table {
-    border: 0;
-  }
+/* Ajusta el layout interno de react-multi-date-picker */
+/* .rmdp-wrapper {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
 
-  .mobile-sort,
-  .sort-wrapper {
-    display: flex;
-    gap: 20px;
-  }
-
-  table caption {
-    font-size: 1.3em;
-  }
-
-  table thead {
-    border: none;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
-  }
-
-  table tr {
-    border-bottom: 3px solid #ddd;
-    display: block;
-    margin-bottom: 0.625em;
-  }
-
-  table td {
-    border-bottom: 1px solid #ddd;
-    display: block;
-    font-size: 0.8em;
-    text-align: right;
-  }
-
-  table td::before {
-    
-    // comentar 
-    //* aria-label has no advantage, it won't be read inside a table
-    //content: attr(aria-label);
-   
-    content: attr(data-label);
-    float: left;
-    font-weight: bold;
-    text-transform: uppercase;
-  }
-
-  table td:last-child {
-    border-bottom: 0;
-  }
+.rmdp-calendar {
+  flex: 1 1 45% !important; // cada calendario ocupa 45% del ancho 
+  min-width: 250px !important; // no se achican demasiado 
+  max-width: 100% !important;
 } */

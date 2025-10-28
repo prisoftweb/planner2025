@@ -567,7 +567,7 @@ export default function TableExpenses({data, token, expenses,
     <>
       <div className="flex justify-end my-5">
           {isFilter && (
-            <ContainerSideNav width="w-full max-w-md">
+            <ContainerSideNav width="w-full max-w-[550px]">
               <Filtering showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
