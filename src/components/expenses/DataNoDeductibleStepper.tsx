@@ -95,7 +95,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
                                               focus:border-slate-700 outline-0"
                                             onChange={formik.handleChange}
                                             onBlur={formik.handleChange}
-                                            //defaultValue={0}
                                             defaultValue={amount}
                                             decimalsLimit={2}
                                             prefix="$"
@@ -473,12 +472,6 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
               showToastMessageError('Ya hay una peticion en proceso..!');
             }
           }}>Guardar</Button>
-          {/* <button type="submit"
-            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
-              border-slate-900 rounded-xl hover:bg-slate-200"
-          >
-            Siguiente
-          </button>          */}
         </div>
       </form> 
     </div>

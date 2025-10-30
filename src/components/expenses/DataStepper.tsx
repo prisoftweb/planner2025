@@ -61,11 +61,9 @@ export default function DataStepper({token, user}: {token:string, user:string })
       taxFolio: Yup.string()
                   .required('El folio fiscal es obligatorio'),
       discount: Yup.string(),
-                  //.required('El descuento es obligatorio'),
       amount: Yup.string()
                   .required('El importe es obligatorio!!!'),
       vat: Yup.string(),
-                  //.required('El iva es obligatorio!!!')
       taxExempt: Yup.string(),
     }),
     onSubmit: async (valores) => {            
@@ -292,57 +290,55 @@ export default function DataStepper({token, user}: {token:string, user:string })
           }
           try {
             formdata.append('ispaid', JSON.stringify(supplierCredit));
-            showToastMessage('crear gasto ');
-            console.log('costo => ', formdata.get('cost'));
-            // if(reportObject && reportObject.ispettycash){
-            //   const fechaGasto = new Date(startDate);
-            //   const fechaReport = new Date(reportObject.date);
-            //   const currentDate = new Date();
-            //   const expiration = new Date(reportObject.expirationdate);
-            //   if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
-            //       (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
-            //     const res = await CreateCostWithFiles(token, formdata);
-            //     if(res === 201){
-            //       reset();
-            //       formik.values.amount = '';
-            //       formik.values.description = '';
-            //       formik.values.discount = '';
-            //       formik.values.folio = '';
-            //       formik.values.taxFolio = '';
-            //       formik.values.vat = '';
-            //       setTotalExpense('0');
-            //       showToastMessage('Costo creado satisfactoriamente!!!');
-            //       updateRefresh(true);
-            //       updateIndexStepper(4);
-            //       refRequest.current = true;
-            //     }else{
-            //       refRequest.current = true;
-            //       showToastMessageError(res);
-            //     }
-            //   }else{
-            //     refRequest.current = true;
-            //     showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
-            //   }
-            // }else{
-            //   const res = await CreateCostWithFiles(token, formdata);
-            //   if(res === 201){
-            //     reset();
-            //     formik.values.amount = '';
-            //     formik.values.description = '';
-            //     formik.values.discount = '';
-            //     formik.values.folio = '';
-            //     formik.values.taxFolio = '';
-            //     formik.values.vat = '';
-            //     setTotalExpense('0');
-            //     showToastMessage('Costo creado satisfactoriamente!!!');
-            //     updateRefresh(true);
-            //     updateIndexStepper(4);
-            //     refRequest.current = true;
-            //   }else{
-            //     refRequest.current = true;
-            //     showToastMessageError(res);
-            //   }
-            // }
+            if(reportObject && reportObject.ispettycash){
+              const fechaGasto = new Date(startDate);
+              const fechaReport = new Date(reportObject.date);
+              const currentDate = new Date();
+              const expiration = new Date(reportObject.expirationdate);
+              if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
+                  (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+                const res = await CreateCostWithFiles(token, formdata);
+                if(res === 201){
+                  reset();
+                  formik.values.amount = '';
+                  formik.values.description = '';
+                  formik.values.discount = '';
+                  formik.values.folio = '';
+                  formik.values.taxFolio = '';
+                  formik.values.vat = '';
+                  setTotalExpense('0');
+                  showToastMessage('Costo creado satisfactoriamente!!!');
+                  updateRefresh(true);
+                  updateIndexStepper(4);
+                  refRequest.current = true;
+                }else{
+                  refRequest.current = true;
+                  showToastMessageError(res);
+                }
+              }else{
+                refRequest.current = true;
+                showToastMessageError('Error al ingresar, la fecha del gasto no cumple con las politicas de la empresa!!!');
+              }
+            }else{
+              const res = await CreateCostWithFiles(token, formdata);
+              if(res === 201){
+                reset();
+                formik.values.amount = '';
+                formik.values.description = '';
+                formik.values.discount = '';
+                formik.values.folio = '';
+                formik.values.taxFolio = '';
+                formik.values.vat = '';
+                setTotalExpense('0');
+                showToastMessage('Costo creado satisfactoriamente!!!');
+                updateRefresh(true);
+                updateIndexStepper(4);
+                refRequest.current = true;
+              }else{
+                refRequest.current = true;
+                showToastMessageError(res);
+              }
+            }
           } catch (error) {
             refRequest.current = true;
             showToastMessageError('Ocurrio un error al guardar costo!!');
@@ -436,17 +432,17 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   const dataCFDIValidation = async() => {
     if(Number(formik.values.amount.replace(/[$,]/g, "")) !== Number(dataCFDI?.amount)){
-      console.log('amount => ', formik.values.amount, 'amountcfdi => ', dataCFDI?.amount);
+      // console.log('amount => ', formik.values.amount, 'amountcfdi => ', dataCFDI?.amount);
       showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
       return false;
     }
     if(startDate.substring(0, 10) !== dataCFDI?.date.substring(0, 10)){
-      console.log('date => ', startDate.substring(0, 10), 'datecfdi => ', dataCFDI?.date.substring(0, 10));
+      // console.log('date => ', startDate.substring(0, 10), 'datecfdi => ', dataCFDI?.date.substring(0, 10));
       showToastMessageError('La fecha ingresada no coincide con la del CFDI!!');
       return false;
     }
     if(formik.values.taxFolio !== dataCFDI.taxFolio){
-      console.log('tax => ', formik.values.taxFolio, 'taxcfdi => ', dataCFDI?.taxFolio);
+      // console.log('tax => ', formik.values.taxFolio, 'taxcfdi => ', dataCFDI?.taxFolio);
       showToastMessageError('El folio fiscal ingresado no coincide con el del CFDI!!');
       return false;
     }
@@ -900,12 +896,6 @@ export default function DataStepper({token, user}: {token:string, user:string })
               showToastMessageError('Ya hay una peticion en proceso..!');
             }
           }}>Guardar</Button>
-          {/* <button type="submit"
-            className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
-              border-slate-900 rounded-xl hover:bg-slate-200"
-          >
-            Siguiente
-          </button>          */}
         </div>
       </form> 
       {showProvider && <AddProvider token={token} setShowForm={setShowProvider} 
