@@ -203,7 +203,7 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
   const handle = () => {}
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 flex flex-col h-full">
       <NavExpenseNoDeductibleStepper index={1} />
       <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile}
          Validation={validationType} getData={handle} fileParam={voucher? voucher: undefined} />
@@ -214,12 +214,6 @@ export default function VoucherNoDeductibleStepper({token, user, idVat}:
               updateVoucher(file);
             }
             updateIndexStepper(2);
-            // if(refRequest.current){
-            //   SaveData();
-            // }
-            // else{
-            //   showToastMessageError('Ya hay una peticion en proceso..!');
-            // }
           }}>Siguiente</Button>
       </div>
     </div>

@@ -182,9 +182,10 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
           }
         </div>
       </div>
-      {pre && !isCFDI && <iframe className="w-full h-full mt-4" src={URL.createObjectURL(pre)} />}
+      {pre && !isCFDI && <iframe className="w-full flex-grow overflow-auto mt-4" src={URL.createObjectURL(pre)} />}
       {isCFDI && (
-        <div className="h-full">
+        // <div className="h-full">
+        <div className="w-full flex-grow overflow-auto">
           <div className="grid grid-cols-2 mt-5">
             <div className=" bg-gray-500 p-4">
               <p className="text-4xl text-white">{total}</p>

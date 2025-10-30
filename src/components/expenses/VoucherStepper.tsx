@@ -234,28 +234,12 @@ export default function VoucherStepper({token, user}: {token:string, user:string
   const handle = () => {}
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 flex flex-col h-full">
       <NavExpenseStepper index={1} />
       <UploadFileDropZone label="Subir PDF o imagen" setFile={setFile} 
           Validation={validationType} getData={handle} fileParam={voucher? voucher: undefined} />
       <div className="flex justify-center mt-8 space-x-5">
-        {/* <Button type="button" 
-          onClick={() => { 
-            if(refRequest.current){
-              SaveData();
-            }
-            else{
-              showToastMessageError('Ya hay una peticion en proceso..!');
-            }
-          }}>Guardar</Button> */}
         <Button type="button" onClick={Next}>Siguiente</Button>
-        {/* <button type="button"
-          onClick={Next}
-          className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 
-            border-slate-900 rounded-xl hover:bg-slate-200"
-        >
-          Siguiente
-        </button>          */}
       </div>
     </div>
   );

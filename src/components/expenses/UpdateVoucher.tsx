@@ -90,10 +90,10 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
   }
 
   return (
-    <div className="mt-2">
+    <div className="mt-2 flex flex-col h-full">
       {urlFile && (
         <iframe src={urlFile} 
-          className="w-full h-96"
+          className="w-full flex-grow overflow-auto"
         ></iframe>
       )}
       {isHistory? <></> : (
