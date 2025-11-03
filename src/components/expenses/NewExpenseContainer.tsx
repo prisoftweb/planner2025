@@ -17,6 +17,9 @@ import TooltipCloseIcons from "../tooltipIcons/TooltipCloseIcon";
 import { UsrBack } from "@/interfaces/User";
 import { useOptionsExpense } from "@/app/store/newExpense";
 
+import Label from "../Label";
+import SelectReact from "../SelectReact";
+
 export default function NewExpenseContainer({token, showForm, user, }: 
                             {token:string, showForm:Function, user:UsrBack, }){
   
@@ -25,10 +28,14 @@ export default function NewExpenseContainer({token, showForm, user, }:
   const [idTicket, setIdTicket] = useState<string>('');
 
   const {indexStepper, isDeductible, project, updateProject, 
-    report, isPettyCash, condition, updateReport, updateIndexStepper, 
-    updateCondition} = useNewExpense();
+    report, isPettyCash, condition, category, updateReport, updateIndexStepper, 
+    updateCondition, updateCategory} = useNewExpense();
 
   const {vats, projects, conditions, categories} = useOptionsExpense();
+
+  const handleCategory = (value:string) => {
+    updateCategory(value);
+  }
 
   if(idLabour==='' && categories.length > 0){
     const idL = categories.find((cat) => cat.label.toLowerCase().includes('mano de obra'))?.value || '';
@@ -107,6 +114,14 @@ export default function NewExpenseContainer({token, showForm, user, }:
     showForm(false);
   }
 
+  //categories
+  //"661eae12f642112488c85fb1" mano de obra
+  //"661eae4ef642112488c85fb4" xml y pdf
+  //"665f90b082c6db3d203cf093" ticket
+  //"66624d61db42d11d46b97ec1" xml
+  //"66e0657bc6d95ffb8aa0ec9a" ninguno
+  // console.log('categories => ', categories);
+
   let stepform: JSX.Element = <></>;
   if(isDeductible){
     if(indexStepper || indexStepper>=0){
@@ -137,6 +152,19 @@ export default function NewExpenseContainer({token, showForm, user, }:
     }
   }
 
+  let indexCate = 0;
+  if(category !== ''){
+    categories.map((opt, index:number) => {
+      if(opt.value === category){
+        indexCate = index;
+      }
+    });
+  }else{
+    if(categories.length > 0 ){
+      updateCategory(categories[0].value);
+    }
+  }
+
   return(
     <div className="z-10 w-full sm:max-w-3xl absolute bg-white p-5 right-0"
       style={{height: `${heightPage}px`}}
@@ -152,6 +180,12 @@ export default function NewExpenseContainer({token, showForm, user, }:
             title="Nuevo gasto"
           />
           { report!=='' && viewSelectProject}
+          {indexStepper==0 && categories.length > 0 && (
+            <div>
+              <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
+              <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
+            </div>
+          )}
         </div>
         <TabDeductible />
         {stepform}

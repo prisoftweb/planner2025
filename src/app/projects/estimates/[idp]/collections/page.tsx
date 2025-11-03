@@ -17,20 +17,6 @@ export default async function Page({ params, searchParams }:
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let project: OneProjectMin;
-  // let collections: ICollectionMin[]=[];
-  // let totalInvoicesProject: ITotalInvoicesByProject[];
-  // let totalPaymentsResumen: ITotalResumentPayment;
-  // let projects: Options[];
-  // let catalogs: GlossaryCatalog[];
-  
-  // project = await GetProjectMin(token, params.idp);
-  // collections = await getCollectionsByProjectMin(token, project._id);
-  // totalInvoicesProject = await getTotalInvoicesByProject(token, params.idp);
-  // totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, params.idp);
-  // projects = await getProjectsLVNoCompleted(token);
-  // catalogs = await getCatalogsByName(token, 'projects');
-
   const [project, collections, totalInvoicesProject, totalPaymentsResumen, projects, catalogs] = await Promise.all([
     GetProjectMin(token, params.idp),
     getCollectionsByProjectMin(token, params.idp),

@@ -4,7 +4,10 @@ import { ReportParse } from "@/interfaces/Reports";
 export default function CardProject({report}: {report:ReportParse}){
   
   const {updateIndexStepper, updateReport, 
-    updateProject, updatePettyCash} = useNewExpense();
+    updateProject, updatePettyCash, category} = useNewExpense();
+
+  const index = (category=="661eae12f642112488c85fb1" || category=="661eae4ef642112488c85fb4" 
+          || category=="665f90b082c6db3d203cf093")? 1 : category=="66624d61db42d11d46b97ec1"? 2: 3;
 
   return(
     <>
@@ -16,7 +19,8 @@ export default function CardProject({report}: {report:ReportParse}){
           updateReport(report._id, report);
           updateProject(report.project._id);
           updatePettyCash(report.ispettycash);
-          updateIndexStepper(1);
+          // updateIndexStepper(1);
+          updateIndexStepper(index);
         }}
       >
         <div className="col-span-2">

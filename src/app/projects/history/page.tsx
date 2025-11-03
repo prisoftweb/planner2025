@@ -13,12 +13,6 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let projects: ProjectMin[];
-  // let catalogs: GlossaryCatalog[];
-  
-  // projects = await getProjectsMin(token);
-  // catalogs = await getCatalogsByName(token, 'projects');
-
   const [projects, catalogs] = await Promise.all([
     getProjectsMin(token),
     getCatalogsByName(token, 'projects')

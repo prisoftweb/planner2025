@@ -3,16 +3,10 @@ import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
-  getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
-  getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient, 
+  getTotalAccountReceivablesByClientResumen, getTotalEstimatesPendingByClient, 
   getAllTOTALPENDINGPAYMENTSByProjectMINRESUME, 
   getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN, 
   getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED } from "@/app/api/routeInvoices";
-import { ITotalInvoicesByProjectDashboardCollection, ITotalInvoiceByClient, 
-  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
-  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient, 
-  IAllTOTALPENDINGPAYMENTSByProject, IAllsProjectsMINAndNEConditionANDNoExistsEstimate, 
-  IAllTOTALPENDINGBillingByProject  } from "@/interfaces/Invoices";
 import DashboardCollectionsContainer from "@/components/collections/dashboard/DashboardCollectionsContainer";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
 
@@ -22,22 +16,6 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  // let totalPrjs: ITotalInvoicesByProjectDashboardCollection[] =  await getTotalAccountReceivablesByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // let totalClis: ITotalInvoiceByClient[] = await getTotalAccountReceivablesByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // let resCob = await getTotalGuaranteesByDateAndStatus(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), 'POR COBRAR');
-  // const resTotPrj: IAllTOTALPENDINGPAYMENTSByProject[] = await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // const resEstPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[] = await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // const resEstPenCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-  // const resPenBill: IAllTOTALPENDINGBillingByProject[] = await getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-
-  // const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, 
-  //   totalEstiatesPen, totalPendEstimatesCli, pendingBilling] = await Promise.all([
-  //   totalPrjs, totalClis, totalPay, totalPen, resCob, resTotPrj, resTotCli, resEstPen, resEstPenCli, resPenBill
-  // ]);
-
   const [totalProjects, totalClients, totalPaymentByDate, totalPending, resCobrar, totalPrjRes, totalCliRes, 
     totalEstiatesPen, totalPendEstimatesCli, pendingBilling] = await Promise.all([
     getTotalAccountReceivablesByProject(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())), 

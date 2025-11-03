@@ -8,25 +8,15 @@ import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
 import { getDepartmentsLV } from "../api/routeDepartments";
 import { getWorkFlows } from "../api/routeWorkflows";
-import { Glossary } from "@/interfaces/Glossary";
-import { Workflow } from "@/interfaces/Workflows";
 import ButtonNewNode from "@/components/nodes/ButtonNewNode";
-import { Node } from "@/interfaces/Nodes";
 import TableNode from "@/components/nodes/TableNode";
 import { NodeTable } from "@/interfaces/Nodes";
 import { getRelations } from "../api/routeRelations";
-import { Relation } from "@/interfaces/Relation";
 
 export default async function page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let nods: Node[] = await getNodes(token);
-  // let optDepts: Options[] = await getDepartmentsLV(token);
-  // let gloss: Glossary[] = await getGlossaries(token);
-  // let works: Workflow[] = await getWorkFlows(token);
-  // const res: Relation[] = await getRelations(token);
 
   const [nodes, optDepartments, glossaries, workflows, res] = await Promise.all([
     getNodes(token), 

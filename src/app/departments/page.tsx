@@ -1,20 +1,15 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { Department } from "@/interfaces/Departments";
 import { getDepartments } from "../api/routeDepartments";
 import { Options } from "@/interfaces/Common";
 import { getCompanies } from "../api/routeCompany";
-import { Company } from "@/interfaces/Companies";
 import ContainerDepartment from "@/components/departments/ContainerDepartment";
 
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let comps:Company[]= await getCompanies(token);
-  // let depts: Department[]= await getDepartments(token);
 
   const [companies, departments] = await Promise.all([
     getCompanies(token), 

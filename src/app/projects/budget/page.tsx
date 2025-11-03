@@ -12,10 +12,6 @@ export default async function Page(){
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let projects: ProjectMin[] = await getProjectsMin(token);
-  // let budgets: BudgetMin[] = await getBudgetsMin(token);
-  // let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'budgets');
-
   const [projects, budgets, catalogs] = await Promise.all([
     getProjectsMin(token),
     getBudgetsMin(token),

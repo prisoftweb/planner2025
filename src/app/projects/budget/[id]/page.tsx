@@ -2,9 +2,7 @@ import { getBudget } from "@/app/api/routeBudget"
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import { FullBudget } from "@/interfaces/BudgetProfile";
 import BudgetCli from "@/components/projects/budget/BudgetClient";
-import { CostCenter } from "@/interfaces/CostCenter";
 import { getCostoCenters } from "@/app/api/routeCostCenter";
 
 export default async function page({ params, searchParams }: 
@@ -14,9 +12,6 @@ export default async function page({ params, searchParams }:
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let budget: FullBudget = await getBudget(token, params.id);
-  // let costoCenters: CostCenter[] = await getCostoCenters(token);
 
   const [budget, costoCenters] = await Promise.all([
     getBudget(token, params.id),

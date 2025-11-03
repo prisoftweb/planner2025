@@ -228,7 +228,11 @@ export default function VoucherStepper({token, user}: {token:string, user:string
     if(file){
       updateVoucher(file);
     }
-    updateIndexStepper(2);
+    if(category=="661eae4ef642112488c85fb4" || category=="66624d61db42d11d46b97ec1"){
+      updateIndexStepper(2);
+    }else{
+      updateIndexStepper(3);
+    }
   }
 
   const handle = () => {}

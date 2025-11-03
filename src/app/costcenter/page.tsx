@@ -4,10 +4,9 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import Header from "@/components/Header";
 import { Options } from "@/interfaces/Common";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import ButtonNew from "@/components/costcenter/ButtonNew";
-import { CostCenterTable, CostCenter } from "@/interfaces/CostCenter";
+import { CostCenterTable } from "@/interfaces/CostCenter";
 import { getCostoCenters } from "../api/routeCostCenter";
 import TableCostCenter from "@/components/costcenter/TableCostCenter";
 
@@ -16,9 +15,6 @@ export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let cats: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
-  // let cos: CostCenter[]= await getCostoCenters(token);
 
   const [catalogs, costs] = await Promise.all([
     getCatalogsByName(token, 'projects'), 

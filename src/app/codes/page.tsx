@@ -1,24 +1,23 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import { ICodeMin } from "@/interfaces/Code"
-import { getCodesMin, getAllCodesMINByDateANDProvider } from "../api/routeCode";
+import { getAllCodesMINByDateANDProvider } from "../api/routeCode";
 import ContainerCodes from "@/components/codes/ContainerCodes";
 import Header from "@/components/HeaderPage";
 import { getAllProvidersWithTradeLine } from "../api/routeDashboardProviders";
-import { ProviderWithTradeLine } from "@/interfaces/DasboardProviders";
 
 export default async function Page() {
 
   const cookieStore = cookies();
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value || '');
   const token: string = cookieStore.get('token')?.value || '';
-  // const codes: ICodeMin[] = await getCodesMin(token);
-
+  
   const [codes, providers] = await Promise.all([
+    // getAllCodesMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
+    //     new Date().toDateString(), ["664e7332277711ed05dc0424","67b359e34fc894a4dab47b18",
+    //       "664e7332277711ed05dc0463", "664e7332277711ed05dc0422"]),
     getAllCodesMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
-        new Date().toDateString(), ["664e7332277711ed05dc0424","67b359e34fc894a4dab47b18",
-          "664e7332277711ed05dc0463", "664e7332277711ed05dc0422"]), 
+        new Date().toDateString(), []), 
     getAllProvidersWithTradeLine(token)
   ])
   

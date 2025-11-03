@@ -1,7 +1,6 @@
 import Navigation from "@/components/navigation/Navigation"
 import { cookies } from "next/headers"
 import { UsrBack } from "@/interfaces/User";
-import { IOneCollectionMin, IInvoicesByCollection } from "@/interfaces/Collections";
 import { getCollectionMin, getInvoicesByCollectionMin } from "@/app/api/routeCollections";
 import ContainerCollectionProfile from "@/components/projects/estimates/collections/ContainerCollectionProfile";
 import Header from "@/components/HeaderPage";
@@ -12,9 +11,6 @@ export default async function page({ params, searchParams }:
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let collection:IOneCollectionMin = await getCollectionMin(token, params.idc);
-  // let invoices:IInvoicesByCollection[] = await getInvoicesByCollectionMin(token, params.idc);
 
   const [collection, invoices] = await Promise.all([
     getCollectionMin(token, params.idc),
@@ -49,8 +45,6 @@ export default async function page({ params, searchParams }:
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <Header title={collection.reference} previousPage={searchParams.page=='projects'? `/projects/estimates/${params.idp}/collections?page=projects` : 
                   (searchParams.page=='collections'? '/collections': (searchParams.page=='collectionsHistory'? `/collections/history` : `/projects/estimates/${params.idp}/collections`))}>
-          {/* <Selectize options={[]} routePage={searchParams.page? `projects/estimates/${params.idp}/collections?page=projects` : 
-                        `projects/estimates/${params.idp}/collections`} subpath="" /> */}
           <></>
         </Header>
         <ContainerCollectionProfile collection={collection} token={token} usr={user._id} invoices={invoices} />

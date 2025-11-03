@@ -59,7 +59,7 @@ interface CurrentExpense{
 interface Actions {
   updateBasicData: (folio:string, description:string, amount: string,
     date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-    typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, 
+    typeCFDI:string, typeExpense:string, idVat:string, type:string, 
     taxExempt: string, total:string) => void,
   updateVoucher: (file: File) => void,
   updateCDFI: (CFDI: File, dataCFDI: CFDIValidation) => void,
@@ -143,7 +143,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
   ...initialCostCenter,
   updateBasicData: ( folio:string, description:string, amount: string,
       date:string, taxFolio:string, vat:string, discount:string, proveedor:string, responsible:string,
-      typeCFDI:string, typeExpense:string, category:string, idVat:string, type:string, 
+      typeCFDI:string, typeExpense:string, idVat:string, type:string, 
       taxExempt: string, total: string) => set(state => ({
     ...state,
     folio: folio,
@@ -157,7 +157,7 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
     responsible: responsible,
     typeCFDI: typeCFDI,
     typeExpense: typeExpense,
-    category: category,
+    // category: category,
     idVat: idVat,
     type: type,
     taxExempt: taxExempt,

@@ -2,12 +2,9 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import ContainerStimationsProject from "@/components/projects/estimates/ContainerStimationsProject";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { IEstimateProject, TotalEstimatedByProject} from "@/interfaces/Estimate";
 import { getEstimatesByProject, getTotalEstimatesByProjectMin } from "@/app/api/routeEstimates";
 
 export default async function Page({ params, searchParams }: 
@@ -15,18 +12,6 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin;
-  // let estimates: IEstimateProject[];
-  // let totalEstimatedProject: TotalEstimatedByProject[];
-  // let projects: Options[];
-  // let catalogs: GlossaryCatalog[];
-
-  // project = await GetProjectMin(token, params.idp);
-  // estimates = await getEstimatesByProject(token, params.idp);
-  // totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
-  // projects = await getProjectsLVNoCompleted(token);
-  // catalogs = await getCatalogsByName(token, 'projects');
 
   const [project, estimates, totalEstimatedProject, projects, catalogs] = await Promise.all([
     GetProjectMin(token, params.idp),

@@ -15,24 +15,56 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
   { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
 
   const {updateCurrentExpense} = useNewExpense();
-  console.log('expense param => ', expense);
+  // console.log('expense param => ', expense);
   useEffect(() => {
-    console.log('Setting current expense in store:', expense);
+    // console.log('Setting current expense in store:', expense);
     updateCurrentExpense(expense);
 
     return () => updateCurrentExpense(null);
   }, []);
 
   const [opt, setOpt] = useState<number>(1);
+  const [widhtPage, setWidhtPage] = useState<number>(900);
+
+  const handleResize = () => {
+    setWidhtPage(Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    ));
+  }
+
+   useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setWidhtPage(Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    ));
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
+
+  const files = expense.files;
+
+  const pdfFile = files.find(f => f.types.includes('pdf') || f.types.includes('PDF') || f.types.includes('jpg') || f.types.includes('JPG') || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png') || f.types.includes('PNG'));
 
   const view = (
-    opt===1? (<div className="mt-3 w-full max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" 
-      style={{borderColor:'#F8FAFC'}}>
-        <div className=" max-w-2xl">
-          <UpdateExpense id={id} token={token} expense={expense} 
-            isticket={expense.isticket} isHistory={isHistory} />
-        </div>
-      </div>) : 
+    // opt===1? (<div className="mt-3 w-full max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" 
+    //   style={{borderColor:'#F8FAFC'}}>
+    //     <div className=" max-w-2xl">
+    //       <UpdateExpense id={id} token={token} expense={expense} 
+    //         isticket={expense.isticket} isHistory={isHistory} />
+    //     </div>
+    //   </div>) :
+    opt===1? (<div className="mt-3 w-full flex space-x-2" >
+                <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                  <UpdateExpense id={id} token={token} expense={expense} 
+                    isticket={expense.isticket} isHistory={isHistory} />
+                </div>
+                {pdfFile?.file && widhtPage > 1500 && (<div className=" max-w-md bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                    <iframe className="w-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
+                  </div>)}
+              </div>) : 
     (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
                       <div className=" max-w-lg">
@@ -54,13 +86,15 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                           <div className=" max-w-lg">
                             <StatusCostComponent cost={expense._id} token={token} />
                           </div>
-                      </div>): (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
-                                style={{borderColor:'#F8FAFC'}}>
-                                  <div className=" max-w-lg">
+                      </div>): (<div className="mt-3 w-full flex space-x-2" >
+                                  <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                                     <UpdateExpense id={id} token={token} expense={expense} 
-                                      isticket={expense.isticket} isHistory={isHistory}  />
+                                      isticket={expense.isticket} isHistory={isHistory} />
                                   </div>
-                              </div>)))))
+                                  {pdfFile?.file && widhtPage > 1500 && (<div className=" max-w-md bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                                      <iframe className="w-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
+                                    </div>)}
+                                </div>)))))
   )
 
   const [open, setOpen] = useState<boolean>(false);

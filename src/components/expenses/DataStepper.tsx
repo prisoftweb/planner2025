@@ -70,7 +70,8 @@ export default function DataStepper({token, user}: {token:string, user:string })
       const {description, folio, taxFolio, discount, amount, vat, taxExempt} = valores;
       updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
           startDate, taxFolio, vat.replace(/[$,]/g, ""), discount.replace(/[$,]/g, ""), provider, responsibleS, 
-          typeCFDIS, '', categoryS, idVat, 'PROVEEDOR', taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
+          typeCFDIS, '', idVat, 'PROVEEDOR', taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
+          //categoryS,
       updateIndexStepper(2);
     },
   });
@@ -90,7 +91,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
   // const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
   const [provider, setProvider] = useState<string>(dataCFDI? dataCFDI.proveedor: providers[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
-  const [categoryS, setCategoryS] = useState<string>(categories[0].value);
+  // const [categoryS, setCategoryS] = useState<string>(categories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const refRequest = useRef(true);
@@ -217,8 +218,9 @@ export default function DataStepper({token, user}: {token:string, user:string })
     const {description, folio, taxFolio, discount, amount, vat, taxExempt} = formik.values
     updateBasicData(folio, description, amount.replace(/[$,]/g, ""), 
         startDate, taxFolio, vat, discount.replace(/[$,]/g, ""), provider, responsibleS, 
-        typeCFDIS, '', categoryS, idVat.replace(/[$,]/g, ""), 'PROVEEDOR', 
+        typeCFDIS, '', idVat.replace(/[$,]/g, ""), 'PROVEEDOR', 
         taxExempt.replace(/[$,]/g, ""), totalExpense.replace(/[$,]/g, ""));
+        //categoryS,
     
     let supplierCredit: boolean;
     try {
@@ -256,7 +258,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           formdata.append('user', responsibleS);
           formdata.append('taxfolio', taxFolio);
           formdata.append('typeCFDI', typeCFDIS);
-          formdata.append('category', categoryS);
+          formdata.append('category', category);
           formdata.append('project', project);
           formdata.append('report', report);
           formdata.append('isticket', JSON.stringify(false));
@@ -359,7 +361,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           },
           folio, provider, user:responsibleS, 
           taxfolio:taxFolio, typeCFDI: typeCFDIS, project, ispaid:supplierCredit,
-          report, isticket:false, category:categoryS,
+          report, isticket:false, category:category,
           conditionprovider: [{
             glossary: '674643dd734d5ab78ab98ddb',
             user
@@ -508,14 +510,14 @@ export default function DataStepper({token, user}: {token:string, user:string })
     </div>
   )
 
-  let indexCate = 0;
-  if(categoryS !== ''){
-    categories.map((opt, index:number) => {
-      if(opt.value === category){
-        indexCate = index;
-      }
-    });   
-  }
+  // let indexCate = 0;
+  // if(categoryS !== ''){
+  //   categories.map((opt, index:number) => {
+  //     if(opt.value === category){
+  //       indexCate = index;
+  //     }
+  //   });   
+  // }
 
   let indexTypeCFDI = 0;
   if(typeCFDIS !== ''){
@@ -526,9 +528,9 @@ export default function DataStepper({token, user}: {token:string, user:string })
     });      
   }
 
-  const handleCategory = (value: string) => {
-    setCategoryS(value);
-  }
+  // const handleCategory = (value: string) => {
+  //   setCategoryS(value);
+  // }
 
   const handleTypeCfdi = (value: string) => {
     handleTypeCategoryCFDI(value);
@@ -538,10 +540,10 @@ export default function DataStepper({token, user}: {token:string, user:string })
 
   const view = (
     <>
-      <div>
+      {/* <div>
         <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
         <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
-      </div>
+      </div> */}
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
         <SelectReact index={indexTypeCFDI} opts={types} setValue={handleTypeCfdi} />

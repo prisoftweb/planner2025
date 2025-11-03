@@ -1,8 +1,6 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { GetProjectMin, getProjectsLV, getProjectsByUserLV, GetCostsByProjectMin } from "@/app/api/routeProjects";
-import { OneProjectMin, ICostsByProject } from "@/interfaces/Projects";
-import { Options } from "@/interfaces/Common";
 import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
 import NavTabProject from "@/components/projects/NavTabProject";
@@ -15,10 +13,6 @@ export default async function Page({ params }:
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin = await GetProjectMin(token, params.id);
-  // let options: Options[] = await getProjectsLV(token);
-  // let costs: ICostsByProject[] = await GetCostsByProjectMin(token, params.id);
 
   let role = user.rol?.name || '';
 

@@ -1,9 +1,8 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
-import { ProjectsTable, IProjectWithEstimateMin } from "@/interfaces/Projects";
+import { ProjectsTable } from "@/interfaces/Projects";
 import { getProjectsWithEstimatesMin, getProjectsForEstimatedByUser } from "@/app/api/routeProjects";
 import { ProjectEstimateDataToTableDataMin } from "@/app/functions/SaveProject";
 import ContainerEstimatesClient from "@/components/projects/estimates/ContainerEstimatesClient";

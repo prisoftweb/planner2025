@@ -1,12 +1,10 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
 import HeaderProfileExpense from "@/components/expenses/HeaderProfileExpense";
 import { GetCostMIN, GetCostsLVByCond } from "@/app/api/routeCost";
 import ExpenseClient from "@/components/expenses/ExpenseClient";
-import { OneExpense } from "@/interfaces/Expenses";
 import NavTabExpense from "@/components/expenses/NavTabExpense";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 
@@ -18,9 +16,6 @@ export default async function Page({ params, searchParams }:
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   const previous = searchParams?.status==='pending' ? 1: 0;
-
-  // let cost: OneExpense = await GetCostMIN(token, params.id);
-  // let options: Options[] = await GetCostsLVByCond(token);
 
   const [cost, options] = await Promise.all([
     GetCostMIN(token, params.id),

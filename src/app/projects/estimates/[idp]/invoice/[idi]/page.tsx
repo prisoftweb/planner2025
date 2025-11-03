@@ -1,9 +1,7 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { GetProjectMin } from "@/app/api/routeProjects";
-import { ITotalInvoicesByProject, IInvoiceMinFull, ICollectiosByInvoice } from "@/interfaces/Invoices";
 import { getInvoiceMinFull, getTotalInvoicesByProject, getCollectionsByInvoice } from "@/app/api/routeInvoices";
 import ContainerDetailInvoice from "@/components/projects/estimates/ContainerDetailInvoice";
 
@@ -12,16 +10,6 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin;
-  // let invoice: IInvoiceMinFull;
-  // let totalInvoiceProject: ITotalInvoicesByProject[];
-  // let collections: ICollectiosByInvoice[]=[];
-  
-  // project = await GetProjectMin(token, params.idp);
-  // invoice = await getInvoiceMinFull(token, params.idi);
-  // totalInvoiceProject = await getTotalInvoicesByProject(token, params.idp);
-  // collections = await getCollectionsByInvoice(token, params.idi);
 
   const [project, invoice, totalInvoiceProject, collections] = await Promise.all([
     GetProjectMin(token, params.idp),

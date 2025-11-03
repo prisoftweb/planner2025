@@ -1,9 +1,7 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { GetProjectMin } from "@/app/api/routeProjects";
-import { IEstimate, IConceptEstimate, TotalEstimatedByProject } from "@/interfaces/Estimate";
 import { getAllConceptsDetailsByEstimateMin, getTotalEstimatesByProjectMin, 
   getEstimate } from "@/app/api/routeEstimates";
 import ContainerDetailEstimate from "@/components/projects/estimates/ContainerDetailEstimate";
@@ -13,16 +11,6 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin;
-  // let estimate: IEstimate;
-  // let totalEstimatedProject: TotalEstimatedByProject[];
-  // let concepts: IConceptEstimate[];
-  
-  // project = await GetProjectMin(token, params.idp);
-  // estimate = await getEstimate(token, params.ide);
-  // totalEstimatedProject = await getTotalEstimatesByProjectMin(token, params.idp);
-  // concepts = await getAllConceptsDetailsByEstimateMin(token, params.ide);
 
   const [project, estimate, totalEstimatedProject, concepts] = await Promise.all([
     GetProjectMin(token, params.idp),

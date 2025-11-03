@@ -1,8 +1,6 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import { GetProjectMin, getProjectsLV, getProjectsByUserLV } from "@/app/api/routeProjects";
-import { OneProjectMin } from "@/interfaces/Projects";
-import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
 import Selectize from "@/components/Selectize";
@@ -11,17 +9,12 @@ import Header from "@/components/HeaderPage";
 
 import ProjectGuaranteeFundsContainer from "@/components/projects/ProjectGuaranteeFundsContainer";
 import { getGuaranteesByProject } from "@/app/api/routeGuarantee";
-import { IGuaranteeByPojectMin } from "@/interfaces/Guarantee";
 
 export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin = await GetProjectMin(token, params.id);
-  // let options: Options[] = await getProjectsLV(token);
-  // let guarantees: IGuaranteeByPojectMin[] = await getGuaranteesByProject(token, params.id);
 
   let role = user.rol?.name || '';
 

@@ -4,9 +4,7 @@ import { UsrBack } from "@/interfaces/User";
 import DashBoardContainer from "@/components/expenses/dashboard/DashBoardContainer";
 import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject, GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject, 
   GetAllCostsGroupByDAYAndProject, GetAllCostsGroupByRESUMEN, GetAllCostsGroupByTYPERESUMEN } from "@/app/api/routeCost"
-import { CostsByConceptAndCategory, CostsByDay, CostsGroupByResumen, CostsGroupResumenByType } from "@/interfaces/DashboardsCosts";
 import { getProjectsLV } from "@/app/api/routeProjects";
-import { Options } from "@/interfaces/Common";
 
 interface OptionsDashboard {
   label: string,
@@ -19,13 +17,6 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  // let costsCategory: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  // let costsConcept: CostsByConceptAndCategory[] = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  // let costsDays: CostsByDay[] = await GetAllCostsGroupByDAYAndProject(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  // let costsResumen: CostsGroupByResumen[] = await GetAllCostsGroupByRESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  // let costsResumenType: CostsGroupResumenByType[] = await GetAllCostsGroupByTYPERESUMEN(token, new Date().toDateString(), new Date().toDateString(), 'TODOS');
-  // let projects: Options[] = await getProjectsLV(token);
-
   const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects] = await Promise.all([
     GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS'),
     GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS'),

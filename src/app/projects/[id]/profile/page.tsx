@@ -1,9 +1,7 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { ClientBack } from "@/interfaces/Clients";
 import { getClients } from "@/app/api/routeClients";
 import { GetProjectMin, getProjectsLV, getProjectsByUserLV } from "@/app/api/routeProjects";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
@@ -11,8 +9,6 @@ import Selectize from "@/components/Selectize";
 import NavTabProject from "@/components/projects/NavTabProject";
 import ProjectCli from "@/components/projects/ProjectClient";
 import Header from "@/components/HeaderPage";
-
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 
 export default async function Page({ params }: 
@@ -21,11 +17,6 @@ export default async function Page({ params }:
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin = await GetProjectMin(token, params.id);
-  // let options: Options[] = await getProjectsLV(token);
-  // let clients: ClientBack[] = await getClients(token);
-  // let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
 
   let role = user.rol?.name || '';
 

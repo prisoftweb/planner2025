@@ -1,13 +1,10 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { GetProjectMin, getProjectsLVNoCompleted } from "@/app/api/routeProjects";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 import { getTotalInvoicesByProject, getInvoicesByProject, getTotalInvoiceResumenByProject } from "@/app/api/routeInvoices";
-import { ITotalInvoicesByProject, IInvoiceByProject, ITotalInvoiceResumen } from "@/interfaces/Invoices";
 import ContainerInvoicesProject from "@/components/projects/estimates/ContainerInvoicesProject";
 
 export default async function Page({ params, searchParams }: 
@@ -16,20 +13,6 @@ export default async function Page({ params, searchParams }:
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin;
-  // let invoices: IInvoiceByProject[];
-  // let totalInvoicesProject: ITotalInvoicesByProject[];
-  // let totalInvoicesResumen: ITotalInvoiceResumen;
-  // let projects: Options[];
-  // let catalogs: GlossaryCatalog[];
-  
-  // project = await GetProjectMin(token, params.idp);
-  // invoices = await getInvoicesByProject(token, params.idp);
-  // totalInvoicesProject = await getTotalInvoicesByProject(token, params.idp);
-  // totalInvoicesResumen = await getTotalInvoiceResumenByProject(token, params.idp);
-  // projects = await getProjectsLVNoCompleted(token);
-  // catalogs = await getCatalogsByName(token, 'projects');
 
   const [project, invoices, totalInvoicesProject, totalInvoicesResumen, projects, catalogs] = await Promise.all([
     GetProjectMin(token, params.idp),

@@ -1,9 +1,7 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { ClientBack } from "@/interfaces/Clients";
 import { getClients } from "@/app/api/routeClients";
 import { GetProjectMin, getProjectsLV } from "@/app/api/routeProjects";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
@@ -12,7 +10,6 @@ import NavTabProject from "@/components/projects/NavTabProject";
 import Header from "@/components/HeaderPage";
 import ProjectHistoryCli from "@/components/projects/ProjectHistoryCli";
 
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -20,16 +17,6 @@ export default async function Page({ params }: { params: { id: string }}){
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let project: OneProjectMin;
-  // let options: Options[] = [];
-  // let clients: ClientBack[];
-  // let catalogs: GlossaryCatalog[];
-  
-  // project = await GetProjectMin(token, params.id);
-  // options = await getProjectsLV(token);
-  // clients = await getClients(token);
-  // catalogs = await getCatalogsByName(token, 'projects');
 
   const [project, options, clients, catalogs] = await Promise.all([
     GetProjectMin(token, params.id),

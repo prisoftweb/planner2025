@@ -115,7 +115,8 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
     }
     const {description, amount} = formik.values
     updateBasicData('', description, amount.replace(/[$,]/g, ""), 
-        startDate, '', '', '', '', '', '', '', categoryS, '', type, '', amount.replace(/[$,]/g, ""));
+        startDate, '', '', '', '', '', '', '', '', type, '', amount.replace(/[$,]/g, ""));
+        //categoryS,
 
     const costcenter = {
       category: costCenter,
