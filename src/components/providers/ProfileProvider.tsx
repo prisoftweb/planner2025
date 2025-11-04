@@ -1,5 +1,6 @@
 import IconText from "./IconText";
 import { useOneProviderStore } from "@/app/store/providerStore";
+import { MoneyFormatter } from "@/app/functions/Globals";
 
 export default function ProfileProvider(){
   
@@ -30,7 +31,8 @@ export default function ProfileProvider(){
                 </div>
               </div>
               <div className="w-40">
-                <p>$ {oneProviderStore?.tradeline.currentbalance}</p>
+                {/* <p>$ {oneProviderStore?.tradeline.currentbalance}</p> */}
+                <p>{MoneyFormatter(oneProviderStore?.tradeline?.currentbalance || 0)}</p>
               </div>
             </div>
           </div>

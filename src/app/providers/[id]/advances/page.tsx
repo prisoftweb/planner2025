@@ -69,7 +69,7 @@ export default async function Page({ params }: { params: { id: string }}){
           </div>
           <Selectize options={options} routePage="providers" subpath="/advances" />
         </div>
-        <NavTab idProv={params.id} tab='2' />
+        <NavTab idProv={params.id} tab='4' />
       </div>
     </>
   )

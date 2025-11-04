@@ -8,6 +8,8 @@ import { RemoveProvider } from "@/app/api/routeProviders";
 import RemoveElement from "../RemoveElement";
 import { useProviderStore } from "@/app/store/providerStore";
 import { showToastMessageError } from "../Alert";
+import { Badge } from "@mui/material";
+import { UserCircleIcon } from "@heroicons/react/24/solid"
 
 export default function TableProviders({data, token}:
           {data:TableProvider[], token:string}){
@@ -24,7 +26,7 @@ export default function TableProviders({data, token}:
       showToastMessageError('Error al quitar proveedor de la tabla!!');
     }
   }
-  
+
   const columns = [
     columnHelper.accessor(row => row.id, {
       maxSize: 10,
@@ -58,7 +60,14 @@ export default function TableProviders({data, token}:
           </div>
           <RemoveElement id={row.original.id} name={row.original.name} token={token} 
               remove={RemoveProvider} removeElement={delProvider} />
-          <NumberContacts numContacts={row.original.contacts} />
+          {/* <Badge color="info" badgeContent={row.original.contacts}>
+            <UserCircleIcon className="w-6 h-6 text-slate-500" />
+          </Badge> */}
+          {/* <NumberContacts numContacts={row.original.contacts} /> */}
+          <div className="flex text-slate-500 items-start">
+            <UserCircleIcon className="w-6 h-6" />
+            <p className="bg-purple-700 text-white rounded-full px-1 h-3"><sup>{row.original.contacts}</sup></p>
+          </div>
         </div>
       ),
     }),
