@@ -181,7 +181,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
           />
           { report!=='' && viewSelectProject}
           {indexStepper==0 && categories.length > 0 && (
-            <div>
+            <div className="w-48">
               <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
               <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
             </div>

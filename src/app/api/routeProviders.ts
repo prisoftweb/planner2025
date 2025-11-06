@@ -100,8 +100,6 @@ export async function getProviderMin(id:string, auth_token:string) {
 export async function updateProvider(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/${id}`;
 
-  console.log('update provider => ', url);
-  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       'headers': {
@@ -275,5 +273,31 @@ export async function getProviderByRFC(auth_token:string, prov: string){
     // }else{
     //   return 'Error al obtener proveedor';
     // }
+  }
+}
+
+export async function getCostTOTALPendingPAYGroupByPROVIDER(id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostTOTALPendingPAYGroupByPROVIDER/${id}`;
+
+  const data={
+    conditionCost: ["PAGADO", "DIFERIDO", "NO PAGADO"]
+  }
+
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });    
+    if(res.status===200) return res.data.data.stats[0];
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      console.log(typeof(error));
+      return 'Ocurrio un error al obtener costos pendientes de pago por proveedor';
+    }
   }
 }

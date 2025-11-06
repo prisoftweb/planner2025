@@ -1,8 +1,9 @@
 import IconText from "./IconText";
 import { useOneProviderStore } from "@/app/store/providerStore";
 import { MoneyFormatter } from "@/app/functions/Globals";
+import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
 
-export default function ProfileProvider(){
+export default function ProfileProvider({costPayment}: {costPayment:ICostTOTALPendingPAYGroupByPROVIDER}){
   
   const {oneProviderStore} = useOneProviderStore();
 
@@ -32,7 +33,8 @@ export default function ProfileProvider(){
               </div>
               <div className="w-40">
                 {/* <p>$ {oneProviderStore?.tradeline.currentbalance}</p> */}
-                <p>{MoneyFormatter(oneProviderStore?.tradeline?.currentbalance || 0)}</p>
+                {/* <p>{MoneyFormatter(oneProviderStore?.tradeline?.currentbalance || 0)}</p> */}
+                <p>{MoneyFormatter(costPayment?.totalCost?? 0)}</p>
               </div>
             </div>
           </div>

@@ -4,9 +4,9 @@ import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
 import ProviderClient from "@/components/providers/ProviderClient";
-import { getProvider, getProviders } from "@/app/api/routeProviders";
+import { getProvider, getProviders, getCostTOTALPendingPAYGroupByPROVIDER } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { Provider } from "@/interfaces/Providers";
+// import { Provider, ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers";
 import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
 
@@ -16,15 +16,10 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let provider: any;
-  // let providers: Provider[];
-  
-  // provider = await getProvider(params.id, token);
-  // providers = await getProviders(token);
-
-  const [provider, providers] = await Promise.all([
+  const [provider, providers, costPayment] = await Promise.all([
     getProvider(params.id, token),
-    getProviders(token)
+    getProviders(token),
+    getCostTOTALPendingPAYGroupByPROVIDER(params.id, token),
   ]);
   
   if(typeof(provider) === "string"){
@@ -41,6 +36,15 @@ export default async function Page({ params }: { params: { id: string }}){
       <>
         <Navigation user={user} />
         <h1 className="text-center text-red-500">{providers}</h1>
+      </>
+    )
+  }
+
+  if(typeof(costPayment) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">{costPayment}</h1>
       </>
     )
   }
@@ -76,7 +80,7 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={options} routePage="providers" subpath="/profile" />
         </div>
         <NavTab idProv={params.id} tab='1' />
-        <ProviderClient provider={provider} token={token} id={params.id} />
+        <ProviderClient provider={provider} token={token} id={params.id} costPayment={costPayment} />
       </div>
     </>
   )

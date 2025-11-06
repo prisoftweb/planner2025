@@ -31,7 +31,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
     report, condition, category, isPettyCash, concept,
     updateIsCard, updateCostCenter, updateHaveDiscount, 
     updateHaveTaxExempt, haveDiscount, haveTaxExempt, taxExempt, 
-    total, reportObject, dataCFDI} = useNewExpense();
+    total, reportObject, dataCFDI, updateCategory} = useNewExpense();
 
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
@@ -301,6 +301,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
                   (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
                 const res = await CreateCostWithFiles(token, formdata);
                 if(res === 201){
+                  const catAux=category;
                   reset();
                   formik.values.amount = '';
                   formik.values.description = '';
@@ -313,6 +314,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
                   updateRefresh(true);
                   updateIndexStepper(4);
                   refRequest.current = true;
+                  updateCategory(catAux);
                 }else{
                   refRequest.current = true;
                   showToastMessageError(res);
@@ -324,6 +326,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
             }else{
               const res = await CreateCostWithFiles(token, formdata);
               if(res === 201){
+                const catAux=category;
                 reset();
                 formik.values.amount = '';
                 formik.values.description = '';
@@ -336,6 +339,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 updateRefresh(true);
                 updateIndexStepper(4);
                 refRequest.current = true;
+                updateCategory(catAux);
               }else{
                 refRequest.current = true;
                 showToastMessageError(res);
@@ -382,6 +386,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
               const res = await SaveExpense(data, token);
               if(res===201){
+                const catAux=category;
                 reset();
                 formik.values.amount = '';
                 formik.values.description = '';
@@ -394,6 +399,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
                 updateRefresh(true);
                 updateIndexStepper(4);
                 refRequest.current = true;
+                updateCategory(catAux);
               }
               else{
                 showToastMessageError(res);
@@ -406,6 +412,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
           }else{
             const res = await SaveExpense(data, token);
             if(res===201){
+              const catAux=category;
               reset();
               formik.values.amount = '';
               formik.values.description = '';
@@ -418,6 +425,7 @@ export default function DataStepper({token, user}: {token:string, user:string })
               updateRefresh(true);
               updateIndexStepper(4);
               refRequest.current = true;
+              updateCategory(catAux);
             }
             else{
               showToastMessageError(res);

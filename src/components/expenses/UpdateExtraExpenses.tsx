@@ -50,74 +50,129 @@ export default function UpdateExtraExpense({token, id, expense, isHistory}:
 
   useEffect(() => {
     const fetchOptions = async () => {
-      let costcenters: CostoCenterLV[];
-      try {
-        costcenters = await getCostoCentersLV(token);
-        if(typeof(costcenters)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+      // let costcenters: CostoCenterLV[];
+      // try {
+      //   costcenters = await getCostoCentersLV(token);
+      //   if(typeof(costcenters)==='string'){
+      //     return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
+      //   }    
+      // } catch (error) {
+      //   return <h1 className="text-center text-lg text-red-500">Error al consultar los centros de costos!!</h1>
+      // }
+      
+      // let optTypes: Options[] = [];
+      // try {
+      //   optTypes = await getCatalogsByNameAndType(token, 'cost');
+      //   if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+      // } catch (error) {
+      //   return <h1>Error al consultar tipos de cfdi!!</h1>
+      // }
+
+      // let optPro: Options[] = [];
+      // try {
+      //   optPro = await getProjectsLV(token);
+      //   if(typeof(optPro)==='string'){
+      //     return <h1 className="text-center text-lg text-red-500">{optPro}</h1>
+      //   }    
+      // } catch (error) {
+      //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+      // }
+
+      // let optRes : Options[] = [];
+      // try {
+      //   optRes = await getUsersLV(token);
+      //   if(typeof(optRes)==='string'){
+      //     return <h1 className="text-center text-lg text-red-500">{optRes}</h1>
+      //   }    
+      // } catch (error) {
+      //   return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+      // }
+
+      // let optProv: Options[] =  [];
+      // try {
+      //   optProv = await getProvidersLV(token);
+      //   if(typeof(optProv)==='string'){
+      //     return <h1 className="text-center text-lg text-red-500">{optProv}</h1>
+      //   }    
+      // } catch (error) {
+      //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+      // }
+
+      // let optProvSat: Options[] =  [];
+      // try {
+      //   optProvSat = await getProvidersSATLV(token);
+      //   if(typeof(optProvSat)==='string'){
+      //     return <h1 className="text-center text-lg text-red-500">{optProvSat}</h1>
+      //   }    
+      // } catch (error) {
+      //   return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+      // }
+
+      // let optCat: Options[] = [];
+      // try {
+      //   optCat = await getCatalogsByNameAndCategory(token, 'cost');
+      //   if(typeof(optCat)==='string') return <h1 className="text-red-500 text-center text-lg">{optCat}</h1>
+      // } catch (error) {
+      //   return <h1>Error al consultar catalogos!!</h1>
+      // }
+
+      // let costcenters: CostoCenterLV[];
+      // let optTypes: Options[] = [];
+      // let optPro: Options[] = [];
+      // let optRes : Options[] = [];
+      // let optProv: Options[] =  [];
+      // let optProvSat: Options[] =  [];
+      // let optCat: Options[] = [];
+      
+      // costcenters = await getCostoCentersLV(token);
+      // optTypes = await getCatalogsByNameAndType(token, 'cost');
+      // optPro = await getProjectsLV(token);
+      // optRes = await getUsersLV(token);
+      // optProv = await getProvidersLV(token);
+      // optProvSat = await getProvidersSATLV(token);
+      // optCat = await getCatalogsByNameAndCategory(token, 'cost');
+
+      const [costcenters, optTypes, optPro, optRes, optProv, optProvSat, optCat] = await Promise.all([
+        getCostoCentersLV(token), 
+        getCatalogsByNameAndType(token, 'cost'),
+        getProjectsLV(token), 
+        getUsersLV(token),
+        getProvidersLV(token),
+        getProvidersSATLV(token), 
+        getCatalogsByNameAndCategory(token, 'cost')
+      ]);
+      
+      if(typeof(costcenters)==='string'){
+        showToastMessageError(costcenters);
+        return <h1 className="text-center text-lg text-red-500">{costcenters}</h1>
       }
       
-      let optTypes: Options[] = [];
-      try {
-        optTypes = await getCatalogsByNameAndType(token, 'cost');
-        if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
-      } catch (error) {
-        return <h1>Error al consultar tipos de cfdi!!</h1>
+      if(typeof(optTypes)==='string') return <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+
+      if(typeof(optPro)==='string'){
+        showToastMessageError(optPro);
+        return <h1 className="text-center text-lg text-red-500">{optPro}</h1>
       }
 
-      let optPro: Options[] = [];
-      try {
-        optPro = await getProjectsLV(token);
-        if(typeof(optPro)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optPro}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los proyectos!!</h1>
+      if(typeof(optRes)==='string'){
+        showToastMessageError(optRes);
+        return <h1 className="text-center text-lg text-red-500">{optRes}</h1>
       }
 
-      let optRes : Options[] = [];
-      try {
-        optRes = await getUsersLV(token);
-        if(typeof(optRes)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optRes}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los usuarios!!</h1>
+      if(typeof(optProv)==='string'){
+        showToastMessageError(optProv);
+        return <h1 className="text-center text-lg text-red-500">{optProv}</h1>
       }
 
-      let optProv: Options[] =  [];
-      try {
-        optProv = await getProvidersLV(token);
-        if(typeof(optProv)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optProv}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
+      if(typeof(optProvSat)==='string'){
+        showToastMessageError(optProvSat);
+        return <h1 className="text-center text-lg text-red-500">{optProvSat}</h1>
       }
 
-      let optProvSat: Options[] =  [];
-      try {
-        optProvSat = await getProvidersSATLV(token);
-        if(typeof(optProvSat)==='string'){
-          return <h1 className="text-center text-lg text-red-500">{optProvSat}</h1>
-        }    
-      } catch (error) {
-        return <h1 className="text-center text-lg text-red-500">Error al consultar los proveedores!!</h1>
-      }
-
-      let optCat: Options[] = [];
-      try {
-        optCat = await getCatalogsByNameAndCategory(token, 'cost');
-        if(typeof(optCat)==='string') return <h1 className="text-red-500 text-center text-lg">{optCat}</h1>
-      } catch (error) {
-        return <h1>Error al consultar catalogos!!</h1>
-      }
+      if(typeof(optCat)==='string') return <h1 className="text-red-500 text-center text-lg">{optCat}</h1>
 
       const optCC:Options[]= [];
-      costcenters.map((costcenter) => {
+      costcenters.map((costcenter: CostoCenterLV) => {
         optCC.push({
           label: costcenter.label || 'sin categoria',
           value: costcenter.categoryid + '/' + costcenter.value

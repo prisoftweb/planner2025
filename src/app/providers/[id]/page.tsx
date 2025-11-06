@@ -83,7 +83,8 @@ export default async function Page({ params, searchParams }:
   if(searchParams.tab==='2') res=<></>
   else if(searchParams.tab==='3') res=<></>
   else if(searchParams.tab==='4') res=<></>
-  else res=<ProviderClient provider={provider} token={token} id={params.id} />;
+  else res=<></>
+  // else res=<ProviderClient provider={provider} token={token} id={params.id} />;
 
   return(
     <>

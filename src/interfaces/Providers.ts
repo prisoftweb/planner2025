@@ -167,3 +167,11 @@ export interface DetailExpensesTableProvider {
   partitialnumber: number,
   unpaidbalanceamount: number
 }
+
+export interface ICostTOTALPendingPAYGroupByPROVIDER {
+  quantity: number
+  totalCost: number
+  subtotalCost: number
+  totalIVA: number
+  totalDiscount: number
+}

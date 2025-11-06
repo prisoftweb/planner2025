@@ -56,12 +56,12 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
     //         isticket={expense.isticket} isHistory={isHistory} />
     //     </div>
     //   </div>) :
-    opt===1? (<div className="mt-3 w-full flex space-x-2" >
+    opt===1? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                   <UpdateExpense id={id} token={token} expense={expense} 
                     isticket={expense.isticket} isHistory={isHistory} />
                 </div>
-                {pdfFile?.file && widhtPage > 1500 && (<div className=" max-w-md bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                {pdfFile?.file && (<div className=" w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                     <iframe className="w-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
                   </div>)}
               </div>) : 

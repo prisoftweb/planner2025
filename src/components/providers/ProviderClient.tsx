@@ -9,9 +9,10 @@ import { useState, useEffect } from "react"
 import { Provider } from "@/interfaces/Providers"
 import NavResponsive from "./NavResponsive"
 import { useOneProviderStore } from "@/app/store/providerStore"
+import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
 
-export default function ProviderClient({provider, token, id}: 
-  {provider:Provider, token:string, id:string}){
+export default function ProviderClient({provider, token, id, costPayment}: 
+  {provider:Provider, token:string, id:string, costPayment:ICostTOTALPendingPAYGroupByPROVIDER}){
 
   const [opt, setOpt] = useState<number>(provider.tradeline?.creditlimit ? 1: 2);
   const {updateOneProviderStore} = useOneProviderStore();
@@ -33,7 +34,8 @@ export default function ProviderClient({provider, token, id}:
               </div>): 
       (<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
         style={{borderColor:'#F8FAFC'}}>
-          {provider.tradeline?.creditlimit ? <Sumary provider={provider} token={token} /> : <DataBasic id={id} provider={provider} token={token} /> }
+          {provider.tradeline?.creditlimit ? <Sumary provider={provider} token={token} costPayment={costPayment} /> 
+            : <DataBasic id={id} provider={provider} token={token} /> }
         </div>) ))
   );
 
@@ -53,7 +55,7 @@ export default function ProviderClient({provider, token, id}:
         <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            <ProfileProvider />
+            <ProfileProvider costPayment={costPayment} />
           </div>
           {view}
         </div>
