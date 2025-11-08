@@ -26,6 +26,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
   const [heightPage, setHeightPage] = useState<number>(900);
   const [idLabour, setIdLabour] = useState<string>('');
   const [idTicket, setIdTicket] = useState<string>('');
+  const [updateCat, setUpdateCat]=useState<string>('66e0657bc6d95ffb8aa0ec9a');
 
   const {indexStepper, isDeductible, project, updateProject, 
     report, isPettyCash, condition, category, updateReport, updateIndexStepper, 
@@ -33,8 +34,14 @@ export default function NewExpenseContainer({token, showForm, user, }:
 
   const {vats, projects, conditions, categories} = useOptionsExpense();
 
+  const handleUpdateCategory = (value:string) => {
+    // setUpdateCat(value);
+  }
+
   const handleCategory = (value:string) => {
     updateCategory(value);
+    setUpdateCat(value);
+    console.log('categoryyy => ', value);
   }
 
   if(idLabour==='' && categories.length > 0){
@@ -124,28 +131,30 @@ export default function NewExpenseContainer({token, showForm, user, }:
 
   let stepform: JSX.Element = <></>;
   if(isDeductible){
+    // console.log('index is ded => ', indexStepper);
     if(indexStepper || indexStepper>=0){
       stepform = indexStepper===1? (
         <VoucherStepper token={token} user={user._id} />
       ): indexStepper===2? (
         <CFDIStepper token={token} user={user._id} />
       ): indexStepper===3? (
-        <DataStepper token={token} user={user._id} />
+        <DataStepper token={token} user={user._id} handleUpdateCategory={handleUpdateCategory} />
       ): indexStepper===4? (
-        <RefreshStepperComponent />
+        <RefreshStepperComponent category={updateCat} isDeductible={isDeductible} />
       ): (
         <SelectProjectStepper />
       )
     }
   }else{
     if(indexStepper || indexStepper>=0){
+      console.log('index is ded => ', indexStepper);
       stepform = indexStepper===1? (
         <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
       ): indexStepper===2? (
         <DataNoDeductibleStepper token={token} user={user._id}
-          idLabour={idLabour} idTicket={idTicket} idVat={idVat} />
+          idLabour={idLabour} idTicket={idTicket} idVat={idVat} handleUpdateCategory={handleUpdateCategory} />
       ): indexStepper===3? (
-        <RefreshStepperComponent />
+        <RefreshStepperComponent category={updateCat} isDeductible={isDeductible} />
       ):  (
         <SelectProjectStepper />
       )

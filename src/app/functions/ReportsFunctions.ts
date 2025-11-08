@@ -42,6 +42,14 @@ export function ReportParseDataToTableData(reports:ReportParse[]){
       value: report.total
     })
     
+    let mov=true;
+    if(report.lastmove?.condition?.name?.toLowerCase().includes('aprobado') || 
+        report.lastmove?.condition?.name?.toLowerCase().includes('pendiente de pago') ||
+        report.lastmove?.condition?.name?.toLowerCase().includes('cerrado') ||
+        report.lastmove?.condition?.name?.toLowerCase().includes('pagado')){
+      mov=false;
+    }
+
     table.push({
       //Company: report._id.company.logo,
       Company: report.company?.logo || 'sin logo',
@@ -57,8 +65,8 @@ export function ReportParseDataToTableData(reports:ReportParse[]){
       color: report.lastmove?.condition.color || '',
       account: report.account,
       isPettyCash: report.ispettycash,
-      moveRep: true
-    })
+      moveRep: mov
+    });
   });
   return table;
 }

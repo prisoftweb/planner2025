@@ -15,8 +15,8 @@ import CurrencyInput from 'react-currency-input-field';
 import Input from "../Input";
 import { useOptionsExpense } from "@/app/store/newExpense";
 
-export default function DataNoDeductibleStepper({token, user, idLabour, idTicket, idVat }: 
-  {token:string, user:string, idLabour:string, idTicket:string, idVat:string}){
+export default function DataNoDeductibleStepper({token, user, idLabour, idTicket, idVat, handleUpdateCategory }: 
+  {token:string, user:string, idLabour:string, idTicket:string, idVat:string, handleUpdateCategory: (value: string) => void}){
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, project, condition, category, 
@@ -181,9 +181,11 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
                 showToastMessage('Costo creado satisfactoriamente!!!');
                 setClearAmount(true);
                 updateRefresh(true);
-                setTimeout(() => {
-                  setResetBand(true);
-                }, 300);
+                // setTimeout(() => {
+                //   setResetBand(true);
+                // }, 300);
+                setResetBand(true);
+                updateIndexStepper(3);
                 refRequest.current = true;
               }else{
                 showToastMessageError(res);
@@ -208,9 +210,11 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
               showToastMessage('Costo creado satisfactoriamente!!!');
               setClearAmount(true);
               updateRefresh(true);
-              setTimeout(() => {
-                setResetBand(true);
-              }, 300);
+              // setTimeout(() => {
+              //   setResetBand(true);
+              // }, 300);
+              setResetBand(true);
+              updateIndexStepper(3);
               refRequest.current = true;
             }else{
               showToastMessageError(res);
@@ -258,9 +262,11 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
                 setClearAmount(true);
                 updateRefresh(true);
                 updateIndexStepper(3);
-                setTimeout(() => {
-                  setResetBand(true);
-                }, 300);
+                // setTimeout(() => {
+                //   setResetBand(true);
+                // }, 300);
+                setResetBand(true);
+                updateIndexStepper(3);
                 refRequest.current = true;
               }
               else{
@@ -287,9 +293,11 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
               setClearAmount(true);
               updateRefresh(true);
               updateIndexStepper(3);
-              setTimeout(() => {
-                setResetBand(true);
-              }, 300);
+              // setTimeout(() => {
+              //   setResetBand(true);
+              // }, 300);
+              setResetBand(true);
+              updateIndexStepper(3);
               refRequest.current = true;
             }
             else{

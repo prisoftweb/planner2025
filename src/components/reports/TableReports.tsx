@@ -220,10 +220,12 @@ export default function TableReports({data, token, reports, optCompanies,
       id: 'Mover',
       cell: ({row}) => (
         <div className="w-36 min-w-36">
-          <SelectReact index={0} opts={[{
-            label: 'Seleccione informe',
-            value: '0'
-          }, ...optReps]} setValue={() => {}} moveRep={handleMoveCostsToReport} idRep={row.original.id} />
+          {row.original.moveRep && (
+            <SelectReact index={0} opts={[{
+              label: 'Seleccione informe',
+              value: '0'
+            }, ...optReps]} setValue={() => {}} moveRep={handleMoveCostsToReport} idRep={row.original.id} />
+          )}
         </div>
       ),
     }),

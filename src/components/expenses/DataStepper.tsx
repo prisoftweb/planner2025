@@ -22,7 +22,8 @@ import { useOptionsExpense } from "@/app/store/newExpense";
 import { getProvider } from "@/app/api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
 
-export default function DataStepper({token, user}: {token:string, user:string }){
+export default function DataStepper({token, user, handleUpdateCategory}: 
+  {token:string, user:string, handleUpdateCategory: (value: string) => void }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 

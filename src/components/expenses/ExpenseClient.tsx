@@ -61,8 +61,8 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                   <UpdateExpense id={id} token={token} expense={expense} 
                     isticket={expense.isticket} isHistory={isHistory} />
                 </div>
-                {pdfFile?.file && (<div className=" w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
-                    <iframe className="w-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
+                {pdfFile?.file && (<div className=" w-full h-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                    <iframe className="w-full h-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
                   </div>)}
               </div>) : 
     (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 

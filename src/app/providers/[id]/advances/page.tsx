@@ -5,7 +5,6 @@ import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
 import { getProvider, getProviders } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { Provider } from "@/interfaces/Providers";
 import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
 

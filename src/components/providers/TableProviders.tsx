@@ -54,7 +54,9 @@ export default function TableProviders({data, token}:
       id: 'accion',
       cell: ({row}) => (
         <div className="flex items-center">
-          <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
+          <Badge color="info" badgeContent={row.original.contacts}>
+            <IconText text={row.original.name} size="w-8 h-8" sizeText="" />
+          </Badge>
           <div 
             className={`w-4 h-4 mr-3 ml-5 ${row.original.suppliercredit? 'bg-green-500': 'bg-red-500'}`}>
           </div>
@@ -64,10 +66,10 @@ export default function TableProviders({data, token}:
             <UserCircleIcon className="w-6 h-6 text-slate-500" />
           </Badge> */}
           {/* <NumberContacts numContacts={row.original.contacts} /> */}
-          <div className="flex text-slate-500 items-start">
+          {/* <div className="flex text-slate-500 items-start">
             <UserCircleIcon className="w-6 h-6" />
             <p className="bg-purple-700 text-white rounded-full px-1 h-3"><sup>{row.original.contacts}</sup></p>
-          </div>
+          </div> */}
         </div>
       ),
     }),

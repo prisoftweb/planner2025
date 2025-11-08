@@ -23,10 +23,17 @@ export default async function Page({ params }: { params: { id: string }}){
 
   let role = user.rol?.name || '';
 
-  let project: OneProjectMin = await GetProjectMin(token, params.id);
-  let options: Options[] = role.toLowerCase().includes('residente') ? await getProjectsByUserLV(token, user._id) : await getProjectsLV(token);
-  let clients: ClientBack[] = await getClients(token);
-  let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+  // let project: OneProjectMin = await GetProjectMin(token, params.id);
+  // let options: Options[] = role.toLowerCase().includes('residente') ? await getProjectsByUserLV(token, user._id) : await getProjectsLV(token);
+  // let clients: ClientBack[] = await getClients(token);
+  // let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
+
+  const [project, options, clients, catalogs ] = await Promise.all([
+    GetProjectMin(token, params.id),
+    role.toLowerCase().includes('residente') ? await getProjectsByUserLV(token, user._id) : await getProjectsLV(token),
+    getClients(token),
+    getCatalogsByName(token, 'projects')
+  ]);
   
   if(typeof(project) === "string")
     return(
@@ -69,7 +76,7 @@ export default async function Page({ params }: { params: { id: string }}){
     )
  
   const optClients: Options[] = [];
-  clients.map((client) => {
+  clients.map((client: ClientBack) => {
     optClients.push({
       label: client.name,
       value: client._id
@@ -77,7 +84,7 @@ export default async function Page({ params }: { params: { id: string }}){
   })
 
   const optCategories: Options[] = [];
-  catalogs[0].categorys.map((category) => {
+  catalogs[0].categorys.map((category: any) => {
     optCategories.push({
       label: category.glossary.name,
       value: category.glossary._id
@@ -85,7 +92,7 @@ export default async function Page({ params }: { params: { id: string }}){
   })
 
   const optTypes: Options[] = [];
-  catalogs[0].types.map((type) => {
+  catalogs[0].types.map((type: any) => {
     optTypes.push({
       label: type.glossary.name,
       value: type.glossary._id
@@ -93,7 +100,7 @@ export default async function Page({ params }: { params: { id: string }}){
   })
 
   const optConditions: Options[] = [];
-  catalogs[0].condition.map((condition) => {
+  catalogs[0].condition.map((condition: any) => {
     optConditions.push({
       label: condition.glossary.name,
       value: condition.glossary._id

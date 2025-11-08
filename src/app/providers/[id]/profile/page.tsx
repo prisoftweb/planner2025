@@ -6,7 +6,6 @@ import IconText from "@/components/providers/IconText";
 import ProviderClient from "@/components/providers/ProviderClient";
 import { getProvider, getProviders, getCostTOTALPendingPAYGroupByPROVIDER } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-// import { Provider, ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers";
 import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
 
