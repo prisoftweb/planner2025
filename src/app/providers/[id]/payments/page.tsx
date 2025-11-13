@@ -6,7 +6,6 @@ import { UsrBack } from "@/interfaces/User";
 import { ExpensesTableProvider, Provider } from "@/interfaces/Providers";
 import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableExpensesProvider from "@/components/providers/ContainerTableExpensesProvider";
-import { PaymentProvider } from "@/interfaces/Payments";
 import { getPaymentsProvider } from "@/app/api/routePayments";
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -15,14 +14,6 @@ export default async function Page({ params }: { params: { id: string }}){
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let provider: any;
-  // let providers: Provider[];
-  // let costs: PaymentProvider[];
-  
-  // provider = await getProvider(params.id, token);
-  // providers = await getProviders(token);
-  // costs = await getPaymentsProvider(token, params.id);
 
   const [provider, providers, costs] = await Promise.all([
     getProvider(params.id, token),

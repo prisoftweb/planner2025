@@ -211,7 +211,7 @@ export default function TableReports({data, token, reports, optCompanies,
         <div className="cursor-pointer"
           onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
         >
-          <Chip label={row.original.Status} color={row.original.color} />
+          <Chip label={row.original.Status} color={row.original.color} darktext={row.original?.darktext?? false} />
         </div>
       ),
     }),

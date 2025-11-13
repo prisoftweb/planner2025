@@ -95,8 +95,8 @@ export async function GetReportMIN(auth_token:string, id:string){
 
 export async function updateReport(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/${id}`;
-  console.log(url);
-  console.log(JSON.stringify(data));
+  // console.log(url);
+  // console.log(JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       headers:{

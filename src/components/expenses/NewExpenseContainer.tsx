@@ -41,7 +41,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
   const handleCategory = (value:string) => {
     updateCategory(value);
     setUpdateCat(value);
-    console.log('categoryyy => ', value);
+    // console.log('categoryyy => ', value);
   }
 
   if(idLabour==='' && categories.length > 0){

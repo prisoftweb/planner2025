@@ -10,7 +10,7 @@ import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
 
 export default async function Page({ params, searchParams }: 
-                  { params: { id: string }, searchParams: { tab: string, opt: string } }){
+  { params: { id: string }, searchParams: { tab: string, opt: string } }){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
@@ -58,8 +58,7 @@ export default async function Page({ params, searchParams }:
 
   const photo=user.photo
   const name=user.name
-  const email=user.email
-
+  
   let options: Options[] = [];
   
   users.map((usr: any) => {

@@ -1,6 +1,5 @@
 import { useRegFormContext } from "./StepperClientProvider";
 import HeaderForm from "../HeaderForm";
-// import { XMarkIcon } from "@heroicons/react/24/solid";
 import ContainerClientStepper from "./ContainerClientStepper";
 import { showToastMessageWarning, showToastMessageInfo } from "../Alert";
 import {confirmAlert} from 'react-confirm-alert';
@@ -82,8 +81,6 @@ export default function NewClientContainer({token, id, showForm, tags}: NewClien
         <HeaderForm img="/img/clientes.svg" subtitle="Ingresa nuevo cliente" 
           title="Nuevo cliente"
         />
-        {/* <XMarkIcon className="w-6 h-6 text-slate-500
-          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
         <TooltipCloseIcon handleClose={closeForm} />
       </div>
       <ContainerClientStepper token={token} id={id} tags={tags} />

@@ -2,7 +2,6 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -100,8 +99,6 @@ export default function NewCatalog({showForm, token, catalog}: NewCatalogProps){
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevo catalogo" 
             title="Agregar nuevo catalogo"
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
         

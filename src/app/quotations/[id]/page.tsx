@@ -1,20 +1,15 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import { IOneQuotationMin } from "@/interfaces/Quotations";
 import { getQuotationMin, getQuotationsLV } from "@/app/api/routeQuotations";
 import Selectize from "@/components/Selectize";
 import Header from "@/components/HeaderPage";
 import ContainerQuatationProfile from "@/components/quotations/ContainerQuatationProfile";
-import { Options } from "@/interfaces/Common";
 
 export default async function Page({params}: {params:{id:string}}){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let quot: IOneQuotationMin = await getQuotationMin(token, params.id);
-  // let quots: Options[] = await getQuotationsLV(token);
 
   const [quotation, quotations] = await Promise.all([
     getQuotationMin(token, params.id), 

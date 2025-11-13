@@ -91,7 +91,9 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
               <img src={oneReport?.company.logo} alt="logo" className="w-16 h-auto" />
             </div>
             <div>
-              <Chip label={oneReport?.moves[oneReport?.moves.length -1]?.condition?.name || 'sin status'} />
+              <Chip label={oneReport?.moves[oneReport?.moves.length -1]?.condition?.name || 'sin status'}
+                  darktext={oneReport?.moves[report.moves.length -1]?.condition?.darktext?? false}
+                  color={oneReport?.moves[report.moves.length -1]?.condition?.color?? '#000'} />
             </div>
           </div>
           

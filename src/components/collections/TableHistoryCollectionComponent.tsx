@@ -400,7 +400,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                     {/* <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
                       removeElement={delCollection} token={token} /> */}
                   </div>
-                  <Chip label={col.condition.name} color={col.condition.color} />
+                  <Chip label={col.condition.name} color={col.condition.color} darktext={col.condition?.darktext?? false} />
                 </div>
                 <div className="w-full">
                   <div className="flex gap-x-3 justify-between items-center">

@@ -1,7 +1,6 @@
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-
 import CompanyClient from "@/components/companies/CompanyClient";
 import Header from "@/components/Header";
 import ButtonNew from "@/components/glossary/ButtonNew";
@@ -36,7 +35,7 @@ export default async function Page(){
       id: gloss._id,
       name: gloss.name  
     })
-  })
+  });
 
   return(
     <>

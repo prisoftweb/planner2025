@@ -6,10 +6,9 @@ import { getCompaniesLV } from "../../api/routeCompany";
 import { Options } from "@/interfaces/Common";
 import { getProjectsLV } from "../../api/routeProjects";
 import { GetReportsMin, GetReportsByUserMin} from "../../api/routeReports";
-import { ReportParse, ReportTable } from "@/interfaces/Reports";
+import { ReportTable } from "@/interfaces/Reports";
 import { ReportParseDataToTableData } from "../../functions/ReportsFunctions";
 import { getCatalogsByName } from "../../api/routeCatalogs";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import ContainerClient from "@/components/reports/ContainerClient";
 
 export default async function Page() {
@@ -18,29 +17,11 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let reports: ReportParse[] = [];
-  // let optCompanies: Options[] = [];
-  // let optProjects:Options[];
   let optProjectsFilter: Options[] = [{
       label: 'TODOS',
       value: 'all'
     }]
-  // let catalogs: GlossaryCatalog[];
-  
-  // if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')){
-  //   reports = await GetReportsMin(token);
-  // }else{
-  //   if(typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras')){
-  //     reports = await GetReportsByUserMin(token, user._id);
-  //   }else{
-  //     reports = await GetReportsMin(token);
-  //   }
-  // }
-  
-  // optCompanies = await getCompaniesLV(token);
-  // optProjects = await getProjectsLV(token);
-  // catalogs = await getCatalogsByName(token, 'reports');
-
+    
   const [reports, optCompanies, optProjects, catalogs]=await Promise.all([
     typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('direccion')? 
       GetReportsMin(token) : (typeof(user.department)!=='string' && user.department.name.toLowerCase().includes('obras') ?

@@ -12,7 +12,7 @@ export interface BudgetMin {
   pending: number
   amount: number
   status: boolean
-  progressAverage: number
+  progressAverage: number,
 }
 
 export interface User {
@@ -42,6 +42,7 @@ export interface Condition {
   _id: string
   name: string
   color: string
+  darktext: boolean
 }
 
 export interface BudgetTableCostCenter{

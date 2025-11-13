@@ -12,7 +12,8 @@ export interface Glossary {
   color?: string
   status: boolean
   __v: number
-  id: string
+  id: string,
+  darktext:boolean
 }
 
 export interface GlossaryCatalog {

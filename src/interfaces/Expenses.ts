@@ -35,6 +35,7 @@ export interface ExpensesTable {
   totalMoneda: string
   taxFolio: string
   color: string
+  darktext: boolean
 }
 
 // export interface Expense {

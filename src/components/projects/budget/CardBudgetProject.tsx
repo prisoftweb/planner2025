@@ -26,7 +26,7 @@ export default function CardBudgetProject({budget, token}: {budget:BudgetMin, to
                 <p className="text-base font-bold">
                   {MoneyFormatter(budget.pending)}
                 </p>
-                <Chip label={budget.lastmove.condition.name} color={budget.lastmove.condition.color} />
+                <Chip label={budget.lastmove.condition.name} color={budget.lastmove.condition.color} darktext={budget?.lastmove?.condition?.darktext?? false} />
               </div>
             </div>
           </div>

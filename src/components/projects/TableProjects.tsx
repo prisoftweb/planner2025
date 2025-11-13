@@ -291,7 +291,7 @@ export default function TableProjects({data, token, projects, optCategories,
         cell: ({row}) => (
           <p className="cursor-pointer"
             onClick={() => linkToProfile(row.original.id)}
-          ><Chip label={row.original.category} color={row.original.condition} /></p>
+          ><Chip label={row.original.category} color={row.original.condition} darktext={row.original.darktext} /></p>
         ),
       }),
       columnHelper.accessor('category', {
@@ -485,7 +485,7 @@ export default function TableProjects({data, token, projects, optCategories,
         cell: ({row}) => (
           <p className="cursor-pointer"
             onClick={() => linkToProfile(row.original.id)}
-          ><Chip label={row.original.category} color={row.original.condition} /></p>
+          ><Chip label={row.original.category} color={row.original.condition} darktext={row.original.darktext} /></p>
         ),
       }),
       columnHelper.accessor('category', {

@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
-import { Tree, TreeTable } from "@/interfaces/Roles";
+import { TreeTable } from "@/interfaces/Roles";
 import Navigation from "@/components/navigation/Navigation";
 import RolesClient from "@/components/roles/RolesClient";
 import TableTree from "@/components/roles/TableTree";
@@ -8,7 +8,6 @@ import ButtonNew from "@/components/roles/ButtonNew";
 import { getResources, getRoutes, getComponents,
         getTrees
       } from "@/app/api/routeRoles";
-import { Resource } from "@/interfaces/Roles";
 import { Options } from "@/interfaces/Common";
 import WithOut from "@/components/WithOut";
 import SearchInTable from "@/components/SearchInTable";
@@ -20,16 +19,6 @@ export default async function Page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let trees: Tree[];
-  // let resources: Resource[];
-  // let routes: Resource[];
-  // let components: Resource[];
-  
-  // trees = await getTrees(token);
-  // resources = await getResources(token);
-  // routes = await getRoutes(token);
-  // components = await getComponents(token);
 
   const [trees, resources, routes, components] = await Promise.all([
     getTrees(token),
@@ -188,7 +177,6 @@ export default async function Page() {
               </Link>
               <p className="text-xl ml-4 font-medium">Arbol</p>
             </div>
-            {/* <ButtonNewProvider id={id} token={token} /> */}
             <div className="flex gap-x-3 gap-y-2 justify-end w-full flex-wrap-reverse sm:flex-nowrap">
               <SearchInTable placeH="Buscar arbol.." />
               <div className="w-70">

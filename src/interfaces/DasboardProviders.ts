@@ -62,7 +62,8 @@ export interface ITotalCostPendingPaymentByProviderEstatusMIN {
   provider: string
   condition: {
     status: string,
-    color: string
+    color: string,
+    darktext: boolean
   },
   quantity: number
   porcentageTotal: number

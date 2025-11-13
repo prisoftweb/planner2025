@@ -33,8 +33,6 @@ export default function DeleteClient({token, client} : {token : string, client:T
                   showToastMessageError('El cliente no pudo ser eliminado..');
                 }
               } catch (error) {
-                console.log(error);
-                console.log('Error al eliminar cliente');
                 showToastMessageError('Error al eliminar cliente');
               }
             break;

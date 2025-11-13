@@ -1,11 +1,9 @@
-import { Options } from "@/interfaces/Common";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import ReportClient from "@/components/reports/ReportClient";
 import { GetReport, GetReportsLV, GetAllCostByReportWithDateMINAndMAX, 
-  updateReport, insertMovementsInReport, insertConditionInReportViewer  } from "@/app/api/routeReports";
-import { Report, DateReport  } from "@/interfaces/Reports";
+  updateReport, insertConditionInReportViewer  } from "@/app/api/routeReports";
 import { getNodesByDepto } from "@/app/api/routeNodes";
 import { Node } from "@/interfaces/Nodes";
 
@@ -14,16 +12,6 @@ export default async function Page({ params }: { params: { id: string }}){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let report: Report;
-  // let dateReport: DateReport[];
-  // let optReports:Options[] = [];
-  // let nodes:(Node[] | null) = null;
-  
-  // report = await GetReport(token, params.id);
-  // dateReport = await GetAllCostByReportWithDateMINAndMAX(token, params.id);
-  // optReports = await GetReportsLV(token);
-  // nodes = await getNodesByDepto(token, typeof(user.department)==='string'? user.department : user.department._id);
 
   const [report, dateReport, optReports, nodes]=await Promise.all([
     GetReport(token, params.id),
@@ -40,8 +28,6 @@ export default async function Page({ params }: { params: { id: string }}){
       </>
     )
   }
-
-  console.log('report => ', report);
 
   if(typeof(dateReport)==='string'){
     return(
@@ -83,8 +69,14 @@ export default async function Page({ params }: { params: { id: string }}){
 
   node = nodes[0];
 
-  if(!report.wached && node != null){
+  // console.log('report dept => ', report.department);
+  // console.log('user dept => ', user.department);
+
+  const watched=(typeof(user.department)!=='string'? report.department.id===user.department.id : report.department.id===user.department);
+
+  if(!report.wached && node != null && watched){
     try {
+      // console.log('watched true => ');
       const data = {wached: true};
       const res = await updateReport(token, params.id, data);
       if(typeof(res)==='string'){
@@ -114,7 +106,10 @@ export default async function Page({ params }: { params: { id: string }}){
             date: new Date()
         }]
       };
-      // const res = await insertMovementsInReport(token, report._id, data);
+
+      // console.log('data to insert in report viewer => ', data);
+      // console.log('node r => ', node);
+      // console.log('last moment => ', report?.moves[report?.moves?.length-1]);
       const res = await insertConditionInReportViewer(token, report._id, data);
       if(res !== 200){
         return(
@@ -138,14 +133,6 @@ export default async function Page({ params }: { params: { id: string }}){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-        {/* <div className="flex justify-between items-center flex-wrap gap-y-3">
-          <div className="flex items-center my-2">
-            <ArrowReturn link="/reports" />
-            <p className="text-xl ml-4 font-medium">{report.name}</p>
-          </div>
-          <Selectize options={optReports} routePage="reports" subpath="/profile" />
-        </div> */}
-        {/* <NavTab idRep={params.id} tab='1' /> */}
         <ReportClient report={report} token={token} id={params.id} 
           user={user} node={node} dates={dateReport} optReports={optReports}
         />

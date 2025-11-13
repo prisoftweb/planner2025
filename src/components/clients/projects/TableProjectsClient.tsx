@@ -83,21 +83,9 @@ export default function TableProjectsClient({projects}:{projects: ProjectMin[]})
       header: 'Estatus',
       id: 'categoria',
       cell: ({row}) => (
-        // <p className="cursor-pointer"
-        //   onClick={() => window.location.replace(`/projects/estimates/${row.original.id}`)}
-        // >{row.original.category}</p>
-        <Chip label={row.original.category} color={row.original.condition} />
+        <Chip label={row.original.category} color={row.original.condition} darktext={row.original.darktext} />
       ),
     }),
-    // columnHelper.accessor('client', {
-    //   header: 'Cliente',
-    //   id: 'cliente',
-    //   cell: ({row}) => (
-    //     <p className="cursor-pointer"
-    //       onClick={() => window.location.replace(`/projects/estimates/${row.original.id}`)}
-    //     >{row.original.client}</p>
-    //   ),
-    // }),
     columnHelper.accessor('date', {
       header: 'Fecha',
       id: 'fecha',
@@ -120,118 +108,12 @@ export default function TableProjectsClient({projects}:{projects: ProjectMin[]})
     }),
   ]
   
-  // const [maxAmount, setMaxAmount] = useState<number>(0);
-  // useEffect(() => {
-  //   const projectMax = projects.reduce(((previous, current) => {
-  //     return current.amount > previous.amount ? current: previous;
-  //   }));
-  //   setMaxAmount(projectMax.amount);
-  // }, [])
-
-  // const [filteredProjects, setFilteredProjects] = useState<IProjectWithEstimateMin[]>(projects);
   const dataTable: ProjectsTable[] = ProjectsClientDataToTableDataMin(projects);
-
-  // let view = <></>;
-  // if(isTable){
-  //   view = (<Table columns={columns} data={dataTable} placeH="Buscar proyecto.." />);
-  // }else{
-  //   view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-  //             {projects.map((project, index:number) => (
-  //               <CardProject project={project} token={token} key={index} deleteIcon={false} 
-  //                 url={`/projects/estimates/${project._id}`}  />
-  //             ))}
-  //           </div>)
-  // }
 
   let view = <Table columns={columns} data={dataTable} placeH="Buscar proyecto.." />;
 
-  // const dateValidation = (date:string, startDate:number, endDate:number) => {
-  //   let d = new Date(date).getTime();
-  //   if(d >= startDate && d <= endDate){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // const amountValidation = (project:IProjectWithEstimateMin, startDate:number, endDate:number, 
-  //       minAmount:number, maxAmount:number) => {
-  //   if(project.amount >= minAmount && project.amount <= maxAmount){
-  //     // if(dateValidation(project.date, startDate, endDate)){
-  //     //   return true;
-  //     // }
-  //     if(dateValidation(new Date().toISOString(), startDate, endDate)){
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const categoriesValidation = (project:IProjectWithEstimateMin, startDate:number, endDate:number, 
-  //           minAmount:number, maxAmount:number, categories:string[]) => {
-  //   if(categories.includes('all')){
-  //     if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-  //       return true
-  //     return false;
-  //   }else{
-  //     if(project.segment)
-  //       if(categories.includes(project.segment._id))
-  //         if(amountValidation(project, startDate, endDate, minAmount, maxAmount))
-  //           return true
-  //     return false;
-  //   }
-  // }
-
-  // const typesValidation = (project:IProjectWithEstimateMin, startDate:number, endDate:number, 
-  //   minAmount:number, maxAmount:number, categories:string[], types:string[]) => {
-  //   if(types.includes('all')){
-  //     if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(project.type)
-  //       if(types.includes(project.type._id))
-  //         if(categoriesValidation(project, startDate, endDate, minAmount, maxAmount, categories))
-  //           return true;
-  //     return false;
-  //   }
-  // }
-
-  // const conditionsValidation = (project:IProjectWithEstimateMin, startDate:number, endDate:number, 
-  //       minAmount:number, maxAmount:number, categories:string[], 
-  //       types:string[], conditions:string[]) => {
-  //   if(conditions.includes('all')){
-  //     if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
-  //       return true;
-  //     return false;
-  //   }else{
-  //     if(conditions.includes(project.category._id))
-  //       if(typesValidation(project, startDate, endDate, minAmount, maxAmount, categories, types))
-  //         return true;
-  //     return false;
-  //   }
-  // }
-
-  const filterData = (conditions:string[], types:string[], 
-    categories:string[], minAmount:number, maxAmount:number, startDate:number, endDate:number) => {
-  
-    // let filtered: IProjectWithEstimateMin[] = [];
-    // projects.map((project) => {
-    //   if(conditionsValidation(project, startDate, endDate, minAmount, maxAmount, categories, types, conditions)){
-    //     filtered.push(project);
-    //   }
-    // });
-    // setFilteredProjects(filtered);
-    // setDataProjects(ProjectDataToTableDataMin(filtered));
-    // setFilter(true); usar setIsFilter() => parametro
-  }
-
   return(
     <>
-      {/* <div className="flex justify-end mb-5">
-        {isFilter && <Filtering showForm={setIsFilter} optCategories={optCategories} 
-                                  optTypes={optTypes} optConditions={optConditions} 
-                                  FilterData={filterData} maxAmount={maxAmount}  />}
-      </div> */}
       {view}
     </>
   )
@@ -316,7 +198,8 @@ function ProjectsClientDataToTableDataMin(projects:ProjectMin[]){
       hasamountChargeOff: project.hasamountChargeOff?? false, 
       hasguaranteefund: project.hasguaranteefund, 
       includesTaxes: project.includesTaxes?? false,
-      imgUser: '/img/users/default.jpg'
+      imgUser: '/img/users/default.jpg',
+      darktext: project.category?.darktext ?? false
     })
   });
 

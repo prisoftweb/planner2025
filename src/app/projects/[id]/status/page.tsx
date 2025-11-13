@@ -3,7 +3,6 @@ import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
 import { getClients } from "@/app/api/routeClients";
 import { GetProjectMin, getProjectsLV, getProjectsByUserLV } from "@/app/api/routeProjects";
-import { OneProjectMin } from "@/interfaces/Projects";
 import { Options } from "@/interfaces/Common";
 import { NextUiProviders } from "@/components/NextUIProviderComponent";
 import Navigation from "@/components/navigation/Navigation";
@@ -12,7 +11,6 @@ import NavTabProject from "@/components/projects/NavTabProject";
 import ProjectStatusContainer from "@/components/projects/ProjectStatusContainer";
 import Header from "@/components/HeaderPage";
 
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -22,11 +20,6 @@ export default async function Page({ params }: { params: { id: string }}){
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let role = user.rol?.name || '';
-
-  // let project: OneProjectMin = await GetProjectMin(token, params.id);
-  // let options: Options[] = role.toLowerCase().includes('residente') ? await getProjectsByUserLV(token, user._id) : await getProjectsLV(token);
-  // let clients: ClientBack[] = await getClients(token);
-  // let catalogs: GlossaryCatalog[] = await getCatalogsByName(token, 'projects');
 
   const [project, options, clients, catalogs ] = await Promise.all([
     GetProjectMin(token, params.id),

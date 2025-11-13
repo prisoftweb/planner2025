@@ -50,7 +50,6 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
 
   useEffect(() => {
     const fetch = async () => {
-      // const res = await getActiveProjectsMin(token);
       const res = await getExecuteProjectsMin(token);
       if(typeof(res)==='string'){
         showToastMessageError(res);
@@ -64,61 +63,10 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   const handleProjectSel = async (value: string, title:string) => {
     setProjectSel(value);
     setProjectTitle(title);
-
-    // const code = generarToken(5);
-
-    // const data: TCode = {
-    //   code,
-    //   date: new Date().toISOString(),
-    //   user,
-    //   project: value,
-    //   provider: providerSel
-    // }
-
-    // setCodeData({
-    //   __v: 0,
-    //   _id: '384737',
-    //   code,
-    //   date: new Date().toDateString(),
-    //   datets: new Date().toDateString(),
-    //   id: '384737',
-    //   project: title,
-    //   status: true,
-    //   user: user
-    // });
-
-    // const res = await createCode(token, data);
-    // if(typeof(res)==='string'){
-    //   showToastMessageError(res);
-    // }else{
-    //   setCodeData(res);
-    // }
-
   }
 
-  // const handleProvSel = async (value: string, title:string) => {
   const handleProvSel = async (value: string) => {
     setProviderSel(value);
-    
-    // const code = generarToken(5);
-
-    // if(projectSel){
-    //   const data: TCode = {
-    //     code,
-    //     date: new Date().toISOString(),
-    //     user,
-    //     project: projectSel,
-    //     provider: value,
-    //     userRequesting: value
-    //   }
-
-    //   const res = await createCode(token, data);
-    //   if(typeof(res)==='string'){
-    //     showToastMessageError(res);
-    //   }else{
-    //     setCodeData(res);
-    //   }
-    // }
   }
 
   const handleUserSel = async (value: string) => {

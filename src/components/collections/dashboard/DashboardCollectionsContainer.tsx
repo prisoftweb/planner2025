@@ -10,14 +10,13 @@ import NewDonutChartComponent from "@/components/projects/dashboard/NewDonutChar
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "@/components/Label";
 import { ITotalInvoiceByClient, ITotalInvoicesByProjectDashboardCollection, 
-  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, ITotalAccountReceivablesByProjectResumen, 
-  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByProject, ITotalEstimatesPendingByClient,
+  ITotalPaymentByDateAndStatus, ITotalPendingByDateAndStatus, 
+  ITotalAccountReceivablesByClientResumen, ITotalEstimatesPendingByClient,
   IAllTOTALPENDINGPAYMENTSByProject, IAllsProjectsMINAndNEConditionANDNoExistsEstimate, IAllTOTALPENDINGBillingByProject } from "@/interfaces/Invoices";
 import { BarChartComponent } from "@/components/projects/dashboard/BarChartComponent";
 import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient, 
   getTotalAccountReceivablesPaymentByDateAndStatus, getTotalAccountReceivablesPendingByDateAndStatus, 
-  getTotalAccountReceivablesByProjectResumen, getTotalAccountReceivablesByClientResumen, 
-  getTotalEstimatesPendingByProject, getTotalEstimatesPendingByClient, 
+  getTotalAccountReceivablesByClientResumen, getTotalEstimatesPendingByClient, 
   getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN, 
   getAllTOTALPENDINGPAYMENTSByProjectMINRESUME, getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED } from "@/app/api/routeInvoices";
 import { showToastMessageError } from "@/components/Alert";
@@ -48,7 +47,6 @@ function transformProjectsTypesToDataChart(dataCollections: ITotalAccountReceiva
   for (let i = 0; i < dataCollections.length; i++) {
     const cli = pendingCli.find((cli) => cli.c === dataCollections[i][0].client);
     if(cli){
-      console.log('cli => ', cli);
       dataCollections[i].push({
         client: cli.client,
         pendingPayment: cli.pendingEstimated,
@@ -100,89 +98,42 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const [totalCollectionsClients, setTotalCollectionsClients]=useState<ITotalInvoiceByClient[]>(totalClients);
   const [totalPaymentByDate, setTotalPaymentByDate]=useState<ITotalPaymentByDateAndStatus[]>(totalPay);
   const [totalPending, setTotalPending]=useState<ITotalPendingByDateAndStatus[]>(totalPen);
-  const [widthPage, setWidthPage] = useState<number>(900);
-  const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>(resC);
+  // const [widthPage, setWidthPage] = useState<number>(900);
+  // const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>(resC);
   const [totalAccountByPrjRes, setTotalAccountByPrjRes]=useState<IAllTOTALPENDINGPAYMENTSByProject[]>(toalPrjRes);
   const [totalAccountByCliRes, setTotalAccountByCliRes]=useState<ITotalAccountReceivablesByClientResumen[]>(toalCliRes);
-  const [totalEstimatesPending, setTotalEstimatesPending] = useState<IAllsProjectsMINAndNEConditionANDNoExistsEstimate[]>(totalEstimatesPen);
+  // const [totalEstimatesPending, setTotalEstimatesPending] = useState<IAllsProjectsMINAndNEConditionANDNoExistsEstimate[]>(totalEstimatesPen);
   const [totalEstimatesPendingCli, setTotalEstimatesPendingCli] = useState<ITotalEstimatesPendingByClient[]>(totalEstimatesCli);
   const [totalPendingBillingPjr, setTotalPendingBillingPjr] = useState<IAllTOTALPENDINGBillingByProject[]>(totalPendingBillingByPrj);
 
-  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-  //   from: new Date('2024-01-01'),
-  //   to: new Date('2025-04-30'),
-  // });
-  
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
 
-  const handleResize = () => {
-    setWidthPage(Math.max(
-      document.body.scrollHeight, document.documentElement.scrollHeight,
-      document.body.offsetHeight, document.documentElement.offsetHeight,
-      document.body.clientHeight, document.documentElement.clientHeight
-    ));
-  }
+  // const handleResize = () => {
+  //   setWidthPage(Math.max(
+  //     document.body.scrollHeight, document.documentElement.scrollHeight,
+  //     document.body.offsetHeight, document.documentElement.offsetHeight,
+  //     document.body.clientHeight, document.documentElement.clientHeight
+  //   ));
+  // }
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-    setWidthPage(Math.max(
-      document.body.scrollWidth, document.documentElement.scrollWidth,
-      document.body.offsetWidth, document.documentElement.offsetWidth,
-      document.body.clientWidth, document.documentElement.clientWidth
-    ));
-    return () => window.removeEventListener('scroll', handleResize);
-  }, []);
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize, false);
+  //   setWidthPage(Math.max(
+  //     document.body.scrollWidth, document.documentElement.scrollWidth,
+  //     document.body.offsetWidth, document.documentElement.offsetWidth,
+  //     document.body.clientWidth, document.documentElement.clientWidth
+  //   ));
+  //   return () => window.removeEventListener('scroll', handleResize);
+  // }, []);
 
   const handleDate = (dateI: Date, dateF: Date) => {
-    //actualizar total con el rango de fechas
-    // updateTotal(getDate(dateI), getDate(dateF), statuses);
     updateDashboard(getDate(dateI), getDate(dateF));
   }
 
-  // const addStatus = (status:string) => {
-  //   const newStatus = [...statuses, status];
-  //   setStatuses(newStatus);
-  //   if(rangeDate.from && rangeDate.to){
-  //     handleFilter(rangeDate.from, rangeDate.to, newStatus);
-  //   }else{
-  //     showToastMessageError('Seleccione un rango de fechas para filtrar');
-  //   }
-  // }
-
-  // const deleteStatus = (status:string) => {
-  //   const newStatus = statuses.filter((s) => s !== status);
-  //   setStatuses(newStatus);
-  //   if(rangeDate.from && rangeDate.to){
-  //     handleFilter(rangeDate.from, rangeDate.to, newStatus);
-  //   }else{
-  //     showToastMessageError('Seleccione un rango de fechas para filtrar');
-  //   }
-  // }
-
-  // const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-  //   updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
-  // }
-
   const updateDashboard = async (dateI:string, dateF:string) => {
-
-    // let totalPrjs: ITotalInvoicesByProjectDashboardCollection[] =  await getTotalAccountReceivablesByProject(token, dateI, dateF);
-    // let totalClis: ITotalInvoiceByClient[] = await getTotalAccountReceivablesByClient(token, dateI, dateF);
-    // let totalPay: ITotalPaymentByDateAndStatus[] = await getTotalAccountReceivablesPaymentByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-    // let totalPen: ITotalPendingByDateAndStatus[] = await getTotalAccountReceivablesPendingByDateAndStatus(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-    // const resCob = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
-    // const resTotCli: ITotalAccountReceivablesByClientResumen[] = await getTotalAccountReceivablesByClientResumen(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-    // const resEstPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[] = await getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-    // const resEstCli: ITotalEstimatesPendingByClient[] = await getTotalEstimatesPendingByClient(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-    // const resTotPenPjr: IAllTOTALPENDINGPAYMENTSByProject[] = await getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString());
-    // const resPenBill: IAllTOTALPENDINGBillingByProject[] = await getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()));
-
-    // const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen, totEstPenCli, 
-    //   totalPenPayPjr, pendingBilling] = await Promise.all([
-    //   totalPrjs, totalClis, totalPay, totalPen, resCob, resTotCli, resEstPen, resEstCli, resTotPenPjr, resPenBill
-    // ]);
 
     const [totprj, totcli, totPay, totPen, resCobrar, totalCliRes, totEstPen, totEstPenCli, 
       totalPenPayPjr, pendingBilling] = await Promise.all([
@@ -222,11 +173,11 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       setTotalPending(totPen);
     }
 
-    if(typeof(resCobrar)==='string'){
-      showToastMessageError(resCobrar);
-    }else{
-      setPorCobrar(resCobrar[0]);
-    }
+    // if(typeof(resCobrar)==='string'){
+    //   showToastMessageError(resCobrar);
+    // }else{
+    //   setPorCobrar(resCobrar[0]);
+    // }
 
     if(typeof(totalCliRes)==='string'){
       showToastMessageError(totalCliRes);
@@ -234,11 +185,11 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       setTotalAccountByCliRes(totalCliRes);
     }
 
-    if(typeof(totEstPen)==='string'){
-      showToastMessageError(totEstPen);
-    }else{
-      setTotalEstimatesPending(totEstPen);
-    }
+    // if(typeof(totEstPen)==='string'){
+    //   showToastMessageError(totEstPen);
+    // }else{
+    //   setTotalEstimatesPending(totEstPen);
+    // }
 
     if(typeof(totEstPenCli)==='string'){
       showToastMessageError(totEstPenCli);
@@ -260,13 +211,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   }
 
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-                {/* <ChipStatus id="6827d56d936cac5913f94ad5" addStatus={addStatus} removeStatus={deleteStatus} title="Vencidos" />
-                <ChipStatus id="6827d64a936cac5913f94ad9" addStatus={addStatus} removeStatus={deleteStatus} title="Por cobrar" />
-                <ChipStatus id="6827d5c2936cac5913f94ad7" addStatus={addStatus} removeStatus={deleteStatus} title="Recuperado" />
-                <ChipStatus id="6827d67b936cac5913f94adb" addStatus={addStatus} removeStatus={deleteStatus} title="Programado" />
-                <ChipStatus id="6840deda0c901d22c05dead1" addStatus={addStatus} removeStatus={deleteStatus} title="Retenido" /> */}
                 <div>
-                  {/* <Label htmlFor='date'>Fecha</Label> */}
                   <DateRangePicker 
                     className='mt-2'
                     placeholder='Seleccione un rango de fechas'
@@ -282,7 +227,6 @@ export default function DashboardCollectionsContainer({token, user, totalClients
                 </div>
               </div>;
 
-  // const DataGuaranteesClient = [];
   const titles:string[]=[];
   const values: number[] = [];
 
@@ -319,54 +263,24 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     });
   });
 
-  // console.log('tot estiamtes exist => ', totalEstimatesPending);
-  // console.log('totalAccountByPrjRes => ', totalAccountByPrjRes);
   const dataPendingProyect: DataPendingProject[] = [];
-  // console.log('totalAccountByPrjRes => ', totalAccountByPrjRes);
-  // console.log('totalEstimatesPending => ', totalEstimatesPending);
   totalAccountByPrjRes.map((prj) => {
-    // const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
-    // const prjS = prjSpent.find((pr) => pr.title === prj.title);
-    // const prjP = prjPayments.find((pr) => pr.project === prj.title);
-
-    // const prjEst = totalEstimatesPending.find((pr) => pr.project === prj.project);
-
-    // console.log('pjr est => ', prjEst);
-    
-    // console.log('pjr pending => ', prj.pendingPayment);
     dataPendingProyect.push({
       label: prj.project,
       "POR COBRAR": prj.pendingPayment || 0,
-      // "POR FACTURAR": prjEst ? prjEst.pendingPayment : 0
       "POR FACTURAR": prj.pendingBilling
     });    
   });
-  // console.log('dataPendingProyect => ', dataPendingProyect);
-
-  // const groupedByClient = toalCliRes.reduce((acc: any, prj) => {
-  //       const client = prj.client;
-  //       (acc[client] = acc[client] || []).push(prj);
-  //       return acc;
-  //   }, {});
 
   const groupedByClient = totalAccountByCliRes.reduce((acc: any, prj) => {
         const client = prj.client;
         (acc[client] = acc[client] || []).push(prj);
         return acc;
     }, {});
-
-  // console.log('total cli => ', toalCliRes);
-  // console.log('Grouped by client:', groupedByClient);
   
   const resultArray: ITotalAccountReceivablesByClientResumen[][] = Object.values(groupedByClient);
 
-  // console.log('Result array:', resultArray);
-
   const resParse = transformProjectsTypesToDataChart(resultArray, totalEstimatesPendingCli);
-
-  // console.log('resParse => ', resParse);
-
-  // resParse
 
   return (
     <>
@@ -429,7 +343,6 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         </Card>
       </div> 
       
-      {/* {widthPage > 1080 && filterElemnts} */}
       <div className="mt-5 flex items-center gap-x-3">
         <div className="w-4/6">
           <Label>SALDOS PENDIENTES POR PROYECTO</Label>

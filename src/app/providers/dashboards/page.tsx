@@ -2,13 +2,9 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import DashboardContainer from "@/components/providers/dashboard/DashboardContainer";
-import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getAllCostsTOTALGroupByPROVIDERTRADELINE,
-  getAllProvidersWithTradeLine, getTotalPayments, getTotalPendingPaymentsProvider, 
+import { getAllCostsGroupByPROVIDERWithoutTRADELINE, getTotalPayments, getTotalPendingPaymentsProvider, 
   getTotalCostPendingPaymentByProviderEstatusMIN, getTotalCostPendingPaymentByProvidersMIN, 
   getTotalCostApplyPaymentByProvidersTradelineMIN } from "@/app/api/routeDashboardProviders";
-// import { CostsByProvider, ProviderWithTradeLine, TotalCostsByProvidersTradeLine } from "@/interfaces/DasboardProviders";
-// import { TotalPayments } from "@/interfaces/DasboardProviders";
-// import { ProvidersDataToTableData } from "@/app/functions/DashboardProviderFunctions";
 
 export default async function page() {
 
@@ -17,23 +13,9 @@ export default async function page() {
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let totalCost: TotalCostsByProvidersTradeLine[] = [];
-  // let providersTradeLine: ProviderWithTradeLine[] = [];
-  // let costsProviderWithTradeLine: CostsByProvider[] = [];
-  // let costsProvider: CostsByProvider[] = [];
-  // let totalPayments: TotalPayments[] = [];
-  
-  // totalCost = await getAllCostsTOTALGroupByPROVIDERTRADELINE(token);
-  // providersTradeLine = await getAllProvidersWithTradeLine(token);
-  // costsProviderWithTradeLine = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true');
-  // costsProvider = await getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false');
-  // totalPayments = await getTotalPayments(token);
-
   const [totalCost, providersTradeLine, costsProviderWithTradeLine, costsProvider, 
       totalPayments, penddingPayment, pendingPaymentProv] = await Promise.all([
-    // getAllCostsTOTALGroupByPROVIDERTRADELINE(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getTotalCostApplyPaymentByProvidersTradelineMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
-    // getAllProvidersWithTradeLine(token),
     getTotalCostPendingPaymentByProviderEstatusMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'true', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
     getAllCostsGroupByPROVIDERWithoutTRADELINE(token, 'false', new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString()),
@@ -42,8 +24,6 @@ export default async function page() {
     getTotalCostPendingPaymentByProvidersMIN(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), new Date().toDateString())
   ]);
 
-  // let providers: ProviderWithTradeLine[] = [];
-  
   if(typeof(totalCost)==='string'){
     return(
       <>
@@ -106,8 +86,6 @@ export default async function page() {
       </>
     )
   }
-
-  // const data = ProvidersDataToTableData(providersTradeLine);
 
   return (
     <>

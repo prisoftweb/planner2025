@@ -124,7 +124,7 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
       id: 'Estatus',
       cell: ({row}) => (
         <Link href={`/reports/history/${row.original.id}`}>
-          <Chip label={row.original.Status} color={row.original.color} />
+          <Chip label={row.original.Status} color={row.original.color} darktext={row.original?.darktext?? false} />
         </Link>
       ),
     }),

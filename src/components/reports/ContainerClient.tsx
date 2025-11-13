@@ -43,6 +43,8 @@ export default function ContainerClient({token, optCompanies, optDepartments,
 
   const {reportsStore, updateReportStore, haveNewReport, updateHaveNewReport} = useOptionsReports();
 
+  console.log('reps => ', reports);
+
   useEffect(() => {
     updateReportStore(reports);
   }, []);

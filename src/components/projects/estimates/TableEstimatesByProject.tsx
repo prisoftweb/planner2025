@@ -202,7 +202,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         <p className="cursor-pointer"
           onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${row.original.id}?page=project`
                                     : `/projects/estimates/${project._id}/${row.original.id}`)}
-        ><Chip label={row.original.Condicion.name} color={row.original.Condicion.color} /></p>
+        ><Chip label={row.original.Condicion.name} color={row.original.Condicion.color} darktext={row.original?.Condicion?.darktext?? false} /></p>
       ),
     }),
     columnHelper.accessor('Fecha', {

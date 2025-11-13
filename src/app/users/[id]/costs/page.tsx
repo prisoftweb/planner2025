@@ -8,8 +8,7 @@ import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
 
-export default async function Page({ params }: 
-                  { params: { id: string } }){
+export default async function Page({ params }: { params: { id: string } }){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
@@ -47,11 +46,6 @@ export default async function Page({ params }:
       label: usr.name,
     })
   })
-
-  // let opt = 1;
-  // if(searchParams.opt==='2') opt = 2;
-  // else if(searchParams.opt==='3') opt = 3;
-  //   else if(searchParams.opt==='4') opt = 4;
 
   return(
     <>

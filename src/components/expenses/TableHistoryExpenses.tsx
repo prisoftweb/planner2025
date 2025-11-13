@@ -167,7 +167,7 @@ export default function TableHistoryExpenses({data, token, expenses,
       id: 'estatus',
       cell: ({row}) => (
         <Link href={`/expenses/history/${row.original.id}/profile`}>
-          <Chip label={row.original.condition} color={row.original.color} />
+          <Chip label={row.original.condition} color={row.original.color} darktext={row.original.darktext} />
         </Link>
       ),
     }),

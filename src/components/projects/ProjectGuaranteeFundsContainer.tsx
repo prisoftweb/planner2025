@@ -128,7 +128,7 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
       cell: ({row}) => (
         <p className="cursor-pointer"
         // onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collections`)}
-        ><Chip label={row.original.status.name} color={row.original.status.color} /> </p>
+        ><Chip label={row.original.status.name} color={row.original.status.color} darktext={row.original.darktext} /> </p>
       ),
     }),
     columnHelper.accessor('amount', {
@@ -218,6 +218,7 @@ function TransformDataGuaranteeTotable(guarantees: IGuaranteeByPojectMin[]): ITa
     fechaGarantia: guarantee.dateGuarantee?.substring(0, 10) || '',
     fechaPago: guarantee.datePayment?.substring(0, 10) || '',
     fechaProgramacion: guarantee.dateScheduled?.substring(0, 10) || '',
+    darktext: guarantee.estatus?.darktext?? false
     // fechaRetencion: ''
   }));
 }

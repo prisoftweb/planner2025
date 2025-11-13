@@ -60,7 +60,8 @@ export default function ProfileCollection({collection, token, user}:
               <p className="text-slate-500">Proyecto</p>
               <div className="flex gap-x-2 w-full justify-between">
                 <p className="text-blue-500 text-lg">{oneCollection?.client?.name || ''}</p>
-                <Chip label={oneCollection.condition[0].name} color={oneCollection.condition[0].color} />
+                <Chip label={oneCollection.condition[0].name} color={oneCollection.condition[0].color}
+                    darktext={oneCollection?.condition[0]?.darktext?? false} />
               </div>
             </div>
           </div>

@@ -7,17 +7,10 @@ import Selectize from "@/components/Selectize";
 import { Options } from "@/interfaces/Common";
 import HeaderImage from "@/components/HeaderImage";
 
-export default async function Page({ params, searchParams }: 
-                  { params: { id: string }, searchParams: { opt: string } }){
+export default async function Page({ params, searchParams }: { params: { id: string }, searchParams: { opt: string } }){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
-
-  // let user;
-  // let users;
-
-  // user = await getUser(params.id, token);
-  // users = await getUsers(token);
 
   const [user, users]=await Promise.all([
     getUser(params.id, token),

@@ -27,6 +27,7 @@ export function ReportDataToTableData(reports:Report[]){
       account: report.account,
       isPettyCash: report.ispettycash,
       moveRep: true,
+      darktext: report.moves[report.moves.length - 1]?.condition?.darktext ?? false
     })
   });
 
@@ -65,7 +66,8 @@ export function ReportParseDataToTableData(reports:ReportParse[]){
       color: report.lastmove?.condition.color || '',
       account: report.account,
       isPettyCash: report.ispettycash,
-      moveRep: mov
+      moveRep: mov,
+      darktext: report?.lastmove?.condition?.darktext ?? false
     });
   });
   return table;
@@ -91,6 +93,8 @@ export function CostsDataToTableData(expenses:Expense[]){
         photo: expense.user.photo
       },
       condition: expense.estatus.name,
+      color: expense.estatus.color?? '#000',
+      darktext: expense.estatus.darktext?? false
       //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
     })
   });
@@ -120,7 +124,9 @@ export function CostsDataToTableDataMin(expenses:CostReport[]){
         photo: expense.user.photo
       },
       //condition: expense.condition.length > 0 ? expense.condition[expense.condition.length -1].glossary?.name: 'sin status'
-      condition: expense.estatus?.name || 'sin status'
+      condition: expense.estatus?.name || 'sin status',
+      color: expense?.estatus?.color?? '#000',
+      darktext: expense?.estatus?.darktext?? false
     })
   });
 

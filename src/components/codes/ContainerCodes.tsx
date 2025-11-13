@@ -55,11 +55,8 @@ export default function ContainerCodes({codes, providers, token}:
     handleFilter(dateI, dateF, statuses);  
   }
 
-  // const filteredCodes = search==''? codes: codes.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
-  console.log('codes state => ', codesState);
   const filteredCodes = search==''? codesState: codesState.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
-  console.log('filtered codes => ', filteredCodes);
-
+  
   return (
     <>
       <div className="flex gap-x-4 gap-y-3 flex-wrap items-center mt-3">
@@ -69,7 +66,6 @@ export default function ContainerCodes({codes, providers, token}:
         ))}
       </div>
       <div className="mt-3">
-        {/* <Label htmlFor='date'>Fecha</Label> */}
         <DateRangePicker 
           className='mt-2'
           placeholder='Seleccione un rango de fechas'
@@ -116,7 +112,6 @@ export default function ContainerCodes({codes, providers, token}:
                     focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                     active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                     bg-white`}
-                  // onClick={() => handleProjectSel(prj._id, prj.title)}
                 >
                   <div className="flex items-center w-full ">
                     <div className="grid mr-4 place-items-center">

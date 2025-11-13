@@ -20,11 +20,6 @@ export default function ButtonNew({token, glossary}: buttonProps ){
             <ContainerSideNav width="w-full max-w-sm">
               <NewGlossary showForm={setNewList} token={token} glossary={glossary} />
             </ContainerSideNav>
-            // <div className="fixed inset-0 z-40 flex">
-            //   <div className="fixed inset-0 bg-black bg-opacity-40">
-            //     <NewGlossary showForm={setNewList} token={token} glossary={glossary} />
-            //   </div>
-            // </div>
           )}
     </>
   )

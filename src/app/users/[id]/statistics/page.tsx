@@ -8,8 +8,7 @@ import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
 
-export default async function Page({ params }: 
-                  { params: { id: string } }){
+export default async function Page({ params }: { params: { id: string } }){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';

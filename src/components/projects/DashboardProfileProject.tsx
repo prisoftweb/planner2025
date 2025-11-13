@@ -143,7 +143,8 @@ export default function DashboardProfileProject({token, id, conditions}:
         condition: {
           _id: c.conditionstatus.condition._id,
           name: c.conditionstatus.condition.name,
-          color: c.conditionstatus.condition.color
+          color: c.conditionstatus.condition.color,
+          darktext: c.conditionstatus?.condition?.darktext?? false
         },
         user: {
           _id: c.conditionstatus.user._id,
@@ -243,7 +244,7 @@ export default function DashboardProfileProject({token, id, conditions}:
               <span className="flex items-center justify-center w-full h-10 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
                 <img className="rounded-full shadow-lg w-9 h-auto" src={t.conditionstatus?.user?.photo || '/img/users/default.jpg' } alt="user"/>
               </span>
-              <Chip label={t.conditionstatus.condition.name} color={t.conditionstatus.condition.color} width='w-40' />
+              <Chip label={t.conditionstatus.condition.name} color={t.conditionstatus.condition.color} darktext={t.conditionstatus?.condition?.darktext?? false} width='w-40' />
               <p className='text-xs text-center'>{t.conditionstatus.date.substring(0, 10)}</p>
             </div>
         </li>

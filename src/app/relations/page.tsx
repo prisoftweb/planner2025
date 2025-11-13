@@ -5,11 +5,9 @@ import WithOut from "@/components/WithOut";
 import Header from "@/components/Header";
 import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
-import { Glossary } from "@/interfaces/Glossary";
 import { getRelations } from "../api/routeRelations";
 import ButtonNewRelation from "@/components/relations/ButtonNewRelation";
 import { getNodes } from "../api/routeNodes";
-import { Node } from "@/interfaces/Nodes";
 import TableRelations from "@/components/relations/TableRelation";
 import { RelationTable, Relation } from "@/interfaces/Relation";
 
@@ -17,10 +15,6 @@ export default async function Page() {
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let rels: Relation[] = await getRelations(token);
-  // let gloss: Glossary[] = await getGlossaries(token);
-  // let nods: Node[] = await getNodes(token);
 
   const [relations, glossaries, nodes] = await Promise.all([
     getRelations(token), 

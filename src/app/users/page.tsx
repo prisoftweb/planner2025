@@ -5,7 +5,6 @@ import { getDepartmentsLV } from "../api/routeDepartments";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
 import ButtonNewUser from "@/components/users/ButtonNewUser";
-import { Options } from "@/interfaces/Common";
 import { getRolesLV } from "../api/routeRoles";
 import UsersConstext from "@/components/users/UsersContext";
 
@@ -16,10 +15,6 @@ export default async function Users() {
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  // let users = await getUsers(token);
-  // let optionsRoles:Options[] = await getRolesLV(token);
-  // let departments = await getDepartmentsLV(token);
-
   const [users, optionsRoles, departments] = await Promise.all([
     getUsers(token),
     getRolesLV(token),

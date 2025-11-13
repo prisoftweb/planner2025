@@ -172,7 +172,8 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
       header: 'Condicion',
       id: 'condicion',
       cell: ({row}) => (
-        <Chip label={row.original.condition.name} color={row.original.condition.color} />
+        <Chip label={row.original.condition.name} color={row.original.condition.color}
+            darktext={row.original?.condition?.darktext?? false} />
       ),
     }),
     columnHelper.accessor('fecha', {

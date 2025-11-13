@@ -149,7 +149,8 @@ export function ProjectDataToTableDataMin(projects:ProjectMin[]){
       hasamountChargeOff: project.hasamountChargeOff?? false, 
       hasguaranteefund: project.hasguaranteefund, 
       includesTaxes: project.includesTaxes?? false,
-      imgUser: project.user?.photo ?? '/img/users/default.jpg'
+      imgUser: project.user?.photo ?? '/img/users/default.jpg',
+      darktext: project?.category?.darktext ?? false
     })
   });
 
@@ -201,7 +202,8 @@ export function ProjectDataToTableDataWithUtilitiesMin(projects:ProjectMin[],
       hasamountChargeOff: project.hasamountChargeOff?? false, 
       hasguaranteefund: project.hasguaranteefund, 
       includesTaxes: project.includesTaxes?? false,
-      imgUser: project.user?.photo ?? '/img/users/default.jpg'
+      imgUser: project.user?.photo ?? '/img/users/default.jpg',
+      darktext: project?.category?.darktext ?? false
     })
   });
 
@@ -225,7 +227,7 @@ export function ProjectEstimateDataToTableDataMin(projects:IProjectWithEstimateM
     }else{
       cond = '#f00';
     }
-console.log('project => ', project);
+// console.log('project => ', project);
     table.push({
       amount: project.amount,
       category: project?.projectInfoStatusInfo?.name || 'Sin categoria',
@@ -244,7 +246,8 @@ console.log('project => ', project);
       hasamountChargeOff: false, 
       hasguaranteefund: false, 
       includesTaxes: false,
-      imgUser: '/img/users/default.jpg'
+      imgUser: '/img/users/default.jpg',
+      darktext: project?.projectInfoStatusInfo?.darktext ?? false
     })
   });
 
@@ -286,7 +289,8 @@ export function ProjectBudgetDataToTableDataMin(budgets:BudgetMin[]){
       segment: budget.lastmove.condition.name,
       color: budget.lastmove.condition.color,
       // budgeted
-      budgeted: budget.budgeted
+      budgeted: budget.budgeted,
+      darktext: budget.lastmove?.condition?.darktext ?? false
     })
   });
 
@@ -479,7 +483,8 @@ export function ExpenseDataProjectToTableDataProject(expenses:ICostsByProject[])
       total: expense.cost?.total || 0,
       totalMoneda: total,
       taxFolio: expense.taxfolio || '',
-      color: expense.estatus.color || 'gray'
+      color: expense.estatus.color || 'gray',
+      darktext: expense.estatus.darktext || false,
     });
   });
 
@@ -529,7 +534,8 @@ export function ProjectBudgetDataToTableDataProjectMin(budgets:IBudgetByProject[
       amountBudget: budget.amount,
       segment: '',
       color: '',
-      budgeted: budget.budgeted
+      budgeted: budget.budgeted,
+      darktext: false
     })
   });
 

@@ -59,7 +59,8 @@ export default function ProfileQuatation({quatation, token, user}:
               <p className="text-green-500 text-lg">{quatation.applicant.name}</p>
             </div>
             <div>
-              <Chip label={quatation.condition[0].name} color={quatation.condition[0].color} />
+              <Chip label={quatation.condition[0].name} color={quatation.condition[0].color}
+                  darktext={quatation?.condition[0]?.darktext?? false} />
             </div>
           </div>
         </div>

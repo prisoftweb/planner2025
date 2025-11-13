@@ -180,7 +180,7 @@ export default function TableCollectionsComp({token, user}: {token:string, user:
       id: 'facturas',
       cell: ({row}) => (
         <div>
-          <Chip label={row.original.folioInvoice} color={'#466'} />
+          <Chip label={row.original.folioInvoice} color={'#466'} darktext={false} />
         </div>
       )
     }),
@@ -188,7 +188,7 @@ export default function TableCollectionsComp({token, user}: {token:string, user:
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        <Chip label={row.original.nameStatus} color={row.original.colorStatus} />
+        <Chip label={row.original.nameStatus} color={row.original.colorStatus} darktext={false} />
       ),
     }),
     columnHelper.accessor('Cuenta', {

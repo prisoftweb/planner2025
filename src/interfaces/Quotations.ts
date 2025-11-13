@@ -14,6 +14,7 @@ export interface IQuotationMin {
     _id: string
     name: string
     color: string
+    darktext: boolean
   }[]
   client: {
     _id: string
@@ -46,6 +47,7 @@ export interface IQuotationTable {
     _id: string
     name: string
     color: string
+    darktext: boolean
   }
   Fechasol: string 
   Fechaenv: string 
@@ -95,7 +97,8 @@ export interface IOneQuotationMin {
   condition: {
     _id: string
     name: string
-    color: string
+    color: string,
+    darktext: boolean
   }[]
   client: {
     _id: string

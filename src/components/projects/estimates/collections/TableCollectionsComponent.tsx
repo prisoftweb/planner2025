@@ -115,7 +115,8 @@ export default function TableCollectionsComponent({token, project, pageQuery}:
       cell: ({row}) => (
         <div>
           {row.original.Facturas.map((f) => (
-            <Chip label={f.invoices.folio} color={'#466'} key={f._id} />
+            <Chip label={f.invoices.folio} color={'#466'} key={f._id}
+              darktext={false} />
           ))}
         </div>
       )
@@ -124,7 +125,7 @@ export default function TableCollectionsComponent({token, project, pageQuery}:
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        <Chip label={row.original.status.name} color={row.original.status.color} />
+        <Chip label={row.original.status.name} color={row.original.status.color} darktext={row?.original?.status?.darktext} />
       ),
     }),
     columnHelper.accessor('Cuenta', {

@@ -34,17 +34,19 @@ export interface PaymentProvider {
   paymentplugin: {
     plugin: number,
     date: string,
-    notes: string
+    notes: string,
   }
   methodofpayment: {
     _id: string,
     name: string,
-    color: string
+    color: string,
+    darktext:boolean
   }
   condition: {
     _id: string,
     name: string,
-    color: string
+    color: string,
+    darktext:boolean
   }
 }
 

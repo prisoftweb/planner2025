@@ -80,7 +80,8 @@ export default function TableListExpensesPaid({data, nextPage, updateCostPartial
       id: 'estatus',
       cell: ({row}) => (
         <div className="cursor-pointer">
-            <Chip label={row.original.condition.name} color={row.original.condition.color} />
+            <Chip label={row.original.condition.name} color={row.original.condition.color}
+                darktext={row.original?.condition?.darktext?? false} />
         </div>
       ),
     }),

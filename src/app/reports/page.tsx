@@ -8,10 +8,9 @@ import { getProjectsLVNoCompleted } from "../api/routeProjects";
 import { GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN, 
   GetAllReportsWithUSERAndNEConditionMIN, getAllReportsNE3ConditionsLV
  } from "../api/routeReports";
-import { ReportParse, ReportTable } from "@/interfaces/Reports";
+import { ReportTable } from "@/interfaces/Reports";
 import { ReportParseDataToTableData } from "../functions/ReportsFunctions";
 import { getCatalogsByName } from "../api/routeCatalogs";
-import { GlossaryCatalog } from "@/interfaces/Glossary";
 import ContainerClient from "@/components/reports/ContainerClient";
 
 export default async function Page() {

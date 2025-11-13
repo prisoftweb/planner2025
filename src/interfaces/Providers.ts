@@ -136,12 +136,14 @@ export interface ExpensesTableProvider {
   methodofpayment: {
     _id: string,
     name: string,
-    color: string
+    color: string,
+    darktext:boolean
   }
   condition: {
     _id: string,
     name: string,
-    color: string
+    color: string,
+    darktext: boolean
   }
 }
 

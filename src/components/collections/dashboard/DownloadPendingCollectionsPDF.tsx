@@ -1,18 +1,11 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
-// import { OneProjectMin } from "@/interfaces/Projects"
-// import { ICollectionMin } from '@/interfaces/Collections';
-// import { useState, useEffect } from 'react';
-// import { ITotalResumentPayment } from '@/interfaces/Collections';
-// import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
 import { IAllTOTALPENDINGPAYMENTSByProject } from '@/interfaces/Invoices';
 
 export default function DownloadPendingCollectionsPDF({collections, token, pendingBilling, pendingPayment, 
     totalProjects, date}:
   {collections: IAllTOTALPENDINGPAYMENTSByProject[], token:string, pendingBilling?: number, 
     pendingPayment?: number, totalProjects?: number, date?: string}) {
-
-  // const [resumenPayment, setResumenPayment] = useState<ITotalResumentPayment>();
 
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 

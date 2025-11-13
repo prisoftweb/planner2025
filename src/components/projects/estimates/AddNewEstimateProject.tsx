@@ -270,7 +270,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                 currency: 'MXN',
                 value: project.amount
               })}</p>
-              <Chip label={project.category.name} color={project.category.color} />
+              <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
             </div>
           </div>
           <div>

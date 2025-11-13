@@ -64,6 +64,7 @@ export interface IInvoiceTable {
     _id: string
     name: string
     color: string
+    darktext:boolean
   }
   fecha: string
   amount: number,
@@ -133,6 +134,7 @@ export interface IInvoiceByProject {
     _id: string,
     name: string,
     color: string
+    darktext:boolean
   }
   concepts: {
     conceptEstimate: {
@@ -507,6 +509,7 @@ export interface IInvoiceByDateAndConditionMin {
     _id: string
     name: string
     color: string
+    darktext:boolean
   }
   accountreceivables: any[]
   accountreceivablesCount: number

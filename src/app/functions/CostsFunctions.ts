@@ -114,7 +114,8 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       total: expense.cost?.total || 0,
       totalMoneda: total,
       taxFolio: expense.taxfolio || '',
-      color: expense.estatus.color || 'gray'
+      color: expense.estatus.color || 'gray',
+      darktext: expense.estatus.darktext || false,
     });
   });
 

@@ -5,7 +5,7 @@ import { getClients } from "../api/routeClients";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
-import { getActiveProjectsMin, getProjectsByConditionMin, GetCollectionsAccumByProjectMin, 
+import { getActiveProjectsMin, GetCollectionsAccumByProjectMin, 
   GetCostsAccumByProjectMin, getProjectsMinFinishedUser, getProjectsMinInEjecucionUser } from "../api/routeProjects";
 import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject";

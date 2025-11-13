@@ -127,6 +127,7 @@ export interface ICollectionMin {
     _id: string
     name: string
     color: string
+    darktext: boolean
   }
 }
 
@@ -161,6 +162,7 @@ export interface IOneCollectionMin {
     _id: string
     name: string
     color: string
+    darktext: boolean
   }[]
   account: string
 }
@@ -195,6 +197,7 @@ export interface ITableCollection {
     _id: string
     name: string
     color: string
+    darktext: boolean
   }, 
   Importe: number
   concept: string,

@@ -3,10 +3,8 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import ArrowReturn from "@/components/ArrowReturn";
 import Selectize from "@/components/Selectize";
-import { Options } from "@/interfaces/Common";
 import RoleProfile from "@/components/roles/RoleProfile";
 import { getRole, getRolesLV, getTree } from "@/app/api/routeRoles";
-import { RoleUser } from "@/interfaces/Roles";
 import { Tree } from "@/interfaces/Roles";
 import PermissionResource from "@/components/roles/PermissionResource";
 
@@ -17,12 +15,6 @@ export default async function Page({ params, searchParams }:
   const token: string = cookieStore.get('token')?.value || '';
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
-
-  // let rol:RoleUser;
-  // let options: Options[] = [];
-  
-  // rol = await getRole(token, params.id);
-  // options = await getRolesLV(token);
 
   const [rol, options] = await Promise.all([
     getRole(token, params.id),

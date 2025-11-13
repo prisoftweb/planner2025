@@ -288,7 +288,8 @@ export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPending
                   <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                   {prov.provider}
                   </p>
-                  <Chip label={prov.condition.status} color={prov.condition.color} width="w-40" />
+                  <Chip label={prov.condition.status} color={prov.condition.color}
+                      darktext={prov?.condition?.darktext?? false} width="w-40" />
                 </div>
               </div>
             </div>

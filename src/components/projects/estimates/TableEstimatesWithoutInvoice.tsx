@@ -155,7 +155,8 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
       cell: ({row}) => (
         <p className="cursor-pointer"
           onClick={() => window.location.replace(`/projects/estimates/${row.original.idProject}/${row.original.id}`)}
-        ><Chip label={row.original.Condicion.name} color={row.original.Condicion.color} /></p>
+        ><Chip label={row.original.Condicion.name} color={row.original.Condicion.color}
+            darktext={row.original?.Condicion?.darktext?? false} /></p>
       ),
     }),
     columnHelper.accessor('Fecha', {

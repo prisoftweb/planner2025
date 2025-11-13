@@ -1,4 +1,3 @@
-import {ICode} from '@/interfaces/Code'
 import { TbArrowNarrowLeft } from 'react-icons/tb'
 import { useState, useEffect } from 'react';
 import { getAllProvidersWithTradeLine } from '@/app/api/routeDashboardProviders';
@@ -103,14 +102,10 @@ export default function SelectProviderCode({token, returnProject, handleProvSel,
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                 ${prov._id===prov.name? 'bg-slate-500': 'bg-white'}`}
-              // onClick={() => handleProvSel(prov.value, prov.label)}
               onClick={() => handleProvSel(prov._id)}
             >
               <div className="flex items-center w-full ">
                 <div className="grid mr-4 place-items-center">
-                  {/* <img alt="responsable" src={ prj.photo? prj.photo : '/img/projects/default.svg'} */}
-                  {/* <img alt="responsable" src={ '/img/projects/default.svg'}
-                    className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
                   <IconText size='h-12 w-12' sizeText='' text={prov.name} />
                 </div>
                 <div className="w-full">

@@ -22,7 +22,8 @@ export interface ProjectsTable{
   hasamountChargeOff: boolean, 
   hasguaranteefund: boolean, 
   includesTaxes: boolean,
-  imgUser: string
+  imgUser: string,
+  darktext:boolean
 }
 
 export interface ProjectsBudgetTable{
@@ -40,7 +41,8 @@ export interface ProjectsBudgetTable{
   amountBudget:number,
   pending:number,
   budgeted: number,
-  color: string  
+  color: string,
+  darktext: boolean
 }
 
 export interface Project {
@@ -204,6 +206,7 @@ export interface ITimeLineProject {
       _id: string
       name: string
       color: string
+      darktext: boolean
     }
     user: {
       _id: string
@@ -233,6 +236,7 @@ export interface IProjectWithEstimateMin {
     color: string
     status: boolean
     __v: number
+    darktext: boolean
   }
 }
 
@@ -295,6 +299,7 @@ export interface ICostsByProject {
     _id: string
     name: string
     color: string
+    darktext: boolean
   }
   status: boolean
 }
@@ -361,6 +366,7 @@ export interface IConditionProject {
       _id: string
       name: string
       color: string
+      darktext: boolean
     }
     user: {
       _id: string

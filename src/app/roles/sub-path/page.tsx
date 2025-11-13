@@ -7,7 +7,6 @@ import RolesClient from "@/components/roles/RolesClient";
 import { ResourceTable, Resource } from "@/interfaces/Roles";
 import { getRoutes } from "@/app/api/routeRoles";
 import Header from "@/components/Header";
-//import TableSubPath from "@/components/roles/TableSubPath";
 import TableResource from "@/components/roles/TableResource";
 
 export default async function Page(){

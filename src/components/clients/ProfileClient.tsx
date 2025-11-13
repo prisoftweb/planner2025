@@ -19,7 +19,7 @@ export default function ProfileClient(){
             <p className="text-slate-500">{clientProfile?.regime==='Moral'? 'Persona Moral': 'Persona Fisica'}</p>
             <div className="flex gap-x-2 gap-y-2">
               {clientProfile?.tags?.map((tag, index:number) => (
-                <Chip label={tag} key={index} />
+                <Chip label={tag} key={index} darktext={false} />
               ))}
             </div>
           </div>

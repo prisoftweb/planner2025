@@ -140,6 +140,7 @@ export interface IGuaranteeByPojectMin {
     _id: string
     name: string
     color: string
+    darktext: boolean
   }
   client: {
     _id: string
@@ -167,7 +168,8 @@ export interface ITableGuaranteeByProject {
   // fechaRetencion: string,
   fechaGarantia: string,
   fechaProgramacion: string,
-  fechaPago: string
+  fechaPago: string,
+  darktext: boolean
 }
 
 export interface IGuaranteeResumenByProject {

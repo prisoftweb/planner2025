@@ -117,7 +117,7 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
       header: 'Estatus',
       id: 'Estatus',
       cell: ({row}) => (
-        <Chip label={row.original.segment} color={row.original.color} />
+        <Chip label={row.original.segment} color={row.original.color} darktext={row.original.darktext} />
       ),
     }),
     columnHelper.accessor('amountBudget', {

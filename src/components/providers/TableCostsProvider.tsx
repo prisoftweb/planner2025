@@ -155,7 +155,8 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       cell: ({row}) => (
         <div className="cursor-pointer" 
           onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}>
-            <Chip label={row.original.condition.name} color={row.original.condition.color} />
+            <Chip label={row.original.condition.name} color={row.original.condition.color}
+                darktext={row?.original?.condition?.darktext?? false} />
         </div>
       ),
     }),
@@ -165,7 +166,8 @@ export default function TableCostsProvider({data, token, expenses, idProv,
       cell: ({row}) => (
         <div className="cursor-pointer" 
           onClick={() => window.location.replace(`/providers/${idProv}/payments/${row.original.id}/details`)}>
-            <Chip label={row.original.methodofpayment.name} color={row.original.methodofpayment.color} />
+            <Chip label={row.original.methodofpayment.name} color={row.original.methodofpayment.color}
+                darktext={row?.original?.methodofpayment?.darktext?? false} />
         </div>
       ),
     }),

@@ -79,7 +79,7 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
                 value: project.amount
               })}</p>
               <div className="w-full max-w-36">
-                <Chip label={project.category.name} color={project.category.color} />
+                <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
               </div>
             </div>
               {resumenEstimateProject && estimate && (

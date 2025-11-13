@@ -30,6 +30,8 @@ export default function TableLists({data, token, glossaries}: tableProps){
   const [editGloss, setEditGloss] = useState<boolean>(false);
   const [glossEdit, setGlossEdit] = useState<GlossaryTable>();
 
+  console.log('glossaries => ', glossaries);
+
   const delGlossary = async(id: string) => {
     try {
       const arrGloss = glossariesStore.filter(glo => glo._id !== id);

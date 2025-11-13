@@ -248,7 +248,7 @@ export default function TableExpenses({data, token, expenses,
       cell: ({row}) => (
         <div className="cursor-pointer" 
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}>
-            <Chip label={row.original.condition} color={row.original.color} />
+            <Chip label={row.original.condition} color={row.original.color} darktext={row.original.darktext} />
         </div>
       ),
     }),

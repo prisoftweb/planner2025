@@ -72,7 +72,9 @@ export default function CostsInReport({report, id, token}:
                 <p className="text-blue-600">{oneReport?.department.name}</p>
               </div>
               <div>
-                <Chip label={oneReport?.moves[oneReport?.moves.length -1]?.condition?.name || 'sin status'} />
+                <Chip label={oneReport?.moves[oneReport?.moves.length -1]?.condition?.name || 'sin status'}
+                    color={oneReport?.moves[oneReport?.moves.length -1]?.condition?.color?? undefined}
+                    darktext={oneReport?.moves[oneReport?.moves.length -1]?.condition?.darktext?? false} />
               </div>
             </div>
             
@@ -176,7 +178,8 @@ function CostsTableInReport({data}: {data: CostsTable[]}){
       header: 'Estatus',
       id: 'estatus',
       cell: ({row}) => (
-        <Chip label={row.original.condition} />
+        <Chip label={row.original.condition} darktext={row?.original?.darktext?? false}
+            color={row?.original?.color?? undefined} />
       ),
     }),
     columnHelper.accessor('Fecha', {

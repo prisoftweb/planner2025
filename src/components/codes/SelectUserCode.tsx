@@ -1,8 +1,6 @@
-import {ICode} from '@/interfaces/Code'
 import { TbArrowNarrowLeft } from 'react-icons/tb'
 import { useState, useEffect } from 'react';
 import { showToastMessageError } from '../Alert';
-import IconText from '../providers/IconText';
 import { getUsersMin } from '@/app/api/routeUser';
 import { UsrBack } from "@/interfaces/User";
 
@@ -89,7 +87,7 @@ export default function SelectUserCode({token, handleUserSel, returnProvider, si
               rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500
               outline-0 outline-none 
               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-              dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={'Buscar provedor'} required ></input>
+              dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={'Buscar usuario'} required ></input>
         </div>
       </div>
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
@@ -103,15 +101,11 @@ export default function SelectUserCode({token, handleUserSel, returnProvider, si
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                 ${us._id===us.name? 'bg-slate-500': 'bg-white'}`}
-              // onClick={() => handleProvSel(prov.value, prov.label)}
               onClick={() => handleUserSel(us._id)}
             >
               <div className="flex items-center w-full ">
                 <div className="grid mr-4 place-items-center">
                   <img alt="responsable" src={ us.photo? us.photo : '/img/default.jpg'} className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-                  {/* <img alt="responsable" src={ '/img/projects/default.svg'}
-                    className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
-                  {/* <IconText size='h-12 w-12' sizeText='' text={prov.name} /> */}
                 </div>
                 <div className="w-full">
                   <div className="flex gap-x-3 justify-between items-center w-full">
@@ -120,9 +114,6 @@ export default function SelectUserCode({token, handleUserSel, returnProvider, si
                       {us.name}
                     </h6>
                   </div>
-                  {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                    {prov.tradename}
-                  </p> */}
                 </div>
               </div>
             </div>

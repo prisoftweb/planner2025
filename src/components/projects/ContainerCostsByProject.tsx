@@ -143,7 +143,7 @@ export default function ContainerCostsByProject({project, token, user, costs}: P
         cell: ({row}) => (
           <div className="cursor-pointer" 
             onClick={() => window.location.replace(`/expenses/${row.original.id}/profile${queryParam}`)}>
-              <Chip label={row.original.condition} color={row.original.color} />
+              <Chip label={row.original.condition} color={row.original.color} darktext={row.original?.darktext?? false} />
           </div>
         ),
       }),

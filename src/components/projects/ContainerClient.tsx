@@ -43,6 +43,8 @@ export default function ContainerClient({token, optClients, optCategories,
   const [isTable, setIsTable] = useState<boolean>(true);
   const [dataTable, setDataTable] = useState<ProjectsTable[]>(data);
 
+  console.log('projects => ', projects);
+
   const {haveNewProject, projectStore, 
     updateProjectStore, updateHaveNewProject} = useProjectsStore();
 

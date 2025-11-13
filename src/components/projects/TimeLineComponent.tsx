@@ -26,7 +26,8 @@ export default function TimelineComponent({timeLine}: {timeLine: ITimeLineProjec
               <img className="rounded-full shadow-lg" src={t.conditionstatus?.user?.photo || '/img/users/default.jpg' } alt="user"/>
             </span>
             <div className="items-center justify-between px-10 bg-white dark:bg-gray-700 dark:border-gray-600">
-              <Chip label={t.conditionstatus.condition.name} color={t.conditionstatus.condition.color} width='w-40' />
+              <Chip label={t.conditionstatus.condition.name} color={t.conditionstatus.condition.color}
+                  darktext={t.conditionstatus.condition?.darktext?? false} width='w-40' />
              <p className='text-xs'>{t.conditionstatus.date.substring(0, 10)}</p>
             </div>
         </li>

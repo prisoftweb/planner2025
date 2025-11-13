@@ -5,7 +5,6 @@ import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders
 import { UsrBack } from "@/interfaces/User";
 import { HistoryExpensesTable, Provider } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
-import { Expense } from "@/interfaces/Expenses";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableHistoryCosts from "@/components/providers/ContainerTableHistoryCosts";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";

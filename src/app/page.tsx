@@ -2,7 +2,6 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import ContainerNewCode from "@/components/codes/ContainerNewCode";
-// import DragAndDropComponent from "@/components/DragAndDropComponent";
 
 export default function Home() {
   const cookieStore = cookies();
@@ -12,7 +11,6 @@ export default function Home() {
 
   const depto = typeof(user.department)==='string'? user.department:  user.department.name;
   const role = user.rol?.name || '';
-  // const depto='direccion';
 
   return (
     <>
@@ -32,7 +30,6 @@ export default function Home() {
           />)}
         </div>
       </div>
-      {/* <DragAndDropComponent /> */}
     </>
   );
 }

@@ -69,7 +69,8 @@ export default function ProfileExpense({expense}: {expense:OneExpense}){
                 <div className="h-6">
                   <Chip label={currentExpense && currentExpense?.estatus? 
                     currentExpense?.estatus.name: 'sin status'} color={currentExpense && currentExpense?.estatus? 
-                      currentExpense?.estatus.color: 'gray'} />
+                      currentExpense?.estatus.color: 'gray'} darktext={currentExpense && currentExpense?.estatus? 
+                      currentExpense?.estatus.darktext: false} />
                 </div>
               </div>
             </div>

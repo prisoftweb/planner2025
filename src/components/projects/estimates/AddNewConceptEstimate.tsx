@@ -172,7 +172,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
                   </div>
                 </div>
                 <div>
-                  <Chip label={project.category.name} color={project.category.color} />
+                  <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
                 </div>
               </div>
               <div>

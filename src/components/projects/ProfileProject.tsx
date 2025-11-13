@@ -39,7 +39,8 @@ export default function ProfileProject({project}:
           </div>
           
           <div className="w-36 mr-3">
-            <Chip label={oneProjectStore?.category?.name || ''} color={oneProjectStore?.category?.color} />
+            <Chip label={oneProjectStore?.category?.name || ''} color={oneProjectStore?.category?.color} 
+              darktext={oneProjectStore?.category?.darktext ?? false} />
           </div>
         </div>
         

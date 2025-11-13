@@ -9,7 +9,6 @@ import RemoveElement from "../RemoveElement";
 import { useProviderStore } from "@/app/store/providerStore";
 import { showToastMessageError } from "../Alert";
 import { Badge } from "@mui/material";
-import { UserCircleIcon } from "@heroicons/react/24/solid"
 
 export default function TableProviders({data, token}:
           {data:TableProvider[], token:string}){

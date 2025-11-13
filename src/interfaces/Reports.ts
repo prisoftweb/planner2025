@@ -19,6 +19,7 @@ export interface ReportTable{
   account: string
   isPettyCash: boolean
   moveRep: boolean
+  darktext: boolean
 }
 
 export interface Report {
@@ -67,6 +68,8 @@ export interface CostsTable {
   Fecha: string 
   Total: string
   condition: string
+  color: string
+  darktext:boolean
 }
 
 // export interface ReportParse {
@@ -124,6 +127,7 @@ export interface Condition {
   _id: string
   name: string
   color: string
+  darktext: boolean
 }
 
 export interface CostReport {

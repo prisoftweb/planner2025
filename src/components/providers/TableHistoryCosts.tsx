@@ -124,7 +124,8 @@ export default function TableHistoryCosts({data, token, expenses,
       cell: ({row}) => (
         <div className="cursor-pointer" 
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}>
-            <Chip label={row.original.Estatus.name} color={row.original.Estatus.color} />
+            <Chip label={row.original.Estatus.name} color={row.original.Estatus.color}
+                darktext={row.original?.Estatus?.darktext?? false} />
         </div>
       ),
     }),

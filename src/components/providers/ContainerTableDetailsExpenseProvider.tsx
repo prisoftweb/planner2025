@@ -146,7 +146,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
 
         <div className="bg-white col-span-1 p-3">
           <div className="mb-2">
-            <Chip label="Pagado" color="#0f0" />
+            <Chip label="Pagado" color="#0f0" darktext={false} />
           </div>
           <ProgressCircle value={(payment.payout / (payment.payout + payment.pending)) * 100}>
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">

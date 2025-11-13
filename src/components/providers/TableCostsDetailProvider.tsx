@@ -122,7 +122,8 @@ export default function TableCostsDetailProvider({data, token, expenses,
       id: 'Estatus',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} /></p>
+        ><Chip label={row.original.Estatus.name} color={row.original.Estatus.color} 
+            darktext={row?.original?.Estatus?.darktext?? false} /></p>
       ),
     }),
     columnHelper.accessor('previoudbalanceamount', {

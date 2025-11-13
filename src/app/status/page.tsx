@@ -2,10 +2,8 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import { getCatalogs } from "../api/routeCatalogs";
-import { Catalog } from "@/interfaces/Catalogs";
 import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
-import { Glossary } from "@/interfaces/Glossary";
 
 import CatalogClient from "@/components/status/CatalogClient";
 
@@ -14,9 +12,6 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  // let cats: Catalog[] = await getCatalogs(token);
-  // let glos: Glossary[] = await getGlossaries(token);
-
   const [catalogs, glosaries] = await Promise.all([
     getCatalogs(token), 
     getGlossaries(token)

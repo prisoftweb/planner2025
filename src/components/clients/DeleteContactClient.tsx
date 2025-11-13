@@ -32,8 +32,6 @@ export default function DeleteContactClient({token, contact, idCli} : {token : s
                   showToastMessageError(res.toString());
                 }
               } catch (error) {
-                console.log(error);
-                console.log('Error al eliminar contacto');
               }
             break;
           }

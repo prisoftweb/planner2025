@@ -334,7 +334,7 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
                     <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
                       removeElement={delCollection} token={token} />
                   </div>
-                  <Chip label={col.condition.name} color={col.condition.color} />
+                  <Chip label={col.condition.name} color={col.condition.color} darktext={col?.condition?.darktext?? false} />
                   {col.condition.name.toLowerCase().includes('depositado')? (
                     <Toogle value={col.condition.name.toLowerCase().includes('confirmado')} id={col._id} onClick={confirmCollection} />
                   ): <></>}

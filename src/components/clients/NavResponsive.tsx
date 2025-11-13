@@ -7,6 +7,7 @@ import { FaRegImage } from "react-icons/fa6";
 import { FaAddressCard } from "react-icons/fa";
 import { MdContactPhone } from "react-icons/md";
 import { Resource2 } from "@/interfaces/Roles";
+import { propsTooltip } from "@/libs/animations";
 
 type NavResponsiveProps = {
   open:boolean, 
@@ -17,25 +18,6 @@ type NavResponsiveProps = {
 }
 
 export default function NavResponsive({open, setOpen, option, changeOption, clientPermission}: NavResponsiveProps){
-  
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const [isHover, setIsHover] = useState<number>(-1);
   
@@ -55,14 +37,14 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
   if(!open){
     nav = (
       <div className="bg-white top-52 space-y-4 left-4 p-2 flex flex-col items-center rounded-md h-full shadow-md">
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Expandir' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Expandir' 
           placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                 text-slate-500 my-1 bg-white rounded-md rotate-90" 
               onClick={() => setOpen(true)} /></div>
         </Tooltip>
         {resumeData?.status && (
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Resumen' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Resumen' 
             placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400"> 
               <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
                 <PiPresentationChartLight 
@@ -77,7 +59,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
           </Tooltip>
         )}
         {basicData?.status && (
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion basica' 
             placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
                 <ImProfile className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -91,7 +73,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
           </Tooltip>
         )}
         {aditionalData?.status && (
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion extra' 
             placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
                 <FaRegImage className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -105,7 +87,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
           </Tooltip>
         )}
         {addressData?.status && (
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Direccion' 
             placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
                 <FaAddressCard className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -119,7 +101,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
           </Tooltip>
         )}
         {contactData && (
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Contactos' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Contactos' 
             placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
               <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
                 <MdContactPhone className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -136,7 +118,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
   }else{
     nav = (
       <div className="w-full">
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Reducir' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Reducir' 
           placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <div className="flex justify-end border-b border-slate-300 pr-2">
               <ArrowDownTrayIcon className="w-4 h-4 sm:w-12 sm:h-12 pb-2 sm:pb-4 cursor-pointer 

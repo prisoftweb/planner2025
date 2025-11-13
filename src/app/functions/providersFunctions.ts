@@ -203,7 +203,7 @@ export function getTypeFiles(expense:Expense) {
 
 export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvider[]){
   const table: ExpensesTableProvider[] = [];
-  console.log('expenses payment => ', expenses);
+  // console.log('expenses payment => ', expenses);
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",

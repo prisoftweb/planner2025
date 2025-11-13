@@ -50,7 +50,9 @@ export default function NuevoComponente({report, id, token}:
                 <p className="text-blue-600">{oneReport?.department.name}</p>
               </div>
               <div>
-                <Chip label={oneReport?.moves[report.moves.length -1]?.condition?.name || 'sin status'} />
+                <Chip label={oneReport?.moves[report.moves.length -1]?.condition?.name || 'sin status'}
+                  darktext={oneReport?.moves[report.moves.length -1]?.condition?.darktext?? false}
+                  color={oneReport?.moves[report.moves.length -1]?.condition?.color?? '#000'} />
               </div>
             </div>
             

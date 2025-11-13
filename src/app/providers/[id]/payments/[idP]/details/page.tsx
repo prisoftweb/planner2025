@@ -5,7 +5,6 @@ import { UsrBack } from "@/interfaces/User";
 import { DetailExpensesTableProvider, Provider, ProviderMin } from "@/interfaces/Providers";
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
-import { CostPayment, OnePayment } from "@/interfaces/Payments";
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
 
 export default async function Page({ params }: { params: { id: string, idP: string }}){
@@ -16,14 +15,6 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let provider: ProviderMin;
-  // let providers: Provider[];
-  // let costs: CostPayment[];
-  // let payment: OnePayment;
-  
-  // const arrProvider = await getProviderMin(params.id, token);
-  // providers = await getProviders(token);
-  // costs = await getCostsPayment(token, params.idP);
-  // payment = await getPayment(token, params.idP);
 
   const [arrProvider, providers, costs, payment] = await Promise.all([
     getProviderMin(params.id, token),

@@ -33,7 +33,7 @@ export default function CardContacts({contact, token, children}:
               <DeletePhoneContact idC={contact._id || ''} phone={pnumber} 
                   token={token} numContacts={contact.phoneNumber.length} />
               <p className="text-xs font-thin text-slate-400" key={index}>{pnumber.phoneformat}</p>
-              <Chip label={pnumber.type} />
+              <Chip label={pnumber.type} darktext={false} />
             </div>
           ))}
         </div>

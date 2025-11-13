@@ -287,7 +287,7 @@ function Card(relation: Relation){
       <img src={typeof(relation.relation.nextnodo)==='string'? "/img/users/default.jpg": relation.relation.nextnodo?.department.company.logo || "/img/users/default.jpg"}
        className="w-12 h-auto rounded-full" alt="responsable" />
       <p className="text-xs text-center">{typeof(relation.relation.nextnodo)=== 'string'? '': relation.relation.nextnodo?.department.name || 'Depto'}</p>
-      <Chip label={relation.relation.glossary.name} />
+      <Chip label={relation.relation.glossary.name} darktext={false} />
     </div>
   )
 }

@@ -16,16 +16,6 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  // let provider: any;
-  // let providers: Provider[];
-  // let costs: Expense[];
-  // let optTypes: Options[] = [];
-  
-  // provider = await getProvider(params.id, token);
-  // providers = await getProviders(token);
-  // costs = await GetCostsProviderMINWithoutPay(token, params.id);
-  // optTypes = await getCatalogsByNameAndType(token, 'payments');
-
   const [provider, providers, costs, optTypes] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),

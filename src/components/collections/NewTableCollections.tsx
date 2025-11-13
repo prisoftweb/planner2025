@@ -143,7 +143,7 @@ export default function NewTableCollections({token, user}: {token:string, user:s
         <ReactTableCollections columns={columns} data={data} arrStatuses={statuses} 
           dateE={new Date()} dateS={new Date()} isFiter={false} />
       )} */}
-      {JSON.stringify(data)}
+      {/* {JSON.stringify(data)} */}
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
@@ -165,7 +165,7 @@ export default function NewTableCollections({token, user}: {token:string, user:s
                     <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
                       removeElement={delCollection} token={token} />
                   </div>
-                  <Chip label={col.condition.name} color={col.condition.color} />
+                  <Chip label={col.condition.name} color={col.condition.color} darktext={col.condition?.darktext?? false} />
                 </div>
                 <div className="w-full">
                   <div className="flex gap-x-3 justify-between items-center">

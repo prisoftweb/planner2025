@@ -1,13 +1,10 @@
 'use client'
-// import { XMarkIcon } from "@heroicons/react/24/solid"
-// import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { createCollectionWithVoucher, createCollectionUpdateMany } from "@/app/api/routeCollections"
 import NavCollectionStepper from "../projects/estimates/collections/NavCollectionStepper"
 import DataCollectionStepper from "../projects/estimates/collections/DataCollectionStepper"
 import DispersionCollectionStepper from "./DispersionCollectionStepper"
-// import { IInvoiceTable } from "@/interfaces/Invoices"
 import VoucherCollectionStepper from "./VoucherCollectionStepper"
 import HeaderForm from "../HeaderForm"
 import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
@@ -33,7 +30,6 @@ type TInvoiceSend={
 
 export default function AddNewCollectionComponent({showForm, user, token, updateCollections}: 
   {showForm:(value: boolean) => void, user:string, token:string, updateCollections:Function }) {
-  // const refRequest = useRef(true);
 
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
   const [textConcept, setTextConcept]=useState<string>('');
@@ -41,18 +37,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
   const [voucher, setVoucher]=useState<File>();
   const [amount, setAmount]=useState<string>('');
   const [disperse, setDisperse]=useState<boolean>(false);
-  // const [invoicesDisp, setInvoicesDisp]=useState<TInvoiceStepper[]>([{
-  //   id:invoiceTable.id,
-  //   folio: invoiceTable.folio,
-  //   project: {
-  //     id: project._id,
-  //     title: project.title
-  //   },
-  //   total: invoiceTable.amount,
-  //   totalPending: invoiceTable.unchargedbalanceamount,
-  //   previousAmount: invoiceTable.previousBalance,
-  //   concepts: invoiceTable.formpaid+' | '+ invoiceTable.methodpaid + ' | ' + invoiceTable.usecfdi
-  // }]);
   const [invoicesDisp, setInvoicesDisp]=useState<TInvoiceStepper[]>([]);
 
   const [bandDate, setBandDate] = useState<boolean>(false);
@@ -76,78 +60,15 @@ export default function AddNewCollectionComponent({showForm, user, token, update
     setInvoicesDisp(invoicesParam);
   }
 
-  // const handleUpdateAmount = (invoicesParam: TInvoiceStepper[]) => {
-  //   let acum=0;
-  //   if(invoicesParam.length > 0){
-  //     invoicesParam.map((i, index:number) => {
-  //       if(index > 0){
-  //         acum+=i.total;
-  //       }
-  //     });
-  //   }
-  //   let auxAmount=0;
-  //   try {
-  //     auxAmount=Number(amount);
-  //   } catch (error) {
-  //     auxAmount=0;
-  //   }
-
-  //   const inv = invoicesParam.map((i, index) => {
-  //     if (index === 0) {
-  //       const aux: TInvoiceStepper = {
-  //         id: i.id,
-  //         folio: i.folio,
-  //         project: i.project,
-  //         concepts: i.concepts,
-  //         total: auxAmount-acum,
-  //         totalPending: invoiceTable.unchargedbalanceamount,
-  //         previousAmount: invoiceTable.previousBalance
-  //       }
-  //       return aux;
-  //     } else {
-  //       return i;
-  //     }
-  //   });
-  //   setInvoicesDisp(inv);
-  // }
-
   const handleAmount = (value:string) => {
-    let auxAmount=0;
+    // let auxAmount=0;
     try {
-      auxAmount=Number(value);
+      // auxAmount=Number(value);
       setAmount(value);
     } catch (error) {
-      auxAmount=0;
+      // auxAmount=0;
       setAmount('0');
     }
-    // setAmount(auxAmount.toString());
-
-    // let acum=0;
-    // if(invoicesDisp.length > 0){
-    //   invoicesDisp.map((i, index:number) => {
-    //     if(index > 0){
-    //       acum+=i.total;
-    //     }
-    //   });
-    // }
-
-    // const inv = invoicesDisp.map((i, index) => {
-    //   if (index === 0) {
-    //     const aux: TInvoiceStepper = {
-    //       id: i.id,
-    //       folio: i.folio,
-    //       project: i.project,
-    //       concepts: i.concepts,
-    //       total: auxAmount-acum,
-    //       totalPending: invoiceTable.unchargedbalanceamount,
-    //       previousAmount: invoiceTable.previousBalance
-    //     }
-    //     return aux;
-    //   } else {
-    //     return i;
-    //   }
-    // });
-    // setInvoicesDisp(inv);
   }
 
   const handleBandDate = (value:boolean) => {
@@ -156,10 +77,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
 
   const handleBandAmount = (value:boolean) => {
     setBandAmount(value);
-  }
-
-  const handleInvoicesDisp = (value: TInvoiceStepper[]) => {
-    setInvoicesDisp(value);
   }
 
   const handleVoucher = (value:File) => {
@@ -270,7 +187,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
             amount:Number(amount),
             date,
             company: "65d3813c74045152c0c4377e", 
-            // client: project.client._id,
             user,
             condition: [
               {
@@ -288,7 +204,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
             invoices,
             paymentInInvoices
           }
-          // console.log('data new collection => ', JSON.stringify(data));
           const res = await createCollectionUpdateMany(token, data);
           if(typeof(res)==='string'){
             showToastMessageError(res);
@@ -296,9 +211,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
             showToastMessage('Cobro agregado satisfactoriamente!!!');
             updateCollections();
             showForm(false);
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 1000);
           }
         }else{
           const data = new FormData();
@@ -307,7 +219,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
           data.append('amount', JSON.stringify(Number(amount)));
           data.append('date', date);
           data.append('company', "65d3813c74045152c0c4377e");
-          // data.append('client', project.client._id);
           data.append('user', user);
           data.append('condition', JSON.stringify([
             {
@@ -329,9 +240,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
             showToastMessageError(res);
           }else{
             showToastMessage('Cobro agregado satisfactoriamente!!!');
-            // setTimeout(() => {
-            //   window.location.reload();
-            // }, 2500);
             updateCollections();
           }
         }
@@ -364,8 +272,6 @@ export default function AddNewCollectionComponent({showForm, user, token, update
           <HeaderForm img="/img/estimates/invoices.svg" subtitle={'Recuperacion de cartera, pagos de facturas '} 
             title={'Nuevo cobro'}
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
 
