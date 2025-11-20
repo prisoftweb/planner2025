@@ -42,36 +42,13 @@ export function BarChartComponent({data, colors, categories}:
 
       <BarChart
         className="h-72"
-        //data={chartdata}
         data={data}
         index="label"
-        //categories={['Running']}
         categories={categories}
         colors={colors}
-        //colors={['blue']}
         yAxisWidth={56}
         customTooltip={customTooltip}
       />
-
-      {/* <div className="relative">
-        <h3 className="text-lg font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong px-5">
-          GASTOS POR MES
-        </h3>
-
-        <div className="absolute top-[48px] left-0 right-0 h-px bg-slate-300 z-10" />
-        <BarChart
-          className="h-72"
-          //data={chartdata}
-          data={data}
-          index="label"
-          //categories={['Running']}
-          categories={categories}
-          colors={colors}
-          //colors={['blue']}
-          yAxisWidth={56}
-          customTooltip={customTooltip}
-        />
-      </div> */}
     </>
   );
 }

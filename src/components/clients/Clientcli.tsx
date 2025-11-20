@@ -12,6 +12,7 @@ import AddressClient from "./AddressClient"
 import NavResponsive from "./NavResponsive"
 import { Resource2 } from "@/interfaces/Roles"
 import { useClientProfileStore } from "@/app/store/clientStore"
+import ShowContactasClicComponent from "./ShowContactasClicComponent"
 
 type ClientCliProps = {
   client:ClientBack, 
@@ -54,9 +55,14 @@ export default function ClientCli({client, token, id, tags, clientPermissions}: 
                         style={{borderColor:'#F8FAFC'}}>
                   <Contacts id={id} contacts={client.contact || []} token={token}
                     editInfo={true} />
-                </div>):  (<div className="mt-3 w-full p-2 md:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
+                </div>):  (<div className="mt-3 w-full p-2" 
                                     style={{borderColor:'#F8FAFC'}}>
-                              <Sumary client={client} idCli={id} token={token} />
+                              <div className="w-full flex flex-wrap md:flex-nowrap gap-x-3">
+                                <Sumary client={client} idCli={id} token={token} />
+                                <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
+                                  <ShowContactasClicComponent client={client} token={token} idCli={id} />
+                                </div>
+                              </div>
                           </div>)) ))
   
   const [open, setOpen] = useState<boolean>(false);
@@ -74,7 +80,7 @@ export default function ClientCli({client, token, id, tags, clientPermissions}: 
                 option={opt} clientPermission={clientPermissions} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileClient />

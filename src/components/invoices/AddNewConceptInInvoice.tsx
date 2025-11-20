@@ -13,7 +13,6 @@ import DataConceptStepperComponent from "./DataConceptStepper"
 
 export default function AddNewConceptInInvoice({showForm, updateConcepts, user, token}: 
   {showForm:Function, updateConcepts:Function, user:string, token:string}) {
-  // const refRequest = useRef(true);
 
   const [conceptSel, setConcepSel] = useState<IConceptEstimateMin>();
   const [idPrice, setIdPrice] = useState<PriceConcept>();
@@ -80,7 +79,6 @@ export default function AddNewConceptInInvoice({showForm, updateConcepts, user, 
     let cons: IConceptEstimateMin[];
     try {
       cons = await getConceptsMin(token);
-      // console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
         showToastMessageError(cons);
       else{

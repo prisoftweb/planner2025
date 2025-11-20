@@ -15,9 +15,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
   { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
 
   const {updateCurrentExpense} = useNewExpense();
-  // console.log('expense param => ', expense);
   useEffect(() => {
-    // console.log('Setting current expense in store:', expense);
     updateCurrentExpense(expense);
 
     return () => updateCurrentExpense(null);
@@ -49,13 +47,6 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
   const pdfFile = files.find(f => f.types.includes('pdf') || f.types.includes('PDF') || f.types.includes('jpg') || f.types.includes('JPG') || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png') || f.types.includes('PNG'));
 
   const view = (
-    // opt===1? (<div className="mt-3 w-full max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" 
-    //   style={{borderColor:'#F8FAFC'}}>
-    //     <div className=" max-w-2xl">
-    //       <UpdateExpense id={id} token={token} expense={expense} 
-    //         isticket={expense.isticket} isHistory={isHistory} />
-    //     </div>
-    //   </div>) :
     opt===1? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                   <UpdateExpense id={id} token={token} expense={expense} 
@@ -96,7 +87,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                                     </div>)}
                                 </div>)))))
   )
-
+  
   const [open, setOpen] = useState<boolean>(false);
 
   return(

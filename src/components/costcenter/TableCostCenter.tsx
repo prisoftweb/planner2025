@@ -8,6 +8,7 @@ import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import NewCostCenter from "./NewCostCenter";
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
 
 export default function TableCostCenter({data, token}: {data:CostCenterTable[], token:string}){
 
@@ -15,25 +16,6 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
 
   const [editCostCenter, setEditCostCenter] = useState<boolean>(false);
   const [costCenter, setCostCenter] = useState<CostCenterTable>();
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -65,7 +47,7 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
       id: 'accion',
       cell: ({row}) => (
         <div className="flex items-center gap-x-1">
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Modificar' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
             <PencilIcon className="w-6 h-6 text-slate-600 cursor-pointer hover:bg-slate-100" 
               onClick={() => {

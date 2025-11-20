@@ -16,12 +16,19 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {Tooltip} from "@nextui-org/react";
 import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
+
+interface Props {
+  data:ExpensesTable[], 
+  token:string, 
+  expenses:Expense[], 
+  isFilter:boolean, 
+  setIsFilter:(value: boolean) => void, 
+  isViewReports: boolean
+}
 
 export default function TableHistoryExpenses({data, token, expenses, 
-                            isFilter, setIsFilter, isViewReports}:
-                        {data:ExpensesTable[], token:string, 
-                        expenses:Expense[], isFilter:boolean, setIsFilter:(value: boolean) => void, 
-                        isViewReports: boolean}){
+  isFilter, setIsFilter, isViewReports}:Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -30,25 +37,6 @@ export default function TableHistoryExpenses({data, token, expenses,
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(expenses);
 
   const {refresh, updateRefresh} = useNewExpense();
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -77,7 +65,7 @@ export default function TableHistoryExpenses({data, token, expenses,
         <div className="flex gap-x-1 items-center">
           <img src={row.original.Responsable.photo} className="w-6 h-auto rounded-full" alt="user" />
           {row.original.archivos.includes('xml') && (
-            <Tooltip closeDelay={0} delay={100} motionProps={props} content='XML' 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='XML' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
               <span>
                 <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
@@ -85,7 +73,7 @@ export default function TableHistoryExpenses({data, token, expenses,
             </Tooltip>
           )}
           {row.original.archivos.includes('pdf') && (
-            <Tooltip closeDelay={0} delay={100} motionProps={props} content='PDF' 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='PDF' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
               <span>
                 <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
@@ -93,16 +81,13 @@ export default function TableHistoryExpenses({data, token, expenses,
             </Tooltip>
           )}
           {row.original.archivos.includes('none') && (
-            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Sin archivo' 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Sin archivo' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
               <span>
                 <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
               </span>
             </Tooltip>
           )}
-          {/* {row.original.archivos.includes('xml') && <BsFiletypeXml className="w-6 h-6 text-green-500" />}
-          {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
-          {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />} */}
         </div>
       ),
       enableSorting:false,
@@ -497,11 +482,6 @@ export default function TableHistoryExpenses({data, token, expenses,
                         minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
                       />
           </ContainerSideNav>
-          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-          //   <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
-          //               minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
-          //             />
-          // </div>
         )}
       </div>
       {view}

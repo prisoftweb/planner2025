@@ -1,7 +1,6 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { Options } from "@/interfaces/Common"
@@ -138,8 +137,6 @@ export default function NewRouteTree({showForm, token, optResources,
         <HeaderForm img="/img/tree.svg" subtitle="Crea un arbol inicial agregando rutas" 
           title="Agregar ruta a nuevo arbol"
         />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div>

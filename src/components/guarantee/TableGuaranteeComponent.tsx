@@ -22,6 +22,7 @@ import NewDonutChartComponent from "../projects/dashboard/NewDonutChartComponent
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
+import { getDate } from "@/libs/dates";
 
 import Slider from '@mui/material/Slider';
 
@@ -106,14 +107,6 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   }
 
   const updateTotal = async (dateI:string, dateF:string, arrStatuses:string[]) => {
-
-    // const res = await getGuaranteesResumeByProjectMin(token, dateI, dateF, arrStatuses);
-    // const resTotal = await getGuaranteesGroupByStatus(token, dateI, dateF, arrStatuses);
-    // const resCobrar = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'POR COBRAR');
-    // const resRecuperado = await getTotalGuaranteesByDateAndStatus(token, dateI, dateF, 'RECUPERADO');
-    // const guaranteesClient = await getGuaranteesGroupByClientAndDateAndStatus(token, dateI, dateF, arrStatuses);
-    // const guaranteesYear = await getGuaranteesGroupByYear(token, dateI, dateF, arrStatuses);
-    // const guaranteebyStatus = await getAllTOTALGuaranteeFundsResumeByDateAndStatus(token, dateI, dateF, arrStatuses);
 
     const [res, resTotal, resCobrar, resRecuperado, guaranteesClient, guaranteesYear, guaranteebyStatus] = await Promise.all([
       getGuaranteesResumeByProjectMin(token, dateI, dateF, arrStatuses),
@@ -311,7 +304,6 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   return (
     <>
       <div className="grid grid-cols-4 gap-x-3">
-        {/* <Card amount={amountTotal?.total || 0} title="FONDO DE GARANTIA"></Card> */}
         <Card amount={guaranteeByStatus?.guarantee?.subtotal || 0} title="FONDO DE GARANTIA" />
         <div className="p-3 gap-x-3 col-span-3 grid grid-cols-5 bg-white shadow-md shadow-slate-300 rounded-md">
           <div>
@@ -350,7 +342,6 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
             })}</p>
           </div>
         </div>
-        {/* <Card amount={amountTotal?.total || 0} title="Pendiente porcentaje"></Card> */}
       </div>
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
@@ -439,43 +430,6 @@ export const Card = ({amount, title}: {title:string, amount:number}) => {
       </div>
     </div>
   )
-}
-
-// const Toogle = ({value, onClick, id}: 
-//   {value:boolean, id:string, onClick: (id:string) => void}) => {
-
-//   const [checked, setChecked] = useState(value);
-  
-//   return(
-//     <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-//       <input 
-//         // checked={row.original.confirm} 
-//         checked={checked}
-//         onClick={() => {onClick(id); setChecked(true);}} id={id} type="checkbox"
-//         disabled={checked}
-//         className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-//           appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-//           peer-checked:border-green-500 peer-checked:before:bg-green-500
-//           border border-slate-300" />
-//       <label htmlFor={id.toString()}
-//         className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-//         <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-//           data-ripple-dark="true"></div>
-//       </label>
-//     </div>
-//   )
-// }
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
 }
 
 const ChipStatus = ({ addStatus, id, removeStatus, title}: 

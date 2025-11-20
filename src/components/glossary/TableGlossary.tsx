@@ -1,7 +1,6 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import { PencilIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { GlossaryTable } from "@/interfaces/Glossary";
 import { RemoveGlossary } from "@/app/api/routeGlossary";
@@ -15,6 +14,7 @@ import { showToastMessageError } from "../Alert";
 import {Tooltip} from "@nextui-org/react";
 import TooltipPencilIcon from "../tooltipIcons/TooltipPencilIcon";
 import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
 
 type tableProps={
   data:GlossaryTable[], 
@@ -29,8 +29,6 @@ export default function TableLists({data, token, glossaries}: tableProps){
 
   const [editGloss, setEditGloss] = useState<boolean>(false);
   const [glossEdit, setGlossEdit] = useState<GlossaryTable>();
-
-  console.log('glossaries => ', glossaries);
 
   const delGlossary = async(id: string) => {
     try {
@@ -52,25 +50,6 @@ export default function TableLists({data, token, glossaries}: tableProps){
   useEffect(() => {
     updateGlossariesStore(glossaries);
   }, []);
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -98,11 +77,8 @@ export default function TableLists({data, token, glossaries}: tableProps){
       cell: ({row}) => (
         <div className="flex gap-x-2">
           <div className="w-5 h-5" style={{backgroundColor: row.original.color}}></div>
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Modificar' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
-            {/* <PencilIcon className="w-6 h-6 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
-              onClick={() => {setGlossEdit(row.original); setEditGloss(true);}}
-            /> */}
             <TooltipPencilIcon handleBooleanValue={handleEditGloss} handleElement={handleGlossToEdit} element={row.original} />
           </Tooltip>
           <RemoveElement id={row.original.id} name={row.original.name} token={token} 

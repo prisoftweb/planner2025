@@ -4,7 +4,6 @@ import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "@/components/SelectMultipleReact"
 import { Options } from "@/interfaces/Common";
-// import Calendar, { DateObject } from "react-multi-date-picker";
 import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
@@ -22,14 +21,6 @@ export default function FilteringInvoiceComponent({showForm, FilterData, maxAmou
 
   const [optConditions, setOptConditions] = useState<Options[]>([]);
   const [optProjects, setOptProjects] = useState<Options[]>([]);
-
-  // const [firstDate, setFirstDate] = useState<Date>(new Date('2024-03-11'));
-  // const [secondDate, setSecondDate] = useState<Date>(new Date('2024-07-11'));
-  
-  // const [values, setValues] = useState([
-  //   new DateObject().setDay(4).subtract(1, "month"),
-  //   new DateObject().setDay(4).add(1, "month")
-  // ])
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date('2024-01-02'),
@@ -71,26 +62,11 @@ export default function FilteringInvoiceComponent({showForm, FilterData, maxAmou
     fetch();
   }, []);
 
-  // useEffect(() => {
-  //   if(values.length > 1){
-  //     setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-  //     setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
-  //   }else{
-  //     if(values.length > 0){
-  //       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
-  //     }
-  //   }
-  // }, [values]);
-
   useEffect(() => {
     if(rangeDate.from && rangeDate.to){
       FilterData(conditions, minValue, maxValue, projects, rangeDate.from?.getTime(), rangeDate.to?.getTime());
     }
   }, [ conditions, minValue, maxValue, projects, rangeDate]);
-
-  // const applyFilter = () => {
-  //   FilterData(conditions, minValue, maxValue, firstDate?.getTime(), secondDate?.getTime(), projects);
-  // }
 
   const handleCondition = (value:string[]) => {
     setConditions(value);
@@ -104,9 +80,6 @@ export default function FilteringInvoiceComponent({showForm, FilterData, maxAmou
     <>
       <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0 h-screen">
         <div className="flex justify-between">
-          {/* <HeaderForm img="/img/role.svg" subtitle="Filtra proyectos por diferentes caracteristicas" 
-            title="Filtrar proyecto"
-          /> */}
           <div className="flex mt-2 items-center">
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">
@@ -167,28 +140,11 @@ export default function FilteringInvoiceComponent({showForm, FilterData, maxAmou
                 placeholder='Seleccione un rango de fechas'
                 onValueChange={(e) => {
                   setRangeDate(e);
-                  // if(e.from && e.to){
-                  //   handleDate(e.from, e.to);
-                  // }
                 }}
                 value={rangeDate}
                 locale={es}
               />
-              {/* <Calendar
-                className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-                  focus:border-slate-700 outline-0"
-                value={values}
-                onChange={(e: any) => setValues(e)}
-                range
-                numberOfMonths={2}
-                showOtherDays
-                style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
-                  'height': '35px', 'width': '330px'}}
-              />  */}
             </div>
-            {/* <div className="flex justify-center">
-              <Button type="button" onClick={applyFilter}>Filtrar</Button>
-            </div> */}
           </>
         ): (
           <p>Cargando..</p>
@@ -196,16 +152,4 @@ export default function FilteringInvoiceComponent({showForm, FilterData, maxAmou
       </form>
     </>
   )
-}
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
 }

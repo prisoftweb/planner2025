@@ -21,6 +21,7 @@ import SelectReact from "../SelectReact";
 import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import { Badge } from "@mui/material";
+import { propsTooltip } from "@/libs/animations";
 
 type Props = {
   data:ReportTable[], 
@@ -40,30 +41,10 @@ export default function TableReports({data, token, reports, optCompanies,
   
   const columnHelper = createColumnHelper<ReportTable>();
 
-  // const [filter, setFilter] = useState<boolean>(false);
   const [dataReports, setDataReports] = useState(data);
 
   const {haveDeleteReport, haveNewReport, updateHaveDeleteReport, updateHaveNewReport, 
     updateReportStore, reportsStore} = useOptionsReports();
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const delReport = async(id: string) => {
     try {
@@ -139,7 +120,7 @@ export default function TableReports({data, token, reports, optCompanies,
           </Badge>
           <RemoveElement id={row.original.id} name={row.original.Report} token={token} 
               remove={RemoveReport} removeElement={delReport} />
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Copiar' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Copiar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
             <span className="inline-flex items-center justify-center">
               <IoCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneReport(row.original.id)} />
@@ -229,15 +210,6 @@ export default function TableReports({data, token, reports, optCompanies,
         </div>
       ),
     }),
-    // columnHelper.accessor('NºGastos', {
-    //   header: 'NºGastos',
-    //   id: 'NºGastos',
-    //   cell: ({row}) => (
-    //     <p className="cursor-pointer"
-    //       onClick={() => window.location.replace(`/reports/${row.original.id}/profile`)}
-    //     >{row.original.NºGastos}</p>
-    //   ),
-    // }),
     columnHelper.accessor('Total', {
       header: 'Total',
       id: 'Total',
@@ -269,7 +241,6 @@ export default function TableReports({data, token, reports, optCompanies,
   const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
     let d = new Date(rep.date).getTime();
     if(d >= startDate && d <= endDate){
-      console.log('return true ');
       return true;
     }
     return false;
@@ -350,7 +321,6 @@ export default function TableReports({data, token, reports, optCompanies,
     });
 
     setDataReports(ReportParseDataToTableData(filtered));
-    // setFilter(true);
   }
 
   const addNewReport = async() => {
@@ -395,11 +365,6 @@ export default function TableReports({data, token, reports, optCompanies,
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optCompanies={optCompanies} />
           </ContainerSideNav>
-          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-          //   <Filtering showForm={setIsFilter} optConditions={optConditions} 
-          //               FilterData={filterData} maxAmount={maxAmount} 
-          //               optProjects={optProjects} optCompanies={optCompanies} />
-          // </div>
         )}
       </div>
       {view}

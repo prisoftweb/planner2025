@@ -31,11 +31,6 @@ export default function ButtonNewNode({token, user, departments,
                           departments={departments} glossaries={glossaries} 
                           workFlows={workFlows} descGlossaries={descGlossaries} />
             </ContainerSideNav>
-            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-            //   <NewNode showForm={handleClick} token={token} 
-            //               departments={departments} glossaries={glossaries} 
-            //               workFlows={workFlows} descGlossaries={descGlossaries} />
-            // </div>
           )}
     </>
   )

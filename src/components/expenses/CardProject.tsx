@@ -19,7 +19,6 @@ export default function CardProject({report}: {report:ReportParse}){
           updateReport(report._id, report);
           updateProject(report.project._id);
           updatePettyCash(report.ispettycash);
-          // updateIndexStepper(1);
           updateIndexStepper(index);
         }}
       >

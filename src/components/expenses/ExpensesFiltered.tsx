@@ -1,6 +1,5 @@
 'use client'
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "../SelectMultipleReact"
 import Calendar, { DateObject } from "react-multi-date-picker";
@@ -46,9 +45,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   const handleValues = (dateValues: DateObject[]) => {
     setValues(dateValues);
     if(values.length > 1){
-      console.log('values 2 => ', values);
-      // console.log('update dates => ', new Date(values[0].year, values[0].month.number - 1, values[0].day) );
-      // console.log('update dates fin => ', new Date(values[1].year, values[1].month.number - 1, values[1].day) );
       setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
       setSecondDate(new Date(values[1].year, values[1].month.number - 1, values[1].day));
       filterfunction(categoriesSel, typesSel, conditionsSel, minValue, 
@@ -57,7 +53,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
         costcentersSel, providersSel, isPaid);
     }else{
       if(values.length > 0){
-        console.log('values 1 => ', values);
         setFirstDate(new Date(values[0].year, values[0].month.number - 1, values[0].day));
       }
     }
@@ -67,7 +62,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
   const [maxValue, set_maxValue] = useState(maxAmount);
 
   const handleInput = (e:any) => {
-    console.log('handle input');
     set_minValue(e.minValue);
     set_maxValue(e.maxValue);
   };
@@ -169,8 +163,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
               <p className="text-gray-500 text-sm">Filtra gastos por diferentes caracteristicas</p>
             </div>
           </div>
-          {/* <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
 
@@ -243,7 +235,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
           <Label htmlFor="providers"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proveedores</p></Label>
           <SelectMultipleReact index={0} opts={allArray.concat(providers)} setValue={handleProviders} />
         </div>
-        {/* <div className="pt-9"> */}
         <div className="pt-0">
           <Label htmlFor="amount"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Monto</p></Label>
           <MultiRangeSlider
@@ -278,43 +269,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
         </div>
         <div>
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Rango de fechas</p></Label>
-          {/* <Calendar
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
-              focus:border-slate-700 outline-0"
-            value={values}
-            onChange={(e: any) => {
-              console.log('handle values => ');
-              handleValues(e)
-            }}
-            range
-            numberOfMonths={2}
-            // containerClassName="z-[9999]" // Muy importante esto no estaba
-            showOtherDays
-            // style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
-            //   'height': '35px', 'width': '330px'}}
-            // style={{'padding': '10px', 'marginTop': '5px', 'borderRadius': '5px', 
-            //   'height': '35px', 'width': '100%'}}
-            style={{
-              width: "100%",      // ocupa todo el ancho disponible del sidenav
-              maxWidth: "100%",   // evita que se desborde
-              borderRadius: "5px",
-            }}
-          /> 
-
-          <style jsx global>{`
-            .rmdp-wrapper {
-              display: flex !important;
-              flex-wrap: wrap !important;
-              justify-content: center !important;
-              width: 100% !important;
-            }
-
-            .rmdp-calendar {
-              flex: 1 1 45% !important;
-              min-width: 220px !important;
-              max-width: 100% !important;
-            }
-          `}</style> */}
           <Calendar
             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 focus:border-slate-700 outline-0"
             value={values}

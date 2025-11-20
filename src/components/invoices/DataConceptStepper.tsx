@@ -18,30 +18,14 @@ type Props = {
 export default function DataConceptStepperComponent({previousStep, price, conceptSelected, 
   user, updateConcepts, showForm}: Props) {
 
-  // const [area, setArea] = useState<string>('');
-  // const [section, setSection] = useState<string>('');
   const [quantity, setQuantity] = useState<string>('0');
   const [pu, setPu] = useState<string>('0');
   
-  const [bandArea, setBandArea] = useState<boolean>(false);
-  const [bandSection, setBandSection] = useState<boolean>(false);
   const [bandQuantity, setBandQuantity] = useState<boolean>(false);
   const [bandPU, setBandPU] = useState<boolean>(false);
 
   const validationData = () => {
     let validation = true;
-    // if(!area || area===''){
-    //   setBandArea(true);
-    //   validation = false;
-    // }else{
-    //   setBandArea(false);
-    // }
-    // if(!section || section===''){
-    //   setBandSection(true);
-    //   validation = false;
-    // }else{
-    //   setBandSection(false);
-    // }
     if(!quantity || quantity===''){
       setBandQuantity(true);
       validation = false;
@@ -61,35 +45,13 @@ export default function DataConceptStepperComponent({previousStep, price, concep
   }
 
   const saveData = async () => {
-    // const data = {
-    //   concepts: [
-    //     {
-    //       // conceptEstimate: conceptSelected._id,
-    //       conceptEstimate: conceptSelected,
-    //       priceConcepEstimate: {
-    //           cost: price?.cost,
-    //           date: price?.date,            
-    //           user: price?.user._id
-    //       },
-    //       area,
-    //       section,
-    //       quantity: Number(quantity),
-    //       amount: Number(pu.replace(/[$,]/g, "")),
-    //       date: new Date(),
-    //       user: user
-    //     }
-    //   ]
-    // }
     const data = {
-      // conceptEstimate: conceptSelected._id,
       conceptEstimate: conceptSelected,
       priceConcepEstimate: {
           cost: price?.cost,
           date: price?.date,            
           user: price?.user._id
       },
-      // area,
-      // section,
       quantity: Number(quantity),
       amount: Number(pu.replace(/[$,]/g, "")),
       date: new Date(),
@@ -132,27 +94,6 @@ export default function DataConceptStepperComponent({previousStep, price, concep
 
       <div className="p-2">
         <div className="grid grid-cols-2 gap-x-1">
-          {/* <div className="">
-            <Label htmlFor="area"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Area</p></Label>
-            <Input type="text" name="area" 
-              value={area}
-              onChange={(e) => setArea(e.target.value)}
-            />
-            {bandArea && (
-              <p className="text-red-500">El area es obligatoria!!!</p>
-            )}
-          </div>
-          <div className="">
-            <Label htmlFor="section"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Seccion</p></Label>
-            <Input type="text" name="section" 
-              value={section}
-              onChange={(e) => setSection(e.target.value)}
-            />
-            {bandSection && (
-              <p className="text-red-500">La seccion es obligatoria!!!</p>
-            )}
-          </div> */}
-
           <div className="">
             <Label htmlFor="quantity"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cantidad</p></Label>
             <Input type="text" name="quantity" 
@@ -177,9 +118,6 @@ export default function DataConceptStepperComponent({previousStep, price, concep
               decimalsLimit={2}
               prefix="$"
               disabled
-              // onValueChange={(value) => {try {
-              // } catch (error) {
-              // }}}
             />
             {bandPU && (
               <p className="text-red-500">El importe es obligatorio!!!</p>

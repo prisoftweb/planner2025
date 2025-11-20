@@ -3,7 +3,6 @@ import Button from "../Button"
 import { TbArrowNarrowLeft } from "react-icons/tb"
 import Link from "next/link"
 import SearchInTable from "../SearchInTable"
-import { GiSettingsKnobs } from "react-icons/gi"
 import { IQuotationMin } from "@/interfaces/Quotations"
 import { useState, useEffect, useRef } from "react"
 import TableQuotations from "./TableQuotations"
@@ -197,7 +196,6 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
   const filterData = (conditions:string[], clients:string[], minAmount:number, maxAmount:number, 
     startDate:number, endDate:number) => {
   
-      // console.log('filter data => ', conditions, clients, minAmount, maxAmount, startDate, endDate);
     let filtered: IQuotationMin[] = [];
     quotationsState.map((quatation) => {
       if(conditionsValidation(quatation, startDate, endDate, minAmount, maxAmount, clients, conditions)){
@@ -227,9 +225,6 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
           <SearchInTable placeH="Buscar cotizacion.." />
           <div>
             <div className="flex gap-x-3 items-center">
-              {/* <GiSettingsKnobs onClick={() => setShowFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              /> */}
               <TooltipFilterIcon handleFilter={handleShowFilter} />
               <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
             </div>

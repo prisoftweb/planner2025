@@ -1,8 +1,6 @@
 'use client'
 import { XMarkIcon } from "@heroicons/react/24/solid"
 import HeaderForm from "@/components/HeaderForm"
-import Chip from "@/components/providers/Chip"
-import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import NavStepperConceptEstimate from "../projects/estimates/NavStepperConceptEstimate"
@@ -10,18 +8,12 @@ import ConceptStepperComponent from "../projects/estimates/ConceptStepperCompone
 import PriceUnityStepper from "../projects/estimates/PriceUnityStepper"
 import DataStepperComponent from "../projects/estimates/DataStepperComponent"
 import { getConceptsMin, } from "@/app/api/routeEstimates"
-import { IConceptEstimateMin, IConceptEstimate, PriceConcept, IEstimate } from "@/interfaces/Estimate"
+import { IConceptEstimateMin, IConceptEstimate, PriceConcept } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
-
-interface OptionsDashboard {
-  label: string,
-  costo: number
-}
 
 export default function AddNewConceptEstimate({showForm, updateConcepts, user, token, 
   conceptsDataChart}: {showForm:Function, updateConcepts:Function, user:string, 
     token:string, conceptsDataChart:IConceptEstimate[]}) {
-  // const refRequest = useRef(true);
 
   const [conceptSel, setConcepSel] = useState<IConceptEstimateMin>();
   const [idPrice, setIdPrice] = useState<PriceConcept>();
@@ -88,7 +80,6 @@ export default function AddNewConceptEstimate({showForm, updateConcepts, user, t
     let cons: IConceptEstimateMin[];
     try {
       cons = await getConceptsMin(token);
-      // console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
         showToastMessageError(cons);
       else{

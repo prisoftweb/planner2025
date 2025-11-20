@@ -2,7 +2,6 @@ import { Report } from "@/interfaces/Reports"
 import Chip from "../providers/Chip"
 import Label from "../Label"
 import { CurrencyFormatter } from "@/app/functions/Globals"
-
 import { useOneReportStore } from "@/app/store/reportsStore"
 
 export default function NuevoComponente({report, id, token}: 

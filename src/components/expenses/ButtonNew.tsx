@@ -16,10 +16,6 @@ export default function ButtonNew({token, user}: {token:string, user:UsrBack,}){
               <NewExpenseContainer showForm={setNewExpense} token={token} 
                             user={user} />
             </ContainerSideNav>
-            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-            //   <NewExpenseContainer showForm={setNewExpense} token={token} 
-            //                 user={user} />
-            // </div>
           )}
     </>
   )

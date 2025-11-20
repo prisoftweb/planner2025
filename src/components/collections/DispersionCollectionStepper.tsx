@@ -1,12 +1,10 @@
 'use client'
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "@/components/Button";
 import { showToastMessageError } from "@/components/Alert";
-
-import { getInvoices, getUnpaidInvoices } from "@/app/api/routeInvoices";
+import { getUnpaidInvoices } from "@/app/api/routeInvoices";
 import { IInvoiceMin } from "@/interfaces/Invoices";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import {PlusCircleIcon} from "@heroicons/react/24/solid";
 import CurrencyInput from "react-currency-input-field";
 import Label from "@/components/Label";
 import HeaderForm from "../HeaderForm";
@@ -25,7 +23,7 @@ type TInvoiceStepper={
 }
 
 export default function DispersionCollectionStepper({token, user, NextStep, invoicesDisp, 
-    saveCollection, updateAmount}: 
+  saveCollection, updateAmount}: 
   {token:string, user:string, NextStep:Function, invoicesDisp:TInvoiceStepper[], 
     saveCollection:Function, updateAmount: Function}) {
 
@@ -33,19 +31,15 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
   const [invoices, setInvoices]=useState<TInvoiceStepper[]>([]);
   const [selected, setSelected]=useState<TInvoiceStepper>();
   const [amount, setAmount]=useState<string>('0');
-  // const [amountPending, setAmountPending]=useState<string>('0');
   const [showAddDispersion, setShowAddDispersion]=useState<boolean>(false);
 
   useEffect(() => {
     const fetch = async() => {
-      // const res = await getInvoices(token);
       const res = await getUnpaidInvoices(token);
       if(typeof(res)==='string'){
         showToastMessageError('Error al obtener facturas!!!');
       }else{
-        console.log('invoices back => ', res);
         const resI=transformTypes(res);
-        console.log('invoices trnas => ', resI);
         setInvoices(resI);
       }
     }
@@ -243,35 +237,7 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 
   return (
     <div className="mt-2">
-
-      {view}     
-
-      {/* <div className="grid grid-cols-7 items-center mt-3">
-        <div className="col-span-3">
-          <Label>Cobrado</Label>
-          <CurrencyInput
-            prefix="$"
-            value={amount.replace(/[$,]/g, "")}
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                      focus:border-slate-700 outline-0"
-            onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
-          />
-        </div>
-        <div className="col-span-3">
-          <Label>Por cobrar</Label>
-          <CurrencyInput
-            prefix="$"
-            value={amountPending.replace(/[$,]/g, "")}
-            className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                      focus:border-slate-700 outline-0"
-            onChange={(e) => setAmountPending(e.target.value.replace(/[$,]/g, "") || '0')}
-          />
-        </div>
-        <PlusCircleIcon className="w-6 h-6 text-green-500 hover:text-green-300" 
-          onClick={addNewDispersion}
-        />
-      </div> */}
-
+      {view}
       <div className="flex justify-center mt-8 space-x-5">
         <Button type="button" 
           onClick={() => {
@@ -292,11 +258,8 @@ export default function DispersionCollectionStepper({token, user, NextStep, invo
 function transformTypes(invoiceFrom: IInvoiceMin[]){
   const invoiceTo: TInvoiceStepper[]=[];
   invoiceFrom.map((i) => {
-    console.log('invoice from => ', i);
     invoiceTo.push({
-      // total:i.cost.total,
       total: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.charged : 0,
-      // totalPending: i.cost.total,
       totalPending: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.unchargedbalanceamount : 0,
       id:i._id,
       project: {
@@ -305,7 +268,6 @@ function transformTypes(invoiceFrom: IInvoiceMin[]){
       },
       folio: i.folio,
       concepts: i.paymentWay+' | '+ i.paymentMethod + ' | ' + i.useCFDI,
-      // previousAmount: i.cost.total
       previousAmount: i?.accountreceivables?.length > 0? i.accountreceivables[0]?.previousbalanceamount : 0
     });
   });

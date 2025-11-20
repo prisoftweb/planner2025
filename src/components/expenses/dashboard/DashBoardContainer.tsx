@@ -38,18 +38,6 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   const [dataCostsConcept, setDataCostsConcept ] = useState<CostsByConceptAndCategory[]>(costsCon);
 
   const fetchData = async (dateS: string, dateE: string, project:string) => {
-    // let costsCategory: CostsByConceptAndCategory[] = [];
-    // let costsConcept: CostsByConceptAndCategory[] = [];
-    // let costsDays: CostsByDay[] = [];
-    // let costsRes: CostsGroupByResumen[] = [];
-    // let costsResType: CostsGroupResumenByType[] = [];
-    
-    // costsCategory = await GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project);
-    // costsConcept = await GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project);
-    // costsDays = await GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project);
-    // costsRes = await GetAllCostsGroupByRESUMEN(token, dateS, dateE, project);
-    // costsResType = await GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project);
-
     const [costsCategory, costsConcept, costsDays, costsRes, costsResType] = await Promise.all([
       GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project),
       GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project),

@@ -3,9 +3,7 @@ import TableExpenses from "./TableExpenses"
 import ButtonNew from "./ButtonNew"
 import { Options } from "@/interfaces/Common"
 import { ExpensesTable, Expense } from "@/interfaces/Expenses"
-import { ReportParse } from "@/interfaces/Reports"
 import { useState, useEffect } from "react"
-import { GiSettingsKnobs } from "react-icons/gi"
 import TableHistoryExpenses from "./TableHistoryExpenses"
 import SearchInTable from "../SearchInTable"
 import Link from "next/link"
@@ -17,7 +15,6 @@ import { insertConditionInCost } from "@/app/api/routeCost"
 import { useOptionsExpense, useNewExpense } from "@/app/store/newExpense"
 
 import { getCostoCentersLV } from "@/app/api/routeCostCenter";
-import { CostoCenterLV, } from "@/interfaces/CostCenter";
 import { getProvidersLV, getProvidersSATLV } from "@/app/api/routeProviders";
 import { getUsersLV } from "@/app/api/routeUser";
 import { getAllProjectsWithConditionLV, getProjectsLV } from "@/app/api/routeProjects";
@@ -54,38 +51,6 @@ export default function ContainerClient({data, token, expenses,
 
   useEffect(() => {
     const fetchApis = async () => {
-      // let costcentersData: CostoCenterLV[];
-      // let optProvidersData:Options[]= [];
-      // let optProvidersSATData:Options[]= [];
-      // let optResponsiblesData:Options[]= [];
-      // let optCategoriesData: Options[] = [];
-      // let optTypesData: Options[] = [];
-      // let optConditionsData: Options[] = [];
-      // let optVatsData: Options[];
-      // let optProjectsData:Options[]=[];
-      // let repsData: ReportParse[]=[];
-
-      // costcentersData = await getCostoCentersLV(token);
-      // optProvidersData = await getProvidersLV(token);
-      // optProvidersSATData = await getProvidersSATLV(token);
-      // optResponsiblesData = await getUsersLV(token);
-      // optCategoriesData = await getCatalogsByNameAndCategory(token, 'cost');
-      // optTypesData = await getCatalogsByNameAndType(token, 'cost');
-      // optConditionsData = await getCatalogsByNameAndCondition(token, 'cost');
-      // optVatsData = await GetVatsLV(token);
-
-      // if(isHistory){
-      //   optProjectsData = await getProjectsLV(token);
-      // }else{
-      //   optProjectsData = await getAllProjectsWithConditionLV(token);
-      // }
-      
-      // if(typeof(user.department)=== 'string' || user.department.name.toLowerCase().includes('obras')){
-      //   repsData = await GetAllReportsWithUSERAndNEConditionMIN(token, user._id);
-      // }else{
-      //   repsData = await GetAllReportsWithLastMoveInDepartmentAndNEConditionMIN(token, user.department._id);
-      // }
-
       const [costcenters, optProviders, optProvidersSAT, optResponsibles, optProjects, 
         optCategories, optTypes, optConditions, optVats, reps] = await Promise.all([
           getCostoCentersLV(token), 
@@ -406,9 +371,6 @@ export default function ContainerClient({data, token, expenses,
                 conditions.length > 0 && costCenterOpt.length > 0 && 
                 projects.length > 0 && providers.length > 0 && responsibles.length > 0 && 
                 types.length > 0 && (
-                  // <GiSettingsKnobs onClick={() => handleFilter(true)}
-                  //   className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-                  // />
                   <TooltipFilterIcon handleFilter={handleFilter} />
               )}  
               <>

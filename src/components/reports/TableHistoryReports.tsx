@@ -128,15 +128,6 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
         </Link>
       ),
     }),
-    // columnHelper.accessor('NºGastos', {
-    //   header: 'NºGastos',
-    //   id: 'NºGastos',
-    //   cell: ({row}) => (
-    //     <Link href={`/reports/history/${row.original.id}`}>
-    //       <p className="">{row.original.NºGastos}</p>
-    //     </Link>
-    //   ),
-    // }),
     columnHelper.accessor('Total', {
       header: 'Total',
       id: 'Total',
@@ -272,11 +263,6 @@ export default function TableHistoryReports({data, token, reports, optCompanies,
                         FilterData={filterData} maxAmount={maxAmount} 
                         optProjects={optProjects} optCompanies={optCompanies} />
           </ContainerSideNav>
-          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-          //   <Filtering showForm={setIsFilter} optConditions={optConditions} 
-          //               FilterData={filterData} maxAmount={maxAmount} 
-          //               optProjects={optProjects} optCompanies={optCompanies} />
-          // </div>
         )}
       </div>
       {view}

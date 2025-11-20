@@ -1,6 +1,5 @@
 'use client'
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "../SelectMultipleReact"
 import { Options } from "@/interfaces/Common";
@@ -99,8 +98,6 @@ export default function Filtering({showForm, optCompanies,
               <p className="text-gray-500 text-sm">Filtra informes de gastos por diferentes caracteristicas</p>
             </div>
           </div>
-          {/* <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div className="flex justify-end px-5">

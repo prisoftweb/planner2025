@@ -22,12 +22,6 @@ export default function DownloadCollectionsByProjectPDF({collections, project, t
     fetch();
   }, []);
 
-  // let total = 0;
-  // guarantees.map((g) => {
-  //   total += g.cost.subtotal || 0;
-  // });
-
-  // const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   return(

@@ -23,10 +23,6 @@ export default function ButtonNew({token, optionsCompany, dept}: ButtonNewProps)
               <NewDepartment showForm={setNewCompany} token={token} 
                             OptionsCompany={optionsCompany} dept={dept} />
             </ContainerSideNav>
-            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-            //   <NewDepartment showForm={setNewCompany} token={token} 
-            //                 OptionsCompany={optionsCompany} dept={dept} />
-            // </div>
           )}
     </>
   )

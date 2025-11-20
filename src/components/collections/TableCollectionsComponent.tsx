@@ -2,14 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
-import Table from "@/components/Table";
-import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
 import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
-import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
-import { CollectionDataToTableData } from "@/app/functions/CollectionsFunctions";
+import { ICollectionMin, ITotalAmountCollections } from "@/interfaces/Collections";
 import Button from "../Button";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
@@ -30,18 +27,13 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
   const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
   const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
-  const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
+  // const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
 
   const {search} = useTableStates();
   
   const [widthPage, setWidthPage] = useState<number>(900);
-
-  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-  //   from: new Date('2024-01-02'),
-  //   to: new Date('2024-10-30'),
-  // });
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -74,11 +66,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
         conditionAccountsReceivable:['67d20cb359865f640af92638'],
       }
 
-      // const r = await getCollectionsMin(token);
-      // const rt = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
-
-      // const [res, rest] = await Promise.all([r, rt]);
-
       const [res, rest] = await Promise.all([
         getCollectionsMin(token), 
         getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data)
@@ -108,13 +95,11 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }else{
       setCollections(res);
       setIsFilter(false);
-      // setFilteredCollections(res);
     }
   }
 
   const handleDate = (dateI: Date, dateF: Date) => {
     handleFilter(dateI, dateF, statuses);
-    //actualizar total con el rango de fechas
   }
 
   const addStatus = (status:string) => {
@@ -159,16 +144,11 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     setFilteredCollections(filtered);
     setIsFilter(true);
     updateTotal(getDate(dateS), getDate(dateE));
-    // setShowIsFilter(false);
   }
 
-  // const handleIsFilter = (value:boolean) => {
-  //   setIsFilter(value);
+  // const handleShowIsFilter = (value:boolean) => {
+  //   setShowIsFilter(value);
   // }
-
-  const handleShowIsFilter = (value:boolean) => {
-    setShowIsFilter(value);
-  }
 
   const updateTotal = async (dateI:string, dateF:string) => {
     const data={
@@ -224,9 +204,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     }else{
       showToastMessage('Cobro actualizado satisfactoriamente!!!');
       updateCollections();
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 1500);
     }
   }
 
@@ -250,7 +227,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
                 <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
                 <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
                 <div>
-                  {/* <Label htmlFor='date'>Fecha</Label> */}
                   <DateRangePicker 
                     className='mt-2'
                     placeholder='Seleccione un rango de fechas'
@@ -296,22 +272,13 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {widthPage < 1080 && filterElemnts}
-              {/* {filterElemnts} */}
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
           </div>
         </div>
       </div>
       {widthPage > 1080 && filterElemnts}
-      {/* <Table columns={columns} data={data} placeH="buscar cobro" /> */}
-      {/* {rangeDate.from && rangeDate.to ? (
-        <ReactTableCollections columns={columns} data={data} arrStatuses={statuses} 
-          dateE={rangeDate.to} dateS={rangeDate.from} isFiter={isFilter} />
-      ): (
-        <ReactTableCollections columns={columns} data={data} arrStatuses={statuses} 
-          dateE={new Date()} dateS={new Date()} isFiter={false} />
-      )} */}
-      {/* {JSON.stringify(data)} */}
+      
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-317px)]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-317px)]
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
@@ -323,7 +290,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                 bg-white`}
-              // onClick={() => handleProjectSel(prj._id, prj.title)}
               onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
             >
               <div className="flex items-center w-full ">
@@ -379,22 +345,14 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
           <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
                                 user={user} updateCollections={updateCollections} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-        //                         user={user} updateCollections={updateCollections} />
-        // </div>
       )}
-      {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
     </>
   )
 }
 
 export const Card = ({amount, title}: {title:string, amount:number}) => {
-  // console.log('amount => ', amount);
-  // console.log('title => ', title);
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
-      {/* {children} */}
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
@@ -414,7 +372,6 @@ const Toogle = ({value, onClick, id}:
   return(
     <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
       <input 
-        // checked={row.original.confirm} 
         checked={checked}
         onClick={() => {onClick(id); setChecked(true);}} id={id} type="checkbox"
         disabled={checked}
@@ -447,12 +404,6 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
   {title:string, id:string, addStatus:Function, removeStatus:Function}) => {
   const [active, setActive] = useState<boolean>(false);
 
-  // const view = active? 
-  //                 <ChipUi className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>
-  //                   {title}
-  //                 </ChipUi>: 
-  //                 <ChipUi color="danger" onClick={() => {addStatus(id); setActive(true)}}>{title}</ChipUi>
-
   const view = active? 
                   <ChipMui label={title} className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>
                   </ChipMui>: 
@@ -463,29 +414,4 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
       {view }
     </>
   )
-}
-
-function CollectionDataToTableDataFunction(collections:ICollectionMin[]){
-  const table: ITableCollectionMin[] = [];
-  collections.map((col) => {
-    table.push({
-      Cuenta: col.account,
-      Estimacion: '',
-      // Facturas: [col.invoices],
-      Fecha: col.date,
-      id: col._id,
-      Importe: col.amount,
-      Referencia: col.reference,
-      // status: col.condition,
-      concept: col.concept,
-      confirm: col.condition.name.toLowerCase().includes('confirmado'),
-      idProject: col.invoices.project._id,
-      folioInvoice: col.invoices.invoices.folio,
-      nameStatus: col.condition.name,
-      colorStatus: col.condition.color,
-      idStatus: col.condition._id
-    })
-  });
-
-  return table;
 }

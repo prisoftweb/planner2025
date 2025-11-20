@@ -44,12 +44,6 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
   }
 
   const updateConceptsEstimate = async () => {
-    // let concepts: IConceptEstimate[];
-    // let totalEstimated: TotalEstimatedByProject[];
-
-    // concepts = await getAllConceptsDetailsByEstimateMin(token, estimate._id);
-    // totalEstimated = await getTotalEstimatesByProjectMin(token, project._id);
-
     const [concepts, totalEstimated] = await Promise.all([
       getAllConceptsDetailsByEstimateMin(token, estimate._id),
       getTotalEstimatesByProjectMin(token, project._id)
@@ -96,8 +90,6 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       button=<Button onClick={() => setOpenNewConcept(true)}>Agregar partida</Button>;
     }
   }
-
-  // console.log('estimate detail => ', estimate);
 
   const handleCreateGuaranteeFund = async () => {
     const data = {
@@ -226,11 +218,9 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       
       {component}
       {openNewConcept && (
-        <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-          <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
+        <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={estimate}
                             conceptsDataChart={conceptsData} />
-        </div>
       )}
     </>
   )

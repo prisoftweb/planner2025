@@ -84,20 +84,16 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
         userRequesting: value
       }
 
-      console.log('data code => ', data);
-
       const res = await createCode(token, data);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        console.log('res ocde => ', res);
         setCodeData(res);
       }
     }
   }
 
   function generarToken(longitud = 5) {
-    // const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let token = '';
     for (let i = 0; i < longitud; i++) {
@@ -117,11 +113,6 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
       setProjectTitle('');
       setProviderSel(undefined);
     }
-
-    // setProjectSel(undefined);
-    // setCodeData(undefined);
-    // setProjectTitle('');
-    // setProviderSel(undefined);
   }
 
   const returnProject = async () => {
@@ -132,21 +123,13 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
   }
 
   const returnform = async (id:string) => {
-    // setProjectSel('');
-    // setCodeData(undefined);
-    // setProjectTitle('');
     setUserSel(undefined);
   }
 
   const returnProviderSel = async () => {
     setProviderSel(undefined);
-    console.log('ret prov => ');
   }
 
-  // const viewProv=projectSel? <SelectProviderCode handleProvSel={handleProvSel} returnProject={returnProject} token={token} size={widthPage} />: <></>;
-  // const viewComponent=(providerSel && codeData ? <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} />: viewProv );
-
-  console.log('user => ', userSel);
   const viewComponent=(providerSel && codeData && userSel ? 
                 <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} /> : (
                   userSel ? <></>: (
@@ -155,9 +138,6 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
                     )
                   )
                 ))
-  
-  // const viewProv=projectSel? <SelectProviderCode handleProvSel={handleProvSel} returnProject={returnProject} token={token} size={widthPage} />: <></>;
-  // const viewComponent=(providerSel && codeData ? <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} />: viewProv );
   
   const filteredProjects = search==''? projects: projects.filter((p) => p.title.toString().toLowerCase().includes(search.toLowerCase()));
 
@@ -221,13 +201,10 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
             ))}
           </nav>
         </div>
-        {/* {codeData && widthPage < 500 && viewComponent } */}
         {widthPage < 500 && viewComponent}
       </div>
 
       <div>
-        {/* {codeData && widthPage > 500 && <NewCode closeForm={closeform} returnForm={returnform} code={codeData} title={projectTitle} size={widthPage} />} */}
-        {/* {codeData && widthPage > 500 && viewComponent} */}
         {widthPage > 500 && viewComponent}
       </div>
     </div>

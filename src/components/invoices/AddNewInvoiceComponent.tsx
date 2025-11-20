@@ -1,4 +1,3 @@
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import HeaderForm from "@/components/HeaderForm"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
@@ -13,8 +12,6 @@ type Params = {
   showForm:(value: boolean) => void, 
   user:string, 
   token:string, 
-  // project:OneProjectMin
-  // invoice: IInvoiceTable
 }
 
 export default function AddNewInvoiceComponent({showForm, user, token}: Params) {
@@ -164,10 +161,6 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
           date:c.date,
           user:c.user
       });
-      // console.log('amount => ', c.amount);
-      // console.log('quiantiti => ', c.quantity);
-      // amount += c.amount * c.quantity;
-      // console.log('total => ', amount);
       amount += c.amount;
     });
 
@@ -188,7 +181,6 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
         user,
         client,
         project,
-        // project: project._id,
         company: '65d3813c74045152c0c4377e',
         concepts: dataConcepts,
         cost: {
@@ -196,7 +188,6 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
           iva: isVat? (amount * 0.16): 0,
           total: isVat? (amount * 1.16): amount,
         },
-        // notes: res.description,
         condition: [
           {glossary:"67d20cb359865f640af92638", user}
         ],
@@ -211,13 +202,11 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
         }]
       }
 
-      console.log('data invoice => ', data);
       const resInvoice = await createInvoice(token, data);
       if(typeof(resInvoice)==='string'){
         showToastMessageError(resInvoice);
       }else{
         showToastMessage('Factura agregada satisfactoriamente!!');
-        // updateEstimates();
         showForm(false);
       }
     }
@@ -246,8 +235,6 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
           <HeaderForm img="/img/estimates/invoices.svg" subtitle={"Crea factura"} 
             title={"Nueva factura"}
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
 

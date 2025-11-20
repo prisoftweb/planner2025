@@ -75,7 +75,7 @@ export default function AddConcept({bandPlus, DeleteElement, index,
           />
         </div>
         <div>
-          <Label htmlFor=""><p>&nbsp;</p></Label>
+          <Label ><p>&nbsp;</p></Label>
           <CheckCircleIcon width={30} height={30} className={`text-red-500 cursor-pointer ${saved? 'invisible': ''}`} onClick={save} />
         </div>
         <div>

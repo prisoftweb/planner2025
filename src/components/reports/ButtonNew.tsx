@@ -33,13 +33,6 @@ export default function ButtonNew({token, companies, departments,
                                   condition={condition} user={user}
                         />
             </ContainerSideNav>
-            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-            //   <NewReport showForm={handleNewReport} 
-            //                       token={token} projects={projects}
-            //                       companies={companies} departments={departments} 
-            //                       condition={condition} user={user}
-            //             />
-            // </div>
           )}
     </>
   )

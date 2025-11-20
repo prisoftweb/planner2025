@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   DndContext,
-  closestCenter,
   PointerSensor,
   useSensor,
   useSensors,
@@ -20,6 +19,7 @@ import { insertConditionInQuotation } from "@/app/api/routeQuotations";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import RatingComponent from "./RatingComponent"
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
 
 import {
   SortableContext,
@@ -34,30 +34,9 @@ type Task = {
   content: string;
 };
 
-type Tasks = {
-  [key: string]: Task[];
-};
-
 type TQuotations = {
   [key: string]: IQuotationMin[];
 };
-
-// const initialTasks: TQuotations = {
-//   // todo: [
-//   //   { id: "1", content: "Tarea 1" },
-//   //   { id: "2", content: "Tarea 2" },
-//   // ],
-//   // "in-progress": [{ id: "3", content: "Tarea 3" }],
-//   // done: [],
-//   todo: [],
-//   "in-progress": [],
-//   done: []
-// };
-
-interface SortableItemProps {
-  id: string;
-  content: string;
-}
 
 const arrId: Options[] = [
   {
@@ -124,28 +103,8 @@ function SortableItem(q : IQuotationMin) {
     cursor: "grab",
   };
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      {/* {content} */}
       <div>
         <div className="flex items-center gap-x-2">
           <img src={q.user.photo} alt="usuario" className="w-9 h-9 rounded-full" />
@@ -154,12 +113,11 @@ function SortableItem(q : IQuotationMin) {
             <p className="text-blue-500">{q.client.name}</p>
           </div>
         </div>
-        {/* <div className="flex items-center justify-between gap-x-2 mt-2"></div> */}
         <p className="text-slate-500 text-sm">{CurrencyFormatter({
           currency: 'MXN',
           value: q.cost.subtotal
         })}</p>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content={q.title} 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content={q.title} 
           placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <p className="text-green-500 text-sm">{q.title.substring(0, 17)}{q.title.length > 17? '...': ''}</p>
         </Tooltip>
@@ -170,8 +128,6 @@ function SortableItem(q : IQuotationMin) {
 
 function DroppableColumn({ columnId, children }: { columnId: string; children: React.ReactNode }) {
   const { setNodeRef } = useDroppable({ id: columnId });
-
-  // console.log("DroppableColumn render:", { columnId });
 
   return (
     <div
@@ -196,7 +152,6 @@ function DroppableColumn({ columnId, children }: { columnId: string; children: R
 
 export default function DragAndDropQuatations({quotationsParam, token, user}: 
   {quotationsParam: IQuotationMin[], token:string, user:string}) {
-  // const [tasks, setTasks] = useState<Tasks>(initialTasks);
 
   const arr1: IQuotationMin[]=[];
   const arr2: IQuotationMin[]=[];
@@ -259,8 +214,6 @@ export default function DragAndDropQuatations({quotationsParam, token, user}:
     }
   });
 
-  
-
   const initialQuotations: TQuotations = {
     "EN PROGRESO": arr1,
     "LISTA": arr2,
@@ -285,95 +238,6 @@ export default function DragAndDropQuatations({quotationsParam, token, user}:
     setActiveId(event.active.id as string);
   };
 
-  // const onDragEnd = (event: DragEndEvent) => {
-  //   const { active, over } = event;
-
-  //   if (!over) {
-  //     setActiveId(null);
-  //     return;
-  //   }
-
-  //   const activeIdStr = String(active.id);
-  //   const overIdStr = String(over.id);
-
-  //   if (activeIdStr !== overIdStr) {
-  //     let fromColumn: string | null = null;
-  //     for (const column in quotations) {
-  //       if (quotations[column].some(q => q._id === activeIdStr)) {
-  //         fromColumn = column;
-  //         break;
-  //       }
-  //     }
-
-  //     if (!fromColumn) {
-  //       setActiveId(null);
-  //       return;
-  //     }
-
-  //     let toColumn: string | null = null;
-  //     let toIndex: number = -1;
-
-  //     // if (quotations[overIdStr]) {
-  //     //   toColumn = overIdStr;
-  //     //   toIndex = quotations[toColumn].length;
-  //     // } else {
-  //     //   for (const column in quotations) {
-  //     //     const index = quotations[column].findIndex(q => q._id === overIdStr);
-  //     //     if (index !== -1) {
-  //     //       toColumn = column;
-  //     //       toIndex = index;
-  //     //       break;
-  //     //     }
-  //     //   }
-  //     // }
-      
-  //     // Detectar si el overId corresponde a una columna (incluso vacía)
-  //     if (quotations.hasOwnProperty(overIdStr)) {
-  //       toColumn = overIdStr;
-  //       toIndex = quotations[toColumn].length;
-  //     } else {
-  //       // Buscar a qué columna pertenece el ítem sobre el que se está soltando
-  //       for (const column in quotations) {
-  //         const index = quotations[column].findIndex(q => q._id === overIdStr);
-  //         if (index !== -1) {
-  //           toColumn = column;
-  //           toIndex = index;
-  //           break;
-  //         }
-  //       }
-  //     }
-
-  //     if (toColumn) {
-  //       const activeTask = quotations[fromColumn].find(q => q._id === activeIdStr);
-  //       if (!activeTask) {
-  //         setActiveId(null);
-  //         return;
-  //       }
-
-  //       const newFromTasks = quotations[fromColumn].filter(q => q._id !== activeIdStr);
-  //       const newToTasks = [...quotations[toColumn]];
-
-  //       let insertIndex = toIndex;
-  //       if (fromColumn === toColumn) {
-  //         const oldIndex = quotations[toColumn].findIndex(q => q._id === activeIdStr);
-  //         if (oldIndex < toIndex) {
-  //           insertIndex = toIndex - 1;
-  //         }
-  //       }
-
-  //       newToTasks.splice(insertIndex, 0, activeTask);
-
-  //       setQuotations({
-  //         ...quotations,
-  //         [fromColumn]: newFromTasks,
-  //         [toColumn]: newToTasks,
-  //       });
-  //     }
-  //   }
-
-  //   setActiveId(null);
-  // };
-
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     setActiveId(null);
@@ -382,9 +246,6 @@ export default function DragAndDropQuatations({quotationsParam, token, user}:
 
     const activeIdStr = String(active.id);
     const overIdStr = String(over.id);
-
-    // console.log('active => ', active);
-    // console.log('over => ', over);
 
     // 🛑 Si se suelta el ítem sobre sí mismo, no hacer nada
     if (activeIdStr === overIdStr) return;
@@ -463,19 +324,12 @@ export default function DragAndDropQuatations({quotationsParam, token, user}:
       if(typeof(res) === 'string'){
         showToastMessageError(res);
       }
-
     }else{
       showToastMessageError("No se pudo actualizar el estado de la cotización");
     }
   }
 
   return (
-    // <DndContext
-    //   sensors={sensors}
-    //   collisionDetection={closestCenter}
-    //   onDragStart={onDragStart}
-    //   onDragEnd={onDragEnd}
-    // >
     <DndContext
       sensors={sensors}
       collisionDetection={rectIntersection} // ✅ nuevo algoritmo

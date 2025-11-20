@@ -10,6 +10,7 @@ import NewDepartment from "./NewDepartment";
 import { Options } from "@/interfaces/Common";
 import {Tooltip} from "@nextui-org/react";
 import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
 
 type DeptProps={
   data:DepartmentTable[], 
@@ -23,25 +24,6 @@ export default function TableDepartments({data, token, optionsCompany}: DeptProp
 
   const [editDept, setEditDept] = useState<boolean>(false);
   const [deptEdit, setDeptEdit] = useState<DepartmentTable>();
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const columns = [
     columnHelper.accessor(row => row.id, {
@@ -68,7 +50,7 @@ export default function TableDepartments({data, token, optionsCompany}: DeptProp
       id: 'accion',
       cell: ({row}) => (
         <div className="flex gap-x-2">
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Modificar' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
             <PencilIcon className="w-6 h-6 text-slate-500 hover:text-slate-400 cursor-pointer hover:bg-blue-100" 
               onClick={() => {setDeptEdit(row.original); setEditDept(true);}}

@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react"
-import { showToastMessageError } from "@/components/Alert";
 import Button from "@/components/Button";
-import { getConceptsInvoice } from "@/app/api/routeInvoices";
 import { IConceptsInvoice } from "@/interfaces/Invoices";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -31,20 +29,7 @@ export default function ConceptsInvoiceStepperComponent({token, nextStep, saveIn
   const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);  
   const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
 
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     const cons = await getConceptsInvoice(token, idInvoice);
-  //     if(typeof(cons)==='string'){
-  //       showToastMessageError(cons);
-  //     }else{
-  //       setConceptsInvoice(cons);
-  //     }
-  //   }
-  //   fetch();
-  // }, []);
-
   const handleAddNewConcept = (concept: IConceptsInvoice) => {
-    // console.log('concept new concetp => ', concept);
     setConceptsInvoice((prev) => [...prev, concept]);
     setShowNewConcept(false);
   }
@@ -140,11 +125,8 @@ export default function ConceptsInvoiceStepperComponent({token, nextStep, saveIn
 
 function TransformConceptsInvoice(concepts:IConceptsInvoice[]):TableConceptsInvoice[]{
   const data:TableConceptsInvoice[]=[];
-  // console.log('concepts => ', concepts);
   
   concepts.forEach((c) => {
-    // console.log('concept => ', c);
-    // console.log('concept stimetate => ', c.conceptEstimate);
     data.push({
       Clave:c.conceptEstimate.code,
       Concepto:c.conceptEstimate.name,

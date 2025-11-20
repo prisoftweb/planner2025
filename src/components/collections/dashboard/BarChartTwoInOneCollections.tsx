@@ -21,7 +21,7 @@ const Tooltip = ({ payload, active, label }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) return null;
 
   const title = payload[0].payload.client;
-  const st = payload[0].dataKey;
+  // const st = payload[0].dataKey;
   const data = payload.map((item:any) => ({
       status: item.dataKey,
       value: CurrencyFormatter({

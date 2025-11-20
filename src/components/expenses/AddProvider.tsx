@@ -76,7 +76,6 @@ export default function AddProvider({token, setShowForm, addProv}: {token:string
               label: res.tradename || name,
               value: res._id
             }
-            console.log('new provider => ', option);
             addProv(option, tradeOption);
             setShowForm(false);
           }

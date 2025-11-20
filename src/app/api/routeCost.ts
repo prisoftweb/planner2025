@@ -740,7 +740,7 @@ export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart
 
 export async function getTimeLineCost(auth_token:string, cost:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getConditionsByCostMIN/${cost}`;
-  
+  console.log('url costs => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
@@ -748,6 +748,7 @@ export async function getTimeLineCost(auth_token:string, cost:string) {
         'Content-Type': 'application/json'
       }
     })
+    console.log('res => ', res.data.data.data);
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {

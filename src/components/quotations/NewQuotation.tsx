@@ -1,12 +1,11 @@
 'use client'
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Input from "../Input"
 import CurrencyInput from "react-currency-input-field"
 import SelectReact from "../SelectReact"
 import TextArea from "../TextArea"
 import Button from "../Button"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import { showToastMessage, showToastMessageError } from "../Alert"
 import { createQuotation, getContactsClientLV } from "@/app/api/routeQuotations"
@@ -247,12 +246,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   return(//top-16
     <>
-      {/* <div className="fixed inset-0 bg-black bg-opacity-40 z-40">
-        <form className="z-10 absolute w-full max-w-md bg-white space-y-5 p-5 right-0" 
-            style={{height: `${heightPage}px`}}>
-          
-        </form>
-      </div> */}
       <ContainerSideNav width="w-full max-w-md">
         <div 
             style={{height: `${heightPage}px`}}>
@@ -264,8 +257,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
                 <p className="text-gray-500 text-sm">Ingresa datos de la nueva cotizacion</p>
               </div>
             </div>
-            {/* <XMarkIcon className="w-8 h-8 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
             <TooltipCloseIcon handleClose={showForm} />
           </div>
 

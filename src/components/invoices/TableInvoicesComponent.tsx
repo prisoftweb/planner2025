@@ -24,6 +24,8 @@ import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
 import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
+import { getDate } from "@/libs/dates";
 
 export default function TableInvoicesComponent({token, user}: 
   {token:string, user:string}) {
@@ -38,35 +40,11 @@ export default function TableInvoicesComponent({token, user}:
 
   const [widthPage, setWidthPage] = useState<number>(900);
   const [statuses, setStatuses]=useState<string[]>([]);
-  
-  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-  //   from: new Date('2024-01-01'),
-  //   to: new Date('2025-04-30'),
-  // });
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const handleShowForm = (value:boolean) => {
     setShowNewCollection(value);
@@ -106,9 +84,6 @@ export default function TableInvoicesComponent({token, user}:
         ]
       }
       
-      // const res = await getAllInvoicesMINByDateAndCondition(token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''), dataInvoices);
-      // const rest = await getAllTotalAmountInvoicePending(token, '2025-01-01', '2025-12-31', data);
-
       const [res, rest] = await Promise.all([
         getAllInvoicesMINByDateAndCondition(token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''), dataInvoices),
         getAllTotalAmountInvoicePending(token, '2025-01-01', '2025-12-31', data)
@@ -173,7 +148,7 @@ export default function TableInvoicesComponent({token, user}:
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
           {row.original.ischargedfull? (
-            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrada' 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cobrada' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 {row.original.accountreceivablesCount > 0? (
                   <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
@@ -184,7 +159,7 @@ export default function TableInvoicesComponent({token, user}:
                 )}
           </Tooltip>
           ): (
-            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Cobrar' 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cobrar' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
               {row.original.accountreceivablesCount > 0? (
                 <Badge color="secondary" badgeContent={row.original.accountreceivablesCount}>
@@ -333,9 +308,6 @@ export default function TableInvoicesComponent({token, user}:
       condition: statuses
     }
 
-    // const rest = await getAllTotalAmountInvoicePending(token, dateI, dateF, data);
-    // const res = await getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices);
-
     const [res, rest] = await Promise.all([
       getAllInvoicesMINByDateAndCondition(token, dateI, dateF, dataInvoices),
       getAllTotalAmountInvoicePending(token, dateI, dateF, data)
@@ -344,14 +316,12 @@ export default function TableInvoicesComponent({token, user}:
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
     }else{
-      // console.log('rest => ', rest);
       setTotalInvoices(rest);
     }
 
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
-      console.log('res invoices => ', res);
       setInvoices(res);
     }
   }
@@ -363,85 +333,6 @@ export default function TableInvoicesComponent({token, user}:
     updateTotal(getDate(dateI), getDate(dateF), statuses);
   }
 
-  // const invoiceM = invoices.reduce((previous, current) => {
-  //   return current.cost.total > previous.cost.total ? current : previous;
-  // });
-
-  // console.log('invoiceM => ', invoiceM);
-  // const maxAmount = invoiceM.cost.total;
-  // const maxAmount=110;
-  // const maxAmount = invoiceM;
-
-  // const dateValidation = (exp:IInvoiceByDateAndConditionMin, startDate:number, endDate:number) => {
-  //   let d = new Date(exp.date).getTime();
-  //   if(d >= startDate && d <= endDate){
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
-  // const amountValidation = (exp:IInvoiceByDateAndConditionMin, minAmount:number, maxAmount:number, 
-  //                             startDate:number, endDate:number) => {
-  //   if(exp.cost?.subtotal >= minAmount && exp.cost?.subtotal <= maxAmount){
-  //     return dateValidation(exp, startDate, endDate);
-  //   }
-  //   return false;
-  // }
-
-  // const projectValidation = (exp:IInvoiceByDateAndConditionMin, minAmount:number, maxAmount:number, 
-  //                     startDate:number, endDate:number, projects:string[]) => {
-  //   if(projects.includes('all')){
-  //     return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-  //   }else{
-  //     if(exp.project){
-  //       if(projects.includes(exp.project._id)){
-  //         return amountValidation(exp, minAmount, maxAmount, startDate, endDate);
-  //       }
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const conditionValidation = (exp:IInvoiceByDateAndConditionMin, minAmount:number, maxAmount:number, 
-  //                 startDate:number, endDate:number, projects:string[], 
-  //                 conditions:string[]) => {
-
-  //   if(conditions.includes('all')){
-  //     return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
-  //   }else{
-  //     if(conditions.includes(exp.condition._id)){
-  //       return projectValidation(exp, minAmount, maxAmount, startDate, endDate, projects);
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  // const filterData = (conditions:string[], minAmount:number, maxAmount:number, 
-  //   projects:string[], startDate:number, endDate:number) => {
-  
-  //   let filtered: IInvoiceByDateAndConditionMin[] = [];
-  //   invoices.map((invoice) => {
-  //     if(conditionValidation(invoice, minAmount, maxAmount, startDate, 
-  //         endDate, projects, conditions)){
-  //       filtered.push(invoice);
-  //     }
-  //   });
-
-  //   // console.log('filtered => ', filtered);
-  //   setFilteredInvoices(filtered);
-  //   setIsFilter(true);
-  //   updateTotal(getDate(new Date(startDate)), getDate(new Date(endDate)), conditions);
-  //   // setDataExpenses(ExpenseDataToTableData(filtered));
-  // }
-  
-  // const data = InvoiceDataToTableData(invoices);
-  // let data = [];
-  // if(isFilter){
-  //   data = InvoiceDataToTableData(filteredInvoices);
-  // }else{
-  //   data = InvoiceDataToTableData(invoices);
-  // }
-
   const data = InvoiceDataToTableData(invoices);
 
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
@@ -451,7 +342,6 @@ export default function TableInvoicesComponent({token, user}:
                   <ChipStatus id="67d20e2959865f640af92682" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada parcial" />
                   <ChipStatus id="678ecf6ec5f08e8a0f36d5dd" addStatus={addStatus} removeStatus={deleteStatus} title="Cancelada" />
                   <div>
-                    {/* <Label htmlFor='date'>Fecha</Label> */}
                     <DateRangePicker 
                       className='mt-2'
                       placeholder='Seleccione un rango de fechas'
@@ -490,10 +380,6 @@ export default function TableInvoicesComponent({token, user}:
           <SearchInTable placeH={"Buscar factura.."} />
           <div className={''}>
             <div className="flex gap-x-4 justify-end items-center">
-              {/* <GiSettingsKnobs 
-                onClick={() => setShowIsFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />   */}
               <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
             </div>
           </div>
@@ -506,18 +392,11 @@ export default function TableInvoicesComponent({token, user}:
           <AddNewCollectionInvoice showForm={handleShowForm} user={user}
                token={token} invoiceTable={selInvoice} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <AddNewCollectionInvoice showForm={handleShowForm} user={user}
-        //        token={token} invoiceTable={selInvoice} />
-        // </div>
       )}
       {showNewInvoice && (
         <ContainerSideNav width="w-full max-w-3xl">
           <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
-        // </div>
       ) }
     </>
   )
@@ -526,7 +405,6 @@ export default function TableInvoicesComponent({token, user}:
 function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   const table: IInvoiceTable[] = [];
 
-  console.log('invoicess => ', invoicess);
   invoicess.map((inv) => {
     const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
     table.push({
@@ -567,18 +445,6 @@ export const Card = ({amount, title, footer}: {title:string, amount:number, foot
       </div>
     </div>
   )
-}
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
 }
 
 const ChipStatus = ({ addStatus, id, removeStatus, title}: 

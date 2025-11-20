@@ -1,7 +1,7 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,9 +11,10 @@ import { Options } from "@/interfaces/Common"
 import { createRelation } from "@/app/api/routeRelations"
 import SelectReact from "../SelectReact"
 import SelectReactWithDescription from "../SelectReactWithDescription"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type Props = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   glossaries:Options[], 
   nodes:Options[], 
@@ -96,8 +97,9 @@ export default function NewRelation({showForm, token, glossaries,
           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nueva relacion" 
             title="Agregar nueva relacion"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <div>

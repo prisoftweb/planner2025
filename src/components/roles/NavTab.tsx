@@ -6,34 +6,16 @@ import { GrResources } from "react-icons/gr"; //Recursos
 import { TbRoute } from "react-icons/tb"; //Rutas
 import { BsWindowStack } from "react-icons/bs"; //Componentes
 import { PiTreeDuotone } from "react-icons/pi";
+import { propsTooltip } from "@/libs/animations";
 
 export default function NavTab({option}: {option:number}){
-
-  let props = {
-    variants: {
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.1,
-        ease: "easeIn",
-      }
-    },
-    enter: {
-      opacity: 1,
-      transition: {
-        duration: 0.15,
-        ease: "easeOut",
-      }
-    },
-    },
-  }
 
   const [isHover, setIsHover] = useState<number>(-1);
 
   const nav =(<div>
                 <div className="bg-white fixed top-12 left-0 p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
                   <Link href='/roles/role'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 bg-white rounded-md border border-slate-400" content='Roles'
                       placement="right"
                     >
@@ -48,7 +30,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/roles/resources'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 bg-white rounded-md border border-slate-400" content='Recursos'
                       placement="right"  
                     >
@@ -63,7 +45,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/roles/sub-path'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 bg-white rounded-md border border-slate-400" content='Rutas'
                       placement="right"
                     >
@@ -78,7 +60,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/roles/components'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 bg-white rounded-md border border-slate-400" content='Componentes'
                       placement="right"
                     >
@@ -93,7 +75,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/roles/trees'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 bg-white rounded-md border border-slate-400" content='Arboles'
                       placement="right"
                     >

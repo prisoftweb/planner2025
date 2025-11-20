@@ -16,6 +16,7 @@ import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import ReportCostsCategoryAndConceptPDF from './ReportCostsCategoryAndConcept';
+import { propsTooltip } from '@/libs/animations';
 
 type StatisticsHeaderProps = {
   handleDate: Function, 
@@ -29,30 +30,7 @@ type StatisticsHeaderProps = {
 export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType, 
       dataCostsCatagory, dataCostsConcept }: StatisticsHeaderProps) {
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   const [project, setProject] = useState<string>(projects[0].value);
-  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-  //   from: new Date(),
-  //   to: new Date(),
-  // });
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
@@ -89,7 +67,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           </div>
           <div className='w-5'>
             {dataCostsCatagory && dataCostsCatagory.length > 0 && (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                 content='categoria'
                 className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
@@ -107,7 +85,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           </div>
           <div className='w-5'>
             {dataCostsConcept && dataCostsConcept.length > 0 && (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content='concepto' 
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                   <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
@@ -133,7 +111,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 0 && (
               <>
                 <p className='text-xs'>{costsResumenType[0].tipo}</p>
-                <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                     content={CurrencyFormatter({
                       currency: 'USD',
                       value: costsResumenType[0].subtotalCost
@@ -150,7 +128,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 1 && (
               <>
                 <p className='text-xs'>{costsResumenType[1].tipo}</p>
-                <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                     content={CurrencyFormatter({
                       currency: 'USD',
                       value: costsResumenType[1].subtotalCost
@@ -167,7 +145,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             {costsResumenType.length > 2 && (
               <>
                 <p className='text-xs'>{costsResumenType[2].tipo}</p>
-                <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                     content={CurrencyFormatter({
                       currency: 'USD',
                       value: costsResumenType[2].subtotalCost
@@ -191,7 +169,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           </div>
           <div>
             <div>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: costsResumen.length > 0? costsResumen[0].subtotalCost : 0
@@ -204,7 +182,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               <p className='text-xs'>Costo</p>
             </div>
             <div className='mt-3'>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: costsResumen.length > 0? costsResumen[0].totalIVA : 0
@@ -224,7 +202,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
           <div>
             <p className='text-2xl'>{costsResumen.length > 0? costsResumen[0].quantity: 0}</p>
             <p className='text-xs'>GRANTOTAL</p>
-            <Tooltip closeDelay={0} delay={100} motionProps={props} 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: costsResumen.length > 0? costsResumen[0].totalCost : 0

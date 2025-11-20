@@ -18,12 +18,6 @@ export default function TableReportByType({token}: {token:string}){
 
   useEffect(() => {
     const fetchData = async() => {
-      // let reportsProject: ReportByProject[];
-      // let costTypes: CostGroupByType[];
-      
-      // reportsProject = await GetCostsGroupByProject(token);
-      // costTypes = await GetCostsGroupByType(token);
-
       const [reportsProject, costTypes] = await Promise.all([
         GetCostsGroupByProject(token),
         GetCostsGroupByType(token)

@@ -1,6 +1,5 @@
 'use client'
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
 import SelectMultipleReact from "../SelectMultipleReact"
 import { Options } from "@/interfaces/Common";
@@ -38,7 +37,6 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount }:
 
   const handleValues = (dateValues: DateObject[]) => {
     setValues(dateValues);
-    // console.log('date => ', dateValues);
     if(dateValues.length > 1){
       setFirstDate(new Date(dateValues[0].year, dateValues[0].month.number - 1, dateValues[0].day));
       setSecondDate(new Date(dateValues[1].year, dateValues[1].month.number - 1, dateValues[1].day));
@@ -81,8 +79,6 @@ export default function FilteringQuatations({showForm, FilterData, maxAmount }:
                 <p className="text-gray-500 text-sm">Filtra cotizaciones por diferentes caracteristicas</p>
               </div>
             </div>
-            {/* <XMarkIcon className="w-8 h-8 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
             <TooltipCloseIcon handleClose={showForm} />
           </div>
           

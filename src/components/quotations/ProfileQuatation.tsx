@@ -16,8 +16,6 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 export default function ProfileQuatation({quatation, token, user}: 
   {quatation:IOneQuotationMin, token:string, user:string}){
 
-  console.log('cotizacion => ', quatation);
-
   const newProject = async () => {
     const data = {
       title: quatation.title,

@@ -7,34 +7,16 @@ import { TfiLayoutAccordionList } from "react-icons/tfi";
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 import Link from "next/link";
+import { propsTooltip } from "@/libs/animations";
 
 export default function NavTab({option}: {option:number}){
-
-  let props = {
-    variants: {
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.1,
-        ease: "easeIn",
-      }
-    },
-    enter: {
-      opacity: 1,
-      transition: {
-        duration: 0.15,
-        ease: "easeOut",
-      }
-    },
-    },
-  }
 
   const [isHover, setIsHover] = useState<number>(-1);
 
   const nav =(<div>
                 <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
                 <Link href='/catalogs'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" 
                       content='Listas' placement="right"
                     >
@@ -49,7 +31,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/departments'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" content='Departamentos'
                       placement="right" 
                     >
@@ -64,7 +46,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/companies'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 text-sm font-thin bg-white rounded-md border border-slate-400" content='Compañia'
                       placement="right"
                     >
@@ -79,7 +61,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/glossary'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" content='Glosarios'
                       placement="right"
                     >
@@ -94,7 +76,7 @@ export default function NavTab({option}: {option:number}){
                     </Tooltip>
                   </Link>
                   <Link href='/status'>
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 text-sm font-thin bg-white rounded-md border border-slate-400" content='Catalogos'
                       placement="right"  
                     >

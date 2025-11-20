@@ -58,7 +58,6 @@ export default function SendReport({send, report, node, user, token, isClose}: P
               const data = {wached: false};
               const res = await updateReport(token, oneReport?._id || '', data);
               if(typeof(res)==='string'){
-                //refRequest.current = true;
                 showToastMessageError(res);
               }
             }

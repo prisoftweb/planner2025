@@ -5,28 +5,10 @@ import { useState, useEffect } from "react";
 import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon, 
   DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
 
 export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {tab:string, 
   idExp:string, pending: 0|1, idProv: string, idProj:string}){
-  
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const [width, setWidth] = useState<number>(0);
   const handleResize = () => {
@@ -44,15 +26,15 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
   if(width < 710){
     tabCli = <div className="flex justify-between mt-3">
                     <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}&&project=${idProj}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>  
-                    <Link href={`/expenses/${idExp}/budget?prov=${idProv}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                    {/*<Link href={`/expenses/${idExp}/budget?prov=${idProv}`}>
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
                         <DocumentChartBarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -60,7 +42,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
                       </Tooltip>
                     </Link>
                     <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -68,15 +50,15 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
                       </Tooltip>
                     </Link>
                     <Link href={`/expenses/${idExp}/advange?prov=${idProv}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Avance'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
-                    </Link>
+                    </Link>*/}
                     <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}&&project=${idProj}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estatus'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -92,7 +74,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
             <p className="text-blue-600">Resumen</p>
           </div>
         </Link>
-        <Link href={`/expenses/${idExp}/projects?prov=${idProv}`}>
+        {/* <Link href={`/expenses/${idExp}/projects?prov=${idProv}`}>
           <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Presupuesto</p>
           </div>
@@ -106,7 +88,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Avances</p>
           </div>
-        </Link>
+        </Link> */}
         <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}&&project=${idProj}`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Estatus</p>

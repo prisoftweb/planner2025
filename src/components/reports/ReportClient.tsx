@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from "react"
-// import NavResponsive from "./NavResponsive"
 import DataReports from "./DataReports"
 import { Report, DateReport } from "@/interfaces/Reports"
 import CostsInReport from "./CostsInReport"
@@ -22,7 +21,6 @@ export default function ReportClient({report, token, id, user, node, dates, optR
   const {updateOneReportStore, oneReport} = useOneReportStore();
 
   useEffect(() => {
-    // console.log('update rep => ', report);
     updateOneReportStore(report);
 
     return () => updateOneReportStore(undefined);
@@ -44,12 +42,6 @@ export default function ReportClient({report, token, id, user, node, dates, optR
         opt===4?  view =(<CostsInReport id={id} token={token} report={report} />): 
                   view = (<NuevoComponente id={id} token={token} report={report} />)
   }
-  
-  // const [open, setOpen] = useState<boolean>(false);
-  
-  // const handeleOpen = (value:boolean) => {
-  //   setOpen(value);
-  // }
 
   const handleOpt = (value:number) => {
     setOpt(value);
@@ -70,17 +62,6 @@ export default function ReportClient({report, token, id, user, node, dates, optR
       <div>
         {view}
       </div>
-      {/* <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
-          <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
-            <NavResponsive open={open} setOpen={handeleOpen} changeOption={handleOpt} option={opt} />
-          </div>
-        </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
-          style={{'backgroundColor': '#F8FAFC'}}>
-          {view}
-        </div>
-      </div> */}
     </>
   )
 }

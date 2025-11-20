@@ -87,6 +87,7 @@ export async function getClient(auth_token:string, id:string) {
     if(res.status===200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
+    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.message;
     }

@@ -1,5 +1,4 @@
 'use client'
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
@@ -33,7 +32,6 @@ type TInvoiceSend={
 
 export default function AddNewCollectionInvoice({showForm, user, token, invoiceTable}: 
   {showForm:(value: boolean) => void, user:string, token:string, invoiceTable:IInvoiceTable }) {
-  // const refRequest = useRef(true);
 
   const [project, setProject] = useState<OneProjectMin>();
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
@@ -105,7 +103,6 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
 
   const handleUpdateAmount = (invoicesParam: TInvoiceStepper[]) => {
     let acum=0;
-    // console.log('update anount error => ');
     if(invoicesParam.length > 0){
       invoicesParam.map((i, index:number) => {
         if(index > 0){
@@ -141,17 +138,14 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
 
   const handleAmount = (value:string) => {
     let auxAmount=0;
-    // cambiar a estring amount para respetar el punto
     try {
       auxAmount=Number(value);
-      // console.log('set value => ', value);
       setAmount(value);
     } catch (error) {
       auxAmount=0;
       setAmount('0');
     }
-    // setAmount(auxAmount.toString());
-
+    
     let acum=0;
     if(invoicesDisp.length > 0){
       invoicesDisp.map((i, index:number) => {
@@ -355,14 +349,9 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
       <form className="z-10 absolute top-16 w-full max-w-xl bg-white space-y-5 p-3 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
-
-        {/* <NavCollectionStepper index={step} setIndex={handleStep} /> */}
         <p>Obteniendo proyecto...</p>
-
       </form>
     )
   }
@@ -386,12 +375,7 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
       <form className="z-10 absolute w-full max-w-xl bg-white space-y-5 p-5 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
-          {/* <HeaderForm img="/img/estimates/invoices.svg" subtitle={"Crea factura apartir de "+ estimate?.Nombre} 
-            title={"Nueva factura de " + estimate?.Nombre}
-          /> */}
           <></>
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
 

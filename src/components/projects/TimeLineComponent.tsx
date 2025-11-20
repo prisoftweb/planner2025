@@ -18,6 +18,7 @@ import { ITimeLineProject } from '@/interfaces/Projects';
 
 export default function TimelineComponent({timeLine}: {timeLine: ITimeLineProject[]}) {
 
+  console.log('costs status => ', timeLine);
   return(
     <ol className="relative border-s border-gray-400 dark:border-gray-700 ml-10">                  
         {timeLine.map((t) => (

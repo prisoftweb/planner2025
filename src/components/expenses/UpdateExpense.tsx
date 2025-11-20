@@ -22,8 +22,6 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
 
   const {currentExpense, updateCurrentExpense} = useNewExpense();
 
-console.log('Current Expense en UpdateExpense: ', currentExpense);
-
   const [costcenter, setCostCenter] = 
           useState<string>(currentExpense? 
                               typeof(currentExpense.costocenter)==='string'? currentExpense.costocenter : currentExpense.costocenter?._id || ''
@@ -209,7 +207,11 @@ console.log('Current Expense en UpdateExpense: ', currentExpense);
       
       formik.values.vat = operation.toFixed(2).toString();
       setVatValue(operation.toFixed(2).toString());
-      setTotalExpense(t.toFixed(2).toString())
+      if(isticket){
+        setTotalExpense(formik.values.amount.replace(/[$,]/g, ""))
+      }else{
+        setTotalExpense(t.toFixed(2).toString())
+      }
     } catch (error) {
       setVatValue('0');
       formik.values.vat = '0';

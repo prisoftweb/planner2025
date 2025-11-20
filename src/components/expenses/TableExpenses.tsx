@@ -17,6 +17,7 @@ import {IoMdCopy} from 'react-icons/io';
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import {Tooltip} from "@nextui-org/react";
 import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
 
 type Props = {
   data:ExpensesTable[], 
@@ -93,25 +94,6 @@ export default function TableExpenses({data, token, expenses,
 
   const queryParam= isPending? '?status=pending': '';
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
@@ -145,7 +127,7 @@ export default function TableExpenses({data, token, expenses,
           <RemoveElement id={row.original.id} name={row.original.Descripcion} 
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" />
-          <Tooltip closeDelay={0} delay={100} motionProps={props} content='Copiar' 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Copiar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
             <span>
               <IoMdCopy className="w-6 h-6 text-slate-400 hover:text-slate-600 cursor-pointer hover:bg-blue-100" onClick={() => cloneCost(row.original.id)} />
@@ -153,7 +135,7 @@ export default function TableExpenses({data, token, expenses,
           </Tooltip>
           <div className="w-20 flex gap-x-1 items-center">
             {row.original.archivos.includes('xml') && (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='XML' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='XML' 
                   placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <span>
                   <BsFiletypeXml className="w-6 h-6 text-green-500 hover:bg-blue-100" />
@@ -161,7 +143,7 @@ export default function TableExpenses({data, token, expenses,
               </Tooltip>
             )}
             {row.original.archivos.includes('pdf') && (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='PDF' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='PDF' 
                   placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <span>
                   <BsFileEarmarkPdf className="w-6 h-6 text-green-500 hover:bg-blue-100" />
@@ -169,7 +151,7 @@ export default function TableExpenses({data, token, expenses,
               </Tooltip>
             )}
             {row.original.archivos.includes('none') && (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Sin archivo' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Sin archivo' 
                   placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <span>
                   <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
@@ -573,12 +555,6 @@ export default function TableExpenses({data, token, expenses,
                           minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
                         />
             </ContainerSideNav>
-            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-            //   <Filtering showForm={handleIsFilter}  
-            //               FilterData={filterData} maxAmount={maxAmount} 
-            //               minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
-            //             />
-            // </div>
           )}
       </div>
       {view}

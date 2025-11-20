@@ -21,8 +21,6 @@ export default function AddElements({opts, descriptions, bandPlus, DeleteElement
   
   const [saved, setSaved] = useState(false);
   const [add, setAdd] = useState(false);
-  // const [ok, setOk] = useState<boolean>(true);
-  // const [message, setMessage] = useState<string>('');
   const [element, setElement] = useState<string>(opts[0].value);
 
   const onChange = (value:any) => {
@@ -38,11 +36,6 @@ export default function AddElements({opts, descriptions, bandPlus, DeleteElement
     if(element !== '' && saved){
       setAdd(true);
       updateCount();
-    }else{
-      // setOk(false);
-      // setTimeout(() => {
-      //   setOk(true);
-      // }, 2000);
     }
   }
 
@@ -50,12 +43,6 @@ export default function AddElements({opts, descriptions, bandPlus, DeleteElement
     if(element !== ''){
       setSaved(true);
       pushElement(element);
-    }else{
-      // setMessage('* Todos los campos son obligatorios!!');
-      // setOk(false);
-      // setTimeout(() => {
-      //   setOk(true);
-      // }, 2000);
     }
   }
 

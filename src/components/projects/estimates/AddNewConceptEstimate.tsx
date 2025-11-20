@@ -1,5 +1,5 @@
 'use client'
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import HeaderForm from "@/components/HeaderForm"
 import Chip from "@/components/providers/Chip"
 import { OneProjectMin } from "@/interfaces/Projects"
@@ -14,6 +14,8 @@ import { getConceptsMin, } from "@/app/api/routeEstimates"
 import { IConceptEstimateMin, IConceptEstimate, PriceConcept, IEstimate } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
 import DonutChartComponent from "../dashboard/DonutChartComponent"
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
+import ContainerSideNav from "@/components/ContainerSideNav"
 
 interface OptionsDashboard {
   label: string,
@@ -22,7 +24,7 @@ interface OptionsDashboard {
 
 export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
     idEstimate, conceptsDataChart}: 
-  {showForm:Function, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
+  {showForm:(value: boolean) => void, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
     idEstimate:IEstimate, conceptsDataChart:IConceptEstimate[]}) {
   // const refRequest = useRef(true);
 
@@ -146,15 +148,16 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
   
   return(
-    <>
+    <ContainerSideNav width="w-full max-w-xl">
       <form className="z-10 absolute w-full max-w-xl bg-white space-y-5 p-5 right-0"
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
           <HeaderForm img="/img/estimates/concepts.svg" subtitle="Modifica y agrega mas conceptos a una estimacion existente" 
             title="Agregar conceptos a estimacion"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <div className="bg-white p-3">
@@ -193,6 +196,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
         <NavStepperConceptEstimate changeTab={handleIndexStepper} index={indexStepper} />
         {viewComponent}  
       </form>
-    </>
+    </ContainerSideNav>
   )
 }

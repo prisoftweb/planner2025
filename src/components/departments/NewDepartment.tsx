@@ -2,7 +2,6 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -27,15 +26,15 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
   const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
   const refRequest = useRef(true);
 
-  const [heightPage, setHeightPage] = useState<number>(900);
+  // const [heightPage, setHeightPage] = useState<number>(900);
   
-  const handleResize = () => {
-    setHeightPage(document.body.offsetHeight);
-  }
+  // const handleResize = () => {
+  //   setHeightPage(document.body.offsetHeight);
+  // }
   
   useEffect (() => {
-    window.addEventListener("resize", handleResize, false);
-    setHeightPage(document.body.offsetHeight - 70);
+    // window.addEventListener("resize", handleResize, false);
+    // setHeightPage(document.body.offsetHeight - 70);
     
     if(typeof(dept) !== 'string'){
       OptionsCompany.map((optC) => {
@@ -45,7 +44,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
         }
       })
     }
-    return () => window.removeEventListener('scroll', handleResize);
+    // return () => window.removeEventListener('scroll', handleResize);
   }, [])
   
   const formik = useFormik({
@@ -115,15 +114,12 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
   return(
     <>
       <form className={`z-10 h-full absolute bg-white space-y-5 p-5 right-0`}
-        // style={{height: `${heightPage}px`}}
         onSubmit={formik.handleSubmit}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/department.svg" subtitle="Agregar nuevos departamentos de compañias" 
             title="Agregar nuevo departamento"
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
         

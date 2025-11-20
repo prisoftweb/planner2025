@@ -9,14 +9,7 @@ import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollection
 
 export default function DownloadInvoicesByProjectPDF({invoices, project, resumenInvoice, token}: 
   {invoices: IInvoiceByProject[], project:OneProjectMin, resumenInvoice:ITotalInvoiceResumen, token:string}) {
-  // const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MARZO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-  // const date = new Date(report.date);
-
-  // const dateIni = dates[0]?.minDate? new Date(dates[0].minDate): new Date();
-  // const dateEnd = dates[0]?.maxDate? new Date(dates[0].maxDate): new Date();
-
-  // const bandMonth = dateIni.getMonth() === dateEnd.getMonth()
-
+  
   const [totalPaymentsResumen, setTotalPaymentsResumen] = useState<ITotalResumentPayment>();
 
   useEffect(() => {
@@ -31,8 +24,6 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
   }, []);
 
   const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-  console.log('order inv => ', orderInvoices);
 
   return(
     <Document>
@@ -72,8 +63,6 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
                 <Text style={{color:'gray', margin: '2px'}}>Monto total del proyecto:</Text>
                 <Text style={{margin: '2px'}}>{CurrencyFormatter({
                   currency: 'MXN',
-                  // value: project.amount
-                  // value: project.amount * 1.16
                   value: project.amountotal || 0
                 })}</Text>
               </View>
@@ -147,8 +136,6 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
-                // value: (i.lastpayment?.unchargedbalanceamount >= 0 && i.lastpayment?.unchargedbalanceamount <= 100? 
-                //               i.cost.total: i.cost.total - i.lastpayment?.previousbalanceamount) || i.cost.total
                 value: i.lastpayment?.charged || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({

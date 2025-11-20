@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string }}){
   ]);
   
   if(typeof(client) === "string")
-    return <h1 className="text-center text-red-500">{client}</h1>
+    return <h1 className="text-center text-red-500">{client} client</h1>
 
   const clientCookie = cookieStore.get('clients')?.value;
   let permisionsClient: Resource2 | undefined;
@@ -60,7 +60,7 @@ export default async function Page({ params }: { params: { id: string }}){
     return (
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">{clients}</h1>
+        <h1 className="text-center text-red-500">{clients} clients</h1>
       </>
     )
 
@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">{tags}</h1>
+        <h1 className="text-center text-red-500">{tags} tags</h1>
       </>
     )
   }

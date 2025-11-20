@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { getCostByReportMin } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
 import { showToastMessageError } from "../Alert";
+import { propsTooltip } from "@/libs/animations";
 
 export default function ProfileReport({report, send, token, user, id, dates, isSendReport=true}: 
   {report:Report, send:Function, id:string, token: string, user:UsrBack, 
@@ -30,12 +31,10 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
       try {
         costsRep = await getCostByReportMin(id, token);
         if(typeof(costsRep)==='string'){
-          // return <h1 className="text-center text-lg text-red-500">{costsRep}</h1>
           showToastMessageError(costsRep);
           return;
         }
       } catch (error) {
-        // return <h1 className="text-center text-lg text-red-500">Error al consultar los costos del reporte!</h1>
         showToastMessageError('Error al consultar los costos del reporte!');
         return;
       }
@@ -43,29 +42,6 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
     }
     fetchCosts();
   }, []);
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
-  console.log('costs rep => ', costsReport);
-  console.log('cost rep leng => ', costsReport.length);
-  console.log('rep min => ', oneReport);
 
   return(
     <>
@@ -154,12 +130,12 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
                   <PDFDownloadLink document={<ReportPDF report={oneReport} costs={costsReport} />} fileName={oneReport.name} >
                     {({loading, url, error, blob}) => 
                       loading? (
-                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                             placement="right" className="text-blue-500 bg-white">
                           <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
                         </Tooltip>
                       ) : (
-                        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                             placement="right" className="text-blue-500 bg-white">
                           <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
                         </Tooltip>
@@ -168,7 +144,7 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
                 )}
                 {typeof(user.department)!== 'string' && (user.department.name.toLowerCase().includes('soporte') || 
                     user.department.name.toLowerCase().includes('direccion') || user.department.name.toLowerCase().includes('admin')) && oneReport && (
-                  <Tooltip closeDelay={0} delay={100} motionProps={props} content='Anexo' 
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Anexo' 
                       placement="top" className="text-blue-500 bg-white">
                     <PDFDownloadLink document={<AttachedPDF report={oneReport} dates={dates} />} 
                           fileName={`FF-ANEXO-1-${oneReport.name}`} >

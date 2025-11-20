@@ -7,8 +7,7 @@ import { useNewExpense } from "@/app/store/newExpense"
 import StatusCostComponent from "./StatusCostComponent"
 
 export default function ExpenseStatusClient({token, user, id, expense, isHistory=false}: 
-                            { token:string, id:string, user:string, 
-                              expense:OneExpense, isHistory?:boolean}){
+  { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {

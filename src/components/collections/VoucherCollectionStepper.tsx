@@ -1,5 +1,5 @@
 'use client'
-import { useRef, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import Button from "@/components/Button";
 import Label from "@/components/Label";
 import { useDropzone} from 'react-dropzone';
@@ -7,9 +7,6 @@ import { useDropzone} from 'react-dropzone';
 export default function VoucherCollectionStepper({NextStep, setVoucher, voucher}: 
   {NextStep:Function, setVoucher:Function, voucher:File | undefined}) {
 
-  // const [file, setFile] = useState<File>();
-  const refRequest = useRef(true);
-  
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
     const file = new FileReader;
     file.readAsDataURL(acceptedFiles[0])
@@ -20,7 +17,6 @@ export default function VoucherCollectionStepper({NextStep, setVoucher, voucher}
   });
 
   useEffect(() => {
-    // console.log(acceptedFiles);
     if ( typeof acceptedFiles[0] !== 'undefined' ){
       setVoucher(acceptedFiles[0]);
     }else{
@@ -29,9 +25,6 @@ export default function VoucherCollectionStepper({NextStep, setVoucher, voucher}
   },[acceptedFiles]);
 
   const Next = () => {
-    // if(file){
-    //   setVoucher(file);
-    // }
     NextStep(2);
   }
 

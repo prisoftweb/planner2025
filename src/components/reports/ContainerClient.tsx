@@ -6,7 +6,6 @@ import TableReports from "./TableReports"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import { ReportTable, ReportParse } from "@/interfaces/Reports"
-import { GiSettingsKnobs } from "react-icons/gi"
 import TableHistoryReports from "./TableHistoryReports"
 import { useOptionsReports } from "@/app/store/reportsStore"
 import { UsrBack } from "@/interfaces/User"
@@ -42,8 +41,6 @@ export default function ContainerClient({token, optCompanies, optDepartments,
   const [dataTable, setDataTable] = useState<ReportTable[]>(data);
 
   const {reportsStore, updateReportStore, haveNewReport, updateHaveNewReport} = useOptionsReports();
-
-  console.log('reps => ', reports);
 
   useEffect(() => {
     updateReportStore(reports);
@@ -107,9 +104,6 @@ export default function ContainerClient({token, optCompanies, optDepartments,
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <Header title="Informes" placeHolder="Buscar Informe.." >
         <div className="flex gap-x-4 items-center">
-          {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
-            className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-          /> */}
           <TooltipFilterIcon handleFilter={handleFilter} />
           {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
                             projects={optProjects} token={token} condition={condition} user={user._id}

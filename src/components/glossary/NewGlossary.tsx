@@ -13,6 +13,7 @@ import { CreateGlossary, UpdateGlossary } from "@/app/api/routeGlossary"
 import { GlossaryTable, Glossary } from "@/interfaces/Glossary"
 import { useRef } from "react"
 import { useGlossariesStore } from "@/app/store/glossaryStore"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type glossaryProps={
   showForm:Function, 
@@ -120,8 +121,9 @@ export default function NewGlossary({showForm, token, glossary}: glossaryProps )
             <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevos status, categorys, types" 
               title="Agregar nuevo glosario"
             />
-            <XMarkIcon className="w-6 h-6 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+            {/* <XMarkIcon className="w-6 h-6 text-slate-500
+              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+            <TooltipCloseIcon handleClose={() => showForm(false)} />
           </div>
           
           <div>

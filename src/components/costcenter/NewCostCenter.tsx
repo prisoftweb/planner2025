@@ -2,7 +2,6 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -129,9 +128,7 @@ export default function NewCostCenter({showForm, token, costCenter}: NewCostCent
     if(indexDeleteConcept !== -1){
       const arrConcepts = concetpsCostCenter;
       arrConcepts.splice(indexDeleteConcept, 1);
-      console.log('res => ', arrConcepts.length);
       setConceptsCostCenter(arrConcepts);
-      console.log(arrConcepts);
     }
   }, [indexDeleteConcept]);
   
@@ -232,8 +229,6 @@ export default function NewCostCenter({showForm, token, costCenter}: NewCostCent
           <HeaderForm img="/img/company.svg" subtitle="Ingresa nueva categoria y concepto" 
             title="Nuevo centro de costo"
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
         

@@ -2,12 +2,11 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import UploadImage from "../UploadImage"
@@ -20,18 +19,18 @@ export default function NewCompany({showForm, token}:
   const [file, setFile] = useState<any>();
   const [phoneNumber, setPhoneNumber] = useState('');
   
-  const [heightPage, setHeightPage] = useState<number>(900);
+  // const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);
   
-  const handleResize = () => {
-    setHeightPage(document.body.offsetHeight);
-  }
+  // const handleResize = () => {
+  //   setHeightPage(document.body.offsetHeight);
+  // }
   
-  useEffect (() => {
-    window.addEventListener("resize", handleResize, false);
-    setHeightPage(document.body.offsetHeight - 70);
-    return () => window.removeEventListener('scroll', handleResize);
-  }, [])
+  // useEffect (() => {
+  //   window.addEventListener("resize", handleResize, false);
+  //   setHeightPage(document.body.offsetHeight - 70);
+  //   return () => window.removeEventListener('scroll', handleResize);
+  // }, [])
 
   const formik = useFormik({
     initialValues: {
@@ -117,14 +116,11 @@ export default function NewCompany({showForm, token}:
     <>
       <form className="z-10 absolute bg-white space-y-5 p-5 right-0 h-full"
         onSubmit={formik.handleSubmit}
-        // style={{height: `${heightPage}px`}}
       >
         <div className="flex justify-between">
           <HeaderForm img="/img/company.svg" subtitle="Ingresa los datos de la nueva empresa" 
             title="Nueva compañia"
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
           <TooltipCloseIcon handleClose={showForm} />
         </div>
         

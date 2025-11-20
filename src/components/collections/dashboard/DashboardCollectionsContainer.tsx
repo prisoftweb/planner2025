@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
@@ -98,11 +98,8 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const [totalCollectionsClients, setTotalCollectionsClients]=useState<ITotalInvoiceByClient[]>(totalClients);
   const [totalPaymentByDate, setTotalPaymentByDate]=useState<ITotalPaymentByDateAndStatus[]>(totalPay);
   const [totalPending, setTotalPending]=useState<ITotalPendingByDateAndStatus[]>(totalPen);
-  // const [widthPage, setWidthPage] = useState<number>(900);
-  // const [porCobrar, setPorCobrar]=useState<IAmountTotalGuaranteesByDateAndStatus>(resC);
   const [totalAccountByPrjRes, setTotalAccountByPrjRes]=useState<IAllTOTALPENDINGPAYMENTSByProject[]>(toalPrjRes);
   const [totalAccountByCliRes, setTotalAccountByCliRes]=useState<ITotalAccountReceivablesByClientResumen[]>(toalCliRes);
-  // const [totalEstimatesPending, setTotalEstimatesPending] = useState<IAllsProjectsMINAndNEConditionANDNoExistsEstimate[]>(totalEstimatesPen);
   const [totalEstimatesPendingCli, setTotalEstimatesPendingCli] = useState<ITotalEstimatesPendingByClient[]>(totalEstimatesCli);
   const [totalPendingBillingPjr, setTotalPendingBillingPjr] = useState<IAllTOTALPENDINGBillingByProject[]>(totalPendingBillingByPrj);
 
@@ -110,24 +107,6 @@ export default function DashboardCollectionsContainer({token, user, totalClients
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
-
-  // const handleResize = () => {
-  //   setWidthPage(Math.max(
-  //     document.body.scrollHeight, document.documentElement.scrollHeight,
-  //     document.body.offsetHeight, document.documentElement.offsetHeight,
-  //     document.body.clientHeight, document.documentElement.clientHeight
-  //   ));
-  // }
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", handleResize, false);
-  //   setWidthPage(Math.max(
-  //     document.body.scrollWidth, document.documentElement.scrollWidth,
-  //     document.body.offsetWidth, document.documentElement.offsetWidth,
-  //     document.body.clientWidth, document.documentElement.clientWidth
-  //   ));
-  //   return () => window.removeEventListener('scroll', handleResize);
-  // }, []);
 
   const handleDate = (dateI: Date, dateF: Date) => {
     updateDashboard(getDate(dateI), getDate(dateF));
@@ -173,23 +152,11 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       setTotalPending(totPen);
     }
 
-    // if(typeof(resCobrar)==='string'){
-    //   showToastMessageError(resCobrar);
-    // }else{
-    //   setPorCobrar(resCobrar[0]);
-    // }
-
     if(typeof(totalCliRes)==='string'){
       showToastMessageError(totalCliRes);
     }else{
       setTotalAccountByCliRes(totalCliRes);
     }
-
-    // if(typeof(totEstPen)==='string'){
-    //   showToastMessageError(totEstPen);
-    // }else{
-    //   setTotalEstimatesPending(totEstPen);
-    // }
 
     if(typeof(totEstPenCli)==='string'){
       showToastMessageError(totEstPenCli);

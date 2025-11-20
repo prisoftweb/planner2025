@@ -14,6 +14,7 @@ import SearchInTable from "@/components/SearchInTable";
 import TableStatus from "./TableStatuses";
 import ButtonNew from "@/components/status/ButtonNew";
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
 
 export default function CatalogClient({catalogs, token, descGlossaries, glosariesOptions}: 
     {token:string, catalogs:Catalog[], glosariesOptions:Options[], descGlossaries:Options[] }) {
@@ -49,7 +50,6 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
     let statuses = '';
     let arrStatuses: string[] = [];
     let arrColors: string[] = [];
-    console.log('cat catclient => ', cat);
     cat.condition?.map((cond) => {
       statuses += cond.glossary.name + ', ';
       arrStatuses.push(cond.glossary.name);
@@ -77,25 +77,6 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
     })
   });
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   return(
     <>
       <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">  
@@ -104,7 +85,7 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
           <div className="">
             <div className="sm:flex gap-x-3 md:justify-between flex-wrap md:flex-nowrap items-center">
               <div className="flex items-center">
-                <Tooltip closeDelay={0} delay={100} motionProps={props} content='Regresar' 
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
                     placement="right" className="text-black bg-white rounded-md border border-slate-400">
                   <Link href={'/'}>
                     <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-slate-100" >

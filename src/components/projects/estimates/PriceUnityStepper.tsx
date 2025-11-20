@@ -7,7 +7,8 @@ import RemoveElement from "@/components/RemoveElement";
 import { insertPriceInConceptEstimate } from "@/app/api/routeEstimates";
 import { showToastMessageError } from "@/components/Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import {IoIosSave} from 'react-icons/io';
+// import {IoIosSave} from 'react-icons/io';
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 type Props = { 
   token:string, 
@@ -155,7 +156,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
         </div>
 
         <Label htmlFor="concept"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Precio</p></Label>
-        <div className="flex justify-between gap-x-2">
+        <div className="flex justify-between gap-x-2 items-center">
           <CurrencyInput
             id="price"
             name="price"
@@ -170,8 +171,10 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
               setCost('0');
             }}}
           />
-          <IoIosSave className="h6 w-6 text-slate-900 hover:text-slate-600" 
-            onClick={addPrice} />
+          <PlusCircleIcon className="w-8 h-8 text-green-500 cursor-pointer hover:text-green-400" 
+                  onClick={addPrice} />
+          {/* <IoIosSave className="h6 w-6 text-slate-900 hover:text-slate-600" 
+            onClick={addPrice} /> */}
         </div>
         {bandPrice && (
           <p className="text-red-500">El precio unitario es obligatorio!!!</p>

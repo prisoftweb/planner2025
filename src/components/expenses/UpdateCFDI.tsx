@@ -7,7 +7,7 @@ import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { CFDIValidation } from "@/interfaces/Expense";
 
 export default function UpdateCFDI({id, token, expense, isHistory}: 
-                  {token: string, id:string, expense:OneExpense, isHistory:boolean}){
+  {token: string, id:string, expense:OneExpense, isHistory:boolean}){
   
   const [file, setFile] = useState<File | null>();
   const [urlFile, setUrlFile] = useState<string>();

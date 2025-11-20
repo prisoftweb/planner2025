@@ -1,7 +1,7 @@
 'use client'
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
-import { IQuotationTable, IQuotationMin } from "@/interfaces/Quotations";
+import { IQuotationTable } from "@/interfaces/Quotations";
 import RemoveElement from "../RemoveElement";
 import Chip from "../providers/Chip";
 import { CurrencyFormatter } from "@/app/functions/Globals";

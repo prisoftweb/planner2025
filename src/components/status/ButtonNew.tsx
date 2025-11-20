@@ -7,6 +7,7 @@ import { InsertCategoryInCatalog, InsertConditionInCatalog, InsertTypeInCatalog 
 import { FireIcon, TagIcon, Battery50Icon } from "@heroicons/react/24/solid";
 import {Tooltip} from "@nextui-org/react";
 import ContainerSideNav from "../ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
 
 type Props = {
   token:string, 
@@ -21,25 +22,6 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
   const [newType, setNewType] = useState<boolean>(false);
   const [newCategory, setNewCategory] = useState<boolean>(false);
 
-  let props = {
-    variants: {
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.1,
-        ease: "easeIn",
-      }
-    },
-    enter: {
-      opacity: 1,
-      transition: {
-        duration: 0.15,
-        ease: "easeOut",
-      }
-    },
-    },
-  }
-
   let button;
 
   switch(opt){
@@ -47,7 +29,7 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
       button = (
         <>
           <div className=" hidden sm:block"><Button type="button" onClick={() => setNewType(true)}>Nuevo tipo</Button></div>
-          <Tooltip closeDelay={0} delay={100} motionProps={props} 
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
             className="text-blue-500 bg-white rounded-md border border-slate-400" content='Estatus'
             placement="right"  
           >
@@ -83,11 +65,6 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
                   catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
                   glosariesOptions={glosariesOptions} insertFunction={InsertTypeInCatalog} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <NewStatus showForm={setNewType} token={token} opt={opt}
-        //           catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
-        //           glosariesOptions={glosariesOptions} insertFunction={InsertTypeInCatalog} />
-        // </div>
       )}
       {newCategory && (
         <ContainerSideNav width="w-full max-w-sm">
@@ -95,11 +72,6 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
                   catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
                   glosariesOptions={glosariesOptions} insertFunction={InsertCategoryInCatalog} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <NewStatus showForm={setNewCategory} token={token} opt={opt}
-        //           catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
-        //           glosariesOptions={glosariesOptions} insertFunction={InsertCategoryInCatalog} />
-        // </div>
       )}
       {newStatus && (
         <div className="fixed inset-0 bg-black bg-opacity-40  z-40">

@@ -1,7 +1,7 @@
 'use client'
 import HeaderForm from "../HeaderForm"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect } from "react"
@@ -11,9 +11,10 @@ import AddElements from "../roles/AddElements"
 import { useRef } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog } from "@/interfaces/Catalogs"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type Props = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   catalogOptions:Options[], 
   glosariesOptions:Options[], 
@@ -192,8 +193,9 @@ export default function NewStatus({showForm, token, catalogOptions,
           <HeaderForm img="/img/catalog.svg" subtitle="Agregar nuevos status, categorys, types" 
             title={`Agregar ${opt===2? 'nueva categoria': (opt===3? 'nuevo status' : 'nuevo tipo')}`}
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         <div>
           <Label htmlFor="catalogs"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Catalogo</p></Label>

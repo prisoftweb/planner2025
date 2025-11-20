@@ -1,11 +1,11 @@
 'use client'
 
 import { useState, useEffect } from "react"
-import { showToastMessage, showToastMessageError } from "@/components/Alert";
+import { showToastMessageError } from "@/components/Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "@/components/providers/Chip";
-import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
-import { ICollectionMin, ITableCollection, ITotalAmountCollections } from "@/interfaces/Collections";
+import { getCollectionsMin, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
+import { ICollectionMin, ITotalAmountCollections } from "@/interfaces/Collections";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
@@ -19,9 +19,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
 
   const [collections, setCollections] = useState<ICollectionMin[]>([]);
   const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
-  // const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
-  // const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
   const [statuses, setStatuses]=useState<string[]>([]);
   
@@ -59,9 +57,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
         conditionAccountsReceivable:['67d20cb359865f640af92638'],
       }
 
-      // const res = await getCollectionsMin(token);
-      // const rest = await getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data);
-
       const [res, rest] = await Promise.all([
         getCollectionsMin(token),
         getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data)
@@ -84,21 +79,8 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
     fetch();
   }, []);
 
-  // const updateCollections = async() => {
-  //   const res = await getCollectionsMin(token);
-  //   if(typeof(res)==='string'){
-  //     showToastMessageError(res);
-  //   }else{
-  //     setCollections(res);
-  //     setIsFilter(false);
-  //     // setFilteredCollections(res);
-  //   }
-  // }
-
   const handleDate = (dateI: Date, dateF: Date) => {
     handleFilter(dateI, dateF, statuses);
-    
-    //actualizar total con el rango de fechas
   }
 
   const addStatus = (status:string) => {
@@ -170,143 +152,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
     )
   }
 
-  // const delCollection = (id:string) => {
-  //   showToastMessage('Cobro eliminado satisfactoriamente!!!');
-  //   setTimeout(() => {
-  //     window.location.reload();
-  //   }, 2000);
-  // }
-
-  // const confirmCollection = async( id: string) => {
-  //   const data = {
-  //     condition: [
-  //       {
-  //         glossary: "67e318171945c0b1e4c9bc72",
-  //         user
-  //       }
-  //     ]
-  //   }
-  //   const res = await insertConditionInCollection(token, data, id);
-  //   if(typeof(res)==='string'){
-  //     showToastMessageError(res);
-  //     setTimeout(() => {
-  //       window.location.reload();
-  //     }, 1500);
-  //   }else{
-  //     showToastMessage('Cobro actualizado satisfactoriamente!!!');
-  //     updateCollections();
-  //   }
-  // }
-
-  // const columnHelper = createColumnHelper<ITableCollection>();
-  
-  // const columns = [
-  //   columnHelper.accessor(row => row.id, {
-  //     id: 'Accion',
-  //     cell: ({row}) => (
-  //       <div className="flex gap-x-2">
-  //         <input type="checkbox" 
-  //           checked={row.getIsSelected()}
-  //           onChange={row.getToggleSelectedHandler()}
-  //         />
-  //         {/* <RemoveElement id={`${row.original.id}`} name={row.original.Referencia} remove={deleteCollection} 
-  //                     removeElement={delCollection} token={token} /> */}
-  //       </div>
-  //     ),
-  //     size: 300,
-  //     enableSorting:false,
-  //     header: ({table}:any) => (
-  //       // <input type="checkbox"
-  //       //   checked={table.getIsAllRowsSelected()}
-  //       //   onClick={()=> {
-  //       //     table.toggleAllRowsSelected(!table.getIsAllRowsSelected())
-  //       //   }}
-  //       // />
-  //       <p>Accion</p>
-  //     )
-  //   }),
-  //   columnHelper.accessor('Referencia', {
-  //     header: 'Referencia',
-  //     id: 'referencia',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace( `/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.Referencia}</p>
-  //     ),
-  //   }),
-  //   columnHelper.accessor('Fecha', {
-  //     header: 'Fecha',
-  //     id: 'fecha',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.Fecha?.substring(0, 10)}</p>
-  //     ),
-  //   }),
-  //   columnHelper.accessor('concept', {
-  //     header: 'Concepto',
-  //     id: 'concepto',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.concept}</p>
-  //     ),
-  //   }),
-  //   // columnHelper.accessor('confirm', {
-  //   //   header: 'Confirmado',
-  //   //   id: 'confirmado',
-  //   //   cell: ({row}) => (
-  //   //     <Toogle value={row.original.confirm} id={row.original.id} onClick={confirmCollection} />
-  //   //   ),
-  //   // }),
-  //   columnHelper.accessor('Facturas', {
-  //     header: 'Facturas',
-  //     id: 'facturas',
-  //     cell: ({row}) => (
-  //       <div>
-  //         {row.original.Facturas.map((f) => (
-  //           <Chip label={f.invoices.folio} color={'#466'} key={f._id} />
-  //         ))}
-  //       </div>
-  //     )
-  //   }),
-  //   columnHelper.accessor('status', {
-  //     header: 'Estatus',
-  //     id: 'estatus',
-  //     cell: ({row}) => (
-  //       <Chip label={row.original.status.name} color={row.original.status.color} />
-  //     ),
-  //   }),
-  //   columnHelper.accessor('Cuenta', {
-  //     header: 'Cuenta',
-  //     id: 'cuenta',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{row.original.Cuenta}</p>
-  //     ),
-  //   }),
-  //   columnHelper.accessor('Importe', {
-  //     header: 'Importe depositado',
-  //     id: 'importe',
-  //     cell: ({row}) => (
-  //       <p className="cursor-pointer"
-  //       onClick={() => window.location.replace(`/projects/estimates/${row.original.Facturas[0].project._id}/collections/${row.original.id}?page=collectionsHistory`)}
-  //       >{CurrencyFormatter({
-  //         currency: 'MXN',
-  //         value: row.original.Importe
-  //       })}</p>
-  //     ),
-  //   }),
-  // ]
-
-  // let data;
-  // if(isFilter){
-  //   data = CollectionDataToTableData(filteredCollections);
-  // }else{
-  //   data = CollectionDataToTableData(collections);
-  // }
-
   let data
   if(isFilter){
     if(search.length>0){
@@ -327,7 +172,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                 <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
                 <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
                 <div>
-                  {/* <Label htmlFor='date'>Fecha</Label> */}
                   <DateRangePicker 
                     className='mt-2'
                     placeholder='Seleccione un rango de fechas'
@@ -370,12 +214,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
           <div className="">
             <SearchInTable placeH={"Buscar cobro.."} />
           </div>
-          {/* <div className={''}>
-            <div className="flex gap-x-4 gap-y-4 justify-end items-center">
-              {widthPage < 1080 && filterElemnts}
-              <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
-            </div>
-          </div> */}
         </div>
       </div>
       {widthPage > 1080 && filterElemnts}
@@ -390,15 +228,12 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                 bg-white`}
-              // onClick={() => handleProjectSel(prj._id, prj.title)}
             >
               <div className="flex items-center w-full ">
                 <div className="grid mr-4 place-items-center gap-x-1 gap-y-2">
                   <div className="flex gap-x-1 items-end">
                     <img alt="responsable" src={ '/img/projects/default.svg'}
                       className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
-                    {/* <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
-                      removeElement={delCollection} token={token} /> */}
                   </div>
                   <Chip label={col.condition.name} color={col.condition.color} darktext={col.condition?.darktext?? false} />
                 </div>
@@ -437,10 +272,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
           ))}
         </nav>
       </div>
-      {/* <Table columns={columns} data={data} placeH="buscar cobro" /> */}
-      {/* {showNewCollection && <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-                                user={user} updateCollections={updateCollections} />} */}
-      {/* {showIsFilter && <FilteringCollectionsComponent FilterData={filterData} maxAmount={maxAmount} showForm={handleShowIsFilter} token={token} />} */}
     </>
   )
 }
@@ -448,7 +279,6 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
 export const Card = ({amount, title}: {title:string, amount:number}) => {
   return(
     <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
-      {/* {children} */}
       <div>
         <p className="text-slate-600">{title}</p>
         <p className="text-xl font-bold">{CurrencyFormatter({
@@ -456,31 +286,6 @@ export const Card = ({amount, title}: {title:string, amount:number}) => {
           value: amount
         })}</p>
       </div>
-    </div>
-  )
-}
-
-const Toogle = ({value, onClick, id}: 
-  {value:boolean, id:string, onClick: (id:string) => void}) => {
-
-  const [checked, setChecked] = useState(value);
-  
-  return(
-    <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-      <input 
-        // checked={row.original.confirm} 
-        checked={checked}
-        onClick={() => {onClick(id); setChecked(true);}} id={id} type="checkbox"
-        disabled={checked}
-        className="absolute w-8 h-4 transition-colors duration-300 rounded-full 
-          appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 
-          peer-checked:border-green-500 peer-checked:before:bg-green-500
-          border border-slate-300" />
-      <label htmlFor={id.toString()}
-        className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">
-        <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-          data-ripple-dark="true"></div>
-      </label>
     </div>
   )
 }
@@ -500,12 +305,6 @@ function getDate(date: Date){
 const ChipStatus = ({ addStatus, id, removeStatus, title}: 
   {title:string, id:string, addStatus:Function, removeStatus:Function}) => {
   const [active, setActive] = useState<boolean>(false);
-
-  // const view = active? 
-  //                 <ChipUi className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>
-  //                   {title}
-  //                 </ChipUi>: 
-  //                 <ChipUi color="danger" onClick={() => {addStatus(id); setActive(true)}}>{title}</ChipUi>
 
   const view = active? 
                   <ChipMui label={title} className="p-3" color="success" onClick={() => {removeStatus(id); setActive(false)}}>
