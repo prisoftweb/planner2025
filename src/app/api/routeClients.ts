@@ -236,3 +236,87 @@ export async function getProjectsByClient(auth_token:string, id:string) {
     return 'Ocurrio un problema al consultar proyectos del cliente!!';
   }
 }
+
+export async function getAllTOTALsProjectsByCLIENT(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllTOTALsProjectsByCLIENT/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.stats[0];
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+  }
+}
+
+export async function getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME/${id}/PAGADA/CANCELADA`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.stats[0];
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+  }
+}
+
+export async function getAllTOTALEstimatesPendingByOneClientMINRESUME(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALEstimatesPendingByOneClientMINRESUME/${id}`;
+  // console.log('url pend bil => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    // console.log('res fact => ', res);
+    if(res.status===200){
+      if(res.data.data.arrStats.length>0){
+        return res.data.data.arrStats[0];
+      }else{
+        const r={
+          client: "",
+          quantity: 0,
+          c: "",
+          type: "PENDIENTE DE FACTURAR",
+          pendingEstimated: 0
+        };
+        return r;
+      }
+    } 
+    return res.statusText;
+  } catch (error) {
+    console.log('error fact => ', error);
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+  }
+}
+
+export async function getAllTOTALPENDINGPaymentsByCLIENTMIN(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPENDINGPaymentsByCLIENTMIN/${id}/678ed05cc5f08e8a0f36d5e1/678ecf6ec5f08e8a0f36d5dd`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+  }
+}

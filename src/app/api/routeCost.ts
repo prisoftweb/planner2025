@@ -147,6 +147,27 @@ export async function getAllCostsByUserAdmin(auth_token:string){
   }
 }
 
+export async function getAllCostsAndNE3ConditionsMIN(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsAndNE3ConditionsMIN/FINALIZADO/PAGADOS/NO PAGADO`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    // console.log('res cost by user admin => ', res);
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      // console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    // console.log('catch ', error);
+    return 'Error al consultar costos!!';
+  }
+}
+
 export async function GetCostsLV(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsLV`;
   try {
@@ -740,7 +761,7 @@ export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart
 
 export async function getTimeLineCost(auth_token:string, cost:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getConditionsByCostMIN/${cost}`;
-  console.log('url costs => ', url);
+  
   try {
     const res = await axios.get(url, {
       headers: {
@@ -748,7 +769,6 @@ export async function getTimeLineCost(auth_token:string, cost:string) {
         'Content-Type': 'application/json'
       }
     })
-    console.log('res => ', res.data.data.data);
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
@@ -756,5 +776,26 @@ export async function getTimeLineCost(auth_token:string, cost:string) {
       return error.response?.data.message || error.message
     }
     return 'Error al consultar linea de tiempo del costo!!';
+  }
+}
+
+export async function findCostExistsInBD(auth_token:string, folio:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/findCostExistsInBD/${folio}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    // console.log('res cost by user admin => ', res);
+    if(res.status===200) return res.data.data.data
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      // console.log('if catch ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    // console.log('catch ', error);
+    return 'Error al consultar costos!!';
   }
 }

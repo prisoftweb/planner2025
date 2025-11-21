@@ -22,22 +22,23 @@ import SelectReact from "../SelectReact";
 export default function NewExpenseContainer({token, showForm, user, }: 
                             {token:string, showForm:Function, user:UsrBack, }){
   
+  const {vats, projects, conditions, categories} = useOptionsExpense();
+  
   const [heightPage, setHeightPage] = useState<number>(900);
   const [idLabour, setIdLabour] = useState<string>('');
   const [idTicket, setIdTicket] = useState<string>('');
-  const [updateCat, setUpdateCat]=useState<string>('66e0657bc6d95ffb8aa0ec9a');
+  const [updateCat, setUpdateCat]=useState<string>(categories.length>0?categories[0].value:'');
 
   const {indexStepper, isDeductible, project, updateProject, 
     report, isPettyCash, condition, category, updateReport, updateIndexStepper, 
     updateCondition, updateCategory} = useNewExpense();
-
-  const {vats, projects, conditions, categories} = useOptionsExpense();
 
   const handleUpdateCategory = (value:string) => {
     // setUpdateCat(value);
   }
 
   const handleCategory = (value:string) => {
+    console.log('handleCategory => ', value);
     updateCategory(value);
     setUpdateCat(value);
   }
@@ -144,7 +145,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
     }
   }else{
     if(indexStepper || indexStepper>=0){
-      console.log('index is ded => ', indexStepper);
+      // console.log('index is ded => ', indexStepper);
       stepform = indexStepper===1? (
         <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
       ): indexStepper===2? (

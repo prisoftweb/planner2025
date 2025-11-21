@@ -163,25 +163,6 @@ export default function TableProjects({data, token, projects, optCategories,
   // ]
   let columns: any[] = [];
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   let rol = user.rol?.name || '';
   if(rol.toLowerCase().includes('residente')){
     columns = [

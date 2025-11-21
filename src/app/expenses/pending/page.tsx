@@ -3,7 +3,7 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import ContainerClient from "@/components/expenses/ContainerClient";
-import { getAllCostsByUserAdmin, getAllCostsByUserNormal } from "@/app/api/routeCost";
+import { getAllCostsByUserAdmin, getAllCostsByUserNormal, getAllCostsAndNE3ConditionsMIN } from "@/app/api/routeCost";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 
 export default async function Page() {
@@ -18,9 +18,11 @@ export default async function Page() {
   
   let expenses: Expense[] = [];
   if(role.toLowerCase().includes('admin')){
-    expenses = await getAllCostsByUserAdmin(token);
+    // expenses = await getAllCostsByUserAdmin(token);
+    expenses = await getAllCostsAndNE3ConditionsMIN(token);
   }else{
     expenses = await getAllCostsByUserNormal(token, user._id);
+    // expenses = await getAllCostsAndNE3ConditionsMIN(token);
   }
   
   if(typeof(expenses)=== 'string')

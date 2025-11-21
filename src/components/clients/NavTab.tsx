@@ -48,7 +48,7 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
                     </Link>
                     <Link href={`/clients/${idCli}/wallet`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cartera'>
+                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
                           ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
@@ -75,7 +75,7 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
         </Link>
         <Link href={`/clients/${idCli}/wallet`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Cartera</p>
+            <p className="text-blue-600">Cobranza</p>
           </div>
         </Link>
       </div>

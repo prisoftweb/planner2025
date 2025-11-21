@@ -2,7 +2,8 @@
 
 import Contacts from "./Contacts"
 import { useState, useEffect } from "react"
-import { ClientBack } from "@/interfaces/Clients"
+import { ClientBack, ITotalProjectsByClient, ITotalCollectionsByClient, 
+  ITotalPendingBillingByClient } from "@/interfaces/Clients"
 import ProfileClient from "./ProfileClient"
 import Sumary from "./Sumary"
 import { Options } from "@/interfaces/Common"
@@ -19,10 +20,14 @@ type ClientCliProps = {
   token:string, 
   id:string, 
   tags:Options[], 
-  clientPermissions: Resource2
+  clientPermissions: Resource2,
+  totalprj: ITotalProjectsByClient,
+  totalColl:ITotalCollectionsByClient,
+  totalPenBil:ITotalPendingBillingByClient
 }
 
-export default function ClientCli({client, token, id, tags, clientPermissions}: ClientCliProps){
+export default function ClientCli({client, token, id, tags, clientPermissions, 
+  totalprj, totalColl, totalPenBil}: ClientCliProps){
 
   const [opt, setOpt] = useState<number>(1);
   const handleOpt = (value: number) => {
@@ -58,7 +63,7 @@ export default function ClientCli({client, token, id, tags, clientPermissions}: 
                 </div>):  (<div className="mt-3 w-full p-2" 
                                     style={{borderColor:'#F8FAFC'}}>
                               <div className="w-full flex flex-wrap md:flex-nowrap gap-x-3">
-                                <Sumary client={client} idCli={id} token={token} />
+                                <Sumary totalprj={totalprj} totalColl={totalColl} totalPenBil={totalPenBil} />
                                 <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
                                   <ShowContactasClicComponent client={client} token={token} idCli={id} />
                                 </div>

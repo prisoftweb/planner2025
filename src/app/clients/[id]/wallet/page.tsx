@@ -4,9 +4,10 @@ import Selectize from "@/components/Selectize"
 import NavTab from "@/components/clients/NavTab"
 import { cookies } from "next/headers"
 import { UsrBack } from "@/interfaces/User"
-import { getClient, getClients } from "@/app/api/routeClients"
+import { getClient, getClients, getAllTOTALPENDINGPaymentsByCLIENTMIN } from "@/app/api/routeClients"
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
+import ClientCollectionCli from "@/components/clients/ClientCollectionCLi"
 
 export default async function Wallet({ params }: { params: { id: string }}){
 
@@ -15,9 +16,10 @@ export default async function Wallet({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [client, clients] = await Promise.all([
+  const [client, clients, pendindInvoices] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
+    getAllTOTALPENDINGPaymentsByCLIENTMIN(token, params.id)
   ]);
   
   if(typeof(client) === "string"){
@@ -39,7 +41,15 @@ export default async function Wallet({ params }: { params: { id: string }}){
       </>
     )
   }
-      
+   
+  if(typeof(pendindInvoices) === "string"){
+    return (
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">{pendindInvoices}</h1>
+      </>
+    )
+  }
 
   if(clients.length <= 0){
     return (
@@ -71,6 +81,9 @@ export default async function Wallet({ params }: { params: { id: string }}){
           <Selectize options={options} routePage="clients" subpath="/wallet" />
         </div>
         <NavTab idCli={params.id} tab='4' />
+        <div className="mt-5">
+          <ClientCollectionCli collections={pendindInvoices} />
+        </div>
       </div>
     </>
   )

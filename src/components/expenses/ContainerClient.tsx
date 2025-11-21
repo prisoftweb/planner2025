@@ -29,6 +29,7 @@ import { getAllCostsByConditionAndUser } from "@/app/api/routeCost"
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions"
 import {Tooltip} from "@nextui-org/react";
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
+import { propsTooltip } from "@/libs/animations"
 
 export default function ContainerClient({data, token, expenses, 
                     user, isHistory=false, isViewReports, isViewUser=false}:
@@ -327,32 +328,13 @@ export default function ContainerClient({data, token, expenses,
         data={tableData} isPending={isViewUser}
       />
     )
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
   
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
-            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Regresar' 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
               <span>
                 <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">

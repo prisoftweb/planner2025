@@ -5,6 +5,7 @@ export default function RefreshStepperComponent({category, isDeductible}: {categ
   const {updateIndexStepper, updateCategory} = useNewExpense();
 
   useEffect( () => {
+    console.log('RefreshStepperComponent - useEffect - category:', category, ' isDeductible:', isDeductible);
     updateCategory(category)
     //categories
     //"661eae12f642112488c85fb1" mano de obra

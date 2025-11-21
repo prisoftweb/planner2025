@@ -180,3 +180,44 @@ export const optionsTags:Options[] = [
     label: 'otro'
   },
 ]
+
+export interface ITotalProjectsByClient {
+  totalAmount: number
+  totalAmountTotal: number
+  projects: number
+}
+
+export interface ITotalCollectionsByClient {
+  client: string
+  quantity: number
+  type: string
+  pendingPayment: number
+}
+
+export interface ITotalPendingBillingByClient {
+  client: string
+  quantity: number
+  c: string
+  type: string
+  pendingEstimated: number
+}
+
+
+export interface ICollectionByClientMin {
+  project: string
+  client: string
+  type: string
+  pendingBilling: number
+  pendingPayment: number
+  pendingTotal: number
+  porcentagePendingPAY: number
+}
+
+export interface ITableCollectionByClientMin {
+  user: string,
+  project: string, 
+  status: boolean,
+  pendingBilling: number, 
+  pendingCollection: number,
+  total: number
+}

@@ -21,11 +21,16 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
     return () => window.removeEventListener('scroll', handleResize);
   }, [])
 
-  const previos = pending===1? '?status=pending': '';
+  const previos = pending===1? '?status=pending': '?';
+  const prevProject = idProj && idProj != ''? `&&project=${idProj}`: '';
+  const prevProvider = idProv && idProv != ''? `&&prov=${idProv}`: '';
+  
+  const previosFull = previos + prevProject + prevProvider;
+
   let tabCli: JSX.Element;
   if(width < 710){
     tabCli = <div className="flex justify-between mt-3">
-                    <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}&&project=${idProj}`}>
+                    <Link href={`/expenses/${idExp}/profile${previosFull}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
@@ -33,31 +38,7 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
                           ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
                       </Tooltip>
                     </Link>  
-                    {/*<Link href={`/expenses/${idExp}/budget?prov=${idProv}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
-                        <DocumentChartBarIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
-                        <CurrencyDollarIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/expenses/${idExp}/advange?prov=${idProv}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Avance'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>*/}
-                    <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}&&project=${idProj}`}>
+                    <Link href={`/expenses/${idExp}/status${previosFull}`}>
                       <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estatus'>
                         <CreditCardIcon
@@ -69,27 +50,12 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj}: {ta
   }else{
     tabCli = (
       <div className="flex mt-5 py-1 border-b border-blue-300">
-        <Link href={`/expenses/${idExp}/profile${previos}?prov=${idProv}&&project=${idProj}`}>
+        <Link href={`/expenses/${idExp}/profile${previosFull}`}>
           <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Resumen</p>
           </div>
         </Link>
-        {/* <Link href={`/expenses/${idExp}/projects?prov=${idProv}`}>
-          <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Presupuesto</p>
-          </div>
-        </Link>
-        <Link href={`/expenses/${idExp}/analitics?prov=${idProv}`}>
-          <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Analisis</p>
-          </div>
-        </Link>
-        <Link href={`/expenses/${idExp}/wallet?prov=${idProv}`}>
-          <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Avances</p>
-          </div>
-        </Link> */}
-        <Link href={`/expenses/${idExp}/status${previos}?prov=${idProv}&&project=${idProj}`}>
+        <Link href={`/expenses/${idExp}/status${previosFull}`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Estatus</p>
           </div>
