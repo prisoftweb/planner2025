@@ -320,3 +320,27 @@ export async function getAllTOTALPENDINGPaymentsByCLIENTMIN(auth_token:string, i
     }
   }
 }
+
+export async function getAllTOTALChargedByOneCLIENT(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTALChargedByOneCLIENT/${id}`;
+
+  const data = {
+    conditionCharged: [
+      "678ed05cc5f08e8a0f36d5e1","67d20e2959865f640af92682"
+    ]
+  }
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+  }
+}

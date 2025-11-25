@@ -3,7 +3,7 @@ import { UsrBack } from "@/interfaces/User";
 import { ClientBack } from "@/interfaces/Clients";
 import { getClient, getClients, getAllTOTALsProjectsByCLIENT, 
   getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME, 
-  getAllTOTALEstimatesPendingByOneClientMINRESUME } from "@/app/api/routeClients";
+  getAllTOTALEstimatesPendingByOneClientMINRESUME, getAllTOTALChargedByOneCLIENT } from "@/app/api/routeClients";
 import { getTags } from "@/app/api/routeClients";
 import { Options } from "@/interfaces/Common";
 import { Tag } from "@/interfaces/Clients";
@@ -22,13 +22,14 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [client, clients, tags, totalprj, totalColl, totalPenBil] = await Promise.all([
+  const [client, clients, tags, totalprj, totalColl, totalPenBil, totalpay] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
     getTags(token),
     getAllTOTALsProjectsByCLIENT(token, params.id), 
     getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME(token, params.id),
-    getAllTOTALEstimatesPendingByOneClientMINRESUME(token, params.id)
+    getAllTOTALEstimatesPendingByOneClientMINRESUME(token, params.id),
+    getAllTOTALChargedByOneCLIENT(token, params.id)
   ]);
   
   if(typeof(client) === "string")
@@ -99,6 +100,15 @@ export default async function Page({ params }: { params: { id: string }}){
     )
   }
 
+  if(typeof(totalpay)==='string'){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">{totalpay}</h1>
+      </>
+    )
+  }
+
   let arrTags: Options[] = [];
   if(tags.length > 0){
     tags.map((tag:Tag) => {
@@ -136,7 +146,7 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
           <ClientCli client={client} token={token} id={params.id} tags={arrTags} totalPenBil={totalPenBil}
-            clientPermissions={permisionsClient} totalprj={totalprj} totalColl={totalColl} />
+            clientPermissions={permisionsClient} totalprj={totalprj} totalColl={totalColl} totalpay={totalpay} />
         </NextUiProviders>
       </div>
     </>

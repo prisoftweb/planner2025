@@ -25,7 +25,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
   
   const { updateIndexStepper, CFDI} = useNewExpense();
   
-  const validationType = (f: File) => {
+  const validationType = async (f: File) => {
     if(!f.type.includes('xml') && !f.type.includes('XML')){
       showToastMessageError('Seleccione un archivo con la extension xml!!!');
       return 'Seleccione un archivo con la extension xml!!!';
@@ -64,8 +64,10 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
           return false;
         }
       }
-      return readFile();
-      // return true;
+      const resXML = await readFile();
+      // return readFile();
+      console.log('resXML => ', resXML);
+      return resXML;
     }
   }
 

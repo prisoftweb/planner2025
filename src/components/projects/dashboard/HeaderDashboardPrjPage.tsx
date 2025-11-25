@@ -30,25 +30,6 @@ type Params = {
 
 export default function HeaderDashboardPrjPage({handleDate, amountProjects, 
     projectsTotalCost, configMin, activeProjects, projects, numEvaluado, totalFeaturesAC, totalFeaturesGF, totalFeaturesT}: Params) {
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
   
   const refHability = useRef(true);
   const [project, setProject] = useState<string[]>([projects[0].value]);

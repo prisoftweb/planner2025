@@ -18,11 +18,20 @@ export const metadata: Metadata = {
   },
 };
 
+// const metadata = children.props?.metadata;
+//   const disablePadding = metadata?.layoutPadding === false;
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{  children: React.ReactNode;}>) {
+
+  // // tomar la propiedad custom
+  // const disablePadding =
+  // typeof children === "object" &&
+  // children !== null &&
+  // "props" in children &&
+  // children.props?.layoutPadding === false;
+
   return (
     <html lang="en">
       {/* <body className={inter.className}> */}

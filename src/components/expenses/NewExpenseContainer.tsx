@@ -38,7 +38,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
   }
 
   const handleCategory = (value:string) => {
-    console.log('handleCategory => ', value);
+    // console.log('handleCategory => ', value);
     updateCategory(value);
     setUpdateCat(value);
   }

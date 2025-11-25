@@ -88,6 +88,7 @@ export default function ClientCollectionCli({collections}: ClientCliProps){
 
 export function CollectionClientDataToTableData(collectionsP: ICollectionByClientMin[]){
   const table: ITableCollectionByClientMin[] = [];
+  console.log('collection table => ', collectionsP);
   collectionsP.map((col) => {
     table.push({
       pendingBilling: col?.pendingBilling?? 0,
@@ -95,7 +96,7 @@ export function CollectionClientDataToTableData(collectionsP: ICollectionByClien
       project: col.project,
       status: col?.pendingTotal && col.pendingTotal > 0 ? false : true,
       total: col?.pendingTotal?? 0,
-      user: '/img/users/default.jpg' // to be filled later
+      user: '/img/projects/default.jpg' // to be filled later
     })
   });
 

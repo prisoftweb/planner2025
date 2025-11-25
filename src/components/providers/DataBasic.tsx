@@ -65,22 +65,22 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
     },       
   });
   
-  let showContacts: JSX.Element[] =[];
+  // let showContacts: JSX.Element[] =[];
 
-  if(provider.contact){
-    provider.contact.map((contact) => {
-      showContacts.push(<CardContact contact={contact} idProv={provider._id} token={token} />)
-    })
-  }
+  // if(provider.contact){
+  //   provider.contact.map((contact) => {
+  //     showContacts.push(<CardContact contact={contact} idProv={provider._id} token={token} />)
+  //   })
+  // }
 
   return(
-    <div className="w-full">
+    <div className="w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
       />
-      <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3">
+      {/* <div className="flex flex-wrap gap-x-3 gap-y-2 mt-3">
         {showContacts}
-      </div>
+      </div> */}
       <form onSubmit={formik.handleSubmit} className="mt-4 bg-white border border-gray-200 rounded-lg shadow p-4 space-y-5">
         <div className="">
           <LabelRed htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></LabelRed>

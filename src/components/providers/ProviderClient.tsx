@@ -10,6 +10,7 @@ import { Provider } from "@/interfaces/Providers"
 import NavResponsive from "./NavResponsive"
 import { useOneProviderStore } from "@/app/store/providerStore"
 import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
+import ShowContactasProv from "./ShowContactsProv"
 
 export default function ProviderClient({provider, token, id, costPayment}: 
   {provider:Provider, token:string, id:string, costPayment:ICostTOTALPendingPAYGroupByPROVIDER}){
@@ -20,10 +21,12 @@ export default function ProviderClient({provider, token, id, costPayment}:
   const [open, setOpen] = useState<boolean>(false);
 
   const view = (
-    opt===2? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
-          style={{borderColor:'#F8FAFC'}}>
-            <DataBasic id={id} provider={provider} token={token} />
-          </div>) : 
+    opt===2? (<div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
+                <DataBasic id={id} provider={provider} token={token} />
+                <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
+                  <ShowContactasProv provider={provider} token={token} />
+                </div>
+              </div>) : 
     (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
             style={{borderColor:'#F8FAFC'}}>
               <CreditLine provider={provider} id={id} token={token} />
@@ -32,10 +35,20 @@ export default function ProviderClient({provider, token, id, costPayment}:
               style={{borderColor:'#F8FAFC'}}>
                 <Contacts id={id} contacts={provider.contact || []} token={token} />
               </div>): 
-      (<div className="mt-3 w-full md:w-1/2 xl:w-1/2 bg-white rounded-lg shadow-md pl-2 px-3" 
-        style={{borderColor:'#F8FAFC'}}>
-          {provider.tradeline?.creditlimit ? <Sumary provider={provider} token={token} costPayment={costPayment} /> 
-            : <DataBasic id={id} provider={provider} token={token} /> }
+      (<div>
+          {provider.tradeline?.creditlimit ? 
+            <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
+              <Sumary provider={provider} token={token} costPayment={costPayment} />
+              <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
+                <ShowContactasProv provider={provider} token={token} />
+              </div>
+            </div>
+            : <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
+                <DataBasic id={id} provider={provider} token={token} />
+                <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
+                  <ShowContactasProv provider={provider} token={token} />
+                </div>
+              </div> }
         </div>) ))
   );
 
@@ -52,12 +65,14 @@ export default function ProviderClient({provider, token, id, costPayment}:
               tradeline={provider.tradeline?.creditlimit ? true: false} />
           </div>
         </div>
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileProvider costPayment={costPayment} />
           </div>
-          {view}
+          <div className="mt-3 w-full">
+            {view}
+          </div>
         </div>
       </div>
     </>

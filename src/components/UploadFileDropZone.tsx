@@ -62,12 +62,14 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
     }
   }
 
-  const updateCFDIData = (fileData: File) => {
+  const updateCFDIData = async (fileData: File) => {
     setAmounts([]);
     setDescriptions([]);
     setPrices([]);
     setQuantities([]);
-    const res: (boolean | string) = Validation(fileData);
+    console.log('pre validation');
+    const res: (boolean | string) = await Validation(fileData);
+    console.log('post validation => ', res);
     if(typeof(res) === 'boolean'){
       setFile(fileData);
       setPre(fileData);
@@ -124,7 +126,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
           } catch (error) {
             console.log('error al leer cfdi => ', error);
           }
-
 
           getData(CFDIObj);
           setDate(res2.elements[0].attributes.Fecha);

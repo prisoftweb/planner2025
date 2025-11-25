@@ -221,3 +221,8 @@ export interface ITableCollectionByClientMin {
   pendingCollection: number,
   total: number
 }
+
+export interface ITotalPaymentClient {
+  quantity: number
+  totalCharged: number
+}
