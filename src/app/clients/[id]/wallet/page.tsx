@@ -4,7 +4,7 @@ import Selectize from "@/components/Selectize"
 import NavTab from "@/components/clients/NavTab"
 import { cookies } from "next/headers"
 import { UsrBack } from "@/interfaces/User"
-import { getClient, getClients, getAllTOTALPENDINGPaymentsByCLIENTMIN } from "@/app/api/routeClients"
+import { getClient, getClients, getAllTOTALPENDINGPaymentsByCLIENTMIN, getAllTOTALPENDINGPaymentsOFClientANDBYProjectMIN } from "@/app/api/routeClients"
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
 import ClientCollectionCli from "@/components/clients/ClientCollectionCLi"
@@ -19,7 +19,8 @@ export default async function Wallet({ params }: { params: { id: string }}){
   const [client, clients, pendindInvoices] = await Promise.all([
     getClient(token, params.id),
     getClients(token),
-    getAllTOTALPENDINGPaymentsByCLIENTMIN(token, params.id)
+    // getAllTOTALPENDINGPaymentsByCLIENTMIN(token, params.id)
+    getAllTOTALPENDINGPaymentsOFClientANDBYProjectMIN(token, params.id)
   ]);
   
   if(typeof(client) === "string"){
@@ -82,7 +83,7 @@ export default async function Wallet({ params }: { params: { id: string }}){
         </div>
         <NavTab idCli={params.id} tab='4' />
         <div className="mt-5">
-          <ClientCollectionCli collections={pendindInvoices} />
+          <ClientCollectionCli collections={pendindInvoices} rfc={client?.rfc?? 'sin rfc'} client={client?.name?? 'cliente'} />
         </div>
       </div>
     </>

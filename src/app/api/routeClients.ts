@@ -321,6 +321,23 @@ export async function getAllTOTALPENDINGPaymentsByCLIENTMIN(auth_token:string, i
   }
 }
 
+export async function getAllTOTALPENDINGPaymentsOFClientANDBYProjectMIN(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPENDINGPaymentsOFClientANDBYProjectMIN/${id}/678ecf6ec5f08e8a0f36d5dd`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.arrStats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+  }
+}
+
 export async function getAllTOTALChargedByOneCLIENT(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTALChargedByOneCLIENT/${id}`;
 

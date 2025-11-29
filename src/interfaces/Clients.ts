@@ -204,7 +204,16 @@ export interface ITotalPendingBillingByClient {
 
 
 export interface ICollectionByClientMin {
+  // project: string
+  // client: string
+  // type: string
+  // pendingBilling: number
+  // pendingPayment: number
+  // pendingTotal: number
+  // porcentagePendingPAY: number
+  quantity: number
   project: string
+  date: string
   client: string
   type: string
   pendingBilling: number

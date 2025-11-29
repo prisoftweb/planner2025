@@ -5,12 +5,19 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { ITableCollectionByClientMin, ICollectionByClientMin } from "@/interfaces/Clients";
 import { MoneyFormatter } from "@/app/functions/Globals";
 import Table from "../Table";
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import {Tooltip} from "@nextui-org/react";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import { propsTooltip } from "@/libs/animations";
+import DownloadCollectionByClientPDF from "./DownloadCollectionByClient";
 
 type ClientCliProps = {
-  collections: ICollectionByClientMin[]
+  collections: ICollectionByClientMin[],
+  client:string,
+  rfc:string
 }
 
-export default function ClientCollectionCli({collections}: ClientCliProps){
+export default function ClientCollectionCli({collections, client, rfc}: ClientCliProps){
 
   const [opt, setOpt] = useState<number>(1);
   const handleOpt = (value: number) => {
@@ -79,6 +86,22 @@ export default function ClientCollectionCli({collections}: ClientCliProps){
 
   return(
     <>
+      <div className="flex justify-end">
+        <PDFDownloadLink document={<DownloadCollectionByClientPDF collections={collections} client={client} rfc={rfc} />} fileName={`Cobranza ${client}`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </Tooltip>
+            ) : (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </Tooltip>
+            ) }
+        </PDFDownloadLink>
+      </div>
       <div >
         <Table columns={columns} data={data} placeH="buscar cobro" />
       </div>

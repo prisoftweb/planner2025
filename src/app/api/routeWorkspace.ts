@@ -20,3 +20,50 @@ export async function getWorkSpaces(auth_token:string) {
     }
   }
 }
+
+export async function createWorkSpace(data:Object) {
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces`;
+  console.log('url ws => ', url);
+  console.log('data => ', data);
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('res => ', res.data.data);
+    if(res.status===201)
+      return res.data.data.data;
+    return res.statusText
+  } catch (error) {
+    console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error?.response?.data?.message || error.message;
+    }else{
+      return 'Error al crear espacio de trabajo';
+    }
+  }
+}
+
+export async function findCODEVALIDATION(code:string) {
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/findCODEVALIDATION/${code}`;
+  try {
+    const res = await axios.get(url, {
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('res => ', res.data.data);
+    if(res.status===201)
+      return res.data.data.data;
+    // return res.statusText
+    return res.status;
+  } catch (error) {
+    console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error?.response?.data?.message || error.message;
+    }else{
+      return 'Error al verificar codigo, intente de nuevo...';
+    }
+  }
+}

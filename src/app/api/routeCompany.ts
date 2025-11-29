@@ -55,6 +55,8 @@ export async function RemoveCompany(auth_token:string, id:string) {
 
 export async function CreateCompany(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/companys`;
+  console.log('ur; comp => ', url);
+  console.log('data comp => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -62,6 +64,7 @@ export async function CreateCompany(auth_token:string, data:Object) {
         'Content-Type': 'application/json'
       }
     })
+    console.log('res comp => ', res);
     if(res.status === 201) return res.status
     return res.statusText;
   } catch (error) {

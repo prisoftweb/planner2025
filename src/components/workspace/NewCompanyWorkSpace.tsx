@@ -1,0 +1,328 @@
+'use client'
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import {showToastMessage, showToastMessageError} from "../Alert"
+import { useState, useEffect, useRef } from "react"
+import HeaderForm from "../HeaderForm"
+import Button from '../Button';
+import Label from '../Label';
+import Input from '../Input';
+import InputMask from 'react-input-mask';
+import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
+import { createWorkSpace } from '@/app/api/routeWorkspace';
+import UploadImage from '../UploadImage';
+import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
+
+export default function NewCompanyWorkSpace() {
+
+  const refRequest = useRef(true);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [errorPhoneNumber, setErrorPhoneNumber] = useState('');
+  const [file, setFile] = useState<File>();
+  
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      lastname: '',
+      contact: '',
+      street: '',
+      cp: '',
+      community: '',
+      municipy: '',
+      state: '',
+      country: '',
+    }, 
+    validationSchema: Yup.object({
+      street: Yup.string()
+                  .required('La calle es obligatoria'),
+      name: Yup.string()
+                  .required('El nombre es obligatorio'),
+      lastname: Yup.string()
+                  .required('El nombre comercial es obligatorio'),
+      email: Yup.string()
+                  .required('El correo electrónico es obligatorio'),
+      contact: Yup.string()
+                  .required('El nombre de contacto es obligatorio'),
+      cp: Yup.string()
+                  .required('El codigo postal es obligatorio'),
+      community: Yup.string()
+                  .required('La colonia es obligatoria'),
+      municipy: Yup.string()
+                  .required('El municipio es obligatorio'),
+      state: Yup.string()
+                  .required('El estado es obligatorio'),
+      country: Yup.string()
+                  .required('El pais es obligatorio'),
+    }),
+
+    onSubmit: async valores => {
+      if(refRequest.current){
+        refRequest.current = false;
+        // const {community, contact, country, cp, email, lastname, 
+        //     municipy, name, state, street} = valores;
+
+        if (!phoneNumber || phoneNumber.trim() === '') {
+          console.log('phoneNumber vacio => ', phoneNumber);
+          refRequest.current = true;
+          setErrorPhoneNumber("El teléfono es obligatorio.");
+          return;
+        }
+
+        setErrorPhoneNumber("");
+        let phoneformat = phoneNumber.trim();
+        phoneformat = phoneformat.replace(/\s+/g, '');
+        phoneformat = phoneformat.replace('(+52)', '');
+
+        if(file){
+          console.log('con logo', file);
+          if(phoneNumber && phoneNumber!==''){
+            console.log('phone file');
+            const {email, name, community, contact, country, cp, lastname, municipy, state, street} = valores;
+            const formdata = new FormData();
+            formdata.append('email', email);
+            formdata.append('name', name);
+            formdata.append('phoneNumber', phoneNumber);
+            formdata.append('tradename', lastname);
+            formdata.append('contact', contact);
+            formdata.append('location', JSON.stringify({
+                stret:street,
+                cp,
+                community,
+                municipy,
+                state,
+                country
+              }));
+            formdata.append('logo', file);
+            const res = await CreateCompanyLogo('', formdata);
+            if(res===201){
+              showToastMessage('Compania creada satisfactoriamente!!!');
+            }else{
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
+          }else{
+            refRequest.current = true;
+            showToastMessageError('El telefono es obligatorio!!');
+          }
+        }else{
+          console.log('sib file');
+          if(phoneNumber && phoneNumber!==''){
+            console.log('phone sin file');
+            const {email, name, community, contact, country, cp, lastname, municipy, state, street} = valores;
+            const data = {
+              name,
+              tradename: lastname,
+              contact,
+              email,              
+              phoneNumber,
+              location: {
+                stret:street,
+                cp,
+                community,
+                municipy,
+                state,
+                country
+              }
+            }
+            const res = await CreateCompany('', data);
+            console.log('res comp front => ', res);
+            if(res===201){
+              console.log('res 201');
+              showToastMessage('Compania creada satisfactoriamente!!!');
+            }else{
+              console.log('res else => ');
+              refRequest.current = true;
+              showToastMessageError(res);
+            }
+          }else{
+            refRequest.current = true;
+            showToastMessageError('El telefono es obligatorio!!');
+          }
+        }
+      }else{
+        showToastMessageError('Ya hay una solicitud en proceso!!');
+      }
+    }
+  });
+
+  return (
+    <div className='w-full h-full flex'>
+      <div className=' hidden sm:flex justify-center items-center w-full bg-cover bg-center bg-no-repeat'
+        style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
+      >
+        <p className='text-2xl w-96'>Controla y gestiona tus proyectos con las variables financieras adecuadas, cajas chicas, cobranza, facturacion</p>
+      </div>
+      <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+        onSubmit={formik.handleSubmit}
+      >
+        <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
+          title="Planner"
+        />
+
+        <div className="ml-2">
+          <p className="text-xl">Agregar datos de una compañia</p>
+          <p className="text-gray-500 text-sm">Ingresa los datos basicos de una compañia.</p>
+        </div>
+
+        <div >
+          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+          <Input name="name" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.name}
+          />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.name}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div className=' col-span-2'>
+          <Label htmlFor="lastname"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre comercial</p></Label>
+          <Input name="lastname" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.lastname}
+          />
+          {formik.touched.lastname && formik.errors.lastname ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.lastname}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <Label htmlFor="street"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Calle</p></Label>
+          <Input name="street" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.street}
+          />
+          {formik.touched.street && formik.errors.street ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.street}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <Label htmlFor="community"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Colonia</p></Label>
+          <Input name="community" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.community}
+          />
+          {formik.touched.community && formik.errors.community ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.community}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <Label htmlFor="municipy"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Municipio</p></Label>
+          <Input name="municipy" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.municipy}
+          />
+          {formik.touched.municipy && formik.errors.municipy ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.municipy}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <Label htmlFor="state"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estado</p></Label>
+          <Input name="state" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.state}
+          />
+          {formik.touched.state && formik.errors.state ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.state}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
+          <Input name="country" 
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.country}
+          />
+          {formik.touched.country && formik.errors.country ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.country}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div className='grid grid-cols-3 gap-x-3'>
+          <div>
+            <Label htmlFor="cp"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Código Postal</p></Label>
+            <Input name="cp" 
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.cp}
+            />
+            {formik.touched.cp && formik.errors.cp ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.cp}</p>
+              </div>
+            ) : null}
+          </div>
+
+          <div>
+            <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
+            <div className="w-48 flex  justify-start items-center relative">
+              <InputMask mask='(+52) 999 999 9999'
+                className="shadow appearance-none border border-gray-300 rounded w-full py-2 pl-9 text-base text-gray-500 leading-tight font-sans font-thin focus:ring-1 focus:ring-blue-600"
+                type="phone" 
+                placeholder="(+52) 444 429 7227"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+              />
+              <DevicePhoneMobileIcon className="h-6 w-6 text-amber-400 hover:text-amber-500 absolute ml-1" />
+            </div>
+            {errorPhoneNumber ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{errorPhoneNumber}</p>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Correo electrónico</p></Label>
+          <Input name="email" 
+            type='email'
+            onChange={formik.handleChange}
+            onBlur={formik.handleChange}
+            value={formik.values.email}
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+              <p>{formik.errors.email}</p>
+            </div>
+          ) : null}
+        </div>
+
+        <div>
+          <Label htmlFor="logo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Logotipo</p></Label>
+          <UploadImage setFile={setFile} />
+        </div>
+
+        <div className="flex justify-center mt-2">
+          <Button type="submit">Guardar</Button>
+        </div>
+
+      </form>
+    </div>
+  )
+}

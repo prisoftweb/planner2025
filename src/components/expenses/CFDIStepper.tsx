@@ -66,7 +66,7 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
       }
       const resXML = await readFile();
       // return readFile();
-      console.log('resXML => ', resXML);
+      // console.log('resXML => ', resXML);
       return resXML;
     }
   }

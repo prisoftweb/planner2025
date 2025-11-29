@@ -67,9 +67,9 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
     setDescriptions([]);
     setPrices([]);
     setQuantities([]);
-    console.log('pre validation');
+    // console.log('pre validation');
     const res: (boolean | string) = await Validation(fileData);
-    console.log('post validation => ', res);
+    // console.log('post validation => ', res);
     if(typeof(res) === 'boolean'){
       setFile(fileData);
       setPre(fileData);
