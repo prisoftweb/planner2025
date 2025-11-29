@@ -66,7 +66,7 @@ export default function DownloadCollectionByClientPDF({collections, client, rfc}
                   <Text style={{color:'white', textAlign:'center', fontSize:'10px'}}>PENDIENTE</Text>
                 </View>
                 <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
-                  <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
+                  <Text style={{textAlign:'center', color:'red', fontSize:'11px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
                       value: pendingTotal || 0
@@ -108,11 +108,12 @@ export default function DownloadCollectionByClientPDF({collections, client, rfc}
 
           {orderCollections.map((c, index:number) => (
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={index}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.project}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.project.title}</Text>
               <View style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>
-                <View style={{borderRadius: '3px', backgroundColor: 'gray', textAlign: 'center'}}>
-                  <Text style={{fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>
-                    {c.type}
+                <View style={{borderRadius: '3px', backgroundColor: `${c.project.estatus.color}`, textAlign: 'center'}}>
+                  <Text style={{fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold', 
+                        color:`${c.project.estatus.darktext? 'black':'white'}`}}>
+                    {c.project.estatus.name}
                   </Text>
                 </View>
               </View>

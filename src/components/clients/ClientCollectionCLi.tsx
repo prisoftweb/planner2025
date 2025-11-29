@@ -116,10 +116,10 @@ export function CollectionClientDataToTableData(collectionsP: ICollectionByClien
     table.push({
       pendingBilling: col?.pendingBilling?? 0,
       pendingCollection: col?.pendingPayment?? 0,
-      project: col.project,
+      project: col.project.title,
       status: col?.pendingTotal && col.pendingTotal > 0 ? false : true,
       total: col?.pendingTotal?? 0,
-      user: '/img/projects/default.jpg' // to be filled later
+      user: col.project?.photo?? '/img/projects/default.jpg' // to be filled later
     })
   });
 

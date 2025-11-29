@@ -211,8 +211,28 @@ export interface ICollectionByClientMin {
   // pendingPayment: number
   // pendingTotal: number
   // porcentagePendingPAY: number
+
+  // quantity: number
+  // project: string
+  // date: string
+  // client: string
+  // type: string
+  // pendingBilling: number
+  // pendingPayment: number
+  // pendingTotal: number
+  // porcentagePendingPAY: number
+
   quantity: number
-  project: string
+  project: {
+    title: string
+    photo: string
+    date: string
+    estatus: {
+      name: string
+      color: string
+      darktext: boolean
+    }
+  }
   date: string
   client: string
   type: string

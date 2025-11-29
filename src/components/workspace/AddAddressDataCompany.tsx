@@ -9,11 +9,10 @@ import Label from '../Label';
 import Input from '../Input';
 import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
-import { createWorkSpace } from '@/app/api/routeWorkspace';
 import UploadImage from '../UploadImage';
 import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
 
-export default function NewCompanyWorkSpace() {
+export default function AddAddressDataCompany() {
 
   const refRequest = useRef(true);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -244,8 +243,8 @@ export default function NewCompanyWorkSpace() {
       <div className=' hidden sm:block justify-center items-center w-full bg-cover bg-center bg-no-repeat'
         style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
       >
-        <p className='text-4xl w-96 text-white'>Datos de empresa</p>
-        <p className='text-xl w-96 text-white'>Ingresa los datos de la compañia para gestionar sus ingresos y egresos.</p>
+        <p className='text-4xl w-96 text-white'>Direccion de empresa</p>
+        <p className='text-xl w-96 text-white'>Ingresa la ubicación y domicilio de la compañia</p>
       </div>
       <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
@@ -255,8 +254,8 @@ export default function NewCompanyWorkSpace() {
         />
 
         <div className="ml-2">
-          <p className="text-xl">Agregar datos de una compañia</p>
-          <p className="text-gray-500 text-sm">Ingresa los datos basicos de una compañia.</p>
+          <p className="text-xl">Agregar dirección de compañia</p>
+          <p className="text-gray-500 text-sm">Ingresa la dirección y ubicación de una compañia.</p>
         </div>
 
         <div >
