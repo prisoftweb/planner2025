@@ -1,0 +1,47 @@
+'use client'
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { useState, useEffect, useRef } from "react"
+import InputMask from 'react-input-mask';
+import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
+import { createWorkSpace } from '@/app/api/routeWorkspace';
+import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
+import Button from '@/components/Button';
+import Label from '@/components/Label';
+import Input from '@/components/Input';
+import { showToastMessage, showToastMessageError } from '@/components/Alert';
+import UploadImage from '@/components/UploadImage';
+
+export default function LogoCompanyStepper({handleIndex, file, fileIsologo, handleFile, handleFileIsologo}: 
+  {handleIndex:(value: number) => void, file:File | null, fileIsologo:File | null,
+    handleFile:(value:File | null) => void,
+    handleFileIsologo:(value:File | null) => void,
+  }) {
+
+  const sendData = () => {
+    handleIndex(2);
+  }
+
+  return (
+    <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0">
+
+      <div className='flex justify-between gap-x-3 items-center'>
+        <div>
+          <Label>Logotipo</Label>
+          {file && (<img src={URL.createObjectURL(file)} alt="Logo Company" className="w-20 h-20 object-contain mb-2"/> )}
+          <UploadImage setFile={handleFile} />
+        </div>
+        <div>
+          <Label>Isologo</Label>
+          {fileIsologo && (<img src={URL.createObjectURL(fileIsologo)} alt="IsoLogo Company" className="w-20 h-20 object-contain mb-2"/> )}
+          <UploadImage setFile={handleFileIsologo} />
+        </div>
+      </div>
+
+      <div className="flex justify-center mt-2">
+        <Button type="button" onClick={sendData}>Siguiente</Button>
+      </div>
+
+    </form>
+  )
+}

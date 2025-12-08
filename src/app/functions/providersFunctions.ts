@@ -84,7 +84,9 @@ export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
       discount: expense.cost.discount,
       iva: expense.cost.vat?.value || expense.cost.iva,
       typeCFDI: expense.typeCFDI.name,
-      conceptCostoCenter: expense.costocenter.concept.name
+      conceptCostoCenter: expense.costocenter.concept.name,
+      expiredDate: expense.expiredDate?? '',
+      daysExpired: expense.daysExpired?? 0
     });
   });
 

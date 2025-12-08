@@ -108,15 +108,15 @@ export default function TableProviders({data, token}:
         >{row.original.account}</p>
       )
     }),
-    columnHelper.accessor('currentbalance', {
-      header: 'Saldo actual',
-      id: 'saldo',
-      cell: ({row}) => (
-        <p className="py-2 cursor-pointer"
-          onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
-        >{row.original.currentbalance}</p>
-      )
-    }),
+    // columnHelper.accessor('currentbalance', {
+    //   header: 'Saldo actual',
+    //   id: 'saldo',
+    //   cell: ({row}) => (
+    //     <p className="py-2 cursor-pointer"
+    //       onClick={() => window.location.replace(`/providers/${row.original.id}/profile`)}
+    //     >{row.original.currentbalance}</p>
+    //   )
+    // }),
   ]
   
   return(

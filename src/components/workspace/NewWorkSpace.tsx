@@ -12,7 +12,8 @@ import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import { createWorkSpace } from '@/app/api/routeWorkspace';
 import { createUser } from '@/app/api/routeUser';
 
-export default function NewWorkSpace() {
+export default function NewWorkSpace({handleIndex, handleEmail}: 
+  {handleIndex:(value: number) => void, handleEmail:(value: string) => void}) {
 
   const refRequest = useRef(true);
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
@@ -74,8 +75,6 @@ export default function NewWorkSpace() {
           return;
         }
 
-        console.log('phone => ', phoneNumber);
-
         setError("");
         setErrorPhoneNumber("");
         setErrorPassword("");
@@ -95,7 +94,7 @@ export default function NewWorkSpace() {
           accepTermsAndConditions:aceptaTerminos,
           bankAccountStatus:"NO VALIDADO",    
           // "validTo":"2025-11-01 12:00",
-          // "validFrom":"2025-12-01 12:00",
+          validFrom:new Date().toISOString(),
           condition: [
               {glossary:"6924da4f0d8d3a873b0dc47f"}
           ]
@@ -105,7 +104,7 @@ export default function NewWorkSpace() {
           refRequest.current = true;
           showToastMessageError(res);
         }else{
-          console.log('res => new ws', res);
+          console.log('json ws => ', JSON.stringify(res));
           refRequest.current = true;
           showToastMessage('Espacio de trabajo creado satisfactoriamente!!');
 
@@ -114,16 +113,19 @@ export default function NewWorkSpace() {
             email, 
             password, 
             confirmpassword: confirmPassword, 
-            rol:"66147eacaac7bddd90d24ee1"
+            rol:"660efa21f7bd2d031cae721c"
           }
 
           const resUser = await createUser(userData, '');
           if(typeof(resUser)==='string'){
             refRequest.current = true;
-            showToastMessageError(resUser);
+            handleEmail(email);
+            showToastMessageError("Error usuario " +resUser);
+            handleIndex(2);
           }else{
             refRequest.current = true;
             showToastMessage('Usuario creado exitosamente!!!');
+            handleIndex(2);
           }
         }
       }else{

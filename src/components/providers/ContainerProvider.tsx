@@ -5,7 +5,7 @@ import Navigation from "../navigation/Navigation"
 import { UsrBack } from "@/interfaces/User"
 import WithOutProvider from "./WithoutProvider"
 import ButtonNewProvider from "./ButtonNewProvider"
-import Header from "../Header"
+// import Header from "../Header"
 import TableProviders from "./TableProviders"
 import { useProviderStore } from "@/app/store/providerStore"
 import { useEffect, useState } from "react"
@@ -16,6 +16,7 @@ import SearchInTable from "../SearchInTable"
 import Link from "next/link"
 import { Tooltip } from "@nextui-org/react"
 import { TbArrowNarrowLeft } from "react-icons/tb"
+import { propsTooltip } from "@/libs/animations"
 
 type ContainerProps={
   providers: Provider[], 
@@ -114,31 +115,13 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
 
 const HeaderProvider = ({children, placeHolder, title}: 
     {placeHolder:string, children: JSX.Element, title:string}) => {
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   return (
     <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">
       <div className="flex items-center gap-x-3 w-full max-w-96">
         <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
           <Link href={'/'}>
-            <Tooltip closeDelay={0} delay={100} motionProps={props} content='Regresar' 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
               <span>
                 <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />

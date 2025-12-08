@@ -11,7 +11,8 @@ import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import { findCODEVALIDATION } from '@/app/api/routeWorkspace';
 
-export default function CodeWorkSpaceValidation() {
+export default function CodeWorkSpaceValidation({handleIndex, emailUser}: 
+  {handleIndex:(value: number) => void, emailUser:string}) {
 
   const refRequest = useRef(true);
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
@@ -19,7 +20,7 @@ export default function CodeWorkSpaceValidation() {
 
   const formik = useFormik({
     initialValues: {
-      email: '',
+      email: emailUser,
       code: '',
     }, 
     validationSchema: Yup.object({
@@ -42,7 +43,7 @@ export default function CodeWorkSpaceValidation() {
 
         setError("");
         
-        const res = await findCODEVALIDATION(code);
+        const res = await findCODEVALIDATION(code, email);
         if(typeof(res)==='string'){
           refRequest.current = true;
           showToastMessageError(res);
@@ -50,6 +51,7 @@ export default function CodeWorkSpaceValidation() {
           if(res===200){
             refRequest.current = true;
             showToastMessage('Codigo validado exitosamente!!!');
+            handleIndex(3);
           }else{
             refRequest.current = true;
             showToastMessageError('Codigo no valido, intente de nuevo!!!');

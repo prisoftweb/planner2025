@@ -7,6 +7,7 @@ import { useClientStore } from "@/app/store/clientStore";
 import { useEffect } from "react";
 import RemoveElement from "../RemoveElement";
 import { removeClient } from "@/app/api/routeClients";
+import { Badge } from "@mui/material";
 
 type TableClientsProps = {
   data:TableClient[], 
@@ -39,7 +40,9 @@ export default function TableClients({data, token, deletePermission, selectPermi
               onChange={row.getToggleSelectedHandler()}
             />
           )}
-          <img src={row.original.logo} alt="logo" className="w-10 h-auto" />
+          <Badge color="secondary" badgeContent={row.original.contacts}>
+            <img src={row.original.logo} alt="logo" className="w-10 h-auto" />
+          </Badge>
         </div>
       ),
       enableSorting:false,
@@ -65,7 +68,7 @@ export default function TableClients({data, token, deletePermission, selectPermi
             <RemoveElement id={row.original.id} name={row.original.name} token={token}
               remove={removeClient} removeElement={delClient} />
           )}
-          <NumberContacts numContacts={row.original.contacts} />
+          {/* <NumberContacts numContacts={row.original.contacts} /> */}
         </div>
       ),
       enableSorting:false,
@@ -100,15 +103,15 @@ export default function TableClients({data, token, deletePermission, selectPermi
         >{row.original.account}</p>
       )
     }),
-    columnHelper.accessor('currentbalance', {
-      header: 'Saldo actual',
-      id: 'saldo',
-      cell: ({row}) => (
-        <p className="py-2 cursor-pointer"
-          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
-        >{row.original.currentbalance}</p>
-      )
-    }),
+    // columnHelper.accessor('currentbalance', {
+    //   header: 'Saldo actual',
+    //   id: 'saldo',
+    //   cell: ({row}) => (
+    //     <p className="py-2 cursor-pointer"
+    //       onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+    //     >{row.original.currentbalance}</p>
+    //   )
+    // }),
   ]
 
   let table: JSX.Element = <></>;

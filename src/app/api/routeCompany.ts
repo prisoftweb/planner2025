@@ -68,6 +68,7 @@ export async function CreateCompany(auth_token:string, data:Object) {
     if(res.status === 201) return res.status
     return res.statusText;
   } catch (error) {
+    console.log('error create comp => ');
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message;
     }

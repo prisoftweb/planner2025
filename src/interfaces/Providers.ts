@@ -86,6 +86,8 @@ export interface HistoryExpensesTable {
   discount: number
   typeCFDI: string,
   conceptCostoCenter: string,
+  expiredDate: string
+  daysExpired: number
 }
 
 export interface CostsPaymentTable {

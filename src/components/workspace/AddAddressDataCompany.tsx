@@ -7,42 +7,27 @@ import HeaderForm from "../HeaderForm"
 import Button from '../Button';
 import Label from '../Label';
 import Input from '../Input';
-import InputMask from 'react-input-mask';
-import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
-import UploadImage from '../UploadImage';
+import TextArea from '../TextArea';
 import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
 
-export default function AddAddressDataCompany() {
+export default function AddAddressDataCompany({handleIndex}: 
+  {handleIndex:(value: number) => void}) {
 
   const refRequest = useRef(true);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [errorPhoneNumber, setErrorPhoneNumber] = useState('');
-  const [file, setFile] = useState<File>();
   
   const formik = useFormik({
     initialValues: {
-      name: '',
-      email: '',
-      lastname: '',
-      contact: '',
       street: '',
       cp: '',
       community: '',
       municipy: '',
       state: '',
       country: '',
+      notes: '',
     }, 
     validationSchema: Yup.object({
       street: Yup.string()
                   .required('La calle es obligatoria'),
-      name: Yup.string()
-                  .required('El nombre es obligatorio'),
-      lastname: Yup.string()
-                  .required('El nombre comercial es obligatorio'),
-      email: Yup.string()
-                  .required('El correo electrónico es obligatorio'),
-      contact: Yup.string()
-                  .required('El nombre de contacto es obligatorio'),
       cp: Yup.string()
                   .required('El codigo postal es obligatorio'),
       community: Yup.string()
@@ -53,186 +38,36 @@ export default function AddAddressDataCompany() {
                   .required('El estado es obligatorio'),
       country: Yup.string()
                   .required('El pais es obligatorio'),
+      notes: Yup.string()
+                  .required('Las notas son obligatorias'),
     }),
 
-    onSubmit: async valores => {
-      // console.log('enviando datos...', valores);
-      // if(refRequest.current){
-      //   console.log('entro =>');
-      //   refRequest.current = false;
-      //   // const {community, contact, country, cp, email, lastname, 
-      //   //     municipy, name, state, street} = valores;
-
-      //   if (!phoneNumber || phoneNumber.trim() === '') {
-      //     console.log('phoneNumber vacio => ', phoneNumber);
-      //     refRequest.current = true;
-      //     setErrorPhoneNumber("El teléfono es obligatorio.");
-      //     return;
-      //   }
-
-      //   setErrorPhoneNumber("");
-      //   let phoneformat = phoneNumber.trim();
-      //   phoneformat = phoneformat.replace(/\s+/g, '');
-      //   phoneformat = phoneformat.replace('(+52)', '');
-
-      //   if(file){
-      //     console.log('con logo', file);
-      //     if(phoneNumber && phoneNumber!==''){
-      //       console.log('phone file');
-      //       const {email, name, community, contact, country, cp, lastname, municipy, state, street} = valores;
-      //       const formdata = new FormData();
-      //       formdata.append('email', email);
-      //       formdata.append('name', name);
-      //       formdata.append('phoneNumber', phoneNumber);
-      //       formdata.append('tradename', lastname);
-      //       formdata.append('contact', contact);
-      //       formdata.append('location', JSON.stringify({
-      //           stret:street,
-      //           cp,
-      //           community,
-      //           municipy,
-      //           state,
-      //           country
-      //         }));
-      //       formdata.append('logo', file);
-      //       const res = await CreateCompanyLogo('', formdata);
-      //       if(res===201){
-      //         showToastMessage('Compania creada satisfactoriamente!!!');
-      //       }else{
-      //         refRequest.current = true;
-      //         showToastMessageError(res);
-      //       }
-      //     }else{
-      //       refRequest.current = true;
-      //       showToastMessageError('El telefono es obligatorio!!');
-      //     }
-      //   }else{
-      //     console.log('sib file');
-      //     if(phoneNumber && phoneNumber!==''){
-      //       console.log('phone sin file');
-      //       const {email, name, community, contact, country, cp, lastname, municipy, state, street} = valores;
-      //       const data = {
-      //         name,
-      //         tradename: lastname,
-      //         contact,
-      //         email,              
-      //         phoneNumber,
-      //         location: {
-      //           stret:street,
-      //           cp,
-      //           community,
-      //           municipy,
-      //           state,
-      //           country
-      //         }
-      //       }
-      //       const res = await CreateCompany('', data);
-      //       console.log('res comp front => ', res);
-      //       if(res===201){
-      //         console.log('res 201');
-      //         showToastMessage('Compania creada satisfactoriamente!!!');
-      //       }else{
-      //         console.log('res else => ');
-      //         refRequest.current = true;
-      //         showToastMessageError(res);
-      //       }
-      //     }else{
-      //       refRequest.current = true;
-      //       showToastMessageError('El telefono es obligatorio!!');
-      //     }
-      //   }
-      // }else{
-      //   showToastMessageError('Ya hay una solicitud en proceso!!');
-      // }
-    }
+    onSubmit: async valores => {}
   });
 
   const sendData = async () => {
-    console.log('enviando datos sd...', formik.values);
     if(refRequest.current){
-      console.log('entro =>');
-      refRequest.current = false;
-      // const {community, contact, country, cp, email, lastname, 
-      //     municipy, name, state, street} = valores;
-
-      if (!phoneNumber || phoneNumber.trim() === '') {
-        console.log('phoneNumber vacio => ', phoneNumber);
-        refRequest.current = true;
-        setErrorPhoneNumber("El teléfono es obligatorio.");
-        return;
+      const {community, country, cp, municipy, state, street, notes} = formik.values;
+      const data = {
+        location: {
+          stret:street,
+          cp,
+          community,
+          municipy,
+          state,
+          country,
+          addressref: notes
+        },
       }
-
-      setErrorPhoneNumber("");
-      let phoneformat = phoneNumber.trim();
-      phoneformat = phoneformat.replace(/\s+/g, '');
-      phoneformat = phoneformat.replace('(+52)', '');
-
-      if(file){
-        console.log('con logo', file);
-        if(phoneNumber && phoneNumber!==''){
-          console.log('phone file');
-          const {email, name, community, contact, country, cp, lastname, municipy, state, street} = formik.values;
-          const formdata = new FormData();
-          formdata.append('email', email);
-          formdata.append('name', name);
-          formdata.append('phoneNumber', phoneNumber);
-          formdata.append('tradename', lastname);
-          formdata.append('contact', contact);
-          formdata.append('location', JSON.stringify({
-              stret:street,
-              cp,
-              community,
-              municipy,
-              state,
-              country
-            }));
-          formdata.append('logo', file);
-          const res = await CreateCompanyLogo('', formdata);
-          if(res===201){
-            showToastMessage('Compania creada satisfactoriamente!!!');
-          }else{
-            refRequest.current = true;
-            showToastMessageError(res);
-          }
-        }else{
-          refRequest.current = true;
-          showToastMessageError('El telefono es obligatorio!!');
-        }
-      }else{
-        console.log('sib file');
-        if(phoneNumber && phoneNumber!==''){
-          console.log('phone sin file');
-          const {email, name, community, contact, country, cp, lastname, municipy, state, street} = formik.values;
-          const data = {
-            name,
-            tradename: lastname,
-            contact,
-            email,              
-            phoneNumber,
-            location: {
-              stret:street,
-              cp,
-              community,
-              municipy,
-              state,
-              country
-            }
-          }
-          const res = await CreateCompany('', data);
-          console.log('res comp front => ', res);
-          if(res===201){
-            console.log('res 201');
-            showToastMessage('Compania creada satisfactoriamente!!!');
-          }else{
-            console.log('res else => ');
-            refRequest.current = true;
-            showToastMessageError(res);
-          }
-        }else{
-          refRequest.current = true;
-          showToastMessageError('El telefono es obligatorio!!');
-        }
-      }
+      // const res = await CreateCompany('', data);
+      // if(res===201){
+      //   console.log('res 201');
+      //   showToastMessage('Compania creada satisfactoriamente!!!');
+      // }else{
+      //   console.log('res else => ');
+      //   refRequest.current = true;
+      //   showToastMessageError(res);
+      // }
     }else{
       showToastMessageError('Ya hay una solicitud en proceso!!');
     }
@@ -258,36 +93,8 @@ export default function AddAddressDataCompany() {
           <p className="text-gray-500 text-sm">Ingresa la dirección y ubicación de una compañia.</p>
         </div>
 
-        <div >
-          <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
-          <Input name="name" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.name}
-          />
-          {formik.touched.name && formik.errors.name ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.name}</p>
-            </div>
-          ) : null}
-        </div>
-
-        <div className=' col-span-2'>
-          <Label htmlFor="lastname"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre comercial</p></Label>
-          <Input name="lastname" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.lastname}
-          />
-          {formik.touched.lastname && formik.errors.lastname ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.lastname}</p>
-            </div>
-          ) : null}
-        </div>
-
         <div>
-          <Label htmlFor="street"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Calle</p></Label>
+          <Label htmlFor="street"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Calle y numero</p></Label>
           <Input name="street" 
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
@@ -300,63 +107,21 @@ export default function AddAddressDataCompany() {
           ) : null}
         </div>
 
-        <div>
-          <Label htmlFor="community"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Colonia</p></Label>
-          <Input name="community" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.community}
-          />
-          {formik.touched.community && formik.errors.community ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.community}</p>
-            </div>
-          ) : null}
-        </div>
+        <div className='grid grid-cols-2 gap-x-3'>
+          <div>
+            <Label htmlFor="community"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Colonia / Localidad</p></Label>
+            <Input name="community" 
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.community}
+            />
+            {formik.touched.community && formik.errors.community ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.community}</p>
+              </div>
+            ) : null}
+          </div>
 
-        <div>
-          <Label htmlFor="municipy"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Municipio</p></Label>
-          <Input name="municipy" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.municipy}
-          />
-          {formik.touched.municipy && formik.errors.municipy ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.municipy}</p>
-            </div>
-          ) : null}
-        </div>
-
-        <div>
-          <Label htmlFor="state"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estado</p></Label>
-          <Input name="state" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.state}
-          />
-          {formik.touched.state && formik.errors.state ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.state}</p>
-            </div>
-          ) : null}
-        </div>
-
-        <div>
-          <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
-          <Input name="country" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.country}
-          />
-          {formik.touched.country && formik.errors.country ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.country}</p>
-            </div>
-          ) : null}
-        </div>
-
-        <div className='grid grid-cols-3 gap-x-3'>
           <div>
             <Label htmlFor="cp"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Código Postal</p></Label>
             <Input name="cp" 
@@ -372,43 +137,61 @@ export default function AddAddressDataCompany() {
           </div>
 
           <div>
-            <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
-            <div className="w-48 flex  justify-start items-center relative">
-              <InputMask mask='(+52) 999 999 9999'
-                className="shadow appearance-none border border-gray-300 rounded w-full py-2 pl-9 text-base text-gray-500 leading-tight font-sans font-thin focus:ring-1 focus:ring-blue-600"
-                type="phone" 
-                placeholder="(+52) 444 429 7227"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-              />
-              <DevicePhoneMobileIcon className="h-6 w-6 text-amber-400 hover:text-amber-500 absolute ml-1" />
-            </div>
-            {errorPhoneNumber ? (
+            <Label htmlFor="municipy"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Municipio / Delegacion</p></Label>
+            <Input name="municipy" 
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.municipy}
+            />
+            {formik.touched.municipy && formik.errors.municipy ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-                <p>{errorPhoneNumber}</p>
+                <p>{formik.errors.municipy}</p>
               </div>
             ) : null}
           </div>
+
+          <div>
+            <Label htmlFor="state"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Estado</p></Label>
+            <Input name="state" 
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.state}
+            />
+            {formik.touched.state && formik.errors.state ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.state}</p>
+              </div>
+            ) : null}
+          </div>
+
+          <div>
+            <Label htmlFor="country"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Pais</p></Label>
+            <Input name="country" 
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+              value={formik.values.country}
+            />
+            {formik.touched.country && formik.errors.country ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.country}</p>
+              </div>
+            ) : null}
+          </div>
+
         </div>
 
         <div>
-          <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Correo electrónico</p></Label>
-          <Input name="email" 
-            type='email'
+          <Label htmlFor="notes"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Referencias / Notas</p></Label>
+          <TextArea name="notes" 
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
-            value={formik.values.email}
+            value={formik.values.notes}
           />
-          {formik.touched.email && formik.errors.email ? (
+          {formik.touched.notes && formik.errors.notes ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.email}</p>
+              <p>{formik.errors.notes}</p>
             </div>
           ) : null}
-        </div>
-
-        <div>
-          <Label htmlFor="logo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Logotipo</p></Label>
-          <UploadImage setFile={setFile} />
         </div>
 
         <div className="flex justify-center mt-2">

@@ -17,6 +17,28 @@ export interface IWorkSpace {
   id: string
 }
 
+export interface IWorkSpaceMin {
+  _id: string
+  name: string
+  surname: string
+  email: string
+  phoneNumber: string
+  picture: string
+  isverificatedBankAccount: boolean
+  isverificatedPhone: boolean
+  isverificatedEmail: boolean
+  validTo: string
+  validFrom: string
+  estatus: {
+    _id: string
+    name: string
+    color: string
+    darktext: boolean
+  }
+}
+
+
+
 export interface ITableWorkSpace {
   id: string
   company: string
@@ -31,4 +53,36 @@ export interface ITableWorkSpace {
   validTo: string
   validFrom: string
   status: boolean
+}
+
+export interface ITableCompanyWorkSpace {
+  logo:string
+  name:string
+  rfc:string
+  status:boolean
+  date:string
+  fisica:boolean
+  id:string
+}
+
+export interface ICompanyWorkSpace {
+  location: {
+    type: string
+    coordinates: any[]
+  }
+  isologo: string
+  isverificatedSAT: boolean
+  _id: string
+  name: string
+  email: string
+  phoneNumber: string
+  address: string
+  logo: string
+  status: boolean
+  __v: number
+  type: {
+    _id: string
+    name: string
+  }
+  id: string
 }

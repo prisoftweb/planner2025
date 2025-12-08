@@ -1,6 +1,6 @@
 'use client'
 
-import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, ArrowRightStartOnRectangleIcon } 
+import { Bars3Icon, UserIcon, Cog6ToothIcon, PhotoIcon, ArrowRightStartOnRectangleIcon, Cog8ToothIcon } 
   from "@heroicons/react/24/solid"
 import { MdPassword } from "react-icons/md";
   import Image from "next/image"
@@ -68,6 +68,9 @@ export default function Navigation({user}: {user:UsrBack}){
           <div className="flex justify-around items-center w-24 text-white print:hidden">
             <p className="p-2 hover:bg-slate-700 text-center font-semibold print:hidden">{firstName}</p>
           </div>
+          {role.toLowerCase().includes('super') && (
+            <Cog8ToothIcon className="text-slate-100 w-7 h-7" onClick={() => window.location.replace('/workspace')} />
+          )}
           <Image src={photo} alt="profile" width={50} height={50} 
                   onClick={toggleProfile} className="cursor-pointer rounded-full print:hidden"
           />

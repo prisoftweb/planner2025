@@ -138,6 +138,15 @@ export default function TableHistoryCosts({data, token, expenses,
         >{row.original.Fecha?.substring(0, 10) || ''}</p>
       ),
     }),
+    columnHelper.accessor('daysExpired', {
+      header: 'Dias vigentes',
+      id: 'dias',
+      cell: ({row}) => (
+        <p className="cursor-pointer"
+          onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
+        >{row.original.daysExpired}</p>
+      ),
+    }),
     columnHelper.accessor('Importe', {
       header: 'Importe',
       id: 'importe',

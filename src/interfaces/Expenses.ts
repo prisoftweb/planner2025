@@ -85,6 +85,8 @@ export interface Expense {
   status: boolean
   iscard: boolean
   files: File[]
+  expiredDate?: string
+  daysExpired?: number
 }
 
 export interface OneExpense {

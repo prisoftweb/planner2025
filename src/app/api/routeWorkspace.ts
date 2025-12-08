@@ -21,6 +21,27 @@ export async function getWorkSpaces(auth_token:string) {
   }
 }
 
+export async function getWorkSpacesMin(auth_token:string) {
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/getAllWorkspacesMIN`;
+  try {
+    const res = await axios.get(url, {
+      headers:{
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if(res.status===200)
+      return res.data.data.stats;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error?.response?.data?.message || error.message;
+    }else{
+      return 'Error al obtener espacios de trabajo';
+    }
+  }
+}
+
 export async function createWorkSpace(data:Object) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces`;
   console.log('url ws => ', url);
@@ -45,8 +66,33 @@ export async function createWorkSpace(data:Object) {
   }
 }
 
-export async function findCODEVALIDATION(code:string) {
-  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/findCODEVALIDATION/${code}`;
+export async function updateWorkSpace(data:Object, id:string, auth_token:string) {
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/${id}`;
+  // console.log('url ws => ', url);
+  // console.log('data => ', data);
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    console.log('res => ', res.data.data);
+    if(res.status===200)
+      return res.data.data.data;
+    return res.statusText
+  } catch (error) {
+    console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error?.response?.data?.message || error.message;
+    }else{
+      return 'Error al actualizar espacio de trabajo';
+    }
+  }
+}
+
+export async function findCODEVALIDATION(code:string, email:string) {
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/cods/findCODByUserMIN/${code}/${email}`;
   try {
     const res = await axios.get(url, {
       headers:{

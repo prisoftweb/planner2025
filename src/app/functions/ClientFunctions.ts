@@ -13,7 +13,7 @@ export function TransformClientInTableClient(client: ClientBack){
     'id': client._id,
     'name': client.name,
     account: client.account,
-    contacts: client.contact.length,
+    contacts: client.contact?.length?? 0,
     currentbalance: 0,
     rfc: client.rfc,
     status: client.status,
