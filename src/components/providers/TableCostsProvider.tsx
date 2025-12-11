@@ -11,6 +11,7 @@ import FilteringPaymentsProvider from "./FilteringPaymentsProvider";
 import { PaymentProvider } from "@/interfaces/Payments";
 import RemovePaymentComponent from "./RemovePaymentComponent";
 import { Badge } from "@mui/material";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props = {
   data:ExpensesTableProvider[], 
@@ -257,9 +258,14 @@ export default function TableCostsProvider({data, token, expenses, idProv,
   return(
     <>
       <div className="flex justify-end my-5">
-          {isFilter && <FilteringPaymentsProvider showForm={handleIsFilter}  
+          {/* {isFilter && <FilteringPaymentsProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
-                          minAmount={minAmount} token={token} />}
+                          minAmount={minAmount} token={token} />} */}
+        <ContainerSideNav width="w-full max-w-md" open={isFilter}>
+          <FilteringPaymentsProvider showForm={handleIsFilter}  
+                          FilterData={filterData} maxAmount={maxAmount} 
+                          minAmount={minAmount} token={token} />
+        </ContainerSideNav>
       </div>
       {view}
     </>

@@ -8,7 +8,9 @@ import { useState, useEffect } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
 import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
-export default function NewProviderContainer({token, id, showForm, user}: {token:string, id:string, showForm:Function, user: string}){
+export default function NewProviderContainer({token, id, showForm, user, open}: 
+  {token:string, id:string, showForm:Function, user: string, open:boolean}){
+  
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
@@ -77,10 +79,12 @@ export default function NewProviderContainer({token, id, showForm, user}: {token
   }
 
   return(//top-16
-    <div className="z-10 w-full sm:max-w-lg absolute bg-white p-5 right-0 h-screen"
+    <div className={`z-10 w-full sm:max-w-lg absolute bg-white p-5 right-0 h-screen
+                    transform transition-transform duration-300
+                    ${open ? "translate-x-0" : "translate-x-full"}`}
       style={{height: `${heightPage}px`}}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
         <HeaderForm img="/img/provider.svg" subtitle="Ingresa nuevo proveedor" 
           title="Nuevo proveedor"
         />

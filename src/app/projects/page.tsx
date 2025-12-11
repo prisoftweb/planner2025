@@ -6,7 +6,8 @@ import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import { getCompaniesLV } from "../api/routeCompany";
 import { getActiveProjectsMin, GetCollectionsAccumByProjectMin, 
-  GetCostsAccumByProjectMin, getProjectsMinFinishedUser, getProjectsMinInEjecucionUser } from "../api/routeProjects";
+  GetCostsAccumByProjectMin, getProjectsMinFinishedUser, getProjectsMinInEjecucionUser, 
+  getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT, getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT } from "../api/routeProjects";
 import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
@@ -18,14 +19,16 @@ export default async function Page(){
 
   let role = user.rol?.name || '';
 
-  const [projects, finished, clients, costs, collections, catalogs, optCompanies] = await Promise.all([
+  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB] = await Promise.all([
     role.toLowerCase().includes('residente') ? getProjectsMinInEjecucionUser(token, user._id) : getActiveProjectsMin(token),
     getProjectsMinFinishedUser(token, user._id),
     getClients(token), 
     GetCostsAccumByProjectMin(token),
     GetCollectionsAccumByProjectMin(token),
     getCatalogsByName(token, 'projects'),
-    getCompaniesLV(token)
+    getCompaniesLV(token),
+    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token),
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token)
   ]);
   
   if(typeof(projects)==='string'){
@@ -147,7 +150,7 @@ export default async function Page(){
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
           optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
           optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 
-          condition={condition} />
+          condition={condition} prjsCB={prjsCB} benTot={totalCB[0]} cosBen={totalCB[2]} costTot={totalCB[1]} />
     </>
   )
 }

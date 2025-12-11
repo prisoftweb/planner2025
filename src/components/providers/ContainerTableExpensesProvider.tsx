@@ -12,6 +12,7 @@ import { PaymentProvider } from "@/interfaces/Payments"
 import WithOut from "../WithOut"
 import { showToastMessageError } from "../Alert"
 import { getPaymentsProvider } from "@/app/api/routePayments"
+import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 
 type Props = {
   data:ExpensesTableProvider[], 
@@ -68,9 +69,10 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
           <SearchInTable placeH={"Buscar gasto.."} />
           <div className={`w-24`}>
             <div className="flex gap-x-4 justify-end items-center">
-              <GiSettingsKnobs onClick={() => handleFilter(true)}
+              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              />
+              /> */}
+              <TooltipFilterIcon handleFilter={handleFilter} />
             </div>
           </div>
         </div>

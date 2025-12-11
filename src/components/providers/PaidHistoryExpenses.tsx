@@ -136,7 +136,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
         <form className="z-10 w-full max-w-5xl absolute bg-white space-y-5 p-5 right-0"
           style={{height: `${heightPage}px`}}
         >
-          <div className="flex justify-between">
+          <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
             <div className="flex mt-2 items-center">
               <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
               <div className="ml-3">
@@ -144,8 +144,6 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
                 <p className="text-gray-500 text-sm">Agrega un nuevo pago a proveedores</p>
               </div>
             </div>
-            {/* <XMarkIcon className="w-8 h-8 text-slate-500
-              hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
             <TooltipCloseIcon handleClose={showForm} />
           </div>
           

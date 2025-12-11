@@ -77,7 +77,7 @@ export default function NewClientContainer({token, id, showForm, tags}: NewClien
   return(//top-16
     <div className={`z-10 w-full sm:max-w-2xl absolute bg-white p-5 right-0`}
       style={{height: `${heightPage}px`}} >
-      <div className="flex justify-between">
+      <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
         <HeaderForm img="/img/clientes.svg" subtitle="Ingresa nuevo cliente" 
           title="Nuevo cliente"
         />

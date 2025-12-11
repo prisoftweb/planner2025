@@ -3,8 +3,7 @@ import ButtonNew from "./ButtonNew"
 import TableProjects from "./TableProjects"
 import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
-import { ProjectsTable, ProjectMin } from "@/interfaces/Projects"
-import { GiSettingsKnobs } from "react-icons/gi"
+import { ProjectsTable, ProjectMin, IProyectCostBen, ICosBen, ICostosTotales, IBeneficiosTotales } from "@/interfaces/Projects"
 import { VscListUnordered } from "react-icons/vsc";
 import { PiTableThin } from "react-icons/pi";
 import Link from "next/link"
@@ -19,6 +18,9 @@ import { getActiveProjectsMin, getProjectsByConditionMin, getProjectsMinFinished
   getProjectsMinInEjecucionUser } from "@/app/api/routeProjects"
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadReportCBPDF from "./DownloadReportCBPDF"
 
 type Props = {
   token:string, 
@@ -32,18 +34,27 @@ type Props = {
   optCategoriesFilter: Options[], 
   optTypesFilter: Options[], 
   optConditionsFilter: Options[], 
-  condition: string
+  condition: string,
+  prjsCB:IProyectCostBen[], 
+  cosBen:ICosBen, 
+  costTot:ICostosTotales, 
+  benTot:IBeneficiosTotales
 }
 
 export default function ContainerClient({token, optClients, optCategories, 
   optTypes, user, optCompanies, data, optCategoriesFilter, optConditionsFilter, 
-  optTypesFilter, projects, condition}: Props){
+  optTypesFilter, projects, condition, benTot, cosBen, costTot, prjsCB}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
   const [dataTable, setDataTable] = useState<ProjectsTable[]>(data);
 
-  console.log('projects => ', projects);
+  const [selected, setSelected] = useState("Ben");
+
+  const options = ["Ben", "B/C"];
+
+  // console.log('projects => ', projects);
+  let role = user.rol?.name || '';
 
   const {haveNewProject, projectStore, 
     updateProjectStore, updateHaveNewProject} = useProjectsStore();
@@ -62,7 +73,6 @@ export default function ContainerClient({token, optClients, optCategories,
       try {
         let rol = user.rol?.name || '';
         if(rol.toLowerCase().includes('residente')){
-          // projs = await getProjectsByConditionMin(token);
           const prj1 = await getProjectsMinInEjecucionUser(token, user._id);
           const prj2 = await getProjectsMinFinishedUser(token, user._id);
 
@@ -116,10 +126,6 @@ export default function ContainerClient({token, optClients, optCategories,
     )
   }
 
-  console.log('data tabla => ', dataTable);
-  console.log('projects => ', projects);
-  console.log('prj sotre => ', projectStore);
-
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap print:hidden">
@@ -137,6 +143,38 @@ export default function ContainerClient({token, optClients, optCategories,
           <SearchInTable placeH="Buscar proyecto.." />
           <div>
             <div className="flex gap-x-3 items-center print:hidden">
+              {role.toLowerCase().includes('super') && (
+                <>
+                  <div className="inline-flex rounded-md shadow-sm" role="group">
+                    {options.map((opt, index) => (
+                      <button
+                        key={opt}
+                        onClick={() => setSelected(opt)}
+                        className={`
+                          px-4 py-2 text-sm font-medium border border-gray-300
+                          ${index === 0 ? "rounded-l-lg" : ""}
+                          ${index === options.length - 1 ? "rounded-r-lg" : ""}
+                          ${selected === opt ? "bg-blue-600 text-white" : "bg-white hover:bg-gray-100"}
+                        `}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                  <PDFDownloadLink document={<DownloadReportCBPDF prjsCB={prjsCB} benTot={benTot} cosBen={cosBen} costTot={costTot} order={selected} />} fileName={`Relacion costo beneficio`} >
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <TooltipContainerIcon label="costo beneficio">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                        </TooltipContainerIcon>
+                      ) : (
+                        <TooltipContainerIcon label="costo beneficio">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                        </TooltipContainerIcon>
+                      ) }
+                  </PDFDownloadLink>
+                </>
+              )}
               <TooltipContainerIcon label="Tabla">
                 <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
                   onClick={() => setIsTable(true)}
@@ -147,9 +185,6 @@ export default function ContainerClient({token, optClients, optCategories,
                   className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
                 />
               </TooltipContainerIcon>
-              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300 print:hidden"
-              /> */}
               <TooltipFilterIcon handleFilter={handleFilter} />
               <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}

@@ -1305,3 +1305,39 @@ export async function getProjectsMinFinishedUser(auth_token:string, user:string)
     return 'Error al consultar proyectos!!';
   }
 }
+
+export async function getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT/678ecf6ec5f08e8a0f36d5dd/2020-01-01/2025-12-12`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar proyectos y su relacion!!';
+  }
+}
+
+export async function getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT/678ecf6ec5f08e8a0f36d5dd/2025-01-01/2025-12-12`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message
+    }
+    return 'Error al consultar acumulado de costo beneficio!!';
+  }
+}

@@ -9,9 +9,10 @@ import MultiRangeSlider from "multi-range-slider-react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { GiSettingsKnobs } from "react-icons/gi"
 import { getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 type Props = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   FilterData:Function, 
   maxAmount:number, 
   minAmount:number, 
@@ -106,12 +107,12 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
     return <></>
   }
 
-  return(
+  return(//top-16
     <>
-      <form className="z-10 top-16 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-md absolute bg-white space-y-5 p-3 right-0"
         style={{height: `${heightPage}px`}}
       >
-        <div className="flex justify-between">
+        <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <div className="flex mt-2 items-center">
             <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
             <div className="ml-3">
@@ -119,8 +120,9 @@ export default function FilteringPaymentsProvider({showForm, FilterData, maxAmou
               <p className="text-gray-500 text-sm">Filtra gastos por diferentes caracteristicas</p>
             </div>
           </div>
-          <XMarkIcon className="w-8 h-8 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-8 h-8 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
 
         <div className="">

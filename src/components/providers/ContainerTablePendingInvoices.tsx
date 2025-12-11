@@ -49,9 +49,6 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
     setPaidExpenses(value);
   }
 
-  // console.log('costos nuevos => ', expenses);
-  // console.log('costos nuevos json => ', JSON.stringify(expenses[1]));
-
   const handleExpensesSelected = (value: HistoryExpensesTable[]) => {
     const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
                                         c.Estatus._id !== '661eade6f642112488c85fad' &&
@@ -180,13 +177,18 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
         user={user} isViewReports={false} data={dataTable} idProv={provider._id}
         filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
       />
-      {paidExpenses && (
-        <ContainerSideNav width="w-full max-w-5xl">
-          <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
+      {/* {paidExpenses && (
+        <ContainerSideNav width="w-full max-w-5xl" open={paidExpenses}>
+          <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition} open={paidExpenses}
             showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable}
             optTypes={optTypes} />
         </ContainerSideNav>
-      )}
+      )} */}
+      <ContainerSideNav width="w-full max-w-5xl" open={paidExpenses}>
+        <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
+          showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable}
+          optTypes={optTypes} />
+      </ContainerSideNav>
     </div>
   )
 }

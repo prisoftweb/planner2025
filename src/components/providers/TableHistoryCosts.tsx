@@ -8,6 +8,7 @@ import { BsFiletypeXml } from "react-icons/bs"; //Archivo XML
 import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { HistoryExpensesTable } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
+import ContainerSideNav from "../ContainerSideNav";
 
 type Props = {
   data:HistoryExpensesTable[], 
@@ -142,7 +143,7 @@ export default function TableHistoryCosts({data, token, expenses,
       header: 'Dias vigentes',
       id: 'dias',
       cell: ({row}) => (
-        <p className="cursor-pointer"
+        <p className={`cursor-pointer ${row.original.daysExpired! < 0 ? 'text-red-500' : 'text-green-500'}`}
           onClick={() => window.location.replace(`/expenses/${row.original.id}/profile?prov=${idProv}`)}
         >{row.original.daysExpired}</p>
       ),
@@ -206,9 +207,14 @@ export default function TableHistoryCosts({data, token, expenses,
   return(
     <>
       <div className="flex justify-end my-5">
-          {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
+          {/* {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
-                          minAmount={minAmount} token={token} />}
+                          minAmount={minAmount} token={token} />} */}
+          <ContainerSideNav width="w-full max-w-md" open={isFilter}>
+            <FilteringExpensesProvider showForm={handleIsFilter}  
+                          FilterData={filterData} maxAmount={maxAmount} 
+                          minAmount={minAmount} token={token} />
+          </ContainerSideNav>
       </div>
       {view}
     </>

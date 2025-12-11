@@ -143,9 +143,6 @@ export interface ProjectMin {
   status: boolean
   account: string
   description?: string
-  // category: Category
-  // type: Type
-  // segment: Segment
   category: Glossary
   type: Glossary
   segment: Glossary
@@ -376,4 +373,42 @@ export interface IConditionProject {
     date: string
     status: boolean
   }
+}
+
+export interface IProyectCostBen {
+  project: string
+  quantityCost: number
+  ivaCost: number
+  subtotalCost: number
+  totalCost: number
+  amountotal: number
+  pendingToSpent: number
+  porcentageSpent: number
+  porcentagePendingToSpend: number
+  quantityInvoices: number
+  fullyCharged: number
+  pendingPayment: number
+  porcentagePayment: number
+  porcentagePendingPayment: number
+  costobeneficio: number
+  rentabilidad: number
+}
+
+export interface IBeneficiosTotales {
+  quantityInvoices: number
+  fullyCharged: number
+  label: string
+}
+
+export interface ICostosTotales {
+  quantityCost: number
+  ivaCost: number
+  subtotalCost: number
+  totalCost: number
+  label: string
+}
+
+export interface ICosBen {
+  rentabilidad: number
+  costobeneficio: number
 }
