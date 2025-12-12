@@ -201,6 +201,8 @@ export default function TableHistoryCosts({data, token, expenses,
     "folio fiscal" : false,
   }
 
+  console.log('gastos => ', data);
+
   const view = <Table columns={columns} data={data} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable="costProvider" initialColumns={initialVisibilityColumns} />
   
@@ -210,11 +212,13 @@ export default function TableHistoryCosts({data, token, expenses,
           {/* {isFilter && <FilteringExpensesProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} />} */}
-          <ContainerSideNav width="w-full max-w-md" open={isFilter}>
-            <FilteringExpensesProvider showForm={handleIsFilter}  
-                          FilterData={filterData} maxAmount={maxAmount} 
-                          minAmount={minAmount} token={token} />
-          </ContainerSideNav>
+          {isFilter && (
+            <ContainerSideNav width="w-full max-w-md" open={isFilter}>
+              <FilteringExpensesProvider showForm={handleIsFilter}  
+                            FilterData={filterData} maxAmount={maxAmount} 
+                            minAmount={minAmount} token={token} />
+            </ContainerSideNav>
+          )}
       </div>
       {view}
     </>

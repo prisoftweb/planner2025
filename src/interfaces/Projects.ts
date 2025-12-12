@@ -392,6 +392,7 @@ export interface IProyectCostBen {
   porcentagePendingPayment: number
   costobeneficio: number
   rentabilidad: number
+  date: string
 }
 
 export interface IBeneficiosTotales {

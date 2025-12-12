@@ -25,7 +25,23 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
   //   fetch();
   // }, []);
 
-  const orderProjects = order==="Ben"? prjsCB.sort((a, b) => a.fullyCharged - b.fullyCharged) : prjsCB.sort((a, b) => a.costobeneficio - b.costobeneficio);
+  const orderProjects = order==="Ben"? [...prjsCB].sort((a, b) => a.fullyCharged - b.fullyCharged) : [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
+
+  // console.log('ord ben => ', [...prjsCB].sort((a, b) => a.fullyCharged - b.fullyCharged));
+  // console.log('ord no => ', [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio));
+
+  // const ord = order==="Ben"? 0 : 1;
+
+  // console.log('ord => ', ord, ' order => ', order);
+  // console.log('order => ', orderProjects);
+  // orderProjects.forEach(({ project, fullyCharged, costobeneficio }) => console.log({ project, fullyCharged, costobeneficio }));
+
+  // const ord1= [...prjsCB].sort((a, b) => a.fullyCharged - b.fullyCharged);
+  // const ord2=[...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
+
+  // ord1.forEach(({ project, fullyCharged, costobeneficio }) => console.log({ project, fullyCharged, costobeneficio }));
+  // ord2.forEach(({ project, fullyCharged, costobeneficio }) => console.log({ project, fullyCharged, costobeneficio }));
+
 
   const months=['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
@@ -35,7 +51,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
   return(
     <Document>
       <Page>
-        <View style={{padding: '15px', marginTop: '15px'}}>
+        <View style={{padding: '15px'}}>
 
           <View style={{display: 'flex', flexDirection: 'row', gap:'5px', justifyContent: 'space-between'}}>
 
@@ -101,6 +117,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
 
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Proyecto</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Costos totales</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Beneficios totales</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Rentabilidad </Text>
@@ -110,6 +127,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
           {orderProjects.map((c) => (
             <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={c.project}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.project}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date?.substring(0, 10)?? ''}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: c.totalCost || 0

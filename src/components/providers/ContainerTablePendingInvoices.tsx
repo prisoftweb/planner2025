@@ -137,7 +137,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
 
     let filtered: Expense[] = [];
     currentCostsProvider.map((expense) => {
-      console.log('expense map => ', expense);
+      // console.log('expense map => ', expense);
       if(conditionValidation(expense, minAmount, maxAmount, startDate, 
           endDate, conditions, isPaid)){
         filtered.push(expense);
