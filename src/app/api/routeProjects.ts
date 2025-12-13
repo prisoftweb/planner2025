@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getDate } from "@/libs/dates";
 
 export async function getProjects(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`;
@@ -1307,7 +1308,10 @@ export async function getProjectsMinFinishedUser(auth_token:string, user:string)
 }
 
 export async function getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(auth_token:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT/678ecf6ec5f08e8a0f36d5dd/2020-01-01/2025-12-12`;
+  const now=getDate(new Date());
+  const first=new Date(new Date().getFullYear(), 0, 1);
+  const firstString=getDate(first);
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT/678ecf6ec5f08e8a0f36d5dd/${firstString}/${now}?sort=totalCostAccum&direction=desc`;
   try {
     const res = await axios.get(url, {
       headers: {
@@ -1325,7 +1329,10 @@ export async function getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(auth_to
 }
 
 export async function getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(auth_token:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT/678ecf6ec5f08e8a0f36d5dd/2025-01-01/2025-12-12`;
+  const now=getDate(new Date());
+  const first=new Date(new Date().getFullYear(), 0, 1);
+  const firstString=getDate(first);
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT/678ecf6ec5f08e8a0f36d5dd/${firstString}/${now}`;
   try {
     const res = await axios.get(url, {
       headers: {

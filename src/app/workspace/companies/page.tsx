@@ -1,12 +1,12 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import { IWorkSpace } from "@/interfaces/WorkSpaces";
 import Header from "@/components/HeaderPage";
 import NavTabAccount from "@/components/workspace/NavTabAccount";
 import { getWorkSpacesMin } from "@/app/api/routeWorkspace";
 import WorkSpaceCompaniesCli from "@/components/workspace/companies/WorkSpaceCompaniesCli";
-import { getCompanies } from "@/app/api/routeCompany";
+import { getCompaniesByWorkSpace } from "@/app/api/routeCompany";
+import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
 
 export default async function Page() {
   
@@ -14,12 +14,12 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  // let workSpaces: IWorkSpace[] = await getWorkSpaces(token);
+  // const [workSpaces, companies] = await Promise.all([
+  //   getWorkSpacesMin(token),
+  //   getCompanies(token)
+  // ]);
 
-  const [workSpaces, companies] = await Promise.all([
-    getWorkSpacesMin(token),
-    getCompanies(token)
-  ]);
+  const workSpaces=await getWorkSpacesMin(token);
   
   if(typeof(workSpaces)=== 'string')
     return(
@@ -30,6 +30,8 @@ export default async function Page() {
         </div>
       </>
     )
+  
+  const companies=await getCompaniesByWorkSpace(token, workSpaces[workSpaces.length-1]._id);
 
   if(typeof(companies)=== 'string')
     return(
@@ -49,7 +51,8 @@ export default async function Page() {
           <></>
         </Header>
         <NavTabAccount idWS="" tab="2" />
-        <WorkSpaceCompaniesCli id="" token="" companies={companies} workspace={workSpaces[workSpaces.length-1]} />
+        <WorkSpaceCompaniesCli token={token} companies={companies} 
+            workspace={workSpaces[workSpaces.length-1]} idUser={user._id} />
       </div>
     </>
   )

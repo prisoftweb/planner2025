@@ -113,3 +113,24 @@ export async function findCODEVALIDATION(code:string, email:string) {
     }
   }
 }
+
+export async function insertCompanyInWorkSpace(auth_token:string, id:string, data:Object) {
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/insertCompanyArrByID/${id}`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers:{
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if(res.status===200)
+      return res.data.data.data;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error?.response?.data?.message || error.message;
+    }else{
+      return 'Error al insertar compañia en el espacio de trabajo';
+    }
+  }
+}

@@ -141,7 +141,7 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
             </WithOut>
           </div>
           {showNewQuotation && <NewQuotation showForm={handleShowNewQuotation} token={token} usr={user._id} 
-              updateQuotations={refreshQuatations} />}
+              updateQuotations={refreshQuatations} showSideNav={showNewQuotation} />}
         </>
       )
     }
@@ -234,9 +234,12 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
       <div className="mt-5">
         <TableQuotations quotationsData={quotationsData} token={token} deleteQuatation={deleteQuatation} />
       </div>
-      {showNewQuotation && optCategories.length> 0 && optClients.length> 0 && optTypes.length > 0 && 
+      {/* {showNewQuotation && optCategories.length> 0 && optClients.length> 0 && optTypes.length > 0 && 
           optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} 
-            token={token} usr={user._id} updateQuotations={refreshQuatations} />}
+            token={token} usr={user._id} updateQuotations={refreshQuatations} />} */}
+      {optCategories.length> 0 && optClients.length> 0 && optTypes.length > 0 && 
+          optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} 
+            token={token} usr={user._id} updateQuotations={refreshQuatations} showSideNav={showNewQuotation} />}
       {showFilter && optClients && optConditions && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
                     showForm={handleShowFilter} />}
     </>

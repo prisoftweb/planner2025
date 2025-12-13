@@ -16,16 +16,16 @@ export default function ButtonNewBudgetProject({token, user, projects}:
   return(
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
-          {newProject && (
+          {/* {newProject && (
             <ContainerSideNav width="w-full sm:max-w-4xl">
               <NewBudgetProject showForm={handleNewProject}
                             token={token} projects={projects} user={user} />
             </ContainerSideNav>
-            // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-            //   <NewBudgetProject showForm={handleNewProject}
-            //                 token={token} projects={projects} user={user} />
-            // </div>
-          )}
+          )} */}
+          <ContainerSideNav width="w-full sm:max-w-4xl" open={newProject}>
+            <NewBudgetProject showForm={handleNewProject}
+                          token={token} projects={projects} user={user} />
+          </ContainerSideNav>
     </>
   )
 }

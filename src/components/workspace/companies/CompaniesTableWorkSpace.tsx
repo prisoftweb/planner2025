@@ -6,11 +6,11 @@ import { ITableCompanyWorkSpace } from "@/interfaces/WorkSpaces";
 import NewCompanyContainer from "./NewCompanyContainer";
 import ContainerSideNav from "@/components/ContainerSideNav";
 import { ICompanyWorkSpace } from "@/interfaces/WorkSpaces";
-import { getCompanies } from "@/app/api/routeCompany";
+import { getCompaniesByWorkSpace } from "@/app/api/routeCompany";
 import { showToastMessageError } from "@/components/Alert";
 
-export default function CompaniesTableWorkSpace({companiesParam, token}: 
-  {companiesParam: ICompanyWorkSpace[], token:string}) {
+export default function CompaniesTableWorkSpace({companiesParam, token, idWS, idUSer}: 
+  {companiesParam: ICompanyWorkSpace[], token:string, idWS:string, idUSer:string}) {
 
   const [companies, setCompanies]=useState(companiesParam);
   const [openNewCompany, setOpenNewCompany]=useState<boolean>(false);
@@ -20,10 +20,11 @@ export default function CompaniesTableWorkSpace({companiesParam, token}:
   }
 
   const handleFetchCompanies = async () => {
-    const res = await getCompanies(token);
+    const res = await getCompaniesByWorkSpace(token, idWS);
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
+      console.log('res handle etxh => ', res);
       setCompanies(res);
       setOpenNewCompany(false);
     }
@@ -119,12 +120,16 @@ export default function CompaniesTableWorkSpace({companiesParam, token}:
         <Table columns={columns} data={data} placeH="Buscar compañia.." />
       </div>
 
-      {openNewCompany && (
+      {/* {openNewCompany && (
         <ContainerSideNav width="w-full sm:max-w-lg">
           <NewCompanyContainer token={token} handleOpen={handleOpenNewCompany} 
               handleFetchCompanies={handleFetchCompanies} />
         </ContainerSideNav>
-      )}
+      )} */}
+      <ContainerSideNav width="w-full sm:max-w-lg" open={openNewCompany}>
+        <NewCompanyContainer token={token} handleOpen={handleOpenNewCompany} 
+            handleFetchCompanies={handleFetchCompanies} idWS={idWS} idUser={idUSer} />
+      </ContainerSideNav>
 
     </div>
   )

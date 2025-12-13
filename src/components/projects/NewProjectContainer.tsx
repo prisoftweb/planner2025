@@ -88,12 +88,10 @@ export default function NewProjectContainer({token, showForm, optClients,
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">
-        <div className="flex justify-between">
+        <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <HeaderForm img="/img/projects.jpg" subtitle="Ingresa datos del nuevo proyecto" 
             title="Nuevo proyecto"
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
           <TooltipCloseIcon handleClose={closeForm} />
         </div>
         <ContainerProjectStepper token={token} optClients={optClients} 

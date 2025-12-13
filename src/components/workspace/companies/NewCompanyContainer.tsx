@@ -12,12 +12,11 @@ import LogoCompanyStepper from "./LogoCompanyStepper";
 import Label from "@/components/Label";
 import AddressDataCompanyStepper from "./AddressDataCompanyStepper";
 import { CreateCompany, CreateCompanyLogo } from "@/app/api/routeCompany";
-import { showToastMessageError } from "@/components/Alert";
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
+import { insertCompanyInWorkSpace } from "@/app/api/routeWorkspace";
 
-export default function NewCompanyContainer({token, handleOpen, handleFetchCompanies }: 
-  {token:string, handleOpen:(value: boolean) => void, handleFetchCompanies: () => Promise<void> }){
-  
-  // const {vats, projects, conditions, categories} = useOptionsExpense();
+export default function NewCompanyContainer({token, handleOpen, handleFetchCompanies, idUser, idWS }:
+  {token:string, handleOpen:(value: boolean) => void, handleFetchCompanies: () => Promise<void>, idWS:string, idUser:string }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper]=useState(0);
@@ -131,7 +130,24 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        handleFetchCompanies();
+        showToastMessage('Compania creada satisfactoriamente!!!!');
+        const data={
+          companys: 
+          [
+            {
+              company:res._id, 
+              user:idUser
+            }
+          ]
+        }
+        const resINsert=await insertCompanyInWorkSpace(token, idWS, data);
+        console.log('res in => ', resINsert);
+        if(typeof(resINsert)==='string'){
+          showToastMessageError(resINsert);
+        }else{
+          console.log('handelfetch => ');
+          handleFetchCompanies();
+        }
       }
     }
   };

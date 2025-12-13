@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from "react";
 import { useOneBudget } from "@/app/store/budgetProject";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import HeaderForm from "@/components/HeaderForm";
-import { XMarkIcon } from "@heroicons/react/24/solid";
 import Select from 'react-select'
 import { Options } from "@/interfaces/Common";
 import Label from "@/components/Label";
@@ -11,6 +10,7 @@ import Button from "@/components/Button";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { InsertNewBudgetInBudgetByID } from "@/app/api/routeBudget";
 import { getBudget } from "@/app/api/routeBudget";
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 
 import DonutChartBudget from "./DonutChartBudget";
 import { CostCenter } from "@/interfaces/CostCenter";
@@ -21,7 +21,7 @@ interface OptionsDashboard {
 }
 
 export default function NewBudgetCostCenter({closeForm, costoCenters, user, token, id}: 
-  {closeForm:Function, costoCenters: CostCenter[], user:string, token: string, id: string}) {
+  {closeForm:(value: boolean) => void, costoCenters: CostCenter[], user:string, token: string, id: string}) {
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const {oneBudget, updateOneBudget} = useOneBudget();
@@ -207,12 +207,13 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
     <div className="z-10 w-full sm:max-w-5xl absolute bg-white p-5 right-0"
       style={{height: `${heightPage}px`}}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
         <HeaderForm img="/img/projects.jpg" subtitle="Selecciona el centro de costos y el monto del presupuesto" 
           title="Nuevo presupuesto"
         />
-        <XMarkIcon className="w-6 h-6 text-slate-500
-          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => closeForm(false)} />
+        {/* <XMarkIcon className="w-6 h-6 text-slate-500
+          hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => closeForm(false)} /> */}
+        <TooltipCloseIcon handleClose={closeForm} />
       </div>
       <div className="grid grid-cols-3 gap-x-3">
         <div className="bg-white p-3 rounded-lg shadow-md h-full">

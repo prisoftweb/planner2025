@@ -12,36 +12,7 @@ type Props = {
 
 export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, order}: Props) {
 
-  // const [resumenPayment, setResumenPayment] = useState<ITotalResumentPayment>();
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     let totalPaymentsResumen: ITotalResumentPayment;
-  //     totalPaymentsResumen = await getAllTotalPaymentsResumeByProjectMin(token, project._id);
-  //     if(typeof(totalPaymentsResumen) !== "string"){
-  //       setResumenPayment(totalPaymentsResumen);
-  //     }
-  //   }
-  //   fetch();
-  // }, []);
-
-  const orderProjects = order==="Ben"? [...prjsCB].sort((a, b) => a.fullyCharged - b.fullyCharged) : [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
-
-  // console.log('ord ben => ', [...prjsCB].sort((a, b) => a.fullyCharged - b.fullyCharged));
-  // console.log('ord no => ', [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio));
-
-  // const ord = order==="Ben"? 0 : 1;
-
-  // console.log('ord => ', ord, ' order => ', order);
-  // console.log('order => ', orderProjects);
-  // orderProjects.forEach(({ project, fullyCharged, costobeneficio }) => console.log({ project, fullyCharged, costobeneficio }));
-
-  // const ord1= [...prjsCB].sort((a, b) => a.fullyCharged - b.fullyCharged);
-  // const ord2=[...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
-
-  // ord1.forEach(({ project, fullyCharged, costobeneficio }) => console.log({ project, fullyCharged, costobeneficio }));
-  // ord2.forEach(({ project, fullyCharged, costobeneficio }) => console.log({ project, fullyCharged, costobeneficio }));
-
+  const orderProjects = order==="Ganancia"? [...prjsCB].sort((a, b) => a.rentabilidad - b.rentabilidad) : [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
 
   const months=['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
@@ -58,7 +29,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
+                <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>COSTO-BENEFICIO</Text>
@@ -120,7 +91,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Costos totales</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Beneficios totales</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Rentabilidad </Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Ganancia </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Relacion costo-beneficio (B/C) </Text>
           </View>
 

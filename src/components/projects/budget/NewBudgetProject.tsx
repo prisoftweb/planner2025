@@ -50,12 +50,10 @@ export default function NewBudgetProject({token, showForm, user, projects}:
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full">
-        <div className="flex justify-between">
+        <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <HeaderForm img="/img/projects.jpg" subtitle="Selecciona el centro de costos y el monto del presupuesto" 
             title="Nuevo presupuesto"
           />
-          {/* <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
           <TooltipCloseIcon handleClose={closeForm} />
         </div>
         <NavBudgetStepper />

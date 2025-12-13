@@ -23,8 +23,8 @@ import { useOptionsQuotations } from "@/app/store/QuotationStates"
 
 import ContainerSideNav from "../ContainerSideNav"
 
-export default function NewQuotation({showForm, token, usr, updateQuotations}: 
-  {showForm:(value: boolean) => void, token:string, usr:string, updateQuotations: Function}){
+export default function NewQuotation({showForm, token, usr, updateQuotations, showSideNav}: 
+  {showForm:(value: boolean) => void, token:string, usr:string, updateQuotations: Function, showSideNav:boolean}){
 
   const {optClients, optUsers, optVats, optCategories, optTypes} = useOptionsQuotations();
 
@@ -246,10 +246,9 @@ export default function NewQuotation({showForm, token, usr, updateQuotations}:
 
   return(//top-16
     <>
-      <ContainerSideNav width="w-full max-w-md">
-        <div 
-            style={{height: `${heightPage}px`}}>
-          <div className="flex justify-between">
+      <ContainerSideNav width="w-full max-w-md" open={showSideNav}>
+        <div style={{height: `${heightPage}px`}}>
+          <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
             <div className="flex mt-2 items-center">
               <img src={"/img/role.svg"} alt="logo" className="rounded-full w-8 h-auto" />
               <div className="ml-3">

@@ -78,9 +78,6 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
           </div>
           <div className="">
             <div className="flex gap-x-3 items-center">
-              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              /> */}
               <TooltipFilterIcon handleFilter={handleFilter} />
               <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
             </div>

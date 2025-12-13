@@ -26,20 +26,20 @@ export default function ButtonNew({token, optClients, optCategories,
   return(
     <>
       <Button type="button" onClick={() => setNewProject(true)}>Nuevo</Button>
-        {newProject && (
+        {/* {newProject && (
           <ContainerSideNav width="w-full max-w-xl">
             <NewProject showForm={handleNewProject} optTypes={optTypes} 
                         token={token} optClients={optClients} 
                         optCategories={optCategories} user={user} 
                           optCompanies={optCompanies} condition={condition} />
           </ContainerSideNav>
-          // <div className="fixed inset-0 bg-black bg-opacity-40 z-40">
-          //   <NewProject showForm={handleNewProject} optTypes={optTypes} 
-          //               token={token} optClients={optClients} 
-          //               optCategories={optCategories} user={user} 
-          //                 optCompanies={optCompanies} condition={condition} />
-          // </div>
-        )}
+        )} */}
+        <ContainerSideNav width="w-full max-w-xl" open={newProject}>
+          <NewProject showForm={handleNewProject} optTypes={optTypes} 
+                      token={token} optClients={optClients} 
+                      optCategories={optCategories} user={user} 
+                        optCompanies={optCompanies} condition={condition} />
+        </ContainerSideNav>
     </>
   )
 }

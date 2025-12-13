@@ -92,3 +92,22 @@ export async function CreateCompanyLogo(auth_token:string, data:FormData) {
     }
   }
 }
+
+export async function getCompaniesByWorkSpace(auth_token:string, idWS:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/getCompanysWorkspaceMIN/${idWS}`;
+  console.log('url getCompaniesByWorkSpace => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.stats;
+    return 'Error al obtener compañias!!'
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Ocurrio un error al obtener compañias!!';
+  }
+}
