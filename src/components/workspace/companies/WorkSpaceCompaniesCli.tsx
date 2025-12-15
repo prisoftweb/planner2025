@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useEffect } from "react"
 import ProfileAccount from "../ProfileAccount"
 import CompaniesTableWorkSpace from "./CompaniesTableWorkSpace"
 import { ICompanyWorkSpace } from "@/interfaces/WorkSpaces"
@@ -14,11 +13,6 @@ type WSCliProps = {
 }
 
 export default function WorkSpaceCompaniesCli({token, companies, workspace, idUser }: WSCliProps){
-
-  // const [opt, setOpt] = useState<number>(1);
-  // const handleOpt = (value: number) => {
-  //   setOpt(value);
-  // }
 
   const view = <div className="mt-3 w-full p-2" 
                           style={{borderColor:'#F8FAFC'}}>

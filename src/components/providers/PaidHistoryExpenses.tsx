@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-// import { XMarkIcon } from "@heroicons/react/24/solid";
 import { GiSettingsKnobs } from "react-icons/gi";
 import NavStepperPaidExpenses from "./NavStepperPaidExpenses";
 import { HistoryExpensesTable } from "@/interfaces/Providers";
@@ -20,14 +19,17 @@ type Props = {
   user: string, 
   updateTable: Function, 
   condition: string, 
-  optTypes: Options[]
+  optTypes: Options[],
+  open: boolean
 }
 
 export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
-  updateTable, condition, optTypes}: Props) {
+  updateTable, condition, optTypes, open}: Props) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
+
+  // console.log('data table paid history => ', dataTable);
 
   const [costsInPayment, setCostInPayment] = useState<CostsPaymentTable[]>([]);
 
@@ -36,7 +38,6 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   const [comments, setComments] = useState<string>('');
 
   const handlePaymentPlugin = (value:string) => {
-    console.log('handle payment p => ', value);
     setPaymentPlugin(value);
   }
 
@@ -49,30 +50,32 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   }
 
   useEffect(() => {
-    const aux: CostsPaymentTable[] = [];
-    dataTable.map((c) => {
-      aux.push({
-        archivos: c.archivos,
-        condition: c.Estatus,
-        Fecha: c.Fecha,
-        id: c.id,
-        isPaid: c.isPaid,
-        Responsable: c.Responsable,
-        Total: c.Total,
-        paid: Number(c.Total.replace(/[$,",", M, X]/g, "")),
-        pending: 0,
-        parciality: 1,
-        conceptCostoCenter: c.conceptCostoCenter,
-        discount: c.discount,
-        Importe: c.Importe,
-        iva: c.iva,
-        typeCFDI: c.typeCFDI,
-        folio: c.folio,
-        folioFiscal: c.folioFiscal
+    if(open){
+      const aux: CostsPaymentTable[] = [];
+      dataTable.map((c) => {
+        aux.push({
+          archivos: c.archivos,
+          condition: c.Estatus,
+          Fecha: c.Fecha,
+          id: c.id,
+          isPaid: c.isPaid,
+          Responsable: c.Responsable,
+          Total: c.Total,
+          paid: Number(c.Total.replace(/[$,",", M, X]/g, "")),
+          pending: 0,
+          parciality: 1,
+          conceptCostoCenter: c.conceptCostoCenter,
+          discount: c.discount,
+          Importe: c.Importe,
+          iva: c.iva,
+          typeCFDI: c.typeCFDI,
+          folio: c.folio,
+          folioFiscal: c.folioFiscal
+        });
       });
-    });
-    setCostInPayment(aux);
-  }, []);
+      setCostInPayment(aux);
+    }
+  }, [open]);
 
   const updateCostPartiality = (value: CostsPaymentTable) => {
     const filtered = costsInPayment.filter((c) => c.id !== value.id);

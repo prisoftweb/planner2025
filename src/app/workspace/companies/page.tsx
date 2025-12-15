@@ -6,7 +6,6 @@ import NavTabAccount from "@/components/workspace/NavTabAccount";
 import { getWorkSpacesMin } from "@/app/api/routeWorkspace";
 import WorkSpaceCompaniesCli from "@/components/workspace/companies/WorkSpaceCompaniesCli";
 import { getCompaniesByWorkSpace } from "@/app/api/routeCompany";
-import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
 
 export default async function Page() {
   
@@ -18,7 +17,6 @@ export default async function Page() {
   //   getWorkSpacesMin(token),
   //   getCompanies(token)
   // ]);
-
   const workSpaces=await getWorkSpacesMin(token);
   
   if(typeof(workSpaces)=== 'string')

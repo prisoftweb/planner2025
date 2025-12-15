@@ -187,7 +187,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
       <ContainerSideNav width="w-full max-w-5xl" open={paidExpenses}>
         <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
           showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable}
-          optTypes={optTypes} />
+          optTypes={optTypes} open={paidExpenses} />
       </ContainerSideNav>
     </div>
   )

@@ -1,10 +1,13 @@
 import Chip from "../providers/Chip";
 import Label from "../Label";
-import { useClientProfileStore } from "@/app/store/clientStore";
 import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
 
 export default function ProfileAccount({workspace}: {workspace: IWorkSpaceMin}){
-  // const {clientProfile} = useClientProfileStore();
+
+  const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  const dateIni=new Date(workspace.validFrom?? '');
+  const dateFin=new Date(workspace.validTo?? '');
 
   return(
     <>
@@ -33,7 +36,7 @@ export default function ProfileAccount({workspace}: {workspace: IWorkSpaceMin}){
           </div>
           <div className="mt-3">
             <Label>Periodo</Label>
-            <p className="my-0 text-blue-500">{workspace.validFrom}  - {workspace.validTo}</p>
+            <p className="my-0 text-blue-500">{dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} - {dateFin.getDate()} de {months[dateFin.getMonth()]} de {dateFin.getFullYear()}</p>
           </div>
         </div>
       </div>
