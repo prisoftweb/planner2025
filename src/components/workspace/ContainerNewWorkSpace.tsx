@@ -5,11 +5,17 @@ import CodeWorkSpaceValidation from "@/components/workspace/CodeWorkSpaceValidat
 import NewCompanyWorkSpace from "@/components/workspace/NewCompanyWorkSpace"
 import AddAddressDataCompany from "@/components/workspace/AddAddressDataCompany"
 import { useState } from "react"
+import { IWorkSpace } from "@/interfaces/WorkSpaces"
+import { Company } from "@/interfaces/Companies"
+import { UsrBack } from "@/interfaces/User"
 
 export default function ContainerNewWorkSpace() {
 
   const [index, setIndex]=useState<number>(1);
   const [emailUser, setEmailUser]=useState<string>();
+  const [workSpaceData, setWorkSpaceData]=useState<IWorkSpace>();
+  const [companyData, setCompanyData]=useState<Company>();
+  const [userData, setUserData]=useState<UsrBack>();
 
   const handleIndex=(value:number) => {
     setIndex(value);
@@ -19,14 +25,32 @@ export default function ContainerNewWorkSpace() {
     setEmailUser(value);
   }
 
+  const handleWorkSpaceData= (value:IWorkSpace) => {
+    setWorkSpaceData(value);
+  }
+
+  const handleCompanyData= (value:Company) => {
+    setCompanyData(value);
+  }
+
+  const handleUserData= (value:UsrBack) => {
+    setUserData(value);
+  }
+
   const view = index==2 && emailUser? (
     <CodeWorkSpaceValidation handleIndex={handleIndex} emailUser={emailUser} />
   ): index==3? (
-    <NewCompanyWorkSpace handleIndex={handleIndex} />
+    <>
+      {workSpaceData && <NewCompanyWorkSpace handleIndex={handleIndex} workspace={workSpaceData} 
+                            handleCompany={handleCompanyData} />}
+    </>
   ): index==4? (
-    <AddAddressDataCompany handleIndex={handleIndex} />
+    <>
+      {companyData && <AddAddressDataCompany handleIndex={handleIndex} company={companyData} />}
+    </>
   ): (
-    <NewWorkSpace handleIndex={handleIndex} handleEmail={handleEmail} />
+    <NewWorkSpace handleIndex={handleIndex} handleEmail={handleEmail} handleWorkSpace={handleWorkSpaceData} 
+        handleUser={handleUserData} />
   )
 
   return (

@@ -2,22 +2,17 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect, useRef } from "react"
-import HeaderForm from "../HeaderForm"
+import { useRef } from "react"
 import Button from '../Button';
 import Label from '../Label';
 import Input from '../Input';
-import InputMask from 'react-input-mask';
-import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import { findCODEVALIDATION } from '@/app/api/routeWorkspace';
 
 export default function CodeWorkSpaceValidation({handleIndex, emailUser}: 
   {handleIndex:(value: number) => void, emailUser:string}) {
 
   const refRequest = useRef(true);
-  const [aceptaTerminos, setAceptaTerminos] = useState(false);
-  const [error, setError] = useState("");
-
+  
   const formik = useFormik({
     initialValues: {
       email: emailUser,
@@ -34,14 +29,6 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
       if(refRequest.current){
         refRequest.current = false;
         const {code, email} = valores;
-
-        if (!aceptaTerminos) {
-          refRequest.current = true;
-          setError("Debes aceptar los términos y condiciones.");
-          return;
-        }
-
-        setError("");
         
         const res = await findCODEVALIDATION(code, email);
         if(typeof(res)==='string'){
@@ -65,23 +52,26 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
 
   return (
     <div className='w-full h-screen flex'>
-      <div className=' hidden sm:block w-full bg-cover bg-center bg-no-repeat'
-        style={{ backgroundImage: "url('/img/workspaces/61380.jpg')" }}
+      <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
+        // style={{ backgroundImage: "url('/img/workspaces/61380.jpg')" }}
+        style={{backgroundImage:
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/61380.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+              }}
       >
-        <p className='text-2xl w-96 text-slate-900'>Verifica tu identidad</p>
-        <p className='text-lg w-96 text-slate-700'>Hemos enviado un correo electrónico con tu código a: palaciosconstrucciones@gmail.com</p>
+        <div>
+          <p className='text-2xl w-96 text-white'>Verifica tu identidad</p>
+          <p className='text-lg w-96 text-white'>Hemos enviado un correo electrónico con tu código a: {" "+emailUser}</p>
+        </div>
       </div>
       <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
-        <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
-          title="Planner"
-        />
-
         <div className="ml-2">
           <p className="text-xl">Ingresar codigo</p>
           <span className="text-gray-500 text-sm">Revisa tu correo electronico </span>
-          <span className="text-gray-700 text-sm"> palaciosconstruciones@gmail.com </span>
+          <span className="text-gray-700 text-sm"> {emailUser} </span>
           <span className="text-gray-500 text-sm"> e ingresa el codigo recibido </span>
         </div>
   
@@ -111,6 +101,7 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.code}
+            autoFocus
           />
           {formik.touched.code && formik.errors.code ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -118,24 +109,6 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
             </div>
           ) : null}
         </div>
-
-        <div className='mt-3 flex gap-x-1 items-center'>
-          <div className="w-4 ml-2">
-            <Input
-              type="checkbox"
-              checked={aceptaTerminos}
-              onChange={(e) => setAceptaTerminos(e.target.checked)}
-            />
-          </div>
-          <Label>
-            He leido y aceptado los <a href="/terminos" target="_blank" className='text-black'> términos y condiciones</a>
-          </Label>
-        </div>
-        {error ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{error}</p>
-            </div>
-          ) : null}
 
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>

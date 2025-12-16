@@ -8,10 +8,11 @@ import Button from '../Button';
 import Label from '../Label';
 import Input from '../Input';
 import TextArea from '../TextArea';
-import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
+import { updateCompany } from '@/app/api/routeCompany';
+import { Company } from '@/interfaces/Companies';
 
-export default function AddAddressDataCompany({handleIndex}: 
-  {handleIndex:(value: number) => void}) {
+export default function AddAddressDataCompany({handleIndex, company}: 
+  {handleIndex:(value: number) => void, company:Company}) {
 
   const refRequest = useRef(true);
   
@@ -42,7 +43,9 @@ export default function AddAddressDataCompany({handleIndex}:
                   .required('Las notas son obligatorias'),
     }),
 
-    onSubmit: async valores => {}
+    onSubmit: async valores => {
+      sendData();
+    }
   });
 
   const sendData = async () => {
@@ -59,15 +62,15 @@ export default function AddAddressDataCompany({handleIndex}:
           addressref: notes
         },
       }
-      // const res = await CreateCompany('', data);
-      // if(res===201){
-      //   console.log('res 201');
-      //   showToastMessage('Compania creada satisfactoriamente!!!');
-      // }else{
-      //   console.log('res else => ');
-      //   refRequest.current = true;
-      //   showToastMessageError(res);
-      // }
+      const res = await updateCompany(' ', data, company._id);
+      if(res===200){
+        // console.log('res 201');
+        showToastMessage('Compania actualizada satisfactoriamente!!!');
+      }else{
+        // console.log('res else => ');
+        refRequest.current = true;
+        showToastMessageError(res);
+      }
     }else{
       showToastMessageError('Ya hay una solicitud en proceso!!');
     }
@@ -195,7 +198,8 @@ export default function AddAddressDataCompany({handleIndex}:
         </div>
 
         <div className="flex justify-center mt-2">
-          <Button type="button" onClick={sendData}>Guardar</Button>
+          {/* <Button type="button" onClick={sendData}>Guardar</Button> */}
+          <Button type="submit" >Guardar</Button>
         </div>
 
       </form>

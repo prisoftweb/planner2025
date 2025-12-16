@@ -44,6 +44,9 @@ export async function createUser(user:any, auth_token:string){
       return res.statusText;
     }
   } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Ocurrio un error al crear usuario..';
+    }
     return 'Ocurrio un error al crear usuario..'
   }
 }

@@ -3,17 +3,22 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
-import HeaderForm from "../HeaderForm"
+// import HeaderForm from "../HeaderForm"
 import Button from '../Button';
 import Label from '../Label';
 import Input from '../Input';
 import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
-import { createWorkSpace } from '@/app/api/routeWorkspace';
 import UploadImage from '../UploadImage';
 import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
+import { IWorkSpace } from '@/interfaces/WorkSpaces';
+import { insertCompanyInWorkSpace } from '@/app/api/routeWorkspace';
+import { Company } from '@/interfaces/Companies';
+import { UsrBack } from '@/interfaces/User';
 
-export default function NewCompanyWorkSpace({handleIndex}: {handleIndex:(value: number) => void}) {
+export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompany, user}: 
+  {handleIndex:(value: number) => void, workspace:IWorkSpace, 
+    handleCompany:(value: Company) => void, user?: UsrBack}) {
 
   const refRequest = useRef(true);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -38,7 +43,9 @@ export default function NewCompanyWorkSpace({handleIndex}: {handleIndex:(value: 
       //             .required('El nombre de contacto es obligatorio'),
     }),
 
-    onSubmit: async valores => { }
+    onSubmit: async valores => {
+      sendData();
+    }
   });
 
   const sendData = async () => {
@@ -86,12 +93,29 @@ export default function NewCompanyWorkSpace({handleIndex}: {handleIndex:(value: 
           }
           const res = await CreateCompany('', data);
           if(res===201){
+            handleCompany(res);
             showToastMessage('Compania creada satisfactoriamente!!!');
+            const data={
+              companys: 
+              [
+                {
+                  company:res._id, 
+                  // user:idUser
+                  user: user?._id ?? ''
+                }
+              ]
+            }
+            const resCompany=insertCompanyInWorkSpace('', workspace._id, data);
+            if(typeof(resCompany)==='string'){
+              showToastMessageError(resCompany);
+            }else{
+              showToastMessage("Compañia agregada satisfactoriamente al espacio de trabajo!!!");
+            }
             handleIndex(4);
           }else{
             refRequest.current = true;
             showToastMessageError(res);
-            handleIndex(4);
+            // handleIndex(4);
           }
         }else{
           refRequest.current = true;
@@ -105,19 +129,23 @@ export default function NewCompanyWorkSpace({handleIndex}: {handleIndex:(value: 
 
   return (
     <div className='w-full h-full flex'>
-      <div className=' hidden sm:block justify-center items-center w-full bg-cover bg-center bg-no-repeat'
-        style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
+      <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
+        // style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
+        style={{backgroundImage:
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/2174.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+              }}
       >
-        <p className='text-4xl w-96 text-white'>Datos de empresa</p>
-        <p className='text-xl w-96 text-white'>Ingresa los datos de la compañia para gestionar sus ingresos y egresos.</p>
+        <div>
+          <p className='text-4xl w-96 text-white'>Datos de empresa</p>
+          <p className='text-xl w-96 text-white'>Ingresa los datos de la compañia para gestionar sus ingresos y egresos.</p>
+        </div>
       </div>
-      <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-md h-full min-h-screen bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
-        <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
-          title="Planner"
-        />
-
+        
         <div className="ml-2">
           <p className="text-xl">Agregar datos de una compañia</p>
           <p className="text-gray-500 text-sm">Ingresa los datos basicos de una compañia.</p>
@@ -129,6 +157,7 @@ export default function NewCompanyWorkSpace({handleIndex}: {handleIndex:(value: 
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.name}
+            autoFocus
           />
           {formik.touched.name && formik.errors.name ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -191,7 +220,8 @@ export default function NewCompanyWorkSpace({handleIndex}: {handleIndex:(value: 
         </div>
 
         <div className="flex justify-center mt-2">
-          <Button type="button" onClick={sendData}>Guardar</Button>
+          {/* <Button type="button" onClick={sendData}>Guardar</Button> */}
+          <Button type="submit" >Guardar</Button>
         </div>
 
       </form>

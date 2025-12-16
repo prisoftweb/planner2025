@@ -111,3 +111,25 @@ export async function getCompaniesByWorkSpace(auth_token:string, idWS:string) {
     return 'Ocurrio un error al obtener compañias!!';
   }
 }
+
+export async function updateCompany(auth_token:string, data:Object, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/companys/${id}`;
+  console.log('url upcomp => ', url);
+  console.log('data upcomp => ', JSON.stringify(data));
+  try {
+    const res = await axios.patch(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log('res upcomp => ', res);
+    if(res.status === 200) return res.status
+    return res.statusText;
+  } catch (error) {
+    console.log('error create comp => ');
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+  }
+}

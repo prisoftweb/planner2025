@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
-import HeaderForm from "../HeaderForm"
+// import HeaderForm from "../HeaderForm"
 import Button from '../Button';
 import Label from '../Label';
 import Input from '../Input';
@@ -11,9 +11,12 @@ import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import { createWorkSpace } from '@/app/api/routeWorkspace';
 import { createUser } from '@/app/api/routeUser';
+import { IWorkSpace } from '@/interfaces/WorkSpaces';
+import { UsrBack } from '@/interfaces/User';
 
-export default function NewWorkSpace({handleIndex, handleEmail}: 
-  {handleIndex:(value: number) => void, handleEmail:(value: string) => void}) {
+export default function NewWorkSpace({handleIndex, handleEmail, handleWorkSpace, handleUser}: 
+  {handleIndex:(value: number) => void, handleEmail:(value: string) => void, 
+    handleWorkSpace:(value: IWorkSpace) => void, handleUser:(value: UsrBack) => void}) {
 
   const refRequest = useRef(true);
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
@@ -27,7 +30,6 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
       name: '',
       lastname: '',
       location: '',
-      // phone: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -45,8 +47,6 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
                   .required('La confirmacion es obligatoria'),
       email: Yup.string()
                   .required('El correo electrónico es obligatorio'),
-      // phone: Yup.string()
-      //             .required('El teléfono es obligatorio'),
     }),
 
     onSubmit: async valores => {
@@ -62,7 +62,6 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
         }
 
         if (!phoneNumber || phoneNumber.trim() === '') {
-          console.log('phoneNumber vacio => ', phoneNumber);
           refRequest.current = true;
           setErrorPhoneNumber("El teléfono es obligatorio.");
           return;
@@ -70,7 +69,6 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
 
         if (password !== confirmPassword) {
           refRequest.current = true;
-          console.log('passwords no coinciden');
           setErrorPassword("La contraseña y la confirmación deben coincidir.");
           return;
         }
@@ -104,8 +102,8 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
           refRequest.current = true;
           showToastMessageError(res);
         }else{
-          console.log('json ws => ', JSON.stringify(res));
           refRequest.current = true;
+          handleWorkSpace(res);
           showToastMessage('Espacio de trabajo creado satisfactoriamente!!');
 
           const userData={
@@ -123,6 +121,7 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
             showToastMessageError("Error usuario " +resUser);
             handleIndex(2);
           }else{
+            handleUser(resUser);
             refRequest.current = true;
             showToastMessage('Usuario creado exitosamente!!!');
             handleIndex(2);
@@ -136,17 +135,19 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
 
   return (
     <div className='w-full h-full flex'>
-      <div className=' hidden sm:flex justify-center items-center w-full bg-cover bg-center bg-no-repeat'
-        style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
+      <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
+        // style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
+        style={{backgroundImage:
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/2174.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+              }}
       >
-        <p className='text-2xl w-96'>Controla y gestiona tus proyectos con las variables financieras adecuadas, cajas chicas, cobranza, facturacion</p>
+        <p className='text-2xl w-96 text-white'>Controla y gestiona tus proyectos con las variables financieras adecuadas, cajas chicas, cobranza, facturacion</p>
       </div>
       <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
-        <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
-          title="Planner"
-        />
 
         <div className="ml-2">
           <p className="text-xl">Crear nueva cuenta</p>
@@ -160,6 +161,7 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
               value={formik.values.name}
+              autoFocus
             />
             {formik.touched.name && formik.errors.name ? (
               <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
@@ -215,20 +217,6 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
             </div>
           ) : null}
         </div>
-
-        {/* <div>
-          <Label htmlFor="phone"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Telefono</p></Label>
-          <Input name="phone" 
-            onChange={formik.handleChange}
-            onBlur={formik.handleChange}
-            value={formik.values.phone}
-          />
-          {formik.touched.phone && formik.errors.phone ? (
-            <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
-              <p>{formik.errors.phone}</p>
-            </div>
-          ) : null}
-        </div> */}
 
         <div>
           <Label htmlFor="email"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Correo electrónico</p></Label>
@@ -289,7 +277,7 @@ export default function NewWorkSpace({handleIndex, handleEmail}:
             />
           </div>
           <Label>
-            He leido y aceptado los <a href="/terminos" target="_blank">términos y condiciones</a>
+            He leido y aceptado los <a href="/terminos" target="_blank" className='ml-1'> términos y condiciones</a>
           </Label>
         </div>
         {error ? (
