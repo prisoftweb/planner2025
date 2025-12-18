@@ -18,6 +18,7 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadInvoicesByProjectPDF from "@/components/invoices/DownloadInvoicesByProjectPDF";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ContainerSideNav from "@/components/ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
 
 export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice}: 
   {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, resumenInvoice:ITotalInvoiceResumen}) {
@@ -229,25 +230,6 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
   
   const data = InvoiceDataToTableData(invoices);
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   return (
     <>
       <div className="flex justify-end p-3">
@@ -255,12 +237,12 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
                                       resumenInvoice={resumenInvoice} token={token} />} fileName={'Cobranza - ' + project.title} >
           {({loading, url, error, blob}) => 
             loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                   placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
               </Tooltip>
             ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                   placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
               </Tooltip>

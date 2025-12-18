@@ -101,6 +101,7 @@ export interface IInvoiceByProject {
     _id: string
   }
   ischargedfull: boolean
+  fullyCharged: number
   accountreceivablesCount: number
   useCFDI: string
   paymentMethod: string

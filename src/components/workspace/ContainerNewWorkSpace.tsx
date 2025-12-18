@@ -41,8 +41,8 @@ export default function ContainerNewWorkSpace() {
     <CodeWorkSpaceValidation handleIndex={handleIndex} emailUser={emailUser} />
   ): index==3? (
     <>
-      {workSpaceData && <NewCompanyWorkSpace handleIndex={handleIndex} workspace={workSpaceData} 
-                            handleCompany={handleCompanyData} />}
+      {workSpaceData && userData && <NewCompanyWorkSpace handleIndex={handleIndex} workspace={workSpaceData} 
+                            handleCompany={handleCompanyData} user={userData} />}
     </>
   ): index==4? (
     <>

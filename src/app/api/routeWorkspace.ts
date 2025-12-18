@@ -68,10 +68,8 @@ export async function createWorkSpace(data:Object) {
 
 export async function updateWorkSpace(data:Object, id:string, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/${id}`;
-  // console.log('url ws => ', url);
-  // console.log('data => ', data);
   try {
-    const res = await axios.post(url, JSON.stringify(data), {
+    const res = await axios.patch(url, JSON.stringify(data), {
       headers:{
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${auth_token}`
@@ -116,6 +114,8 @@ export async function findCODEVALIDATION(code:string, email:string) {
 
 export async function insertCompanyInWorkSpace(auth_token:string, id:string, data:Object) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/insertCompanyArrByID/${id}`;
+  console.log('url ws insert company => ', url);
+  console.log('data insert company => ', data);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers:{

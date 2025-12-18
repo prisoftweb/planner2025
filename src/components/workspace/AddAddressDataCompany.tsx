@@ -78,18 +78,25 @@ export default function AddAddressDataCompany({handleIndex, company}:
 
   return (
     <div className='w-full h-full flex'>
-      <div className=' hidden sm:block justify-center items-center w-full bg-cover bg-center bg-no-repeat'
-        style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
+      <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
+        // style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
+        style={{backgroundImage:
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/2174.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center"
+              }}
       >
-        <p className='text-4xl w-96 text-white'>Direccion de empresa</p>
-        <p className='text-xl w-96 text-white'>Ingresa la ubicación y domicilio de la compañia</p>
+        <div>
+          <p className='text-4xl w-96 text-white'>Direccion de empresa</p>
+          <p className='text-xl w-96 text-white'>Ingresa la ubicación y domicilio de la compañia</p>
+        </div>
       </div>
       <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
-        <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
+        {/* <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
           title="Planner"
-        />
+        /> */}
 
         <div className="ml-2">
           <p className="text-xl">Agregar dirección de compañia</p>

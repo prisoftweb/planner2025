@@ -107,7 +107,7 @@ export default function NewWorkSpace({handleIndex, handleEmail, handleWorkSpace,
           showToastMessage('Espacio de trabajo creado satisfactoriamente!!');
 
           const userData={
-            name, 
+            name: name+" "+lastname, 
             email, 
             password, 
             confirmpassword: confirmPassword, 
@@ -117,11 +117,12 @@ export default function NewWorkSpace({handleIndex, handleEmail, handleWorkSpace,
           const resUser = await createUser(userData, '');
           if(typeof(resUser)==='string'){
             refRequest.current = true;
-            handleEmail(email);
+            // handleEmail(email);
             showToastMessageError("Error usuario " +resUser);
             handleIndex(2);
           }else{
             handleUser(resUser);
+            handleEmail(email);
             refRequest.current = true;
             showToastMessage('Usuario creado exitosamente!!!');
             handleIndex(2);

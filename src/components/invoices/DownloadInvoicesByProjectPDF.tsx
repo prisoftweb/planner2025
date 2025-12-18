@@ -25,6 +25,8 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
 
   const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+  // console.log('invoices pdf => ', orderInvoices);
+
   return(
     <Document>
       <Page>
@@ -132,11 +134,13 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.condition.name}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
-                value: i.lastpayment?.previousbalanceamount || 0
+                // value: i.lastpayment?.previousbalanceamount || 0
+                value: i.cost.total
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
-                value: i.lastpayment?.charged || 0
+                // value: i.lastpayment?.charged || 0
+                value: i.fullyCharged || 0
               })}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',

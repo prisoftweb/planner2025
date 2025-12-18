@@ -72,11 +72,30 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
           formdata.append('tradename', lastname);
           formdata.append('logo', file);
           const res = await CreateCompanyLogo('', formdata);
-          if(res===201){
-            showToastMessage('Compania creada satisfactoriamente!!!');
-          }else{
+          if(typeof(res)==='string'){
             refRequest.current = true;
             showToastMessageError(res);
+          }else{
+            handleCompany(res);
+            showToastMessage('Compania creada satisfactoriamente!!!');
+            console.log('new company ws => ', res);
+            const data={
+              companys: 
+              [
+                {
+                  company:res._id, 
+                  user: user?._id ?? ''
+                }
+              ]
+            }
+            const resCompany=await insertCompanyInWorkSpace('', workspace._id, data);
+            if(typeof(resCompany)==='string'){
+              showToastMessageError(resCompany);
+            }else{
+              console.log('res insert => ', resCompany);
+              showToastMessage("Compañia agregada satisfactoriamente al espacio de trabajo!!!");
+            }
+            handleIndex(4);
           }
         }else{
           refRequest.current = true;
@@ -92,9 +111,14 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
             phoneNumber: phoneformat,
           }
           const res = await CreateCompany('', data);
-          if(res===201){
+          if(typeof(res)==='string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+            // handleIndex(4);
+          }else{
             handleCompany(res);
             showToastMessage('Compania creada satisfactoriamente!!!');
+            console.log('new company ws => ', res);
             const data={
               companys: 
               [
@@ -105,17 +129,14 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
                 }
               ]
             }
-            const resCompany=insertCompanyInWorkSpace('', workspace._id, data);
+            const resCompany=await insertCompanyInWorkSpace('', workspace._id, data);
             if(typeof(resCompany)==='string'){
               showToastMessageError(resCompany);
             }else{
+              console.log('res insert => ', resCompany);
               showToastMessage("Compañia agregada satisfactoriamente al espacio de trabajo!!!");
             }
             handleIndex(4);
-          }else{
-            refRequest.current = true;
-            showToastMessageError(res);
-            // handleIndex(4);
           }
         }else{
           refRequest.current = true;

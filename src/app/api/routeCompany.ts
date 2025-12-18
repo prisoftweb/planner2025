@@ -65,7 +65,8 @@ export async function CreateCompany(auth_token:string, data:Object) {
       }
     })
     console.log('res comp => ', res);
-    if(res.status === 201) return res.status
+    // if(res.status === 201) return res.status
+    if(res.status === 201) return res.data.data.data;
     return res.statusText;
   } catch (error) {
     console.log('error create comp => ');
@@ -84,7 +85,8 @@ export async function CreateCompanyLogo(auth_token:string, data:FormData) {
         'Content-Type': 'multipart/form-data'
       }
     })
-    if(res.status === 201) return res.status
+    // if(res.status === 201) return res.status
+    if(res.status === 201) return res.data.data.data
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
