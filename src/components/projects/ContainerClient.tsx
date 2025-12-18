@@ -53,7 +53,6 @@ export default function ContainerClient({token, optClients, optCategories,
 
   const options = ["Ganancia", "Costo-Beneficio"];
 
-  // console.log('projects => ', projects);
   let role = user.rol?.name || '';
 
   const {haveNewProject, projectStore, 
@@ -143,7 +142,7 @@ export default function ContainerClient({token, optClients, optCategories,
           <SearchInTable placeH="Buscar proyecto.." />
           <div>
             <div className="flex gap-x-3 items-center print:hidden">
-              {(//role.toLowerCase().includes('super') && (
+              {role.toLowerCase().includes('super') && (
                 <>
                   <div className="inline-flex rounded-md shadow-sm" role="group">
                     {options.map((opt, index) => (
