@@ -9,14 +9,14 @@ import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 import NavNewCompanyStepper from "./NavNewCompanyStepper";
 import DataBasicCompanyStepper from "./DataBasicCompanyStepper";
 import LogoCompanyStepper from "./LogoCompanyStepper";
-import Label from "@/components/Label";
 import AddressDataCompanyStepper from "./AddressDataCompanyStepper";
-import { CreateCompany, CreateCompanyLogo } from "@/app/api/routeCompany";
+import { CreateCompany, CreateCompanyLogo, CreateCompanyWithLogoAndIsologo } from "@/app/api/routeCompany";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { insertCompanyInWorkSpace } from "@/app/api/routeWorkspace";
 
-export default function NewCompanyContainer({token, handleOpen, handleFetchCompanies, idUser, idWS }:
-  {token:string, handleOpen:(value: boolean) => void, handleFetchCompanies: () => Promise<void>, idWS:string, idUser:string }){
+export default function NewCompanyContainer({token, handleOpen, handleFetchCompanies, idUser, idWS, openSideNav }:
+  {token:string, handleOpen:(value: boolean) => void, handleFetchCompanies: () => Promise<void>, 
+    idWS:string, idUser:string, openSideNav:boolean }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper]=useState(0);
@@ -104,19 +104,136 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
 
   const createNewCompany = async (location:Object) => {
     if(file || fileIsologo){
-      const formData = new FormData();
-      formData.append('name', nameCompany);
-      formData.append('email', emailCompany);
-      formData.append('contact', contactCompany);
-      formData.append('phone', phoneCompany);
-      formData.append('location', JSON.stringify(location));
-      if(file){
-        formData.append('logo', file);
+      // const formData = new FormData();
+      // formData.append('name', nameCompany);
+      // formData.append('email', emailCompany);
+      // formData.append('contact', contactCompany);
+      // formData.append('phone', phoneCompany);
+      // formData.append('location', JSON.stringify(location));
+      // if(file){
+      //   formData.append('logo', file);
+      // }
+      // if(fileIsologo){
+      //   formData.append('isologo', fileIsologo);
+      // }
+
+      if(!file || !fileIsologo){
+        let phoneformat = phoneCompany.trim();
+        phoneformat = phoneformat.replace(/\s+/g, '');
+        phoneformat = phoneformat.replace('(+52)', '');
+        
+        const formdata = new FormData();
+        formdata.append('email', emailCompany);
+        formdata.append('name', nameCompany);
+        formdata.append('phone', phoneformat);
+        formdata.append('tradename', tradeNameCompany);
+        formdata.append('location', JSON.stringify(location));
+        // formdata.append('logo', file);
+        if(file){
+          formdata.append('logo', file);
+        }
+        if(fileIsologo){
+          formdata.append('logo', fileIsologo);
+        }
+        const res = await CreateCompanyLogo(token, formdata);
+        // const res = await CreateCompanyLogo(token, formData);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          showToastMessage('Compania creada satisfactoriamente!!!!');
+          const data={
+            companys: 
+            [
+              {
+                company:res._id, 
+                user:idUser
+              }
+            ]
+          }
+          const resINsert=await insertCompanyInWorkSpace(token, idWS, data);
+          console.log('res in => ', resINsert);
+          if(typeof(resINsert)==='string'){
+            showToastMessageError(resINsert);
+          }
+          else{
+            setIndexStepper(0);
+            setNameCompany('');
+            setEmailCompany('');
+            setContactCompany('');
+            setPhoneCompany('');
+            setTradeNameCompany('');
+            setFile(null);
+            setFileIsologo(null);
+            setAddressCompany('');
+            setCpCompany('');
+            setCommunityCompany('');
+            setMunicipyCompany('');
+            setStateCompany('');
+            setCountryCompany('');
+            setNotesCompany('');
+            handleFetchCompanies();
+          }
+        }     
+      }else{
+        let phoneformat = phoneCompany.trim();
+        phoneformat = phoneformat.replace(/\s+/g, '');
+        phoneformat = phoneformat.replace('(+52)', '');
+        
+        const formdata = new FormData();
+        formdata.append('email', emailCompany);
+        formdata.append('name', nameCompany);
+        formdata.append('phone', phoneformat);
+        formdata.append('tradename', tradeNameCompany);
+        formdata.append('location', JSON.stringify(location));
+        // formdata.append('logo', file);
+        if(file){
+          // formdata.append('logo', file);
+          formdata.append('files', file);
+        }
+        if(fileIsologo){
+          // formdata.append('logo', fileIsologo);
+          // formdata.append('isologo', fileIsologo);
+          formdata.append('files', fileIsologo);
+        }
+        const res = await CreateCompanyWithLogoAndIsologo(token, formdata);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          showToastMessage('Compania creada satisfactoriamente!!!!');
+          const data={
+            companys: 
+            [
+              {
+                company:res._id, 
+                user:idUser
+              }
+            ]
+          }
+          const resINsert=await insertCompanyInWorkSpace(token, idWS, data);
+          console.log('res in => ', resINsert);
+          if(typeof(resINsert)==='string'){
+            showToastMessageError(resINsert);
+          }
+          else{
+            setIndexStepper(0);
+            setNameCompany('');
+            setEmailCompany('');
+            setContactCompany('');
+            setPhoneCompany('');
+            setTradeNameCompany('');
+            setFile(null);
+            setFileIsologo(null);
+            setAddressCompany('');
+            setCpCompany('');
+            setCommunityCompany('');
+            setMunicipyCompany('');
+            setStateCompany('');
+            setCountryCompany('');
+            setNotesCompany('');
+            handleFetchCompanies();
+          }
+        }
       }
-      if(fileIsologo){
-        formData.append('isologo', fileIsologo);
-      }
-      // await CreateCompanyLogo(token, dataCompany, file, fileIsologo);
     }else{
       const dataCompany = {
         name: nameCompany,
@@ -145,7 +262,21 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         if(typeof(resINsert)==='string'){
           showToastMessageError(resINsert);
         }else{
-          console.log('handelfetch => ');
+          setIndexStepper(0);
+          setNameCompany('');
+          setEmailCompany('');
+          setContactCompany('');
+          setPhoneCompany('');
+          setTradeNameCompany('');
+          setFile(null);
+          setFileIsologo(null);
+          setAddressCompany('');
+          setCpCompany('');
+          setCommunityCompany('');
+          setMunicipyCompany('');
+          setStateCompany('');
+          setCountryCompany('');
+          setNotesCompany('');
           handleFetchCompanies();
         }
       }
@@ -167,7 +298,8 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         saveCompany={createNewCompany} />
   ): (<DataBasicCompanyStepper handleIndex={handleIndexStepper} contactCompany={contactCompany} 
           emailCompany={emailCompany} handleContactCompany={handleContactCompany} handleEmailCompany={handleEmailCompany}
-          handleNameCompany={handleNameCompany} handlePhoneCompany={handlePhoneCompany} nameCompany={nameCompany}
+          handleNameCompany={handleNameCompany} handlePhoneCompany={handlePhoneCompany} nameCompany={nameCompany} 
+          openSideNav={openSideNav}
           phoneCompany={phoneCompany} handleTradeNameCompany={handleTradeNameCompany} tradeNameCompany={tradeNameCompany} />);
 
   return(
@@ -175,9 +307,9 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
       style={{height: `${heightPage}px`}}
     >
       <div className="h-full p-1 sm:p-3">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <HeaderForm img="/img/gastos.svg" subtitle="" 
-            title=""
+            title="Agregar compañia"
           />
           <TooltipCloseIcon handleClose={handleOpen} />
         </div>

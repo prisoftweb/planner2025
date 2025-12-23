@@ -12,9 +12,9 @@ export default function ProfileAccount({workspace}: {workspace: IWorkSpaceMin}){
   return(
     <>
       <div className="w-full h-full mt-3">
-        <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
+        <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md items-center">
           <div>
-            <img src={'/img/projects/default.jpg'} alt="logo" className="w-20 h-20" />
+            <img src={workspace?.picture?? '/img/projects/default.jpg'} alt="logo" className="w-20 rounded-2xl" />
           </div>
           <div>
             <p className="text-blue-500">{workspace.name?? ""}</p>

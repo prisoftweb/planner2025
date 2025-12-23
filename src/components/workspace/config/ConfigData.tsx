@@ -1,46 +1,56 @@
-import { useFormik } from "formik";
-import * as Yup from 'yup';
+// import { useFormik } from "formik";
+// import * as Yup from 'yup';
 import { useState, useRef } from "react";
 import HeaderForm from "@/components/HeaderForm";
 import Button from "@/components/Button";
+import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
 
 type ConfigDataProps = {
   id:string, 
-  token:string, 
+  token:string,
+  workspace: IWorkSpaceMin
 }
 
-export default function ConfigData({ id, token}: ConfigDataProps){
+export default function ConfigData({ id, token, workspace}: ConfigDataProps){
   const refRequest = useRef(true);
+
+  console.log('workspace config data', workspace);
 
   const [serviceSaas, setServiceSaas]=useState<boolean>(true);
   const [verification, setVerification]=useState<boolean>(true);
 
-  const formik = useFormik({
-    initialValues: {
-      lastname:'',
-      name:'',
-      rfc: '',
-      email: '',
-    }, 
-    validationSchema: Yup.object({
-      lastname: Yup.string()
-                  .required('El apellido no puede ir vacio'),
-      name: Yup.string()
-                  .required('El nombre es obligatorio'),
-      email: Yup.string(),
-    }),
-    onSubmit: async (valores) => {            
-      if(refRequest.current){
+  const [emailVerified, setEmailVerified]=useState<boolean>(workspace.isverificatedEmail?? false);
+  const [phoneVerified, setPhoneVerified]=useState<boolean>(workspace.isverificatedPhone?? false);
+  const [accountVerified, setAccountVerified]=useState<boolean>(false);
+  const [additionalDataVerified, setAdditionalDataVerified]=useState<boolean>(false);
 
-      }
-    },
-  });
+  // const formik = useFormik({
+  //   initialValues: {
+  //     lastname:'',
+  //     name:'',
+  //     rfc: '',
+  //     email: '',
+  //   }, 
+  //   validationSchema: Yup.object({
+  //     lastname: Yup.string()
+  //                 .required('El apellido no puede ir vacio'),
+  //     name: Yup.string()
+  //                 .required('El nombre es obligatorio'),
+  //     email: Yup.string(),
+  //   }),
+  //   onSubmit: async (valores) => {            
+  //     if(refRequest.current){
+
+  //     }
+  //   },
+  // });
 
   return(
     <>
       <HeaderForm title="Modificar datos de cuenta" img="/img/projects/default.jpg" subtitle="Modificar tu perfil o cuenta" />
-      <form id="basicdata" onSubmit={formik.handleSubmit} className="mt-4 w-full">
-        
+      <form id="basicdata" className="mt-4 w-full"
+        // onSubmit={formik.handleSubmit}
+      >        
         <div className="mt-5 bg-white rounded-lg shadow-md p-2">
           <div>
             <div className="flex justify-between items-center">
@@ -68,8 +78,8 @@ export default function ConfigData({ id, token}: ConfigDataProps){
               </div>
             </div>
             <div className="pl-5">
-              <CardComponent name="Valida desde" desc="Fecha de inicio de contratación" value="2025-10-23" />
-              <CardComponent name="Valida hasta" desc="Fecha de termino de contratación" value="2025-11-22" />
+              <CardComponent name="Valida desde" desc="Fecha de inicio de contratación" value={workspace.validFrom?.substring(0,10)?? ''} />
+              <CardComponent name="Valida hasta" desc="Fecha de termino de contratación" value={workspace.validTo?.substring(0, 10)?? ''} />
             </div>
           </div>
         </div>
@@ -101,10 +111,10 @@ export default function ConfigData({ id, token}: ConfigDataProps){
               </div>
             </div>
             <div className="pl-5">
-              <ToogleComponent name="Teléfono verificado" desc="Teléfono fue verificado con codigo" value={true} />
-              <ToogleComponent name="Correo verificado" desc="Correo fue verificado con codigo" value={true} />
-              <ToogleComponent name="Cuenta verificada" desc="Cuenta fue verificada con codigo" value={true} />
-              <ToogleComponent name="Datos adicionales" desc="Captura los datos adicionales de un cliente" value={true} />
+              <ToogleComponent name="Teléfono verificado" desc="Teléfono fue verificado con codigo" value={phoneVerified} />
+              <ToogleComponent name="Correo verificado" desc="Correo fue verificado con codigo" value={emailVerified} />
+              <ToogleComponent name="Cuenta verificada" desc="Cuenta fue verificada con codigo" value={accountVerified} />
+              <ToogleComponent name="Datos adicionales" desc="Captura los datos adicionales de un cliente" value={additionalDataVerified} />
             </div>
           </div>
         </div>

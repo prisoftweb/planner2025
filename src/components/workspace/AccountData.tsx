@@ -8,8 +8,9 @@ import Button from "../Button";
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
 import HeaderForm from "../HeaderForm";
 import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
-import { updateWorkSpace } from "@/app/api/routeWorkspace";
+import { updateWorkSpace, updateWorkSpaceWithLogo } from "@/app/api/routeWorkspace";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import UploadImage from "../UploadImage";
 
 type AccountDataProps = {
   id:string, 
@@ -22,6 +23,7 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
   const refRequest = useRef(true);
   // const {updateProfileClient} = useClientProfileStore();
   const [phone, setPhone] = useState<string>( workspace.phoneNumber?? '');
+  const [file, setFile] = useState<File>();
 
   const formik = useFormik({
     initialValues: {
@@ -41,26 +43,56 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
       if(refRequest.current){
         refRequest.current = false;
 
-        const {email, lastname, name, rfc} = formik.values;
+        const {email, lastname, name} = formik.values;
 
         let phoneformat = phone.trim();
         phoneformat = phoneformat.replace(/\s+/g, '');
         phoneformat = phoneformat.replace('(+52)', '');
 
-        const data = {
-          name,
-          surname:lastname,
-          email,
-          phoneNumber: phoneformat,
-        }
-        const res = await updateWorkSpace(data, workspace._id, token);
-        if(typeof(res)==='string'){
-          refRequest.current = true;
-          showToastMessageError(res);
+        if(file){
+          const formdata=new FormData();
+          formdata.append('name', name);
+          formdata.append('surname', lastname);
+          formdata.append('email', email);
+          formdata.append('phoneNumber', phoneformat);
+          formdata.append('picture', file);
+
+          const data = {
+            name,
+            surname:lastname,
+            email,
+            phoneNumber: phoneformat,
+            file
+          }
+
+          console.log('data con logo => ', data);
+
+          const res = await updateWorkSpaceWithLogo(formdata, workspace._id, token);
+          if(typeof(res)==='string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+          }else{
+            console.log('res con logo => ', res);
+            refRequest.current = true;
+            showToastMessage('Espacio de trabajo actualizado satisfactoriamente!!!');
+            fetchWorkSpace();
+          }
         }else{
-          refRequest.current = true;
-          showToastMessage('Espacio de trabajo actualizado satisfactoriamente!!!');
-          fetchWorkSpace();
+          const data = {
+            name,
+            surname:lastname,
+            email,
+            phoneNumber: phoneformat,
+          }
+          const res = await updateWorkSpace(data, workspace._id, token);
+          if(typeof(res)==='string'){
+            refRequest.current = true;
+            showToastMessageError(res);
+          }else{
+            refRequest.current = true;
+            showToastMessage('Espacio de trabajo actualizado satisfactoriamente!!!');
+            fetchWorkSpace();
+          }
         }
       }
     },
@@ -113,7 +145,7 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
           ) : null}
         </div>
         <div>
-        <Label htmlFor="phone"><p>Telefono</p></Label>
+          <Label htmlFor="phone"><p>Telefono</p></Label>
           <div className="flex items-center mt-2 flex-wrap gap-y-1">
             <div className="w-full flex  justify-start items-center relative">
               <InputMask mask='9999999999'
@@ -126,6 +158,11 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
               <DevicePhoneMobileIcon className="h-6 w-6 text-amber-400 hover:text-amber-500 absolute ml-1" />
             </div>
           </div>
+        </div>
+
+        <div>
+          <Label htmlFor="logo"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Logotipo</p></Label>
+          <UploadImage setFile={setFile} />
         </div>
         
         <div className="flex justify-center mt-8 space-x-5">

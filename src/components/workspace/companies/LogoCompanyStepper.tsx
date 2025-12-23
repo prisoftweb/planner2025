@@ -1,15 +1,7 @@
 'use client'
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useState, useEffect, useRef } from "react"
-import InputMask from 'react-input-mask';
-import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
-import { createWorkSpace } from '@/app/api/routeWorkspace';
-import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
+
 import Button from '@/components/Button';
 import Label from '@/components/Label';
-import Input from '@/components/Input';
-import { showToastMessage, showToastMessageError } from '@/components/Alert';
 import UploadImage from '@/components/UploadImage';
 
 export default function LogoCompanyStepper({handleIndex, file, fileIsologo, handleFile, handleFileIsologo}: 

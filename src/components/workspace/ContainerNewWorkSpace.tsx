@@ -46,7 +46,7 @@ export default function ContainerNewWorkSpace() {
     </>
   ): index==4? (
     <>
-      {companyData && <AddAddressDataCompany handleIndex={handleIndex} company={companyData} />}
+      {companyData && userData && <AddAddressDataCompany handleIndex={handleIndex} company={companyData} user={userData} />}
     </>
   ): (
     <NewWorkSpace handleIndex={handleIndex} handleEmail={handleEmail} handleWorkSpace={handleWorkSpaceData} 

@@ -6,24 +6,22 @@ import {showToastMessage, showToastMessageError, showToastMessageWarning, showTo
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from '@/libs/animations';
+import { deleteCompanyInWorkSpace } from '@/app/api/routeWorkspace';
 
 type Props = {
   token : string, 
   name:string, 
-  id:string, 
-  remove:Function, 
+  idWs:string, 
   removeElement: Function, 
   colorIcon?: string, 
-  isCostcenterBudget?:boolean, 
-  progreesAverage?: number, 
-  totalAverage?: number
+  idComp:string,
+  idCompany:string
 }
 
-export default function RemoveElement({token, id, name, remove, removeElement, 
-  colorIcon='text-red-500 hover:text-red-300', isCostcenterBudget=false, progreesAverage=0, 
-  totalAverage=0} : Props){
+export default function RemoveCompanyInWorkSpace({token, idWs, idComp, name, removeElement, idCompany, 
+  colorIcon='text-red-500 hover:text-red-300'} : Props){
   
-  const deleteElement = async (progress: number, total: number)  => {
+  const deleteElement = async ()  => {
   
     confirmAlert({
       title: 'Confirmacion para eliminar?',
@@ -37,10 +35,10 @@ export default function RemoveElement({token, id, name, remove, removeElement,
           switch('user'){
             case 'user':
               try {
-                res = await remove(id, token, progreesAverage, totalAverage);
+                res = await deleteCompanyInWorkSpace(token, idWs, idCompany);
                 if(res === 204) {
                   showToastMessage(`${name} eliminado exitosamente!`);
-                  removeElement(id);
+                  removeElement( idCompany);
                 } else {
                   showToastMessageError(`${name} no pudo ser eliminado..`);
                 }
@@ -81,9 +79,9 @@ export default function RemoveElement({token, id, name, remove, removeElement,
       <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Eliminar' 
           placement="right" className="text-black bg-white rounded-md border border-slate-400">
         <div className=''>
-          <TrashIcon className={`cursor-pointer w-6 h-6 ${colorIcon} hover:bg-blue-100`}  
+          <TrashIcon className={`cursor-pointer w-4 h-4 ${colorIcon} hover:bg-blue-100`}  
             onClick={() => {
-              deleteElement(progreesAverage, totalAverage);
+              deleteElement();
             }}
           />
         </div>

@@ -144,13 +144,13 @@ export default function NewWorkSpace({handleIndex, handleEmail, handleWorkSpace,
                 backgroundPosition: "center"
               }}
       >
-        <p className='text-2xl w-96 text-white'>Controla y gestiona tus proyectos con las variables financieras adecuadas, cajas chicas, cobranza, facturacion</p>
+        <p className='text-5xl w-[600px] text-white'>Controla y gestiona tus proyectos con las variables financieras adecuadas, cajas chicas, cobranza, facturacion</p>
       </div>
       <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
 
-        <div className="ml-2">
+        <div className="border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <p className="text-xl">Crear nueva cuenta</p>
           <p className="text-gray-500 text-sm">Utiliza tu correo electrónico para crear una nueva cuenta.</p>
         </div>

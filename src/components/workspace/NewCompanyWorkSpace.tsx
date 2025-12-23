@@ -153,21 +153,21 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
       <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
         // style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
         style={{backgroundImage:
-                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/2174.jpg')",
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/138583.jpg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center"
               }}
       >
         <div>
-          <p className='text-4xl w-96 text-white'>Datos de empresa</p>
-          <p className='text-xl w-96 text-white'>Ingresa los datos de la compañia para gestionar sus ingresos y egresos.</p>
+          <p className='text-5xl w-[600px] text-white'>Datos de empresa</p>
+          <p className='text-4xl w-[600px] text-white'>Ingresa los datos de la compañia para gestionar sus ingresos y egresos.</p>
         </div>
       </div>
       <form className="z-10 w-full max-w-md h-full min-h-screen bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
         
-        <div className="ml-2">
+        <div className="border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <p className="text-xl">Agregar datos de una compañia</p>
           <p className="text-gray-500 text-sm">Ingresa los datos basicos de una compañia.</p>
         </div>

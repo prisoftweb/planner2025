@@ -43,8 +43,6 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
     categoriesEstimates.push(i.folio);
   });
 
-  console.log('resume invoice => ', resumenInvoice);
-  
   return (
     <>
       <div className="flex justify-between items-center">

@@ -1,46 +1,30 @@
 'use client'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { showToastMessageError } from '@/components/Alert';
-import { useState, useEffect, useRef } from "react"
-import HeaderForm from '@/components/HeaderForm';
+import { showToastMessageError, showToastMessage } from '@/components/Alert';
+import { useRef } from "react"
 import Button from '@/components/Button';
 import Label from '@/components/Label';
 import Input from '@/components/Input';
 import TextArea from '@/components/TextArea';
-import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
+import { updateCompany } from '@/app/api/routeCompany';
+import { Company } from '@/interfaces/Companies';
 
 // {handleIndex}: {handleIndex:(value: number) => void}
-export default function AddressDataCompanyStepper({addressCompany, cpCompany, communityCompany,
-    municipyCompany, stateCompany, countryCompany,
-    notesCompany,
-    handleAddressCompany, handleCpCompany, handleCommunityCompany,
-    handleMunicipyCompany, handleStateCompany, handleCountryCompany,
-    handleNotesCompany, saveCompany}:
-  {addressCompany:string, cpCompany:string, communityCompany:string,
-    municipyCompany:string, stateCompany:string, countryCompany:string,
-    notesCompany:string,
-    handleAddressCompany:(value:string) => void,
-    handleCpCompany:(value:string) => void,
-    handleCommunityCompany:(value:string) => void,
-    handleMunicipyCompany:(value:string) => void,
-    handleStateCompany:(value:string) => void,
-    handleCountryCompany:(value:string) => void,
-    handleNotesCompany:(value:string) => void,
-    saveCompany: (location: Object) => Promise<void>
-  }) {
+export default function AddressProfileCompany({company, fetchCompany, token}:
+  {company:Company, fetchCompany: () => Promise<void>, token:string}) {
 
   const refRequest = useRef(true);
   
   const formik = useFormik({
     initialValues: {
-      street: addressCompany,
-      cp: cpCompany,
-      community: communityCompany,
-      municipy: municipyCompany,
-      state: stateCompany,
-      country: countryCompany,
-      notes: notesCompany,
+      street: company.location?.stret ?? '',
+      cp: company.location?.cp ?? '',
+      community: company.location?.community ?? '',
+      municipy: company.location?.municipy ?? '',
+      state: company.location?.state ?? '',
+      country: company.location?.country ?? '',
+      notes: company.location?.addressref ?? '',
     }, 
     validationSchema: Yup.object({
       street: Yup.string()
@@ -67,25 +51,28 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
   const sendData = async () => {
     if(refRequest.current){
       const {community, country, cp, municipy, state, street, notes} = formik.values;
-      const location= {
-        stret:street,
-        cp,
-        community,
-        municipy,
-        state,
-        country,
-        addressref: notes
+      const data={
+        location: {
+          stret:street,
+          cp,
+          community,
+          municipy,
+          state,
+          country,
+          addressref: notes
+        }
       }
 
-      handleAddressCompany(street);
-      handleCpCompany(cp);
-      handleCommunityCompany(community);
-      handleMunicipyCompany(municipy);
-      handleStateCompany(state);
-      handleCountryCompany(country);
-      handleNotesCompany(notes);
+      const res = await updateCompany(token, data, company._id);
+      if(typeof(res) === 'string'){
+        showToastMessageError(res);
+        refRequest.current = true;
+      }else{
+        showToastMessage('Los datos se han actualizado correctamente.');
+        refRequest.current = true;
+        fetchCompany();
+      }
 
-      await saveCompany(location);
     }else{
       showToastMessageError('Ya hay una solicitud en proceso!!');
     }

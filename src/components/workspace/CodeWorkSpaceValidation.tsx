@@ -61,14 +61,14 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
               }}
       >
         <div>
-          <p className='text-2xl w-96 text-white'>Verifica tu identidad</p>
-          <p className='text-lg w-96 text-white'>Hemos enviado un correo electrónico con tu código a: {" "+emailUser}</p>
+          <p className='text-5xl w-[600px] text-white'>Verifica tu identidad</p>
+          <p className='text-4xl w-[600px] text-white'>Hemos enviado un correo electrónico con tu código a: {" "+emailUser}</p>
         </div>
       </div>
       <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
-        <div className="ml-2">
+        <div className="border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <p className="text-xl">Ingresar codigo</p>
           <span className="text-gray-500 text-sm">Revisa tu correo electronico </span>
           <span className="text-gray-700 text-sm"> {emailUser} </span>

@@ -10,9 +10,11 @@ import Input from '../Input';
 import TextArea from '../TextArea';
 import { updateCompany } from '@/app/api/routeCompany';
 import { Company } from '@/interfaces/Companies';
+import { setCookie } from 'cookies-next';
+import { UsrBack } from '@/interfaces/User';
 
-export default function AddAddressDataCompany({handleIndex, company}: 
-  {handleIndex:(value: number) => void, company:Company}) {
+export default function AddAddressDataCompany({handleIndex, company, user}: 
+  {handleIndex:(value: number) => void, company:Company, user:UsrBack}) {
 
   const refRequest = useRef(true);
   
@@ -66,6 +68,8 @@ export default function AddAddressDataCompany({handleIndex, company}:
       if(res===200){
         // console.log('res 201');
         showToastMessage('Compania actualizada satisfactoriamente!!!');
+        setCookie('user', user);
+        window.location.replace('/workspace')
       }else{
         // console.log('res else => ');
         refRequest.current = true;
@@ -81,24 +85,24 @@ export default function AddAddressDataCompany({handleIndex, company}:
       <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
         // style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
         style={{backgroundImage:
-                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/2174.jpg')",
+                  "linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('/img/workspaces/2149764150.jpg')",
                 backgroundSize: "cover",
                 backgroundPosition: "center"
               }}
       >
         <div>
-          <p className='text-4xl w-96 text-white'>Direccion de empresa</p>
-          <p className='text-xl w-96 text-white'>Ingresa la ubicación y domicilio de la compañia</p>
+          <p className='text-5xl w-[600px] text-white'>Direccion de empresa</p>
+          <p className='text-4xl w-[600px] text-white'>Ingresa la ubicación y domicilio de la compañia</p>
         </div>
       </div>
-      <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-md h-full min-h-screen bg-white space-y-5 p-3 right-0"
         onSubmit={formik.handleSubmit}
       >
         {/* <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
           title="Planner"
         /> */}
 
-        <div className="ml-2">
+        <div className="border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <p className="text-xl">Agregar dirección de compañia</p>
           <p className="text-gray-500 text-sm">Ingresa la dirección y ubicación de una compañia.</p>
         </div>

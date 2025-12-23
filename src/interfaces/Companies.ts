@@ -15,7 +15,19 @@ export interface Company {
   phoneNumber: string
   address: string
   logo: string
+  isologo?: string
   status: boolean
   __v: number
   id: string
+  tradename?:string
+  contact?:string,
+  location?: {
+    stret?: string,
+    cp?: string,
+    community?: string,
+    municipy?: string,
+    state?: string,
+    country?: string,
+    addressref?: string
+  }
 }

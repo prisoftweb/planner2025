@@ -17,7 +17,8 @@ export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
       methodpaid: inv.paymentMethod,
       usecfdi: inv.useCFDI,
       idEstimates:inv.estimate._id, 
-      charged: inv.lastpayment?.charged || 0,
+      // charged: inv.lastpayment?.charged || 0,
+      charged: inv.fullyCharged || 0,
       // charged: (inv.lastpayment?.unchargedbalanceamount >= 0 && inv.lastpayment?.unchargedbalanceamount <= 100? 
       //                         inv.cost.total: inv.cost.total - inv.lastpayment?.unchargedbalanceamount) || inv.cost.total,
       unchargedbalanceamount: inv.lastpayment?.unchargedbalanceamount || 0,

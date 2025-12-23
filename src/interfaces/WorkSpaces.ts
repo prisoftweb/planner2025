@@ -74,6 +74,7 @@ export interface ICompanyWorkSpace {
   isverificatedSAT: boolean
   _id: string
   name: string
+  tradename?:string
   email: string
   phoneNumber: string
   address: string
@@ -85,4 +86,9 @@ export interface ICompanyWorkSpace {
     name: string
   }
   id: string
+}
+
+export interface ICompanyInWorkSpace{
+  _id:string
+  companys:ICompanyWorkSpace
 }

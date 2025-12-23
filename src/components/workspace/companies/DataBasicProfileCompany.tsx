@@ -4,40 +4,33 @@ import * as Yup from 'yup';
 import { useState, useEffect, useRef } from "react"
 import InputMask from 'react-input-mask';
 import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
-import { createWorkSpace } from '@/app/api/routeWorkspace';
-import { CreateCompany, CreateCompanyLogo } from '@/app/api/routeCompany';
+import { updateCompany } from '@/app/api/routeCompany';
 import Button from '@/components/Button';
 import Label from '@/components/Label';
 import Input from '@/components/Input';
 import { showToastMessage, showToastMessageError } from '@/components/Alert';
+import { Company } from '@/interfaces/Companies';
 
-export default function DataBasicCompanyStepper({handleIndex, contactCompany, emailCompany, nameCompany, 
-    phoneCompany, tradeNameCompany, handleContactCompany,handleEmailCompany, handleNameCompany, handlePhoneCompany,
-    handleTradeNameCompany, openSideNav}: 
-  {handleIndex:(value: number) => void, nameCompany:string, emailCompany:string, contactCompany:string, 
-    phoneCompany:string, tradeNameCompany:string, handleNameCompany:(value:string) => void,
-    handleEmailCompany:(value:string) => void, handleTradeNameCompany:(value:string) => void,
-    handleContactCompany:(value:string) => void,
-    handlePhoneCompany:(value:string) => void, openSideNav:boolean
-  }) {
+export default function DataBasicProfileCompany({company, token, fetchCompany}: 
+  { company:Company, token:string, fetchCompany: () => Promise<void>}) {
 
   const refRequest = useRef(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [phoneNumber, setPhoneNumber] = useState(phoneCompany);
+  const [phoneNumber, setPhoneNumber] = useState(company.phoneNumber?? '');
   const [errorPhoneNumber, setErrorPhoneNumber] = useState('');
 
-  useEffect(() => {
-    if (openSideNav && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [openSideNav]);
+  // useEffect(() => {
+  //   if (openSideNav && inputRef.current) {
+  //     inputRef.current.focus();
+  //   }
+  // }, [openSideNav]);
   
   const formik = useFormik({
     initialValues: {
-      name: nameCompany,
-      email: emailCompany,
-      contact: contactCompany,
-      tradename: tradeNameCompany
+      name: company.name?? '',
+      email: company.email?? '',
+      contact: company.contact?? '',
+      tradename: company.tradename?? ''
     }, 
     validationSchema: Yup.object({
       name: Yup.string()
@@ -55,7 +48,7 @@ export default function DataBasicCompanyStepper({handleIndex, contactCompany, em
      }
   });
 
-  const sendData = () => {
+  const sendData = async () => {
     if(refRequest.current){
       refRequest.current = false;
       if (!phoneNumber || phoneNumber.trim() === '') {
@@ -70,13 +63,23 @@ export default function DataBasicCompanyStepper({handleIndex, contactCompany, em
       phoneformat = phoneformat.replace('(+52)', '');
 
       const { name, email, contact, tradename } = formik.values;
-      handleNameCompany(name);
-      handleEmailCompany(email);
-      handlePhoneCompany(phoneformat);
-      handleContactCompany(contact);
-      handleTradeNameCompany(tradename),
-      handleIndex(1);
+      const data = {
+        name: name.trim(),
+        email: email.trim(),
+        contact: contact.trim(),
+        tradename: tradename.trim(),
+        phoneNumber: phoneformat
+      };
 
+      const res = await updateCompany(token, data, company._id);
+      if(typeof(res) === 'string'){
+        showToastMessageError(res);
+        refRequest.current = true;
+      }else{
+        showToastMessage('Los datos se han actualizado correctamente.');
+        refRequest.current = true;
+        fetchCompany();
+      }
     }else{
       showToastMessageError('Ya hay una solicitud en proceso!!');
     }
@@ -168,7 +171,7 @@ export default function DataBasicCompanyStepper({handleIndex, contactCompany, em
       </div>
 
       <div className="flex justify-center mt-2">
-        <Button type="submit">Siguiente</Button>
+        <Button type="submit">Guardar</Button>
       </div>
 
     </form>
