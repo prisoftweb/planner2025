@@ -261,11 +261,13 @@ export default function TableCostsProvider({data, token, expenses, idProv,
           {/* {isFilter && <FilteringPaymentsProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} />} */}
-        <ContainerSideNav width="w-full max-w-md" open={isFilter}>
-          <FilteringPaymentsProvider showForm={handleIsFilter}  
-                          FilterData={filterData} maxAmount={maxAmount} 
-                          minAmount={minAmount} token={token} />
-        </ContainerSideNav>
+        {isFilter && (
+          <ContainerSideNav width="w-full max-w-md" open={isFilter}>
+            <FilteringPaymentsProvider showForm={handleIsFilter}  
+                            FilterData={filterData} maxAmount={maxAmount} 
+                            minAmount={minAmount} token={token} />
+          </ContainerSideNav>
+        )}
       </div>
       {view}
     </>
