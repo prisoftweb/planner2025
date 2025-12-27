@@ -1,7 +1,7 @@
 'use client'
 
 import HeaderForm from "../HeaderForm"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import UploadImage from "../UploadImage";
 import Button from "../Button";
 import Label from "../Label";
@@ -10,12 +10,30 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { setCookie } from "cookies-next"
 import { useUserStore } from "@/app/store/userStore";
 import { useRef } from "react";
+import { updateWorkSpaceWithLogo } from "@/app/api/routeWorkspace";
+import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
+import { getWorkSpaces } from "@/app/api/routeWorkspace";
+import { UsrBack } from "@/interfaces/User";
 
-export default function ChangePhoto({id, token}: {id:string, token:string}){
+export default function ChangePhoto({id, token, user}: {id:string, token:string, user:UsrBack}){
   
   const [photo, setPhoto] = useState<File>();
   const {updateUser} = useUserStore();
   const refRequest = useRef(true);
+
+  const [workspaces, setWorkspaces] = useState<IWorkSpaceMin[]>([]);
+  
+  useEffect(() => {
+    const fetchWorkSpaces = async () => {
+      const res = await getWorkSpaces(token);
+      if(Array.isArray(res)){
+        setWorkspaces(res);
+      }else{
+        showToastMessageError('Error al obtener los workspaces');
+      }
+    }
+    fetchWorkSpaces();
+  }, []);
   
   const onSave = async () => {
     if(photo){
@@ -24,6 +42,10 @@ export default function ChangePhoto({id, token}: {id:string, token:string}){
         try {
           const data = new FormData();
           data.append('photo', photo);
+
+          const dataws = new FormData();
+          dataws.append('picture', photo);
+
           const res = await updateMeUser(id, data, token);
           if(typeof(res)==='string'){
             refRequest.current = true;
@@ -33,6 +55,16 @@ export default function ChangePhoto({id, token}: {id:string, token:string}){
             showToastMessage('La foto ha sido actualizada!!');
             setCookie('user', res);
             updateUser(res);
+
+            const wsToUpdate = workspaces.filter((ws) => ws.email === user.email);
+            const resws = await updateWorkSpaceWithLogo(dataws, wsToUpdate[0]?._id?? '', token);
+            if(typeof(res)==='string'){
+              refRequest.current = true;
+              showToastMessageError(res);
+            }else{
+              refRequest.current = true;
+              showToastMessage('La foto del workspace ha sido actualizada!!');
+            }
           }
         } catch (error) {
           refRequest.current = true;

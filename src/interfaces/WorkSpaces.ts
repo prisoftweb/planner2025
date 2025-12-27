@@ -35,6 +35,7 @@ export interface IWorkSpaceMin {
     color: string
     darktext: boolean
   }
+  daysavailable?: number
 }
 
 

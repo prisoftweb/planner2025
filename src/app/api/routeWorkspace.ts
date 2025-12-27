@@ -135,6 +135,28 @@ export async function findCODEVALIDATION(code:string, email:string) {
   }
 }
 
+export async function resendNEWCode(data:Object) {
+  const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/cods/resendNEWCode`;
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    });
+    // console.log('res => ', res.data.data);
+    if(res.status===201)
+      return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    // console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error?.response?.data?.message || error.message;
+    }else{
+      return 'Error al reenviar codigo, intente de nuevo...';
+    }
+  }
+}
+
 export async function insertCompanyInWorkSpace(auth_token:string, id:string, data:Object) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/insertCompanyArrByID/${id}`;
   console.log('url ws insert company => ', url);

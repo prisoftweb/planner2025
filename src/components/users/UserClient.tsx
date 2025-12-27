@@ -49,7 +49,7 @@ export default function UserClient({user, token, departments, optQuery, optsRole
 
   console.log('user client opt => ', optQuery, ' => ', opt);
   
-  opt===2? view = (<ChangePhoto id={user._id} token={token} />) : 
+  opt===2? view = (<ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />) : 
       (opt===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 
         (opt===4? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
           view = (<UpdateProfile departments={departments} user={usr.name ===''? user: usr} 

@@ -6,7 +6,7 @@ import { useRef } from "react"
 import Button from '../Button';
 import Label from '../Label';
 import Input from '../Input';
-import { findCODEVALIDATION } from '@/app/api/routeWorkspace';
+import { findCODEVALIDATION, resendNEWCode } from '@/app/api/routeWorkspace';
 
 export default function CodeWorkSpaceValidation({handleIndex, emailUser}: 
   {handleIndex:(value: number) => void, emailUser:string}) {
@@ -50,6 +50,26 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
     }
   });
 
+  const handleSendCode = async () => {
+    if(refRequest.current){
+      refRequest.current = false;
+      const data = {
+        email: emailUser,
+        date: new Date().toISOString()
+      }
+      const res = await resendNEWCode(data);
+      if(typeof(res)==='string'){
+        refRequest.current = true;
+        showToastMessageError(res);
+      }else{
+        showToastMessage('Codigo reenviado exitosamente!!!');
+        refRequest.current = true;
+      }
+    }else{
+      showToastMessageError('Ya hay una solicitud en proceso!!');
+    }
+  }
+
   return (
     <div className='w-full h-screen flex'>
       <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
@@ -65,7 +85,7 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
           <p className='text-4xl w-[600px] text-white'>Hemos enviado un correo electrónico con tu código a: {" "+emailUser}</p>
         </div>
       </div>
-      <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-lg h-full bg-white space-y-5 py-3 md:py-5 px-3 md:px-12 right-0"
         onSubmit={formik.handleSubmit}
       >
         <div className="border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
@@ -93,7 +113,7 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
         <div>
           <div className='flex justify-between items-center'>
             <p className='text-xs text-slate-500'>No he recibido codigo?</p>
-            <p className='text-xs text-blue-600 cursor-pointer'>Reenviar codigo</p>
+            <p className='text-xs text-blue-600 cursor-pointer' onClick={handleSendCode}>Reenviar codigo</p>
           </div>
           <Label htmlFor="code"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Codigo</p></Label>
           <Input name="code" 

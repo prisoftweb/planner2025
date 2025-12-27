@@ -11,15 +11,18 @@ import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
 import { updateWorkSpace, updateWorkSpaceWithLogo } from "@/app/api/routeWorkspace";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import UploadImage from "../UploadImage";
+import { updateUser, updateMeUser } from "@/app/api/routeUser"
+import { setCookie } from "cookies-next"
 
 type AccountDataProps = {
   id:string, 
   token:string, 
   workspace: IWorkSpaceMin,
-  fetchWorkSpace: () => Promise<void>
+  fetchWorkSpace: () => Promise<void>,
+  idUser: string
 }
 
-export default function AccountData({ id, token, workspace, fetchWorkSpace}: AccountDataProps){
+export default function AccountData({ id, token, workspace, fetchWorkSpace, idUser}: AccountDataProps){
   const refRequest = useRef(true);
   // const {updateProfileClient} = useClientProfileStore();
   const [phone, setPhone] = useState<string>( workspace.phoneNumber?? '');
@@ -37,13 +40,13 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
                   .required('El apellido no puede ir vacio'),
       name: Yup.string()
                   .required('El nombre es obligatorio'),
-      email: Yup.string(),
+      // email: Yup.string(),
     }),
     onSubmit: async (valores) => {            
       if(refRequest.current){
         refRequest.current = false;
 
-        const {email, lastname, name} = formik.values;
+        const {lastname, name} = formik.values;
 
         let phoneformat = phone.trim();
         phoneformat = phoneformat.replace(/\s+/g, '');
@@ -53,35 +56,50 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
           const formdata=new FormData();
           formdata.append('name', name);
           formdata.append('surname', lastname);
-          formdata.append('email', email);
+          // formdata.append('email', email);
           formdata.append('phoneNumber', phoneformat);
           formdata.append('picture', file);
-
-          const data = {
-            name,
-            surname:lastname,
-            email,
-            phoneNumber: phoneformat,
-            file
-          }
-
-          console.log('data con logo => ', data);
 
           const res = await updateWorkSpaceWithLogo(formdata, workspace._id, token);
           if(typeof(res)==='string'){
             refRequest.current = true;
             showToastMessageError(res);
           }else{
-            console.log('res con logo => ', res);
-            refRequest.current = true;
             showToastMessage('Espacio de trabajo actualizado satisfactoriamente!!!');
+
+            refRequest.current = true;
+            const dataUser = {
+              name: name + ' ' + lastname
+            }
+            
+            const dataFoto = new FormData();
+            dataFoto.append('photo', file);
+            
+            const [resUser, resFoto] = await Promise.all([
+              updateUser(dataUser, token, idUser),
+              updateMeUser(idUser, dataFoto, token)
+            ]);
+            
+            if(typeof(resUser) === 'string'){
+              showToastMessageError(resUser);
+            }else{
+              showToastMessage('Usuario actualizado exitosamente!');
+            }
+
+            if(typeof(resFoto) === 'string'){
+              showToastMessageError(resFoto);
+            }else{
+              showToastMessage('Foto de usuario actualizada exitosamente!');
+              setCookie('user', resFoto);
+            }
+            
             fetchWorkSpace();
           }
         }else{
           const data = {
             name,
             surname:lastname,
-            email,
+            // email,
             phoneNumber: phoneformat,
           }
           const res = await updateWorkSpace(data, workspace._id, token);
@@ -89,8 +107,20 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
             refRequest.current = true;
             showToastMessageError(res);
           }else{
-            refRequest.current = true;
             showToastMessage('Espacio de trabajo actualizado satisfactoriamente!!!');
+
+            refRequest.current = true;
+            const dataUser = {
+              name: name + ' ' + lastname
+            }
+            const resUser = await updateUser(dataUser, token, idUser);
+            if(typeof(resUser) === 'string'){
+              showToastMessageError(resUser);
+            }else{
+              showToastMessage('Usuario actualizado exitosamente!');
+              setCookie('user', resUser);
+            }
+            
             fetchWorkSpace();
           }
         }
@@ -137,6 +167,7 @@ export default function AccountData({ id, token, workspace, fetchWorkSpace}: Acc
             value={formik.values.email}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
+            disabled={true}
           />
           {formik.touched.email && formik.errors.email ? (
             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">

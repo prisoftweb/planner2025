@@ -95,12 +95,9 @@ export default function AddAddressDataCompany({handleIndex, company, user}:
           <p className='text-4xl w-[600px] text-white'>Ingresa la ubicación y domicilio de la compañia</p>
         </div>
       </div>
-      <form className="z-10 w-full max-w-md h-full min-h-screen bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-lg h-full min-h-screen bg-white space-y-5 py-3 md:py-5 px-3 md:px-12 right-0"
         onSubmit={formik.handleSubmit}
       >
-        {/* <HeaderForm img="/img/glossary.svg" subtitle="Gestiona tus proyectos" 
-          title="Planner"
-        /> */}
 
         <div className="border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
           <p className="text-xl">Agregar dirección de compañia</p>

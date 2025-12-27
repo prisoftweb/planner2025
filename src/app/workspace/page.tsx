@@ -33,7 +33,7 @@ export default async function Page() {
           <></>
         </Header>
         <NavTabAccount idWS="" tab="1" />
-        <WorkSpaceCli id="" token={token} workspaceParam={workSpaces[workSpaces.length-1]} />
+        <WorkSpaceCli id="" token={token} workspaceParam={workSpaces[workSpaces.length-1]} idUser={user._id} />
       </div>
     </>
   )

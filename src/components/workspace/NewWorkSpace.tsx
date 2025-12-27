@@ -111,14 +111,15 @@ export default function NewWorkSpace({handleIndex, handleEmail, handleWorkSpace,
             email, 
             password, 
             confirmpassword: confirmPassword, 
-            rol:"660efa21f7bd2d031cae721c"
+            rol:"660efa21f7bd2d031cae721c",
+            department:"65d3817b74045152c0c43782"
           }
 
           const resUser = await createUser(userData, '');
           if(typeof(resUser)==='string'){
             refRequest.current = true;
             // handleEmail(email);
-            showToastMessageError("Error usuario " +resUser);
+            showToastMessageError(resUser);
             handleIndex(2);
           }else{
             handleUser(resUser);
@@ -146,7 +147,7 @@ export default function NewWorkSpace({handleIndex, handleEmail, handleWorkSpace,
       >
         <p className='text-5xl w-[600px] text-white'>Controla y gestiona tus proyectos con las variables financieras adecuadas, cajas chicas, cobranza, facturacion</p>
       </div>
-      <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-lg h-full min-h-screen bg-white space-y-5 py-3 md:py-5 px-3 md:px-12 right-0"
         onSubmit={formik.handleSubmit}
       >
 

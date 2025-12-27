@@ -32,7 +32,7 @@ export default function ProfileAccount({workspace}: {workspace: IWorkSpaceMin}){
           </div>
           <div className="mt-3">
             <Label>Dias disponibles</Label>
-            <p className="my-0 text-blue-500">28 dias</p>
+            <p className="my-0 text-blue-500">{workspace?.daysavailable?? 0} dias</p>
           </div>
           <div className="mt-3">
             <Label>Periodo</Label>

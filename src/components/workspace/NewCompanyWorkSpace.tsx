@@ -163,7 +163,7 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
           <p className='text-4xl w-[600px] text-white'>Ingresa los datos de la compañia para gestionar sus ingresos y egresos.</p>
         </div>
       </div>
-      <form className="z-10 w-full max-w-md h-full min-h-screen bg-white space-y-5 p-3 right-0"
+      <form className="z-10 w-full max-w-lg h-full min-h-screen bg-white space-y-5 py-3 md:py-5 px-3 md:px-12 right-0"
         onSubmit={formik.handleSubmit}
       >
         
