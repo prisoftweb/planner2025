@@ -19,7 +19,7 @@ export default async function Page(){
 
   let role = user.rol?.name || '';
 
-  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB] = await Promise.all([
+  const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB, prjsCBtrue, totalCBtrue] = await Promise.all([
     role.toLowerCase().includes('residente') ? getProjectsMinInEjecucionUser(token, user._id) : getActiveProjectsMin(token),
     getProjectsMinFinishedUser(token, user._id),
     getClients(token), 
@@ -28,7 +28,10 @@ export default async function Page(){
     getCatalogsByName(token, 'projects'),
     getCompaniesLV(token),
     getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token),
-    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token)
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token), //agregar parametro /?full=false para imprimir 
+                                                                        //global o por proyecto
+    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true"),
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true")
   ]);
   
   if(typeof(projects)==='string'){
@@ -150,7 +153,9 @@ export default async function Page(){
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
           optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
           optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 
-          condition={condition} prjsCB={prjsCB} benTot={totalCB[0]} cosBen={totalCB[2]} costTot={totalCB[1]} />
+          condition={condition} prjsCB={prjsCB} benTot={totalCB[0]} cosBen={totalCB[2]} costTot={totalCB[1]}
+          benTottrue={totalCBtrue[0]} cosBentrue={totalCBtrue[2]} costTottrue={totalCBtrue[1]} 
+          prjsCBtrue={prjsCBtrue} />
     </>
   )
 }

@@ -19,8 +19,6 @@ export default async function Page() {
     getAllCodesMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), [], 'SIN ASIGNAR'), 
     getAllProvidersWithTradeLine(token), 
-    // getAllCostsMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
-    //     new Date().toDateString(), [])
     getAllCostsMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
         today.toDateString(), [])
   ])

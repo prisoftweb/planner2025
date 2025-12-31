@@ -7,10 +7,11 @@ type Props = {
   cosBen:ICosBen, 
   costTot:ICostosTotales, 
   benTot:IBeneficiosTotales,
-  order:string
+  order:string,
+  type:string
 }
 
-export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, order}: Props) {
+export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, order, type}: Props) {
 
   const orderProjects = order==="Ganancia"? [...prjsCB].sort((a, b) => a.rentabilidad - b.rentabilidad) : [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
 
@@ -33,7 +34,8 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>COSTO-BENEFICIO</Text>
-                    <Text style={{fontSize:'11px', color:'gray'}}>POR PROYECTO</Text>
+                    {/* <Text style={{fontSize:'11px', color:'gray'}}>POR PROYECTO</Text> */}
+                    <Text style={{fontSize:'11px', color:'gray'}}>{type}</Text>
                   </View>
                 </View>
               </View>
@@ -64,7 +66,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
                     })}
                   </Text>
                   <Text style={{textAlign:'center', color:cosBen.costobeneficio>=1?'green':'red', fontSize:'11px', width:'100px'}}>
-                    {cosBen.costobeneficio.toFixed(2)}
+                    {cosBen.costobeneficio?.toFixed(2)}
                   </Text>
                 </View>
               </View>

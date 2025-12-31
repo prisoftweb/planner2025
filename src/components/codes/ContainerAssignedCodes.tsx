@@ -28,7 +28,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
   const [searchCost, setSearchCost]=useState<string>('');
   const [codeSelected, setCodeSelected]=useState<ICodeMin | null>(null);
   const [costSelected, setCostSelected]=useState<ICostWithoutCode | null>(null);
-  // const [assigning, setAssigning]=useState<boolean>(false);
   const [message, setMessage]=useState<string | null>();
 
   const handleAssingCode = async () => {
@@ -68,8 +67,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
 
         deleteCodeAndCost(codeSelected._id, costSelected._id);
         showToastMessage('Codigo asignado correctamente');
-        // setAssigning(true);
-        // const res = await assignCodeToCost(token, codeSelected._id, costSelected._id);
       }
     }
   }
@@ -112,15 +109,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
   }
 
   const handleFilter = async (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    // updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
-    
-    // const res = await getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses);
-    // if(typeof(res)==='string'){
-    //   showToastMessageError(res);
-    // }else{
-    //   setCodesState(res);
-    // }
-
     const [codesfetch, costsfetch] = await Promise.all([
       getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses, 'SIN ASIGNAR'), 
       getAllCostsMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses)
@@ -158,7 +146,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
   const filteredCodes = search==''? codesState: codesState.filter((p) => p.code.toString().toLowerCase().includes(search.toLowerCase()));
 
   const filteredCosts = searchCost==''? costsState: costsState.filter((p) => p.folio?.toString()?.toLowerCase()?.includes(searchCost.toLowerCase())); 
-  // const filteredCosts = searchCost==''? costsState: costsState.filter((p) => p.folio.includes(searchCost)); 
   
   return (
     <>
@@ -255,7 +242,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
         </div>
 
         <div className="w-full max-w-lg" >
-          {/*codeSelected && <Button onClick={() => deleteCodeAndCost(codeSelected._id, '')}>Delete</Button>*/}
           <div>
             <div className="flex items-center gap-x-2">
               <div className="relative w-full p-2">
@@ -268,7 +254,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
                   type="search" 
                   id="default-search"
                   value={searchCost}
-                  // autoFocus
                   onChange={(e) => setSearchCost(e.target.value)} 
                   className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 
                     rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500
@@ -298,11 +283,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
 
               {!codeSelected && (<div></div>)}
 
-              {/* {codeSelected && costSelected? (
-                <Button onClick={() => alert('asignar')}>Asignar codigo</Button>
-              ): (
-                <Button disabled >Asignar codigo</Button>
-              )} */}
               <Button onClick={() => handleAssingCode()}>Asignar codigo</Button>
               
             </div>
@@ -322,8 +302,6 @@ export default function ContainerAssignedCodes({codes, providers, token, costs}:
                   >
                     <div className="flex items-center w-full ">
                       <div className="grid mr-4 w-24 place-items-center">
-                        {/* <img alt="responsable" src={ code?.userRequesting?.photo ?? '/img/users/default.jpg'}
-                          className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
                         <Chip darktext={cost.estatus.darktext?? false} width="w-10" label={cost.estatus.name.substring(0, 3)} color={cost.estatus.color} />
                         <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                           {cost.folio}

@@ -38,12 +38,17 @@ type Props = {
   prjsCB:IProyectCostBen[], 
   cosBen:ICosBen, 
   costTot:ICostosTotales, 
-  benTot:IBeneficiosTotales
+  benTot:IBeneficiosTotales,
+  prjsCBtrue:IProyectCostBen[], 
+  cosBentrue:ICosBen, 
+  costTottrue:ICostosTotales, 
+  benTottrue:IBeneficiosTotales
 }
 
 export default function ContainerClient({token, optClients, optCategories, 
   optTypes, user, optCompanies, data, optCategoriesFilter, optConditionsFilter, 
-  optTypesFilter, projects, condition, benTot, cosBen, costTot, prjsCB}: Props){
+  optTypesFilter, projects, condition, benTot, cosBen, costTot, prjsCB, benTottrue, 
+  cosBentrue, costTottrue, prjsCBtrue}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -161,7 +166,7 @@ export default function ContainerClient({token, optClients, optCategories,
                     ))}
                   </div>
                   {selected==='Ganancia'? (
-                    <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} cosBen={cosBen} costTot={costTot} order={'Ganancia'} />} fileName={`Relacion de ganancias por proyectos`} >
+                    <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" />} fileName={`Relacion de ganancias por proyectos`} >
                       {({loading, url, error, blob}) => 
                         loading? (
                           <TooltipContainerIcon label="Ganancia">
@@ -174,7 +179,7 @@ export default function ContainerClient({token, optClients, optCategories,
                         ) }
                     </PDFDownloadLink>
                   ): (
-                    <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} cosBen={cosBen} costTot={costTot} order={'B/C'} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
+                    <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
                       {({loading, url, error, blob}) => 
                         loading? (
                           <TooltipContainerIcon label="costo beneficio">
@@ -183,6 +188,33 @@ export default function ContainerClient({token, optClients, optCategories,
                         ) : (
                           <TooltipContainerIcon label="costo beneficio">
                             <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                          </TooltipContainerIcon>
+                        ) }
+                    </PDFDownloadLink>
+                  )}
+                  {selected==='Ganancia'? (
+                    <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
+                      {({loading, url, error, blob}) => 
+                        loading? (
+                          <TooltipContainerIcon label="Ganancia">
+                            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                          </TooltipContainerIcon>
+                        ) : (
+                          <TooltipContainerIcon label="Ganancia">
+                            <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+                          </TooltipContainerIcon>
+                        ) }
+                    </PDFDownloadLink>
+                  ): (
+                    <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" />} fileName={`Relacion de costo beneficio B-C general`} >
+                      {({loading, url, error, blob}) => 
+                        loading? (
+                          <TooltipContainerIcon label="costo beneficio">
+                            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                          </TooltipContainerIcon>
+                        ) : (
+                          <TooltipContainerIcon label="costo beneficio">
+                            <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
                           </TooltipContainerIcon>
                         ) }
                     </PDFDownloadLink>
