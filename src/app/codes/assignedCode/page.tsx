@@ -1,10 +1,11 @@
 import { cookies } from "next/headers";
 import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
-import { getAllCodesMINByDateANDProvider } from "../api/routeCode";
-import ContainerCodes from "@/components/codes/ContainerCodes";
+import { getAllCodesMINByDateANDProvider } from "@/app/api/routeCode";
+import ContainerAssignedCodes from "@/components/codes/ContainerAssignedCodes";
 import Header from "@/components/HeaderPage";
-import { getAllProvidersWithTradeLine } from "../api/routeDashboardProviders";
+import { getAllProvidersWithTradeLine } from "@/app/api/routeDashboardProviders";
+import { getAllCostsMINByDateANDProvider } from "@/app/api/routeCost";
 
 export default async function Page() {
 
@@ -13,13 +14,15 @@ export default async function Page() {
   const token: string = cookieStore.get('token')?.value || '';
 
   const today = new Date();
-
-  const [codes, providers] = await Promise.all([
-    // getAllCodesMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
-    //     new Date().toDateString(), [], 'TODOS'),
+  
+  const [codes, providers, costs] = await Promise.all([
     getAllCodesMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
-        today.toDateString(), [], 'TODOS'), 
-    getAllProvidersWithTradeLine(token)
+        today.toDateString(), [], 'SIN ASIGNAR'), 
+    getAllProvidersWithTradeLine(token), 
+    // getAllCostsMINByDateANDProvider(token, new Date(new Date().getFullYear(), 0, 1).toDateString(), 
+    //     new Date().toDateString(), [])
+    getAllCostsMINByDateANDProvider(token, new Date(today.getFullYear(), today.getMonth(), 1).toDateString(), 
+        today.toDateString(), [])
   ])
   
   if (typeof(codes) === 'string') {
@@ -48,10 +51,10 @@ export default async function Page() {
     <div>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md:p-5">
-        <Header previousPage="/" title="Codigos" >
+        <Header previousPage="/" title="Asignar codigos" >
           <></>
         </Header>
-        <ContainerCodes codes={codes} providers={providers} token={token} />
+        <ContainerAssignedCodes codes={codes} providers={providers} token={token} costs={costs} />
       </div>
     </div>
   )

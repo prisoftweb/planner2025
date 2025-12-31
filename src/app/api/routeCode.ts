@@ -42,8 +42,9 @@ export async function getCodesMin(token: string) {
   }
 }
 
-export async function getAllCodesMINByDateANDProvider(token: string, dateStart:string, dateEnd:string, providers:string[]) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/getAllCodesMINByDateANDProvider/${dateStart}/${dateEnd}`;
+export async function getAllCodesMINByDateANDProvider(token: string, dateStart:string, dateEnd:string, providers:string[], type:string) {
+  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/getAllCodesMINByDateANDProvider/${dateStart}/${dateEnd}/SIN ASIGNAR`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/getAllCodesMINByDateANDProvider/${dateStart}/${dateEnd}/${type}`;
   const data = {
     providers: providers
   }
@@ -55,7 +56,7 @@ export async function getAllCodesMINByDateANDProvider(token: string, dateStart:s
       },
     });
     if (response.status === 200) {
-      console.log('res codes => ', response.data.data.stats);
+      // console.log('res codes => ', response.data.data.stats);
       return response.data.data.stats;
     }
     return 'Error: No se pudo obtener la información de los codigos';
@@ -106,5 +107,26 @@ export async function removeCode(token: string, id:string) {
       return error.response?.data || 'Error: No se pudo eliminar el codigo';
     }
     return 'Error: No se pudo eliminar el codigo'; 
+  }
+}
+
+export async function updateCode(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/${id}`;
+  console.log('updateCode url => ', url);
+  console.log('updateCode data => ', JSON.stringify(data));
+  try {
+    const res = await axios.patch(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if(res.status===200) return res.data.data.data;
+    res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al actualizar codigo!!';
   }
 }

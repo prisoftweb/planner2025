@@ -43,7 +43,7 @@ export default function ContainerCodes({codes, providers, token}:
 
   const handleFilter = async (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
     // updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
-    const res = await getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses);
+    const res = await getAllCodesMINByDateANDProvider(token, dateS.toDateString(), dateE.toDateString(), arrStatuses, 'TODOS');
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{

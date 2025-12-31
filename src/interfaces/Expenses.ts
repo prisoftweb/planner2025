@@ -1,7 +1,6 @@
 import { Glossary } from "./Glossary"
 import { UsrBack } from "./User"
 import { Provider } from "./Providers"
-import { CostCenter } from "./CostCenter"
 import { Project } from "./Projects"
 import { Report } from "./Reports"
 import { Concept } from "./Concepts"
@@ -174,3 +173,33 @@ export interface Cost {
   total: number
   exempttax: number
 }
+
+export interface ICostWithoutCode {
+  _id: string
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    discount: number
+    exempttax: any
+  }
+  provider: {
+    _id: string
+    name: string
+  }
+  project: {
+    _id: string
+    title: string
+  }
+  folio: string
+  description: string
+  date: string
+  estatus: {
+    _id: string
+    name: string
+    color: string
+    darktext?: boolean
+  }
+  status: boolean
+}
+

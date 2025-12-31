@@ -270,7 +270,7 @@ export async function GetCost(auth_token:string, id:string) {
 
 export async function GetCostMIN(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCost/${id}`;
-  console.log('url => ', url);
+  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
@@ -292,15 +292,15 @@ export async function GetCostMIN(auth_token:string, id:string) {
 export async function UpdateCost(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/${id}`;
   try {
-    //console.log(url);
-    //console.log(JSON.stringify(data));
+    // console.log('actualizar gasto => ', url);
+    // console.log(JSON.stringify(data));
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       }
     });
-    //console.log(res);
+    console.log(res);
     if(res.status===200) return res.data.data.data;
     res.statusText;
   } catch (error) {
@@ -797,5 +797,30 @@ export async function findCostExistsInBD(auth_token:string, folio:string){
     }
     // console.log('catch ', error);
     return 'Error al consultar costos!!';
+  }
+}
+
+export async function getAllCostsMINByDateANDProvider(token: string, dateStart:string, dateEnd:string, providers:string[]) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsMINByDateANDProvider/${dateStart}/${dateEnd}/SIN ASIGNAR`;
+  const data = {
+    providers: providers
+  }
+  try {
+    const response = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status === 200) {
+      // console.log('res codes => ', response.data.data.stats);
+      return response.data.data.stats;
+    }
+    return 'Error: No se pudo obtener la información de los codigos';
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return error.response?.data || 'Error: No se pudo obtener la información de los gastos';
+    }
+    return 'Error: No se pudo obtener la información de los gastos'; 
   }
 }

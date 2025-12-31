@@ -391,6 +391,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             name: 'Codigos',
             link: '/codes'
           },
+          {
+            name: 'Asignar Codigos',
+            link: '/codes/assignedCode'
+          },
         ]} 
       />
       <NavItem name="Workflow" link="" items={[
