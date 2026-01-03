@@ -11,6 +11,7 @@ import { getActiveProjectsMin, GetCollectionsAccumByProjectMin,
 import { ProjectsTable } from "@/interfaces/Projects";
 import { ProjectDataToTableDataWithUtilitiesMin } from "../functions/SaveProject";
 import ContainerClient from "@/components/projects/ContainerClient";
+import { getDate } from "@/libs/dates";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -18,6 +19,10 @@ export default async function Page(){
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   let role = user.rol?.name || '';
+
+  const now=getDate(new Date());
+  const first=new Date(new Date().getFullYear(), 0, 1);
+  const firstString=getDate(first);
 
   const [projects, finished, clients, costs, collections, catalogs, optCompanies, prjsCB, totalCB, prjsCBtrue, totalCBtrue] = await Promise.all([
     role.toLowerCase().includes('residente') ? getProjectsMinInEjecucionUser(token, user._id) : getActiveProjectsMin(token),
@@ -27,11 +32,11 @@ export default async function Page(){
     GetCollectionsAccumByProjectMin(token),
     getCatalogsByName(token, 'projects'),
     getCompaniesLV(token),
-    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token),
-    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token), //agregar parametro /?full=false para imprimir 
+    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "false", firstString, now),
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "false", firstString, now), //agregar parametro /?full=false para imprimir 
                                                                         //global o por proyecto
-    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true"),
-    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true")
+    getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now),
+    getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", firstString, now)
   ]);
   
   if(typeof(projects)==='string'){
@@ -153,9 +158,9 @@ export default async function Page(){
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
           optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
           optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 
-          condition={condition} prjsCB={prjsCB} benTot={totalCB[0]} cosBen={totalCB[2]} costTot={totalCB[1]}
-          benTottrue={totalCBtrue[0]} cosBentrue={totalCBtrue[2]} costTottrue={totalCBtrue[1]} 
-          prjsCBtrue={prjsCBtrue} />
+          condition={condition} prjsCBparam={prjsCB} benTotparam={totalCB[0]} cosBenparam={totalCB[2]} costTotparam={totalCB[1]}
+          benTottrueparam={totalCBtrue[0]} cosBentrueparam={totalCBtrue[2]} costTottrueparam={totalCBtrue[1]} 
+          prjsCBtrueparam={prjsCBtrue} />
     </>
   )
 }

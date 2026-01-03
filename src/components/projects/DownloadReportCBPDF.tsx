@@ -8,17 +8,19 @@ type Props = {
   costTot:ICostosTotales, 
   benTot:IBeneficiosTotales,
   order:string,
-  type:string
+  type:string,
+  dateIni:Date,
+  dateEnd:Date
 }
 
-export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, order, type}: Props) {
+export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, order, type, dateEnd, dateIni}: Props) {
 
   const orderProjects = order==="Ganancia"? [...prjsCB].sort((a, b) => a.rentabilidad - b.rentabilidad) : [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
 
   const months=['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
   const date=new Date();
-  const dateIni= new Date(new Date().getFullYear(), 0, 1);
+  // const dateIni= new Date(new Date().getFullYear(), 0, 1);
 
   return(
     <Document>
@@ -47,7 +49,7 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
 
               <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
                 <Text style={{color:'gray', margin: '2px'}}>Periodo:</Text>
-                <Text style={{margin: '2px'}}> {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} al {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
+                <Text style={{margin: '2px'}}> {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} al {dateEnd.getDate()} de {months[dateEnd.getMonth()]} de {dateEnd.getFullYear()}</Text>
               </View>
 
             </View>

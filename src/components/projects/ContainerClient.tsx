@@ -15,12 +15,16 @@ import { UsrBack } from "@/interfaces/User"
 import { showToastMessageError } from "../Alert"
 import { ProjectDataToTableDataMin } from "@/app/functions/SaveProject"
 import { getActiveProjectsMin, getProjectsByConditionMin, getProjectsMinFinishedUser, 
-  getProjectsMinInEjecucionUser } from "@/app/api/routeProjects"
+  getProjectsMinInEjecucionUser, getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT, 
+  getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT } from "@/app/api/routeProjects"
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadReportCBPDF from "./DownloadReportCBPDF"
+import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
+import { es } from "date-fns/locale"
+import { getDate } from "@/libs/dates"
 
 type Props = {
   token:string, 
@@ -35,28 +39,44 @@ type Props = {
   optTypesFilter: Options[], 
   optConditionsFilter: Options[], 
   condition: string,
-  prjsCB:IProyectCostBen[], 
-  cosBen:ICosBen, 
-  costTot:ICostosTotales, 
-  benTot:IBeneficiosTotales,
-  prjsCBtrue:IProyectCostBen[], 
-  cosBentrue:ICosBen, 
-  costTottrue:ICostosTotales, 
-  benTottrue:IBeneficiosTotales
+  prjsCBparam:IProyectCostBen[], 
+  cosBenparam:ICosBen, 
+  costTotparam:ICostosTotales, 
+  benTotparam:IBeneficiosTotales,
+  prjsCBtrueparam:IProyectCostBen[], 
+  cosBentrueparam:ICosBen, 
+  costTottrueparam:ICostosTotales, 
+  benTottrueparam:IBeneficiosTotales
 }
 
 export default function ContainerClient({token, optClients, optCategories, 
   optTypes, user, optCompanies, data, optCategoriesFilter, optConditionsFilter, 
-  optTypesFilter, projects, condition, benTot, cosBen, costTot, prjsCB, benTottrue, 
-  cosBentrue, costTottrue, prjsCBtrue}: Props){
+  optTypesFilter, projects, condition, benTotparam, cosBenparam, costTotparam, prjsCBparam, benTottrueparam, 
+  cosBentrueparam, costTottrueparam, prjsCBtrueparam}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
   const [dataTable, setDataTable] = useState<ProjectsTable[]>(data);
 
+  const [benTot, setBenTot] = useState<IBeneficiosTotales>(benTotparam);
+  const [cosBen, setCosBen] = useState<ICosBen>(cosBenparam);
+  const [costTot, setCostTot] = useState<ICostosTotales>(costTotparam);
+  const [prjsCB, setPrjsCB] = useState<IProyectCostBen[]>(prjsCBparam);
+
+  const [benTottrue, setBenTottrue] = useState<IBeneficiosTotales>(benTottrueparam);
+  const [cosBentrue, setCosBentrue] = useState<ICosBen>(cosBentrueparam);
+  const [costTottrue, setCostTottrue] = useState<ICostosTotales>(costTottrueparam);
+  const [prjsCBtrue, setPrjsCBtrue] = useState<IProyectCostBen[]>(prjsCBtrueparam);
   const [selected, setSelected] = useState("Ganancia");
 
+  const [isWide, setIsWide] = useState(false);
+
   const options = ["Ganancia", "Costo-Beneficio"];
+
+  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
+  });
 
   let role = user.rol?.name || '';
 
@@ -65,6 +85,22 @@ export default function ContainerClient({token, optClients, optCategories,
 
   useEffect(() => {
     updateProjectStore(projects);
+  }, []);
+
+  useEffect(() => {
+    // Función para actualizar el estado según el ancho
+    const checkWidth = () => {
+      setIsWide(window.innerWidth > 1400);
+    };
+
+    // Llamar al cargar
+    checkWidth();
+
+    // Escuchar cambios de tamaño de ventana
+    window.addEventListener("resize", checkWidth);
+
+    // Limpiar listener al desmontar
+    return () => window.removeEventListener("resize", checkWidth);
   }, []);
 
   const handleFilter = (value:boolean) => {
@@ -130,6 +166,138 @@ export default function ContainerClient({token, optClients, optCategories,
     )
   }
 
+  const handleDate = async (dateI: Date, dateF: Date) => {
+    // updateTotal(getDate(dateI), getDate(dateF), statuses);
+
+    const [prjsCBfetch, totalCBfetch, prjsCBtruefetch, totalCBtruefetch] = await Promise.all([
+      getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "false", getDate(dateI), getDate(dateF)),
+      getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "false", getDate(dateI), getDate(dateF)), //agregar parametro /?full=false para imprimir 
+                                                                          //global o por proyecto
+      getAllTOTALPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", getDate(dateI), getDate(dateF)),
+      getAllTOTALACUMULATEDPaymentsAndCostsByProjectMINCOSTBENEFIT(token, "true", getDate(dateI), getDate(dateF))
+    ]);
+
+    if(typeof(prjsCBfetch)!=='string'){
+      setPrjsCB(prjsCBfetch);
+    }else{
+      showToastMessageError(prjsCBfetch);
+    }
+    if(typeof(totalCBfetch)!=='string'){
+      setBenTot(totalCBfetch[0]);
+      setCostTot(totalCBfetch[1]);
+      setCosBen(totalCBfetch[2]);
+    }else{
+      showToastMessageError(totalCBfetch);
+    }
+    if(typeof(prjsCBtruefetch)!=='string'){
+      setPrjsCBtrue(prjsCBtruefetch);
+    }else{
+      showToastMessageError(prjsCBtruefetch);
+    }
+    if(typeof(totalCBtruefetch)!=='string'){
+      setBenTottrue(totalCBtruefetch[0]);
+      setCostTottrue(totalCBtruefetch[1]);
+      setCosBentrue(totalCBtruefetch[2]);
+    }else{
+      showToastMessageError(totalCBtruefetch);
+    }
+  }
+
+  const reportPDF=(
+    <>
+      <div className="inline-flex rounded-md shadow-sm" role="group">
+        {options.map((opt, index) => (
+          <button
+            key={opt}
+            onClick={() => setSelected(opt)}
+            className={`
+              px-4 py-2 text-sm font-medium border border-gray-300
+              ${index === 0 ? "rounded-l-lg" : ""}
+              ${index === options.length - 1 ? "rounded-r-lg" : ""}
+              ${selected === opt ? "bg-blue-600 text-white" : "bg-white hover:bg-gray-100"}
+            `}
+          >
+            {opt}
+          </button>
+        ))}
+      </div>
+      <DateRangePicker 
+        className=''
+        placeholder='Seleccione un rango de fechas'
+        onValueChange={(e) => {
+          setRangeDate(e);
+          if(e.from && e.to){
+            handleDate(e.from, e.to);
+          }
+        }}
+        value={rangeDate}
+        locale={es}
+      />
+      {selected==='Ganancia'? (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} 
+            cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de ganancias por proyectos`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      ): (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} 
+            cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      )}
+      {selected==='Ganancia'? (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} 
+            benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      ): (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} 
+            cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      )}
+    </>
+  )
+
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap print:hidden">
@@ -147,80 +315,7 @@ export default function ContainerClient({token, optClients, optCategories,
           <SearchInTable placeH="Buscar proyecto.." />
           <div>
             <div className="flex gap-x-3 items-center print:hidden">
-              {role.toLowerCase().includes('super') && (
-                <>
-                  <div className="inline-flex rounded-md shadow-sm" role="group">
-                    {options.map((opt, index) => (
-                      <button
-                        key={opt}
-                        onClick={() => setSelected(opt)}
-                        className={`
-                          px-4 py-2 text-sm font-medium border border-gray-300
-                          ${index === 0 ? "rounded-l-lg" : ""}
-                          ${index === options.length - 1 ? "rounded-r-lg" : ""}
-                          ${selected === opt ? "bg-blue-600 text-white" : "bg-white hover:bg-gray-100"}
-                        `}
-                      >
-                        {opt}
-                      </button>
-                    ))}
-                  </div>
-                  {selected==='Ganancia'? (
-                    <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" />} fileName={`Relacion de ganancias por proyectos`} >
-                      {({loading, url, error, blob}) => 
-                        loading? (
-                          <TooltipContainerIcon label="Ganancia">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                          </TooltipContainerIcon>
-                        ) : (
-                          <TooltipContainerIcon label="Ganancia">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                          </TooltipContainerIcon>
-                        ) }
-                    </PDFDownloadLink>
-                  ): (
-                    <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
-                      {({loading, url, error, blob}) => 
-                        loading? (
-                          <TooltipContainerIcon label="costo beneficio">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                          </TooltipContainerIcon>
-                        ) : (
-                          <TooltipContainerIcon label="costo beneficio">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                          </TooltipContainerIcon>
-                        ) }
-                    </PDFDownloadLink>
-                  )}
-                  {selected==='Ganancia'? (
-                    <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
-                      {({loading, url, error, blob}) => 
-                        loading? (
-                          <TooltipContainerIcon label="Ganancia">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                          </TooltipContainerIcon>
-                        ) : (
-                          <TooltipContainerIcon label="Ganancia">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-                          </TooltipContainerIcon>
-                        ) }
-                    </PDFDownloadLink>
-                  ): (
-                    <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" />} fileName={`Relacion de costo beneficio B-C general`} >
-                      {({loading, url, error, blob}) => 
-                        loading? (
-                          <TooltipContainerIcon label="costo beneficio">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                          </TooltipContainerIcon>
-                        ) : (
-                          <TooltipContainerIcon label="costo beneficio">
-                            <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-                          </TooltipContainerIcon>
-                        ) }
-                    </PDFDownloadLink>
-                  )}
-                </>
-              )}
+              {role.toLowerCase().includes('super') && isWide && reportPDF}
               <TooltipContainerIcon label="Tabla">
                 <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
                   onClick={() => setIsTable(true)}
@@ -239,6 +334,11 @@ export default function ContainerClient({token, optClients, optCategories,
           </div>
         </div>
       </div>
+      {role.toLowerCase().includes('super') && !isWide && (
+        <div className="flex justify-end items-center gap-x-3">
+          {reportPDF}
+        </div>
+      )}
       <div className="mt-5">
         <TableProjects data={dataTable} token={token} projects={projectStore.length > 0? projectStore: projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}
