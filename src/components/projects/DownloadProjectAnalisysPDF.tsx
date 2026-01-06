@@ -1,29 +1,13 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { OneProjectMin } from "@/interfaces/Projects"
-import { useState, useEffect } from 'react';
-import { getTotalEstimatesByProjectMin } from '@/app/api/routeEstimates';
 import { IContractualControlProject, ProjectByBudgetedControl } from '@/interfaces/DashboardProjects';
 
 export default function DownloadProjectAnalisysPDF({project, token, contractualControl, budgetedControl}:
-  {project:OneProjectMin, token:string, contractualControl: IContractualControlProject, 
+  {project:OneProjectMin, token:string, contractualControl?: IContractualControlProject, 
     budgetedControl:ProjectByBudgetedControl}) {
 
-//   const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>([]);
 
-//   useEffect(() => {
-//     const fetch = async () => {
-//       let totalPaymentsResumen: TotalEstimatedByProject[];
-//       totalPaymentsResumen = await getTotalEstimatesByProjectMin(token, project._id);
-//       if(typeof(totalPaymentsResumen) !== "string"){
-//         setTotalEstimatedProjectState(totalPaymentsResumen);
-//       }
-//     }
-//     fetch();
-//   }, []);
-
-  // const orderEstimates = estimates.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-// console.log('budgeted info => ', budgetedControl.budgetedInfo);
   return(
     <Document>
       <Page>
@@ -107,85 +91,85 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                 })}</Text>
               </View>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Aplica fondo de garantia:  </Text>
-                <View style={{width: '5px', height: '5px', backgroundColor: project.hasguaranteefund? 'green': 'red'}}></View>
-              </View>
+              {project.estimatedProject && (
+                <>
+                  <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
+                    <Text style={{fontSize:'10px', color:'gray'}}>Aplica fondo de garantia:  </Text>
+                    <View style={{width: '5px', height: '5px', backgroundColor: project.hasguaranteefund? 'green': 'red'}}></View>
+                  </View>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Aplica anticipo: </Text>
-                <View style={{width: '5px', height: '5px', backgroundColor: project.hasamountChargeOff? 'green': 'red'}}></View>
-              </View>
+                  <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
+                    <Text style={{fontSize:'10px', color:'gray'}}>Aplica anticipo: </Text>
+                    <View style={{width: '5px', height: '5px', backgroundColor: project.hasamountChargeOff? 'green': 'red'}}></View>
+                  </View>
+                </>
+              )}
 
             </View>
           </View>
 
           <View style={{display: 'flex', flexDirection: 'row', gap: '5px', marginTop: '30px', fontSize:'10px'}}>
-            <View style={{width: '50%'}}>
-              <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL CONTRACTUAL</Text>
+            {contractualControl && (
+              <View style={{width: '50%'}}>
+                <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL CONTRACTUAL</Text>
 
-              {/* <View style={{display: 'flex', flexDirection: 'row', gap: '5px', alignItems: 'center'}}>
-                <View style={{width: '100%', height: '7px', backgroundColor: 'gray'}}>
-                  <View style={{width: '30%', backgroundColor: 'blue'}}></View>
+                <Text>Contratado ({CurrencyFormatter({
+                  currency: 'MXN', 
+                  value: contractualControl?.estimateInfo?.amount || 0
+                })})</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                  <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                    <View style={{ width: 200, height: 7, backgroundColor: '#E4D831', position: 'absolute', top: 0, left: 0 }} />
+                  </View>
+                  <Text>{100} %</Text>
                 </View>
-                <Text>30 %</Text>
-              </View> */}
-              <Text>Contratado ({CurrencyFormatter({
-                currency: 'MXN', 
-                value: contractualControl?.estimateInfo?.amount || 0
-              })})</Text>
-              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
-                  <View style={{ width: 200, height: 7, backgroundColor: '#E4D831', position: 'absolute', top: 0, left: 0 }} />
-                </View>
-                <Text>{100} %</Text>
-              </View>
 
-              <Text style={{marginTop: '10px'}}>Anticipo ({CurrencyFormatter({
-                currency: 'MXN', 
-                value: contractualControl?.estimateInfo?.cashAdvance || 0
-              })})</Text>
-              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
-                  <View style={{ width: (contractualControl?.estimateInfo?.porcentageCashAdvance || 0) > 100? 200: (contractualControl?.estimateInfo?.porcentageCashAdvance || 0) * 2, height: 7, backgroundColor: '#71B2F2', position: 'absolute', top: 0, left: 0 }} />
+                <Text style={{marginTop: '10px'}}>Anticipo ({CurrencyFormatter({
+                  currency: 'MXN', 
+                  value: contractualControl?.estimateInfo?.cashAdvance || 0
+                })})</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                  <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                    <View style={{ width: (contractualControl?.estimateInfo?.porcentageCashAdvance || 0) > 100? 200: (contractualControl?.estimateInfo?.porcentageCashAdvance || 0) * 2, height: 7, backgroundColor: '#71B2F2', position: 'absolute', top: 0, left: 0 }} />
+                  </View>
+                  <Text>{contractualControl?.estimateInfo?.porcentageCashAdvance || 0} %</Text>
                 </View>
-                <Text>{contractualControl?.estimateInfo?.porcentageCashAdvance || 0} %</Text>
-              </View>
 
-              <Text style={{marginTop: '10px'}}>Amortizado ({CurrencyFormatter({
-                currency: 'MXN', 
-                value: contractualControl?.estimateInfo?.amountChargeOff || 0
-              })})</Text>
-              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
-                  <View style={{ width: (contractualControl?.estimateInfo?.porcentageChargeOff || 0) > 100 ? 200 : (contractualControl?.estimateInfo?.porcentageChargeOff || 0) *2, height: 7, backgroundColor: '#ff5252', position: 'absolute', top: 0, left: 0 }} />
+                <Text style={{marginTop: '10px'}}>Amortizado ({CurrencyFormatter({
+                  currency: 'MXN', 
+                  value: contractualControl?.estimateInfo?.amountChargeOff || 0
+                })})</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                  <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                    <View style={{ width: (contractualControl?.estimateInfo?.porcentageChargeOff || 0) > 100 ? 200 : (contractualControl?.estimateInfo?.porcentageChargeOff || 0) *2, height: 7, backgroundColor: '#ff5252', position: 'absolute', top: 0, left: 0 }} />
+                  </View>
+                  <Text>{contractualControl?.estimateInfo?.porcentageChargeOff || 0} %</Text>
                 </View>
-                <Text>{contractualControl?.estimateInfo?.porcentageChargeOff || 0} %</Text>
-              </View>
 
-              <Text style={{marginTop: '10px'}}>Estimado ({CurrencyFormatter({
-                currency: 'MXN', 
-                value: contractualControl?.estimateInfo?.estimatedTotal || 0
-              })})</Text>
-              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
-                  <View style={{ width: (contractualControl?.estimateInfo?.porcentageEstimated || 0) > 100 ? 200: (contractualControl?.estimateInfo?.porcentageEstimated || 0) *2, height: 7, backgroundColor: '#FFA145', position: 'absolute', top: 0, left: 0 }} />
+                <Text style={{marginTop: '10px'}}>Estimado ({CurrencyFormatter({
+                  currency: 'MXN', 
+                  value: contractualControl?.estimateInfo?.estimatedTotal || 0
+                })})</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                  <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                    <View style={{ width: (contractualControl?.estimateInfo?.porcentageEstimated || 0) > 100 ? 200: (contractualControl?.estimateInfo?.porcentageEstimated || 0) *2, height: 7, backgroundColor: '#FFA145', position: 'absolute', top: 0, left: 0 }} />
+                  </View>
+                  <Text>{contractualControl?.estimateInfo?.porcentageEstimated || 0} %</Text>
                 </View>
-                <Text>{contractualControl?.estimateInfo?.porcentageEstimated || 0} %</Text>
-              </View>
 
-              <Text style={{marginTop: '10px'}}>Garantia ({CurrencyFormatter({
-                currency: 'MXN', 
-                value: contractualControl?.estimateInfo?.amountGuaranteeFund || 0
-              })})</Text>
-              <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
-                <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
-                  <View style={{ width: ((contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0)*2) > 200 ? 200: ((contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0)*2), height: 7, backgroundColor: '#69f0ae', position: 'absolute', top: 0, left: 0 }} />
+                <Text style={{marginTop: '10px'}}>Garantia ({CurrencyFormatter({
+                  currency: 'MXN', 
+                  value: contractualControl?.estimateInfo?.amountGuaranteeFund || 0
+                })})</Text>
+                <View style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+                  <View style={{ width: 200, height: 7, backgroundColor: 'gray', position: 'relative' }}>
+                    <View style={{ width: ((contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0)*2) > 200 ? 200: ((contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0)*2), height: 7, backgroundColor: '#69f0ae', position: 'absolute', top: 0, left: 0 }} />
+                  </View>
+                  <Text>{contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0} %</Text>
                 </View>
-                <Text>{contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0} %</Text>
+                
               </View>
-              
-            </View>
+            )}
 
             <View style={{width: '50%'}}>
               <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL PRESUPUESTAL</Text>

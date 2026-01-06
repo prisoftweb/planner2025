@@ -119,6 +119,15 @@ export default function TableHistoryCosts({data, token, expenses,
         )
       ),
     }),
+    columnHelper.accessor('code', {
+      header: 'Codigo',
+      id: 'codigo',
+      cell: ({row}) => (
+        <div> 
+          <p>{row.original.code}</p>
+        </div>
+      ),
+    }),
     columnHelper.accessor('Estatus', {
       header: 'Estatus',
       id: 'estatus',

@@ -2,9 +2,10 @@ import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
 import { DateRangePickerValue } from '@tremor/react';
+import { title } from 'process';
 
-export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}: 
-  {data: CostsByConceptAndCategory[], type:boolean, rangeDate: DateRangePickerValue}){
+export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate, projectTitle}: 
+  {data: CostsByConceptAndCategory[], type:boolean, rangeDate: DateRangePickerValue, projectTitle:string}) {
   
   const style = StyleSheet.create({
     table: {
@@ -34,6 +35,8 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
     },
   })
 
+  const totalCosts = data.reduce((acc, curr) => acc + curr.totalCost, 0);
+
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const currentDate = new Date();
   return(
@@ -46,6 +49,9 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
               <Text style={[{fontSize: '13px', margin: '1px', color: 'black', fontWeight:'semibold'}]}>
                 Costos por {type? 'categorias':'conceptos'}
               </Text>
+              <Text style={[{fontSize: '13px', margin: '1px', color: 'black', fontWeight:'semibold'}]}>
+                {projectTitle}
+              </Text>
             </View>
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.subTitle, {textAlign:'right', marginTop:'17px'}]}>
@@ -53,6 +59,12 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate}
               </Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>
               {currentDate.getDate()} de {months[currentDate.getMonth() || 0]} de {currentDate.getFullYear()}
+              </Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>
+              {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: totalCosts
+                })}
               </Text>
             </View>
           </View>

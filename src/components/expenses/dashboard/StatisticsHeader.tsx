@@ -31,6 +31,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
       dataCostsCatagory, dataCostsConcept }: StatisticsHeaderProps) {
 
   const [project, setProject] = useState<string>(projects[0].value);
+  const [titleProject, setTitleProject] = useState<string>(projects[0].label);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
@@ -38,6 +39,10 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
 
   const handleProjects = (value: string) => {
     setProject(value);
+    const selectedProject = projects.find(proj => proj.value === value);
+    if (selectedProject) {
+      setTitleProject(selectedProject.label);
+    }
     if(rangeDate?.from && rangeDate.to){
       handleDate(rangeDate.from, rangeDate.to, value);
     }
@@ -71,7 +76,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                 content='categoria'
                 className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
-                                              type={true} rangeDate={rangeDate} />} 
+                                              type={true} rangeDate={rangeDate} projectTitle={titleProject} />} 
                     fileName={`InformeCostosAgrupadosPorCategoria`} >
                   {({loading, url, error, blob}) => 
                     loading? (
@@ -89,7 +94,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
                   content='concepto' 
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                   <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
-                                                type={false} rangeDate={rangeDate} />} 
+                                                type={false} rangeDate={rangeDate} projectTitle={titleProject} />} 
                     fileName={`InformeCostosAgrupadosPorConcepto`} >
                   {({loading, url, error, blob}) => 
                     loading? (

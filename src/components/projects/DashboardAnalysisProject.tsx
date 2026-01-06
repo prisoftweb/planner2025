@@ -10,7 +10,6 @@ import { ProgressCircle } from "@tremor/react";
 import { getDashboardProjectCostoCenters } from "@/app/api/routeProjects";
 import { OneProjectMin } from "@/interfaces/Projects";
 import VerticalBarChart from "./VerticalBarChart";
-import NewDonutChartComponent from "./dashboard/NewDonutChartComponent";
 import { DonutChartComponentWithDescription } from "./dashboard/NewDonutChartComponent";
 import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
@@ -21,6 +20,7 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadProjectAnalisysPDF from "./DownloadProjectAnalisysPDF"
+import { propsTooltip } from "@/libs/animations";
 
 interface OptionsDashboard {
   label: string,
@@ -44,11 +44,7 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
 
   useEffect(() => {
     const fetch = async () => {
-      // const resBudCon = await getDashboardProjectByBudgetControl(token, id, oneProjectStore?.date? new Date(oneProjectStore?.date).getFullYear(): new Date().getFullYear());
-      // const resContractualC = await getProjectContractualControl(token, id);
-      // const resCostoC = await getDashboardProjectCostoCenters(token, id);
-      // const resCostoCat = await getDashboardProjectCostoCentersCategory(token, id);
-
+      
       const [resBudCon, resContractualC, resCostoC, resCostoCat] = await Promise.all([
         getDashboardProjectByBudgetControl(token, id, oneProjectStore?.date? new Date(oneProjectStore?.date).getFullYear(): new Date().getFullYear()),
         getProjectContractualControl(token, id),
@@ -183,25 +179,6 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
 
   console.log('project => ', project);
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   return(
     <div className="w-full">
 
@@ -225,18 +202,18 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
           </div>
         </div>
 
-        {contractualControl && budgetedControl && (
+        {budgetedControl && (
           <PDFDownloadLink document={<DownloadProjectAnalisysPDF project={project}
                                       token={token} contractualControl={contractualControl}
                                       budgetedControl={budgetedControl} />} fileName={'Analisis - ' + project.title} >
             {({loading, url, error, blob}) => 
               loading? (
-                <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                     placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                   <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
                 </Tooltip>
               ) : (
-                <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                     placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                   <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
                 </Tooltip>
@@ -275,39 +252,42 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
             <div className="p-3 w-full flex flex-col justify-center">
               <p className="mb-2">AVANCE DE PROYECTO</p>
               <div className="flex gap-x-2 items-center">
-                <div>
-                  <div className="border-b-1 border-green-500 py-2">
-                    <p className="text-xs">Duracion de proyecto</p>
+                {project.estimatedProject && (
+                  <div>
+                    <div className="border-b-1 border-green-500 py-2">
+                      <p className="text-xs">Duracion de proyecto</p>
+                    </div>
+                    <div className="border-b-1 border-green-500 py-2">
+                      <p className="text-xs">Aplica fondo de garantia</p>
+                      {project.hasguaranteefund? (
+                          <div className="flex gap-x-3 items-center mt-1">
+                            <p className="font-bold">si</p>
+                            <div className="w-4 h-4 bg-green-500"></div>
+                          </div>
+                        ): (
+                          <div className="flex gap-x-3 items-center mt-1">
+                            <p className="font-bold">no</p>
+                            <div className="w-4 h-4 bg-red-500"></div>
+                          </div>
+                        )}
+                    </div>
+                    <div className="py-2">
+                      <p className="text-xs">Aplica anticipo</p>
+                      {project.hasamountChargeOff? (
+                          <div className="flex gap-x-3 items-center mt-1">
+                            <p className="font-bold">si</p>
+                            <div className="w-4 h-4 bg-green-500"></div>
+                          </div>
+                        ): (
+                          <div className="flex gap-x-3 items-center mt-1">
+                            <p className="font-bold">no</p>
+                            <div className="w-4 h-4 bg-red-500"></div>
+                          </div>
+                        )}
+                    </div>
                   </div>
-                  <div className="border-b-1 border-green-500 py-2">
-                    <p className="text-xs">Aplica fondo de garantia</p>
-                    {project.hasguaranteefund? (
-                        <div className="flex gap-x-3 items-center mt-1">
-                          <p className="font-bold">si</p>
-                          <div className="w-4 h-4 bg-green-500"></div>
-                        </div>
-                      ): (
-                        <div className="flex gap-x-3 items-center mt-1">
-                          <p className="font-bold">no</p>
-                          <div className="w-4 h-4 bg-red-500"></div>
-                        </div>
-                      )}
-                  </div>
-                  <div className="py-2">
-                    <p className="text-xs">Aplica anticipo</p>
-                    {project.hasamountChargeOff? (
-                        <div className="flex gap-x-3 items-center mt-1">
-                          <p className="font-bold">si</p>
-                          <div className="w-4 h-4 bg-green-500"></div>
-                        </div>
-                      ): (
-                        <div className="flex gap-x-3 items-center mt-1">
-                          <p className="font-bold">no</p>
-                          <div className="w-4 h-4 bg-red-500"></div>
-                        </div>
-                      )}
-                  </div>
-                </div>
+                )}
+                
                 <ProgressCircle 
                   value={oneProjectStore.progress}
                   radius={100}
@@ -320,64 +300,67 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
               </div>
             </div>
 
-            <div className="p-3 mt-3 bg-white">
-              <p className="mb-2">CONTROL CONTRACTUAL</p>
-              {contractualControl && (
-                <div>
-                  <p className=" text-sm mt-2">Contratado ({
-                    CurrencyFormatter({
-                      currency:'MXN',
-                      value: (showTotal? contractualControl?.estimateInfo?.amount : 
-                        contractualControl?.estimateInfo?.amountPro) || 0
-                    })}) 
-                  </p>
-                    <ProgressBarComponent label={''} 
-                        progress={100} amount={(showTotal? contractualControl?.estimateInfo?.amount : 
-                        contractualControl?.estimateInfo?.amountPro) || 0} 
-                        widthBar="w-full" color={colorsRandom[d1]} hei="h-5" />
-                  
-                  <p className=" text-sm mt-2">Anticipo ({
-                    CurrencyFormatter({
-                      currency:'MXN',
-                      value: contractualControl?.estimateInfo?.cashAdvance || 0
-                    })}) 
-                  </p>
-                    <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageCashAdvance || 0} 
-                      widthBar="w-full" color={colorsRandom[d2]} hei="h-5"
-                      amount={contractualControl?.estimateInfo?.cashAdvance || 0} />
-                  
-                  <p className=" text-sm mt-2">Amortizado ({
-                    CurrencyFormatter({
-                      currency:'MXN',
-                      value: contractualControl?.estimateInfo?.amountChargeOff || 0
-                    })}) 
-                  </p>
-                    <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageChargeOff || 0} 
-                      widthBar="w-full" color={colorsRandom[d3]} hei="h-5"
-                      amount={contractualControl?.estimateInfo?.amountChargeOff || 0} />
-                  
-                  <p className=" text-sm mt-2">Estimado ({
-                    CurrencyFormatter({
-                      currency:'MXN',
-                      value: contractualControl?.estimateInfo?.estimatedTotal || 0
-                    })}) 
-                  </p>
-                    <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageEstimated || 0 } 
-                      widthBar="w-full" color={colorsRandom[d4]} hei="h-5"
-                      amount={contractualControl?.estimateInfo?.estimatedTotal || 0} />
+            { project.estimatedProject && (
+            // (
+              <div className="p-3 mt-3 bg-white">
+                <p className="mb-2">CONTROL CONTRACTUAL</p>
+                {contractualControl && (
+                  <div>
+                    <p className=" text-sm mt-2">Contratado ({
+                      CurrencyFormatter({
+                        currency:'MXN',
+                        value: (showTotal? contractualControl?.estimateInfo?.amount : 
+                          contractualControl?.estimateInfo?.amountPro) || 0
+                      })}) 
+                    </p>
+                      <ProgressBarComponent label={''} 
+                          progress={100} amount={(showTotal? contractualControl?.estimateInfo?.amount : 
+                          contractualControl?.estimateInfo?.amountPro) || 0} 
+                          widthBar="w-full" color={colorsRandom[d1]} hei="h-5" />
+                    
+                    <p className=" text-sm mt-2">Anticipo ({
+                      CurrencyFormatter({
+                        currency:'MXN',
+                        value: contractualControl?.estimateInfo?.cashAdvance || 0
+                      })}) 
+                    </p>
+                      <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageCashAdvance || 0} 
+                        widthBar="w-full" color={colorsRandom[d2]} hei="h-5"
+                        amount={contractualControl?.estimateInfo?.cashAdvance || 0} />
+                    
+                    <p className=" text-sm mt-2">Amortizado ({
+                      CurrencyFormatter({
+                        currency:'MXN',
+                        value: contractualControl?.estimateInfo?.amountChargeOff || 0
+                      })}) 
+                    </p>
+                      <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageChargeOff || 0} 
+                        widthBar="w-full" color={colorsRandom[d3]} hei="h-5"
+                        amount={contractualControl?.estimateInfo?.amountChargeOff || 0} />
+                    
+                    <p className=" text-sm mt-2">Estimado ({
+                      CurrencyFormatter({
+                        currency:'MXN',
+                        value: contractualControl?.estimateInfo?.estimatedTotal || 0
+                      })}) 
+                    </p>
+                      <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageEstimated || 0 } 
+                        widthBar="w-full" color={colorsRandom[d4]} hei="h-5"
+                        amount={contractualControl?.estimateInfo?.estimatedTotal || 0} />
 
-                  <p className=" text-sm mt-2">Garantia ({
-                    CurrencyFormatter({
-                      currency:'MXN',
-                      value: contractualControl?.estimateInfo?.amountGuaranteeFund || 0
-                    })}) 
-                  </p>
-                    <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0 } 
-                      widthBar="w-full" color={colorsRandom[d5]} hei="h-5"
-                      amount={contractualControl?.estimateInfo?.amountGuaranteeFund || 0} />
-                </div>
-              )}
-            </div>
+                    <p className=" text-sm mt-2">Garantia ({
+                      CurrencyFormatter({
+                        currency:'MXN',
+                        value: contractualControl?.estimateInfo?.amountGuaranteeFund || 0
+                      })}) 
+                    </p>
+                      <ProgressBarComponent label={''} progress={contractualControl?.estimateInfo?.porcentageGuaranteeFund || 0 } 
+                        widthBar="w-full" color={colorsRandom[d5]} hei="h-5"
+                        amount={contractualControl?.estimateInfo?.amountGuaranteeFund || 0} />
+                  </div>
+                )}
+              </div>
+            )}
 
           </div>
 

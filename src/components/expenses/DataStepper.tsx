@@ -39,13 +39,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
 
   const formik = useFormik({
     initialValues: {
-      // folio: folio,
-      // taxFolio: taxFolio,
-      // description: description,
-      // discount: discount,
-      // amount: amount,
-      // vat: vat,
-      // taxExempt: taxExempt,
       folio: dataCFDI? dataCFDI.folio: folio,
       taxFolio: dataCFDI? dataCFDI.taxFolio : taxFolio,
       description: dataCFDI? dataCFDI.concepts : description,
@@ -101,6 +94,9 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   const [vatValue, setVatValue] = useState<string>(dataCFDI? dataCFDI.vat: '0');
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [totalExpense, setTotalExpense] = useState<string>(dataCFDI? dataCFDI.total : total);
+
+  const [typeCFDISprov, setTypeCFDISprov] = useState<string>(types[0].value);
+  const [CFDISrelation, setCFDISrelations] = useState<string>(types[0].value);
   
   const updateIva = (idValue: string) => {
     try {
@@ -519,15 +515,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
     </div>
   )
 
-  // let indexCate = 0;
-  // if(categoryS !== ''){
-  //   categories.map((opt, index:number) => {
-  //     if(opt.value === category){
-  //       indexCate = index;
-  //     }
-  //   });   
-  // }
-
   let indexTypeCFDI = 0;
   if(typeCFDIS !== ''){
     types.map((opt, index:number) => {
@@ -537,28 +524,33 @@ export default function DataStepper({token, user, handleUpdateCategory}:
     });      
   }
 
-  // const handleCategory = (value: string) => {
-  //   setCategoryS(value);
-  // }
-
   const handleTypeCfdi = (value: string) => {
     handleTypeCategoryCFDI(value);
     console.log('value type cfdi => ', value);
     setTypeCFDIS(value);
   }
 
+  const handleCfdirelations = (value: string) => {
+    // handleTypeCategoryCFDI(value);
+    setCFDISrelations(value);
+  }
+
+  const handleTypeCfdiprov = (value: string) => {
+    // handleTypeCategoryCFDI(value);
+    // console.log('value type cfdi => ', value);
+    setTypeCFDISprov(value);
+  }
+
   const view = (
     <>
-      {/* <div>
-        <Label htmlFor="category"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Categoria</p></Label>
-        <SelectReact index={indexCate} opts={categories} setValue={handleCategory} />
-      </div> */}
       <div>
         <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
         <SelectReact index={indexTypeCFDI} opts={types} setValue={handleTypeCfdi} />
       </div>
     </>
   );
+
+
 
   let indexCC = 0;
   if(costCenter !== ''){
@@ -642,6 +634,8 @@ export default function DataStepper({token, user, handleUpdateCategory}:
     updateIva(value);
     setIdVat(value);
   };
+
+  // if concept == 6691a5f9c14942310b52ac0e
 
   return(
     <div className="w-full bg-white">
@@ -880,6 +874,20 @@ export default function DataStepper({token, user, handleUpdateCategory}:
           </div>
           
         </div>
+
+        {/*concept==="6691a5f9c14942310b52ac0e" && (
+          <div>
+            <div>
+              <Label htmlFor="CFDIrelations"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">CFDI&apos;s Relacionado</p></Label>
+              <SelectReact index={indexTypeCFDI} opts={types} setValue={handleCfdirelations} />
+            </div>
+
+            <div>
+              <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
+              <SelectReact index={indexTypeCFDI} opts={types} setValue={handleTypeCfdiprov} />
+            </div>
+          </div>
+        )*/}
 
         <div className="mt-5">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>

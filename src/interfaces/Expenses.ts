@@ -86,6 +86,7 @@ export interface Expense {
   files: File[]
   expiredDate?: string
   daysExpired?: number
+  code?:string
 }
 
 export interface OneExpense {

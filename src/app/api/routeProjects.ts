@@ -700,7 +700,8 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
   const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
   // console.log('d fin => ', d_fin);
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/${d_ini}/${d_fin}`;
+  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/${d_ini}/${d_fin}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/2024-01-01/2025-02-28`;
   // //console.log('url control presupuestal => ', url);
   try {
     const res = await axios.post(url, {}, {
@@ -1038,16 +1039,20 @@ export async function getProjectContractualControl(auth_token:string, project:st
   const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
   // console.log('d fin => ', d_fin);
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/${d_ini}/${d_fin}`;
+  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/${d_ini}/${d_fin}`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/2024-01-01/2025-02-28`;
+  console.log('url control contractual => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     })
+    console.log('res control contractual => ', res);
     if(res.status === 200) return res.data.data.stats[0];
     return res.statusText;
   } catch (error) {
+    console.log('error control contractual => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }

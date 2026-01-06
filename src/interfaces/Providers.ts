@@ -88,6 +88,7 @@ export interface HistoryExpensesTable {
   conceptCostoCenter: string,
   expiredDate: string
   daysExpired: number
+  code: string
 }
 
 export interface CostsPaymentTable {

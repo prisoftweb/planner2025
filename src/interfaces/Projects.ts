@@ -107,7 +107,8 @@ export interface OneProjectMin {
     amount: number,
     porcentage: number
   }
-  includesTaxes?: boolean
+  includesTaxes?: boolean,
+  estimatedProject?: boolean
 }
 
 // export interface ProjectMin {
