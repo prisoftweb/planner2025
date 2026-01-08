@@ -5,6 +5,7 @@ import {confirmAlert} from 'react-confirm-alert';
 import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from '@/libs/animations';
 
 export default function DeleteElement({token, id, name, remove, 
   colorIcon='text-red-500 hover:text-red-300'} : 
@@ -64,29 +65,10 @@ export default function DeleteElement({token, id, name, remove,
       overlayClassName: "overlay-custom-class-name"
     }); 
   }
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-  
+ 
   return(
     <>
-      <Tooltip closeDelay={0} delay={100} motionProps={props} content='Eliminar' 
+      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Eliminar' 
           placement="right" className="text-black bg-white rounded-md border border-slate-400">
         <TrashIcon className={`${colorIcon} cursor-pointer w-6 h-6 hover:bg-blue-100`}  
           onClick={() => {

@@ -1,28 +1,10 @@
 import Link from "next/link"
 import { Tooltip } from "@nextui-org/react"
 import { MoneyFormatterToNumber, CurrencyFormatter } from "@/app/functions/Globals"
+import { propsTooltip } from "@/libs/animations"
 
 export default function CardDashboardProvider({children, link, p1, p2, p3, textColor, textLink, valueTooltip=false}:
     {children:JSX.Element, link:string, p1:string, p2:string, p3:string, textColor: string, textLink: string, valueTooltip?: boolean}){
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   return(
     <>
@@ -33,7 +15,7 @@ export default function CardDashboardProvider({children, link, p1, p2, p3, textC
             {children}
           </div>
           {valueTooltip && (
-            <Tooltip closeDelay={0} delay={100} motionProps={props} 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                 content={CurrencyFormatter({
                   currency: 'USD',
                   value: MoneyFormatterToNumber(p2)

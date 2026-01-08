@@ -23,6 +23,7 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadEstimatesByProjectPDF from "./DownloadEstimationsByProjectPDF";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ContainerSideNav from "@/components/ContainerSideNav";
+import { propsTooltip } from "@/libs/animations";
 
 interface OptionsDashboard {
   label: string,
@@ -121,25 +122,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
   const percentajeAdvance = Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-  
   return (
     <>
       <div className="flex justify-between items-center">
@@ -282,12 +264,12 @@ export default function ContainerStimationsProject({project, optConditions, optP
                                       token={token} anticipo={advance} />} fileName={'Estimaciones - ' + project.title} >
           {({loading, url, error, blob}) => 
             loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                   placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
               </Tooltip>
             ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                   placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
               </Tooltip>
@@ -306,11 +288,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
             updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
             porcentajeAdvange={percentajeAdvance} advange={advance} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
-        //     updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
-        //     porcentajeAdvange={percentajeAdvance} advange={advance} />
-        // </div>
       )}
 
       {openNewInvoice && (
@@ -318,10 +295,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
           <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
             updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
-        //     updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
-        // </div>
       )}
     </>
   )

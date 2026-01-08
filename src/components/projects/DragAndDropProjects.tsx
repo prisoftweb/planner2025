@@ -19,6 +19,7 @@ import { showToastMessageError } from "../Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { InsertConditionInProject } from "@/app/api/routeProjects";
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
 
 import {
   SortableContext,
@@ -28,30 +29,9 @@ import {
 
 import { CSS } from "@dnd-kit/utilities";
 
-// type Task = {
-//   id: string;
-//   content: string;
-// };
-
-// type Tasks = {
-//   [key: string]: Task[];
-// };
-
 type TProjects = {
   [key: string]: ProjectMin[];
 };
-
-// const initialTasks: TQuotations = {
-//   // todo: [
-//   //   { id: "1", content: "Tarea 1" },
-//   //   { id: "2", content: "Tarea 2" },
-//   // ],
-//   // "in-progress": [{ id: "3", content: "Tarea 3" }],
-//   // done: [],
-//   todo: [],
-//   "in-progress": [],
-//   done: []
-// };
 
 interface SortableItemProps {
   id: string;
@@ -115,25 +95,6 @@ function SortableItem(p : ProjectMin) {
     cursor: "grab",
   };
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {/* {content} */}
@@ -150,7 +111,7 @@ function SortableItem(p : ProjectMin) {
           currency: 'MXN',
           value: p.amount
         })}</p>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content={p.title} 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content={p.title} 
           placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <p className="text-green-500 text-sm">{p.title.substring(0, 25)}{p.title.length > 25? '...': ''}</p>
         </Tooltip>

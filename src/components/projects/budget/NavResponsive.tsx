@@ -2,28 +2,10 @@ import { ArrowDownTrayIcon } from "@heroicons/react/24/solid"
 import { useState } from "react";
 import {Tooltip} from "@nextui-org/react";
 import { LuConstruction } from "react-icons/lu";
+import { propsTooltip } from "@/libs/animations";
 
 export default function NavResponsive({open, setOpen, option, changeOption}: 
                 {open:boolean, setOpen:Function, option:number, changeOption:Function}){
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const [isHover, setIsHover] = useState<number>(-1);
   
@@ -35,7 +17,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
         <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                 text-slate-500 my-1 bg-white rounded-md rotate-90" 
             onClick={() => setOpen(true)} /></div>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion basica' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
               <LuConstruction className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 

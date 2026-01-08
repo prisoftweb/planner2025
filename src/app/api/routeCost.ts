@@ -824,3 +824,24 @@ export async function getAllCostsMINByDateANDProvider(token: string, dateStart:s
     return 'Error: No se pudo obtener la información de los gastos'; 
   }
 }
+
+export async function getAllCostsByProviderNEConditionLV(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByProviderNEConditionLV/${id}/661eade6f642112488c85fad/67318a51ceaf47ece0d3aa72`;
+  // console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    // console.log('res => ', res);
+    if(res.status===200) return res.data.data.data;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      // console.log('error => ', error);
+      return error.response?.data.message || 'Error al consultar costos!!';
+    }
+    return 'Error al consultar informacion de los costos!!';
+  }
+}

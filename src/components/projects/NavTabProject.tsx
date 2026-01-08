@@ -5,27 +5,9 @@ import { useState, useEffect } from "react";
 import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon, 
   DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
 
 export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
-  
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const [width, setWidth] = useState<number>(0);
   
@@ -43,7 +25,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
   if(width < 710){
     tabCli = <div className="flex justify-between mt-3">
                     <Link href={`/projects/${idPro}/profile`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
                         <UserCircleIcon data-tooltip-target="tooltip-dark"
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -51,7 +33,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                       </Tooltip>
                     </Link>  
                     <Link href={`/projects/${idPro}/analysis`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
                         <DocumentChartBarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -59,7 +41,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                       </Tooltip>
                     </Link>
                     <Link href={`/projects/${idPro}/budgets`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
                         <CurrencyDollarIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -67,7 +49,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                       </Tooltip>
                     </Link>
                     <Link href={`/projects/${idPro}/costs`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Costo'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -75,7 +57,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                       </Tooltip>
                     </Link>
                     <Link href={`/projects/estimates/${idPro}?page=projects`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -83,7 +65,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                       </Tooltip>
                     </Link>
                     <Link href={`/projects/estimates/${idPro}/invoice?page=projects`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturacion'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -91,7 +73,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                       </Tooltip>
                     </Link>
                     <Link href={`/projects/estimates/${idPro}/collections?page=projects`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 
@@ -99,7 +81,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
                       </Tooltip>
                     </Link>
                     <Link href={`/projects/${idPro}/guaranteefunds`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={props} 
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Fondo garantia'>
                         <CreditCardIcon
                           className={`w-6 h-6 text-slate-600 cursor-pointer 

@@ -111,24 +111,6 @@ export interface OneProjectMin {
   estimatedProject?: boolean
 }
 
-// export interface ProjectMin {
-//   _id: string
-//   title: string
-//   code: string
-//   amount: number
-//   date: string
-//   photo: string
-//   account: string
-//   hasguaranteefund: boolean
-//   client: ClientBack
-//   company: Company
-//   type: Glossary
-//   segment: Glossary
-//   category: Glossary
-//   progress: number
-//   status: boolean
-// }
-
 export interface ProjectMin {
   _id: string
   title: string

@@ -19,6 +19,7 @@ import { BsFileEarmarkPdf } from "react-icons/bs"
 import ReportPaymentPDF from "./ReportPaymentPDF"
 import { UsrBack } from "@/interfaces/User"
 import { ProviderMin } from "@/interfaces/Providers"
+import { propsTooltip } from "@/libs/animations"
 
 type Props = {
   data:DetailExpensesTableProvider[], 
@@ -36,25 +37,6 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
   
   const handleFilter = (value: boolean) => {
     setFilter(value);
-  }
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
   }
 
   return (
@@ -77,12 +59,12 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
                                             payment={payment} user={user} />} fileName={`${provider.name}.pdf`} >
                 {({loading, url, error, blob}) => 
                   loading? (
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                         placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                       <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
                     </Tooltip>
                   ) : (
-                    <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                         placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                       <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
                     </Tooltip>

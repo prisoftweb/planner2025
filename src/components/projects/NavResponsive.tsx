@@ -9,28 +9,10 @@ import { FaRegCreditCard } from "react-icons/fa";
 import {FcAdvance} from "react-icons/fc"
 import {ChartBarIcon} from "@heroicons/react/24/solid";
 import { FaMoneyBill } from "react-icons/fa6";
+import { propsTooltip } from "@/libs/animations";
 
 export default function NavResponsive({open, setOpen, option, changeOption}: 
   {open:boolean, setOpen:Function, option:number, changeOption:Function}){
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
 
   const [isHover, setIsHover] = useState<number>(-1);
   
@@ -41,7 +23,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
         <div className="rotate-180 p-1"><ArrowDownTrayIcon className="w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
                 text-slate-500 my-1 bg-white rounded-md rotate-90" 
             onClick={() => setOpen(true)} /></div>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Dashboard' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Dashboard' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===1 ? '#0075c9' : (option===1? '#178DE1': '')}}>
               <ChartBarIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -53,7 +35,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion basica' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion basica' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
               <LuConstruction className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -65,7 +47,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informacion extra' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion extra' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
               <AiOutlineFundProjectionScreen className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -77,7 +59,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Direccion' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Direccion' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===4 ? '#0075c9' : (option===4? '#178DE1': '')}}>
               <MdOutlineEditLocationAlt className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -89,7 +71,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Garantia' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Garantia' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
               <FaRegCreditCard className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -100,7 +82,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Avance' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Avance' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===6 ? '#0075c9' : (option===6? '#178DE1': '')}}>
               <FcAdvance className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -111,7 +93,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={props} content='Fechas garantia' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Fechas garantia' 
           className="text-blue-500 bg-white rounded-md border border-slate-400" placement="right">
             <div className="p-1" style={{backgroundColor: isHover===7 ? '#0075c9' : (option===7? '#178DE1': '')}}>
               <FaMoneyBill className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 

@@ -10,6 +10,8 @@ import { Options } from '@/interfaces/Common';
 import SelectMultipleReact from '@/components/SelectMultipleReact';
 import { MoneyFormatter } from '@/app/functions/Globals';
 import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
+import { getDate } from "@/libs/dates";
 
 type Params = {
   handleDate: Function, 
@@ -22,32 +24,10 @@ type Params = {
 
 export default function HeaderDashboardPage({handleDate, amountProjects, 
     projectsTotalCost, configMin, activeProjects, projects}: Params) {
-
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-  
+ 
   const refHability = useRef(true);
   const [project, setProject] = useState<string[]>([projects[0].value]);
-  // const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
-  //   from: new Date('2024-01-02'),
-  //   to: new Date('2024-10-30'),
-  // });
+  
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
@@ -115,7 +95,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </span>
           </ProgressCircle>
           <div>
-            <Tooltip closeDelay={0} delay={100} motionProps={props} 
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                 content={CurrencyFormatter({
                   currency: 'USD',
                   value: configMin[0].lastmeta.amount
@@ -136,7 +116,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             flex flex-col justify-center items-center rounded-xl' >
           {projectsTotalCost.length > 0 && (
             <>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost
@@ -147,7 +127,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                 </p>
               </Tooltip>
               <p className='text-xs'>COSTO TOTAL</p>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: projectsTotalCost[0].subtotalCost + projectsTotalCost[0].totalIVA
@@ -167,7 +147,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
           {amountProjects.length > 0 && (
             <>
               <p className='text-xs'>UTILIDAD</p>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
@@ -186,7 +166,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               flex flex-col justify-center items-center rounded-xl' >
           {amountProjects.length > 0 && (
             <>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: amountProjects[0].totalAmount
@@ -197,7 +177,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
                 </p>
               </Tooltip>
               <p className='text-xs text-slate-900'>VENTA TOTAL</p>
-              <Tooltip closeDelay={0} delay={100} motionProps={props} 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
                     value: amountProjects[0].totalAmountTotal
@@ -214,16 +194,4 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
       </div>
     </div>
   )
-}
-
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
-
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
 }

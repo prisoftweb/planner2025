@@ -7,7 +7,6 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
   {project:OneProjectMin, token:string, contractualControl?: IContractualControlProject, 
     budgetedControl:ProjectByBudgetedControl}) {
 
-
   return(
     <Document>
       <Page>
@@ -109,7 +108,7 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
           </View>
 
           <View style={{display: 'flex', flexDirection: 'row', gap: '5px', marginTop: '30px', fontSize:'10px'}}>
-            {contractualControl && (
+            {contractualControl && project.estimatedProject && (
               <View style={{width: '50%'}}>
                 <Text style={{marginBottom: '15px', fontSize:'11px', color:'gray'}}>CONTROL CONTRACTUAL</Text>
 

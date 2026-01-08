@@ -12,6 +12,7 @@ import DownloadGuaranteeByProjectPDF from "../guarantee/DownloadGuaranteeByProje
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
+import { propsTooltip } from "@/libs/animations"
 
 type Props = {
   project:OneProjectMin, 
@@ -23,14 +24,11 @@ type Props = {
 
 export default function ProjectGuaranteeFundsContainer({project, token, id, user, guarantees}: Props){
 
-  // const [opt, setOpt] = useState<number>(1);
   const {updateOneProjectStore} = useOneProjectsStore();
   
   useEffect(() => {
     updateOneProjectStore(project);
   }, []);
-
-  // console.log('guarantees by project => ', guarantees);
 
   const columnHelper = createColumnHelper<ITableGuaranteeByProject>();
     
@@ -159,37 +157,18 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
 
   const data = TransformDataGuaranteeTotable(guarantees);
 
-  let props = {
-    variants: {
-      exit: {
-        opacity: 0,
-        transition: {
-          duration: 0.1,
-          ease: "easeIn",
-        }
-      },
-      enter: {
-        opacity: 1,
-        transition: {
-          duration: 0.15,
-          ease: "easeOut",
-        }
-      },
-    },
-  }
-
   return(
     <>
       <div className="flex w-full justify-end items-center p-3">
         <PDFDownloadLink document={<DownloadGuaranteeByProjectPDF project={project} token={token} guarantees={guarantees} />} fileName={project.title} >
           {({loading, url, error, blob}) => 
             loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                   placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
               </Tooltip>
             ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={props} content='Informe' 
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
                   placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
                 <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
               </Tooltip>

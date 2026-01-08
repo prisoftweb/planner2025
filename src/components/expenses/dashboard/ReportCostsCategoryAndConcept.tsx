@@ -2,7 +2,6 @@ import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
 import { DateRangePickerValue } from '@tremor/react';
-import { title } from 'process';
 
 export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate, projectTitle}: 
   {data: CostsByConceptAndCategory[], type:boolean, rangeDate: DateRangePickerValue, projectTitle:string}) {
