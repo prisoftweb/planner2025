@@ -127,7 +127,8 @@ export function getTypeFiles(expense:Expense) {
   expense.files.map((f) => {
       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-        || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a'){
+        || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a' 
+        || f.types.includes('peg') || f.types.includes('PEG')){
           typeFiles.push('pdf');
           //console.log('aqui entro => ', f);
           //tiene factura

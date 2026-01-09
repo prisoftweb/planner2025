@@ -22,6 +22,7 @@ import { useOptionsExpense } from "@/app/store/newExpense";
 import { getProvider } from "@/app/api/routeProviders";
 import { Provider } from "@/interfaces/Providers";
 import { getAllCostsByProviderNEConditionLV } from "@/app/api/routeCost";
+import Select from 'react-select'
 
 export default function DataStepper({token, user, handleUpdateCategory}: 
   {token:string, user:string, handleUpdateCategory: (value: string) => void }){
@@ -38,7 +39,8 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   const {costCenterOpt, providers, providersSAT, responsibles, categories, types, 
     vats, addProvider, addProviderSat} = useOptionsExpense();
 
-  // const [optionsInvoices, setOptionsInvoices] = useState<Options[]>([]);
+  const [optionsInvoices, setOptionsInvoices] = useState<Options[]>([]);
+  const [optInvoice, setOptInvoice]=useState<Options>();
 
   let year = new Date().getFullYear().toString();
   let month = (new Date().getMonth() + 1).toString();
@@ -52,10 +54,8 @@ export default function DataStepper({token, user, handleUpdateCategory}:
 
   const [startDate, setStartDate] = useState<string>(dateDat!== ''? dateDat: d);
   const [typeCFDIS, setTypeCFDIS] = useState<string>(types[0].value);
-  // const [provider, setProvider] = useState<string>(proveedor!==''? proveedor: providers[0].value);
   const [provider, setProvider] = useState<string>(dataCFDI? dataCFDI.proveedor: providers[0].value);
   const [responsibleS, setResponsibleS] = useState<string>(responsible!==''? responsible: user);
-  // const [categoryS, setCategoryS] = useState<string>(categories[0].value);
   
   const [showProvider, setShowProvider] = useState<boolean>(false);
   const refRequest = useRef(true);
@@ -68,16 +68,22 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   const [typeCFDISprov, setTypeCFDISprov] = useState<string>(types[0].value);
   const [CFDISrelation, setCFDISrelations] = useState<string>();
 
+  const handleOptInvoice = (value: Options) => {
+    setOptInvoice(value);
+    console.log('value opt invoice => ', value);
+  }
+
   const fetchInvoices = async(provParam:string) => {
     // console.log('fetchInvoices provParam => ', provParam);
-    // const res = await getAllCostsByProviderNEConditionLV(token, provParam);
-    // if(typeof(res)!=='string'){
-    //   console.log('res fetchInvoices => ', res);
-    //   setOptionsInvoices(res);
-    //   setCFDISrelations(res.length>0? res[0].value : undefined);
-    // }else{
-    //   showToastMessageError(res);
-    // }
+    const res = await getAllCostsByProviderNEConditionLV(token, provParam);
+    if(typeof(res)!=='string'){
+      // console.log('res fetchInvoices => ', res);
+      setOptionsInvoices(res);
+      setOptInvoice(res.length>0? res[0]: undefined);
+      setCFDISrelations(res.length>0? res[0].value : undefined);
+    }else{
+      showToastMessageError(res);
+    }
   }
 
   useEffect(() => {
@@ -302,11 +308,21 @@ export default function DataStepper({token, user, handleUpdateCategory}:
           if(voucher){
             formdata.append('files', voucher);
             formdata.append('types', voucher.type);
+
+            console.log('voucheer => ', voucher);
           }
           if(CFDI){
             formdata.append('files', CFDI);
             formdata.append('types', CFDI.type);
           }
+
+          if(concept==="6691a5f9c14942310b52ac0e"){
+            formdata.append('cfdisRelations', JSON.stringify({cfdisRelations: {                
+              relatedUUIDs: [CFDISrelation],                        
+              typeUUID: "07 CFDI por aplicacion de anticipo",                                     
+            }}));
+          }
+
           try {
             formdata.append('ispaid', JSON.stringify(supplierCredit));
             if(reportObject && reportObject.ispettycash){
@@ -391,14 +407,22 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             glossary: condition,
             user
           }], iscard:isCard, type:'PROVEEDOR',
+          ...(concept==="6691a5f9c14942310b52ac0e" && {
+              cfdisRelations: {                
+              relatedUUIDs: [CFDISrelation],                        
+              typeUUID: "07 CFDI por aplicacion de anticipo",                                     
+            },
+          })  
         }
-    
+
         try {
           if(reportObject && reportObject.ispettycash){
             const fechaGasto = new Date(startDate);
             const fechaReport = new Date(reportObject.date);
             const currentDate = new Date();
             const expiration = new Date(reportObject.expirationdate);
+            // console.log('data gasto => ', data);
+            // showToastMessage("ok");
             if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
               const res = await SaveExpense(data, token);
@@ -555,8 +579,8 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   }
 
   const handleCfdirelations = (value: string) => {
-    // handleTypeCategoryCFDI(value);
     setCFDISrelations(value);
+    console.log('value cfdi relations => ', value);
   }
 
   const handleTypeCfdiprov = (value: string) => {
@@ -904,23 +928,25 @@ export default function DataStepper({token, user, handleUpdateCategory}:
           
         </div>
 
-        {/* {
+        {
           concept==="6691a5f9c14942310b52ac0e" && (
-            <div className="grid grid-cols-3 gap-x-2" >
+            <div className="grid grid-cols-3 gap-x-2 mt-5" >
               {optionsInvoices && (
                 <div className=" col-span-2">
                   <Label htmlFor="CFDIrelations"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">CFDI&apos;s Relacionado</p></Label>
-                  <SelectReact index={0} opts={optionsInvoices} setValue={handleCfdirelations} />
+                  {/* <SelectReact index={0} opts={optionsInvoices} setValue={handleCfdirelations} /> */}
+                  <SelectOptionReact opts={optionsInvoices} selOpt={optInvoice} setSelOpt={handleOptInvoice} 
+                    setValue={handleCfdirelations} />
                 </div>
               )}
 
-              <div>
+              {/* <div>
                 <Label htmlFor="typeCFDI"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo de CFDI</p></Label>
                 <SelectReact index={indexTypeCFDI} opts={types} setValue={handleTypeCfdiprov} />
-              </div>
+              </div> */}
             </div>
           )
-        } */}
+        }
 
         <div className="mt-5">
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
@@ -953,5 +979,32 @@ export default function DataStepper({token, user, handleUpdateCategory}:
       {showProvider && <AddProvider token={token} setShowForm={setShowProvider} 
                             addProv={addProv}  />} 
     </div>
+  )
+}
+
+export function SelectOptionReact({opts, setValue, disabled=false, setSelOpt, selOpt}: 
+  {opts:Options[], setValue:Function, disabled?:boolean, 
+    setSelOpt:(value: Options) => void, selOpt: Options| undefined}) {
+  
+  // const [selOpt, setSelOpt] = useState<Options>(index!== undefined? opts[index]: opts[opts.length-1]);
+  
+  return(
+    <Select
+      value={selOpt}
+      options={opts}
+      onChange={(e:any) => {
+        setSelOpt(e); 
+        setValue(e.value)
+      }} 
+      className="w-full text-lg mt-2 text-gray-900  rounded-lg 
+        bg-gray-50 focus:ring-blue-500 focus:border-slate-700 outline-0"
+      styles={{
+        control: (baseStyles, state) => ({
+          ...baseStyles,
+          height: '5px',
+        }),
+      }}
+      isDisabled={disabled}
+    />
   )
 }

@@ -19,7 +19,7 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
     currentExpense.files.map((f) => {
       if(f.types === 'application/pdf' || f.types.includes('jpg') || f.types.includes('JPG')
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
-        || f.types.includes('PNG') || f.types.includes('pdf')){
+        || f.types.includes('PNG') || f.types.includes('pdf') || f.types.includes('peg') || f.types.includes('PEG')){
           idFile = f._id;
           urlFile = f.file;
       }
