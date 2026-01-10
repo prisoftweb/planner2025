@@ -115,7 +115,7 @@ export default async function Page() {
       label: cc.day?.toString() || ' ',
       costo: cc.subtotalCost
     })
-  })
+  });
 
   return (
     <>

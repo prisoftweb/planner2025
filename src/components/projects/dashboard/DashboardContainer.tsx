@@ -104,49 +104,16 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
   const [stateProjectsStatus, setStateProjectsStatus] = useState<ProjectsByStatus[]>(projectsStatus);
   const [stateProjectsProgress, setStateProjectsProgress] = useState<ProjectsByProgress[]>(projectsProgress);
   const [stateProjectsNotCompleted, setStateProjectsNotCompleted] = useState<ProjectsNotCompleted[]>(listProjectsnotCompleted);  
-  // const [stateProjectsAndType, setStateProjectsAndType] = useState<CostsByProjectAndType[]>(projectsandTypes);
   const [stateProjectsTop10, setStateProjectsTop10] = useState<ProjectsTop10[]>(projectsTop10);
   const [stateTotalCost, setStateTotalCost] = useState<DashboardTotalCost[]>(projectsTotalCost);
   const [stateConfiMin, setStateConfiMin] = useState<ConfigMin[]>(configMin);
   const [stateTotalFeatureAmountChargeOff, setStateTotalFeatureAmountChargeOff] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesAC);
   const [stateTotalFeatureGuaranteeFund, setStateTotalFeatureGuaranteeFund] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesGF);
   const [stateTotalFeatureTaxes, setStateTotalFeatureTaxes] = useState<ITotalDashboardProjectsByFeatures[]>(totalFeaturesT);
-  // const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
-  // const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
-  // const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
-
+  
   const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
-    // let amountPrjs: TotalAmountProjects[] = [];
-    
-    // let listPrjsDate: ListProjectsByDate[] = [];
-    
-    // let prjsClient: ProjectsByClient[] = [];
-    
-    // let prjsSegment: ProjectsBySegment[] = [];
-    
-    // let prjStatus: ProjectsByStatus[] = [];
-    
-    // let prjsProgress: ProjectsByProgress[] = [];
-    
-    // let listprjnotCompleted: ProjectsNotCompleted[] = [];
-    
-    // let prjsTop10: ProjectsTop10[] = [];
-    
-    // let totalCost: DashboardTotalCost[] = [];
-    
-    // let confMin: ConfigMin[] = [];
     
     if(prj.includes('all')){
-      // amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
-      // listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
-      // prjsClient = await getDashboardProjectsByClient(token, dateS, dateE, []);
-      // prjsSegment = await getDashboardProjectsBySEGMENT(token, dateS, dateE, []);
-      // prjStatus = await getDashboardProjectsByESTATUS(token, dateS, dateE, []);
-      // prjsProgress = await getDashboardProjectsByPROGRESS(token, dateS, dateE, []);
-      // listprjnotCompleted = await getDashboardListProjectsNotComplete(token, dateS, dateE, []);
-      // prjsTop10 = await getDashboardListProjectsTop10(token, '2024-01-01', '2024-10-30', []);
-      // totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, []);
-      // confMin = await getConfigMin(token);
 
       const [amountPrjs, listPrjsDate, prjsClient, prjsSegment, prjStatus,
         prjsProgress, listprjnotCompleted, prjsTop10,
@@ -515,92 +482,6 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
       </div>
 
-      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-        <div className="mb-3">
-          <p>COSTO POR TIPO</p>
-        </div>
-        <BarChartTreeInOne data={resParse} />
-      </div> */}
-
-      {/* <div className="mt-5 bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5">
-        <div className="mb-3">
-          <p>CONTROL PRESUPUESTAL</p>
-        </div>
-        <BarChartComponent categories={['Monto de obra', 'Gastado', 'Presupuestado']} colors={colorsBudgeted} data={dataControlBudgeted} />
-      </div> */}
     </div>
   )
 }
-
-interface DataControlBudgeted {
-  label: string,
-  "Monto de obra": number,
-  Presupuestado: number,
-  Gastado: number
-}
-
-// function MoreProjectsBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-//   const res: DataControlBudgeted[] = [];
-//   prjBugeted.map((prj) => {
-//     const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
-//     const prjS = prjSpent.find((pr) => pr.title === prj.title);
-
-//     res.push({
-//       label: prj.title,
-//       "Monto de obra": prjCB?.total || 0,
-//       Gastado: prjS?.total || 0,
-//       Presupuestado: prj.total,
-//     });
-//   });
-//   return res;
-// }
-
-// function MoreProjectsCtrBudgeted(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-//   const res: DataControlBudgeted[] = [];
-//   prjControlBudgeted.map((prj) => {
-//     const prjB = prjBugeted.find((pr) => pr.title === prj.title);
-//     const prjS = prjSpent.find((pr) => pr.title === prj.title);
-
-//     res.push({
-//       label: prj.title,
-//       "Monto de obra": prj.total,
-//       Gastado: prjS?.total || 0,
-//       Presupuestado: prjB?.total || 0,
-//     });
-//   });
-//   return res;
-// }
-
-// function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], prjSpent: ControlBudgeted[]){
-//   const res: DataControlBudgeted[] = [];
-//   prjSpent.map((prj) => {
-//     const prjB = prjBugeted.find((pr) => pr.title === prj.title);
-//     const prjCB = prjControlBudgeted.find((pr) => pr.title === prj.title);
-
-//     res.push({
-//       label: prj.title,
-//       "Monto de obra": prjCB?.total || 0,
-//       Gastado: prj.total,
-//       Presupuestado: prjB?.total || 0,
-//     });
-//   });
-//   return res;
-// }
-
-// import { Doughnut } from 'react-chartjs-2';
-
-// const titles=['prj1', 'prj2'];
-// const values=[123, 234];
-
-// const dataProjects = {
-//     labels: titles,
-//     datasets: [
-//       {
-//         label: 'Projectos',
-//         data: values,
-//         backgroundColor:[ '#E4D831', '#71B2F2', '#434348', '#6BF672', '#FFA145', '#8579F0', '#FF467A', '#ff4081', '#e040fb', '#448aff', '#ff5252', '#ff6e40', '#69f0ae', '#7c4dff', '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399', '#289399', '#617178', '#8a9a9a', '#516f7d'],
-//         hoverOffset: 4
-//       }
-//     ]
-//   };
-  

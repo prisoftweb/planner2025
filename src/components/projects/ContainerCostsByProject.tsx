@@ -1,11 +1,6 @@
 'use client'
 
-// import { useEffect } from "react"
 import { OneProjectMin, ICostsByProject } from "@/interfaces/Projects"
-// import ProfileProject from "./ProfileProject"
-// import { useOneProjectsStore } from "@/app/store/projectsStore"
-// import DashboardAnalysisProject from "./DashboardAnalysisProject"
-
 import { createColumnHelper } from "@tanstack/react-table"
 import { ExpensesTable } from "@/interfaces/Expenses"
 import { IoAlert } from "react-icons/io5"
@@ -17,21 +12,26 @@ import Table from "../Table"
 import { ExpenseDataProjectToTableDataProject } from "@/app/functions/SaveProject"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import DownloadCostsProjectPDF from "./DownloadCostsProjectPDF"
+// import SearchInTable from "../SearchInTable"
+// import NewDonutChartComponent from "./dashboard/NewDonutChartComponent"
+
+// interface OptionsDashboard {
+//   label: string,
+//   costo: number
+// }
+
+import { DonutChartJS } from '@/interfaces/DashboardProjects';
 
 type Props = {
   project:OneProjectMin, 
   token:string, 
   user:string,
-  costs: ICostsByProject[]
+  costs: ICostsByProject[],
+  costsConcepts?: DonutChartJS, 
+  costsCategories?: DonutChartJS,
 }
 
-export default function ContainerCostsByProject({project, token, user, costs}: Props){
-
-  // const {updateOneProjectStore} = useOneProjectsStore();
-  
-  // useEffect(() => {
-  //   updateOneProjectStore(project);
-  // }, []);
+export default function ContainerCostsByProject({project, token, user, costs, costsCategories, costsConcepts}: Props){
 
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -225,6 +225,9 @@ export default function ContainerCostsByProject({project, token, user, costs}: P
 
   const dataExpenses =ExpenseDataProjectToTableDataProject(costs);
 
+  // console.log('options concepts:', costsConcepts);
+  // console.log('options categories:', costsCategories);
+
   return(
     <>
       <div className="flex justify-end">
@@ -238,6 +241,19 @@ export default function ContainerCostsByProject({project, token, user, costs}: P
             ) }
         </PDFDownloadLink>
       </div>
+
+      {/* <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5">
+        <div className="w-full max-w-md">
+          <NewDonutChartComponent data={costsCategories} />
+        </div>
+        <div className="w-full max-w-md">
+          <NewDonutChartComponent data={costsConcepts} />
+        </div>
+      </div>
+
+      <div className="flex justify-end mt-5">
+        <SearchInTable placeH="Buscar gasto.." />
+      </div> */}
       <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
     </>
   )

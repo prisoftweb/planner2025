@@ -16,19 +16,24 @@ import { insertConditionInCollection } from "@/app/api/routeCollections";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { Chip as ChipMui } from "@mui/material";
-import { ITableCollectionMin } from "@/interfaces/Collections";
 import { useTableStates } from "@/app/store/tableStates";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 import ContainerSideNav from "../ContainerSideNav";
 
-export default function TableCollectionsComponent({token, user}: {token:string, user:string}) {
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import {Tooltip} from "@nextui-org/react";
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import { propsTooltip } from "@/libs/animations";
+import DownloadCollectionPDF from "./DownloadCollectionPDF";
 
-  const [collections, setCollections] = useState<ICollectionMin[]>([]);
+export default function TableCollectionsComponent({token, user, collectionsParam, totalParam}: 
+  {token:string, user:string, collectionsParam:ICollectionMin[], totalParam:ITotalAmountCollections}) {
+
+  const [collections, setCollections] = useState<ICollectionMin[]>(collectionsParam);
   const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
   const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
-  // const [showIsFilter, setShowIsFilter]=useState<boolean>(false);
-  const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>();
+  const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>(totalParam);
   const [statuses, setStatuses]=useState<string[]>([]);
 
   const {search} = useTableStates();
@@ -59,34 +64,38 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
   }, []);
 
   useEffect(() => {
-    const fetch = async() => {
-      const data={
-        condition: [],
-        conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
-        conditionAccountsReceivable:['67d20cb359865f640af92638'],
-      }
-
-      const [res, rest] = await Promise.all([
-        getCollectionsMin(token), 
-        getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data)
-      ]);
-      
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        setCollections(res);
-        setFilteredCollections(res);
-      }
-
-      if(typeof(rest)==='string'){
-        showToastMessageError(rest);
-      }else{
-        setTotalCollections(rest);
-      }
-    }
-
-    fetch();
+    handleFilter(rangeDate.from!, rangeDate.to!, statuses);
   }, []);
+
+  // useEffect(() => {
+  //   const fetch = async() => {
+  //     const data={
+  //       condition: [],
+  //       conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
+  //       conditionAccountsReceivable:['67d20cb359865f640af92638'],
+  //     }
+
+  //     const [res, rest] = await Promise.all([
+  //       getCollectionsMin(token), 
+  //       getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data)
+  //     ]);
+      
+  //     if(typeof(res)==='string'){
+  //       showToastMessageError(res);
+  //     }else{
+  //       setCollections(res);
+  //       setFilteredCollections(res);
+  //     }
+
+  //     if(typeof(rest)==='string'){
+  //       showToastMessageError(rest);
+  //     }else{
+  //       setTotalCollections(rest);
+  //     }
+  //   }
+
+  //   fetch();
+  // }, []);
 
   const updateCollections = async() => {
     const res = await getCollectionsMin(token);
@@ -145,10 +154,6 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
     setIsFilter(true);
     updateTotal(getDate(dateS), getDate(dateE));
   }
-
-  // const handleShowIsFilter = (value:boolean) => {
-  //   setShowIsFilter(value);
-  // }
 
   const updateTotal = async (dateI:string, dateF:string) => {
     const data={
@@ -272,6 +277,20 @@ export default function TableCollectionsComponent({token, user}: {token:string, 
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {widthPage < 1080 && filterElemnts}
+              <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} />} fileName={'Cobranza'} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </Tooltip>
+                    ) }
+                </PDFDownloadLink>
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
           </div>
