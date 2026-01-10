@@ -78,6 +78,8 @@ export interface IInvoiceTable {
   project?: string
   nameProject?: string
   client?: string
+  subtotal?:number,
+  vat?:number
 }
 
 export interface IInvoiceByProject {

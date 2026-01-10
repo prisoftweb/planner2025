@@ -425,9 +425,14 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
       ischargedfull: inv.ischargedfull,
       project: inv.project._id,
       nameProject: inv.project.title,
-      client: inv.client.name
+      client: inv.client.name,
+      subtotal:inv.cost.subtotal?? 0,
+      vat:inv.cost.iva?? 0
     })
   });
+
+  // console.log('invoices data => ', invoicess);
+  // console.log('data table => ', table);
 
   return table;
 }

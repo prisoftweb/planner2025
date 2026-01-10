@@ -294,19 +294,47 @@ export default function Table({data, columns, placeH, typeTable='',
               }
             }else{
               if(typeTable === 'invoices'){
-                data.map((invoice:IInvoiceTable) => total += invoice.amount);
+
+                data.forEach((element:IInvoiceTable) => {
+                  total+= element.amount;
+                  // subtot+= element.subtotal;
+                  // vatInv+= element.vat;
+                });
+
+                // data.map((invoice:IInvoiceTable) => total += invoice.amount);
                 const t = CurrencyFormatter({
                   currency: 'MXN',
                   value: total
                 });
-                
+
                 if(table.getSelectedRowModel().flatRows.length > 0){
                   let totalSeleccionados: number = 0;
-                  table.getSelectedRowModel().flatRows.map((inv:any) => totalSeleccionados += inv.original.amount);
+                  let subtotSel=0;
+                  let vatInvSel=0;
+                  // table.getSelectedRowModel().flatRows.map((inv:any) => totalSeleccionados += inv.original.amount);
+                  // console.log('table selected => ', table.getSelectedRowModel().flatRows);
+                  table.getSelectedRowModel().flatRows.forEach((inv:any) => {
+                    totalSeleccionados += inv.original.amount;
+                    // console.log('subtotsel => ', subtotSel, ' invsubttot => ', inv.original.subtotal);
+                    // console.log('ivasel => ', vatInvSel, ' invvat => ', inv.original.vat);
+                    subtotSel+= inv.original.subtotal?? 0;
+                    vatInvSel+= inv.original.vat?? 0;
+                  })
                   const tSeleccionados = CurrencyFormatter({
                     currency: 'MXN',
                     value: totalSeleccionados
                   });
+                  
+                  const sSel = CurrencyFormatter({
+                    currency: 'MXN',
+                    value: subtotSel
+                  });
+
+                  const vSel = CurrencyFormatter({
+                    currency: 'MXN',
+                    value: vatInvSel
+                  });
+
                   labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
                       <div className="flex gap-x-5 text-white pl-5">
                         <p>Cantidad: {data.length}</p>
@@ -314,7 +342,13 @@ export default function Table({data, columns, placeH, typeTable='',
                       </div>
                       <div className="flex gap-x-5 text-white pl-5">
                         <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
-                        <p>Total de facturas seleccionadas: {tSeleccionados}</p>
+                        <p>Total de facturas seleccionadas: {tSeleccionados} </p>
+                      </div>
+                      <div className="flex gap-x-5 text-white pl-5">
+                        <p> Subtotal: {sSel} </p>
+                      </div>
+                      <div className="flex gap-x-5 text-white pl-5">
+                        <p> Iva: {vSel}</p>
                       </div>
                   </div>)
                 }else{
