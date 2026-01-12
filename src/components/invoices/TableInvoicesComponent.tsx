@@ -27,6 +27,10 @@ import ContainerSideNav from "../ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
 import { getDate } from "@/libs/dates";
 
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadInvoicesReportPDF from "./DownloadInvoicesReportPDF";
+
 export default function TableInvoicesComponent({token, user}: 
   {token:string, user:string}) {
 
@@ -380,6 +384,20 @@ export default function TableInvoicesComponent({token, user}:
           <SearchInTable placeH={"Buscar factura.."} />
           <div className={''}>
             <div className="flex gap-x-4 justify-end items-center">
+              <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} />} fileName={'Facturacion'} >
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    </Tooltip>
+                  ) }
+              </PDFDownloadLink>
               <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
             </div>
           </div>

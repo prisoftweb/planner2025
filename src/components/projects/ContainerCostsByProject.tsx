@@ -12,7 +12,7 @@ import Table from "../Table"
 import { ExpenseDataProjectToTableDataProject } from "@/app/functions/SaveProject"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import DownloadCostsProjectPDF from "./DownloadCostsProjectPDF"
-// import SearchInTable from "../SearchInTable"
+import SearchInTable from "../SearchInTable"
 // import NewDonutChartComponent from "./dashboard/NewDonutChartComponent"
 
 // interface OptionsDashboard {
@@ -249,11 +249,11 @@ export default function ContainerCostsByProject({project, token, user, costs, co
         <div className="w-full max-w-md">
           <NewDonutChartComponent data={costsConcepts} />
         </div>
-      </div>
+      </div>*/}
 
       <div className="flex justify-end mt-5">
         <SearchInTable placeH="Buscar gasto.." />
-      </div> */}
+      </div> 
       <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
     </>
   )

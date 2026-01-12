@@ -31,21 +31,6 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni}:
                 </View>
               </View>
 {/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px', justifyContent:'flex-start', alignItems:'center'}}></View> */}
-              {/* <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
-                <Text style={{color:'gray', margin: '2px'}}>Cliente:</Text>
-                <Text style={{margin: '2px'}}>{project.client.name}</Text>
-              </View> */}
-
-              {/* <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
-                <Text style={{color:'gray', margin: '2px'}}>RFC:</Text>
-                <Text style={{margin: '2px'}}>{project.client.rfc}</Text>
-              </View> */}
-
-              {/* <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
-                <Text style={{color:'gray', margin: '2px'}}>Proyecto:</Text>
-                <Text style={{margin: '2px'}}>{project.title}</Text>
-              </View> */}
-
             </View>
 
             <View style={{padding:'13px'}}>

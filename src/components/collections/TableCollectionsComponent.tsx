@@ -67,36 +67,6 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     handleFilter(rangeDate.from!, rangeDate.to!, statuses);
   }, []);
 
-  // useEffect(() => {
-  //   const fetch = async() => {
-  //     const data={
-  //       condition: [],
-  //       conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
-  //       conditionAccountsReceivable:['67d20cb359865f640af92638'],
-  //     }
-
-  //     const [res, rest] = await Promise.all([
-  //       getCollectionsMin(token), 
-  //       getAllTotalAmountRecoveredCollection(token, '2025-01-01', '2025-12-31', data)
-  //     ]);
-      
-  //     if(typeof(res)==='string'){
-  //       showToastMessageError(res);
-  //     }else{
-  //       setCollections(res);
-  //       setFilteredCollections(res);
-  //     }
-
-  //     if(typeof(rest)==='string'){
-  //       showToastMessageError(rest);
-  //     }else{
-  //       setTotalCollections(rest);
-  //     }
-  //   }
-
-  //   fetch();
-  // }, []);
-
   const updateCollections = async() => {
     const res = await getCollectionsMin(token);
     if(typeof(res)==='string'){
@@ -278,19 +248,19 @@ export default function TableCollectionsComponent({token, user, collectionsParam
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {widthPage < 1080 && filterElemnts}
               <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} />} fileName={'Cobranza'} >
-                  {({loading, url, error, blob}) => 
-                    loading? (
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                      </Tooltip>
-                    ) : (
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                      </Tooltip>
-                    ) }
-                </PDFDownloadLink>
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    </Tooltip>
+                  ) }
+              </PDFDownloadLink>
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
           </div>
