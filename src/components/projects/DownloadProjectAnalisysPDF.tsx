@@ -62,7 +62,8 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
-                      value: project.amount * 1.16
+                      // value: project.amount * 1.16
+                      value: project.amountotal?? 0
                     })}
                   </Text>
                 </View>
