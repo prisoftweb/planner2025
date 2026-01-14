@@ -26,6 +26,7 @@ export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
       // accountreceivablesCount: inv.accountreceivablesCount,
       accountreceivablesCount: inv.accountreceivables.length > 0? inv.accountreceivables[0].partialitynumber : 0,
       ischargedfull: inv.ischargedfull
+      
     })
   });
 

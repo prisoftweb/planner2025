@@ -423,8 +423,11 @@ export default function TableInvoicesComponent({token, user}:
 function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   const table: IInvoiceTable[] = [];
 
+  console.log('invoices data => ', invoicess);
+
   invoicess.map((inv) => {
     const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
+    
     table.push({
       amount: inv.cost.total,
       condition: inv.condition,
@@ -436,7 +439,8 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
       methodpaid: inv.paymentMethod,
       usecfdi: aux,
       idEstimates:inv.estimate._id, 
-      charged: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].charged: 0,
+      // charged: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].charged: 0,
+      charged: inv.fullyCharged?? 0,
       unchargedbalanceamount: inv.accountreceivables?.length > 0 ? inv.accountreceivables[inv.accountreceivables.length-1].unchargedbalanceamount: 0,
       previousBalance: inv.accountreceivables?.length > 0? inv.accountreceivables[inv.accountreceivables.length-1].previousbalanceamount: 0,
       accountreceivablesCount: inv.accountreceivables[inv.accountreceivables.length - 1].partialitynumber,
@@ -448,9 +452,6 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
       vat:inv.cost.iva?? 0
     })
   });
-
-  // console.log('invoices data => ', invoicess);
-  // console.log('data table => ', table);
 
   return table;
 }

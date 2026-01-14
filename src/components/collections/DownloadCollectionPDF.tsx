@@ -1,16 +1,18 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
-import { ICollectionMin } from '@/interfaces/Collections';
+import { ICollectionMin, ITotalAmountCollections } from '@/interfaces/Collections';
 
-export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni}:
-  {collections: ICollectionMin[], fechaIni?:Date, fechaFin?:Date}) {
+export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, totalCollections}:
+  {collections: ICollectionMin[], fechaIni?:Date, fechaFin?:Date, totalCollections:ITotalAmountCollections}) {
 
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  let total=0;
-  orderCollections.forEach((c) => {
-    total += c.amount || 0;
-  });
+  // let total=0;
+  // orderCollections.forEach((c) => {
+  //   total += c.amount || 0;
+  // });
+
+  // console.log('total recovered => ', totalCollections);
 
   return(
     <Document>
@@ -42,7 +44,8 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni}:
                   <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
-                      value: total || 0
+                      // value: total || 0
+                      value: totalCollections?.totalCharged?.totalCharged?? 0
                     })}
                   </Text>
                 </View>
@@ -79,7 +82,9 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni}:
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha</Text>
             <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Concepto</Text>
             {/* <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Estatus </Text> */}
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Proyecto </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Factura </Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Importe </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Importe pagado</Text>
           </View>
 
@@ -89,10 +94,16 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni}:
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date.substring(0, 10) || ''}</Text>
               <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.concept}</Text>
               {/* <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.condition.name} </Text> */}
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.invoices.project.title}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.invoices.invoices.folio}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: c.amount || 0
+              })}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                currency: 'MXN',
+                // value: c.amountcharged || 0
+                value: c.invoices?.amountcharged?? 0
               })}</Text>
             </View>
           ))}

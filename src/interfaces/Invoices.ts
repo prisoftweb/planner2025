@@ -517,6 +517,7 @@ export interface IInvoiceByDateAndConditionMin {
   accountreceivables: any[]
   accountreceivablesCount: number
   status: boolean
+  fullyCharged?: number
 }
 
 

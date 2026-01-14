@@ -129,6 +129,7 @@ export interface ICollectionMin {
     color: string
     darktext: boolean
   }
+  // amountcharged?: number
 }
 
 export interface IOneCollectionMin {

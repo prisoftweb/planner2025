@@ -247,7 +247,8 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {widthPage < 1080 && filterElemnts}
-              <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} />} fileName={'Cobranza'} >
+              <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
+                          fechaIni={rangeDate?.from} totalCollections={totalCollections} />} fileName={'Cobranza'} >
                 {({loading, url, error, blob}) => 
                   loading? (
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
