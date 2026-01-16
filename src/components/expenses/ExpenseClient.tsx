@@ -60,7 +60,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                     style={{borderColor:'#F8FAFC'}}>
                       <div className=" max-w-lg">
                         <UpdateExtraExpense expense={expense} id={id} 
-                          isHistory={isHistory} token={token}
+                          isHistory={isHistory} token={token} isticket={expense.isticket}
                         />
                       </div>
             </div>): //max w-md antes abajo

@@ -7,6 +7,9 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni}
 
   const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
+  console.log('invoices pdf => ', invoices);
+  console.log('order by => ', orderInvoices);
+
   const total = invoices.reduce((acc, item) => acc + item.cost.total, 0);
   const vat = invoices.reduce((acc, item) => acc + item.cost.iva, 0);
   const subtotal = invoices.reduce((acc, item) => acc + item.cost.subtotal, 0);
@@ -99,8 +102,8 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni}
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Pendiente</Text>
           </View>
 
-          {orderInvoices.map((i) => (
-            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={i._id}>
+          {orderInvoices.map((i, index:number) => (
+            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={`${i._id}-${index}`}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.folio}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.date.substring(0, 10)}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{i.paymentMethod} | {i.paymentWay} | {i.useCFDI}</Text>

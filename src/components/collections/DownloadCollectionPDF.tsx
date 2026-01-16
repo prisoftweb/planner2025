@@ -1,18 +1,13 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
-import { ICollectionMin, ITotalAmountCollections } from '@/interfaces/Collections';
+import { ICollectionMin, ITotalAmountRecoveredCollections } from '@/interfaces/Collections';
 
 export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, totalCollections}:
-  {collections: ICollectionMin[], fechaIni?:Date, fechaFin?:Date, totalCollections:ITotalAmountCollections}) {
+  {collections: ICollectionMin[], fechaIni?:Date, fechaFin?:Date, totalCollections:ITotalAmountRecoveredCollections}) {
 
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  // let total=0;
-  // orderCollections.forEach((c) => {
-  //   total += c.amount || 0;
-  // });
-
-  // console.log('total recovered => ', totalCollections);
+  console.log('total collections => ', totalCollections);
 
   return(
     <Document>
@@ -45,7 +40,7 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
                     {CurrencyFormatter({
                       currency: 'MXN',
                       // value: total || 0
-                      value: totalCollections?.totalCharged?.totalCharged?? 0
+                      value: totalCollections?.amount?? 0
                     })}
                   </Text>
                 </View>

@@ -7,6 +7,8 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
   {project:OneProjectMin, token:string, contractualControl?: IContractualControlProject, 
     budgetedControl:ProjectByBudgetedControl}) {
 
+  // console.log('project => ', project);
+
   return(
     <Document>
       <Page>
@@ -43,12 +45,14 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
 
               <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
                 <Text style={{color:'gray', margin: '2px'}}>Fecha de inicio:</Text>
-                <Text style={{margin: '2px'}}>{new Date().toISOString().substring(0, 10)}</Text>
+                {/* <Text style={{margin: '2px'}}>{new Date().toISOString().substring(0, 10)}</Text> */}
+                <Text style={{margin: '2px'}}>{project.date?.substring(0, 10)}</Text>
               </View>
 
               <View style={{display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px'}}>
                 <Text style={{color:'gray', margin: '2px'}}>Fecha de termino:</Text>
-                <Text style={{margin: '2px'}}>{new Date().toISOString().substring(0, 10)}</Text>
+                {/* <Text style={{margin: '2px'}}>{new Date().toISOString().substring(0, 10)}</Text> */}
+                <Text style={{margin: '2px'}}>{project.endDate?.substring(0, 10)}</Text>
               </View>
 
             </View>
@@ -104,6 +108,12 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
                   </View>
                 </>
               )}
+
+              <View style={{borderRadius: '3px', marginLeft: '35px', marginTop:'7px', width:'100px', backgroundColor: project?.category?.color ?? 'gray', textAlign: 'center', color:project?.category?.darktext? 'black': 'white'}}>
+                <Text style={{fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold', textAlign: 'center'}}>
+                  {project.category.name}
+                </Text>
+              </View>
 
             </View>
           </View>

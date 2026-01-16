@@ -210,6 +210,28 @@ export async function getAllTotalAmountRecoveredCollection(auth_token:string, da
   }
 }
 
+export async function getAllTOTAmountRecovered(auth_token:string, dateI: string, dateF:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecovered/${dateI}/${dateF}`;
+  console.log('ulr total amount => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    });
+    console.log('res => ', res);
+    if(res.status===200)
+      return res.data.data.resdata;
+    return 'Error al obtener total de  cobros!!';
+  } catch (error) {
+    console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar monto total de los cobros!!';
+  }
+}
+
 export async function insertConditionInCollection(auth_token:string, data:Object, id:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/insertConditionInCollection/${id}`;
   // console.log('url coboro => ', url);

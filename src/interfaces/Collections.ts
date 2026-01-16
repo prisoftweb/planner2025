@@ -129,7 +129,6 @@ export interface ICollectionMin {
     color: string
     darktext: boolean
   }
-  // amountcharged?: number
 }
 
 export interface IOneCollectionMin {
@@ -297,4 +296,9 @@ export interface ITotalAmountCollections {
     quantity: number,
     totalCharged: number
   }
+}
+
+export interface ITotalAmountRecoveredCollections {
+  quantity: number
+  amount: number
 }

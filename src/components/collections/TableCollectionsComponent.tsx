@@ -5,8 +5,8 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
-import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection } from "@/app/api/routeCollections";
-import { ICollectionMin, ITotalAmountCollections } from "@/interfaces/Collections";
+import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection, getAllTOTAmountRecovered } from "@/app/api/routeCollections";
+import { ICollectionMin, ITotalAmountCollections, ITotalAmountRecoveredCollections } from "@/interfaces/Collections";
 import Button from "../Button";
 import SearchInTable from "../SearchInTable";
 import Link from "next/link";
@@ -26,14 +26,16 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import { propsTooltip } from "@/libs/animations";
 import DownloadCollectionPDF from "./DownloadCollectionPDF";
 
-export default function TableCollectionsComponent({token, user, collectionsParam, totalParam}: 
-  {token:string, user:string, collectionsParam:ICollectionMin[], totalParam:ITotalAmountCollections}) {
+export default function TableCollectionsComponent({token, user, collectionsParam, totalParam, totalRecoveredP}: 
+  {token:string, user:string, collectionsParam:ICollectionMin[], totalParam:ITotalAmountCollections, 
+    totalRecoveredP:ITotalAmountRecoveredCollections}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>(collectionsParam);
   const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
   const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>(totalParam);
+  const [totalRecovered, setTotalRecovered]=useState<ITotalAmountRecoveredCollections>(totalRecoveredP);
   const [statuses, setStatuses]=useState<string[]>([]);
 
   const {search} = useTableStates();
@@ -131,11 +133,23 @@ export default function TableCollectionsComponent({token, user, collectionsParam
       conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
       conditionAccountsReceivable:['67d20cb359865f640af92638'],
     }
-    const rest = await getAllTotalAmountRecoveredCollection(token, dateI, dateF, data);
+    // const rest = await getAllTotalAmountRecoveredCollection(token, dateI, dateF, data);
+    const [rest, restt]= await Promise.all([
+      getAllTotalAmountRecoveredCollection(token, dateI, dateF, data),
+      getAllTOTAmountRecovered(token, dateI, dateF),
+    ]);
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
     }else{
+      console.log('rest => ', rest);
       setTotalCollections(rest);
+    }
+
+    if(typeof(restt)==='string'){
+      showToastMessageError(restt);
+    }else{
+      console.log('restt => ', restt);
+      setTotalRecovered(restt[0]);
     }
   }
 
@@ -248,7 +262,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {widthPage < 1080 && filterElemnts}
               <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
-                          fechaIni={rangeDate?.from} totalCollections={totalCollections} />} fileName={'Cobranza'} >
+                          fechaIni={rangeDate?.from} totalCollections={totalRecovered} />} fileName={'Cobranza'} >
                 {({loading, url, error, blob}) => 
                   loading? (
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 

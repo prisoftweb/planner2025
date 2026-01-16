@@ -2,7 +2,7 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import TableCollectionsComponent from "@/components/collections/TableCollectionsComponent";
-import { getCollectionsMin, getAllTotalAmountRecoveredCollection } from "../api/routeCollections";
+import { getCollectionsMin, getAllTotalAmountRecoveredCollection, getAllTOTAmountRecovered } from "../api/routeCollections";
 import { getDate } from "@/libs/dates";
 
 export default async function Page(){
@@ -17,9 +17,10 @@ export default async function Page(){
     conditionAccountsReceivable:['67d20cb359865f640af92638'],
   }
 
-  const [res, rest] = await Promise.all([
+  const [res, rest, restt] = await Promise.all([
     getCollectionsMin(token), 
-    getAllTotalAmountRecoveredCollection(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), data)
+    getAllTotalAmountRecoveredCollection(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), data),
+    getAllTOTAmountRecovered(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())),
   ]);
 
   if(typeof(res) === "string")
@@ -42,11 +43,21 @@ export default async function Page(){
       </>
     )
 
+  if(typeof(restt) === "string")
+    return(
+      <>
+        <Navigation user={user} />
+        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+          <h1 className="text-center text-red-500">{restt}</h1>
+        </div>
+      </>
+    )
+
   return (
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <TableCollectionsComponent token={token} user={user._id} collectionsParam={res} totalParam={rest} />
+        <TableCollectionsComponent token={token} user={user._id} collectionsParam={res} totalParam={rest} totalRecoveredP={restt[0]} />
       </div>
     </>
   )

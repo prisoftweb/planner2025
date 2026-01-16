@@ -109,6 +109,7 @@ export interface OneProjectMin {
   }
   includesTaxes?: boolean,
   estimatedProject?: boolean
+  endDate?:string
 }
 
 export interface ProjectMin {
