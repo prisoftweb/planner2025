@@ -7,7 +7,7 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
 
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  console.log('total collections => ', totalCollections);
+  // console.log('total collections => ', totalCollections);
 
   return(
     <Document>
@@ -83,8 +83,8 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Importe pagado</Text>
           </View>
 
-          {orderCollections.map((c) => (
-            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={c._id}>
+          {orderCollections.map((c, index:number) => (
+            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}} key={`${c._id}_${index}`}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.reference}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date.substring(0, 10) || ''}</Text>
               <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.concept}</Text>

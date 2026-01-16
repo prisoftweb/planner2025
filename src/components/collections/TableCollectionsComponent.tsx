@@ -5,7 +5,8 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
-import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection, getAllTOTAmountRecovered } from "@/app/api/routeCollections";
+import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection, 
+  getAllTOTAmountRecovered, getAllCollectionsMINByDateAndCondition } from "@/app/api/routeCollections";
 import { ICollectionMin, ITotalAmountCollections, ITotalAmountRecoveredCollections } from "@/interfaces/Collections";
 import Button from "../Button";
 import SearchInTable from "../SearchInTable";
@@ -87,8 +88,10 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     const newStatus = [...statuses, status];
     setStatuses(newStatus);
     if(rangeDate.from && rangeDate.to){
+      console.log('add status');
       handleFilter(rangeDate.from, rangeDate.to, newStatus);
     }else{
+      console.log('error add =>');
       showToastMessageError('Seleccione un rango de fechas para filtrar');
     }
   }
@@ -97,8 +100,10 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     const newStatus = statuses.filter((s) => s !== status);
     setStatuses(newStatus);
     if(rangeDate.from && rangeDate.to){
+      console.log('filter delete');
       handleFilter(rangeDate.from, rangeDate.to, newStatus);
     }else{
+      console.log('error delete => ');
       showToastMessageError('Seleccione un rango de fechas para filtrar');
     }
   }
@@ -108,65 +113,76 @@ export default function TableCollectionsComponent({token, user, collectionsParam
   }
 
   const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    let statusesFil;
-    if(arrStatuses.length > 0){
-      statusesFil = collections.filter((c) => arrStatuses.includes(c.condition._id));
-    }else{
-      statusesFil = collections;
-    }
+    // let statusesFil;
+    // if(arrStatuses.length > 0){
+    //   statusesFil = collections.filter((c) => arrStatuses.includes(c.condition._id));
+    // }else{
+    //   statusesFil = collections;
+    // }
 
-    const filtered = statusesFil.filter((c) => {
-      let d = new Date(c.date).getTime();
-      if(d >= dateS.getTime() && d <= dateE.getTime()){
-        return c;
-      }
-    });
+    // const filtered = statusesFil.filter((c) => {
+    //   let d = new Date(c.date).getTime();
+    //   if(d >= dateS.getTime() && d <= dateE.getTime()){
+    //     return c;
+    //   }
+    // });
 
-    setFilteredCollections(filtered);
-    setIsFilter(true);
-    updateTotal(getDate(dateS), getDate(dateE));
+    // setFilteredCollections(filtered);
+    // setIsFilter(true);
+    updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   }
 
-  const updateTotal = async (dateI:string, dateF:string) => {
+  const updateTotal = async (dateI:string, dateF:string, arrStatuses:Array<string>) => {
     const data={
-      condition: statuses,
+      // condition: statuses,
+      condition:arrStatuses,
       conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
       conditionAccountsReceivable:['67d20cb359865f640af92638'],
     }
     // const rest = await getAllTotalAmountRecoveredCollection(token, dateI, dateF, data);
-    const [rest, restt]= await Promise.all([
+    const [col,rest, restt]= await Promise.all([
+      getAllCollectionsMINByDateAndCondition(token, dateI, dateF, {
+          "condition": arrStatuses
+      }),
       getAllTotalAmountRecoveredCollection(token, dateI, dateF, data),
       getAllTOTAmountRecovered(token, dateI, dateF),
     ]);
+    if(typeof(col)==='string'){
+      showToastMessageError(col);
+    }else{
+      console.log('cols => ', col);
+      setCollections(col);
+    }
+
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
     }else{
-      console.log('rest => ', rest);
+      // console.log('rest => ', rest);
       setTotalCollections(rest);
     }
 
     if(typeof(restt)==='string'){
       showToastMessageError(restt);
     }else{
-      console.log('restt => ', restt);
+      // console.log('restt => ', restt);
       setTotalRecovered(restt[0]);
     }
   }
 
-  if(collections.length <= 0){
-    return (
-      <>
-        <div className="flex flex-col items-center">
-          <p className="text-5xl mt-20 font-bold">Cobranza</p>
-          <p className="text-xl mt-10 text-slate-700 font-bold" 
-            >Gestiona las cuentas por cobrar,
-            recuperacion de cobranza y mas
-            desde Planner</p>
-          <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
-        </div>
-      </>
-    )
-  }
+  // if(collections?.length <= 0){
+  //   return (
+  //     <>
+  //       <div className="flex flex-col items-center">
+  //         <p className="text-5xl mt-20 font-bold">Cobranza</p>
+  //         <p className="text-xl mt-10 text-slate-700 font-bold" 
+  //           >Gestiona las cuentas por cobrar,
+  //           recuperacion de cobranza y mas
+  //           desde Planner</p>
+  //         <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   const delCollection = (id:string) => {
     showToastMessage('Cobro eliminado satisfactoriamente!!!');
@@ -196,19 +212,26 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     }
   }
 
+  // let data
+  // if(isFilter){
+  //   if(search.length>0){
+  //     data=filteredCollections.filter((f) => f.reference.includes(search));
+  //   }else{
+  //     data=filteredCollections;
+  //   }
+  // }else{
+  //   if(search.length>0){
+  //     data=collections.filter((f) => f.reference.includes(search));
+  //   }else{
+  //     data=collections;
+  //   }
+  // }
+
   let data
-  if(isFilter){
-    if(search.length>0){
-      data=filteredCollections.filter((f) => f.reference.includes(search));
-    }else{
-      data=filteredCollections;
-    }
+  if(search.length>0){
+    data=collections.filter((f) => f.reference.includes(search));
   }else{
-    if(search.length>0){
-      data=collections.filter((f) => f.reference.includes(search));
-    }else{
-      data=collections;
-    }
+    data=collections;
   }
  
   let filterElemnts = <div className="flex gap-x-4 justify-end items-center">

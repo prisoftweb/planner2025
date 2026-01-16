@@ -205,8 +205,15 @@ export default function UpdateExtraExpense({token, id, expense, isHistory, istic
         category: costcenter,
         concept
       }
-      const data = {
-        costocenter, provider, user:responsible, typeCFDI, category, project
+      const data = { 
+        user:responsible, 
+        typeCFDI, 
+        category, 
+        project,
+        ...(!isticket && {
+          costocenter, 
+          provider,
+        })
       }
       try {
         const res = await UpdateCost(token, id, data);

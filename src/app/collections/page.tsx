@@ -2,7 +2,8 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import TableCollectionsComponent from "@/components/collections/TableCollectionsComponent";
-import { getCollectionsMin, getAllTotalAmountRecoveredCollection, getAllTOTAmountRecovered } from "../api/routeCollections";
+import { getCollectionsMin, getAllTotalAmountRecoveredCollection, 
+  getAllTOTAmountRecovered, getAllCollectionsMINByDateAndCondition } from "../api/routeCollections";
 import { getDate } from "@/libs/dates";
 
 export default async function Page(){
@@ -18,7 +19,12 @@ export default async function Page(){
   }
 
   const [res, rest, restt] = await Promise.all([
-    getCollectionsMin(token), 
+    // getCollectionsMin(token),
+    getAllCollectionsMINByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()),{
+          "condition": [
+              "67e31aa81945c0b1e4c9bc76", "67e318171945c0b1e4c9bc72", "67e318601945c0b1e4c9bc74"
+          ]
+      }), 
     getAllTotalAmountRecoveredCollection(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), data),
     getAllTOTAmountRecovered(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())),
   ]);

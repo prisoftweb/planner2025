@@ -19,6 +19,36 @@ export async function getCollectionsMin(auth_token:string){
   }
 }
 
+export async function getAllCollectionsMINByDateAndCondition(auth_token:string, fechaIni:string, fechaFin:string, data:Object){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllCollectionsMINByDateAndCondition/${fechaIni}/${fechaFin}`;
+  console.log('url cols => ', url);
+  console.log('data => ', data);
+  try {
+    const res = await axios.post(url, data, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    // const res = await axios({
+    //   method: 'get',
+    //   url,
+    //   headers: {
+    //     Authorization: `Bearer ${auth_token}`
+    //   },
+    //   data
+    // });
+    console.log('res => ', res);
+    if(res.status===200)
+      return res.data.data.data;
+    return 'Error al obtener los cobros!!';
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message || error.response?.data.message;
+    }
+    return 'Error al consultar los cobros!!';
+  }
+}
+
 export async function getCollectionsByProjectMin(auth_token:string, idp:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllCollectionsByProjectMIN/${idp}`;
   try {
@@ -212,14 +242,14 @@ export async function getAllTotalAmountRecoveredCollection(auth_token:string, da
 
 export async function getAllTOTAmountRecovered(auth_token:string, dateI: string, dateF:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/collections/getAllTOTAmountRecovered/${dateI}/${dateF}`;
-  console.log('ulr total amount => ', url);
+  // console.log('ulr total amount => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
-    console.log('res => ', res);
+    // console.log('res => ', res);
     if(res.status===200)
       return res.data.data.resdata;
     return 'Error al obtener total de  cobros!!';
