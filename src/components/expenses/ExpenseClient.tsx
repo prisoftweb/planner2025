@@ -9,7 +9,8 @@ import UpdateExtraExpense from "./UpdateExtraExpenses"
 import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
 import { useNewExpense } from "@/app/store/newExpense"
-import StatusCostComponent from "./StatusCostComponent"
+// import StatusCostComponent from "./StatusCostComponent"
+import AddCFDIRelations from "./AddCFDIRelations";
 
 export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
   { token:string, id:string, user:string, expense:OneExpense, isHistory?:boolean}){
@@ -46,6 +47,11 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
 
   const pdfFile = files.find(f => f.types.includes('pdf') || f.types.includes('PDF') || f.types.includes('jpg') || f.types.includes('JPG') || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png') || f.types.includes('PNG'));
 
+  // console.log('expense => ', expense);
+  console.log(" => ", expense.costocenter.concept._id, " == 6691a5f9c14942310b52ac0e");
+
+  const isadvanceapp= expense.costocenter.concept._id==="6691a5f9c14942310b52ac0e";
+
   const view = (
     opt===1? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
@@ -75,7 +81,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
           (opt===5? (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                           <div className=" max-w-lg">
-                            <StatusCostComponent cost={expense._id} token={token} />
+                            <AddCFDIRelations cost={expense._id} token={token} />
                           </div>
                       </div>): (<div className="mt-3 w-full flex space-x-2" >
                                   <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
@@ -95,7 +101,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
       <div className={`flex`}>
         <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
-            <NavResponsive open={open} setOpen={setOpen} 
+            <NavResponsive open={open} setOpen={setOpen} isadvanceapp={isadvanceapp}
                   changeOption={setOpt} option={opt} isticket={expense.isticket} />
           </div>
         </div>

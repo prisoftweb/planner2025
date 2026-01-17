@@ -300,5 +300,5 @@ export interface ITotalAmountCollections {
 
 export interface ITotalAmountRecoveredCollections {
   quantity: number
-  amount: number
+  amountcharged: number
 }

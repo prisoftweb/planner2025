@@ -40,7 +40,7 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
                     {CurrencyFormatter({
                       currency: 'MXN',
                       // value: total || 0
-                      value: totalCollections?.amount?? 0
+                      value: totalCollections?.amountcharged?? 0
                     })}
                   </Text>
                 </View>

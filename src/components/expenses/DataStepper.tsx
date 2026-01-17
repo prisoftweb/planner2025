@@ -65,7 +65,7 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   const [isNoBusinessName, setIsNoBusinesName] = useState<boolean>(false);
   const [totalExpense, setTotalExpense] = useState<string>(dataCFDI? dataCFDI.total : total);
 
-  const [typeCFDISprov, setTypeCFDISprov] = useState<string>(types[0].value);
+  // const [typeCFDISprov, setTypeCFDISprov] = useState<string>(types[0].value);
   const [CFDISrelation, setCFDISrelations] = useState<string>();
 
   const handleOptInvoice = (value: Options) => {
@@ -74,10 +74,8 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   }
 
   const fetchInvoices = async(provParam:string) => {
-    // console.log('fetchInvoices provParam => ', provParam);
     const res = await getAllCostsByProviderNEConditionLV(token, provParam);
     if(typeof(res)!=='string'){
-      // console.log('res fetchInvoices => ', res);
       setOptionsInvoices(res);
       setOptInvoice(res.length>0? res[0]: undefined);
       setCFDISrelations(res.length>0? res[0].value : undefined);
@@ -87,7 +85,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   }
 
   useEffect(() => {
-    
     fetchInvoices(dataCFDI? dataCFDI.proveedor: providers[0].value);
   }, []);
 
@@ -482,11 +479,29 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   }
 
   const dataCFDIValidation = async() => {
-    if(Number(formik.values.amount.replace(/[$,]/g, "")) !== Number(dataCFDI?.amount)){
-      // console.log('amount => ', formik.values.amount, 'amountcfdi => ', dataCFDI?.amount);
-      showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
-      return false;
+    const found = types.find((type) => type.value === typeCFDIS);
+    let absolute=false;
+    if(found){
+      console.log('found => ', found);
+      if(found.label.toLowerCase().includes('egreso')){
+        absolute=true;
+      }
     }
+
+    if(absolute){
+      if(Math.abs(Number(formik.values.amount.replace(/[$,]/g, ""))) !== Number(dataCFDI?.amount)){
+        // console.log('absolute => ', 'amount => ', formik.values.amount, 'amountcfdi => ', dataCFDI?.amount);
+        showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
+        return false;
+      }
+    }else{
+      if(Number(formik.values.amount.replace(/[$,]/g, "")) !== Number(dataCFDI?.amount)){
+        // console.log('no absolute => ', 'amount => ', formik.values.amount, 'amountcfdi => ', dataCFDI?.amount);
+        showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
+        return false;
+      }
+    }
+    
     if(startDate.substring(0, 10) !== dataCFDI?.date.substring(0, 10)){
       // console.log('date => ', startDate.substring(0, 10), 'datecfdi => ', dataCFDI?.date.substring(0, 10));
       showToastMessageError('La fecha ingresada no coincide con la del CFDI!!');
@@ -583,11 +598,11 @@ export default function DataStepper({token, user, handleUpdateCategory}:
     console.log('value cfdi relations => ', value);
   }
 
-  const handleTypeCfdiprov = (value: string) => {
-    // handleTypeCategoryCFDI(value);
-    // console.log('value type cfdi => ', value);
-    setTypeCFDISprov(value);
-  }
+  // const handleTypeCfdiprov = (value: string) => {
+  //   // handleTypeCategoryCFDI(value);
+  //   // console.log('value type cfdi => ', value);
+  //   setTypeCFDISprov(value);
+  // }
 
   const view = (
     <>
@@ -597,8 +612,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
       </div>
     </>
   );
-
-
 
   let indexCC = 0;
   if(costCenter !== ''){
@@ -985,8 +998,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
 export function SelectOptionReact({opts, setValue, disabled=false, setSelOpt, selOpt}: 
   {opts:Options[], setValue:Function, disabled?:boolean, 
     setSelOpt:(value: Options) => void, selOpt: Options| undefined}) {
-  
-  // const [selOpt, setSelOpt] = useState<Options>(index!== undefined? opts[index]: opts[opts.length-1]);
   
   return(
     <Select

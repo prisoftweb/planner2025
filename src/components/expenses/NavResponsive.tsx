@@ -7,8 +7,9 @@ import { BsFiletypeXml } from "react-icons/bs";
 import { FaMoneyCheckDollar } from "react-icons/fa6";
 import { propsTooltip } from "@/libs/animations";
 
-export default function NavResponsive({open, setOpen, option, changeOption, isticket}: 
-  {open:boolean, setOpen:Function, option:number, changeOption:Function, isticket:boolean}){
+export default function NavResponsive({open, setOpen, option, changeOption, isticket, isadvanceapp}: 
+  {open:boolean, setOpen:Function, option:number, changeOption:Function, isticket:boolean,
+    isadvanceapp:boolean}){
 
   const [isHover, setIsHover] = useState<number>(-1);
 
@@ -66,6 +67,19 @@ export default function NavResponsive({open, setOpen, option, changeOption, isti
               />
             </div>
         </Tooltip>
+        {isadvanceapp && (
+          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionadas' 
+            className={`text-blue-500 bg-white rounded-md border border-slate-400`} placement="right">
+              <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
+                <BsFiletypeXml className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                  text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
+                  onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
+                  style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
+                    color: isHover===5 || option===5 ? 'white' : '',}}
+                />
+              </div>
+          </Tooltip>
+        )}
       </div>
     )
   }else{
@@ -103,6 +117,15 @@ export default function NavResponsive({open, setOpen, option, changeOption, isti
           <BsFiletypeXml className="w-4 h-4 mr-2 text-slate-500" />
           CFDI
         </div>
+        {isadvanceapp && (
+          <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer
+            flex py-2 items-center ${isticket? 'hidden': ''} ${option===5? 'bg-slate-200': ''}`}
+            onClick={() => changeOption(5)}
+          >
+            <BsFiletypeXml className="w-4 h-4 mr-2 text-slate-500" />
+            CFDI relacionadas
+          </div>
+        )}
       </div>
     )
   }

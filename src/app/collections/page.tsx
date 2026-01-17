@@ -3,7 +3,7 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import TableCollectionsComponent from "@/components/collections/TableCollectionsComponent";
 import { getCollectionsMin, getAllTotalAmountRecoveredCollection, 
-  getAllTOTAmountRecovered, getAllCollectionsMINByDateAndCondition } from "../api/routeCollections";
+  getAllTOTAmountRecoveredByDateAndCondition, getAllCollectionsMINByDateAndCondition } from "../api/routeCollections";
 import { getDate } from "@/libs/dates";
 
 export default async function Page(){
@@ -26,7 +26,7 @@ export default async function Page(){
           ]
       }), 
     getAllTotalAmountRecoveredCollection(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), data),
-    getAllTOTAmountRecovered(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())),
+    getAllTOTAmountRecoveredByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()), []),
   ]);
 
   if(typeof(res) === "string")

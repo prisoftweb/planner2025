@@ -6,7 +6,7 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import RemoveElement from "@/components/RemoveElement";
 import Chip from "@/components/providers/Chip";
 import { getCollectionsMin, deleteCollection, getAllTotalAmountRecoveredCollection, 
-  getAllTOTAmountRecovered, getAllCollectionsMINByDateAndCondition } from "@/app/api/routeCollections";
+  getAllTOTAmountRecoveredByDateAndCondition, getAllCollectionsMINByDateAndCondition } from "@/app/api/routeCollections";
 import { ICollectionMin, ITotalAmountCollections, ITotalAmountRecoveredCollections } from "@/interfaces/Collections";
 import Button from "../Button";
 import SearchInTable from "../SearchInTable";
@@ -145,12 +145,12 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           "condition": arrStatuses
       }),
       getAllTotalAmountRecoveredCollection(token, dateI, dateF, data),
-      getAllTOTAmountRecovered(token, dateI, dateF),
+      getAllTOTAmountRecoveredByDateAndCondition(token, dateI, dateF, arrStatuses),
     ]);
     if(typeof(col)==='string'){
       showToastMessageError(col);
     }else{
-      console.log('cols => ', col);
+      // console.log('cols => ', col);
       setCollections(col);
     }
 
