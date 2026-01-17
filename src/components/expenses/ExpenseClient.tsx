@@ -48,8 +48,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
   const pdfFile = files.find(f => f.types.includes('pdf') || f.types.includes('PDF') || f.types.includes('jpg') || f.types.includes('JPG') || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png') || f.types.includes('PNG'));
 
   // console.log('expense => ', expense);
-  console.log(" => ", expense.costocenter.concept._id, " == 6691a5f9c14942310b52ac0e");
-
+  
   const isadvanceapp= expense.costocenter.concept._id==="6691a5f9c14942310b52ac0e";
 
   const view = (
@@ -81,7 +80,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
           (opt===5? (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                           <div className=" max-w-lg">
-                            <AddCFDIRelations cost={expense._id} token={token} />
+                            <AddCFDIRelations cost={expense._id} token={token} idProv={expense.provider._id} />
                           </div>
                       </div>): (<div className="mt-3 w-full flex space-x-2" >
                                   <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>

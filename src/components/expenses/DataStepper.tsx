@@ -405,11 +405,11 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             user
           }], iscard:isCard, type:'PROVEEDOR',
           ...(concept==="6691a5f9c14942310b52ac0e" && {
-              cfdisRelations: {                
-              relatedUUIDs: [CFDISrelation],                        
-              typeUUID: "07 CFDI por aplicacion de anticipo",                                     
-            },
-          })  
+                cfdisRelations: {                
+                relatedUUIDs: [CFDISrelation],                        
+                typeUUID: "07 CFDI por aplicacion de anticipo",                                     
+              },
+            })  
         }
 
         try {
