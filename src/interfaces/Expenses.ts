@@ -204,3 +204,70 @@ export interface ICostWithoutCode {
   status: boolean
 }
 
+export interface ICostRelAdvance {
+  _id: string
+  folio: string
+  taxfolio: string
+  description: string
+  date: string
+  taxapply: boolean
+  isticket: boolean
+  ispaid: boolean
+  iscard: boolean
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    discount: number
+    exempttax: number
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  project: {
+    _id: string
+    title: string
+  }
+  report: {
+    _id: string
+    name: string
+  }
+  provider: {
+    _id: string
+    name: string
+  }
+  costocenter: {
+    _id: string
+    category: string
+    concept: {
+      _id: string
+      name: string
+    }
+  }
+  typeCFDI: {
+    _id: string
+    name: string
+  }
+  category: {
+    _id: string
+    name: string
+  }
+  files: {
+    file: string
+    types: string
+    _id: string
+  }[]
+  cfdisRelations: {
+    relatedUUIDs: string[]
+    typeUUID: string
+  }
+  estatus: {
+    _id: string
+    name: string
+    color: string
+    darktext?:boolean
+  }
+  status: boolean
+}

@@ -3,10 +3,11 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import IconText from "@/components/providers/IconText";
-import { getProvider, getProviders } from "@/app/api/routeProviders";
+import { getProvider, getProviders, getAllCostsAdvancesByProviderMIN } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
 import ArrowReturn from "@/components/ArrowReturn";
 import { Options } from "@/interfaces/Common";
+import ContainerAdvances from "@/components/providers/advances/containerAdvances";
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -15,9 +16,10 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [provider, providers] = await Promise.all([
+  const [provider, providers, advances] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
+    getAllCostsAdvancesByProviderMIN(token, params.id)
   ]);
   
   if(typeof(provider) === "string"){
@@ -34,6 +36,15 @@ export default async function Page({ params }: { params: { id: string }}){
       <>
         <Navigation user={user} />
         <h1 className="text-center text-red-500">{providers}</h1>
+      </>
+    )
+  }
+
+  if(typeof(advances) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">{advances}</h1>
       </>
     )
   }
@@ -69,6 +80,9 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={options} routePage="providers" subpath="/advances" />
         </div>
         <NavTab idProv={params.id} tab='4' />
+
+        <ContainerAdvances data={advances} expenses={advances} provider={provider} token={token} user={user._id}/>
+        
       </div>
     </>
   )

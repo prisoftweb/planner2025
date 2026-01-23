@@ -306,7 +306,7 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             formdata.append('files', voucher);
             formdata.append('types', voucher.type);
 
-            console.log('voucheer => ', voucher);
+            // console.log('voucheer => ', voucher);
           }
           if(CFDI){
             formdata.append('files', CFDI);
@@ -701,7 +701,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
   };
 
   // if concept == 6691a5f9c14942310b52ac0e
-  // console.log('opt invoices => ', optionsInvoices);
 
   return(
     <div className="w-full bg-white">

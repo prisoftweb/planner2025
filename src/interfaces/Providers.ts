@@ -180,3 +180,83 @@ export interface ICostTOTALPendingPAYGroupByPROVIDER {
   totalIVA: number
   totalDiscount: number
 }
+
+export interface IAdvanceProvider {
+  _id: string
+  folio: string
+  taxfolio: string
+  description: string
+  date: string
+  taxapply: boolean
+  isticket: boolean
+  ispaid: boolean
+  iscard: boolean
+  isadvancesToSuppliers: boolean
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+    discount: any
+    exempttax: any
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  project: {
+    _id: string
+    title: string
+  }
+  report: {
+    _id: string
+    name: string
+  }
+  provider: {
+    _id: string
+    name: string
+  }
+  costocenter: {
+    _id: string
+    category: string
+    concept: {
+      _id: string
+      name: string
+    }
+  }
+  typeCFDI: {
+    _id: string
+    name: string
+  }
+  category: {
+    _id: string
+    name: string
+  }
+  files: {
+    file: string
+    types: string
+    _id: string
+  }[]
+  estatus: {
+    _id: string
+    name: string
+    color: string
+    darktext?:boolean
+  }
+  status: boolean
+}
+
+// export interface AdvancesTableProvider {
+//   id: string
+//   Responsable: {
+//     responsible: string,
+//     photo: string
+//   } 
+//   project:descripcion
+//   condition: {
+//     _id: string,
+//     name: string,
+//     color: string,
+//     darktext: boolean
+//   }
+// }

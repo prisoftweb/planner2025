@@ -172,7 +172,3 @@ export interface CostInPayment {
   paymentelements: number
   // payment: PaymentOfCost[]
 }
-
-// export interface PaymentOfCost {
-  
-// }

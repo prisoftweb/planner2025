@@ -1,0 +1,171 @@
+import { useState, useEffect } from "react"
+import { GiSettingsKnobs } from "react-icons/gi";
+import { HistoryExpensesTable } from "@/interfaces/Providers";
+// import HeaderPaidHistoryExpenses from "../HeaderPaidHistoryExpenses";
+import { Provider, ProviderMin } from "@/interfaces/Providers";
+import TableListExpensesPaid from "../TableListsExpensesPaid";
+import PaidExpensesHistory from "../PaidExpensesHistory";
+import { Options } from "@/interfaces/Common";
+import { CostsPaymentTable } from "@/interfaces/Providers";
+import PaymentPlugin from "../PaymentPlugin";
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
+import NavStepperAddInvoicesToAdvance from "./NavStepperAddInvoicesToAdvance";
+import HeaderAddInvoicesToAdvance from "./HeaderAddInvoicesToAdvance";
+import AddInvoicesInAdvance from "./AddInvoicesInAdvance";
+import { ICostRelAdvance } from "@/interfaces/Expenses";
+import ExpensesToRelacionatedTable from "./ExpensesToRelacionatedTable";
+
+type Props = {
+  showForm: (value: boolean) => void, 
+  // dataTable: HistoryExpensesTable[], 
+  // provider: Provider,
+  provider: ProviderMin, 
+  token:string, 
+  user: string, 
+  // updateTable: Function, 
+  // condition: string, 
+  // optTypes: Options[],
+  open: boolean,
+  costs:ICostRelAdvance[]
+}
+
+export default function AddInvoicesToAdvance({showForm, provider, open, costs}: Props) {
+
+  const [heightPage, setHeightPage] = useState<number>(900);
+  const [indexStepper, setIndexStepper] = useState<number>(0);
+
+  // const [costsInPayment, setCostInPayment] = useState<CostsPaymentTable[]>([]);
+
+  // const [paymentPlugin, setPaymentPlugin] = useState<string>('');
+  // const [date, setDate] = useState<string>('');
+  // const [comments, setComments] = useState<string>('');
+
+  // const handlePaymentPlugin = (value:string) => {
+  //   setPaymentPlugin(value);
+  // }
+
+  // const handleDate = (value:string) => {
+  //   setDate(value);
+  // }
+
+  // const handleComments = (value:string) => {
+  //   setComments(value);
+  // }
+
+  // useEffect(() => {
+  //   if(open){
+  //     const aux: CostsPaymentTable[] = [];
+  //     dataTable.map((c) => {
+  //       aux.push({
+  //         archivos: c.archivos,
+  //         condition: c.Estatus,
+  //         Fecha: c.Fecha,
+  //         id: c.id,
+  //         isPaid: c.isPaid,
+  //         Responsable: c.Responsable,
+  //         Total: c.Total,
+  //         paid: Number(c.Total.replace(/[$,",", M, X]/g, "")),
+  //         pending: 0,
+  //         parciality: 1,
+  //         conceptCostoCenter: c.conceptCostoCenter,
+  //         discount: c.discount,
+  //         Importe: c.Importe,
+  //         iva: c.iva,
+  //         typeCFDI: c.typeCFDI,
+  //         folio: c.folio,
+  //         folioFiscal: c.folioFiscal
+  //       });
+  //     });
+  //     setCostInPayment(aux);
+  //   }
+  // }, [open]);
+
+  // const updateCostPartiality = (value: CostsPaymentTable) => {
+  //   const filtered = costsInPayment.filter((c) => c.id !== value.id);
+  //   setCostInPayment([...filtered, value]);
+  // }
+
+  const handleResize = () => {
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+  }
+  
+  const handleIndexStepper = (value: number) => {
+    setIndexStepper(value);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    setHeightPage(Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    ));
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
+
+  // const costs: string[] = [];
+  // let minDate = '', maxDate = '';
+
+  // dataTable.map((cost) => {
+  //   costs.push(cost.id);
+  //   if(minDate === '' && maxDate === ''){
+  //     minDate=cost.Fecha;
+  //     maxDate=cost.Fecha;
+  //   }else{
+  //     if(new Date(minDate) > new Date(cost.Fecha)){
+  //       minDate = cost.Fecha;
+  //     }else{
+  //       if(new Date(maxDate) < new Date(cost.Fecha)){
+  //         maxDate = cost.Fecha;
+  //       }
+  //     }
+  //   }
+  // });
+
+  // let viewComponent = indexStepper===1? 
+  //     <PaymentPlugin comments={comments} date={date} nextStep={handleIndexStepper} paymentPlugin={paymentPlugin} 
+  //       setComments={handleComments} setDate={handleDate} setPaymentPlugin={handlePaymentPlugin} />:
+  //     (indexStepper==2? <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
+  //         user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} 
+  //         commentsPayment={comments} datePayment={date} paymentPlugin={paymentPlugin} 
+  //         optTypes={optTypes} costsPayment={costsInPayment} />: 
+  //       <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />);
+
+  let viewComponent = indexStepper===1? 
+      <AddInvoicesInAdvance />:
+      (<ExpensesToRelacionatedTable costs={costs} />);
+  
+  return(
+    <>
+      <div>
+        {/* top-16 */}
+        <form className="z-10 w-full max-w-5xl absolute bg-white space-y-5 p-5 right-0"
+          style={{height: `${heightPage}px`}}
+        >
+          <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>
+            <div className="flex mt-2 items-center">
+              <GiSettingsKnobs className="w-8 h-8 text-slate-600" />
+              <div className="ml-3">
+                <p className="text-xl">Facturas a anticipo</p>
+                <p className="text-gray-500 text-sm">Se agregan facturas al anticipo</p>
+              </div>
+            </div>
+            <TooltipCloseIcon handleClose={showForm} />
+          </div>
+          
+          <NavStepperAddInvoicesToAdvance index={indexStepper} changeTab={handleIndexStepper} />
+          <div className="mt-3">
+            <HeaderAddInvoicesToAdvance provider={provider} />
+          </div>
+          <div className="mt-3">
+            {viewComponent}
+          </div>
+        </form>
+      </div>
+    </>
+  )
+}

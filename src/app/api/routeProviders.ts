@@ -79,15 +79,19 @@ export async function getProvider(id:string, auth_token:string) {
 
 export async function getProviderMin(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getProviderMIN/${id}`;
+
+  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       'headers': {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
+    console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
       return res.statusText;
   } catch (error) {
+    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.message
     }else{
@@ -298,6 +302,25 @@ export async function getCostTOTALPendingPAYGroupByPROVIDER(id:string, auth_toke
     }else{
       console.log(typeof(error));
       return 'Ocurrio un error al obtener costos pendientes de pago por proveedor';
+    }
+  }
+}
+
+export async function getAllCostsAdvancesByProviderMIN(auth_token:string, id:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsAdvancesByProviderMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error?.message?? 'Error al obtener anticipos del proveedor';
+    }else{
+      return 'Error al obtener anticipos del proveedor';
     }
   }
 }
