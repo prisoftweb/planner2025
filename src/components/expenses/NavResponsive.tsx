@@ -68,7 +68,7 @@ export default function NavResponsive({open, setOpen, option, changeOption, isti
               />
             </div>
         </Tooltip>
-        {isadvanceapp && (
+        {/* {isadvanceapp && (
           <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionadas' 
             className={`text-blue-500 bg-white rounded-md border border-slate-400`} placement="right">
               <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
@@ -80,7 +80,18 @@ export default function NavResponsive({open, setOpen, option, changeOption, isti
                 />
               </div>
           </Tooltip>
-        )}
+        )} */}
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionadas' 
+          className={`text-blue-500 bg-white rounded-md border border-slate-400`} placement="right">
+            <div className={`p-1 ${isticket? 'hidden': ''}`} style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': '')}}>
+              <ClipboardDocumentCheckIcon className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
+                text-slate-500 my-1 bg-white rounded-md ${option===5? 'bg-blue-500': ''}`} onClick={() => changeOption(5)} 
+                onMouseEnter={() => {setIsHover(5)} } onMouseLeave={() => setIsHover(-1)}
+                style={{backgroundColor: isHover===5 ? '#0075c9' : (option===5? '#178DE1': ''), 
+                  color: isHover===5 || option===5 ? 'white' : '',}}
+              />
+            </div>
+        </Tooltip>
       </div>
     )
   }else{

@@ -318,6 +318,11 @@ export default function DataStepper({token, user, handleUpdateCategory}:
               relatedUUIDs: [CFDISrelation],                        
               typeUUID: "07 CFDI por aplicacion de anticipo",                                     
             }}));
+            formdata.append('isCfdisRelations', JSON.stringify(true));
+          }
+
+          if(concept==="66595dae40935bd8188ea4a2"){
+            formdata.append('isadvancesToSuppliers', JSON.stringify(true));
           }
 
           try {
@@ -409,7 +414,11 @@ export default function DataStepper({token, user, handleUpdateCategory}:
                 relatedUUIDs: [CFDISrelation],                        
                 typeUUID: "07 CFDI por aplicacion de anticipo",                                     
               },
-            })  
+              isCfdisRelations:true
+            }),
+          ...(concept==="66595dae40935bd8188ea4a2" && {
+              isadvancesToSuppliers:true
+            }),
         }
 
         try {
@@ -418,10 +427,9 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             const fechaReport = new Date(reportObject.date);
             const currentDate = new Date();
             const expiration = new Date(reportObject.expirationdate);
-            // console.log('data gasto => ', data);
-            // showToastMessage("ok");
             if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
+              // console.log('data expense con cfdirel => ', JSON.stringify(data));
               const res = await SaveExpense(data, token);
               if(res===201){
                 const catAux=category;
@@ -589,20 +597,14 @@ export default function DataStepper({token, user, handleUpdateCategory}:
 
   const handleTypeCfdi = (value: string) => {
     handleTypeCategoryCFDI(value);
-    console.log('value type cfdi => ', value);
+    // console.log('value type cfdi => ', value);
     setTypeCFDIS(value);
   }
 
   const handleCfdirelations = (value: string) => {
     setCFDISrelations(value);
-    console.log('value cfdi relations => ', value);
+    // console.log('value cfdi relations => ', value);
   }
-
-  // const handleTypeCfdiprov = (value: string) => {
-  //   // handleTypeCategoryCFDI(value);
-  //   // console.log('value type cfdi => ', value);
-  //   setTypeCFDISprov(value);
-  // }
 
   const view = (
     <>

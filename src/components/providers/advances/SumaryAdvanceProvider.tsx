@@ -4,8 +4,9 @@ import { EnvelopeIcon, CursorArrowRaysIcon, ChatBubbleBottomCenterTextIcon } fro
 // import CardContact from "../CardContact"
 // import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
 import { MoneyFormatter } from "@/app/functions/Globals"
+import { OneExpense } from "@/interfaces/Expenses"
 
-export default function SumaryAdvanceProvider({}:{}){
+export default function SumaryAdvanceProvider({advance}:{advance:OneExpense}){
   
   return(
     <div className="w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
@@ -16,21 +17,21 @@ export default function SumaryAdvanceProvider({}:{}){
       <div className="flex justify-center flex-wrap gap-y-2 mt-3">
         <div className="w-72 p-1">
           <Card p1={'Anticipo' } 
-            p2={MoneyFormatter(2733208.16)}
+            p2={MoneyFormatter(advance.cost.total?? 0)}
             color="text-black" >
               <EnvelopeIcon className="w-8 h-8" />
           </Card>
         </div>
         <div className="w-72 p-1">
           <Card p1={'Aplicado a anticipo' } 
-            p2={MoneyFormatter(2000000.00)}
+            p2={MoneyFormatter((advance.cost.total?? 0) - (advance.advancesToSuppliers?.currentbalance?? 0))}
             color="text-red-700" >
               <EnvelopeIcon className="w-8 h-8" />
           </Card>
         </div>
         <div className="w-72 p-1">
           <Card p1={'Saldo actual' } 
-            p2={MoneyFormatter(733208.16)}
+            p2={MoneyFormatter(advance.advancesToSuppliers?.currentbalance?? 0)}
             color="text-green-700" >
               <EnvelopeIcon className="w-8 h-8" />
           </Card>

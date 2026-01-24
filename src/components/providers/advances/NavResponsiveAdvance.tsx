@@ -36,7 +36,7 @@ export default function NavResponsiveAdvance({open, setOpen, option, changeOptio
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informacion basica' 
+        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Facturas' 
           placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <div className="p-1" style={{backgroundColor: isHover===2 ? '#0075c9' : (option===2? '#178DE1': '')}}>
               <FaPeopleRoof className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
@@ -48,7 +48,7 @@ export default function NavResponsiveAdvance({open, setOpen, option, changeOptio
               />
             </div>
         </Tooltip>
-        <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Linea de credito' 
+        {/* <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Linea de credito' 
           placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
             <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
               <FaMoneyCheckDollar 
@@ -60,7 +60,7 @@ export default function NavResponsiveAdvance({open, setOpen, option, changeOptio
                   color: isHover===3 || option===3 ? 'white' : '',}}
               />
             </div>
-        </Tooltip>
+        </Tooltip> */}
       </div>
     )
   }else{
@@ -97,9 +97,9 @@ export default function NavResponsiveAdvance({open, setOpen, option, changeOptio
               text-slate-500 my-1 bg-white rounded-md mr-2
               ${option===2? 'bg-blue-500': ''}`}
           />
-          Datos basicos
+          Facturas
         </div>
-        <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer pl-2
+        {/* <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer pl-2
           flex py-2 items-center border-b border-slate-300 ${option===3? 'bg-slate-200': ''}`}
           onClick={() => changeOption(3)}
         >
@@ -111,7 +111,7 @@ export default function NavResponsiveAdvance({open, setOpen, option, changeOptio
               ${option===3? 'bg-blue-500': ''}`}
           />
           Linea de credito
-        </div>        
+        </div>         */}
       </div>
     )
   }

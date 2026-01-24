@@ -35,6 +35,7 @@ export interface ExpensesTable {
   taxFolio: string
   color: string
   darktext: boolean
+  isCfdisRelations: boolean
 }
 
 // export interface Expense {
@@ -87,6 +88,7 @@ export interface Expense {
   expiredDate?: string
   daysExpired?: number
   code?:string
+  isCfdisRelations?:boolean
 }
 
 export interface OneExpense {
@@ -110,6 +112,19 @@ export interface OneExpense {
   status: boolean
   iscard: boolean
   files: File[]
+  isadvancesToSuppliers: boolean
+  advancesToSuppliers?: {
+    currentbalance: number
+    percentadvance: number
+    user: string
+    notes: string[]
+    advanceInvoicesCfdis: {
+      invoiceUUID: string
+      applicationUUID: string
+      date: string
+      _id: string
+    }[]
+  }
 }
 
 export interface OneCategory {

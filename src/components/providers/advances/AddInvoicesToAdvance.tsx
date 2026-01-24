@@ -26,10 +26,11 @@ type Props = {
   // condition: string, 
   // optTypes: Options[],
   open: boolean,
-  costs:ICostRelAdvance[]
+  costs:ICostRelAdvance[],
+  pending:number
 }
 
-export default function AddInvoicesToAdvance({showForm, provider, open, costs}: Props) {
+export default function AddInvoicesToAdvance({showForm, provider, open, costs, pending}: Props) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
@@ -159,7 +160,7 @@ export default function AddInvoicesToAdvance({showForm, provider, open, costs}: 
           
           <NavStepperAddInvoicesToAdvance index={indexStepper} changeTab={handleIndexStepper} />
           <div className="mt-3">
-            <HeaderAddInvoicesToAdvance provider={provider} />
+            <HeaderAddInvoicesToAdvance provider={provider} costs={costs} pending={pending} />
           </div>
           <div className="mt-3">
             {viewComponent}

@@ -87,7 +87,8 @@ export function ExpenseDataToTableHistoryProviderData(expenses:Expense[]){
       conceptCostoCenter: expense.costocenter.concept.name,
       expiredDate: expense.expiredDate?? '',
       daysExpired: expense.daysExpired?? 0,
-      code: expense.code?? ''
+      code: expense.code?? '',
+      isCfdisRelations: expense.isCfdisRelations?? false
     });
   });
 

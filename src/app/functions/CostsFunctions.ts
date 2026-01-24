@@ -116,6 +116,7 @@ export function ExpenseDataToTableData(expenses:Expense[]){
       taxFolio: expense.taxfolio || '',
       color: expense.estatus.color || 'gray',
       darktext: expense.estatus.darktext || false,
+      isCfdisRelations: expense.isCfdisRelations ?? false
     });
   });
 

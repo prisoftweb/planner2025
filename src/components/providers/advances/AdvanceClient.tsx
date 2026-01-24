@@ -52,15 +52,17 @@ export default function AdvanceClient({token, user, id, provider, advance}:
 
   // const isadvanceapp= expense.costocenter.concept._id==="6691a5f9c14942310b52ac0e";
 
+  // console.log('advance => ', JSON.stringify(advance));
   const view = (
     opt===1? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3 h-screen" 
                           style={{borderColor:'#F8FAFC'}}>
                               {/* <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} /> */}
-                              <SumaryAdvanceProvider />
+                              <SumaryAdvanceProvider advance={advance} />
                         </div>) : 
     (opt===2? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className="w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
-                  <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} ida={advance._id} />
+                  <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} 
+                      ida={advance._id} pending={advance.advancesToSuppliers?.currentbalance?? 0} />
                 </div>
               </div>): //max w-md antes abajo
               <div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 

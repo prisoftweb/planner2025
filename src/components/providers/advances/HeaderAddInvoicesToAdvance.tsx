@@ -6,17 +6,22 @@ import { useState, useEffect } from "react";
 import { pendingPaymentProvider } from "@/interfaces/Payments";
 import { showToastMessageError } from "@/components/Alert";
 import { CostsPaymentTable } from "@/interfaces/Providers";
+import { ICostRelAdvance } from "@/interfaces/Expenses";
 
 type HeaderProps={
   // expensesTable: CostsPaymentTable[], 
   // provider: Provider,
   provider: ProviderMin, 
   // token: string
+  costs:ICostRelAdvance[],
+  pending:number
 }
 
-export default function HeaderAddInvoicesToAdvance({provider}: HeaderProps) {
+export default function HeaderAddInvoicesToAdvance({provider, costs, pending}: HeaderProps) {
 
-  const [pending, setPending] = useState<number>(0);
+  // const [pending, setPending] = useState<number>(0);
+
+  const total = costs.reduce((accum, item) => accum+=item.cost?.subtotal?? 0, 0 );
 
   // useEffect(() => {
   //   const fetch = async () => {
@@ -55,7 +60,7 @@ export default function HeaderAddInvoicesToAdvance({provider}: HeaderProps) {
           <p>Monto a aplicar</p>
           <p className="text-green-500">{CurrencyFormatter({
             currency: 'MXN',
-            value: 0
+            value: total
           })}</p>
         </div>
 
@@ -63,14 +68,14 @@ export default function HeaderAddInvoicesToAdvance({provider}: HeaderProps) {
           <p>Pendiente de aplicar</p>
           <p className="text-red-500">{CurrencyFormatter({
             currency: 'MXN',
-            value: 0
+            value: pending
           })}</p>
         </div>
 
         <div>
           <p>Total de facturas</p>
           {/* <p className="text-blue-500">{expensesTable.length} documentos</p> */}
-          <p className="text-blue-500"> documentos</p>
+          <p className="text-blue-500"> {costs.length} documentos</p>
         </div>
       </div>
     </div>

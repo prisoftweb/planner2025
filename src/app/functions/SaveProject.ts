@@ -485,6 +485,7 @@ export function ExpenseDataProjectToTableDataProject(expenses:ICostsByProject[])
       taxFolio: expense.taxfolio || '',
       color: expense.estatus.color || 'gray',
       darktext: expense.estatus.darktext || false,
+      isCfdisRelations: false
     });
   });
 

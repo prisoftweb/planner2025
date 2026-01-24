@@ -17,8 +17,8 @@ import Table from "@/components/Table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IoAlert } from "react-icons/io5";
 
-export default function TableInvoicesAndCreditNotes({provider, user, token, ida}: 
-  {provider:ProviderMin, user:string, token:string, ida:string}) {
+export default function TableInvoicesAndCreditNotes({provider, user, token, ida, pending}: 
+  {provider:ProviderMin, user:string, token:string, ida:string, pending:number}) {
 
   const [isAddInvoices, setIsAddInvoices]=useState<boolean>(false);
   const [costsRelAdvance, setCostsRelAdvance]=useState<ICostRelAdvance[]>([]);
@@ -32,6 +32,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida}
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
+        // console.log('res table adv => ', res);
         setCostsRelAdvance(res);
       }
     }
@@ -193,7 +194,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida}
           selectFunction={handleExpensesSelected} />
       </div>
       <ContainerSideNav width="w-full max-w-5xl" open={isAddInvoices}>
-        <AddInvoicesToAdvance token={token} costs={expensesSelected}
+        <AddInvoicesToAdvance token={token} costs={expensesSelected} pending={pending}
           showForm={handleIsAddInvoices} provider={provider} user={user} open={isAddInvoices} />
       </ContainerSideNav>
     </div>

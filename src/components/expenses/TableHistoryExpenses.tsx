@@ -17,6 +17,7 @@ import { CurrencyFormatter } from "@/app/functions/Globals";
 import {Tooltip} from "@nextui-org/react";
 import ContainerSideNav from "../ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
+import { IoIosLink } from "react-icons/io";
 
 interface Props {
   data:ExpensesTable[], 
@@ -85,6 +86,14 @@ export default function TableHistoryExpenses({data, token, expenses,
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
               <span>
                 <IoAlert className="w-6 h-6 text-red-500 hover:bg-blue-100" />
+              </span>
+            </Tooltip>
+          )}
+          {row.original.isCfdisRelations && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionado' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <span>
+                <IoIosLink className="w-6 h-6 text-green-500 hover:bg-blue-100" />
               </span>
             </Tooltip>
           )}

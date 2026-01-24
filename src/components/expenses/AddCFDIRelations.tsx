@@ -38,7 +38,8 @@ export default function AddCFDIRelations({cost, token, idProv}: {token:string, c
       cfdisRelations: {                
         relatedUUIDs: [CFDISrelation],                        
         typeUUID: "07 CFDI por aplicacion de anticipo",                                     
-      }
+      },
+      isCfdisRelations:true
     }
 
     const res = await UpdateCost(token, cost, data);
@@ -47,7 +48,6 @@ export default function AddCFDIRelations({cost, token, idProv}: {token:string, c
     }else{
       showToastMessage('CFDI relacionado  exitosamente!!!!');
     }
-
   }
 
   return (
