@@ -869,7 +869,7 @@ export async function getAdvance(auth_token:string, id:string) {
 
 export async function getAllCostsByAdvancesToSuppliersMIN(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByAdvancesToSuppliersMIN/${id}`;
-  // console.log('url => ', url);
+  // console.log('url cost adv => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
@@ -886,5 +886,48 @@ export async function getAllCostsByAdvancesToSuppliersMIN(auth_token:string, id:
       return error.response?.data.message || 'Error al consultar gastos relacionados del anticipo!!';
     }
     return 'Error al consultar gastos relacionados del anticipo!!';
+  }
+}
+
+export async function insertAdvanceInvoicesCfdisInCost(auth_token:string, id:string, data:Object) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/insertAdvanceInvoicesCfdisInCost/${id}`;
+  console.log(url);
+  console.log(JSON.stringify(data));
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(res);
+    if(res.status === 200) return res.status;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al insertar facturas en el anticipo!!!';
+    }
+    return 'Error al insertar facturas en el anticipo!!!';
+  }
+}
+
+export async function getCostsAdvanceInvoicesCFDIs(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostsAdvanceInvoicesCFDIs/${id}`;
+  // console.log('url cost adv => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    // console.log('res => ', res);
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      console.log('error => ', error);
+      return error.response?.data.message || 'Error al consultar gastos anticipo!!';
+    }
+    return 'Error al consultar gastos del anticipo!!';
   }
 }

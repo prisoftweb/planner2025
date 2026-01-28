@@ -48,19 +48,6 @@ export default function NavResponsiveAdvance({open, setOpen, option, changeOptio
               />
             </div>
         </Tooltip>
-        {/* <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Linea de credito' 
-          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-            <div className="p-1" style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': '')}}>
-              <FaMoneyCheckDollar 
-                className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-                        text-slate-500 my-1 bg-white rounded-md
-                ${option===3? 'bg-blue-500': ''}`} onClick={() => changeOption(3)} 
-                onMouseEnter={() => setIsHover(3)} onMouseLeave={() => setIsHover(-1)}
-                style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-                  color: isHover===3 || option===3 ? 'white' : '',}}
-              />
-            </div>
-        </Tooltip> */}
       </div>
     )
   }else{
@@ -99,19 +86,6 @@ export default function NavResponsiveAdvance({open, setOpen, option, changeOptio
           />
           Facturas
         </div>
-        {/* <div className={`hover:text-gray-900 hover:bg-gray-100 cursor-pointer pl-2
-          flex py-2 items-center border-b border-slate-300 ${option===3? 'bg-slate-200': ''}`}
-          onClick={() => changeOption(3)}
-        >
-          <FaMoneyCheckDollar 
-            style={{backgroundColor: isHover===3 ? '#0075c9' : (option===3? '#178DE1': ''), 
-              color: isHover===3 || option===3 ? 'white' : '',}}
-            className={`w-5 h-5 sm:w-6 sm:h-6 cursor-pointer 
-              text-slate-500 my-1 bg-white rounded-md mr-2
-              ${option===3? 'bg-blue-500': ''}`}
-          />
-          Linea de credito
-        </div>         */}
       </div>
     )
   }

@@ -104,7 +104,7 @@ export default function ExpensesToRelacionatedTable({costs}:{costs:ICostRelAdvan
         <p>Fecha</p>
       )
     }),
-    columnHelper.accessor('cost.subtotal', {
+    columnHelper.accessor('cost.total', {
       header: 'Importe',
       id: 'importe',
       cell: ({row}) => (
@@ -112,7 +112,7 @@ export default function ExpensesToRelacionatedTable({costs}:{costs:ICostRelAdvan
           // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
         >{CurrencyFormatter({
           currency: 'MXN', 
-          value: row.original.cost.subtotal?? 0
+          value: row.original.cost.total?? 0
         })}</p>
       ),
     }),

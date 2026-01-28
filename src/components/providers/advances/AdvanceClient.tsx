@@ -61,7 +61,7 @@ export default function AdvanceClient({token, user, id, provider, advance}:
                         </div>) : 
     (opt===2? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className="w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
-                  <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} 
+                  <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} advance={advance}
                       ida={advance._id} pending={advance.advancesToSuppliers?.currentbalance?? 0} />
                 </div>
               </div>): //max w-md antes abajo

@@ -14,6 +14,7 @@ import HeaderAddInvoicesToAdvance from "./HeaderAddInvoicesToAdvance";
 import AddInvoicesInAdvance from "./AddInvoicesInAdvance";
 import { ICostRelAdvance } from "@/interfaces/Expenses";
 import ExpensesToRelacionatedTable from "./ExpensesToRelacionatedTable";
+import { OneExpense } from "@/interfaces/Expenses";
 
 type Props = {
   showForm: (value: boolean) => void, 
@@ -27,10 +28,12 @@ type Props = {
   // optTypes: Options[],
   open: boolean,
   costs:ICostRelAdvance[],
-  pending:number
+  pending:number,
+  advance:OneExpense,
+  updateInvoices: () => Promise<void>
 }
 
-export default function AddInvoicesToAdvance({showForm, provider, open, costs, pending}: Props) {
+export default function AddInvoicesToAdvance({showForm, provider, open, costs, pending, advance, token, user, updateInvoices}: Props) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
@@ -136,8 +139,16 @@ export default function AddInvoicesToAdvance({showForm, provider, open, costs, p
   //         optTypes={optTypes} costsPayment={costsInPayment} />: 
   //       <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />);
 
+  // console.log('costs to relacionated => ', costs);
+
+  const handleClose = () => {
+    setIndexStepper(0);
+    showForm(false);
+  }
+
   let viewComponent = indexStepper===1? 
-      <AddInvoicesInAdvance />:
+      <AddInvoicesInAdvance costs={costs} advance={advance} user={user} token={token} 
+          handleClose={handleClose} updateInvoices={updateInvoices} />:
       (<ExpensesToRelacionatedTable costs={costs} />);
   
   return(
@@ -155,7 +166,7 @@ export default function AddInvoicesToAdvance({showForm, provider, open, costs, p
                 <p className="text-gray-500 text-sm">Se agregan facturas al anticipo</p>
               </div>
             </div>
-            <TooltipCloseIcon handleClose={showForm} />
+            <TooltipCloseIcon handleClose={handleClose} />
           </div>
           
           <NavStepperAddInvoicesToAdvance index={indexStepper} changeTab={handleIndexStepper} />

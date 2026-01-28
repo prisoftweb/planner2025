@@ -10,37 +10,75 @@ import { propsTooltip } from "@/libs/animations";
 // import DownloadCollectionPDF from "@/components/collections/DownloadCollectionPDF";
 import DownloadAdvancePDF from "./DownloadAdvancePDF";
 import { ICostRelAdvance } from "@/interfaces/Expenses";
-import { getAllCostsByAdvancesToSuppliersMIN } from "@/app/api/routeCost";
+import { getAllCostsByAdvancesToSuppliersMIN, getCostsAdvanceInvoicesCFDIs } from "@/app/api/routeCost";
 import { showToastMessageError } from "@/components/Alert";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IoAlert } from "react-icons/io5";
+import { OneExpense } from "@/interfaces/Expenses";
 
-export default function TableInvoicesAndCreditNotes({provider, user, token, ida, pending}: 
-  {provider:ProviderMin, user:string, token:string, ida:string, pending:number}) {
+export default function TableInvoicesAndCreditNotes({provider, user, token, ida, pending, advance}: 
+  {provider:ProviderMin, user:string, token:string, ida:string, pending:number, advance:OneExpense}) {
 
   const [isAddInvoices, setIsAddInvoices]=useState<boolean>(false);
   const [costsRelAdvance, setCostsRelAdvance]=useState<ICostRelAdvance[]>([]);
   const [expensesSelected, setExpensesSelected] = useState<ICostRelAdvance[]>([]);
+  const [costsAdvance, setCostsAdvance]=useState<ICostRelAdvance[]>([]);
 
   const columnHelper = createColumnHelper<ICostRelAdvance>();
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getAllCostsByAdvancesToSuppliersMIN(token, ida);
+      const [res, resCosts] = await Promise.all([
+        getAllCostsByAdvancesToSuppliersMIN(token, ida),
+        getCostsAdvanceInvoicesCFDIs(token, ida)
+      ]);
+
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        // console.log('res table adv => ', res);
         setCostsRelAdvance(res);
+      }
+
+      if(typeof(resCosts)==='string'){
+        showToastMessageError(resCosts);
+      }else{
+        setCostsAdvance(resCosts);
       }
     }
     fetch();
   }, []);
 
+  const updateInvoices = async() => {
+    const [res, resCosts] = await Promise.all([
+      getAllCostsByAdvancesToSuppliersMIN(token, ida),
+      getCostsAdvanceInvoicesCFDIs(token, ida)
+    ]);
+
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }else{
+      setCostsRelAdvance(res);
+    }
+
+    if(typeof(resCosts)==='string'){
+      showToastMessageError(resCosts);
+    }else{
+      setCostsAdvance(resCosts);
+    }
+  }
+
   const handleIsAddInvoices = (value:boolean) => {
-    setIsAddInvoices(value);
+    if(value){
+      if(expensesSelected.length % 2 === 0){
+        setIsAddInvoices(value);
+      }else{
+        showToastMessageError('El numero de facturas seleccionadas debe coincidir con las notas de credito!!!!');
+      }
+    }else{
+      setIsAddInvoices(value);
+    }
   }
 
   const columns = [
@@ -134,7 +172,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
         <p>Fecha</p>
       )
     }),
-    columnHelper.accessor('cost.subtotal', {
+    columnHelper.accessor('cost.total', {
       header: 'Importe',
       id: 'importe',
       cell: ({row}) => (
@@ -142,7 +180,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
           // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
         >{CurrencyFormatter({
           currency: 'MXN', 
-          value: row.original.cost.subtotal?? 0
+          value: row.original.cost.total?? 0
         })}</p>
       ),
     }),
@@ -161,10 +199,6 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
   ]
 
   const handleExpensesSelected = (value: ICostRelAdvance[]) => {
-    // const noPaid = value.filter((c) => c.Estatus._id !== '67318a51ceaf47ece0d3aa72' && 
-    //                                     c.Estatus._id !== '661eade6f642112488c85fad' &&
-    //                                     c.Estatus._id !== '661eaa71f642112488c85f59' &&
-    //                                     c.Estatus._id !== '661eaa4af642112488c85f56' );
     setExpensesSelected(value);
   }
 
@@ -175,27 +209,32 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
           <Button onClick={() => handleIsAddInvoices(true)}>Agregar a anticipo</Button>
         )}
       </div>
-      {/*<PDFDownloadLink document={<DownloadAdvancePDF />} fileName={'Anticipo'} >
-        {({loading, url, error, blob}) => 
-          loading? (
-            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-              <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-            </Tooltip>
-          ) : (
-            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-              <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-            </Tooltip>
-          ) }
-      </PDFDownloadLink>*/}
+      <div className="flex justify-end mr-3">
+        <div>
+          <PDFDownloadLink document={<DownloadAdvancePDF provider={provider} advance={advance} costsRelAdvance={costsAdvance} />} fileName={'Anticipo'} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        </div>
+      </div>
       <div className="mt-5">
         <Table columns={columns} data={costsRelAdvance} placeH="Buscar gasto.." typeTable="advance"
           selectFunction={handleExpensesSelected} />
       </div>
       <ContainerSideNav width="w-full max-w-5xl" open={isAddInvoices}>
-        <AddInvoicesToAdvance token={token} costs={expensesSelected} pending={pending}
-          showForm={handleIsAddInvoices} provider={provider} user={user} open={isAddInvoices} />
+        <AddInvoicesToAdvance token={token} costs={expensesSelected} pending={pending} advance={advance}
+          showForm={handleIsAddInvoices} provider={provider} user={user} open={isAddInvoices} 
+          updateInvoices={updateInvoices} />
       </ContainerSideNav>
     </div>
   )

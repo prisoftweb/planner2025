@@ -37,12 +37,34 @@ export interface ProviderMin {
   estatus: Glossary
 }
 
-// export interface Tradeline {
-//   creditdays: number
-//   creditlimit: number
-//   currentbalance: number
-//   percentoverduedebt: number
+// export interface Root {
+//   _id: string
+//   name: string
+//   tradename: string
+//   rfc: string
+//   suppliercredit: boolean
+//   tradeline: {
+//     overduedebt: boolean
+//     date: string
+//     creditdays: number
+//     creditlimit: number
+//     currentbalance: number
+//     percentoverduedebt: number
+//   }
+//   user: {
+//     _id: string
+//     name: string
+//     photo: string
+//   }
+//   account: string
+//   estatus: {
+//     _id: string
+//     name: string
+//     color: string
+//     darktext: boolean
+//   }
 // }
+
 
 export interface TableProvider{
   "id": string,
