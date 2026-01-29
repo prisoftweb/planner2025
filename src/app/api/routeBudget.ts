@@ -146,7 +146,6 @@ export async function DeleteNewBudgetInBudget(id:string, auth_token:string, prog
         "totalAverage":totalAverage
       }
     });
-    console.log('res remove bud => ', res);
     if(res.status===204 || res.status===200 || res.status===201) return 204;
     return res.statusText;
   } catch (error) {
@@ -159,7 +158,6 @@ export async function DeleteNewBudgetInBudget(id:string, auth_token:string, prog
 
 export async function UpdateNewBudgetInBudget(auth_token:string, data:Object, id:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/budgets/updateElementArrByBUDGET/${id}`;
-  console.log('json data => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -167,7 +165,6 @@ export async function UpdateNewBudgetInBudget(auth_token:string, data:Object, id
         'Content-Type': 'Application/json',
       }
     });
-    console.log('res update new budget => ', res);
     if(res.status===200 || res.status===201)
       return res.data.data.data;
     return 'Error al actualizar centro de costos en el presupuesto!!';

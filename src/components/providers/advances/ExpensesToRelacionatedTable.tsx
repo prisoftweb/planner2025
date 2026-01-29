@@ -6,8 +6,10 @@ import { IoAlert } from "react-icons/io5";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import Chip from '../Chip';
 import { CurrencyFormatter } from '@/app/functions/Globals';
+import Button from '@/components/Button';
 
-export default function ExpensesToRelacionatedTable({costs}:{costs:ICostRelAdvance[]}) {
+export default function ExpensesToRelacionatedTable({costs, handleIndexStepper}:
+  {costs:ICostRelAdvance[], handleIndexStepper: (value: number) => void}) {
 
   const columnHelper = createColumnHelper<ICostRelAdvance>();
 
@@ -132,7 +134,10 @@ export default function ExpensesToRelacionatedTable({costs}:{costs:ICostRelAdvan
 
   return (
     <div className='mt-5'>
-      <Table columns={columns} data={costs} placeH="Buscar gasto.." typeTable="advance"/>
+      <Table columns={columns} data={costs} placeH="Buscar gasto.." typeTable="advanceRel"/>
+      <div className='mt-3 flex justify-center'>
+        <Button onClick={() => handleIndexStepper(1)}>Siguiente</Button>
+      </div>
     </div>
   )
 }

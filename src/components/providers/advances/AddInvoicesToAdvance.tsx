@@ -18,14 +18,9 @@ import { OneExpense } from "@/interfaces/Expenses";
 
 type Props = {
   showForm: (value: boolean) => void, 
-  // dataTable: HistoryExpensesTable[], 
-  // provider: Provider,
   provider: ProviderMin, 
   token:string, 
   user: string, 
-  // updateTable: Function, 
-  // condition: string, 
-  // optTypes: Options[],
   open: boolean,
   costs:ICostRelAdvance[],
   pending:number,
@@ -37,57 +32,6 @@ export default function AddInvoicesToAdvance({showForm, provider, open, costs, p
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
-
-  // const [costsInPayment, setCostInPayment] = useState<CostsPaymentTable[]>([]);
-
-  // const [paymentPlugin, setPaymentPlugin] = useState<string>('');
-  // const [date, setDate] = useState<string>('');
-  // const [comments, setComments] = useState<string>('');
-
-  // const handlePaymentPlugin = (value:string) => {
-  //   setPaymentPlugin(value);
-  // }
-
-  // const handleDate = (value:string) => {
-  //   setDate(value);
-  // }
-
-  // const handleComments = (value:string) => {
-  //   setComments(value);
-  // }
-
-  // useEffect(() => {
-  //   if(open){
-  //     const aux: CostsPaymentTable[] = [];
-  //     dataTable.map((c) => {
-  //       aux.push({
-  //         archivos: c.archivos,
-  //         condition: c.Estatus,
-  //         Fecha: c.Fecha,
-  //         id: c.id,
-  //         isPaid: c.isPaid,
-  //         Responsable: c.Responsable,
-  //         Total: c.Total,
-  //         paid: Number(c.Total.replace(/[$,",", M, X]/g, "")),
-  //         pending: 0,
-  //         parciality: 1,
-  //         conceptCostoCenter: c.conceptCostoCenter,
-  //         discount: c.discount,
-  //         Importe: c.Importe,
-  //         iva: c.iva,
-  //         typeCFDI: c.typeCFDI,
-  //         folio: c.folio,
-  //         folioFiscal: c.folioFiscal
-  //       });
-  //     });
-  //     setCostInPayment(aux);
-  //   }
-  // }, [open]);
-
-  // const updateCostPartiality = (value: CostsPaymentTable) => {
-  //   const filtered = costsInPayment.filter((c) => c.id !== value.id);
-  //   setCostInPayment([...filtered, value]);
-  // }
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -111,36 +55,6 @@ export default function AddInvoicesToAdvance({showForm, provider, open, costs, p
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  // const costs: string[] = [];
-  // let minDate = '', maxDate = '';
-
-  // dataTable.map((cost) => {
-  //   costs.push(cost.id);
-  //   if(minDate === '' && maxDate === ''){
-  //     minDate=cost.Fecha;
-  //     maxDate=cost.Fecha;
-  //   }else{
-  //     if(new Date(minDate) > new Date(cost.Fecha)){
-  //       minDate = cost.Fecha;
-  //     }else{
-  //       if(new Date(maxDate) < new Date(cost.Fecha)){
-  //         maxDate = cost.Fecha;
-  //       }
-  //     }
-  //   }
-  // });
-
-  // let viewComponent = indexStepper===1? 
-  //     <PaymentPlugin comments={comments} date={date} nextStep={handleIndexStepper} paymentPlugin={paymentPlugin} 
-  //       setComments={handleComments} setDate={handleDate} setPaymentPlugin={handlePaymentPlugin} />:
-  //     (indexStepper==2? <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
-  //         user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} 
-  //         commentsPayment={comments} datePayment={date} paymentPlugin={paymentPlugin} 
-  //         optTypes={optTypes} costsPayment={costsInPayment} />: 
-  //       <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />);
-
-  // console.log('costs to relacionated => ', costs);
-
   const handleClose = () => {
     setIndexStepper(0);
     showForm(false);
@@ -149,7 +63,7 @@ export default function AddInvoicesToAdvance({showForm, provider, open, costs, p
   let viewComponent = indexStepper===1? 
       <AddInvoicesInAdvance costs={costs} advance={advance} user={user} token={token} 
           handleClose={handleClose} updateInvoices={updateInvoices} />:
-      (<ExpensesToRelacionatedTable costs={costs} />);
+      (<ExpensesToRelacionatedTable costs={costs} handleIndexStepper={handleIndexStepper} />);
   
   return(
     <>

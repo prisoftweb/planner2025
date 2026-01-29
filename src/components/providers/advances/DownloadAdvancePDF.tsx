@@ -13,7 +13,11 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
   // console.log('prov => ', provider);
   // console.log('data prov => ', JSON.stringify(provider));
 
-  const total = costsRelAdvance.reduce((accum, item) => accum+=item.cost.total, 0);
+  // const total = costsRelAdvance.reduce((accum, item) => accum+=item.cost.total, 0);
+
+  const appAdvance=costsRelAdvance.reduce((accum, item) => accum+= item.cost.total>0? item.cost.total: 0, 0);
+  // console.log('costsRelAdvance => ', costsRelAdvance);
+  // const appAdvance=0;
 
   return(
     <Document>
@@ -37,6 +41,30 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                 {/* <Text style={{fontSize:'11px', color:'gray'}}>{project.title}</Text> */}
               </View>
 
+              <View>
+                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                  <Text style={{fontSize:'10px', color:'gray'}}>Proveedor: </Text>
+                  <Text style={{fontSize:'10px'}}>{provider.name}</Text>
+                </View>
+
+                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                  <Text style={{fontSize:'10px', color:'gray'}}>RFC: </Text>
+                  <Text style={{fontSize:'10px'}}>{provider.rfc}</Text>
+                </View>
+
+                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                  <Text style={{fontSize:'10px', color:'gray'}}>Dias de credito: </Text>
+                  <Text style={{fontSize:'10px'}}>{provider.tradeline?.creditdays?? 0}</Text>
+                </View>
+
+                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                  <Text style={{fontSize:'10px', color:'gray'}}>Linea de credito: </Text>
+                  <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
+                    currency: 'MXN',
+                    value: provider.tradeline?.creditlimit?? 0
+                  })}</Text>
+                </View>
+              </View>
               {/* <View>
                 <Text style={{fontSize:'10px', width: '250px', marginTop:'5px'}}>{provider.name}</Text>
                 <Text style={{fontSize:'10px', color:'gray', width: '250px'}}>Arquimedes #1234</Text>
@@ -49,28 +77,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
 
             <View style={{padding:'13px', paddingTop: '0px', width: '270px'}}>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Proveedor: </Text>
-                <Text style={{fontSize:'10px'}}>{provider.name}</Text>
-              </View>
-
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>RFC: </Text>
-                <Text style={{fontSize:'10px'}}>{provider.rfc}</Text>
-              </View>
-
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Dias de credito: </Text>
-                <Text style={{fontSize:'10px'}}>{provider.tradeline?.creditdays?? 0}</Text>
-              </View>
-
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Linea de credito: </Text>
-                <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: provider.tradeline?.creditlimit?? 0
-                })}</Text>
-              </View>
+              <Text style={{fontSize:'13px'}}>ESTADO DE CUENTA DE ANTICIPO</Text>
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Folio: </Text>
@@ -87,7 +94,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                 <Text style={{fontSize:'10px'}}>
                   {CurrencyFormatter({
                     currency: 'MXN',
-                    value: total
+                    value: 0
                   })}
                 </Text>
               </View>
@@ -114,7 +121,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                 </View>
               </View> */}
 
-              <View style={{border:'1px solid gray'}}>
+              <View style={{border:'1px solid gray', marginTop: '7px'}}>
                 <View style={{display:'flex', flexDirection:'row', border:'1px solid gray'}}>
                   <Text style={{backgroundColor:'green', color:'white', width:'110px', textAlign:'center', fontSize:'10px'}}>Anticipo</Text>
                   <Text style={{width:'100%', textAlign:'center', color:'black', fontSize:'10px', backgroundColor:'#D3D3D3'}}>
@@ -130,7 +137,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                     {CurrencyFormatter({
                       currency: 'MXN',
                       // value: total || 0
-                      value: total
+                      value: advance.advancesToSuppliers?.currentbalance?? 0
                     })}
                   </Text>
                 </View>
@@ -139,7 +146,9 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
             </View>
           </View>
 
-          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
+          <View style={{marginTop:'10px'}}></View>
+
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '20px', margin: '3px'}}>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Comp.</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Proyecto</Text>
             <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Descripcion </Text>
@@ -169,7 +178,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
             <Text style={{fontSize:'10px', color:'gray'}}>Aplicacion de anticipo: </Text>
             <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
               currency: 'MXN',
-              value: advance.cost.total
+              value: appAdvance
             })}</Text>
           </View>
 
@@ -177,7 +186,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
             <Text style={{fontSize:'10px', color:'gray'}}>Total aplicado: </Text>
             <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
               currency: 'MXN',
-              value: total
+              value: 0
             })}</Text>
           </View>
 

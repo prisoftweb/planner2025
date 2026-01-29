@@ -209,7 +209,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
           <Button onClick={() => handleIsAddInvoices(true)}>Agregar a anticipo</Button>
         )}
       </div>
-      <div className="flex justify-end mr-3">
+      <div className="flex justify-end mr-3 mt-3">
         <div>
           <PDFDownloadLink document={<DownloadAdvancePDF provider={provider} advance={advance} costsRelAdvance={costsAdvance} />} fileName={'Anticipo'} >
             {({loading, url, error, blob}) => 
@@ -228,7 +228,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
         </div>
       </div>
       <div className="mt-5">
-        <Table columns={columns} data={costsRelAdvance} placeH="Buscar gasto.." typeTable="advance"
+        <Table columns={columns} data={costsRelAdvance} placeH="Buscar factura.." typeTable="advance"
           selectFunction={handleExpensesSelected} />
       </div>
       <ContainerSideNav width="w-full max-w-5xl" open={isAddInvoices}>

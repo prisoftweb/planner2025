@@ -56,7 +56,6 @@ export async function getAllCodesMINByDateANDProvider(token: string, dateStart:s
       },
     });
     if (response.status === 200) {
-      // console.log('res codes => ', response.data.data.stats);
       return response.data.data.stats;
     }
     return 'Error: No se pudo obtener la información de los codigos';
@@ -112,8 +111,6 @@ export async function removeCode(token: string, id:string) {
 
 export async function updateCode(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/codes/${id}`;
-  console.log('updateCode url => ', url);
-  console.log('updateCode data => ', JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {

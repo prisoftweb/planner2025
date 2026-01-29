@@ -57,15 +57,12 @@ export async function getTags(auth_token:string) {
 export async function createClient(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients`;
   try {
-    // console.log('url => ', url);
-    // console.log('data => ', JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     })
-    //console.log('res => ', res);
     if(res.status===201) return res.data.data.data;
     return res.statusText;
   } catch (error) {
@@ -87,7 +84,6 @@ export async function getClient(auth_token:string, id:string) {
     if(res.status===200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
-    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.message;
     }
@@ -135,8 +131,6 @@ export async function removeClient(id:string, auth_token:string) {
 
 export async function updateContactClient(data:Object, id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/insertContactOfClient/${id}`;
-  console.log(url);
-  console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -150,17 +144,12 @@ export async function updateContactClient(data:Object, id:string, auth_token:str
     if(axios.isAxiosError(error)){
       return error.message;
     }
-    console.log(typeof(error));
-    console.log(error);
     return 'Ocurrio un error al actulizar contacto del cliente!!';
   }
 }
 
 export async function createClientLogo(auth_token:string, data:FormData) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/clientWithLogo`;
-  
-  //console.log('location');
-  //console.log(data.get('location'));
 
   try {
     const res = await axios.post(url, data, {
@@ -193,8 +182,6 @@ export async function removeContactClient(idc:string, id:string, auth_token:stri
     if(axios.isAxiosError(error)){
       return error.message;
     }
-    console.log(typeof(error));
-    console.log(error);
     return 'Ocurrio un problema al eliminar contacto!!';
   }
 }
@@ -273,14 +260,12 @@ export async function getAllTOTALAccountReceivablesOnlyByOneClientMINRESUME(auth
 
 export async function getAllTOTALEstimatesPendingByOneClientMINRESUME(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllTOTALEstimatesPendingByOneClientMINRESUME/${id}`;
-  // console.log('url pend bil => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    // console.log('res fact => ', res);
     if(res.status===200){
       if(res.data.data.arrStats.length>0){
         return res.data.data.arrStats[0];
@@ -297,7 +282,6 @@ export async function getAllTOTALEstimatesPendingByOneClientMINRESUME(auth_token
     } 
     return res.statusText;
   } catch (error) {
-    console.log('error fact => ', error);
     if(axios.isAxiosError(error)){
       return error.message;
     }

@@ -19,26 +19,7 @@ type HeaderProps={
 
 export default function HeaderAddInvoicesToAdvance({provider, costs, pending}: HeaderProps) {
 
-  // const [pending, setPending] = useState<number>(0);
-
-  const total = costs.reduce((accum, item) => accum+=item.cost?.subtotal?? 0, 0 );
-
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     const res :(pendingPaymentProvider[] | string) = await getPendingPaymentProvider(provider._id, token);
-  //     if(typeof(res) !== 'string'){
-  //       setPending(res[0].totalPendingPayment);
-  //     }else{
-  //       showToastMessageError(res);
-  //     }
-  //   }
-  //   fetch();
-  // })
-  
-  // let amount = 0;
-  // expensesTable.map((exp) => {
-  //   amount += Number(exp.paid);
-  // });
+  const total = costs.reduce((accum, item) => accum+=item.cost?.total > 0? item.cost?.total:0, 0 );
  
   return (
     <div>
