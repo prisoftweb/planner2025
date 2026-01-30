@@ -19,9 +19,7 @@ export default function CompaniesTableWorkSpace({companiesParam, token, idWS, id
   }
 
   const handleRemoveCompany = (idComp:string) => {
-    console.log('comps +> ', companies);
     const comp = companies.filter((c) => c.companys._id!==idComp);
-    console.log('comp after remove => ', comp);
     setCompanies(comp);
 
     const data={
@@ -39,15 +37,12 @@ export default function CompaniesTableWorkSpace({companiesParam, token, idWS, id
     if(typeof(res)==='string'){
       showToastMessageError(res);
     }else{
-      console.log('res handle etxh => ', res);
       setCompanies(res);
       setOpenNewCompany(false);
     }
   }
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-
-  // console.log('companies => ', companies);
 
   return (
     <div className="w-full">

@@ -7,9 +7,6 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni}
 
   const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  console.log('invoices pdf => ', invoices);
-  console.log('order by => ', orderInvoices);
-
   const total = invoices.reduce((acc, item) => acc + item.cost.total, 0);
   const vat = invoices.reduce((acc, item) => acc + item.cost.iva, 0);
   const subtotal = invoices.reduce((acc, item) => acc + item.cost.subtotal, 0);

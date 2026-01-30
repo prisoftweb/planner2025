@@ -12,8 +12,6 @@ const reducer = (state:any, action:any) => {
       }
       break;
       case 'SET_EXTRA_DATA': {
-            console.log('helppp');
-            console.log(action.data);
           return { ...state, extradata: { ...action.data } };
       }
       break;

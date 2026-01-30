@@ -44,20 +44,16 @@ export async function getWorkSpacesMin(auth_token:string) {
 
 export async function createWorkSpace(data:Object) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces`;
-  console.log('url ws => ', url);
-  console.log('data => ', data);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers:{
         'Content-Type': 'application/json'
       }
     });
-    console.log('res => ', res.data.data);
     if(res.status===201)
       return res.data.data.data;
     return res.statusText
   } catch (error) {
-    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error?.response?.data?.message || error.message;
     }else{
@@ -75,12 +71,10 @@ export async function updateWorkSpace(data:Object, id:string, auth_token:string)
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res => ', res.data.data);
     if(res.status===200)
       return res.data.data.data;
     return res.statusText
   } catch (error) {
-    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error?.response?.data?.message || error.message;
     }else{
@@ -98,12 +92,10 @@ export async function updateWorkSpaceWithLogo(data:FormData, id:string, auth_tok
         'Content-Type': 'multipart/form-data'
       }
     });
-    console.log('res update ws con logo => ', res.data.data);
     if(res.status===200)
       return res.data.data.data;
     return res.statusText
   } catch (error) {
-    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error?.response?.data?.message || error.message;
     }else{
@@ -120,13 +112,10 @@ export async function findCODEVALIDATION(code:string, email:string) {
         'Content-Type': 'application/json'
       }
     });
-    console.log('res => ', res.data.data);
     if(res.status===201)
       return res.data.data.data;
-    // return res.statusText
     return res.status;
   } catch (error) {
-    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error?.response?.data?.message || error.message;
     }else{
@@ -143,12 +132,10 @@ export async function resendNEWCode(data:Object) {
         'Content-Type': 'application/json'
       }
     });
-    // console.log('res => ', res.data.data);
     if(res.status===201)
       return res.data.data.data;
     return res.statusText;
   } catch (error) {
-    // console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error?.response?.data?.message || error.message;
     }else{
@@ -159,8 +146,6 @@ export async function resendNEWCode(data:Object) {
 
 export async function insertCompanyInWorkSpace(auth_token:string, id:string, data:Object) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/insertCompanyArrByID/${id}`;
-  console.log('url ws insert company => ', url);
-  console.log('data insert company => ', data);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers:{
@@ -182,8 +167,6 @@ export async function insertCompanyInWorkSpace(auth_token:string, id:string, dat
 
 export async function deleteCompanyInWorkSpace(auth_token:string, id:string, idComp:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/workspaces/eliminaCompanyArrByID/${id}/${idComp}`;
-  console.log('url ws dlete company => ', url);
-  // console.log('data delete company => ', data);
   try {
     const res = await axios.post(url, {}, {
       headers:{
@@ -191,7 +174,6 @@ export async function deleteCompanyInWorkSpace(auth_token:string, id:string, idC
         'Content-Type': 'application/json'
       }
     });
-    console.log('res delete company ws => ', res);
     if(res.status===200 || res.status===201 || res.status===204)
       return 204;
     return res.statusText

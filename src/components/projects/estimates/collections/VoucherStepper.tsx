@@ -21,7 +21,6 @@ export default function VoucherStepper({token, user, NextStep, setVoucher, dispe
   });
 
   useEffect(() => {
-    // console.log(acceptedFiles);
     if ( typeof acceptedFiles[0] !== 'undefined' ){
       setVoucher(acceptedFiles[0]);
     }else{
@@ -31,7 +30,6 @@ export default function VoucherStepper({token, user, NextStep, setVoucher, dispe
 
   const Next = () => {
     if(file){
-      // updateVoucher(file);
       setVoucher(file);
     }
     NextStep(2);

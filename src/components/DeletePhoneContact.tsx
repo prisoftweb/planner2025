@@ -34,7 +34,7 @@ export default function DeletePhoneContact({token, phone, idC, numContacts} :
                   showToastMessageError('El telefono no pudo ser eliminado..');
                 }
               } catch (error) {
-                console.log('Error al eliminar telefono');
+                
               }
             break;
           }

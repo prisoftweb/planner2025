@@ -111,7 +111,6 @@ export default function ClientCollectionCli({collections, client, rfc}: ClientCl
 
 export function CollectionClientDataToTableData(collectionsP: ICollectionByClientMin[]){
   const table: ITableCollectionByClientMin[] = [];
-  console.log('collection table => ', collectionsP);
   collectionsP.map((col) => {
     table.push({
       pendingBilling: col?.pendingBilling?? 0,

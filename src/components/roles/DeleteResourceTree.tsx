@@ -35,7 +35,6 @@ export default function DeleteResourceTree({token, resource, idTree} :
                   //router.refresh()
                 }
               } catch (error) {
-                console.log('Error al eliminar recurso');
               }
             break;
           }

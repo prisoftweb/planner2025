@@ -29,9 +29,6 @@ export default function AddInvoicesInAdvance({costs, user, advance, token, handl
       setError(false);
       let validate = true;
 
-      // console.log('costs => ', costs);
-      // console.log('impares => ', impares);
-      // console.log('pares => ', pares);
 
       for (let i = 0; i < pares.length; i++) {
         if (impares[i].cost.total > 0) {
@@ -67,7 +64,6 @@ export default function AddInvoicesInAdvance({costs, user, advance, token, handl
           }
         }
 
-        // console.log('data => ', data);
         const res = await insertAdvanceInvoicesCfdisInCost(token, advance._id, data);
         if(typeof(res)==='string'){
           showToastMessageError(res);

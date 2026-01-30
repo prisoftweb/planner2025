@@ -10,14 +10,11 @@ export async function createUserPhoto(user:FormData, auth_token:string){
       }
     })
     if(res.status === 201){
-      //return res.status;
-      //console.log('res back ', res);
       return res.data.data.data;
     }else{
       return res.statusText;
     }
   } catch (error) {
-    //console.log('error api ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Ocurrio un problema al crear usuario con foto';
     }
@@ -28,17 +25,13 @@ export async function createUserPhoto(user:FormData, auth_token:string){
 export async function createUser(user:any, auth_token:string){
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
   try {
-    console.log('url user', url);
-    console.log(JSON.stringify(user));
     const res = await axios.post(url, JSON.stringify(user), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     })
-    console.log(res.data.data);
     if(res.status === 201){
-      //return res.status;
       return res.data.data.data;
     }else{
       return res.statusText;
@@ -61,20 +54,15 @@ export async function getUser(id:string, auth_token:string) {
         'Authorization': `Bearer ${auth_token}`
       }
     })
-    console.log('user => ', url);
-    console.log('data => ', user);
     if(user.status === 200) return user.data.data.data;
     return user.statusText;
   } catch (error) {
-    console.log('error => ', error);
     return 'Ocurrio un problema al consultar datos del usuario..';
   }
 }
 
 export async function updateMeUser(id:string, userData:FormData, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/updateMe/${id}`;
-  console.log(url);
-  //console.log(userData.get('photo'));
   try {
     const res = await axios.patch(url, userData, {
       headers: { 
@@ -82,7 +70,6 @@ export async function updateMeUser(id:string, userData:FormData, auth_token:stri
         'Authorization': `Bearer ${auth_token}`
       },
     });
-    console.log(res); 
     if(res.status === 200) return res.data.data.user;
       return res.statusText;
   } catch {
@@ -108,7 +95,6 @@ export async function updateMePassword(id:string, passwordCurrent:string, passwo
       if(res.status===200) return res.status;
         return res.statusText;    
   } catch (error:any) {
-    console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message;
     }
@@ -172,8 +158,6 @@ export async function resetPassword(id:string, data:any) {
 export async function getUsers(auth_token:string){
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`;
 
-  //console.log(auth_token);
-  console.log('url => ', url);
   try{
     const res = await axios.get(url, {
       headers: {
@@ -181,12 +165,9 @@ export async function getUsers(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     })
-    console.log('res => ', res);
     if(res.status===200) return res.data.data.data;
     return res.statusText;
   }catch(e:any){
-    console.log('error => ', e);
-    //return 'Ocurrio un problema al consultar usuarios!!';
     return e.response.data.message;
   }
 }
@@ -201,11 +182,9 @@ export async function getUsersMin(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     })
-    // console.log('res => ', res);
     if(res.status===200) return res.data.data.data;
     return res.statusText;
   }catch(e:any){
-    console.log('error => ', e);
     return e.response.data.message;
   }
 }
@@ -230,8 +209,6 @@ export async function getUsersLV(auth_token:string){
 
 export async function removeUser(id:string, auth_token:string) {
   const url=`${process.env.NEXT_PUBLIC_API_URL}/api/v1/users/${id}`;
-  
-  console.log('url', url);
 
   try {
     const res = await axios.delete(url, {
@@ -239,11 +216,9 @@ export async function removeUser(id:string, auth_token:string) {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    console.log('res', res);
     if(res.status=== 204) return 204;
     else return res.statusText;
   } catch (error) {
-    console.log('catch', error);
     return 'Ocurrio un error al eliminar usuario!';
   }
 }
@@ -257,11 +232,9 @@ export async function updateUser(data:any, auth_token:string, id:string) {
         'Content-Type': 'application/json',
       }
     })
-    console.log(res);
     if(res.status===200) return res.data.data.data;
       return res.statusText;
   } catch (error) {
-    console.log(error);
     return 'Error al editar usuario'   
   }
 }

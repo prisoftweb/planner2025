@@ -76,42 +76,13 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   const [stateTotalCost, setStateTotalCost] = useState<DashboardTotalCost[]>(projectsTotalCost);
   const [stateConfiMin, setStateConfiMin] = useState<ConfigMin[]>(configMin);
   const [stateProjectsBudgeted, setStateProjectsBudgeted] = useState<ControlBudgeted[]>(projectsBudgeted);
-  console.log('projects spent param => ', projectsSpent);
   const [stateProjectsSpent, setStateProjectsSpent] = useState<ControlBudgeted[]>(projectsSpent);
   const [stateProjectscontrolBudgeted, setStateProjectsControlBudgeted] = useState<ControlBudgeted[]>(projectsControlBudgeted);
   const [stateTotalPaymentsProjects, setStateTotalPaymentsProjects] = useState<ITotalPaymentsProyects[]>(totalPaymentsProjects);
 
-  const fetchData = async (dateS: string, dateE: string, prj: string[]) => {
-    // let amountPrjs: TotalAmountProjects[] = [];
-    
-    // let listPrjsDate: ListProjectsByDate[] = [];    
-    
-    // let prjandTypes: CostsByProjectAndType[] = [];
-    
-    // let totalCost: DashboardTotalCost[] = [];
-    
-    // let confMin: ConfigMin[] = [];
-    
-    // let prjsBudgeted: ControlBudgeted[] = [];
-    
-    // let prjsSpent: ControlBudgeted[] = [];
-    
-    // let prjsControlBudgeted: ControlBudgeted[] = [];
-
-    // let allPaymentsProjects: ITotalPaymentsProyects[] = [];
-    
+  const fetchData = async (dateS: string, dateE: string, prj: string[]) => {    
     if(prj.includes('all')){
-      // amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, []);
-      // listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, []);
-      // totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, []);
-      // confMin = await getConfigMin(token);
-      // prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, []);
-      // prjsSpent = await getProjectsSpent(token, dateS, dateE, []);
-      // prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, []);
-      // prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, []);
-
-      // allPaymentsProjects = await getAllPaymentsProjects(token, dateS, dateE);
-
+      
       const [amountPrjs, listPrjsDate, totalCost, confMin, prjsBudgeted, prjsSpent, prjsControlBudgeted, prjandTypes, allPaymentsProjects] = await Promise.all([
         getDashboardProjectsAmount(token, dateS, dateE, []),
         getDashboardListProjectsByDate(token, dateS, dateE, []),
@@ -165,7 +136,6 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
       setStateProjectsAndType(prjandTypes);
       setStateTotalCost(totalCost);
       setStateConfiMin(confMin);
-      console.log('all prj spent => ', prjsSpent);
       setStateProjectsSpent(prjsSpent);
       setStateProjectsControlBudgeted(prjsControlBudgeted);
       setStateProjectsBudgeted(prjsBudgeted);
@@ -183,42 +153,34 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
         getAllPaymentsProjects(token, dateS, dateE)
       ]);
 
-      // amountPrjs = await getDashboardProjectsAmount(token, dateS, dateE, prj);
       if(typeof(amountPrjs)==='string'){
         showToastMessageError(amountPrjs);
       }
 
-      // listPrjsDate = await getDashboardListProjectsByDate(token, dateS, dateE, prj);
       if(typeof(listPrjsDate)==='string'){
         showToastMessageError(listPrjsDate);
       }
 
-      // totalCost = await getDashboardProjectTotalCost(token, dateS, dateE, prj);
       if(typeof(totalCost)==='string'){
         showToastMessageError(totalCost);
       }
 
-      // confMin = await getConfigMin(token);
       if(typeof(confMin)==='string'){
         showToastMessageError(confMin);
       }
 
-      // prjsBudgeted = await getProjectsBudgeted(token, dateS, dateE, prj);
       if(typeof(prjsBudgeted)==='string'){
         showToastMessageError(prjsBudgeted);
       }
 
-      // prjsSpent = await getProjectsSpent(token, dateS, dateE, prj);
       if(typeof(prjsSpent)==='string'){
         showToastMessageError(prjsSpent);
       }
 
-      // prjsControlBudgeted = await getProjectsControlBudgeted(token, dateS, dateE, prj);
       if(typeof(prjsControlBudgeted)==='string'){
         showToastMessageError(prjsControlBudgeted);
       }
 
-      // prjandTypes = await getDashboardByProjectAndType(token, dateS, dateE, prj);
       if(typeof(prjandTypes)==='string'){
         showToastMessageError(prjandTypes);
       }
@@ -228,21 +190,11 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
       setStateProjectsAndType(prjandTypes);
       setStateTotalCost(totalCost);
       setStateConfiMin(confMin);
-      console.log('prj spent 2 => ', prjsSpent);
       setStateProjectsSpent(prjsSpent);
       setStateProjectsControlBudgeted(prjsControlBudgeted);
       setStateProjectsBudgeted(prjsBudgeted);
       setStateTotalPaymentsProjects(allPaymentsProjects);
     }
-    // setStateListProjects(listPrjsDate);
-    // setTotalAmount(amountPrjs);
-    // setStateProjectsAndType(prjandTypes);
-    // setStateTotalCost(totalCost);
-    // setStateConfiMin(confMin);
-    // setStateProjectsSpent(prjsSpent);
-    // setStateProjectsControlBudgeted(prjsControlBudgeted);
-    // setStateProjectsBudgeted(prjsBudgeted);
-    // setStateTotalPaymentsProjects(allPaymentsProjects);
   }
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
@@ -258,8 +210,6 @@ export default function DashBoardFinanceContainer({token, amountProjects, listPr
   });
 
   const dataProjectsProgress: OptionsDashboard[] = [];
-
-  // console.log('stateProjectsAndType => ', stateProjectsAndType);
 
   const groupedByProject = stateProjectsAndType.reduce((acc: any, prj) => {
       const project = prj.project;
@@ -397,7 +347,6 @@ function MoreProjectsSpent(prjBugeted: ControlBudgeted[], prjControlBudgeted: Co
 function MoreProjectsPayment(prjBugeted: ControlBudgeted[], prjControlBudgeted: ControlBudgeted[], 
   prjSpent: ControlBudgeted[], prjPayments: ITotalPaymentsProyects[]){
   
-  console.log('prj spent => ', prjSpent);
   const res: DataControlBudgeted[] = [];
   prjPayments.map((prj) => {
     const prjB = prjBugeted.find((pr) => pr.title === prj.project);

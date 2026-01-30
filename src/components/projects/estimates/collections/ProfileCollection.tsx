@@ -14,8 +14,6 @@ export default function ProfileCollection({collection, token, user}:
 
   const [oneCollection, setOneCollection]=useState<IOneCollectionMin>(collection);
 
-  console.log('collection min => ', oneCollection);
-
   const isDeposited = oneCollection.condition[oneCollection.condition.length-1].name.toLowerCase().includes('depositado');
 
   const updateCollection = async () => {

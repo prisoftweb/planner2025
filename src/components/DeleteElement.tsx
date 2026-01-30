@@ -35,7 +35,7 @@ export default function DeleteElement({token, id, name, remove,
                   showToastMessageError(`${name} no pudo ser eliminado..`);
                 }
               } catch (error) {
-                console.log('Error al eliminar');
+                
               }
             break;
           }

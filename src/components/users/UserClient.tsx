@@ -46,8 +46,6 @@ export default function UserClient({user, token, departments, optQuery, optsRole
   }, []);
 
   let view: JSX.Element;
-
-  console.log('user client opt => ', optQuery, ' => ', opt);
   
   opt===2? view = (<ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />) : 
       (opt===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 

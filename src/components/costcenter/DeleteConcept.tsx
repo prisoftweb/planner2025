@@ -38,7 +38,7 @@ export default function DeleteConcept({token, id, name, remove, DeleteElement, i
                   showToastMessageError(`${name} no pudo ser eliminado..`);
                 }
               } catch (error) {
-                console.log('Error al eliminar');
+                
               }
             break;
           }

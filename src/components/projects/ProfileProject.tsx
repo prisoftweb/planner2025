@@ -19,8 +19,6 @@ export default function ProfileProject({project}:
     value: oneProjectStore?.guaranteefund?.amount? parseFloat(oneProjectStore.guaranteefund.amount) : 0
   });
 
-  console.log('one project store => ', oneProjectStore);
-
   return(
     <>
       <div className="w-full h-full mt-3">

@@ -423,8 +423,6 @@ export default function TableInvoicesComponent({token, user}:
 function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   const table: IInvoiceTable[] = [];
 
-  console.log('invoices data => ', invoicess);
-
   invoicess.map((inv) => {
     const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
     

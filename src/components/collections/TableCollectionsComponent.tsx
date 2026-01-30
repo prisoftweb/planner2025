@@ -88,10 +88,8 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     const newStatus = [...statuses, status];
     setStatuses(newStatus);
     if(rangeDate.from && rangeDate.to){
-      console.log('add status');
       handleFilter(rangeDate.from, rangeDate.to, newStatus);
     }else{
-      console.log('error add =>');
       showToastMessageError('Seleccione un rango de fechas para filtrar');
     }
   }
@@ -100,10 +98,8 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     const newStatus = statuses.filter((s) => s !== status);
     setStatuses(newStatus);
     if(rangeDate.from && rangeDate.to){
-      console.log('filter delete');
       handleFilter(rangeDate.from, rangeDate.to, newStatus);
     }else{
-      console.log('error delete => ');
       showToastMessageError('Seleccione un rango de fechas para filtrar');
     }
   }
@@ -150,39 +146,21 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     if(typeof(col)==='string'){
       showToastMessageError(col);
     }else{
-      // console.log('cols => ', col);
       setCollections(col);
     }
 
     if(typeof(rest)==='string'){
       showToastMessageError(rest);
     }else{
-      // console.log('rest => ', rest);
       setTotalCollections(rest);
     }
 
     if(typeof(restt)==='string'){
       showToastMessageError(restt);
     }else{
-      // console.log('restt => ', restt);
       setTotalRecovered(restt[0]);
     }
   }
-
-  // if(collections?.length <= 0){
-  //   return (
-  //     <>
-  //       <div className="flex flex-col items-center">
-  //         <p className="text-5xl mt-20 font-bold">Cobranza</p>
-  //         <p className="text-xl mt-10 text-slate-700 font-bold" 
-  //           >Gestiona las cuentas por cobrar,
-  //           recuperacion de cobranza y mas
-  //           desde Planner</p>
-  //         <img src="/img/estimates/invoices.svg" alt="image" className="w-60 h-auto" />
-  //       </div>
-  //     </>
-  //   )
-  // }
 
   const delCollection = (id:string) => {
     showToastMessage('Cobro eliminado satisfactoriamente!!!');
@@ -211,21 +189,6 @@ export default function TableCollectionsComponent({token, user, collectionsParam
       updateCollections();
     }
   }
-
-  // let data
-  // if(isFilter){
-  //   if(search.length>0){
-  //     data=filteredCollections.filter((f) => f.reference.includes(search));
-  //   }else{
-  //     data=filteredCollections;
-  //   }
-  // }else{
-  //   if(search.length>0){
-  //     data=collections.filter((f) => f.reference.includes(search));
-  //   }else{
-  //     data=collections;
-  //   }
-  // }
 
   let data
   if(search.length>0){

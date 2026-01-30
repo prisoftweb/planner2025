@@ -1,8 +1,5 @@
-// import { useFormik } from "formik";
-// import * as Yup from 'yup';
 import { useState, useRef } from "react";
 import HeaderForm from "@/components/HeaderForm";
-import Button from "@/components/Button";
 import { IWorkSpaceMin } from "@/interfaces/WorkSpaces";
 
 type ConfigDataProps = {
@@ -12,12 +9,7 @@ type ConfigDataProps = {
 }
 
 export default function ConfigData({ id, token, workspace}: ConfigDataProps){
-  const refRequest = useRef(true);
-
-  console.log('workspace config data', workspace);
-
-  // const [serviceSaas, setServiceSaas]=useState<boolean>(true);
-  // const [verification, setVerification]=useState<boolean>(true);
+  // const refRequest = useRef(true);
 
   const [emailVerified, setEmailVerified]=useState<boolean>(workspace.isverificatedEmail?? false);
   const [phoneVerified, setPhoneVerified]=useState<boolean>(workspace.isverificatedPhone?? false);

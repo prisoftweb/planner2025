@@ -36,7 +36,6 @@ export default function ProjectHistoryCli({project, id, token}:
         setConditions(res);
       } else {
         showToastMessageError(res);
-        console.error('Error fetching conditions:', res);
       }
     };
     fetchConditions();

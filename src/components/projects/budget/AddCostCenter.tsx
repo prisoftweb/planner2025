@@ -111,7 +111,6 @@ export default function AddCostCenter({token, user, closeForm}:
   }
 
   const keyDown = (event: any) => {
-    // console.log(event.key);
     if(event.key==='Tab'){
       tabRef?.current?.focus();
       setBandTab(!bandTab);

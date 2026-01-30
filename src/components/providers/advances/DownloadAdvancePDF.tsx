@@ -8,16 +8,7 @@ import { ICostRelAdvance } from '@/interfaces/Expenses';
 export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}: 
   {provider:ProviderMin, advance:OneExpense, costsRelAdvance:ICostRelAdvance[]}) {
 
-  // const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-  // console.log('prov => ', provider);
-  // console.log('data prov => ', JSON.stringify(provider));
-
-  // const total = costsRelAdvance.reduce((accum, item) => accum+=item.cost.total, 0);
-
   const appAdvance=costsRelAdvance.reduce((accum, item) => accum+= item.cost.total>0? item.cost.total: 0, 0);
-  // console.log('costsRelAdvance => ', costsRelAdvance);
-  // const appAdvance=0;
 
   return(
     <Document>
@@ -41,7 +32,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                 {/* <Text style={{fontSize:'11px', color:'gray'}}>{project.title}</Text> */}
               </View>
 
-              <View>
+              <View style={{marginTop:'7px'}}>
                 <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                   {/* <Text style={{fontSize:'10px', color:'gray'}}>Proveedor: </Text> */}
                   <Text style={{fontSize:'10px'}}>{provider.name}</Text>
@@ -52,7 +43,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                   <Text style={{fontSize:'10px'}}>{provider.rfc}</Text>
                 </View>
 
-                <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                {/* <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                   <Text style={{fontSize:'10px', color:'gray'}}>Dias de credito: </Text>
                   <Text style={{fontSize:'10px'}}>{provider.tradeline?.creditdays?? 0}</Text>
                 </View>
@@ -63,7 +54,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                     currency: 'MXN',
                     value: provider.tradeline?.creditlimit?? 0
                   })}</Text>
-                </View>
+                </View> */}
               </View>
               {/* <View>
                 <Text style={{fontSize:'10px', width: '250px', marginTop:'5px'}}>{provider.name}</Text>
@@ -79,7 +70,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
 
               <Text style={{fontSize:'13px'}}>ESTADO DE CUENTA DE ANTICIPO</Text>
 
-              <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+              <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px', marginTop:'7px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Folio: </Text>
                 <Text style={{fontSize:'10px'}}>{advance.folio}</Text>
               </View>
@@ -122,7 +113,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                 </View>
               </View> */}
 
-              <View style={{border:'1px solid gray'}}>
+              <View style={{border:'1px solid gray', marginTop:'7px'}}>
                 <View style={{display:'flex', flexDirection:'row'}}>
                   <Text style={{backgroundColor:'green', color:'white', width:'110px', textAlign:'center', fontSize:'13px', padding:'3px'}}>Anticipo</Text>
                   <Text style={{width:'100%', textAlign:'center', color:'black', fontSize:'13px', backgroundColor:'#D3D3D3', padding:'3px'}}>
@@ -158,14 +149,14 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Total</Text>
           </View>
 
-          {costsRelAdvance.map((c) => (
+          {costsRelAdvance.map((c, index:number) => (
             <View key={c._id} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.folio}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.project.title}</Text>
-              <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.description} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date?.substring(0, 10)} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.costocenter.concept.name}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.folio}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.project.title}</Text>
+              <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.description} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.date?.substring(0, 10)} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.costocenter.concept.name}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: c.cost.total
               })}</Text>

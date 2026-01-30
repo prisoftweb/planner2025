@@ -21,8 +21,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
     file.readAsDataURL(acceptedFiles[0])
   }, [])
 
-  // console.log('fileParam', fileParam);
-
   const { acceptedFiles, getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
   });
@@ -47,7 +45,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
 
   useEffect(() => {
     if ( typeof acceptedFiles[0] !== 'undefined' ){
-      console.log(acceptedFiles[0]);
       updateCFDIData(acceptedFiles[0]);
     }
   }, [acceptedFiles]);
@@ -67,9 +64,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
     setDescriptions([]);
     setPrices([]);
     setQuantities([]);
-    // console.log('pre validation');
     const res: (boolean | string) = await Validation(fileData);
-    // console.log('post validation => ', res);
     if(typeof(res) === 'boolean'){
       setFile(fileData);
       setPre(fileData);
@@ -78,7 +73,6 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
           const t = await fileData.text();
           
           const res2: (XMLCFDI | any ) = xml2js(t);
-          console.log('res 2 => ', res2);
           const uuid = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('complemento'));
           const taxes = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('impuestos'));
           const concepts = res2.elements[0].elements.find((e: any) => e.name.toLowerCase().includes('conceptos'));
@@ -124,7 +118,7 @@ export default function UploadFileDropZone({label, setFile, Validation, getData,
               CFDIObj.proveedor = provAux;
             }
           } catch (error) {
-            console.log('error al leer cfdi => ', error);
+            
           }
 
           getData(CFDIObj);

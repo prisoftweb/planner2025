@@ -123,8 +123,6 @@ function SortableItem(p : ProjectMin) {
 function DroppableColumn({ columnId, children }: { columnId: string; children: React.ReactNode }) {
   const { setNodeRef } = useDroppable({ id: columnId });
 
-  // console.log("DroppableColumn render:", { columnId });
-
   return (
     <div
       ref={setNodeRef} // ✅ marca el contenedor como zona droppable
@@ -160,7 +158,6 @@ export default function DragAndDropProjects({projectsParam, token, user}:
   const arr10: ProjectMin[]=[];
 
   projectsParam.map((p) => {
-    // console.log('segement => ', p);
     if(p.category.name.includes("NUEVO")){
       arr1.push(p);
     }else{
@@ -200,8 +197,6 @@ export default function DragAndDropProjects({projectsParam, token, user}:
     }
   });
 
-  
-console.log('no evaluados => ', arr9);
   const initialProjects: TProjects = {
     "NUEVO": arr1,
     "PRESUPUESTADO": arr2,
@@ -232,9 +227,6 @@ console.log('no evaluados => ', arr9);
 
     const activeIdStr = String(active.id);
     const overIdStr = String(over.id);
-
-    // console.log('active => ', active);
-    // console.log('over => ', over);
 
     // 🛑 Si se suelta el ítem sobre sí mismo, no hacer nada
     if (activeIdStr === overIdStr) return;

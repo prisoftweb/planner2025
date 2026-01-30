@@ -60,13 +60,10 @@ export default function CFDIStepper({token, user} : {token: string, user:string}
             }
           }
         } catch (error) {
-          console.log('error al leer cfdi => ', error);
           return false;
         }
       }
       const resXML = await readFile();
-      // return readFile();
-      // console.log('resXML => ', resXML);
       return resXML;
     }
   }

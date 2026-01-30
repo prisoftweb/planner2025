@@ -7,8 +7,6 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
   {project:OneProjectMin, token:string, contractualControl?: IContractualControlProject, 
     budgetedControl:ProjectByBudgetedControl}) {
 
-  // console.log('project => ', project);
-
   return(
     <Document>
       <Page>

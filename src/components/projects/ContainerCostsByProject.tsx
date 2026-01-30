@@ -225,9 +225,6 @@ export default function ContainerCostsByProject({project, token, user, costs, co
 
   const dataExpenses =ExpenseDataProjectToTableDataProject(costs);
 
-  // console.log('options concepts:', costsConcepts);
-  // console.log('options categories:', costsCategories);
-
   return(
     <>
       <div className="flex justify-end">

@@ -151,7 +151,6 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
   const colorsCat: string[]= [];
 
   costoCentersCat.map((prj) => {
-    console.log('prj cat => ', prj.costocenter);
     dataCostoCentersCat.push({
       backgroundColor: random_rgba(),
       data:[prj.totalCost],
@@ -176,8 +175,6 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
       }
     ]
   };
-
-  console.log('project => ', project);
 
   return(
     <div className="w-full">

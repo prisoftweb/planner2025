@@ -207,7 +207,6 @@ export function getTypeFiles(expense:Expense) {
 
 export function ExpenseDataToTablePaidExpensesProviderData(expenses:PaymentProvider[]){
   const table: ExpensesTableProvider[] = [];
-  // console.log('expenses payment => ', expenses);
   expenses.map((expense) => {
     const dollar = CurrencyFormatter({
           currency: "MXN",
@@ -247,9 +246,6 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
   const table: DetailExpensesTableProvider[] = [];
   
   expenses.map((expense, index:number) => {
-    console.log('expense completo => ', expense);
-    console.log('pay parse => ', JSON.stringify(expense));
-    console.log('expense pay => ', expense.costs.pay);
     let dollar = '0';
     let d=0;
     if(expense.costs.pay){

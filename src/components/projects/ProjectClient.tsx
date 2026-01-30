@@ -44,7 +44,6 @@ export default function ProjectCli({project, token, id, optCategories, optClient
         setConditions(res);
       } else {
         showToastMessageError(res);
-        console.error('Error fetching conditions:', res);
       }
     };
     fetchConditions();
@@ -89,8 +88,6 @@ export default function ProjectCli({project, token, id, optCategories, optClient
   )
   
   const [open, setOpen] = useState<boolean>(false);
-
-  // console.log('user cli => ', user);
 
   return(
     <>

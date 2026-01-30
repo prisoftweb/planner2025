@@ -20,7 +20,6 @@ export function GuaranteeDataToTableData(guarantees:IGuaranteeMin[]){
 
 export function GuaranteeDataByProjectToTableData(guarantees:IGuaranteeResumenByProject[]){
   const table: ITableGuarantee[] = [];
-  console.log('data table => ', guarantees);
   guarantees.map((gua, index) => {
     table.push({
       amount: gua.subtotal,

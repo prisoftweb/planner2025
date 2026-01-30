@@ -51,11 +51,8 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
   }, []);
 
   let indexCLi = 0;
-  console.log('client', client);
   if(optClients.length > 0){
-    console.log('optClients => ', optClients);
     indexCLi=optClients.findIndex((c) => c.value===client);
-    console.log('index cli => ', indexCLi);
   }
   if(indexCLi<0) indexCLi=0;
 

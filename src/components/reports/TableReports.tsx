@@ -395,7 +395,7 @@ const moveCostsToReport = async (token:string, origin:string, destiny:string) =>
                 showToastMessageError(`Error al mover gastos del informe..`);
               }
             } catch (error) {
-              console.log('Error al mover');
+              
             }
           break;
         }

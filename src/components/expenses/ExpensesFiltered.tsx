@@ -310,7 +310,6 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
           <div className="p-2 flex justify-center">
             <Button  
               onClick={() => {
-                console.log('gastos filtrados => ', expensesFiltered);
                 setIsGeneratedReport(true);
               }}
               type="button"

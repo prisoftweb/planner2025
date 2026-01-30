@@ -52,7 +52,7 @@ export default function RemovePaymentComponent({token, id, name, expenses, updat
                   }
                 }
               } catch (error) {
-                console.log('Error al eliminar');
+                
               }
             break;
           }

@@ -47,10 +47,6 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
   let data:TableProvider[] = [];
   providerStore.map((prov:Provider) => {
 
-    // if(prov?.contact && prov?.contact?.length > 0){
-    //   console.log('prov => ', prov.tradename, ' => ', prov.contact);
-    // }
-    
     let nc = 0;
     if(prov.contact) nc = prov.contact.length;
     
@@ -70,8 +66,6 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
       tradename: prov.tradename || ' '
     })
   })
-
-  // console.log('data => ', data);
 
   const dataFilter=data.filter(p => p.suppliercredit==isCreditLine);
   

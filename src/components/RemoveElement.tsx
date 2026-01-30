@@ -45,7 +45,7 @@ export default function RemoveElement({token, id, name, remove, removeElement,
                   showToastMessageError(`${name} no pudo ser eliminado..`);
                 }
               } catch (error) {
-                console.log('Error al eliminar');
+                
               }
             break;
           }

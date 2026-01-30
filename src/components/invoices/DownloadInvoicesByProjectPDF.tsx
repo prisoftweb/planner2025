@@ -25,8 +25,6 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
 
   const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  // console.log('invoices pdf => ', orderInvoices);
-
   return(
     <Document>
       <Page>

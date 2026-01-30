@@ -33,7 +33,6 @@ export default function DeleteContact({token, contact, idProv} :
                   showToastMessageError(res.toString());
                 }
               } catch (error) {
-                console.log('Error al eliminar contacto');
               }
             break;
           }

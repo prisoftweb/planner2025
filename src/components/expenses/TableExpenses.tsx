@@ -91,7 +91,7 @@ export default function TableExpenses({data, token, expenses,
     setIsFilter(value);
   }
 
-  data.map((c) => !c.Descripcion || typeof(c.Descripcion) !== 'string' ? console.log('desc => ', c) : '');
+  // data.map((c) => !c.Descripcion || typeof(c.Descripcion) !== 'string' ? console.log('desc => ', c) : '');
 
   const queryParam= isPending? '?status=pending': '';
 
@@ -362,7 +362,6 @@ export default function TableExpenses({data, token, expenses,
   if(refresh){
     const aux = async () =>{
       try {
-        console.log('refresh table costs ');
         const res = await getAllCostsByConditionAndUser(token, user);
         if(typeof(res) !== 'string'){
           refExpenses.current = res;
@@ -549,7 +548,6 @@ export default function TableExpenses({data, token, expenses,
       }
     });
 
-    console.log('filtered => ', filtered);
     setExpensesFiltered(filtered);
     setDataExpenses(ExpenseDataToTableData(filtered));
   }

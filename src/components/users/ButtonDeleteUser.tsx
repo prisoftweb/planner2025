@@ -24,7 +24,6 @@ export default function ButtonDeleteUser({token, user} : {token : string, user:a
             case 'user':
               try {
                 res = await removeUser(id, token);
-                console.log(res);
                 if(res === 204) {
                   showToastMessage('Usuario eliminado exitosamente!');
                   setTimeout(() => {
@@ -35,7 +34,6 @@ export default function ButtonDeleteUser({token, user} : {token : string, user:a
                   showToastMessageError('El usuario no pudo ser eliminado..');
                 }
               } catch (error) {
-                console.log('Error al eliminar usuario');
               }
             break;
           }

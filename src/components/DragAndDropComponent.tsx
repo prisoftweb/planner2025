@@ -58,9 +58,6 @@ function SortableItem({ id, content }: SortableItemProps) {
     cursor: "grab",
   };
 
-  console.log('id => ', id);
-  console.log('content => ', content);
-
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
       {content}

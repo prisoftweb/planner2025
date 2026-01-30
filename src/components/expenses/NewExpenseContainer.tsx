@@ -38,7 +38,6 @@ export default function NewExpenseContainer({token, showForm, user, }:
   }
 
   const handleCategory = (value:string) => {
-    // console.log('handleCategory => ', value);
     updateCategory(value);
     setUpdateCat(value);
   }
@@ -87,7 +86,6 @@ export default function NewExpenseContainer({token, showForm, user, }:
       placeholder='Buscar ...'
       styles={customStyles}
       onChange={(value:any) => {
-        console.log('onchange => ', value);
         updateProject(value.value); 
       }}
     />)
@@ -120,14 +118,6 @@ export default function NewExpenseContainer({token, showForm, user, }:
     showForm(false);
   }
 
-  //categories
-  //"661eae12f642112488c85fb1" mano de obra
-  //"661eae4ef642112488c85fb4" xml y pdf
-  //"665f90b082c6db3d203cf093" ticket
-  //"66624d61db42d11d46b97ec1" xml
-  //"66e0657bc6d95ffb8aa0ec9a" ninguno
-  // console.log('categories => ', categories);
-
   let stepform: JSX.Element = <></>;
   if(isDeductible){
     if(indexStepper || indexStepper>=0){
@@ -145,7 +135,6 @@ export default function NewExpenseContainer({token, showForm, user, }:
     }
   }else{
     if(indexStepper || indexStepper>=0){
-      // console.log('index is ded => ', indexStepper);
       stepform = indexStepper===1? (
         <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
       ): indexStepper===2? (

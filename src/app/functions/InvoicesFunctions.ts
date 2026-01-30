@@ -3,9 +3,7 @@ import { ITableConceptsEstimate } from "@/interfaces/Estimate";
 
 export function InvoiceDataToTableData(invoices:IInvoiceByProject[]){
   const table: IInvoiceTable[] = [];
-  console.log('invoices table => ', invoices);
   invoices.map((inv) => {
-    // console.log('uncharged => ', inv.lastpayment?.unchargedbalanceamount, ' cost total => ', inv.cost.total, ' previous => ', inv.lastpayment?.previousbalanceamount, 'total - previous => ', inv.cost.total - inv.lastpayment?.previousbalanceamount);
     table.push({
       amount: inv.cost.total,
       condition: inv.condition,

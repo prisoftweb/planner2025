@@ -70,7 +70,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
 
   const handleOptInvoice = (value: Options) => {
     setOptInvoice(value);
-    console.log('value opt invoice => ', value);
   }
 
   const fetchInvoices = async(provParam:string) => {
@@ -306,7 +305,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             formdata.append('files', voucher);
             formdata.append('types', voucher.type);
 
-            // console.log('voucheer => ', voucher);
           }
           if(CFDI){
             formdata.append('files', CFDI);
@@ -429,7 +427,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             const expiration = new Date(reportObject.expirationdate);
             if( (fechaGasto > fechaReport || fechaGasto.getTime() >= fechaReport.getTime())  && 
                 (currentDate < expiration || currentDate.getTime() <= currentDate.getTime())){
-              // console.log('data expense con cfdirel => ', JSON.stringify(data));
               const res = await SaveExpense(data, token);
               if(res===201){
                 const catAux=category;
@@ -490,7 +487,6 @@ export default function DataStepper({token, user, handleUpdateCategory}:
     const found = types.find((type) => type.value === typeCFDIS);
     let absolute=false;
     if(found){
-      console.log('found => ', found);
       if(found.label.toLowerCase().includes('egreso')){
         absolute=true;
       }
@@ -498,25 +494,21 @@ export default function DataStepper({token, user, handleUpdateCategory}:
 
     if(absolute){
       if(Math.abs(Number(formik.values.amount.replace(/[$,]/g, ""))) !== Number(dataCFDI?.amount)){
-        // console.log('absolute => ', 'amount => ', formik.values.amount, 'amountcfdi => ', dataCFDI?.amount);
         showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
         return false;
       }
     }else{
       if(Number(formik.values.amount.replace(/[$,]/g, "")) !== Number(dataCFDI?.amount)){
-        // console.log('no absolute => ', 'amount => ', formik.values.amount, 'amountcfdi => ', dataCFDI?.amount);
         showToastMessageError('El importe ingresado no coincide con el del CFDI!!');
         return false;
       }
     }
     
     if(startDate.substring(0, 10) !== dataCFDI?.date.substring(0, 10)){
-      // console.log('date => ', startDate.substring(0, 10), 'datecfdi => ', dataCFDI?.date.substring(0, 10));
       showToastMessageError('La fecha ingresada no coincide con la del CFDI!!');
       return false;
     }
     if(formik.values.taxFolio !== dataCFDI.taxFolio){
-      // console.log('tax => ', formik.values.taxFolio, 'taxcfdi => ', dataCFDI?.taxFolio);
       showToastMessageError('El folio fiscal ingresado no coincide con el del CFDI!!');
       return false;
     }
@@ -597,13 +589,11 @@ export default function DataStepper({token, user, handleUpdateCategory}:
 
   const handleTypeCfdi = (value: string) => {
     handleTypeCategoryCFDI(value);
-    // console.log('value type cfdi => ', value);
     setTypeCFDIS(value);
   }
 
   const handleCfdirelations = (value: string) => {
     setCFDISrelations(value);
-    // console.log('value cfdi relations => ', value);
   }
 
   const view = (

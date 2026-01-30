@@ -2,7 +2,6 @@ import { IEstimateProject, TableEstimatesProject, IConceptEstimate, ITableConcep
 
 export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
   const table: TableEstimatesProject[] = [];
-  // console.log('tabla estimates => ', estimates);
   estimates.map((estimate, index:number) => {
     table.push({
       id: estimate._id,
@@ -28,7 +27,6 @@ export function EstimatesDataToEstimatesTable(estimates:IEstimateProject[]){
 
 export function EstimatesWitoutInvoiceDataToEstimatesTable(estimates:IEstimateMin[]){
   const table: TableEstimatesProject[] = [];
-  // console.log('tabla estimates => ', estimates);
   estimates.map((estimate, index:number) => {
     table.push({
       id: estimate._id,

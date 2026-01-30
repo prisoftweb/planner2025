@@ -66,12 +66,10 @@ export default function AddAddressDataCompany({handleIndex, company, user}:
       }
       const res = await updateCompany(' ', data, company._id);
       if(res===200){
-        // console.log('res 201');
         showToastMessage('Compania actualizada satisfactoriamente!!!');
         setCookie('user', user);
         window.location.replace('/workspace')
       }else{
-        // console.log('res else => ');
         refRequest.current = true;
         showToastMessageError(res);
       }

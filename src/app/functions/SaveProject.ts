@@ -180,9 +180,6 @@ export function ProjectDataToTableDataWithUtilitiesMin(projects:ProjectMin[],
       cond = '#f00';
     }
 
-    // console.log('projects min => ', projects);
-    // console.log('prj => ', project, ' guar => ', project.hasguaranteefund, ' char => ', project.hasamountChargeOff, ' tax => ', project.includesTaxes);
-
     table.push({
       amount: project.amount,
       category: project.category?.name || 'Sin Categoria',
@@ -227,7 +224,7 @@ export function ProjectEstimateDataToTableDataMin(projects:IProjectWithEstimateM
     }else{
       cond = '#f00';
     }
-// console.log('project => ', project);
+
     table.push({
       amount: project.amount,
       category: project?.projectInfoStatusInfo?.name || 'Sin categoria',
@@ -343,8 +340,6 @@ export function BudgetDataToTableCostCenter(budget:FullBudget){
 export function ParseProjectToOneProjectMin(value: Project){
   try {
     const p = value.progress?.length > 0? value.progress[value.progress.length -1].progress: 0 || 0;
-    // console.log('p => ', p);
-    console.log('value proyect update => ', value);
     const projMin: OneProjectMin = {
       _id: value._id,
       account: value.account,
@@ -370,7 +365,6 @@ export function ParseProjectToOneProjectMin(value: Project){
     }
     return projMin;
   } catch (error) {
-    console.log('errpr => ', error);
     return "Error al actualizar proyecto..."
   }
 }
@@ -499,13 +493,9 @@ export function getTypeFiles(expense:ICostsByProject) {
         || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png')
         || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a'){
           typeFiles.push('pdf');
-          //console.log('aqui entro => ', f);
-          //tiene factura
       }else{
         if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
           typeFiles.push('xml');
-          //console.log('aqui entro => ', f);
-          //tiene xml    
         }
       }
     });

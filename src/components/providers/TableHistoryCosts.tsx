@@ -9,6 +9,9 @@ import { IoAlert } from "react-icons/io5"; // No hay archivo
 import { HistoryExpensesTable } from "@/interfaces/Providers";
 import FilteringExpensesProvider from "./FilteredExpensesHistoryProvider";
 import ContainerSideNav from "../ContainerSideNav";
+import { Tooltip } from "@nextui-org/react";
+import { IoIosLink } from "react-icons/io";
+import { propsTooltip } from "@/libs/animations";
 
 type Props = {
   data:HistoryExpensesTable[], 
@@ -75,6 +78,14 @@ export default function TableHistoryCosts({data, token, expenses,
             {row.original.archivos.includes('pdf') && <BsFileEarmarkPdf className="w-6 h-6 text-green-500" />}
             {row.original.archivos.includes('none') && <IoAlert className="w-6 h-6 text-red-500" />}
             <div className={`${row.original.isPaid? 'bg-green-500': 'bg-red-500'} w-3 h-3 rounded-full`}></div>
+            {row.original.isCfdisRelations && (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='CFDI relacionado' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <span>
+                  <IoIosLink className="w-6 h-6 text-green-500 hover:bg-blue-100" />
+                </span>
+              </Tooltip>
+            )}
           </div>
         </div>
       ),
@@ -209,8 +220,6 @@ export default function TableHistoryCosts({data, token, expenses,
     folio : false, 
     "folio fiscal" : false,
   }
-
-  console.log('gastos => ', data);
 
   const view = <Table columns={columns} data={data} selectFunction={handleExpensesSelected}
                 placeH="Buscar gasto.." typeTable="costProvider" initialColumns={initialVisibilityColumns} />

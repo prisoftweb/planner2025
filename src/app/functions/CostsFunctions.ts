@@ -131,13 +131,9 @@ export function getTypeFiles(expense:Expense) {
         || f.types.includes('PNG') || f.types.includes('pdf') || f.types === 'a' 
         || f.types.includes('peg') || f.types.includes('PEG')){
           typeFiles.push('pdf');
-          //console.log('aqui entro => ', f);
-          //tiene factura
       }else{
         if(f.types.includes('xml') || f.types.includes('XML') || f.types === 't'){
           typeFiles.push('xml');
-          //console.log('aqui entro => ', f);
-          //tiene xml    
         }
       }
     });

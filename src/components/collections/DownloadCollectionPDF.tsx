@@ -7,8 +7,6 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
 
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  // console.log('total collections => ', totalCollections);
-
   return(
     <Document>
       <Page>

@@ -16,7 +16,7 @@ export const LineChartComponent = ({dataProjectsTop, colors}:{dataProjectsTop: O
     valueFormatter={(number: number) =>
       `$${Intl.NumberFormat("us").format(number).toString()}`
     }
-    onValueChange={(v) => console.log(v)}
+    // onValueChange={(v) => console.log(v)}
     yAxisWidth={76}
   />
 )
@@ -31,7 +31,7 @@ export const LineChartProvidersComponent = ({dataProjectsTop, colors}:{dataProje
     valueFormatter={(number: number) =>
       `$${Intl.NumberFormat("us").format(number).toString()}`
     }
-    onValueChange={(v) => console.log(v)}
+    // onValueChange={(v) => console.log(v)}
     // yAxisWidth={76}
   />
 )

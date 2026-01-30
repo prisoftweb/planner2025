@@ -47,8 +47,6 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
         showToastMessageError(res);
         showToastMessageError('Error al actualizar la tabla!!!');
       }else{
-        console.log('role => ', rol);
-        console.log('res proyects => ', res);
         setProjects(res);
         setIsFilter(false);
       }

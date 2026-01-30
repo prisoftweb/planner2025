@@ -81,8 +81,6 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
     }
   }
 
-  console.log('amount => ', amount);
-
   return (
     <div>
       {showDispersion && (
@@ -125,7 +123,6 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
                       focus:border-slate-700 outline-0"
             // onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
             onChange={(value) => {try {
-              console.log('value => ', value.target.value.replace(/[$,]/g, ""));
               setAmount(value.target.value.replace(/[$,]/g, "") || '0');
             } catch (error) {
               setAmount('0');

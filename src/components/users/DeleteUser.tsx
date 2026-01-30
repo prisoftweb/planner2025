@@ -33,7 +33,6 @@ export default function DeleteUser({token, user} : {token : string, user:User}){
                   showToastMessageError('El usuario no pudo ser eliminado..');
                 }
               } catch (error) {
-                console.log('Error al eliminar usuario');
               }
             break;
           }

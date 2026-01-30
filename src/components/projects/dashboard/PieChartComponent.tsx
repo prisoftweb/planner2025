@@ -79,8 +79,6 @@ export default function PieChartComponent({data, colors, categories, category}:
     const categoryPayload = payload?.[0];
     if (!categoryPayload) return null;
 
-    // console.log('categorypayload => ', categoryPayload);
-
     return (
       <div className="w-72 rounded-tremor-default border border-tremor-border p-2 
           text-tremor-default shadow-tremor-dropdown bg-slate-600 z-50">

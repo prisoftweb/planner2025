@@ -47,8 +47,6 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
 
   const pdfFile = files.find(f => f.types.includes('pdf') || f.types.includes('PDF') || f.types.includes('jpg') || f.types.includes('JPG') || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png') || f.types.includes('PNG'));
 
-  // console.log('expense => ', expense);
-  
   const isadvanceapp= expense.costocenter.concept._id==="6691a5f9c14942310b52ac0e";
 
   const view = (

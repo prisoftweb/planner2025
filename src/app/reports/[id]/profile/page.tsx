@@ -69,14 +69,10 @@ export default async function Page({ params }: { params: { id: string }}){
 
   node = nodes[0];
 
-  // console.log('report dept => ', report.department);
-  // console.log('user dept => ', user.department);
-
   const watched=(typeof(user.department)!=='string'? report.department.id===user.department.id : report.department.id===user.department);
 
   if(!report.wached && node != null && watched){
     try {
-      // console.log('watched true => ');
       const data = {wached: true};
       const res = await updateReport(token, params.id, data);
       if(typeof(res)==='string'){
@@ -107,9 +103,6 @@ export default async function Page({ params }: { params: { id: string }}){
         }]
       };
 
-      // console.log('data to insert in report viewer => ', data);
-      // console.log('node r => ', node);
-      // console.log('last moment => ', report?.moves[report?.moves?.length-1]);
       const res = await insertConditionInReportViewer(token, report._id, data);
       if(res !== 200){
         return(

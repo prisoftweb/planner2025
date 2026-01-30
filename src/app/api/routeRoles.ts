@@ -17,7 +17,6 @@ export async function getRoles(auth_token:string) {
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.response?.data.message || error.message;
     }
   }
@@ -34,7 +33,6 @@ export async function getRolesLV(auth_token:string) {
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.response?.data.message || error.message;
     }
   }
@@ -51,8 +49,6 @@ export async function getRole(auth_token:string, id:string) {
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
-      //console.log(error.response?.data);
-      //return error.message;
       return error.response?.data.message? error.response?.data.message : error.message; 
     }
     return 'Error al obtener rol';
@@ -80,7 +76,6 @@ export async function createRole(auth_token:string, data:NewRole, idTree:string)
     return 'Error al crear rol!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al crear rol!!';
@@ -116,7 +111,6 @@ export async function createResource(auth_token:string, data:NewRole) {
     return 'Error al crear ruta!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al crear ruta!!';
@@ -134,7 +128,6 @@ export async function getResources(auth_token:string) {
     return 'Error al consultar recursos!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al consultar recursos!!!';
@@ -152,7 +145,6 @@ export async function getRoutes(auth_token:string) {
     return 'Error al consultar rutas!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al consultar rutas!!!';
@@ -171,7 +163,6 @@ export async function createRoute(auth_token:string, data:NewRole) {
     return 'Error al crear ruta!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al crear ruta!!';
@@ -189,7 +180,6 @@ export async function getComponents(auth_token:string) {
     return 'Error al consultar componentes!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al consultar componentes!!!';
@@ -208,7 +198,6 @@ export async function createComponent(auth_token:string, data:NewRole) {
     return 'Error al crear componente!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al crear componente!!';
@@ -226,7 +215,6 @@ export async function getTrees(auth_token:string) {
     return 'Error al consultar arboles!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al consultar arboles!!!';
@@ -244,7 +232,6 @@ export async function getTree(auth_token:string, id:string) {
     return 'Error al consultar arbol!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al consultar arbol!!!';
@@ -263,7 +250,6 @@ export async function updateResource(auth_token:string, id:string, data:Object) 
     return 'Error al actualizar recurso!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al actualizar recurso!!';
@@ -282,7 +268,6 @@ export async function updateRoute(auth_token:string, id:string, data:Object) {
     return 'Error al actualizar ruta!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al actualizar ruta!!';
@@ -301,7 +286,6 @@ export async function updateComponent(auth_token:string, id:string, data:Object)
     return 'Error al actualizar componente!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al actualizar componente!!';
@@ -394,7 +378,6 @@ export async function updateStatusComponentTree(auth_token:string, idT:string, i
     return 'Error al actualizar status!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al actualizar status!!';
@@ -414,7 +397,6 @@ export async function updateAllComponentsRouteTree(auth_token:string, idT:string
     return 'Error al actualizar permisos!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
       return error.message;
     }
     return 'Ocurrio un error al actualizar permisos!!';
@@ -424,9 +406,6 @@ export async function updateAllComponentsRouteTree(auth_token:string, idT:string
 export async function updatePermissionResourceTree(auth_token:string, idT:string, idRes:string, data:Object) {
   const url = `/trees/updateResourcePermissionInTree/${idT}/${idRes}`;
   try {
-    console.log(axiosInstance.getUri());
-    console.log(url);
-    console.log(JSON.stringify(data));
     const res = await axiosInstance.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -437,8 +416,6 @@ export async function updatePermissionResourceTree(auth_token:string, idT:string
     return 'Error al actualizar permisos!!';
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log(error.response?.data);
-      console.log(error);
       return error.message;
     }
     return 'Ocurrio un error al actualizar permisos!!';

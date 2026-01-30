@@ -43,7 +43,6 @@ export default function RemoveCompanyInWorkSpace({token, idWs, idComp, name, rem
                   showToastMessageError(`${name} no pudo ser eliminado..`);
                 }
               } catch (error) {
-                console.log('Error al eliminar');
               }
             break;
           }

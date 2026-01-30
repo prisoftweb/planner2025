@@ -228,7 +228,6 @@ export const useNewExpense = create<NewExpenseState & Actions & ProjectState
     haveTaxExempt: value,
   })),
   updateExpensesTable: (value:Expense[]) => {
-    console.log('update expenses table => ', value);
     set(state => ({
       ...state,
       expensesTable: value,

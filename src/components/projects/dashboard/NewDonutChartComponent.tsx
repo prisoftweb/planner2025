@@ -10,16 +10,12 @@ export default function NewDonutChartComponent({data}: {data: DonutChartJS}) {
 
   const ref = useRef();
 
-  console.log('dat cahrt clia => ', data);
-
   return <Doughnut ref={ref} data={data} width={3} height={3} />
 }
 
 export function DonutChartComponentWithDescription({data, descriptions}: {data: DonutChartJS, descriptions:string[]}) {
 
   const ref = useRef();
-
-  console.log('dat cahrt clia => ', data);
 
   const options = {
     plugins: {

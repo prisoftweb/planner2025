@@ -159,8 +159,6 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
     categoriesPending.push(prj.provider);
   });
 
-  // console.log('info cards => ', pendingPaymentProv);
-
   return (
     <>
       <div className="flex justify-end">
@@ -251,7 +249,7 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
 }
 
 export function ListCardPendingPaymentProviders({data}: {data: ITotalCostPendingPaymentByProviderEstatusMIN[]}){
-  // console.log('provs list card => ', data);
+  
   return(
     <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
       <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-149px)]

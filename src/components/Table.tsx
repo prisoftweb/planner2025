@@ -67,7 +67,6 @@ export default function Table({data, columns, placeH, typeTable='',
   }, [search]);
 
   useEffect(() => {
-    // console.log(table.getSelectedRowModel().flatRows.map((row) => row.original))
     selectFunction(table.getSelectedRowModel().flatRows.map((row) => row.original));
   }, [rowSelection]);
 
@@ -92,10 +91,7 @@ export default function Table({data, columns, placeH, typeTable='',
     onGlobalFilterChange: setFiltering,
     onColumnVisibilityChange: setColumnVisibility,
   })
-  // console.log('data table  => ', data);
-  // console.log('sort => ', search);
-  // console.log('sorting => ', table.getState().sorting);
-
+  
   let total: number = 0;
   let labelJSX : JSX.Element = <div></div>;
   if(typeTable === 'cost'){
@@ -312,12 +308,8 @@ export default function Table({data, columns, placeH, typeTable='',
                   let totalSeleccionados: number = 0;
                   let subtotSel=0;
                   let vatInvSel=0;
-                  // table.getSelectedRowModel().flatRows.map((inv:any) => totalSeleccionados += inv.original.amount);
-                  // console.log('table selected => ', table.getSelectedRowModel().flatRows);
                   table.getSelectedRowModel().flatRows.forEach((inv:any) => {
                     totalSeleccionados += inv.original.amount;
-                    // console.log('subtotsel => ', subtotSel, ' invsubttot => ', inv.original.subtotal);
-                    // console.log('ivasel => ', vatInvSel, ' invvat => ', inv.original.vat);
                     subtotSel+= inv.original.subtotal?? 0;
                     vatInvSel+= inv.original.vat?? 0;
                   })
@@ -391,7 +383,6 @@ export default function Table({data, columns, placeH, typeTable='',
                   }
                 }else{
                   if(typeTable==='costReport'){
-                    // console.log('data cost table => ', data);
                     data.map((invoice:CostsTable) => total += Number(invoice.Total.replace(/[$, M, X, N,]/g, "")));
                     const t = CurrencyFormatter({
                       currency: 'MXN',
@@ -490,7 +481,6 @@ export default function Table({data, columns, placeH, typeTable='',
           {labelJSX}
           <div className="flex justify-end">
             <button type="button" onClick={() => {
-                console.log(table.getPreSelectedRowModel());
                 setShowColumns(!showColumns);
               }}
             >
@@ -508,7 +498,7 @@ export default function Table({data, columns, placeH, typeTable='',
                             checked: column.getIsVisible(),
                             onChange: column.getToggleVisibilityHandler(),
                           }}
-                          onClick={() => console.log('clic')}
+                          onClick={() => console.log('')}
                         />{' '}
                         {column.id}
                       </label>

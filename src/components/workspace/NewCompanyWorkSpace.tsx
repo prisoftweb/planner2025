@@ -78,7 +78,6 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
           }else{
             handleCompany(res);
             showToastMessage('Compania creada satisfactoriamente!!!');
-            console.log('new company ws => ', res);
             const data={
               companys: 
               [
@@ -92,7 +91,6 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
             if(typeof(resCompany)==='string'){
               showToastMessageError(resCompany);
             }else{
-              console.log('res insert => ', resCompany);
               showToastMessage("Compañia agregada satisfactoriamente al espacio de trabajo!!!");
             }
             handleIndex(4);
@@ -118,7 +116,6 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
           }else{
             handleCompany(res);
             showToastMessage('Compania creada satisfactoriamente!!!');
-            console.log('new company ws => ', res);
             const data={
               companys: 
               [
@@ -133,7 +130,6 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
             if(typeof(resCompany)==='string'){
               showToastMessageError(resCompany);
             }else{
-              console.log('res insert => ', resCompany);
               showToastMessage("Compañia agregada satisfactoriamente al espacio de trabajo!!!");
             }
             handleIndex(4);

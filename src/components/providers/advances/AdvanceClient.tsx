@@ -46,13 +46,6 @@ export default function AdvanceClient({token, user, id, provider, advance}:
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  // const files = expense.files;
-
-  // const pdfFile = files.find(f => f.types.includes('pdf') || f.types.includes('PDF') || f.types.includes('jpg') || f.types.includes('JPG') || f.types.includes('jpeg') || f.types.includes('JPEG') || f.types.includes('png') || f.types.includes('PNG'));
-
-  // const isadvanceapp= expense.costocenter.concept._id==="6691a5f9c14942310b52ac0e";
-
-  // console.log('advance => ', JSON.stringify(advance));
   const view = (
     opt===1? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3 h-screen" 
                           style={{borderColor:'#F8FAFC'}}>

@@ -583,7 +583,6 @@ export default function TableProjects({data, token, projects, optCategories,
             projs=prj1;
           }else{
             projs=[...prj1, ...prj2];
-            console.log('donde debe => ', projs);
           }
         }
       }else{

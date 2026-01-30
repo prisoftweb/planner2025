@@ -151,7 +151,6 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
             ]
           }
           const resINsert=await insertCompanyInWorkSpace(token, idWS, data);
-          console.log('res in => ', resINsert);
           if(typeof(resINsert)==='string'){
             showToastMessageError(resINsert);
           }
@@ -210,7 +209,6 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
             ]
           }
           const resINsert=await insertCompanyInWorkSpace(token, idWS, data);
-          console.log('res in => ', resINsert);
           if(typeof(resINsert)==='string'){
             showToastMessageError(resINsert);
           }
@@ -258,7 +256,6 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
           ]
         }
         const resINsert=await insertCompanyInWorkSpace(token, idWS, data);
-        console.log('res in => ', resINsert);
         if(typeof(resINsert)==='string'){
           showToastMessageError(resINsert);
         }else{

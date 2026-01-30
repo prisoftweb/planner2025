@@ -90,7 +90,6 @@ export function DonutStatusChartComponent({data, colors, categories, category, s
     const categoryPayload = payload?.[0];
     if (!categoryPayload) return null;
 
-    console.log('category payload => ', categoryPayload.payload.payload);
     return (
       <div className="w-72 rounded-tremor-default border border-tremor-border p-2 
           text-tremor-default shadow-tremor-dropdown bg-slate-600 z-50">
@@ -126,9 +125,6 @@ export function DonutStatusChartComponent({data, colors, categories, category, s
       </div>
     );
   };
- 
-  console.log('data => ', data);
-  console.log('categories => ', categories);
 
   return (
     <>
@@ -204,7 +200,6 @@ export function DonutPendingPaymentProvidersChartComponent({data, colors, catego
     const categoryPayload = payload?.[0];
     if (!categoryPayload) return null;
 
-    // console.log('category payload => ', categoryPayload.payload.payload);
     return (
       <div className="w-72 rounded-tremor-default border border-tremor-border p-2 
           text-tremor-default shadow-tremor-dropdown bg-slate-600 z-50">

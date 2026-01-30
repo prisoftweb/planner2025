@@ -394,7 +394,6 @@ export default function NewQuotation({showForm, token, usr, updateQuotations, sh
                   value={selOpt}
                   options={optContacts}
                   onChange={(e:any) => { 
-                    console.log('value select => ', e);
                     setContact(e.value);
                     setSelOpt(e);
                   }} 

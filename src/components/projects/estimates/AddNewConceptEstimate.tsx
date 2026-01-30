@@ -96,7 +96,6 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
     let cons: IConceptEstimateMin[];
     try {
       cons = await getConceptsMin(token);
-      console.log('res concepts => ', cons);
       if(typeof(cons) === "string")
         showToastMessageError(cons);
       else{

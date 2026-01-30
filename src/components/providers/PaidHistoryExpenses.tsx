@@ -29,8 +29,6 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
 
-  // console.log('data table paid history => ', dataTable);
-
   const [costsInPayment, setCostInPayment] = useState<CostsPaymentTable[]>([]);
 
   const [paymentPlugin, setPaymentPlugin] = useState<string>('');

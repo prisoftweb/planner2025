@@ -35,7 +35,6 @@ export default function ContainerStepper({token, id, user}: {token:string, id:st
       }
     }, [state.indexstepper])
   } catch (error) {
-    console.log(error);
   }
 
   return(

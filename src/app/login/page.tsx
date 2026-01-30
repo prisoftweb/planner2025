@@ -34,14 +34,11 @@ export default function Login({}) {
         if(res.status === 'success') {
           const dataToStore = { numRows: '10'};
           localStorage.setItem('myData', JSON.stringify(dataToStore));
-          
-          //console.log('res login => ', res);
 
           //const resPermission = getTree(res.token, res.data.user.tree._id);
           try {
             let tree: Tree = await getTree(res.token, '66bbc98153827ab3d270987a');
             
-            console.log('res tree => ', tree);
             if(typeof(tree)==='string'){
               showToastMessage(tree);
             }else{
@@ -51,7 +48,6 @@ export default function Login({}) {
               const {_id } = res.data.user;
               setCookie('id', _id);
               tree.resources.map((reso) => {
-              console.log(reso.resource.name, ' => ', JSON.stringify(reso).length);
               setCookie(reso.resource.name, reso);
               });
 
@@ -157,7 +153,6 @@ export default function Login({}) {
                 "id": "660ef649f7bd2d031cae7115"
             }
 
-              console.log('cleints cook => ', JSON.stringify(clientCook));
               setCookie('clients', clientCook);
 
               setTimeout(() => {                
