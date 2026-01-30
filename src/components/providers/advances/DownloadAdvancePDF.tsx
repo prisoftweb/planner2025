@@ -42,22 +42,22 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
               </View>
 
               <View>
-                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                  <Text style={{fontSize:'10px', color:'gray'}}>Proveedor: </Text>
+                <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                  {/* <Text style={{fontSize:'10px', color:'gray'}}>Proveedor: </Text> */}
                   <Text style={{fontSize:'10px'}}>{provider.name}</Text>
                 </View>
 
-                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                  <Text style={{fontSize:'10px', color:'gray'}}>RFC: </Text>
+                <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                  {/* <Text style={{fontSize:'10px', color:'gray'}}>RFC: </Text> */}
                   <Text style={{fontSize:'10px'}}>{provider.rfc}</Text>
                 </View>
 
-                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                   <Text style={{fontSize:'10px', color:'gray'}}>Dias de credito: </Text>
                   <Text style={{fontSize:'10px'}}>{provider.tradeline?.creditdays?? 0}</Text>
                 </View>
 
-                <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+                <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                   <Text style={{fontSize:'10px', color:'gray'}}>Linea de credito: </Text>
                   <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
                     currency: 'MXN',
@@ -79,23 +79,24 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
 
               <Text style={{fontSize:'13px'}}>ESTADO DE CUENTA DE ANTICIPO</Text>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+              <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Folio: </Text>
                 <Text style={{fontSize:'10px'}}>{advance.folio}</Text>
               </View>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+              <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Fecha: </Text>
                 <Text style={{fontSize:'10px'}}>{advance.date?.substring(0, 10)}</Text>
               </View>
 
-              <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
+              <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Facturas Relacionadas: </Text>
                 <Text style={{fontSize:'10px'}}>
-                  {CurrencyFormatter({
+                  {costsRelAdvance.length}
+                  {/* {CurrencyFormatter({
                     currency: 'MXN',
-                    value: 0
-                  })}
+                    value: costsRelAdvance.length
+                  })} */}
                 </Text>
               </View>
 
@@ -121,10 +122,10 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                 </View>
               </View> */}
 
-              <View style={{border:'1px solid gray', marginTop: '7px'}}>
-                <View style={{display:'flex', flexDirection:'row', border:'1px solid gray'}}>
-                  <Text style={{backgroundColor:'green', color:'white', width:'110px', textAlign:'center', fontSize:'10px'}}>Anticipo</Text>
-                  <Text style={{width:'100%', textAlign:'center', color:'black', fontSize:'10px', backgroundColor:'#D3D3D3'}}>
+              <View style={{border:'1px solid gray'}}>
+                <View style={{display:'flex', flexDirection:'row'}}>
+                  <Text style={{backgroundColor:'green', color:'white', width:'110px', textAlign:'center', fontSize:'13px', padding:'3px'}}>Anticipo</Text>
+                  <Text style={{width:'100%', textAlign:'center', color:'black', fontSize:'13px', backgroundColor:'#D3D3D3', padding:'3px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
                       // value: total || 0
@@ -132,8 +133,8 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                     })}
                   </Text>
                 </View>
-                <View style={{textAlign:'center', border:'1px solid gray', padding:'3px'}}>
-                  <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
+                <View style={{textAlign:'center', padding:'5px'}}>
+                  <Text style={{textAlign:'center', color:'gray', fontSize:'14px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
                       // value: total || 0
@@ -159,12 +160,12 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
 
           {costsRelAdvance.map((c) => (
             <View key={c._id} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{c.folio}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{c.project.title}</Text>
-              <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{c.description} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{c.date?.substring(0, 10)} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{c.costocenter.concept.name}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>{CurrencyFormatter({
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.folio}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.project.title}</Text>
+              <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.description} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date?.substring(0, 10)} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.costocenter.concept.name}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: c.cost.total
               })}</Text>
@@ -186,14 +187,14 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
             <Text style={{fontSize:'10px', color:'gray'}}>Total aplicado: </Text>
             <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
               currency: 'MXN',
-              value: 0
+              value: appAdvance
             })}</Text>
           </View>
 
           <View style={{marginTop:'5px'}}>
-            <Text style={{fontSize:'10px', width: '250px'}}>Notas:</Text>
+            <Text style={{fontSize:'10px'}}>Notas:</Text>
             {advance.advancesToSuppliers?.notes?.map((n, index:number) => (
-              <Text key={index} style={{fontSize:'10px', color:'gray', width: '250px'}}>{n}</Text>
+              <Text key={index} style={{fontSize:'10px', color:'gray'}}>{n}</Text>
             ))}
           </View>
 

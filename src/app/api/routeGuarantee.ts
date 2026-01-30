@@ -85,7 +85,6 @@ export async function getAmountTotalGuaranteesByDateAndStatus(token: string, dat
         'Content-Type': 'application/json',
       },
     });
-    // console.log('res status => ', response);
     if (response.status === 200) {
       return response.data.data.stats;
     }
@@ -159,15 +158,12 @@ export async function getGuaranteesGroupByYear(token: string, dateI:string, date
     condition: statuses
   };
   try {
-    console.log('url => ', url);
-    console.log('data => ', JSON.stringify(data));
     const response = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
-    console.log('response => ', response);
     if (response.status === 200) {
       return response.data.data.resultado;
     }
@@ -262,9 +258,6 @@ export async function getGuaranteesResumeByProjectMin(token: string, dateI:strin
     condition: statuses
   };
   try {
-    console.log('url => ', url);
-    console.log('data => ', JSON.stringify(data));
-    console.log('token => ', token);
     const response = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -274,10 +267,8 @@ export async function getGuaranteesResumeByProjectMin(token: string, dateI:strin
     if (response.status === 200) {
       return response.data.data.stats;
     }
-    console.log('return guaranteesresumebyprojectmin => ', response);
     return 'Error: No se pudo obtener la información de las garantías';
   } catch (error) {
-    console.log('error guaranteesresumebyprojectmin => ', error);
     if (axios.isAxiosError(error)) {
       return error.response?.data || 'Error: No se pudo obtener la información de las garantías';
     }

@@ -202,8 +202,6 @@ export async function getAllProjectsWithClientLV(auth_token:string, client:strin
 export async function CreateProject(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`;
   try {
-    console.log(url);
-    console.log(JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -277,8 +275,6 @@ export async function GetProjectMin(auth_token:string, id:string) {
 export async function UpdateProject(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/${id}`;
   try {
-    // console.log(url);
-    // console.log(JSON.stringify(data))
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -368,7 +364,6 @@ export async function getDashboardProjectsAmount(auth_token:string, dateStart: s
         'Content-Type': 'application/json'
       },
     })
-    // console.log('res dashboar amount proyects => ', res);
     if(res.status === 200) {
       if(res.data.data.result){
         return res.data.data.result;
@@ -413,7 +408,6 @@ export async function getDashboardListProjects(auth_token:string, dateStart: str
 
 export async function getDashboardProjectsByClient(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsGROUPBYCLIENT/${dateStart}/${dateEnd}`;
-  // console.log('url > ', url);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -427,9 +421,7 @@ export async function getDashboardProjectsByClient(auth_token:string, dateStart:
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       }, 
-      // data: data
     })
-    // console.log('res route => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -476,17 +468,13 @@ export async function getDashboardProjectsByESTATUS(auth_token:string, dateStart
   const data = {
     project: prj.substring(1)
   }
-  // console.log('url estatus => ', url);
-  // console.log('data estatus => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    // console.log('res status => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -563,9 +551,6 @@ export async function getLenghtProjectsEvaluacion(auth_token:string) {
 
 export async function getDashboardByProjectAndType(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByProjectsAndTypes/${dateStart}/${dateEnd}`;
-  // console.log('url costs => ', url);
-  // console.log('date start costs => ', dateStart);
-  // console.log('proyects costs => ', projects);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -579,18 +564,11 @@ export async function getDashboardByProjectAndType(auth_token:string, dateStart:
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    // console.log('res costs => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    // console.log('catch costs => ', error);
     return [];
-    // if(axios.isAxiosError(error)){
-    //   return error.response?.data.message || error.message
-    // }
-    // return 'Error al consultar Costos agrupados por proyecto y tipos!!';
   }
 }
 
@@ -609,11 +587,7 @@ export async function getDashboardListProjectsNotComplete(auth_token:string, dat
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    // console.log(url);
-    // console.log(res);
-    // console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -626,9 +600,6 @@ export async function getDashboardListProjectsNotComplete(auth_token:string, dat
 
 export async function getDashboardListProjectsByDate(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsLISTByDate/${dateStart}/${dateEnd}`;
-  //console.log('url => ', url);
-  //console.log('date start => ', dateStart);
-  //console.log('projects => ', projects);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -642,16 +613,10 @@ export async function getDashboardListProjectsByDate(auth_token:string, dateStar
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    //console.log('data primer grafico => ', JSON.stringify(data));
-    //console.log('este no debe venir => ', projects);
-    //console.log('res => ', res);
-    //console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    //console.log('catch => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -668,17 +633,13 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
   const data = {
     project: prj.substring(1)
   }
-  console.log('url top10 => ', url);
-  console.log('data => ', data);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -688,21 +649,15 @@ export async function getDashboardListProjectsTop10(auth_token:string, dateStart
     return 'Error al consultar lista de proyectos top 10!!';
   }
 }
-// (/[$, M, X, N,]/g, "")
+
 export async function getDashboardProjectByBudgetControl(auth_token:string, id:string, anio:number) {
   const d = new Date(anio, 0, 1);
   const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
-  // console.log('d2 => ', new Date(d).toLocaleDateString());
-  // console.log('d fin => ', d_ini);
-
+  
   const d2 = new Date(anio, 11, 31);
-  // console.log('d2 => ', new Date(d2).toLocaleDateString());
   const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
-  // console.log('d fin => ', d_fin);
-
-  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/${d_ini}/${d_fin}`;
+  
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectByBudgetControl/${id}/2024-01-01/2025-02-28`;
-  // //console.log('url control presupuestal => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
@@ -710,11 +665,9 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
         'Content-Type': 'application/json'
       },
     })
-    // //console.log('res control pres => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    // //console.log('error control pres => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -724,7 +677,6 @@ export async function getDashboardProjectByBudgetControl(auth_token:string, id:s
 
 export async function getDashboardProjectCostoCenters(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostByProject-groupByCOSTOCENTERONLY/${id}`;
-  // console.log('url dashboard cc => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
@@ -770,14 +722,12 @@ export async function getDashboardProjectTotalCost(auth_token:string, dateStart:
   const data = {
     project: prj.substring(1)
   }
-  //console.log('url total cost => ',url);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
@@ -819,19 +769,15 @@ export async function getProjectsBudgeted(auth_token:string, dateStart: string, 
     project: prj.substring(1)
   }
   try {
-    // console.log('url presupuestado => ', url);
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    // console.log('res presupuestado => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    // console.log('error presupuestado => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -849,16 +795,12 @@ export async function getProjectsSpent(auth_token:string, dateStart: string, dat
     project: prj.substring(1)
   }
   try {
-    // console.log('url => ', url);
-    // console.log('data => ', data);
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      //data: data
     })
-    // console.log('res data data => ', res.data.data);
     if(res.status === 200) return res.data.data.stats0;
     return res.statusText;
   } catch (error) {
@@ -898,10 +840,6 @@ export async function getAllPaymentsProjects(auth_token:string, dateStart: strin
 
 export async function getProjectsControlBudgeted(auth_token:string, dateStart: string, dateEnd:string, projects: string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllsProjectsByBudgetControl/${dateStart}/${dateEnd}`;
-  //console.log('url control prsu =>', url);
-  //console.log('fecha ini => ', dateStart);
-  //console.log('fecha fin => ', dateEnd);
-  //console.log('proyectos => ', projects);
   let prj:string = '';
   projects.map(p => {
     prj+= ','+p;
@@ -909,22 +847,13 @@ export async function getProjectsControlBudgeted(auth_token:string, dateStart: s
   const data = {
     project: prj.substring(1)
   }
-  // const data = {
-  //   project: projects.length > 0? projects[0]: ''
-  // }
-  //console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: {
-      //   project: projects
-      //   // project: ['6628118dad51c39004cad07d']
-      // }
     })
-    // console.log('res control pres => ', res);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -981,7 +910,7 @@ export async function getProjectsForEstimatedByUser(auth_token:string, user:stri
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res start => ', res);
+    
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -1031,28 +960,20 @@ export async function getAllsProjectsMINAndNEConditionAndNEstimatesAndUser(auth_
 export async function getProjectContractualControl(auth_token:string, project:string) {
   const d = new Date(2025, 0, 1);
   const d_ini = new Date(d).toLocaleDateString().replaceAll(/['/']/g, "-");
-  // console.log('d2 => ', new Date(d).toLocaleDateString());
-  // console.log('d fin => ', d_ini);
-
+  
   const d2 = new Date(2025, 11, 31);
-  // console.log('d2 => ', new Date(d2).toLocaleDateString());
   const d_fin = new Date(d2).toLocaleDateString().replaceAll(/['/']/g, "-");
-  // console.log('d fin => ', d_fin);
-
-  // const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/${d_ini}/${d_fin}`;
+  
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getProjectContractualControl/${project}/2024-01-01/2025-02-28`;
-  console.log('url control contractual => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     })
-    console.log('res control contractual => ', res);
     if(res.status === 200) return res.data.data.stats[0];
     return res.statusText;
   } catch (error) {
-    console.log('error control contractual => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }
@@ -1135,8 +1056,6 @@ export async function GetCostsAccumByProjectMin(auth_token:string) {
 export async function UpdateGuaranteeFoundProject(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/updateProjectAndManyGuaranteeFunds/${id}`;
   try {
-    // console.log(url);
-    // console.log(JSON.stringify(data))
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -1156,8 +1075,6 @@ export async function UpdateGuaranteeFoundProject(auth_token:string, id:string, 
 export async function UpdatePaymentGuaranteeFoundProject(auth_token:string, id:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/updateProjectAndManyGuaranteeFundsScheduledPayment/${id}`;
   try {
-    // console.log(url);
-    // console.log(JSON.stringify(data))
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -1207,9 +1124,7 @@ export async function getDashboardProjectsByFeaturesGuaranteeFund(auth_token:str
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    // console.log('res status => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -1235,9 +1150,7 @@ export async function getDashboardProjectsByFeaturesAmountCharge(auth_token:stri
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    // console.log('res status => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -1263,9 +1176,7 @@ export async function getDashboardProjectsByFeaturesTaxes(auth_token:string, dat
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       },
-      // data: data
     })
-    // console.log('res status => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {

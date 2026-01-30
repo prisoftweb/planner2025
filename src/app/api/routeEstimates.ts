@@ -20,14 +20,12 @@ export async function getEstimatesByProject(auth_token:string, project: string) 
 
 export async function getEstimate(auth_token:string, id: string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/${id}`;
-  console.log('url estimate => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    console.log('res => ', res);
     if(res.status===200) return res.data.data.stats[0];
     return res.statusText;
   } catch (error) {
@@ -40,14 +38,12 @@ export async function getEstimate(auth_token:string, id: string) {
 
 export async function getEstimateMin(auth_token:string, id: string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getEstimateByIDMIN/${id}`;
-  console.log('url estimate min => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    console.log('res => ', res);
     if(res.status===200) return res.data.data.stats[0];
     return res.statusText;
   } catch (error) {
@@ -60,14 +56,12 @@ export async function getEstimateMin(auth_token:string, id: string) {
 
 export async function getEstimatesWithoutInvoiceMin(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllEstimatesWithoutInvoiceMIN`;
-  console.log('url estimate without min => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    console.log('res => ', res);
     if(res.status===200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
@@ -80,8 +74,6 @@ export async function getEstimatesWithoutInvoiceMin(auth_token:string) {
 
 export async function createEstimate(auth_token:string, data: Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates`;
-  console.log('url => ', url);
-  console.log('data new estimate => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -89,7 +81,6 @@ export async function createEstimate(auth_token:string, data: Object) {
         'Content-Type': 'application/json'
       }
     })
-    // if(res.status===200) return res.data.data.data;
     if(res.status===201) return res.status;
     return res.statusText;
   } catch (error) {
@@ -157,14 +148,12 @@ export async function getConceptsMin(auth_token:string) {
 
 export async function getAllConceptsEstimateMin(auth_token:string, estimate: string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllConceptsOfEstimateMIN/${estimate}`;
-  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    // console.log('res data => ', res);
     if(res.status===200) return res.data.data.resdata;
     return res.statusText;
   } catch (error) {
@@ -177,14 +166,12 @@ export async function getAllConceptsEstimateMin(auth_token:string, estimate: str
 
 export async function getAllConceptsDetailsByEstimateMin(auth_token:string, estimate: string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/getAllConceptsDetailsByEstimateMIN/${estimate}`;
-  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    console.log('res => ', res);
     if(res.status===200) return res.data.data.resdata;
     return res.statusText;
   } catch (error) {
@@ -236,7 +223,6 @@ export async function createConceptEstimate(auth_token:string, data: Object) {
 
 export async function insertPriceInConceptEstimate(auth_token:string, data: Object, idC:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/insertPricesInConcep/${idC}`;
-  console.log('price => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -244,8 +230,6 @@ export async function insertPriceInConceptEstimate(auth_token:string, data: Obje
         'Content-Type': 'application/json'
       }
     })
-    // if(res.status===200) return res.data.data.data;
-    console.log('insert price => ', res);
     if(res.status===201 || res.status===200) return res.status;
     return res.statusText;
   } catch (error) {
@@ -258,8 +242,6 @@ export async function insertPriceInConceptEstimate(auth_token:string, data: Obje
 
 export async function insertConceptInEstimate(auth_token:string, data: Object, idE:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/insertConceptsInEstimates/${idE}`;
-  console.log('url insert concept => ', url);
-  console.log('concept => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -267,8 +249,6 @@ export async function insertConceptInEstimate(auth_token:string, data: Object, i
         'Content-Type': 'application/json'
       }
     })
-    // if(res.status===200) return res.data.data.data;
-    console.log('insert concept => ', res);
     if(res.status===201 || res.status===200) return res.status;
     return res.statusText;
   } catch (error) {
@@ -281,10 +261,6 @@ export async function insertConceptInEstimate(auth_token:string, data: Object, i
 
 export async function deleteConceptInEstimate(idE:string, auth_token:string, totalEstimated:number) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/estimates/deleteConceptsInEstimates/${idE}`;
-  console.log('url delete concept => ', url);
-  console.log('data => ', {
-    totalEstimatedInConcept:totalEstimated
-  });
   try {
     const res = await axios.post(url, {
       totalEstimatedInConcept:totalEstimated
@@ -294,8 +270,6 @@ export async function deleteConceptInEstimate(idE:string, auth_token:string, tot
         'Content-Type': 'application/json'
       }
     })
-    // if(res.status===200) return res.data.data.data;
-    console.log('delete concept => ', res);
     if(res.status===204) return res.status;
     return res.statusText;
   } catch (error) {
@@ -352,8 +326,6 @@ export async function getTotalEstimatesByProjectMin(auth_token:string, project: 
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    // console.log('url => ', url);
-    // console.log('res estimated => ', res);
     if(res.status===200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {

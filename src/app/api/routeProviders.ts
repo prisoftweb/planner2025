@@ -71,7 +71,6 @@ export async function getProvider(id:string, auth_token:string) {
     if(axios.isAxiosError(error)){
       return error.message
     }else{
-      console.log(error);
       return 'Ocurrio un problema al consultar proveedor';
     }
   }
@@ -80,22 +79,18 @@ export async function getProvider(id:string, auth_token:string) {
 export async function getProviderMin(id:string, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers/getProviderMIN/${id}`;
 
-  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       'headers': {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    console.log('res => ', res.data.data.stats);
     if(res.status === 200) return res.data.data.stats;
       return res.statusText;
   } catch (error) {
-    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.message
     }else{
-      console.log(error);
       return 'Ocurrio un problema al consultar proveedor min';
     }
   }
@@ -117,7 +112,6 @@ export async function updateProvider(id:string, auth_token:string, data:Object) 
     if(axios.isAxiosError(error)){
       return error.message;
     }else{
-      console.log(typeof(error));
       return 'Ocurrio un error al actualizar proveedor';
     }
   }
@@ -137,7 +131,6 @@ export async function RemoveProvider(id:string, auth_token:string) {
     if(axios.isAxiosError(error)){
       return error.message;
     }else{
-      console.log(error);
       return 'Ocurrio un error al eliminar proveedor';
     }
   }
@@ -167,8 +160,6 @@ export async function createProvider(data:Object, auth_token:string) {
 export async function createNewProvider(data:Object, auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/providers`;
   
-  console.log('new provider => ', url);
-  console.log('data => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -176,7 +167,6 @@ export async function createNewProvider(data:Object, auth_token:string) {
         'Content-Type': 'Application/json',
       }
     })
-    console.log('res => ', res);
     if(res.status===201) return res.data.data.data;
       return res.statusText;
   } catch (error) {
@@ -203,8 +193,6 @@ export async function updateContactProvider(data:Object, id:string, auth_token:s
     if(axios.isAxiosError(error)){
       return error.message;
     }
-    console.log(typeof(error));
-    console.log(error);
     return 'Ocurrio un error al actulizar contacto del proveedor!!';
   }
 }
@@ -221,10 +209,8 @@ export async function GetCostsMIN(auth_token:string, id:string){
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -244,10 +230,8 @@ export async function GetCostsProviderMINWithoutPay(auth_token:string, id:string
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos sin pago!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos sin pago!!';
   }
 }
@@ -261,9 +245,7 @@ export async function getProviderByRFC(auth_token:string, prov: string){
       }
     })
     if(res.status===200){
-      console.log('res stats => ', res.data.data.stats);
       if(res.data.data.stats.length > 0){
-        console.log('res stats 0 => ', res.data.data.stats[0]);
         return res.data.data.stats[0]._id;
       }else{
         return 'No se encontro el proveedor!!';
@@ -272,11 +254,6 @@ export async function getProviderByRFC(auth_token:string, prov: string){
     return res.statusText;
   } catch (error) {
     return 'No se encontro el proveedor!!';
-    // if(axios.isAxiosError(error)){
-    //   return error.message;
-    // }else{
-    //   return 'Error al obtener proveedor';
-    // }
   }
 }
 
@@ -300,7 +277,6 @@ export async function getCostTOTALPendingPAYGroupByPROVIDER(id:string, auth_toke
     if(axios.isAxiosError(error)){
       return error.message;
     }else{
-      console.log(typeof(error));
       return 'Ocurrio un error al obtener costos pendientes de pago por proveedor';
     }
   }

@@ -26,15 +26,12 @@ export async function GetCostsMIN(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    //console.log('res', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -47,15 +44,12 @@ export async function getAllCostsByCondition(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    //console.log('res', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -68,15 +62,12 @@ export async function getAllCostsByConditionAndUser(auth_token:string, user:stri
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res by condition and user => ', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -89,15 +80,12 @@ export async function GetCostsByUserMIN(auth_token:string, user:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    //console.log('res', res);
     if(res.status===200) return res.data.data.stats
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -110,15 +98,12 @@ export async function getAllCostsByUserNormal(auth_token:string, user:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    //console.log('res', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -131,15 +116,12 @@ export async function getAllCostsByUserAdmin(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res cost by user admin => ', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -152,15 +134,12 @@ export async function getAllCostsAndNE3ConditionsMIN(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    // console.log('res cost by user admin => ', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      // console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    // console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -173,15 +152,12 @@ export async function GetCostsLV(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    //console.log('res', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -194,23 +170,18 @@ export async function GetCostsLVByCond(auth_token:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    //console.log('res', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
 
 export async function CreateCost(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs`;
-  //console.log(url);
-  //console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -218,7 +189,6 @@ export async function CreateCost(auth_token:string, data:Object) {
         'Content-Type': 'application/json'
       }
     });
-    //console.log(res);
     if(res.status === 201) return res.status;
     return res.statusText
   } catch (error) {
@@ -267,19 +237,16 @@ export async function GetCost(auth_token:string, id:string) {
 
 export async function GetCostMIN(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCost/${id}`;
-  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res => ', res);
     if(res.status===200) return res.data.data.data[0];
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('error => ', error);
       return error.response?.data.message || 'Error al consultar costo!!';
     }
     return 'Error al consultar informacion del costo costo!!';
@@ -289,15 +256,12 @@ export async function GetCostMIN(auth_token:string, id:string) {
 export async function UpdateCost(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/${id}`;
   try {
-    console.log('actualizar gasto => ', url);
-    console.log(JSON.stringify(data));
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       }
     });
-    console.log(res);
     if(res.status===200) return res.data.data.data;
     res.statusText;
   } catch (error) {
@@ -310,11 +274,6 @@ export async function UpdateCost(auth_token:string, id:string, data:Object) {
 
 export async function CreateCostWithFiles(auth_token:string, data:FormData) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/costWithFILES`;
-  // console.log(url);
-  // console.log('files => ', data.getAll('files'));
-  // console.log('types => ', data.getAll('types'));
-  //console.log(JSON.stringify(data));
-  console.log('formdata cost center => ', data.get('costocenter'));
   try {
     const res = await axios.post(url, data, {
       headers: {
@@ -322,7 +281,6 @@ export async function CreateCostWithFiles(auth_token:string, data:FormData) {
         'Content-Type': 'multipart/form-data',
       }
     });
-    console.log('res costo => ', res);
     if(res.status === 201) return res.status;
     return res.statusText
   } catch (error) {
@@ -363,7 +321,6 @@ export async function ADDNewFILE(auth_token:string, id:string, data:FormData) {
         'Content-Type': 'multipart/form-data',
       }
     })
-    //console.log('add new file => ', res.data.data.slider);
     if(res.status === 200) return res.data.data.slider;
     return res.statusText;
   } catch (error) {
@@ -438,12 +395,10 @@ export async function GetCostsGroupByProject(auth_token:string) {
     });
     
     if(res.status===200) {
-      //console.log('res route cost => ', res.data.data.resok);
       return res.data.data.resok;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por proyecto!!';
     }
@@ -461,12 +416,10 @@ export async function GetCostsGroupByType(auth_token:string) {
     });
     
     if(res.status===200) {
-      //console.log('res route cost => ', res.data.data.resok);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por tipo!!';
     }
@@ -484,12 +437,10 @@ export async function GetCostsGroupByCostoCenterConcept(auth_token:string) {
     });
     
     if(res.status===200) {
-      //console.log('res route cost concept => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
     }
@@ -507,12 +458,10 @@ export async function GetCostsGroupByCostoCenterCategory(auth_token:string) {
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
     }
@@ -530,12 +479,10 @@ export async function GetAllCostsGroupByProjectOnly(auth_token:string) {
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
     }
@@ -545,8 +492,6 @@ export async function GetAllCostsGroupByProjectOnly(auth_token:string) {
 
 export async function insertConditionInCost(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/insertConditionInCost`;
-  //console.log(url);
-  //console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -554,7 +499,6 @@ export async function insertConditionInCost(auth_token:string, data:Object) {
         'Content-Type': 'application/json'
       }
     });
-    //console.log(res);
     if(res.status === 200) return res.status;
     return res.statusText
   } catch (error) {
@@ -568,7 +512,6 @@ export async function insertConditionInCost(auth_token:string, data:Object) {
 export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:string, dateStart:string, dateEnd:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}`;
   try {
-    //console.log('url => ', url);
     const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
@@ -576,12 +519,10 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:strin
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos categoria!!';
     }
@@ -592,7 +533,6 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:strin
 export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}/${project}`;
   try {
-    console.log('url category only => ', url);
     const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
@@ -600,12 +540,10 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_t
     });
     
     if(res.status===200) {
-      console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos categoria!!';
     }
@@ -615,8 +553,6 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_t
 
 export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(auth_token:string, dateStart:string, dateEnd:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${dateStart}/${dateEnd}`;
-  console.log('que miras => ');
-  console.log('url => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
@@ -625,12 +561,10 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(auth_token:string
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos concepto!!';
     }
@@ -648,12 +582,10 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_to
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos concepto!!';
     }
@@ -671,12 +603,10 @@ export async function GetAllCostsGroupByDAY(auth_token:string, dateStart:string,
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por dia!!';
     }
@@ -694,12 +624,10 @@ export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateSta
     });
     
     if(res.status===200) {
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por dia!!';
     }
@@ -709,7 +637,6 @@ export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateSta
 
 export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMEN/${dateStart}/${dateEnd}/${project}`;
-  //console.log('url => ', url);
   try {
     const res = await axios.post(url, {}, {
       headers: {
@@ -718,13 +645,10 @@ export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:str
     });
     
     if(res.status===200) {
-      //console.log(res.data.data.stats);
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por resumen!!';
     }
@@ -734,7 +658,6 @@ export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:str
 
 export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMENTYPE/${dateStart}/${dateEnd}/${project}`;
-  console.log(url);
   try {
     const res = await axios.post(url, {
       headers: {
@@ -742,13 +665,10 @@ export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart
       }
     });
     if(res.status===200) {
-      console.log(res.data.data.stats);
-      //console.log('res route cost category => ', res.data.data);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    //console.log('error', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por resumen y tipo!!';
     }
@@ -784,15 +704,12 @@ export async function findCostExistsInBD(auth_token:string, folio:string){
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    // console.log('res cost by user admin => ', res);
     if(res.status===200) return res.data.data.data
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      // console.log('if catch ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
-    // console.log('catch ', error);
     return 'Error al consultar costos!!';
   }
 }
@@ -810,7 +727,6 @@ export async function getAllCostsMINByDateANDProvider(token: string, dateStart:s
       },
     });
     if (response.status === 200) {
-      // console.log('res codes => ', response.data.data.stats);
       return response.data.data.stats;
     }
     return 'Error: No se pudo obtener la información de los codigos';
@@ -824,19 +740,16 @@ export async function getAllCostsMINByDateANDProvider(token: string, dateStart:s
 
 export async function getAllCostsByProviderNEConditionLV(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByProviderNEConditionLV/${id}/661eade6f642112488c85fad/67318a51ceaf47ece0d3aa72`;
-  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    // console.log('res => ', res);
     if(res.status===200) return res.data.data.data;
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      // console.log('error => ', error);
       return error.response?.data.message || 'Error al consultar costos!!';
     }
     return 'Error al consultar informacion de los costos!!';
@@ -845,19 +758,16 @@ export async function getAllCostsByProviderNEConditionLV(auth_token:string, id:s
 
 export async function getAdvance(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCost/${id}/?full=true`;
-  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('res => ', res);
     if(res.status===200) return res.data.data.data[0];
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('error => ', error);
       return error.response?.data.message || 'Error al consultar anticipo!!';
     }
     return 'Error al consultar informacion del anticipo!!';
@@ -866,20 +776,16 @@ export async function getAdvance(auth_token:string, id:string) {
 
 export async function getAllCostsByAdvancesToSuppliersMIN(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByAdvancesToSuppliersMIN/${id}`;
-  // console.log('url cost adv => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    // console.log('res => ', res);
-    // if(res.status===200) return res.data.data.stats;
     if(res.status===200) return res.data.data.arrStats;
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('error => ', error);
       return error.response?.data.message || 'Error al consultar gastos relacionados del anticipo!!';
     }
     return 'Error al consultar gastos relacionados del anticipo!!';
@@ -888,8 +794,6 @@ export async function getAllCostsByAdvancesToSuppliersMIN(auth_token:string, id:
 
 export async function insertAdvanceInvoicesCfdisInCost(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/insertAdvanceInvoicesCfdisInCost/${id}`;
-  console.log(url);
-  console.log(JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -897,7 +801,6 @@ export async function insertAdvanceInvoicesCfdisInCost(auth_token:string, id:str
         'Content-Type': 'application/json'
       }
     });
-    console.log(res);
     if(res.status === 200) return res.status;
     return res.statusText
   } catch (error) {
@@ -910,19 +813,16 @@ export async function insertAdvanceInvoicesCfdisInCost(auth_token:string, id:str
 
 export async function getCostsAdvanceInvoicesCFDIs(auth_token:string, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostsAdvanceInvoicesCFDIs/${id}`;
-  // console.log('url cost adv => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    // console.log('res => ', res);
     if(res.status===200) return res.data.data.stats;
     return res.statusText
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('error => ', error);
       return error.response?.data.message || 'Error al consultar gastos anticipo!!';
     }
     return 'Error al consultar gastos del anticipo!!';

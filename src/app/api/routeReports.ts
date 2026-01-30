@@ -57,14 +57,12 @@ export async function RemoveReport(id:string, auth_token:string) {
 
 export async function GetReport(auth_token:string, id:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/${id}`;
-  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers:{
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    // console.log('res');
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {
@@ -95,8 +93,6 @@ export async function GetReportMIN(auth_token:string, id:string){
 
 export async function updateReport(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/${id}`;
-  // console.log(url);
-  // console.log(JSON.stringify(data));
   try {
     const res = await axios.patch(url, JSON.stringify(data), {
       headers:{
@@ -135,17 +131,14 @@ export async function getCostByReport(id:string, auth_token:string){
 export async function getCostByReportMin(id:string, auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByReportMIN/${id}`;
   try {
-    //console.log('url => ', url);
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     });
-    //console.log('res => ', res);
     if(res.status===200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    //console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos del informe!!';
     }
@@ -174,15 +167,12 @@ export async function getReportsByUser(auth_token:string, id:string) {
 export async function insertMovementsInReport(auth_token:string, id:string, data:object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/insertConditionInReport/${id}`;
   try {
-    // console.log(url);
-    // console.log(JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     });
-    // console.log(res);
     if(res.status === 200) return res.status
     return res.statusText;
   } catch (error) {
@@ -196,15 +186,12 @@ export async function insertMovementsInReport(auth_token:string, id:string, data
 export async function insertConditionInReportViewer(auth_token:string, id:string, data:object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports/insertConditionInReportViewer/${id}`;
   try {
-    // console.log(url);
-    // console.log(JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
       }
     });
-    // console.log(res);
     if(res.status === 200) return res.status
     return res.statusText;
   } catch (error) {
@@ -259,12 +246,10 @@ export async function GetReportsMin(auth_token:string) {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
-    //console.log('res ack => ', res.data.data);
     if(res.status === 200) return res.data.data.resdata;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
-      console.log('axios error => ', error);
       return error.response?.data.message || 'Ocurrio un problema al obtener informes';
     }
     return 'Ocurrio un problema al obtener informes';

@@ -129,7 +129,6 @@ export async function CreateCostCenter(auth_token:string, data:Object){
 
 export async function CreateCostoCenter(auth_token:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costocenters`;
-  console.log('costo centers => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -137,7 +136,6 @@ export async function CreateCostoCenter(auth_token:string, data:Object){
         'Content-Type': 'application/json',
       }
     });
-    console.log('res => ', res);
     if(res.status === 201) return res.status;
     return res.statusText;
   } catch (error) {

@@ -38,18 +38,15 @@ export async function getTotalCostPendingPaymentByProviderEstatusMIN(auth_token:
 
 export async function getTotalCostPendingPaymentByProvidersMIN(auth_token:string, dateStart:string, dateEnd:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getTotalCostPendingPaymentByProvidersMIN/${dateStart}/${dateEnd}`;
-  console.log('url circle => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    console.log('stats circle => ', res.data.data.stats);
     if(res.status===200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    console.log('error circle => ', error);
     if(axios.isAxiosError(error)){
       return error.message || error.response?.data.message;
     }
@@ -80,7 +77,6 @@ export async function getAllCostsTOTALGroupByPROVIDERTRADELINE(auth_token:string
 export async function getAllCostsGroupByPROVIDERWithoutTRADELINE(auth_token:string, tradeline:string, 
     dateStart:string, dateEnd:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsGroupByPROVIDERWithoutTRADELINE/${tradeline}/${dateStart}/${dateEnd}`;
-  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
@@ -99,7 +95,6 @@ export async function getAllCostsGroupByPROVIDERWithoutTRADELINE(auth_token:stri
 
 export async function getTotalPayments(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllPaymentsTOTAL`;
-  console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
@@ -118,7 +113,6 @@ export async function getTotalPayments(auth_token:string) {
 
 export async function getTotalPendingPaymentsProvider(auth_token:string, dateStart:string, dateEnd:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getTotalCostPendingPaymentByProvidersTradelineMIN/${dateStart}/${dateEnd}`;
-  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
@@ -146,7 +140,6 @@ export async function getTotalCostApplyPaymentByProvidersTradelineMIN(auth_token
     if(res.status===200) return res.data.data.stats;
     return res.statusText;
   } catch (error) {
-    // console.log('error circle => ', error);
     if(axios.isAxiosError(error)){
       return error.message || error.response?.data.message;
     }

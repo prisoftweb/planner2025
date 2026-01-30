@@ -75,15 +75,12 @@ export async function removeQuotation(id:string, auth_token:string) {
 export async function createQuotation(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/quotations`;
   try {
-    console.log('url create => ', url);
-    console.log('data => ', JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       }
     })
-    console.log('res create => ', res);
     if(res.status === 201) return res.status;
     return res.statusText;
   } catch (error) {
@@ -97,15 +94,12 @@ export async function createQuotation(auth_token:string, data:Object) {
 export async function updateQuotation(auth_token:string, data:Object, id:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/quotations/${id}`;
   try {
-    console.log('url create => ', url);
-    console.log('data => ', JSON.stringify(data));
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json'
       }
     })
-    console.log('res update => ', res);
     if(res.status === 201 || res.status === 200) return res.status;
     return res.statusText;
   } catch (error) {
@@ -130,8 +124,6 @@ export async function getContactsClient(auth_token:string, id:string) {
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message;
     }
-    console.log(typeof(error));
-    console.log(error);
     return 'Error al obtener contactos';
   }
 }
