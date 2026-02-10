@@ -3,8 +3,15 @@ import Chip from "../Chip";
 // import { OneExpense } from "@/interfaces/Expenses"
 import { useNewExpense } from "@/app/store/newExpense"
 import { CurrencyFormatter } from "@/app/functions/Globals";
+import CardConfig from "@/components/users/CardConfig";
+// import ButtonDeleteUser from "@/components/users/ButtonDeleteUser";
+import {confirmAlert} from 'react-confirm-alert';
+import {showToastMessage, showToastMessageError, showToastMessageWarning, showToastMessageInfo} from "@/components/Alert";
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { UpdateCost } from "@/app/api/routeCost";
+import { OneExpense } from "@/interfaces/Expenses";
 
-export default function ProfileAdvanceProvider({}: {}){
+export default function ProfileAdvanceProvider({token, user}: {token:string, user:string}){
 
   const {currentExpense } = useNewExpense();
 
@@ -127,7 +134,93 @@ export default function ProfileAdvanceProvider({}: {}){
             <p className="my-0 text-slate-700">{currentExpense?.description}</p>
           </div>
         </div>
+
+        <div className="mt-2 bg-white p-3 rounded-lg shadow-md py-2">
+          {currentExpense && (
+            <CardConfig 
+              text="ELIMINARAS LAS FACTURAS ASIGNADAS A ESTE ANTICIPO, CAMBIARAN SU ESTATUS A NO PAGADAS; ESTE ANTICIPO QUEDARA EN BLANCO Y PODRAS ASIGNAR NUEVAMENTE FACTURAS."
+              title="Limpiar anticipo"
+            >
+              <ButtonClearAdvance token={token} user={user} advance={currentExpense} />
+            </CardConfig>
+          )}
+        </div>
       </div>
+    </>
+  )
+}
+
+export function ButtonClearAdvance({token, user, advance} : {token : string, user:string, advance:OneExpense}){
+  
+  const clearAdvance = async (id:string, name:string)  => {
+  
+    const data={
+      advancesToSuppliers: {
+        currentbalance: advance.cost.total,
+        percentadvance: 100,
+        user: user,
+        notes: [],
+        advanceInvoicesCfdis: []
+      }
+    }
+    confirmAlert({
+      title: 'Confirmacion para limpiar anticipo?',
+      message: `Desea limpiar ${name}`,
+      buttons: [
+      {
+        label: 'Si',
+        onClick: async () => {
+          let res = undefined;
+
+          switch('user'){
+            case 'user':
+              try {
+                // console.log('update cost => ', JSON.stringify(data));
+                // showToastMessage('Ver consola!!!!');
+                res = await UpdateCost(token, id, data);
+                if(typeof(res)==='string') {
+                  showToastMessageError('El anticipo no pudo ser limpiado..');
+                } else {
+                  showToastMessage('Anticipo limpiado exitosamente!');
+                }
+              } catch (error) {
+              }
+            break;
+          }
+        }           
+      },
+      {
+        label: 'No',
+        onClick: () => {
+          showToastMessageInfo('Se ha cancelado la operacion!');            
+        }
+      }
+      ],
+      closeOnEscape: true,
+      closeOnClickOutside: true,
+      keyCodeForClose: [8, 32],
+      willUnmount: () => {},
+      //afterClose: () => {},
+      onClickOutside: () => {
+        showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
+      },
+      onkeyPress: () => {
+        showToastMessageInfo('Favor de seleccionar SI o NO');
+      },
+      onKeypressEscape: () => {
+        showToastMessageWarning('Se ha cerrado dialogo, volver a intentar!');
+      },
+      overlayClassName: "overlay-custom-class-name"
+    }); 
+  }
+  
+    return(
+    <>
+      <button type="button" 
+        className='bg-red-600 rounded-full text-white w-full py-2 hover:bg-red-400'
+        onClick={() => clearAdvance(advance._id, advance.folio)}>
+          Eliminar facturas en anticipo
+      </button>
     </>
   )
 }

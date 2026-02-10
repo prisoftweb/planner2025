@@ -411,11 +411,14 @@ export default function TableInvoicesComponent({token, user}:
                token={token} invoiceTable={selInvoice} />
         </ContainerSideNav>
       )}
-      {showNewInvoice && (
+      {/* {showNewInvoice && (
         <ContainerSideNav width="w-full max-w-3xl">
           <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
         </ContainerSideNav>
-      ) }
+      ) } */}
+      <ContainerSideNav width="w-full max-w-3xl" open={showNewInvoice}>
+        <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
+      </ContainerSideNav>
     </>
   )
 }

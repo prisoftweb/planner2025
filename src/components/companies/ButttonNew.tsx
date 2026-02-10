@@ -10,14 +10,17 @@ export default function ButtonNew({token}: {token:string}){
   return(
     <>
       <Button type="button" onClick={() => setNewCompany(true)}>Nuevo</Button>
-          {newCompany && (
+          {/* {newCompany && (
             <ContainerSideNav width="w-full max-w-xs">
               <NewCompany showForm={setNewCompany} token={token} />
             </ContainerSideNav>
             // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
             //   <NewCompany showForm={setNewCompany} token={token} />
             // </div>
-          )}
+          )} */}
+      <ContainerSideNav width="w-full max-w-xs" open={newCompany} >
+        <NewCompany showForm={setNewCompany} token={token} />
+      </ContainerSideNav>
     </>
   )
 }

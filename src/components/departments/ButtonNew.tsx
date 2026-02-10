@@ -18,12 +18,16 @@ export default function ButtonNew({token, optionsCompany, dept}: ButtonNewProps)
   return(
     <>
       <Button type="button" onClick={() => setNewCompany(true)}>Nuevo</Button>
-          {newCompany && (
+          {/* {newCompany && (
             <ContainerSideNav width="w-full max-w-sm">
               <NewDepartment showForm={setNewCompany} token={token} 
                             OptionsCompany={optionsCompany} dept={dept} />
             </ContainerSideNav>
-          )}
+          )} */}
+      <ContainerSideNav width="w-full max-w-sm" open={newCompany}>
+        <NewDepartment showForm={setNewCompany} token={token} 
+                      OptionsCompany={optionsCompany} dept={dept} />
+      </ContainerSideNav>
     </>
   )
 }

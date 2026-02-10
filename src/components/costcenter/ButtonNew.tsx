@@ -14,11 +14,14 @@ export default function ButtonNew({token, id}: {token:string, id:string}){
   return(
     <>
       <Button type="button" onClick={() => setVarNew(true)}>Nuevo</Button>
-        {varNew && (
+        {/* {varNew && (
           <ContainerSideNav width="w-full max-w-lg">
             <NewCostCenter showForm={handleNew} token={token} costCenter={''} />
           </ContainerSideNav>
-        )}
+        )} */}
+        <ContainerSideNav width="w-full max-w-lg" open={varNew}>
+          <NewCostCenter showForm={handleNew} token={token} costCenter={''} />
+        </ContainerSideNav>
     </>
   )
 }

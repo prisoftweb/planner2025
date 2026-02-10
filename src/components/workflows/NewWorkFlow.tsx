@@ -2,7 +2,7 @@
 import HeaderForm from "../HeaderForm"
 import Input from "../Input"
 import Label from "../Label"
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -10,9 +10,10 @@ import {showToastMessage, showToastMessageError} from "../Alert"
 import { useState, useEffect, useRef } from "react"
 import { Workflow } from "@/interfaces/Workflows"
 import { createWorkFlow } from "@/app/api/routeWorkflows"
+import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
 export default function NewWorkFlow({showForm, token, workFlow}: 
-  {showForm:Function, token:string, workFlow: (Workflow | string)}){
+  {showForm:(value: boolean) => void, token:string, workFlow: (Workflow | string)}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);
@@ -79,8 +80,9 @@ export default function NewWorkFlow({showForm, token, workFlow}:
           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevo workflow" 
             title="Agregar nuevo workflow"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>

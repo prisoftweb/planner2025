@@ -25,7 +25,7 @@ export default function ButtonNew({token, companies, departments,
   return(
     <>
       <Button type="button" onClick={() => setNewReport(true)}>Nuevo</Button>
-          {newReport && (
+          {/* {newReport && (
             <ContainerSideNav width="w-full max-w-xl">
               <NewReport showForm={handleNewReport} 
                                   token={token} projects={projects}
@@ -33,7 +33,14 @@ export default function ButtonNew({token, companies, departments,
                                   condition={condition} user={user}
                         />
             </ContainerSideNav>
-          )}
+          )} */}
+      <ContainerSideNav width="w-full max-w-xl" open={newReport}>
+        <NewReport showForm={handleNewReport} 
+                            token={token} projects={projects}
+                            companies={companies} departments={departments} 
+                            condition={condition} user={user}
+                  />
+      </ContainerSideNav>
     </>
   )
 }

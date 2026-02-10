@@ -1,79 +1,93 @@
 import Label from "@/components/Label"
 import TextArea from "@/components/TextArea"
 import Button from "@/components/Button"
-import { ICostRelAdvance } from "@/interfaces/Expenses"
+import { ICostRelAdvanceInv } from "@/interfaces/Expenses"
 import { useState, useMemo } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { insertAdvanceInvoicesCfdisInCost } from "@/app/api/routeCost"
 import { OneExpense } from "@/interfaces/Expenses"
 
 export default function AddInvoicesInAdvance({costs, user, advance, token, handleClose, updateInvoices}: 
-  {costs:ICostRelAdvance[], user:string, advance:OneExpense, token:string, handleClose: () => void, 
+  {costs:ICostRelAdvanceInv[], user:string, advance:OneExpense, token:string, handleClose: () => void, 
     updateInvoices: () => Promise<void>}) {
 
   const [notes, setNotes]=useState<string>();
   const [error, setError]=useState<boolean>(false);
 
-  const [pares, impares] = useMemo(() => {
-    return costs.reduce(
-      ([p, i], value, index) => {
-        index % 2 === 0 ? p.push(value) : i.push(value);
-        return [p, i];
-      },
-      [[], []] as [ICostRelAdvance[], ICostRelAdvance[]]
-    );
-  }, [costs]);
+  // const [pares, impares] = useMemo(() => {
+  //   return costs.reduce(
+  //     ([p, i], value, index) => {
+  //       index % 2 === 0 ? p.push(value) : i.push(value);
+  //       return [p, i];
+  //     },
+  //     [[], []] as [ICostRelAdvanceInv[], ICostRelAdvanceInv[]]
+  //   );
+  // }, [costs]);
 
   const saveData = async() => {
     if(notes && notes.trim() !== ''){
       setError(false);
-      let validate = true;
+      // let validate = true;
 
 
-      for (let i = 0; i < pares.length; i++) {
-        if (impares[i].cost.total > 0) {
-          showToastMessageError(`El valor de la nota ${impares[i].folio} no es valido!!!!`);
-          validate=false;
-          break;
-        }else{
-          if(!impares[i].cfdisRelations.relatedUUIDs.includes(pares[i]._id)){
-            showToastMessageError(`La nota no coincide con la factura ${pares[i].taxfolio}!!!!`);
-            validate=false;
-            break;
-          }
+      // for (let i = 0; i < pares.length; i++) {
+      //   if (impares[i].cost.total > 0) {
+      //     showToastMessageError(`El valor de la nota ${impares[i].folio} no es valido!!!!`);
+      //     validate=false;
+      //     break;
+      //   }else{
+      //     if(!impares[i].cfdisRelations.relatedUUIDs.includes(pares[i]._id)){
+      //       showToastMessageError(`La nota no coincide con la factura ${pares[i].taxfolio}!!!!`);
+      //       validate=false;
+      //       break;
+      //     }
+      //   }
+      // }
+
+      // if(validate){
+      //   const advanceInvoicesCfdis = [];
+
+      //   for (let index = 0; index < pares.length; index++) {
+      //     advanceInvoicesCfdis.push({
+      //       invoiceUUID:pares[index]._id,
+      //       applicationUUID:impares[index]._id,
+      //     });
+      //   }
+
+      const advanceInvoicesCfdis = [];
+      for (let index = 0; index < costs.length; index++) {
+        // const element = costs[index];
+        // const ids = objetos.map(obj => obj.id);
+        // const applicationUUID = costs[index].applicationUUID.map((c) => c._id);
+        const applicationUUID = (Array.isArray(costs[index].applicationUUID)? costs[index].applicationUUID: []).map((c) => c._id);
+        advanceInvoicesCfdis.push({
+          invoiceUUID:costs[index].invoiceUUID._id,
+          applicationUUID
+        })
+      }
+
+      const data ={
+        advancesToSuppliers: {
+          currentbalance: advance.advancesToSuppliers?.currentbalance,
+          percentadvance: advance.advancesToSuppliers?.percentadvance,
+          user,
+          notes: [notes],
+          advanceInvoicesCfdis
         }
       }
 
-      if(validate){
-        const advanceInvoicesCfdis = [];
+      console.log('data insertAdvanceInvoicesCfdisInCost => ', JSON.stringify(data));
 
-        for (let index = 0; index < pares.length; index++) {
-          advanceInvoicesCfdis.push({
-            invoiceUUID:pares[index]._id,
-            applicationUUID:impares[index]._id,
-          });
-        }
-
-        const data ={
-          advancesToSuppliers: {
-            currentbalance: advance.advancesToSuppliers?.currentbalance,
-            percentadvance: advance.advancesToSuppliers?.percentadvance,
-            user,
-            notes: [notes],
-            advanceInvoicesCfdis
-          }
-        }
-
-        const res = await insertAdvanceInvoicesCfdisInCost(token, advance._id, data);
-        if(typeof(res)==='string'){
-          showToastMessageError(res);
-        }
-        else{
-          showToastMessage('Se han agregado las facturas al anticipo correctamente!!!!');
-          updateInvoices();
-          handleClose();
-        }
+      const res = await insertAdvanceInvoicesCfdisInCost(token, advance._id, data);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
       }
+      else{
+        showToastMessage('Se han agregado las facturas al anticipo correctamente!!!!');
+        updateInvoices();
+        handleClose();
+      }
+      // }
     }else{
       setError(true);
     }

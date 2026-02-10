@@ -9,8 +9,9 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import { propsTooltip } from "@/libs/animations";
 // import DownloadCollectionPDF from "@/components/collections/DownloadCollectionPDF";
 import DownloadAdvancePDF from "./DownloadAdvancePDF";
-import { ICostRelAdvance } from "@/interfaces/Expenses";
-import { getAllCostsByAdvancesToSuppliersMIN, getCostsAdvanceInvoicesCFDIs } from "@/app/api/routeCost";
+import { ICostRelAdvanceInv, ICostRelAdvanceTable } from "@/interfaces/Expenses";
+import { getAllCostsByAdvancesToSuppliersMIN, getCostsAdvanceInvoicesCFDIs, 
+  getAllCostsByAdvancesToSuppliersMININVandAPP, getCostsAdvanceInvoicesCFDIsWithSTRUCT } from "@/app/api/routeCost";
 import { showToastMessageError } from "@/components/Alert";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
@@ -22,23 +23,30 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
   {provider:ProviderMin, user:string, token:string, ida:string, pending:number, advance:OneExpense}) {
 
   const [isAddInvoices, setIsAddInvoices]=useState<boolean>(false);
-  const [costsRelAdvance, setCostsRelAdvance]=useState<ICostRelAdvance[]>([]);
-  const [expensesSelected, setExpensesSelected] = useState<ICostRelAdvance[]>([]);
-  const [costsAdvance, setCostsAdvance]=useState<ICostRelAdvance[]>([]);
+  const [costsRelAdvance, setCostsRelAdvance]=useState<ICostRelAdvanceInv[]>([]);
+  const [expensesSelected, setExpensesSelected] = useState<ICostRelAdvanceInv[]>([]);
+  const [costsAdvance, setCostsAdvance]=useState<ICostRelAdvanceInv[]>([]);
+  const [dataTable, setDatatable]=useState<ICostRelAdvanceTable[]>([]);
 
-  const columnHelper = createColumnHelper<ICostRelAdvance>();
+  const columnHelper = createColumnHelper<ICostRelAdvanceTable>();
 
   useEffect(() => {
     const fetch = async() => {
       const [res, resCosts] = await Promise.all([
-        getAllCostsByAdvancesToSuppliersMIN(token, ida),
-        getCostsAdvanceInvoicesCFDIs(token, ida)
+        // getAllCostsByAdvancesToSuppliersMIN(token, ida),
+        getAllCostsByAdvancesToSuppliersMININVandAPP(token, ida),
+        // getCostsAdvanceInvoicesCFDIs(token, ida)
+        getCostsAdvanceInvoicesCFDIsWithSTRUCT(token, ida)
       ]);
 
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
+        // console.log('Rel advance:', res);
         setCostsRelAdvance(res);
+        const data = transformDataInvoicesInDataTable(res);
+        // console.log('Data table:', data);
+        setDatatable(data);
       }
 
       if(typeof(resCosts)==='string'){
@@ -52,7 +60,8 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
 
   const updateInvoices = async() => {
     const [res, resCosts] = await Promise.all([
-      getAllCostsByAdvancesToSuppliersMIN(token, ida),
+      // getAllCostsByAdvancesToSuppliersMIN(token, ida),
+      getAllCostsByAdvancesToSuppliersMININVandAPP(token, ida),
       getCostsAdvanceInvoicesCFDIs(token, ida)
     ]);
 
@@ -70,27 +79,32 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
   }
 
   const handleIsAddInvoices = (value:boolean) => {
-    if(value){
-      if(expensesSelected.length % 2 === 0){
-        setIsAddInvoices(value);
-      }else{
-        showToastMessageError('El numero de facturas seleccionadas debe coincidir con las notas de credito!!!!');
-      }
-    }else{
-      setIsAddInvoices(value);
-    }
+    // if(value){
+    //   if(expensesSelected.length % 2 === 0){
+    //     setIsAddInvoices(value);
+    //   }else{
+    //     showToastMessageError('El numero de facturas seleccionadas debe coincidir con las notas de credito!!!!');
+    //   }
+    // }else{
+    //   setIsAddInvoices(value);
+    // }
+    setIsAddInvoices(value);
   }
 
   const columns = [
-    columnHelper.accessor(row => row._id, {
+    columnHelper.accessor(row => row.id, {
       id: 'seleccion',
       cell: ({row}) => (
         <div className="flex gap-x-2 justify-center">
-          <input type="checkbox" 
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            className="w-24 cursor-pointer"
-          />
+          {row.original.isinvoiceUUID? (
+            <input type="checkbox" 
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+              className="w-24 cursor-pointer"
+            />
+          ): (
+            <></>
+          )}
         </div>
       ),
       enableSorting:false,
@@ -126,7 +140,7 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
           // onClick={() => window.location.replace(`/providers/${idProv}/advances/${row.original._id}/profile`)}
-        >{row.original?.project.title}</p>
+        >{row.original?.project}</p>
       ),
       enableSorting:false,
       header: () => (
@@ -198,8 +212,13 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
     // }),
   ]
 
-  const handleExpensesSelected = (value: ICostRelAdvance[]) => {
-    setExpensesSelected(value);
+  const handleExpensesSelected = (value: ICostRelAdvanceTable[]) => {
+    // setExpensesSelected(value);
+    const d = costsRelAdvance.filter( c =>
+      value.some(v => v.id === c.invoiceUUID._id)
+    );
+
+    setExpensesSelected(d);
   }
 
   return (
@@ -228,7 +247,9 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
         </div>
       </div>
       <div className="mt-5">
-        <Table columns={columns} data={costsRelAdvance} placeH="Buscar factura.." typeTable="advance"
+        {/* <Table columns={columns} data={costsRelAdvance} placeH="Buscar factura.." typeTable="advance"
+          selectFunction={handleExpensesSelected} /> */}
+        <Table columns={columns} data={dataTable} placeH="Buscar factura.." typeTable="advance"
           selectFunction={handleExpensesSelected} />
       </div>
       <ContainerSideNav width="w-full max-w-5xl" open={isAddInvoices}>
@@ -238,4 +259,80 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
       </ContainerSideNav>
     </div>
   )
+}
+
+function transformDataInvoicesInDataTable(dataBack:ICostRelAdvanceInv[]){
+  const table: ICostRelAdvanceTable[]=[];
+
+  dataBack.forEach(element => {
+    table.push({
+      cost: element.invoiceUUID.cost,
+      date: element.invoiceUUID.date,
+      description: element.invoiceUUID.description,
+      files: element.invoiceUUID.files,
+      folio: element.invoiceUUID.folio,
+      id: element.invoiceUUID._id,
+      isinvoiceUUID:true,
+      project: element.invoiceUUID.project.title,
+      user: element.invoiceUUID.user
+    });
+
+//     El problema es que a veces element.application es un arreglo ([]) y a veces es un objeto ({}), y forEach solo existe en arreglos.
+
+// Forma segura y recomendada ✔️
+
+// Antes de usar forEach, valida que sí sea un arreglo:
+
+// if (Array.isArray(element.application)) {
+//   element.application.forEach(app => {
+//     table.push({
+//       // lo que estés metiendo a la tabla
+//     });
+//   });
+// }
+
+
+// Si no es arreglo, simplemente no entra y no truena.
+
+// Forma compacta (muy usada)
+// (Array.isArray(element.application) ? element.application : [])
+//   .forEach(app => {
+//     table.push({
+//       // ...
+//     });
+//   });
+
+
+// Así aunque venga {}, se convierte en [] y sigue feliz 😌
+
+    (Array.isArray(element.applicationUUID) ? element.applicationUUID : [])
+    .forEach(app => {
+      table.push({
+        cost: app.cost,
+        date: app.date,
+        description: app.description,
+        files: app.files,
+        folio: app.folio,
+        id: app._id,
+        isinvoiceUUID:false,
+        project: app.project.title,
+        user: app.user
+      });
+    });
+
+    // element.applicationUUID.forEach(element => {
+    //   table.push({
+    //     cost: element.cost,
+    //     date: element.date,
+    //     description: element.description,
+    //     files: element.files,
+    //     folio: element.folio,
+    //     id: element._id,
+    //     isinvoiceUUID:false,
+    //     project: element.project.title,
+    //     user: element.user
+    //   });
+    // });
+  });
+  return table;
 }

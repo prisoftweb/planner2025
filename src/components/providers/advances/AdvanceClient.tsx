@@ -82,7 +82,7 @@ export default function AdvanceClient({token, user, id, provider, advance}:
         <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
-            <ProfileAdvanceProvider />
+            <ProfileAdvanceProvider token={token} user={user} />
           </div>
           {view}
         </div>

@@ -13,14 +13,17 @@ export default function ButtonNew({token, user}: {token:string, user:string}){
   return(
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
-          {newWorkFlow && (
+          {/* {newWorkFlow && (
             <ContainerSideNav width="w-full max-w-md">
               <NewWorkFlow showForm={handleClick} token={token} workFlow={''} />
             </ContainerSideNav>
             // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
             //   <NewWorkFlow showForm={handleClick} token={token} workFlow={''} />
             // </div>
-          )}
+          )} */}
+      <ContainerSideNav width="w-full max-w-md" open={newWorkFlow} >
+        <NewWorkFlow showForm={handleClick} token={token} workFlow={''} />
+      </ContainerSideNav>
     </>
   )
 }

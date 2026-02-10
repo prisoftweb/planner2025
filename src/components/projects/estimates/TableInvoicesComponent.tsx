@@ -255,11 +255,11 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
           <AddNewCollectionComponent showForm={handleShowForm} user={user}
                token={token} project={project} invoiceTable={selInvoice} />
         </ContainerSideNav>
-        // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-        //   <AddNewCollectionComponent showForm={handleShowForm} user={user}
-        //        token={token} project={project} invoiceTable={selInvoice} />
-        // </div>
       )}
+      {/* <ContainerSideNav width="w-full max-w-xl" open={showNewCollection && selInvoice!=undefined}>
+        <AddNewCollectionComponent showForm={handleShowForm} user={user}
+              token={token} project={project} invoiceTable={selInvoice!} />
+      </ContainerSideNav> */}
     </>
   )
 }

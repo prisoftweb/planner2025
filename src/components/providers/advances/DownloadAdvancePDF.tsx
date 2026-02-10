@@ -3,12 +3,15 @@ import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ICollectionMin, ITotalAmountRecoveredCollections } from '@/interfaces/Collections';
 import { ProviderMin } from "@/interfaces/Providers";
 import { OneExpense } from '@/interfaces/Expenses';
-import { ICostRelAdvance } from '@/interfaces/Expenses';
+import { ICostRelAdvanceInv } from '@/interfaces/Expenses';
 
 export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}: 
-  {provider:ProviderMin, advance:OneExpense, costsRelAdvance:ICostRelAdvance[]}) {
+  {provider:ProviderMin, advance:OneExpense, costsRelAdvance:ICostRelAdvanceInv[]}) {
 
-  const appAdvance=costsRelAdvance.reduce((accum, item) => accum+= item.cost.total>0? item.cost.total: 0, 0);
+  // const appAdvance=costsRelAdvance.reduce((accum, item) => accum+= item.cost.total>0? item.cost.total: 0, 0);
+  const appAdvance=costsRelAdvance.reduce((accum, item) => accum+=item.invoiceUUID.cost.total, 0);
+
+  const costData = transformDataInvoicesInDataTable(costsRelAdvance);
 
   return(
     <Document>
@@ -34,35 +37,14 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
 
               <View style={{marginTop:'7px'}}>
                 <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                  {/* <Text style={{fontSize:'10px', color:'gray'}}>Proveedor: </Text> */}
                   <Text style={{fontSize:'10px'}}>{provider.name}</Text>
                 </View>
 
                 <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                  {/* <Text style={{fontSize:'10px', color:'gray'}}>RFC: </Text> */}
                   <Text style={{fontSize:'10px'}}>{provider.rfc}</Text>
                 </View>
-
-                {/* <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                  <Text style={{fontSize:'10px', color:'gray'}}>Dias de credito: </Text>
-                  <Text style={{fontSize:'10px'}}>{provider.tradeline?.creditdays?? 0}</Text>
-                </View>
-
-                <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                  <Text style={{fontSize:'10px', color:'gray'}}>Linea de credito: </Text>
-                  <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
-                    currency: 'MXN',
-                    value: provider.tradeline?.creditlimit?? 0
-                  })}</Text>
-                </View> */}
               </View>
-              {/* <View>
-                <Text style={{fontSize:'10px', width: '250px', marginTop:'5px'}}>{provider.name}</Text>
-                <Text style={{fontSize:'10px', color:'gray', width: '250px'}}>Arquimedes #1234</Text>
-                <Text style={{fontSize:'10px', color:'gray', width: '250px'}}>Col. Progreso</Text>
-                <Text style={{fontSize:'10px', color:'gray', width: '250px'}}>San Luis Potosi S.L.P. </Text>
-                <Text style={{fontSize:'10px', color:'gray', width: '250px'}}>Mexico</Text>
-              </View> */}
+              
 {/* <View style={{marginTop:'5px', display:'flex', flexDirection:'row', gap: '2px', fontSize: '10px', justifyContent:'flex-start', alignItems:'center'}}></View> */}
             </View>
 
@@ -84,34 +66,8 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                 <Text style={{fontSize:'10px', color:'gray'}}>Facturas Relacionadas: </Text>
                 <Text style={{fontSize:'10px'}}>
                   {costsRelAdvance.length}
-                  {/* {CurrencyFormatter({
-                    currency: 'MXN',
-                    value: costsRelAdvance.length
-                  })} */}
                 </Text>
               </View>
-
-              {/* <View style={{border:'1px solid gray', marginTop: '5px'}}>
-                <View style={{border:'1px solid gray', textAlign:'center', display:'flex', flexDirection:'row', justifyContent:'center'}}>
-                  <Text style={{color:'white', backgroundColor:'green', textAlign:'center', fontSize:'10px', width:'75px'}}>Anticipo</Text>
-                  <Text style={{color:'black', backgroundColor:'gray', textAlign:'center', fontSize:'10px'}}>
-                    {CurrencyFormatter({
-                      currency: 'MXN',
-                      // value: total || 0
-                      value: advance.cost.total
-                    })}
-                  </Text>
-                </View>
-                <View style={{textAlign:'center', border:'1px solid gray', padding:'3px', display:'flex', flexDirection:'row', justifyContent:'center'}}>
-                  <Text style={{textAlign:'center', color:'gray', fontSize:'11px'}}>
-                    {CurrencyFormatter({
-                      currency: 'MXN',
-                      // value: total || 0
-                      value: total
-                    })}
-                  </Text>
-                </View>
-              </View> */}
 
               <View style={{border:'1px solid gray', marginTop:'7px'}}>
                 <View style={{display:'flex', flexDirection:'row'}}>
@@ -119,7 +75,6 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                   <Text style={{width:'100%', textAlign:'center', color:'black', fontSize:'13px', backgroundColor:'#D3D3D3', padding:'3px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
-                      // value: total || 0
                       value: advance.cost.total
                     })}
                   </Text>
@@ -128,7 +83,6 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
                   <Text style={{textAlign:'center', color:'gray', fontSize:'14px'}}>
                     {CurrencyFormatter({
                       currency: 'MXN',
-                      // value: total || 0
                       value: advance.advancesToSuppliers?.currentbalance?? 0
                     })}
                   </Text>
@@ -149,19 +103,79 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Total</Text>
           </View>
 
-          {costsRelAdvance.map((c, index:number) => (
-            <View key={c._id} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.folio}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.project.title}</Text>
-              <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.description} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.date?.substring(0, 10)} </Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.costocenter.concept.name}</Text>
+          {/* {costData.map((c, index:number) => (
+            <View key={c.id} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.Comp}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.Proyecto}</Text>
+              <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.Descripcion} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.Fecha?.substring(0, 10)} </Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{c.Costocenter}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: index%2===0? '':'0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
                 currency: 'MXN',
-                value: c.cost.total
+                value: c.Total
               })}</Text>
             </View>
-          ))}
+          ))} */}
+
+          {/* {costData.map((c, index:number) => {
+            const esUltimoDelGrupo = index === costData.length - 1 || c.index !== costData[index + 1].index;
+
+            return(
+              <View key={c.id} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Comp}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Proyecto}</Text>
+                <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Descripcion} </Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Fecha?.substring(0, 10)} </Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{c.Costocenter}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: esUltimoDelGrupo ? '0.2px solid gray' : 'none', fontWeight: 'bold'}}>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: c.Total
+                })}</Text>
+              </View>
+            )
+          })} */}
+
+          {costData.map((c, index: number) => {
+            const esUltimoDelGrupo =
+              index === costData.length - 1 ||
+              c.index !== costData[index + 1].index
+
+            return (
+              <View
+                key={c.id}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginTop: 10,
+                  marginBottom: 3,
+                  borderBottomWidth: esUltimoDelGrupo ? 0.5 : 0,
+                  borderBottomColor: 'gray',
+                }}
+              >
+                <Text style={{ flex: 1, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
+                  {c.Comp}
+                </Text>
+                <Text style={{ flex: 1, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
+                  {c.Proyecto}
+                </Text>
+                <Text style={{ flex: 3, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
+                  {c.Descripcion}
+                </Text>
+                <Text style={{ flex: 1, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
+                  {c.Fecha?.substring(0, 10)}
+                </Text>
+                <Text style={{ flex: 1, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
+                  {c.Costocenter}
+                </Text>
+                <Text style={{ flex: 1, fontSize: 7, padding: 2, fontWeight: 'bold' }}>
+                  {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: c.Total,
+                  })}
+                </Text>
+              </View>
+            )
+          })}
 
           {/* <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', marginTop: '10px', margin: '3px'}}>
             
@@ -193,4 +207,66 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance}:
       </Page>
     </Document>
   )
+}
+
+interface ICostsOfAdvance{
+  Comp: string
+  Proyecto: string
+  Descripcion: string
+  Fecha: string
+  Costocenter: string,
+  Total: number
+  id: string
+  index: number
+}
+
+function transformDataInvoicesInDataTable(dataBack:ICostRelAdvanceInv[]){
+  const table: ICostsOfAdvance[]=[];
+
+  let index=0;
+
+  console.log('data to table => ', dataBack);
+
+  dataBack.forEach(element => {
+    table.push({
+      Comp: element.invoiceUUID.folio,
+      Proyecto: element.invoiceUUID.project.title,
+      Descripcion: element.invoiceUUID.description,
+      Fecha: element.invoiceUUID.date,
+      Costocenter: element.invoiceUUID.costocenter.concept.name,
+      Total: element.invoiceUUID.cost.total,
+      id: element.invoiceUUID._id,
+      index: index
+    });
+
+    // element.applicationUUID.forEach(element => {
+    //   table.push({
+    //     Comp: element.folio,
+    //     Proyecto: element.project.title,
+    //     Descripcion: element.description,
+    //     Fecha: element.date,
+    //     Costocenter: element.costocenter.concept.name,
+    //     Total: element.cost.total,
+    //     id: element._id,
+    //     index: index
+    //   });
+    // });
+
+    (Array.isArray(element.applicationUUID) ? element.applicationUUID : [])
+    .forEach(app => {
+      table.push({
+        Comp: app.folio,
+        Proyecto: app.project.title,
+        Descripcion: app.description,
+        Fecha: app.date,
+        Costocenter: app.costocenter.concept.name,
+        Total: app.cost.total,
+        id: app._id,
+        index: index
+      });
+    });
+
+    index++;
+  });
+  return table;
 }

@@ -9,6 +9,7 @@ import { useState } from "react";
 import NewCostCenter from "./NewCostCenter";
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
+import ContainerSideNav from "../ContainerSideNav";
 
 export default function TableCostCenter({data, token}: {data:CostCenterTable[], token:string}){
 
@@ -99,7 +100,12 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
 
   return(
     <>
-      {editCostCenter && <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} /> }
+      {/* {editCostCenter && <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} /> } */}
+      {editCostCenter && (
+        <ContainerSideNav width="w-full max-w-md">
+          <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} />
+        </ContainerSideNav>
+      ) }
       <Table columns={columns} data={data} placeH="Buscar centro de costo.." />
     </>
   )

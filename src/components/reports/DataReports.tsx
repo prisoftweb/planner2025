@@ -5,6 +5,7 @@ import { useState, useRef } from "react"
 import SendReport from "./SendReport"
 import { Node } from "@/interfaces/Nodes"
 import { UsrBack } from "@/interfaces/User"
+// import ContainerSideNav from "../ContainerSideNav"
 
 export default function DataReports({token, report, user, node, id, dates}:
   {token:string, report:Report, user:UsrBack, node:Node, id:string, dates: DateReport[] }) {
@@ -32,6 +33,10 @@ export default function DataReports({token, report, user, node, id, dates}:
       </div>
       {isSend && <SendReport report={report} send={handleSend} 
                     token={token} user={user._id} node={node} isClose={refClose.current} />}
+        {/* <ContainerSideNav open={isSend} width="w-full sm:max-w-lg">
+          <SendReport report={report} send={handleSend} 
+                    token={token} user={user._id} node={node} isClose={refClose.current} />
+        </ContainerSideNav> */}
     </>
   )
 }

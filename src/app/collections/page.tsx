@@ -19,7 +19,6 @@ export default async function Page(){
   }
 
   const [res, rest, restt] = await Promise.all([
-    // getCollectionsMin(token),
     getAllCollectionsMINByDateAndCondition(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()),{
           "condition": [
               "67e31aa81945c0b1e4c9bc76", "67e318171945c0b1e4c9bc72", "67e318601945c0b1e4c9bc74"

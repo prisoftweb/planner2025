@@ -6,21 +6,23 @@ import { useState, useEffect } from "react";
 import { pendingPaymentProvider } from "@/interfaces/Payments";
 import { showToastMessageError } from "@/components/Alert";
 import { CostsPaymentTable } from "@/interfaces/Providers";
-import { ICostRelAdvance } from "@/interfaces/Expenses";
+import { ICostRelAdvanceInv } from "@/interfaces/Expenses";
 
 type HeaderProps={
   // expensesTable: CostsPaymentTable[], 
   // provider: Provider,
   provider: ProviderMin, 
   // token: string
-  costs:ICostRelAdvance[],
+  costs:ICostRelAdvanceInv[],
   pending:number
 }
 
 export default function HeaderAddInvoicesToAdvance({provider, costs, pending}: HeaderProps) {
 
-  const total = costs.reduce((accum, item) => accum+=item.cost?.total > 0? item.cost?.total:0, 0 );
- 
+  // const total = costs.reduce((accum, item) => accum+=item.cost?.total > 0? item.cost?.total:0, 0 );
+  const total = costs.reduce((accum, item) => accum+=item.invoiceUUID.cost.total, 0);
+  // const total=10;
+  
   return (
     <div>
       <div className="grid grid-cols-3">

@@ -12,7 +12,7 @@ import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 import NavStepperAddInvoicesToAdvance from "./NavStepperAddInvoicesToAdvance";
 import HeaderAddInvoicesToAdvance from "./HeaderAddInvoicesToAdvance";
 import AddInvoicesInAdvance from "./AddInvoicesInAdvance";
-import { ICostRelAdvance } from "@/interfaces/Expenses";
+import { ICostRelAdvanceInv } from "@/interfaces/Expenses";
 import ExpensesToRelacionatedTable from "./ExpensesToRelacionatedTable";
 import { OneExpense } from "@/interfaces/Expenses";
 
@@ -22,7 +22,7 @@ type Props = {
   token:string, 
   user: string, 
   open: boolean,
-  costs:ICostRelAdvance[],
+  costs:ICostRelAdvanceInv[],
   pending:number,
   advance:OneExpense,
   updateInvoices: () => Promise<void>

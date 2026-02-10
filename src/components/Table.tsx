@@ -16,7 +16,7 @@ import { HistoryExpensesTable, ExpensesTableProvider, DetailExpensesTableProvide
 import { IInvoiceTable } from "@/interfaces/Invoices";
 import { ITableGuarantee } from "@/interfaces/Guarantee";
 import { CostsTable } from "@/interfaces/Reports";
-import { ICostRelAdvance } from "@/interfaces/Expenses";
+import { ICostRelAdvanceInv } from "@/interfaces/Expenses";
 
 type MyData = {
   numRows: string
@@ -415,41 +415,41 @@ export default function Table({data, columns, placeH, typeTable='',
                   }else{
                     if(typeTable === 'advance'){
 
-                      data.forEach((element:ICostRelAdvance) => {
-                        total+= element.cost.total>0? element.cost.total:0;
-                      });
+                      // data.forEach((element:ICostRelAdvance) => {
+                      //   total+= element.cost.total>0? element.cost.total:0;
+                      // });
 
-                      const t = CurrencyFormatter({
-                        currency: 'MXN',
-                        value: total
-                      });
+                      // const t = CurrencyFormatter({
+                      //   currency: 'MXN',
+                      //   value: total
+                      // });
 
-                      if(table.getSelectedRowModel().flatRows.length > 0){
-                        let totalSeleccionados: number = 0;
-                        table.getSelectedRowModel().flatRows.forEach((inv:any) => {
-                          totalSeleccionados += inv.original.cost.total>0?inv.original.cost.total:0;
-                        })
-                        const tSeleccionados = CurrencyFormatter({
-                          currency: 'MXN',
-                          value: totalSeleccionados
-                        });
+                      // if(table.getSelectedRowModel().flatRows.length > 0){
+                      //   let totalSeleccionados: number = 0;
+                      //   table.getSelectedRowModel().flatRows.forEach((inv:any) => {
+                      //     totalSeleccionados += inv.original.cost.total>0?inv.original.cost.total:0;
+                      //   })
+                      //   const tSeleccionados = CurrencyFormatter({
+                      //     currency: 'MXN',
+                      //     value: totalSeleccionados
+                      //   });
                         
-                        labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
-                            <div className="flex gap-x-5 text-white pl-5">
-                              <p>Cantidad: {data.length}</p>
-                              <p>Total de facturas: {t}</p>
-                            </div>
-                            <div className="flex gap-x-5 text-white pl-5">
-                              <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
-                              <p>Total de facturas seleccionadas: {tSeleccionados} </p>
-                            </div>
-                        </div>)
-                      }else{
-                        labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
-                              <p>Cantidad: {data.length}</p>
-                              <p>Total de facturas: {t}</p>
-                            </div>)
-                      }
+                      //   labelJSX = ( <div className="flex justify-between gap-x-5 text-white pl-5">
+                      //       <div className="flex gap-x-5 text-white pl-5">
+                      //         <p>Cantidad: {data.length}</p>
+                      //         <p>Total de facturas: {t}</p>
+                      //       </div>
+                      //       <div className="flex gap-x-5 text-white pl-5">
+                      //         <p>Cantidad: {table.getSelectedRowModel().flatRows.length}</p>
+                      //         <p>Total de facturas seleccionadas: {tSeleccionados} </p>
+                      //       </div>
+                      //   </div>)
+                      // }else{
+                      //   labelJSX = ( <div className="flex gap-x-5 text-white pl-5">
+                      //         <p>Cantidad: {data.length}</p>
+                      //         <p>Total de facturas: {t}</p>
+                      //       </div>)
+                      // }
                     }
                   }
                 }

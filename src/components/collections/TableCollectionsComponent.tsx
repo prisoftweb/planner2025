@@ -32,7 +32,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     totalRecoveredP:ITotalAmountRecoveredCollections}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>(collectionsParam);
-  const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
+  // const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
   const [showNewCollection, setShowNewCollection]= useState<boolean>(false);
   const [isFilter, setIsFilter]=useState<boolean>(false);
   const [totalCollections, setTotalCollections]=useState<ITotalAmountCollections>(totalParam);
@@ -109,33 +109,15 @@ export default function TableCollectionsComponent({token, user, collectionsParam
   }
 
   const handleFilter = (dateS:Date, dateE:Date, arrStatuses:Array<string>) => {
-    // let statusesFil;
-    // if(arrStatuses.length > 0){
-    //   statusesFil = collections.filter((c) => arrStatuses.includes(c.condition._id));
-    // }else{
-    //   statusesFil = collections;
-    // }
-
-    // const filtered = statusesFil.filter((c) => {
-    //   let d = new Date(c.date).getTime();
-    //   if(d >= dateS.getTime() && d <= dateE.getTime()){
-    //     return c;
-    //   }
-    // });
-
-    // setFilteredCollections(filtered);
-    // setIsFilter(true);
     updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   }
 
   const updateTotal = async (dateI:string, dateF:string, arrStatuses:Array<string>) => {
     const data={
-      // condition: statuses,
       condition:arrStatuses,
       conditionCharged:['678ed05cc5f08e8a0f36d5e1', '67d20e2959865f640af92682'],
       conditionAccountsReceivable:['67d20cb359865f640af92638'],
     }
-    // const rest = await getAllTotalAmountRecoveredCollection(token, dateI, dateF, data);
     const [col,rest, restt]= await Promise.all([
       getAllCollectionsMINByDateAndCondition(token, dateI, dateF, {
           "condition": arrStatuses
@@ -330,12 +312,16 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           ))}
         </nav>
       </div>
-      {showNewCollection && (
+      {/* {showNewCollection && (
         <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
                                 user={user} updateCollections={updateCollections} />
         </ContainerSideNav>
-      )}
+      )} */}
+      <ContainerSideNav width="w-full max-w-xl" open={showNewCollection}>
+        <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
+                              user={user} updateCollections={updateCollections} />
+      </ContainerSideNav>
     </>
   )
 }

@@ -25,13 +25,18 @@ export default function ButtonNewNode({token, user, departments,
   return(
     <>
       <Button type="button" onClick={() => handleClick(true)}>Nuevo</Button>
-          {newNode && (
+          {/* {newNode && (
             <ContainerSideNav width="w-full max-w-md">
               <NewNode showForm={handleClick} token={token} 
                           departments={departments} glossaries={glossaries} 
                           workFlows={workFlows} descGlossaries={descGlossaries} />
             </ContainerSideNav>
-          )}
+          )} */}
+      <ContainerSideNav width="w-full max-w-md" open={newNode} >
+        <NewNode showForm={handleClick} token={token} 
+                    departments={departments} glossaries={glossaries} 
+                    workFlows={workFlows} descGlossaries={descGlossaries} />
+      </ContainerSideNav>
     </>
   )
 }

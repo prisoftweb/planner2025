@@ -223,7 +223,6 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <p className="text-slate-600 text-right">{CurrencyFormatter({
                 currency: 'MXN',
                 value: advance
-                // value: totalEstimatedProjectState.length> 0? totalEstimatedProjectState[0]?.amountPayable || 0 : 0
               })}</p>
             </div>
 
@@ -282,20 +281,29 @@ export default function ContainerStimationsProject({project, optConditions, optP
         delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
         selEstimate={handleSelEstimate} pageProject={pageProject} />
 
-      {openNewStimate && (
+      {/* {openNewStimate && (
         <ContainerSideNav width="w-full max-w-lg">
           <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
             updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
             porcentajeAdvange={percentajeAdvance} advange={advance} />
         </ContainerSideNav>
-      )}
+      )} */}
+      <ContainerSideNav width="w-full max-w-lg" open={openNewStimate}>
+        <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
+          updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
+          porcentajeAdvange={percentajeAdvance} advange={advance} />
+      </ContainerSideNav>
 
-      {openNewInvoice && (
+      {/* {openNewInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
           <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
             updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
         </ContainerSideNav>
-      )}
+      )} */}
+      <ContainerSideNav width="w-full max-w-xl" open={openNewInvoice}>
+        <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
+          updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
+      </ContainerSideNav>
     </>
   )
 }

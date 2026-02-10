@@ -792,6 +792,27 @@ export async function getAllCostsByAdvancesToSuppliersMIN(auth_token:string, id:
   }
 }
 
+export async function getAllCostsByAdvancesToSuppliersMININVandAPP(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsByAdvancesToSuppliersMININVandAPP/${id}`;
+  // console.log('URL:', url); // Agrega este log para verificar la URL
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    console.log('Response:', res); // Agrega este log para verificar la respuesta
+    if(res.status===200) return res.data.data.arrStats;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar gastos relacionados del anticipo!!';
+    }
+    return 'Error al consultar gastos relacionados del anticipo!!';
+  }
+}
+
+
 export async function insertAdvanceInvoicesCfdisInCost(auth_token:string, id:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/insertAdvanceInvoicesCfdisInCost/${id}`;
   try {
@@ -819,6 +840,26 @@ export async function getCostsAdvanceInvoicesCFDIs(auth_token:string, id:string)
         'Authorization': `Bearer ${auth_token}`
       }
     });
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar gastos anticipo!!';
+    }
+    return 'Error al consultar gastos del anticipo!!';
+  }
+}
+
+export async function getCostsAdvanceInvoicesCFDIsWithSTRUCT(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getCostsAdvanceInvoicesCFDIsWithSTRUCT/${id}`;
+  // console.log('url cost pdf => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    // console.log('res => ', res);
     if(res.status===200) return res.data.data.stats;
     return res.statusText
   } catch (error) {

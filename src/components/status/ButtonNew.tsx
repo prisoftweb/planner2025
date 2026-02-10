@@ -59,7 +59,7 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
   return(
     <>
       {button}
-      {newType && (
+      {/* {newType && (
         <ContainerSideNav width="w-full max-w-sm">
           <NewStatus showForm={setNewType} token={token} opt={opt}
                   catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
@@ -81,7 +81,22 @@ export default function ButtonNew({token, catalogOptions, descGlossaries, glosar
                   glosariesOptions={glosariesOptions} insertFunction={InsertConditionInCatalog} />
           </ContainerSideNav>
         </div>
-      )}
+      )} */}
+      <ContainerSideNav width="w-full max-w-sm" open={newType} >
+        <NewStatus showForm={setNewType} token={token} opt={opt}
+                catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
+                glosariesOptions={glosariesOptions} insertFunction={InsertTypeInCatalog} />
+      </ContainerSideNav>
+      <ContainerSideNav width="w-full max-w-sm" open={newCategory} >
+        <NewStatus showForm={setNewCategory} token={token} opt={opt}
+                catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
+                glosariesOptions={glosariesOptions} insertFunction={InsertCategoryInCatalog} />
+      </ContainerSideNav>
+      <ContainerSideNav width="w-full max-w-sm" open={newStatus} >
+        <NewStatus showForm={setNewStatus} token={token} opt={opt}
+              catalogOptions={catalogOptions} descGlossaries={descGlossaries} 
+              glosariesOptions={glosariesOptions} insertFunction={InsertConditionInCatalog} />
+      </ContainerSideNav>
     </>
   )
 }

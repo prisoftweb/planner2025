@@ -11,12 +11,16 @@ export default function ButtonNew({token, catalog}: {token:string, catalog: (Cat
   return(
     <>
       <Button type="button" onClick={() => setNewCollection(true)}>Nuevo</Button>
-          {newCollection && (
+          {/* {newCollection && (
             <ContainerSideNav width="w-full max-w-xs">
               <NewCatalog showForm={setNewCollection} 
                                   token={token} catalog={catalog} />
             </ContainerSideNav>
-          )}
+          )} */}
+      <ContainerSideNav width="w-full max-w-xs" open={newCollection} >
+        <NewCatalog showForm={setNewCollection} 
+                            token={token} catalog={catalog} />
+      </ContainerSideNav>
     </>
   )
 }

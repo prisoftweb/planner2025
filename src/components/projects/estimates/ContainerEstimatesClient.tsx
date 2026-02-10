@@ -41,7 +41,6 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
   }
 
   const updateProjects = async () => {
-      // const res = await getProjectsWithEstimatesMin(token);
       const res = rol.toLowerCase().includes('residente') ? await getProjectsForEstimatedByUser(token, user._id) : await getProjectsWithOutEstimateMin(token);
       if(typeof(res)==='string'){
         showToastMessageError(res);
@@ -63,7 +62,6 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           <WithOut img="/img/estimates/estimates.svg" subtitle="Proyectos para estimar"
             text="Aqui se mostraran los proyectos a los que se les puede realizar o consultar una estimacion"
             title="Proyectos para estimar">
-              {/* <></> */}
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
           </WithOut>
           {newEstimate && (
@@ -110,16 +108,16 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           <div className="">
             <div className="flex gap-x-3 items-center">
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
-                        {newEstimate && (
+                        {/* {newEstimate && (
                           <ContainerSideNav width="w-full sm:max-w-4xl">
                             <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
                                           token={token} user={user._id} updateProjects={updateProjects} />
                           </ContainerSideNav>
-                          // <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
-                          //   <NewEstimateStepper showForm={handleNewEstimate}
-                          //                 token={token} user={user._id} updateProjects={updateProjects} />
-                          // </div>
-                        )}
+                        )} */}
+              <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
+                <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
+                              token={token} user={user._id} updateProjects={updateProjects} />
+              </ContainerSideNav>
             </div>
           </div>
         </div>

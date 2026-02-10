@@ -91,8 +91,6 @@ export default function TableExpenses({data, token, expenses,
     setIsFilter(value);
   }
 
-  // data.map((c) => !c.Descripcion || typeof(c.Descripcion) !== 'string' ? console.log('desc => ', c) : '');
-
   const queryParam= isPending? '?status=pending': '';
 
   const columns = [
