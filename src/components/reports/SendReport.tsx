@@ -12,6 +12,7 @@ import ButtonColor from "../ButtonColor";
 import { getNode, getNodes } from "@/app/api/routeNodes";
 import { updateReport } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
+import { Mfe } from "@/interfaces/Reports";
 
 type Props = {
   send:Function, 
@@ -226,9 +227,9 @@ export default function SendReport({send, report, node, user, token, isClose}: P
             <p className=" ml-10">Cantidad de gastos del informe</p>
             <p className=" ml-10">{oneReport?.quantity}</p>
 
-            <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
-              <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700">
-                {oneReport?.moves.map((mov) => (
+            {/* <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+              <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700"> */}
+                {/* {oneReport?.moves.map((mov) => (
                   <div role="button"
                     key={mov._id}
                     className="flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 active:bg-opacity-80 active:text-blue-gray-900">
@@ -254,6 +255,14 @@ export default function SendReport({send, report, node, user, token, isClose}: P
                         className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
                     </div>
                   </div>
+                ))} */}
+            {/* <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-188px)]"> */}
+            <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
+              <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+                overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+                {oneReport?.moves.map((mov, index:number) => (
+                  <CardReport mov={mov} key={mov._id+index} />
                 ))}
 
               </nav>
@@ -287,6 +296,40 @@ function Card(relation: Relation){
        className="w-12 h-auto rounded-full" alt="responsable" />
       <p className="text-xs text-center">{typeof(relation.relation.nextnodo)=== 'string'? '': relation.relation.nextnodo?.department.name || 'Depto'}</p>
       <Chip label={relation.relation.glossary.name} darktext={false} />
+    </div>
+  )
+}
+
+const CardReport = ({mov}: {mov:Mfe}) => {
+  return(
+    <div role="button"
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={mov.user?.photo || '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+        </div>
+        <div className="w-full max-w-72">
+          <h6
+            className="block font-sans text-base antialiased font-semibold leading-relaxed tracking-normal text-blue-gray-900">
+            {mov.condition.name}
+          </h6>
+          <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-700">
+            {mov.notes}
+          </p>
+        </div>
+      </div>
+      <div className="grid place-items-center justify-center w-28">
+        <p className="block font-sans text-sm antialiased font-normal 
+            leading-normal text-gray-700">{mov.department.name}</p>
+        <img alt="responsable" src={mov.department.company.logo || '/img/users/default.jpg'}
+          className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+      </div>
     </div>
   )
 }
