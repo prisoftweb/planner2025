@@ -319,8 +319,15 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             formdata.append('isCfdisRelations', JSON.stringify(true));
           }
 
-          if(concept==="66595dae40935bd8188ea4a2"){
+          if(concept==="6691a5f9c14942310b52ac0c"){
             formdata.append('isadvancesToSuppliers', JSON.stringify(true));
+            formdata.append('advancesToSuppliers', JSON.stringify({
+                currentbalance: Number(totalExpense.replace(/[$,]/g, "")),
+                percentadvance: 100,
+                user,
+                notes:[],
+                advanceInvoicesCfdis:[]
+              }));
           }
 
           try {
@@ -414,8 +421,15 @@ export default function DataStepper({token, user, handleUpdateCategory}:
               },
               isCfdisRelations:true
             }),
-          ...(concept==="66595dae40935bd8188ea4a2" && {
-              isadvancesToSuppliers:true
+          ...(concept==="6691a5f9c14942310b52ac0c" && {
+              isadvancesToSuppliers:true,
+              advancesToSuppliers: {
+                currentbalance: Number(totalExpense.replace(/[$,]/g, "")),
+                percentadvance: 100,
+                user,
+                notes:[],
+                advanceInvoicesCfdis:[]
+              }
             }),
         }
 
@@ -453,6 +467,7 @@ export default function DataStepper({token, user, handleUpdateCategory}:
               refRequest.current = true;
             }
           }else{
+            console.log('data => ', JSON.stringify(data));
             const res = await SaveExpense(data, token);
             if(res===201){
               const catAux=category;

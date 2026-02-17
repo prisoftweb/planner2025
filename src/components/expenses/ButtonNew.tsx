@@ -11,12 +11,6 @@ export default function ButtonNew({token, user}: {token:string, user:UsrBack,}){
   return(
     <>
       <Button type="button" onClick={() => setNewExpense(true)}>Nuevo</Button>
-          {/* {newExpense && (
-            <ContainerSideNav width="w-full sm:max-w-3xl">
-              <NewExpenseContainer showForm={setNewExpense} token={token} 
-                            user={user} />
-            </ContainerSideNav>
-          )} */}
         <ContainerSideNav width="w-full sm:max-w-3xl" open={newExpense}>
           <NewExpenseContainer showForm={setNewExpense} token={token} 
                         user={user} />

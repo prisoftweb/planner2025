@@ -79,7 +79,7 @@ export default async function Page({ params }: { params: { id: string }}){
           <Selectize options={options} routePage="providers" subpath="/profile" />
         </div>
         <NavTab idProv={params.id} tab='1' />
-        <ProviderClient provider={provider} token={token} id={params.id} costPayment={costPayment} />
+        <ProviderClient provider={provider} token={token} user={user._id} id={params.id} costPayment={costPayment} />
       </div>
     </>
   )

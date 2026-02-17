@@ -69,6 +69,8 @@ export default function ContainerClient({token, optClients, optCategories,
   const [prjsCBtrue, setPrjsCBtrue] = useState<IProyectCostBen[]>(prjsCBtrueparam);
   const [selected, setSelected] = useState("Ganancia");
 
+  const [widthPage, setWidthPage]=useState<number>(500);
+
   const [isWide, setIsWide] = useState(false);
 
   const options = ["Ganancia", "Costo-Beneficio"];
@@ -91,6 +93,9 @@ export default function ContainerClient({token, optClients, optCategories,
     // Función para actualizar el estado según el ancho
     const checkWidth = () => {
       setIsWide(window.innerWidth > 1400);
+      // if(window.innerWidth < 500){
+      //   setIsTable(false);
+      // }
     };
 
     // Llamar al cargar
@@ -101,6 +106,28 @@ export default function ContainerClient({token, optClients, optCategories,
 
     // Limpiar listener al desmontar
     return () => window.removeEventListener("resize", checkWidth);
+  }, []);
+
+  const handleResize = () => {
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    )
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    );
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+    return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
   const handleFilter = (value:boolean) => {
@@ -316,16 +343,20 @@ export default function ContainerClient({token, optClients, optCategories,
           <div>
             <div className="flex gap-x-3 items-center print:hidden">
               {role.toLowerCase().includes('super') && isWide && reportPDF}
-              <TooltipContainerIcon label="Tabla">
-                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
-                  onClick={() => setIsTable(true)}
-                />
-              </TooltipContainerIcon>
-              <TooltipContainerIcon label="Tarjeta">
-                <PiTableThin onClick={() => setIsTable(false)} 
-                  className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
-                />
-              </TooltipContainerIcon>
+              {widthPage > 500 && (
+                <>
+                  <TooltipContainerIcon label="Tabla">
+                    <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
+                      onClick={() => setIsTable(true)}
+                    />
+                  </TooltipContainerIcon>
+                  <TooltipContainerIcon label="Tarjeta">
+                    <PiTableThin onClick={() => setIsTable(false)} 
+                      className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
+                    />
+                  </TooltipContainerIcon>
+                </>
+              )}
               <TooltipFilterIcon handleFilter={handleFilter} />
               <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}

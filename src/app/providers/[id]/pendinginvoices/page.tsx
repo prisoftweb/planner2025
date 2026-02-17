@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">{provider}</h1>
+        <h1 className="text-center text-red-500">{provider} provider</h1>
       </>
     )
   }
@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(providers) === "string"){
     return(
       <>
-        <h1 className="text-center text-red-500">{providers}</h1>
+        <h1 className="text-center text-red-500">{providers} providers</h1>
       </>
     )
   }
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-center text-red-500">{costs}</h1>
+        <h1 className="text-center text-red-500">{costs} costs</h1>
       </>
     )
   }
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: { id: string }}){
     return(
       <>
         <Navigation user={user} />
-        <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
+        <h1 className="text-red-500 text-center text-lg">{optTypes} types</h1>
       </>
     )
   }

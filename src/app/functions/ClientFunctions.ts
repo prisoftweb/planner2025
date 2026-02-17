@@ -10,8 +10,9 @@ export function ClientDataToTableClient(clients:ClientBack[]){
 
 export function TransformClientInTableClient(client: ClientBack){
   const c = {
-    'id': client._id,
-    'name': client.name,
+    id: client._id,
+    // name: client.name,
+    name: client.tradename?? '',
     account: client.account,
     contacts: client.contact?.length?? 0,
     currentbalance: 0,

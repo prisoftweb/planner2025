@@ -12,8 +12,8 @@ import { useOneProviderStore } from "@/app/store/providerStore"
 import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
 import ShowContactasProv from "./ShowContactsProv"
 
-export default function ProviderClient({provider, token, id, costPayment}: 
-  {provider:Provider, token:string, id:string, costPayment:ICostTOTALPendingPAYGroupByPROVIDER}){
+export default function ProviderClient({provider, token, id, costPayment, user}: 
+  {provider:Provider, token:string, id:string, costPayment:ICostTOTALPendingPAYGroupByPROVIDER, user:string}){
 
   const [opt, setOpt] = useState<number>(provider.tradeline?.creditlimit ? 1: 2);
   const {updateOneProviderStore} = useOneProviderStore();
@@ -22,7 +22,7 @@ export default function ProviderClient({provider, token, id, costPayment}:
 
   const view = (
     opt===2? (<div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
-                <DataBasic id={id} provider={provider} token={token} />
+                <DataBasic id={id} provider={provider} token={token} user={user} />
                 <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
                   <ShowContactasProv provider={provider} token={token} />
                 </div>
@@ -44,7 +44,7 @@ export default function ProviderClient({provider, token, id, costPayment}:
               </div>
             </div>
             : <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
-                <DataBasic id={id} provider={provider} token={token} />
+                <DataBasic id={id} provider={provider} token={token} user={user} />
                 <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
                   <ShowContactasProv provider={provider} token={token} />
                 </div>

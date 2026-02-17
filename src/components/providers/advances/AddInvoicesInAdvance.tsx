@@ -2,7 +2,7 @@ import Label from "@/components/Label"
 import TextArea from "@/components/TextArea"
 import Button from "@/components/Button"
 import { ICostRelAdvanceInv } from "@/interfaces/Expenses"
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { insertAdvanceInvoicesCfdisInCost } from "@/app/api/routeCost"
 import { OneExpense } from "@/interfaces/Expenses"
@@ -14,51 +14,12 @@ export default function AddInvoicesInAdvance({costs, user, advance, token, handl
   const [notes, setNotes]=useState<string>();
   const [error, setError]=useState<boolean>(false);
 
-  // const [pares, impares] = useMemo(() => {
-  //   return costs.reduce(
-  //     ([p, i], value, index) => {
-  //       index % 2 === 0 ? p.push(value) : i.push(value);
-  //       return [p, i];
-  //     },
-  //     [[], []] as [ICostRelAdvanceInv[], ICostRelAdvanceInv[]]
-  //   );
-  // }, [costs]);
-
   const saveData = async() => {
     if(notes && notes.trim() !== ''){
       setError(false);
-      // let validate = true;
-
-
-      // for (let i = 0; i < pares.length; i++) {
-      //   if (impares[i].cost.total > 0) {
-      //     showToastMessageError(`El valor de la nota ${impares[i].folio} no es valido!!!!`);
-      //     validate=false;
-      //     break;
-      //   }else{
-      //     if(!impares[i].cfdisRelations.relatedUUIDs.includes(pares[i]._id)){
-      //       showToastMessageError(`La nota no coincide con la factura ${pares[i].taxfolio}!!!!`);
-      //       validate=false;
-      //       break;
-      //     }
-      //   }
-      // }
-
-      // if(validate){
-      //   const advanceInvoicesCfdis = [];
-
-      //   for (let index = 0; index < pares.length; index++) {
-      //     advanceInvoicesCfdis.push({
-      //       invoiceUUID:pares[index]._id,
-      //       applicationUUID:impares[index]._id,
-      //     });
-      //   }
 
       const advanceInvoicesCfdis = [];
       for (let index = 0; index < costs.length; index++) {
-        // const element = costs[index];
-        // const ids = objetos.map(obj => obj.id);
-        // const applicationUUID = costs[index].applicationUUID.map((c) => c._id);
         const applicationUUID = (Array.isArray(costs[index].applicationUUID)? costs[index].applicationUUID: []).map((c) => c._id);
         advanceInvoicesCfdis.push({
           invoiceUUID:costs[index].invoiceUUID._id,
@@ -87,7 +48,6 @@ export default function AddInvoicesInAdvance({costs, user, advance, token, handl
         updateInvoices();
         handleClose();
       }
-      // }
     }else{
       setError(true);
     }
@@ -108,44 +68,3 @@ export default function AddInvoicesInAdvance({costs, user, advance, token, handl
     </div>
   )
 }
-
-// update cost 
-// {
-//     "advancesToSuppliers": {
-//         "currentbalance": 2733208.16,
-//         "percentadvance": 100.0,
-//         "user": "666243bfef1d807b24ed9a28",
-//         "notes": ["Se agregaron 2 facturas al anticipo como pruebas"],
-//         "advanceInvoicesCfdis":[
-//             {
-//                 "invoiceUUID":"693320ec8b2dff14f8c68778",
-//                 "applicationUUID":"694ee783c180d3ed7a2e76e3",
-//                 "date": "2026-01-22"
-//             },
-//             {
-//                 "invoiceUUID":"693b04899f6656796271ceee",
-//                 "applicationUUID":"696145cd01a1a2db0b93edc3",
-//                 "date": "2026-01-22"
-//             }
-//         ]
-//     }
-// }
-
-// insert advancesInvoices
-// {{URL}}api/v1/costs/insertAdvanceInvoicesCfdisInCost/689a28097ceb2b3935f1f349
-
-// {
-//     "advancesToSuppliers": {
-//         "currentbalance": 1528927.79,
-//         "percentadvance": 55.94,
-//         "user": "65d3836974045152c0c4378c",
-//         "notes": ["Se agrega 1 factura al anticipo como pruebas"],
-//         "advanceInvoicesCfdis":[
-//             {
-//                 "invoiceUUID":"693320ec8b2dff14f8c68778",
-//                 "applicationUUID":"694ee7fcc180d3ed7a2e784f",
-//                 "date": "2026-01-21"
-//             }            
-//         ]
-//     }
-// }

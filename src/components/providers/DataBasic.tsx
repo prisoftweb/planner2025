@@ -6,17 +6,50 @@ import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
 import { Provider } from "@/interfaces/Providers";
-import { useState, useRef } from "react";
-import { updateProvider } from "@/app/api/routeProviders";
+import { useState, useRef, useEffect } from "react";
+import { updateProvider, insertConditionInProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
-import CardContact from "./CardContact";
+// import CardContact from "./CardContact";
 import { useOneProviderStore } from "@/app/store/providerStore";
+import { getCatalogsByNameAndType, getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
 
-export default function DataBasic({id, token, provider}:{id:string, token:string, provider:Provider}){
+export default function DataBasic({id, token, provider, user}:{id:string, token:string, provider:Provider, user:string}){
   
   const refRequest = useRef(true);
 
   const {updateOneProviderStore, oneProviderStore} = useOneProviderStore();
+
+  const [type, setType]=useState<Options>();
+  const [optTypes, setOptTypes] = useState<Options[]>([]);
+
+  const [category, setCategory]=useState<Options>();
+  const [optCategories, setOptCategories] = useState<Options[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [res, resc] = await Promise.all([
+        getCatalogsByNameAndType(token, 'Providers'),
+        getCatalogsByNameAndCondition(token, 'Providers')
+      ]) 
+      
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptTypes(res);
+        setType(res[0]);
+      }
+
+      if(typeof(resc)==='string'){
+        showToastMessageError(resc);
+      }else{
+        setOptCategories(resc);
+        setCategory(resc[0]);
+      }
+    }
+    fetch();
+  }, [])
 
   const [suppliercredit, setSuppliercredit] = useState<boolean>(oneProviderStore? oneProviderStore.suppliercredit : provider.suppliercredit);
 
@@ -64,6 +97,34 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
       }
     },       
   });
+
+  const handleSupplierCredit = async (value:boolean) => {
+    setSuppliercredit(value);
+    if(value){
+      const data ={
+        condition: [
+          {                        
+            glossary: "6746442a734d5ab78ab98ddd",
+            user                    
+          }
+        ]    
+      }
+      const res = await insertConditionInProvider(id, token, data);
+      if(typeof(res) !== 'string'){
+        showToastMessage('El proveedor ahora tiene linea de credito!!');
+      }else{
+        showToastMessageError(res);
+      }
+    }
+  }
+
+  const handleType=(value:Options) => {
+    setType(value);
+  }
+
+  const handleCategory=(value:Options) => {
+    setCategory(value);
+  }
   
   // let showContacts: JSX.Element[] =[];
 
@@ -121,10 +182,22 @@ export default function DataBasic({id, token, provider}:{id:string, token:string
             </div>
           ) : null}
         </div>
+        <div>
+          <Label>Tipo</Label>
+          {optTypes.length>0 && (
+            <SelectReact index={0} opts={optTypes} setValue={handleType} />
+          )}
+        </div>
+        <div>
+          <Label>Estatus</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+          )}
+        </div>
         <div className="inline-flex items-center">
           <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-            <input checked={suppliercredit} onClick={() => setSuppliercredit(!suppliercredit)} id="switch-3" type="checkbox"
+            <input checked={suppliercredit} onClick={() => handleSupplierCredit(!suppliercredit)} id="switch-3" type="checkbox"
               className="absolute w-8 h-4 transition-colors duration-300 rounded-full appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-green-500 peer-checked:border-green-500 peer-checked:before:bg-green-500" />
             <label htmlFor="switch-3"
               className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-green-500 peer-checked:before:bg-green-500">

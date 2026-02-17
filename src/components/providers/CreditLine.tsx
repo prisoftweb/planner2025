@@ -8,14 +8,20 @@ import { Provider } from "@/interfaces/Providers";
 import { updateProvider } from "@/app/api/routeProviders";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import CurrencyInput from "react-currency-input-field";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useOneProviderStore } from "@/app/store/providerStore";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
+import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 
 export default function CreditLine({provider, id, token}: 
   {provider:Provider, id:string, token:string}){
   
   const refRequest = useRef(true);
   const {oneProviderStore, updateOneProviderStore} = useOneProviderStore();
+
+  const [category, setCategory]=useState<Options>();
+  const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   const formik = useFormik({
     initialValues: {
@@ -63,6 +69,27 @@ export default function CreditLine({provider, id, token}:
       }
     },       
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [resc] = await Promise.all([
+        // getCatalogsByNameAndType(token, 'Providers'),
+        getCatalogsByNameAndCategory(token, 'Providers')
+      ]) 
+      
+      if(typeof(resc)==='string'){
+        showToastMessageError(resc);
+      }else{
+        setOptCategories(resc);
+        setCategory(resc[0]);
+      }
+    }
+    fetch();
+  }, [])
+
+  const handleCategory=(value:Options) => {
+    setCategory(value);
+  }
   
   return(
     <div className="w-full">
@@ -154,6 +181,12 @@ export default function CreditLine({provider, id, token}:
                   <p>{formik.errors.percentoverduedebt}</p>
               </div>
           ) : null}
+        </div>
+        <div>
+          <Label>Categoria</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+          )}
         </div>
         <div className="flex justify-center mt-4">
           <Button type="submit">Guardar cambios</Button>

@@ -8,8 +8,11 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import SaveProvider from "@/app/functions/SaveProvider";
 import BasicBarStepper from "./BasicBarStepper";
 import CurrencyInput from "react-currency-input-field";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
+import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 
 export default function CreditLineStepper({token, id, user}:{token:string, id:string, user: string}){
   
@@ -17,6 +20,9 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
   const refRequest = useRef(true);
 
   const {providerStore, updateProviderStore, updateHaveNewProvider} = useProviderStore();
+
+  const [category, setCategory]=useState<Options>();
+  const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   let creditlimitI= '', creditdaysI='', currentbalanceI='', percentoverduedebtI=''; 
 
@@ -57,6 +63,23 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
       dispatch({type: 'INDEX_STEPPER', data: 2})
     },       
   });
+
+  useEffect(() => {
+      const fetch = async () => {
+        const [resc] = await Promise.all([
+          // getCatalogsByNameAndType(token, 'Providers'),
+          getCatalogsByNameAndCategory(token, 'Providers')
+        ]) 
+        
+        if(typeof(resc)==='string'){
+          showToastMessageError(resc);
+        }else{
+          setOptCategories(resc);
+          setCategory(resc[0]);
+        }
+      }
+      fetch();
+    }, [])
   
   const onClickSave = async () => {
     if(refRequest.current){
@@ -91,8 +114,15 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
           condition: [{
             glossary: '663d2fe61d1c43ae98d77bc3',
             user
-          }]
+          },
+            ...(suppliercredit
+                ? [{
+                    glossary: "6746442a734d5ab78ab98ddd",
+                    user
+                  }]
+                : [])],
         }
+        console.log('data => ', JSON.stringify(data));
         const res = await SaveProvider(data, token);
         if(res.status){
           refRequest.current = true;
@@ -110,6 +140,10 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
     }else{
       showToastMessageError('Ya hay una solicitud en proceso..!!!');
     }
+  }
+
+  const handleCategory=(value:Options) => {
+    setCategory(value);
   }
 
   return(
@@ -202,6 +236,12 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
                   <p>{formik.errors.percentoverduedebt}</p>
               </div>
           ) : null}
+        </div>
+        <div>
+          <Label>Categoria</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+          )}
         </div>
         <div className="flex justify-end space-x-5 mt-8">
           <Button onClick={onClickSave} type="button">Guardar</Button>

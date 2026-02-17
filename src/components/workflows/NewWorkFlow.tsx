@@ -7,13 +7,129 @@ import Button from "../Button"
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {showToastMessage, showToastMessageError} from "../Alert"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, forwardRef } from "react"
 import { Workflow } from "@/interfaces/Workflows"
 import { createWorkFlow } from "@/app/api/routeWorkflows"
 import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon"
 
-export default function NewWorkFlow({showForm, token, workFlow}: 
-  {showForm:(value: boolean) => void, token:string, workFlow: (Workflow | string)}){
+// export default function NewWorkFlow({showForm, token, workFlow}: 
+//   {showForm:(value: boolean) => void, token:string, workFlow: (Workflow | string)}){
+  
+//   const [heightPage, setHeightPage] = useState<number>(900);
+//   const refRequest = useRef(true);
+  
+//   const handleResize = () => {
+//     setHeightPage(document.body.offsetHeight);
+//   }
+  
+//   useEffect (() => {
+//     window.addEventListener("resize", handleResize, false);
+//     setHeightPage(document.body.offsetHeight - 70);
+//     return () => window.removeEventListener('scroll', handleResize);
+//   }, [])
+
+//   const formik = useFormik({
+//     initialValues: {
+//       title: (typeof(workFlow)==='string')? '': workFlow.title,
+//       description: (typeof(workFlow)==='string')? '': workFlow.description,
+//     }, 
+//     validationSchema: Yup.object({
+//       title: Yup.string()
+//                   .required('El titulo es obligatorio'),
+//       description: Yup.string()
+//                   .required('La descripcion es obligatoria'),
+//     }),
+
+//     onSubmit: async valores => {
+//       if(refRequest.current){
+//         refRequest.current = false;
+//         try {
+//           const {description, title} = valores;
+//           const data = {
+//             description,
+//             title,
+//           }
+//           const res = await createWorkFlow(token, data);
+//           if(res === 201){
+//             refRequest.current = true;
+//             showToastMessage('WorkFlow creado satisfactoriamente!!');
+//             setTimeout(() => {
+//               window.location.reload();
+//             }, 500);
+//           }else{
+//             refRequest.current = true;
+//             showToastMessageError(res);
+//           }
+//         } catch (error) {
+//           refRequest.current = true;
+//           showToastMessageError('Error al crear workflow!!!');
+//         }
+//       }else{
+//         showToastMessageError('Ya hay una solicitud en procese!!!');
+//       }
+//     }
+//   });
+
+//   return(//top-16
+//     <>
+//       <form className="z-10 w-full h-full max-w-md absolute bg-white space-y-5 p-5 right-0"
+//         onSubmit={formik.handleSubmit}
+//         // style={{height: `${heightPage}px`}}
+//       >
+//         <div className="flex justify-between">
+//           <HeaderForm img="/img/glossary.svg" subtitle="Agregar nuevo workflow" 
+//             title="Agregar nuevo workflow"
+//           />
+//           {/* <XMarkIcon className="w-6 h-6 text-slate-500
+//             hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+//           <TooltipCloseIcon handleClose={showForm} />
+//         </div>
+        
+//         <div>
+//           <Label htmlFor="title"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Title</p></Label>
+//           <Input type="text" name="title" 
+//             onChange={formik.handleChange}
+//             onBlur={formik.handleChange}
+//             value={formik.values.title}
+//             autoFocus
+//           />
+//           {formik.touched.title && formik.errors.title ? (
+//             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+//               <p>{formik.errors.title}</p>
+//             </div>
+//           ) : null}
+//         </div>
+//         <div>
+//           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
+//           <textarea name="description" 
+//             className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-slate-100 
+//                 focus:border-slate-700 outline-0 overflow-hidden resize-none"
+//             onChange={formik.handleChange}
+//             onBlur={formik.handleChange}
+//             value={formik.values.description}
+//             rows={4}
+//           />
+//           {formik.touched.description && formik.errors.description ? (
+//             <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+//               <p>{formik.errors.description}</p>
+//             </div>
+//           ) : null}
+//         </div>
+//         <div className="flex justify-center mt-2">
+//           <Button type="submit">Guardar</Button>
+//         </div>
+//       </form>
+//     </>
+//   )
+// }
+
+type WorkFlowProps = {
+  showForm:(value: boolean) => void, 
+  token:string, 
+  workFlow: (Workflow | string)
+}
+
+const NewWorkFlow = forwardRef<HTMLInputElement, WorkFlowProps>(function NewWorkFlow( { token, showForm, workFlow }, ref ){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const refRequest = useRef(true);
@@ -87,7 +203,8 @@ export default function NewWorkFlow({showForm, token, workFlow}:
         
         <div>
           <Label htmlFor="title"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Title</p></Label>
-          <Input type="text" name="title" 
+          <Input type="text" name="title"
+            ref={ref}
             onChange={formik.handleChange}
             onBlur={formik.handleChange}
             value={formik.values.title}
@@ -121,4 +238,8 @@ export default function NewWorkFlow({showForm, token, workFlow}:
       </form>
     </>
   )
-}
+});
+
+Input.displayName = "NewWorkFlow";
+
+export default NewWorkFlow;

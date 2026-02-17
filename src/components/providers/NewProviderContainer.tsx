@@ -79,9 +79,12 @@ export default function NewProviderContainer({token, id, showForm, user, open}:
   }
 
   return(//top-16
-    <div className={`z-10 w-full sm:max-w-lg absolute bg-white p-5 right-0 h-screen
-                    transform transition-transform duration-300
-                    ${open ? "translate-x-0" : "translate-x-full"}`}
+    // <div className={`z-10 w-full sm:max-w-lg absolute bg-white p-5 right-0 h-screen
+    //                 transform transition-transform duration-300
+    //                 ${open ? "translate-x-0" : "translate-x-full"}`}
+    //   style={{height: `${heightPage}px`}}
+    // >
+    <div className={`z-10 w-full sm:max-w-lg absolute bg-white p-5 right-0 h-screen`}
       style={{height: `${heightPage}px`}}
     >
       <div className="flex justify-between border border-slate-400 p-2 rounded-md" style={{backgroundColor:'#F8FAFC'}}>

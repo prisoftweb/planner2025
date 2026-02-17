@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import { getWorkFlows } from "../api/routeWorkflows";
 import { WorkflowTable } from "@/interfaces/Workflows";
 import TableWorkflows from "@/components/workflows/TableWorkflows";
+import ContainerWorkFlows, {ContainerButtonWorkFlow} from "@/components/workflows/ContainerWorkFlows";
 
 export default async function page() {
   const cookieStore = cookies();
@@ -40,8 +41,8 @@ export default async function page() {
           <WithOut img="/img/costs/costs.svg" subtitle="Workflow"
             text="Agrega workflow, para el control de los diferentes procedimientos"
             title="Workflow">
-              <ButtonNew token={token} user={user._id}
-              />
+              {/* <ButtonNew token={token} /> */}
+              <ContainerButtonWorkFlow token={token} />
           </WithOut>
         </div>
       </>
@@ -60,7 +61,7 @@ export default async function page() {
   return (
     <>
       <Navigation user={user} />
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+      {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Workflows" placeHolder="Buscar workflow.." >
           <ButtonNew token={token} user={user._id}
           />
@@ -68,7 +69,8 @@ export default async function page() {
         <div className="mt-5">
           <TableWorkflows data={table} token={token} />
         </div>
-      </div>
+      </div> */}
+      <ContainerWorkFlows data={table} token={token} user={user} />
     </>
   )
 }

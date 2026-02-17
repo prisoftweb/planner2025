@@ -44,11 +44,20 @@ export default function ContactsStepper({id, token, user}: {id:string, token:str
             condition: [{
               glossary: '663d2fe61d1c43ae98d77bc3',
               user
-            }]
+            },
+              ...(suppliercredit
+                ? [{
+                    glossary: "6746442a734d5ab78ab98ddd",
+                    user
+                  }]
+                : [])],
           }
 
+          // console.log('supplier credit => ', suppliercredit);
+          // console.log('data => ', JSON.stringify(data));
           const res = await SaveProvider(data, token);
           if(res.status){
+            // console.log('res provider', res.prov);
             refRequest.current = true;
             showToastMessage(res.message);
             updateProviderStore([...providerStore, res.prov]);

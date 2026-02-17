@@ -3,12 +3,15 @@ import Input from "../Input"
 import { useFormik } from "formik"
 import * as Yup from 'yup';
 import Button from "../Button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRegFormContext } from "./StepperProvider";
 import SaveProvider from "@/app/functions/SaveProvider";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import BasicBarStepper from "./BasicBarStepper";
 import { useProviderStore } from "@/app/store/providerStore";
+import { Options } from "@/interfaces/Common";
+import SelectReact from "../SelectReact";
+import { getCatalogsByNameAndType, getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs";
 
 export default function DataBasicStepper({token, id, user}: {token:string, id:string, user: string}){
   
@@ -30,6 +33,12 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
   const [suppliercredit, setSuppliercredit] = useState<boolean>(supplier);
 
   const {providerStore, updateProviderStore, updateHaveNewProvider} = useProviderStore();
+
+  const [type, setType]=useState<Options>();
+  const [optTypes, setOptTypes] = useState<Options[]>([]);
+
+  // const [category, setCategory]=useState<Options>();
+  // const [optCategories, setOptCategories] = useState<Options[]>([]);
 
   const formik = useFormik({
     initialValues: {
@@ -62,6 +71,30 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
       }
     },       
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [res] = await Promise.all([
+        getCatalogsByNameAndType(token, 'Providers'),
+        // getCatalogsByNameAndCondition(token, 'Providers')
+      ]) 
+      
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setOptTypes(res);
+        setType(res[0]);
+      }
+
+      // if(typeof(resc)==='string'){
+      //   showToastMessageError(resc);
+      // }else{
+      //   setOptCategories(resc);
+      //   setCategory(resc[0]);
+      // }
+    }
+    fetch();
+  }, [])
   
   const onClickSave = async () => {
     if(refRequest.current){
@@ -98,8 +131,15 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           condition: [{
             glossary: '663d2fe61d1c43ae98d77bc3',
             user
-          }]
+          }, 
+            ...(suppliercredit
+                ? [{
+                    glossary: "6746442a734d5ab78ab98ddd",
+                    user
+                  }]
+                : [])],
         }
+        
         const res = await SaveProvider(data, token);
         if(res.status){
           refRequest.current = true;
@@ -118,6 +158,14 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
       showToastMessageError('Ya hay una solicitud en proceso!!');
     }
   }
+
+  const handleType=(value:Options) => {
+    setType(value);
+  }
+
+  // const handleCategory=(value:Options) => {
+  //   setCategory(value);
+  // }
 
   return(
     <div className="w-full">
@@ -164,6 +212,18 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
             </div>
           ) : null}
         </div>
+        <div>
+          <Label>Tipo</Label>
+          {optTypes.length>0 && (
+            <SelectReact index={0} opts={optTypes} setValue={handleType} />
+          )}
+        </div>
+        {/* <div>
+          <Label>Estatus</Label>
+          {optCategories.length>0 && (
+            <SelectReact index={0} opts={optCategories} setValue={handleCategory} />
+          )}
+        </div> */}
         <div className="inline-flex items-center">
           <Label>Linea de credito</Label>
           <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">

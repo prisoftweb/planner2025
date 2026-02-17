@@ -75,13 +75,13 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   }
 
   useEffect(() => {
-    const expenseM = expenses.reduce((previous, current) => {
+    const expenseM = Array.isArray(expenses) && expenses.length > 0? expenses.reduce((previous, current) => {
       return current.cost?.subtotal > previous.cost?.subtotal ? current : previous;
-    });
-    const expenseMin = expenses.reduce((previous, current) => {
+    }): {cost: {subtotal: 0}};
+    const expenseMin = Array.isArray(expenses) && expenses.length > 0? expenses.reduce((previous, current) => {
       return current.cost?.subtotal < previous.cost?.subtotal ? current : previous;
-    });
-    setMaxAmount(expenseM.cost?.subtotal);
+    }): {cost: {subtotal: 0}};
+    setMaxAmount(expenseM.cost?.subtotal || 0);
     setMinAmount(expenseMin.cost?.subtotal > 0? 0: expenseMin.cost?.subtotal || 0);
   }, [])
 
