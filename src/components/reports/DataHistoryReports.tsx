@@ -28,7 +28,7 @@ export default function DataHistoryReports({report, user, id, token, dates}:
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 
-                    token='' user={user._id} node={undefined} isClose={false} />}
+                    token='' user={user} node={undefined} isClose={false} />}
     </>
   )
 }

@@ -32,7 +32,7 @@ export default function DataReports({token, report, user, node, id, dates}:
         </div>
       </div>
       {isSend && <SendReport report={report} send={handleSend} 
-                    token={token} user={user._id} node={node} isClose={refClose.current} />}
+                    token={token} user={user} node={node} isClose={refClose.current} />}
         {/* <ContainerSideNav open={isSend} width="w-full sm:max-w-lg">
           <SendReport report={report} send={handleSend} 
                     token={token} user={user._id} node={node} isClose={refClose.current} />

@@ -13,12 +13,13 @@ import { getNode, getNodes } from "@/app/api/routeNodes";
 import { updateReport } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
 import { Mfe } from "@/interfaces/Reports";
+import { UsrBack } from "@/interfaces/User";
 
 type Props = {
   send:Function, 
   report:Report, 
   node:(Node | undefined), 
-  user:string, 
+  user: UsrBack, 
   token:string, 
   isClose:boolean 
 }
@@ -75,7 +76,7 @@ export default function SendReport({send, report, node, user, token, isClose}: P
                 moves: [{
                     condition: relation.relation.glossary._id,
                     notes,
-                    user,
+                    user: user._id,
                     department: res.department._id,
                     date: new Date()
                 }]
@@ -129,7 +130,7 @@ export default function SendReport({send, report, node, user, token, isClose}: P
               moves: [{
                   condition: node?.glossary._id,
                   notes,
-                  user,
+                  user: user._id,
                   department: node?.department._id,
                   date: new Date()
               }]
@@ -174,6 +175,8 @@ export default function SendReport({send, report, node, user, token, isClose}: P
 
   let button: JSX.Element = <></>;
 
+  const canSend=(typeof(user.department)!=='string'? report.department.id===user.department.id : report.department.id===user.department);
+
   if(isClose){
     button = (
       <div className="mt-3 flex justify-center gap-x-3">
@@ -184,7 +187,7 @@ export default function SendReport({send, report, node, user, token, isClose}: P
       </div>
     )
   }else{
-    if(node){
+    if(node && canSend){
       button = (
         <div className="mt-3 flex justify-center gap-x-3">
           {node.relations.map((rel) => (
