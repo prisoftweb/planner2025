@@ -25,6 +25,8 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
   const [isTable, setIsTable] = useState<boolean>(true);
   const {budgetsStore, updateBudgetsStore} = useBudgetStore();
 
+  const [widthPage, setWidthPage]=useState<number>(500);
+
   useEffect(() => {
     updateBudgetsStore(budgets);
   }, []);
@@ -32,6 +34,28 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
   const handleFilter = (value:boolean) => {
     setIsFilter(value);
   }
+
+  const handleResize = () => {
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    )
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    );
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
 
   if(!budgetsStore || budgetsStore.length <= 0){
     return (
@@ -61,19 +85,21 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
           <div className="flex gap-x-3 gap-y-3 justify-end">
-            <div className="flex gap-x-3 items-center">
-              <p>Vista: </p>
-              <TooltipContainerIcon label="Tabla">
-                <Squares2X2Icon onClick={() => setIsTable(true)} 
-                  className="text-slate-600 w-10 h-810 cursor-pointer hover:slate-slate-300 hover:bg-blue-100"
-                />
-              </TooltipContainerIcon>
-              <TooltipContainerIcon label="Tarjeta">
-                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
-                  onClick={() => setIsTable(false)}
-                />
-              </TooltipContainerIcon>
-            </div>
+            {widthPage >= 500 && (
+              <div className="flex gap-x-3 items-center">
+                <p>Vista: </p>
+                <TooltipContainerIcon label="Tabla">
+                  <Squares2X2Icon onClick={() => setIsTable(true)} 
+                    className="text-slate-600 w-10 h-810 cursor-pointer hover:slate-slate-300 hover:bg-blue-100"
+                  />
+                </TooltipContainerIcon>
+                <TooltipContainerIcon label="Tarjeta">
+                  <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
+                    onClick={() => setIsTable(false)}
+                  />
+                </TooltipContainerIcon>
+              </div>
+            )}
             <SearchInTable placeH="Buscar presupuesto.." />
           </div>
           <div className="">

@@ -1,9 +1,9 @@
 'use client'
 import TableProjects from "./TableProjects"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Options } from "@/interfaces/Common"
 import { ProjectsTable, ProjectMin } from "@/interfaces/Projects"
-import { GiSettingsKnobs } from "react-icons/gi"
+// import { GiSettingsKnobs } from "react-icons/gi"
 import { VscListUnordered } from "react-icons/vsc";
 import { PiTableThin } from "react-icons/pi";
 import Link from "next/link"
@@ -29,11 +29,34 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
-  const [dataTable, setDataTable] = useState<ProjectsTable[]>(data);
+  // const [dataTable, setDataTable] = useState<ProjectsTable[]>(data);
+  const [widthPage, setWidthPage]=useState<number>(500);
 
   const handleFilter = (value:boolean) => {
     setIsFilter(value);
   }
+
+  const handleResize = () => {
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    )
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+    const w = Math.max(
+      document.body.scrollWidth, document.documentElement.scrollWidth,
+      document.body.offsetWidth, document.documentElement.offsetWidth,
+      document.body.clientWidth, document.documentElement.clientWidth
+    );
+    setWidthPage(w);
+    if(w <= 500) setIsTable(false);
+    return () => window.removeEventListener('scroll', handleResize);
+  }, []);
 
   if(projects.length <= 0){
     return (
@@ -66,26 +89,27 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
           <SearchInTable placeH="Buscar proyecto.." />
           <div className="">
             <div className="flex gap-x-3 items-center">
-              <TooltipContainerIcon label="Tabla">
-                <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
-                  onClick={() => setIsTable(true)}
-                />
-              </TooltipContainerIcon>
-              <TooltipContainerIcon label="Tarjeta">
-                <PiTableThin onClick={() => setIsTable(false)} 
-                  className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100"
-                />
-              </TooltipContainerIcon>
-              {/* <GiSettingsKnobs onClick={() => handleFilter(true)}
-                className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
-              /> */}
+              {widthPage >= 500 && (
+                <>
+                  <TooltipContainerIcon label="Tabla">
+                    <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
+                      onClick={() => setIsTable(true)}
+                    />
+                  </TooltipContainerIcon>
+                  <TooltipContainerIcon label="Tarjeta">
+                    <PiTableThin onClick={() => setIsTable(false)} 
+                      className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100"
+                    />
+                  </TooltipContainerIcon>
+                </>
+              )}
               <TooltipFilterIcon handleFilter={handleFilter} />
             </div>
           </div>
         </div>
       </div>
       <div className="mt-5">
-        <TableProjects data={dataTable} token={token} projects={projects} 
+        <TableProjects data={data} token={token} projects={projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}
           optConditions={optConditionsFilter} isFilter={isFilter} 
           setIsFilter={handleFilter} isTable={isTable} isHistory={true} user={user}

@@ -276,34 +276,10 @@ function transformDataInvoicesInDataTable(dataBack:ICostRelAdvanceInv[]){
       project: element.invoiceUUID.project.title,
       user: element.invoiceUUID.user
     });
-
-//     El problema es que a veces element.application es un arreglo ([]) y a veces es un objeto ({}), y forEach solo existe en arreglos.
-
-// Forma segura y recomendada ✔️
-
+    
 // Antes de usar forEach, valida que sí sea un arreglo:
-
-// if (Array.isArray(element.application)) {
-//   element.application.forEach(app => {
-//     table.push({
-//       // lo que estés metiendo a la tabla
-//     });
-//   });
-// }
-
-
 // Si no es arreglo, simplemente no entra y no truena.
-
-// Forma compacta (muy usada)
-// (Array.isArray(element.application) ? element.application : [])
-//   .forEach(app => {
-//     table.push({
-//       // ...
-//     });
-//   });
-
-
-// Así aunque venga {}, se convierte en [] y sigue feliz 😌
+// Así aunque venga {}, se convierte en [] y sigue
 
     (Array.isArray(element.applicationUUID) ? element.applicationUUID : [])
     .forEach(app => {

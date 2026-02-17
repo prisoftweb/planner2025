@@ -93,9 +93,6 @@ export default function ContainerClient({token, optClients, optCategories,
     // Función para actualizar el estado según el ancho
     const checkWidth = () => {
       setIsWide(window.innerWidth > 1400);
-      // if(window.innerWidth < 500){
-      //   setIsTable(false);
-      // }
     };
 
     // Llamar al cargar
