@@ -19,7 +19,9 @@ export async function GetReports(auth_token:string) {
 }
 
 export async function CreateReport(auth_token:string, data:Object) {
+  console.log('data to create report => ', JSON.stringify(data));
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/reports`;
+  console.log('url => ', url);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -27,9 +29,11 @@ export async function CreateReport(auth_token:string, data:Object) {
         'Content-Type': 'application/json'
       }
     });
+    console.log('res create report => ', res);
     if(res.status === 201) return res.status;
     return res.statusText;
   } catch (error) {
+    console.log('error create report => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Ocurrio un error al crear informe!!';
     }

@@ -211,8 +211,8 @@ export default function SendReport({send, report, node, user, token, isClose}: P
             <XMarkIcon className="w-6 h-6 text-slate-500 
                 hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => send(false, false)} />
           </div>
-          <div className="grid grid-cols-2 gap-x-3">
-            <div className="col-span-1 mt-2 p-3">
+          <div className="grid grid-cols-2 gap-x-2">
+            <div className="col-span-1 mt-2 p-0">
               <p className=" text-3xl text-slate-500">{oneReport?.name}</p>
               <div className="bg-slate-500 p-4">
                 <p className="text-4xl text-white">{total}</ p>

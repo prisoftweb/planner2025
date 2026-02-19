@@ -94,7 +94,7 @@ export default async function Page() {
     )
   }
 
-  const table: ReportTable[] = ReportParseDataToTableData(reports);
+  const table: ReportTable[] = ReportParseDataToTableData(reports, true);
 
   return (
     <>

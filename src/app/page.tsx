@@ -26,7 +26,7 @@ export default function Home() {
             <ContainerNewCode token={token} user={user._id} />
           ): (
           <img src="/img/Palaciosconstrucciones horizontal.svg" alt="logo" 
-            className="w-auto h-96"
+            className="w-auto h-96" 
           />)}
         </div>
       </div>

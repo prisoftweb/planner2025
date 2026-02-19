@@ -8,7 +8,7 @@ import { CostsDataToTableDataMin } from "@/app/functions/ReportsFunctions"
 import DeleteElement from "../DeleteElement"
 import { RemoveCost } from "@/app/api/routeCost"
 import { CostReport } from "@/interfaces/Reports"
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { getCostByReportMin } from "@/app/api/routeReports"
 import { useOneReportStore } from "@/app/store/reportsStore"
 
@@ -42,9 +42,9 @@ export default function CostsInReport({report, id, token}:
 
   return (
     <>
-      <div className="flex w-full max-w-screen-2xl px-2 flex-wrap space-x-2"
+      <div className="flex w-full max-w-screen-2xl px-2 flex-wrap"
           style={{'backgroundColor': '#F8FAFC'}}>
-        <div className="grid grid-cols-3 gap-x-3 mt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 mt-2">
           <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
             <div>
               <img src={ oneReport?.project.photo? oneReport.project.photo: '/img/projects/default.svg'} alt="logo" 
@@ -199,7 +199,80 @@ function CostsTableInReport({data}: {data: CostsTable[]}){
   ]
 
   return (
-    <Table columns={columns} data={data} placeH="buscar costo" typeTable="costReport" />
+    <div>
+      <div className="hidden md:block w-full">
+        <Table columns={columns} data={data} placeH="buscar costo" typeTable="costReport" />
+      </div>
+      <div className=" block md:hidden w-full">
+        <ListData data={data} />
+      </div>
+    </div>
   )
+}
 
+const ListData = ({data}: {data: CostsTable[]}) => {
+
+  const total = useMemo(() => {
+    return data.reduce((accum, item) => accum+=Number(item.Total.replace(/[$, M, X, N,]/g, "")), 0);
+  }, [data]);
+
+  return(
+    <div>
+      <p className="mt-2 text-center">Cantidad: <span className="text-blue-500 font-bold">{data.length}</span> Total gastos: <span className="text-green-600 font-bold">{CurrencyFormatter({
+        currency: 'MXN',
+        value: total
+      })}</span></p>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((c) => (
+            <CardCost cost={c} key={c.id} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardCost = ({cost}: {cost:CostsTable}) => {
+  return(
+    <div role="button"
+      key={cost.id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ cost?.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {cost.Proyecto}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {cost.Descripcion}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {cost.Total}
+              </p>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {cost.condition}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }

@@ -34,7 +34,7 @@ export default function ButtonNew({token, companies, departments,
                         />
             </ContainerSideNav>
           )} */}
-      <ContainerSideNav width="w-full max-w-xl" open={newReport}>
+      <ContainerSideNav width="w-full max-w-md" open={newReport}>
         <NewReport showForm={handleNewReport} 
                             token={token} projects={projects}
                             companies={companies} departments={departments} 

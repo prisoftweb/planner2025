@@ -19,9 +19,9 @@ export default function NuevoComponente({report, id, token}:
 
   return (
     <>
-      <div className="flex w-full px-2 flex-wrap space-x-2"
+      <div className="flex w-full px-2 flex-wrap"
           style={{'backgroundColor': '#F8FAFC'}}>
-        <div className="grid grid-cols-3 gap-x-3 mt-2 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-3 mt-2 w-full">
           <div className="flex gap-x-2 bg-white p-3 rounded-lg shadow-md">
             <div>
               <img src={ oneReport? oneReport.project.photo ?? '/img/projects/default.svg'  : '/img/projects/default.svg'} alt="logo" 
@@ -81,7 +81,7 @@ export default function NuevoComponente({report, id, token}:
         </div>
 
         <div className="mt-7 bg-white w-full shadow-md shadow-slate-500">
-          <div className="grid grid-cols-6 gap-x-4 p-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-4 p-3 gap-y-3">
             <div>
               <Label>Porcentaje gastado</Label>
               <div className="w-full flex justify-center gap-x-1">

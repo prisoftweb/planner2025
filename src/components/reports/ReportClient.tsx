@@ -52,11 +52,13 @@ export default function ReportClient({report, token, id, user, node, dates, optR
       <NavTab setTab={handleOpt} tab={opt} />
 
       <div className="flex justify-between items-center flex-wrap gap-y-3">
-        <div className="flex items-center my-2">
+        <div className="flex items-center my-2 ml-2 sm:ml-0">
           <ArrowReturn link="/reports" />
           <p className="text-xl ml-4 font-medium">{report.name}</p>
         </div>
-        <Selectize options={optReports} routePage="reports" subpath="/profile" />
+        <div className="ml-2 sm:ml-0 w-full max-w-md">
+          <Selectize options={optReports} routePage="reports" subpath="/profile" />
+        </div>
       </div>
 
       <div>

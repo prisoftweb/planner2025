@@ -155,7 +155,7 @@ export default function NewReport({showForm, token, companies,
 
   return(
     <>
-      <form className="z-10 absolute bg-white space-y-5 p-5 right-0 h-screen"
+      <form className="z-10 w-full max-w-md absolute bg-white space-y-5 p-5 right-0 h-screen"
         onSubmit={formik.handleSubmit}
         style={{height: `${heightPage}px`}}
       >

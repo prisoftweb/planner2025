@@ -34,12 +34,12 @@ export function ReportDataToTableData(reports:Report[]){
   return table;
 }
 
-export function ReportParseDataToTableData(reports:ReportParse[]){
+export function ReportParseDataToTableData(reports:ReportParse[], isHistory:boolean=false){
   const table: ReportTable[] = [];
   reports.map((report) => {
     const dollar = CurrencyFormatter({
       currency: "MXN",
-      value: report.total
+      value: isHistory? report.total : report.totalok
     })
     
     let mov=true;

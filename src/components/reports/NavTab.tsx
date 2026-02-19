@@ -24,29 +24,50 @@ export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
                       <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        ${tab===1? 'bg-green-500 rounded-lg': ''}`}
+                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        // ${tab===1? 'bg-green-500 rounded-lg': ''}`}
+                        className={`w-6 h-6 cursor-pointer transition-all duration-200
+                        ${tab===1 
+                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+                        }`}
                         onClick={() => setTab(1)} />
                     </Tooltip>
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Modificar'>
                       <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        ${tab===2? 'bg-green-500 rounded-lg': ''}`}
+                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        // ${tab===2? 'bg-green-500 rounded-lg': ''}`}
+                        // onClick={() => setTab(2)} />
+                        className={`w-6 h-6 cursor-pointer transition-all duration-200
+                        ${tab===2 
+                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+                        }`} 
                         onClick={() => setTab(2)} />
                     </Tooltip>
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Formatos'>
                       <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        ${tab===3? 'bg-green-500 rounded-lg': ''}`}
+                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        // ${tab===3? 'bg-green-500 rounded-lg': ''}`}
+                        className={`w-6 h-6 cursor-pointer transition-all duration-200
+                        ${tab===3 
+                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+                        }`}
                         onClick={() => setTab(3)} />
                     </Tooltip>
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturas'>
                       <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        ${tab===4? 'bg-green-500 rounded-lg': ''}`}
+                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
+                        // ${tab===4? 'bg-green-500 rounded-lg': ''}`}
+                        className={`w-6 h-6 cursor-pointer transition-all duration-200
+                        ${tab===4 
+                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+                        }`}
                         onClick={() => setTab(4)} />
                     </Tooltip>                        
                   </div>                             
