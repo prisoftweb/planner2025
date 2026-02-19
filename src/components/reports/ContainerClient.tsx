@@ -18,6 +18,7 @@ import { ReportParseDataToTableData } from "@/app/functions/ReportsFunctions"
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 import RemoveElement from "../RemoveElement"
 import { RemoveReport } from "@/app/api/routeReports"
+import { useTableStates } from "@/app/store/tableStates"
 
 type Props = {
   token:string, 
@@ -139,6 +140,8 @@ const ListData = ({data, token, isHistory}: {data: ReportTable[], token:string, 
 
   const [dataReports, setDataReports] = useState(data);
 
+  const {search} = useTableStates();
+
   const {haveNewReport, updateHaveNewReport, updateReportStore, reportsStore} = useOptionsReports();
 
   if(haveNewReport){
@@ -155,6 +158,16 @@ const ListData = ({data, token, isHistory}: {data: ReportTable[], token:string, 
     }
   }
 
+  const filterData = useMemo(() => {
+    if(search.trim() === ''){
+      return dataReports;
+    }else{
+      const d = dataReports.filter(item => item.Report.toLowerCase().includes(search.toLowerCase()) || 
+        item.Project.toLowerCase().includes(search.toLowerCase()));
+      return d;
+    }
+  }, [search, dataReports]);
+
   return(
     <div>
       {/* <p className="mt-2 text-center">Cantidad: <span className="text-blue-500 font-bold">{data.length}</span> Total gastos: <span className="text-green-600 font-bold">{CurrencyFormatter({
@@ -165,7 +178,7 @@ const ListData = ({data, token, isHistory}: {data: ReportTable[], token:string, 
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
-          {dataReports.map((r) => (
+          {filterData.map((r) => (
             <CardReport report={r} key={r.id} token={token} delReport={delReport} isHistory={isHistory} />
           ))}
 
@@ -181,7 +194,7 @@ const CardReport = ({report, token, delReport, isHistory}:
   return(
     <div role="button"
       key={report.id}
-      onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
       className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
         outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
@@ -195,7 +208,9 @@ const CardReport = ({report, token, delReport, isHistory}:
           {!isHistory && <RemoveElement id={report.id} name={report.Report} token={token} 
               remove={RemoveReport} removeElement={delReport} />}
         </div>
-        <div className="w-full">
+        <div className="w-full"
+          onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+        >
           <div className="flex gap-x-3 w-full justify-between items-center p-3">
             <div>
               <h6
