@@ -20,7 +20,7 @@ export default function DataReports({token, report, user, node, id, dates}:
 
   return (
     <>
-      <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+      <div className="flex w-full max-w-5xl px-2 flex-wrap sm:space-x-2" 
         style={{'backgroundColor': '#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
           <ProfileReport report={report} send={handleSend} token={token}

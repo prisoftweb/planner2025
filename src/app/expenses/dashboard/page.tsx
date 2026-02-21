@@ -31,7 +31,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{costsCategory}</h1>
+          <h1 className="text-center text-red-500">{costsCategory} cost cat</h1>
         </div>
       </>
     )
@@ -42,7 +42,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{costsConcept}</h1>
+          <h1 className="text-center text-red-500">{costsConcept} cost con</h1>
         </div>
       </>
     )
@@ -53,7 +53,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{costsDays}</h1>
+          <h1 className="text-center text-red-500">{costsDays} cost days</h1>
         </div>
       </>
     )
@@ -64,7 +64,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{costsResumen}</h1>
+          <h1 className="text-center text-red-500">{costsResumen} cost res</h1>
         </div>
       </>
     )
@@ -75,7 +75,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{costsResumenType}</h1>
+          <h1 className="text-center text-red-500">{costsResumenType} cost res type</h1>
         </div>
       </>
     )
@@ -86,7 +86,7 @@ export default async function Page() {
       <>
         <Navigation user={user} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-          <h1>{projects}</h1>
+          <h1 className="text-center text-red-500">{projects} projects</h1>
         </div>
       </>
     )

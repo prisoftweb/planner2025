@@ -220,18 +220,22 @@ export async function GetCostsMIN(auth_token:string, id:string){
 
 export async function GetCostsProviderMINWithoutPay(auth_token:string, id:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostByProviderMINWithoutPAY/${id}`;
+  // console.log('url => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
-        'Authorization': `Bearer ${auth_token}`
+        'Authorization': `Bearer ${auth_token}`,
+        'application-type': 'application/json',
       },
       data: {
         filter: "67318a51ceaf47ece0d3aa72"
       }
     });
+    // console.log('res => ', res); 
     if(res.status===200) return res.data.data.stats;
     return res.statusText
   } catch (error) {
+    // console.log('error => ', error); 
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos sin pago!!';
     }

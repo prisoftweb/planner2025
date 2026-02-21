@@ -19,6 +19,13 @@ import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 import RemoveElement from "../RemoveElement"
 import { RemoveReport } from "@/app/api/routeReports"
 import { useTableStates } from "@/app/store/tableStates"
+import ContainerSideNav from "../ContainerSideNav";
+import Filtering from "./FilteringReports";
+import Link from "next/link"
+import { TbArrowNarrowLeft } from "react-icons/tb";
+import SearchInTable from "../SearchInTable";
+import {Tooltip} from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
 
 type Props = {
   token:string, 
@@ -105,15 +112,15 @@ export default function ContainerClient({token, optCompanies, optDepartments,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <Header title="Informes" placeHolder="Buscar Informe.." >
-        <div className="flex gap-x-4 items-center">
-          <TooltipFilterIcon handleFilter={handleFilter} />
-          {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
-                            projects={optProjects} token={token} condition={condition} user={user._id}
-                          />}
-        </div>
-      </Header>
       <div className="mt-5 hidden md:block w-full">
+        <Header title="Informes" placeHolder="Buscar Informe.." >
+          <div className="flex gap-x-4 items-center">
+            <TooltipFilterIcon handleFilter={handleFilter} />
+            {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
+                              projects={optProjects} token={token} condition={condition} user={user._id}
+                            />}
+          </div>
+        </Header>
         {isHistory? (
           <TableHistoryReports data={data} optConditions={optConditionsFilter} 
           reports={reports} token={token} optCompanies={optCompaniesFilter} 
@@ -126,19 +133,52 @@ export default function ContainerClient({token, optCompanies, optDepartments,
         )}
       </div>
       <div className="mt-5 block md:hidden w-full">
-        <ListData data={dataTable} token={token} isHistory={isHistory} />
+        <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">
+          <div className="flex items-center gap-x-3 w-full max-w-96">
+            <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+              <Link href={'/'}>
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
+                    placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                  <span>
+                    <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
+                  </span>
+                </Tooltip>
+              </Link>
+            </div>
+            <p className="text-xl ml-4 font-medium">Informes</p>
+            <div className="flex gap-x-4 items-center">
+              <TooltipFilterIcon handleFilter={handleFilter} />
+              {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
+                                projects={optProjects} token={token} condition={condition} user={user._id}
+                              />}
+            </div>
+          </div>
+          <div className="flex gap-x-3 justify-end w-full">
+            <SearchInTable placeH="Buscar Informe.." />
+          </div>
+        </div>
+        <ListData data={dataTable} token={token} isHistory={isHistory} isFilter={isFilter}
+          optCompanies={optCompaniesFilter} optConditions={optConditionsFilter} 
+          optProjects={optProjectsFilter} setIsFilter={handleFilter} reports={reports} />
       </div>
     </div>
   )
 }
 
-const ListData = ({data, token, isHistory}: {data: ReportTable[], token:string, isHistory:boolean}) => {
+const ListData = ({data, token, isHistory, isFilter, optCompanies, optProjects, optConditions, 
+  setIsFilter, reports}: 
+  {data: ReportTable[], token:string, isHistory:boolean, optCompanies: Options[], 
+  optProjects: Options[], optConditions: Options[], isFilter:boolean, 
+  setIsFilter:(value: boolean) => void, reports: ReportParse[]}) => {
 
   // const total = useMemo(() => {
   //   return data.reduce((accum, item) => accum+=Number(item.Total.replace(/[$, M, X, N,]/g, "")), 0);
   // }, [data]);
 
   const [dataReports, setDataReports] = useState(data);
+  const [maxAmount, setMaxAmount] = useState<number>(reports.reduce((previous, current) => {
+      return current.totalok > previous.totalok ? current : previous;
+    }).totalok);
 
   const {search} = useTableStates();
 
@@ -158,7 +198,91 @@ const ListData = ({data, token, isHistory}: {data: ReportTable[], token:string, 
     }
   }
 
-  const filterData = useMemo(() => {
+  const dateValidation = (rep:ReportParse, startDate:number, endDate:number) => {
+    let d = new Date(rep.date).getTime();
+    if(d >= startDate && d <= endDate){
+      return true;
+    }
+    return false;
+  }
+
+  const amountValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
+                              startDate:number, endDate:number) => {
+    if(rep.totalok >= 0){
+      if(rep.totalok >= minAmount && rep.totalok <= maxAmount){
+        return dateValidation(rep, startDate, endDate);
+      }
+    }
+    return false;
+  }
+
+  const projectValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
+                      startDate:number, endDate:number, projects:string[]) => {
+    if(projects.includes('all')){
+      return amountValidation(rep, minAmount, maxAmount, startDate, endDate);
+    }else{
+      if(rep.project){
+        if(projects.includes(rep.project._id)){
+          return amountValidation(rep, minAmount, maxAmount, startDate, endDate);
+        }
+      }
+    }
+    return false;
+  }
+
+  const companyValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
+              startDate:number, endDate:number, projects:string[], companies:string[]) => {
+    if(companies.includes('all')){
+      return projectValidation(rep, minAmount, maxAmount, startDate, endDate, projects); 
+    }else{
+      if(rep.company){
+        if(companies.includes(rep.company._id)){
+          return projectValidation(rep, minAmount, maxAmount, startDate, endDate, projects);
+        }
+      }
+    }
+    return false;
+  }
+
+  const conditionValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
+                  startDate:number, endDate:number, projects:string[], 
+                  companies:string[], conditions:string[]) => {
+
+    if(conditions.includes('all')){
+      return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
+    }else{
+      if(conditions.includes(rep.lastmove.condition._id)){
+        return companyValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies);
+      }
+    }
+    return false;
+  }
+
+  const pettyCashValidation = (rep:ReportParse, minAmount:number, maxAmount:number, 
+      startDate:number, endDate:number, projects:string[], 
+      companies:string[], conditions:string[], isPettyCash:boolean) => {
+
+    if(isPettyCash === rep.ispettycash){
+      return conditionValidation(rep, minAmount, maxAmount, startDate, endDate, projects, companies, conditions);
+    }
+    return false;
+  }
+
+  const filterData = (conditions:string[], minAmount:number, 
+    maxAmount:number, companies:string[], projects:string[], 
+    startDate:number, endDate:number, isPettyCash:boolean) => {
+  
+    let filtered: ReportParse[] = [];
+    reportsStore.map((report) => {
+      if(pettyCashValidation(report, minAmount, maxAmount, startDate, 
+          endDate, projects, companies, conditions, isPettyCash)){
+        filtered.push(report);
+      }
+    });
+    setDataReports(ReportParseDataToTableData(filtered));
+  }
+
+  const filterReports = useMemo(() => {
     if(search.trim() === ''){
       return dataReports;
     }else{
@@ -168,22 +292,25 @@ const ListData = ({data, token, isHistory}: {data: ReportTable[], token:string, 
     }
   }, [search, dataReports]);
 
-  return(
-    <div>
-      {/* <p className="mt-2 text-center">Cantidad: <span className="text-blue-500 font-bold">{data.length}</span> Total gastos: <span className="text-green-600 font-bold">{CurrencyFormatter({
-        currency: 'MXN',
-        value: total
-      })}</span></p> */}
-      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
+  return(//h-[450px] altura enterior
+    <div className="mt-5">
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100dvh-230px)]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
-          {filterData.map((r) => (
+          {filterReports.map((r) => (
             <CardReport report={r} key={r.id} token={token} delReport={delReport} isHistory={isHistory} />
           ))}
 
         </nav>
       </div>
+      {isFilter && (
+        <ContainerSideNav width="w-full max-w-md">
+          <Filtering showForm={setIsFilter} optConditions={optConditions} 
+                      FilterData={filterData} maxAmount={maxAmount} 
+                      optProjects={optProjects} optCompanies={optCompanies} />
+        </ContainerSideNav>
+      )}
     </div>
   )
 }
