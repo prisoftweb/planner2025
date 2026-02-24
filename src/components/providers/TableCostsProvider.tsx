@@ -257,7 +257,7 @@ export default function TableCostsProvider({data, token, expenses, idProv,
 
   return(
     <>
-      <div className="flex justify-end my-5">
+      <div className="flex justify-end mt-1">
           {/* {isFilter && <FilteringPaymentsProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} />} */}

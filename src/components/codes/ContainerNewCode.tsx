@@ -143,7 +143,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
 
   return (
     // <div className={`grid ${widthPage < 500? 'grid-cols-1': 'grid-cols-2'} gap-x-3`}>
-    <div className={`grid grid-cols-1 md:grid-cols-2 gap-x-3`}>
+    <div className={`grid grid-cols-1 md:grid-cols-2 gap-x-3 max-w-[1500px]`}>
       <div>
         <div className="flex items-center gap-x-2">
           <div className="relative w-full p-2">

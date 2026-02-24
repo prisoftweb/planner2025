@@ -45,27 +45,29 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
   }
 
   let data:TableProvider[] = [];
-  providerStore.map((prov:Provider) => {
+  if(Array.isArray(providerStore)){
+    providerStore.map((prov:Provider) => {
 
-    let nc = 0;
-    if(prov.contact) nc = prov.contact.length;
-    
-    const dollar = CurrencyFormatter({
-      currency: "MXN",
-      value: prov.tradeline.currentbalance || 0
-    })
+      let nc = 0;
+      if(prov.contact) nc = prov.contact.length;
+      
+      const dollar = CurrencyFormatter({
+        currency: "MXN",
+        value: prov.tradeline.currentbalance || 0
+      })
 
-    data.push({
-      'id': prov._id,
-      'name': prov.name,
-      rfc: prov.rfc,
-      currentbalance: dollar,
-      account: prov.account,
-      suppliercredit: prov.suppliercredit,
-      contacts: nc,
-      tradename: prov.tradename || ' '
+      data.push({
+        'id': prov._id,
+        'name': prov.name,
+        rfc: prov.rfc,
+        currentbalance: dollar,
+        account: prov.account,
+        suppliercredit: prov.suppliercredit,
+        contacts: nc,
+        tradename: prov.tradename || ' '
+      })
     })
-  })
+  }
 
   const dataFilter=data.filter(p => p.suppliercredit==isCreditLine);
   

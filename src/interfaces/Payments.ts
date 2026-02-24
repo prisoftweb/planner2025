@@ -172,3 +172,78 @@ export interface CostInPayment {
   paymentelements: number
   // payment: PaymentOfCost[]
 }
+
+export interface IPaymentResumeProvider {
+  _id: string
+  reference: string
+  paymentplugin: {
+    plugin: number
+    date: string
+    notes: string
+  }
+  payout: number
+  pending: number
+  date: string
+  notes: string
+  voucher: string
+  provider: {
+    _id: string
+    name: string
+  }
+  methodofpayment: {
+    _id: string
+    name: string
+    color: string
+  }
+  user: {
+    _id: string
+    name: string
+    photo: string
+  }
+  condition: {
+    _id: string
+    name: string
+    color: string
+    darktext: boolean
+  }
+  quantity: string[]
+  status: boolean
+}
+
+export interface IPendingPaymentResumeProviderPDF {
+  folio: string
+  date: string
+  expiredDate: string
+  daysExpired: number
+  ispaid: boolean
+  paymentelements: number
+  provider: {
+    _id: string
+    name: string
+    today: string
+    creditdays: number
+  }
+  costocenter: {
+    _id: string
+    category: string
+    concept: {
+      _id: string
+      name: string
+    }
+  }
+  estatus: {
+    _id: string
+    name: string
+    color: string
+  }
+  groupTitleExpirationDays: string
+  groupExpirationDays: {
+    vigente: number
+    days0_30: number
+    days30_45: number
+    days45_60: number
+    days60plus: number
+    show?: number
+  }
+  totalAcum: number
+}
