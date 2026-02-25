@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getDate } from '@/libs/dates';
 
 export async function GetCosts(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs`;
@@ -574,22 +575,22 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(auth_token:string
 }
 
 export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${dateStart}/${dateEnd}/${project}`;
-  // console.log('URL => ', url);
-  // console.log('auth_token => ', auth_token);
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${getDate(new Date(dateStart))}/${getDate(new Date(dateEnd))}/${project}`;
+  console.log('URL => ', url);
+  console.log('auth_token => ', auth_token);
   try {
     const res = await axios.post(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
-    // console.log('res => ', res);
+    console.log('res => ', res);
     if(res.status===200) {
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
-    // console.log('Error => ', error);
+    console.log('Error => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos concepto!!';
     }

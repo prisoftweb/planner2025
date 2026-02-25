@@ -210,6 +210,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
 
       <div className=" hidden md:block">
         {/* {widthPage > 500 && viewComponent} */}
+        {viewComponent}
       </div>
     </div>
   )

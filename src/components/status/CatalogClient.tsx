@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog } from "@/interfaces/Catalogs";
 import WithOut from "../WithOut";
@@ -15,11 +15,17 @@ import TableStatus from "./TableStatuses";
 import ButtonNew from "@/components/status/ButtonNew";
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
+import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
+import { BsType } from "react-icons/bs";
+import { MdCategory } from "react-icons/md";
+import { GrStatusInfo } from "react-icons/gr";
 
 export default function CatalogClient({catalogs, token, descGlossaries, glosariesOptions}: 
     {token:string, catalogs:Catalog[], glosariesOptions:Options[], descGlossaries:Options[] }) {
 
   const {listsStore, updateListsStore} = useListsStore();
+
+  const [optFilter, setOptFilter]=useState<number>(1);
 
   useEffect(() => {
     updateListsStore(catalogs);
@@ -95,7 +101,7 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
                 </Tooltip>
                 <p className="text-xl ml-4 font-medium">Catalogos</p>
               </div>
-              <div className="sm:flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap">
+              <div className="mt-2 sm:mt-0 sm:flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap">
                 <SearchInTable placeH='Buscar catalogo..' />
                 <div className="mt-2 sm:mt-0" >
                   <div className="flex gap-x-2">
@@ -105,12 +111,23 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
                       descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
                     <ButtonNew catalogOptions={catalogOptions} token={token} opt={3}
                       descGlossaries={descGlossaries} glosariesOptions={glosariesOptions} />
+                    <div className="flex md:hidden gap-x-3 items-center w-full justify-end">
+                      <TooltipContainerIcon label="Estatus">
+                        <GrStatusInfo className="w-6 h-6 text-slate-600 cursor-pointer" onClick={() => setOptFilter(1)} />
+                      </TooltipContainerIcon>
+                      <TooltipContainerIcon label="Categorias">
+                        <MdCategory className="w-6 h-6 text-slate-600 cursor-pointer" onClick={() => setOptFilter(2)} />
+                      </TooltipContainerIcon>
+                      <TooltipContainerIcon label="Tipos">
+                        <BsType className="w-6 h-6 text-slate-600 cursor-pointer" onClick={() => setOptFilter(3)} />
+                      </TooltipContainerIcon>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
             <div className="mt-5">
-              <TableStatus  data={table}  token={token} />
+              <TableStatus data={table} token={token} optFilter={optFilter} />
             </div>
           </div>
         </div>

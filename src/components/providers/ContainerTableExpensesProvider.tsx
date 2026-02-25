@@ -91,26 +91,26 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
               <TooltipFilterIcon handleFilter={handleFilter} />
             </div>
           </div>
+          {dataReport.length > 0 && (
+            <div className="flex justify-end">
+              <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider} />} fileName={`Pagos ${provider.name}`} >
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    </Tooltip>
+                  ) }
+              </PDFDownloadLink>
+            </div>
+          )}
         </div>
       </div>
-      {dataReport.length > 0 && (
-        <div className="flex justify-end">
-          <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider} />} fileName={`Pagos ${provider.name}`} >
-            {({loading, url, error, blob}) => 
-              loading? (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                </Tooltip>
-              ) : (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                </Tooltip>
-              ) }
-          </PDFDownloadLink>
-        </div>
-      )}
       <TableCostsProvider token={token} expenses={expenses} isFilter={filter}
         setIsFilter={handleFilter} user={user} data={data} idProv={provider._id} 
         udpateTable={updateStateExpenses} />

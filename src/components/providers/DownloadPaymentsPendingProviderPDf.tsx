@@ -4,6 +4,15 @@ import { Provider } from "@/interfaces/Providers";
 import { IPendingPaymentResumeProviderPDF } from '@/interfaces/Payments';
 import { useMemo } from 'react';
 
+type groupExpirationDays = {
+  vigente: number
+  days0_30: number
+  days30_45: number
+  days45_60: number
+  days60plus: number
+  show?: number
+}
+
 export default function DownloadPaymentsPendingProviderPDF({provider, costs}: 
   {provider:Provider, costs:IPendingPaymentResumeProviderPDF[]}) {
 
@@ -13,6 +22,8 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs}:
   // const costData = transformDataInvoicesInDataTable(costsRelAdvance);
 
   const total = useMemo(() => costs.reduce((accum, element) => accum += element.totalAcum, 0), costs);
+
+  
 
   return(
     <Document>
@@ -96,39 +107,45 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs}:
           <View style={{marginTop:'10px'}}></View>
 
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '20px', margin: '3px'}}>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}></Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Folio</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Fecha</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>30 dias</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>45 dias </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>60 dias </Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Mas de 60 dias</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Acumulado</Text>
             {/* <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Pendiente</Text> */}
           </View>
 
-          {costs.map((c, index:number) => (
-            <View key={index} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
-                value: c?.groupExpirationDays?.days0_30?? 0
-              })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
-                value: c?.groupExpirationDays?.days30_45?? 0
-              })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
-                value: c?.groupExpirationDays?.days45_60?? 0
-              })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
-                value: c?.groupExpirationDays?.show ? c?.groupExpirationDays?.show: (c?.groupExpirationDays?.days60plus?? 0) 
-              })}</Text>
-              {/* <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-                currency: 'MXN',
-                value: p.pending
-              })}</Text> */}
-            </View>
-          ))}
+          {costs.map((c, index:number) => {
+            const aging = normalizeAging(c.groupExpirationDays);
+            return(
+              <View key={index} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.folio}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{c.date?.substring(0, 10)}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: aging.days0_30?? 0
+                })}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: aging.days30_45?? 0
+                })}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: aging.days45_60?? 0
+                })}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: aging.days60plus ?? 0
+                })}</Text>
+                <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: c.totalAcum
+                })}</Text>
+              </View>
+            )
+          })}
 
           {/* {costData.map((c, index:number) => {
             const esUltimoDelGrupo = index === costData.length - 1 || c.index !== costData[index + 1].index;
@@ -217,4 +234,36 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs}:
       </Page>
     </Document>
   )
+}
+
+const normalizeAging = (data: groupExpirationDays): groupExpirationDays => {
+  const result: groupExpirationDays = {
+    vigente: 0,
+    days0_30: 0,
+    days30_45: 0,
+    days45_60: 0,
+    days60plus: 0,
+    show: data.show
+  }
+
+  if ((data.show ?? 0) > 0) {
+    result.days60plus = data.show!
+    return result
+  }
+
+  const priority: (keyof groupExpirationDays)[] = [
+    "days60plus",
+    "days45_60",
+    "days30_45",
+    "days0_30",
+    "vigente"
+  ]
+
+  const found = priority.find(key => (data[key] ?? 0) > 0)
+
+  if (found) {
+    result[found] = data[found] ?? 0
+  }
+
+  return result
 }

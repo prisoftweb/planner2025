@@ -13,8 +13,8 @@ import { BsType } from "react-icons/bs";
 import { MdCategory } from "react-icons/md";
 import { GrStatusInfo } from "react-icons/gr";
 
-export default function TableStatus({data, token}:
-  {data:StatusTable[], token:string}){
+export default function TableStatus({data, token, optFilter}:
+  {data:StatusTable[], token:string, optFilter:number}) {
   
   const columnHelper = createColumnHelper<StatusTable>();
 
@@ -114,24 +114,24 @@ export default function TableStatus({data, token}:
         <Table columns={columns} data={data} placeH="Buscar catalogo.." />
       </div>
       <div className="block md:hidden w-full">
-        <ListData data={data} token={token} delReport={delReport} />
+        <ListData data={data} token={token} delReport={delReport} optFilter={optFilter} />
       </div>
     </>
   )
 }
 
-const ListData = ({data, token, delReport}: 
-  {data: StatusTable[], token:string, delReport: (id: string) => Promise<void>}) => {
+const ListData = ({data, token, delReport, optFilter}: 
+  {data: StatusTable[], token:string, delReport: (id: string) => Promise<void>, optFilter: number}) => {
 
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
-  const [category, setCategory]=useState<number>(1);
+  // const [category, setCategory]=useState<number>(1);
 
   const filterData = useMemo(() => {
     if(search.trim() === ''){
       return data;
     }else{
-      switch(category){
+      switch(optFilter){
         case 1: 
           const d = data.filter(item =>
             item.statuses.arrStatuses.some(tag =>
@@ -155,7 +155,7 @@ const ListData = ({data, token, delReport}:
 
   return(
     <div>
-      <div className="flex gap-x-3 items-center">
+      {/* <div className="flex gap-x-3 items-center">
         <TooltipContainerIcon label="Estatus">
           <GrStatusInfo className="w-6 h-6 text-slate-600" onClick={() => setCategory(1)} />
         </TooltipContainerIcon>
@@ -165,13 +165,13 @@ const ListData = ({data, token, delReport}:
         <TooltipContainerIcon label="Tipos">
           <BsType className="w-6 h-6 text-slate-600" onClick={() => setCategory(3)} />
         </TooltipContainerIcon>
-      </div>
+      </div> */}
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData?.map((g) => (
-            <CardStatus glossary={g} key={g.id} delReport={delReport} token={token} typeFilter={category} />
+            <CardStatus glossary={g} key={g.id} delReport={delReport} token={token} typeFilter={optFilter} />
           ))}
 
         </nav>
