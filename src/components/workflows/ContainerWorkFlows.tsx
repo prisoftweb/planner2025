@@ -1,5 +1,6 @@
 'use client'
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader as Header } from "../Header";
 import TableWorkflows from "@/components/workflows/TableWorkflows";
 import ButtonNew from "@/components/workflows/ButtonNew";
 import { UsrBack } from "@/interfaces/User";
@@ -9,8 +10,6 @@ import { useState, useEffect, useRef } from "react";
 export default function ContainerWorkFlows({token, user, data}: {token:string, user:UsrBack, data:WorkflowTable[]}) {
 
   const [newWorkFlow, setNewWorkFlow] = useState<boolean>(false);
-
-  // const [searchValue, setSearchValue] = useState("");
 
   const searchRef = useRef<HTMLInputElement | null>(null);
   const sidenavFirstItemRef = useRef<HTMLInputElement | null>(null);
