@@ -85,10 +85,15 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
 
   return(
     <>
-      <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">  
-        <div className="flex mt-5 gap-x-3">
+      <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">
+        <div className="block sm:hidden">
           <NavTab option={5} />
-          <div className="">
+        </div>  
+        <div className="flex mt-5 gap-x-3">
+          <div className="hidden sm:block">
+            <NavTab option={5} />
+          </div>
+          <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0">
             <div className="sm:flex gap-x-3 md:justify-between flex-wrap md:flex-nowrap items-center">
               <div className="flex items-center">
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
@@ -101,7 +106,7 @@ export default function CatalogClient({catalogs, token, descGlossaries, glosarie
                 </Tooltip>
                 <p className="text-xl ml-4 font-medium">Catalogos</p>
               </div>
-              <div className="mt-2 sm:mt-0 sm:flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap">
+              <div className="mt-2 md:mt-0 sm:flex gap-x-3 gap-y-2 flex-wrap md:flex-nowrap pr-2 sm:pr-0">
                 <SearchInTable placeH='Buscar catalogo..' />
                 <div className="mt-2 sm:mt-0" >
                   <div className="flex gap-x-2">

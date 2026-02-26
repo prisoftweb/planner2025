@@ -4,7 +4,8 @@ import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import CompanyClient from "@/components/companies/CompanyClient";
 import ButtonNew from "@/components/companies/ButttonNew";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader } from "@/components/Header";
 import { getCompanies } from "../api/routeCompany";
 import { Company, CompanyTable } from "@/interfaces/Companies";
 import TableCompany from "@/components/companies/TableCompany";
@@ -68,10 +69,10 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <CompanyClient option={2} >
-        <div>
-          <Header title="Compañias" placeHolder="Buscar compañia.." >
+        <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
+          <ResponsiveHeader title="Compañias" placeHolder="Buscar compañia.." >
             <ButtonNew token={token} />
-          </Header>
+          </ResponsiveHeader>
           <div className="mt-5">
             <TableCompany data={table} token={token} />
           </div>

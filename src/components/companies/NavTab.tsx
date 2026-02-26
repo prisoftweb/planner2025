@@ -14,8 +14,14 @@ export default function NavTab({option}: {option:number}){
   const [isHover, setIsHover] = useState<number>(-1);
 
   const nav =(<div>
-                <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md">
-                <Link href='/catalogs'>
+                {/* <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md"> */}
+                <div className="bg-white fixed top-12 left-0 pt-1 sm:pt-0 p-2 flex flex-row sm:flex-col items-center 
+                                  space-x-4 sm:space-x-0 sm:space-y-4 rounded-md shadow-md w-full h-auto
+                                  sm:w-auto sm:h-screen">
+                {/* <div className="bg-white fixed bottom-0 left-0 w-full h-auto md:top-12 md:bottom-auto
+                                  md:w-auto md:h-screen p-2 flex flex-row md:flex-col
+                                  items-center space-x-4 md:space-x-0 md:space-y-4 rounded-md shadow-md"> */}
+                  <Link href='/catalogs'>
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                       className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" 
                       content='Listas' placement="right"

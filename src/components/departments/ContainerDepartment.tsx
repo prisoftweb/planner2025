@@ -8,7 +8,8 @@ import WithOut from "../WithOut";
 import ButtonNew from "./ButtonNew";
 import { Options } from "@/interfaces/Common";
 import TableDepartments from "./TableDepartments";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader as Header } from "@/components/Header";
 
 type DeptProps={
   departments:Department[], 
@@ -53,7 +54,7 @@ export default function ContainerDepartment({departments, optsCompanies, token}:
   return(
     <>
       <CompanyClient option={1} >
-        <div>
+        <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
           <Header title="Departamentos" placeHolder="Buscar departamento.." >
             <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} />
           </Header>

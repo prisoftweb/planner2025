@@ -2,7 +2,8 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import CompanyClient from "@/components/companies/CompanyClient";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader } from "@/components/Header";
 import ButtonNew from "@/components/glossary/ButtonNew";
 import TableGlossary from "@/components/glossary/TableGlossary";
 import {getGlossaries} from "../api/routeGlossary";
@@ -41,10 +42,10 @@ export default async function Page(){
     <>
       <Navigation user={user} />
       <CompanyClient option={4} >
-        <div>
-          <Header title="Glosarios" placeHolder="Buscar glosario.." >
+        <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
+          <ResponsiveHeader title="Glosarios" placeHolder="Buscar glosario.." >
             <ButtonNew token={token} glossary={''} />
-          </Header>
+          </ResponsiveHeader>
           <div className="mt-5">
             <TableGlossary data={table} token={token} glossaries={glossaries} />
           </div>

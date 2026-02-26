@@ -4,7 +4,8 @@ import { useEffect } from "react"
 import { useListsStore } from "@/app/store/listStore"
 import { Catalog, CatalogTable } from "@/interfaces/Catalogs"
 import CompanyClient from "../companies/CompanyClient"
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader as Header } from "@/components/Header";
 import TableCatalogs from "./TableCatalogs"
 import ButtonNew from "./ButtonNew"
 import WithOut from "../WithOut"
@@ -41,7 +42,7 @@ export default function ListClient({lists, token}: {lists:Catalog[], token:strin
 
   return (
     <CompanyClient option={3} >
-      <div>
+      <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
         <Header title="Catalogos" placeHolder="Buscar Catalogo.." >
           <ButtonNew token={token} catalog={''} />
         </Header>
