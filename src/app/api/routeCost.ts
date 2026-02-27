@@ -899,3 +899,28 @@ export async function getAllCostPROGByProviderMINWithoutPAY(id:string, auth_toke
     }
   }
 }
+
+export async function getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(id:string, auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllTotalAccumResumeProgramingByProviderMINWithoutPAY/${id}`;
+  const data={
+    filter:["661eaa9ef642112488c85f5c","661eaa71f642112488c85f59", "661eaa4af642112488c85f56","67318dacceaf47ece0d3aabb","67378f77d846bbd16e1a8714"]
+  }
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    // console.log('res => ', res);
+    // console.log('res json => ', JSON.stringify(res.data.data.stats));
+    if(res.status===200) return res.data.data.stats;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al consultar total acumulado pendiente de pago del proveedor';
+    }
+  }
+}

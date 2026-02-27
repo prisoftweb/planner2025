@@ -247,3 +247,12 @@ export interface IPendingPaymentResumeProviderPDF {
   }
   totalAcum: number
 }
+
+export interface ITotalAcumulatedPendingPaymentResumeProviderPDF {
+  debttosupplier: string
+  quantity: number
+  deferred: number
+  amountotal: number
+  unpaidbalanceamount: number
+  payout: number
+}

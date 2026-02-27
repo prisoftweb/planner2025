@@ -17,8 +17,8 @@ import { showToastMessageError } from "../Alert"
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions"
 import { useEffect } from "react"
 import ContainerSideNav from "../ContainerSideNav"
-import { getAllCostPROGByProviderMINWithoutPAY } from "@/app/api/routeCost"
-import { IPendingPaymentResumeProviderPDF } from "@/interfaces/Payments"
+import { getAllCostPROGByProviderMINWithoutPAY, getAllTotalAccumResumeProgramingByProviderMINWithoutPAY } from "@/app/api/routeCost"
+import { IPendingPaymentResumeProviderPDF, ITotalAcumulatedPendingPaymentResumeProviderPDF } from "@/interfaces/Payments"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadPaymentsResumeProviderPDF from "./DownloadPaymentsResumeProviderPDF"
@@ -50,15 +50,27 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   const [minAmount, setMinAmount] = useState<number>(0);
 
   const [dataReport, setDataReport]=useState<IPendingPaymentResumeProviderPDF[]>([]);
+  const [totalAccum, setTotalAccum]=useState<ITotalAcumulatedPendingPaymentResumeProviderPDF[]>([]);
   
   useEffect(() => {
     const fetch = async () => {
-      const res = await getAllCostPROGByProviderMINWithoutPAY(provider._id, token);
+      const [res, restot] = await Promise.all([
+        getAllCostPROGByProviderMINWithoutPAY(provider._id, token),
+        getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(provider._id, token)
+      ]);
+      
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
         // console.log('res 0 => ', JSON.stringify(res[0]));
         setDataReport(res);
+      }
+
+      if(typeof(restot)==='string'){
+        showToastMessageError(restot);
+      }else{
+        // console.log('res cont => ', restot);
+        setTotalAccum(restot.flat());
       }
     }
     fetch();
@@ -192,7 +204,8 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
               )}
             </div>
           </div>
-          <PDFDownloadLink document={<DownloadPaymentsPendingProviderPDF costs={dataReport} provider={provider} />} fileName={`Pendientes ${provider.name}`} >
+          <PDFDownloadLink document={<DownloadPaymentsPendingProviderPDF costs={dataReport} 
+                                          provider={provider} totalAccum={totalAccum} />} fileName={`Pendientes ${provider.name}`} >
             {({loading, url, error, blob}) => 
               loading? (
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
