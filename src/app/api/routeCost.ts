@@ -579,7 +579,7 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_to
   console.log('URL => ', url);
   console.log('auth_token => ', auth_token);
   try {
-    const res = await axios.post(url, {
+    const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
@@ -622,7 +622,7 @@ export async function GetAllCostsGroupByDAY(auth_token:string, dateStart:string,
 export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByDAY/${dateStart}/${dateEnd}/${project}`;
   try {
-    const res = await axios.post(url, {
+    const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
@@ -664,7 +664,7 @@ export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:str
 export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMENTYPE/${dateStart}/${dateEnd}/${project}`;
   try {
-    const res = await axios.post(url, {
+    const res = await axios.post(url, {}, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }

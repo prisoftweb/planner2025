@@ -2,13 +2,14 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
 import Table from "../Table";
 import SearchInTable from "../SearchInTable";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GetAllCostsGroupByProjectOnly } from "@/app/api/routeCost";
 import ReportCostsByProjectOnlyPDF from "../ReportCostByProjectOnlyPDF"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
+import { useTableStates } from "@/app/store/tableStates";
 
 export default function TableReportByProject({token}: {token:string}){
   
@@ -94,7 +95,14 @@ export default function TableReportByProject({token}: {token:string}){
   ]
 
   const table = data.length > 0? (
-    <Table columns={columns} data={data} placeH=""  />
+    <>
+      <div className="hidden md:block w-full">
+        <Table columns={columns} data={data} placeH="" />
+      </div>
+      <div className="block md:hidden w-full">
+        <ListData data={data} token={token} />
+      </div>
+    </>
   ): <><h1 className="text-center text-red-500 text-lg">Cargando gastos...</h1></>
 
   return(
@@ -119,5 +127,87 @@ export default function TableReportByProject({token}: {token:string}){
         {table}
       </div>
     </>
+  )
+}
+
+const ListData = ({data, token}: {data: ReportCostsByProjectOnly[], token:string}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+
+  const {search} = useTableStates();
+
+  const filterData = useMemo(() => {
+    if(search.trim() === ''){
+      return data;
+    }else{
+      const d = data.filter(item => item.project.toLowerCase().includes(search.toLowerCase()));
+      return d;
+    }
+  }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {filterData.map((c, index:number) => (
+            <CardData data={c} key={index} token={token} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardData = ({data, token}: 
+  {data:ReportCostsByProjectOnly, token:string}) => {
+  
+  return(
+    <div role="button"
+      key={data.project}
+      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ '/img/costs/costs.svg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <DeleteElement id={node.id} name={node.department} remove={removeNode} token={token} /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: data.amount,
+                })}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: data.totalCost,
+                })} gastado
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {data.porcentage}%  
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {/* {node.condition} */}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
