@@ -13,12 +13,29 @@ type groupExpirationDays = {
   show?: number
 }
 
-export default function DownloadPaymentsPendingProviderPDF({provider, costs, totalAccum}: 
-  {provider:Provider, costs:IPendingPaymentResumeProviderPDF[], totalAccum: ITotalAcumulatedPendingPaymentResumeProviderPDF[]}) {
+export default function DownloadPaymentsPendingProviderPDF({provider, costs, totalAccum, user}: 
+  {provider:Provider, costs:IPendingPaymentResumeProviderPDF[], 
+    totalAccum: ITotalAcumulatedPendingPaymentResumeProviderPDF[], user:string}) {
 
   // const total = useMemo(() => costs.reduce((accum, element) => accum += element.totalAcum, 0), costs);  
 
   let text = costs.length > 0 ? costs[0].groupTitleExpirationDays ?? '' : '';
+
+  // const total30 = useMemo(() => costs.reduce((accum, element) => accum += element.groupExpirationDays.days0_30 ?? 0, 0), costs);
+  // const total45 = useMemo(() => costs.reduce((accum, element) => accum += element.groupExpirationDays.days30_45 ?? 0, 0), costs);
+  // const total60 = useMemo(() => costs.reduce((accum, element) => accum += element.groupExpirationDays.days45_60 ?? 0, 0), costs);
+  // const total60plus = useMemo(() => costs.reduce((accum, element) => accum += element.groupExpirationDays.days60plus ?? 0, 0), costs);
+  // const totalVigente = useMemo(() => costs.reduce((accum, element) => accum += element.groupExpirationDays.vigente ?? 0, 0), costs);
+  // const total = useMemo(() => costs.reduce((accum, element) => accum += element.totalAcum, 0), costs);
+
+  let total30 = 0;
+  let total45 = 0;
+  let total60 = 0;
+  let total60plus = 0;
+  let totalVigente = 0;
+  let total = 0;
+
+
 
   // console.log('total acum => ', totalAccum);
 
@@ -124,7 +141,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
               <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Usuario: </Text>
                 <Text style={{fontSize:'10px'}}>
-                  Samuel Palacios
+                  {user}
                 </Text>
               </View>
 
@@ -142,6 +159,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
             <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>30 dias</Text>
             <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>45 dias </Text>
             <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>60 dias </Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>+90 dias </Text>
             {/* <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Mas de 60 dias</Text> */}
             <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Total</Text>
             {/* <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '1px solid black', fontWeight: 'bold'}}>Pendiente</Text> */}
@@ -157,6 +175,14 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
               b=1;
             }
             const aging = normalizeAging(c.groupExpirationDays);
+
+              total30 += aging.days0_30 ?? 0;
+              total45 += aging.days30_45 ?? 0;
+              total60 += aging.days45_60 ?? 0;
+              total60plus += aging.days60plus ?? 0;
+              totalVigente += aging.vigente ?? 0;
+              total += c.totalAcum ?? 0;
+              
             return(
               <View key={index} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderTop: b==1? '0.2px solid gray': '', fontWeight: 'bold'}}>{index + 1}</Text>
@@ -181,6 +207,10 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
                 })}</Text>
                 <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: b==1? '0.2px solid gray': '', fontWeight: 'bold'}}>{CurrencyFormatter({
                   currency: 'MXN',
+                  value: aging.days45_60?? 0
+                })}</Text>
+                <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: b==1? '0.2px solid gray': '', fontWeight: 'bold'}}>{CurrencyFormatter({
+                  currency: 'MXN',
                   value: aging.days60plus ?? 0
                   // value: aging.days45_60 ?? 0
                 })}</Text>
@@ -191,6 +221,41 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
               </View>
             )
           })}
+
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}></Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}></Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}></Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}></Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              currency: 'MXN',
+              // value: aging.days0_30?? 0
+              value: totalVigente ?? 0
+            })}</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              currency: 'MXN',
+              // value: aging.days30_45?? 0
+              value: total30 ?? 0
+            })}</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              currency: 'MXN',
+              // value: aging.days45_60?? 0
+              value: total45 ?? 0
+            })}</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              currency: 'MXN',
+              value: total60 ?? 0
+            })}</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              currency: 'MXN',
+              value: total60plus ?? 0
+              // value: aging.days45_60 ?? 0
+            })}</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
+              currency: 'MXN',
+              value: total
+            })}</Text>
+          </View>
 
           {/* {costData.map((c, index:number) => {
             const esUltimoDelGrupo = index === costData.length - 1 || c.index !== costData[index + 1].index;

@@ -25,12 +25,13 @@ import DownloadPaymentsResumeProviderPDF from "./DownloadPaymentsResumeProviderP
 import { Tooltip } from "@nextui-org/react"
 import { propsTooltip } from "@/libs/animations"
 import DownloadPaymentsPendingProviderPDF from "./DownloadPaymentsPendingProviderPDf"
+import { UsrBack } from "@/interfaces/User"
 
 type Props = {
   data:HistoryExpensesTable[], 
   token:string, 
   expenses:Expense[], 
-  user: string, 
+  user: UsrBack, 
   provider: Provider, 
   optTypes: Options[], 
   condition: string
@@ -205,7 +206,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
             </div>
           </div>
           <PDFDownloadLink document={<DownloadPaymentsPendingProviderPDF costs={dataReport} 
-                                          provider={provider} totalAccum={totalAccum} />} fileName={`Pendientes ${provider.name}`} >
+                                          provider={provider} totalAccum={totalAccum} user={user.name} />} fileName={`Pendientes ${provider.name}`} >
             {({loading, url, error, blob}) => 
               loading? (
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
@@ -223,7 +224,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
       </div>
       <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={costsProvider} isFilter={filter} setIsFilter={handleFilter}
-        user={user} isViewReports={false} data={dataTable} idProv={provider._id}
+        user={user._id} isViewReports={false} data={dataTable} idProv={provider._id}
         filterData={filterData} maxAmount={maxAmount} minAmount={minAmount}
       />
       {/* {paidExpenses && (
@@ -235,7 +236,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
       )} */}
       <ContainerSideNav width="w-full max-w-5xl" open={paidExpenses}>
         <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
-          showForm={handlePaidExpenses} provider={provider} user={user} updateTable={updateTable}
+          showForm={handlePaidExpenses} provider={provider} user={user._id} updateTable={updateTable}
           optTypes={optTypes} open={paidExpenses} />
       </ContainerSideNav>
     </div>
