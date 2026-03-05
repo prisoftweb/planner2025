@@ -80,7 +80,7 @@ export default function AddressStepper({token, condition, showForm}:
         data = {
           // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
           amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-          hasguaranteefund, title, types:type, user:responsible,
+          hasguaranteefund, title, types:type, users: responsible.map(id => ({user: id})),
           location, hasamountChargeOff, amountChargeOff, includesTaxes,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
@@ -89,7 +89,7 @@ export default function AddressStepper({token, condition, showForm}:
           data = {
             // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
             amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-            hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, guaranteefund: guaranteeData,
+            hasguaranteefund, hasamountChargeOff, title, types:type, users: responsible.map(id => ({user: id})), guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}], includesTaxes
           }
         }else{
@@ -97,7 +97,7 @@ export default function AddressStepper({token, condition, showForm}:
             data = {
               // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
               amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-              hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+              hasguaranteefund, hasamountChargeOff, title, types:type, users: responsible.map(id => ({user: id})), amountChargeOff,
               location, condition: [{glossary: condition, user}], includesTaxes
             }
           }else{
@@ -105,7 +105,7 @@ export default function AddressStepper({token, condition, showForm}:
               data = {
                 // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                 amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                hasguaranteefund, hasamountChargeOff, title, types:type, users: responsible.map(id => ({user: id})),
                 location, condition: [{glossary: condition, user}], includesTaxes
               }
             }else{
@@ -113,7 +113,7 @@ export default function AddressStepper({token, condition, showForm}:
                 data = {
                   // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                   amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                  hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+                  hasguaranteefund, hasamountChargeOff, title, types:type, users: responsible.map(id => ({user: id})), amountChargeOff,
                   guaranteefund: guaranteeData, condition: [{glossary: condition, user}], includesTaxes
                 }
               }else{
@@ -121,7 +121,7 @@ export default function AddressStepper({token, condition, showForm}:
                   data = {
                     // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                     amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                    hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                    hasguaranteefund, hasamountChargeOff, title, types:type, users: responsible.map(id => ({user: id})),
                     location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData, includesTaxes
                   }
                 }else{
@@ -129,14 +129,14 @@ export default function AddressStepper({token, condition, showForm}:
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                      hasguaranteefund, hasamountChargeOff, title, types:type, users: responsible.map(id => ({user: id})),
                       location, condition: [{glossary: condition, user}], amountChargeOff, includesTaxes
                     }
                   }else{
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, 
+                      hasguaranteefund, hasamountChargeOff, title, types:type, users: responsible.map(id => ({user: id})), 
                       condition: [{glossary: condition, user}], includesTaxes,
                     }
                   }

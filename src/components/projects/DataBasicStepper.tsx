@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import SelectReact from "../SelectReact"
 import { getUsersLV } from "@/app/api/routeUser";
 import { Options } from "@/interfaces/Common";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 export default function DataBasicStepper({token, user, condition, showForm}: 
   {token:string, user:string, condition: string, showForm:Function}){
@@ -29,6 +30,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
   const {updateHaveNewProject} = useProjectsStore();
 
   const [responsible, setResponsible]=useState<string>(user);
+  const [arrResponsibles, setArrResponsibles] = useState<string[]>([]);
   const [optUsers, setOptUsers]=useState<Options[]>([]);
 
   const indexUser = optUsers.findIndex((u) => u.value===responsible);
@@ -49,6 +51,19 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     setResponsible(value);
   }
 
+  const addResponsible = () => {
+    if(arrResponsibles.includes(responsible)){
+      showToastMessageError('El responsable ya esta agregado!!');
+    }else{
+      if(responsible){
+        setArrResponsibles([...arrResponsibles, responsible]);
+        // showToastMessage('Responsable agregado!!');
+      }else{
+        showToastMessageError('Seleccione un responsable para agregar!!');
+      }
+    }
+  }
+
   const formik = useFormik({
     initialValues: {
       name:title,
@@ -66,7 +81,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     onSubmit: async (valores) => {            
       const {name, description, keyProject} = valores;
       
-      updateBasicData(name, keyProject, description, responsible);
+      updateBasicData(name, keyProject, description, arrResponsibles);
       dispatch({type: 'INDEX_STEPPER', data: 1})
     },       
   });
@@ -75,7 +90,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
     if(refRequest.current){
       refRequest.current = false;
       const {description, keyProject, name} = formik.values;
-      updateBasicData(name, keyProject, description, responsible);
+      updateBasicData(name, keyProject, description, arrResponsibles);
       
       const location = {
         community, country, cp, municipy, 
@@ -99,7 +114,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
         data = {
           // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
           amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-          hasguaranteefund, title, types:type, user:responsible,
+          hasguaranteefund, title, types:type, users: arrResponsibles.map(id => ({user: id})),
           location, hasamountChargeOff, amountChargeOff, includesTaxes,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
@@ -108,7 +123,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
           data = {
             // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
             amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-            hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, guaranteefund: guaranteeData,
+            hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}], includesTaxes
           }
         }else{
@@ -116,7 +131,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
             data = {
               // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
               amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-              hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+              hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), amountChargeOff,
               location, condition: [{glossary: condition, user}], includesTaxes
             }
           }else{
@@ -124,7 +139,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
               data = {
                 // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                 amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible,
+                hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})),
                 location, condition: [{glossary: condition, user}], includesTaxes
               }
             }else{
@@ -132,7 +147,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
                 data = {
                   // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date, description,
                   amount: amount.replace(/[$,]/g, ""), category, client, code, company, date, description, 
-                  hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, amountChargeOff,
+                  hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), amountChargeOff,
                   guaranteefund: guaranteeData, condition: [{glossary: condition, user}], includesTaxes
                 }
               }else{
@@ -140,7 +155,7 @@ export default function DataBasicStepper({token, user, condition, showForm}:
                   data = {
                     // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description,
                     amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description, 
-                    hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, includesTaxes,
+                    hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), includesTaxes,
                     location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData
                   }
                 }else{
@@ -148,14 +163,14 @@ export default function DataBasicStepper({token, user, condition, showForm}:
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description, 
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, includesTaxes,
+                      hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), includesTaxes,
                       location, condition: [{glossary: condition, user}], amountChargeOff
                     }
                   }else{
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date: date, description, 
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date: date, description,
-                      hasguaranteefund, hasamountChargeOff, title, types:type, user:responsible, 
+                      hasguaranteefund, hasamountChargeOff, title, types:type, users: arrResponsibles.map(id => ({user: id})), 
                       condition: [{glossary: condition, user}], includesTaxes,
                     }
                   }
@@ -221,9 +236,22 @@ export default function DataBasicStepper({token, user, condition, showForm}:
         <div>
           <Label>Responsable</Label>
           {optUsers.length > 0 && (
-            <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
+            <div className="flex items-center gap-x-2">
+              <SelectReact index={indexUser} opts={optUsers} setValue={handleUser} />
+              <PlusCircleIcon className="w-6 h-6 text-slate-700 cursor-pointer mt-1" onClick={addResponsible} />
+            </div>
           )}
         </div>
+        { arrResponsibles.length > 0 && (
+          <div>
+            <Label>Responsables agregados</Label>
+            <div className="mt-2">
+              {arrResponsibles.map((a) => (
+                <Label key={a}>{optUsers.find((u) => u.value===a)?.label}</Label>
+              ))}
+            </div>
+          </div>
+        )}
         <div>
           <Label htmlFor="description"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Descripcion</p></Label>
           <textarea name="description"

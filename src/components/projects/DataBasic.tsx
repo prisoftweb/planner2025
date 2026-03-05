@@ -41,6 +41,7 @@ export default function DataBasic({token, id, project, optConditions, user}:
   const handleUser = (value:string) => {
     setResponsible(value);
   }
+  console.log('project', project);
 
   const indexUser = optUsers.findIndex((u) => u.value===responsible) || 0;
 

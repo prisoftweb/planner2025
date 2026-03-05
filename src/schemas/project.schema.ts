@@ -50,9 +50,14 @@ export const projectValidation = z.object({
     amount: z.string().optional(),
     date: z.string().optional(),
   }).optional(),
-  user: z.string({
-    required_error: 'El usuario es obligatorio'
-  }),
+  // user: z.string({
+  //   required_error: 'El usuario es obligatorio'
+  // }),
+  users: z.array(z.object({
+    user: z.string({
+      required_error: 'El usuario es obligatorio'
+    })
+  })).optional(),
   company: z.string({
     required_error: 'La compañia es obligatoria'
   }).optional(),

@@ -175,7 +175,7 @@ export default function SendReport({send, report, node, user, token, isClose}: P
 
   let button: JSX.Element = <></>;
 
-  const canSend=(typeof(user.department)!=='string'? report.department.id===user.department.id : report.department.id===user.department);
+  // const canSend=(typeof(user.department)!=='string'? report.department.id===user.department.id : report.department.id===user.department);
 
   if(isClose){
     button = (

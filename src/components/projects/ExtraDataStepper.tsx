@@ -111,7 +111,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
         data = {
           // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
           amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-          hasguaranteefund, title, types:type, user:responsible,
+          hasguaranteefund, title, types:type, users: responsible.map(id => ({user: id})),
           location, hasamountChargeOff:haveAmountCharge, amountChargeOff, includesTaxes:includeVat,
           guaranteefund: guaranteeData, condition: [{glossary: condition, user}]
         }
@@ -120,7 +120,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
           data = {
             // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
             amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-            hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, guaranteefund: guaranteeData,
+            hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, users: responsible.map(id => ({user: id})), guaranteefund: guaranteeData,
             location, condition: [{glossary: condition, user}], includesTaxes:includeVat,
           }
         }else{
@@ -128,7 +128,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
             data = {
               // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
               amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-              hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, amountChargeOff,
+              hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, users: responsible.map(id => ({user: id})), amountChargeOff,
               location, condition: [{glossary: condition, user}], includesTaxes:includeVat,
             }
           }else{
@@ -136,7 +136,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
               data = {
                 // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                 amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible,
+                hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, users: responsible.map(id => ({user: id})),
                 location, condition: [{glossary: condition, user}], includesTaxes:includeVat,
               }
             }else{
@@ -144,7 +144,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
                 data = {
                   // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                   amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                  hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, amountChargeOff,
+                  hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, users: responsible.map(id => ({user: id})), amountChargeOff,
                   guaranteefund: guaranteeData, condition: [{glossary: condition, user}], includesTaxes:includeVat,
                 }
               }else{
@@ -152,7 +152,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
                   data = {
                     // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                     amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                    hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible,
+                    hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, users: responsible.map(id => ({user: id})),
                     location, condition: [{glossary: condition, user}], guaranteefund: guaranteeData, includesTaxes:includeVat,
                   }
                 }else{
@@ -160,14 +160,14 @@ export default function ExtraDataStepper({token, optClients, optCategories,
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible,
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, users: responsible.map(id => ({user: id})),
                       location, condition: [{glossary: condition, user}], amountChargeOff, includesTaxes:includeVat,
                     }
                   }else{
                     data = {
                       // amount: amount.replace(/[$,]/g, ""), categorys:category, client, code, company, date:startDate, description,
                       amount: amount.replace(/[$,]/g, ""), category, client, code, company, date:startDate, description, 
-                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, user:responsible, 
+                      hasguaranteefund, hasamountChargeOff:haveAmountCharge, title, types:type, users: responsible.map(id => ({user: id})), 
                       condition: [{glossary: condition, user}], includesTaxes:includeVat,
                     }
                   }

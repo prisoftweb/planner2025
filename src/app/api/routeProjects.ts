@@ -202,6 +202,7 @@ export async function getAllProjectsWithClientLV(auth_token:string, client:strin
 export async function CreateProject(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects`;
   try {
+    // console.log('data new proyect => ', JSON.stringify(data));
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -211,6 +212,7 @@ export async function CreateProject(auth_token:string, data:Object) {
     if(res.status===201) return res.status;
     return res.statusText;
   } catch (error) {
+    // console.log('errro create project => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message
     }

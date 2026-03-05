@@ -27,8 +27,8 @@ interface NewProjectState {
   percentageCharge: string
   hasamountChargeOff: boolean
   includesTaxes: boolean,
-  responsible:string,
-  updateBasicData: (name:string, code:string, description:string, responsible:string) => void,
+  responsible:string[],
+  updateBasicData: (name:string, code:string, description:string, responsible:string[]) => void,
   updateExtraData: (amount: string, date:string, category:string,type:string, 
     client:string, user:string, haveAddress:boolean, company:string, hasguaranteefund:boolean, 
     haveChargeOff:boolean, includeVat:boolean
@@ -66,8 +66,8 @@ export const useNewProject = create<NewProjectState>((set) => ({
   hasamountChargeOff: false,
   percentageCharge: '',
   includesTaxes: true,
-  responsible: '',
-  updateBasicData: (name:string, code:string, description:string, responsible:string) => set(state => ({
+  responsible: [],
+  updateBasicData: (name:string, code:string, description:string, responsible:string[]) => set(state => ({
     ...state,
     title: name,
     code: code,
