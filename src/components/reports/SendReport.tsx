@@ -187,7 +187,8 @@ export default function SendReport({send, report, node, user, token, isClose}: P
       </div>
     )
   }else{
-    if(node && canSend){
+    // if(node && canSend){
+    if(node){
       button = (
         <div className="mt-3 flex justify-center gap-x-3">
           {node.relations.map((rel) => (

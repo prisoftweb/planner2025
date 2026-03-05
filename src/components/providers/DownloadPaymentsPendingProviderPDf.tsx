@@ -2,7 +2,6 @@ import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { Provider } from "@/interfaces/Providers";
 import { IPendingPaymentResumeProviderPDF, ITotalAcumulatedPendingPaymentResumeProviderPDF } from '@/interfaces/Payments';
-import { useMemo } from 'react';
 
 type groupExpirationDays = {
   vigente: number
@@ -89,25 +88,6 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
 
             <View style={{padding:'13px', paddingTop: '0px', width: '270px'}}>
 
-              {/* <Text style={{fontSize:'13px'}}>ESTADO DE CUENTA</Text> */}
-
-              {/* <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px', marginTop:'7px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Folio: </Text>
-                <Text style={{fontSize:'10px'}}>{advance.folio}</Text>
-              </View>
-
-              <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Fecha: </Text>
-                <Text style={{fontSize:'10px'}}>{advance.date?.substring(0, 10)}</Text>
-              </View>
-
-              <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center', gap:'3px'}}>
-                <Text style={{fontSize:'10px', color:'gray'}}>Facturas Relacionadas: </Text>
-                <Text style={{fontSize:'10px'}}>
-                  {costsRelAdvance.length}
-                </Text>
-              </View> */}
-
               <View style={{border:'1px solid gray', marginTop:'7px'}}>
                 {/* <View style={{display:'flex', flexDirection:'row'}}>
                   <Text style={{backgroundColor:'green', color:'white', width:'100%', textAlign:'center', fontSize:'13px', padding:'3px'}}>TOTAL</Text>
@@ -182,7 +162,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
               total60plus += aging.days60plus ?? 0;
               totalVigente += aging.vigente ?? 0;
               total += c.totalAcum ?? 0;
-              
+
             return(
               <View key={index} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
                 <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderTop: b==1? '0.2px solid gray': '', fontWeight: 'bold'}}>{index + 1}</Text>
