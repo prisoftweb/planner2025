@@ -3,35 +3,57 @@ import { ReportCostsByProjectOnly } from "@/interfaces/ReportsOfCosts";
 import Table from "../Table";
 import SearchInTable from "../SearchInTable";
 import { useState, useEffect, useMemo } from "react";
-import { GetAllCostsGroupByProjectOnly } from "@/app/api/routeCost";
+import { GetAllCostsGroupByProjectOnly, getAllCostsGroupByProjectOnlyByDate } from "@/app/api/routeCost";
 import ReportCostsByProjectOnlyPDF from "../ReportCostByProjectOnlyPDF"
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 import { useTableStates } from "@/app/store/tableStates";
+import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
+import { es } from "date-fns/locale"
+import { showToastMessageError } from "../Alert";
 
 export default function TableReportByProject({token}: {token:string}){
   
   const columnHelper = createColumnHelper<ReportCostsByProjectOnly>();
   const [data, setData] = useState<ReportCostsByProjectOnly[]>([]);
 
-  useEffect(() => {
-    const fetchData = async() => {
-      let reportProjectOnly: ReportCostsByProjectOnly[] = [];
-      try {
-        reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
-        if(typeof(reportProjectOnly)==='string'){
-          return <h1>Error al consultar costos por proyecto!!</h1>
-        }
-      } catch (error) {
-        return <h1>Error al consultar costos por proyecto!!</h1>
-      }
-      setData(reportProjectOnly);
-    }
+  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
+  });
 
-    fetchData();
+  const fetch = async (dateIni:string, dateFinal:string) => {
+    const res = await getAllCostsGroupByProjectOnlyByDate(token, dateIni, dateFinal);
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }else{
+      setData(res);
+    }
+  }
+
+  useEffect(() => {
+    // const fetchData = async() => {
+    //   let reportProjectOnly: ReportCostsByProjectOnly[] = [];
+    //   try {
+    //     reportProjectOnly = await GetAllCostsGroupByProjectOnly(token);
+    //     if(typeof(reportProjectOnly)==='string'){
+    //       return <h1>Error al consultar costos por proyecto!!</h1>
+    //     }
+    //   } catch (error) {
+    //     return <h1>Error al consultar costos por proyecto!!</h1>
+    //   }
+    //   setData(reportProjectOnly);
+    // }
+
+    // fetchData();
+    fetch((rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''));
   }, []);
+
+  const handleDate = (dateI: Date, dateF: Date) => {
+    fetch((dateI?.toISOString().substring(0, 10) || ''), (dateF?.toISOString().substring(0, 10) || ''));
+  }
 
   const columns = [
     columnHelper.accessor('project', {
@@ -107,8 +129,22 @@ export default function TableReportByProject({token}: {token:string}){
 
   return(
     <>
-      <div className="flex justify-end gap-x-3 mt-7 items-center">
+      <div className="flex justify-end gap-x-3 mt-7 items-center flex-wrap md:flex-nowrap gap-y-2">
         <SearchInTable placeH={"Buscar gasto.."} />
+        <div>
+          <DateRangePicker 
+            className=''
+            placeholder='Seleccione un rango de fechas'
+            onValueChange={(e) => {
+              setRangeDate(e);
+              if(e.from && e.to){
+                handleDate(e.from, e.to);
+              }
+            }}
+            value={rangeDate}
+            locale={es}
+          />
+        </div>
         {data.length > 0 && (
           <TooltipContainerIcon label="Descargar PDF" >
             <PDFDownloadLink document={<ReportCostsByProjectOnlyPDF reports={data} />} 
@@ -176,7 +212,7 @@ const CardData = ({data, token}:
     >
       <div className="flex items-center w-full ">
         <div className="grid mr-4 place-items-center">
-          <img alt="responsable" src={ '/img/costs/costs.svg'}
+          <img alt="responsable" src={ data?.photo?? '/img/costs/costs.svg'}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
           {/* <DeleteElement id={node.id} name={node.department} remove={removeNode} token={token} /> */}
         </div>

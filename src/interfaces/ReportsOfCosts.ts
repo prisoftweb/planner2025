@@ -65,4 +65,6 @@ export interface ReportCostsByProjectOnly {
   project: string
   amount: number
   porcentage: number
+  amountotal: number
+  photo: string
 }

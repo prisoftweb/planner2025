@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getDate } from '@/libs/dates';
+import { date } from 'zod';
 
 export async function GetCosts(auth_token:string){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs`;
@@ -471,8 +472,71 @@ export async function GetCostsGroupByCostoCenterCategory(auth_token:string) {
   }
 }
 
+export async function getAllCostsGroupByCOSTOCENTERCategoryByDate(auth_token:string, dateStart:string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTER-Category-ByDate/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+    }
+    return 'Error al consultar costos por centros de costos!!';
+  }
+}
+
 export async function GetAllCostsGroupByProjectOnly(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByProject-Only`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+    }
+    return 'Error al consultar costos por centros de costos!!';
+  }
+}
+
+export async function getAllCostsGroupByProjectOnlyByDate(auth_token:string, dateStart:string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByProject-OnlyByDate/${dateStart}/${dateEnd}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`
+      }
+    });
+    
+    if(res.status===200) {
+      return res.data.data.stats;
+    }
+    return res.statusText
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar costos por centro de costos!!';
+    }
+    return 'Error al consultar costos por centros de costos!!';
+  }
+}
+
+export async function getAllCostsGroupByCOSTOCENTERConceptByDate(auth_token:string, dateStart:string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTER-Concept-ByDate/${dateStart}/${dateEnd}`;
   try {
     const res = await axios.get(url, {
       headers: {
