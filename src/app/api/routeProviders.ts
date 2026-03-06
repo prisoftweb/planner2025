@@ -350,3 +350,25 @@ export async function getAllPaymentsByProviderMIN(id:string, auth_token:string) 
     }
   }
 }
+
+export async function getAllPaymentsByProviderAndDateMIN(id:string, auth_token:string, dateInitial:string, dateFinal:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/payments/getAllPaymentsByProviderAndDateMIN/${id}/${dateInitial}/${dateFinal}`;
+  try {
+    const res = await axios.get(url, {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    // console.log('res => ', res);
+    // console.log('res json => ', JSON.stringify(res.data.data));
+    if(res.status===200) return res.data.data.resdata;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al obtener pagos del proveedor';
+    }
+  }
+}

@@ -4,13 +4,15 @@ import { Provider } from "@/interfaces/Providers";
 import { IPaymentResumeProvider } from '@/interfaces/Payments';
 import { useMemo } from 'react';
 
-export default function DownloadPaymentsResumeProviderPDF({provider, payments}: 
-  {provider:Provider, payments:IPaymentResumeProvider[]}) {
+export default function DownloadPaymentsResumeProviderPDF({provider, payments, dateFinal, dateIni}: 
+  {provider:Provider, payments:IPaymentResumeProvider[], dateIni:Date, dateFinal:Date}) {
 
   const total = useMemo(() => payments.reduce((accum, element) => accum += element.payout, 0), payments);
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const date = new Date();
+
+  const period = `Del ${dateIni.getDate()} de ${months[dateIni.getMonth()]} de ${dateIni.getFullYear()} al ${dateFinal.getDate()} de ${months[dateFinal.getMonth()]} de ${dateFinal.getFullYear()}`;
 
   return(
     <Document>
@@ -104,7 +106,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments}:
               </View>
 
               <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-end', alignItems:'center', gap:'3px'}}>
-                {/* <Text style={{fontSize:'10px', color:'gray'}}>Fecha: </Text> */}
+                <Text style={{fontSize:'10px', color:'gray'}}> {period} </Text>
                 {/* <Text style={{fontSize:'10px'}}>{new Date().toISOString().substring(0, 10)}</Text> */}
               </View>
 

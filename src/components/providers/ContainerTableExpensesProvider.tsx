@@ -17,7 +17,11 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadPaymentsResumeProviderPDF from "./DownloadPaymentsResumeProviderPDF"
 import { Tooltip } from "@nextui-org/react"
 import { propsTooltip } from "@/libs/animations"
-import { getAllPaymentsByProviderMIN } from "@/app/api/routeProviders"
+// import { getAllPaymentsByProviderMIN } from "@/app/api/routeProviders"
+import { getAllPaymentsByProviderAndDateMIN } from "@/app/api/routeProviders"
+import { getDate } from "@/libs/dates";
+import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
+import { es } from "date-fns/locale"
 
 type Props = {
   data:ExpensesTableProvider[], 
@@ -34,21 +38,40 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
   const [stateExpenses, setStateExpenses] = useState<PaymentProvider[]>(expenses);
 
   const [dataReport, setDataReport]=useState<IPaymentResumeProvider[]>([]);
+  const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(),
+  });
+
+  const fetch = async (dateIni:string, dateFinal:string) => {
+    const res = await getAllPaymentsByProviderAndDateMIN(provider._id, token, dateIni, dateFinal);
+    if(typeof(res)==='string'){
+      showToastMessageError(res);
+    }else{
+      setDataReport(res);
+    }
+  }
 
   useEffect(() => {
-    const fetch = async () => {
-      const res = await getAllPaymentsByProviderMIN(provider._id, token);
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
-      }else{
-        setDataReport(res);
-      }
-    }
-    fetch();
+    // const fetch = async () => {
+    //   const res = await getAllPaymentsByProviderAndDateMIN(provider._id, token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''));
+    //   if(typeof(res)==='string'){
+    //     showToastMessageError(res);
+    //   }else{
+    //     setDataReport(res);
+    //   }
+    // }
+    fetch((rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''));
   }, []);
 
   const handleFilter = (value: boolean) => {
     setFilter(value);
+  }
+
+  const handleDate = (dateI: Date, dateF: Date) => {
+    
+    //actualizar total con el rango de fechas
+    fetch((dateI?.toISOString().substring(0, 10) || ''), (dateF?.toISOString().substring(0, 10) || ''));
   }
 
   const updateStateExpenses = async () => {
@@ -91,9 +114,24 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
               <TooltipFilterIcon handleFilter={handleFilter} />
             </div>
           </div>
+          <div>
+            <DateRangePicker 
+              className=''
+              placeholder='Seleccione un rango de fechas'
+              onValueChange={(e) => {
+                setRangeDate(e);
+                if(e.from && e.to){
+                  handleDate(e.from, e.to);
+                }
+              }}
+              value={rangeDate}
+              locale={es}
+            />
+          </div>
           {dataReport.length > 0 && (
             <div className="flex justify-end">
-              <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider} />} fileName={`Pagos ${provider.name}`} >
+              <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
+                    dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} />} fileName={`Pagos ${provider.name}`} >
                 {({loading, url, error, blob}) => 
                   loading? (
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
