@@ -73,6 +73,7 @@ export interface Condition{
 export interface TableClient{
   "id": string,
   "name":string,
+  tradename:string,
   "status":boolean,
   'contacts': number,
   "rfc": string,

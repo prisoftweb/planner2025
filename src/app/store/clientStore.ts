@@ -46,7 +46,7 @@ const initialState: TableClient = {
   //sourceimg: '',
   status: false, 
   //location: location,
-  //tradename: '',
+  tradename: '',
   //user: '',
   //__v: undefined,
   //createAt: undefined,

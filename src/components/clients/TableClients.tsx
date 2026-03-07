@@ -85,6 +85,15 @@ export default function TableClients({data, token, deletePermission, selectPermi
         >{row.original.name}</p>
       )
     }),
+    columnHelper.accessor('tradename', {
+      header: 'Nombre Comercial',
+      id: 'nombrecomercial',
+      cell: ({row}) => (
+        <p className="py-2 cursor-pointer"
+          onClick={() => window.location.replace(`/clients/${row.original.id}/profile`)}
+        >{row.original.tradename}</p>
+      )
+    }),
     columnHelper.accessor('rfc', {
       header: 'RFC',
       id: 'rfc',
