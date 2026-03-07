@@ -1,9 +1,14 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
+import { useMemo } from 'react'
 
 export default function ReportCostByProjects({reports, costsByTypes}: 
-  {reports:ReportByProject[], costsByTypes: CostGroupByType[]}){
+  {reports?:ReportByProject[], costsByTypes: CostGroupByType[]}){
+
+  // console.log('reportes por proyecto: ', reports);
+  // console.log('costos por tipo: ', costsByTypes);
+  const total=useMemo(() => costsByTypes.reduce((accum, item) => accum+=item?.totalCost?? 0, 0), costsByTypes);
   
   const style = StyleSheet.create({
     table: {
@@ -32,18 +37,18 @@ export default function ReportCostByProjects({reports, costsByTypes}:
       color: 'black',
     },
   })
-  const reportSorted = reports.sort((a, b) => {
-    const nameA = a.project.title.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.project.title.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
+  // const reportSorted = reports?.sort((a, b) => {
+  //   const nameA = a.project?.title?.toUpperCase(); // ignore upper and lowercase
+  //   const nameB = b.project?.title?.toUpperCase(); // ignore upper and lowercase
+  //   if (nameA < nameB) {
+  //     return -1;
+  //   }
+  //   if (nameA > nameB) {
+  //     return 1;
+  //   }
   
-    return 0;
-  });
+  //   return 0;
+  // });
 
   // const costsSorted = costsByTypes.sort((a, b) => new Date(a.).getTime() - new Date(b.date).getTime());
 
@@ -75,23 +80,23 @@ export default function ReportCostByProjects({reports, costsByTypes}:
               <View style={[style.header, {flex: 1}]}><Text>Cantidad</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Porcentaje %</Text></View>
             </View>
-            {reportSorted.map((rep, index:number) => (
-              <View style={[style.table, index > 0 && reports[index-1].project.title !== rep.project.title? {borderTop: '1px solid gray'}: {}]} key={index}>
-                <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep.project.title}</Text></View>
+            {/* {reports && reportSorted?.map((rep, index:number) => (
+              <View style={[style.table, index > 0 && reports[index-1]?.project?.title !== rep.project?.title? {borderTop: '1px solid gray'}: {}]} key={index}>
+                <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project?.title}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{rep.tipo ?? 'Sin tipo'}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',
-                  value: rep.project.amount
+                  value: rep?.project?.amount?? 0
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',
-                  value: rep.totalCost
+                  value: rep?.totalCost?? 0
                 })}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{rep.quantity}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{((rep.totalCost / rep.project.amount) * 100).toFixed(2)}%</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{((rep?.totalCost / (rep?.project?.amount?? 1)) * 100).toFixed(2)}%</Text></View>
               </View>
-            ) )}
-            <View style={{borderTop: '1px solid gray', marginTop: '20px'}}>
+            ) )} */}
+            {/* <View style={{borderTop: '1px solid gray', marginTop: '20px'}}>
               {costsByTypes.map((costtype, index:number) => (
                 <View style={[style.table]} key={index}>
                   <View style={[style.element, {flex: 1}]}><Text style={{fontWeight: 'semibold'}}>TOTAL</Text></View>
@@ -113,6 +118,37 @@ export default function ReportCostByProjects({reports, costsByTypes}:
               <View style={[style.element, {flex: 1}]}><Text style={{fontSize: '14px', fontWeight:'semibold'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: totalTypes
+              })}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+            </View> */}
+
+            {costsByTypes?.map((rep, index:number) => (
+              <View style={[style.table, {borderTop: '1px solid gray'}]} key={index}>
+                <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{rep.type ?? 'Sin tipo'}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: rep?.totalCost?? 0
+                })}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: rep?.totalCost?? 0
+                })}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{rep?.porcentage}%</Text></View>
+              </View>
+            ) )}
+            <View style={[style.table, {borderTop: '1px solid gray'}]} >
+              <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                currency: 'MXN',
+                value: total
+              })}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                currency: 'MXN',
+                value: total
               })}</Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>

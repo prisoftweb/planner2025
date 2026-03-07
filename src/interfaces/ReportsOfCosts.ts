@@ -48,14 +48,25 @@ export interface Types {
   id: string
 }
 
+// export interface CostGroupByType {
+//   _id: Id
+//   quantity: number
+//   totalCost: number
+//   totalIVA: number
+//   totalDiscount: number
+//   tipo: string
+// }
 export interface CostGroupByType {
-  _id: Id
   quantity: number
+  subtotalCost: number
   totalCost: number
   totalIVA: number
   totalDiscount: number
-  tipo: string
+  porcentage: number
+  project: string
+  type: string
 }
+
 
 export interface ReportCostsByProjectOnly {
   quantity: number
