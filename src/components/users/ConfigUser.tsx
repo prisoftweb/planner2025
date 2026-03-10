@@ -9,14 +9,14 @@ export default function ConfigUser({token, user, status}:{token:string, user:any
   const changeStatus = async (value:boolean, id:string, token:string) => {
     try{
       const res = await updateUser({status:value}, token, id);
-      if(res===200) {
+      if(typeof(res)==='string') {
+        showToastMessageError(res);
+      }else{
         value? showToastMessage('El usuario ha sido habilitado!!') : 
                 showToastMessage('El usuario ha sido deshabilitado');
         setTimeout(() => {
           window.location.reload();
         }, 500);
-      }else{
-        showToastMessageError(res);
       }
     }catch(e){
       showToastMessageError('Ocurrio un problema al cambiar el estado del usuario!!');

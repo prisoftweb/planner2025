@@ -1,36 +1,51 @@
-import { cookies } from "next/headers"
+'use client'
+// import { cookies } from "next/headers"
 import UserClient from "./UserClient";
 import { getDepartmentsLV } from "@/app/api/routeDepartments";
 import { getRolesLV } from "@/app/api/routeRoles";
-// import { Options } from "@/interfaces/Common";
 import { UsrBack } from "@/interfaces/User";
+// import NavTab from "@/components/users/NavTab";
+import { useState, useEffect } from "react";
+import { Options } from "@/interfaces/Common";
+import { showToastMessageError } from "../Alert";
 
-export default async function TabUser({user, opt}: {user:UsrBack, opt: number}){
+export default function TabUser({user, opt, token}: 
+  {user:UsrBack, opt: number, token:string}){
   
-  const cookieStore = cookies();
-  const token: string = cookieStore.get('token')?.value || '';
+  // const cookieStore = cookies();
+  // const token: string = cookieStore.get('token')?.value || '';
+  const [optionsDepartments, setOptionsDepartments] = useState<Options[]>([]);
+  const [optsRole, setOptsRole] = useState<Options[]>([]);
+  // const [error, setError] = useState<string>('');
 
-  // let optionsDepartments:Options[] = [];
-  // let optsRole:Options[] = [];
-  
-  // optionsDepartments = await getDepartmentsLV(token);
-  // optsRole = await getRolesLV(token);
-
-  const [optionsDepartments, optsRole]=await Promise.all([
-    getDepartmentsLV(token),
-    getRolesLV(token)
-  ]);
-  
-  if(typeof(optionsDepartments) === "string")
-    return <h1 className="text-center text-red-500">{optionsDepartments}</h1>
-
-  if(typeof(optsRole)==='string')
-      return <h1 className="text-red-500 text-center text-lg">{optsRole}</h1>
+  useEffect(() => {
+    const fetchData = async () => {
+      const [departments, roles] = await Promise.all([
+        getDepartmentsLV(token),
+        getRolesLV(token)
+      ]);
+      if(typeof(departments) === 'string'){
+        showToastMessageError(departments);
+      }else{
+        setOptionsDepartments(departments);
+      }
+      if(typeof(roles) === 'string'){
+        showToastMessageError(roles);
+      }else{
+        setOptsRole(roles);
+      } 
+    }
+    fetchData();
+  }, []);
 
   return(
     <>
+      {/* <div className="mt-3">
+        <NavTab idUser={params.id} tab={'1'} />
+        <NavTab idUser={''} tab={'1'} />
+      </div> */}
       <UserClient user={user} token={token} departments={optionsDepartments} 
-            optQuery={opt} optsRole={optsRole} />
+        optsRole={optsRole} optTab={opt} />
     </>
   )
 }

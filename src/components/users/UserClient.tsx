@@ -11,17 +11,17 @@ import NavResponsive from "./NavResponsive"
 import { UsrBack } from "@/interfaces/User"
 import { useUserStore } from "@/app/store/userStore"
 
-export default function UserClient({user, token, departments, optQuery, optsRole}: 
-  {user:UsrBack, token:string, departments:Options[], optQuery: number, optsRole:Options[]}){
+export default function UserClient({user, token, departments, optsRole, optTab}: 
+  {user:UsrBack, token:string, departments:Options[], optsRole:Options[], optTab: number}) {
   
-  const [opt, setOpt] = useState<number>(optQuery);
-  const [open, setOpen] = useState<boolean>(false);
+  // const [opt, setOpt] = useState<number>(optQuery);
+  // const [open, setOpen] = useState<boolean>(false);
   const {updateUser, name, _id, department, email, photo, role, status, __v, 
       createAt, passwordChangedAt, rol} = useUserStore();
 
-  const handleOpenNav = (value: boolean) => {
-    setOpen(value);
-  }
+  // const handleOpenNav = (value: boolean) => {
+  //   setOpen(value);
+  // }
 
   const usr: UsrBack = {
     __v,
@@ -37,9 +37,9 @@ export default function UserClient({user, token, departments, optQuery, optsRole
     role
   }
 
-  const handleChangeOpt = (value:number) => {
-    setOpt(value);
-  }
+  // const handleChangeOpt = (value:number) => {
+  //   setOpt(value);
+  // }
 
   useEffect(() => {
     updateUser(user);
@@ -47,20 +47,20 @@ export default function UserClient({user, token, departments, optQuery, optsRole
 
   let view: JSX.Element;
   
-  opt===2? view = (<ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />) : 
-      (opt===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 
-        (opt===4? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
+  optTab===2? view = (<ChangePhoto id={user._id} token={token} user={usr.name ===''? user: usr} />) : 
+      (optTab===3? view = (<ChangePassword token={token} name={user.name} id={user._id} />): 
+        (optTab===5? view = (<ConfigUser token={token} user={user} status={usr.name ===''? user.status: usr.status} />): 
           view = (<UpdateProfile departments={departments} user={usr.name ===''? user: usr} 
                       token={token} optsRoles={optsRole} />) ))
 
   return(
     <>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
+        {/* <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handleOpenNav} changeOption={handleChangeOpt} option={opt} />
           </div>
-        </div>
+        </div> */}
         <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>

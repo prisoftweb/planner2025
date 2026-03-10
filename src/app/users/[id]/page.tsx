@@ -74,10 +74,10 @@ export default async function Page({ params, searchParams }:
     else if(searchParams.opt==='4') opt = 4;
       else opt = 1;
 
-  let res;
-  if(searchParams.tab==='2') res=<></>
-  else if(searchParams.tab==='3') res=<></>
-    else res=<TabUser user={user} opt={opt} />;
+  // let res;
+  // if(searchParams.tab==='2') res=<></>
+  // else if(searchParams.tab==='3') res=<></>
+  //   else res=<TabUser user={user} opt={opt} />;
 
   return(
     <>
@@ -97,10 +97,10 @@ export default async function Page({ params, searchParams }:
           </div>
           <Selectize options={options} routePage="users" subpath="" />
         </div>
-        <div className="mt-3">
+        {/* <div className="mt-3">
           <NavTab idUser={params.id} tab={searchParams.tab} />
         </div>
-        {res}
+        {res} */}
       </div>
     </>
   )

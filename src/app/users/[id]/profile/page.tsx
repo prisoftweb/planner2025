@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import Selectize from "@/components/Selectize";
 import { Options } from "@/interfaces/Common";
 import HeaderImage from "@/components/HeaderImage";
+import ContainerProfileUser from "@/components/users/ContainerProfileUser";
 
 export default async function Page({ params, searchParams }: { params: { id: string }, searchParams: { opt: string } }){
   
@@ -59,10 +60,11 @@ export default async function Page({ params, searchParams }: { params: { id: str
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
           <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
         </HeaderImage>
-        <div className="mt-3">
+        {/* <div className="mt-3">
           <NavTab idUser={params.id} tab={'1'} />
-        </div>
-        <TabUser user={user} opt={opt} />
+        </div> */}
+        {/* <TabUser user={user} opt={opt} /> */}
+        <ContainerProfileUser token={token} user={user} />
       </div>
     </>
   )
