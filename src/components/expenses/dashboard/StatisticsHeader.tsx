@@ -66,45 +66,49 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               locale={es}
             />
           </div>
-          <div className='sm:w-56 w-96'>
-            <Label htmlFor='project'>Proyecto</Label>
-            <SelectReact index={0} opts={projects} setValue={handleProjects} />
-          </div>
-          <div className='w-5'>
-            {dataCostsCatagory && dataCostsCatagory.length > 0 && (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                content='categoria'
-                className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
-                <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
-                                              type={true} rangeDate={rangeDate} projectTitle={titleProject} />} 
-                    fileName={`InformeCostosAgrupadosPorCategoria`} >
-                  {({loading, url, error, blob}) => 
-                    loading? (
-                      <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-                    ) : (
-                      <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                    ) }
-                </PDFDownloadLink>
-              </Tooltip>
-            )}
-          </div>
-          <div className='w-5'>
-            {dataCostsConcept && dataCostsConcept.length > 0 && (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                  content='concepto' 
+          <div className='flex items-center gap-x-1'>
+            <div className='sm:w-56 w-96'>
+              <Label htmlFor='project'>Proyecto</Label>
+              <SelectReact index={0} opts={projects} setValue={handleProjects} />
+            </div>
+            <div className='w-5'>
+              <Label></Label>
+              {dataCostsCatagory && dataCostsCatagory.length > 0 && (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                  content='categoria'
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
-                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
-                                                type={false} rangeDate={rangeDate} projectTitle={titleProject} />} 
-                    fileName={`InformeCostosAgrupadosPorConcepto`} >
-                  {({loading, url, error, blob}) => 
-                    loading? (
-                      <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-                    ) : (
-                      <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                    ) }
-                </PDFDownloadLink>
-              </Tooltip>
-            )}
+                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
+                                                type={true} rangeDate={rangeDate} projectTitle={titleProject} />} 
+                      fileName={`InformeCostosAgrupadosPorCategoria`} >
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                      ) : (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                      ) }
+                  </PDFDownloadLink>
+                </Tooltip>
+              )}
+            </div>
+            <div className='w-5'>
+              <Label></Label>
+              {dataCostsConcept && dataCostsConcept.length > 0 && (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    content='concepto' 
+                    className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
+                    <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
+                                                  type={false} rangeDate={rangeDate} projectTitle={titleProject} />} 
+                      fileName={`InformeCostosAgrupadosPorConcepto`} >
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                      ) : (
+                        <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                      ) }
+                  </PDFDownloadLink>
+                </Tooltip>
+              )}
+            </div>
           </div>
         </div>
       </div>

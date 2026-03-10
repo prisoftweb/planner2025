@@ -15,7 +15,7 @@ export default function NavTab({option}: {option:number}){
 
   const nav =(<div>
                 {/* <div className="bg-white fixed top-12 left-0  p-2 space-y-4 flex flex-col items-center align-top rounded-md h-full shadow-md"> */}
-                <div className="bg-white fixed top-12 left-0 pt-1 sm:pt-0 p-2 flex flex-row sm:flex-col items-center 
+                <div className="bg-white fixed top-14 left-0 pt-1 sm:pt-0 p-2 flex flex-row sm:flex-col items-center 
                                   space-x-4 sm:space-x-0 sm:space-y-4 rounded-md shadow-md w-full h-auto
                                   sm:w-auto sm:h-screen">
                 {/* <div className="bg-white fixed bottom-0 left-0 w-full h-auto md:top-12 md:bottom-auto
