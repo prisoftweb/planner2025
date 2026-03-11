@@ -1,8 +1,12 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportByCostcenterCategory } from '@/interfaces/CostCenter'
+import { useMemo } from 'react';
 
-export default function ReportCostByCategory({costsCostCenter}: {costsCostCenter: ReportByCostcenterCategory[]}){
+export default function ReportCostByCategory({costsCostCenter, dateFinal, dateIni}: 
+  {costsCostCenter: ReportByCostcenterCategory[], dateIni:Date, dateFinal: Date}){
+
+  const total=useMemo(() => costsCostCenter.reduce((accum, item) => accum+=item?.totalCost?? 0, 0), costsCostCenter);
   
   const style = StyleSheet.create({
     table: {
@@ -30,6 +34,13 @@ export default function ReportCostByCategory({costsCostCenter}: {costsCostCenter
       margin: '1px',
       color: 'black',
     },
+    title: {
+      fontSize: '14px',
+      padding: '2px',
+      borderBottom: '1px solid black',
+      fontWeight: 'bold',
+      color: 'black',
+    },
   })
   
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -41,7 +52,8 @@ export default function ReportCostByCategory({costsCostCenter}: {costsCostCenter
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Detalle de costo agrupado por categoria</Text>
+              <Text style={[style.title, {textAlign:'right'}]}>Resumen de costos por Categorias</Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>De {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} a {dateFinal.getDate()} de {months[dateFinal.getMonth()]} de {dateFinal.getFullYear()} </Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
           </View>
@@ -49,7 +61,7 @@ export default function ReportCostByCategory({costsCostCenter}: {costsCostCenter
           <View style={style.containerTable}>
             <View style={style.table}>
               <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Tipo</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Obra</Text></View>
+              <View style={[style.header, {flex: 1}]}><Text>Proyecto</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Categoria</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Cantidad</Text></View>
@@ -66,6 +78,16 @@ export default function ReportCostByCategory({costsCostCenter}: {costsCostCenter
                 <View style={[style.element, {flex: 1}]}><Text>{costCC.quantity}</Text></View>                
               </View>
             ) )}
+            <View style={[style.table, {borderTop: '1px solid gray'}]} >
+                <View style={[style.element, {flex: 1}]}><Text></Text></View>
+                <View style={[style.element, {flex: 1}]}><Text></Text></View>
+                <View style={[style.element, {flex: 1}]}><Text></Text></View>
+                <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: total
+                })}</Text></View>
+                <View style={[style.element, {flex: 1}]}><Text></Text></View>                
+              </View>
           </View>
         </View>
       </Page>

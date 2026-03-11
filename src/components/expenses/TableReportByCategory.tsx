@@ -150,8 +150,8 @@ export default function TableReportByCategory({token}: {token:string}){
           />
         </div>
         {data.length > 0 && (
-          <PDFDownloadLink document={<ReportCostByCategory costsCostCenter={data} />} 
-              fileName={`InformeCostosAgrupadosCategoria`} >
+          <PDFDownloadLink document={<ReportCostByCategory costsCostCenter={data} dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} />} 
+              fileName={`Resumen de costos por Categorias`} >
             {({loading, url, error, blob}) => 
               loading? (
                 <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
@@ -185,7 +185,7 @@ const ListData = ({data, token}: {data: ReportByCostcenterCategory[], token:stri
 
   return(
     <div>
-      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-317px)]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 

@@ -70,7 +70,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
       if(typeof(restot)==='string'){
         showToastMessageError(restot);
       }else{
-        // console.log('res cont => ', restot);
+        console.log('res cont => ', restot);
         setTotalAccum(restot.flat());
       }
     }

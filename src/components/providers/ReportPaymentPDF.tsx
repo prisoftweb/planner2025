@@ -4,9 +4,11 @@ import { DetailExpensesTableProvider } from '@/interfaces/Providers'
 import { ProviderMin } from "@/interfaces/Providers"
 import { OnePayment } from '@/interfaces/Payments'
 import { UsrBack } from '@/interfaces/User'
+import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from '@/interfaces/Payments'
 
-export default function ReportPaymentPDF({costs, provider, payment, user}: 
-    {costs: DetailExpensesTableProvider[], provider: ProviderMin, user: UsrBack, payment: OnePayment}){
+export default function ReportPaymentPDF({costs, provider, payment, user, pending}: 
+    {costs: DetailExpensesTableProvider[], provider: ProviderMin, user: UsrBack, 
+      payment: OnePayment, pending:ITotalAcumulatedPendingPaymentResumeProviderPDF[]}){
   
   const style = StyleSheet.create({
     table: {
@@ -89,8 +91,8 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
           <View style={{display:'flex', flexDirection: 'row', alignItems: 'center', gap: '10px'}}>
             <Image src={'/Palaciosconstrucciones-isologo.png'} style={{width: '40px'}} />
             <View>
-              <Text style={{fontSize: '10px', color: 'gray'}}>Resumen de pago a proveedor</Text>
-              <Text style={{fontSize: '12px', color: 'gray'}}>RESUMEN DE PAGO</Text>
+              <Text style={{fontSize: '12px', color: 'gray'}}>DETALLE DEL PAGO</Text>
+              <Text style={{fontSize: '10px', color: 'gray'}}>Listado de facturas pagadas</Text>
               <Text style={{fontSize: '10px', color: 'gray'}}>Palacios construcciones</Text>
             </View>
           </View>
@@ -144,7 +146,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user}:
               <Text style={style.textRight}>
                 {CurrencyFormatter({
                   currency: 'MXN',
-                  value: payment.pending
+                  value: pending[0]?.unpaidbalanceamount ?? 0
                 })}
               </Text>
             </View>

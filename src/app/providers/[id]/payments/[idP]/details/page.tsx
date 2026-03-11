@@ -6,6 +6,7 @@ import { DetailExpensesTableProvider, Provider, ProviderMin } from "@/interfaces
 import { ExpenseDataToTableDetailExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableDetailsExpenseProvider from "@/components/providers/ContainerTableDetailsExpenseProvider";
 import { getCostsPayment, getPayment } from "@/app/api/routePayments";
+import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
 
 export default async function Page({ params }: { params: { id: string, idP: string }}){
   
@@ -16,11 +17,12 @@ export default async function Page({ params }: { params: { id: string, idP: stri
 
   let provider: ProviderMin;
 
-  const [arrProvider, providers, costs, payment] = await Promise.all([
+  const [arrProvider, providers, costs, payment, pending] = await Promise.all([
     getProviderMin(params.id, token),
     getProviders(token),
     getCostsPayment(token, params.idP),
-    getPayment(token, params.idP)
+    getPayment(token, params.idP),
+    getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token)
   ]);
   
   if(typeof(arrProvider) === "string"){
@@ -62,6 +64,15 @@ export default async function Page({ params }: { params: { id: string, idP: stri
     )
   }
 
+  if(typeof(pending) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">{pending}</h1>
+      </>
+    )
+  }
+
   if(providers.length <= 0){
     return(
       <>
@@ -78,7 +89,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token}
-          user={user} provider={provider} payment={payment} />
+          user={user} provider={provider} payment={payment} pending={pending.flat()} />
       </div>
     </>
   )

@@ -97,7 +97,7 @@ const ListData = ({data, token}: {data: RelationTable[], token:string}) => {
 
   return(
     <div>
-      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[450px]">
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-222px)]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
@@ -141,13 +141,13 @@ const CardRelation = ({relation, token}:
                 {relation.description}
               </p>
             </div>
-            <div className="text-right">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+            <div className="text-right w-40">
+              <p className="flex font-sans text-2xl antialiased font-normal leading-normal text-blue-600 break-all">
                 {relation.nextNode}  
               </p>
-              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
-                {/* {node.condition} */}
-              </p>
+              {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {node.condition}
+              </p> */}
             </div>
           </div>
         </div>

@@ -3,8 +3,8 @@ import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
 import { useMemo } from 'react'
 
-export default function ReportCostByProjects({reports, costsByTypes}: 
-  {reports?:ReportByProject[], costsByTypes: CostGroupByType[]}){
+export default function ReportCostByProjects({reports, costsByTypes, dateFinal, dateIni}: 
+  {reports?:ReportByProject[], costsByTypes: CostGroupByType[], dateIni:Date, dateFinal: Date}){
 
   // console.log('reportes por proyecto: ', reports);
   // console.log('costos por tipo: ', costsByTypes);
@@ -36,6 +36,13 @@ export default function ReportCostByProjects({reports, costsByTypes}:
       margin: '1px',
       color: 'black',
     },
+    title: {
+      fontSize: '14px',
+      padding: '2px',
+      borderBottom: '1px solid black',
+      fontWeight: 'bold',
+      color: 'black',
+    },
   })
   // const reportSorted = reports?.sort((a, b) => {
   //   const nameA = a.project?.title?.toUpperCase(); // ignore upper and lowercase
@@ -57,6 +64,8 @@ export default function ReportCostByProjects({reports, costsByTypes}:
     totalTypes += costtype.totalCost;
   });
 
+  let bandtitle='';
+
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const date = new Date();
   return(
@@ -66,17 +75,18 @@ export default function ReportCostByProjects({reports, costsByTypes}:
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
-              <Text style={[style.subTitle, {textAlign:'right'}]}>Resumen de costos por obras</Text>
+              <Text style={[style.title, {textAlign:'right'}]}>Resumen de costos por Tipos</Text>
+              <Text style={[style.subTitle, {textAlign:'right'}]}>De {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} a {dateFinal.getDate()} de {months[dateFinal.getMonth()]} de {dateFinal.getFullYear()} </Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>
             </View>
           </View>
           
           <View style={style.containerTable}>
             <View style={style.table}>
-              <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Obra</Text></View>
+              <View style={[style.header, {flex: 1}]}><Text style={{fontWeight: 'bold'}}>Proyecto</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Tipo</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Monto de obra</Text></View>
-              <View style={[style.header, {flex: 1}]}><Text>Total</Text></View>
+              <View style={[style.header, {flex: 1}]}><Text>Monto de proyecto</Text></View>
+              <View style={[style.header, {flex: 1}]}><Text>Costo</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Cantidad</Text></View>
               <View style={[style.header, {flex: 1}]}><Text>Porcentaje %</Text></View>
             </View>
@@ -123,29 +133,34 @@ export default function ReportCostByProjects({reports, costsByTypes}:
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
             </View> */}
 
-            {costsByTypes?.map((rep, index:number) => (
-              <View style={[style.table, {borderTop: '1px solid gray'}]} key={index}>
-                <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{rep.type ?? 'Sin tipo'}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: rep?.totalCost?? 0
-                })}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                  currency: 'MXN',
-                  value: rep?.totalCost?? 0
-                })}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
-                <View style={[style.element, {flex: 1}]}><Text>{rep?.porcentage}%</Text></View>
-              </View>
-            ) )}
+            
+            {costsByTypes?.map((rep, index:number) => {
+              let b=0;
+              if(bandtitle !== rep.project){
+                bandtitle = rep.project?? '';
+                b=1;
+              }
+              return(
+                <View style={[style.table, {borderTop: (b==1? '1px solid gray': '')}]} key={index}>
+                  <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep?.project}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{rep.type ?? 'Sin tipo'}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                    currency: 'MXN',
+                    value: rep?.totalCost?? 0
+                  })}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
+                    currency: 'MXN',
+                    value: rep?.totalCost?? 0
+                  })}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{(((rep?.totalCost?? 0) / ( 1)) * 100).toFixed(2)} %</Text></View>
+                </View>
+              )
+            } )}
             <View style={[style.table, {borderTop: '1px solid gray'}]} >
               <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}></Text></View>
               <View style={[style.element, {flex: 1}]}><Text></Text></View>
-              <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
-                currency: 'MXN',
-                value: total
-              })}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text></Text></View>
               <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                 currency: 'MXN',
                 value: total

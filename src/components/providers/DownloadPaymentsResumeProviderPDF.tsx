@@ -3,9 +3,11 @@ import { CurrencyFormatter } from '@/app/functions/Globals'
 import { Provider } from "@/interfaces/Providers";
 import { IPaymentResumeProvider } from '@/interfaces/Payments';
 import { useMemo } from 'react';
+import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from '@/interfaces/Payments';
 
-export default function DownloadPaymentsResumeProviderPDF({provider, payments, dateFinal, dateIni}: 
-  {provider:Provider, payments:IPaymentResumeProvider[], dateIni:Date, dateFinal:Date}) {
+export default function DownloadPaymentsResumeProviderPDF({provider, payments, dateFinal, dateIni, pending}: 
+  {provider:Provider, payments:IPaymentResumeProvider[], dateIni:Date, dateFinal:Date, 
+    pending: ITotalAcumulatedPendingPaymentResumeProviderPDF[]}) {
 
   const total = useMemo(() => payments.reduce((accum, element) => accum += element.payout, 0), payments);
 
@@ -51,7 +53,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
                   <Text style={{fontSize:'10px', color:'gray'}}>Por pagar: </Text>
                   <Text style={{fontSize:'10px'}}>{CurrencyFormatter({
                     currency: 'MXN',
-                    value: total
+                    value: pending[0]?.unpaidbalanceamount ?? 0
                   })}</Text>
                 </View>
               </View>

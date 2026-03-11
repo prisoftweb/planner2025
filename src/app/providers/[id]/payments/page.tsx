@@ -7,6 +7,7 @@ import { ExpensesTableProvider, Provider } from "@/interfaces/Providers";
 import { ExpenseDataToTablePaidExpensesProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableExpensesProvider from "@/components/providers/ContainerTableExpensesProvider";
 import { getPaymentsProvider } from "@/app/api/routePayments";
+import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -15,10 +16,11 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [provider, providers, costs] = await Promise.all([
+  const [provider, providers, costs, pending] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
-    getPaymentsProvider(token, params.id)
+    getPaymentsProvider(token, params.id),
+    getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token)
   ]);
   
   if(typeof(provider) === "string"){
@@ -57,6 +59,15 @@ export default async function Page({ params }: { params: { id: string }}){
     )
   }
 
+  if(typeof(pending) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">{pending}</h1>
+      </>
+    )
+  }
+
   const table: ExpensesTableProvider[] = ExpenseDataToTablePaidExpensesProviderData(costs);
   
   return(
@@ -65,7 +76,7 @@ export default async function Page({ params }: { params: { id: string }}){
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='5' />
         <ContainerTableExpensesProvider data={table} expenses={costs} token={token} 
-          user={user._id} provider={provider} />
+          user={user._id} provider={provider} pending={pending.flat()} />
       </div>
     </>
   )

@@ -22,17 +22,19 @@ import { getAllPaymentsByProviderAndDateMIN } from "@/app/api/routeProviders"
 import { getDate } from "@/libs/dates";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
+import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from "@/interfaces/Payments"
 
 type Props = {
   data:ExpensesTableProvider[], 
   token:string, 
   expenses:PaymentProvider[], 
   user: string, 
-  provider: Provider
+  provider: Provider,
+  pending: ITotalAcumulatedPendingPaymentResumeProviderPDF[]
 }
 
 export default function ContainerTableExpensesProvider({data, token, expenses, user, 
-  provider}: Props) {
+  provider, pending}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [stateExpenses, setStateExpenses] = useState<PaymentProvider[]>(expenses);
@@ -131,7 +133,8 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
           {dataReport.length > 0 && (
             <div className="flex justify-end">
               <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
-                    dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} />} fileName={`Pagos ${provider.name}`} >
+                    dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()}
+                    pending={pending} />} fileName={`Pagos ${provider.name}`} >
                 {({loading, url, error, blob}) => 
                   loading? (
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 

@@ -20,6 +20,7 @@ import ReportPaymentPDF from "./ReportPaymentPDF"
 import { UsrBack } from "@/interfaces/User"
 import { ProviderMin } from "@/interfaces/Providers"
 import { propsTooltip } from "@/libs/animations"
+import {ITotalAcumulatedPendingPaymentResumeProviderPDF} from "@/interfaces/Payments"
 
 type Props = {
   data:DetailExpensesTableProvider[], 
@@ -27,11 +28,12 @@ type Props = {
   expenses:CostPayment[], 
   user: UsrBack, 
   provider: ProviderMin, 
-  payment: OnePayment
+  payment: OnePayment, 
+  pending:ITotalAcumulatedPendingPaymentResumeProviderPDF[]
 }
 
 export default function ContainerTableDetailsExpenseProvider({data, token, expenses, user, 
-  provider, payment}: Props) {
+  provider, payment, pending}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   
@@ -56,7 +58,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
               />
               
               <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider}
-                                            payment={payment} user={user} />} fileName={`${provider.name}.pdf`} >
+                                            payment={payment} user={user} pending={pending} />} fileName={`${provider.name}.pdf`} >
                 {({loading, url, error, blob}) => 
                   loading? (
                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 

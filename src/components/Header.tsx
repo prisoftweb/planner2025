@@ -96,7 +96,7 @@ const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Head
           </div>
         </div>
         {/* <div className="flex gap-x-3 justify-end w-full"> */}
-        <div className="mt-2 md:mt-0 sm:flex gap-x-3 gap-y-2 pr-2 sm:pr-0 justify-end w-full">
+        <div className="mt-2 md:mt-0 sm:flex gap-x-3 gap-y-2 pr-4 sm:pr-0 justify-end w-full">
           <SearchInTable placeH={placeHolder} ref={ref} />
           <div className="w-36 mt-2 sm:mt-0 hidden sm:block">
             {children}

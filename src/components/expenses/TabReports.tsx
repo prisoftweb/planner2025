@@ -34,7 +34,7 @@ export default function TabReports({option, setOption}: {option: number, setOpti
       </div>
 
       {/* <div className="flex items-center gap-x-3 sm:hidden mt-2"> */}
-      <div className="bg-white pt-1 p-2 flex flex-row items-center 
+      <div className="bg-white pt-1 p-2 flex flex-row items-center mt-2 
                       space-x-4 rounded-md shadow-md w-full h-auto sm:hidden">
         <TooltipContainerIcon label="Proyecto">
           <div className="p-1 rounded-full" style={{backgroundColor: option===0? '#178DE1': ''}}>

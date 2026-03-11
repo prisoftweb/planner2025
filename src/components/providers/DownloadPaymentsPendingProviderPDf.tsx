@@ -231,10 +231,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
               value: total60plus ?? 0
               // value: aging.days45_60 ?? 0
             })}</Text>
-            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}>{CurrencyFormatter({
-              currency: 'MXN',
-              value: total
-            })}</Text>
+            <Text style={{flex: 2, fontSize: '7px', padding: '2px', borderTop: '0.2px solid gray', fontWeight: 'bold'}}></Text>
           </View>
 
           {/* {costData.map((c, index:number) => {

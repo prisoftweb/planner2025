@@ -8,6 +8,7 @@ import { Options } from "@/interfaces/Common";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import ContainerTablePendinginvoices from "@/components/providers/ContainerTablePendingInvoices";
+import {getAllTotalAccumResumeProgramingByProviderMINWithoutPAY} from "@/app/api/routeCost"
 
 export default async function Page({ params }: { params: { id: string }}){
   
@@ -16,11 +17,12 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [provider, providers, costs, optTypes] = await Promise.all([
+  const [provider, providers, costs, optTypes, pending] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
     GetCostsProviderMINWithoutPay(token, params.id),
-    getCatalogsByNameAndType(token, 'payments')
+    getCatalogsByNameAndType(token, 'payments'),
+    getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token)
   ]);
   
   if(typeof(provider) === "string"){
@@ -54,6 +56,15 @@ export default async function Page({ params }: { params: { id: string }}){
       <>
         <Navigation user={user} />
         <h1 className="text-red-500 text-center text-lg">{optTypes} types</h1>
+      </>
+    )
+  }
+
+  if(typeof(pending) === "string"){
+    return(
+      <>
+        <Navigation user={user} />
+        <h1 className="text-center text-red-500">{pending}</h1>
       </>
     )
   }
