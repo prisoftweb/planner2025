@@ -17,12 +17,12 @@ export default async function Page({ params }: { params: { id: string }}){
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const [provider, providers, costs, optTypes, pending] = await Promise.all([
+  const [provider, providers, costs, optTypes] = await Promise.all([
     getProvider(params.id, token),
     getProviders(token),
     GetCostsProviderMINWithoutPay(token, params.id),
     getCatalogsByNameAndType(token, 'payments'),
-    getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token)
+    // getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token)
   ]);
   
   if(typeof(provider) === "string"){
@@ -60,14 +60,14 @@ export default async function Page({ params }: { params: { id: string }}){
     )
   }
 
-  if(typeof(pending) === "string"){
-    return(
-      <>
-        <Navigation user={user} />
-        <h1 className="text-center text-red-500">{pending}</h1>
-      </>
-    )
-  }
+  // if(typeof(pending) === "string"){
+  //   return(
+  //     <>
+  //       <Navigation user={user} />
+  //       <h1 className="text-center text-red-500">{pending}</h1>
+  //     </>
+  //   )
+  // }
 
   let options: Options[] = [];
 
