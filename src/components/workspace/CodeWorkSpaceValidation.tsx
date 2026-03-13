@@ -71,7 +71,7 @@ export default function CodeWorkSpaceValidation({handleIndex, emailUser}:
   }
 
   return (
-    <div className='w-full h-screen flex'>
+    <div className='w-full h-screen flex justify-center'>
       <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
         // style={{ backgroundImage: "url('/img/workspaces/61380.jpg')" }}
         style={{backgroundImage:

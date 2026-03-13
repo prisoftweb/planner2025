@@ -22,7 +22,6 @@ export default async function Page({ params }: { params: { id: string }}){
     getProviders(token),
     GetCostsProviderMINWithoutPay(token, params.id),
     getCatalogsByNameAndType(token, 'payments'),
-    // getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(params.id, token)
   ]);
   
   if(typeof(provider) === "string"){

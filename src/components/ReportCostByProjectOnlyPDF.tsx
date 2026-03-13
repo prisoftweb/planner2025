@@ -3,6 +3,8 @@ import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportCostsByProjectOnly } from '@/interfaces/ReportsOfCosts';
 
 export default function ReportCostsByProjectOnlyPDF({reports, dateFinal, dateIni}: {reports: ReportCostsByProjectOnly[], dateIni:Date, dateFinal: Date}){
+
+  console.log('reportes para pdf', reports);
   
   const style = StyleSheet.create({
     table: {
@@ -72,7 +74,7 @@ export default function ReportCostsByProjectOnlyPDF({reports, dateFinal, dateIni
                 <View style={[style.element, {flex: 1}, {fontWeight: 'bold'}]}><Text style={{fontWeight: 'bold'}}>{rep.project}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',
-                  value: rep.amount
+                  value: rep.amountotal
                 })}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',

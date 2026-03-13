@@ -193,7 +193,8 @@ export interface DetailExpensesTableProvider {
   previoudbalanceamount: number,
   payout: number,
   partitialnumber: number,
-  unpaidbalanceamount: number
+  unpaidbalanceamount: number,
+  folio?: string
 }
 
 export interface ICostTOTALPendingPAYGroupByPROVIDER {

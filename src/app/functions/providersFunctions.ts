@@ -313,7 +313,8 @@ export function ExpenseDataToTableDetailExpensesProviderData(expenses:CostPaymen
       payout: t,
       partitialnumber: expense.costs.pay? expense.costs.pay[0]?.partialitynumber: 1 || 1,
       // unpaidbalanceamount: unpaid,
-      unpaidbalanceamount: u
+      unpaidbalanceamount: u,
+      folio: expense.costs.folio,
     });
   });
   return table;

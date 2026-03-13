@@ -55,14 +55,6 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
   }
 
   useEffect(() => {
-    // const fetch = async () => {
-    //   const res = await getAllPaymentsByProviderAndDateMIN(provider._id, token, (rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''));
-    //   if(typeof(res)==='string'){
-    //     showToastMessageError(res);
-    //   }else{
-    //     setDataReport(res);
-    //   }
-    // }
     fetch((rangeDate?.from?.toISOString().substring(0, 10) || ''), (rangeDate?.to?.toISOString().substring(0, 10) || ''));
   }, []);
 

@@ -153,7 +153,7 @@ export default function ReportCostByProjects({reports, costsByTypes, dateFinal, 
                     value: rep?.totalCost?? 0
                   })}</Text></View>
                   <View style={[style.element, {flex: 1}]}><Text>{rep?.quantity}</Text></View>
-                  <View style={[style.element, {flex: 1}]}><Text>{(((rep?.totalCost?? 0) / ( 1)) * 100).toFixed(2)} %</Text></View>
+                  <View style={[style.element, {flex: 1}]}><Text>{(((rep?.totalCost?? 0) / ( rep?.amountotal?? 1)) * 100).toFixed(2)} %</Text></View>
                 </View>
               )
             } )}

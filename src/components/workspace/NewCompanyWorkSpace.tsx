@@ -145,7 +145,7 @@ export default function NewCompanyWorkSpace({handleIndex, workspace, handleCompa
   }
 
   return (
-    <div className='w-full h-full flex'>
+    <div className='w-full h-full flex justify-center'>
       <div className=' hidden sm:flex justify-center items-center min-h-full flex-1 bg-cover bg-center bg-no-repeat'
         // style={{ backgroundImage: "url('/img/workspaces/2174.jpg')" }}
         style={{backgroundImage:

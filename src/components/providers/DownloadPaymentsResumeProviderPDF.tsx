@@ -135,7 +135,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
           </View>
 
           {payments.map((p, index:number) => (
-            <View key={p._id} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
+            <View key={p._id+index} style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px', margin: '3px'}}>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{p.paymentplugin.plugin}</Text>
               <Text style={{flex: 1, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{p.reference}</Text>
               <Text style={{flex: 3, fontSize: '7px', padding: '2px', borderBottom: '0.2px solid gray', fontWeight: 'bold'}}>{`${p.notes}\n${p.paymentplugin.notes}`}</Text>

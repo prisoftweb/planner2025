@@ -21,7 +21,6 @@ import { getAllCostPROGByProviderMINWithoutPAY, getAllTotalAccumResumePrograming
 import { IPendingPaymentResumeProviderPDF, ITotalAcumulatedPendingPaymentResumeProviderPDF } from "@/interfaces/Payments"
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { BsFileEarmarkPdf } from "react-icons/bs";
-import DownloadPaymentsResumeProviderPDF from "./DownloadPaymentsResumeProviderPDF"
 import { Tooltip } from "@nextui-org/react"
 import { propsTooltip } from "@/libs/animations"
 import DownloadPaymentsPendingProviderPDF from "./DownloadPaymentsPendingProviderPDf"
@@ -64,6 +63,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
         showToastMessageError(res);
       }else{
         // console.log('res 0 => ', JSON.stringify(res[0]));
+        console.log('res costos => ', res);
         setDataReport(res);
       }
 

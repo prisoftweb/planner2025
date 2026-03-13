@@ -177,6 +177,7 @@ export default function ReportPaymentPDF({costs, provider, payment, user, pendin
           <View style={[style.header, {flex: 1}]}><Text>#</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>PROYECTO</Text></View>
             <View style={[style.header, {flex: 7}]}><Text>DESCRIPCION</Text></View>
+            <View style={[style.header, {flex: 1}]}><Text>Folio</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>FECHA</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>SALDO ANTERIOR</Text></View>
             <View style={[style.header, {flex: 3}]}><Text>PAGADO</Text></View>
@@ -184,10 +185,11 @@ export default function ReportPaymentPDF({costs, provider, payment, user, pendin
             <View style={[style.header, {flex: 1}]}><Text>DIF</Text></View>
           </View>
           {costs.map((cost, index: number) => (
-            <View style={style.table} key={cost.id}>
+            <View style={style.table} key={cost.id+index}>
               <View style={[style.element, {flex: 1}]}><Text>{index + 1}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.project}</Text></View>
               <View style={[style.element, {flex: 7}]}><Text>{cost.description}</Text></View>
+              <View style={[style.element, {flex: 1}]}><Text>{cost.folio}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{cost.date.substring(0, 10)}</Text></View>
               <View style={[style.element, {flex: 3}]}><Text>{CurrencyFormatter({
                 currency: 'MXN',

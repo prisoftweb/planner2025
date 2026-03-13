@@ -221,24 +221,24 @@ const CardData = ({data, token}:
             <div>
               <h6
                 className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                {CurrencyFormatter({
-                  currency: 'MXN',
-                  value: data.amount,
-                })}
+                {data.project}
               </h6>
               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                 {CurrencyFormatter({
                   currency: 'MXN',
-                  value: data.totalCost,
-                })} gastado
+                  value: data.amount,
+                })}
               </p>
             </div>
             <div className="text-right">
               <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
-                {data.porcentage}%  
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: data.totalCost,
+                })}  
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
-                {/* {node.condition} */}
+                {data.porcentage}%
               </p>
             </div>
           </div>

@@ -65,6 +65,7 @@ export interface CostGroupByType {
   porcentage: number
   project: string
   type: string
+  amountotal?: number
 }
 
 
