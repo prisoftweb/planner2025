@@ -3,7 +3,7 @@ import Navigation from "@/components/navigation/Navigation";
 import { cookies } from "next/headers";
 import { getProvider, getProviders, GetCostsMIN } from "@/app/api/routeProviders";
 import { UsrBack } from "@/interfaces/User";
-import { HistoryExpensesTable, Provider } from "@/interfaces/Providers";
+import { HistoryExpensesTable } from "@/interfaces/Providers";
 import { Options } from "@/interfaces/Common";
 import { ExpenseDataToTableHistoryProviderData } from "@/app/functions/providersFunctions";
 import ContainerTableHistoryCosts from "@/components/providers/ContainerTableHistoryCosts";

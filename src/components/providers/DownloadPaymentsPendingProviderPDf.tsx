@@ -16,8 +16,6 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
   {provider:Provider, costs:IPendingPaymentResumeProviderPDF[], 
     totalAccum: ITotalAcumulatedPendingPaymentResumeProviderPDF[], user:string}) {
 
-  // const total = useMemo(() => costs.reduce((accum, element) => accum += element.totalAcum, 0), costs);  
-
   let text = costs.length > 0 ? costs[0].groupTitleExpirationDays ?? '' : '';
 
   // const total30 = useMemo(() => costs.reduce((accum, element) => accum += element.groupExpirationDays.days0_30 ?? 0, 0), costs);
@@ -34,12 +32,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
   let totalVigente = 0;
   let total = 0;
 
-
-
-  // console.log('total acum => ', totalAccum);
-
-  // console.log('unpaidbalanceamount => ', totalAccum[0]?.unpaidbalanceamount);
-  // console.log('overdueamount => ', totalAccum[1]?.unpaidbalanceamount);
+  // console.log('costs pdf => ', costs);
 
   return(
     <Document>
@@ -323,21 +316,48 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
   )
 }
 
+// const normalizeAging = (data: groupExpirationDays): groupExpirationDays => {
+//   const result: groupExpirationDays = {
+//     vigente: 0,
+//     days0_30: 0,
+//     days30_45: 0,
+//     days45_60: 0,
+//     days60plus: 0,
+//     show: data.show
+//   }
+
+//   // if ((data.show ?? 0) > 0) {
+//   //   result.days60plus = data.show!
+//   //   return result
+//   // }
+
+//   console.log('res => ', result);
+
+//   const priority: (keyof groupExpirationDays)[] = [
+//     "days60plus",
+//     "days45_60",
+//     "days30_45",
+//     "days0_30",
+//     "vigente"
+//   ]
+
+//   console.log('data => ', data);
+//   console.log(' priority => ', priority);
+
+//   const found = priority.find(key => (data[key] ?? 0) > 0)
+
+//   console.log('found => ', found);
+
+//   if (found) {
+//     result[found] = data[found] ?? 0
+//   }
+
+//   console.log('result => ', result);
+
+//   return result
+// }
+
 const normalizeAging = (data: groupExpirationDays): groupExpirationDays => {
-  const result: groupExpirationDays = {
-    vigente: 0,
-    days0_30: 0,
-    days30_45: 0,
-    days45_60: 0,
-    days60plus: 0,
-    show: data.show
-  }
-
-  if ((data.show ?? 0) > 0) {
-    result.days60plus = data.show!
-    return result
-  }
-
   const priority: (keyof groupExpirationDays)[] = [
     "days60plus",
     "days45_60",
@@ -346,11 +366,18 @@ const normalizeAging = (data: groupExpirationDays): groupExpirationDays => {
     "vigente"
   ]
 
-  const found = priority.find(key => (data[key] ?? 0) > 0)
+  const found = priority.find(key => (data[key] ?? 0) !== 0)
 
-  if (found) {
-    result[found] = data[found] ?? 0
+  const normalized = priority.reduce<Record<(typeof priority)[number], number>>(
+    (acc, key) => {
+      acc[key] = key === found ? data[key] ?? 0 : 0
+      return acc
+    },
+    {} as Record<(typeof priority)[number], number>
+  )
+
+  return {
+    ...normalized,
+    show: data.show
   }
-
-  return result
 }

@@ -50,6 +50,42 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   const [minAmount, setMinAmount] = useState<number>(0);
 
   const [dataReport, setDataReport]=useState<IPendingPaymentResumeProviderPDF[]>([]);
+  // const [dataReport, setDataReport]=useState<IPendingPaymentResumeProviderPDF[]>([{
+  //   costocenter: {
+  //     _id: '',
+  //     category: '',
+  //     concept:{
+  //       _id: '',
+  //       name: ''
+  //     }
+  //   },
+  //   date: '',
+  //   daysExpired: 0,
+  //   estatus: {
+  //     _id: '',
+  //     color: '',
+  //     name: ''
+  //   },
+  //   expiredDate: '',
+  //   folio: '',
+  //   groupExpirationDays: {
+  //     days0_30: -1,
+  //     days30_45: -2,
+  //     days45_60: -3,
+  //     days60plus: -4,
+  //     vigente: -5
+  //   },
+  //   groupTitleExpirationDays: '',
+  //   ispaid: false,
+  //   paymentelements: 3,
+  //   provider: {
+  //     _id: '',
+  //     creditdays: 0,
+  //     name: '',
+  //     today: ''
+  //   },
+  //   totalAcum: 5,
+  // }]);
   const [totalAccum, setTotalAccum]=useState<ITotalAcumulatedPendingPaymentResumeProviderPDF[]>([]);
   
   useEffect(() => {
@@ -62,15 +98,14 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        // console.log('res 0 => ', JSON.stringify(res[0]));
-        console.log('res costos => ', res);
+        // console.log('res costos => ', res);
         setDataReport(res);
       }
 
       if(typeof(restot)==='string'){
         showToastMessageError(restot);
       }else{
-        console.log('res cont => ', restot);
+        // console.log('res cont => ', restot);
         setTotalAccum(restot.flat());
       }
     }
