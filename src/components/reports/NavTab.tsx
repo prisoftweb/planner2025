@@ -4,6 +4,11 @@ import { useState, useEffect } from "react";
 import { UserCircleIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
+import { MdOutlineAccountBalance } from "react-icons/md";
+// import { VscEditSession } from "react-icons/vsc";
+import { BsFiletypePdf } from "react-icons/bs";
+import { SlDocs } from "react-icons/sl";
+import { VscEdit } from "react-icons/vsc";
 
 export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
 
@@ -20,57 +25,77 @@ export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
 
   let tabProv = <></>;
   if(width < 710){
-    tabProv = <div className="flex justify-between mt-3 border-b border-blue-300">
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
-                      <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        // ${tab===1? 'bg-green-500 rounded-lg': ''}`}
-                        className={`w-6 h-6 cursor-pointer transition-all duration-200
-                        ${tab===1 
-                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
-                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
-                        }`}
-                        onClick={() => setTab(1)} />
-                    </Tooltip>
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Modificar'>
-                      <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        // ${tab===2? 'bg-green-500 rounded-lg': ''}`}
-                        // onClick={() => setTab(2)} />
-                        className={`w-6 h-6 cursor-pointer transition-all duration-200
-                        ${tab===2 
-                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
-                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
-                        }`} 
-                        onClick={() => setTab(2)} />
-                    </Tooltip>
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Formatos'>
-                      <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        // ${tab===3? 'bg-green-500 rounded-lg': ''}`}
-                        className={`w-6 h-6 cursor-pointer transition-all duration-200
-                        ${tab===3 
-                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
-                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
-                        }`}
-                        onClick={() => setTab(3)} />
-                    </Tooltip>
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturas'>
-                      <UserCircleIcon data-tooltip-target="tooltip-dark"
-                        // className={`w-6 h-6 text-slate-600 cursor-pointer 
-                        // ${tab===4? 'bg-green-500 rounded-lg': ''}`}
-                        className={`w-6 h-6 cursor-pointer transition-all duration-200
-                        ${tab===4 
-                          ? 'text-green-600 bg-green-100 rounded-lg p-1' 
-                          : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
-                        }`}
-                        onClick={() => setTab(4)} />
-                    </Tooltip>                        
-                  </div>                             
+    // tabProv = <div className="flex justify-between mt-3 border-b border-blue-300">
+    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
+    //                   <UserCircleIcon data-tooltip-target="tooltip-dark"
+    //                     className={`w-6 h-6 cursor-pointer transition-all duration-200
+    //                     ${tab===1 
+    //                       ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+    //                       : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+    //                     }`}
+    //                     onClick={() => setTab(1)} />
+    //                 </Tooltip>
+    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Modificar'>
+    //                   <UserCircleIcon data-tooltip-target="tooltip-dark"
+    //                     className={`w-6 h-6 cursor-pointer transition-all duration-200
+    //                     ${tab===2 
+    //                       ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+    //                       : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+    //                     }`} 
+    //                     onClick={() => setTab(2)} />
+    //                 </Tooltip>
+    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Formatos'>
+    //                   <UserCircleIcon data-tooltip-target="tooltip-dark"
+    //                     className={`w-6 h-6 cursor-pointer transition-all duration-200
+    //                     ${tab===3 
+    //                       ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+    //                       : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+    //                     }`}
+    //                     onClick={() => setTab(3)} />
+    //                 </Tooltip>
+    //                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                   placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturas'>
+    //                   <UserCircleIcon data-tooltip-target="tooltip-dark"
+    //                     className={`w-6 h-6 cursor-pointer transition-all duration-200
+    //                     ${tab===4 
+    //                       ? 'text-green-600 bg-green-100 rounded-lg p-1' 
+    //                       : 'text-slate-600 hover:text-green-600 hover:bg-slate-200 rounded-lg p-1'
+    //                     }`}
+    //                     onClick={() => setTab(4)} />
+    //                 </Tooltip>                        
+    //               </div>
+    tabProv = <div className="grid grid-cols-4 mt-3 border-t pt-2">
+              <div className="flex flex-col items-center">
+                <MdOutlineAccountBalance 
+                  className={`w-6 h-6 cursor-pointer ${tab===1 ? 'text-green-500' : 'text-slate-500'}`}
+                  onClick={() => setTab(1)} />
+                <span className="text-xs">Resumen</span>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <VscEdit 
+                  className={`w-6 h-6 cursor-pointer ${tab===2 ? 'text-green-500' : 'text-slate-500'}`}
+                  onClick={() => setTab(2)} />
+                <span className="text-xs">Modificar</span>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <BsFiletypePdf 
+                  className={`w-6 h-6 cursor-pointer ${tab===3 ? 'text-green-500' : 'text-slate-500'}`}
+                  onClick={() => setTab(3)} />
+                <span className="text-xs">Formatos</span>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <SlDocs 
+                  className={`w-6 h-6 cursor-pointer ${tab===4 ? 'text-green-500' : 'text-slate-500'}`}
+                  onClick={() => setTab(4)} />
+                <span className="text-xs">Facturas</span>
+              </div>
+            </div>  
   }else{
     tabProv =(
       <div className="flex mt-5 py-1 border-b border-blue-300">

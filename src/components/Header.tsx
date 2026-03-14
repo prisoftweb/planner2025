@@ -79,7 +79,7 @@ const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Head
   return(
     <>
       <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">
-        <div className="flex items-center gap-x-3 w-full max-w-96">
+        <div className="flex items-center gap-x-3 w-full sm:max-w-96">
           <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
             <Link href={'/'}>
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
@@ -91,7 +91,7 @@ const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Head
             </Link>
           </div>
           <p className="text-xl ml-4 font-medium">{title}</p>
-          <div className="sm:hidden">
+          <div className="sm:hidden flex justify-end w-full mr-4">
             {children}
           </div>
         </div>
