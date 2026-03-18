@@ -343,8 +343,9 @@ export default function ContainerClient({data, token, expenses,
               </span>
             </Tooltip>
           </Link>
-          <p className="text-xl ml-4 font-medium">{isHistory? 'Historial de Gastos': (isViewUser? 'Gastos en proceso': 'Gastos')}</p>
-          <div className={`${isHistory? '': 'w-full'} sm:hidden`}>
+          <p className="text-xl ml-4 w-80 font-medium">{isHistory? 'Historial de Gastos': (isViewUser? 'Gastos en proceso': 'Gastos')}</p>
+          {/* <div className={`${isHistory? '': 'w-full'} sm:hidden`}> */}
+          <div className={`sm:hidden flex-1`}>
             <div className="flex gap-x-4 justify-end items-center">
               {categories.length > 0 && 
                 conditions.length > 0 && costCenterOpt.length > 0 && 

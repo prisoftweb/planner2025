@@ -9,7 +9,6 @@ import UpdateExtraExpense from "./UpdateExtraExpenses"
 import UpdateVoucher from "./UpdateVoucher"
 import UpdateCFDI from "./UpdateCFDI"
 import { useNewExpense } from "@/app/store/newExpense"
-// import StatusCostComponent from "./StatusCostComponent"
 import AddCFDIRelations from "./AddCFDIRelations";
 
 export default function ExpenseClient({token, user, id, expense, isHistory=false}: 
@@ -50,8 +49,8 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
   const isadvanceapp= expense.costocenter.concept._id==="6691a5f9c14942310b52ac0e";
 
   const view = (
-    opt===1? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
-                <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+    opt===1? (<div className="mt-3 w-full gap-y-3 flex sm:space-x-2 flex-wrap 2xl:flex-nowrap" >
+                <div className="w-full sm:max-w-xl bg-white rounded-lg shadow-md sm:pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                   <UpdateExpense id={id} token={token} expense={expense} 
                     isticket={expense.isticket} isHistory={isHistory} />
                 </div>
@@ -59,7 +58,7 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                     <iframe className="w-full h-full flex-grow overflow-auto mt-4" src={pdfFile.file} />
                   </div>)}
               </div>) : 
-    (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+    (opt===2? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md sm:pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
                       <div className=" max-w-lg">
                         <UpdateExtraExpense expense={expense} id={id} 
@@ -67,21 +66,21 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
                         />
                       </div>
             </div>): //max w-md antes abajo
-    (opt===3? (<div className="mt-3 w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3 h-screen" 
+    (opt===3? (<div className="mt-3 w-full max-w-[1800px] bg-white rounded-lg shadow-md sm:pl-2 px-3 h-screen" 
                       style={{borderColor:'#F8FAFC'}}>
                         <UpdateVoucher id={id} token={token} expense={expense} isHistory={isHistory} />
                       </div>): 
-      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3 h-screen" 
+      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md sm:pl-2 px-3 h-screen" 
                           style={{borderColor:'#F8FAFC'}}>
                               <UpdateCFDI id={id} token={token} expense={expense} isHistory={isHistory} />
                         </div>): 
-          (opt===5? (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
+          (opt===5? (<div className="mt-3 w-full p-2 md:max-w-lg bg-white rounded-lg shadow-md sm:pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                           <div className=" max-w-lg">
                             <AddCFDIRelations cost={expense._id} token={token} idProv={expense.provider._id} />
                           </div>
-                      </div>): (<div className="mt-3 w-full flex space-x-2" >
-                                  <div className=" max-w-xl bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
+                      </div>): (<div className="mt-3 w-full sm:flex sm:space-x-2 gap-y-3" >
+                                  <div className=" w-full sm:max-w-xl bg-white rounded-lg shadow-md sm:pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                                     <UpdateExpense id={id} token={token} expense={expense} 
                                       isticket={expense.isticket} isHistory={isHistory} />
                                   </div>
@@ -95,14 +94,18 @@ export default function ExpenseClient({token, user, id, expense, isHistory=false
 
   return(
     <>
+      <div className=" sm:hidden">
+        <NavResponsive open={open} setOpen={setOpen} isadvanceapp={isadvanceapp}
+                  changeOption={setOpt} option={opt} isticket={expense.isticket} />
+      </div>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
+        <div className={`bg-white hidden sm:block ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={setOpen} isadvanceapp={isadvanceapp}
                   changeOption={setOpt} option={opt} isticket={expense.isticket} />
           </div>
         </div>
-        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
+        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap sm:space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileExpense expense={expense} />

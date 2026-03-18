@@ -568,14 +568,14 @@ export default function TableExpenses({data, token, expenses,
         {view}
       </div>
       <div className="block md:hidden w-full">
-        <ListData data={data} token={token} delCost={delCost} />
+        <ListData data={data} token={token} delCost={delCost} queryParam={queryParam} />
       </div>
     </>
   )
 }
 
-const ListData = ({data, token, delCost}: 
-  {data: ExpensesTable[], token:string, delCost: (id: string) => Promise<void>}) => {
+const ListData = ({data, token, delCost, queryParam}: 
+  {data: ExpensesTable[], token:string, delCost: (id: string) => Promise<void>, queryParam:string}) => {
 
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
@@ -596,7 +596,7 @@ const ListData = ({data, token, delCost}:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((e) => (
-            <CardExpense expense={e} key={e.id} delCost={delCost} token={token} />
+            <CardExpense expense={e} key={e.id} delCost={delCost} token={token} queryParam={queryParam} />
           ))}
 
         </nav>
@@ -605,8 +605,8 @@ const ListData = ({data, token, delCost}:
   )
 }
 
-const CardExpense = ({expense, token, delCost}: 
-  {expense:ExpensesTable, token:string, delCost: (id: string) => Promise<void>}) => {
+const CardExpense = ({expense, token, delCost, queryParam}: 
+  {expense:ExpensesTable, token:string, delCost: (id: string) => Promise<void>, queryParam:string}) => {
   
   return(
     <div role="button"
@@ -616,6 +616,7 @@ const CardExpense = ({expense, token, delCost}:
         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
         active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
         bg-white`}
+      onClick={() => window.location.replace(`/expenses/${expense.id}/profile${queryParam}`)}
     >
       <div className="flex items-center w-full ">
         <div className="grid mr-4 place-items-center">

@@ -3,7 +3,7 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import { ExpensesTable, Expense } from "@/interfaces/Expenses";
 import ContainerClient from "@/components/expenses/ContainerClient";
-import { getAllCostsByUserAdmin, getAllCostsByUserNormal, getAllCostsAndNE3ConditionsMIN } from "@/app/api/routeCost";
+import { getAllCostsByUserNormal, getAllCostsAndNE3ConditionsMIN } from "@/app/api/routeCost";
 import { ExpenseDataToTableData } from "@/app/functions/CostsFunctions";
 
 export default async function Page() {

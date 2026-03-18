@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
           <Selectize options={options} routePage="expenses/history" subpath="/profile" />
         </Header>
         <NavTabExpense idExp={params.id} tab="1" pending={0} 
-            idProv={params.idProv} idProj={params.project} />
+            idProv={params.idProv} idProj={params.project} isHistory={true} />
         <NextUiProviders>
           <ExpenseClient expense={cost} id={params.id} token={token} 
               user={user._id} isHistory={true}/>
