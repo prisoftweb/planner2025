@@ -2,7 +2,8 @@ import WithOut from "@/components/WithOut";
 import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader } from "@/components/Header";
 import { Options } from "@/interfaces/Common";
 import { getCatalogsByName } from "../api/routeCatalogs";
 import ButtonNew from "@/components/costcenter/ButtonNew";
@@ -86,8 +87,8 @@ export default async function Page(){
     <>
       <Navigation user={user} />     
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <Header title="Centro de costos" placeHolder="Buscar centro de costos..">
-          <ButtonNew token={token} id="" /></Header>
+        <ResponsiveHeader title="Centro de costos" placeHolder="Buscar centro de costos..">
+          <ButtonNew token={token} id="" /></ResponsiveHeader>
         <div className="mt-5">
           <TableCostCenter data={table} token={token} />
         </div>

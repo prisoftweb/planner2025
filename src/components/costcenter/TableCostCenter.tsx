@@ -5,11 +5,12 @@ import Table from "../Table";
 import DeleteElement from "../DeleteElement";
 import { RemoveCostoCenter } from "@/app/api/routeCostCenter";
 import { PencilIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import NewCostCenter from "./NewCostCenter";
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
 import ContainerSideNav from "../ContainerSideNav";
+import { useTableStates } from "@/app/store/tableStates";
 
 export default function TableCostCenter({data, token}: {data:CostCenterTable[], token:string}){
 
@@ -106,7 +107,96 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
           <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} />
         </ContainerSideNav>
       ) }
-      <Table columns={columns} data={data} placeH="Buscar centro de costo.." />
+      <div className="hidden md:block w-full">
+        <Table columns={columns} data={data} placeH="Buscar centro de costo.." />
+      </div>
+      <div className="block sm:hidden w-full">
+        <ListData data={data} token={token} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data, token }: 
+  {data: CostCenterTable[], token:string }) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  const {search} = useTableStates();
+
+  const filterData = useMemo(() => {
+    if(search.trim() === ''){
+      return data;
+    }else{
+      const d = data.filter(item => item.category.toLowerCase().includes(search.toLowerCase()));
+      return d;
+    }
+  }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-249px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {filterData.map((c) => (
+            <CardCostcenter costcenter={c} key={c.id} token={token} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardCostcenter = ({costcenter, token }: 
+  {costcenter:CostCenterTable, token:string }) => {
+  
+  return(
+    <div role="button"
+      key={costcenter.id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          {/* <img alt="responsable" src={ costcenter.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+              remove={RemoveGlossary} removeElement={delGlossary} /> */}
+            <div 
+              className={`rounded-md text-white bg-gray-600 text-center
+              uppercase w-6 h-6 flex items-center justify-center`}>
+              <p className={`text-xs uppercase `} >{costcenter.code.toString()}</p>
+            </div>
+            <DeleteElement remove={RemoveCostoCenter} id={costcenter.id} 
+              token={token} name={costcenter.category} />
+            {/* <RemoveElement id={costcenter.id} name={costcenter.Descripcion} 
+              remove={RemoveCost} removeElement={delCost} 
+              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {costcenter.category}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {costcenter.concept}
+              </p>
+            </div>
+            {/* <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+              </p>
+            </div> */}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

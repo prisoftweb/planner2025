@@ -90,7 +90,7 @@ const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Head
               </Tooltip>
             </Link>
           </div>
-          <p className="text-xl ml-4 font-medium">{title}</p>
+          <p className="text-xl w-80 ml-4 font-medium">{title}</p>
           <div className="sm:hidden flex justify-end w-full mr-4">
             {children}
           </div>
