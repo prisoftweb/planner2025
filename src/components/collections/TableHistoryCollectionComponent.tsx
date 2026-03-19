@@ -167,29 +167,51 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
     }
   }
   
-  let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-                <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
-                <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
-                <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
-                <div>
-                  <DateRangePicker 
-                    className='mt-2'
-                    placeholder='Seleccione un rango de fechas'
-                    onValueChange={(e) => {
-                      setRangeDate(e);
-                      if(e.from && e.to){
-                        handleDate(e.from, e.to);
-                      }
-                    }}
-                    value={rangeDate}
-                    locale={es}
-                  />
-                </div>
-              </div>
+  // let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
+  //               <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
+  //               <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
+  //               <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
+  //               <div>
+  //                 <DateRangePicker 
+  //                   className='mt-2'
+  //                   placeholder='Seleccione un rango de fechas'
+  //                   onValueChange={(e) => {
+  //                     setRangeDate(e);
+  //                     if(e.from && e.to){
+  //                       handleDate(e.from, e.to);
+  //                     }
+  //                   }}
+  //                   value={rangeDate}
+  //                   locale={es}
+  //                 />
+  //               </div>
+  //             </div>
+
+  let filterElemnts =<div className="md:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
+                          <div className="flex gap-x-4 justify-end items-center">
+                            <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
+                            <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
+                            <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
+                          </div>
+                          <div className="flex gap-x-4 justify-end items-center">
+                            <DateRangePicker 
+                              className='mt-2'
+                              placeholder='Seleccione un rango de fechas'
+                              onValueChange={(e) => {
+                                setRangeDate(e);
+                                if(e.from && e.to){
+                                  handleDate(e.from, e.to);
+                                }
+                              }}
+                              value={rangeDate}
+                              locale={es}
+                            />
+                          </div>
+                      </div>
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-x-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-3">
         <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
           <div>
             <p className="text-slate-600">Historial de cobranza</p>
@@ -199,7 +221,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
         <Card amount={totalCollections?.totalAccountsReceivable?.total || 0} title="Por cobrar"></Card>
         <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Por cobrar vencido"></Card>
       </div>
-      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
+      <div className="flex justify-between flex-wrap xl:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
             <TooltipContainerIcon label="Regresar">
@@ -210,14 +232,18 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
           </Link>
           <p className="text-xl ml-4 font-medium">Historial de recuperacion de cartera</p>
         </div>
-        <div className={`flex gap-x-3 gap-y-3 w-full justify-end`}>
-          <div className="">
+        <div className={`md:flex flex-wrap lg:flex-nowrap gap-x-3 gap-y-3 w-full justify-end items-center`}>
+          <div className="flex justify-end">
             <SearchInTable placeH={"Buscar cobro.."} />
+          </div>
+          <div className="">
+            {filterElemnts}
           </div>
         </div>
       </div>
-      {widthPage > 1080 && filterElemnts}
-      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
+      {/* {widthPage > 1080 && filterElemnts} */}
+
+      <div className="relative mt-5 flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-96
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {data.map((col, index) => (

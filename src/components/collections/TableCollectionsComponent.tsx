@@ -179,29 +179,31 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     data=collections;
   }
  
-  let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-                <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
-                <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
-                <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
-                <div>
-                  <DateRangePicker 
-                    className='mt-2'
-                    placeholder='Seleccione un rango de fechas'
-                    onValueChange={(e) => {
-                      setRangeDate(e);
-                      if(e.from && e.to){
-                        handleDate(e.from, e.to);
-                      }
-                    }}
-                    value={rangeDate}
-                    locale={es}
-                  />
-                </div>
-              </div>
+  let filterElemnts =<div className="md:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
+                        <div className="flex gap-x-4 justify-end items-center">
+                          <ChipStatus id="67e31aa81945c0b1e4c9bc76" addStatus={addStatus} removeStatus={deleteStatus} title="Depositado" />
+                          <ChipStatus id="67e318171945c0b1e4c9bc72" addStatus={addStatus} removeStatus={deleteStatus} title="Confirmado" />
+                          <ChipStatus id="67e318601945c0b1e4c9bc74" addStatus={addStatus} removeStatus={deleteStatus} title="Devuelto" />
+                        </div>
+                        <div className="flex gap-x-4 justify-end items-center">
+                          <DateRangePicker 
+                            className='mt-2'
+                            placeholder='Seleccione un rango de fechas'
+                            onValueChange={(e) => {
+                              setRangeDate(e);
+                              if(e.from && e.to){
+                                handleDate(e.from, e.to);
+                              }
+                            }}
+                            value={rangeDate}
+                            locale={es}
+                          />
+                        </div>
+                    </div>
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-x-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-3">
         <div className="p-3 flex gap-x-3 items-center bg-white shadow-md shadow-slate-300 rounded-md">
           <div>
             <p className="text-slate-600">Historial de cobranza</p>
@@ -211,7 +213,50 @@ export default function TableCollectionsComponent({token, user, collectionsParam
         <Card amount={totalCollections?.totalAccountsReceivable?.total || 0} title="Por cobrar"></Card>
         <Card amount={totalCollections?.totalCharged?.totalCharged || 0} title="Por cobrar vencido"></Card>
       </div>
-      <div className="flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
+
+      <div className="2xl:hidden mt-5 justify-between gap-x-2">
+        <div className="flex items-center w-full">
+          <Link href={'/'}>
+            <TooltipContainerIcon label="Regresar">
+              <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
+                <TbArrowNarrowLeft className="w-9 h-9 text-slate-600" />
+              </div>
+            </TooltipContainerIcon>
+          </Link>
+          <p className="text-xl ml-4 font-medium">Recuperacion de cartera</p>
+          <div className="flex-1 flex justify-end sm:hidden">
+            <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
+          </div>
+        </div>
+        <div className="xl:flex lg:gap-x-3 items-center">
+          <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}>
+            <div className="flex-1 flex justify-end">
+              <SearchInTable placeH={"Buscar cobro.."} />
+            </div>
+            <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
+                        fechaIni={rangeDate?.from} totalCollections={totalRecovered} />} fileName={'Cobranza'} >
+              {({loading, url, error, blob}) => 
+                loading? (
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                    <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                  </Tooltip>
+                ) : (
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                    <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                  </Tooltip>
+                ) }
+            </PDFDownloadLink>
+            <div className="hidden sm:flex justify-end">
+              <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
+            </div>
+          </div>
+          {filterElemnts}
+        </div>
+      </div>
+
+      <div className="hidden 2xl:flex justify-between flex-wrap sm:flex-nowrap gap-x-5 gap-y-2 items-center mt-5">
         <div className="flex items-center w-full max-w-96">
           <Link href={'/'}>
             <TooltipContainerIcon label="Regresar">
@@ -228,7 +273,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           </div>
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
-              {widthPage < 1080 && filterElemnts}
+              {filterElemnts}
               <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
                           fechaIni={rangeDate?.from} totalCollections={totalRecovered} />} fileName={'Cobranza'} >
                 {({loading, url, error, blob}) => 
@@ -249,9 +294,9 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           </div>
         </div>
       </div>
-      {widthPage > 1080 && filterElemnts}
+      {/* {widthPage > 1080 && filterElemnts} */}
       
-      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-317px)]">
+      <div className="relative mt-5 flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border h-[calc(100vh-317px)]">
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-317px)]
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {data.map((col, index) => (

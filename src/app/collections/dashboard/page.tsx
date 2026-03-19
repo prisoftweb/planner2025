@@ -9,6 +9,7 @@ import { getTotalAccountReceivablesByProject, getTotalAccountReceivablesByClient
   getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED } from "@/app/api/routeInvoices";
 import DashboardCollectionsContainer from "@/components/collections/dashboard/DashboardCollectionsContainer";
 import { getTotalGuaranteesByDateAndStatus } from "@/app/api/routeGuarantee";
+import { getDate } from "@/libs/dates";
 
 export default async function Page() {
   
@@ -155,14 +156,14 @@ export default async function Page() {
   )
 }
 
-function getDate(date: Date){
-  let day = date.getDate()
-  let month = date.getMonth() + 1
-  let year = date.getFullYear()
+// function getDate(date: Date){
+//   let day = date.getDate()
+//   let month = date.getMonth() + 1
+//   let year = date.getFullYear()
 
-  if(month < 10){
-    return `${year}-0${month}-${day}`;
-  }else{
-    return `${year}-${month}-${day}`;
-  }
-}
+//   if(month < 10){
+//     return `${year}-0${month}-${day}`;
+//   }else{
+//     return `${year}-${month}-${day}`;
+//   }
+// }

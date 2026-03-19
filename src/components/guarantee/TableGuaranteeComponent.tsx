@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -23,6 +23,7 @@ import { DonutChartJS } from "@/interfaces/DashboardProjects";
 import Label from "../Label";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 import { getDate } from "@/libs/dates";
+import { useTableStates } from "@/app/store/tableStates";
 
 import Slider from '@mui/material/Slider';
 
@@ -252,12 +253,14 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
     data = GuaranteeDataByProjectToTableData(filteredGuarantees);
   }
 
-  let filterElemnts = <div className="flex gap-x-4 justify-end items-center">
-                <ChipStatus id="6827d56d936cac5913f94ad5" addStatus={addStatus} removeStatus={deleteStatus} title="Vencidos" />
-                <ChipStatus id="6827d64a936cac5913f94ad9" addStatus={addStatus} removeStatus={deleteStatus} title="Por cobrar" />
-                <ChipStatus id="6827d5c2936cac5913f94ad7" addStatus={addStatus} removeStatus={deleteStatus} title="Recuperado" />
-                <ChipStatus id="6827d67b936cac5913f94adb" addStatus={addStatus} removeStatus={deleteStatus} title="Programado" />
-                <ChipStatus id="6840deda0c901d22c05dead1" addStatus={addStatus} removeStatus={deleteStatus} title="Retenido" />
+  let filterElemnts = <div className="flex mt-3 flex-wrap lg:flex-nowrap gap-x-4 justify-end items-center">
+                <div className="flex justify-end gap-x-2 items-center">
+                  <ChipStatus id="6827d56d936cac5913f94ad5" addStatus={addStatus} removeStatus={deleteStatus} title="Vencidos" />
+                  <ChipStatus id="6827d64a936cac5913f94ad9" addStatus={addStatus} removeStatus={deleteStatus} title="Por cobrar" />
+                  <ChipStatus id="6827d5c2936cac5913f94ad7" addStatus={addStatus} removeStatus={deleteStatus} title="Recuperado" />
+                  <ChipStatus id="6827d67b936cac5913f94adb" addStatus={addStatus} removeStatus={deleteStatus} title="Programado" />
+                  <ChipStatus id="6840deda0c901d22c05dead1" addStatus={addStatus} removeStatus={deleteStatus} title="Retenido" />
+                </div>
                 <div>
                   {/* <Label htmlFor='date'>Fecha</Label> */}
                   <DateRangePicker 
@@ -301,11 +304,13 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
   const programado = amountTotalByStatuses?.find(a => a.status.toLowerCase().includes('programado'));
   const vencido = amountTotalByStatuses?.find(a => a.status.toLowerCase().includes('vencido'));
 
+  // console.log('data table => ', data);
+
   return (
     <>
-      <div className="grid grid-cols-4 gap-x-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-3">
         <Card amount={guaranteeByStatus?.guarantee?.subtotal || 0} title="FONDO DE GARANTIA" />
-        <div className="p-3 gap-x-3 col-span-3 grid grid-cols-5 bg-white shadow-md shadow-slate-300 rounded-md">
+        <div className="p-3 gap-x-3 gap-y-3 sm:col-span-2 md:col-span-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 bg-white shadow-md shadow-slate-300 rounded-md">
           <div>
             <p className="text-slate-600">Recuperado</p>
             <p className="text-xl font-bold">{CurrencyFormatter({
@@ -360,8 +365,9 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
           </div>
         </div>
       </div>
-      {widthPage > 1080 && filterElemnts}
-      <div className="mt-5 grid grid-cols-3 gap-x-5">
+      {/* {widthPage > 1080 && filterElemnts} */}
+      {filterElemnts}
+      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5">
         <div>
           <Label>GARANTIA POR CLIENTE</Label>
           <div className="mt-3">
@@ -412,8 +418,112 @@ export default function TableGuaranteeComponent({token, user}: {token:string, us
           </div>
         </div>
       </div>
-      <Table columns={columns} data={data} placeH="buscar garantia" typeTable="guarantee" />      
+      <div className="hidden md:block w-full">
+        <Table columns={columns} data={data} placeH="buscar garantia" typeTable="guarantee" />      
+      </div>
+      <div className="block md:hidden w-full">
+        <ListData data={data} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data}: 
+  {data: ITableGuarantee[]}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(!search || search.trim() === ''){
+  //     console.log('no search => ', search);
+  //     console.log('data ns => ', data);
+  //     return data;
+  //   }else{
+  //     console.log('search => ', search);
+  //     const d = data.filter(item => item.proyect.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  // console.log('data => ', data);
+
+  let filterData = [];
+
+  if(!search || search.trim() === ''){
+      // console.log('no search => ', search);
+      // console.log('data ns => ', data);
+      filterData= data;
+    }else{
+      // console.log('search => ', search);
+      const d = data.filter(item => item.proyect.toLowerCase().includes(search.toLowerCase()));
+      filterData = d;
+    }
+
+  // console.log('filter data => ', filterData);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {filterData.map((g, index:number) => (
+            <CardGuarantee guarantee={g} key={g.id+index} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardGuarantee = ({guarantee}: 
+  {guarantee:ITableGuarantee}) => {
+  
+  return(
+    <div role="button"
+      // key={guarantee.id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        {/* <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ expense.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+        </div> */}
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {guarantee.proyect}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {guarantee.client}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: guarantee.amount
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: guarantee.amountVat
+                })}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

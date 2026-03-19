@@ -298,7 +298,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-x-3 mt-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-3 mt-3">
         <Card amount={ totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0 } title="TOTAL PAGADO">
           <BsCash className="w-6 h-6 text-slate-600" />
         </Card>
@@ -310,8 +310,8 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         </Card>
       </div> 
       
-      <div className="mt-5 flex items-center gap-x-3">
-        <div className="w-4/6">
+      <div className="mt-5 md:flex items-center gap-x-3">
+        <div className="md:w-1/2 lg:w-4/6">
           <Label>SALDOS PENDIENTES POR PROYECTO</Label>
           <div className="mt-3">
             <BarChartComponent 
@@ -321,7 +321,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
             />
           </div>
         </div>
-        <div className="w-2/6">
+        <div className="mt-3 md:mt-0 md:w-1/2 lg:w-2/6">
           <Label>SALDOS PENDIENTES POR CLIENTE</Label>
           <div className="mt-3">
             <BarChartTwoInOneCollections 
@@ -330,8 +330,9 @@ export default function DashboardCollectionsContainer({token, user, totalClients
           </div>
         </div>
       </div>
-      <div className="mt-5 flex items-center gap-x-3">
-        <div className="w-4/6">
+      
+      <div className="mt-5 md:flex items-center gap-x-3">
+        <div className="md:w-1/2 lg:w-4/6">
           <Label>COBRANZA POR PROYECTO</Label>
           <div className="mt-3">
             <BarChartComponent 
@@ -341,7 +342,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
             />
           </div>
         </div>
-        <div className="w-2/6">
+        <div className="mt-3 md:mt-0 md:w-1/2 lg:w-2/6">
           <Label>COBRANZA X CLIENTE</Label>
           <div className="mt-3 w-full max-w-96">
             <NewDonutChartComponent data={totalInvoiceClient} />

@@ -2,7 +2,7 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import TableCollectionsComponent from "@/components/collections/TableCollectionsComponent";
-import { getCollectionsMin, getAllTotalAmountRecoveredCollection, 
+import { getAllTotalAmountRecoveredCollection, 
   getAllTOTAmountRecoveredByDateAndCondition, getAllCollectionsMINByDateAndCondition } from "../api/routeCollections";
 import { getDate } from "@/libs/dates";
 
