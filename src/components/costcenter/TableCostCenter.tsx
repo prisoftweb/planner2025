@@ -110,7 +110,7 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
       <div className="hidden md:block w-full">
         <Table columns={columns} data={data} placeH="Buscar centro de costo.." />
       </div>
-      <div className="block sm:hidden w-full">
+      <div className="block md:hidden w-full">
         <ListData data={data} token={token} />
       </div>
     </>

@@ -253,7 +253,14 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         <p className="text-blue-400">ACUMULADO DE ESTIMACIONES</p>
         <GiSettingsKnobs className="w-8 h-8 text-slate-600" onClick={() => setIsFilter(true)} />          
       </div>
-      <Table columns={columns} data={dataTable} placeH="buscar estimacion" initialColumns={initialVisibilityColumns} />
+
+      <div className="hidden md:block w-full">
+        <Table columns={columns} data={dataTable} placeH="buscar estimacion" initialColumns={initialVisibilityColumns} />
+      </div>
+      <div className="block md:hidden w-full">
+        <ListData data={dataTable} token={token} delEstimate={delEstimate} pageProject={pageProject} project={project} />
+      </div>
+
       {isFilter && (
         <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
           <FilteringEstimatesProject showForm={handleIsFilter} optConditions={optConditions} 
@@ -263,5 +270,104 @@ export default function TableEstimatesByProject({project, optConditions, optProj
       {isShowDetailEstimate && <DetailEstimateComponent project={project} nomEstimate={refEstimate.current} 
                                     numEstimate={1} showForm={handleIsShowDetailEstimate} token={token} />}
     </>
+  )
+}
+
+const ListData = ({data, token, pageProject, project, delEstimate }: 
+  {data: TableEstimatesProject[], token:string, pageProject: string | undefined, project: OneProjectMin, 
+    delEstimate:Function }) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  // const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.category.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  return(
+    <div className="mt-2">
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-249px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((e) => (
+            <CardEstimates estimates={e} key={e.id} token={token} pageProject={pageProject} 
+              project={project} delEstimate={delEstimate} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardEstimates = ({estimates, token, pageProject, project, delEstimate }: 
+  {estimates:TableEstimatesProject, token:string, pageProject: string | undefined, project: OneProjectMin, 
+    delEstimate:Function }) => {
+  
+  return(
+    <div role="button"
+      key={estimates.id}
+      onClick={() => window.location.replace(pageProject? `/projects/estimates/${project._id}/${estimates.id}?page=project`
+                                    : `/projects/estimates/${project._id}/${estimates.id}`)}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          {/* <img alt="responsable" src={ estimates.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+              remove={RemoveGlossary} removeElement={delGlossary} /> */}
+            <Badge color="secondary" badgeContent={estimates.numConcepts}>
+              <TooltipContainerIcon label="Conceptos">
+                <BsFilePdfFill className="h-6 w-6 text-green-500 cursor-pointer hover:text-green-300" 
+                  // onClick={() => {
+                  //   refEstimate.current = estimates.id;
+                  //   setIsShowDetailEstimate(true);
+                  // }} 
+                />
+              </TooltipContainerIcon>
+            </Badge>
+            <RemoveElement id={estimates.id} name={estimates.Nombre} remove={removeEstimate} 
+              removeElement={delEstimate} token={token} />
+            {/* <RemoveElement id={estimates.id} name={estimates.Descripcion} 
+              remove={RemoveCost} removeElement={delCost} 
+              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {estimates.Nombre}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {estimates.Fecha?.substring(0, 10)}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: estimates.Estimacion
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                <Chip label={estimates.Condicion.name} color={estimates.Condicion.color} darktext={estimates?.Condicion?.darktext?? false} />
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

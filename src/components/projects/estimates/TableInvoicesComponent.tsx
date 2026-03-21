@@ -249,7 +249,14 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
             ) }
         </PDFDownloadLink>
       </div>
-      <Table columns={columns} data={data} placeH="buscar factura" />
+      
+      <div className="hidden md:block w-full">
+        <Table columns={columns} data={data} placeH="buscar factura" />
+      </div>
+      <div className="block md:hidden w-full mt-3">
+        <ListData data={data} token={token} delInvoice={delInvoice} pageQuery={pageQuery} project={project} />
+      </div>
+
       {showNewCollection && selInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionComponent showForm={handleShowForm} user={user}
@@ -261,5 +268,138 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
               token={token} project={project} invoiceTable={selInvoice!} />
       </ContainerSideNav> */}
     </>
+  )
+}
+
+const ListData = ({data, token, delInvoice, pageQuery, project}: 
+  {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, 
+    project:OneProjectMin, pageQuery:string | undefined,}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  // const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.folio.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  // let filterData = [];
+  // if(search.trim() === ''){
+  //   filterData=data;
+  // }else{
+  //   const d = data.filter(item => item.folio.toLowerCase().includes(search.toLowerCase()));
+  //   filterData=d;
+  // }
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-249px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((i) => (
+            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} pageQuery={pageQuery} project={project} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardInvoice = ({invoice, token, delInvoice, pageQuery, project }: 
+  {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, 
+    project:OneProjectMin, pageQuery:string | undefined, }) => {
+  
+  return(
+    <div role="button"
+      key={invoice.id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+      // onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=invoices`)}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          {/* <img alt="responsable" src={ invoice.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+              remove={RemoveGlossary} removeElement={delGlossary} /> */}
+            < RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
+                      name={invoice.estimate ?? invoice.folio} remove={removeInvoice} 
+                      removeElement={delInvoice} token={token} />
+            {invoice.ischargedfull? (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cobrada' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                  {invoice.accountreceivablesCount > 0? (
+                    <Badge color="secondary" badgeContent={invoice.accountreceivablesCount}>
+                      <DocumentArrowDownIcon className="h-6 w-6 hover:bg-blue-100 text-green-500 hover:text-green-300" />
+                    </Badge> 
+                  ): (
+                    <DocumentArrowDownIcon className="h-6 w-6 hover:bg-blue-100 text-green-500 hover:text-green-300" />
+                  )}
+            </Tooltip>
+            ): (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cobrar' 
+                  placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                {invoice.accountreceivablesCount > 0? (
+                  <Badge color="secondary" badgeContent={invoice.accountreceivablesCount}>
+                    <DocumentArrowDownIcon className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300" onClick={() => {
+                      // refEstimate.current = invoice.id;
+                      // setSelInvoice(invoice);
+                      // setShowNewCollection(true);
+                    }}/>
+                  </Badge>
+                ): (
+                  <DocumentArrowDownIcon className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300" onClick={() => {
+                    // refEstimate.current = invoice.id;
+                    // setSelInvoice(row.original);
+                    // setShowNewCollection(true);
+                  }}/>
+                )}
+              </Tooltip>
+            )}
+            {/* <RemoveElement id={invoice.id} name={invoice.Descripcion} 
+              remove={RemoveCost} removeElement={delCost} 
+              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+        </div>
+        <div className="w-full"
+          onClick={() => window.location.replace(pageQuery? `/projects/estimates/${project._id}/invoice/${invoice.id}?page=projects`: 
+                              `/projects/estimates/${project._id}/invoice/${invoice.id}`)}
+        >
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {invoice.nameProject}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {invoice.folio}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: invoice.amount
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: invoice.charged
+                })}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

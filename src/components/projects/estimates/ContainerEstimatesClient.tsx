@@ -87,10 +87,13 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
             </div>
           </TooltipContainerIcon>
           <p className="text-xl ml-4 font-medium w-56">Proyectos para estimar</p>
+          <div className="flex-1 flex justify-end sm:hidden">
+            <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
+          </div>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
-          <div className="flex gap-x-3 gap-y-3 justify-end">
-            <div className="flex gap-x-3 items-center">
+          <div className="flex flex-grow sm:flex-grow-0 gap-x-3 gap-y-3 justify-end">
+            <div className="hidden md:flex gap-x-3 items-center">
               <p>Vista: </p>
               <TooltipContainerIcon label="Tabla">
                 <Squares2X2Icon onClick={() => setIsTable(true)} 
@@ -106,7 +109,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
             <SearchInTable placeH="Buscar presupuesto.." />
           </div>
           <div className="">
-            <div className="flex gap-x-3 items-center">
+            <div className="hidden sm:flex gap-x-3 items-center">
               <Button type="button" onClick={() => setNewEstimate(true)}>Nuevo</Button>
                         {/* {newEstimate && (
                           <ContainerSideNav width="w-full sm:max-w-4xl">
@@ -114,11 +117,15 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
                                           token={token} user={user._id} updateProjects={updateProjects} />
                           </ContainerSideNav>
                         )} */}
-              <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
+              {/* <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
                 <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
                               token={token} user={user._id} updateProjects={updateProjects} />
-              </ContainerSideNav>
+              </ContainerSideNav> */}
             </div>
+            <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
+              <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
+                            token={token} user={user._id} updateProjects={updateProjects} />
+            </ContainerSideNav>
           </div>
         </div>
       </div>

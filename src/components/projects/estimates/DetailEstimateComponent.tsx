@@ -127,37 +127,37 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
 
       </div>
 
-      <p className="text-blue-500 text-cente mb-0r">CONTRATO</p>
+      <p className="text-blue-500 text-center mb-0r">CONTRATO</p>
       <div className="bg-white shadow-md shadow-slate-500 p-2 mt-0">
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Monto de contrato</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: project.amount
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Estimado anterior</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.totalPrevious?.estimatedTotal || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-blue-400 w-72">Esta estimacion</p>
           <p className="text-lg text-green-600 w-48 text-right">{CurrencyFormatter({
               currency: 'MXN',
               value: estimate?.amount || 0
             })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Acumulado estimado</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.totalAccumulated?.amountPayable || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Saldo pendiente por estimar</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN", 
@@ -168,32 +168,32 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
 
       <p className="text-blue-500 text-center">ANTICIPO</p>
       <div className="bg-white shadow-md shadow-slate-500 p-2">
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Anticipo recibido</p>
           <p className="text-lg text-slate-600 w-48 text-right">$0</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Amortizado anterior</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.totalPrevious?.amountChargeOff || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-blue-400 w-72">Esta estimacion</p>
           <p className="text-lg text-green-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.totalActual?.amountChargeOff || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Acumulado amortizado</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.totalAccumulated?.amountChargeOff || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Saldo pendiente por amortizar</p>
           <p className="text-lg text-slate-600 w-48 text-right">$0</p>
         </div>
@@ -201,21 +201,21 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
 
       <p className="text-blue-500 text-center">FONDO DE GARANTIA {project.guaranteefund.porcentage}%</p>
       <div className="bg-white shadow-md shadow-slate-500 p-2">
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Retenido anterior</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: 'MXN',
             value: resumenEstimateProject?.totalPrevious?.amountGuaranteeFund || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-blue-400 w-72">Esta estimacion</p>
           <p className="text-lg text-green-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN", 
             value: resumenEstimateProject?.totalActual?.amountGuaranteeFund || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Total retenido</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
@@ -226,35 +226,35 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
 
       <p className="text-blue-500 text-center">ESTA ESTIMACION</p>
       <div className="bg-white shadow-md shadow-slate-500 p-2">
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Importe esta estimacion</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.estimateResume?.amount || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Amortizacion de anticipo</p>
           <p className="text-lg text-green-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.estimateResume?.amountChargeOff || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-blue-400 w-72">Fondo de garantia</p>
           <p className="text-lg text-green-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.estimateResume?.amountGuaranteeFund || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Acumulado Total sin impuestos</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",
             value: resumenEstimateProject?.estimateResume?.amount || 0
           })}</p>
         </div>
-        <div className="flex justify-around flex-wrap">
+        <div className="flex justify-around">
           <p className="text-slate-400 w-72">Acumulado Total con impuestos</p>
           <p className="text-lg text-slate-600 w-48 text-right">{CurrencyFormatter({
             currency: "MXN",

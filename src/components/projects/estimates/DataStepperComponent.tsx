@@ -125,7 +125,7 @@ export default function DataStepperComponent({token, previousStep, price, concep
       </div>
 
       <div className="p-2">
-        <div className="grid grid-cols-2 gap-x-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-1">
           <div className="">
             <Label htmlFor="area"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Area</p></Label>
             <Input type="text" name="area" 

@@ -7,7 +7,7 @@ export default function ContainerCollectionProfile({collection, token, usr, invo
 
   return (
     <>
-      <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2"
+      <div className="flex w-full px-2 flex-wrap lg:flex-nowrap md:space-x-2"
         style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileCollection collection={collection} token={token} user={usr} />

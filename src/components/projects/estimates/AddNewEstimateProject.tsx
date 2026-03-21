@@ -306,7 +306,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
           <p className="text-red-500">El nombre es obligatorio!!!</p>
         )}
 
-        <div className="grid grid-cols-2 gap-x-2">
+        <div className="grid sm:grid-cols-2 gap-x-2">
           <div>
             <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
             <Input 

@@ -160,7 +160,7 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
         </div>
 
         <div className="bg-white p-3">
-          <div className="grid grid-cols-2 gap-x-2">
+          <div className="flex sm:grid sm:grid-cols-2 gap-x-2">
             <div>
               <div className="flex items-center justify-between gap-x-2">
                 <div className="flex gap-x-1">

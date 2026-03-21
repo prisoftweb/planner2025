@@ -106,7 +106,7 @@ export default function DataBasicStepper({token, client, date, setDate, setClien
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-2">
         {optClients.length > 0 && (
           <div className="">
             <div className="flex items-center gap-x-3">
