@@ -249,42 +249,43 @@ export default function InvoicesConditionsStepper({token, nextStep, handleFormPa
 
   return (
     <div>
-      <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+      <div className="sm:grid sm:grid-cols-2 gap-x-2 gap-y-2">
         {optConditionsPayment.length > 0 && (
-          <div className=" col-span-3">
+          <div className=" ">
             <Label htmlFor="conditionsPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condiciones de pago</p></Label>
             <SelectReact index={0} opts={optConditionsPayment} setValue={handleConditionPayment} />
           </div>
         )}
 
         {catalogPaymentMethod && (
-          <div className=" col-span-3">
+          <div className=" ">
             <Label htmlFor="methodPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Metodo de pago</p></Label>
             <SelectReact index={0} opts={catalogPaymentMethod} setValue={handleMethodPaid} />
           </div>
         )}
 
         {catalogFormPayment && (
-          <div className=" col-span-3">
+          <div className=" ">
             <Label htmlFor="formPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Forma de pago</p></Label>
             <SelectReact index={0} opts={catalogFormPayment} setValue={handleFormPaid} />
           </div>
         )}
 
-        {catalogCFDI.length > 0 && (
-          <div className=" col-span-6">
-            <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-            <SelectReact index={0} opts={catalogCFDI} setValue={handleType} />
-          </div>
-        )}
-
-        <div className=" col-span-2">
+        <div className="">
           <Label htmlFor="odc"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Orden de compra</p></Label>
           <Input type="text" value={odc} onChange={(e) => setOdc(e.target.value)} />
           {bandOdc && (
             <p className="text-red-700">Ingrese una orden de compra valida!!!!</p>
           )}
         </div>
+
+        {catalogCFDI.length > 0 && (
+          <div className=" col-span-2">
+            <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
+            <SelectReact index={0} opts={catalogCFDI} setValue={handleType} />
+          </div>
+        )}
+
       </div>
       <div className="flex justify-center gap-x-2">
         <button

@@ -103,7 +103,7 @@ export default function DataCollectionStepper({token, date, setDate, bandDate, b
           </div>
         </div>
       )}
-      <div className="grid grid-cols-3 gap-x-2 gap-y-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-2">
 
         <div className="">
           <Label htmlFor="reference"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Referencia</p></Label>

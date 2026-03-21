@@ -43,8 +43,8 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         </div>
       </div>
 
-      <div className="flex justify-between gap-x-3 border-b border-slate-500 pb-3">
-        <div className="mt-2">
+      <div className="flex flex-wrap sm:flex-nowrap justify-between gap-x-3 gap-y-3 border-b border-slate-500 pb-3">
+        <div className="mt-2 order-2 sm:order-1">
           <p className="text-lg">{invoice?.client?.name}</p>
           <p className="text-lg">{invoice?.client?.rfc}</p>
 
@@ -54,9 +54,9 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           <p className="text-sm">{invoice?.client?.location?.cp}</p>
         </div>
 
-        <div className="text-right">
+        <div className=" order-1 sm:order-3 sm:text-right">
           <img src="/Palaciosconstrucciones_horizontal.png" alt="palacios"
-            className="h-24 w-auto"
+            className=" h-14 md:h-24 w-auto"
           />
           <p className="font-extrabold text-lg text-black">Samuel Palacios Hernandez</p>
           <p className="font-extrabold text-lg text-black">PAHS76123U25</p>
@@ -68,12 +68,16 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
 
       <div className="flex justify-between gap-x-3 mt-3">
         <div>
+          <div className="md:hidden">
+            <p className="text-slate-500 font-extrabold">ESTIMACION</p>
+            <p className="text-black font-extrabold">{invoice?.estimate?.name}</p>
+          </div>
           <p className="text-slate-500 font-extrabold">PROYECTO</p>
           <p className="text-black font-extrabold">{invoice.project.title}</p>
           {/* <p>direccion?</p> */}
         </div>
 
-        <div>
+        <div className="hidden md:block">
           <p className="text-slate-500 font-extrabold">ESTIMACION</p>
           <p className="text-black font-extrabold">{invoice?.estimate?.name}</p>
         </div>
@@ -89,33 +93,39 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
 
       </div>
 
-      <div className={`grid gap-x-3 ${showCollections? 'grid-cols-2': ''}`}>
+      <div className={`grid gap-x-3 gap-y-3 ${showCollections? 'lg:grid-cols-2': ''}`}>
         <div>
           <div className="mt-5 bg-blue-500 py-3">
             <p className="text-white text-center text-lg font-bold">FACTURA</p>
           </div>
 
-          <div className="grid grid-cols-6 gap-x-2 mt-4">
-            <p className="text-slate-600 font-bold">CANTIDAD</p>
-            <p className="text-slate-600 font-bold col-span-3">DESCRIPCION</p>
-            <p className="text-slate-600 font-bold text-right">PRECIO</p>
-            <p className="text-slate-600 font-bold text-right">IMPORTE</p>
+          <div className="hidden md:block">
+            <div className="grid grid-cols-6 gap-x-2 mt-4">
+              <p className="text-slate-600 font-bold">CANTIDAD</p>
+              <p className="text-slate-600 font-bold col-span-3">DESCRIPCION</p>
+              <p className="text-slate-600 font-bold text-right">PRECIO</p>
+              <p className="text-slate-600 font-bold text-right">IMPORTE</p>
+            </div>
+
+            {invoice.conceptsInvoiceInfo.map((c) => (
+              <div className="grid grid-cols-6 gap-x-2 mt-3" key={c._id}>
+                <p className="text-black">{c?.quantity || 0}</p>
+                <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
+                <p className="text-black text-right">{CurrencyFormatter({
+                  currency: 'MXN',
+                  value: c?.priceConcepEstimate?.cost || 0
+                })}</p>
+                <p className="text-black text-right">{CurrencyFormatter({
+                  currency: 'MXN', 
+                  value: c?.amount || 0
+                })}</p>
+              </div>
+            ))}
           </div>
 
-          {invoice.conceptsInvoiceInfo.map((c) => (
-            <div className="grid grid-cols-6 gap-x-2 mt-3" key={c._id}>
-              <p className="text-black">{c?.quantity || 0}</p>
-              <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
-              <p className="text-black text-right">{CurrencyFormatter({
-                currency: 'MXN',
-                value: c?.priceConcepEstimate?.cost || 0
-              })}</p>
-              <p className="text-black text-right">{CurrencyFormatter({
-                currency: 'MXN', 
-                value: c?.amount || 0
-              })}</p>
-            </div>
-          ))}
+          <div className="md:hidden">
+            <ListData data={invoice} />
+          </div>
 
           <div className="mt-6 py-3 flex justify-between items-center border-y-2 border-blue-200">
             <p className="font-extrabold text-slate-600">SUBTOTAL</p>
@@ -278,4 +288,96 @@ function TrasnformFromCollectionDataToTableData(collections: ICollectiosByInvoic
   });
 
   return data;
+}
+
+const ListData = ({data }: 
+  {data: IInvoiceMinFull}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  // const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.folio.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  // let filterData = [];
+  // if(search.trim() === ''){
+  //   filterData=data;
+  // }else{
+  //   const d = data.filter(item => item.folio.toLowerCase().includes(search.toLowerCase()));
+  //   filterData=d;
+  // }
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-249px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.conceptsInvoiceInfo.map((i) => (
+            <CardInvoice invoice={i} key={i._id} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardInvoice = ({invoice }: 
+  {invoice:any }) => {
+  
+  return(
+    <div role="button"
+      key={invoice._id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        {/* <div className="grid mr-4 place-items-center">
+        </div> */}
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: invoice.priceConcepEstimate?.cost || 0
+                })}
+              </h6>
+              {/* <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {invoice.folio}
+              </p> */}
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: invoice.amount || 0
+                })}
+              </p>
+              {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: invoice.charged
+                })}
+              </p> */}
+            </div>
+          </div>
+          <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+            {invoice.conceptEstimate.description}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
 }
