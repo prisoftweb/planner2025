@@ -43,7 +43,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         </div>
       </div>
 
-      <div className="flex flex-wrap sm:flex-nowrap justify-between gap-x-3 gap-y-3 border-b border-slate-500 pb-3">
+      <div className="flex flex-col sm:flex-row justify-between gap-x-3 gap-y-3 border-b border-slate-500 pb-3">
         <div className="mt-2 order-2 sm:order-1">
           <p className="text-lg">{invoice?.client?.name}</p>
           <p className="text-lg">{invoice?.client?.rfc}</p>
@@ -54,7 +54,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           <p className="text-sm">{invoice?.client?.location?.cp}</p>
         </div>
 
-        <div className=" order-1 sm:order-3 sm:text-right">
+        <div className=" order-1 sm:order-3 sm:text-right mt-2 sm:mt-0">
           <img src="/Palaciosconstrucciones_horizontal.png" alt="palacios"
             className=" h-14 md:h-24 w-auto"
           />
@@ -72,7 +72,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
             <p className="text-slate-500 font-extrabold">ESTIMACION</p>
             <p className="text-black font-extrabold">{invoice?.estimate?.name}</p>
           </div>
-          <p className="text-slate-500 font-extrabold">PROYECTO</p>
+          <p className="text-slate-500 font-extrabold mt-3 md:mt-0">PROYECTO</p>
           <p className="text-black font-extrabold">{invoice.project.title}</p>
           {/* <p>direccion?</p> */}
         </div>
