@@ -45,8 +45,15 @@ export default async function Page({params}: {params:{id:string}}){
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <Header title={quotation.title} previousPage={role? "/quotations/byuser": "/quotations"}>
-          <Selectize options={quotations} routePage="quotations" subpath="" />
+          <>
+            <div className="hidden md:flex w-full max-w-md">
+              <Selectize options={quotations} routePage="quotations" subpath="" />
+            </div>
+          </>
         </Header>
+        <div className="md:hidden mt-3">
+          <Selectize options={quotations} routePage="quotations" subpath="" />
+        </div>
         <ContainerQuatationProfile quatation={quotation} token={token} usr={user._id} />
       </div>
     </>

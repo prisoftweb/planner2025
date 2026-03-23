@@ -211,7 +211,7 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
   return (
     <>
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
-        <div className="flex items-center">
+        <div className="flex items-center w-full">
           <Link href={'/'}>
             <TooltipContainerIcon label="Regresar">
               <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
@@ -220,14 +220,17 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
             </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">Cotizaciones</p>
+          
+          <div className="flex flex-1 justify-end sm:hidden gap-x-3 items-center ">
+            <TooltipFilterIcon handleFilter={handleShowFilter} />
+            <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
+          </div>
         </div>
         <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end">
           <SearchInTable placeH="Buscar cotizacion.." />
-          <div>
-            <div className="flex gap-x-3 items-center">
-              <TooltipFilterIcon handleFilter={handleShowFilter} />
-              <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
-            </div>
+          <div className="hidden sm:flex gap-x-3 items-center ">
+            <TooltipFilterIcon handleFilter={handleShowFilter} />
+            <Button onClick={() => setShowNewQuotation(true)}>Nueva</Button>
           </div>
         </div>
       </div>

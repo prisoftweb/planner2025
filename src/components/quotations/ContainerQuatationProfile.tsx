@@ -21,12 +21,12 @@ export default function ContainerQuatationProfile({quatation, token, usr}:
 
   return (
     <>
-      <div className="flex w-full px-2 flex-wrap space-x-2"
+      <div className="flex w-full px-2 flex-wrap lg:space-x-2"
         style={{backgroundColor:'#F8FAFC'}}>
         <div className={`w-full max-w-md`}>
           <ProfileQuatation quatation={quatationState} token={token} user={usr} />
         </div>
-        <div className="mt-3 w-full md:max-w-2xl lg:w-full bg-white rounded-lg shadow-md pl-2 px-3" 
+        <div className="mt-3 w-full md:max-w-2xl lg:w-full bg-white rounded-lg shadow-md md:pl-2 px-3" 
             style={{borderColor:'#F8FAFC'}}>
           <UpdateQuatationComponent id={quatation._id} quatation={quatationState} token={token} 
               usr={usr} updateQuotationState={updateQuotationState} />

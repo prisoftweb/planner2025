@@ -304,8 +304,8 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-x-2 gap-y-2">
-        <div className=" col-span-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-2">
+        <div className=" col-span-2 sm:col-span-3">
           <Label>Titulo</Label>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
           {message===1 && (
@@ -391,7 +391,7 @@ export default function UpdateQuatationComponent({token, id, quatation, usr, upd
           )}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+      <div className="sm:grid sm:grid-cols-2 gap-x-2 gap-y-2">
         <div className="">
           <Label>Fecha de solicitud</Label>
           <Input type="date" value={datesol} onChange={(e) => setDatesol(e.target.value)} />

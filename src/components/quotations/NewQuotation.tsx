@@ -279,7 +279,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations, sh
 
           </div>
 
-          <div className="grid grid-cols-3 gap-x-2 gap-y-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-2 gap-y-2">
             <div className=" col-span-3">
               <Label>Titulo</Label>
               <Input value={title} onChange={(e) => setTitle(e.target.value)} autoFocus />
@@ -366,7 +366,7 @@ export default function NewQuotation({showForm, token, usr, updateQuotations, sh
               )}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-x-2 gap-y-2">
+          <div className="sm:grid sm:grid-cols-2 gap-x-2 gap-y-2">
             <div className="">
               <Label>Fecha de solicitud</Label>
               <Input type="date" onChange={(e) => setDatesol(e.target.value)} />
