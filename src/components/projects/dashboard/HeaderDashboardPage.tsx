@@ -76,7 +76,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
       <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-3'>
         {/* <div className='w-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 h-full'
             style={{backgroundColor: '#8EA7FF'}}> */}
-        <div className='w-full border border-slate-300 bg-white rounded-xl p-1 h-full'>
+        <div className='w-full border border-slate-300 bg-white rounded-xl p-3 sm:p-1 h-full min-h-20'>
           {amountProjects.length > 0 && (
             <>
               <p className='text-lg'>{amountProjects[0].projects}</p>
@@ -86,7 +86,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             </>
           )}
         </div>
-        <div className="flex items-center bg-white border  border-slate-300 rounded-xl  p-1 
+        <div className="flex w-full h-full min-h-20 items-center bg-white border  border-slate-300 rounded-xl  p-1 
             justify-center gap-x-5">
         {/* <div className='w-full border border-slate-300 bg-white rounded-xl p-1 h-full'> */}
           <ProgressCircle value={Number(progress)}>
@@ -112,7 +112,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
         </div>
         {/* <div className='w-full h-full border  border-slate-100 shadow-lg shadow-slate-500 p-1 
             flex flex-col justify-center items-center' style={{backgroundColor: '#86DDFS'}}> */}
-        <div className='w-full h-full border  border-slate-300 p-1 
+        <div className='w-full h-full min-h-20 border  border-slate-300 p-1 
             flex flex-col justify-center items-center rounded-xl' >
           {projectsTotalCost.length > 0 && (
             <>
@@ -142,7 +142,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
         </div>
         {/* <div className='w-full h-full bg-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
             flex flex-col justify-center items-center'> */}
-        <div className='w-full h-full bg-white border  border-slate-300  p-1 
+        <div className='w-full h-full min-h-20 bg-white border  border-slate-300  p-1 
             flex flex-col justify-center items-center rounded-xl'>
           {amountProjects.length > 0 && (
             <>
@@ -162,7 +162,7 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
         </div>
         {/* <div className='w-full h-full text-white border  border-slate-100 shadow-lg shadow-slate-500 p-1 
               flex flex-col justify-center items-center' style={{backgroundColor: '#FF9C89'}}> */}
-        <div className='w-full h-full border  border-slate-300  p-1 
+        <div className='w-full h-full min-h-20 border  border-slate-300  p-1 
               flex flex-col justify-center items-center rounded-xl' >
           {amountProjects.length > 0 && (
             <>

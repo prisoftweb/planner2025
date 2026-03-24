@@ -429,9 +429,9 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         activeProjects={dataProjectsProgress.length} numEvaluado={numEvaluado}
         totalFeaturesAC={stateTotalFeatureAmountChargeOff} totalFeaturesGF={stateTotalFeatureGuaranteeFund}
         totalFeaturesT={stateTotalFeatureTaxes} />
-      <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap md:flex-nowrap">
+      <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap lg:flex-nowrap">
         {/* <div className="bg-white w-full md:w-2/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
-        <div className="w-full md:w-2/3 border border-slate-300 bg-white rounded-xl p-5">
+        <div className="w-full lg:w-2/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between ">
             <p>AVANCE DE PROYECTOS ACTIVOS {dataProjectsProgress.length}</p>
           </div>
@@ -442,7 +442,7 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
         
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
-        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
+        <div className="hidden lg:block w-full lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between ">
             <p>PROYECTOS POR ESTATUS</p>
           </div>
@@ -453,10 +453,20 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
       </div>
 
-      <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap md:flex-nowrap">
+      {/* <div className="mt-5 gap-x-6 gap-y-6 flex flex-wrap lg:flex-nowrap"> */}
+      <div className="mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <div className="lg:hidden border border-slate-300 bg-white rounded-xl p-5">
+          <div className="flex mb-3 gap-x-2 justify-between ">
+            <p>PROYECTOS POR ESTATUS</p>
+          </div>
+          <DonutStatusChartComponent data={dataProjectsStatus} colors={colors} category="percentaje"
+            categories={categoriesStatus}  />
+        </div>
 
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
-        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
+        {/* <div className="w-full md:w-1/2 lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5"> */}
+        <div className="border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between ">
             <p>PROYECTOS POR SEGMENTO</p>
           </div>
@@ -465,7 +475,8 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
 
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
-        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
+        {/* <div className="w-full md:w-1/2 lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5"> */}
+        <div className="border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between ">
             <p>TOP 10 PROYECTOS</p>
           </div>
@@ -473,7 +484,8 @@ export default function DashBoardContainer({token, amountProjects, listProjects,
         </div>
 
         {/* <div className="bg-white w-full md:w-1/3 border border-slate-100 shadow-lg shadow-slate-500 p-5"> */}
-        <div className="w-full md:w-1/3 border border-slate-300 bg-white rounded-xl p-5">
+        {/* <div className="w-full md:w-1/2 lg:w-1/3 border border-slate-300 bg-white rounded-xl p-5"> */}
+        <div className="border border-slate-300 bg-white rounded-xl p-5">
           <div className="flex mb-3 gap-x-2 justify-between ">
             <p>PROYECTOS POR ClIENTE</p>
           </div>

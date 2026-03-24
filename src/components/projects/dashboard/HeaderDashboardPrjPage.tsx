@@ -85,7 +85,8 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
           </div>
         </div>
       </div>
-      <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3'>
+      <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-3'>
+      {/* <div className='mt-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>*/}
         <NewCardDashboard colorIcon="bg-yellow-300" text1={amountProjects[0].projects} text2={MoneyFormatter(amountProjects[0].totalAmountTotal)} 
             title="Cantidad de proyectos" styleT1="text-2xl text-green-500 font-bold" styleT2="text-lg text-green-600 font-bold"> 
           <MdHomeRepairService className="w-6 h-6 text-blue-500" />
