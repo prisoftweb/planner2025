@@ -8,7 +8,7 @@ import { MoneyFormatter } from "@/app/functions/Globals";
 export default function CardBudgetProject({budget, token}: {budget:BudgetMin, token:string}){
   return(
     <>
-      <Link href={`/projects/budget/${budget._id}/profile`}>
+      <Link href={`/projects/budget/${budget._id}`}>
         <div className="p-3 border border-slate-700 
                 rounded-xl bg-white shadow-md shadow-slate-500 hover:shadow-xl 
                 hover:shadow-slate-600">

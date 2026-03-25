@@ -119,7 +119,7 @@ export default function AddCostCenter({token, user, closeForm}:
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-x-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3">
         <div className="bg-white p-3 rounded-lg shadow-md">
           <div className="flex gap-x-2">
             <div>
@@ -171,7 +171,7 @@ export default function AddCostCenter({token, user, closeForm}:
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 mt-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 mt-3">
         <div>
           <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
           <Input 

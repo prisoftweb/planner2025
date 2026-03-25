@@ -51,13 +51,16 @@ export default function BudgetCli({budget, token, id, user, costoCenters, projec
         <ButtonNewBudget handleNewBudget={handleNewBudget} openNewBudget={newBudget} 
           token={token} user={user} costoCenters={costoCenters} id={id} />
       </Header>
+      {/* <div className="md:hidden">
+        <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} option={opt} />
+      </div> */}
       <div className={`flex mt-5`}>
-        <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
+        {/* <div className={`hiiden md:block bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} option={opt} />
           </div>
-        </div>
-        <div className="flex w-full px-2 space-x-2" 
+        </div> */}
+        <div className="flex w-full lg:px-2 lg:space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full`}>
             <ProfileBudget budget={oneBudget} token={token} id={id} user={user} />

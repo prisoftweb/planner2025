@@ -252,7 +252,14 @@ export default function TableBudgetProjects({token, budgets, optConditions, isFi
         {isFilter && <Filtering showForm={setIsFilter} optConditions={optConditions} 
                           FilterData={filterData} maxAmount={maxAmount} optProjects={optProjects}  />}
       </div>
-      {view}
+      <div className="hidden lg:block">
+        {view}
+      </div>
+      <div className="grid lg:hidden grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
+        {filteredBudgets.map((budget, index:number) => (
+          <CardBudgetProject budget={budget} token={token} key={index} />
+        ))}
+      </div>
     </>
   )
 }

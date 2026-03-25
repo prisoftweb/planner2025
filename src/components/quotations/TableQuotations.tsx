@@ -148,14 +148,14 @@ const ListData = ({data, token, deleteQuatation }:
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
 
-  const filterData = useMemo(() => {
-    if(search.trim() === ''){
-      return data;
-    }else{
-      const d = data.filter(item => item.Titulo.toLowerCase().includes(search.toLowerCase()));
-      return d;
-    }
-  }, [search]);
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.Titulo.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
 
   return(
     <div className="mt-2">

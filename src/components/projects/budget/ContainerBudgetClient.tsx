@@ -74,7 +74,7 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
 
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-      <div className="flex justify-between items-center gap-x-3 gap-y-3 md:flex-nowrap flex-wrap">
+      <div className="flex justify-between items-center gap-x-3 gap-y-3 sm:flex-nowrap flex-wrap">
         <div className="flex items-center">
           <TooltipContainerIcon label="Regresar">
             <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer hover:bg-blue-100" onClick={() => window.location.replace('/')}>
@@ -86,7 +86,7 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
           <div className="flex gap-x-3 gap-y-3 justify-end">
             {widthPage >= 500 && (
-              <div className="flex gap-x-3 items-center">
+              <div className="hidden lg:flex gap-x-3 items-center">
                 <p>Vista: </p>
                 <TooltipContainerIcon label="Tabla">
                   <Squares2X2Icon onClick={() => setIsTable(true)} 
