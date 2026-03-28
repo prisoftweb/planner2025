@@ -98,8 +98,15 @@ export default async function Page({ params }: { params: { id: string }}){
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects/history">
-          <Selectize options={options} routePage="projects/history" subpath="" />
+          <>
+            <div className="hidden sm:block w-full max-w-48 sm:max-w-80 lg:max-w-md">
+              <Selectize options={options} routePage="projects/history" subpath="" />
+            </div>
+          </>
         </Header>
+        <div className="block sm:hidden mt-2">
+          <Selectize options={options} routePage="projects/history" subpath="" />
+        </div>
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>
           <ProjectHistoryCli project={project} id={params.id} token={token} />

@@ -7,7 +7,7 @@ import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon,
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
 
-export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
+export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPro:string, isHistory?: boolean}){
 
   const [width, setWidth] = useState<number>(0);
   
@@ -20,94 +20,178 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
     setWidth(window.innerWidth);
     return () => window.removeEventListener('scroll', handleResize);
   }, [])
+
+  const query=isHistory? '?history=1':'';
   
   let tabCli = <></>;
-  if(width < 710){
-    tabCli = <div className="flex justify-between mt-3">
-                    <Link href={`/projects/${idPro}/profile`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+  if(width < 1010){
+    // tabCli = <div className="flex justify-between mt-3">
+    //                 <Link href={isHistory ? `/projects/history/${idPro}` : `/projects/${idPro}/profile`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
+    //                     <UserCircleIcon data-tooltip-target="tooltip-dark"
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>  
+    //                 <Link href={`/projects/${idPro}/analysis`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
+    //                     <DocumentChartBarIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/projects/${idPro}/budgets${query}`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
+    //                     <CurrencyDollarIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/projects/${idPro}/costs`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Costo'>
+    //                     <CreditCardIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/projects/estimates/${idPro}?page=projects`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
+    //                     <CreditCardIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/projects/estimates/${idPro}/invoice?page=projects`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturacion'>
+    //                     <CreditCardIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='6'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/projects/estimates/${idPro}/collections?page=projects`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
+    //                     <CreditCardIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='7'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/projects/${idPro}/guaranteefunds${query}`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Fondo garantia'>
+    //                     <CreditCardIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='8'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //               </div>
+
+    tabCli = <div className="grid grid-cols-4 sm:grid-cols-8 mt-3 border-t pt-2 gap-y-2">
+                <Link href={isHistory ? `/projects/history/${idPro}` : `/projects/${idPro}/profile`} className="flex flex-col items-center" >
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
-                        <UserCircleIcon data-tooltip-target="tooltip-dark"
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>  
-                    <Link href={`/projects/${idPro}/analysis`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    <UserCircleIcon 
+                      className={`w-6 h-6 cursor-pointer ${tab==='1' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Resumen</span> */}
+                </Link>
+  
+                <Link href={`/projects/${idPro}/analysis${query}`} className="flex flex-col items-center">
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
-                        <DocumentChartBarIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/projects/${idPro}/budgets`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    <DocumentChartBarIcon
+                      className={`w-6 h-6 cursor-pointer ${tab==='2' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Modificar</span> */}
+                </Link>
+  
+                <Link href={`/projects/${idPro}/budgets${query}`} className="flex flex-col items-center">
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
-                        <CurrencyDollarIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/projects/${idPro}/costs`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    <CurrencyDollarIcon
+                      className={`w-6 h-6 cursor-pointer ${tab==='3' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Formatos</span> */}
+                </Link>
+  
+                <Link href={`/projects/${idPro}/costs${query}`} className="flex flex-col items-center">
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Costo'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/projects/estimates/${idPro}?page=projects`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    <CreditCardIcon
+                      className={`w-6 h-6 cursor-pointer ${tab==='4' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Facturas</span> */}
+                </Link>
+
+                <Link href={`/projects/estimates/${idPro}?page=projects`} className="flex flex-col items-center">
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/projects/estimates/${idPro}/invoice?page=projects`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    <CreditCardIcon
+                      className={`w-6 h-6 cursor-pointer ${tab==='5' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Facturas</span> */}
+                </Link>
+
+                <Link href={`/projects/estimates/${idPro}/invoice?page=projects`} className="flex flex-col items-center">
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturacion'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='6'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/projects/estimates/${idPro}/collections?page=projects`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    <CreditCardIcon
+                      className={`w-6 h-6 cursor-pointer ${tab==='6' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Facturas</span> */}
+                </Link>
+
+                <Link href={`/projects/estimates/${idPro}/collections?page=projects`} className="flex flex-col items-center">
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='7'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/projects/${idPro}/guaranteefunds`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                    <CreditCardIcon
+                      className={`w-6 h-6 cursor-pointer ${tab==='7' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Facturas</span> */}
+                </Link>
+
+                <Link href={`/projects/${idPro}/guaranteefunds${query}`} className="flex flex-col items-center">
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Fondo garantia'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='8'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                  </div>                             
+                    <CreditCardIcon
+                      className={`w-6 h-6 cursor-pointer ${tab==='8' ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                  </Tooltip>
+                  {/* <span className="text-xs">Facturas</span> */}
+                </Link>
+              </div>
   }else{
     tabCli=(
       <div className="flex mt-5 py-1 border-b border-blue-300">
-        <Link href={`/projects/${idPro}/profile`}>
+        <Link href={isHistory ? `/projects/history/${idPro}` : `/projects/${idPro}/profile`}>
           <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Resumen</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/analysis`}>
+        <Link href={`/projects/${idPro}/analysis${query}`}>
           <div className={`w-50 px-5 ${tab==='2'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Analisis</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/budgets`}>
+        <Link href={`/projects/${idPro}/budgets${query}`}>
           <div className={`w-50 px-5 ${tab==='3'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Presupuesto</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/costs`}>
+        <Link href={`/projects/${idPro}/costs${query}`}>
           <div className={`w-50 px-5 ${tab==='4'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Costo</p>
           </div>
@@ -127,7 +211,7 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
             <p className="text-blue-600">Cobranza</p>
           </div>
         </Link>
-        <Link href={`/projects/${idPro}/guaranteefunds`}>
+        <Link href={`/projects/${idPro}/guaranteefunds${query}`}>
           <div className={`w-50 px-5 ${tab==='8'? 'border-b-4 border-blue-600':''}`}>
             <p className="text-blue-600">Fondo garantia</p>
           </div>
@@ -139,6 +223,12 @@ export default function NavTabProject({tab, idPro}: {tab:string, idPro:string}){
   return(
     <>
       {tabCli}
+      {/* <div className="hidden md:block">
+        {tabCli}
+      </div>
+      <div>
+
+      </div> */}
     </>
   )
 }

@@ -87,7 +87,7 @@ export default async function Page(){
     <>
       <Navigation user={user} />     
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <ResponsiveHeader title="Centro de costos" placeHolder="Buscar centro de costos..">
+        <ResponsiveHeader other={true} title="Centro de costos" placeHolder="Buscar centro de costos..">
           <ButtonNew token={token} id="" /></ResponsiveHeader>
         <div className="mt-5">
           <TableCostCenter data={table} token={token} />

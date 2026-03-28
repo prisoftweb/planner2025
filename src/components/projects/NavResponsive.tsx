@@ -166,9 +166,100 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
     )
   }
 
+  const tabCli = <div className="grid grid-cols-4 sm:grid-cols-8 mt-3 border-t pt-2">
+              <div  className="flex flex-col items-center"
+                onClick={() => changeOption(1)}
+              >
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Dashboard'>
+                  <ChartBarIcon 
+                    className={`w-6 h-6 cursor-pointer ${option===1 ? 'text-green-500' : 'text-slate-500'}`}
+                  />
+                </Tooltip>
+                {/* <span className="text-xs">Resumen</span> */}
+              </div>
+
+              <div  className="flex flex-col items-center"
+                onClick={() => changeOption(2)}
+              >
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Datos basicos'>
+                  <LuConstruction
+                    className={`w-6 h-6 cursor-pointer ${option===2 ? 'text-green-500' : 'text-slate-500'}`}
+                  />
+                </Tooltip>
+                {/* <span className="text-xs">Modificar</span> */}
+              </div>
+
+              <div className="flex flex-col items-center"
+                onClick={() => changeOption(3)}
+              >
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Datos extras'>
+                  <AiOutlineFundProjectionScreen
+                    className={`w-6 h-6 cursor-pointer ${option===3 ? 'text-green-500' : 'text-slate-500'}`}
+                  />
+                </Tooltip>
+                {/* <span className="text-xs">Formatos</span> */}
+              </div>
+
+              <div className="flex flex-col items-center"
+                onClick={() => changeOption(4)}
+              >
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Direccion'>
+                  <MdOutlineEditLocationAlt
+                    className={`w-6 h-6 cursor-pointer ${option===4 ? 'text-green-500' : 'text-slate-500'}`}
+                  />
+                </Tooltip>
+                {/* <span className="text-xs">Facturas</span> */}
+              </div>
+
+              <div className="flex flex-col items-center"
+                onClick={() => changeOption(5)}
+              >
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Garantia'>
+                  <FaRegCreditCard
+                    className={`w-6 h-6 cursor-pointer ${option===5 ? 'text-green-500' : 'text-slate-500'}`}
+                  />
+                </Tooltip>
+                {/* <span className="text-xs">Facturas</span> */}
+              </div>
+
+              <div className="flex flex-col items-center"
+                onClick={() => changeOption(6)}
+              >
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Avance'>
+                  <FcAdvance
+                    className={`w-6 h-6 cursor-pointer ${option===6 ? 'text-green-500' : 'text-slate-500'}`}
+                  />
+                </Tooltip>
+                {/* <span className="text-xs">Facturas</span> */}
+              </div>
+
+              <div className="flex flex-col items-center"
+                onClick={() => changeOption(7)}
+              >
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+                      placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Fechas de garantia'>
+                  <FaMoneyBill
+                    className={`w-6 h-6 cursor-pointer ${option===7 ? 'text-green-500' : 'text-slate-500'}`}
+                  />
+                </Tooltip>
+                {/* <span className="text-xs">Facturas</span> */}
+              </div>
+            </div>
+
   return(
     <>
-      {nav}
+      <div className="hidden lg:block">
+        {nav}
+      </div>
+      <div className=" lg:hidden">
+        {tabCli}
+      </div>
     </>
   )
 }

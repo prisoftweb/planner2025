@@ -720,7 +720,14 @@ export default function TableProjects({data, token, projects, optCategories,
           </div>
         )}
       </div>
-      {view}
+      <div className="hidden xl:block">
+        {view}
+      </div>
+      <div className="xl:hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
+        {filteredProjects.map((project, index:number) => (
+          <CardProject project={project} token={token} key={index} url={isHistory? `/projects/history/${project._id}`: `/projects/${project._id}/profile`} />
+        ))}
+      </div>
     </>
   )
 }

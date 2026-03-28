@@ -57,8 +57,15 @@ export default async function Page({ params }:
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects">
-          <Selectize options={options} routePage="projects" subpath="/budgets" />
+          <>
+            <div className="hidden sm:block w-full max-w-48 sm:max-w-80 lg:max-w-md">
+              <Selectize options={options} routePage="projects" subpath="/budgets" />
+            </div>
+          </>
         </Header>
+        <div className="block sm:hidden mt-2">
+          <Selectize options={options} routePage="projects" subpath="/budgets" />
+        </div>
         <NavTabProject idPro={params.id} tab='3' />
         <ContainerBudgetsByProject budgets={budgets} project={project} token={token} user={user._id} />
       </div>

@@ -223,10 +223,13 @@ export default function TableCollectionsComponent({token, user, collectionsParam
               </div>
             </TooltipContainerIcon>
           </Link>
-          <p className="text-xl ml-4 font-medium">Recuperacion de cartera</p>
-          <div className="flex-1 flex justify-end sm:hidden">
+          <p className="flex-1 text-xl ml-4 font-medium">Recuperacion de cartera</p>
+          {/* <div className="flex justify-end sm:hidden">
             <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
-          </div>
+          </div> */}
+        </div>
+        <div className="flex w-full justify-end sm:hidden">
+          <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
         </div>
         <div className="xl:flex lg:gap-x-3 items-center">
           <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}>
@@ -307,7 +310,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                 bg-white`}
-              onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
+              // onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
             >
               <div className="flex items-center w-full ">
                 <div className="grid mr-4 place-items-center gap-x-1 gap-y-2">
@@ -322,7 +325,9 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                     <Toogle value={col.condition.name.toLowerCase().includes('confirmado')} id={col._id} onClick={confirmCollection} />
                   ): <></>}
                 </div>
-                <div className="w-full">
+                <div className="w-full"
+                  onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
+                >
                   <div className="flex gap-x-3 justify-between items-center">
                     <div>
                       <h6

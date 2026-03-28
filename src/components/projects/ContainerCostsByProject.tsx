@@ -13,6 +13,8 @@ import { ExpenseDataProjectToTableDataProject } from "@/app/functions/SaveProjec
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import DownloadCostsProjectPDF from "./DownloadCostsProjectPDF"
 import SearchInTable from "../SearchInTable"
+import { useTableStates } from "@/app/store/tableStates"
+import { useMemo } from "react"
 // import NewDonutChartComponent from "./dashboard/NewDonutChartComponent"
 
 // interface OptionsDashboard {
@@ -227,7 +229,7 @@ export default function ContainerCostsByProject({project, token, user, costs, co
 
   return(
     <>
-      <div className="flex justify-end">
+      {/* <div className="flex justify-end">
         <PDFDownloadLink document={<DownloadCostsProjectPDF costs={costs} project={project} />} 
             fileName={`Costos detalles-${project.title}`} >
           {({loading, url, error, blob}) => 
@@ -237,7 +239,7 @@ export default function ContainerCostsByProject({project, token, user, costs, co
               <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
             ) }
         </PDFDownloadLink>
-      </div>
+      </div> */}
 
       {/* <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-5">
         <div className="w-full max-w-md">
@@ -248,10 +250,109 @@ export default function ContainerCostsByProject({project, token, user, costs, co
         </div>
       </div>*/}
 
-      <div className="flex justify-end mt-5">
+      <div className="flex w-full max-w-2xl justify-end mt-5 gap-x-2 items-center">
         <SearchInTable placeH="Buscar gasto.." />
+        
+        <PDFDownloadLink document={<DownloadCostsProjectPDF costs={costs} project={project} />} 
+            fileName={`Costos detalles-${project.title}`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+            ) : (
+              <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+            ) }
+        </PDFDownloadLink>
       </div> 
-      <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
+      
+      <div className="hidden xl:block w-full">
+        <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." typeTable="cost" />
+      </div>
+      <div className="block xl:hidden w-full">
+        <ListData data={dataExpenses} queryParam={queryParam} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data, queryParam}: 
+  {data: ExpensesTable[], queryParam:string}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  const {search} = useTableStates();
+
+  const filterData = useMemo(() => {
+    if(search.trim() === ''){
+      return data;
+    }else{
+      const d = data.filter(item => item.Descripcion.toLowerCase().includes(search.toLowerCase()));
+      return d;
+    }
+  }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full max-w-2xl mt-3 rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {filterData.map((e) => (
+            <CardExpense expense={e} key={e.id} queryParam={queryParam} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardExpense = ({expense, queryParam}: 
+  {expense:ExpensesTable, queryParam:string}) => {
+  
+  return(
+    <div role="button"
+      key={expense.id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+      onClick={() => window.location.replace(`/expenses/${expense.id}/profile${queryParam}`)}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ expense.Responsable?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+              remove={RemoveGlossary} removeElement={delGlossary} /> */}
+            {/* <RemoveElement id={expense.id} name={expense.Descripcion} 
+              remove={RemoveCost} removeElement={delCost} 
+              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {expense.Proyecto}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {expense.Descripcion}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: expense.Importe
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {expense.Informe}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

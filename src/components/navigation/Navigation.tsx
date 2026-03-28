@@ -371,10 +371,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             name: 'Listas',
             link: '/catalogs'
           },
-          {
-            name: 'Compañias',
-            link: '/companies'
-          },
+          // {
+          //   name: 'Compañias',
+          //   link: '/companies'
+          // },
           {
             name: 'Departamentos',
             link: '/departments'

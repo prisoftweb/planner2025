@@ -10,6 +10,7 @@ import NavTabProject from "@/components/projects/NavTabProject";
 import ProjectCli from "@/components/projects/ProjectClient";
 import Header from "@/components/HeaderPage";
 import { getCatalogsByName } from "@/app/api/routeCatalogs";
+import { ResponsiveHeader } from "@/components/Header";
 
 export default async function Page({ params }: 
   { params: { id: string }}){
@@ -104,8 +105,18 @@ export default async function Page({ params }:
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects">
-          <Selectize options={options} routePage="projects" subpath="/profile" />
+          <>
+            <div className="hidden sm:block w-full max-w-48 sm:max-w-80 lg:max-w-md">
+              <Selectize options={options} routePage="projects" subpath="/profile" />
+            </div>
+          </>
         </Header>
+        {/* <ResponsiveHeader title={project.title} placeHolder="" >
+          <Selectize options={options} routePage="projects" subpath="/profile" />
+        </ResponsiveHeader> */}
+        <div className="block sm:hidden mt-2">
+          <Selectize options={options} routePage="projects" subpath="/profile" />
+        </div>
         <NavTabProject idPro={params.id} tab='1' />
         <NextUiProviders>
           <ProjectCli token={token} id={params.id} project={project}

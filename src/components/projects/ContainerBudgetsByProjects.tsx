@@ -2,7 +2,7 @@
 import { OneProjectMin, IBudgetByProject } from "@/interfaces/Projects"
 import { createColumnHelper } from "@tanstack/react-table"
 import Table from "../Table"
-import { MoneyFormatter } from "@/app/functions/Globals"
+import { CurrencyFormatter, MoneyFormatter } from "@/app/functions/Globals"
 import { ProjectsBudgetTable } from "@/interfaces/Projects"
 import { ProjectBudgetDataToTableDataProjectMin } from "@/app/functions/SaveProject"
 
@@ -132,7 +132,104 @@ export default function ContainerBudgetsByProject({project, token, user, budgets
 
   return(
     <>
-      <Table columns={columns} data={dataExpenses} placeH="Buscar gasto.." />
+      <div className="hidden lg:block w-full">
+        <Table columns={columns} data={dataExpenses} placeH="Buscar presupuesto.." />
+      </div>
+      <div className="block lg:hidden w-full">
+        <ListData data={dataExpenses} queryParam={queryParam} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data, queryParam }: 
+  {data: ProjectsBudgetTable[], queryParam:string }) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+  // const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.Titulo.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  return(
+    <div className="mt-2">
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full rounded-xl bg-clip-border] h-[calc(100vh-229px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((b) => (
+            <CardBudget budget={b} key={b.id} queryParam={queryParam} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardBudget = ({budget, queryParam }: 
+  {budget:ProjectsBudgetTable, queryParam:string }) => {
+  
+  return(
+    <div role="button"
+      key={budget.id}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ budget.project.project ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+              remove={RemoveGlossary} removeElement={delGlossary} /> */}
+            {/* <RemoveElement id={budget.id} name={budget.Titulo} remove={removeQuotation} 
+              token={token} removeElement={deleteQuatation} /> */}
+            {/* <RemoveElement id={budget.id} name={budget.Descripcion} 
+              remove={RemoveCost} removeElement={delCost} 
+              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+        </div>
+        <div className="w-full"
+          onClick={() => window.location.replace(`/projects/budget/${budget.id}${queryParam}`)}
+        >
+          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {budget.project.budget}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: budget.amountBudget
+                })}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: budget.budgeted
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: budget.pending
+                })}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

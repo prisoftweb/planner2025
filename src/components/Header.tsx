@@ -39,6 +39,7 @@ type HeaderProps = {
   children: JSX.Element;
   title: string;
   placeHolder: string;
+  other?: boolean
 };
 
 const Header = forwardRef<HTMLInputElement, HeaderProps>(function Header( 
@@ -74,7 +75,7 @@ const Header = forwardRef<HTMLInputElement, HeaderProps>(function Header(
 export default Header;
 
 const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Header( 
-  { children, title, placeHolder }, ref ){
+  { children, title, placeHolder, other=false }, ref ){
 
   return(
     <>
@@ -90,11 +91,19 @@ const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Head
               </Tooltip>
             </Link>
           </div>
-          <p className="text-xl w-80 ml-4 font-medium">{title}</p>
-          <div className="sm:hidden flex justify-end w-full mr-4">
+          <p className="flex-1 text-xl w-80 ml-4 font-medium">{title}</p>
+          {/* w-full */}
+          {!other && (
+            <div className="sm:hidden flex justify-end mr-4">
+              {children}
+            </div>
+          )}
+        </div>
+        {other && (
+          <div className="sm:hidden w-full flex justify-end mr-4">
             {children}
           </div>
-        </div>
+        )}
         {/* <div className="flex gap-x-3 justify-end w-full"> */}
         <div className="mt-2 md:mt-0 sm:flex gap-x-3 gap-y-2 pr-4 sm:pr-0 justify-end w-full">
           <SearchInTable placeH={placeHolder} ref={ref} />

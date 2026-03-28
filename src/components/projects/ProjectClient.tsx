@@ -91,15 +91,18 @@ export default function ProjectCli({project, token, id, optCategories, optClient
 
   return(
     <>
+      <div className="lg:hidden mt-2">
+        <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
+      </div>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
+        <div className={`hidden lg:block bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt} />
           </div>
         </div>
-        <div className="flex w-full px-2 flex-wrap md:flex-nowrap space-x-2"
+        <div className={`flex w-full px-2 flex-wrap ${opt===1? 'xl:flex-nowrap xl:space-x-2': 'md:flex-nowrap md:space-x-2'}  `}
           style={{backgroundColor:'#F8FAFC'}}>
-          <div className={`w-full max-w-md`}>
+          <div className={`w-full sm:max-w-md`}>
             <ProfileProject project={project} />
           </div>
           {view}

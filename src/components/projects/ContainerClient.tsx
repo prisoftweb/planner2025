@@ -322,10 +322,180 @@ export default function ContainerClient({token, optClients, optCategories,
     </>
   )
 
+  const reportPDFResponsive=(
+    <>
+      <DateRangePicker 
+        className=''
+        placeholder='Seleccione un rango de fechas'
+        onValueChange={(e) => {
+          setRangeDate(e);
+          if(e.from && e.to){
+            handleDate(e.from, e.to);
+          }
+        }}
+        value={rangeDate}
+        locale={es}
+      />
+      {selected==='Ganancia'? (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} 
+            cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de ganancias por proyectos`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      ): (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} 
+            cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      )}
+      {selected==='Ganancia'? (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} 
+            benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="Ganancia">
+                <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      ): (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} 
+            cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
+          {({loading, url, error, blob}) => 
+            loading? (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+              </TooltipContainerIcon>
+            ) : (
+              <TooltipContainerIcon label="costo beneficio">
+                <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+              </TooltipContainerIcon>
+            ) }
+        </PDFDownloadLink>
+      )}
+    </>
+  )
+
+  // return(
+  //   <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+  //     <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap print:hidden">
+  //       <div className="flex items-center print:hidden">
+  //         <Link href={'/'}>
+  //           <TooltipContainerIcon label="Regresar">
+  //             <div className="p-1 border border-slate-400 bg-white rounded-md print:hidden hover:bg-blue-100">
+  //               <TbArrowNarrowLeft className="w-10 h-10 text-slate-600 print:hidden" />
+  //             </div>
+  //           </TooltipContainerIcon>
+  //         </Link>
+  //         <p className="text-xl ml-4 font-medium">Proyectos</p>
+  //         <div className="flex-1 flex justify-end items-center gap-x-3 md:hidden">
+  //           <TooltipFilterIcon handleFilter={handleFilter} />
+  //           <ButtonNew token={token} optClients={optClients} 
+  //                   optCategories={optCategories} optTypes={optTypes}
+  //                   user={user._id} optCompanies={optCompanies} condition={condition} />
+  //         </div>
+  //       </div>
+  //       <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end print:hidden">
+  //         <SearchInTable placeH="Buscar proyecto.." />
+  //         <div>
+  //           <div className="flex gap-x-3 items-center print:hidden">
+  //             <div className="2xl:block">
+  //               {role.toLowerCase().includes('super') && isWide && reportPDF}
+  //             </div>
+  //             {widthPage > 500 && (
+  //               <>
+  //                 <TooltipContainerIcon label="Tabla">
+  //                   <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
+  //                     onClick={() => setIsTable(true)}
+  //                   />
+  //                 </TooltipContainerIcon>
+  //                 <TooltipContainerIcon label="Tarjeta">
+  //                   <PiTableThin onClick={() => setIsTable(false)} 
+  //                     className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
+  //                   />
+  //                 </TooltipContainerIcon>
+  //               </>
+  //             )}
+  //             <div className="hidden md:flex items-center gap-x-3">
+  //               <TooltipFilterIcon handleFilter={handleFilter} />
+  //               <ButtonNew token={token} optClients={optClients} 
+  //                     optCategories={optCategories} optTypes={optTypes}
+  //                     user={user._id} optCompanies={optCompanies} condition={condition} />
+  //             </div>
+
+  //             <div className="inline-flex rounded-md shadow-sm md:hidden" role="group">
+  //               {options.map((opt, index) => (
+  //                 <button
+  //                   key={opt}
+  //                   onClick={() => setSelected(opt)}
+  //                   className={`
+  //                     px-4 py-2 text-sm font-medium border border-gray-300
+  //                     ${index === 0 ? "rounded-l-lg" : ""}
+  //                     ${index === options.length - 1 ? "rounded-r-lg" : ""}
+  //                     ${selected === opt ? "bg-blue-600 text-white" : "bg-white hover:bg-gray-100"}
+  //                   `}
+  //                 >
+  //                   {opt}
+  //                 </button>
+  //               ))}
+  //             </div>
+
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //     <div className="2xl:hidden">
+  //       {role.toLowerCase().includes('super') && !isWide && (
+  //         <div className="flex justify-end items-center gap-x-3">
+  //           {reportPDF}
+  //         </div>
+  //       )}
+  //     </div>
+
+  //     <div className="md:hidden">
+  //       {reportPDFResponsive}
+  //     </div>
+
+  //     <div className="mt-5">
+  //       <TableProjects data={dataTable} token={token} projects={projectStore.length > 0? projectStore: projects} 
+  //         optCategories={optCategoriesFilter} optTypes={optTypesFilter}
+  //         optConditions={optConditionsFilter} isFilter={isFilter} 
+  //         setIsFilter={handleFilter} isTable={isTable} user={user}>            
+  //       </TableProjects>        
+  //     </div>
+  //   </div>
+  // )
+              
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-      <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap print:hidden">
-        <div className="flex items-center print:hidden">
+      <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap 2xl:flex-nowrap print:hidden">
+        
+        <div className="flex w-full items-center print:hidden">
           <Link href={'/'}>
             <TooltipContainerIcon label="Regresar">
               <div className="p-1 border border-slate-400 bg-white rounded-md print:hidden hover:bg-blue-100">
@@ -334,12 +504,169 @@ export default function ContainerClient({token, optClients, optCategories,
             </TooltipContainerIcon>
           </Link>
           <p className="text-xl ml-4 font-medium">Proyectos</p>
+          <div className="flex-1 flex justify-end items-center gap-x-3 md:hidden">
+            <TooltipFilterIcon handleFilter={handleFilter} />
+            <ButtonNew token={token} optClients={optClients} 
+                    optCategories={optCategories} optTypes={optTypes}
+                    user={user._id} optCompanies={optCompanies} condition={condition} />
+          </div>
         </div>
-        <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end print:hidden">
-          <SearchInTable placeH="Buscar proyecto.." />
+        
+        <div className="w-full flex flex-col gap-y-2 gap-x-2 items-end xl:flex-row xl:items-center xl:justify-end">
+
+          <div className="flex gap-x-3 w-full">
+            <div className="w-full flex justify-end flex-1">
+              <SearchInTable placeH="Buscar proyecto.." />
+            </div>
+
+            <div className="hidden md:flex xl:hidden items-center gap-x-3 ">
+              {/* <div className="hidden xl:flex gap-x-2 items-center">
+                <TooltipContainerIcon label="Tabla">
+                  <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
+                    onClick={() => setIsTable(true)}
+                  />
+                </TooltipContainerIcon>
+                <TooltipContainerIcon label="Tarjeta">
+                  <PiTableThin onClick={() => setIsTable(false)} 
+                    className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
+                  />
+                </TooltipContainerIcon>
+              </div> */}
+              <TooltipFilterIcon handleFilter={handleFilter} />
+              <ButtonNew token={token} optClients={optClients} 
+                      optCategories={optCategories} optTypes={optTypes}
+                      user={user._id} optCompanies={optCompanies} condition={condition} />
+            </div>
+          </div>
+          
+          <div className="flex w-full xl:w-auto gap-x-2 items-center justify-end gap-y-2 flex-wrap md:flex-nowrap">
+            <DateRangePicker 
+              className=''
+              placeholder='Seleccione un rango de fechas'
+              onValueChange={(e) => {
+                setRangeDate(e);
+                if(e.from && e.to){
+                  handleDate(e.from, e.to);
+                }
+              }}
+              value={rangeDate}
+              locale={es}
+            />
+
+            <div className="flex justify-end gap-x-3 items-center">
+              <div className="inline-flex rounded-md shadow-sm" role="group">
+                {options.map((opt, index) => (
+                  <button
+                    key={opt}
+                    onClick={() => setSelected(opt)}
+                    className={`
+                      px-4 py-2 text-sm font-medium border border-gray-300
+                      ${index === 0 ? "rounded-l-lg" : ""}
+                      ${index === options.length - 1 ? "rounded-r-lg" : ""}
+                      ${selected === opt ? "bg-blue-600 text-white" : "bg-white hover:bg-gray-100"}
+                    `}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+
+              {selected==='Ganancia'? (
+                <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} 
+                    cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+                    dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de ganancias por proyectos`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <TooltipContainerIcon label="Ganancia">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </TooltipContainerIcon>
+                    ) : (
+                      <TooltipContainerIcon label="Ganancia">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </TooltipContainerIcon>
+                    ) }
+                </PDFDownloadLink>
+              ): (
+                <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} 
+                    cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+                    dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <TooltipContainerIcon label="costo beneficio">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </TooltipContainerIcon>
+                    ) : (
+                      <TooltipContainerIcon label="costo beneficio">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </TooltipContainerIcon>
+                    ) }
+                </PDFDownloadLink>
+              )}
+              {selected==='Ganancia'? (
+                <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} 
+                    benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+                    dateIni={rangeDate.from?? new Date()} order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <TooltipContainerIcon label="Ganancia">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </TooltipContainerIcon>
+                    ) : (
+                      <TooltipContainerIcon label="Ganancia">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+                      </TooltipContainerIcon>
+                    ) }
+                </PDFDownloadLink>
+              ): (
+                <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} 
+                    cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+                    dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <TooltipContainerIcon label="costo beneficio">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </TooltipContainerIcon>
+                    ) : (
+                      <TooltipContainerIcon label="costo beneficio">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+                      </TooltipContainerIcon>
+                    ) }
+                </PDFDownloadLink>
+              )}
+
+              <div className="hidden xl:flex items-center gap-x-3 ">
+                <div className="hidden xl:flex gap-x-2 items-center">
+                  <TooltipContainerIcon label="Tabla">
+                    <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
+                      onClick={() => setIsTable(true)}
+                    />
+                  </TooltipContainerIcon>
+                  <TooltipContainerIcon label="Tarjeta">
+                    <PiTableThin onClick={() => setIsTable(false)} 
+                      className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
+                    />
+                  </TooltipContainerIcon>
+                </div>
+                <TooltipFilterIcon handleFilter={handleFilter} />
+                <ButtonNew token={token} optClients={optClients} 
+                        optCategories={optCategories} optTypes={optTypes}
+                        user={user._id} optCompanies={optCompanies} condition={condition} />
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        {/* <div className="mt-7 flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end print:hidden">
+          
+          
+          
           <div>
             <div className="flex gap-x-3 items-center print:hidden">
-              {role.toLowerCase().includes('super') && isWide && reportPDF}
+              <div className="2xl:block">
+                {role.toLowerCase().includes('super') && isWide && reportPDF}
+              </div>
               {widthPage > 500 && (
                 <>
                   <TooltipContainerIcon label="Tabla">
@@ -354,19 +681,48 @@ export default function ContainerClient({token, optClients, optCategories,
                   </TooltipContainerIcon>
                 </>
               )}
-              <TooltipFilterIcon handleFilter={handleFilter} />
-              <ButtonNew token={token} optClients={optClients} 
+              <div className="hidden md:flex items-center gap-x-3">
+                <TooltipFilterIcon handleFilter={handleFilter} />
+                <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
                       user={user._id} optCompanies={optCompanies} condition={condition} />
+              </div>
+
+              <div className="inline-flex rounded-md shadow-sm md:hidden" role="group">
+                {options.map((opt, index) => (
+                  <button
+                    key={opt}
+                    onClick={() => setSelected(opt)}
+                    className={`
+                      px-4 py-2 text-sm font-medium border border-gray-300
+                      ${index === 0 ? "rounded-l-lg" : ""}
+                      ${index === options.length - 1 ? "rounded-r-lg" : ""}
+                      ${selected === opt ? "bg-blue-600 text-white" : "bg-white hover:bg-gray-100"}
+                    `}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+
             </div>
           </div>
         </div>
       </div>
-      {role.toLowerCase().includes('super') && !isWide && (
-        <div className="flex justify-end items-center gap-x-3">
-          {reportPDF}
-        </div>
-      )}
+      <div className="2xl:hidden">
+        {role.toLowerCase().includes('super') && !isWide && (
+          <div className="flex justify-end items-center gap-x-3">
+            {reportPDF}
+          </div>
+        )}
+      </div>
+
+      <div className="md:hidden">
+        {reportPDFResponsive}
+      </div> */}
+
+      </div>
+
       <div className="mt-5">
         <TableProjects data={dataTable} token={token} projects={projectStore.length > 0? projectStore: projects} 
           optCategories={optCategoriesFilter} optTypes={optTypesFilter}

@@ -505,6 +505,7 @@ export function getTypeFiles(expense:ICostsByProject) {
 
 export function ProjectBudgetDataToTableDataProjectMin(budgets:IBudgetByProject[]){
   const table: ProjectsBudgetTable[] = [];
+  // console.log('budgets', budgets);
   budgets.map((budget) => {
     let p: string;
     if(budget.progressAverage){
@@ -512,13 +513,15 @@ export function ProjectBudgetDataToTableDataProjectMin(budgets:IBudgetByProject[
     }else{
       p = '0%';
     }
+
+    // console.log('budget', budget);
     
     table.push({
       pending: budget.pending,
       id: budget._id,
       project: {
         budget: budget.title,
-        project: budget.project.photo
+        project: budget?.project?.photo ?? '/img/projects/default.svg'
       },
       status: budget.status,
       percentage: p,

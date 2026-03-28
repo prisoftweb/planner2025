@@ -248,7 +248,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
             selected={new Date(startDate)} onChange={(date:Date) => setStartDate(date.toDateString())} 
           />
         </div>
-        <div className=" flex gap-x-3">
+        {/* <div className=" flex gap-x-3"> */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-3 gap-y-2">
           <div>
             <Label htmlFor="guarantee"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fondo de garantia</p></Label>
             <div className="inline-flex rounded-md shadow-sm mx-2">
@@ -266,7 +267,8 @@ export default function ExtraDataStepper({token, optClients, optCategories,
               </button>
             </div>
           </div>
-          <div>
+          
+          <div >
             <Label htmlFor="haveAddress"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tiene direccion?</p></Label>
             <div className="inline-flex rounded-md shadow-sm mx-2">
               <button type="button" className={`px-3 py-1 text-sm border border-green-400 rounded-md 

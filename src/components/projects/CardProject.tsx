@@ -8,17 +8,20 @@ export default function CardProject({project, token, deleteIcon=true, url=`/proj
                       {project:ProjectMin, token:string, deleteIcon?:boolean, url?:string}){
   return(
     <>
-      <Link href={url}>
+      {/* <Link href={url}> */}
+      <>
         <div className="grid grid-cols-3 gap-x-2 p-3 border border-slate-700 
               rounded-xl bg-white shadow-md shadow-slate-500 hover:shadow-xl 
               hover:shadow-slate-600">
           <div className="col-span-2">
             <div className="flex items-center justify-between">
-              <div className="flex flex-col items-center gap-y-1">
+              <div className="flex flex-col items-center gap-y-1 cursor-pointer"
+                onClick={() => window.location.replace(url)}
+              >
                 <img src={project.photo} alt="logo" className="w-8 h-auto rounded-full" />
                 <div className={`w-3 h-3 ${project.status? 'bg-green-500': 'bg-red-500'}`}></div>
               </div>
-              <div>
+              <div className="cursor-pointer" onClick={() => window.location.replace(url)} >
                 <p>{project.title}</p>
                 <p>{project.account}</p>
               </div>
@@ -46,7 +49,8 @@ export default function CardProject({project, token, deleteIcon=true, url=`/proj
                         / 86400000): 0 } dias</p>
           </div>
         </div>
-      </Link>
+      {/* </Link> */}
+      </>
     </>
   )
 }

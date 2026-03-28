@@ -53,7 +53,7 @@ export default function NavTab({option}: {option:number}){
             </div>
           </Tooltip>
         </Link>
-        <Link href='/companies'>
+        {/* <Link href='/companies'>
           <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
             className="text-blue-500 text-sm font-thin bg-white rounded-md border border-slate-400" content='Compañia'
             placement="right"
@@ -67,7 +67,7 @@ export default function NavTab({option}: {option:number}){
               />
             </div>
           </Tooltip>
-        </Link>
+        </Link> */}
         <Link href='/glossary'>
           <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
             className="text-blue-500 text-sm font-thin bg-white mx-3 rounded-md border border-slate-400" content='Glosarios'
@@ -112,10 +112,10 @@ export default function NavTab({option}: {option:number}){
         <span className="text-xs">Departamentos</span>
       </Link>
 
-      <Link href="/companies" className="flex flex-col items-center">
+      {/* <Link href="/companies" className="flex flex-col items-center">
         <GoOrganization className={`w-6 h-6 ${option===2 ? 'text-green-500' : 'text-slate-500'}`} />
         <span className="text-xs">Compañia</span>
-      </Link>
+      </Link> */}
 
       <Link href="/glossary" className="flex flex-col items-center">
         <LiaListAlt className={`w-6 h-6 ${option===4 ? 'text-green-500' : 'text-slate-500'}`} />

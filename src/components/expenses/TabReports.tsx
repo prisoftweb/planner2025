@@ -1,6 +1,10 @@
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
 
 import { PencilIcon } from "@heroicons/react/24/solid";
+import { PiProjectorScreenChartLight } from "react-icons/pi";
+import { VscSymbolClass } from "react-icons/vsc";
+import { BiSolidCategoryAlt } from "react-icons/bi";
+import { MdBusinessCenter } from "react-icons/md";
 
 export default function TabReports({option, setOption}: {option: number, setOption: Function}){
   
@@ -78,28 +82,28 @@ export default function TabReports({option, setOption}: {option: number, setOpti
 
       <div className="grid grid-cols-4 mt-3 border-t pt-2 sm:hidden">
         <div className="flex flex-col items-center">
-          <PencilIcon 
+          <PiProjectorScreenChartLight
             className={`w-6 h-6 cursor-pointer ${option===0 ? 'text-green-500' : 'text-slate-500'}`}
             onClick={() => onClick(0)} />
           <span className="text-xs">Proyecto</span>
         </div>
 
         <div className="flex flex-col items-center">
-          <PencilIcon 
+          <VscSymbolClass 
             className={`w-6 h-6 cursor-pointer ${option===1 ? 'text-green-500' : 'text-slate-500'}`}
             onClick={() => onClick(1)} />
           <span className="text-xs">Tipo</span>
         </div>
 
         <div className="flex flex-col items-center">
-          <PencilIcon 
+          <BiSolidCategoryAlt
             className={`w-6 h-6 cursor-pointer ${option===2 ? 'text-green-500' : 'text-slate-500'}`}
             onClick={() => onClick(2)} />
           <span className="text-xs">Categoria</span>
         </div>
 
         <div className="flex flex-col items-center">
-          <PencilIcon 
+          <MdBusinessCenter 
             className={`w-6 h-6 cursor-pointer ${option===3 ? 'text-green-500' : 'text-slate-500'}`}
             onClick={() => onClick(3)} />
           <span className="text-xs">Concepto</span>

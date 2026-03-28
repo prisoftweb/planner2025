@@ -75,7 +75,8 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
-        <div className="flex items-center">
+        
+        <div className="w-full flex items-center">
           <Link href={'/'}>
             <TooltipContainerIcon label="Regresar">
               <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
@@ -84,11 +85,15 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
             </TooltipContainerIcon>
           </Link>
           <p className="text-xl w-56 ml-4 font-medium">Historial de proyectos</p>
+          <div className="flex-1 flex justify-end md:hidden">
+            <TooltipFilterIcon handleFilter={handleFilter} />
+          </div>
         </div>
+        
         <div className="flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end">
           <SearchInTable placeH="Buscar proyecto.." />
           <div className="">
-            <div className="flex gap-x-3 items-center">
+            {/* <div className="flex gap-x-3 items-center">
               {widthPage >= 500 && (
                 <>
                   <TooltipContainerIcon label="Tabla">
@@ -103,6 +108,21 @@ export default function ContainerHistoryClient({token, data, optCategoriesFilter
                   </TooltipContainerIcon>
                 </>
               )}
+              <TooltipFilterIcon handleFilter={handleFilter} />
+            </div> */}
+            <div className="hidden md:flex gap-x-3 items-center">
+              <div className="hidden xl:flex gap-x-3 items-center">
+                <TooltipContainerIcon label="Tabla">
+                  <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100" 
+                    onClick={() => setIsTable(true)}
+                  />
+                </TooltipContainerIcon>
+                <TooltipContainerIcon label="Tarjeta">
+                  <PiTableThin onClick={() => setIsTable(false)} 
+                    className="text-slate-600 w-10 h-10 cursor-pointer hover:bg-blue-100"
+                  />
+                </TooltipContainerIcon>
+              </div>
               <TooltipFilterIcon handleFilter={handleFilter} />
             </div>
           </div>
