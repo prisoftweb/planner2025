@@ -19,6 +19,14 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
   const [editCostCenter, setEditCostCenter] = useState<boolean>(false);
   const [costCenter, setCostCenter] = useState<CostCenterTable>();
 
+  const handleCostCenter = (costCenter: CostCenterTable) => {
+    setCostCenter(costCenter);
+  }
+
+  const handleEditCostCenter = (value: boolean) => {
+    setEditCostCenter(value);
+  }
+
   const columns = [
     columnHelper.accessor(row => row.id, {
       id: 'seleccion',
@@ -111,14 +119,15 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
         <Table columns={columns} data={data} placeH="Buscar centro de costo.." />
       </div>
       <div className="block md:hidden w-full">
-        <ListData data={data} token={token} />
+        <ListData data={data} token={token} handleCostCenter={handleCostCenter} handleEditCostCenter={handleEditCostCenter} />
       </div>
     </>
   )
 }
 
-const ListData = ({data, token }: 
-  {data: CostCenterTable[], token:string }) => {
+const ListData = ({data, token, handleCostCenter, handleEditCostCenter }: 
+  {data: CostCenterTable[], token:string, handleCostCenter: (costCenter: CostCenterTable) => void, 
+    handleEditCostCenter: (value: boolean) => void }) => {
 
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
@@ -139,7 +148,7 @@ const ListData = ({data, token }:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((c) => (
-            <CardCostcenter costcenter={c} key={c.id} token={token} />
+            <CardCostcenter costcenter={c} key={c.id} token={token} handleCostCenter={handleCostCenter} handleEditCostCenter={handleEditCostCenter} />
           ))}
 
         </nav>
@@ -148,8 +157,9 @@ const ListData = ({data, token }:
   )
 }
 
-const CardCostcenter = ({costcenter, token }: 
-  {costcenter:CostCenterTable, token:string }) => {
+const CardCostcenter = ({costcenter, token, handleCostCenter, handleEditCostCenter }: 
+  {costcenter:CostCenterTable, token:string, handleCostCenter: (costCenter: CostCenterTable) => void, 
+    handleEditCostCenter: (value: boolean) => void }) => {
   
   return(
     <div role="button"
@@ -161,7 +171,7 @@ const CardCostcenter = ({costcenter, token }:
         bg-white`}
     >
       <div className="flex items-center w-full ">
-        <div className="grid mr-4 place-items-center">
+        <div className="grid mr-4 place-items-center gap-y-1">
           {/* <img alt="responsable" src={ costcenter.Responsable?.photo ?? '/img/users/default.jpg'}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
           {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
@@ -171,11 +181,18 @@ const CardCostcenter = ({costcenter, token }:
               uppercase w-6 h-6 flex items-center justify-center`}>
               <p className={`text-xs uppercase `} >{costcenter.code.toString()}</p>
             </div>
+
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Modificar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+              <PencilIcon className="w-6 h-6 text-slate-600 cursor-pointer hover:bg-slate-100" 
+                onClick={() => {
+                  handleCostCenter(costcenter);
+                  handleEditCostCenter(true);
+                }} />
+            </Tooltip>
+
             <DeleteElement remove={RemoveCostoCenter} id={costcenter.id} 
               token={token} name={costcenter.category} />
-            {/* <RemoveElement id={costcenter.id} name={costcenter.Descripcion} 
-              remove={RemoveCost} removeElement={delCost} 
-              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
         </div>
         <div className="w-full">
           <div className="flex gap-x-3 w-full justify-between items-center p-3">

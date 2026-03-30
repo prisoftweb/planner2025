@@ -27,9 +27,19 @@ export default function HeaderProfileExpense({options, subTotal, idProv, pending
     //   <Selectize options={options} routePage="expenses" subpath="/profile"
     //     onChangeFunction={handleExpense} />
     // </Header>
-    <Header title={subTotal} previousPage={prevPage}>
-      <Selectize options={options} routePage="expenses" subpath="/profile"
-        onChangeFunction={handleExpense} />
-    </Header>
+    <>
+      <Header title={subTotal} previousPage={prevPage}>
+        <>
+          <div className="hidden sm:flex justify-end w-full">
+            <Selectize options={options} routePage="expenses" subpath="/profile"
+              onChangeFunction={handleExpense} />
+          </div>
+        </>
+      </Header>
+      <div className=" sm:hidden mt-2 w-full">
+        <Selectize options={options} routePage="expenses" subpath="/profile"
+          onChangeFunction={handleExpense} />
+      </div>
+    </>
   )
 }

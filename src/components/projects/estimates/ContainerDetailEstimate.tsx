@@ -128,8 +128,15 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
           </div>
           <p className="text-xl ml-4 font-medium">{project.title} {'->'} {estimate?.name || 'sin estimacion'} </p>
         </div>
+        <div className="hidden sm:flex">
+          {button}
+        </div>
+      </div>
+      
+      <div className="flex sm:hidden w-full justify-end mb-2">
         {button}
       </div>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-5 mt-2 sm:mt-3 md:mt-5 gap-y-2">
         <div className="bg-white p-3">
           <img src={project.client.logo} alt={project.client.name} className="h-20 w-auto " />

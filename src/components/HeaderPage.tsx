@@ -8,7 +8,7 @@ export default function Header({children, title, previousPage}:
   
   return(
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-x-2">
         <div className="flex items-center">
           <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">

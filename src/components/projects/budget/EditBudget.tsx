@@ -1,7 +1,7 @@
 'use client'
-import { XMarkIcon } from "@heroicons/react/24/solid"
+// import { XMarkIcon } from "@heroicons/react/24/solid"
 import { useState, useEffect } from "react"
-
+import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 import { BudgetTableCostCenter } from "@/interfaces/Budget"
 import Button from "@/components/Button";
 import Label from "@/components/Label";
@@ -12,7 +12,7 @@ import { UpdateNewBudgetInBudget, getBudget } from "@/app/api/routeBudget";
 import { useOneBudget } from "@/app/store/budgetProject";
 
 type Params = {
-  showForm:Function, 
+  showForm:(value: boolean) => void, 
   token:string, 
   budget: BudgetTableCostCenter, 
   idBudget:string, 
@@ -112,8 +112,9 @@ export default function EditBudget({showForm, token, budget, idBudget, user}: Pa
           <HeaderForm img="/img/projects/default.svg" subtitle="Cambia monto de centro de costo" 
             title="Modificar informe presupuesto"
           />
-          <XMarkIcon className="w-6 h-6 text-slate-500
-            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} />
+          {/* <XMarkIcon className="w-6 h-6 text-slate-500
+            hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => showForm(false)} /> */}
+          <TooltipCloseIcon handleClose={showForm} />
         </div>
         
         <div>

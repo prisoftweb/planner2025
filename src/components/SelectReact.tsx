@@ -4,7 +4,7 @@ import { useState } from 'react'
 
 export default function SelectReact({opts, setValue, index, disabled=false, moveRep=undefined, idRep='0'}: 
   {opts:Options[], setValue:Function, index:number, disabled?:boolean, 
-    idRep?:string|undefined, moveRep?: ((a:string, b:string) => void)}){
+    idRep?:string|undefined, moveRep?: ((a:string, b:string, c:string) => void)}){
   
   const [selOpt, setSelOpt] = useState<Options>(index!== undefined? opts[index]: opts[opts.length-1]);
   
@@ -16,7 +16,7 @@ export default function SelectReact({opts, setValue, index, disabled=false, move
         setSelOpt(e); 
         setValue(e.value)
         if(idRep && moveRep){
-          moveRep(idRep, e.value);
+          moveRep(idRep, e.value, e.label);
         }
       }} 
       className="w-full text-lg mt-2 text-gray-900  rounded-lg 

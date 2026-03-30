@@ -157,7 +157,7 @@ export default function TableCollectionsComponent({token, project, pageQuery}:
   return (
     <>
       <div className="flex w-full justify-end items-center p-3">
-        <PDFDownloadLink document={<DownloadCollectionsByProjectPDF project={project} token={token} collections={collections} />} fileName={project.title} >
+        <PDFDownloadLink document={<DownloadCollectionsByProjectPDF project={project} token={token} collections={collections} />} fileName={'Cobros - '+project.title} >
           {({loading, url, error, blob}) => 
             loading? (
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 

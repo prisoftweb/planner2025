@@ -75,16 +75,20 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
   return(
     <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
       <div className="flex justify-between items-center gap-x-3 gap-y-3 sm:flex-nowrap flex-wrap">
-        <div className="flex items-center">
+        <div className="flex flex-1 items-center">
           <TooltipContainerIcon label="Regresar">
             <div className="p-1 border border-slate-400 bg-white rounded-md cursor-pointer hover:bg-blue-100" onClick={() => window.location.replace('/')}>
               <TbArrowNarrowLeft className="w-10 h-10 text-slate-600"/>
             </div>
           </TooltipContainerIcon>
-          <p className="text-xl ml-4 font-medium">Presupuestos</p>
+          <p className="text-xl ml-4 flex-1 font-medium">Presupuestos</p>
+          <div className="flex sm:hidden justify-end gap-x-3 items-center">
+            <TooltipFilterIcon handleFilter={handleFilter} />
+            <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
+          </div>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
-          <div className="flex gap-x-3 gap-y-3 justify-end">
+          <div className="flex gap-x-3 gap-y-3 justify-end w-full sm:w-auto">
             {widthPage >= 500 && (
               <div className="hidden lg:flex gap-x-3 items-center">
                 <p>Vista: </p>
@@ -100,10 +104,12 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
                 </TooltipContainerIcon>
               </div>
             )}
-            <SearchInTable placeH="Buscar presupuesto.." />
+            <div className="flex w-full">
+              <SearchInTable placeH="Buscar presupuesto.." />
+            </div>
           </div>
           <div className="">
-            <div className="flex gap-x-3 items-center">
+            <div className="hidden sm:flex gap-x-3 items-center">
               <TooltipFilterIcon handleFilter={handleFilter} />
               <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
             </div>

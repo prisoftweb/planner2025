@@ -215,7 +215,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
           hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={() => closeForm(false)} /> */}
         <TooltipCloseIcon handleClose={closeForm} />
       </div>
-      <div className="grid grid-cols-3 gap-x-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-3 gap-y-2">
         <div className="bg-white p-3 rounded-lg shadow-md h-full">
           <div className="flex gap-x-2">
             <div>
@@ -272,7 +272,7 @@ export default function NewBudgetCostCenter({closeForm, costoCenters, user, toke
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-3 mt-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-2 mt-3">
         <div>
           <Select options={options} className="mt-2" 
             onChange={(value:any) => onChangeCostoCenter(value)}

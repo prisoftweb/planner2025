@@ -363,7 +363,7 @@ export default function TableInvoicesComponent({token, user}:
   //               </div>
       
   let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
-                          <div className="flex gap-x-4 justify-end items-center">
+                          <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
                             <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
                             <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
                             <ChipStatus id="678ed05cc5f08e8a0f36d5e1" addStatus={addStatus} removeStatus={deleteStatus} title="Pagada" />

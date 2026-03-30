@@ -86,8 +86,8 @@ export default function TableReports({data, token, reports, optCompanies,
     }
   }
 
-  const handleMoveCostsToReport = (id:string, destiny:string) => {
-    moveCostsToReport(token, id, destiny);
+  const handleMoveCostsToReport = (id:string, destiny:string, title:string) => {
+    moveCostsToReport(token, id, destiny, title);
   }
 
   const columns = [
@@ -372,13 +372,13 @@ export default function TableReports({data, token, reports, optCompanies,
   )
 }
 
-const moveCostsToReport = async (token:string, origin:string, destiny:string) => {
+const moveCostsToReport = async (token:string, origin:string, destiny:string, title:string) => {
 
   if(origin==='0') return;
   
   confirmAlert({
     title: 'Confirmacion para mover gastos',
-    message: `Desea mover los gastos de este informe?`,
+    message: `Desea mover los gastos de este informe al nuevo informe ${title}?`,
     buttons: [
     {
       label: 'Si',

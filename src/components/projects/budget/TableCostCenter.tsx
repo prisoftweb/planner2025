@@ -22,6 +22,10 @@ export default function TableCostCenter({dataTable, token, id, user}:
     setOpenEditBudget(value);
   }
 
+  const handleRowEditBudget = (value: BudgetTableCostCenter) => {
+    setRowEditBudget(value);
+  }
+
   const delBudget = async(id: string) => {
     const index = id.indexOf('/');
     const id_b = id.substring(0, index);
@@ -126,7 +130,8 @@ export default function TableCostCenter({dataTable, token, id, user}:
         <Table columns={columns} data={dataTable} placeH="Buscar costo.." />
       </div>
       <div className="block md:hidden w-full">
-        <ListData data={dataTable} token={token} delBudget={delBudget} id={id} />
+        <ListData data={dataTable} token={token} delBudget={delBudget} id={id} 
+          handleEditBudget={handleEditBudget} handleRowEditBudget={handleRowEditBudget} />
       </div>
       {openEditBudget && rowEditBudget && <EditBudget budget={rowEditBudget} showForm={handleEditBudget}
         token={token} idBudget={id} user={user} />}
@@ -134,8 +139,9 @@ export default function TableCostCenter({dataTable, token, id, user}:
   )
 }
 
-const ListData = ({data, token, delBudget, id }: 
-  {data: BudgetTableCostCenter[], token:string, delBudget:Function, id:string }) => {
+const ListData = ({data, token, delBudget, id, handleEditBudget, handleRowEditBudget }: 
+  {data: BudgetTableCostCenter[], token:string, delBudget:Function, id:string, 
+    handleEditBudget: (value: boolean) => void, handleRowEditBudget: (value: BudgetTableCostCenter) => void }) => {
 
   // const [dataReports, setDataReports] = useState(data);
   // const {search} = useTableStates();
@@ -156,7 +162,8 @@ const ListData = ({data, token, delBudget, id }:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {data.map((q) => (
-            <CardQuotations costcenter={q} key={q.id} token={token} delBudget={delBudget} id={id} />
+            <CardQuotations costcenter={q} key={q.id} token={token} delBudget={delBudget} id={id}
+              handleEditBudget={handleEditBudget} handleRowEditBudget={handleRowEditBudget} />
           ))}
 
         </nav>
@@ -165,8 +172,9 @@ const ListData = ({data, token, delBudget, id }:
   )
 }
 
-const CardQuotations = ({costcenter, token, delBudget, id }: 
-  {costcenter:BudgetTableCostCenter, token:string, delBudget:Function, id:string }) => {
+const CardQuotations = ({costcenter, token, delBudget, id, handleEditBudget, handleRowEditBudget }: 
+  {costcenter:BudgetTableCostCenter, token:string, delBudget:Function, id:string, 
+    handleEditBudget: (value: boolean) => void, handleRowEditBudget: (value: BudgetTableCostCenter) => void }) => {
   
   return(
     <div role="button"
@@ -192,7 +200,12 @@ const CardQuotations = ({costcenter, token, delBudget, id }:
         <div className="w-full"
           // onClick={() => window.location.replace(`/costcenter/${costcenter.id}`)}
         >
-          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3 cursor-pointer"
+            onClick={() => {
+              handleEditBudget(true);
+              handleRowEditBudget(costcenter);
+            }}
+          >
             <div>
               <h6
                 className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">

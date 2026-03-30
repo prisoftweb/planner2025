@@ -67,7 +67,7 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             />
           </div>
           <div className='flex items-center gap-x-1'>
-            <div className='sm:w-56 w-96'>
+            <div className='w-80 sm:w-56'>
               <Label htmlFor='project'>Proyecto</Label>
               <SelectReact index={0} opts={projects} setValue={handleProjects} />
             </div>

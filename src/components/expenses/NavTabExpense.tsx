@@ -27,51 +27,66 @@ export default function NavTabExpense({tab, idExp, pending, idProv, idProj, isHi
   const pathExp= isHistory? '/history': '';
 
   let tabCli: JSX.Element;
-  if(width < 710){
-    tabCli = <div className="flex justify-around mt-3">
-                    {/* <Link href={`/expenses${pathExp}/${idExp}/profile${previosFull}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
-                        <UserCircleIcon data-tooltip-target="tooltip-dark"
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>   */}
-                    <Link href={`/expenses${pathExp}/${idExp}/profile${previosFull}`} className="flex flex-col items-center">
-                      <UserCircleIcon 
-                        className={`w-6 h-6 cursor-pointer ${tab==='1' ? 'text-green-500' : 'text-slate-500'}`} />
-                      <span className="text-xs">Resumen</span>
-                    </Link>
-                    {/* <Link href={`/expenses${pathExp}/${idExp}/status${previosFull}`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estatus'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link> */}
-                    <Link href={`/expenses${pathExp}/${idExp}/status${previosFull}`} className="flex flex-col items-center">
-                      <UserCircleIcon 
-                        className={`w-6 h-6 cursor-pointer ${tab==='5' ? 'text-green-500' : 'text-slate-500'}`} />
-                      <span className="text-xs">Estatus</span>
-                    </Link>
-                  </div>                             
-  }else{
-    tabCli = (
-      <div className="flex mt-5 py-1 border-b border-blue-300">
-        <Link href={`/expenses${pathExp}/${idExp}/profile${previosFull}`}>
-          <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Resumen</p>
-          </div>
-        </Link>
-        <Link href={`/expenses${pathExp}/${idExp}/status${previosFull}`}>
-          <div className={`w-50 px-5 ${tab==='5'? 'border-b-4 border-blue-600':''}`}>
-            <p className="text-blue-600">Estatus</p>
-          </div>
-        </Link>
-      </div>
-    )
-  }
+  // if(width < 710){
+  //   tabCli = <div className="flex justify-around mt-3">
+  //                   {/* <Link href={`/expenses${pathExp}/${idExp}/profile${previosFull}`}>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+  //                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
+  //                       <UserCircleIcon data-tooltip-target="tooltip-dark"
+  //                         className={`w-6 h-6 text-slate-600 cursor-pointer 
+  //                         ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
+  //                     </Tooltip>
+  //                   </Link>   */}
+  //                   <Link href={`/expenses${pathExp}/${idExp}/profile${previosFull}`} className="flex flex-col items-center">
+  //                     <UserCircleIcon 
+  //                       className={`w-6 h-6 cursor-pointer ${tab==='1' ? 'text-green-500' : 'text-slate-500'}`} />
+  //                     <span className="text-xs">Resumen</span>
+  //                   </Link>
+  //                   {/* <Link href={`/expenses${pathExp}/${idExp}/status${previosFull}`}>
+  //                     <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+  //                       placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estatus'>
+  //                       <CreditCardIcon
+  //                         className={`w-6 h-6 text-slate-600 cursor-pointer 
+  //                         ${tab==='5'? 'bg-green-500 rounded-lg': ''}`} />
+  //                     </Tooltip>
+  //                   </Link> */}
+  //                   <Link href={`/expenses${pathExp}/${idExp}/status${previosFull}`} className="flex flex-col items-center">
+  //                     <UserCircleIcon 
+  //                       className={`w-6 h-6 cursor-pointer ${tab==='5' ? 'text-green-500' : 'text-slate-500'}`} />
+  //                     <span className="text-xs">Estatus</span>
+  //                   </Link>
+  //                 </div>                             
+  // }else{
+  //   tabCli = (
+  //     <div className="flex mt-5 py-1 border-b border-blue-300">
+  //       <Link href={`/expenses${pathExp}/${idExp}/profile${previosFull}`}>
+  //         <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
+  //           <p className="text-blue-600">Resumen</p>
+  //         </div>
+  //       </Link>
+  //       <Link href={`/expenses${pathExp}/${idExp}/status${previosFull}`}>
+  //         <div className={`w-50 px-5 ${tab==='5'? 'border-b-4 border-blue-600':''}`}>
+  //           <p className="text-blue-600">Estatus</p>
+  //         </div>
+  //       </Link>
+  //     </div>
+  //   )
+  // }
+
+  tabCli = (
+    <div className="flex mt-5 py-1 border-b border-blue-300">
+      <Link href={`/expenses${pathExp}/${idExp}/profile${previosFull}`}>
+        <div className={`w-50 px-5 ${tab==='1'? 'border-b-4 border-blue-600':''}`}>
+          <p className="text-blue-600">Resumen</p>
+        </div>
+      </Link>
+      <Link href={`/expenses${pathExp}/${idExp}/status${previosFull}`}>
+        <div className={`w-50 px-5 ${tab==='5'? 'border-b-4 border-blue-600':''}`}>
+          <p className="text-blue-600">Estatus</p>
+        </div>
+      </Link>
+    </div>
+  )
   
   return(
     <>

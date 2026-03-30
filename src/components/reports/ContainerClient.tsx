@@ -134,7 +134,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
       </div>
       <div className="mt-5 block md:hidden w-full">
         <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap sm:flex-nowrap">
-          <div className="flex items-center gap-x-3 w-full max-w-96">
+          <div className="flex items-center gap-x-3 w-full md:max-w-96">
             <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
               <Link href={'/'}>
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Regresar' 
@@ -145,8 +145,8 @@ export default function ContainerClient({token, optCompanies, optDepartments,
                 </Tooltip>
               </Link>
             </div>
-            <p className="text-xl ml-4 font-medium">Informes</p>
-            <div className="flex gap-x-4 items-center">
+            <p className="text-xl flex-1 ml-4 font-medium">Informes</p>
+            <div className="flex sm:hidden gap-x-4 items-center justify-end">
               <TooltipFilterIcon handleFilter={handleFilter} />
               {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
                                 projects={optProjects} token={token} condition={condition} user={user._id}
@@ -155,6 +155,12 @@ export default function ContainerClient({token, optCompanies, optDepartments,
           </div>
           <div className="flex gap-x-3 justify-end w-full">
             <SearchInTable placeH="Buscar Informe.." />
+          </div>
+          <div className="hidden sm:flex gap-x-4 items-center justify-end">
+            <TooltipFilterIcon handleFilter={handleFilter} />
+            {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
+                              projects={optProjects} token={token} condition={condition} user={user._id}
+                            />}
           </div>
         </div>
         <ListData data={dataTable} token={token} isHistory={isHistory} isFilter={isFilter}

@@ -57,7 +57,7 @@ export default function NavTabEstimates({tab, id_p, pageQuery}:
             <div className="flex flex-col items-center">
               <DocumentChartBarIcon 
                 className={`w-6 h-6 cursor-pointer ${tab===1 ? 'text-green-500' : 'text-slate-500'}`}
-                onClick={() => () => window.location.replace(pageQuery? `/projects/estimates/${id_p}/invoice?page=projects`: `/projects/estimates/${id_p}/invoice`)} />
+                onClick={ () => window.location.replace(pageQuery? `/projects/estimates/${id_p}/invoice?page=projects`: `/projects/estimates/${id_p}/invoice`)} />
               <span className="text-xs">Facturas</span>
             </div>
 
