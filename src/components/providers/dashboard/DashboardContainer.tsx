@@ -219,19 +219,19 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
         </div>
       </div>
       
-      <div className="flex gap-x-5">
-        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-2/3">
+      <div className="flex gap-x-5 flex-wrap lg:flex-nowrap">
+        <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-full lg:w-2/3">
           <h1>GASTOS CON PROVEEDORES</h1>
           <BarChartComponent categories={['costo']} colors={colors} data={dataAllProviders} />    
         </div>
-        <div className="bg-white border w-1/3 border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
+        <div className="bg-white border w-full lg:w-1/3 border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5">
           <h1>GASTOS CON PROVEEDORES CON CREDITO</h1>
           {/* <BarChartComponent categories={['costo']} colors={colors} data={dataProvidersTradeLine} />     */}
           <LineChartComponent colors={colors} dataProjectsTop={dataProvidersTradeLine} />
         </div>
       </div>
 
-      <div className="flex gap-x-5">
+      <div className="flex gap-x-5 flex-wrap lg:flex-nowrap">
         <div className="bg-white border border-slate-100 shadow-lg shadow-slate-500 p-5 mt-5 w-full md:w-1/2 2xl:w-1/3">
           *<h1>SALDOS PENDIENTES DE PAGO</h1>
           <DonutPendingPaymentProvidersChartComponent data={dataPendingPayment} colors={colors} category="percentaje"

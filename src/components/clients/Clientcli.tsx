@@ -47,12 +47,12 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
             <DataBasic token={token} client={client} id={id} tags={tags} 
               editInfo={true} />
           </div>) : 
-      (opt===3? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+      (opt===3? (<div className="mt-3 w-full sm:max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                     style={{borderColor:'#F8FAFC'}}>
               <ExtraData token={token} id={id} link={client.link? client.link: ''}
                 editInfo={true} />
             </div>): 
-      (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
+      (opt===4? (<div className="mt-3 w-full sm:max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
                       style={{borderColor:'#F8FAFC'}}>
                 <AddressClient client={client} token={token} 
                   editInfo={true} />
@@ -61,12 +61,12 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
                         style={{borderColor:'#F8FAFC'}}>
                   <Contacts id={id} contacts={client.contact || []} token={token}
                     editInfo={true} />
-                </div>):  (<div className="mt-3 w-full p-2" 
+                </div>):  (<div className="mt-3 w-full md:p-2" 
                                     style={{borderColor:'#F8FAFC'}}>
                               <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
                                 <Sumary totalprj={totalprj} totalColl={totalColl} 
                                     totalPenBil={totalPenBil} totalpay={totalpay} />
-                                <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
+                                <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full sm:max-w-md mt-2">
                                   <ShowContactasClicComponent client={client} token={token} idCli={id} />
                                 </div>
                               </div>
@@ -80,16 +80,20 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
 
   return(
     <>
+      <div className={`md:hidden bg-white`}>
+        <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} 
+            option={opt} clientPermission={clientPermissions} />
+      </div>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
+        <div className={`hidden md:block bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={handleOpen} changeOption={handleOpt} 
                 option={opt} clientPermission={clientPermissions} />
           </div>
         </div>
-        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
+        <div className="flex w-full md:px-2 flex-wrap lg:flex-nowrap lg:space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
-          <div className={`w-full max-w-md`}>
+          <div className={`w-full sm:max-w-md`}>
             <ProfileClient />
           </div>
           {view}

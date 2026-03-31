@@ -97,7 +97,7 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
   return(
     <>
       <form id="basicdata" onSubmit={formik.handleSubmit} className="mt-4 w-full">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="col-span-2">
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
             <Input type="text" name="name" autoFocus 

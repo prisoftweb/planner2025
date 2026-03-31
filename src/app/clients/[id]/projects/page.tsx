@@ -7,7 +7,6 @@ import { UsrBack } from "@/interfaces/User"
 import { getClient, getClients, getProjectsByClient } from "@/app/api/routeClients"
 import { ClientBack } from "@/interfaces/Clients"
 import { Options } from "@/interfaces/Common"
-import { ProjectMin } from "@/interfaces/Projects"
 import TableProjectsClient from "@/components/clients/projects/TableProjectsClient"
 
 export default async function Page({ params }: { params: { id: string }}){
@@ -66,8 +65,6 @@ export default async function Page({ params }: { params: { id: string }}){
     })
   })
 
-  // const table: ProjectsTable[] = ProjectsClientDataToTableDataMin(projects);
-  
   return(
     <>
       <Navigation user={user} />

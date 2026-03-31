@@ -2,10 +2,19 @@
 
 import Link from "next/link"
 import { useState, useEffect } from "react";
-import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon, 
-  DocumentChartBarIcon } from "@heroicons/react/24/solid"
+// import { UserCircleIcon, CurrencyDollarIcon, CreditCardIcon, 
+//   DocumentChartBarIcon } from "@heroicons/react/24/solid"
 import {Tooltip} from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
+
+import { LuLayoutDashboard } from "react-icons/lu";
+import { PiProjectorScreenChartDuotone } from "react-icons/pi";
+import { BsCashCoin } from "react-icons/bs";
+import { TbBriefcaseFilled } from "react-icons/tb";
+import { PiHandCoinsLight } from "react-icons/pi";
+import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
+import { MdAccountBalanceWallet } from "react-icons/md";
+import { TbPigMoney } from "react-icons/tb";
 
 export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPro:string, isHistory?: boolean}){
 
@@ -92,11 +101,11 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
     //                 </Link>
     //               </div>
 
-    tabCli = <div className="grid grid-cols-4 sm:grid-cols-8 mt-3 border-t pt-2 gap-y-2">
+    tabCli = <div className="grid grid-cols-8 mt-3 border-t pt-2 gap-y-2">
                 <Link href={isHistory ? `/projects/history/${idPro}` : `/projects/${idPro}/profile`} className="flex flex-col items-center" >
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Resumen'>
-                    <UserCircleIcon 
+                    <LuLayoutDashboard 
                       className={`w-6 h-6 cursor-pointer ${tab==='1' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>
@@ -106,7 +115,7 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
                 <Link href={`/projects/${idPro}/analysis${query}`} className="flex flex-col items-center">
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Analisis'>
-                    <DocumentChartBarIcon
+                    <PiProjectorScreenChartDuotone
                       className={`w-6 h-6 cursor-pointer ${tab==='2' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>
@@ -116,7 +125,7 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
                 <Link href={`/projects/${idPro}/budgets${query}`} className="flex flex-col items-center">
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Presupuesto'>
-                    <CurrencyDollarIcon
+                    <BsCashCoin
                       className={`w-6 h-6 cursor-pointer ${tab==='3' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>
@@ -126,7 +135,7 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
                 <Link href={`/projects/${idPro}/costs${query}`} className="flex flex-col items-center">
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Costo'>
-                    <CreditCardIcon
+                    <TbBriefcaseFilled
                       className={`w-6 h-6 cursor-pointer ${tab==='4' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>
@@ -136,7 +145,7 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
                 <Link href={`/projects/estimates/${idPro}?page=projects`} className="flex flex-col items-center">
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
-                    <CreditCardIcon
+                    <PiHandCoinsLight
                       className={`w-6 h-6 cursor-pointer ${tab==='5' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>
@@ -146,7 +155,7 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
                 <Link href={`/projects/estimates/${idPro}/invoice?page=projects`} className="flex flex-col items-center">
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Facturacion'>
-                    <CreditCardIcon
+                    <LiaFileInvoiceDollarSolid
                       className={`w-6 h-6 cursor-pointer ${tab==='6' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>
@@ -156,7 +165,7 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
                 <Link href={`/projects/estimates/${idPro}/collections?page=projects`} className="flex flex-col items-center">
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
-                    <CreditCardIcon
+                    <MdAccountBalanceWallet
                       className={`w-6 h-6 cursor-pointer ${tab==='7' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>
@@ -166,7 +175,7 @@ export default function NavTabProject({tab, idPro, isHistory}: {tab:string, idPr
                 <Link href={`/projects/${idPro}/guaranteefunds${query}`} className="flex flex-col items-center">
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                         placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Fondo garantia'>
-                    <CreditCardIcon
+                    <TbPigMoney
                       className={`w-6 h-6 cursor-pointer ${tab==='8' ? 'text-green-500' : 'text-slate-500'}`}
                     />
                   </Tooltip>

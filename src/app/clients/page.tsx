@@ -5,7 +5,8 @@ import ButtonNewClient from "@/components/clients/ButtonNewClient";
 import Navigation from "@/components/navigation/Navigation";
 import { TableClient, Tag } from "@/interfaces/Clients";
 import { UsrBack } from "@/interfaces/User";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader } from "@/components/Header";
 import TableClients from "@/components/clients/TableClients";
 import { Options } from "@/interfaces/Common";
 import { ClientDataToTableClient } from "../functions/ClientFunctions";
@@ -119,14 +120,14 @@ export default async function clients(){
     <>
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
-        <Header title="Clientes" placeHolder="Buscar cliente.." >
+        <ResponsiveHeader title="Clientes" placeHolder="Buscar cliente.." >
           {/* {permisionsClient.permission.create? (
             <ButtonNewClient id={user._id} token={token} tags={arrTags} />
           ): (
             <></>
           )} */}
           <ButtonNewClient id={user._id} token={token} tags={arrTags} />
-        </Header>
+        </ResponsiveHeader>
         <div className="mt-5">
           <TableClients data={data} token={token} 
             // deletePermission={permisionsClient.permission.delete}

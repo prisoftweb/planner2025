@@ -166,7 +166,7 @@ export default function NavResponsive({open, setOpen, option, changeOption}:
     )
   }
 
-  const tabCli = <div className="grid grid-cols-4 sm:grid-cols-8 mt-3 border-t pt-2">
+  const tabCli = <div className="grid grid-cols-8 mt-3 border-t pt-2">
               <div  className="flex flex-col items-center"
                 onClick={() => changeOption(1)}
               >

@@ -203,10 +203,45 @@ export default function NavResponsive({open, setOpen, option, changeOption, clie
       </div>
     )
   }
+
+  const navResponsive = (
+    <div className={`grid ${contactData? 'grid-cols-5': 'grid-cols-4'} mt-3 border-t pt-2 sm:hidden`}>
+      <div onClick={() => changeOption(1)} className="flex flex-col items-center">
+        <PiPresentationChartLight className={`w-6 h-6 ${option===1 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Resumen</span>
+      </div>
+
+      <div onClick={() => changeOption(2)} className="flex flex-col items-center">
+        <ImProfile className={`w-6 h-6 ${option===2 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Datos basicos</span>
+      </div>
+
+      <div onClick={() => changeOption(3)} className="flex flex-col items-center">
+        <FaRegImage className={`w-6 h-6 ${option===3 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Datos extras</span>
+      </div>
+
+      <div onClick={() => changeOption(4)} className="flex flex-col items-center">
+        <FaAddressCard className={`w-6 h-6 ${option===4 ? 'text-green-500' : 'text-slate-500'}`} />
+        <span className="text-xs">Direccion</span>
+      </div>
+
+      {contactData && (
+        <div onClick={() => changeOption(5)} className="flex flex-col items-center">
+          <MdContactPhone className={`w-6 h-6 ${option===5 ? 'text-green-500' : 'text-slate-500'}`} />
+          <span className="text-xs">Contactos</span>
+        </div>)}
+    </div>
+  )
    
   return(
     <>
-      {nav}
+      <div className="hidden md:block">
+        {nav}
+      </div>
+      <div className=" md:hidden">
+        {navResponsive}
+      </div>
     </>
   )
 }

@@ -21,40 +21,64 @@ export default function NavTab({tab, idCli}: {tab:string, idCli:string}){
   
   let tabCli: JSX.Element = <></>;
   if(width < 710){
-    tabCli = <div className="flex justify-between mt-3">
-                    <Link href={`/clients/${idCli}/profile`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
-                          <UserCircleIcon data-tooltip-target="tooltip-dark"
-                            className={`w-6 h-6 text-slate-600 cursor-pointer 
-                            ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>  
-                    <Link href={`/clients/${idCli}/projects`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Proyectos'>
-                        <DocumentChartBarIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/clients/${idCli}/estimates`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
-                        <CurrencyDollarIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                    <Link href={`/clients/${idCli}/wallet`}>
-                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
-                        placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
-                        <CreditCardIcon
-                          className={`w-6 h-6 text-slate-600 cursor-pointer 
-                          ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
-                      </Tooltip>
-                    </Link>
-                  </div>                             
+    // tabCli = <div className="flex justify-between mt-3">
+    //                 <Link href={`/clients/${idCli}/profile`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Perfil'>
+    //                       <UserCircleIcon data-tooltip-target="tooltip-dark"
+    //                         className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                         ${tab==='1'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>  
+    //                 <Link href={`/clients/${idCli}/projects`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Proyectos'>
+    //                     <DocumentChartBarIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='2'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/clients/${idCli}/estimates`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Estimaciones'>
+    //                     <CurrencyDollarIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='3'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //                 <Link href={`/clients/${idCli}/wallet`}>
+    //                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
+    //                     placement="bottom" className="bg-white text-blue-500 rounded-md border border-slate-400" content='Cobranza'>
+    //                     <CreditCardIcon
+    //                       className={`w-6 h-6 text-slate-600 cursor-pointer 
+    //                       ${tab==='4'? 'bg-green-500 rounded-lg': ''}`} />
+    //                   </Tooltip>
+    //                 </Link>
+    //               </div>                             
+
+    tabCli=(
+      <div className="grid grid-cols-4 mt-3 border-t pt-2 sm:hidden">
+        <Link href={`/clients/${idCli}/profile`} className="flex flex-col items-center">
+          <UserCircleIcon className={`w-6 h-6 ${tab==='1' ? 'text-green-500' : 'text-slate-500'}`} />
+          <span className="text-xs">Perfil</span>
+        </Link>
+
+        <Link href={`/clients/${idCli}/projects`} className="flex flex-col items-center">
+          <DocumentChartBarIcon className={`w-6 h-6 ${tab==='2' ? 'text-green-500' : 'text-slate-500'}`} />
+          <span className="text-xs">Proyectos</span>
+        </Link>
+
+        <Link href={`/clients/${idCli}/estimates`} className="flex flex-col items-center">
+          <CurrencyDollarIcon className={`w-6 h-6 ${tab==='3' ? 'text-green-500' : 'text-slate-500'}`} />
+          <span className="text-xs">Estimaciones</span>
+        </Link>
+
+        <Link href={`/clients/${idCli}/wallet`} className="flex flex-col items-center">
+          <CreditCardIcon className={`w-6 h-6 ${tab==='4' ? 'text-green-500' : 'text-slate-500'}`} />
+          <span className="text-xs">Cobranza</span>
+        </Link>
+      </div>
+    )
   }else{
     tabCli =(
       <div className="flex mt-5 py-1 border-b border-blue-300">

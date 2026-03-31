@@ -13,7 +13,7 @@ export default function Sumary({totalprj, totalColl, totalPenBil, totalpay}:
     totalPenBil:ITotalPendingBillingByClient, totalpay:ITotalPaymentClient[]}){
 
   return(
-    <div className="w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
+    <div className="w-full sm:max-w-md bg-white rounded-lg shadow-md md:pl-2 px-3">
       <div className="flex flex-wrap gap-y-3 p-3">
         {/* <div className="w-72 p-1">
           <div className="bg-white p-3 shadow-lg shadow-slate-600 mt-2 rounded-xl">

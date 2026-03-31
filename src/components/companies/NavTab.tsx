@@ -101,7 +101,7 @@ export default function NavTab({option}: {option:number}){
       </div>
     </div>
 
-    <div className="grid grid-cols-5 mt-3 border-t pt-2 sm:hidden">
+    <div className="grid grid-cols-4 mt-3 border-t pt-2 sm:hidden">
       <Link href="/catalogs" className="flex flex-col items-center">
         <GrCatalog className={`w-6 h-6 ${option===3 ? 'text-green-500' : 'text-slate-500'}`} />
         <span className="text-xs">Listas</span>
