@@ -64,19 +64,19 @@ export default function ContainerAdvances({data, token, expenses, user, provider
   
   return (
     <div>
-      <div className="flex justify-between items-center flex-wrap gap-y-3">
-        <div className="flex items-center my-2">
-          {/* <ArrowReturn link="/providers" />
+      <div className="flex justify-end items-center flex-wrap gap-y-3">
+        {/* <div className="flex items-center my-2">
+          <ArrowReturn link="/providers" />
           <IconText text={provider?.tradename || ''} size="w-8 h-8" sizeText="" />
-          <p className="text-slate-500 mx-3">{provider.name}</p> */}
-        </div>
-        <div className="flex gap-x-2">
+          <p className="text-slate-500 mx-3">{provider.name}</p>
+        </div> */}
+        <div className="flex gap-x-2 mt-2 w-full sm:max-w-md">
           <SearchInTable placeH={"Buscar anticipo.."} />
-          <div className={`w-24`}>
+          {/* <div className={`w-24`}>
             <div className="flex gap-x-4 justify-end items-center">
-              {/* <TooltipFilterIcon handleFilter={handleFilter} /> */}
+              <TooltipFilterIcon handleFilter={handleFilter} />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
         <TableAdvancesProvider data={expenses} expenses={expenses} idProv={provider._id} token={token} />

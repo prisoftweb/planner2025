@@ -44,14 +44,14 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap gap-y-3">
-        <div className="flex items-center my-2">
+        <div className="flex items-center my-2 gap-x-2">
           <ArrowReturn link={`/providers/${provider._id}/payments`} />
           <IconText text={provider?.tradename || ''} size="w-8 h-8" sizeText="" />
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
         <div className="flex gap-x-2">
           <SearchInTable placeH={"Buscar gasto.."} />
-          <div className={`w-24`}>
+          <div className={`w-auto`}>
             <div className="flex gap-x-4 justify-end items-center">
               <GiSettingsKnobs onClick={() => handleFilter(true)}
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
@@ -77,7 +77,7 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
         </div>
       </div>
 
-      <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-x-3 gap-y-3">
+      <div className="mt-2 md:mt-0 grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-x-3 gap-y-3">
         <div className="bg-white col-span-3 p-3">
           <div className="flex gap-x-2 items-center">
             <IconText text={provider?.name || ''} size="w-8 h-8" sizeText="" />

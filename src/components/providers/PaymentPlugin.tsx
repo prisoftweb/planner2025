@@ -50,7 +50,7 @@ export default function PaymentPlugin({comments, date, paymentPlugin, setComment
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-3 gap-y-3">
         <div>
           <Label htmlFor="payment">Complemento de pago</Label>
           <Input

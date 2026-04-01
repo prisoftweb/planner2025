@@ -21,7 +21,7 @@ export default function ProviderClient({provider, token, id, costPayment, user}:
   const [open, setOpen] = useState<boolean>(false);
 
   const view = (
-    opt===2? (<div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
+    opt===2? (<div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
                 <DataBasic id={id} provider={provider} token={token} user={user} />
                 <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
                   <ShowContactasProv provider={provider} token={token} />
@@ -37,13 +37,13 @@ export default function ProviderClient({provider, token, id, costPayment, user}:
               </div>): 
       (<div>
           {provider.tradeline?.creditlimit ? 
-            <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
+            <div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
               <Sumary provider={provider} token={token} costPayment={costPayment} />
               <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
                 <ShowContactasProv provider={provider} token={token} />
               </div>
             </div>
-            : <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">
+            : <div className="w-full h-full flex flex-wrap lg:flex-nowrap gap-x-3">
                 <DataBasic id={id} provider={provider} token={token} user={user} />
                 <div className="bg-white rounded-lg shadow-md pl-2 px-3 w-full max-w-md">
                   <ShowContactasProv provider={provider} token={token} />
@@ -58,16 +58,20 @@ export default function ProviderClient({provider, token, id, costPayment, user}:
   
   return(
     <>
+      <div className={`md:hidden bg-white`}>
+        <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt}
+          tradeline={provider.tradeline?.creditlimit ? true: false} />
+      </div>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
+        <div className={`hidden md:block bg-white ${open? 'w-full max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsive open={open} setOpen={setOpen} changeOption={setOpt} option={opt}
               tradeline={provider.tradeline?.creditlimit ? true: false} />
           </div>
         </div>
-        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
+        <div className="flex w-full md:px-2 flex-wrap lg:flex-nowrap lg:space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
-          <div className={`w-full max-w-md`}>
+          <div className={`w-full md:max-w-md`}>
             <ProfileProvider costPayment={costPayment} />
           </div>
           <div className="mt-3 w-full">

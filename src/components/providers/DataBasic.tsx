@@ -135,7 +135,7 @@ export default function DataBasic({id, token, provider, user}:{id:string, token:
   // }
 
   return(
-    <div className="w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
+    <div className="w-full md:max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
       <HeaderForm img="/img/provider.svg" subtitle="Datos esenciales del proveedor" 
         title="Información basica"
       />

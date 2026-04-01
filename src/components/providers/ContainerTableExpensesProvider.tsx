@@ -96,16 +96,38 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap gap-y-3">
-        <div className="flex items-center my-2">
+        <div className="flex items-center my-2 gap-x-2">
           <ArrowReturn link="/providers" />
           <IconText text={provider?.tradename || ''} size="w-8 h-8" sizeText="" />
           <p className="text-slate-500 mx-3">{provider.name}</p>
         </div>
-        <div className="flex gap-x-2">
-          <SearchInTable placeH={"Buscar gasto.."} />
-          <div className={`w-24`}>
-            <div className="flex gap-x-4 justify-end items-center">
-              <TooltipFilterIcon handleFilter={handleFilter} />
+        <div className="flex gap-x-2 gap-y-2 items-center flex-wrap sm:flex-nowrap">
+          <div className="flex w-full sm:w-auto gap-x-2 items-center">
+            <SearchInTable placeH={"Buscar gasto.."} />
+            <div className={`w-auto`}>
+              <div className="flex gap-x-4 justify-end items-center">
+                <TooltipFilterIcon handleFilter={handleFilter} />
+                {dataReport.length > 0 && (
+                  <div className="flex justify-end sm:hidden">
+                    <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
+                          dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()}
+                          pending={pending} />} fileName={`Pagos ${provider.name}`} >
+                      {({loading, url, error, blob}) => 
+                        loading? (
+                          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                              placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                            <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                          </Tooltip>
+                        ) : (
+                          <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                              placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                            <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                          </Tooltip>
+                        ) }
+                    </PDFDownloadLink>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div>
@@ -123,7 +145,7 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
             />
           </div>
           {dataReport.length > 0 && (
-            <div className="flex justify-end">
+            <div className="hidden sm:flex justify-end ">
               <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
                     dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()}
                     pending={pending} />} fileName={`Pagos ${provider.name}`} >

@@ -49,7 +49,7 @@ export default function HeaderPaidHistoryExpenses({expensesTable, provider, toke
 
       </div>
 
-      <div className="grid grid-cols-3 mt-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 mt-3">
         <div>
           <p>Monto a pagar</p>
           <p className="text-green-500">{CurrencyFormatter({

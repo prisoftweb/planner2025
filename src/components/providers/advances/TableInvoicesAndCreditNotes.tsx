@@ -249,8 +249,14 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
       <div className="mt-5">
         {/* <Table columns={columns} data={costsRelAdvance} placeH="Buscar factura.." typeTable="advance"
           selectFunction={handleExpensesSelected} /> */}
-        <Table columns={columns} data={dataTable} placeH="Buscar factura.." typeTable="advance"
-          selectFunction={handleExpensesSelected} />
+        
+        <div className="hidden xl:block w-full">
+          <Table columns={columns} data={dataTable} placeH="Buscar factura.." typeTable="advance"
+            selectFunction={handleExpensesSelected} />
+        </div>
+        <div className="block xl:hidden w-full">
+          <ListData data={dataTable} />
+        </div>
       </div>
       <ContainerSideNav width="w-full max-w-5xl" open={isAddInvoices}>
         <AddInvoicesToAdvance token={token} costs={expensesSelected} pending={pending} advance={advance}
@@ -311,4 +317,85 @@ function transformDataInvoicesInDataTable(dataBack:ICostRelAdvanceInv[]){
     // });
   });
   return table;
+}
+
+const ListData = ({data}: {data: ICostRelAdvanceTable[]}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+
+  // const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full max-w-2xl rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((e) => (
+            <CardInvoices expense={e} key={e.id} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardInvoices = ({expense }: 
+  {expense:ICostRelAdvanceTable }) => {
+
+  return(
+    <div role="button"
+      key={expense.id}
+      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ expense.user?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <DeleteElement id={expense.id} name={expense.name} remove={RemoveCompany} token={token} /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3"
+            // onClick={() => window.location.replace(`/expenses/${expense.id}/profile?prov=${idProv}`)}
+          >
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {expense.project}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {expense.description}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {expense.date?.substring(0, 10)}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                {CurrencyFormatter({
+                  currency: 'MXN', 
+                  value: expense.cost.total?? 0
+                })}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }

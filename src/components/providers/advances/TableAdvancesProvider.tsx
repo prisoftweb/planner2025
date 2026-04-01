@@ -217,7 +217,7 @@ export default function TableAdvancesProvider({data, token, expenses, idProv }: 
 
   return(
     <>
-      <div className="flex justify-end my-5">
+      <div className="flex justify-end">
           {/* {isFilter && <FilteringPaymentsProvider showForm={handleIsFilter}  
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} token={token} />} */}
@@ -229,7 +229,95 @@ export default function TableAdvancesProvider({data, token, expenses, idProv }: 
           </ContainerSideNav>
         )} */}
       </div>
-      {view}
+      
+      <div className="hidden lg:block w-full">
+        {view}
+      </div>
+      <div className="block lg:hidden w-full mt-2">
+        <ListData data={data} idProv={idProv} />
+      </div>
     </>
+  )
+}
+
+const ListData = ({data, idProv}: {data: IAdvanceProvider[], idProv:string}) => {
+
+  // const [dataReports, setDataReports] = useState(data);
+
+  // const {search} = useTableStates();
+
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     const d = data.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
+  //     return d;
+  //   }
+  // }, [search]);
+
+  return(
+    <div>
+      <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full max-w-2xl rounded-xl bg-clip-border] h-[calc(100vh-264px)]">
+        <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700
+          overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
+
+          {data.map((a) => (
+            <CardAdvances advance={a} key={a._id} idProv={idProv} />
+          ))}
+
+        </nav>
+      </div>
+    </div>
+  )
+}
+
+const CardAdvances = ({advance, idProv }: 
+  {advance:IAdvanceProvider, idProv:string }) => {
+
+  return(
+    <div role="button"
+      key={advance._id}
+      // onClick={() => window.location.replace(`/reports/${report.id}/profile`)}
+      className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+        outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+        focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+        active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+        bg-white`}
+    >
+      <div className="flex items-center w-full ">
+        <div className="grid mr-4 place-items-center">
+          <img alt="responsable" src={ advance.user?.photo ?? '/img/users/default.jpg'}
+            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+          {/* <DeleteElement id={advance.id} name={advance.name} remove={RemoveCompany} token={token} /> */}
+        </div>
+        <div className="w-full">
+          <div className="flex gap-x-3 w-full justify-between items-center p-3"
+            onClick={() => window.location.replace(`/providers/${idProv}/advances/${advance._id}/profile`)}
+          >
+            <div>
+              <h6
+                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                {advance.project.title}
+              </h6>
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                {advance.description}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                {CurrencyFormatter({
+                  currency: 'MXN',
+                  value: advance.cost.total?? 0
+                })}
+              </p>
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                <Chip label={advance.estatus.name} color={advance.estatus.color}
+                darktext={advance?.estatus?.darktext?? false} />
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

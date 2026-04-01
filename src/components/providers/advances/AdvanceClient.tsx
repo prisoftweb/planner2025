@@ -72,14 +72,18 @@ export default function AdvanceClient({token, user, id, provider, advance}:
 
   return(
     <>
+      <div className={`md:hidden bg-white`}>
+        <NavResponsiveAdvance open={open} setOpen={setOpen}
+              changeOption={setOpt} option={opt} />
+      </div>
       <div className={`flex`}>
-        <div className={`bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
+        <div className={`hidden md:block bg-white ${open? 'w-full  max-w-48': 'w-12'}`} >
           <div className={`mt-0 h-full ${open? 'w-full max-w-60': 'w-12'} bg-white`}>
             <NavResponsiveAdvance open={open} setOpen={setOpen}
                   changeOption={setOpt} option={opt} />
           </div>
         </div>
-        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap space-x-2" 
+        <div className="flex w-full px-2 flex-wrap lg:flex-nowrap lg:space-x-2" 
           style={{backgroundColor:'#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <ProfileAdvanceProvider token={token} user={user} />

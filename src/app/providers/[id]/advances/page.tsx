@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: { id: string }}){
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
-          <div className="flex items-center my-2">
+          <div className="flex items-center my-2 gap-x-2">
             <ArrowReturn link="/providers" />
             <IconText text={provider.tradename} size="w-8 h-8" sizeText="" />
             <p className="text-slate-500 mx-3">{provider.name}</p>

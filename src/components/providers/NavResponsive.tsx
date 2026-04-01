@@ -144,9 +144,45 @@ export default function NavResponsive({open, setOpen, option, changeOption, trad
     )
   }
 
+  const navProv=<div className="grid grid-cols-4 mt-3 border-t pt-2 gap-y-2">
+                  <div onClick={() => changeOption(1)} className="flex flex-col items-center" >
+                    <PiPresentationChartLight 
+                      className={`w-6 h-6 cursor-pointer ${option===1 ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                    <span className="text-xs">Resumen</span>
+                  </div>
+
+                  <div onClick={() => changeOption(2)} className="flex flex-col items-center">
+                    <FaPeopleRoof
+                      className={`w-6 h-6 cursor-pointer ${option===2 ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                    <span className="text-xs">Datos basicos</span>
+                  </div>
+
+                  <div onClick={() => changeOption(3)} className="flex flex-col items-center">
+                    <FaMoneyCheckDollar
+                      className={`w-6 h-6 cursor-pointer ${option===3 ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                    <span className="text-xs">Linea de credito</span>
+                  </div>
+
+                  <div onClick={() => changeOption(4)} className="flex flex-col items-center">
+                    <RiContactsBook3Line
+                      className={`w-6 h-6 cursor-pointer ${option===4 ? 'text-green-500' : 'text-slate-500'}`}
+                    />
+                    <span className="text-xs">Contactos</span>
+                  </div>
+
+                </div>
+
   return(
     <>
-      {nav}
+      <div className="hidden md:block">
+        {nav}
+      </div>
+      <div className=" md:hidden">
+        {navProv}
+      </div>
     </>
   )
 }

@@ -19,7 +19,7 @@ export default function Sumary({provider, token, costPayment}:
   }
 
   return(
-    <div className="w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
+    <div className="w-full md:max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
       <div className="mt-5">
         <h1 className="text-2xl text-slate-600 font-semibold">Resumen de proveedor</h1>
         <p className="text-slate-400 text-sm">Saldos pendientes y linea de credito del proveedor</p>
