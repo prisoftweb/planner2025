@@ -115,7 +115,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
 
   return(
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
+      {/* <div className="fixed inset-0 bg-black bg-opacity-40  z-40"> */}
         {/* <form className="z-10 top-16 absolute bg-white space-y-5 p-3 right-0" */}
         <form className="z-10 absolute bg-white space-y-5 p-5 right-0"
           onSubmit={formik.handleSubmit}
@@ -214,7 +214,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
             <Button type="submit">Guardar</Button>
           </div>
         </form>
-      </div>
+      {/* </div> */}
     </>
   )
 }

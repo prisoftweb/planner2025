@@ -58,8 +58,15 @@ export default async function Page({ params, searchParams }: { params: { id: str
       <Navigation user={user} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
-          <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
+          <>
+            <div className="hidden md:block w-full max-w-80 lg:max-w-md">
+              <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
+            </div>
+          </>
         </HeaderImage>
+        <div className=" md:hidden mt-2">
+          <Selectize options={options} routePage="users" subpath="/profile?opt=1" />
+        </div>
         {/* <div className="mt-3">
           <NavTab idUser={params.id} tab={'1'} />
         </div> */}

@@ -61,7 +61,7 @@ export default function UserClient({user, token, departments, optsRole, optTab}:
             <NavResponsive open={open} setOpen={handleOpenNav} changeOption={handleChangeOpt} option={opt} />
           </div>
         </div> */}
-        <div className="flex w-full max-w-5xl px-2 flex-wrap space-x-2" 
+        <div className="flex w-full max-w-5xl md:px-2 flex-wrap md:space-x-2" 
           style={{'backgroundColor': '#F8FAFC'}}>
           <div className={`w-full max-w-md`}>
             <Profile />
