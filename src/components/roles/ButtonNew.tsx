@@ -11,6 +11,7 @@ import NewCompoentTree from "./NewComponentTree";
 import { Resource } from "@/interfaces/Roles";
 import { CreateTree } from "@/app/api/routeRoles";
 import { showToastMessage, showToastMessageError } from "../Alert";
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 type Props = {
   token:string, 
@@ -96,7 +97,17 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
     break;
     case 5: 
       showButton = <>
-        <Button type="button" onClick={() => setNewRole(true)}>Asignar ruta</Button>
+        <div className="hidden sm:block">
+          <Button type="button" onClick={() => setNewRole(true)}>Asignar ruta</Button>
+        </div>
+        <div className="sm:hidden">
+          <div  className="flex flex-col items-center">
+            <PlusCircleIcon onClick={() => setNewRole(true)}
+              className={`w-6 h-6 cursor-pointer text-slate-600`}
+            />
+            <span className="text-xs">Ruta</span>
+          </div >
+        </div>
           {newRole && (
             <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
               <NewRouteTree showForm={setNewRole} token={token} 
@@ -108,7 +119,17 @@ export default function ButtonNew({token, opt, optResources, optRoutes,
     break;
     case 6: 
       showButton = <>
-        <Button type="button" onClick={() => setNewRole(true)}>Asignar componente</Button>
+        <div className="hidden sm:block">
+          <Button type="button" onClick={() => setNewRole(true)}>Asignar componente</Button>
+        </div>
+        <div className="sm:hidden">
+          <div  className="flex flex-col items-center">
+            <PlusCircleIcon onClick={() => setNewRole(true)}
+              className={`w-6 h-6 cursor-pointer text-slate-600`}
+            />
+            <span className="text-xs">Componente</span>
+          </div >
+        </div>
           {newRole && (
             <div className="fixed inset-0 bg-black bg-opacity-40  z-40">
               <NewCompoentTree showForm={setNewRole} token={token} 

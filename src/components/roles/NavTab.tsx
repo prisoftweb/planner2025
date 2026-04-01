@@ -92,9 +92,54 @@ export default function NavTab({option}: {option:number}){
                 </div>
               </div>);
 
+  const navResponsive=(
+    <div className="grid grid-cols-5 mt-3 border-t pt-2 gap-y-2">
+      <Link href='/roles/role' className="flex flex-col items-center" >
+        <MdAdminPanelSettings
+          className={`w-6 h-6 cursor-pointer ${option===1 ? 'text-green-500' : 'text-slate-500'}`}
+        />
+        <span className="text-xs">Roles</span>
+      </Link >
+
+      <Link  href='/roles/resources' className="flex flex-col items-center">
+        <GrResources
+          className={`w-6 h-6 cursor-pointer ${option===2 ? 'text-green-500' : 'text-slate-500'}`}
+        />
+        <span className="text-xs">Recursos</span>
+      </Link >
+
+      <Link href='/roles/sub-path' className="flex flex-col items-center">
+        <TbRoute
+          className={`w-6 h-6 cursor-pointer ${option===3 ? 'text-green-500' : 'text-slate-500'}`}
+        />
+        <span className="text-xs">Rutas</span>
+      </Link >
+
+      <Link href='/roles/components' className="flex flex-col items-center">
+        <BsWindowStack
+          className={`w-6 h-6 cursor-pointer ${option===4 ? 'text-green-500' : 'text-slate-500'}`}
+        />
+        <span className="text-xs">Componentes</span>
+      </Link >
+
+      <Link href='/roles/trees' className="flex flex-col items-center">
+        <PiTreeDuotone
+          className={`w-6 h-6 cursor-pointer ${option===5 ? 'text-green-500' : 'text-slate-500'}`}
+        />
+        <span className="text-xs">Arboles</span>
+      </Link >
+
+    </div>
+  )
+
   return(
     <>
-      {nav}
+      <div className="hidden md:block">
+        {nav}
+      </div>
+      <div className="md:hidden">
+        {navResponsive}
+      </div>
     </>
   )
 }

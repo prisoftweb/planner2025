@@ -7,7 +7,8 @@ import RolesClient from "@/components/roles/RolesClient";
 import { getRoles } from "@/app/api/routeRoles";
 import { Role, RoleTable } from "@/interfaces/Roles";
 import TableRole from "@/components/roles/TableRole";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader as Header } from "@/components/Header";
 
 export default async function Page(){
   const cookieStore = cookies();

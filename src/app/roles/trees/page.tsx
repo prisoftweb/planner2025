@@ -5,9 +5,7 @@ import Navigation from "@/components/navigation/Navigation";
 import RolesClient from "@/components/roles/RolesClient";
 import TableTree from "@/components/roles/TableTree";
 import ButtonNew from "@/components/roles/ButtonNew";
-import { getResources, getRoutes, getComponents,
-        getTrees
-      } from "@/app/api/routeRoles";
+import { getResources, getRoutes, getComponents, getTrees } from "@/app/api/routeRoles";
 import { Options } from "@/interfaces/Common";
 import WithOut from "@/components/WithOut";
 import SearchInTable from "@/components/SearchInTable";
@@ -167,7 +165,7 @@ export default async function Page() {
       <RolesClient token={token} option={5}>
         <div>
           <div className="flex justify-between items-center gap-x-5 gap-y-3 flex-wrap lg:flex-nowrap">
-            <div className="flex items-center gap-x-3 w-full max-w-96">
+            <div className="flex items-center gap-x-3 w-full md:max-w-96">
               <Link href={'/'}>
                 <TooltipContainerIcon label="Regresar">
                   <div className="p-1 border border-slate-400 bg-white rounded-md hover:bg-blue-100">
@@ -176,10 +174,22 @@ export default async function Page() {
                 </TooltipContainerIcon>
               </Link>
               <p className="text-xl ml-4 font-medium">Arbol</p>
+              <div className="flex flex-1 gap-x-3 items-center justify-end md:hidden">
+                <ButtonNew token={token} opt={5} 
+                  optResources={optionsResource} optRoutes={optionsRoutes}
+                  descRoutes={titleRoutes} descComponents={[]} 
+                  optComponents={[]} idTree={trees[0]._id} routesPerResource={[]} />
+              
+                <ButtonNew token={token} opt={6} 
+                  optResources={optionsResourceComponents} optRoutes={optionsRoutesComponents}
+                  descRoutes={descRoutes} descComponents={descComponents} 
+                  optComponents={optionsComponents} idTree={trees[0]._id} 
+                  routesPerResource={routesPerResource} />
+              </div>
             </div>
-            <div className="flex gap-x-3 gap-y-2 justify-end w-full flex-wrap-reverse sm:flex-nowrap">
+            <div className="flex gap-x-3 gap-y-2 justify-end w-full">
               <SearchInTable placeH="Buscar arbol.." />
-              <div className="w-70">
+              <div className="w-70 hidden md:block">
                 <div className="flex gap-x-2">
                   <ButtonNew token={token} opt={5} 
                     optResources={optionsResource} optRoutes={optionsRoutes}

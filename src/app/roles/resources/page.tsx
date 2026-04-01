@@ -7,7 +7,8 @@ import RolesClient from "@/components/roles/RolesClient";
 import { getResources } from "@/app/api/routeRoles";
 import { Resource, ResourceTable } from "@/interfaces/Roles";
 import TableResource from "@/components/roles/TableResource";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
+import { ResponsiveHeader as Header } from "@/components/Header";
 
 export default async function Page(){
   const cookieStore = cookies();

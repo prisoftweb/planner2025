@@ -5,9 +5,10 @@ import { cookies } from "next/headers";
 import ButtonNew from "@/components/roles/ButtonNew";
 import RolesClient from "@/components/roles/RolesClient";
 import { Resource, ResourceTable } from "@/interfaces/Roles";
-import Header from "@/components/Header";
+// import Header from "@/components/Header";
 import { getComponents } from "@/app/api/routeRoles";
 import TableResource from "@/components/roles/TableResource";
+import { ResponsiveHeader as Header } from "@/components/Header";
 
 export default async function Page(){
   const cookieStore = cookies();
