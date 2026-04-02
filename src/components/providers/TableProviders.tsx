@@ -200,11 +200,14 @@ const CardProvider = ({provider, token, delProvider }:
               <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                 {provider.tradename}
               </p>
-            </div>
-            <div className="text-right w-24 sm:w-auto">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600 break-words">
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
                 {provider.rfc}
               </p>
+            </div>
+            <div className="text-right w-24 sm:w-auto">
+              {/* <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600 break-words">
+                
+              </p> */}
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
                 {provider.account}
               </p>

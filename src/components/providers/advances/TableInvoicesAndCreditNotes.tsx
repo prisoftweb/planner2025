@@ -334,6 +334,15 @@ const ListData = ({data}: {data: ICostRelAdvanceTable[]}) => {
   //   }
   // }, [search]);
 
+  if(data.length <= 0){
+    return(
+      <div className="flex items-center justify-center gap-x-2 mt-10">
+        <IoAlert className="w-10 h-10 text-red-500" />
+        <p className="text-red-500 text-lg">No hay facturas pendientes de aplicacion...</p>
+      </div>
+    )
+  }
+
   return(
     <div>
       <div className="relative flex flex-col text-gray-700 bg-white shadow-md w-full max-w-2xl rounded-xl bg-clip-border] h-[calc(100vh-264px)]">

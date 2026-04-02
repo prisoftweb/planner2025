@@ -12,6 +12,7 @@ import ContainerSideNav from "../ContainerSideNav";
 import { Tooltip } from "@nextui-org/react";
 import { IoIosLink } from "react-icons/io";
 import { propsTooltip } from "@/libs/animations";
+import { useState } from "react";
 
 type Props = {
   data:HistoryExpensesTable[], 
@@ -20,7 +21,7 @@ type Props = {
   user: string, 
   isFilter:boolean, 
   setIsFilter:Function, 
-  handleExpensesSelected:Function, 
+  handleExpensesSelected: (value: HistoryExpensesTable[]) => void, 
   idProv:string, 
   isViewReports: boolean, 
   filterData: Function, 
@@ -243,15 +244,29 @@ export default function TableHistoryCosts({data, token, expenses,
         {view}
       </div>
       <div className="block xl:hidden w-full">
-        <ListData data={data} idProv={idProv} />
+        <ListData data={data} idProv={idProv} handleExpensesSelected={handleExpensesSelected} />
       </div>
     </>
   )
 }
 
-const ListData = ({data, idProv}: {data: HistoryExpensesTable[], idProv:string}) => {
+const ListData = ({data, idProv, handleExpensesSelected}: 
+  {data: HistoryExpensesTable[], idProv:string, handleExpensesSelected: (value: HistoryExpensesTable[]) => void}) => {
 
   // const [dataReports, setDataReports] = useState(data);
+  const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
+
+  const selectCard = (expense: HistoryExpensesTable) => {
+    // if(expensesSelected.some((exp) => exp.id === expense.id)){
+    //   const exp = expensesSelected.filter((exp) => exp.id !== expense.id);
+    //   setExpensesSelected(exp);
+    //   handleExpensesSelected(exp);
+    // }else{
+    //   const exp = [...expensesSelected, expense];
+    //   setExpensesSelected(exp);
+    //   handleExpensesSelected(exp);
+    // }
+  }
 
   // const {search} = useTableStates();
 
@@ -271,7 +286,7 @@ const ListData = ({data, idProv}: {data: HistoryExpensesTable[], idProv:string})
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {data.map((e) => (
-            <CardInvoices expense={e} key={e.id} idProv={idProv} />
+            <CardInvoices expense={e} key={e.id} idProv={idProv} expensesSelected={expensesSelected} selectCard={selectCard} />
           ))}
 
         </nav>
@@ -280,8 +295,8 @@ const ListData = ({data, idProv}: {data: HistoryExpensesTable[], idProv:string})
   )
 }
 
-const CardInvoices = ({expense, idProv }: 
-  {expense:HistoryExpensesTable, idProv:string }) => {
+const CardInvoices = ({expense, idProv, expensesSelected, selectCard }: 
+  {expense:HistoryExpensesTable, idProv:string, expensesSelected: HistoryExpensesTable[], selectCard: (expense: HistoryExpensesTable) => void }) => {
 
   return(
     <div role="button"
@@ -291,11 +306,12 @@ const CardInvoices = ({expense, idProv }:
         outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
         active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
-        bg-white`}
+        ${expensesSelected.some((exp) => exp.id === expense.id)? 'bg-blue-400': 'bg-white'} `}
     >
       <div className="flex items-center w-full ">
         <div className="grid mr-4 place-items-center">
           <img alt="responsable" src={ expense.Responsable?.photo ?? '/img/users/default.jpg'}
+            // onClick={() => selectCard(expense)}
             className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
           {/* <DeleteElement id={expense.id} name={expense.name} remove={RemoveCompany} token={token} /> */}
         </div>

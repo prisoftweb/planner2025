@@ -157,27 +157,30 @@ const CardRole = ({role, token }:
         </div>
         
         <div className="w-full">
-          <div className="flex gap-x-3 w-full justify-between items-center p-3"
-            // onClick={() => window.location.replace(`/expenses/${role.id}/profile?prov=${idProv}`)}
-          >
-            <div>
-              <h6
-                className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
-                {role.name}
-              </h6>
-              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
-                {role.description}
-              </p>
+          <Link href={`/roles/role/${role.id}`}>
+            <div className="flex gap-x-3 w-full justify-between items-center p-3"
+              // onClick={() => window.location.replace(`/expenses/${role.id}/profile?prov=${idProv}`)}
+            >
+              <div>
+                <h6
+                  className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                  {role.name}
+                </h6>
+                <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                  {role.description}
+                </p>
+              </div>
+              <div className="text-right w-32">
+                <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                  {role.name}
+                </p>
+                {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                  
+                </p> */}
+              </div>
             </div>
-            <div className="text-right w-32">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
-                {role.name}
-              </p>
-              {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
-                
-              </p> */}
-            </div>
-          </div>
+          </Link>
+          
         </div>
       </div>
     </div>
