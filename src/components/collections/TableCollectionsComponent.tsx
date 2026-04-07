@@ -308,14 +308,69 @@ export default function TableCollectionsComponent({token, user, collectionsParam
         <nav className="flex w-full flex-col gap-1 p-2 font-sans text-base font-normal text-blue-gray-700 h-[calc(100vh-317px)]
             overflow-scroll overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
           {data.map((col, index) => (
+            // <div role="button"
+            //   key={index}
+            //   className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+            //     outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
+            //     focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
+            //     active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
+            //     bg-white`}
+            //   // onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
+            // >
+            //   <div className="flex items-center w-full ">
+            //     <div className="grid mr-4 place-items-center gap-x-1 gap-y-2">
+            //       <div className="flex gap-x-1 items-end">
+            //         <img alt="responsable" src={ '/img/projects/default.svg'}
+            //           className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" />
+            //         <RemoveElement id={`${col._id}`} name={col.reference} remove={deleteCollection} 
+            //           removeElement={delCollection} token={token} />
+            //       </div>
+            //       <Chip label={col.condition.name} color={col.condition.color} darktext={col?.condition?.darktext?? false} />
+            //       {col.condition.name.toLowerCase().includes('depositado')? (
+            //         <Toogle value={col.condition.name.toLowerCase().includes('confirmado')} id={col._id} onClick={confirmCollection} />
+            //       ): <></>}
+            //     </div>
+            //     <div className="w-full"
+            //       onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
+            //     >
+            //       <div className="flex gap-x-3 justify-between items-center">
+            //         <div>
+            //           <h6
+            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
+            //             {col.reference}
+            //           </h6>
+            //           <h6
+            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
+            //             {/* Factura # */}
+            //           </h6>
+            //         </div>
+            //         <div>
+            //           <h6
+            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-blue-600">
+            //             {CurrencyFormatter({
+            //               currency: 'MXN',
+            //               value: col.amount
+            //             })}
+            //           </h6>
+            //           <h6
+            //             className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
+            //             {col.date.substring(0, 10)}
+            //           </h6>
+            //         </div>
+            //       </div>
+            //       <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+            //         {col.concept}
+            //       </p>
+            //     </div>
+            //   </div>
+            // </div>
             <div role="button"
               key={index}
-              className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+              className={`flex flex-col w-full p-3 leading-tight transition-all rounded-lg 
                 outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
                 bg-white`}
-              // onClick={() => window.location.replace( `/projects/estimates/${col.invoices.project._id}/collections/${col._id}?page=collections`)}
             >
               <div className="flex items-center w-full ">
                 <div className="grid mr-4 place-items-center gap-x-1 gap-y-2">
@@ -341,7 +396,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                       </h6>
                       <h6
                         className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
-                        Factura #
+                        {/* Factura # */} {" "}
                       </h6>
                     </div>
                     <div>
@@ -358,11 +413,16 @@ export default function TableCollectionsComponent({token, user, collectionsParam
                       </h6>
                     </div>
                   </div>
-                  <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                  {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                     {col.concept}
-                  </p>
+                  </p> */}
                 </div>
               </div>
+
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 mt-1">
+                {col.concept}
+              </p>
+
             </div>
           ))}
         </nav>

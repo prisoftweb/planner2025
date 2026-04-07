@@ -7,11 +7,14 @@ import Selectize from "@/components/Selectize";
 import { Options } from "@/interfaces/Common";
 import HeaderImage from "@/components/HeaderImage";
 import ContainerProfileUser from "@/components/users/ContainerProfileUser";
+import { UsrBack } from "@/interfaces/User";
 
 export default async function Page({ params, searchParams }: { params: { id: string }, searchParams: { opt: string } }){
   
   const cookieStore = cookies();
   const token: string = cookieStore.get('token')?.value || '';
+
+  const currentUser: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
   const [user, users]=await Promise.all([
     getUser(params.id, token),
@@ -48,14 +51,15 @@ export default async function Page({ params, searchParams }: { params: { id: str
     })
   })
 
-  let opt = 1;
-  if(searchParams.opt==='2') opt = 2;
-  else if(searchParams.opt==='3') opt = 3;
-    else if(searchParams.opt==='4') opt = 4;
+  // let opt = 1;
+  // if(searchParams.opt==='2') opt = 2;
+  // else if(searchParams.opt==='3') opt = 3;
+  //   else if(searchParams.opt==='4') opt = 4;
 
   return(
     <>
-      <Navigation user={user} />
+      {/* <Navigation user={user} /> */}
+      <Navigation user={currentUser} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
           <>

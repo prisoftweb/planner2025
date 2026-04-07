@@ -19,6 +19,7 @@ import { MdHomeRepairService } from "react-icons/md";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { MdOutlineSavings } from "react-icons/md";
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon";
+import { useTableStates } from "@/app/store/tableStates";
 
 type Props= {
   data:ProjectsTable[], 
@@ -42,6 +43,8 @@ export default function TableProjects({data, token, projects, optCategories,
   // const [filter, setFilter] = useState<boolean>(false);
   const [dataProjects, setDataProjects] = useState(data);
   const [filteredProjects, setFilteredProjects] = useState<ProjectMin[]>(projects);
+
+  const {search} = useTableStates();
 
   const {haveDeleteProject, haveNewProject, projectStore, updateHaveDeleteProject, 
     updateHaveNewProject, updateProjectStore} = useProjectsStore();
@@ -613,12 +616,16 @@ export default function TableProjects({data, token, projects, optCategories,
     updateHaveDeleteProject(false);
   }
 
+  const searchProjects = filteredProjects.filter((project) => project.title.toLowerCase().includes(search.toLowerCase()));
   let view = <></>;
   if(isTable){
     view = (<Table columns={columns} data={dataProjects} placeH="Buscar proyecto.." typeTable="projects" />);
   }else{
     view = (<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-              {filteredProjects.map((project, index:number) => (
+              {/* {filteredProjects.map((project, index:number) => (
+                <CardProject project={project} token={token} key={index} />
+              ))} */}
+              {searchProjects.map((project, index:number) => (
                 <CardProject project={project} token={token} key={index} />
               ))}
             </div>)
@@ -724,7 +731,10 @@ export default function TableProjects({data, token, projects, optCategories,
         {view}
       </div>
       <div className="xl:hidden grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-4 gap-y-3">
-        {filteredProjects.map((project, index:number) => (
+        {/* {filteredProjects.map((project, index:number) => (
+          <CardProject project={project} token={token} key={index} url={isHistory? `/projects/history/${project._id}`: `/projects/${project._id}/profile`} />
+        ))} */}
+        {searchProjects.map((project, index:number) => (
           <CardProject project={project} token={token} key={index} url={isHistory? `/projects/history/${project._id}`: `/projects/${project._id}/profile`} />
         ))}
       </div>

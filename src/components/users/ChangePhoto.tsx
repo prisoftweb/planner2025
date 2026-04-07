@@ -53,7 +53,7 @@ export default function ChangePhoto({id, token, user}: {id:string, token:string,
           }else{
             refRequest.current = true;
             showToastMessage('La foto ha sido actualizada!!');
-            setCookie('user', res);
+            // setCookie('user', res);
             updateUser(res);
 
             const wsToUpdate = workspaces.filter((ws) => ws.email === user.email);

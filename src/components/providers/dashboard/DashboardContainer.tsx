@@ -58,6 +58,8 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
   const [totalPendingPaymentCircle, setTotalPendingProviderCicle] = useState<ITotalCostPendingPaymentByProviderEstatusMIN[]>(pendingPayProv);
   const [totalCostProviderState, setTotalCostProviderState] = useState<ITotalCostPaymentProvider[]>(totalCost);
 
+  console.log('providers list => ', providersTradeLine);
+
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),

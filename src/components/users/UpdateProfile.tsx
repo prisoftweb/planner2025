@@ -79,7 +79,7 @@ export default function UpdateProfile({user, departments, token, optsRoles}:
           }else{
             refRequest.current = true;
             showToastMessage(`Usuario ${name} modificado exitosamente!`);            
-            setCookie('user', res);
+            // setCookie('user', res); //Queda pendiente como se maneja esta situacion
             updateUser(res);
 
             const trimmedName = name.trim();

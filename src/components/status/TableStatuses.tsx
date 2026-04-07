@@ -127,29 +127,40 @@ const ListData = ({data, token, delReport, optFilter}:
   const {search} = useTableStates();
   // const [category, setCategory]=useState<number>(1);
 
+  // const filterData = useMemo(() => {
+  //   if(search.trim() === ''){
+  //     return data;
+  //   }else{
+  //     switch(optFilter){
+  //       case 1: 
+  //         const d = data.filter(item =>
+  //           item.statuses.arrStatuses.some(tag =>
+  //             tag.toLowerCase().includes(search)
+  //           )
+  //         );
+  //         return d;
+  //       case 2: 
+  //         const c = data.filter(item =>
+  //           item.categories.toLowerCase().includes(search)
+  //         );
+  //         return c;
+  //       case 3:
+  //         const b = data.filter(item =>
+  //           item.types.toLowerCase().includes(search)
+  //         );
+  //         return b; 
+  //     }
+  //   }
+  // }, [search]);
+
   const filterData = useMemo(() => {
     if(search.trim() === ''){
       return data;
     }else{
-      switch(optFilter){
-        case 1: 
-          const d = data.filter(item =>
-            item.statuses.arrStatuses.some(tag =>
-              tag.toLowerCase().includes(search)
-            )
-          );
-          return d;
-        case 2: 
-          const c = data.filter(item =>
-            item.categories.toLowerCase().includes(search)
-          );
-          return c;
-        case 3:
-          const b = data.filter(item =>
-            item.types.toLowerCase().includes(search)
-          );
-          return b; 
-      }
+      const d = data.filter(item =>
+        item.catalog.toLowerCase().includes(search.toLowerCase())
+      );
+      return d;
     }
   }, [search]);
 

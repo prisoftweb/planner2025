@@ -214,12 +214,12 @@ const CardUser = ({user, token, delUser }:
                 className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
                 {user.name}
               </h6>
-              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600 break-words">
+              <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600 break-all">
                 {user.email}
               </p>
             </div>
             <div className="text-right w-32">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+              <p className="block font-sans text-lg sm:text-2xl antialiased font-normal leading-normal text-blue-600">
                 {user.department}
               </p>
               <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">

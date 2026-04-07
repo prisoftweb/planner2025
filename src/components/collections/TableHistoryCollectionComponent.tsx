@@ -249,7 +249,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
           {data.map((col, index) => (
             <div role="button"
               key={index}
-              className={`flex items-center justify-between w-full p-3 leading-tight transition-all rounded-lg 
+              className={`flex flex-col w-full p-3 leading-tight transition-all rounded-lg 
                 outline-none text-start hover:bg-blue-gray-50 hover:bg-opacity-80 hover:text-blue-gray-900 
                 focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
                 active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
@@ -272,7 +272,7 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                       </h6>
                       <h6
                         className="block font-sans text-xl antialiased font-semibold leading-relaxed tracking-normal text-slate-600">
-                        Factura #
+                        {/* Factura # */}{" "}
                       </h6>
                     </div>
                     <div>
@@ -289,11 +289,16 @@ export default function TableHistoryCollectionsComponent({token, user}: {token:s
                       </h6>
                     </div>
                   </div>
-                  <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
+                  {/* <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
                     {col.concept}
-                  </p>
+                  </p> */}
                 </div>
               </div>
+              
+              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400 mt-1">
+                {col.concept}
+              </p>
+
             </div>
           ))}
         </nav>

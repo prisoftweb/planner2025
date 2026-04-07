@@ -1,14 +1,15 @@
 'use client'
 
 import { useState, useEffect } from "react";
-import { UserCircleIcon } from "@heroicons/react/24/solid"
-import {Tooltip} from "@nextui-org/react";
-import { propsTooltip } from "@/libs/animations";
+// import { UserCircleIcon } from "@heroicons/react/24/solid"
+// import {Tooltip} from "@nextui-org/react";
+// import { propsTooltip } from "@/libs/animations";
 import { MdOutlineAccountBalance } from "react-icons/md";
 // import { VscEditSession } from "react-icons/vsc";
 import { BsFiletypePdf } from "react-icons/bs";
 import { SlDocs } from "react-icons/sl";
-import { VscEdit } from "react-icons/vsc";
+// import { VscEdit } from "react-icons/vsc";
+import {PaperAirplaneIcon} from "@heroicons/react/24/solid";
 
 export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
 
@@ -76,10 +77,10 @@ export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
               </div>
 
               <div className="flex flex-col items-center">
-                <VscEdit 
+                <PaperAirplaneIcon 
                   className={`w-6 h-6 cursor-pointer ${tab===2 ? 'text-green-500' : 'text-slate-500'}`}
                   onClick={() => setTab(2)} />
-                <span className="text-xs">Modificar</span>
+                <span className="text-xs">Enviar</span>
               </div>
 
               <div className="flex flex-col items-center">
@@ -107,7 +108,7 @@ export default function NavTab({tab, setTab}: {tab:number, setTab:Function}){
         <div className={`w-50 px-5 cursor-pointer ${tab===2? 'border-b-4 border-blue-600':''}`}
           onClick={() => setTab(2)}
         >
-          <p className="text-blue-600">Modificar</p>
+          <p className="text-blue-600">Enviar</p>
         </div>
         <div className={`w-50 px-5 cursor-pointer ${tab===3? 'border-b-4 border-blue-600':''}`}
           onClick={() => setTab(3)}
