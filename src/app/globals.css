@@ -20,3 +20,107 @@ body{
   min-width: 250px !important; // no se achican demasiado 
   max-width: 100% !important;
 } */
+
+/* styles/globals.css o app/globals.css */
+.custom-ui {
+  background: white;
+  padding: 20px;
+  width: 400px;
+  max-width: 90%;
+  margin: auto;
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Overlay */
+.react-confirm-alert-overlay {
+  background: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Modal container */
+.custom-ui {
+  background: #fff;
+  padding: 25px 30px;
+  width: 450px;
+  max-width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Título */
+.custom-ui h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  color: #111827; /* Gris oscuro */
+}
+
+/* Mensaje */
+.custom-ui p {
+  margin-bottom: 15px;
+  color: #374151; /* Gris medio */
+  font-size: 1rem;
+}
+
+/* Textarea */
+.custom-ui textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  resize: vertical;
+  margin-bottom: 20px;
+  transition: border 0.2s;
+}
+
+.custom-ui textarea:focus {
+  outline: none;
+  border-color: #3b82f6; /* Azul cuando está activo */
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Botones principales */
+.custom-ui button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 8px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  text-align: center;
+  min-width: 80px;
+}
+
+/* Botón “Sí” */
+.custom-ui button.yes {
+  background-color: #3b82f6; /* Azul */
+  color: #fff;
+}
+
+.custom-ui button.yes:hover {
+  background-color: #2563eb;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Botón “No” */
+.custom-ui button.no {
+  background-color: #e5e7eb; /* Gris claro */
+  color: #111827;
+}
+
+.custom-ui button.no:hover {
+  background-color: #d1d5db;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}

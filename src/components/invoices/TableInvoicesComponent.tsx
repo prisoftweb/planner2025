@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useRef, useMemo } from "react"
 import { IInvoiceTable, ITotalAmountInvoicesPending, IInvoiceByDateAndConditionMin } from "@/interfaces/Invoices"
-import { getAllInvoicesMINByDateAndCondition, removeInvoice, getAllTotalAmountInvoicePending } from "@/app/api/routeInvoices"
-import { showToastMessageError } from "@/components/Alert";
+import { getAllInvoicesMINByDateAndCondition, removeInvoice, 
+  getAllTotalAmountInvoicePending, insertConditionInInvoice } from "@/app/api/routeInvoices"
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import Table from "@/components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
@@ -31,6 +32,9 @@ import { getDate } from "@/libs/dates";
 import { PDFDownloadLink } from "@react-pdf/renderer"
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadInvoicesReportPDF from "./DownloadInvoicesReportPDF";
+import { FaXmark } from "react-icons/fa6";
+import {confirmAlert} from 'react-confirm-alert';
+// import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export default function TableInvoicesComponent({token, user}: 
   {token:string, user:string}) {
@@ -138,6 +142,10 @@ export default function TableInvoicesComponent({token, user}:
     updateTotal(getDate(dateS), getDate(dateE), arrStatuses);
   }
 
+  const updateView = () => {
+    updateTotal(getDate(rangeDate.from ?? new Date()), getDate(rangeDate.to ?? new Date()), statuses);
+  }
+
   const columnHelper = createColumnHelper<IInvoiceTable>();
   
   const columns = [
@@ -152,6 +160,16 @@ export default function TableInvoicesComponent({token, user}:
           < RemoveElement id={ row.original.idEstimates? `${row.original.id}/${row.original.idEstimates}`: `${row.original.id}`} 
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
+
+          {row.original.accountreceivablesCount == 0 && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
+                  onClick={() => abrirDialogo(token, row.original.id, user, updateView) }
+                />
+            </Tooltip> 
+          )}      
+          
           {row.original.ischargedfull? (
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cobrada' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
@@ -513,7 +531,7 @@ export default function TableInvoicesComponent({token, user}:
         <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
       </div>
       <div className="block md:hidden w-full mt-3">
-        <ListData data={data} token={token} delInvoice={delInvoice} />
+        <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} />
       </div>
       
       {showNewCollection && selInvoice && (
@@ -568,8 +586,8 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   return table;
 }
 
-const ListData = ({data, token, delInvoice }: 
-  {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void }) => {
+const ListData = ({data, token, delInvoice, updateView, user }: 
+  {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, user:string, updateView: () => void }) => {
 
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
@@ -598,7 +616,7 @@ const ListData = ({data, token, delInvoice }:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((i) => (
-            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} />
+            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} updateView={updateView} user={user} />
           ))}
 
         </nav>
@@ -607,8 +625,8 @@ const ListData = ({data, token, delInvoice }:
   )
 }
 
-const CardInvoice = ({invoice, token, delInvoice }: 
-  {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void }) => {
+const CardInvoice = ({invoice, token, delInvoice, updateView, user }: 
+  {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, user:string, updateView: () => void }) => {
   
   return(
     <div role="button"
@@ -618,7 +636,7 @@ const CardInvoice = ({invoice, token, delInvoice }:
         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
         active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
         bg-white`}
-      onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=invoices`)}
+      // onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=invoices`)}
     >
       <div className="flex items-center w-full ">
         <div className="grid mr-4 place-items-center">
@@ -629,6 +647,16 @@ const CardInvoice = ({invoice, token, delInvoice }:
             < RemoveElement id={ invoice.idEstimates? `${invoice.id}/${invoice.idEstimates}`: `${invoice.id}`} 
                       name={invoice.estimate ?? invoice.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
+            
+            {invoice.accountreceivablesCount == 0 && (
+              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
+                placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                  <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
+                    onClick={() => abrirDialogo(token, invoice.id, user, updateView) }
+                  />
+              </Tooltip> 
+            )}
+
             {invoice.ischargedfull? (
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cobrada' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
@@ -664,7 +692,9 @@ const CardInvoice = ({invoice, token, delInvoice }:
               remove={RemoveCost} removeElement={delCost} 
               token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
         </div>
-        <div className="w-full">
+        <div className="w-full"
+          onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=invoices`)}
+        >
           <div className="flex gap-x-3 w-full justify-between items-center p-3">
             <div>
               <h6
@@ -726,3 +756,87 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
     </>
   )
 }
+
+const abrirDialogo = async (token:string, id:string, user:string, updateView: () => void) => {
+
+  const DeleteModal = ({ onClose }: { onClose: () => void }) => {
+    const [comentario, setComentario] = useState("");
+    const [error, setError] = useState(false);
+    const [flash, setFlash] = useState(false);
+
+    const handleEliminar = async () => {
+      if (!comentario.trim()) {
+        // Efecto parpadeante
+        setError(true);
+        setFlash(true);
+        let flashes = 0;
+        const interval = setInterval(() => {
+          setFlash(f => !f);
+          flashes++;
+          if (flashes >= 4) clearInterval(interval);
+        }, 200);
+        return;
+      }
+
+      const data={
+        condition: [{
+          glossary:"678ecf6ec5f08e8a0f36d5dd", 
+          user
+        }],
+        notes: comentario
+      }
+
+      // Tu lógica de eliminación
+      const res = await insertConditionInInvoice(token, id, data);
+      // console.log('respuesta => ', res);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        showToastMessage("Factura cancelada exitosamente!!!");
+        updateView();
+        onClose();
+      }
+      // try {
+      //   const res = await remove(id, token, progreesAverage, totalAverage);
+      //   if (res === 204) {
+      //     alert(`${name} eliminado exitosamente!`);
+      //   } else {
+      //     alert(`${name} no pudo ser eliminado`);
+      //   }
+      // } catch (err) {
+      //   alert("Error eliminando");
+      // }
+    };
+
+    return (
+      <div className="custom-ui">
+        <h2 style={{ color: flash ? "red" : "#111827", transition: "color 0.2s" }}>
+          {error ? "¡Debe escribir una razon!" : "Confirmación para cancelar"}
+        </h2>
+
+        <p>¿Desea cancelar la factura?</p>
+
+        <textarea
+          placeholder="Agregar una razon obligatoria..."
+          value={comentario}
+          onChange={(e) => { setComentario(e.target.value); setError(false); }}
+        />
+
+        {error && !comentario.trim() && (
+          <p style={{ color: "red", fontSize: "0.9rem", marginTop: "5px" }}>
+            Por favor escriba una razon antes de continuar
+          </p>
+        )}
+
+        <div>
+          <button className="yes" onClick={handleEliminar}>Sí</button>
+          <button className="no" onClick={onClose}>No</button>
+        </div>
+      </div>
+    );
+  };
+
+  confirmAlert({
+    customUI: ({ onClose }) => <DeleteModal onClose={onClose} />,
+  });
+};
