@@ -15,7 +15,8 @@ export default async function Page({ params, searchParams }:
 
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
 
-  const previous = searchParams?.status==='pending' ? 1: 0;
+  // const previous = searchParams?.status==='pending' ? 1: 0;
+  const previous = searchParams?.status==='pending' ? 1: searchParams?.status==='concept'? 2: 0;
 
   const [cost, options] = await Promise.all([
     GetCostMIN(token, params.id),

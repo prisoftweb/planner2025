@@ -334,6 +334,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             link: '/costcenter'
           },
           {
+            name: 'Conceptos',
+            link: '/expenses/concepts'
+          },
+          {
             name: 'Gastos',
             link: '/expenses'
           },

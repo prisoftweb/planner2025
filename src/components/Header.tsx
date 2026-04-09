@@ -40,6 +40,7 @@ type HeaderProps = {
   title: string;
   placeHolder: string;
   other?: boolean
+  hideChildren?:boolean
 };
 
 const Header = forwardRef<HTMLInputElement, HeaderProps>(function Header( 
@@ -75,7 +76,7 @@ const Header = forwardRef<HTMLInputElement, HeaderProps>(function Header(
 export default Header;
 
 const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Header( 
-  { children, title, placeHolder, other=false }, ref ){
+  { children, title, placeHolder, other=false, hideChildren=false }, ref ){
 
   return(
     <>
@@ -107,7 +108,7 @@ const ResponsiveHeader = forwardRef<HTMLInputElement, HeaderProps>(function Head
         {/* <div className="flex gap-x-3 justify-end w-full"> */}
         <div className="mt-2 md:mt-0 sm:flex gap-x-3 gap-y-2 pr-4 sm:pr-0 justify-end w-full">
           <SearchInTable placeH={placeHolder} ref={ref} />
-          <div className="w-36 mt-2 sm:mt-0 hidden sm:block">
+          <div className={`w-36 mt-2 sm:mt-0 hidden ${hideChildren? '': 'sm:block'}`}>
             {children}
           </div>
         </div>

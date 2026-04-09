@@ -5,7 +5,7 @@ import { Options } from "@/interfaces/Common"
 import { useNewExpense } from "@/app/store/newExpense"
 
 export default function HeaderProfileExpense({options, subTotal, idProv, pending, idProj}: 
-    {subTotal: string, options:Options[], idProv: string | undefined, pending: 1|0, idProj:string | undefined}){
+    {subTotal: string, options:Options[], idProv: string | undefined, pending: 0|1|2, idProj:string | undefined}){
   const {updateCurrentExpense} = useNewExpense();
 
   const handleExpense = () => {
@@ -18,7 +18,8 @@ export default function HeaderProfileExpense({options, subTotal, idProv, pending
   }else if(idProj && idProj != '' && idProj != undefined){
     prevPage = `/projects/${idProj}/profile`;
   }else{
-    prevPage = pending===0? `/expenses`: `/expenses/pending`;
+    // prevPage = pending===0? `/expenses`: `/expenses/pending`;
+    prevPage = pending===0? `/expenses`: pending===1? `/expenses/pending`: `/expenses/concepts`;
   }
 
   return(

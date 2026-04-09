@@ -1010,3 +1010,30 @@ export async function getAllTotalAccumResumeProgramingByProviderMINWithoutPAY(id
     }
   }
 }
+
+export async function getAllCostsMinByMANYCostCenters(auth_token:string, filter:string[], dateStart:string, dateEnd:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCostsMinByMANYCostCenters/${dateStart}/${dateEnd}`;
+
+  const data={
+    filter
+  }
+
+  try {
+    const res = await axios.post(url, JSON.stringify(data), {
+      'headers': {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json',
+      }
+    });
+    // console.log('res => ', res);
+    // console.log('res json => ', JSON.stringify(res.data.data.stats));
+    if(res.status===200) return res.data.data.data;
+      return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }else{
+      return 'Ocurrio un error al consultar los gastos';
+    }
+  }
+}

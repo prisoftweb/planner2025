@@ -43,7 +43,8 @@ export default async function Page({ params, searchParams }:
     value: cost.cost?.subtotal || 0
   });
 
-  const previous = searchParams?.status==='pending' ? 1: 0;
+  // const previous = searchParams?.status==='pending' ? 1: 0;
+  const previous = searchParams?.status==='pending' ? 1: searchParams?.status==='concept'? 2: 0;
 
   return(
     <>

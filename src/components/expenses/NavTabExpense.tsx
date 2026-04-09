@@ -1,24 +1,25 @@
 'use client'
 
 import Link from "next/link"
-import { useState, useEffect } from "react";
-import { UserCircleIcon } from "@heroicons/react/24/solid"
+// import { useState, useEffect } from "react";
+// import { UserCircleIcon } from "@heroicons/react/24/solid"
 
 export default function NavTabExpense({tab, idExp, pending, idProv, idProj, isHistory=false}: {tab:string, 
-  idExp:string, pending: 0|1, idProv: string, idProj:string, isHistory?: boolean}){
+  idExp:string, pending: 0|1|2, idProv: string, idProj:string, isHistory?: boolean}){
 
-  const [width, setWidth] = useState<number>(0);
-  const handleResize = () => {
-    setWidth(window.innerWidth);
-  }
+  // const [width, setWidth] = useState<number>(0);
+  // const handleResize = () => {
+  //   setWidth(window.innerWidth);
+  // }
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize, false);
-    setWidth(window.innerWidth);
-    return () => window.removeEventListener('scroll', handleResize);
-  }, [])
+  // useEffect(() => {
+  //   window.addEventListener("resize", handleResize, false);
+  //   setWidth(window.innerWidth);
+  //   return () => window.removeEventListener('scroll', handleResize);
+  // }, [])
 
-  const previos = pending===1? '?status=pending': '?';
+  // const previos = pending===1? '?status=pending': '?';
+  const previos = pending===1? '?status=pending': pending===2? '?status=concept': '?';
   const prevProject = idProj && idProj != ''? `&&project=${idProj}`: '';
   const prevProvider = idProv && idProv != ''? `&&prov=${idProv}`: '';
   

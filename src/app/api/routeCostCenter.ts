@@ -293,3 +293,21 @@ export async function DeleteConceptInCostCenter(auth_token:string, id:string) {
     return 'Error al eliminar concepto en centro de costos!!';
   }
 }
+
+export async function getAllConceptsLV(auth_token:string){
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/concepts/getAllConceptsLV`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status === 200) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || 'Error al consultar los conceptos!!';
+    }
+    return 'Error al consultar los conceptos!!';
+  }
+}
