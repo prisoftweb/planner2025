@@ -224,6 +224,7 @@ export interface PriceConcept {
   cost: number
   date: string
   status: boolean
+  _id:string
 }
 
 export interface TotalEstimatedByProject {

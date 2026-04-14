@@ -26,8 +26,12 @@ export default function ExtraDataStepper({token}: {token:string}){
       if(state.databasic){
         data.append('name', state.databasic.name);
         data.append('tradename', state.databasic.tradename);
+        data.append('taxregime', state.databasic.taxregime);
         if(state.databasic.email){
           data.append('email', state.databasic.email);
+        }
+        if(state.databasic.capitalregime){
+          data.append('capitalregime', state.databasic.capitalregime);
         }
         data.append('rfc', state.databasic.rfc);
         data.append('source', state.databasic.source);
@@ -79,10 +83,12 @@ export default function ExtraDataStepper({token}: {token:string}){
       }
 
     }else{
-      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='', taxregime='', capitalregime='';
       if(state.databasic){
         name=state.databasic.name? state.databasic.name : '';
         tradename=state.databasic.tradename? state.databasic.tradename : '';
+        taxregime=state.databasic.taxregime? state.databasic.taxregime : '';
+        capitalregime=state.databasic.capitalregime? state.databasic.capitalregime : '';
         email=state.databasic.email? state.databasic.email : '';
         rfc=state.databasic.rfc? state.databasic.rfc : '';
         phone=state.databasic.phone? state.databasic.phone : '';
@@ -112,6 +118,8 @@ export default function ExtraDataStepper({token}: {token:string}){
         tradename, 
         email, 
         rfc, 
+        taxregime, 
+        capitalregime,
         phone, 
         source,
         tags, 

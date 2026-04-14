@@ -56,6 +56,7 @@ export async function getTags(auth_token:string) {
 
 export async function createClient(auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients`;
+  console.log('data new client => ', JSON.stringify(data));
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -63,6 +64,7 @@ export async function createClient(auth_token:string, data:Object) {
         'Content-Type': 'application/json',
       }
     })
+    console.log('res => ', res.data.data.data);
     if(res.status===201) return res.data.data.data;
     return res.statusText;
   } catch (error) {
@@ -93,6 +95,7 @@ export async function getClient(auth_token:string, id:string) {
 export async function updateClient(id:string, auth_token:string, data:Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/${id}`;
   try {
+    // console.log('update cleint => ', JSON.stringify(data));
     const res = await axios.patch(url, JSON.stringify(data), {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
@@ -100,6 +103,7 @@ export async function updateClient(id:string, auth_token:string, data:Object) {
       }
     })
     if(res.status===200){
+      // console.log('res data => ', res.data.data.data);
       return res.data.data.data;
     }
     return 'Error al actualizar cliente!!';

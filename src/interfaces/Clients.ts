@@ -47,6 +47,8 @@ export interface ClientBack{
   status: boolean,
   "createAt"?: string,
   "__v"?: number,
+  taxregime?:string,
+  capitalregime?: string
 }
 
 export interface Location{

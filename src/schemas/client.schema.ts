@@ -17,6 +17,14 @@ export const clientValidation = z.object({
   }).min(3, {
     message: 'Nombre comercial  debe tener minimo 3 caracteres'
   }),
+  taxregime: z.string({
+    required_error : 'El regimen fiscal del cliente es obligatorio!!',
+    invalid_type_error: 'El regimen fiscal no es valido!!',
+  }).min(2, {
+    message: 'El regimen fiscal debe de tener un minimo de 2 caracteres!!',
+  }).max(60, {
+    message: 'El regimen fiscal no debe de tener mas de 60 caracteres!!',
+  }),
   rfc: z.string({
     required_error: 'El RFC es obligatorio!!',
     invalid_type_error: 'El rfc no es valido!!',
@@ -25,6 +33,7 @@ export const clientValidation = z.object({
   }).min(12, {
     message: 'RFC debe tener minimo 12 caracteres'
   }),
+  capitalregime: z.string().optional(),
   //account: z.string().optional(),
   logo: z.object({}).optional(),
   // link: z.string({required_error: 'EL link de la pagina es obligatorio!!'}).max(80, {

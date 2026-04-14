@@ -28,12 +28,16 @@ export default function DataBasicStepper({token, id, tags}:
   let nameI = '';
   let rfcI = '';
   let emailI= '';
+  let taxregime='';
+  let capitalregime='';
 
   if(state.databasic){
     tradenameI = state.databasic.tradename;
     nameI = state.databasic.name;
     rfcI = state.databasic.rfc;
     emailI = state.databasic.email? state.databasic.email : '';
+    taxregime=state.databasic.taxregime? state.databasic.taxregime : '';
+    capitalregime= state.databasic.capitalregime? state.databasic.capitalregime : '';
   }
 
   const formik = useFormik({
@@ -42,6 +46,8 @@ export default function DataBasicStepper({token, id, tags}:
       name:nameI,
       rfc: rfcI,
       email: emailI,
+      taxregime:'',
+      capitalregime: ''
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -51,9 +57,11 @@ export default function DataBasicStepper({token, id, tags}:
       rfc: Yup.string()
                   .required('El rfc no puede ir vacio'),
       email: Yup.string(),
+      taxregime: Yup.string()
+                  .required('El regimen fiscal no puede ir vacio'),
     }),
     onSubmit: async (valores) => {            
-      const {name, tradename, rfc, email} = valores;
+      const {name, tradename, rfc, email, capitalregime, taxregime} = valores;
       
       let tagsSelected: string[] = [];
       optsTags.map((optTag) => {
@@ -64,6 +72,8 @@ export default function DataBasicStepper({token, id, tags}:
         name,
         rfc,
         tradename,
+        taxregime,
+        ...(capitalregime && { capitalregime }),
         phone: phone? parseInt(phone): '',
         source,
         tags:tagsSelected,
@@ -82,12 +92,16 @@ export default function DataBasicStepper({token, id, tags}:
     if(state.extradata && state.extradata.photo){
       const data = new FormData();
       
-      const {email, name, rfc, tradename} = formik.values;
+      const {email, name, rfc, tradename, capitalregime, taxregime} = formik.values;
       
       data.append('name', name);
       data.append('tradename', tradename);
+      data.append('taxregime', taxregime);
       if(email && email!==''){
         data.append('email', email);
+      }
+      if(capitalregime && capitalregime!==''){
+        data.append('capitalregime', capitalregime);
       }
       data.append('rfc', rfc);
       data.append('source', source);
@@ -141,7 +155,7 @@ export default function DataBasicStepper({token, id, tags}:
         showToastMessageError('Error al crear cliente!!');
       }
     }else{
-      const {name, rfc, tradename, email} = formik.values;
+      const {name, rfc, tradename, email, capitalregime, taxregime} = formik.values;
     
       let contact = [];
       if(state.contacts){
@@ -153,7 +167,7 @@ export default function DataBasicStepper({token, id, tags}:
         tagsSelected.push(optTag.label);
       })
 
-      if(name && rfc && tradename){
+      if(name && rfc && tradename && taxregime){
         
         let link='', photo='';
         if(state.extradata){
@@ -180,6 +194,8 @@ export default function DataBasicStepper({token, id, tags}:
           name,
           rfc,
           tradename,
+          taxregime,
+          ...(capitalregime && { capitalregime }),
           phone: phone? parseInt(phone): '',
           source,
           tags:tagsSelected,
@@ -254,6 +270,20 @@ export default function DataBasicStepper({token, id, tags}:
                 </div>
             ) : null}
           </div>
+
+          <div className="">
+            <Label htmlFor="taxregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen Fiscal</p></Label>
+            <Input type="text" name="taxregime" autoFocus 
+              value={formik.values.taxregime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.taxregime && formik.errors.taxregime ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.taxregime}</p>
+              </div>
+            ) : null}
+          </div>
           
           <div>
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">RFC</p></Label>
@@ -268,6 +298,21 @@ export default function DataBasicStepper({token, id, tags}:
               </div>
             ) : null}
           </div>
+
+          <div className="">
+            <Label htmlFor="capitalregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen Capital</p></Label>
+            <Input type="text" name="capitalregime" autoFocus 
+              value={formik.values.capitalregime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.capitalregime && formik.errors.capitalregime ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.capitalregime}</p>
+              </div>
+            ) : null}
+          </div>
+
           <div>
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Origen</p></Label>
             <Select

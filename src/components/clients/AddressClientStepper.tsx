@@ -79,8 +79,12 @@ export default function AddressClientStepper({token}:{token:string}){
       if(state.databasic){
         data.append('name', state.databasic.name);
         data.append('tradename', state.databasic.tradename);
+        data.append('taxregime', state.databasic.taxregime);
         if(state.databasic.email){
           data.append('email', state.databasic.email);
+        }
+        if(state.databasic.capitalregime){
+          data.append('capitalregime', state.databasic.capitalregime);
         }
         data.append('rfc', state.databasic.rfc);
         data.append('source', state.databasic.source);
@@ -124,12 +128,14 @@ export default function AddressClientStepper({token}:{token:string}){
         showToastMessageError('Error al crear cliente!!');
       }
     }else{
-      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='';
+      let name='', tradename='', email='', rfc='', source='', phone='',tags=[], user='', regime='', taxregime='', capitalregime='';
       if(state.databasic){
         name=state.databasic.name? state.databasic.name : '';
         tradename=state.databasic.tradename? state.databasic.tradename : '';
         email=state.databasic.email? state.databasic.email : '';
         rfc=state.databasic.rfc? state.databasic.rfc : '';
+        taxregime=state.databasic.taxregime? state.databasic.taxregime : '';
+        capitalregime=state.databasic.capitalregime? state.databasic.capitalregime : '';
         phone=state.databasic.phone? state.databasic.phone : '';
         source=state.databasic.source? state.databasic.source : '';
         tags=state.databasic.tags? state.databasic.tags : '';
@@ -153,7 +159,9 @@ export default function AddressClientStepper({token}:{token:string}){
         name, 
         tradename, 
         email, 
-        rfc, 
+        rfc,
+        taxregime, 
+        capitalregime, 
         phone, 
         source,
         tags, 

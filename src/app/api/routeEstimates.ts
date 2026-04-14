@@ -296,18 +296,20 @@ export async function deletePriceInConceptEstimate(idP:string, auth_token:string
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message;
     }
-    return 'Error al insertar precio en concepto!!';
+    return 'Error al eliminar precio en concepto!!';
   }
 }
 
 export async function getPricesConcept(auth_token:string, idConcept: string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates/getAllPricesOfConceptEstimateMIN/${idConcept}`;
+  // console.log('url get prices => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
+    // console.log('data prices => ', res.data.data.resdata)
     if(res.status===200) return res.data.data.resdata;
     return res.statusText;
   } catch (error) {

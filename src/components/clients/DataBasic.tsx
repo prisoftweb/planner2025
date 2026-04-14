@@ -32,6 +32,8 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
       name:client.name,
       rfc: client.rfc,
       email: client.email? client.email: '',
+      taxregime:client.taxregime? client.taxregime: '',
+      capitalregime: client.capitalregime? client.capitalregime: '',
     }, 
     validationSchema: Yup.object({
       tradename: Yup.string()
@@ -41,11 +43,13 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
       rfc: Yup.string()
                   .required('El rfc no puede ir vacio'),
       email: Yup.string(),
+      taxregime: Yup.string()
+                        .required('El regimen fiscal no puede ir vacio'),
     }),
     onSubmit: async (valores) => {            
       if(refRequest.current){
         refRequest.current = false;
-        const {name, tradename, rfc, email} = valores;
+        const {name, tradename, rfc, email, capitalregime, taxregime} = valores;
       
         let tagsSelected: any = [];
         if(updateTags){
@@ -61,6 +65,8 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
           name,
           rfc,
           tradename,
+          taxregime,
+          ...(capitalregime && { capitalregime }),
           phone,
           source,
           tags:tagsSelected,
@@ -124,6 +130,20 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
                 </div>
             ) : null}
           </div>
+
+          <div className="">
+            <Label htmlFor="taxregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen Fiscal</p></Label>
+            <Input type="text" name="taxregime" autoFocus 
+              value={formik.values.taxregime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.taxregime && formik.errors.taxregime ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.taxregime}</p>
+              </div>
+            ) : null}
+          </div>
           
           <div>
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">RFC</p></Label>
@@ -138,6 +158,21 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
               </div>
             ) : null}
           </div>
+
+          <div className="">
+            <Label htmlFor="capitalregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen Capital</p></Label>
+            <Input type="text" name="capitalregime" autoFocus 
+              value={formik.values.capitalregime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleChange}
+            />
+            {formik.touched.capitalregime && formik.errors.capitalregime ? (
+              <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
+                <p>{formik.errors.capitalregime}</p>
+              </div>
+            ) : null}
+          </div>
+
           <div>
             <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Origen</p></Label>
             <Select

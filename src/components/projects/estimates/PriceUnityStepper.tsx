@@ -143,7 +143,7 @@ export default function PriceUnityStepper({token, nextStep, handlePriceId,
                     </div>
                     <div>
                       <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-400">
-                        <RemoveElement id="" name={price.cost?.toString() || "sin costo"} remove={deletePriceInConceptEstimate} removeElement={handlePrices}
+                        <RemoveElement id={`${conceptSelected._id}/${price._id}`} name={price.cost?.toString() || "sin costo"} remove={deletePriceInConceptEstimate} removeElement={handlePrices}
                           token={token}  />
                       </p>
                     </div>
