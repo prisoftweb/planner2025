@@ -29,5 +29,9 @@ export interface Company {
     state?: string,
     country?: string,
     addressref?: string
-  }
+  },
+  rfc?:string,
+  taxregime?:string,
+  capitalregime:string
+  password?:string
 }

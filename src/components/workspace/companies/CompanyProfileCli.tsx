@@ -11,6 +11,7 @@ import DataBasicProfileCompany from "./DataBasicProfileCompany"
 import LogosProfileCompany from "./LogosProfileCompany"
 import AddressProfileCompany from "./AddressProfileCompany"
 import { getCompany } from "@/app/api/routeCompany"
+import BillingDataCompany from "./BillingDataCompany"
 
 type WSCliProps = {
   token:string, 
@@ -50,6 +51,8 @@ export default function CompanyProfileCli({token, companyParam }: WSCliProps){
     viewComponent = <LogosProfileCompany company={company} fetchCompany={fetchCompany} token={token} />;
   else if(index===3)
     viewComponent = <AddressProfileCompany company={company} fetchCompany={fetchCompany} token={token} />;
+  else if(index===4)
+    viewComponent = <BillingDataCompany company={company} token={token} fetchCompany={fetchCompany} />;
   else
     viewComponent = <DataBasicProfileCompany company={company} token={token} fetchCompany={fetchCompany} />;
 

@@ -16,7 +16,7 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
     notesCompany,
     handleAddressCompany, handleCpCompany, handleCommunityCompany,
     handleMunicipyCompany, handleStateCompany, handleCountryCompany,
-    handleNotesCompany, saveCompany}:
+    handleNotesCompany, saveCompany, handleIndex}:
   {addressCompany:string, cpCompany:string, communityCompany:string,
     municipyCompany:string, stateCompany:string, countryCompany:string,
     notesCompany:string,
@@ -27,7 +27,8 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
     handleStateCompany:(value:string) => void,
     handleCountryCompany:(value:string) => void,
     handleNotesCompany:(value:string) => void,
-    saveCompany: (location: Object) => Promise<void>
+    saveCompany: () => Promise<void>,
+    handleIndex:(value: number) => void
   }) {
 
   const refRequest = useRef(true);
@@ -67,15 +68,15 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
   const sendData = async () => {
     if(refRequest.current){
       const {community, country, cp, municipy, state, street, notes} = formik.values;
-      const location= {
-        stret:street,
-        cp,
-        community,
-        municipy,
-        state,
-        country,
-        addressref: notes
-      }
+      // const location= {
+      //   stret:street,
+      //   cp,
+      //   community,
+      //   municipy,
+      //   state,
+      //   country,
+      //   addressref: notes
+      // }
 
       handleAddressCompany(street);
       handleCpCompany(cp);
@@ -85,7 +86,8 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
       handleCountryCompany(country);
       handleNotesCompany(notes);
 
-      await saveCompany(location);
+      // await saveCompany(location);
+      handleIndex(3);
     }else{
       showToastMessageError('Ya hay una solicitud en proceso!!');
     }
@@ -198,7 +200,7 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
       </div>
 
       <div className="flex justify-center mt-2">
-        <Button type="submit">Guardar</Button>
+        <Button type="submit">Siguiente</Button>
       </div>
 
     </form>

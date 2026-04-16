@@ -7,7 +7,8 @@ export default function NavInvoiceStepper({index, setIndex}: {index:number, setI
   
   return(
     <>
-      <div className="max-w-xl">
+      {/* <div className="max-w-xl"> */}
+      <div className="w-full">
         <ol
           className="grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 
             border border-gray-500 text-sm  sm:grid-cols-3"

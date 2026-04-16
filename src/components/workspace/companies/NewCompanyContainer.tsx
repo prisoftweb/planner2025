@@ -13,6 +13,7 @@ import AddressDataCompanyStepper from "./AddressDataCompanyStepper";
 import { CreateCompany, CreateCompanyLogo, CreateCompanyWithLogoAndIsologo } from "@/app/api/routeCompany";
 import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { insertCompanyInWorkSpace } from "@/app/api/routeWorkspace";
+import BillingDataStepper from "./BillingDataStepper";
 
 export default function NewCompanyContainer({token, handleOpen, handleFetchCompanies, idUser, idWS, openSideNav }:
   {token:string, handleOpen:(value: boolean) => void, handleFetchCompanies: () => Promise<void>, 
@@ -34,6 +35,42 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
   const [stateCompany, setStateCompany] = useState<string>('');
   const [countryCompany, setCountryCompany] = useState<string>('');
   const [notesCompany, setNotesCompany] = useState<string>('');
+
+  const [name, setName]=useState<string>('');
+  const [taxregime, setTaxregime]=useState<string>('');
+  const [capitalregime, setCapitalregime]=useState<string>('');
+  const [rfc, setRfc]=useState<string>('');
+  const [password, setPassword]=useState<string>('');
+  const [filecer, setFilecer]=useState<File>();
+  const [filekey, setFilekey]=useState<File>();
+
+  const handleName = (value:string) => {
+    setName(value);
+  }
+
+  const handleTaxReg = (value:string) => {
+    setTaxregime(value);
+  }
+
+  const handleCapReg = (value:string) => {
+    setCapitalregime(value);
+  }
+
+  const handleRfc = (value:string) => {
+    setRfc(value);
+  }
+
+  const handlePassword = (value:string) => {
+    setPassword(value);
+  }
+
+  const handleFileccer= (f:File) => {
+    setFilecer(f);
+  }
+
+  const handleFilekey= (f:File) => {
+    setFilekey(f);
+  }
 
   const handleNameCompany = (value:string) => {
     setNameCompany(value);
@@ -102,7 +139,7 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  const createNewCompany = async (location:Object) => {
+  const createNewCompany = async () => {
     if(file || fileIsologo){
       // const formData = new FormData();
       // formData.append('name', nameCompany);
@@ -117,10 +154,20 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
       //   formData.append('isologo', fileIsologo);
       // }
 
-      if(!file || !fileIsologo){
+      if(!file || !fileIsologo && !(filecer && filekey)){
         let phoneformat = phoneCompany.trim();
         phoneformat = phoneformat.replace(/\s+/g, '');
         phoneformat = phoneformat.replace('(+52)', '');
+
+        const location= {
+          stret:addressCompany,
+          cpCompany,
+          communityCompany,
+          municipyCompany,
+          stateCompany,
+          countryCompany,
+          addressref: notesCompany
+        }
         
         const formdata = new FormData();
         formdata.append('email', emailCompany);
@@ -177,6 +224,16 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         let phoneformat = phoneCompany.trim();
         phoneformat = phoneformat.replace(/\s+/g, '');
         phoneformat = phoneformat.replace('(+52)', '');
+
+        const location= {
+          stret:addressCompany,
+          cpCompany,
+          communityCompany,
+          municipyCompany,
+          stateCompany,
+          countryCompany,
+          addressref: notesCompany
+        }
         
         const formdata = new FormData();
         formdata.append('email', emailCompany);
@@ -188,12 +245,38 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         if(file){
           // formdata.append('logo', file);
           formdata.append('files', file);
+          formdata.append('types', file.type);
         }
         if(fileIsologo){
           // formdata.append('logo', fileIsologo);
           // formdata.append('isologo', fileIsologo);
           formdata.append('files', fileIsologo);
+          formdata.append('types', fileIsologo.type);
         }
+
+        if(filecer){
+          formdata.append('files', filecer);
+          formdata.append('types', '.cer');
+        }
+
+        if(filekey){
+          formdata.append('files', filekey);
+          formdata.append('types', '.key');
+        }
+
+        const data={
+          tax: {
+            name: name.trim(),
+            rfc: rfc.trim(),
+            taxregime: taxregime.trim(),
+            capitalregime: capitalregime.trim(),
+            cp: cpCompany,
+            password: password,  
+          },
+        }
+
+        formdata.append('tax', JSON.stringify(data));
+
         const res = await CreateCompanyWithLogoAndIsologo(token, formdata);
         if(typeof(res)==='string'){
           showToastMessageError(res);
@@ -292,7 +375,12 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         handleCpCompany={handleCpCompany} handleMunicipyCompany={handleMunicipyCompany}
         handleNotesCompany={handleNotesCompany} handleStateCompany={handleStateCompany}
         municipyCompany={municipyCompany} notesCompany={notesCompany} stateCompany={stateCompany}
-        saveCompany={createNewCompany} />
+        saveCompany={createNewCompany} handleIndex={handleIndexStepper} />
+  ): indexStepper===3? (
+      <BillingDataStepper capitalregime={capitalregime} filecer={filecer} handleFileccer={handleFileccer} 
+          name={name} password={password} rfc={rfc} taxregime={taxregime} filekey={filekey} handleCapReg={handleCapReg}
+          handleFilekey={handleFilekey} handleName={handleName} handlePassword={handlePassword} handleRfc={handleRfc}
+          handleTaxReg={handleTaxReg} saveCompany={createNewCompany} />
   ): (<DataBasicCompanyStepper handleIndex={handleIndexStepper} contactCompany={contactCompany} 
           emailCompany={emailCompany} handleContactCompany={handleContactCompany} handleEmailCompany={handleEmailCompany}
           handleNameCompany={handleNameCompany} handlePhoneCompany={handlePhoneCompany} nameCompany={nameCompany} 

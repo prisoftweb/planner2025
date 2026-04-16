@@ -200,3 +200,23 @@ export async function updateIsoLogoCompany(auth_token:string, data:FormData, id:
     }
   }
 }
+
+export async function updateCompanyWithSAT(auth_token:string, data:FormData, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/companys/updateCompanyWithSAT/${id}`;
+  try {
+    const res = await axios.patch(url, data, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    // console.log('res update files  => ', res);
+    if(res.status === 200) return res.status
+    return res.statusText;
+  } catch (error) {
+    // console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+  }
+}

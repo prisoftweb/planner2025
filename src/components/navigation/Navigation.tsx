@@ -307,6 +307,10 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             name: 'Facturas',
             link: '/invoices'
           },
+          {
+            name: 'Facturacion-SAT',
+            link: '/satinvoices'
+          },
         ]}
       />
       <NavItem name="Cobranza" link="" items={[
