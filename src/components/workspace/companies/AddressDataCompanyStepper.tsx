@@ -27,7 +27,7 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
     handleStateCompany:(value:string) => void,
     handleCountryCompany:(value:string) => void,
     handleNotesCompany:(value:string) => void,
-    saveCompany: () => Promise<void>,
+    saveCompany: (data: Object) => Promise<void>,
     handleIndex:(value: number) => void
   }) {
 

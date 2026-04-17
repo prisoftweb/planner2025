@@ -18,12 +18,12 @@ export default function LogoCompanyStepper({handleIndex, file, fileIsologo, hand
     <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0">
 
       <div className='flex justify-between gap-x-3 items-center'>
-        <div>
+        <div className='w-1/2'>
           <Label>Logotipo</Label>
           {file && (<img src={URL.createObjectURL(file)} alt="Logo Company" className="w-20 h-20 object-contain mb-2"/> )}
           <UploadImage setFile={handleFile} />
         </div>
-        <div>
+        <div className='w-1/2'>
           <Label>Isologo</Label>
           {fileIsologo && (<img src={URL.createObjectURL(fileIsologo)} alt="IsoLogo Company" className="w-20 h-20 object-contain mb-2"/> )}
           <UploadImage setFile={handleFileIsologo} />

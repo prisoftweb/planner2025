@@ -16,12 +16,12 @@ import { ChangeEvent } from "react";
 
 export default function BillingDataStepper({capitalregime, filecer, handleFileccer, name, 
   password, rfc, taxregime, handleFilekey, filekey, handleCapReg, handleName, handlePassword, handleRfc,
-  handleTaxReg, saveCompany}: 
+  handleTaxReg, saveCompany, cp}: 
   { name:string, taxregime:string, capitalregime:string, rfc:string, password:string, 
     filecer:File|undefined, handleFileccer: (f: File) => void, handleFilekey: (f: File) => void, 
     filekey:File|undefined, handleName: (value: string) => void, handleTaxReg: (value: string) => void, 
     handleCapReg: (value: string) => void, handleRfc: (value: string) => void, handlePassword: (value: string) => void, 
-    saveCompany: () => Promise<void>, }) {
+    saveCompany: (data: Object) => Promise<void>, cp:string }) {
 
   const refRequest = useRef(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -71,7 +71,18 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
       handleRfc(rfc);
       handleTaxReg(taxregime);
 
-      await saveCompany();
+      const data={
+        tax: {
+          name: name.trim(),
+          rfc: rfc.trim(),
+          taxregime: taxregime.trim(),
+          capitalregime: capitalregime.trim(),
+          cp,
+          password: password,  
+        },
+      }
+
+      await saveCompany(data);
 
       // if(filecer){
       //   const formdata=new FormData();
@@ -195,11 +206,12 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
       </div>
 
       <div>
-        <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">C.P.</p></Label>
+        <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Password</p></Label>
         <Input name="password" 
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
           value={formik.values.password}
+          type='password'
         />
         {formik.touched.password && formik.errors.password ? (
           <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">

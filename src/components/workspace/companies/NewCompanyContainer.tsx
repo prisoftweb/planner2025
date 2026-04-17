@@ -139,7 +139,7 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  const createNewCompany = async () => {
+  const createNewCompany = async (data:Object) => {
     if(file || fileIsologo){
       // const formData = new FormData();
       // formData.append('name', nameCompany);
@@ -225,13 +225,23 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         phoneformat = phoneformat.replace(/\s+/g, '');
         phoneformat = phoneformat.replace('(+52)', '');
 
+        // const location= {
+        //   stret:addressCompany,
+        //   cpCompany,
+        //   communityCompany,
+        //   municipyCompany,
+        //   stateCompany,
+        //   countryCompany,
+        //   addressref: notesCompany
+        // }
+
         const location= {
           stret:addressCompany,
-          cpCompany,
-          communityCompany,
-          municipyCompany,
-          stateCompany,
-          countryCompany,
+          cp: cpCompany,
+          community:communityCompany,
+          municipy:municipyCompany,
+          state:stateCompany,
+          country:countryCompany,
           addressref: notesCompany
         }
         
@@ -264,18 +274,21 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
           formdata.append('types', '.key');
         }
 
-        const data={
-          tax: {
-            name: name.trim(),
-            rfc: rfc.trim(),
-            taxregime: taxregime.trim(),
-            capitalregime: capitalregime.trim(),
-            cp: cpCompany,
-            password: password,  
-          },
-        }
+        // const data={
+        //   tax: {
+        //     name: name.trim(),
+        //     rfc: rfc.trim(),
+        //     taxregime: taxregime.trim(),
+        //     capitalregime: capitalregime.trim(),
+        //     cp: cpCompany,
+        //     password: password,  
+        //   },
+        // }
 
         formdata.append('tax', JSON.stringify(data));
+
+        // console.log('tax => ', JSON.stringify(data), ' => ', formdata.get('tax'));
+        // console.log('location => ', JSON.stringify(location), ' => ', formdata.get('location'));
 
         const res = await CreateCompanyWithLogoAndIsologo(token, formdata);
         if(typeof(res)==='string'){
@@ -380,7 +393,7 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
       <BillingDataStepper capitalregime={capitalregime} filecer={filecer} handleFileccer={handleFileccer} 
           name={name} password={password} rfc={rfc} taxregime={taxregime} filekey={filekey} handleCapReg={handleCapReg}
           handleFilekey={handleFilekey} handleName={handleName} handlePassword={handlePassword} handleRfc={handleRfc}
-          handleTaxReg={handleTaxReg} saveCompany={createNewCompany} />
+          handleTaxReg={handleTaxReg} saveCompany={createNewCompany} cp={cpCompany} />
   ): (<DataBasicCompanyStepper handleIndex={handleIndexStepper} contactCompany={contactCompany} 
           emailCompany={emailCompany} handleContactCompany={handleContactCompany} handleEmailCompany={handleEmailCompany}
           handleNameCompany={handleNameCompany} handlePhoneCompany={handlePhoneCompany} nameCompany={nameCompany} 
