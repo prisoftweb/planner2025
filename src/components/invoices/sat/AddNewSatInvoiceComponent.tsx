@@ -2,10 +2,13 @@ import HeaderForm from "@/components/HeaderForm"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
 import { createInvoice } from "@/app/api/routeInvoices"
-import DataBasicInvoiceStepper from "../DataBasicInvoiceStepper"
-import InvoicesConditionsStepper from "@/components/projects/estimates/InvoicesConditionsStepper"
+// import DataBasicInvoiceStepper from "../DataBasicInvoiceStepper"
+import DataBasicSatInvoiceStepper from "./DataBasicSatInvoiceStepper"
+// import InvoicesConditionsStepper from "@/components/projects/estimates/InvoicesConditionsStepper"
+import SatInvoicesConditionsStepper from "./SatInvoicesConditionsStepper"
 import NavInvoiceStepper from "@/components/projects/estimates/NavInvoiceStepper"
-import ConceptsInvoiceStepperComponent from "../ConceptsInvoiceStepperComponent"
+// import ConceptsInvoiceStepperComponent from "../ConceptsInvoiceStepperComponent"
+import ConceptsSatInvoiceStepperComponent from "./ConceptsSatInvoiceStepperComponent"
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
 
 type Params = {
@@ -148,6 +151,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
   const saveInvoice = async (conceptsInvoice: any[]) => {
     const val = validationData();
 
+    showToastMessage('Timbrar factura...');
+
     if(val){
       // const facturapi = new Facturapi('sk_test_tu_api_key');
 
@@ -244,19 +249,18 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
     // }
   }
 
-  const component = (step===0? <DataBasicInvoiceStepper bandDate={bandDate} bandFolio={bandFolio}  
+  const component = (step===0? <DataBasicSatInvoiceStepper bandDate={bandDate} bandFolio={bandFolio}  
                         bandTaxFolio={bandTaxFolio} client={client} date={date} folio={folio} 
                         nextStep={handleStep} setClient={handleClient} setDate={handleDate} 
                         setFolio={handleFolio} setTaxFolio={handleTaxFolio} taxFolio={taxFolio}
                         token={token} setBandDate={handleBandDate} setBandFolio={handleBandFolio}
-                        setBandTaxFolio={handleBandTaxFolio} project={project} setProject={handleProject}
-                        handleIsVat={handleIsVat} isVat={isVat} /> : 
-                        (step===1? <InvoicesConditionsStepper 
+                        setBandTaxFolio={handleBandTaxFolio} /> : 
+                        (step===1? <SatInvoicesConditionsStepper 
                                   conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 
                                   handleType={handleType} nextStep={handleStep} token={token} 
                                   bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc} />: 
-                                    <ConceptsInvoiceStepperComponent nextStep={handleStep} 
+                                    <ConceptsSatInvoiceStepperComponent nextStep={handleStep} 
                                       saveInvoice={saveInvoice} token={token} user={user} />))
 
   return (
@@ -272,7 +276,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
 
         <NavInvoiceStepper index={step} setIndex={handleStep} />
 
-        {/* {component} */}
+        {component}
       </form>
     </>
   )
