@@ -1,7 +1,7 @@
 import HeaderForm from "@/components/HeaderForm"
 import { useState, useEffect } from "react"
 import { showToastMessage, showToastMessageError } from "@/components/Alert"
-import { createInvoice } from "@/app/api/routeInvoices"
+import { createInvoice, getFOLIONEXT } from "@/app/api/routeInvoices"
 // import DataBasicInvoiceStepper from "../DataBasicInvoiceStepper"
 import DataBasicSatInvoiceStepper from "./DataBasicSatInvoiceStepper"
 // import InvoicesConditionsStepper from "@/components/projects/estimates/InvoicesConditionsStepper"
@@ -10,14 +10,17 @@ import NavInvoiceStepper from "@/components/projects/estimates/NavInvoiceStepper
 // import ConceptsInvoiceStepperComponent from "../ConceptsInvoiceStepperComponent"
 import ConceptsSatInvoiceStepperComponent from "./ConceptsSatInvoiceStepperComponent"
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
+import { ISatCLient } from "@/interfaces/Clients";
+import { getClientTAXProfileMIN } from "@/app/api/routeClients";
 
 type Params = {
-  showForm:(value: boolean) => void, 
+  showForm:(value: boolean) => void,
+  isNew:boolean, 
   user:string, 
   token:string, 
 }
 
-export default function AddNewSatInvoiceComponent({showForm, user, token}: Params) {
+export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}: Params) {
 
   const [folio, setFolio] = useState<string>('');
   const [taxFolio, setTaxFolio] = useState<string>('');
@@ -38,10 +41,23 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
   const [step, setStep]=useState<number>(0);
   const [isVat, setIsVat]=useState<boolean>(true);
 
+  const [satClient, setSatClient]=useState<ISatCLient>();
+
   const [heightPage, setHeightPage] = useState<number>(900);
+
+  async function handleSatCLient(idc:string){
+    const res = await getClientTAXProfileMIN(token, idc);
+    if(typeof(res)=='string'){
+      showToastMessageError(res);
+    }else{
+      console.log('res sat cli => ', res[0]);
+      setSatClient(res[0]);
+    }
+  }
 
   const handleClient = (value: string) => {
     setClient(value);
+    handleSatCLient(value);
   }
 
   const handleProject = (value: string) => {
@@ -68,13 +84,13 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
     setDate(value);
   }
 
-  const handleFolio = (value:string) => {
-    setFolio(value);
-  }
+  // const handleFolio = (value:string) => {
+  //   setFolio(value);
+  // }
 
-  const handleTaxFolio = (value:string) => {
-    setTaxFolio(value);
-  }
+  // const handleTaxFolio = (value:string) => {
+  //   setTaxFolio(value);
+  // }
 
   const handleConditionPayment = (value:string) => {
     setConditionPayment(value);
@@ -92,17 +108,17 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
     setBandOdc(value);
   }
 
-  const handleBandFolio = (value:boolean) => {
-    setBandFolio(value);
-  }
+  // const handleBandFolio = (value:boolean) => {
+  //   setBandFolio(value);
+  // }
 
-  const handleBandTaxFolio = (value:boolean) => {
-    setBandTaxFolio(value);
-  }
+  // const handleBandTaxFolio = (value:boolean) => {
+  //   setBandTaxFolio(value);
+  // }
 
-  const handleIsVat = (value:boolean) => {
-    setIsVat(value);
-  }
+  // const handleIsVat = (value:boolean) => {
+  //   setIsVat(value);
+  // }
 
   const handleResize = () => {
     setHeightPage(Math.max(
@@ -121,6 +137,21 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
     ));
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
+
+  useEffect(() => {
+    const fetch = async() => {
+      const [resfolio] = await Promise.all([
+        getFOLIONEXT(token, '65d3813c74045152c0c4377e')
+      ]);
+
+      // console.log('res folio => ', resfolio);
+      setFolio(resfolio);
+    }
+
+    if(isNew){
+      fetch();
+    }
+  }, [isNew]);
 
   const validationData = () =>{
     let validation = true;
@@ -249,12 +280,9 @@ export default function AddNewSatInvoiceComponent({showForm, user, token}: Param
     // }
   }
 
-  const component = (step===0? <DataBasicSatInvoiceStepper bandDate={bandDate} bandFolio={bandFolio}  
-                        bandTaxFolio={bandTaxFolio} client={client} date={date} folio={folio} 
-                        nextStep={handleStep} setClient={handleClient} setDate={handleDate} 
-                        setFolio={handleFolio} setTaxFolio={handleTaxFolio} taxFolio={taxFolio}
-                        token={token} setBandDate={handleBandDate} setBandFolio={handleBandFolio}
-                        setBandTaxFolio={handleBandTaxFolio} /> : 
+  const component = (step===0? <DataBasicSatInvoiceStepper bandDate={bandDate} client={client} date={date}  
+                        nextStep={handleStep} setClient={handleClient} setDate={handleDate} folio={folio} 
+                        token={token} setBandDate={handleBandDate} project={project} setProject={handleProject} /> : 
                         (step===1? <SatInvoicesConditionsStepper 
                                   conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 

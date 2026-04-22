@@ -484,7 +484,7 @@ export default function TableSatInvoicesComponent({token, user}:
       )}
 
       <ContainerSideNav width="w-full max-w-3xl" open={showNewInvoice}>
-        <AddNewSatInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
+        <AddNewSatInvoiceComponent showForm={setShowNewinvoice} isNew={showNewInvoice} token={token} user={user} />
       </ContainerSideNav>
     </>
   )

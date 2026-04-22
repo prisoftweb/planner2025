@@ -1,11 +1,12 @@
 import SelectReact from "@/components/SelectReact"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Label from "@/components/Label";
 import { showToastMessageError } from "@/components/Alert";
-import { getClientsLV } from "@/app/api/routeClients";
+import { getClientsLV, getAllClientsTaxProfileLV } from "@/app/api/routeClients";
 import { Options } from "@/interfaces/Common";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
+import { getAllProjectsWithConditionLV } from "@/app/api/routeProjects";
 
 type DataBasicProps={
   token:string,
@@ -15,26 +16,61 @@ type DataBasicProps={
   setClient:Function,
   bandDate:boolean,
   folio:string,
-  setFolio:Function
-  bandFolio:boolean,
-  taxFolio:string,
-  setTaxFolio:Function
-  bandTaxFolio:boolean
+  // setFolio:Function
+  // bandFolio:boolean,
+  // taxFolio:string,
+  // setTaxFolio:Function
+  // bandTaxFolio:boolean
   nextStep:Function
-  setBandFolio:Function,
-  setBandTaxFolio:Function
+  // setBandFolio:Function,
+  // setBandTaxFolio:Function
   setBandDate:Function,
+  project:string,
+  setProject:Function
 }
 
+const formatDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export default function DataBasicSatInvoiceStepper({token, client, date, setDate, setClient, bandDate, 
-  bandFolio, bandTaxFolio, folio, setFolio, setTaxFolio, taxFolio, nextStep, setBandDate, setBandFolio, 
-  setBandTaxFolio}: DataBasicProps) {
+  nextStep, setBandDate, project, setProject, folio }: DataBasicProps) {
 
   const [optClients, setOptClients]=useState<Options[]>([]);
+  const [optProjects, setOptProjects]=useState<Options[]>([]);
+
+  const { minDate, maxDate } = useMemo(() => {
+    const today = new Date();
+    const threeDaysAgo = new Date();
+
+    threeDaysAgo.setDate(today.getDate() - 3);
+
+    return {
+      minDate: formatDate(threeDaysAgo),
+      maxDate: formatDate(today),
+    };
+  }, []);
   
   useEffect(() => {
     const fetch = async () => {
-      const clients = await getClientsLV(token);
+      // const clients = await getClientsLV(token);
+      // if(typeof(clients)==='string'){
+      //   showToastMessageError(clients);
+      // }else{
+      //   setOptClients(clients);
+      //   if(!client || client ===''){
+      //     setClient(clients[0].value);
+      //   }
+      // }
+
+      const [clients, projs] = await Promise.all([
+        getAllClientsTaxProfileLV(token),
+        getAllProjectsWithConditionLV(token)
+      ]);
+
       if(typeof(clients)==='string'){
         showToastMessageError(clients);
       }else{
@@ -42,6 +78,13 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
         if(!client || client ===''){
           setClient(clients[0].value);
         }
+      }
+
+      if(typeof(projs)==='string'){
+        showToastMessageError(projs);
+      }else{
+        setOptProjects(projs);
+        setProject(projs[0].value);
       }
     }
     fetch();
@@ -55,20 +98,20 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
 
   const validationData = () => {
     let validation = true;
-    if(!folio || folio===''){
-      setBandFolio(true);
-      validation = false;
-      return false;
-    }else{
-      setBandFolio(false);
-    }
-    if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
-      setBandTaxFolio(true);
-      validation = false;
-      return false;
-    }else{
-      setBandTaxFolio(false);
-    }
+    // if(!folio || folio===''){
+    //   setBandFolio(true);
+    //   validation = false;
+    //   return false;
+    // }else{
+    //   setBandFolio(false);
+    // }
+    // if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
+    //   setBandTaxFolio(true);
+    //   validation = false;
+    //   return false;
+    // }else{
+    //   setBandTaxFolio(false);
+    // }
     if(!date || date===''){
       setBandDate(true);
       validation = false;
@@ -91,25 +134,37 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
           </div>
         )}
 
+        {optProjects.length > 0 && (
+          <div className="">
+            <div className="flex items-center gap-x-3">
+              <div className="w-14">
+                <Label htmlFor="project"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Proyecto</p></Label>
+              </div>
+            </div>
+            <SelectReact index={0} opts={optProjects} setValue={setProject} />
+          </div>
+        )}
+
         <div className="">
           <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
-          <Input type="text" value={folio} onChange={(e) => setFolio(e.target.value)} autoFocus />
-          {bandFolio && (
+          <Input type="text" disabled value={folio} />
+          {/* {bandFolio && (
             <p className="text-red-700">Ingrese un folio valido!!!!</p>
-          )}
+          )} */}
         </div>
 
-        <div className="sm:col-span-2">
+        {/* <div className="sm:col-span-2">
           <Label htmlFor="taxfolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio fiscal</p></Label>
           <Input type="text" value={taxFolio} onChange={(e) => setTaxFolio(e.target.value)} />
           {bandTaxFolio && (
             <p className="text-red-700">Ingrese un folio fiscal valido!!!!</p>
           )}
-        </div>
+        </div> */}
         
         <div className="">
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>
-          <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+          <Input type="date" value={date} min={minDate} max={maxDate} 
+            autoFocus onChange={(e) => setDate(e.target.value)} />
           {bandDate && (
             <p className="text-red-700">Ingrese una fecha valida!!!!</p>
           )}

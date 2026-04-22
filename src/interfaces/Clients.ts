@@ -258,3 +258,12 @@ export interface ITotalPaymentClient {
   quantity: number
   totalCharged: number
 }
+
+export interface ISatCLient {
+  _id: string
+  name: string
+  rfc: string
+  taxregime: string
+  regime: string
+  cp: number
+}

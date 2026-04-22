@@ -506,3 +506,25 @@ export async function insertConditionInInvoice(auth_token:string, id:string, dat
     return 'Error al cancelar factura!!';
   }
 }
+
+export async function getFOLIONEXT(auth_token:string, idc:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getFOLIONEXT/${idc}`;
+  // console.log('url => ', url);
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    // console.log('res => ', res.data.data);
+    if(res.status===201) return res.data.data.data;
+    return res.statusText;
+  } catch (error) {
+    // console.log('error => ', error);
+    if(axios.isAxiosError(error)){
+      return error.response?.data.message || error.message;
+    }
+    return 'Error al obtener folio!!';
+  }
+}

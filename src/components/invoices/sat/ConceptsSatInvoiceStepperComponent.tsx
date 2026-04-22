@@ -12,6 +12,8 @@ import { getConceptsMin, } from "@/app/api/routeEstimates"
 import { IConceptEstimateMin } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
 import Label from "@/components/Label";
+import { PriceConcept } from "@/interfaces/Estimate";
+import { getPricesConcept } from "@/app/api/routeEstimates";
 
 type DataBasicProps={
   token:string,
@@ -37,6 +39,8 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
   const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
   const [concepts, setConcepts] = useState<IConceptEstimateMin[]>([]);
   const [conceptSel, setConceptSel] = useState<IConceptEstimateMin | undefined>();
+  const [prices, setPrices] = useState<PriceConcept[]>([]);
+  const [priceSel, setPriceSel] = useState<PriceConcept>();
 
   const [quantity, setQuantity]=useState<string>('0');
   const [price, setPrice]=useState<string>('0');
@@ -47,10 +51,10 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
   const [vat, setVat]=useState<string>('16');
   // const [subtotalInvoice, setSubtotalInvoice]=useState<string>('0');
 
-  const handleTotal = (value: string) => {
+  const handleTotal = (Qvalue: string, PValue:PriceConcept) => {
     try {
-      const t = Number(quantity.replace(/[$,]/g, "")) *
-                Number(value.replace(/[$,]/g, ""));
+      const t = Number(Qvalue.replace(/[$,]/g, "")) *
+                PValue.cost;
       
       setTotal(t.toFixed(2).toString());
     } catch (error) {
@@ -58,27 +62,66 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
     }
   }
 
+  const fetchPrices = async (conceptSelected:IConceptEstimateMin | undefined) => {
+    if(conceptSelected){
+      const res = await getPricesConcept(token, conceptSelected._id);
+      if(typeof(res) !== 'string'){
+        setPrices(res);
+      }else{
+        showToastMessageError(res);
+      }
+    }else{
+      setPrices([]);
+    }
+  }
+  // fetch();
+
+  const handleConcept = (conceptP:IConceptEstimateMin|undefined) => {
+    setConceptSel(conceptP);
+    if(conceptP){
+      fetchPrices(conceptP);
+    }
+  }
+
   const addConcept = () => {
     // console.log('add concept => ');
+    let t = 0;
+    try {
+      t=Number(total.replace(/[$,]/g, ""));
+    } catch (error) {
+      t=0;
+    }
     if(conceptSel){
-      const data = {
-        conceptEstimate: conceptSel,
-        priceConcepEstimate: {
-            cost: price,
-            date: new Date().toISOString(),            
-            user
-        },
-        quantity: Number(quantity),
-        amount: Number(price.replace(/[$,]/g, "")),
-        date: new Date(),
-        user: user
+      if(priceSel){
+        if(t > 0){
+          const data = {
+            conceptEstimate: conceptSel,
+            priceConcepEstimate: {
+                // cost: price,
+                cost: priceSel.cost,
+                date: new Date().toISOString(),            
+                user
+            },
+            quantity: Number(quantity),
+            // amount: Number(price.replace(/[$,]/g, "")),
+            amount: priceSel.cost,
+            date: new Date(),
+            user: user
+          }
+          // console.log('entro => ', data);
+          handleAddNewConcept(data);
+          setConceptSel(undefined);
+          setPriceSel(undefined);
+          setPrices([]);
+          setPrice('0');
+          setTotal('0');
+          setQuantity('0');
+        }else{
+          showToastMessageError('Error el total debe ser mayor a 0!!!');
+        }
+      }else{
+        showToastMessageError('Seleccione un precio por favor!!')
       }
-      // console.log('entro => ', data);
-      handleAddNewConcept(data);
-      setConceptSel(undefined);
-      setPrice('0');
-      setTotal('0');
-      setQuantity('0');
     }else{
       showToastMessageError("Seleccione un concepto por favor!!!");
     }
@@ -180,38 +223,6 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
 
   const data = TransformConceptsInvoice(conceptsInvoice);
 
-  // type Usuario = {
-  //   uuid: string;
-  //   email: string;
-  // };
-
-  // const prueba:Usuario[] = [
-  //   {
-  //     email: 'email1',
-  //     uuid:'11111'
-  //   },
-  //   {
-  //     email: 'email2',
-  //     uuid:'22222'
-  //   },
-  //   {
-  //     email: 'email3',
-  //     uuid:'33333'
-  //   },
-  //   {
-  //     email: 'email4',
-  //     uuid:'44444'
-  //   },
-  //   {
-  //     email: 'email5',
-  //     uuid:'55555'
-  //   },
-  //   {
-  //     email: 'email6',
-  //     uuid:'66666'
-  //   }
-  // ];
-
   let subtotalInvoice=0;
   let totalInvoice=0;
   let vatT=0;
@@ -255,14 +266,32 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
           getKey={(u) => u._id}
           onSelect={(u) => {
             console.log(u);
-            setConceptSel(u);
+            // setConceptSel(u);
+            handleConcept(u);
           }}
         />
         <div className="w-28">
-          <Input type="text" value={quantity} onChange={(e) => setQuantity(e.target.value)} />
+          <Input type="text" value={quantity} onChange={(e) => {
+            setQuantity(e.target.value);
+            if(priceSel){
+              handleTotal(e.target.value?? '0', priceSel);
+            }
+          }} />
         </div>
     
-        <CurrencyInput
+        <div className="w-40">
+          <SearchSelect
+            options={prices}
+            getLabel={(u) => u.cost.toString()}
+            getKey={(u) => u._id}
+            onSelect={(u) => {
+              console.log(u);
+              setPriceSel(u);
+              handleTotal(quantity?? '0', u);
+            }}
+          />
+        </div>
+        {/* <CurrencyInput
           prefix="$"
           value={price.replace(/[$,]/g, "")}
           className="w-32 border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
@@ -278,7 +307,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
             handleTotal('0');
             // handleIdVat(idVat);
           }}}
-        />
+        /> */}
 
         <CurrencyInput
           prefix="$"

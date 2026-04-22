@@ -36,6 +36,24 @@ export async function getClientsLV(auth_token:string) {
   }
 }
 
+export async function getAllClientsTaxProfileLV(auth_token:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/getAllClientsTaxProfileLV`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
+      }
+    })
+    if(res.status===200) return res.data.data.data;
+    return res.data?.message?? res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+    return 'Ocurrio un problema al consultar clientes!!';
+  }
+}
+
 export async function getTags(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/tags`;
   try {
@@ -339,6 +357,23 @@ export async function getAllTOTALChargedByOneCLIENT(auth_token:string, id:string
       headers: {
         'Authorization': `Bearer ${auth_token}`,
         'Content-Type': 'application/json',
+      }
+    })
+    if(res.status===200) return res.data.data.stats;
+    return res.statusText;
+  } catch (error) {
+    if(axios.isAxiosError(error)){
+      return error.message;
+    }
+  }
+}
+
+export async function getClientTAXProfileMIN(auth_token:string, id:string) {
+  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/getClientTAXProfileMIN/${id}`;
+  try {
+    const res = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${auth_token}`,
       }
     })
     if(res.status===200) return res.data.data.stats;
