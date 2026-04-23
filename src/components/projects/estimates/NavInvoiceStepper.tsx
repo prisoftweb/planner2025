@@ -11,7 +11,7 @@ export default function NavInvoiceStepper({index, setIndex}: {index:number, setI
       <div className="w-full">
         <ol
           className="grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 
-            border border-gray-500 text-sm  sm:grid-cols-3"
+            border border-gray-500 text-sm  sm:grid-cols-4"
         >
           <li className={`flex items-center border-b sm:border-b-0 sm:border-r border-gray-300 justify-center 
             gap-1 p-4 cursor-pointer ${index === 0? 'bg-blue-500 text-white': (index > 0? 'bg-green-500 text-white': 'text-gray-500')}`}
@@ -42,18 +42,33 @@ export default function NavInvoiceStepper({index, setIndex}: {index:number, setI
             </p>
           </li>
 
-          <li 
+          <li className={`relative flex items-center justify-center gap-1 p-4 cursor-pointer
+            ${index === 2? 'bg-blue-500 text-white': (index > 2? 'bg-green-500 text-white': 'bg-gray-50 text-gray-500')}`}
             onClick={() => changeTab(2)}
           >
+
+            <span className="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
+              3
+            </span>
+
+            <p className="leading-none">
+              <strong className="block font-medium"> Conceptos </strong>
+              <small className="mt-1">  </small>
+            </p>
+          </li>
+
+          <li 
+            onClick={() => changeTab(3)}
+          >
             <div className={`flex items-center justify-center border-t sm:border-t-0 sm:border-l border-gray-300
-                gap-2 p-4 cursor-pointer ${index === 2? 'bg-blue-500 text-white': (index > 2? 'bg-green-500 text-white': 'text-gray-500')}`}>
+                gap-2 p-4 cursor-pointer ${index === 3? 'bg-blue-500 text-white': (index > 3? 'bg-green-500 text-white': 'text-gray-500')}`}>
 
               <span className="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
-                3
+                4
               </span>
 
               <p className="leading-none">
-                <strong className="block font-medium"> Conceptos </strong>
+                <strong className="block font-medium"> Confirmacion </strong>
                 <small className="mt-1"> </small>
               </p>
             </div>

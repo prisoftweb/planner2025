@@ -19,7 +19,13 @@ type DataBasicProps={
   token:string,
   nextStep:Function,
   saveInvoice:Function,
-  user:string
+  user:string,
+  handleAddConcept: (concept: any) => void,
+  conceptsInvoice: IConceptsInvoice[],
+  handleDiscount: (value: string) => void
+  handleVat: (value: string) => void,
+  vat: string,
+  discount:string,
 }
 
 type TableConceptsInvoice = {
@@ -33,10 +39,10 @@ type TableConceptsInvoice = {
 }
 
 export default function ConceptsSatInvoiceStepperComponent({token, nextStep, saveInvoice, 
-  user}: DataBasicProps) {
+  user, handleAddConcept, conceptsInvoice, handleDiscount, handleVat, discount, vat}: DataBasicProps) {
 
-  const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);  
-  const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
+  // const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);  
+  // const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
   const [concepts, setConcepts] = useState<IConceptEstimateMin[]>([]);
   const [conceptSel, setConceptSel] = useState<IConceptEstimateMin | undefined>();
   const [prices, setPrices] = useState<PriceConcept[]>([]);
@@ -47,8 +53,8 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
   const [total, setTotal]=useState<string>('0');
 
   // const [totalInvoice, setTotalInvoice]=useState<string>('0');
-  const [discount, setDiscount]=useState<string>('0');
-  const [vat, setVat]=useState<string>('16');
+  // const [discount, setDiscount]=useState<string>('0');
+  // const [vat, setVat]=useState<string>('16');
   // const [subtotalInvoice, setSubtotalInvoice]=useState<string>('0');
 
   const handleTotal = (Qvalue: string, PValue:PriceConcept) => {
@@ -133,13 +139,14 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
   // }
 
   const handleAddNewConcept = (concept: any) => {
-    setConceptsInvoice((prev) => [...prev, concept]);
-    setShowNewConcept(false);
+    // setConceptsInvoice((prev) => [...prev, concept]);
+    // setShowNewConcept(false);
+    handleAddConcept(concept);
   }
 
-  const handleShowNewConcept = (value:boolean) => {
-    setShowNewConcept(value);
-  }
+  // const handleShowNewConcept = (value:boolean) => {
+  //   setShowNewConcept(value);
+  // }
 
   useEffect(() => {
     const fetchCocnepts = async () => {
@@ -335,11 +342,12 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
               // onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
               decimalsLimit={2}
               onValueChange={(value) => {try {
-                setDiscount(value || '0');
+                // setDiscount(value || '0');
+                handleDiscount(value || '0');
                 // handleTotal(value || '0');
                 // handleIdVat(idVat);
               } catch (error) {
-                setDiscount('0');
+                handleDiscount('0');
                 // handleTotal('0');
                 // handleIdVat(idVat);
               }}}
@@ -357,11 +365,11 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
               // onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
               decimalsLimit={2}
               onValueChange={(value) => {try {
-                setVat(value || '0');
+                handleVat(value || '0');
                 // handleTotal(value || '0');
                 // handleIdVat(idVat);
               } catch (error) {
-                setVat('0');
+                handleVat('0');
                 // handleTotal('0');
                 // handleIdVat(idVat);
               }}}
@@ -412,10 +420,11 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
         >
           Atras
         </button>
-        <Button type="button" onClick={() => saveInvoice(conceptsInvoice)}>Guardar</Button>
+        {/* <Button type="button" onClick={() => saveInvoice(conceptsInvoice)}>Guardar</Button> */}
+        <Button type="button" onClick={() => nextStep(3)}>Siguiente</Button>
       </div>
-      {showNewConcept && <AddNewConceptInInvoice showForm={handleShowNewConcept} token={token} 
-                            updateConcepts={handleAddNewConcept} user={user} />}
+      {/* {showNewConcept && <AddNewConceptInInvoice showForm={handleShowNewConcept} token={token} 
+                            updateConcepts={handleAddNewConcept} user={user} />} */}
     </div>
   )
 }

@@ -12,6 +12,8 @@ import ConceptsSatInvoiceStepperComponent from "./ConceptsSatInvoiceStepperCompo
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon"
 import { ISatCLient } from "@/interfaces/Clients";
 import { getClientTAXProfileMIN } from "@/app/api/routeClients";
+import { IConceptsInvoice } from "@/interfaces/Invoices"
+import ConfirmSatInvoiceComponent from "./ConfirmSatInvoiceComponent"
 
 type Params = {
   showForm:(value: boolean) => void,
@@ -41,9 +43,38 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   const [step, setStep]=useState<number>(0);
   const [isVat, setIsVat]=useState<boolean>(true);
 
+  const [subtotalInvoice, setSubtotalInvoice]=useState<number>(0);
+  const [totalInvoice, setTotalInvoice]=useState<number>(0);
+  const [vatT, setVatT]=useState<number>(0);
+  const [discount, setDiscount]=useState<string>('0');
+  const [vat, setVat]=useState<string>('16');
+
   const [satClient, setSatClient]=useState<ISatCLient>();
+  const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);
+
+  const handleAddNewConcept = (concept: any) => {
+    setConceptsInvoice((prev) => [...prev, concept]);
+    const nConcept=[...conceptsInvoice, concept];
+    const t = nConcept.reduce((acumulador, item) => {
+                return acumulador + (item.amount * item.quantity);
+              }, 0);
+
+    setSubtotalInvoice(t);
+    const tinv= (t * Number(vat.replace(/[$,%]/g, "")?? 0.1)) / 100;
+    setVatT(tinv);
+    const totI= tinv + t - Number(discount.replace(/[$,%]/g, "")?? 0);
+    setTotalInvoice(totI);
+  }
 
   const [heightPage, setHeightPage] = useState<number>(900);
+
+  const handleDiscount=(value:string) => {
+    setDiscount(value);
+  }
+
+  const handleVat=(value:string) => {
+    setVat(value);
+  }
 
   async function handleSatCLient(idc:string){
     const res = await getClientTAXProfileMIN(token, idc);
@@ -288,8 +319,11 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 
                                   handleType={handleType} nextStep={handleStep} token={token} 
                                   bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc} />: 
-                                    <ConceptsSatInvoiceStepperComponent nextStep={handleStep} 
-                                      saveInvoice={saveInvoice} token={token} user={user} />))
+                                    (step==2? <ConceptsSatInvoiceStepperComponent nextStep={handleStep} handleAddConcept={handleAddNewConcept}
+                                      saveInvoice={saveInvoice} token={token} user={user} conceptsInvoice={conceptsInvoice} 
+                                      discount={discount} handleDiscount={handleDiscount} handleVat={handleVat} vat={vat} /> :
+                                        <ConfirmSatInvoiceComponent client={satClient} concepts={conceptsInvoice} date={date}
+                                              folio={folio} iva={vatT} subtotal={subtotalInvoice} total={totalInvoice} />)))
 
   return (
     <>

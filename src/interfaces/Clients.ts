@@ -260,10 +260,16 @@ export interface ITotalPaymentClient {
 }
 
 export interface ISatCLient {
+  // _id: string
+  // name: string
+  // rfc: string
+  // taxregime: string
+  // regime: string
+  // cp: number
   _id: string
-  name: string
-  rfc: string
-  taxregime: string
+  legalName: string
+  tin: string
+  taxRegimeCode: string
   regime: string
-  cp: number
+  zipCode: number
 }
