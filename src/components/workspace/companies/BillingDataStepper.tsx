@@ -13,6 +13,8 @@ import { Company } from '@/interfaces/Companies';
 // import UploadFileDropZone from '@/components/UploadFileDropZone';
 // import UploadImage from '@/components/UploadImage';
 import { ChangeEvent } from "react";
+import { getSatCfdiUses, getSatTaxRegimes } from '@/app/api/routeSatInvoices';
+import { Options } from '@/interfaces/Common';
 
 export default function BillingDataStepper({capitalregime, filecer, handleFileccer, name, 
   password, rfc, taxregime, handleFilekey, filekey, handleCapReg, handleName, handlePassword, handleRfc,
@@ -27,6 +29,25 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // const [filecer, setFilecer]=useState<File>();
+  const [satTaxRegimes, setSatTaxRegimes] = useState<Options[]>([]);
+  const [satTaxRegime, setSatTaxRegime] = useState<string>();
+
+  useEffect(() => {
+    const fetchSatData = async () => {
+      const taxRegimes = await getSatTaxRegimes();
+      if(typeof(taxRegimes) === 'string'){
+        showToastMessageError(taxRegimes);
+      }else{
+        const aux:Options[] = taxRegimes.map((reg: any) => ({
+          value: reg.id,
+          label: reg.description
+        }));
+        setSatTaxRegimes(aux);
+        setSatTaxRegime(aux[0].value);
+      }
+    }
+    fetchSatData();
+  }, []);
   
   // useEffect(() => {
   //   if (openSideNav && inputRef.current) {
@@ -75,12 +96,19 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
         tax: {
           name: name.trim(),
           rfc: rfc.trim(),
-          taxregime: taxregime.trim(),
+          // taxregime: taxregime.trim(),
+          taxregime: {
+            id: taxregime.trim().substring(0, 3),
+            // id: taxregime.trim(),
+            regime: taxregime.trim()
+          },
           capitalregime: capitalregime.trim(),
           cp,
           password: password,  
         },
       }
+
+      console.log('data conpany => ', data);
 
       await saveCompany(data);
 

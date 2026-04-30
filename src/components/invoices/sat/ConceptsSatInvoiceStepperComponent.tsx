@@ -14,14 +14,18 @@ import { showToastMessageError } from "@/components/Alert"
 import Label from "@/components/Label";
 import { PriceConcept } from "@/interfaces/Estimate";
 import { getPricesConcept } from "@/app/api/routeEstimates";
+import { ISatConcept } from "@/interfaces/SatInvoice";
+import SelectReact from "@/components/SelectReact";
+import { Options } from "@/interfaces/Common";
 
 type DataBasicProps={
   token:string,
   nextStep:Function,
-  saveInvoice:Function,
+  // saveInvoice:Function,
   user:string,
   handleAddConcept: (concept: any) => void,
-  conceptsInvoice: IConceptsInvoice[],
+  // conceptsInvoice: IConceptsInvoice[],
+  conceptsInvoice: ISatConcept[],
   handleDiscount: (value: string) => void
   handleVat: (value: string) => void,
   vat: string,
@@ -38,7 +42,7 @@ type TableConceptsInvoice = {
   Importe: number
 }
 
-export default function ConceptsSatInvoiceStepperComponent({token, nextStep, saveInvoice, 
+export default function ConceptsSatInvoiceStepperComponent({token, nextStep, 
   user, handleAddConcept, conceptsInvoice, handleDiscount, handleVat, discount, vat}: DataBasicProps) {
 
   // const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);  
@@ -46,6 +50,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
   const [concepts, setConcepts] = useState<IConceptEstimateMin[]>([]);
   const [conceptSel, setConceptSel] = useState<IConceptEstimateMin | undefined>();
   const [prices, setPrices] = useState<PriceConcept[]>([]);
+  const [pricesOptions, setPricesOptions] = useState<Options[]>([]);
   const [priceSel, setPriceSel] = useState<PriceConcept>();
 
   const [quantity, setQuantity]=useState<string>('0');
@@ -73,14 +78,33 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
       const res = await getPricesConcept(token, conceptSelected._id);
       if(typeof(res) !== 'string'){
         setPrices(res);
+        const aux: Options[] = res.map((p:any) => {
+          return {
+            label: p.cost.toString(),
+            value: p._id
+          }
+        });
+        setPricesOptions(aux);
       }else{
         showToastMessageError(res);
       }
     }else{
       setPrices([]);
+      setPricesOptions([]);
     }
   }
   // fetch();
+
+  const handlePrice = (idPrice:string) => {
+    const p = prices.find((pr) => pr._id === idPrice);
+    if(p){
+      setPriceSel(p);
+      handleTotal(quantity?? '0', p);
+    }else{
+      setPriceSel(undefined);
+      setTotal('0');
+    }
+  }
 
   const handleConcept = (conceptP:IConceptEstimateMin|undefined) => {
     setConceptSel(conceptP);
@@ -118,6 +142,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
           handleAddNewConcept(data);
           setConceptSel(undefined);
           setPriceSel(undefined);
+          setPricesOptions([]);
           setPrices([]);
           setPrice('0');
           setTotal('0');
@@ -287,7 +312,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
         </div>
     
         <div className="w-40">
-          <SearchSelect
+          {/* <SearchSelect
             options={prices}
             getLabel={(u) => u.cost.toString()}
             getKey={(u) => u._id}
@@ -296,26 +321,12 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep, sav
               setPriceSel(u);
               handleTotal(quantity?? '0', u);
             }}
-          />
+          /> */}
+          {prices && prices.length > 0 && (
+            <SelectReact index={0} opts={pricesOptions} setValue={handlePrice} />
+          )}
         </div>
-        {/* <CurrencyInput
-          prefix="$"
-          value={price.replace(/[$,]/g, "")}
-          className="w-32 border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
-                    focus:border-slate-700 outline-0"
-          // onChange={(e) => setAmount(e.target.value.replace(/[$,]/g, "") || '0')}
-          decimalsLimit={2}
-          onValueChange={(value) => {try {
-            setPrice(value || '0');
-            handleTotal(value || '0');
-            // handleIdVat(idVat);
-          } catch (error) {
-            setPrice('0');
-            handleTotal('0');
-            // handleIdVat(idVat);
-          }}}
-        /> */}
-
+        
         <CurrencyInput
           prefix="$"
           value={total.replace(/[$,]/g, "")}
@@ -510,7 +521,7 @@ const CardConcept = ({concept }:
   )
 }
 
-function TransformConceptsInvoice(concepts:IConceptsInvoice[]):TableConceptsInvoice[]{
+function TransformConceptsInvoice(concepts:ISatConcept[]):TableConceptsInvoice[]{
   const data:TableConceptsInvoice[]=[];
   
   concepts.forEach((c) => {
@@ -527,6 +538,24 @@ function TransformConceptsInvoice(concepts:IConceptsInvoice[]):TableConceptsInvo
   });
   return data;
 }
+
+// function TransformConceptsInvoice(concepts:IConceptsInvoice[]):TableConceptsInvoice[]{
+//   const data:TableConceptsInvoice[]=[];
+  
+//   concepts.forEach((c) => {
+//     data.push({
+//       Clave:c.conceptEstimate.code,
+//       Concepto:c.conceptEstimate.name,
+//       Descripcion:c.conceptEstimate.description,
+//       Unidad:c.conceptEstimate.unit.name,
+//       Cantidad:c.quantity,
+//       Price:c.priceConcepEstimate.cost,
+//       // Importe:c.amount,
+//       Importe:c.amount * c.quantity,
+//     })
+//   });
+//   return data;
+// }
 
 // import { useState, useRef } from "react";
 

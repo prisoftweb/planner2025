@@ -14,6 +14,7 @@ import { ISatCLient } from "@/interfaces/Clients";
 import { getClientTAXProfileMIN } from "@/app/api/routeClients";
 import { IConceptsInvoice } from "@/interfaces/Invoices"
 import ConfirmSatInvoiceComponent from "./ConfirmSatInvoiceComponent"
+import { ISatCompany, ISatConcept } from "@/interfaces/SatInvoice"
 
 type Params = {
   showForm:(value: boolean) => void,
@@ -50,9 +51,11 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   const [vat, setVat]=useState<string>('16');
 
   const [satClient, setSatClient]=useState<ISatCLient>();
-  const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);
+  // const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);
+  const [conceptsInvoice, setConceptsInvoice]=useState<ISatConcept[]>([]);
 
   const handleAddNewConcept = (concept: any) => {
+    console.log('concept => ', JSON.stringify(concept));
     setConceptsInvoice((prev) => [...prev, concept]);
     const nConcept=[...conceptsInvoice, concept];
     const t = nConcept.reduce((acumulador, item) => {
@@ -210,12 +213,84 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
     return validation;
   }
 
-  const saveInvoice = async (conceptsInvoice: any[]) => {
+  const saveInvoice = async (companySatData:ISatCompany) => {
     const val = validationData();
 
     showToastMessage('Timbrar factura...');
 
+    console.log('items => ', conceptsInvoice);
+    const items = conceptsInvoice.map((c: ISatConcept) => {
+        return {
+          itemCode: c.conceptEstimate.codesat,
+          quantity: c.quantity,
+          unitOfMeasurementCode: c.conceptEstimate.unitsat.id,
+          description: c.conceptEstimate.description,
+          unitPrice: c.priceConcepEstimate,
+          taxObjectCode: "02",
+          itemSku: "7506022301697",
+          discount: 0,
+          itemTaxes: [
+            {
+              taxCode: "002",      // IVA
+              taxTypeCode: "Tasa", // Tasa
+              taxRate: "0.160000", // 16%
+              taxFlagCode: "T"     // Traslado
+            }
+          ]
+        }
+      });
+
+      console.log('items 2 => ', items);
+
     if(val){
+      const invoice = {
+        // versionCode: "4.0",
+        series: "F",
+        // date: DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"),
+        date,
+        paymentFormCode: "01",
+        paymentMethodCode: "PUE",
+        currencyCode: "MXN",
+        typeCode: "I",
+        expeditionZipCode: companySatData?.issuer.expeditionZipCode,
+        exchangeRate: 1,
+        exportCode: "01",
+        issuer: {
+          tin: companySatData?.issuer.tin,
+          legalName: companySatData?.issuer.legalName,
+          taxRegimeCode: "621",
+          taxCredentials: companySatData?.issuer.taxCredentials,
+        },
+        recipient: {
+          tin: satClient?.tin,
+          legalName: satClient?.legalName,
+          zipCode: satClient?.zipCode,
+          taxRegimeCode: satClient?.taxRegimeCode,
+          cfdiUseCode: "G01",
+          // email: "someone@somewhere.com"
+        },
+        items
+        // items: [
+        //   {
+        //     itemCode: "01010101",
+        //     quantity: 9.5,
+        //     unitOfMeasurementCode: "E48",
+        //     description: "Invoicing software as a service",
+        //     unitPrice: 3587.75,
+        //     taxObjectCode: "02",
+        //     itemSku: "7506022301697",
+        //     discount: 255.85,
+        //     itemTaxes: [
+        //       {
+        //         taxCode: "002",      // IVA
+        //         taxTypeCode: "Tasa", // Tasa
+        //         taxRate: "0.160000", // 16%
+        //         taxFlagCode: "T"     // Traslado
+        //       }
+        //     ]
+        //   }
+        // ]
+      };
       // const facturapi = new Facturapi('sk_test_tu_api_key');
 
       // const invoice = await facturapi.invoices.create({
@@ -320,10 +395,11 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
                                   handleType={handleType} nextStep={handleStep} token={token} 
                                   bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc} />: 
                                     (step==2? <ConceptsSatInvoiceStepperComponent nextStep={handleStep} handleAddConcept={handleAddNewConcept}
-                                      saveInvoice={saveInvoice} token={token} user={user} conceptsInvoice={conceptsInvoice} 
+                                      token={token} user={user} conceptsInvoice={conceptsInvoice} 
                                       discount={discount} handleDiscount={handleDiscount} handleVat={handleVat} vat={vat} /> :
                                         <ConfirmSatInvoiceComponent client={satClient} concepts={conceptsInvoice} date={date}
-                                              folio={folio} iva={vatT} subtotal={subtotalInvoice} total={totalInvoice} />)))
+                                              folio={folio} iva={vatT} subtotal={subtotalInvoice} 
+                                              total={totalInvoice} token={token} saveInvoice={saveInvoice} />)))
 
   return (
     <>

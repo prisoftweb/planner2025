@@ -1,22 +1,49 @@
 import { ISatCLient } from "@/interfaces/Clients";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IConceptsInvoice } from "@/interfaces/Invoices";
+import { useState, useEffect } from "react";
+import { getCompanyTAXDATAFULL } from "@/app/api/routeSatInvoices";
+import { showToastMessageError } from "@/components/Alert";
+import { ISatCompany, ISatConcept } from "@/interfaces/SatInvoice";
+import Button from "@/components/Button";
 
 type PropsConfirm = {
   client:ISatCLient|undefined, 
   folio:string, 
   date:string,
-  concepts:IConceptsInvoice[],
+  // concepts:IConceptsInvoice[],
+  concepts:ISatConcept[],
   subtotal:number,
   total:number,
-  iva:number
+  iva:number,
+  token:string,
+  saveInvoice: (companySatData: ISatCompany) => Promise<void>
 }
 
-export default function ConfirmSatInvoiceComponent({client, date, folio, concepts, subtotal, total, iva}: PropsConfirm) {
+export default function ConfirmSatInvoiceComponent({client, date, folio, concepts, subtotal, total, 
+  iva, token, saveInvoice}: PropsConfirm) {
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+  const [company, setCompany] = useState<ISatCompany>()
+
+  useEffect(() => {
+    const fetchCompany = async () => {
+      const res = await Promise.all([
+        getCompanyTAXDATAFULL('65d3813c74045152c0c4377e', token)
+      ]);
+
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        // console.log('Company res => ', res[0][0]);
+        setCompany(res[0][0]);
+      }
+    }
+    fetchCompany();
+  }, []);
 
   console.log('client => ', client);
+  console.log('company => ', company);
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between gap-x-3 gap-y-3 border-b border-slate-500 pb-3">
@@ -29,14 +56,14 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
         </div>
 
         <div className=" order-1 sm:order-3 sm:text-right mt-2 sm:mt-0">
-          <img src="/Palaciosconstrucciones_horizontal.png" alt="palacios"
-            className=" h-14 md:h-24 w-auto"
-          />
-          <p className="font-extrabold text-lg text-black">Samuel Palacios Hernandez</p>
-          <p className="font-extrabold text-lg text-black">PAHS76123U25</p>
-          <p className="text-sm text-slate-500">Betelgeuze #334</p>
-          <p className="text-sm text-slate-500">Del Llano San Luis Potosi, S.L.P.</p>
-          <p className="text-sm text-slate-500">CP 78377 Mexico</p>
+          {/* <img src="/Palaciosconstrucciones_horizontal.png" alt="palacios"
+            className=" h-14 md:h-20 w-auto"
+          /> */}
+          <p className="font-extrabold text-lg text-black">{company?.issuer?.legalName}</p>
+          <p className="font-extrabold text-lg text-black">{company?.issuer?.tin}</p>
+          <p className="text-sm text-slate-500">{company?.issuer.expeditionZipCode}</p>
+          {/* <p className="text-sm text-slate-500">Del Llano San Luis Potosi, S.L.P.</p>
+          <p className="text-sm text-slate-500">CP 78377 Mexico</p> */}
         </div>
       </div>
 
@@ -81,7 +108,8 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
             </div>
 
             {concepts.map((c, index:number) => (
-              <div className="grid grid-cols-6 gap-x-2 mt-3" key={c.idconcept+index}>
+              // <div className="grid grid-cols-6 gap-x-2 mt-3" key={c.idconcept+index}>
+              <div className="grid grid-cols-6 gap-x-2 mt-3" key={index}>
                 <p className="text-black">{c?.quantity || 0}</p>
                 <p className="text-black col-span-3">{c.conceptEstimate.description}</p>
                 <p className="text-black text-right">{CurrencyFormatter({
@@ -129,6 +157,12 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
           <p className="text-slate-600 text-sm">Validar abonos de factura completos</p> */}
         </div>
 
+      </div>
+
+      <div className="mt-3 flex justify-center">
+        {company && (
+          <Button type="button" onClick={()=> saveInvoice(company)}>Timbrar</Button>
+        )}
       </div>
     </div>
   )
