@@ -29,7 +29,8 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
   useEffect(() => {
     const fetchCompany = async () => {
       const res = await Promise.all([
-        getCompanyTAXDATAFULL('65d3813c74045152c0c4377e', token)
+        // getCompanyTAXDATAFULL('65d3813c74045152c0c4377e', token)
+        getCompanyTAXDATAFULL('69f54fc23b1b0672ab3115a1', token)
       ]);
 
       if(typeof(res)==='string'){

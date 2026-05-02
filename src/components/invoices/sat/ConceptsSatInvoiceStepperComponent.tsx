@@ -85,12 +85,14 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
           }
         });
         setPricesOptions(aux);
+        setPriceSel(res[0]);
       }else{
         showToastMessageError(res);
       }
     }else{
       setPrices([]);
       setPricesOptions([]);
+      setPriceSel(undefined);
     }
   }
   // fetch();
@@ -297,7 +299,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
           getLabel={(u) => u.name}
           getKey={(u) => u._id}
           onSelect={(u) => {
-            console.log(u);
+            // console.log(u);
             // setConceptSel(u);
             handleConcept(u);
           }}
@@ -311,7 +313,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
           }} />
         </div>
     
-        <div className="w-40">
+        <div className="w-44">
           {/* <SearchSelect
             options={prices}
             getLabel={(u) => u.cost.toString()}

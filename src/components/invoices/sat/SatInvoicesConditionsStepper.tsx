@@ -281,6 +281,8 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
           label: m.description,
         }));
         setCatalogCFDI(auxTypes);
+        console.log('sat types:', auxTypes[0].value);
+        handleType(auxTypes[0].value);
         // handleConditionPayment(auxTypes[0].value)
       }
 
@@ -292,6 +294,7 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
           label: m.description,
         }));
         setCatalogFormPayment(auxPayForm);
+        handleFormPaid(auxPayForm[0].value);
         // handleConditionPayment(auxTypes[0].value)
       }
     }

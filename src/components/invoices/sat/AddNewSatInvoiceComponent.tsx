@@ -15,6 +15,7 @@ import { getClientTAXProfileMIN } from "@/app/api/routeClients";
 import { IConceptsInvoice } from "@/interfaces/Invoices"
 import ConfirmSatInvoiceComponent from "./ConfirmSatInvoiceComponent"
 import { ISatCompany, ISatConcept } from "@/interfaces/SatInvoice"
+import { createFiscalApiInvoice } from "@/app/api/routeSatInvoices"
 
 type Params = {
   showForm:(value: boolean) => void,
@@ -29,9 +30,9 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   const [taxFolio, setTaxFolio] = useState<string>('');
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
   const [client, setClient] = useState<string>('');
-  const [type, setType] = useState<string>('ADQUISICION_MERCANCIAS G01');
-  const [methodPaid, setMethodPaid] = useState<string>('PAGO_EN_UNA_EXHIBICION PUE');
-  const [formPaid, setFormPaid] = useState<string>('EFECTIVO 01');
+  const [type, setType] = useState<string>();
+  const [methodPaid, setMethodPaid] = useState<string>();
+  const [formPaid, setFormPaid] = useState<string>();
   const [conditionPayment, setConditionPayment] = useState<string>('');
   const [odc, setOdc] = useState<string>('');
   const [project, setProject] = useState<string>('');
@@ -80,7 +81,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   }
 
   async function handleSatCLient(idc:string){
-    const res = await getClientTAXProfileMIN(token, idc);
+    // const res = await getClientTAXProfileMIN(token, idc);
+    const res = await getClientTAXProfileMIN(token, '69f2ccb13b1b0672ab310b04');
     if(typeof(res)=='string'){
       showToastMessageError(res);
     }else{
@@ -99,6 +101,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   }
 
   const handleType = (value: string) => {
+    console.log('type => ', value);
     setType(value);
   }
 
@@ -214,18 +217,19 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   }
 
   const saveInvoice = async (companySatData:ISatCompany) => {
-    const val = validationData();
+    // const val = validationData();
+    const val = true;
 
-    showToastMessage('Timbrar factura...');
+    // showToastMessage('Timbrar factura...');
 
-    console.log('items => ', conceptsInvoice);
+    // console.log('items => ', conceptsInvoice);
     const items = conceptsInvoice.map((c: ISatConcept) => {
         return {
-          itemCode: c.conceptEstimate.codesat,
+          itemCode: c.conceptEstimate.codesat.toString(),
           quantity: c.quantity,
           unitOfMeasurementCode: c.conceptEstimate.unitsat.id,
           description: c.conceptEstimate.description,
-          unitPrice: c.priceConcepEstimate,
+          unitPrice: c.priceConcepEstimate.cost,
           taxObjectCode: "02",
           itemSku: "7506022301697",
           discount: 0,
@@ -240,33 +244,173 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
         }
       });
 
-      console.log('items 2 => ', items);
+    // const items=[{
+    //   itemCode: "01010101",
+    //   quantity: 9.5,
+    //   unitOfMeasurementCode: "E48",
+    //   description: "Invoicing software as a service",
+    //   unitPrice: 3587.75,
+    //   taxObjectCode: "02",
+    //   itemSku: "7506022301697",
+    //   discount: 255.85,
+    //   itemTaxes: [{
+    //     taxCode: "002",      // IVA
+    //     taxTypeCode: "Tasa", // Tasa
+    //     taxRate: "0.160000", // 16%
+    //     taxFlagCode: "T"     // Traslado
+    //   }]
+    // }]
+
+    // console.log('items 2 => ', items);
 
     if(val){
+      // const invoice = {
+      //   // versionCode: "4.0",
+      //   series: "F",
+      //   // date: DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"),
+      //   date: new Date(date).toISOString().slice(0, 19),
+      //   paymentFormCode: "01",
+      //   paymentMethodCode: "PUE",
+      //   currencyCode: "MXN",
+      //   typeCode: "I",
+      //   expeditionZipCode: companySatData?.issuer.expeditionZipCode,
+      //   exchangeRate: 1,
+      //   exportCode: "01",
+      //   issuer: {
+      //     tin: companySatData?.issuer.tin,
+      //     legalName: companySatData?.issuer.legalName,
+      //     taxRegimeCode: "621",
+      //     taxCredentials: companySatData?.issuer.taxCredentials,
+      //   },
+      //   // recipient: {
+      //   //   tin: satClient?.tin,
+      //   //   legalName: satClient?.legalName,
+      //   //   zipCode: satClient?.zipCode,
+      //   //   taxRegimeCode: satClient?.taxRegimeCode,
+      //   //   cfdiUseCode: "G01",
+      //   //   // email: "someone@somewhere.com"
+      //   // },
+      //   recipient: {
+      //     tin: "EKU9003173C9",
+      //     legalName: "ESCUELA KEMPER URGATE",
+      //     zipCode: "42501",
+      //     taxRegimeCode: "601",
+      //     cfdiUseCode: "G01",
+      //     email: "someone@somewhere.com"
+      //   },
+      //   items
+      //   // items: [
+      //   //   {
+      //   //     itemCode: "01010101",
+      //   //     quantity: 9.5,
+      //   //     unitOfMeasurementCode: "E48",
+      //   //     description: "Invoicing software as a service",
+      //   //     unitPrice: 3587.75,
+      //   //     taxObjectCode: "02",
+      //   //     itemSku: "7506022301697",
+      //   //     discount: 255.85,
+      //   //     itemTaxes: [
+      //   //       {
+      //   //         taxCode: "002",      // IVA
+      //   //         taxTypeCode: "Tasa", // Tasa
+      //   //         taxRate: "0.160000", // 16%
+      //   //         taxFlagCode: "T"     // Traslado
+      //   //       }
+      //   //     ]
+      //   //   }
+      //   // ]
+      // };
+
+      // const invoice = {
+      //   versionCode: "4.0",
+      //   series: "F",
+      //   date: "2026-05-01T14:56:40Z",
+      //   paymentFormCode: "01",
+      //   paymentMethodCode: "PUE",
+      //   currencyCode: "MXN",
+      //   typeCode: "I",
+      //   expeditionZipCode: "42501",
+      //   exchangeRate: 1,
+      //   exportCode: "01",
+      //   issuer: {
+      //     tin: "FUNK671228PH6",
+      //     legalName: "KARLA FUENTE NOLASCO",
+      //     taxRegimeCode: "621",
+      //     taxCredentials: [
+      //       {
+      //         base64File: "MIIFgDCCA2igAwIBAgIUMzAwMDEwMDAwMDA1MDAwMDM0NDYwDQYJKoZIhvcNAQELBQAwggErMQ8wDQYDVQQDDAZBQyBVQVQxLjAsBgNVBAoMJVNFUlZJQ0lPIERFIEFETUlOSVNUUkFDSU9OIFRSSUJVVEFSSUExGjAYBgNVBAsMEVNBVC1JRVMgQXV0aG9yaXR5MSgwJgYJKoZIhvcNAQkBFhlvc2Nhci5tYXJ0aW5lekBzYXQuZ29iLm14MR0wGwYDVQQJDBQzcmEgY2VycmFkYSBkZSBjYWxpejEOMAwGA1UEEQwFMDYzNzAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBDSVVEQUQgREUgTUVYSUNPMREwDwYDVQQHDAhDT1lPQUNBTjERMA8GA1UELRMIMi41LjQuNDUxJTAjBgkqhkiG9w0BCQITFnJlc3BvbnNhYmxlOiBBQ0RNQS1TQVQwHhcNMjMwNTE4MTQzNTM3WhcNMjcwNTE4MTQzNTM3WjCBpzEdMBsGA1UEAxMUS0FSTEEgRlVFTlRFIE5PTEFTQ08xHTAbBgNVBCkTFEtBUkxBIEZVRU5URSBOT0xBU0NPMR0wGwYDVQQKExRLQVJMQSBGVUVOVEUgTk9MQVNDTzEWMBQGA1UELRMNRlVOSzY3MTIyOFBINjEbMBkGA1UEBRMSRlVOSzY3MTIyOE1DTE5MUjA1MRMwEQYDVQQLEwpTdWN1cnNhbCAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhNXbTSqGX6+/3Urpemyy5vVG2IdP2v7v001+c4BoMxEDFDQ32cOFdDiRxy0Fq9aR+Ojrofq8VeftvN586iyA1A6a0QnA68i7JnQKI4uJy+u0qiixuHu6u3b3BhSpoaVHcUtqFWLLlzr0yBxfVLOqVna/1/tHbQJg9hx57mp97P0JmXO1WeIqi+Zqob/mVZh2lsPGdJ8iqgjYFaFn9QVOQ1Pq74o1PTqwfzqgJSfV0zOOlESDPWggaDAYE4VNyTBisOUjlNd0x7ppcTxSi3yenrJHqkq/pqJsRLKf6VJ/s9p6bsd2bj07hSDpjlDC2lB25eEfkEkeMkXoE7ErXQ5QCwIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQEAwIGwDANBgkqhkiG9w0BAQsFAAOCAgEAHwYpgbClHULXYhK4GNTgonvXh81oqfXwCSWAyDPiTYFDWVfWM9C4ApxMLyc0XvJte75Rla+bPC08oYN3OlhbbvP3twBL/w9SsfxvkbpFn2ZfGSTXZhyiq4vjmQHW1pnFvGelwgU4v3eeRE/MjoCnE7M/Q5thpuog6WGf7CbKERnWZn8QsUaJsZSEkg6Bv2jm69ye57ab5rrOUaeMlstTfdlaHAEkUgLX/NXq7RbGwv82hkHY5b2vYcXeh34tUMBL6os3OdRlooN9ZQGkVIISvxVZpSHkYC20DFNh1Bb0ovjfujlTcka81GnbUhFGZtRuoVQ1RVpMO8xtx3YKBLp4do3hPmnRCV5hCm43OIjYx9Ov2dqICV3AaNXSLV1dW39Bak/RBiIDGHzOIW2+VMPjvvypBjmPv/tmbqNHWPSAWOxTyMx6E1gFCZvi+5F+BgkdC3Lm7U0BU0NfvsXajZd8sXnIllvEMrikCLoI/yurvexNDcF1RW/FhMsoua0eerwczcNm66pGjHm05p9DR6lFeJZrtqeqZuojdxBWy4vH6ghyJaupergoX+nmdG3JYeRttCFF/ITI68TeCES5V3Y0C3psYAg1XxcGRLGd4chPo/4xwiLkijWtgt0/to5ljGBwfK7r62PHZfL1Dp+i7V3w7hmOlhbXzP+zhMZn1GCk7KY=",
+      //         fileType: 0,
+      //         password: "12345678a"
+      //       },
+      //       {
+      //         base64File: "MIIFDjBABgkqhkiG9w0BBQ0wMzAbBgkqhkiG9w0BBQwwDgQIAgEAAoIBAQACAggAMBQGCCqGSIb3DQMHBAgwggS9AgEAMASCBMh4EHl7aNSCaMDA1VlRoXCZ5UUmqErAbucRBAKNQXH8t8gVCl/ItHMI2hMJ76QOECOqEi1Y89cDpegDvh/INXyMsXbzi87tfFzgq1O+9ID6aPWGg+bNGADXyXxDVdy7Nq/SCdoXvo66MTYwq8jyJeUHDHEGMVBcmZpD44VJCvLBxDcvByuevP4Wo2NKqJCwK+ecAdZc/8Rvd947SjbMHuS8BppfQWARVUqA5BLOkTAHNv6tEk/hncC7O2YOGSShart8fM8dokgGSyewHVFe08POuQ+WDHeVpvApH/SP29rwktSoiHRoL6dK+F2YeEB5SuFW9LQgYCutjapmUP/9TC3Byro9Li6UrvQHxNmgMFGQJSYjFdqlGjLibfuguLp7pueutbROoZaSxU8HqlfYxLkpJUxUwNI1ja/1t3wcivtWknVXBd13R06iVfU1HGe8Kb4u5il4a4yP4p7VT4RE3b1SBLJeG+BxHiE8gFaaKcX/Cl6JV14RPTvk/6VnAtEQ66qHJex21KKuiJo2JoOmDXVHmvGQlWXNjYgoPx28Xd5WsofL+n7HDR2Ku8XgwJw6IXBJGuoday9qWN9v/k7DGlNGB6Sm4gdVUmycMP6EGhB1vFTiDfOGQO42ywmcpKoMETPVQ5InYKE0xAOckgcminDgxWjtUHjBDPEKifEjYudPwKmR6Cf4ZdGvUWwY/zq9pPAC9bu423KeBCnSL8AQ4r5SVsW6XG0njamwfNjpegwh/YG7sS7sDtZ8gi7r6tZYjsOqZlCYU0j7QTBpuQn81Yof2nQRCFxhRJCeydmIA8+z0nXrcElk7NDPk4kYQS0VitJ2qeQYNENzGBglROkCl2y6GlxAG80IBtReCUp/xOSdlwDR0eim+SNkdStvmQM5IcWBuDKwGZc1A4v/UoLl7niV9fpl4X6bUX8lZzY4gidJOafoJ30VoY/lYGkrkEuz3GpbbT5v8fF3iXVRlEqhlpe8JSGu7Rd2cPcJSkQ1Cuj/QRhHPhFMF2KhTEf95c9ZBKI8H7SvBi7eLXfSW2Y0ve6vXBZKyjK9whgCU9iVOsJjqRXpAccaWOKi420CjmS0+uwj/Xr2wLZhPEjBA/G6Od30+eG9mICmbp/5wAGhK/ZxCT17ZETyFmOMo49jl9pxdKocJNuzMrLpSz7/g5Jwp8+y8Ck5YP7AX0R/dVA0t37DO7nAbQT5XVSYpMVh/yvpYJ9WR+tb8Yg1h2lERLR2fbuhQRcwmisZR2W3Sr2b7hX9MCMkMQw8y2fDJrzLrqKqkHcjvnI/TdzZW2MzeQDoBBb3fmgvjYg07l4kThS73wGX992w2Y+a1A2iirSmrYEm9dSh16JmXa8boGQAONQzQkHh7vpw0IBs9cnvqO1QLB1GtbBztUBXonA4TxMKLYZkVrrd2RhrYWMsDp7MpC4M0p/DA3E/qscYwq1OpwriewNdx6XXqMZbdUNqMP2viBY2VSGmNdHtVfbN/rnaeJetFGX7XgTVYD7wDq8TW9yseCK944jcT+y/o0YiT9j3OLQ2Ts0LDTQskpJSxRmXEQGy3NBDOYFTvRkcGJEQJItuol8NivJN1H9LoLIUAlAHBZxfHpUYx66YnP4PdTdMIWH+nxyekKPFfAT7olQ=",
+      //         fileType: 1,
+      //         password: "12345678a"
+      //       }
+      //     ]
+      //   },
+      //   recipient: {
+      //     tin: "EKU9003173C9",
+      //     legalName: "ESCUELA KEMPER URGATE",
+      //     zipCode: "42501",
+      //     taxRegimeCode: "601",
+      //     cfdiUseCode: "G01",
+      //     email: "someone@somewhere.com"
+      //   },
+      //   items: [
+      //     {
+      //       itemCode: "01010101",
+      //       quantity: 9.5,
+      //       unitOfMeasurementCode: "E48",
+      //       description: "Invoicing software as a service",
+      //       unitPrice: 3587.75,
+      //       taxObjectCode: "02",
+      //       itemSku: "7506022301697",
+      //       discount: 255.85,
+      //       itemTaxes: [
+      //         {
+      //           taxCode: "002",
+      //           taxTypeCode: "Tasa",
+      //           // taxRate: 0.16,
+      //           "taxRate": "0.160000",
+      //           taxFlagCode: "T"
+      //         }
+      //       ]
+      //     }
+      //   ]
+      // };
+
       const invoice = {
-        // versionCode: "4.0",
+        versionCode: "4.0",
         series: "F",
-        // date: DateTime.now().toFormat("yyyy-MM-dd'T'HH:mm:ss"),
-        date,
-        paymentFormCode: "01",
-        paymentMethodCode: "PUE",
+        // date: "2026-05-01T14:56:40Z",
+        date: new Date(date).toISOString().slice(0, 19),
+        // paymentFormCode: "01",
+        paymentFormCode: formPaid,
+        // paymentMethodCode: "PUE",
+        paymentMethodCode: methodPaid,
         currencyCode: "MXN",
-        typeCode: "I",
-        expeditionZipCode: companySatData?.issuer.expeditionZipCode,
+        // typeCode: "I",
+        typeCode: type,
+        // expeditionZipCode: "42501",
+        expeditionZipCode: companySatData?.issuer.expeditionZipCode.toString(),
         exchangeRate: 1,
         exportCode: "01",
         issuer: {
           tin: companySatData?.issuer.tin,
           legalName: companySatData?.issuer.legalName,
-          taxRegimeCode: "621",
+          taxRegimeCode: "601",
           taxCredentials: companySatData?.issuer.taxCredentials,
         },
         recipient: {
           tin: satClient?.tin,
           legalName: satClient?.legalName,
-          zipCode: satClient?.zipCode,
+          // zipCode: "0"+satClient?.zipCode.toString(),
+          zipCode: satClient?.zipCode.toString(),
           taxRegimeCode: satClient?.taxRegimeCode,
-          cfdiUseCode: "G01",
+          // taxRegimeCode: "621",
+          // cfdiUseCode: "G01",
+          cfdiUseCode: conditionPayment,
           // email: "someone@somewhere.com"
         },
         items
@@ -282,15 +426,27 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
         //     discount: 255.85,
         //     itemTaxes: [
         //       {
-        //         taxCode: "002",      // IVA
-        //         taxTypeCode: "Tasa", // Tasa
-        //         taxRate: "0.160000", // 16%
-        //         taxFlagCode: "T"     // Traslado
+        //         taxCode: "002",
+        //         taxTypeCode: "Tasa",
+        //         // taxRate: 0.16,
+        //         "taxRate": "0.160000",
+        //         taxFlagCode: "T"
         //       }
         //     ]
         //   }
         // ]
       };
+
+      // console.log('invoice => ', invoice);
+
+      const res = await createFiscalApiInvoice(invoice);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        // console.log('res create invoice => ', res);
+        showToastMessage('Factura agregada satisfactoriamente!!');
+        showForm(false);
+      }
       // const facturapi = new Facturapi('sk_test_tu_api_key');
 
       // const invoice = await facturapi.invoices.create({
