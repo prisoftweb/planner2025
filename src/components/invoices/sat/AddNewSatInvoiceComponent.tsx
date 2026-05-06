@@ -14,7 +14,7 @@ import { ISatCLient } from "@/interfaces/Clients";
 import { getClientTAXProfileMIN } from "@/app/api/routeClients";
 import { IConceptsInvoice } from "@/interfaces/Invoices"
 import ConfirmSatInvoiceComponent from "./ConfirmSatInvoiceComponent"
-import { ISatCompany, ISatConcept } from "@/interfaces/SatInvoice"
+import { IResponseSatInvoice, ISatCompany, ISatConcept } from "@/interfaces/SatInvoice"
 import { createFiscalApiInvoice } from "@/app/api/routeSatInvoices"
 
 type Params = {
@@ -27,15 +27,21 @@ type Params = {
 export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}: Params) {
 
   const [folio, setFolio] = useState<string>('');
-  const [taxFolio, setTaxFolio] = useState<string>('');
+  // const [taxFolio, setTaxFolio] = useState<string>('');
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
   const [client, setClient] = useState<string>('');
   const [type, setType] = useState<string>();
   const [methodPaid, setMethodPaid] = useState<string>();
   const [formPaid, setFormPaid] = useState<string>();
   const [conditionPayment, setConditionPayment] = useState<string>('');
+  const [condicionPayment, setCondicionPayment] = useState<string>('');
   const [odc, setOdc] = useState<string>('');
   const [project, setProject] = useState<string>('');
+
+  const [labeFormPaid, setLabelFormPaid] = useState<string>('');
+  const [labelMethodPaid, setLabelMethodPaid] = useState<string>('');
+  const [labelType, setLabelType] = useState<string>('');
+  const [labelConditionPayment, setLabelConditionPayment] = useState<string>('');
 
   const [bandFolio, setBandFolio] = useState<boolean>(false);
   const [bandTaxFolio, setBandTaxFolio] = useState<boolean>(false);
@@ -54,6 +60,23 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   const [satClient, setSatClient]=useState<ISatCLient>();
   // const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);
   const [conceptsInvoice, setConceptsInvoice]=useState<ISatConcept[]>([]);
+
+
+  const handleLabelType = (value: string) => {
+    setLabelType(value); 
+  }
+
+  const handleLabelMethodPaid = (value: string) => {
+    setLabelMethodPaid(value);
+  }
+
+  const handleLabelFormPaid = (value: string) => {
+    setLabelFormPaid(value);
+  }
+
+  const handleLabelConditionPayment = (value: string) => {
+    setLabelConditionPayment(value);
+  }
 
   const handleAddNewConcept = (concept: any) => {
     console.log('concept => ', JSON.stringify(concept));
@@ -133,6 +156,10 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
     setConditionPayment(value);
   }
 
+  const handleCondicionPayment = (value:string) => {
+    setCondicionPayment(value);
+  }
+
   const handleOdc = (value:string) => {
     setOdc(value);
   }
@@ -199,13 +226,13 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
     }else{
       setBandFolio(false);
     }
-    if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
-      setBandTaxFolio(true);
-      validation = false;
-      return false;
-    }else{
-      setBandTaxFolio(false);
-    }
+    // if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
+    //   setBandTaxFolio(true);
+    //   validation = false;
+    //   return false;
+    // }else{
+    //   setBandTaxFolio(false);
+    // }
     if(!date || date===''){
       setBandDate(true);
       validation = false;
@@ -405,10 +432,10 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
         recipient: {
           tin: satClient?.tin,
           legalName: satClient?.legalName,
-          // zipCode: "0"+satClient?.zipCode.toString(),
-          zipCode: satClient?.zipCode.toString(),
-          taxRegimeCode: satClient?.taxRegimeCode,
-          // taxRegimeCode: "621",
+          zipCode: "0"+satClient?.zipCode.toString(),
+          // zipCode: satClient?.zipCode.toString(),
+          // taxRegimeCode: satClient?.taxRegimeCode,
+          taxRegimeCode: "621",
           // cfdiUseCode: "G01",
           cfdiUseCode: conditionPayment,
           // email: "someone@somewhere.com"
@@ -439,13 +466,69 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
 
       // console.log('invoice => ', invoice);
 
-      const res = await createFiscalApiInvoice(invoice);
+      const res: IResponseSatInvoice|string = await createFiscalApiInvoice(invoice);
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
         // console.log('res create invoice => ', res);
         showToastMessage('Factura agregada satisfactoriamente!!');
-        showForm(false);
+
+        const dataConcepts: any[] = [];
+        let amount: number = 0;
+        conceptsInvoice.map((c: ISatConcept) => {
+          dataConcepts.push({
+              conceptEstimate:c.conceptEstimate._id,
+              priceConcepEstimate:c.priceConcepEstimate,
+              area:'sin area',
+              section:'sin sección',
+              quantity:c.quantity,
+              amount:c.amount,
+              date:c.date,
+              user:c.user
+          });
+          amount += c.amount;
+        });
+
+        const invoiceData = {
+          // concepts: dataConcepts,
+          folio,
+          taxfolio: res.uuid,
+          date,
+          useCFDI: type?? '',
+          paymentMethod: methodPaid?? '',
+          paymentWay: formPaid?? '',
+          user,
+          client,
+          project,
+          company: '65d3813c74045152c0c4377e',
+          concepts: dataConcepts,
+          cost: {
+            subtotal: subtotalInvoice, 
+            iva: vatT,
+            total: totalInvoice,
+          },
+          condition: [
+            {glossary:"67d20cb359865f640af92638", user}
+          ],
+          termsofpayment:conditionPayment,
+          purchaseorder:odc,
+          accountreceivables: [{
+            previousbalanceamount: totalInvoice,
+            charged: 0,
+            unchargedbalanceamount: totalInvoice,
+            partialitynumber: 0,
+          }]
+        }
+        
+        console.log('invoice data => ', invoiceData);
+        const resInvoice = await createInvoice(token, invoiceData);
+        if(typeof(resInvoice)==='string'){
+          showToastMessageError(resInvoice);
+        }else{
+          showToastMessage('Factura agregada satisfactoriamente!!');
+          showForm(false);
+        }
+        // showForm(false);
       }
       // const facturapi = new Facturapi('sk_test_tu_api_key');
 
@@ -548,14 +631,18 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
                         (step===1? <SatInvoicesConditionsStepper 
                                   conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 
-                                  handleType={handleType} nextStep={handleStep} token={token} 
-                                  bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc} />: 
+                                  handleType={handleType} nextStep={handleStep} token={token} handleCondicionPayment={handleCondicionPayment}
+                                  bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc}
+                                  handleLabelFormPaid={handleLabelFormPaid} handleLabelMethodPaid={handleLabelMethodPaid}
+                                  handleLabelType={handleLabelType} handleLabelConditionPayment={handleLabelConditionPayment} />: 
                                     (step==2? <ConceptsSatInvoiceStepperComponent nextStep={handleStep} handleAddConcept={handleAddNewConcept}
                                       token={token} user={user} conceptsInvoice={conceptsInvoice} 
                                       discount={discount} handleDiscount={handleDiscount} handleVat={handleVat} vat={vat} /> :
                                         <ConfirmSatInvoiceComponent client={satClient} concepts={conceptsInvoice} date={date}
                                               folio={folio} iva={vatT} subtotal={subtotalInvoice} 
-                                              total={totalInvoice} token={token} saveInvoice={saveInvoice} />)))
+                                              total={totalInvoice} token={token} saveInvoice={saveInvoice}
+                                              labelConditionPayment={labelConditionPayment} labelFormPaid={labeFormPaid}
+                                              labelMethodPaid={labelMethodPaid} labelType={labelType}  />)))
 
   return (
     <>

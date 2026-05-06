@@ -356,8 +356,8 @@ export default function TableSatInvoicesComponent({token, user}:
   }
 
   const data = InvoiceDataToTableData(invoices);
-      
-  let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
+      //xl:order-1 en el primer div
+  let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap 2xl:flex-nowrap">
                         <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
                           <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
                           <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
@@ -405,7 +405,8 @@ export default function TableSatInvoicesComponent({token, user}:
           </div>
         </div>
         <div className="xl:flex lg:gap-x-3 items-center">
-          <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}>
+          {/* <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3 xl:order-2`}> */}
+          <div className={`flex gap-x-3 gap-y-3 w-full justify-end mt-3`}>
             <div className="flex-1 flex justify-end">
               <SearchInTable placeH={"Buscar factura.."} />
             </div>

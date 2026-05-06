@@ -819,6 +819,7 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
         <textarea
           placeholder="Agregar una razon obligatoria..."
           value={comentario}
+          autoFocus
           onChange={(e) => { setComentario(e.target.value); setError(false); }}
         />
 

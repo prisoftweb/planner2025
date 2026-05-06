@@ -104,6 +104,7 @@ export async function createFiscalApiInvoice(data:Object) {
   try {
     const res = await fiscalApi.post("/api/v4/invoices/income", data);
     console.log("Response:", res);
+    console.log('json data => ', JSON.stringify(res.data.data));
     return res.data.data;
   } catch (error) {
     // console.log('Error => ', error);

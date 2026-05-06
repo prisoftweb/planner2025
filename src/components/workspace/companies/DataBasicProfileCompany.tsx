@@ -24,6 +24,9 @@ export default function DataBasicProfileCompany({company, token, fetchCompany}:
   //     inputRef.current.focus();
   //   }
   // }, [openSideNav]);
+
+  console.log('company data => ', company);
+  console.log('company json data => ', JSON.stringify(company));
   
   const formik = useFormik({
     initialValues: {
@@ -86,12 +89,12 @@ export default function DataBasicProfileCompany({company, token, fetchCompany}:
   }
 
   return (
-    <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+    <form className="z-10 w-full h-full bg-white space-y-5 p-3 right-0"
       onSubmit={formik.handleSubmit}
     >
 
       <div >
-        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Nombre</p></Label>
+        <Label htmlFor="name"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Razon social/Nombre</p></Label>
         <input 
           className="w-full border border-slate-300 rounded-md px-2 py-1 my-2 bg-white 
             focus:border-slate-700 outline-0" 

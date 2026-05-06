@@ -1,17 +1,13 @@
 'use client'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useState, useEffect, useRef } from "react"
-import InputMask from 'react-input-mask';
-import {DevicePhoneMobileIcon} from "@heroicons/react/24/solid";
+import { useState, useRef } from "react"
 import { updateCompanyWithSAT } from '@/app/api/routeCompany';
 import Button from '@/components/Button';
 import Label from '@/components/Label';
 import Input from '@/components/Input';
 import { showToastMessage, showToastMessageError } from '@/components/Alert';
 import { Company } from '@/interfaces/Companies';
-// import UploadFileDropZone from '@/components/UploadFileDropZone';
-// import UploadImage from '@/components/UploadImage';
 import { ChangeEvent } from "react";
 
 export default function BillingDataCompany({company, token, fetchCompany}: 
@@ -31,10 +27,10 @@ export default function BillingDataCompany({company, token, fetchCompany}:
   
   const formik = useFormik({
     initialValues: {
-      name: company.name?? '',
-      taxregime: company.taxregime?? '',
-      capitalregime: company.capitalregime?? '',
-      rfc: company.rfc?? '',
+      name: company.tax.name?? '',
+      taxregime: company.tax.taxregime?? '',
+      capitalregime: company.tax.capitalregime?? '',
+      rfc: company.tax.rfc?? '',
       password: company.password?? ''
     }, 
     validationSchema: Yup.object({
@@ -142,7 +138,8 @@ export default function BillingDataCompany({company, token, fetchCompany}:
   }
 
   return (
-    <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+    // <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
+    <form className="z-10 w-full h-full bg-white space-y-5 p-3 right-0"
       onSubmit={formik.handleSubmit}
     >
 
@@ -208,7 +205,7 @@ export default function BillingDataCompany({company, token, fetchCompany}:
       </div>
 
       <div>
-        <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">C.P.</p></Label>
+        <Label htmlFor="password"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Contraseña</p></Label>
         <Input name="password" 
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
@@ -223,12 +220,12 @@ export default function BillingDataCompany({company, token, fetchCompany}:
 
       <div>
         <Label htmlFor="cer"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Archivo cer</p></Label>
-        <UploadFile setFile={handleFileccer} extension='.cer' />
+        <UploadFile setFile={handleFileccer} extension='.cer' nameParam={company.tax?.files[0]?.file?? ''} />
       </div>
 
       <div>
         <Label htmlFor="key"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Archivo key</p></Label>
-        <UploadFile setFile={handleFileckey} extension='.key' />
+        <UploadFile setFile={handleFileckey} extension='.key' nameParam={company.tax?.files[1]?.file?? ''} />
       </div>
 
       <div className="flex justify-center mt-2">
@@ -241,7 +238,7 @@ export default function BillingDataCompany({company, token, fetchCompany}:
 
 
 
-export function UploadFile({setFile, extension}: {setFile: Function, extension:string}){
+export function UploadFile({setFile, extension, nameParam}: {setFile: Function, extension:string, nameParam?:string}) {
   
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 
@@ -269,7 +266,7 @@ export function UploadFile({setFile, extension}: {setFile: Function, extension:s
     }
   }
 
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState(nameParam?? '');
 
   return (
     <>

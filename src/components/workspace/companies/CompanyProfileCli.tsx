@@ -59,7 +59,7 @@ export default function CompanyProfileCli({token, companyParam }: WSCliProps){
   const view = <div className="w-full px-2" 
                           style={{borderColor:'#F8FAFC'}}>
                     <div className="w-full h-full ">
-                      <div className="w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3">
+                      <div className="w-full max-w-2xl bg-white rounded-lg shadow-md pl-2 px-3">
                         <NavProfileCompany tab={index} handleIndex={handleIndex} />
                         <div className="flex flex-wrap gap-y-3 p-3">
                           {viewComponent}

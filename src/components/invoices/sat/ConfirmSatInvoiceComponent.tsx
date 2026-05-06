@@ -17,11 +17,15 @@ type PropsConfirm = {
   total:number,
   iva:number,
   token:string,
-  saveInvoice: (companySatData: ISatCompany) => Promise<void>
+  saveInvoice: (companySatData: ISatCompany) => Promise<void>,
+  labelType: string,
+  labelMethodPaid: string,
+  labelFormPaid: string,
+  labelConditionPayment: string,
 }
 
 export default function ConfirmSatInvoiceComponent({client, date, folio, concepts, subtotal, total, 
-  iva, token, saveInvoice}: PropsConfirm) {
+  iva, token, saveInvoice, labelConditionPayment, labelFormPaid, labelMethodPaid, labelType}: PropsConfirm) {
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const [company, setCompany] = useState<ISatCompany>()
@@ -68,17 +72,30 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
         </div>
       </div>
 
-      <div className="flex justify-center gap-x-3 mt-3">
-        {/* <div>
-          <div className="md:hidden">
-            <p className="text-slate-500 font-extrabold">ESTIMACION</p>
-            <p className="text-black font-extrabold">{invoice?.estimate?.name}</p>
+      <div className="flex justify-around gap-x-3 mt-3">
+        <div>
+          <div className="flex gap-x-2 items-center">
+            <p className="text-slate-600 font-extrabold"></p>
+            <p className="text-black font-extrabold">{labelConditionPayment}</p>
           </div>
-          <p className="text-slate-500 font-extrabold mt-3 md:mt-0">PROYECTO</p>
-          <p className="text-black font-extrabold">{invoice.project.title}</p>
+          
+          <div className="flex gap-x-2 items-center">
+            <p className="text-slate-600 font-extrabold">Forma pago</p>
+            <p className="text-black font-extrabold">{labelFormPaid}</p>
+          </div>
+          
+          <div className="flex gap-x-2 items-center">
+            <p className="text-slate-600 font-extrabold">Metodo pago</p>
+            <p className="text-black font-extrabold">{labelMethodPaid}</p>
+          </div>
+          
+          <div className="flex gap-x-2 items-center">
+            <p className="text-slate-600 font-extrabold">Tipo</p>
+            <p className="text-black font-extrabold">{labelType}</p>
+          </div>
         </div>
 
-        <div className="hidden md:block">
+        {/*<div className="hidden md:block">
           <p className="text-slate-500 font-extrabold">ESTIMACION</p>
           <p className="text-black font-extrabold">{invoice?.estimate?.name}</p>
         </div> */}

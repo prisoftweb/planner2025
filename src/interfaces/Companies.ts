@@ -34,4 +34,16 @@ export interface Company {
   taxregime?:string,
   capitalregime:string
   password?:string
+  tax: {
+    taxregime: string
+    name: string
+    rfc: string
+    capitalregime: string
+    cp: number
+    files: {
+      file: string
+      _id: string
+      id: string
+    }[]
+  }
 }

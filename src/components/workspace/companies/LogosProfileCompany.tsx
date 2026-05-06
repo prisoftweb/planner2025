@@ -78,7 +78,7 @@ export default function LogosProfileCompany({company, fetchCompany, token}:
   }
 
   return (
-    <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0">
+    <form className="z-10 w-full h-full bg-white space-y-5 p-3 right-0">
 
       <div className='flex justify-between gap-x-3 items-center'>
         <div>

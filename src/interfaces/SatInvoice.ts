@@ -62,3 +62,74 @@ export interface ISatConcept {
   date: string
   user: string
 }
+
+export interface IResponseSatInvoice {
+  versionCode: string
+  series: string
+  number: string
+  date: string
+  paymentFormCode: string
+  paymentConditions: any
+  subtotal: number
+  discount: number
+  currencyCode: string
+  exchangeRate: number
+  total: number
+  typeCode: string
+  exportCode: string
+  uuid: string
+  consecutive: number
+  status: any
+  paymentMethodCode: string
+  expeditionZipCode: string
+  issuer: {
+    id: any
+    tin: string
+    legalName: string
+    taxRegimeCode: string
+  }
+  recipient: {
+    id: any
+    tin: string
+    legalName: string
+    zipCode: string
+    taxRegimeCode: string
+    cfdiUseCode: string
+    email: string
+  }
+  items: {
+    itemCode: string
+    quantity: number
+    unitOfMeasurementCode: string
+    description: string
+    unitPrice: number
+    taxObjectCode: string
+    itemSku: string
+    unitOfMeasurement: any
+    discount: number
+    itemTaxes: {
+      taxCode: string
+      taxTypeCode: string
+      taxRate: number
+      taxFlagCode: string
+    }[]
+  }[]
+  responses: {
+    invoiceId: string
+    invoiceUuid: string
+    invoiceCertificateNumber: string
+    invoiceBase64Sello: string
+    invoiceBase64QrCode: string
+    invoiceBase64: string
+    satBase64Sello: string
+    satBase64OriginalString: string
+    invoiceSignatureDate: string
+    satCertificateNumber: string
+    id: string
+    createdAt: string
+    updatedAt: string
+  }[]
+  id: string
+  createdAt: string
+  updatedAt: string
+}

@@ -6,7 +6,7 @@ import { getClientsLV, getAllClientsTaxProfileLV } from "@/app/api/routeClients"
 import { Options } from "@/interfaces/Common";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-import { getAllProjectsWithConditionLV } from "@/app/api/routeProjects";
+import { getAllProjectsWithClientAndConditionLV } from "@/app/api/routeProjects";
 
 type DataBasicProps={
   token:string,
@@ -66,9 +66,10 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
       //   }
       // }
 
-      const [clients, projs] = await Promise.all([
+      const [clients] = await Promise.all([
         getAllClientsTaxProfileLV(token),
-        getAllProjectsWithConditionLV(token)
+        // getAllProjectsWithConditionLV(token)
+        // getAllProjectsWithClientAndConditionLV(token, )
       ]);
 
       if(typeof(clients)==='string'){
@@ -78,17 +79,29 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
         if(!client || client ===''){
           setClient(clients[0].value);
         }
-      }
-
-      if(typeof(projs)==='string'){
-        showToastMessageError(projs);
-      }else{
-        setOptProjects(projs);
-        setProject(projs[0].value);
+        handleChangeClient(!client || client ===''? clients[0].value: client);
+        // const projs = await getAllProjectsWithClientAndConditionLV(token, clients[0].value);
+        // if(typeof(projs)==='string'){
+        //   showToastMessageError(projs);
+        // }else{
+        //   setOptProjects(projs);
+        //   setProject(projs[0].value);
+        // }
       }
     }
     fetch();
   }, []);
+
+  const handleChangeClient = async (value:string) => {
+    setClient(value);
+    const projs = await getAllProjectsWithClientAndConditionLV(token, value);
+    if(typeof(projs)==='string'){
+      showToastMessageError(projs);
+    }else{
+      setOptProjects(projs);
+      setProject(projs[0].value);
+    }
+  }
 
   let indexCLi = 0;
   if(optClients.length > 0){

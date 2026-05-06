@@ -4,7 +4,7 @@ import Label from "@/components/Label";
 import { showToastMessageError } from "@/components/Alert";
 import { Options } from "@/interfaces/Common";
 import Button from "@/components/Button";
-// import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
+import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 import Input from "@/components/Input";
 import { getSatPaymentMethods, getSatCfdiUses, getSatInvoiceTypes, getSatPaymentForms } from "@/app/api/routeSatInvoices";
 
@@ -19,205 +19,13 @@ type DataBasicProps={
   odc:string,
   setOdc:Function,
   bandOdc:boolean
-  setBandOdc:Function
+  setBandOdc:Function,
+  handleCondicionPayment:Function,
+  handleLabelType: (value: string) => void,
+  handleLabelMethodPaid: (value: string) => void,
+  handleLabelFormPaid: (value: string) => void,
+  handleLabelConditionPayment: (value: string) => void,
 }
-
-// const catalogCFDI: Options[] = [
-//   {
-//     label: 'ADQUISICION_MERCANCIAS',
-//     value: 'ADQUISICION_MERCANCIAS G01'
-//   },
-//   {
-//     label: 'DEVOLUCIONES_DESCUENTOS_BONIFICACIONES',
-//     value: 'DEVOLUCIONES_DESCUENTOS_BONIFICACIONES G02'
-//   },
-//   {
-//     label: 'GASTOS_EN_GENERAL',
-//     value: 'GASTOS_EN_GENERAL G03'
-//   },
-//   {
-//     label: 'CONSTRUCCIONES',
-//     value: 'CONSTRUCCIONES I01'
-//   },
-//   {
-//     label: 'MOBILIARIO_Y_EQUIPO_DE_OFICINA',
-//     value: 'MOBILIARIO_Y_EQUIPO_DE_OFICINA I02'
-//   },
-//   {
-//     label: 'EQUIPO_DE_TRANSPORTE',
-//     value: 'EQUIPO_DE_TRANSPORTE I03'
-//   },
-//   {
-//     label: 'EQUIPO_DE_COMPUTO',
-//     value: 'EQUIPO_DE_COMPUTO I04'
-//   },
-//   {
-//     label: 'DADOS_TROQUELES_HERRAMENTAL',
-//     value: 'DADOS_TROQUELES_HERRAMENTAL I05'
-//   },
-//   {
-//     label: 'COMUNICACIONES_TELEFONICAS',
-//     value: 'COMUNICACIONES_TELEFONICAS I06'
-//   },
-//   {
-//     label: 'COMUNICACIONES_SATELITALES',
-//     value: 'COMUNICACIONES_SATELITALES I07'
-//   },
-//   {
-//     label: 'OTRA_MAQUINARIA',
-//     value: 'OTRA_MAQUINARIA I08'
-//   },
-//   {
-//     label: 'HONORARIOS_MEDICOS',
-//     value: 'HONORARIOS_MEDICOS D01'
-//   },
-//   {
-//     label: 'GASTOS_MEDICOS_POR_INCAPACIDAD',
-//     value: 'GASTOS_MEDICOS_POR_INCAPACIDAD D02'
-//   },
-//   {
-//     label: 'GASTOS_FUNERALES',
-//     value: 'GASTOS_FUNERALES D03'
-//   },
-//   {
-//     label: 'DONATIVOS',
-//     value: 'DONATIVOS D04'
-//   },
-//   {
-//     label: 'INTERESES_POR_CREDITOS_HIPOTECARIOS',
-//     value: 'INTERESES_POR_CREDITOS_HIPOTECARIOS D05'
-//   },
-//   {
-//     label: 'APORTACIONES_VOLUNTARIAS_SAR',
-//     value: 'APORTACIONES_VOLUNTARIAS_SAR D06'
-//   },
-//   {
-//     label: 'PRIMA_SEGUROS_GASTOS_MEDICOS',
-//     value: 'PRIMA_SEGUROS_GASTOS_MEDICOS D07'
-//   },
-//   {
-//     label: 'GASTOS_TRANSPORTACION_ESCOLAR',
-//     value: 'GASTOS_TRANSPORTACION_ESCOLAR D08'
-//   },
-//   {
-//     label: 'CUENTAS_AHORRO_PENSIONES',
-//     value: 'CUENTAS_AHORRO_PENSIONES D09'
-//   },
-//   {
-//     label: 'SERVICIOS_EDUCATIVOS',
-//     value: 'SERVICIOS_EDUCATIVOS D10'
-//   },
-//   {
-//     label: 'POR_DEFINIR',
-//     value: 'POR_DEFINIR P01'
-//   },
-//   {
-//     label: 'SIN_EFECTOS_FISCALES',
-//     value: 'SIN_EFECTOS_FISCALES S01'
-//   },
-//   {
-//     label: 'PAGOS',
-//     value: 'PAGOS CP01'
-//   },
-//   {
-//     label: 'NOMINA',
-//     value: 'NOMINA CN01'
-//   }
-// ];
-
-// const catalogPaymentMethod: Options[] = [
-//   {
-//     label: 'PAGO_EN_UNA_EXHIBICION',
-//     value: 'PAGO_EN_UNA_EXHIBICION PUE'
-//   },
-//   {
-//     label: 'PAGO_EN_PARCIALIDADES_DIFERIDO',
-//     value: 'PAGO_EN_PARCIALIDADES_DIFERIDO PPD'
-//   },
-// ];
-
-// const catalogFormPayment: Options[] = [
-//   {
-//     label: 'EFECTIVO',
-//     value: 'EFECTIVO 01'
-//   },
-//   {
-//     label: 'CHEQUE_NOMINATIVO',
-//     value: 'CHEQUE_NOMINATIVO 02'
-//   },
-//   {
-//     label: 'TRANSFERENCIA_ELECTRONICA',
-//     value: 'TRANSFERENCIA_ELECTRONICA 03'
-//   },
-//   {
-//     label: 'TARJETA_DE_CREDITO',
-//     value: 'TARJETA_DE_CREDITO 04'
-//   },
-//   {
-//     label: 'MONEDERO_ELECTRONICO',
-//     value: 'MONEDERO_ELECTRONICO 05'
-//   },
-//   {
-//     label: 'DINERO_ELECTRONICO',
-//     value: 'DINERO_ELECTRONICO 06'
-//   },
-//   {
-//     label: 'VALES_DE_DESPENSA',
-//     value: 'VALES_DE_DESPENSA 08'
-//   },
-//   {
-//     label: 'DACION_EN_PAGO',
-//     value: 'DACION_EN_PAGO 12'
-//   },
-//   {
-//     label: 'SUBROGACION',
-//     value: 'SUBROGACION 13'
-//   },
-//   {
-//     label: 'CONSIGNACION',
-//     value: 'CONSIGNACION 14'
-//   },
-//   {
-//     label: 'CONDONACION',
-//     value: 'CONDONACION 15'
-//   },
-//   {
-//     label: 'COMPENSACION',
-//     value: 'COMPENSACION 17'
-//   },
-//   {
-//     label: 'NOVACION',
-//     value: 'NOVACION 23'
-//   },
-//   {
-//     label: 'CONFUSION',
-//     value: 'CONFUSION 24'
-//   },
-//   {
-//     label: 'REMISION_DE_DEUDA',
-//     value: 'REMISION_DE_DEUDA 25'
-//   },
-//   {
-//     label: 'PRESCRIPCION_O_CADUCIDAD',
-//     value: 'PRESCRIPCION_O_CADUCIDAD 26'
-//   },
-//   {
-//     label: 'A_SATISFACCION_DEL_ACREEDOR',
-//     value: 'A_SATISFACCION_DEL_ACREEDOR 27'
-//   },
-//   {
-//     label: 'TARJETA_DE_DEBITO',
-//     value: 'TARJETA_DE_DEBITO 28'
-//   },
-//   {
-//     label: 'TARJETA_DE_SERVICIOS',
-//     value: 'TARJETA_DE_SERVICIOS 29'
-//   },
-//   {
-//     label: 'POR_DEFINIR',
-//     value: 'POR_DEFINIR 99'
-//   },
-// ];
 
 export interface IMethodPayment {
   id: string
@@ -228,22 +36,24 @@ export interface IMethodPayment {
 
 export default function SatInvoicesConditionsStepper({token, nextStep, handleFormPaid, 
   handleMethodPaid, handleType, conditionPayment, handleConditionPayment, odc, 
-  setOdc, bandOdc, setBandOdc}: DataBasicProps) {
+  setOdc, bandOdc, setBandOdc, handleCondicionPayment, handleLabelFormPaid, handleLabelMethodPaid, 
+  handleLabelType, handleLabelConditionPayment}: DataBasicProps) {
 
   const [optConditionsPayment, setoptConditionsPayment]=useState<Options[]>([]);
   const [catalogPaymentMethod, setCatalogPaymentMethod]=useState<Options[]>([]);
   const [satMethodPayment, setSatMethodPayment]=useState<IMethodPayment[]>([]);
   const [catalogCFDI, setCatalogCFDI]=useState<Options[]>([]);
   const [catalogFormPayment, setCatalogFormPayment]=useState<Options[]>([]);
+  const [optCondicionesPayment, setoptCondicionesPayment]=useState<Options[]>([]);
 
   useEffect(() => {
     const fetch = async () => {
-      const [conditions, fiscalMetPay, satTypes, satPayForm] = await Promise.all([
-        // getCatalogsByNameAndCategory(token, 'invoices'),
+      const [conditions, fiscalMetPay, satTypes, satPayForm, condicionesP] = await Promise.all([
         getSatCfdiUses(),
         getSatPaymentMethods(),
         getSatInvoiceTypes(),
-        getSatPaymentForms()
+        getSatPaymentForms(),
+        getCatalogsByNameAndCategory(token, 'invoices'),
       ]);
 
       if(typeof(conditions)==='string'){
@@ -297,6 +107,13 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
         handleFormPaid(auxPayForm[0].value);
         // handleConditionPayment(auxTypes[0].value)
       }
+
+      if(typeof(condicionesP)==='string'){
+        showToastMessageError(condicionesP);
+      }else{
+        setoptCondicionesPayment(condicionesP);
+        // handleConditionPayment(condicionesP[0].value)
+      }
     }
     fetch();
   }, []);
@@ -324,34 +141,65 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
     nextStep(2);
   }
 
+  const handleMetPaid = (value:string) => {
+    handleMethodPaid(value);
+    const label = catalogPaymentMethod.find((c) => c.value === value)?.label || '';
+    handleLabelMethodPaid(label);
+  }
+
+  const handleTyp = (value:string) => {
+    handleType(value);
+    const label = catalogCFDI.find((c) => c.value === value)?.label || '';
+    handleLabelType(label);
+  }
+
+  const handleFormPay = (value:string) => {
+    handleFormPaid(value);
+    const label = catalogFormPayment.find((c) => c.value === value)?.label || '';
+    handleLabelFormPaid(label);
+  }
+
+  const handleCondicionPay = (value:string) => {
+    handleCondicionPayment(value);
+    const label = optCondicionesPayment.find((c) => c.value === value)?.label || '';
+    handleLabelConditionPayment(label);
+  }
+
   return (
     <div>
       <div className="sm:grid sm:grid-cols-2 gap-x-2 gap-y-2">
         {optConditionsPayment.length > 0 && (
           <div className=" ">
-            <Label htmlFor="conditionsPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condiciones de pago</p></Label>
-            <SelectReact index={0} opts={optConditionsPayment} setValue={handleConditionPayment} />
+            <Label htmlFor="conditionsPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Uso de factura</p></Label>
+            <SelectReact index={0} opts={optConditionsPayment} setValue={handleCondicionPay} />
           </div>
         )}
 
         {catalogPaymentMethod.length > 0 && (
           <div className=" ">
             <Label htmlFor="methodPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Metodo de pago</p></Label>
-            <SelectReact index={0} opts={catalogPaymentMethod} setValue={handleMethodPaid} />
+            <SelectReact index={0} opts={catalogPaymentMethod} setValue={handleMetPaid} />
           </div>
         )}
 
         {catalogCFDI.length > 0 && (
           <div className="">
             <Label htmlFor="type"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Tipo</p></Label>
-            <SelectReact index={0} opts={catalogCFDI} setValue={handleType} />
+            <SelectReact index={0} opts={catalogCFDI} setValue={handleTyp} />
           </div>
         )}
 
         {catalogFormPayment.length > 0 && (
           <div className=" ">
             <Label htmlFor="formPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Forma de pago</p></Label>
-            <SelectReact index={0} opts={catalogFormPayment} setValue={handleFormPaid} />
+            <SelectReact index={0} opts={catalogFormPayment} setValue={handleFormPay} />
+          </div>
+        )}
+
+        {optConditionsPayment.length > 0 && (
+          <div className=" ">
+            <Label htmlFor="condicionesPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condiciones de pago</p></Label>
+            <SelectReact index={0} opts={optCondicionesPayment} setValue={handleCondicionPayment} />
           </div>
         )}
 

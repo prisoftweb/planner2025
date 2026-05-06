@@ -30,7 +30,13 @@ export default function LogoCompanyStepper({handleIndex, file, fileIsologo, hand
         </div>
       </div>
 
-      <div className="flex justify-center mt-2">
+      <div className="flex justify-center gap-x-3 mt-2">
+        <button
+          className="text-black font-normal text-sm bg-white rounded-xl w-36 h-9 py-2 hover:bg-slate-300 print:hidden"
+          type="button"
+        >
+          Guardar
+        </button>
         <Button type="button" onClick={sendData}>Siguiente</Button>
       </div>
 
