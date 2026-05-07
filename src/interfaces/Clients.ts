@@ -47,7 +47,11 @@ export interface ClientBack{
   status: boolean,
   "createAt"?: string,
   "__v"?: number,
-  taxregime?:string,
+  // taxregime?:string,
+  taxregime?:{
+    id:string,
+    regime:string,
+  },
   capitalregime?: string
 }
 

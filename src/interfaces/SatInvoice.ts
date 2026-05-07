@@ -4,6 +4,7 @@ export interface ISatCompany {
   issuer: {
     legalName: string
     tin: string
+    taxRegimeCode: string
     expeditionZipCode: number
     password: string
     taxCredentials: {

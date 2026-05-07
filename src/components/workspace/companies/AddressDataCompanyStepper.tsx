@@ -27,8 +27,8 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
     handleStateCompany:(value:string) => void,
     handleCountryCompany:(value:string) => void,
     handleNotesCompany:(value:string) => void,
-    saveCompany: (data: Object) => Promise<void>,
-    handleIndex:(value: number) => void
+    saveCompany: (data: Object| number) => Promise<void>,
+    handleIndex:(value: number) => void,
   }) {
 
   const refRequest = useRef(true);
@@ -203,6 +203,7 @@ export default function AddressDataCompanyStepper({addressCompany, cpCompany, co
         <button
           className="text-black font-normal text-sm bg-white rounded-xl w-36 h-9 py-2 hover:bg-slate-300 print:hidden"
           type="button"
+          onClick={() => saveCompany(2)}
         >
           Guardar
         </button>

@@ -15,6 +15,8 @@ import { Company } from '@/interfaces/Companies';
 import { ChangeEvent } from "react";
 import { getSatCfdiUses, getSatTaxRegimes } from '@/app/api/routeSatInvoices';
 import { Options } from '@/interfaces/Common';
+// import { getSatPaymentMethods, getSatCfdiUses, getSatInvoiceTypes, getSatPaymentForms } from "@/app/api/routeSatInvoices";
+import SelectReact from '@/components/SelectReact';
 
 export default function BillingDataStepper({capitalregime, filecer, handleFileccer, name, 
   password, rfc, taxregime, handleFilekey, filekey, handleCapReg, handleName, handlePassword, handleRfc,
@@ -23,7 +25,7 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
     filecer:File|undefined, handleFileccer: (f: File) => void, handleFilekey: (f: File) => void, 
     filekey:File|undefined, handleName: (value: string) => void, handleTaxReg: (value: string) => void, 
     handleCapReg: (value: string) => void, handleRfc: (value: string) => void, handlePassword: (value: string) => void, 
-    saveCompany: (data: Object) => Promise<void>, cp:string }) {
+    saveCompany: (data: Object| number) => Promise<void>, cp:string }) {
 
   const refRequest = useRef(true);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -48,6 +50,11 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
     }
     fetchSatData();
   }, []);
+
+  const handleTaxRegimen = (value: string) => {
+    setSatTaxRegime(value);
+    // handleTaxReg(value);
+  }
   
   // useEffect(() => {
   //   if (openSideNav && inputRef.current) {
@@ -58,7 +65,7 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
   const formik = useFormik({
     initialValues: {
       name: name?? '',
-      taxregime: taxregime?? '',
+      // taxregime: taxregime?? '',
       capitalregime: capitalregime?? '',
       rfc: rfc?? '',
       password: password?? ''
@@ -68,8 +75,8 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
                   .required('El nombre es obligatorio'),
       rfc: Yup.string()
                   .required('El rfc es obligatorio'),
-      taxregime: Yup.string()
-                  .required('El regimen fiscal es obligatorio'),
+      // taxregime: Yup.string()
+      //             .required('El regimen fiscal es obligatorio'),
       password: Yup.string()
                   .required('La contraseña es obligatoria'),
     }),
@@ -83,14 +90,16 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
     if(refRequest.current){
       refRequest.current = false;
 
-      const { name, taxregime, capitalregime, rfc, password } = formik.values;
+      const { name, capitalregime, rfc, password } = formik.values;
 
       handleCapReg(capitalregime);
       handleName(name);
       // handleFileccer()
       handlePassword(password);
       handleRfc(rfc);
-      handleTaxReg(taxregime);
+      handleTaxReg(satTaxRegime?? '');
+
+      const opt = satTaxRegimes.find((v) => v.value===satTaxRegime);
 
       const data={
         tax: {
@@ -98,9 +107,9 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
           rfc: rfc.trim(),
           // taxregime: taxregime.trim(),
           taxregime: {
-            id: taxregime.trim().substring(0, 3),
+            id: opt?.value?? '',
             // id: taxregime.trim(),
-            regime: taxregime.trim()
+            regime: opt?.label?? '',
           },
           capitalregime: capitalregime.trim(),
           cp,
@@ -108,56 +117,10 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
         },
       }
 
-      console.log('data conpany => ', data);
+      // console.log('data conpany => ', data);
 
       await saveCompany(data);
 
-      // if(filecer){
-      //   const formdata=new FormData();
-      //   formdata.append('name', name.trim());
-      //   formdata.append('rfc', rfc.trim());
-      //   formdata.append('taxregime', taxregime.trim());
-      //   formdata.append('capitalregime', capitalregime.trim());
-      //   formdata.append('cp', company.location?.cp?? '');
-      //   formdata.append('password', password.trim());
-      //   formdata.append('file', filecer, filecer.name);
-        
-      //   // const data={
-      //   //   taxdata: {
-      //   //     name: name.trim(),
-      //   //     rfc: rfc.trim(),
-      //   //     taxregime: taxregime.trim(),
-      //   //     capitalregime: capitalregime.trim(),
-      //   //     cp: company.location?.cp,
-      //   //     password: password,
-      //   //     files: 
-      //   //     [{
-      //   //       file: {
-      //   //           type: String,
-      //   //           default: '/img/projects/default.cer'
-      //   //       },  
-      //   //       types: {
-      //   //           type: String,
-      //   //           required: [false, 'Tipo de archivo obligatorio'],
-      //   //           maxlength: [160, 'Nombre debe tener maximo 160 caracteres'],
-      //   //           minlength: [0, 'Nombre debe tener minimo 0 caracteres'],            
-      //   //       },                
-      //   //     }],  
-      //   //   },
-      //   // }
-
-      //   // const res = await updateCompany(token, data, company._id);
-      //   // if(typeof(res) === 'string'){
-      //   //   showToastMessageError(res);
-      //   //   refRequest.current = true;
-      //   // }else{
-      //   //   showToastMessage('Los datos se han actualizado correctamente.');
-      //   //   refRequest.current = true;
-      //   //   fetchCompany();
-      //   // }
-      // }else{
-      //   showToastMessageError('Llene todos los campos por favor!!!');
-      // }
     }else{
       showToastMessageError('Ya hay una solicitud en proceso!!');
     }
@@ -207,16 +170,19 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
 
       <div>
         <Label htmlFor="taxregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen fiscal</p></Label>
-        <Input name="taxregime" 
+        {/* <Input name="taxregime" 
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
           value={formik.values.taxregime}
-        />
-        {formik.touched.taxregime && formik.errors.taxregime ? (
+        /> */}
+        {/* {formik.touched.taxregime && formik.errors.taxregime ? (
           <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.taxregime}</p>
           </div>
-        ) : null}
+        ) : null} */}
+        {satTaxRegimes.length > 0 && (
+          <SelectReact index={0} opts={satTaxRegimes} setValue={handleTaxRegimen} />
+        )}
       </div>
 
       <div>

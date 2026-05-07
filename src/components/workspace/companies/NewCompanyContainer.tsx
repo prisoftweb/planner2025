@@ -139,7 +139,7 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  const createNewCompany = async (data:Object) => {
+  const createNewCompany = async (data:Object|number) => {
     if(file || fileIsologo){
       // const formData = new FormData();
       // formData.append('name', nameCompany);
@@ -174,7 +174,9 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         formdata.append('name', nameCompany);
         formdata.append('phone', phoneformat);
         formdata.append('tradename', tradeNameCompany);
-        formdata.append('location', JSON.stringify(location));
+        if(data===2){
+          formdata.append('location', JSON.stringify(location));
+        }
         // formdata.append('logo', file);
         if(file){
           formdata.append('logo', file);
@@ -285,11 +287,14 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         //   },
         // }
 
-        formdata.append('tax', JSON.stringify(data));
+        // console.log('data => ', data);
+
+        // formdata.append('tax', JSON.stringify(data));
 
         // console.log('tax => ', JSON.stringify(data), ' => ', formdata.get('tax'));
         // console.log('location => ', JSON.stringify(location), ' => ', formdata.get('location'));
 
+        // showToastMessage('Creando compañia, esto puede tardar unos minutos...');
         const res = await CreateCompanyWithLogoAndIsologo(token, formdata);
         if(typeof(res)==='string'){
           showToastMessageError(res);
@@ -380,7 +385,7 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
 
   stepform = indexStepper===1? (
     <LogoCompanyStepper handleIndex={handleIndexStepper} file={file} fileIsologo={fileIsologo}
-        handleFile={handleFile} handleFileIsologo={handleFileIsologo} />
+        handleFile={handleFile} handleFileIsologo={handleFileIsologo} saveCompany={createNewCompany} />
   ): indexStepper===2? (
     <AddressDataCompanyStepper addressCompany={addressCompany} communityCompany={communityCompany} 
         countryCompany={countryCompany} cpCompany={cpCompany} handleAddressCompany={handleAddressCompany}

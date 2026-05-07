@@ -180,6 +180,7 @@ export default function AddressClientStepper({token}:{token:string}){
       }
 
       try {
+        // console.log('data client', data);
         const res = await SaveClient(data, token);
         if(res.status){
           refRequest.current = true;

@@ -110,9 +110,9 @@ export async function createFiscalApiInvoice(data:Object) {
     // console.log('Error => ', error);
     // return "Error al crear factura";
     if (axios.isAxiosError(error)) {
-      // console.log("STATUS:", error.response?.status);
+      console.log("STATUS:", error.response?.status);
       console.log("DATA:", error.response?.data);
-      // console.log("HEADERS:", error.response?.headers);
+      console.log("HEADERS:", error.response?.headers);
       return Array.isArray(error.response?.data.data)? error.response?.data.data[0]?.errorMessage : error.response?.data?.message || "Error al crear factura";
     } else {
       // console.log(error);

@@ -1,7 +1,7 @@
 'use client'
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { updateCompanyWithSAT } from '@/app/api/routeCompany';
 import Button from '@/components/Button';
 import Label from '@/components/Label';
@@ -9,6 +9,9 @@ import Input from '@/components/Input';
 import { showToastMessage, showToastMessageError } from '@/components/Alert';
 import { Company } from '@/interfaces/Companies';
 import { ChangeEvent } from "react";
+import SelectReact from '@/components/SelectReact';
+import { getSatCfdiUses, getSatTaxRegimes } from '@/app/api/routeSatInvoices';
+import { Options } from '@/interfaces/Common';
 
 export default function BillingDataCompany({company, token, fetchCompany}: 
   { company:Company, token:string, fetchCompany: () => Promise<void>}) {
@@ -18,6 +21,31 @@ export default function BillingDataCompany({company, token, fetchCompany}:
 
   const [filecer, setFilecer]=useState<File>();
   const [filekey, setFilekey]=useState<File>();
+
+  const [satTaxRegimes, setSatTaxRegimes] = useState<Options[]>([]);
+  const [satTaxRegime, setSatTaxRegime] = useState<string>();
+
+  // console.log('company data => ', company);
+  // console.log('company json data => ', JSON.stringify(company));
+
+  const index = satTaxRegimes.findIndex((v) => v.value===company.tax.taxregime.id);
+  
+  useEffect(() => {
+    const fetchSatData = async () => {
+      const taxRegimes = await getSatTaxRegimes();
+      if(typeof(taxRegimes) === 'string'){
+        showToastMessageError(taxRegimes);
+      }else{
+        const aux:Options[] = taxRegimes.map((reg: any) => ({
+          value: reg.id,
+          label: reg.description
+        }));
+        setSatTaxRegimes(aux);
+        setSatTaxRegime(aux[0].value);
+      }
+    }
+    fetchSatData();
+  }, []);
   
   // useEffect(() => {
   //   if (openSideNav && inputRef.current) {
@@ -28,7 +56,7 @@ export default function BillingDataCompany({company, token, fetchCompany}:
   const formik = useFormik({
     initialValues: {
       name: company.tax.name?? '',
-      taxregime: company.tax.taxregime?? '',
+      // taxregime: company.tax.taxregime?? '',
       capitalregime: company.tax.capitalregime?? '',
       rfc: company.tax.rfc?? '',
       password: company.password?? ''
@@ -38,8 +66,8 @@ export default function BillingDataCompany({company, token, fetchCompany}:
                   .required('El nombre es obligatorio'),
       rfc: Yup.string()
                   .required('El rfc es obligatorio'),
-      taxregime: Yup.string()
-                  .required('El regimen fiscal es obligatorio'),
+      // taxregime: Yup.string()
+      //             .required('El regimen fiscal es obligatorio'),
       password: Yup.string()
                   .required('La contraseña es obligatoria'),
     }),
@@ -53,14 +81,20 @@ export default function BillingDataCompany({company, token, fetchCompany}:
     if(refRequest.current){
       refRequest.current = false;
 
-      const { name, taxregime, capitalregime, rfc, password } = formik.values;
+      const { name, capitalregime, rfc, password } = formik.values;
 
       if(filecer && filekey){
+        const opt = satTaxRegimes.find((v) => v.value===satTaxRegime);
+        const taxregime={
+          id: opt?.value?? '',
+          regime: opt?.label?? '',
+        }
         
         const formdata=new FormData();
         formdata.append('name', name.trim());
         formdata.append('rfc', rfc.trim());
-        formdata.append('taxregime', taxregime.trim());
+        // formdata.append('taxregime', taxregime.trim());
+        formdata.append('taxregime', JSON.stringify(taxregime));
         formdata.append('capitalregime', capitalregime.trim());
         formdata.append('cp', company.location?.cp?? '');
         formdata.append('password', password.trim());
@@ -137,6 +171,10 @@ export default function BillingDataCompany({company, token, fetchCompany}:
     setFilekey(f);
   }
 
+  const handleTaxRegimen = (value: string) => {
+    setSatTaxRegime(value);
+  }
+
   return (
     // <form className="z-10 w-full max-w-md h-full bg-white space-y-5 p-3 right-0"
     <form className="z-10 w-full h-full bg-white space-y-5 p-3 right-0"
@@ -178,7 +216,10 @@ export default function BillingDataCompany({company, token, fetchCompany}:
 
       <div>
         <Label htmlFor="taxregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen fiscal</p></Label>
-        <Input name="taxregime" 
+        {satTaxRegimes.length > 0 && (
+          <SelectReact index={index} opts={satTaxRegimes} setValue={handleTaxRegimen} />
+        )}
+        {/* <Input name="taxregime" 
           onChange={formik.handleChange}
           onBlur={formik.handleChange}
           value={formik.values.taxregime}
@@ -187,7 +228,7 @@ export default function BillingDataCompany({company, token, fetchCompany}:
           <div className="my-1 bg-red-100 border-l-4 font-light text-sm border-red-500 text-red-700 p-2">
             <p>{formik.errors.taxregime}</p>
           </div>
-        ) : null}
+        ) : null} */}
       </div>
 
       <div>

@@ -104,8 +104,9 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   }
 
   async function handleSatCLient(idc:string){
-    // const res = await getClientTAXProfileMIN(token, idc);
-    const res = await getClientTAXProfileMIN(token, '69f2ccb13b1b0672ab310b04');
+    const res = await getClientTAXProfileMIN(token, idc);
+    // const res = await getClientTAXProfileMIN(token, '69f2ccb13b1b0672ab310b04');
+    // const res = await getClientTAXProfileMIN(token, '69fbf97f3b1b0672ab319543');
     if(typeof(res)=='string'){
       showToastMessageError(res);
     }else{
@@ -426,16 +427,16 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
         issuer: {
           tin: companySatData?.issuer.tin,
           legalName: companySatData?.issuer.legalName,
-          taxRegimeCode: "601",
+          taxRegimeCode: companySatData?.issuer.taxRegimeCode?? '',
           taxCredentials: companySatData?.issuer.taxCredentials,
         },
         recipient: {
           tin: satClient?.tin,
           legalName: satClient?.legalName,
-          zipCode: "0"+satClient?.zipCode.toString(),
-          // zipCode: satClient?.zipCode.toString(),
-          // taxRegimeCode: satClient?.taxRegimeCode,
-          taxRegimeCode: "621",
+          // zipCode: "0"+satClient?.zipCode.toString(),
+          zipCode: satClient?.zipCode.toString(),
+          taxRegimeCode: satClient?.taxRegimeCode,
+          // taxRegimeCode: "621",
           // cfdiUseCode: "G01",
           cfdiUseCode: conditionPayment,
           // email: "someone@somewhere.com"

@@ -4,10 +4,11 @@ import Button from '@/components/Button';
 import Label from '@/components/Label';
 import UploadImage from '@/components/UploadImage';
 
-export default function LogoCompanyStepper({handleIndex, file, fileIsologo, handleFile, handleFileIsologo}: 
+export default function LogoCompanyStepper({handleIndex, file, fileIsologo, handleFile, handleFileIsologo, saveCompany}: 
   {handleIndex:(value: number) => void, file:File | null, fileIsologo:File | null,
     handleFile:(value:File | null) => void,
     handleFileIsologo:(value:File | null) => void,
+    saveCompany: (data: Object| number) => Promise<void>
   }) {
 
   const sendData = () => {
@@ -32,8 +33,9 @@ export default function LogoCompanyStepper({handleIndex, file, fileIsologo, hand
 
       <div className="flex justify-center gap-x-3 mt-2">
         <button
-          className="text-black font-normal text-sm bg-white rounded-xl w-36 h-9 py-2 hover:bg-slate-300 print:hidden"
+          className="text-black border-1 border-black font-normal text-sm bg-white rounded-xl w-36 h-9 py-2 hover:bg-slate-300 print:hidden"
           type="button"
+          onClick={() => saveCompany(1)}
         >
           Guardar
         </button>

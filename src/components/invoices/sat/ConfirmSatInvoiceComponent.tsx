@@ -56,7 +56,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
           <p className="text-lg">{client?.legalName}</p>
           <p className="text-lg">{client?.tin}</p>
           <p className="text-sm">{client?.taxRegimeCode}</p>
-          <p className="text-sm">{client?.regime}</p>
+          {/* <p className="text-sm">{client?.regime}</p> */}
           <p className="text-sm">{client?.zipCode}</p>
         </div>
 
@@ -66,6 +66,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
           /> */}
           <p className="font-extrabold text-lg text-black">{company?.issuer?.legalName}</p>
           <p className="font-extrabold text-lg text-black">{company?.issuer?.tin}</p>
+          <p className="text-sm text-slate-500">{company?.issuer?.taxRegimeCode}</p>
           <p className="text-sm text-slate-500">{company?.issuer.expeditionZipCode}</p>
           {/* <p className="text-sm text-slate-500">Del Llano San Luis Potosi, S.L.P.</p>
           <p className="text-sm text-slate-500">CP 78377 Mexico</p> */}
