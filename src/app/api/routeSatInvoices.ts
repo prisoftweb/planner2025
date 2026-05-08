@@ -102,7 +102,7 @@ export async function getSatTaxRegimes() {
 export async function createFiscalApiInvoice(data:Object) {
   console.log("PAYLOAD:", JSON.stringify(data, null, 2));
   try {
-    const res = await fiscalApi.post("/api/v4/invoices/income", data);
+    const res = await fiscalApi.post("/api/v4/invoices", data);
     console.log("Response:", res);
     console.log('json data => ', JSON.stringify(res.data.data));
     return res.data.data;

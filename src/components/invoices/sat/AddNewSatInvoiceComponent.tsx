@@ -104,8 +104,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   }
 
   async function handleSatCLient(idc:string){
-    const res = await getClientTAXProfileMIN(token, idc);
-    // const res = await getClientTAXProfileMIN(token, '69f2ccb13b1b0672ab310b04');
+    // const res = await getClientTAXProfileMIN(token, idc);
+    const res = await getClientTAXProfileMIN(token, '69f2ccb13b1b0672ab310b04');
     // const res = await getClientTAXProfileMIN(token, '69fbf97f3b1b0672ab319543');
     if(typeof(res)=='string'){
       showToastMessageError(res);
@@ -511,7 +511,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
           condition: [
             {glossary:"67d20cb359865f640af92638", user}
           ],
-          termsofpayment:conditionPayment,
+          // termsofpayment:conditionPayment,
+          termsofpayment:condicionPayment,
           purchaseorder:odc,
           accountreceivables: [{
             previousbalanceamount: totalInvoice,

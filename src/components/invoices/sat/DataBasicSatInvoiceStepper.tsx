@@ -143,7 +143,7 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
         {optClients.length > 0 && (
           <div className="">
             <Label htmlFor="client"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Cliente</p></Label>
-            <SelectReact index={indexCLi} opts={optClients} setValue={setClient} />
+            <SelectReact index={indexCLi} opts={optClients} setValue={handleChangeClient} />
           </div>
         )}
 

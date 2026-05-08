@@ -190,7 +190,7 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
           showToastMessageError(res);
         }else{
           showToastMessage('Compania creada satisfactoriamente!!!!');
-          const data={
+          const dcomp={
             companys: 
             [
               {
@@ -199,7 +199,7 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
               }
             ]
           }
-          const resINsert=await insertCompanyInWorkSpace(token, idWS, data);
+          const resINsert=await insertCompanyInWorkSpace(token, idWS, dcomp);
           if(typeof(resINsert)==='string'){
             showToastMessageError(resINsert);
           }
@@ -287,9 +287,9 @@ export default function NewCompanyContainer({token, handleOpen, handleFetchCompa
         //   },
         // }
 
-        // console.log('data => ', data);
+        console.log('data => ', data);
 
-        // formdata.append('tax', JSON.stringify(data));
+        formdata.append('tax', JSON.stringify(data));
 
         // console.log('tax => ', JSON.stringify(data), ' => ', formdata.get('tax'));
         // console.log('location => ', JSON.stringify(location), ' => ', formdata.get('location'));

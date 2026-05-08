@@ -116,7 +116,6 @@ export default function BillingDataStepper({capitalregime, filecer, handleFilecc
           password: password,  
         },
       }
-
       // console.log('data conpany => ', data);
 
       await saveCompany(data);
