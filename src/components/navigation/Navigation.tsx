@@ -387,7 +387,7 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
           link: '/roles/trees'
         }
       ]}/>
-      {/* <NavItem name="Proveedores" link="" items={[
+      <NavItem name="Proveedores" link="" items={[
         {
           name: 'Proveedores',
           link: '/providers'
@@ -509,7 +509,7 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             link: '/expenses/dashboard'
           },
         ]}
-      /> */}
+      />
       <NavItem name="Informes" link="" items={[
           {
             name: 'Informes',
