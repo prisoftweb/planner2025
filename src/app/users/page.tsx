@@ -24,7 +24,7 @@ export default async function Users() {
   if(typeof(users)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{users}</h1>
         </div>
@@ -35,7 +35,7 @@ export default async function Users() {
   if(typeof(optionsRoles)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{optionsRoles}</h1>
         </div>
@@ -46,7 +46,7 @@ export default async function Users() {
   if(typeof(departments)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{departments}</h1>
         </div>
@@ -57,7 +57,7 @@ export default async function Users() {
   if(users.length === 0 || !users){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <WithOut img="/img/user.svg" subtitle="Usuarios" 
             text="Aqui puedes gestionar tus usuarios con toda su informacion" title="Usuarios"
           ><ButtonNewUser optionsDepartments={departments} token={token} 
@@ -69,7 +69,7 @@ export default async function Users() {
   
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <UsersConstext departments={departments} optionsRoles={optionsRoles} token={token} users={users} />
       </div>

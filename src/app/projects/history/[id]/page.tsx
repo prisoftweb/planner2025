@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(project) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{project}</h1>
       </>
     )
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(options) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{options}</h1>
       </>
     )
@@ -46,7 +46,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(clients)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{clients}</h1>
       </>
     )
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
       </>
     )
@@ -95,7 +95,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects/history">
           <>

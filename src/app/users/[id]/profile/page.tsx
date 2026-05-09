@@ -24,7 +24,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
   if(typeof(user) === "string"){
     return(
       <>
-        {/* <Navigation user={user} /> */}
+        {/* <Navigation user={user} token={token} /> */}
         <h1 className="text-center text-red-500">{user}</h1>
       </>
     )
@@ -33,7 +33,7 @@ export default async function Page({ params, searchParams }: { params: { id: str
   if(typeof(users) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{users}</h1>
       </>
     )
@@ -58,8 +58,8 @@ export default async function Page({ params, searchParams }: { params: { id: str
 
   return(
     <>
-      {/* <Navigation user={user} /> */}
-      <Navigation user={currentUser} />
+      {/* <Navigation user={user} token={token} /> */}
+      <Navigation user={currentUser} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderImage image={photo? photo: '/img/default.jpg'} previousPage="/users" title={name} >
           <>

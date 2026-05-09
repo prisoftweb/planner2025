@@ -37,7 +37,7 @@ export default async function Page() {
   if(typeof(reports)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-lg text-center text-red-500">{reports} rep</h1>
       </>
     )
@@ -46,7 +46,7 @@ export default async function Page() {
   if(typeof(optReps)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-lg text-center text-red-500">{optReps} opr</h1>
       </>
     )
@@ -62,7 +62,7 @@ export default async function Page() {
   if(typeof(optProjects)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-lg text-red-500">{optProjects} opp</h1>
       </>
     )
@@ -73,7 +73,7 @@ export default async function Page() {
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{catalogs} cat</h1>
       </>
     )
@@ -99,7 +99,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <ContainerClient data={table} condition={condition} optCompanies={optCompanies} 
           optCompaniesFilter={optCompaniesFilter} optConditionsFilter={optConditionsFilter}
           optDepartments={optDepartments} optProjects={optProjects} optReps={optReps} 

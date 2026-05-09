@@ -36,7 +36,7 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">

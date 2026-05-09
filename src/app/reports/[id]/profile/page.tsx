@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(report)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-lg text-red-500">{report}</h1>
       </>
     )
@@ -32,7 +32,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(dateReport)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
       </>
     )
@@ -41,7 +41,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(optReports)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-lg text-center text-red-500">{optReports}</h1>
       </>
     )
@@ -52,7 +52,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(nodes)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-lg text-red-500 text-center-500">{nodes}</h1>
       </>
     )
@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(!nodes || nodes.length <= 0){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-lg text-red-500 text-center">Error al consultar posicion en el flujo de trabajo del informe!!!</h1>
       </>
     )
@@ -78,7 +78,7 @@ export default async function Page({ params }: { params: { id: string }}){
       if(typeof(res)==='string'){
         return(
           <>
-            <Navigation user={user} />
+            <Navigation user={user} token={token} />
             <h1 className="text-center text-lg text-red-500">{res}</h1>
           </>
         )
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { id: string }}){
     } catch (error) {
       return(
         <>
-          <Navigation user={user} />
+          <Navigation user={user} token={token} />
           <h1 className="text-center text-lg text-red-500">Ocurrio un problema al actualizar estatus del informe</h1>
         </>
       )
@@ -107,7 +107,7 @@ export default async function Page({ params }: { params: { id: string }}){
       if(res !== 200){
         return(
           <>
-            <Navigation user={user} />
+            <Navigation user={user} token={token} />
             <h1 className="text-center text-lg text-red-500">{res}</h1>
           </>
         )
@@ -115,7 +115,7 @@ export default async function Page({ params }: { params: { id: string }}){
     } catch (error) {
       return(
         <>
-          <Navigation user={user} />
+          <Navigation user={user} token={token} />
           <h1 className="text-center text-lg text-red-500">Ocurrio un error al actualizar estatus del flujo informes </h1>
         </>
       )
@@ -124,7 +124,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <ReportClient report={report} token={token} id={params.id} 
           user={user} node={node} dates={dateReport} optReports={optReports}

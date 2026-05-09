@@ -29,7 +29,7 @@ export default async function Page() {
   if(typeof(costsCategory)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsCategory} cost cat</h1>
         </div>
@@ -40,7 +40,7 @@ export default async function Page() {
   if(typeof(costsConcept)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsConcept} cost con</h1>
         </div>
@@ -51,7 +51,7 @@ export default async function Page() {
   if(typeof(costsDays)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsDays} cost days</h1>
         </div>
@@ -62,7 +62,7 @@ export default async function Page() {
   if(typeof(costsResumen)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsResumen} cost res</h1>
         </div>
@@ -73,7 +73,7 @@ export default async function Page() {
   if(typeof(costsResumenType)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costsResumenType} cost res type</h1>
         </div>
@@ -84,7 +84,7 @@ export default async function Page() {
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{projects} projects</h1>
         </div>
@@ -119,7 +119,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <DashBoardContainer token={token} costsCategories={optCategories} 
           costsConcepts={optConcepts} costsDays={optDays} projects={[{
             label: 'TODOS',

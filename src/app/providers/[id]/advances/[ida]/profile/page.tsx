@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
   if(typeof(cost) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
         </div>
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
   if(typeof(prov) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{prov}</h1>
         </div>
@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2 gap-x-2">

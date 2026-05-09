@@ -21,7 +21,7 @@ export default async function Page(){
     if(typeof(companies)=== 'string'){
       return(
         <div className="w-full pl-10 pt-2 sm:pt-3 md:pt-5 pr-2 sm:pr-3 md:pr-5 lg:pr-10">
-          <Navigation user={user} />
+          <Navigation user={user} token={token} />
           <h1 className="text-center text-red-500 text-lg">{companies}</h1>
         </div>
       )
@@ -29,7 +29,7 @@ export default async function Page(){
   } catch (error) {
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500 text-lg">Error al consultar compañias!!</h1>
       </>
     )
@@ -38,7 +38,7 @@ export default async function Page(){
   if(!companies || companies.length <= 0){
     return (
       <div>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <CompanyClient option={2} >
           <WithOut img="/img/clientes.svg" subtitle="Compañias"
             text="Aqui puedes agregar las compañias
@@ -67,7 +67,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <CompanyClient option={2} >
         <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
           <ResponsiveHeader title="Compañias" placeHolder="Buscar compañia.." >

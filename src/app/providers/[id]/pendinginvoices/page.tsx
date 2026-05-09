@@ -27,7 +27,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(provider) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{provider} provider</h1>
       </>
     )
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(costs) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{costs} costs</h1>
       </>
     )
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(optTypes)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{optTypes} types</h1>
       </>
     )
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: { id: string }}){
   // if(typeof(pending) === "string"){
   //   return(
   //     <>
-  //       <Navigation user={user} />
+  //       <Navigation user={user} token={token} />
   //       <h1 className="text-center text-red-500">{pending}</h1>
   //     </>
   //   )
@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(providers.length <= 0){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
       </>
     )
@@ -90,7 +90,7 @@ export default async function Page({ params }: { params: { id: string }}){
   const cond = "67318a51ceaf47ece0d3aa72";
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='2' />
         <ContainerTablePendinginvoices data={table} expenses={costs} token={token} 

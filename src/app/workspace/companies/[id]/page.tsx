@@ -19,7 +19,7 @@ export default async function Page({params}: {params:{id:string}}) {
   if(typeof(company)=== 'string')
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{company}</h1>
         </div>
@@ -28,7 +28,7 @@ export default async function Page({params}: {params:{id:string}}) {
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header previousPage="/workspace/companies" title="Compañia">
           <></>

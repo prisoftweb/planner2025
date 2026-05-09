@@ -42,7 +42,7 @@ export default async function Page(){
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-10">
           <h1 className="text-red-500 text-center text-lg">{projects}projects</h1>
         </div>
@@ -53,7 +53,7 @@ export default async function Page(){
   if(typeof(clients)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{clients}clients</h1>
       </>
     )
@@ -62,7 +62,7 @@ export default async function Page(){
   if(typeof(costs)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{costs}costs</h1>
       </>
     )
@@ -71,7 +71,7 @@ export default async function Page(){
   if(typeof(collections)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{collections}collections</h1>
       </>
     )
@@ -94,7 +94,7 @@ export default async function Page(){
   if(typeof(optCompanies)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{optCompanies}comapies</h1>
       </>
     )
@@ -154,7 +154,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <ContainerClient data={table} optCategories={optsCategories} optCategoriesFilter={optCategories}
           optClients={optClients} optCompanies={optCompanies} optConditionsFilter={optConditions} 
           optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 

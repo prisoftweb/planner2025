@@ -34,7 +34,7 @@ export default async function Page() {
   if(typeof(totalProjects)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalProjects} </h1>
         </div>
@@ -45,7 +45,7 @@ export default async function Page() {
   if(typeof(totalClients)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalClients} </h1>
         </div>
@@ -56,7 +56,7 @@ export default async function Page() {
   if(typeof(totalPaymentByDate)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPaymentByDate} </h1>
         </div>
@@ -67,7 +67,7 @@ export default async function Page() {
   if(typeof(totalPending)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPending} </h1>
         </div>
@@ -78,7 +78,7 @@ export default async function Page() {
   if(typeof(resCobrar)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{resCobrar} </h1>
         </div>
@@ -89,7 +89,7 @@ export default async function Page() {
   if(typeof(totalPrjRes)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPrjRes} </h1>
         </div>
@@ -100,7 +100,7 @@ export default async function Page() {
   if(typeof(totalCliRes)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalCliRes} </h1>
         </div>
@@ -111,7 +111,7 @@ export default async function Page() {
   if(typeof(totalEstiatesPen)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalEstiatesPen} </h1>
         </div>
@@ -122,7 +122,7 @@ export default async function Page() {
   if(typeof(totalPendEstimatesCli)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{totalPendEstimatesCli} </h1>
         </div>
@@ -133,7 +133,7 @@ export default async function Page() {
   if(typeof(pendingBilling)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1>{pendingBilling} </h1>
         </div>
@@ -143,7 +143,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <DashboardCollectionsContainer 
           token={token} toalPrjRes={totalPrjRes}

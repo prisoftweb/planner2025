@@ -20,7 +20,7 @@ export default async function page({ params, searchParams }:
   if(typeof(collection)==='string'){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{collection}</h1>
         </div>
@@ -31,7 +31,7 @@ export default async function page({ params, searchParams }:
   if(typeof(invoices)==='string'){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">{invoices}</h1>
         </div>
@@ -41,7 +41,7 @@ export default async function page({ params, searchParams }:
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <Header title={collection.reference} previousPage={searchParams.page=='projects'? `/projects/estimates/${params.idp}/collections?page=projects` : 
                   (searchParams.page=='collections'? '/collections': (searchParams.page=='collectionsHistory'? `/collections/history` : `/projects/estimates/${params.idp}/collections`))}>

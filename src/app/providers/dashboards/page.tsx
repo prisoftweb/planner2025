@@ -27,7 +27,7 @@ export default async function page() {
   if(typeof(totalCost)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{totalCost}totalCost</h1>
       </>
     )
@@ -36,7 +36,7 @@ export default async function page() {
   if(typeof(providersTradeLine)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{providersTradeLine} providersTradeLine</h1>
       </>
     )
@@ -45,7 +45,7 @@ export default async function page() {
   if(typeof(costsProviderWithTradeLine)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{costsProviderWithTradeLine}costsProviderWithTradeLine</h1>
       </>
     )
@@ -54,7 +54,7 @@ export default async function page() {
   if(typeof(costsProvider)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{costsProvider}costsprovider</h1>
       </>
     )
@@ -63,7 +63,7 @@ export default async function page() {
   if(typeof(totalPayments)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{totalPayments}totalPayments</h1>
       </>
     )
@@ -72,7 +72,7 @@ export default async function page() {
   if(typeof(penddingPayment)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1>
       </>
     )
@@ -81,7 +81,7 @@ export default async function page() {
   if(typeof(pendingPaymentProv)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{penddingPayment}</h1>
       </>
     )
@@ -89,7 +89,7 @@ export default async function page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <DashboardContainer costsProvider={costsProvider} totalCost={totalCost}
           costsProviderWithTradeLine={costsProviderWithTradeLine} 

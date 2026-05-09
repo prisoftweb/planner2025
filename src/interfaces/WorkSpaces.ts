@@ -93,3 +93,11 @@ export interface ICompanyInWorkSpace{
   _id:string
   companys:ICompanyWorkSpace
 }
+
+export interface ICompanyProfileInWorkSpace{
+  _id: string
+  name: string
+  tradename: string
+  email: string
+  isologo: string
+}

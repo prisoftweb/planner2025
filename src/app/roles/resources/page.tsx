@@ -26,7 +26,7 @@ export default async function Page(){
   if(!resources || resources.length <= 0){
     return(
       <div>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <RolesClient token={token} option={2}>
           <WithOut img="/img/clientes.svg" subtitle="Rutas" 
             text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
@@ -51,7 +51,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <RolesClient token={token} option={2}>
         <div>
           <Header title="Recursos" placeHolder="Buscar recurso..">

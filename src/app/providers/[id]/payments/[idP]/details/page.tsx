@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(arrProvider) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{arrProvider}provedor</h1>
       </>
     )
@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(providers) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{providers} provedores</h1>
       </>
     )
@@ -49,7 +49,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(costs) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{costs} costos</h1>
       </>
     )
@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(payment) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{payment} one payment</h1>
       </>
     )
@@ -67,7 +67,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(typeof(pending) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{pending}</h1>
       </>
     )
@@ -76,7 +76,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   if(providers.length <= 0){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
       </>
     )
@@ -86,7 +86,7 @@ export default async function Page({ params }: { params: { id: string, idP: stri
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <ContainerTableDetailsExpenseProvider data={table} expenses={costs} token={token}
           user={user} provider={provider} payment={payment} pending={pending.flat()} />

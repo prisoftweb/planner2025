@@ -20,14 +20,14 @@ export default async function Page(){
     if(typeof(estimates) === "string")
       return(
         <>
-          <Navigation user={user} />
+          <Navigation user={user} token={token} />
           <h1 className="text-center text-red-500">{estimates}</h1>
         </>
       )
   } catch (error) {
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">Ocurrio un error al obtener las estimaciones sin factura!!</h1>
       </>
     )
@@ -35,7 +35,7 @@ export default async function Page(){
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <div className="flex gap-y-3 gap-x-5 justify-between items-center flex-wrap md:flex-nowrap">
           <div className="flex items-center w-96">

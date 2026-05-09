@@ -22,7 +22,7 @@ export default async function Page() {
   if(typeof(workSpaces)=== 'string')
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{workSpaces}</h1>
         </div>
@@ -34,7 +34,7 @@ export default async function Page() {
   if(typeof(companies)=== 'string')
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{companies}</h1>
         </div>
@@ -43,7 +43,7 @@ export default async function Page() {
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header previousPage="/" title="">
           <></>

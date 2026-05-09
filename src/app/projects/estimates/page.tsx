@@ -23,7 +23,7 @@ export default async function Page(){
   if(typeof(projects)==='string') 
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{projects}</h1>
         </div>
@@ -33,7 +33,7 @@ export default async function Page(){
   if(typeof(catalogs)==='string') 
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
         </div>
@@ -92,7 +92,7 @@ export default async function Page(){
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
         optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} />
     </>

@@ -56,7 +56,8 @@ const initialState: UsrBack = {
   __v: 0,
   createAt: '',
   passwordChangedAt: '',
-  rol: undefined
+  rol: undefined,
+  profile: '',
 }
 
 interface ArrUsers {

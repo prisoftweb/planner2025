@@ -25,7 +25,7 @@ export default async function Page(){
   if(!roles || roles.length <= 0){
     return (
       <div>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <RolesClient token={token} option={1}>
           <WithOut img="/img/clientes.svg" subtitle="Roles" 
             text="Aqui puedes gestionar tus roles para usuarios que usen el sistema"
@@ -56,7 +56,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} />      
+      <Navigation user={user} token={token} />      
       <RolesClient token={token} option={1}>
         <div>
           <Header title="Roles" placeHolder="Buscar rol..">

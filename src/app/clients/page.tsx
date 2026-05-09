@@ -27,7 +27,7 @@ export default async function clients(){
   // if(!permisionsClient){
   //   return(
   //     <>
-  //       <Navigation user={user} />
+  //       <Navigation user={user} token={token} />
   //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
   //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
   //           text="Lo sentimos pero no tienes autorizacion para visualizar esta pagina!!!" 
@@ -51,7 +51,7 @@ export default async function clients(){
   if(typeof(tags)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-2xl text-center">{tags}</h1>
       </>
     )
@@ -68,7 +68,7 @@ export default async function clients(){
   }else{
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
       </>
     )
@@ -77,7 +77,7 @@ export default async function clients(){
   if(typeof(clients)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-2xl text-center">{clients}</h1>
         {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <WithOut img="/img/clientes.svg" subtitle="Clientes" 
@@ -93,7 +93,7 @@ export default async function clients(){
   // if(!permission){
   //   return (
   //     <>
-  //       <Navigation user={user} />
+  //       <Navigation user={user} token={token} />
   //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
   //         <WithOut img="/img/clientes.svg" subtitle="Clientes" 
   //           text="Lo sentimos, no tienes acceso a esta informacion!!!" 
@@ -105,7 +105,7 @@ export default async function clients(){
 
   if(!clients || clients.length<= 0){
     return <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <WithOut img="/img/clientes.svg" subtitle="Clientes" 
             text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
@@ -118,7 +118,7 @@ export default async function clients(){
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <ResponsiveHeader title="Clientes" placeHolder="Buscar cliente.." >
           {/* {permisionsClient.permission.create? (

@@ -25,14 +25,14 @@ export default async function Page({ params, searchParams }:
     if(typeof(user) === "string")
       return(
         <>
-          <Navigation user={userLog} />
+          <Navigation user={userLog} token={token} />
           <h1 className="text-center text-red-500">{user}</h1>
         </>
       )
   } catch (error) {
     return(
       <>
-        <Navigation user={userLog} />
+        <Navigation user={userLog} token={token} />
         <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>
       </>
     )
@@ -43,14 +43,14 @@ export default async function Page({ params, searchParams }:
     if(typeof(users) === "string")
       return(
         <>
-          <Navigation user={userLog} />
+          <Navigation user={userLog} token={token} />
           <h1 className="text-center text-red-500">{users}</h1>
         </>
       )
   } catch (error) {
     return(
       <>
-        <Navigation user={userLog} />
+        <Navigation user={userLog} token={token} />
         <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>
       </>
     ) 
@@ -81,7 +81,7 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      <Navigation user={userLog} />
+      <Navigation user={userLog} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center">

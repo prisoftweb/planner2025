@@ -22,7 +22,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(project) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{project}</h1>
       </>
     )
@@ -31,7 +31,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(estimate) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{estimate}</h1>
       </>
     )
@@ -40,7 +40,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(totalEstimatedProject) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{totalEstimatedProject}</h1>
       </>
     )
@@ -49,7 +49,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(concepts) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{concepts}</h1>
       </>
     )
@@ -57,7 +57,7 @@ export default async function Page({ params, searchParams }:
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerDetailEstimate estimate={estimate} project={project} token={token} user={user._id} 
           concepts={concepts} idEstimate={params.ide} totalEstimatedProject={totalEstimatedProject}

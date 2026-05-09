@@ -21,7 +21,7 @@ export default async function page({ params, searchParams }:
   if(typeof(budget)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center">{budget}</h1>
       </>
     )
@@ -30,7 +30,7 @@ export default async function page({ params, searchParams }:
   if(typeof(costoCenters)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <p>{costoCenters}</p>
       </>
     )
@@ -38,7 +38,7 @@ export default async function page({ params, searchParams }:
   
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <BudgetCli budget={budget} id={params.id} token={token} 
           costoCenters={costoCenters} user={user._id} projectQuery={searchParams.project} />

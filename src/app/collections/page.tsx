@@ -31,7 +31,7 @@ export default async function Page(){
   if(typeof(res) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{res}</h1>
         </div>
@@ -41,7 +41,7 @@ export default async function Page(){
   if(typeof(rest) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{rest}</h1>
         </div>
@@ -51,7 +51,7 @@ export default async function Page(){
   if(typeof(restt) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{restt}</h1>
         </div>
@@ -60,7 +60,7 @@ export default async function Page(){
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <TableCollectionsComponent token={token} user={user._id} collectionsParam={res} totalParam={rest} totalRecoveredP={restt[0]} />
       </div>

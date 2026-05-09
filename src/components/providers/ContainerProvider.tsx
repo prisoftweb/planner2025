@@ -36,7 +36,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
   if(providerStore.length <= 0 && (providers.length === 0 || !providers)){
     return (
       <div>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
           <WithOutProvider id={user._id} token={token} />
         </div>
@@ -73,7 +73,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       
       <div className="p-2 sm:p-3 md:p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
         {/* <HeaderProvider title="Proveedores" placeHolder="Buscar proveedor..">

@@ -21,7 +21,7 @@ export default async function Page(){
   if(typeof(projects)==='string') 
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{projects}</h1>
         </div>
@@ -31,7 +31,7 @@ export default async function Page(){
   if(typeof(budgets)==='string') 
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{budgets}</h1>
         </div>
@@ -41,7 +41,7 @@ export default async function Page(){
   if(typeof(catalogs)==='string') 
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
         </div>        
@@ -77,7 +77,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <ContainerBudgetClient optConditionsFilter={optConditions} projects={projects} 
         token={token} user={user} budgets={budgets} optProjectsFilter={optProjects} />
     </>

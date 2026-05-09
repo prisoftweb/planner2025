@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
   if(typeof(cost) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
         </div>
@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
   if(typeof(options) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
          <h1 className="text-center text-red-500">{options}</h1>
         </div>
@@ -47,7 +47,7 @@ export default async function Page({ params }: { params: { id: string, idProv:st
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={subTotal} previousPage="/expenses/history">
           <Selectize options={options} routePage="expenses/history" subpath="/profile" />

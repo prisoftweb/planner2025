@@ -19,7 +19,7 @@ export default async function Page(){
   if(typeof(glossaries)=== 'string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500 text-lg">{glossaries}</h1>
         </div>
@@ -40,7 +40,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <CompanyClient option={4} >
         <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
           <ResponsiveHeader title="Glosarios" placeHolder="Buscar glosario.." >

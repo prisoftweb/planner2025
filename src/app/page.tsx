@@ -16,7 +16,7 @@ export default function Home() {
     <>
       <div className="bg-white">
         {role.toLowerCase().includes('invitado')? <></>: (
-          <Navigation user={user} />
+          <Navigation user={user} token={token} />
         )}
         <div className="p-2 sm:p-3 md:p-5 flex justify-center">
           {depto.toLowerCase().includes('direccion') || role.toLowerCase().includes('invitado') || 

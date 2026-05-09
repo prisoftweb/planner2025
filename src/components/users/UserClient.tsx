@@ -17,7 +17,7 @@ export default function UserClient({user, token, departments, optsRole, optTab}:
   // const [opt, setOpt] = useState<number>(optQuery);
   // const [open, setOpen] = useState<boolean>(false);
   const {updateUser, name, _id, department, email, photo, role, status, __v, 
-      createAt, passwordChangedAt, rol} = useUserStore();
+      createAt, passwordChangedAt, rol, profile} = useUserStore();
 
   // const handleOpenNav = (value: boolean) => {
   //   setOpen(value);
@@ -34,7 +34,8 @@ export default function UserClient({user, token, departments, optsRole, optTab}:
     photo,
     rol,
     status, 
-    role
+    role,
+    profile
   }
 
   // const handleChangeOpt = (value:number) => {

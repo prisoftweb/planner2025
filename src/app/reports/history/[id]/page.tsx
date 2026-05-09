@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(report)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-lg text-red-500">{report}</h1>
       </>
     )
@@ -28,7 +28,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(dateReport)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-lg text-red-500">{dateReport}</h1>
       </>
     )
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(optReports)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-lg text-center text-red-500">{optReports}</h1>
       </>
     )
@@ -45,7 +45,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <ReportHistoryClient report={report} id={params.id} token={token} 
           user={user} dates={dateReport} optReports={optReports} />

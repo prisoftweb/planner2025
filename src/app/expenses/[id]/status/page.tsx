@@ -23,7 +23,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(cost) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{cost}</h1>
         </div>
@@ -33,7 +33,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(options) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{options}</h1>
       </>
     )
@@ -48,7 +48,7 @@ export default async function Page({ params, searchParams }:
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <HeaderProfileExpense options={options} subTotal={subTotal} idProv={searchParams.prov} 
           pending={previous} idProj={searchParams.project} />

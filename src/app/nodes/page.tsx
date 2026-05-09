@@ -30,7 +30,7 @@ export default async function page() {
   if(typeof(nodes) ==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
         </div>
@@ -41,7 +41,7 @@ export default async function page() {
   if(typeof(optDepartments) ==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{optDepartments}</h1>
         </div>
@@ -52,7 +52,7 @@ export default async function page() {
   if(typeof(glossaries) ==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
         </div>
@@ -63,7 +63,7 @@ export default async function page() {
   if(typeof(workflows) ==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
         </div>
@@ -115,7 +115,7 @@ export default async function page() {
   if(typeof(res)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-red-500 text-xl text-center">{res}</h1>
         </div>
@@ -137,7 +137,7 @@ export default async function page() {
   if(!nodes || nodes.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Nodos"
             text="Agrega nodo, para el control del workflow"
@@ -153,7 +153,7 @@ export default async function page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Nodos" placeHolder="Buscar nodo.." >
         <ButtonNewNode token={token} user={user._id} 

@@ -25,7 +25,8 @@ export interface UsrBack{
   "createAt"?: string,
   "__v"?: number,
   "passwordChangedAt"?: string,
-  "rol"? : Role
+  "rol"? : Role,
+  profile:string
 }
 
 // export interface Usr{

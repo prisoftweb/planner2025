@@ -40,7 +40,7 @@ export default async function Page({ params }:
   if(typeof(project) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{project}</h1>
         </div>
@@ -50,7 +50,7 @@ export default async function Page({ params }:
   if(typeof(options) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{options}</h1>
         </div>
@@ -60,7 +60,7 @@ export default async function Page({ params }:
   if(typeof(costs) === "string")
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{costs}</h1>
         </div>
@@ -70,7 +70,7 @@ export default async function Page({ params }:
   // if(typeof(costsCategory)==='string'){
   //   return(
   //     <>
-  //       <Navigation user={user} />
+  //       <Navigation user={user} token={token} />
   //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
   //         <h1>{costsCategory}</h1>
   //       </div>
@@ -81,7 +81,7 @@ export default async function Page({ params }:
   // if(typeof(costsConcept)==='string'){
   //   return(
   //     <>
-  //       <Navigation user={user} />
+  //       <Navigation user={user} token={token} />
   //       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
   //         <h1>{costsConcept}</h1>
   //       </div>
@@ -131,7 +131,7 @@ export default async function Page({ params }:
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title={project.title} previousPage="/projects">
           <>

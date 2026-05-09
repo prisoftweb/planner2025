@@ -36,7 +36,7 @@ export default async function page() {
   if(!workflows || workflows.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Workflow"
             text="Agrega workflow, para el control de los diferentes procedimientos"
@@ -60,7 +60,7 @@ export default async function page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <ContainerWorkFlows data={table} token={token} user={user} />
     </>
   )

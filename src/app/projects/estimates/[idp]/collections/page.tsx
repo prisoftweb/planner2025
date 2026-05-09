@@ -29,7 +29,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(project) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">project min{project}</h1>
         </div>
@@ -40,7 +40,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(collections) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">collections{collections}</h1>
         </div>
@@ -51,7 +51,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(totalInvoicesProject) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">total invoice{totalInvoicesProject}</h1>
         </div>
@@ -62,7 +62,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(totalPaymentsResumen) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">total payments resumen{totalPaymentsResumen}</h1>
         </div>
@@ -73,7 +73,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(projects) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-center text-red-500">opt pro{projects}</h1>
         </div>
@@ -84,7 +84,7 @@ export default async function Page({ params, searchParams }:
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">catalogs{catalogs}</h1>
         </div>
@@ -105,7 +105,7 @@ export default async function Page({ params, searchParams }:
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerCollectionsProject project={project} collections={collections} token={token} user={user._id} 
           totalInvoiceProject={totalInvoicesProject} resumenPayment={totalPaymentsResumen} pageQuery={searchParams.page} />

@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(provider) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{provider}</h1>
       </>
     )
@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(providers) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{providers}</h1>
       </>
     )
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(costs) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{costs}</h1>
       </>
     )
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(optTypes)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{optTypes}</h1>
       </>
     )
@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(providers.length <= 0){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
       </>
     )
@@ -81,7 +81,7 @@ export default async function Page({ params }: { params: { id: string }}){
   const cond = "67318a51ceaf47ece0d3aa72";
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='3' />
         <ContainerTableHistoryCosts data={table} expenses={costs} token={token} 

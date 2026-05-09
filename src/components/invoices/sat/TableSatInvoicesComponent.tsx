@@ -37,8 +37,8 @@ import {confirmAlert} from 'react-confirm-alert';
 
 import { createFiscalApiInvoice } from "@/app/api/routeSatInvoices";
 
-export default function TableSatInvoicesComponent({token, user}: 
-  {token:string, user:string}) {
+export default function TableSatInvoicesComponent({token, user, company}: 
+  {token:string, user:string, company:string}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByDateAndConditionMin[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -575,8 +575,9 @@ export default function TableSatInvoicesComponent({token, user}:
         </ContainerSideNav>
       )}
 {/* el index stepper se debe manejar desde aqui para poder manipular responsivo de los compoentnes */}
-      <ContainerSideNav width={`w-full max-w-3xl`} open={showNewInvoice}>
-        <AddNewSatInvoiceComponent showForm={setShowNewinvoice} isNew={showNewInvoice} token={token} user={user} />
+      <ContainerSideNav width={`w-full ${step > 1? 'max-w-[75%]': 'max-w-3xl'}`} open={showNewInvoice}>
+        <AddNewSatInvoiceComponent showForm={setShowNewinvoice} isNew={showNewInvoice} token={token} 
+          user={user} handleStep={handleStep} step={step} company={company} />
       </ContainerSideNav>
     </>
   )

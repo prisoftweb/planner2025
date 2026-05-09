@@ -22,10 +22,13 @@ type PropsConfirm = {
   labelMethodPaid: string,
   labelFormPaid: string,
   labelConditionPayment: string,
+  companyParam: string,
+  labelCondicion: string,
 }
 
 export default function ConfirmSatInvoiceComponent({client, date, folio, concepts, subtotal, total, 
-  iva, token, saveInvoice, labelConditionPayment, labelFormPaid, labelMethodPaid, labelType}: PropsConfirm) {
+  iva, token, saveInvoice, labelConditionPayment, labelFormPaid, labelMethodPaid, labelType, companyParam,
+  labelCondicion}: PropsConfirm) {
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const [company, setCompany] = useState<ISatCompany>()
@@ -34,7 +37,8 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
     const fetchCompany = async () => {
       const res = await Promise.all([
         // getCompanyTAXDATAFULL('65d3813c74045152c0c4377e', token)
-        getCompanyTAXDATAFULL('69f54fc23b1b0672ab3115a1', token)
+        // getCompanyTAXDATAFULL('69f54fc23b1b0672ab3115a1', token)
+        getCompanyTAXDATAFULL(companyParam, token)
       ]);
 
       if(typeof(res)==='string'){
@@ -76,7 +80,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
       <div className="flex justify-around gap-x-3 mt-3">
         <div>
           <div className="flex gap-x-2 items-center">
-            <p className="text-slate-600 font-extrabold"></p>
+            <p className="text-slate-600 font-extrabold">Uso de factura</p>
             <p className="text-black font-extrabold">{labelConditionPayment}</p>
           </div>
           
@@ -94,6 +98,11 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
             <p className="text-slate-600 font-extrabold">Tipo</p>
             <p className="text-black font-extrabold">{labelType}</p>
           </div>
+
+          <div className="flex gap-x-2 items-center">
+            <p className="text-slate-600 font-extrabold">Condicion de pago</p>
+            <p className="text-black font-extrabold">{labelCondicion}</p>
+          </div>
         </div>
 
         {/*<div className="hidden md:block">
@@ -104,9 +113,9 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
         <div className="text-right">
           {/* <p className="text-slate-500 font-extrabold">FACTURA</p> */}
           <p className="text-blue-500 font-bold">Factura No: {folio}</p>
-          <p className="text-sm">{date?.substring(8, 10)} de {months[new Date(date).getMonth()]} {date?.substring(0, 4)}</p>
-          {/* <p className="text-sm">{invoice.useCFDI}</p>
-          <p className="text-sm">{invoice.paymentMethod}</p>
+          <p className="text-sm">{date?.substring(8, 10)} de {months[new Date(date).getMonth()]} {date?.substring(0, 4)} {new Date(date)?.toISOString().substring(11, 19)}</p>
+          {/* <p className="text-sm">{new Date(date)?.toISOString().substring(11)}</p> */}
+          {/*<p className="text-sm">{invoice.paymentMethod}</p>
           <p className="text-sm">{invoice.paymentWay}</p> */}
         </div>
 

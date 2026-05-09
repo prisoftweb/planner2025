@@ -26,7 +26,7 @@ export default async function Page() {
   if(typeof(relations) ==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{relations}</h1>
         </div>
@@ -37,7 +37,7 @@ export default async function Page() {
   if(typeof(glossaries) ==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{glossaries}</h1>
         </div>
@@ -48,7 +48,7 @@ export default async function Page() {
   if(typeof(nodes) ==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-xl text-center">{nodes}</h1>
         </div>
@@ -80,7 +80,7 @@ export default async function Page() {
   if(!relations || relations.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Relaciones"
             text="Agrega relacion, para el control del flujo de los nodos"
@@ -106,7 +106,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <Header title="Nodos" placeHolder="Buscar nodo.." >
         <ButtonNewRelation glossaries={optGlossaries} nodes={optNodes} 

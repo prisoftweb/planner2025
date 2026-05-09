@@ -33,7 +33,7 @@ export default async function Page() {
   
   if(!trees || trees.length <= 0){
     return <div className="p-10">
-              <Navigation user={user} />
+              <Navigation user={user} token={token} />
               <WithOut img="/img/clientes.svg" subtitle="Arboles" 
                 text="Aqui puedes gestionar tu arbol con toda su informacion relevante"
                 title="Arboles">
@@ -160,7 +160,7 @@ export default async function Page() {
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       
       <RolesClient token={token} option={5}>
         <div>

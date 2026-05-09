@@ -15,7 +15,7 @@ export default async function Page(){
   if(typeof(quotations) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{quotations}</h1>
         </div>
@@ -25,7 +25,7 @@ export default async function Page(){
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerQuotations quotations={quotations} token={token} user={user} isByUser={true} />
       </div>

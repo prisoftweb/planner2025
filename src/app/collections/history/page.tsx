@@ -11,7 +11,7 @@ export default async function Page(){
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <TableHistoryCollectionsComponent token={token} user={user._id} />
       </div>

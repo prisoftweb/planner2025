@@ -26,7 +26,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(provider) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{provider} provedor</h1>
       </>
     )
@@ -35,7 +35,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(providers) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{providers} provedores</h1>
       </>
     )
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(costs) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{costs} cp</h1>
       </>
     )
@@ -53,7 +53,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(providers.length <= 0){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">Error al obtener proveedores...</h1>
       </>
     )
@@ -62,7 +62,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(pending) === "string"){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{pending}</h1>
       </>
     )
@@ -72,7 +72,7 @@ export default async function Page({ params }: { params: { id: string }}){
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <NavTab idProv={params.id} tab='5' />
         <ContainerTableExpensesProvider data={table} expenses={costs} token={token} 

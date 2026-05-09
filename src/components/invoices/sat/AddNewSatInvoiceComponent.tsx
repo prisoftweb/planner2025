@@ -22,9 +22,13 @@ type Params = {
   isNew:boolean, 
   user:string, 
   token:string, 
+  company:string,
+  step:number,
+  handleStep: (value: number) => void,
 }
 
-export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}: Params) {
+export default function AddNewSatInvoiceComponent({showForm, user, token, isNew, company, 
+  handleStep, step}: Params) {
 
   const [folio, setFolio] = useState<string>('');
   // const [taxFolio, setTaxFolio] = useState<string>('');
@@ -42,13 +46,14 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   const [labelMethodPaid, setLabelMethodPaid] = useState<string>('');
   const [labelType, setLabelType] = useState<string>('');
   const [labelConditionPayment, setLabelConditionPayment] = useState<string>('');
+  const [labelCondicionPayment, setLabelCondicionPayment] = useState<string>('');
 
   const [bandFolio, setBandFolio] = useState<boolean>(false);
   const [bandTaxFolio, setBandTaxFolio] = useState<boolean>(false);
   const [bandDate, setBandDate] = useState<boolean>(false);
   const [bandOdc, setBandOdc] = useState<boolean>(false);
 
-  const [step, setStep]=useState<number>(0);
+  // const [step, setStep]=useState<number>(0);
   const [isVat, setIsVat]=useState<boolean>(true);
 
   const [subtotalInvoice, setSubtotalInvoice]=useState<number>(0);
@@ -76,6 +81,11 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
 
   const handleLabelConditionPayment = (value: string) => {
     setLabelConditionPayment(value);
+    console.log('label condition payment => ', value);
+  }
+
+  const handleLabelCondicionPayment = (value: string) => {
+    setLabelCondicionPayment(value);
   }
 
   const handleAddNewConcept = (concept: any) => {
@@ -104,8 +114,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
   }
 
   async function handleSatCLient(idc:string){
-    // const res = await getClientTAXProfileMIN(token, idc);
-    const res = await getClientTAXProfileMIN(token, '69f2ccb13b1b0672ab310b04');
+    const res = await getClientTAXProfileMIN(token, idc);
+    // const res = await getClientTAXProfileMIN(token, '69f2ccb13b1b0672ab310b04');
     // const res = await getClientTAXProfileMIN(token, '69fbf97f3b1b0672ab319543');
     if(typeof(res)=='string'){
       showToastMessageError(res);
@@ -137,9 +147,9 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
     setFormPaid(value);
   }
 
-  const handleStep = (value: number) => {
-    setStep(value);
-  }
+  // const handleStep = (value: number) => {
+  //   setStep(value);
+  // }
 
   const handleDate = (value:string) => {
     setDate(value);
@@ -528,7 +538,10 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
           showToastMessageError(resInvoice);
         }else{
           showToastMessage('Factura agregada satisfactoriamente!!');
-          showForm(false);
+          // showForm(false);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         }
         // showForm(false);
       }
@@ -636,7 +649,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
                                   handleType={handleType} nextStep={handleStep} token={token} handleCondicionPayment={handleCondicionPayment}
                                   bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc}
                                   handleLabelFormPaid={handleLabelFormPaid} handleLabelMethodPaid={handleLabelMethodPaid}
-                                  handleLabelType={handleLabelType} handleLabelConditionPayment={handleLabelConditionPayment} />: 
+                                  handleLabelType={handleLabelType} handleLabelConditionPayment={handleLabelConditionPayment}
+                                  handleLabelCondicionPayment={handleLabelCondicionPayment} />: 
                                     (step==2? <ConceptsSatInvoiceStepperComponent nextStep={handleStep} handleAddConcept={handleAddNewConcept}
                                       token={token} user={user} conceptsInvoice={conceptsInvoice} 
                                       discount={discount} handleDiscount={handleDiscount} handleVat={handleVat} vat={vat} /> :
@@ -644,11 +658,12 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew}
                                               folio={folio} iva={vatT} subtotal={subtotalInvoice} 
                                               total={totalInvoice} token={token} saveInvoice={saveInvoice}
                                               labelConditionPayment={labelConditionPayment} labelFormPaid={labeFormPaid}
-                                              labelMethodPaid={labelMethodPaid} labelType={labelType}  />)))
+                                              labelMethodPaid={labelMethodPaid} labelType={labelType} 
+                                              companyParam={company} labelCondicion={labelCondicionPayment} />)))
 
   return (
     <>
-      <form className="z-10 absolute w-full max-w-3xl bg-white space-y-5 p-5 right-0"
+      <form className={`z-10 absolute w-full bg-white space-y-5 p-5 right-0`}
           style={{height: `${heightPage}px`}}>
         <div className="flex justify-between">
           <HeaderForm img="/img/estimates/invoices.svg" subtitle={"Crea factura"} 

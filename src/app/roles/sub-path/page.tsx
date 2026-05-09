@@ -26,7 +26,7 @@ export default async function Page(){
   if(!routes || routes.length <= 0){
     return(
       <div>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <RolesClient token={token} option={3}>
           <WithOut img="/img/clientes.svg" subtitle="Sub Rutas" 
               text="Aqui puedes gestionar tus rutas para usuarios que usen el sistema"
@@ -52,7 +52,7 @@ export default async function Page(){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <RolesClient token={token} option={3}>
         <div>
           <Header title="Rutas" placeHolder="Buscar ruta..">

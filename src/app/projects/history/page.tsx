@@ -21,7 +21,7 @@ export default async function Page(){
   if(typeof(projects)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{projects}</h1>
       </>
     )
@@ -30,7 +30,7 @@ export default async function Page(){
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
       </>
     )
@@ -88,7 +88,7 @@ export default async function Page(){
   
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <ContainerHistoryClient data={table} optCategoriesFilter={optCategories}
         optConditionsFilter={optConditions} optTypesFilter={optTypes} 
         projects={projects} token={token} user={user} />

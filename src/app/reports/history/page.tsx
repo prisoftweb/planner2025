@@ -34,7 +34,7 @@ export default async function Page() {
   if(typeof(reports)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-lg text-center text-red-500">{reports}</h1>
       </>
     )
@@ -43,7 +43,7 @@ export default async function Page() {
   if(typeof(optProjects)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-lg text-red-500">{optProjects}</h1>
       </>
     )
@@ -61,7 +61,7 @@ export default async function Page() {
   if(typeof(catalogs)==='string'){
     return(
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
       </>
     )
@@ -82,7 +82,7 @@ export default async function Page() {
   if(!reports || reports.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <WithOut img="/img/costs/costs.svg" subtitle="Informes"
             text="No cuentas con un historial de informes!!"
@@ -98,7 +98,7 @@ export default async function Page() {
 
   return (
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <ContainerClient data={table} optCompaniesFilter={optCompaniesFilter} 
           optConditionsFilter={optConditionsFilter} condition="" optCompanies={[]}
           optDepartments={[]} optProjects={[]} user={user} isHistory={true}

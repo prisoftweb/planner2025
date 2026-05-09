@@ -29,7 +29,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(client) === "string"){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{client}</h1>
       </>
     )
@@ -40,7 +40,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(typeof(clients) === "string"){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">{clients}</h1>
       </>
     )
@@ -50,7 +50,7 @@ export default async function Page({ params }: { params: { id: string }}){
   if(clients.length <= 0){
     return (
       <>
-        <Navigation user={user} />
+        <Navigation user={user} token={token} />
         <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los clientes!!</h1>
       </>
     )
@@ -65,7 +65,7 @@ export default async function Page({ params }: { params: { id: string }}){
 
   return(
     <>
-      <Navigation user={user} />
+      <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <div className="flex justify-between items-center flex-wrap gap-y-3">
           <div className="flex items-center my-2">
