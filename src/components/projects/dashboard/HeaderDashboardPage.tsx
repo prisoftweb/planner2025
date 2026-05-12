@@ -42,10 +42,13 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
 
   let progress;
   if(amountProjects.length > 0){
-    progress = (((amountProjects[0]?.totalAmount || 0) / configMin[0].lastmeta.amount) * 100).toFixed(2);
+    progress = (((amountProjects[0]?.totalAmount || 0) / (Array.isArray(configMin)? (configMin[0]?.lastmeta?.amount?? 0.1): 0.1)) * 100).toFixed(2);
   }else{
-    progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
+    progress = ((0 / (Array.isArray(configMin)? (configMin[0]?.lastmeta?.amount?? 0.1): 0.1)) * 100).toFixed(2);
   }
+
+  console.log('configMin', configMin);
+  console.log('prj tot cost => ', projectsTotalCost); 
 
   return (
     <div>
@@ -98,15 +101,15 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                 content={CurrencyFormatter({
                   currency: 'USD',
-                  value: configMin[0].lastmeta.amount
+                  value: (Array.isArray(configMin)? configMin[0]?.lastmeta?.amount?? 0: 0)
                 })} 
                 className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
               <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
-                {MoneyFormatter(configMin[0].lastmeta.amount)}
+                {MoneyFormatter((Array.isArray(configMin)? configMin[0]?.lastmeta?.amount?? 0: 0))}
               </p>
             </Tooltip>
             <p className="text-sm text-gray-500 dark:text-gray-500">
-              META {configMin[0].lastmeta.year}
+              META {Array.isArray(configMin)? configMin[0]?.lastmeta?.year?? 0: 0}
             </p>
           </div>
         </div>
@@ -150,11 +153,11 @@ export default function HeaderDashboardPage({handleDate, amountProjects,
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content={CurrencyFormatter({
                     currency: 'USD',
-                    value: amountProjects[0].totalAmount - projectsTotalCost[0].totalCost
+                    value: amountProjects[0].totalAmount - (Array.isArray(projectsTotalCost) && projectsTotalCost.length>0? projectsTotalCost[0].totalCost: 0)
                   })} 
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
                 <p className='text-xs'>
-                  {MoneyFormatter(amountProjects[0].totalAmount - projectsTotalCost[0].totalCost)}
+                  {MoneyFormatter(amountProjects[0].totalAmount - (Array.isArray(projectsTotalCost) && projectsTotalCost.length>0? projectsTotalCost[0].totalCost: 0))}
                 </p>
               </Tooltip>
             </>

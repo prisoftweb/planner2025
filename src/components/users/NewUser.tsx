@@ -18,7 +18,7 @@ export default function NewUser({showForm, optionsDepartments, token, roles, add
   {showForm:(value: boolean) => void, optionsDepartments:Options[], token:string, roles:Options[], addUser:Function}){
   
   const [file, setFile] = useState<File>();
-  const [department, setDepartment] = useState<string>(optionsDepartments[0].value);
+  const [department, setDepartment] = useState<string>(Array.isArray(optionsDepartments) && optionsDepartments.length>0? optionsDepartments[0].value: '');
   const [role, setRole] = useState<string>(roles[0].value);
   
   let optRole = roles.find(r => r.value === role)?? roles[0];

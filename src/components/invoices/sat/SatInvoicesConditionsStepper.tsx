@@ -20,7 +20,7 @@ type DataBasicProps={
   setOdc:Function,
   bandOdc:boolean
   setBandOdc:Function,
-  handleCondicionPayment:Function,
+  handleCondicionTPayment:Function,
   handleLabelType: (value: string) => void,
   handleLabelMethodPaid: (value: string) => void,
   handleLabelFormPaid: (value: string) => void,
@@ -37,7 +37,7 @@ export interface IMethodPayment {
 
 export default function SatInvoicesConditionsStepper({token, nextStep, handleFormPaid, 
   handleMethodPaid, handleType, conditionPayment, handleConditionPayment, odc, 
-  setOdc, bandOdc, setBandOdc, handleCondicionPayment, handleLabelFormPaid, handleLabelMethodPaid, 
+  setOdc, bandOdc, setBandOdc, handleCondicionTPayment, handleLabelFormPaid, handleLabelMethodPaid, 
   handleLabelType, handleLabelConditionPayment, handleLabelCondicionPayment}: DataBasicProps) {
 
   const [optConditionsPayment, setoptConditionsPayment]=useState<Options[]>([]);
@@ -94,12 +94,17 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
           label: m.description,
         }));
         setCatalogCFDI(auxTypes);
-        console.log('sat types:', auxTypes[0].value);
-        handleType(auxTypes[0].value);
+        console.log('sat types:', auxTypes);
+        let indexT=auxTypes.findIndex((c) => c.label==="Ingreso");
+        indexT=indexT<0?0:indexT;
+        console.log('indexT => ', indexT);
+        console.log('sat types:', auxTypes[indexT].value);
+        handleType(auxTypes[indexT?? 0].value);
         handleLabelType(auxTypes[0].label);
         // handleConditionPayment(auxTypes[0].value)
       }
 
+      console.log('sat pay form => ', satPayForm);
       if(typeof(satPayForm)==='string'){
         showToastMessageError(satPayForm);
       }else{
@@ -113,10 +118,12 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
         // handleConditionPayment(auxTypes[0].value)
       }
 
+      console.log('condicionesP => ', condicionesP);
       if(typeof(condicionesP)==='string'){
         showToastMessageError(condicionesP);
       }else{
         setoptCondicionesPayment(condicionesP);
+        handleCondicionTPayment(condicionesP[0].value);
         handleLabelCondicionPayment(condicionesP[0].label);
         // handleConditionPayment(condicionesP[0].value)
       }
@@ -171,8 +178,8 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
     handleLabelConditionPayment(label);
   }
 
-  const handleCondition = (value:string) => {
-    handleCondicionPayment(value);
+  const handleConditionTP = (value:string) => {
+    handleCondicionTPayment(value);
     const label = optCondicionesPayment.find((c) => c.value === value)?.label || '';
     handleLabelCondicionPayment(label);
   }
@@ -213,7 +220,7 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
         {optConditionsPayment.length > 0 && (
           <div className=" ">
             <Label htmlFor="condicionesPaid"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Condiciones de pago</p></Label>
-            <SelectReact index={0} opts={optCondicionesPayment} setValue={handleCondition} />
+            <SelectReact index={0} opts={optCondicionesPayment} setValue={handleConditionTP} />
           </div>
         )}
 

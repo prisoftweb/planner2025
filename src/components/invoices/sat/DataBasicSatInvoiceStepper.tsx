@@ -76,10 +76,14 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
         showToastMessageError(clients);
       }else{
         setOptClients(clients);
+        console.log("clients: ", clients);
         if(!client || client ===''){
           setClient(clients[0].value);
         }
-        handleChangeClient(!client || client ===''? clients[0].value: client);
+        if(client || clients.length > 0)
+        {
+          handleChangeClient(!client || client ===''? clients[0].value: client);
+        }
         // const projs = await getAllProjectsWithClientAndConditionLV(token, clients[0].value);
         // if(typeof(projs)==='string'){
         //   showToastMessageError(projs);
@@ -93,6 +97,7 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
   }, []);
 
   const handleChangeClient = async (value:string) => {
+    console.log("change client: ", value);
     setClient(value);
     const projs = await getAllProjectsWithClientAndConditionLV(token, value);
     if(typeof(projs)==='string'){

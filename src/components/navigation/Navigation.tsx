@@ -124,9 +124,9 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
           >
             {profile ? profile.name.split(' ')[0] : 'Sin perfil'}
           </button>
-          <div className="flex justify-around items-center w-24 text-white print:hidden">
+          {/* <div className="flex justify-around items-center w-24 text-white print:hidden">
             <p className="p-2 hover:bg-slate-700 text-center font-semibold print:hidden">{firstName}</p>
-          </div>
+          </div> */}
           {role.toLowerCase().includes('super') && (
             <Cog8ToothIcon className="text-slate-100 w-7 h-7" onClick={() => window.location.replace('/workspace')} />
           )}
@@ -424,7 +424,7 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
           link: '/projects/board'
         },
       ]}/>
-      <NavItem name="Cotizaciones" link="" items={[
+      {/* <NavItem name="Cotizaciones" link="" items={[
         {
             name: 'Cotizaciones',
             link: '/quotations'
@@ -551,7 +551,7 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             link: '/codes/assignedCode'
           },
         ]} 
-      />
+      /> */}
       <NavItem name="Workflow" link="" items={[
           {
             name: 'Workflow',

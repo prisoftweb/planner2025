@@ -45,19 +45,21 @@ export default function HeaderDashboardPrjPage({handleDate, amountProjects,
     }
   };
 
-  let progress;
-  if(amountProjects.length > 0){
-    progress = (((amountProjects[0]?.totalAmount || 0) / configMin[0].lastmeta.amount) * 100).toFixed(2);
-  }else{
-    progress = ((0 / configMin[0].lastmeta.amount) * 100).toFixed(2);
-  }
+  console.log('lastmeta', configMin[0]);
 
-  const trueGF = totalFeaturesGF.find(t => t.projectfeature===true);
-  const falseGF = totalFeaturesGF.find(t => t.projectfeature===false);
-  const trueAC = totalFeaturesAC.find(t => t.projectfeature===true);
-  const falseAC = totalFeaturesAC.find(t => t.projectfeature===false);
-  const trueT = totalFeaturesT.find(t => t.projectfeature===true);
-  const falseT = totalFeaturesT.find(t => t.projectfeature===false);
+  // let progress;
+  // if(amountProjects.length > 0){
+  //   progress = (((amountProjects[0]?.totalAmount || 0) / (Array.isArray(configMin)? (configMin[0]?.lastmeta?.amount?? 0.1): 0.1)) * 100).toFixed(2);
+  // }else{
+  //   progress = ((0 / (Array.isArray(configMin)? (configMin[0]?.lastmeta?.amount?? 0.1): 0.1)) * 100).toFixed(2);
+  // }
+
+  const trueGF = Array.isArray(totalFeaturesGF)? totalFeaturesGF?.find(t => t.projectfeature===true) : undefined;
+  const falseGF = Array.isArray(totalFeaturesGF)? totalFeaturesGF?.find(t => t.projectfeature===false) : undefined;
+  const trueAC = Array.isArray(totalFeaturesAC)? totalFeaturesAC?.find(t => t.projectfeature===true) : undefined;
+  const falseAC = Array.isArray(totalFeaturesAC)? totalFeaturesAC?.find(t => t.projectfeature===false) : undefined;
+  const trueT = Array.isArray(totalFeaturesT)? totalFeaturesT?.find(t => t.projectfeature===true) : undefined;
+  const falseT = Array.isArray(totalFeaturesT)? totalFeaturesT?.find(t => t.projectfeature===false) : undefined;
 
   return (
     <div>

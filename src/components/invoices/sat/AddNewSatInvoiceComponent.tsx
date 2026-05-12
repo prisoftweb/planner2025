@@ -38,7 +38,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
   const [methodPaid, setMethodPaid] = useState<string>();
   const [formPaid, setFormPaid] = useState<string>();
   const [conditionPayment, setConditionPayment] = useState<string>('');
-  const [condicionPayment, setCondicionPayment] = useState<string>('');
+  const [condicionTPayment, setCondicionTPayment] = useState<string>('');
   const [odc, setOdc] = useState<string>('');
   const [project, setProject] = useState<string>('');
 
@@ -167,8 +167,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
     setConditionPayment(value);
   }
 
-  const handleCondicionPayment = (value:string) => {
-    setCondicionPayment(value);
+  const handleCondicionTPayment = (value:string) => {
+    setCondicionTPayment(value);
   }
 
   const handleOdc = (value:string) => {
@@ -522,14 +522,15 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
             {glossary:"67d20cb359865f640af92638", user}
           ],
           // termsofpayment:conditionPayment,
-          termsofpayment:condicionPayment,
+          termsofpayment:condicionTPayment,
           purchaseorder:odc,
           accountreceivables: [{
             previousbalanceamount: totalInvoice,
             charged: 0,
             unchargedbalanceamount: totalInvoice,
             partialitynumber: 0,
-          }]
+          }],
+          sat:res.responses[0]
         }
         
         console.log('invoice data => ', invoiceData);
@@ -538,7 +539,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           showToastMessageError(resInvoice);
         }else{
           showToastMessage('Factura agregada satisfactoriamente!!');
-          // showForm(false);
+          showForm(false);
           setTimeout(() => {
             window.location.reload();
           }, 1500);
@@ -646,7 +647,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
                         (step===1? <SatInvoicesConditionsStepper 
                                   conditionPayment={conditionPayment} handleConditionPayment={handleConditionPayment}
                                   handleFormPaid={handleFormPaid} handleMethodPaid={handleMethodPaid} 
-                                  handleType={handleType} nextStep={handleStep} token={token} handleCondicionPayment={handleCondicionPayment}
+                                  handleType={handleType} nextStep={handleStep} token={token} handleCondicionTPayment={handleCondicionTPayment}
                                   bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc}
                                   handleLabelFormPaid={handleLabelFormPaid} handleLabelMethodPaid={handleLabelMethodPaid}
                                   handleLabelType={handleLabelType} handleLabelConditionPayment={handleLabelConditionPayment}

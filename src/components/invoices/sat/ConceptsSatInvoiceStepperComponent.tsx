@@ -80,7 +80,11 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
         setPrices(res);
         const aux: Options[] = res.map((p:any) => {
           return {
-            label: p.cost.toString(),
+            // label: p.cost.toString(),
+            label: CurrencyFormatter({
+              currency: 'MXN',
+              value: p?.cost?? 0
+            }),
             value: p._id
           }
         });

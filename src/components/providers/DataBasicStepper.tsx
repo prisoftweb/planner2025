@@ -146,6 +146,10 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           showToastMessage(res.message);
           updateProviderStore([...providerStore, res.prov]);
           updateHaveNewProvider(true);
+          dispatch({ type: 'SET_BASIC_DATA', data: null });
+          dispatch({ type: 'SET_CREDIT_DATA', data: null });
+          dispatch({ type: 'SET_CONTACTS', data: [] });
+          dispatch({type: 'INDEX_STEPPER', data: 0})
         }else{
           refRequest.current = true;
           showToastMessageError(res.message);

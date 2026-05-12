@@ -9,6 +9,7 @@ export async function createInvoice(auth_token:string, data: Object) {
         'Content-Type': 'application/json'
       }
     })
+    console.log('res local invoice  => ', res);
     // if(res.status===200) return res.data.data.data;
     if(res.status===201) return res.status;
     return res.statusText;
@@ -251,6 +252,8 @@ export async function getAllTotalAmountInvoicePending(auth_token:string, dateI: 
 
 export async function getAllInvoicesMINByDateAndCondition(auth_token:string, dateI: string, dateF:string, data:Object){
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices/getAllInvoicesMINByDate/${dateI}/${dateF}`;
+  console.log('url invoices => ', url);
+  console.log('data invoices => ', data);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -258,6 +261,7 @@ export async function getAllInvoicesMINByDateAndCondition(auth_token:string, dat
         'Content-Type': 'application/json'
       },
     });
+    console.log('res invoices => ', res);
     if(res.status===200)
       return res.data.data.stats;
     return 'Error al obtener las facturas!!';

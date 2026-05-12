@@ -38,12 +38,14 @@ export async function getClientsLV(auth_token:string) {
 
 export async function getAllClientsTaxProfileLV(auth_token:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/clients/getAllClientsTaxProfileLV`;
+  console.log('getAllClientsTaxProfileLV => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`,
       }
     })
+    console.log('res getAllClientsTaxProfileLV => ', res);
     if(res.status===200) return res.data.data.data;
     return res.data?.message?? res.statusText;
   } catch (error) {

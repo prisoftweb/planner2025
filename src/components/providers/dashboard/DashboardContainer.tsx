@@ -66,7 +66,8 @@ export default function DashboardContainer({costsProvider, costsProviderWithTrad
   });
 
   // const pendingText = MoneyFormatter(totalCost[0].totalCost);
-  const totalPaymentsProv = MoneyFormatter(totalPayments.totalPayout);
+
+  // const totalPaymentsProv = MoneyFormatter(totalPayments?.totalPayout?? 0);
 
   const colors = ['blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 

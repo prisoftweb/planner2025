@@ -30,7 +30,7 @@ export default function NewReport({showForm, token, companies,
   const [heightPage, setHeightPage] = useState<number>(900);
   const [project, setProject] = useState<string>(projects[0].value);
   const [company, setCompany] = useState<string>(companies[0].value);
-  const [department, setDepartment] = useState<string>(departments[0].value);
+  const [department, setDepartment] = useState<string>(Array.isArray(departments) && departments.length>0? departments[0].value: '');
   const [startDate, setStartDate] = useState<string>('');
   const [imprest, setImprest] = useState<boolean>(false);
   const refRequest = useRef(true);
