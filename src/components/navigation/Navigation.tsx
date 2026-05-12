@@ -424,7 +424,7 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
           link: '/projects/board'
         },
       ]}/>
-      {/* <NavItem name="Cotizaciones" link="" items={[
+      <NavItem name="Cotizaciones" link="" items={[
         {
             name: 'Cotizaciones',
             link: '/quotations'
@@ -551,7 +551,7 @@ const NavItems = ({role, user}: {role:string, user:UsrBack}) => {
             link: '/codes/assignedCode'
           },
         ]} 
-      /> */}
+      />
       <NavItem name="Workflow" link="" items={[
           {
             name: 'Workflow',
