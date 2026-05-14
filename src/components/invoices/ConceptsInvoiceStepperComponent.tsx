@@ -10,7 +10,8 @@ type DataBasicProps={
   token:string,
   nextStep:Function,
   saveInvoice:Function,
-  user:string
+  user:string,
+  company:string
 }
 
 type TableConceptsInvoice = {
@@ -24,7 +25,7 @@ type TableConceptsInvoice = {
 }
 
 export default function ConceptsInvoiceStepperComponent({token, nextStep, saveInvoice, 
-  user}: DataBasicProps) {
+  user, company}: DataBasicProps) {
 
   const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);  
   const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
@@ -123,7 +124,7 @@ export default function ConceptsInvoiceStepperComponent({token, nextStep, saveIn
         <Button type="button" onClick={() => saveInvoice(conceptsInvoice)}>Guardar</Button>
       </div>
       {showNewConcept && <AddNewConceptInInvoice showForm={handleShowNewConcept} token={token} 
-                            updateConcepts={handleAddNewConcept} user={user} />}
+                            updateConcepts={handleAddNewConcept} user={user} company={company} />}
     </div>
   )
 }

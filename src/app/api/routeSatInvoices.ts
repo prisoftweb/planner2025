@@ -121,6 +121,25 @@ export async function createFiscalApiInvoice(data:Object) {
   }
 }
 
+export async function getSatUnitMeasurements() {
+  try {
+    const res = await fiscalApi.get("/api/v4/catalogs/SatUnitMeasurements");
+    return res.data.data;
+  } catch (error) {
+    return "Error al obtener catálogo unidades del SAT";
+  }
+}
+
+export async function getSatProductCodes() {
+  try {
+    const res = await fiscalApi.get("/api/v4/catalogs/SatProductCodes");
+    console.log("Response:", res);
+    return res.data.data;
+  } catch (error) {
+    return "Error al obtener catálogo productos del SAT";
+  }
+}
+
 // curl --location 'https://test.fiscalapi.com/api/v4/invoices/income' \
 // --header 'X-TENANT-KEY: c1d37b62-e6f0-43e4-aa52-f97999355878' \
 // --header 'X-TIME-ZONE: America/Mexico_City' \

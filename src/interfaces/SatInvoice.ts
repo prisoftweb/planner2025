@@ -134,3 +134,10 @@ export interface IResponseSatInvoice {
   createdAt: string
   updatedAt: string
 }
+
+export interface ISatCatalog {
+  id: string
+  description: string
+  createdAt: string
+  updatedAt: any
+}

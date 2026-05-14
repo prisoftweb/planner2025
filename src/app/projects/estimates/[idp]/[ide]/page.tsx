@@ -61,7 +61,7 @@ export default async function Page({ params, searchParams }:
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerDetailEstimate estimate={estimate} project={project} token={token} user={user._id} 
           concepts={concepts} idEstimate={params.ide} totalEstimatedProject={totalEstimatedProject}
-          page={searchParams.page} />
+          page={searchParams.page} company={user.profile} />
       </div>
     </>
   )

@@ -23,9 +23,9 @@ interface OptionsDashboard {
 }
 
 export default function AddNewConceptEstimate({showForm, project, updateConcepts, user, token, 
-    idEstimate, conceptsDataChart}: 
+    idEstimate, conceptsDataChart, company}: 
   {showForm:(value: boolean) => void, project: OneProjectMin, updateConcepts:Function, user:string, token:string, 
-    idEstimate:IEstimate, conceptsDataChart:IConceptEstimate[]}) {
+    idEstimate:IEstimate, conceptsDataChart:IConceptEstimate[], company:string}) {
   // const refRequest = useRef(true);
 
   const [conceptSel, setConcepSel] = useState<IConceptEstimateMin>();
@@ -129,7 +129,8 @@ export default function AddNewConceptEstimate({showForm, project, updateConcepts
         priceComp:
         (indexStepper===2?  dataComp: 
           <ConceptStepperComponent handleConceptID={handleConceptID} nextStep={handleIndexStepper}
-            token={token} handleAddNewConcept={handleAddNewConcept} concepts={concepts} />);
+            token={token} handleAddNewConcept={handleAddNewConcept} 
+            concepts={concepts} company={company} user={user} />);
 
   const categoriesConcepts: string[] = [];
   const dataConceptsDashboard: OptionsDashboard[] = [];  

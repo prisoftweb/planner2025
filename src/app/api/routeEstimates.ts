@@ -203,6 +203,8 @@ export async function removeConceptEstimate(id:string, auth_token:string) {
 
 export async function createConceptEstimate(auth_token:string, data: Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/conceptsestimates`;
+  console.log('data concept => ', JSON.stringify(data));
+  // console.log('url create concept => ', url);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -210,11 +212,13 @@ export async function createConceptEstimate(auth_token:string, data: Object) {
         'Content-Type': 'application/json'
       }
     })
+    console.log('response create concept => ', res);
     // if(res.status===200) return res.data.data.data;
     if(res.status===201) return res.status;
     return res.statusText;
   } catch (error) {
     if(axios.isAxiosError(error)){
+      console.log('error response create concept => ', error);
       return error.response?.data.message || error.message;
     }
     return 'Error al crear estimacion!!';

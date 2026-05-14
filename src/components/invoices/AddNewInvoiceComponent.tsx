@@ -12,9 +12,10 @@ type Params = {
   showForm:(value: boolean) => void, 
   user:string, 
   token:string, 
+  company:string
 }
 
-export default function AddNewInvoiceComponent({showForm, user, token}: Params) {
+export default function AddNewInvoiceComponent({showForm, user, token, company}: Params) {
 
   const [folio, setFolio] = useState<string>('');
   const [taxFolio, setTaxFolio] = useState<string>('');
@@ -225,7 +226,8 @@ export default function AddNewInvoiceComponent({showForm, user, token}: Params) 
                                   handleType={handleType} nextStep={handleStep} token={token} 
                                   bandOdc={bandOdc} odc={odc} setOdc={handleOdc} setBandOdc={handleBandOdc} />: 
                                     <ConceptsInvoiceStepperComponent nextStep={handleStep} 
-                                      saveInvoice={saveInvoice} token={token} user={user} />))
+                                      saveInvoice={saveInvoice} token={token} user={user}
+                                      company={company} />))
 
   return (
     <>

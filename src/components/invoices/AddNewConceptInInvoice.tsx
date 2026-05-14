@@ -11,8 +11,8 @@ import { IConceptEstimateMin, PriceConcept } from "@/interfaces/Estimate"
 import { showToastMessageError } from "@/components/Alert"
 import DataConceptStepperComponent from "./DataConceptStepper"
 
-export default function AddNewConceptInInvoice({showForm, updateConcepts, user, token}: 
-  {showForm:Function, updateConcepts:Function, user:string, token:string}) {
+export default function AddNewConceptInInvoice({showForm, updateConcepts, user, token, company}: 
+  {showForm:Function, updateConcepts:Function, user:string, token:string, company:string}) {
 
   const [conceptSel, setConcepSel] = useState<IConceptEstimateMin>();
   const [idPrice, setIdPrice] = useState<PriceConcept>();
@@ -112,7 +112,8 @@ export default function AddNewConceptInInvoice({showForm, updateConcepts, user, 
         priceComp:
         (indexStepper===2?  dataComp: 
           <ConceptStepperComponent handleConceptID={handleConceptID} nextStep={handleIndexStepper}
-            token={token} handleAddNewConcept={handleAddNewConcept} concepts={concepts} />);
+            token={token} handleAddNewConcept={handleAddNewConcept} concepts={concepts}
+            company={company} user={user} />);
 
   return(
     <>

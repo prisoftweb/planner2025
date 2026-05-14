@@ -8,11 +8,13 @@ type Params = {
   token:string, 
   nextStep:Function, 
   handleAddNewConcept:Function, 
-  concepts:IConceptEstimateMin[]
+  concepts:IConceptEstimateMin[],
+  user:string,
+  company:string
 }
 
 export default function ConceptStepperComponent({handleConceptID, token, nextStep, 
-    handleAddNewConcept, concepts}: Params) {
+    handleAddNewConcept, concepts, company, user}: Params) {
 
   const [showNewConcept, setShowNewConcept] = useState<boolean>(false);
   
@@ -92,7 +94,7 @@ export default function ConceptStepperComponent({handleConceptID, token, nextSte
         </nav>
       </div>
       {showNewConcept && <FormNewConcept addConcept={handleAddNewConcept} setShowForm={handleShowNewConcept} 
-                              token={token} />}
+                              token={token} company={company} user={user} />}
     </>
   )
 }

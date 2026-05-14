@@ -23,11 +23,12 @@ type ContainerDetailEstimateProps = {
   concepts:IConceptEstimate[], 
   idEstimate:string, 
   totalEstimatedProject: TotalEstimatedByProject[]
-  page: string | undefined
+  page: string | undefined,
+  company:string
 }
 
 export default function ContainerDetailEstimate({project, token, user, estimate, concepts, 
-    idEstimate, totalEstimatedProject, page}: ContainerDetailEstimateProps) {
+    idEstimate, totalEstimatedProject, page, company}: ContainerDetailEstimateProps) {
 
   const [openNewConcept, setOpenNewConcept] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -227,7 +228,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
       {openNewConcept && (
         <AddNewConceptEstimate project={project} showForm={handleShowForm} token={token}
                             updateConcepts={updateConceptsEstimate} user={user} idEstimate={estimate}
-                            conceptsDataChart={conceptsData} />
+                            conceptsDataChart={conceptsData} company={company} />
       )}
     </>
   )

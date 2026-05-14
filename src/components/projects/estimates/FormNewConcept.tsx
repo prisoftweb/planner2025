@@ -11,8 +11,11 @@ import { showToastMessage, showToastMessageError } from "@/components/Alert";
 import { getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
 import SelectReact from "@/components/SelectReact";
 import { Options } from "@/interfaces/Common";
+import { getSatUnitMeasurements, getSatProductCodes } from "@/app/api/routeSatInvoices";
+import { ISatCatalog } from "@/interfaces/SatInvoice";
 
-export default function FormNewConcept({token, setShowForm, addConcept}: {token:string, setShowForm:Function, addConcept:Function}){
+export default function FormNewConcept({token, setShowForm, addConcept, company, user}: 
+  {token:string, setShowForm:Function, addConcept:Function, user:string, company:string}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   
@@ -22,6 +25,9 @@ export default function FormNewConcept({token, setShowForm, addConcept}: {token:
   const [bandDescription, setBandDescription] = useState<boolean>(false);
   const [bandCode, setBandCode] = useState<boolean>(false);
   const [bandName, setBandName] = useState<boolean>(false);
+
+  const [productsSat, setProductsSat] = useState<Options[]>([]);
+  const [productSat, setProductSat] = useState<Options>();
   
   const [unit, setUnit] = useState<string>();
   const [optionsUnit, setOptionsUnit] = useState<Options[]>([]);
@@ -30,15 +36,52 @@ export default function FormNewConcept({token, setShowForm, addConcept}: {token:
     setUnit(value);
   }
 
+  const handleProductSat = (value: string) => {
+    // console.log('value select:', value);
+    const p=productsSat.find((item) => item.value===value);
+    // console.log('product select:', p);
+    setProductSat(p);
+  }
+
   useEffect(() => {
     const fetchUnits = async () => {
-      const res = await getCatalogsByNameAndType(token, 'conceptestimate');
+      // const res = await getCatalogsByNameAndType(token, 'conceptestimate');
+      // if(typeof(res)==='string'){
+      //   showToastMessageError(res);
+      // }else{
+      //   setOptionsUnit(res);
+      //   setUnit(res[0]);
+      // }
+      // const res: ISatCatalog[]|string = await getSatUnitMeasurements();
+      const [res, resproduct]= await Promise.all([
+        getSatUnitMeasurements(),
+        getSatProductCodes()
+      ]);
+
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
-        setOptionsUnit(res);
-        setUnit(res[0]);
+        const options = res.map((item: ISatCatalog) => ({
+          value: item.id,
+          label: item.description
+        }));
+        setOptionsUnit(options);
+        setUnit(options[0].value);
       }
+
+      // console.log("Products SAT:", resproduct);
+      if(typeof(resproduct)==='string'){
+        showToastMessageError(resproduct);
+      }else{
+        const options = resproduct.map((item: ISatCatalog) => ({
+          value: item.id,
+          label: item.description
+        }));
+        setProductsSat(options);
+        setProductSat(options[0]);
+      }
+      // setOptionsUnit([]);
+      // setUnit('');
     }
     fetchUnits();
   }, []);
@@ -92,11 +135,34 @@ export default function FormNewConcept({token, setShowForm, addConcept}: {token:
     const val = validationData();
 
     if(val){
-      const data = {
+      const u=optionsUnit.find((item) => item.value===unit);
+      // console.log('prosucto SAT:', productSat);
+      // const data={
+      //   code,
+      //   description,
+      //   name,
+      //   clavesat: productSat?.value,
+      //   descriptionsat: productSat?.label,
+      //   // unit
+      //   unitsat:{
+      //     id: u?.value,
+      //     unit: u?.label,
+      //     real: u?.label
+      //   }
+      // }
+      const data={
         code,
-        description,
         name,
-        unit
+        description,
+        company,
+        user,
+        unitsat:{
+          id:u?.value,
+          unit:u?.label,
+          real:u?.label
+        },
+        codesat: productSat?.value,
+        descriptionsat: productSat?.label
       }
       try {
         const res = await createConceptEstimate(token, data);
@@ -146,6 +212,14 @@ export default function FormNewConcept({token, setShowForm, addConcept}: {token:
             <p className="text-red-500">El nombre es obligatorio!!!</p>
           )}
         </div>
+        {
+          productsSat.length > 0 && (
+            <div className="">
+              <Label htmlFor="product"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Producto</p></Label>
+              <SelectReact index={0} opts={productsSat} setValue={handleProductSat} />
+            </div>
+          )
+        }
         {
           optionsUnit.length > 0 && (
             <div className="">

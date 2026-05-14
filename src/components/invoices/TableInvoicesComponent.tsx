@@ -36,8 +36,8 @@ import { FaXmark } from "react-icons/fa6";
 import {confirmAlert} from 'react-confirm-alert';
 // import 'react-confirm-alert/src/react-confirm-alert.css';
 
-export default function TableInvoicesComponent({token, user}: 
-  {token:string, user:string}) {
+export default function TableInvoicesComponent({token, user, company}: 
+  {token:string, user:string, company:string}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByDateAndConditionMin[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -546,7 +546,8 @@ export default function TableInvoicesComponent({token, user}:
         </ContainerSideNav>
       ) } */}
       <ContainerSideNav width="w-full max-w-3xl" open={showNewInvoice}>
-        <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user} />
+        <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user}
+          company={company} />
       </ContainerSideNav>
     </>
   )
