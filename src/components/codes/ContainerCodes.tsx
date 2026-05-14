@@ -21,6 +21,8 @@ export default function ContainerCodes({codes, providers, token}:
     to: new Date(),
   });
 
+  console.log('impresion de ayuda...');
+  
   const addStatus = (status:string) => {
     const newStatus = [...statuses, status];
     setStatuses(newStatus);
