@@ -10,7 +10,7 @@ import SaveClient from "@/app/functions/SaveClient"
 import { SaveClientLogo } from "@/app/functions/SaveClient"
 import { useClientStore } from "@/app/store/clientStore"
 
-export default function ExtraDataStepper({token}: {token:string}){
+export default function ExtraDataStepper({token, company}: {token:string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const [page, setPage] = useState('');
@@ -124,6 +124,7 @@ export default function ExtraDataStepper({token}: {token:string}){
         source,
         tags, 
         user,
+        company,
         link:page,
         regime,
         location: {

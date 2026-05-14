@@ -115,5 +115,9 @@ export const clientValidation = z.object({
     required_error: 'Falta el usuario que da de alta el cliente!!',
     invalid_type_error: 'El usuario no es valido!!',
   }),
+  company: z.string({
+    required_error: 'Falta la empresa a la que pertenece el cliente!!',
+    invalid_type_error: 'La empresa no es valida!!',
+  }),
   status: z.boolean().optional(),
 })

@@ -11,14 +11,17 @@ type NewClientContainerProps = {
   token:string, 
   id:string, 
   showForm:Function, 
-  tags:Options[]
+  tags:Options[],
+  company:string
 }
 
-export default function NewClientContainer({token, id, showForm, tags}: NewClientContainerProps ){
+export default function NewClientContainer({token, id, showForm, tags, company}: NewClientContainerProps ){
   const [state] = useRegFormContext();
 
   const [heightPage, setHeightPage] = useState<number>(900);
-  
+ 
+  // console.log('new client container tags => ', tags);
+
   const handleResize = () => {
     setHeightPage(window.outerHeight);
   }
@@ -83,7 +86,7 @@ export default function NewClientContainer({token, id, showForm, tags}: NewClien
         />
         <TooltipCloseIcon handleClose={closeForm} />
       </div>
-      <ContainerClientStepper token={token} id={id} tags={tags} />
+      <ContainerClientStepper token={token} id={id} tags={tags} company={company} />
     </div>
   )
 }

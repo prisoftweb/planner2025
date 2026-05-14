@@ -5,6 +5,7 @@ import { TransformClientInTableClient } from "./ClientFunctions";
 export default async function SaveClient(data:Object, token:string){
   const newObj = Object.fromEntries(Object.entries(data).filter(value => value[1]))
 
+  // console.log('save client');
   const res = clientValidation.safeParse(newObj);
   
   if(res.success){

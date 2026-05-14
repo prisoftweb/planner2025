@@ -18,14 +18,16 @@ import { useClientStore } from "@/app/store/clientStore";
 import SelectReact from '@/components/SelectReact';
 import { getSatCfdiUses, getSatTaxRegimes } from '@/app/api/routeSatInvoices';
 
-export default function DataBasicStepper({token, id, tags}: 
-                          {token:string, id:string, tags:Options[]}){
+export default function DataBasicStepper({token, id, tags, company}: 
+  {token:string, id:string, tags:Options[], company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
 
   const [satTaxRegimes, setSatTaxRegimes] = useState<Options[]>([]);
   const [satTaxRegime, setSatTaxRegime] = useState<string>();
+
+  // console.log('data basic stepper tags => ', tags);
 
   const {pushClient} = useClientStore();
 
@@ -117,8 +119,11 @@ export default function DataBasicStepper({token, id, tags}:
   
   const onClickSave = async () => {
     refRequest.current = false;
+    // console.log('save client');
     if(state.extradata && state.extradata.photo){
       const data = new FormData();
+
+      // console.log('entro aqui => ');
       
       const {email, name, rfc, tradename, capitalregime} = formik.values;
       
@@ -191,6 +196,7 @@ export default function DataBasicStepper({token, id, tags}:
     }else{
       const {name, rfc, tradename, email, capitalregime} = formik.values;
     
+      // console.log('se fue para aca => ');
       let contact = [];
       if(state.contacts){
         contact = state.contacts;
@@ -252,8 +258,11 @@ export default function DataBasicStepper({token, id, tags}:
             community,
             state:stateS,
           },
-          contact
+          contact,
+          company
         }
+
+        // console.log(data);
 
         const res = await SaveClient(data, token);
         if(res.status){

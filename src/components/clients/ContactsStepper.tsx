@@ -6,7 +6,7 @@ import NavClientsStepper from "./NavClientsStepper";
 import SaveClient, {SaveClientLogo} from "@/app/functions/SaveClient";
 import { useClientStore } from "@/app/store/clientStore";
 
-export default function ContactsStepper({id, token}: {id:string, token:string}){
+export default function ContactsStepper({id, token, company}: {id:string, token:string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const [contacts, setContacts] = useState<string[]>(state.contacts? state.contacts: []);
@@ -118,6 +118,7 @@ export default function ContactsStepper({id, token}: {id:string, token:string}){
         source,
         tags, 
         user,
+        company,
         link,
         regime,
         location: {

@@ -10,7 +10,7 @@ import { showToastMessage, showToastMessageError } from "../Alert";
 import { useRef } from "react";
 import { useClientStore } from "@/app/store/clientStore";
 
-export default function AddressClientStepper({token}:{token:string}){
+export default function AddressClientStepper({token, company}:{token:string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -166,6 +166,7 @@ export default function AddressClientStepper({token}:{token:string}){
         source,
         tags, 
         user,
+        company,
         link,
         regime,
         location: {

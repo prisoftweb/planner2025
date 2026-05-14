@@ -57,22 +57,39 @@ export default async function clients(){
     )
   }
   
+  // console.log('tags => ', tags);
   let arrTags: Options[] = [];
-  if(tags.length > 0){
-    tags.map((tag:Tag) => {
-      arrTags.push({
-        'label': tag.name,
-        'value': tag._id,
-      })
-    })
+  if(Array.isArray(tags) && tags.length > 0){
+    arrTags = tags.map((tag:Tag) => ({
+      'label': tag.name,
+      'value': tag._id,
+    }));
+    // console.log('arrTags => ', arrTags);
   }else{
-    return(
-      <>
-        <Navigation user={user} token={token} />
-        <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
-      </>
-    )
+    arrTags = [];
+    // return(
+    //   <>
+    //     <Navigation user={user} token={token} />
+    //     <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+    //   </>
+    // )
   }
+  // if(tags.length > 0){
+  //   tags.map((tag:Tag) => {
+  //     arrTags.push({
+  //       'label': tag.name,
+  //       'value': tag._id,
+  //     })
+  //   });
+  //   console.log('arrTags => ', arrTags);
+  // }else{
+  //   return(
+  //     <>
+  //       <Navigation user={user} token={token} />
+  //       <h1 className="text-red-500 text-2xl text-center">Error al obtener etiquetas!!</h1>
+  //     </>
+  //   )
+  // }
 
   if(typeof(clients)==='string'){
     return(
@@ -109,12 +126,15 @@ export default async function clients(){
         <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <WithOut img="/img/clientes.svg" subtitle="Clientes" 
             text="Aqui puedes gestionar tus clientes con toda su informacion relevante" 
-            title="Clientes"><ButtonNewClient token={token} id={user._id} tags={tags} /></WithOut>
+            title="Clientes"><ButtonNewClient token={token} id={user._id} tags={arrTags}
+                                company={user.profile} /></WithOut>
         </div>
       </>
   }
   
   let data:TableClient[] = ClientDataToTableClient(clients);
+
+  // console.log('server tags => ', arrTags);
 
   return (
     <>
@@ -126,7 +146,7 @@ export default async function clients(){
           ): (
             <></>
           )} */}
-          <ButtonNewClient id={user._id} token={token} tags={arrTags} />
+          <ButtonNewClient id={user._id} token={token} tags={arrTags} company={user.profile} />
         </ResponsiveHeader>
         <div className="mt-5">
           <TableClients data={data} token={token} 
