@@ -4,7 +4,7 @@ import NewProvider from "./NewProvider";
 import Button from "../Button";
 import ContainerSideNav from "../ContainerSideNav";
 
-export default function ButtonNewProvider({token, id}: {token:string, id:string}){
+export default function ButtonNewProvider({token, id, company}: {token:string, id:string, company:string}){
   const [newProvider, setNewProvider] = useState<boolean>(false);
   
   return(
@@ -21,7 +21,7 @@ export default function ButtonNewProvider({token, id}: {token:string, id:string}
             <NewProvider showForm={setNewProvider} token={token} id={id} user={id} open={newProvider} />
           </div> */}
         <ContainerSideNav width="w-full sm:max-w-lg" open={newProvider}>
-          <NewProvider showForm={setNewProvider} token={token} id={id} user={id} open={newProvider} />
+          <NewProvider showForm={setNewProvider} token={token} id={id} user={id} open={newProvider} company={company} />
         </ContainerSideNav>
     </>
   )

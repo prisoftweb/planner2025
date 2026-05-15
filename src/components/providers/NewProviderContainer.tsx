@@ -8,8 +8,8 @@ import { useState, useEffect } from "react";
 import { useProviderStore } from "@/app/store/providerStore";
 import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
-export default function NewProviderContainer({token, id, showForm, user, open}: 
-  {token:string, id:string, showForm:Function, user: string, open:boolean}){
+export default function NewProviderContainer({token, id, showForm, user, open, company}: 
+  {token:string, id:string, showForm:Function, user: string, open:boolean, company:string}){
   
   const [state] = useRegFormContext();
 
@@ -95,7 +95,7 @@ export default function NewProviderContainer({token, id, showForm, user, open}:
           hover:bg-red-500 rounded-full hover:text-white cursor-pointer" onClick={closeForm} /> */}
         <TooltipCloseIcon handleClose={closeForm} />
       </div>
-      <ContainerStepper token={token} id={id} user={user} />
+      <ContainerStepper token={token} id={id} user={user} company={company} />
     </div>
   )
 }

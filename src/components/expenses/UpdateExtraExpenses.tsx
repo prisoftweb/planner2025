@@ -18,6 +18,7 @@ import { getCostoCentersLV } from "@/app/api/routeCostCenter";
 import { getProvidersLV, getProvidersSATLV } from "@/app/api/routeProviders";
 import { getUsersLV } from "@/app/api/routeUser";
 import { getCatalogsByNameAndCategory, getCatalogsByNameAndType } from "@/app/api/routeCatalogs";
+import { GetCostMIN } from "@/app/api/routeCost";
 
 export default function UpdateExtraExpense({token, id, expense, isHistory, isticket}: 
   {token:string, id:string, expense:OneExpense, isHistory:boolean, isticket:boolean}){
@@ -220,7 +221,14 @@ export default function UpdateExtraExpense({token, id, expense, isHistory, istic
         if(typeof(res) !== 'string'){
           refRequest.current = true;
           showToastMessage('Costo actualizado satisfactoriamente!!!');
-          updateCurrentExpense(res);
+          // updateCurrentExpense(res);
+          const newcost = await GetCostMIN(token, id);
+          if(typeof(newcost) !== 'string'){
+            updateCurrentExpense(newcost);
+            // console.log('currentExpense actualizado', newcost);
+          }else{
+            showToastMessageError(newcost);
+          }
         }else{
           refRequest.current = true;
           showToastMessageError(res);

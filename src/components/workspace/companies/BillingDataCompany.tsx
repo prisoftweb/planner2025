@@ -146,6 +146,7 @@ export default function BillingDataCompany({company, token, fetchCompany}:
         //   },
         // }
 
+        // console.log('update billing company =>');
         const res = await updateCompanyWithSAT(token, formdata, company._id);
         if(typeof(res) === 'string'){
           showToastMessageError(res);

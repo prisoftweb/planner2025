@@ -159,8 +159,9 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
 
   return(
     <>
-      <div className="flex w-full max-w-2xl justify-end items-center p-3">
-        <PDFDownloadLink document={<DownloadGuaranteeByProjectPDF project={project} token={token} guarantees={guarantees} />} fileName={project.title} >
+      {/* <div className="flex w-full max-w-2xl justify-end items-center p-3"> */}
+      <div className="flex w-full justify-end items-center p-3">
+        <PDFDownloadLink document={<DownloadGuaranteeByProjectPDF project={project} token={token} guarantees={guarantees} />} fileName={'Fondo de garantia - '+project.title} >
           {({loading, url, error, blob}) => 
             loading? (
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 

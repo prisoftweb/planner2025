@@ -14,7 +14,8 @@ import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { getCatalogsByNameAndCategory } from "@/app/api/routeCatalogs";
 
-export default function CreditLineStepper({token, id, user}:{token:string, id:string, user: string}){
+export default function CreditLineStepper({token, id, user, company}:
+  {token:string, id:string, user: string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -110,6 +111,7 @@ export default function CreditLineStepper({token, id, user}:{token:string, id:st
           suppliercredit,
           tradeline,
           user: id,
+          company,
           contact,
           condition: [{
             glossary: '663d2fe61d1c43ae98d77bc3',

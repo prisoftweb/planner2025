@@ -250,7 +250,8 @@ export default function ContainerCostsByProject({project, token, user, costs, co
         </div>
       </div>*/}
 
-      <div className="flex w-full max-w-2xl justify-end mt-5 gap-x-2 items-center">
+      {/* <div className="flex w-full max-w-2xl justify-end mt-5 gap-x-2 items-center"> */}
+      <div className="flex w-full justify-end mt-5 gap-x-2 items-center">
         <SearchInTable placeH="Buscar gasto.." />
         
         <PDFDownloadLink document={<DownloadCostsProjectPDF costs={costs} project={project} />} 

@@ -38,7 +38,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
       <div>
         <Navigation user={user} token={token} />
         <div className="p-2 sm:p-3 md-p-5 lg:p-10" style={{backgroundColor:'#F8FAFC'}}>
-          <WithOutProvider id={user._id} token={token} />
+          <WithOutProvider id={user._id} token={token} company={user.profile} />
         </div>
       </div>
     )      
@@ -113,7 +113,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
             </div>
             <p className="text-xl ml-4 font-medium">Proveedores</p>
             <div className="flex flex-1 justify-end md:hidden">
-              <ButtonNewProvider id={user._id} token={token} />
+              <ButtonNewProvider id={user._id} token={token} company={user.profile} />
             </div>
           </div>
           <div className="flex md:flex-1 gap-x-3 justify-end w-full items-center">
@@ -138,7 +138,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
                   </div>
                 </div>
                 <div className="hidden md:block">
-                  <ButtonNewProvider id={user._id} token={token} />
+                  <ButtonNewProvider id={user._id} token={token} company={user.profile} />
                 </div>
               </div>
             </div>

@@ -6,14 +6,15 @@ import DataBasicStepper from "./DataBasicStepper";
 import CreditLineStepper from "./CreditLineStepper";
 import ContactsStepper from "./ContactsStepper";
 
-export default function ContainerStepper({token, id, user}: {token:string, id:string, user:string}){
+export default function ContainerStepper({token, id, user, company}: 
+  {token:string, id:string, user:string, company:string}){
   
   const [state] = useRegFormContext();
   
-  const [stepform, setStepForm] = useState<JSX.Element>(<DataBasicStepper id={id} token={token} user={user} />)
+  const [stepform, setStepForm] = useState<JSX.Element>(<DataBasicStepper id={id} token={token} user={user} company={company} />)
 
   useEffect(() => {
-    setStepForm(<DataBasicStepper token={token} id={id} user={user} />)
+    setStepForm(<DataBasicStepper token={token} id={id} user={user} company={company} />)
     return () => setStepForm(<></>);
   }, [])
 
@@ -23,15 +24,15 @@ export default function ContainerStepper({token, id, user}: {token:string, id:st
       try {
         if(state.indexstepper || state.indexstepper>=0){
           if(state.indexstepper===1){
-            setStepForm(<CreditLineStepper token={token} id={id} user={user} />)
+            setStepForm(<CreditLineStepper token={token} id={id} user={user} company={company} />)
           }else if(state.indexstepper===2){
-              setStepForm(<ContactsStepper id={id} token={token} user={user} />)
+              setStepForm(<ContactsStepper id={id} token={token} user={user} company={company} />)
             }else{
-              setStepForm(<DataBasicStepper token={token} id={id} user={user} />)
+              setStepForm(<DataBasicStepper token={token} id={id} user={user} company={company} />)
             }
         }
       } catch (error) {
-        setStepForm(<DataBasicStepper token={token} id={id} user={user} />)
+        setStepForm(<DataBasicStepper token={token} id={id} user={user} company={company} />)
       }
     }, [state.indexstepper])
   } catch (error) {

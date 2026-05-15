@@ -356,7 +356,7 @@ export default function DataBasicStepper({token, id, tags, company}:
           </div>
 
           <div className="">
-            <Label htmlFor="capitalregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen Capital</p></Label>
+            <Label htmlFor="capitalregime"><p>Regimen Capital</p></Label>
             <Input type="text" name="capitalregime" autoFocus 
               value={formik.values.capitalregime}
               onChange={formik.handleChange}

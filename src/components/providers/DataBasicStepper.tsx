@@ -13,7 +13,8 @@ import { Options } from "@/interfaces/Common";
 import SelectReact from "../SelectReact";
 import { getCatalogsByNameAndType, getCatalogsByNameAndCondition } from "@/app/api/routeCatalogs";
 
-export default function DataBasicStepper({token, id, user}: {token:string, id:string, user: string}){
+export default function DataBasicStepper({token, id, user, company}: 
+  {token:string, id:string, user: string, company:string}){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -126,6 +127,7 @@ export default function DataBasicStepper({token, id, user}: {token:string, id:st
           tradename,
           suppliercredit,
           user: id,
+          company,
           tradeline,
           contact,
           condition: [{

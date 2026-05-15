@@ -5,6 +5,7 @@ import { OneExpense } from "@/interfaces/Expenses";
 import { showToastMessage, showToastMessageError } from "../Alert";
 import { ADDNewFILE, DeleteFILE } from "@/app/api/routeCost";
 import { useNewExpense } from "@/app/store/newExpense";
+import { GetCostMIN } from "@/app/api/routeCost";
 
 export default function UpdateVoucher({id, token, expense, isHistory}: 
     {token: string, id:string, expense:OneExpense, isHistory:boolean}){
@@ -38,7 +39,14 @@ export default function UpdateVoucher({id, token, expense, isHistory}:
           if(typeof(res) !== 'string'){
             refRequest.current = true;
             showToastMessage('Archivo agregado satisfactoriamente');
-            updateCurrentExpense(res);
+            // updateCurrentExpense(res);
+            const newcost = await GetCostMIN(token, id);
+            if(typeof(newcost) !== 'string'){
+              updateCurrentExpense(newcost);
+              // console.log('currentExpense actualizado', newcost);
+            }else{
+              showToastMessageError(newcost);
+            }
           }else{
             refRequest.current = true;
             showToastMessageError(res);

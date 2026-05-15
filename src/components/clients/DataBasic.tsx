@@ -174,7 +174,7 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
             {satTaxRegimes.length > 0 && (
               <SelectReact index={index} opts={satTaxRegimes} setValue={handleTaxRegimen} />
             )}
-            {/* <Input type="text" name="taxregime" autoFocus 
+            {/* <Input type="text" name="taxregime" 
               value={formik.values.taxregime}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}
@@ -201,8 +201,8 @@ export default function DataBasic({client, tags, id, token, editInfo}: DataBasic
           </div>
 
           <div className="">
-            <Label htmlFor="capitalregime"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Regimen Capital</p></Label>
-            <Input type="text" name="capitalregime" autoFocus 
+            <Label htmlFor="capitalregime"><p>Regimen Capital</p></Label>
+            <Input type="text" name="capitalregime"
               value={formik.values.capitalregime}
               onChange={formik.handleChange}
               onBlur={formik.handleChange}

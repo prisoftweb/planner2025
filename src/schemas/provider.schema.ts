@@ -55,4 +55,7 @@ export const providerValidation = z.object({
   user: z.string({
     invalid_type_error: 'El usuario debe de ser un string id',
   }).optional(),
+  company: z.string({
+    invalid_type_error: 'La empresa debe de ser un string id',
+  }).optional()
 })

@@ -16,6 +16,7 @@ import { showToastMessage, showToastMessageError } from "../Alert"
 import { useNewExpense } from "@/app/store/newExpense"
 import { CostoCenterLV } from "@/interfaces/CostCenter";
 import { getCostoCentersLV } from "@/app/api/routeCostCenter";
+import { GetCostMIN } from "@/app/api/routeCost";
 
 export default function UpdateExpense({token, id, expense, isticket, isHistory}: 
   {token:string, id:string, expense:OneExpense, isticket:boolean, isHistory: boolean}){
@@ -141,11 +142,20 @@ export default function UpdateExpense({token, id, expense, isticket, isHistory}:
               total: totalExpense.replace(/[$,]/g, ""),
             }}
         try {
+          // console.log('currentExpense antes de actualizar', currentExpense);
           const res = await UpdateCost(token, id, data);
           if(typeof(res) !== 'string'){
             refRequest.current = true;
             showToastMessage('Costo actualizado exitosamente!!!');
-            updateCurrentExpense(res);
+            // updateCurrentExpense(res);
+            // console.log('expense actualizado', res);
+            const newcost = await GetCostMIN(token, id);
+            if(typeof(newcost) !== 'string'){
+              updateCurrentExpense(newcost);
+              // console.log('currentExpense actualizado', newcost);
+            }else{
+              showToastMessageError(newcost);
+            }
           }else{
             refRequest.current = true;
             showToastMessageError(res);
