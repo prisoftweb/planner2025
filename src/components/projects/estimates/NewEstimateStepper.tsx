@@ -12,8 +12,9 @@ import { getProjectsWithOutEstimateMin, getAllsProjectsMINAndNEConditionAndNEsti
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 import { UpdateProject } from "@/app/api/routeProjects";
 
-export default function NewEstimateStepper({token, showForm, user, updateProjects, rol}: 
-  {token:string, showForm:Function, user:string, rol:string, updateProjects: () => Promise<void> }){
+export default function NewEstimateStepper({token, showForm, user, updateProjects, rol, company}: 
+  {token:string, showForm:Function, user:string, rol:string, updateProjects: () => Promise<void>,
+    company:string}){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper]=useState<number>(0);
@@ -193,7 +194,7 @@ export default function NewEstimateStepper({token, showForm, user, updateProject
             user
           }
         ],
-        company: "65d3813c74045152c0c4377e",
+        company,
         project: project?._id,
         user,
         type:typeEstimate

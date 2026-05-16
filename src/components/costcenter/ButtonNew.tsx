@@ -5,7 +5,7 @@ import NewCostCenter from "./NewCostCenter";
 import ContainerSideNav from "../ContainerSideNav";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
-export default function ButtonNew({token, id}: {token:string, id:string}){
+export default function ButtonNew({token, id, company}: {token:string, id:string, company:string}){
   const [varNew, setVarNew] = useState<boolean>(false);
 
   const handleNew = (value: boolean) => {
@@ -27,7 +27,7 @@ export default function ButtonNew({token, id}: {token:string, id:string}){
           </ContainerSideNav>
         )} */}
         <ContainerSideNav width="w-full max-w-lg" open={varNew}>
-          <NewCostCenter showForm={handleNew} token={token} costCenter={''} />
+          <NewCostCenter showForm={handleNew} token={token} costCenter={''} company={company} />
         </ContainerSideNav>
     </>
   )

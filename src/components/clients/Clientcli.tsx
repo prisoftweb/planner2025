@@ -24,11 +24,12 @@ type ClientCliProps = {
   totalprj: ITotalProjectsByClient,
   totalColl:ITotalCollectionsByClient,
   totalPenBil:ITotalPendingBillingByClient,
-  totalpay:ITotalPaymentClient[]
+  totalpay:ITotalPaymentClient[],
+  company: string
 }
 
 export default function ClientCli({client, token, id, tags, clientPermissions, 
-  totalprj, totalColl, totalPenBil, totalpay}: ClientCliProps){
+  totalprj, totalColl, totalPenBil, totalpay, company}: ClientCliProps){
 
   const [opt, setOpt] = useState<number>(1);
   const handleOpt = (value: number) => {
@@ -60,7 +61,7 @@ export default function ClientCli({client, token, id, tags, clientPermissions,
       (opt===5? (<div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 
                         style={{borderColor:'#F8FAFC'}}>
                   <Contacts id={id} contacts={client.contact || []} token={token}
-                    editInfo={true} />
+                    editInfo={true} company={company} />
                 </div>):  (<div className="mt-3 w-full md:p-2" 
                                     style={{borderColor:'#F8FAFC'}}>
                               <div className="w-full h-full flex flex-wrap md:flex-nowrap gap-x-3">

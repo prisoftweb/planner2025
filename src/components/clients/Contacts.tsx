@@ -14,9 +14,11 @@ type ContactsProps = {
   id:string, 
   token:string, 
   contacts:Contact[], 
-  editInfo:boolean}
+  editInfo:boolean,
+  company:string
+}
 
-export default function Contacts({id, token, contacts, editInfo}: ContactsProps){
+export default function Contacts({id, token, contacts, editInfo, company}: ContactsProps){
   
   const [index, setIndex] = useState(0);
   const numberContacts = 1;
@@ -79,18 +81,18 @@ export default function Contacts({id, token, contacts, editInfo}: ContactsProps)
 
   const showNewContact = () => {
     setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} editContact={editInfo} >
+        contact={''} updateContact={updateContactt} editContact={editInfo} company={company} >
         <></>
       </FormContact>)
   }
   
   const [showContacts, setShowContacts] = useState<JSX.Element>(contacts.length > 0? 
     <FormContact token={token} addNewContact={newContact} contact={contacts[0]} 
-      updateContact={updateContactt} editContact={editInfo} >
+      updateContact={updateContactt} editContact={editInfo} company={company} >
         <></>
     </FormContact> : 
     <FormContact token={token} addNewContact={newContact} contact={''} 
-      updateContact={updateContactt} editContact={editInfo} >
+      updateContact={updateContactt} editContact={editInfo} company={company} >
         {editInfo? (
           <Button onClick={showNewContact}>
             Nuevo contacto
@@ -101,7 +103,7 @@ export default function Contacts({id, token, contacts, editInfo}: ContactsProps)
   useEffect(() => {
     if(contacts.length === 0){
       setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} editContact={editInfo} >
+        contact={''} updateContact={updateContactt} editContact={editInfo} company={company} >
           <></>
         </FormContact>);
     }else{
@@ -133,7 +135,7 @@ export default function Contacts({id, token, contacts, editInfo}: ContactsProps)
                 {filter.map((contact: Contact, index:number) => (
                   <div className='' key={index}>
                     <FormContact token={token} addNewContact={newContact} contact={contact} 
-                      updateContact={updateContactt} editContact={editInfo}
+                      updateContact={updateContactt} editContact={editInfo} company={company}
                     >
                       {editInfo? (
                         <button 

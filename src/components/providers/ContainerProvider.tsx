@@ -43,7 +43,7 @@ export default function ContainerProvider({providers, user, token}: ContainerPro
       </div>
     )      
   }
-console.log('');
+
   let data:TableProvider[] = [];
   if(Array.isArray(providerStore)){
     providerStore.map((prov:Provider) => {

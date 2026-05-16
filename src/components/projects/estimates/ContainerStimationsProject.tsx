@@ -38,11 +38,12 @@ type Props = {
   token: string, 
   user: string, 
   totalEstimatedProject: TotalEstimatedByProject[] 
-  pageProject: string | undefined
+  pageProject: string | undefined,
+  company:string
 }
 
 export default function ContainerStimationsProject({project, optConditions, optProjects, estimates, 
-    token, user, totalEstimatedProject, pageProject }: Props) {
+    token, user, totalEstimatedProject, pageProject, company }: Props) {
 
   const [openNewStimate, setOpenNewStimate] = useState<boolean>(false);
   const [isfilterTable, setIsFilterTable] = useState<boolean>(false);
@@ -120,7 +121,11 @@ export default function ContainerStimationsProject({project, optConditions, optP
   });
   
   const overflow = totalEstimatedProjectState[0]?.amountChargeOff >= advance;
-  const percentajeAdvance = Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
+  let percentajeAdvance=0;
+  // const percentajeAdvance = Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
+  if(Array.isArray(totalEstimatedProject[0]) && totalEstimatedProject.length>0){
+    percentajeAdvance=Number((((totalEstimatedProject[0]?.estimatedTotal || 0) / (project.amount * 1.16)) * 100).toFixed(2));
+  }
 
   return (
     <>
@@ -133,10 +138,10 @@ export default function ContainerStimationsProject({project, optConditions, optP
               <TbArrowNarrowLeft className="w-10 h-10 text-slate-600" />
             </div>
           </TooltipContainerIcon>
-          <p className="text-xl ml-4 font-medium">{project.title}</p>
-          <ProgressCircle value={project.progress} color={'orange'} >
+          <p className="text-xl ml-4 font-medium">{project?.title?? ''}</p>
+          <ProgressCircle value={project?.progress?? 0} color={'orange'} >
             <span className="text-sm font-medium text-gray-900 dark:text-gray-50">
-              {project.progress}%
+              {project?.progress?? 0}%
             </span>
           </ProgressCircle>
         </div>
@@ -144,16 +149,16 @@ export default function ContainerStimationsProject({project, optConditions, optP
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-5 gap-y-2 mt-2 sm:mt-3 md:mt-5">
         <div className="bg-white p-3">
-          <img src={project.client.logo} alt={project.client.name} className="h-32 w-auto " />
+          <img src={project?.client?.logo?? '/img/project/default.jpg'} alt={project?.client?.name?? ''} className="h-32 w-auto " />
           <div className="flex items-center gap-x-2">
-            <img src={project.photo} alt={project.title} className="rounded-full w-14 h-auto" />
+            <img src={project?.photo?? '/img/project/default.jpg'} alt={project?.title?? ''} className="rounded-full w-14 h-auto" />
             <div>
-              <p className="text-blue-500">{project.title}</p>
+              <p className="text-blue-500">{project?.title?? ''}</p>
               <p className="text-blue-300">{CurrencyFormatter({
                 currency: 'MXN',
-                value: project.amount
+                value: project?.amount?? 0
               })}</p>
-              <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
+              <Chip label={project?.category?.name?? 'sin categoria'} color={project?.category?.color?? '#f00'} darktext={project?.category?.darktext?? false} />
             </div>
           </div>
         </div>
@@ -291,7 +296,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
       <ContainerSideNav width="w-full max-w-lg" open={openNewStimate}>
         <AddNewEstimateProject showForm={handleShowForm} project={project} user={user}
           updateEstimates={updateEstimatesProject} token={token} overflow={overflow} 
-          porcentajeAdvange={percentajeAdvance} advange={advance} />
+          porcentajeAdvange={percentajeAdvance} advange={advance} company={company} />
       </ContainerSideNav>
 
       {/* {openNewInvoice && (

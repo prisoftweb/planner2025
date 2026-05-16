@@ -12,7 +12,8 @@ import { propsTooltip } from "@/libs/animations";
 import ContainerSideNav from "../ContainerSideNav";
 import { useTableStates } from "@/app/store/tableStates";
 
-export default function TableCostCenter({data, token}: {data:CostCenterTable[], token:string}){
+export default function TableCostCenter({data, token, company}: 
+  {data:CostCenterTable[], token:string, company:string}){
 
   const columnHelper = createColumnHelper<CostCenterTable>();
 
@@ -112,7 +113,7 @@ export default function TableCostCenter({data, token}: {data:CostCenterTable[], 
       {/* {editCostCenter && <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} /> } */}
       {editCostCenter && (
         <ContainerSideNav width="w-full max-w-md">
-          <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} />
+          <NewCostCenter costCenter={costCenter || ''} showForm={setEditCostCenter} token={token} company={company} />
         </ContainerSideNav>
       ) }
       <div className="hidden md:block w-full">

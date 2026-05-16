@@ -19,8 +19,8 @@ import { useOptionsExpense } from "@/app/store/newExpense";
 import Label from "../Label";
 import SelectReact from "../SelectReact";
 
-export default function NewExpenseContainer({token, showForm, user, }: 
-                            {token:string, showForm:Function, user:UsrBack, }){
+export default function NewExpenseContainer({token, showForm, user, company }: 
+  {token:string, showForm:Function, user:UsrBack, company:string }){
   
   const {vats, projects, conditions, categories} = useOptionsExpense();
   
@@ -126,7 +126,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
       ): indexStepper===2? (
         <CFDIStepper token={token} user={user._id} />
       ): indexStepper===3? (
-        <DataStepper token={token} user={user._id} handleUpdateCategory={handleUpdateCategory} />
+        <DataStepper token={token} user={user._id} handleUpdateCategory={handleUpdateCategory} company={company} />
       ): indexStepper===4? (
         <RefreshStepperComponent category={updateCat} isDeductible={isDeductible} />
       ): (
@@ -138,7 +138,7 @@ export default function NewExpenseContainer({token, showForm, user, }:
       stepform = indexStepper===1? (
         <VoucherNoDeductibleStepper token={token} user={user._id} idVat={idVat} />
       ): indexStepper===2? (
-        <DataNoDeductibleStepper token={token} user={user._id}
+        <DataNoDeductibleStepper token={token} user={user._id} company={company}
           idLabour={idLabour} idTicket={idTicket} idVat={idVat} handleUpdateCategory={handleUpdateCategory} />
       ): indexStepper===3? (
         <RefreshStepperComponent category={updateCat} isDeductible={isDeductible} />

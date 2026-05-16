@@ -24,10 +24,11 @@ interface ConceptCostCenter {
 type NewCostCenterProps = {
   showForm:(value: boolean) => void, 
   token:string, 
-  costCenter:(CostCenterTable | string)
+  costCenter:(CostCenterTable | string),
+  company:string
 }
 
-export default function NewCostCenter({showForm, token, costCenter}: NewCostCenterProps){
+export default function NewCostCenter({showForm, token, costCenter, company}: NewCostCenterProps){
 
   const [heightPage, setHeightPage] = useState<number>(900);
   
@@ -172,7 +173,8 @@ export default function NewCostCenter({showForm, token, costCenter}: NewCostCent
             const data = {
               name: category,
               code,
-              categorys: arrIdConcepts
+              categorys: arrIdConcepts,
+              company
             }
             const res = await CreateCostoCenter(token, data);
             if(res===201){

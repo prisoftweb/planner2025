@@ -26,11 +26,12 @@ type Props = {
   optCategories: Options[], 
   optTypes: Options[], 
   data: ProjectsTable[],
-  rol:string
+  rol:string,
+  company:string
 }
 
 export default function ContainerEstimatesClient({token, user, optConditionsFilter, 
-  projectsParam, optCategories, optTypes, data, rol }: Props){
+  projectsParam, optCategories, optTypes, data, rol, company }: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -67,7 +68,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
           </WithOut>
           {newEstimate && (
               <ContainerSideNav width="w-full sm:max-w-4xl">
-                <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
+                <NewEstimateStepper showForm={handleNewEstimate} rol={rol} company={company}
                               token={token} user={user._id} updateProjects={updateProjects} />
               </ContainerSideNav>
             )}
@@ -129,7 +130,7 @@ export default function ContainerEstimatesClient({token, user, optConditionsFilt
             </div>
             <ContainerSideNav width="w-full sm:max-w-4xl" open={newEstimate}>
               <NewEstimateStepper showForm={handleNewEstimate} rol={rol}
-                            token={token} user={user._id} updateProjects={updateProjects} />
+                  token={token} user={user._id} updateProjects={updateProjects} company={company} />
             </ContainerSideNav>
           </div>
         </div>

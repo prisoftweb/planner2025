@@ -40,7 +40,7 @@ export default async function Page() {
   return(
     <>
       <Navigation user={user} token={token} />
-      <ContainerClient data={table} expenses={expenses}
+      <ContainerClient data={table} expenses={expenses} company={user.profile}
         token={token} user={user} isViewReports={isViewReports} isViewUser={true} />
     </>
   )

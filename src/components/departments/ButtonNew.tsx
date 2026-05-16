@@ -9,10 +9,11 @@ import ContainerSideNav from "../ContainerSideNav";
 type ButtonNewProps = {
   token:string, 
   optionsCompany:Options[], 
-  dept:(DepartmentTable | string)
+  dept:(DepartmentTable | string),
+  company:string
 }
 
-export default function ButtonNew({token, optionsCompany, dept}: ButtonNewProps){
+export default function ButtonNew({token, optionsCompany, dept, company}: ButtonNewProps){
   const [newCompany, setNewCompany] = useState<boolean>(false);
   
   return(
@@ -26,7 +27,7 @@ export default function ButtonNew({token, optionsCompany, dept}: ButtonNewProps)
           )} */}
       <ContainerSideNav width="w-full max-w-sm" open={newCompany}>
         <NewDepartment showForm={setNewCompany} token={token} 
-                      OptionsCompany={optionsCompany} dept={dept} />
+                      OptionsCompany={optionsCompany} dept={dept} company={company} />
       </ContainerSideNav>
     </>
   )

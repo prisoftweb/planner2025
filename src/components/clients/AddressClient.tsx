@@ -48,7 +48,8 @@ export default function AddressClient({token, client, editInfo}:
             country,
             municipy,
             stret,
-            cp: parseInt(cp),
+            // cp: parseInt(cp),
+            cp,
             community, 
             state: stateS
           }

@@ -14,10 +14,11 @@ import { ResponsiveHeader as Header } from "@/components/Header";
 type DeptProps={
   departments:Department[], 
   token:string, 
-  optsCompanies:Options[]
+  optsCompanies:Options[],
+  company:string
 }
 
-export default function ContainerDepartment({departments, optsCompanies, token}: DeptProps ) {
+export default function ContainerDepartment({departments, optsCompanies, token, company}: DeptProps ) {
 
   const {departmentStore, updateDepartmentStore} = useDepartmentStore();
 
@@ -31,7 +32,7 @@ export default function ContainerDepartment({departments, optsCompanies, token}:
         <WithOut img="/img/clientes.svg" subtitle="Departamentos"
           text="Aqui puedes agregar los departamentos"
           title="Departamentos">
-              <ButtonNew token={token} dept={''} optionsCompany={optsCompanies} />
+              <ButtonNew token={token} dept={''} optionsCompany={optsCompanies} company={company} />
         </WithOut>
       </CompanyClient>
     )
@@ -56,10 +57,10 @@ export default function ContainerDepartment({departments, optsCompanies, token}:
       <CompanyClient option={1} >
         <div className="absolute sm:static left-2 sm:left-0 mt-4 sm:mt-0 w-full">
           <Header title="Departamentos" placeHolder="Buscar departamento.." >
-            <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} />
+            <ButtonNew optionsCompany={optsCompanies} dept={''} token={token} company={company} />
           </Header>
           <div className="mt-5">
-            <TableDepartments data={table} optionsCompany={optsCompanies} token={token} />
+            <TableDepartments data={table} optionsCompany={optsCompanies} token={token} company={company} />
           </div>
         </div>
       </CompanyClient>

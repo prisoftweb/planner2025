@@ -17,13 +17,14 @@ type NewDepartmentProps = {
   showForm:(value: boolean) => void, 
   token:string, 
   OptionsCompany:Options[],
-  dept: (DepartmentTable | string)
+  dept: (DepartmentTable | string),
+  company:string
 }
 
-export default function NewDepartment({showForm, token, OptionsCompany, dept}: NewDepartmentProps ){
+export default function NewDepartment({showForm, token, OptionsCompany, dept, company}: NewDepartmentProps ){
 
-  const [company, setCompany] = useState(OptionsCompany[0].value);
-  const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
+  // const [company, setCompany] = useState(OptionsCompany[0].value);
+  // const [optCompany, setOptCompany] = useState<Options>(OptionsCompany[0]);
   const refRequest = useRef(true);
 
   // const [heightPage, setHeightPage] = useState<number>(900);
@@ -32,20 +33,20 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
   //   setHeightPage(document.body.offsetHeight);
   // }
   
-  useEffect (() => {
-    // window.addEventListener("resize", handleResize, false);
-    // setHeightPage(document.body.offsetHeight - 70);
+  // useEffect (() => {
+  //   // window.addEventListener("resize", handleResize, false);
+  //   // setHeightPage(document.body.offsetHeight - 70);
     
-    if(typeof(dept) !== 'string'){
-      OptionsCompany.map((optC) => {
-        if(optC.value === dept.company.id){
-          setCompany(optC.value);
-          setOptCompany(optC);
-        }
-      })
-    }
-    // return () => window.removeEventListener('scroll', handleResize);
-  }, [])
+  //   if(typeof(dept) !== 'string'){
+  //     OptionsCompany.map((optC) => {
+  //       if(optC.value === dept.company.id){
+  //         // setCompany(optC.value);
+  //         setOptCompany(optC);
+  //       }
+  //     })
+  //   }
+  //   // return () => window.removeEventListener('scroll', handleResize);
+  // }, [])
   
   const formik = useFormik({
     initialValues: {
@@ -150,7 +151,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
             </div>
           ) : null}
         </div>
-        <div>
+        {/* <div>
           <Label htmlFor="companies"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Compañias</p></Label>
           <Select
             name="companies"
@@ -158,7 +159,7 @@ export default function NewDepartment({showForm, token, OptionsCompany, dept}: N
             value={optCompany}
             onChange={(e:any) => {setCompany(e.value); setOptCompany(e)}}
           />
-        </div>
+        </div> */}
         <div className="flex justify-center mt-2">
           <Button type="submit">Guardar</Button>
         </div>

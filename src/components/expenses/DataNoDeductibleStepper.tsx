@@ -15,8 +15,10 @@ import CurrencyInput from 'react-currency-input-field';
 import Input from "../Input";
 import { useOptionsExpense } from "@/app/store/newExpense";
 
-export default function DataNoDeductibleStepper({token, user, idLabour, idTicket, idVat, handleUpdateCategory }: 
-  {token:string, user:string, idLabour:string, idTicket:string, idVat:string, handleUpdateCategory: (value: string) => void}){
+export default function DataNoDeductibleStepper({token, user, idLabour, idTicket, idVat, 
+  handleUpdateCategory, company }: 
+  {token:string, user:string, idLabour:string, idTicket:string, idVat:string, 
+    handleUpdateCategory: (value: string) => void, company:string}){
   
   const {updateIndexStepper, updateBasicData, voucher, amount, report,
     costCenter, date, description, responsible, project, condition, category, 
@@ -138,6 +140,7 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
         formdata.append('category', categoryS);
         formdata.append('iscard', JSON.stringify(isCard));
         formdata.append('type', type);
+        formdata.append('company', company);
         formdata.append('cost', JSON.stringify({
           discount: 0,
           subtotal:amount.replace(/[$,]/g, ""),
@@ -238,6 +241,7 @@ export default function DataNoDeductibleStepper({token, user, idLabour, idTicket
             glossary: condition,
             user
           }], 
+          company,
           conditionprovider: [{
             glossary: '674643dd734d5ab78ab98ddb',
             user

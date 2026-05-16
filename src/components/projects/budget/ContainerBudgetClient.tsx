@@ -65,7 +65,7 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
             text="Agregar un presupuesto a
                     un proyecto determinado"
             title="Presupuestos">
-              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
+              <ButtonNewBudgetProject projects={projects} token={token} user={user._id} company={user.profile} />
           </WithOut>
         </div>
       </>
@@ -84,7 +84,7 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
           <p className="text-xl ml-4 flex-1 font-medium">Presupuestos</p>
           <div className="flex sm:hidden justify-end gap-x-3 items-center">
             <TooltipFilterIcon handleFilter={handleFilter} />
-            <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
+            <ButtonNewBudgetProject projects={projects} token={token} user={user._id} company={user.profile} />
           </div>
         </div>
         <div className="flex gap-x-3 w-full gap-y-3 justify-end flex-wrap-reverse sm:flex-nowrap">
@@ -111,7 +111,7 @@ export default function ContainerBudgetClient({token, user, optConditionsFilter,
           <div className="">
             <div className="hidden sm:flex gap-x-3 items-center">
               <TooltipFilterIcon handleFilter={handleFilter} />
-              <ButtonNewBudgetProject projects={projects} token="" user={user._id} />
+              <ButtonNewBudgetProject projects={projects} token={token} user={user._id} company={user.profile} />
             </div>
           </div>
         </div>

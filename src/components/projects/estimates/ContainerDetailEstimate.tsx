@@ -108,6 +108,7 @@ export default function ContainerDetailEstimate({project, token, user, estimate,
           {glossary:"6840deda0c901d22c05dead1", user}
       ],
       date:new Date().toISOString(),
+      company
     }
 
     const res = await createGuaranteesFound(token, data);

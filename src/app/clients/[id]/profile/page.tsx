@@ -146,7 +146,8 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTab idCli={params.id} tab='1' />
         <NextUiProviders>
           <ClientCli client={client} token={token} id={params.id} tags={arrTags} totalPenBil={totalPenBil}
-            clientPermissions={permisionsClient} totalprj={totalprj} totalColl={totalColl} totalpay={totalpay} />
+            clientPermissions={permisionsClient} totalprj={totalprj} totalColl={totalColl} 
+            totalpay={totalpay} company={user.profile} />
         </NextUiProviders>
       </div>
     </>

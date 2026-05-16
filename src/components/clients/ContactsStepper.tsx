@@ -167,7 +167,7 @@ export default function ContactsStepper({id, token, company}: {id:string, token:
           <NavClientsStepper index={3} />
         </div>
         <FormContact addNewContact={newContact} token={token} contact={''} 
-            updateContact={updateContact} >
+            updateContact={updateContact} company={company} >
           <button type="button" 
             onClick={() => {
               if(refRequest.current){

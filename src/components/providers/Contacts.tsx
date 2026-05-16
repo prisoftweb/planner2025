@@ -9,7 +9,8 @@ import { updateContactProvider } from "@/app/api/routeProviders";
 import CardContact from "./CardContact";
 import { contactUpdateValidation } from "@/schemas/contact.schema";
 
-export default function Contacts({id, token, contacts}: {id:string, token:string, contacts:(Contact[])}){
+export default function Contacts({id, token, contacts, company}: 
+  {id:string, token:string, contacts:(Contact[]), company:string}){
   
   const [index, setIndex] = useState(0);
   const numberContacts = 1;
@@ -72,18 +73,18 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
 
   const showNewContact = () => {
     setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} >
+        contact={''} updateContact={updateContactt} company={company} >
         <></>
       </FormContact>)
   }
   
   const [showContacts, setShowContacts] = useState<JSX.Element>(contacts.length > 0? 
     <FormContact token={token} addNewContact={newContact} contact={contacts[0]} 
-      updateContact={updateContactt} >
+      updateContact={updateContactt} company={company} >
         <></>
     </FormContact> : 
     <FormContact token={token} addNewContact={newContact} contact={''} 
-      updateContact={updateContactt} >
+      updateContact={updateContactt} company={company} >
         <Button onClick={showNewContact}>
           Nuevo contacto
         </Button>
@@ -92,7 +93,7 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
   useEffect(() => {
     if(contacts.length === 0){
       setShowContacts(<FormContact token={token} addNewContact={newContact} 
-        contact={''} updateContact={updateContactt} >
+        contact={''} updateContact={updateContactt} company={company} >
           <></>
         </FormContact>);
     }else{
@@ -120,7 +121,7 @@ export default function Contacts({id, token, contacts}: {id:string, token:string
                 {filter.map((contact: Contact, index:number) => (
                   <div className='' key={index}>
                     <FormContact token={token} addNewContact={newContact} contact={contact} 
-                      updateContact={updateContactt}
+                      updateContact={updateContactt} company={company}
                     >
                       <button 
                         type="button"

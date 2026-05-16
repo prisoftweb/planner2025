@@ -6,8 +6,9 @@ import NewBudgetProject from "./NewBudgetProject";
 import { ProjectMin } from "@/interfaces/Projects";
 import ContainerSideNav from "@/components/ContainerSideNav";
 
-export default function ButtonNewBudgetProject({token, user, projects}: 
-                          {token:string, user:string, projects:ProjectMin[]}){
+export default function ButtonNewBudgetProject({token, user, projects, company}: 
+  {token:string, user:string, projects:ProjectMin[], company:string}){
+  
   const [newProject, setNewProject] = useState<boolean>(false);
   const handleNewProject = (value: boolean) => {
     setNewProject(value);
@@ -23,7 +24,7 @@ export default function ButtonNewBudgetProject({token, user, projects}:
             </ContainerSideNav>
           )} */}
           <ContainerSideNav width="w-full sm:max-w-4xl" open={newProject}>
-            <NewBudgetProject showForm={handleNewProject}
+            <NewBudgetProject showForm={handleNewProject} company={company}
                           token={token} projects={projects} user={user} />
           </ContainerSideNav>
     </>

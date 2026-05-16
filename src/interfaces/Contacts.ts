@@ -7,7 +7,8 @@ export interface Contact{
   user?: string,
   status?: boolean,
   createAt?: string,
-  __v?: number
+  __v?: number,
+  company?:string
 }
 
 export interface Phone{

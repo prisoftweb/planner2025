@@ -16,10 +16,11 @@ type TCode = {
   user: string,
   project: string
   provider: string,
-  userRequesting: string
+  userRequesting: string,
+  company: string
 }
 
-export default function ContainerNewCode({token, user}: {token: string, user:string}) {
+export default function ContainerNewCode({token, user, company}: {token: string, user:string, company:string}) {
 
   const [projects, setProjects] = useState<ProjectMin[]>([]);
   const [projectSel, setProjectSel]=useState<string>();
@@ -79,6 +80,7 @@ export default function ContainerNewCode({token, user}: {token: string, user:str
         code,
         date: new Date().toISOString(),
         user,
+        company,
         project: projectSel,
         provider: providerSel,
         userRequesting: value

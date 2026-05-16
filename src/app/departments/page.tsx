@@ -60,7 +60,8 @@ export default async function Page(){
   return(
     <>
       <Navigation user={user} token={token} />
-      <ContainerDepartment departments={departments} optsCompanies={optsCompanies} token={token} />
+      <ContainerDepartment departments={departments} optsCompanies={optsCompanies} 
+          token={token} company={user.profile} />
     </>
   )
 }

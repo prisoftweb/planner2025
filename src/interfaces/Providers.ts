@@ -22,7 +22,8 @@ export interface Provider {
     status: boolean
     _id: string
     id: string
-  }]
+  }],
+  company?: string
 }
 
 export interface ProviderMin {

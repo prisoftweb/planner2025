@@ -33,7 +33,7 @@ export default async function Page() {
     <>
       <Navigation user={user} token={token} />
       <ContainerClient data={table} expenses={expenses}
-        token={token} user={user} isViewReports={isViewReports} />
+        token={token} user={user} isViewReports={isViewReports} company={user.profile} />
     </>
   )
 }

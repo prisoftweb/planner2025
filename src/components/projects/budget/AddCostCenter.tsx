@@ -11,8 +11,8 @@ import { createBudget } from "@/app/api/routeBudget";
 import { useBudgetStore } from "@/app/store/budgetProject";
 import { getBudgetsMin } from "@/app/api/routeBudget";
 
-export default function AddCostCenter({token, user, closeForm}: 
-  {token:string, user: string, closeForm: Function}) {
+export default function AddCostCenter({token, user, closeForm, company}: 
+  {token:string, user: string, closeForm: Function, company:string}) {
 
   const {project} = useNewBudget();
   const {updateBudgetsStore} = useBudgetStore();
@@ -92,7 +92,8 @@ export default function AddCostCenter({token, user, closeForm}:
         ],
         progressAverage:0,
         project: project?._id,
-        user
+        user,
+        company
       }
 
       try {

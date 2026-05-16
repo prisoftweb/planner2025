@@ -85,6 +85,12 @@ export default function BillingDataCompany({company, token, fetchCompany}:
 
       if(filecer && filekey){
         const opt = satTaxRegimes.find((v) => v.value===satTaxRegime);
+        // const tax={
+        //   taxregime:{
+        //     id: opt?.value?? '',
+        //     regime: opt?.label?? '',
+        //   }
+        // }
         const taxregime={
           id: opt?.value?? '',
           regime: opt?.label?? '',
@@ -95,6 +101,7 @@ export default function BillingDataCompany({company, token, fetchCompany}:
         formdata.append('rfc', rfc.trim());
         // formdata.append('taxregime', taxregime.trim());
         formdata.append('taxregime', JSON.stringify(taxregime));
+        // formdata.append('tax', JSON.stringify(tax));
         formdata.append('capitalregime', capitalregime.trim());
         formdata.append('cp', company.location?.cp?? '');
         formdata.append('password', password.trim());

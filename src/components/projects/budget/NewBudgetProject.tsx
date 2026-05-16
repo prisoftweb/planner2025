@@ -8,8 +8,8 @@ import { useNewBudget } from "@/app/store/budgetProject";
 import AddCostCenter from "./AddCostCenter";
 import TooltipCloseIcon from "@/components/tooltipIcons/TooltipCloseIcon";
 
-export default function NewBudgetProject({token, showForm, user, projects}: 
-  {token:string, showForm:Function, user:string, projects: ProjectMin[] }){
+export default function NewBudgetProject({token, showForm, user, projects, company}: 
+  {token:string, showForm:Function, user:string, projects: ProjectMin[], company:string }){
   
   const [heightPage, setHeightPage] = useState<number>(900);
 
@@ -42,7 +42,7 @@ export default function NewBudgetProject({token, showForm, user, projects}:
   
   const component = 
     indexStepper === 0? <SelectBudgetProject projects={projectsWithOutBudget} token={token} />: 
-    indexStepper === 1? <AddCostCenter token={token} user={user} closeForm={showForm} />:
+    indexStepper === 1? <AddCostCenter token={token} user={user} closeForm={showForm} company={company} />:
       <></>;
 
   return(//top-16

@@ -23,7 +23,7 @@ export default function Home() {
               role.toLowerCase().includes('residente') || 
               user._id === '679ac44767135227cd14d1e9' || user._id==='666243bfef1d807b24ed9a28'
               || user._id === '65d3836974045152c0c4378c' ? (
-            <ContainerNewCode token={token} user={user._id} />
+            <ContainerNewCode token={token} user={user._id} company={user.profile} />
           ): (
           <img src="/img/Palaciosconstrucciones horizontal.svg" alt="logo" 
             className="w-auto h-96" 

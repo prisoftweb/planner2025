@@ -61,7 +61,7 @@ export default async function Page(){
             text="Aqui se personalizan las categorias y
                     conceptos del centro de costos"
             title="Centro de costos">
-              <ButtonNew token={token} id="" />
+              <ButtonNew token={token} id="" company={user.profile} />
           </WithOut>
         </div>
       </>
@@ -88,10 +88,10 @@ export default async function Page(){
       <Navigation user={user} token={token} />     
       <div className="p-2 sm:p-3 md:p-5 lg:p-10">
         <ResponsiveHeader other={false} title="Centro de costos" placeHolder="Buscar centro de costos..">
-          <ButtonNew token={token} id="" />
+          <ButtonNew token={token} id="" company={user.profile} />
         </ResponsiveHeader>
         <div className="mt-5">
-          <TableCostCenter data={table} token={token} />
+          <TableCostCenter data={table} token={token} company={user.profile} />
         </div>
       </div>
     </>

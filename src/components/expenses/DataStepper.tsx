@@ -24,8 +24,8 @@ import { Provider } from "@/interfaces/Providers";
 import { getAllCostsByProviderNEConditionLV } from "@/app/api/routeCost";
 import Select from 'react-select'
 
-export default function DataStepper({token, user, handleUpdateCategory}: 
-  {token:string, user:string, handleUpdateCategory: (value: string) => void }){
+export default function DataStepper({token, user, handleUpdateCategory, company}: 
+  {token:string, user:string, handleUpdateCategory: (value: string) => void, company:string }){
   
   const {updateIndexStepper, updateBasicData, CFDI, voucher, amount, 
     costCenter, date, description, discount, 
@@ -283,6 +283,7 @@ export default function DataStepper({token, user, handleUpdateCategory}:
           formdata.append('isticket', JSON.stringify(false));
           formdata.append('iscard', JSON.stringify(isCard));
           formdata.append('type', 'PROVEEDOR');
+          formdata.append('company', company);
           formdata.append('exempttax', taxExempt.replace(/[$,]/g, ""));
           formdata.append('conditionprovider', JSON.stringify([{
             glossary: '674643dd734d5ab78ab98ddb',
@@ -404,6 +405,7 @@ export default function DataStepper({token, user, handleUpdateCategory}:
             total: totalExpense.replace(/[$,]/g, "")
           },
           folio, provider, user:responsibleS, 
+          company,
           taxfolio:taxFolio, typeCFDI: typeCFDIS, project, ispaid:supplierCredit,
           report, isticket:false, category:category,
           conditionprovider: [{

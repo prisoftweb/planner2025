@@ -103,7 +103,7 @@ export default function ContactsStepper({id, token, user, company}:
           <BasicBarStepper index={2} />
         </div>
         <FormContact addNewContact={newContact} token={token} contact={''} 
-            updateContact={updateContact} >
+            updateContact={updateContact} company={company} >
           <button type="button" 
             onClick={onClickSave}
             className="border w-36 h-9 bg-white font-normal text-sm text-slate-900 border-slate-900 rounded-xl

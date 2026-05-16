@@ -17,11 +17,12 @@ type Props = {
   contact:(Contact | string), 
   updateContact:Function, 
   children:JSX.Element, 
-  editContact?:boolean
+  editContact?:boolean,
+  company:string
 }
 
 export default function FormContact({addNewContact, token, contact, 
-  updateContact, children, editContact=true}: Props){
+  updateContact, children, editContact=true, company}: Props){
   
   let emailContactI = '';
   let nameContactI = '';
@@ -71,6 +72,7 @@ export default function FormContact({addNewContact, token, contact,
           name: nameContact,
           companyemail: emailCompany,
           phoneNumber,
+          company
         }
         
         if(newContact.email==='' || !newContact.email)

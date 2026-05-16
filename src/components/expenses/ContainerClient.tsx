@@ -31,10 +31,10 @@ import {Tooltip} from "@nextui-org/react";
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 import { propsTooltip } from "@/libs/animations"
 
-export default function ContainerClient({data, token, expenses, 
-                    user, isHistory=false, isViewReports, isViewUser=false}:
+export default function ContainerClient({data, token, expenses, user, isHistory=false, 
+    isViewReports, isViewUser=false, company }:
   {data:ExpensesTable[], token:string, expenses:Expense[], user:UsrBack, isHistory?:boolean, 
-    isViewReports: boolean, isViewUser?: boolean}){
+    isViewReports: boolean, isViewUser?: boolean, company: string}) {
 
   const { categories, conditions, costCenterOpt, projects, providers, responsibles, types, 
     updateCategories, updateConditions, updateCostC, updateProjects, updateProviders,
@@ -284,7 +284,7 @@ export default function ContainerClient({data, token, expenses,
                     caja chica o proveedor desde esta
                     seccion a un determinado proyecto"
               title="Gastos">
-                <ButtonNew token={token} user={user} />
+                <ButtonNew token={token} user={user} company={company} />
             </WithOut>);
     return (
       <>
@@ -354,7 +354,7 @@ export default function ContainerClient({data, token, expenses,
                   <TooltipFilterIcon handleFilter={handleFilter} />
               )}  
               {!isHistory && !isViewUser && (
-                <ButtonNew token={token} user={user} />
+                <ButtonNew token={token} user={user} company={company} />
               )}
             </div>
           </div>
@@ -392,7 +392,7 @@ export default function ContainerClient({data, token, expenses,
                   </>
                 )}
                 {!isHistory && !isViewUser && (
-                  <ButtonNew token={token} user={user} />
+                  <ButtonNew token={token} user={user} company={company} />
                 )}
               </>
             </div>

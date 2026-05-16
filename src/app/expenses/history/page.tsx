@@ -39,7 +39,7 @@ export default async function Page() {
       <Navigation user={user} token={token} />
       <ContainerClient data={table} expenses={expenses}
         token={token} user={user} isViewReports={isViewReports} 
-        isHistory={true} />
+        isHistory={true} company={user.profile} />
     </>
   )
 }

@@ -12,8 +12,9 @@ import { useOneProviderStore } from "@/app/store/providerStore"
 import { ICostTOTALPendingPAYGroupByPROVIDER } from "@/interfaces/Providers"
 import ShowContactasProv from "./ShowContactsProv"
 
-export default function ProviderClient({provider, token, id, costPayment, user}: 
-  {provider:Provider, token:string, id:string, costPayment:ICostTOTALPendingPAYGroupByPROVIDER, user:string}){
+export default function ProviderClient({provider, token, id, costPayment, user, company}: 
+  {provider:Provider, token:string, id:string, costPayment:ICostTOTALPendingPAYGroupByPROVIDER, 
+    user:string, company:string}){
 
   const [opt, setOpt] = useState<number>(provider.tradeline?.creditlimit ? 1: 2);
   const {updateOneProviderStore} = useOneProviderStore();
@@ -33,7 +34,7 @@ export default function ProviderClient({provider, token, id, costPayment, user}:
             </div>): 
     (opt===4? (<div className="mt-3 w-full max-w-md bg-white rounded-lg shadow-md pl-2 px-3" 
               style={{borderColor:'#F8FAFC'}}>
-                <Contacts id={id} contacts={provider.contact || []} token={token} />
+                <Contacts id={id} contacts={provider.contact || []} token={token} company={company} />
               </div>): 
       (<div>
           {provider.tradeline?.creditlimit ? 

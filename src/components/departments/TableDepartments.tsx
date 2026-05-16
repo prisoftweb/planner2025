@@ -17,10 +17,11 @@ import { useMemo } from "react";
 type DeptProps={
   data:DepartmentTable[], 
   token:string, 
-  optionsCompany:Options[]
+  optionsCompany:Options[],
+  company:string
 }
 
-export default function TableDepartments({data, token, optionsCompany}: DeptProps ){
+export default function TableDepartments({data, token, optionsCompany, company}: DeptProps ){
   
   const columnHelper = createColumnHelper<DepartmentTable>();
 
@@ -95,7 +96,8 @@ export default function TableDepartments({data, token, optionsCompany}: DeptProp
     <>
       {editDept && (
         <ContainerSideNav width="w-full max-w-[360px]">
-          <NewDepartment token={token} OptionsCompany={optionsCompany} dept={deptEdit || ''} showForm={setEditDept} />
+          <NewDepartment token={token} OptionsCompany={optionsCompany} dept={deptEdit || ''} 
+              showForm={setEditDept} company={company} />
         </ContainerSideNav>
       )}
       <div className="hidden md:block w-full">

@@ -94,7 +94,7 @@ export default async function Page(){
     <>
       <Navigation user={user} token={token} />
       <ContainerEstimatesClient data={table} optCategories={optCategories} optConditionsFilter={optConditions} 
-        optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} />
+        optTypes={optTypes} projectsParam={projects} token={token} user={user} rol={role} company={user.profile} />
     </>
   )
 }

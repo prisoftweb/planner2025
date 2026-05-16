@@ -28,11 +28,12 @@ type Params={
   user:string, token:string, 
   overflow:boolean, 
   porcentajeAdvange: number, 
-  advange: number
+  advange: number,
+  company:string
 }
 
 export default function AddNewEstimateProject({showForm, project, updateEstimates, user, token, overflow, 
-  porcentajeAdvange, advange}: Params ) {
+  porcentajeAdvange, advange, company}: Params ) {
   
   const [name, setName] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
@@ -211,7 +212,7 @@ export default function AddNewEstimateProject({showForm, project, updateEstimate
                 user
             }
         ],
-        company: "65d3813c74045152c0c4377e",
+        company,
         project: project._id,
         user,
         type:typeEstimate

@@ -14,8 +14,8 @@ import SelectReact from "@/components/SelectReact";
 import { getUsersLV } from "@/app/api/routeUser";
 
 export default function FormNewPrice({token, setShowForm, addPrice, valueConcept, 
-  code, description}: {token:string, setShowForm:Function, addPrice:Function, valueConcept:string, 
-    code:string, description:string}){
+  code, description, company}: {token:string, setShowForm:Function, addPrice:Function, valueConcept:string, 
+    code:string, description:string, company:string}) {
   
   const [heightPage, setHeightPage] = useState<number>(900);
   
@@ -66,6 +66,7 @@ export default function FormNewPrice({token, setShowForm, addPrice, valueConcept
       const data = {
         code,
         description,
+        company
       }
       try {
         const res = await createConceptEstimate(token, data);
