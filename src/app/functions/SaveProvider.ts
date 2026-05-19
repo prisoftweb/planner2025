@@ -11,6 +11,7 @@ export default async function SaveProvider(data:Provider, token:string){
   const res = providerValidation.safeParse(data);
   if(res.success){
     try {
+      // console.log('data new provider => ', data);
       const res = await createProvider(data, token);
       if(typeof(res)!== 'string'){
         //updateProviderStore([...providerStore, res]);

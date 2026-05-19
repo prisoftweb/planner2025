@@ -28,8 +28,8 @@ type TInvoiceSend={
   project: string,
 }
 
-export default function AddNewCollectionComponent({showForm, user, token, updateCollections}: 
-  {showForm:(value: boolean) => void, user:string, token:string, updateCollections:Function }) {
+export default function AddNewCollectionComponent({showForm, user, token, updateCollections, company}: 
+  {showForm:(value: boolean) => void, user:string, token:string, updateCollections:Function, company:string }) {
 
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
   const [textConcept, setTextConcept]=useState<string>('');
@@ -183,7 +183,7 @@ export default function AddNewCollectionComponent({showForm, user, token, update
             concept: textConcept,
             amount:Number(amount),
             date,
-            company: "65d3813c74045152c0c4377e", 
+            company, 
             user,
             condition: [
               {
@@ -215,7 +215,7 @@ export default function AddNewCollectionComponent({showForm, user, token, update
           data.append('concept', textConcept);
           data.append('amount', JSON.stringify(Number(amount)));
           data.append('date', date);
-          data.append('company', "65d3813c74045152c0c4377e");
+          data.append('company', company);
           data.append('user', user);
           data.append('condition', JSON.stringify([
             {

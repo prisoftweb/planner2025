@@ -160,7 +160,7 @@ export default async function Page(){
           optTypes={optsTypes} optTypesFilter={optTypes} projects={allPrjs} token={token} user={user} 
           condition={condition} prjsCBparam={prjsCB} benTotparam={totalCB[0]} cosBenparam={totalCB[2]} costTotparam={totalCB[1]}
           benTottrueparam={totalCBtrue[0]} cosBentrueparam={totalCBtrue[2]} costTottrueparam={totalCBtrue[1]} 
-          prjsCBtrueparam={prjsCBtrue} />
+          prjsCBtrueparam={prjsCBtrue} company={user.profile} />
     </>
   )
 }

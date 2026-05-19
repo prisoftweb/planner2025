@@ -32,9 +32,9 @@ type TInvoiceSend={
   project: string,
 }
 
-export default function AddNewCollectionComponent({showForm, user, token, project, invoiceTable}: 
+export default function AddNewCollectionComponent({showForm, user, token, project, invoiceTable, company}: 
   {showForm:(value: boolean) => void, user:string, token:string, invoiceTable:IInvoiceTable, 
-    project:OneProjectMin}) {
+    project:OneProjectMin, company:string}) {
   // const refRequest = useRef(true);
 
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
@@ -268,7 +268,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
           concept: textConcept,
           amount:Number(amount),
           date,
-          company: "65d3813c74045152c0c4377e", 
+          company, 
           client: project.client._id,
           user,
           condition: [
@@ -316,7 +316,7 @@ export default function AddNewCollectionComponent({showForm, user, token, projec
         data.append('amount', JSON.stringify(Number(amount)));
         // data.append('amount', JSON.stringify(amount));
         data.append('date', date);
-        data.append('company', "65d3813c74045152c0c4377e");
+        data.append('company', company);
         data.append('client', project.client._id);
         data.append('user', user);
         data.append('condition', JSON.stringify([

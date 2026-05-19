@@ -23,11 +23,12 @@ type Props = {
   user:string, 
   optCompanies: Options[]
   condition: string, 
-  showForm:Function
+  showForm:Function,
+  company:string
 }
 
 export default function ExtraDataStepper({token, optClients, optCategories, 
-  optTypes, user, optCompanies, condition, showForm}: Props){
+  optTypes, user, optCompanies, condition, showForm, company}: Props){
   
   const [state, dispatch] = useRegFormContext();
   const refRequest = useRef(true);
@@ -40,7 +41,7 @@ export default function ExtraDataStepper({token, optClients, optCategories,
   const [client, setClient] = useState<string>(optClients[0].value);
   const [type, setType] = useState<string>(optTypes[0].value);
   const [category, setCategory] = useState<string>(optCategories[0].value);
-  const [company, setCompany] = useState<string>(optCompanies[0].value);
+  // const [company, setCompany] = useState<string>(optCompanies[0].value);
   const [guarantee, setGuarantee] = useState<boolean>(false);
   const [haveAddress, setHaveAddress] = useState<boolean>(false);
   const [haveAmountCharge, setHaveAmountCharge] = useState<boolean>(false);

@@ -11,11 +11,12 @@ type Props = {
   companies:Options[], 
   projects:Options[], 
   user:string, 
-  condition:string
+  condition:string,
+  company:string
 }
 
 export default function ButtonNew({token, companies, departments, 
-  projects, condition, user}: Props){
+  projects, condition, user, company}: Props){
   const [newReport, setNewReport] = useState<boolean>(false);
 
   const handleNewReport = (value: boolean) => {
@@ -38,7 +39,7 @@ export default function ButtonNew({token, companies, departments,
         <NewReport showForm={handleNewReport} 
                             token={token} projects={projects}
                             companies={companies} departments={departments} 
-                            condition={condition} user={user}
+                            condition={condition} user={user} company={company}
                   />
       </ContainerSideNav>
     </>

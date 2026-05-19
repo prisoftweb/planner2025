@@ -46,13 +46,14 @@ type Props = {
   prjsCBtrueparam:IProyectCostBen[], 
   cosBentrueparam:ICosBen, 
   costTottrueparam:ICostosTotales, 
-  benTottrueparam:IBeneficiosTotales
+  benTottrueparam:IBeneficiosTotales,
+  company:string
 }
 
 export default function ContainerClient({token, optClients, optCategories, 
   optTypes, user, optCompanies, data, optCategoriesFilter, optConditionsFilter, 
   optTypesFilter, projects, condition, benTotparam, cosBenparam, costTotparam, prjsCBparam, benTottrueparam, 
-  cosBentrueparam, costTottrueparam, prjsCBtrueparam}: Props){
+  cosBentrueparam, costTottrueparam, prjsCBtrueparam, company}: Props){
 
   const [isFilter, setIsFilter] = useState<boolean>(false);
   const [isTable, setIsTable] = useState<boolean>(true);
@@ -183,7 +184,7 @@ export default function ContainerClient({token, optClients, optCategories,
               <ButtonNew token={token} optClients={optClients} 
                       optCategories={optCategories} optTypes={optTypes}
                       user={user._id} optCompanies={optCompanies} 
-                      condition={condition}  />
+                      condition={condition} company={company} />
           </WithOut>
         </div>
       </>
@@ -506,7 +507,7 @@ export default function ContainerClient({token, optClients, optCategories,
           <p className="text-xl ml-4 font-medium">Proyectos</p>
           <div className="flex-1 flex justify-end items-center gap-x-3 md:hidden">
             <TooltipFilterIcon handleFilter={handleFilter} />
-            <ButtonNew token={token} optClients={optClients} 
+            <ButtonNew token={token} optClients={optClients} company={user.profile}
                     optCategories={optCategories} optTypes={optTypes}
                     user={user._id} optCompanies={optCompanies} condition={condition} />
           </div>
@@ -533,7 +534,7 @@ export default function ContainerClient({token, optClients, optCategories,
                 </TooltipContainerIcon>
               </div> */}
               <TooltipFilterIcon handleFilter={handleFilter} />
-              <ButtonNew token={token} optClients={optClients} 
+              <ButtonNew token={token} optClients={optClients} company={user.profile} 
                       optCategories={optCategories} optTypes={optTypes}
                       user={user._id} optCompanies={optCompanies} condition={condition} />
             </div>
@@ -648,7 +649,7 @@ export default function ContainerClient({token, optClients, optCategories,
                   </TooltipContainerIcon>
                 </div>
                 <TooltipFilterIcon handleFilter={handleFilter} />
-                <ButtonNew token={token} optClients={optClients} 
+                <ButtonNew token={token} optClients={optClients} company={user.profile} 
                         optCategories={optCategories} optTypes={optTypes}
                         user={user._id} optCompanies={optCompanies} condition={condition} />
               </div>
@@ -657,70 +658,6 @@ export default function ContainerClient({token, optClients, optCategories,
           </div>
 
         </div>
-
-        {/* <div className="mt-7 flex w-full gap-x-3 gap-y-3 flex-wrap-reverse sm:flex-nowrap justify-end print:hidden">
-          
-          
-          
-          <div>
-            <div className="flex gap-x-3 items-center print:hidden">
-              <div className="2xl:block">
-                {role.toLowerCase().includes('super') && isWide && reportPDF}
-              </div>
-              {widthPage > 500 && (
-                <>
-                  <TooltipContainerIcon label="Tabla">
-                    <VscListUnordered className="text-slate-600 w-10 h-10 cursor-pointer print:hidden hover:bg-blue-100" 
-                      onClick={() => setIsTable(true)}
-                    />
-                  </TooltipContainerIcon>
-                  <TooltipContainerIcon label="Tarjeta">
-                    <PiTableThin onClick={() => setIsTable(false)} 
-                      className="text-slate-600 w-10 h-10 cursor-pointer hover:slate-slate-300 print:hidden hover:bg-blue-100"
-                    />
-                  </TooltipContainerIcon>
-                </>
-              )}
-              <div className="hidden md:flex items-center gap-x-3">
-                <TooltipFilterIcon handleFilter={handleFilter} />
-                <ButtonNew token={token} optClients={optClients} 
-                      optCategories={optCategories} optTypes={optTypes}
-                      user={user._id} optCompanies={optCompanies} condition={condition} />
-              </div>
-
-              <div className="inline-flex rounded-md shadow-sm md:hidden" role="group">
-                {options.map((opt, index) => (
-                  <button
-                    key={opt}
-                    onClick={() => setSelected(opt)}
-                    className={`
-                      px-4 py-2 text-sm font-medium border border-gray-300
-                      ${index === 0 ? "rounded-l-lg" : ""}
-                      ${index === options.length - 1 ? "rounded-r-lg" : ""}
-                      ${selected === opt ? "bg-blue-600 text-white" : "bg-white hover:bg-gray-100"}
-                    `}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="2xl:hidden">
-        {role.toLowerCase().includes('super') && !isWide && (
-          <div className="flex justify-end items-center gap-x-3">
-            {reportPDF}
-          </div>
-        )}
-      </div>
-
-      <div className="md:hidden">
-        {reportPDFResponsive}
-      </div> */}
-
       </div>
 
       <div className="mt-5">

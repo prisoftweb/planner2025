@@ -77,7 +77,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
         </div>
       </div>
 
-      <div className="flex justify-around gap-x-3 mt-3">
+      <div className="md:flex md:justify-around gap-x-3 mt-3">
         <div>
           <div className="flex gap-x-2 items-center">
             <p className="text-slate-600 font-extrabold">Uso de factura</p>
@@ -105,12 +105,7 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
           </div>
         </div>
 
-        {/*<div className="hidden md:block">
-          <p className="text-slate-500 font-extrabold">ESTIMACION</p>
-          <p className="text-black font-extrabold">{invoice?.estimate?.name}</p>
-        </div> */}
-
-        <div className="text-right">
+        <div className="text-right mt-2 lg:mt-0">
           {/* <p className="text-slate-500 font-extrabold">FACTURA</p> */}
           <p className="text-blue-500 font-bold">Factura No: {folio}</p>
           <p className="text-sm">{date?.substring(8, 10)} de {months[new Date(date).getMonth()]} {date?.substring(0, 4)} {new Date(date)?.toISOString().substring(11, 19)}</p>

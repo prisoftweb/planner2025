@@ -16,11 +16,12 @@ type Props = {
   optTypes:Options[], 
   user:string,
   optCompanies: Options[], 
-  condition: string 
+  condition: string,
+  company:string 
 }
 
 export default function NewProjectContainer({token, showForm, optClients, 
-  optCategories, optTypes, user, optCompanies, condition}: Props){
+  optCategories, optTypes, user, optCompanies, condition, company}: Props){
 
   const [state] = useRegFormContext();
 
@@ -96,7 +97,7 @@ export default function NewProjectContainer({token, showForm, optClients,
         </div>
         <ContainerProjectStepper token={token} optClients={optClients} 
             optCategories={optCategories} optTypes={optTypes} showForm={showForm}
-            user={user} optCompanies={optCompanies} condition={condition} />
+            user={user} optCompanies={optCompanies} condition={condition} company={company} />
       </div>
     </div>
   )

@@ -289,15 +289,7 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
         <ListData data={data} />
       </div>
 
-      <div className="flex gap-x-2 items-center mt-3">
-        {/* <SearchInTable placeH="Buscar concepto" /> */}
-        {/*<SearchSelect options={prueba} />*/}
-        {/* <SearchSelect
-          options={prueba}
-          getLabel={(u) => u.email}
-          getKey={(u) => u.uuid}
-          onSelect={(u) => console.log(u)}
-        /> */}
+      <div className="flex flex-wrap lg:flex-nowrap gap-x-2 justify-end items-center mt-3">
         <SearchSelect
           options={concepts}
           getLabel={(u) => u.name}
@@ -318,16 +310,6 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
         </div>
     
         <div className="w-44">
-          {/* <SearchSelect
-            options={prices}
-            getLabel={(u) => u.cost.toString()}
-            getKey={(u) => u._id}
-            onSelect={(u) => {
-              console.log(u);
-              setPriceSel(u);
-              handleTotal(quantity?? '0', u);
-            }}
-          /> */}
           {prices && prices.length > 0 && (
             <SelectReact index={0} opts={pricesOptions} setValue={handlePrice} />
           )}
@@ -487,19 +469,38 @@ const CardConcept = ({concept }:
         active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
         bg-white`}
     >
-      <div className="flex items-center w-full ">
-        <div className="grid mr-4 place-items-center">
-          {/* <img alt="responsable" src={ invoice.Responsable?.photo ?? '/img/users/default.jpg'}
-            className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
-          {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
-              remove={RemoveGlossary} removeElement={delGlossary} /> */}
-            {/* <RemoveElement id={invoice.id} name={invoice.Descripcion} 
-              remove={RemoveCost} removeElement={delCost} 
-              token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
-          <p>{concept.Clave}</p>
-        </div>
-        <div className="w-full">
-          <div className="flex gap-x-3 w-full justify-between items-center p-3">
+      <div>
+        <div className="flex lg:hidden items-center w-full ">
+          {/* <div className="grid mr-4 place-items-center">
+            <p>{concept.Clave}</p>
+          </div> */}
+          <div className="w-full">
+            <div className="flex gap-x-3 w-full justify-between items-center p-3">
+              {/* <div>
+                <h6
+                  className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                  {concept.Concepto}
+                </h6>
+                <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                  {concept.Descripcion}
+                </p>
+              </div> */}
+              <div>
+                <p>{concept.Clave}</p>
+              </div>
+              <div className="text-right">
+                <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                  {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: concept.Importe
+                  })}
+                </p>
+                <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                  {concept.Cantidad}
+                </p>
+              </div>
+            </div>
+            
             <div>
               <h6
                 className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
@@ -509,16 +510,44 @@ const CardConcept = ({concept }:
                 {concept.Descripcion}
               </p>
             </div>
-            <div className="text-right">
-              <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
-                {CurrencyFormatter({
-                  currency: 'MXN',
-                  value: concept.Importe
-                })}
-              </p>
-              <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
-                {concept.Cantidad}
-              </p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div className="hidden lg:flex items-center w-full ">
+          <div className="grid mr-4 place-items-center">
+            {/* <img alt="responsable" src={ invoice.Responsable?.photo ?? '/img/users/default.jpg'}
+              className="relative inline-block h-12 w-12 !rounded-full  object-cover object-center" /> */}
+            {/* <RemoveElement id={glossary.id} name={glossary.name} token={token} 
+                remove={RemoveGlossary} removeElement={delGlossary} /> */}
+              {/* <RemoveElement id={invoice.id} name={invoice.Descripcion} 
+                remove={RemoveCost} removeElement={delCost} 
+                token={token} colorIcon="text-slate-500 hover:text-slate-300" /> */}
+            <p>{concept.Clave}</p>
+          </div>
+          <div className="w-full">
+            <div className="flex gap-x-3 w-full justify-between items-center p-3">
+              <div>
+                <h6
+                  className="block font-sans text-sm antialiased font-semibold leading-relaxed tracking-normal text-gray-600 ">
+                  {concept.Concepto}
+                </h6>
+                <p className="block font-sans text-sm antialiased font-normal leading-normal text-gray-600">
+                  {concept.Descripcion}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="block font-sans text-2xl antialiased font-normal leading-normal text-blue-600">
+                  {CurrencyFormatter({
+                    currency: 'MXN',
+                    value: concept.Importe
+                  })}
+                </p>
+                <p className="block font-sans text-xs antialiased font-normal leading-normal text-gray-600">
+                  {concept.Cantidad}
+                </p>
+              </div>
             </div>
           </div>
         </div>

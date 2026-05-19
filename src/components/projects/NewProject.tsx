@@ -10,16 +10,17 @@ type Props = {
   optTypes:Options[], 
   user:string,
   optCompanies: Options[], 
-  condition: string
+  condition: string,
+  company:string
 }
 
 export default function NewProject({token, showForm, optClients, optCategories,
-  optTypes, user, optCompanies, condition }: Props){
+  optTypes, user, optCompanies, condition, company }: Props){
   
   return(
     <>
       <StepperProjectProvider >
-        <NewProjectContainer showForm={showForm} 
+        <NewProjectContainer showForm={showForm} company={company} 
           token={token} optClients={optClients} optCategories={optCategories} 
            optTypes={optTypes} user={user} optCompanies={optCompanies} condition={condition} />
       </StepperProjectProvider>

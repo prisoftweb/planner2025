@@ -23,8 +23,9 @@ import { useOptionsQuotations } from "@/app/store/QuotationStates"
 
 import ContainerSideNav from "../ContainerSideNav"
 
-export default function NewQuotation({showForm, token, usr, updateQuotations, showSideNav}: 
-  {showForm:(value: boolean) => void, token:string, usr:string, updateQuotations: Function, showSideNav:boolean}){
+export default function NewQuotation({showForm, token, usr, updateQuotations, showSideNav, company}: 
+  {showForm:(value: boolean) => void, token:string, usr:string, updateQuotations: Function, 
+    showSideNav:boolean, company:string}){
 
   const {optClients, optUsers, optVats, optCategories, optTypes} = useOptionsQuotations();
 
@@ -178,7 +179,8 @@ export default function NewQuotation({showForm, token, usr, updateQuotations, sh
         category,
         client,
         applicant: contact,
-        user 
+        user,
+        company 
       }
 
       const create = await createQuotation(token, data);

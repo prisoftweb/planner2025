@@ -24,11 +24,12 @@ type Props = {
   user: string, 
   totalInvoiceProject: ITotalInvoicesByProject[], 
   resumenInvoice:ITotalInvoiceResumen 
-  pageQuery:string | undefined
+  pageQuery:string | undefined,
+  company:string
 }
 
 export default function ContainerInvoicesProject({project, optConditions, optProjects, 
-  token, user, invoices, totalInvoiceProject, resumenInvoice, pageQuery }: Props) {
+  token, user, invoices, totalInvoiceProject, resumenInvoice, pageQuery, company }: Props) {
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
@@ -134,7 +135,7 @@ export default function ContainerInvoicesProject({project, optConditions, optPro
       </div>
       
       <TableInvoicesComponent token={token} project={project} user={user} pageQuery={pageQuery} 
-        resumenInvoice={resumenInvoice} />
+        resumenInvoice={resumenInvoice} company={company} />
     </>
   )
 }

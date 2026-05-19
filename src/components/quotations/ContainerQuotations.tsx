@@ -23,8 +23,8 @@ import { Options } from "@/interfaces/Common"
 import TooltipContainerIcon from "../tooltipIcons/TooltipContainerIcon"
 import TooltipFilterIcon from "../tooltipIcons/TooltipFilterIcon"
 
-export default function ContainerQuotations({quotations, token, user, isByUser=false}: 
-  {quotations: IQuotationMin[], token:string, user: UsrBack, isByUser?: boolean}) {
+export default function ContainerQuotations({quotations, token, user, isByUser=false, company}: 
+  {quotations: IQuotationMin[], token:string, user: UsrBack, isByUser?: boolean, company:string}) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [showFilter, setShowFilter]=useState<boolean>(false);
@@ -141,7 +141,7 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
             </WithOut>
           </div>
           {showNewQuotation && <NewQuotation showForm={handleShowNewQuotation} token={token} usr={user._id} 
-              updateQuotations={refreshQuatations} showSideNav={showNewQuotation} />}
+              updateQuotations={refreshQuatations} showSideNav={showNewQuotation} company={company} />}
         </>
       )
     }
@@ -241,7 +241,7 @@ export default function ContainerQuotations({quotations, token, user, isByUser=f
           optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} 
             token={token} usr={user._id} updateQuotations={refreshQuatations} />} */}
       {optCategories.length> 0 && optClients.length> 0 && optTypes.length > 0 && 
-          optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} 
+          optUsers.length > 0 && optVats.length > 0 && <NewQuotation showForm={handleShowNewQuotation} company={company} 
             token={token} usr={user._id} updateQuotations={refreshQuatations} showSideNav={showNewQuotation} />}
       {showFilter && optClients && optConditions && <FilteringQuatations FilterData={filterData} maxAmount={maxAmount} 
                     showForm={handleShowFilter} />}

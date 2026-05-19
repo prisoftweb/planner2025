@@ -13,8 +13,8 @@ import CardConfig from "../users/CardConfig";
 import { CreateProject } from "@/app/api/routeProjects";
 import { showToastMessage, showToastMessageError } from "../Alert";
 
-export default function ProfileQuatation({quatation, token, user}: 
-  {quatation:IOneQuotationMin, token:string, user:string}){
+export default function ProfileQuatation({quatation, token, user, company}: 
+  {quatation:IOneQuotationMin, token:string, user:string, company:string}){
 
   const newProject = async () => {
     const data = {
@@ -25,7 +25,7 @@ export default function ProfileQuatation({quatation, token, user}:
       client: quatation.client._id,
       date: new Date().toISOString(),
       code: quatation.title, 
-      company: '65d3813c74045152c0c4377e',
+      company,
       condition: {glossary: '661964a1ca3bfa35200c1628', user}
     }
     const res = await CreateProject(token, data);

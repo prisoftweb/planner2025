@@ -16,11 +16,12 @@ type Props = {
   user:string, 
   showForm:Function,
   optCompanies: Options[], 
-  condition: string 
+  condition: string,
+  company:string
 }
 
 export default function ContainerProjectStepper({token, optClients, optCategories, 
-  optTypes, user, optCompanies, condition, showForm}: Props){
+  optTypes, user, optCompanies, condition, showForm, company}: Props){
   
   const [state] = useRegFormContext();
   
@@ -29,7 +30,7 @@ export default function ContainerProjectStepper({token, optClients, optCategorie
     if(state.indexstepper || state.indexstepper>=0){
       if(state.indexstepper===1){
         stepForm =(<ExtraDataStepper token={token} optClients={optClients} 
-                        optCategories={optCategories} user={user} 
+                        optCategories={optCategories} user={user} company={company}
                         optTypes={optTypes} optCompanies={optCompanies}
                         condition={condition} showForm={showForm} />)
       }else if(state.indexstepper===2){

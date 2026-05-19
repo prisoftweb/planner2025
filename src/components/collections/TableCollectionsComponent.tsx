@@ -28,9 +28,9 @@ import { propsTooltip } from "@/libs/animations";
 import DownloadCollectionPDF from "./DownloadCollectionPDF";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
-export default function TableCollectionsComponent({token, user, collectionsParam, totalParam, totalRecoveredP}: 
+export default function TableCollectionsComponent({token, user, collectionsParam, totalParam, totalRecoveredP, company}: 
   {token:string, user:string, collectionsParam:ICollectionMin[], totalParam:ITotalAmountCollections, 
-    totalRecoveredP:ITotalAmountRecoveredCollections}) {
+    totalRecoveredP:ITotalAmountRecoveredCollections, company:string}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>(collectionsParam);
   // const [filteredCollections, setFilteredCollections] = useState<ICollectionMin[]>([]);
@@ -435,7 +435,7 @@ export default function TableCollectionsComponent({token, user, collectionsParam
       )} */}
       <ContainerSideNav width="w-full max-w-xl" open={showNewCollection}>
         <AddNewCollectionComponent showForm={handleShowCollection} token={token} 
-                              user={user} updateCollections={updateCollections} />
+            user={user} updateCollections={updateCollections} company={company} />
       </ContainerSideNav>
     </>
   )

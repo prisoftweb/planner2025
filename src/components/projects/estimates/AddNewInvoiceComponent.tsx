@@ -20,11 +20,12 @@ type Params = {
   user:string, 
   token:string, 
   estimate:TableEstimatesProject | undefined, 
-  project:OneProjectMin
+  project:OneProjectMin,
+  company:string
 }
 
 export default function AddNewInvoiceComponent({showForm, updateEstimates, user, token, 
-    estimate, project}: Params) {
+    estimate, project, company}: Params) {
   // const refRequest = useRef(true);
 
   const [folio, setFolio] = useState<string>('');
@@ -177,7 +178,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           client,
           estimate: estimate?.id,
           project: project._id,
-          company: '65d3813c74045152c0c4377e',
+          company,
           concepts: res.concepts,
           notes: res.description,
           amountGuaranteeFund: estimate.Fondo,

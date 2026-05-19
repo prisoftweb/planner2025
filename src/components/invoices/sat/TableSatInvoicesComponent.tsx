@@ -571,11 +571,11 @@ export default function TableSatInvoicesComponent({token, user, company}:
       {showNewCollection && selInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionInvoice showForm={handleShowForm} user={user}
-               token={token} invoiceTable={selInvoice} />
+               token={token} invoiceTable={selInvoice} company={company} />
         </ContainerSideNav>
       )}
 {/* el index stepper se debe manejar desde aqui para poder manipular responsivo de los compoentnes */}
-      <ContainerSideNav width={`w-full ${step > 1? 'max-w-[75%]': 'max-w-3xl'}`} open={showNewInvoice}>
+      <ContainerSideNav width={`w-full ${step > 1? 'max-w-3xl xl:max-w-[75%]': 'max-w-3xl'}`} open={showNewInvoice}>
         <AddNewSatInvoiceComponent showForm={setShowNewinvoice} isNew={showNewInvoice} token={token} 
           user={user} handleStep={handleStep} step={step} company={company} />
       </ContainerSideNav>

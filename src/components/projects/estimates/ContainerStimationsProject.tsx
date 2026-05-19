@@ -306,7 +306,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
         </ContainerSideNav>
       )} */}
       <ContainerSideNav width="w-full max-w-xl" open={openNewInvoice}>
-        <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user}
+        <AddNewInvoiceComponent showForm={handleShowFormInvoice} user={user} company={company}
           updateEstimates={updateEstimatesProject} token={token} estimate={selEstimate} project={project} />
       </ContainerSideNav>
     </>

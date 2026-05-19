@@ -66,7 +66,7 @@ export default async function Page({ params, searchParams }:
             label: 'Todos',
             value: 'all'
           }, ...projects]} pageQuery={searchParams.page} invoices={invoices} token={token} user={user._id} 
-          totalInvoiceProject={totalInvoicesProject} resumenInvoice={totalInvoicesResumen} />
+          totalInvoiceProject={totalInvoicesProject} resumenInvoice={totalInvoicesResumen} company={user.profile} />
       </div>
     </>
   )

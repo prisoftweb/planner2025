@@ -21,7 +21,7 @@ type TInvoiceStepper={
     title:string,
     id:string
   },
-  concepts: string
+  concepts: string,
 }
 
 type TInvoiceSend={
@@ -30,8 +30,8 @@ type TInvoiceSend={
   project: string,
 }
 
-export default function AddNewCollectionInvoice({showForm, user, token, invoiceTable}: 
-  {showForm:(value: boolean) => void, user:string, token:string, invoiceTable:IInvoiceTable }) {
+export default function AddNewCollectionInvoice({showForm, user, token, invoiceTable, company}: 
+  {showForm:(value: boolean) => void, user:string, token:string, invoiceTable:IInvoiceTable, company:string }) {
 
   const [project, setProject] = useState<OneProjectMin>();
   const [date, setDate] = useState<string>(new Date().toISOString().substring(0, 10));
@@ -275,7 +275,7 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
             concept: textConcept,
             amount:Number(amount),
             date,
-            company: "65d3813c74045152c0c4377e", 
+            company, 
             client: project.client._id,
             user,
             condition: [
@@ -310,7 +310,7 @@ export default function AddNewCollectionInvoice({showForm, user, token, invoiceT
           data.append('amount', JSON.stringify(Number(amount)));
           // data.append('amount', JSON.stringify(amount));
           data.append('date', date);
-          data.append('company', "65d3813c74045152c0c4377e");
+          data.append('company', company);
           data.append('client', project.client._id);
           data.append('user', user);
           data.append('condition', JSON.stringify([

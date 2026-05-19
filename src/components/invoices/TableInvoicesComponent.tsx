@@ -34,10 +34,13 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadInvoicesReportPDF from "./DownloadInvoicesReportPDF";
 import { FaXmark } from "react-icons/fa6";
 import {confirmAlert} from 'react-confirm-alert';
+import { Options } from "@/interfaces/Common";
+import Input from "../Input";
 // import 'react-confirm-alert/src/react-confirm-alert.css';
+import SelectReact from "../SelectReact";
 
-export default function TableInvoicesComponent({token, user, company}: 
-  {token:string, user:string, company:string}) {
+export default function TableInvoicesComponent({token, user, company, optionsCancel}: 
+  {token:string, user:string, company:string, optionsCancel:Options[]}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByDateAndConditionMin[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -165,7 +168,7 @@ export default function TableInvoicesComponent({token, user, company}:
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                  onClick={() => abrirDialogo(token, row.original.id, user, updateView) }
+                  onClick={() => abrirDialogo(token, row.original.id, user, updateView, optionsCancel) }
                 />
             </Tooltip> 
           )}      
@@ -531,13 +534,13 @@ export default function TableInvoicesComponent({token, user, company}:
         <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
       </div>
       <div className="block md:hidden w-full mt-3">
-        <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} />
+        <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} optionsCancel={optionsCancel} />
       </div>
       
       {showNewCollection && selInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionInvoice showForm={handleShowForm} user={user}
-               token={token} invoiceTable={selInvoice} />
+               token={token} invoiceTable={selInvoice} company={company} />
         </ContainerSideNav>
       )}
       {/* {showNewInvoice && (
@@ -587,8 +590,9 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   return table;
 }
 
-const ListData = ({data, token, delInvoice, updateView, user }: 
-  {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, user:string, updateView: () => void }) => {
+const ListData = ({data, token, delInvoice, updateView, user, optionsCancel }: 
+  {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, user:string, 
+    updateView: () => void, optionsCancel:Options[] }) => {
 
   // const [dataReports, setDataReports] = useState(data);
   const {search} = useTableStates();
@@ -617,7 +621,8 @@ const ListData = ({data, token, delInvoice, updateView, user }:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((i) => (
-            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} updateView={updateView} user={user} />
+            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} updateView={updateView} 
+                user={user} optionsCancel={optionsCancel} />
           ))}
 
         </nav>
@@ -626,8 +631,9 @@ const ListData = ({data, token, delInvoice, updateView, user }:
   )
 }
 
-const CardInvoice = ({invoice, token, delInvoice, updateView, user }: 
-  {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, user:string, updateView: () => void }) => {
+const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCancel }: 
+  {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, user:string, updateView: () => void, 
+    optionsCancel:Options[]}) => {
   
   return(
     <div role="button"
@@ -653,7 +659,7 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user }:
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
                   <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                    onClick={() => abrirDialogo(token, invoice.id, user, updateView) }
+                    onClick={() => abrirDialogo(token, invoice.id, user, updateView, optionsCancel) }
                   />
               </Tooltip> 
             )}
@@ -758,12 +764,15 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
   )
 }
 
-const abrirDialogo = async (token:string, id:string, user:string, updateView: () => void) => {
+const abrirDialogo = async (token:string, id:string, user:string, 
+  updateView: () => void, cancelOptions:Options[]) => {
 
   const DeleteModal = ({ onClose }: { onClose: () => void }) => {
     const [comentario, setComentario] = useState("");
     const [error, setError] = useState(false);
     const [flash, setFlash] = useState(false);
+    const [cfdireplace, setCfdireplace]=useState<string>();
+    const [cancelmotive, setCancelMotive]=useState<string>();
 
     const handleEliminar = async () => {
       if (!comentario.trim()) {
@@ -797,17 +806,11 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
         updateView();
         onClose();
       }
-      // try {
-      //   const res = await remove(id, token, progreesAverage, totalAverage);
-      //   if (res === 204) {
-      //     alert(`${name} eliminado exitosamente!`);
-      //   } else {
-      //     alert(`${name} no pudo ser eliminado`);
-      //   }
-      // } catch (err) {
-      //   alert("Error eliminando");
-      // }
     };
+
+    const handleMotive=(value:string) => {
+      setCancelMotive(value);
+    }
 
     return (
       <div className="custom-ui">
@@ -815,7 +818,7 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
           {error ? "¡Debe escribir una razon!" : "Confirmación para cancelar"}
         </h2>
 
-        <p>¿Desea cancelar la factura?</p>
+        <p className="text-left">Agregar razon</p>
 
         <textarea
           placeholder="Agregar una razon obligatoria..."
@@ -829,6 +832,12 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
             Por favor escriba una razon antes de continuar
           </p>
         )}
+
+        <p className="text-left">Motivo de cancelacion</p>
+        <SelectReact index={0} opts={cancelOptions} setValue={handleMotive} />
+
+        <p className="text-left mt-2">CFDI de reemplazo</p>
+        <Input value={cfdireplace} onChange={(e) => setCfdireplace(e.target.value)} />
 
         <div>
           <button className="yes" onClick={handleEliminar}>Sí</button>

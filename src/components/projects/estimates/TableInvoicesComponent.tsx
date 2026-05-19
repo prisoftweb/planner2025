@@ -20,8 +20,9 @@ import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon
 import ContainerSideNav from "@/components/ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
 
-export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice}: 
-  {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, resumenInvoice:ITotalInvoiceResumen}) {
+export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice, company}: 
+  {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, 
+    resumenInvoice:ITotalInvoiceResumen, company:string}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByProject[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -260,7 +261,7 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
       {showNewCollection && selInvoice && (
         <ContainerSideNav width="w-full max-w-xl">
           <AddNewCollectionComponent showForm={handleShowForm} user={user}
-               token={token} project={project} invoiceTable={selInvoice} />
+               token={token} project={project} invoiceTable={selInvoice} company={company} />
         </ContainerSideNav>
       )}
       {/* <ContainerSideNav width="w-full max-w-xl" open={showNewCollection && selInvoice!=undefined}>

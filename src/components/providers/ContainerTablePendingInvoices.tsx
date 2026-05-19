@@ -33,11 +33,12 @@ type Props = {
   user: UsrBack, 
   provider: Provider, 
   optTypes: Options[], 
-  condition: string
+  condition: string,
+  company:string
 }
 
 export default function ContainerTablePendinginvoices({data, token, expenses, user, 
-  provider, optTypes, condition}: Props) {
+  provider, optTypes, condition, company}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [expensesSelected, setExpensesSelected] = useState<HistoryExpensesTable[]>([]);
@@ -272,7 +273,7 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
       <ContainerSideNav width="w-full max-w-5xl" open={paidExpenses}>
         <PaidHistoryExpenses dataTable={expensesSelected} token={token} condition={condition}
           showForm={handlePaidExpenses} provider={provider} user={user._id} updateTable={updateTable}
-          optTypes={optTypes} open={paidExpenses} />
+          optTypes={optTypes} open={paidExpenses} company={company} />
       </ContainerSideNav>
     </div>
   )

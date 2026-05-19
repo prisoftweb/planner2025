@@ -20,11 +20,12 @@ type Props = {
   updateTable: Function, 
   condition: string, 
   optTypes: Options[],
-  open: boolean
+  open: boolean,
+  company:string
 }
 
 export default function PaidHistoryExpenses({showForm, dataTable, provider, token, user, 
-  updateTable, condition, optTypes, open}: Props) {
+  updateTable, condition, optTypes, open, company}: Props) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [indexStepper, setIndexStepper] = useState<number>(0);
@@ -127,7 +128,7 @@ export default function PaidHistoryExpenses({showForm, dataTable, provider, toke
       (indexStepper==2? <PaidExpensesHistory id={provider._id} token={token} showForm={showForm} condition={condition}
           user={user} costs={costs} maxDate={maxDate} minDate={minDate} updateTable={updateTable} 
           commentsPayment={comments} datePayment={date} paymentPlugin={paymentPlugin} 
-          optTypes={optTypes} costsPayment={costsInPayment} />: 
+          optTypes={optTypes} costsPayment={costsInPayment} company={company} />: 
         <TableListExpensesPaid data={costsInPayment} nextPage={handleIndexStepper} updateCostPartial={updateCostPartiality} />);
   
   return(

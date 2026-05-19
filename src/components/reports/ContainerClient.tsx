@@ -100,7 +100,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
               text="Agrega informes de caja chica,
                     para el control de costos"
               title="Informes">
-                <ButtonNew companies={optCompanies} departments={optDepartments} 
+                <ButtonNew companies={optCompanies} departments={optDepartments} company={user.profile}
                   projects={optProjects} token={token} condition={condition} user={user._id}
                 />
             </WithOut>
@@ -116,7 +116,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
         <Header title="Informes" placeHolder="Buscar Informe.." >
           <div className="flex gap-x-4 items-center">
             <TooltipFilterIcon handleFilter={handleFilter} />
-            {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
+            {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} company={user.profile}
                               projects={optProjects} token={token} condition={condition} user={user._id}
                             />}
           </div>
@@ -148,7 +148,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
             <p className="text-xl flex-1 ml-4 font-medium">Informes</p>
             <div className="flex sm:hidden gap-x-4 items-center justify-end">
               <TooltipFilterIcon handleFilter={handleFilter} />
-              {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
+              {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} company={user.profile}
                                 projects={optProjects} token={token} condition={condition} user={user._id}
                               />}
             </div>
@@ -158,7 +158,7 @@ export default function ContainerClient({token, optCompanies, optDepartments,
           </div>
           <div className="hidden sm:flex gap-x-4 items-center justify-end">
             <TooltipFilterIcon handleFilter={handleFilter} />
-            {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} 
+            {!isHistory && <ButtonNew companies={optCompanies} departments={optDepartments} company={user.profile}
                               projects={optProjects} token={token} condition={condition} user={user._id}
                             />}
           </div>

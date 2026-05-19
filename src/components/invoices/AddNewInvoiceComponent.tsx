@@ -182,7 +182,7 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
         user,
         client,
         project,
-        company: '65d3813c74045152c0c4377e',
+        company,
         concepts: dataConcepts,
         cost: {
           subtotal: amount, 

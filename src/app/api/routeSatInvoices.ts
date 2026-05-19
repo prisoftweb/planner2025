@@ -140,6 +140,20 @@ export async function getSatProductCodes() {
   }
 }
 
+export async function getSatMotivosCancelacion() {
+  try {
+    // console.log("KEY:", process.env.NEXT_PUBLIC_API_KEY_DEV);
+    // console.log("TENANT:", process.env.NEXT_PUBLIC_TENANT_DEV);
+    // console.log("URL:", process.env.NEXT_PUBLIC_FISCAL_API_URL);
+    const res = await fiscalApi.get("/api/v4/catalogs/SatMotivosCancelacion");
+    // console.log("Response:", res.data.data);
+    return res.data.data;
+  } catch (error) {
+    // console.error("Error al solicitar uso de cfdi:", error);
+    return "Error al obtener catálogo SAT";
+  }
+}
+
 // curl --location 'https://test.fiscalapi.com/api/v4/invoices/income' \
 // --header 'X-TENANT-KEY: c1d37b62-e6f0-43e4-aa52-f97999355878' \
 // --header 'X-TIME-ZONE: America/Mexico_City' \
@@ -481,3 +495,4 @@ export async function getSatProductCodes() {
 //         "password": "12345678a"
 //       }
 //     ]
+

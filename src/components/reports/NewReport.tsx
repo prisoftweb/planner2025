@@ -21,15 +21,16 @@ type Props = {
   companies:Options[], 
   projects:Options[], 
   user:string, 
-  condition:string
+  condition:string,
+  company:string
 }
 
 export default function NewReport({showForm, token, companies, 
-  departments, projects, user, condition}: Props){
+  departments, projects, user, condition, company}: Props){
   
   const [heightPage, setHeightPage] = useState<number>(900);
   const [project, setProject] = useState<string>(projects[0].value);
-  const [company, setCompany] = useState<string>(companies[0].value);
+  // const [company, setCompany] = useState<string>(companies[0].value);
   const [department, setDepartment] = useState<string>(Array.isArray(departments) && departments.length>0? departments[0].value: '');
   const [startDate, setStartDate] = useState<string>('');
   const [imprest, setImprest] = useState<boolean>(false);
@@ -62,9 +63,9 @@ export default function NewReport({showForm, token, companies,
     setProject(value);
   }
 
-  const handleCompany = (value:string) => {
-    setCompany(value);
-  }
+  // const handleCompany = (value:string) => {
+  //   setCompany(value);
+  // }
 
   const handleDepartment = (value:string) => {
     setDepartment(value);
@@ -133,6 +134,7 @@ export default function NewReport({showForm, token, companies,
 
           refRequest.current = true;
 
+          console.log('data new report => ', data);
           const res = await CreateReport(token, data);
           if(res === 201){
             refRequest.current = true;
@@ -214,10 +216,10 @@ export default function NewReport({showForm, token, companies,
             {viewAmmount}
           </div>
 
-          <div>
+          {/* <div>
             <Label htmlFor="company"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Empresa</p></Label>
             <SelectReact index={0} opts={companies} setValue={handleCompany} />
-          </div>
+          </div> */}
 
           <div>
             <Label htmlFor="department"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Departamento</p></Label>

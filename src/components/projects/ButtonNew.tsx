@@ -12,11 +12,12 @@ type Props = {
   optCategories:Options[], 
   optTypes:Options[],
   optCompanies: Options[], 
-  condition: string
+  condition: string,
+  company:string
 }
 
 export default function ButtonNew({token, optClients, optCategories, 
-  optTypes, user, optCompanies, condition}: Props){
+  optTypes, user, optCompanies, condition, company}: Props){
 
   const [newProject, setNewProject] = useState<boolean>(false);
   const handleNewProject = (value: boolean) => {
@@ -36,9 +37,9 @@ export default function ButtonNew({token, optClients, optCategories,
         )} */}
         <ContainerSideNav width="w-full max-w-xl" open={newProject}>
           <NewProject showForm={handleNewProject} optTypes={optTypes} 
-                      token={token} optClients={optClients} 
-                      optCategories={optCategories} user={user} 
-                        optCompanies={optCompanies} condition={condition} />
+            token={token} optClients={optClients} company={company}
+            optCategories={optCategories} user={user} 
+            optCompanies={optCompanies} condition={condition} />
         </ContainerSideNav>
     </>
   )

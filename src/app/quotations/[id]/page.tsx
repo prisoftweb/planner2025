@@ -54,7 +54,7 @@ export default async function Page({params}: {params:{id:string}}){
         <div className="md:hidden mt-3">
           <Selectize options={quotations} routePage="quotations" subpath="" />
         </div>
-        <ContainerQuatationProfile quatation={quotation} token={token} usr={user._id} />
+        <ContainerQuatationProfile quatation={quotation} token={token} usr={user._id} company={user.profile} />
       </div>
     </>
   )

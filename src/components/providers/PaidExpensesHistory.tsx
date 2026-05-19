@@ -27,12 +27,13 @@ type Props = {
   costsPayment: CostsPaymentTable[], 
   paymentPlugin:string, 
   datePayment:string, 
-  commentsPayment:string
+  commentsPayment:string,
+  company:string
 }
 
 export default function PaidExpensesHistory({token, id, user, costs, maxDate, 
   minDate, showForm, updateTable, condition, optTypes, costsPayment, commentsPayment, 
-  datePayment, paymentPlugin}: Props) {
+  datePayment, paymentPlugin, company}: Props) {
 
   let a = 0;
   costsPayment.map((c) => {
@@ -156,6 +157,7 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
       }]));
       data.append("methodofpayment", paidMethod);
       data.append("paymentplugin", JSON.stringify(paymentplugin));
+      data.append('company', company);
 
       const res = await createPaymentsWithVoucher(token, data);
       if(typeof(res) === 'string'){
@@ -193,7 +195,8 @@ export default function PaidExpensesHistory({token, id, user, costs, maxDate,
             user                    
         }],
         methodofpayment: paidMethod,
-        paymentplugin
+        paymentplugin,
+        company
       }
 
       const res = await createPayments(token, data);
