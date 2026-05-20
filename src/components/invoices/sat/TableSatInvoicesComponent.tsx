@@ -35,10 +35,15 @@ import DownloadInvoicesReportPDF from "../DownloadInvoicesReportPDF";
 import { FaXmark } from "react-icons/fa6";
 import {confirmAlert} from 'react-confirm-alert';
 
-import { createFiscalApiInvoice } from "@/app/api/routeSatInvoices";
+import { cancelFiscalApiInvoice } from "@/app/api/routeSatInvoices";
+import { Options } from "@/interfaces/Common";
+import Input from "@/components/Input";
+import SelectReact from "@/components/SelectReact";
+import { getCompanyTAXDATAFULL } from "@/app/api/routeSatInvoices";
+import { ISatCompany } from "@/interfaces/SatInvoice";
 
-export default function TableSatInvoicesComponent({token, user, company}: 
-  {token:string, user:string, company:string}) {
+export default function TableSatInvoicesComponent({token, user, company, optionsCancel}: 
+  {token:string, user:string, company:string, optionsCancel:Options[]}) {
 
   const [invoices, setInvoices] = useState<IInvoiceByDateAndConditionMin[]>([]);
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
@@ -253,7 +258,7 @@ export default function TableSatInvoicesComponent({token, user, company}:
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                  onClick={() => abrirDialogo(token, row.original.id, user, updateView) }
+                  onClick={() => abrirDialogo(token, row.original.id, user, updateView, optionsCancel, company) }
                 />
             </Tooltip> 
           )}      
@@ -565,7 +570,8 @@ export default function TableSatInvoicesComponent({token, user, company}:
         <Table columns={columns} data={data} placeH="buscar factura" typeTable="invoices" />
       </div>
       <div className="block md:hidden w-full mt-3">
-        <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} />
+        <ListData data={data} token={token} delInvoice={delInvoice} updateView={updateView} user={user} 
+          optionsCancel={optionsCancel} company={company} />
       </div>
       
       {showNewCollection && selInvoice && (
@@ -617,8 +623,9 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   return table;
 }
 
-const ListData = ({data, token, delInvoice, updateView, user }: 
-  {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, user:string, updateView: () => void }) => {
+const ListData = ({data, token, delInvoice, updateView, user, optionsCancel, company }: 
+  {data: IInvoiceTable[], token:string, delInvoice: (id: string) => void, user:string, 
+    updateView: () => void, optionsCancel:Options[], company:string }) => {
 
   const {search} = useTableStates();
 
@@ -637,7 +644,8 @@ const ListData = ({data, token, delInvoice, updateView, user }:
           overflow-scroll overflow-y-auto overflow-x-hidden" style={{scrollbarColor: '#ada8a8 white', scrollbarWidth: 'thin'}}>
 
           {filterData.map((i) => (
-            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} updateView={updateView} user={user} />
+            <CardInvoice invoice={i} key={i.id} token={token} delInvoice={delInvoice} updateView={updateView} user={user} 
+              optionsCancel={optionsCancel} company={company} />
           ))}
 
         </nav>
@@ -646,8 +654,9 @@ const ListData = ({data, token, delInvoice, updateView, user }:
   )
 }
 
-const CardInvoice = ({invoice, token, delInvoice, updateView, user }: 
-  {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, user:string, updateView: () => void }) => {
+const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCancel, company }: 
+  {invoice:IInvoiceTable, token:string, delInvoice: (id: string) => void, user:string, updateView: () => void, 
+    optionsCancel:Options[], company:string}) => {
   
   return(
     <div role="button"
@@ -669,7 +678,7 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user }:
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                  onClick={() => abrirDialogo(token, invoice.id, user, updateView) }
+                  onClick={() => abrirDialogo(token, invoice.id, user, updateView, optionsCancel, company) }
                 />
             </Tooltip> 
           )}
@@ -771,12 +780,91 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
   )
 }
 
-const abrirDialogo = async (token:string, id:string, user:string, updateView: () => void) => {
+// const abrirDialogo = async (token:string, id:string, user:string, updateView: () => void) => {
 
-  const DeleteModal = ({ onClose }: { onClose: () => void }) => {
+//   const DeleteModal = ({ onClose }: { onClose: () => void }) => {
+//     const [comentario, setComentario] = useState("");
+//     const [error, setError] = useState(false);
+//     const [flash, setFlash] = useState(false);
+
+//     const handleEliminar = async () => {
+//       if (!comentario.trim()) {
+//         // Efecto parpadeante
+//         setError(true);
+//         setFlash(true);
+//         let flashes = 0;
+//         const interval = setInterval(() => {
+//           setFlash(f => !f);
+//           flashes++;
+//           if (flashes >= 4) clearInterval(interval);
+//         }, 200);
+//         return;
+//       }
+
+//       const data={
+//         condition: [{
+//           glossary:"678ecf6ec5f08e8a0f36d5dd", 
+//           user
+//         }],
+//         notes: comentario
+//       }
+
+//       // Tu lógica de eliminación
+//       const res = await insertConditionInInvoice(token, id, data);
+//       // console.log('respuesta => ', res);
+//       if(typeof(res)==='string'){
+//         showToastMessageError(res);
+//       }else{
+//         showToastMessage("Factura cancelada exitosamente!!!");
+//         updateView();
+//         onClose();
+//       }
+//     };
+
+//     return (
+//       <div className="custom-ui">
+//         <h2 style={{ color: flash ? "red" : "#111827", transition: "color 0.2s" }}>
+//           {error ? "¡Debe escribir una razon!" : "Confirmación para cancelar"}
+//         </h2>
+
+//         <p>¿Desea cancelar la factura?</p>
+
+//         <textarea
+//           placeholder="Agregar una razon obligatoria..."
+//           value={comentario}
+//           onChange={(e) => { setComentario(e.target.value); setError(false); }}
+//         />
+
+//         {error && !comentario.trim() && (
+//           <p style={{ color: "red", fontSize: "0.9rem", marginTop: "5px" }}>
+//             Por favor escriba una razon antes de continuar
+//           </p>
+//         )}
+
+//         <div>
+//           <button className="yes" onClick={handleEliminar}>Sí</button>
+//           <button className="no" onClick={onClose}>No</button>
+//         </div>
+//       </div>
+//     );
+//   };
+
+//   confirmAlert({
+//     customUI: ({ onClose }) => <DeleteModal onClose={onClose} />,
+//   });
+// };
+
+const abrirDialogo = async (token:string, id:string, user:string, 
+  updateView: () => void, cancelOptions:Options[], company:string) => {
+
+  const DeleteModal = ({ onClose, company }: { onClose: () => void, company:string }) => {
     const [comentario, setComentario] = useState("");
     const [error, setError] = useState(false);
     const [flash, setFlash] = useState(false);
+    const [cfdireplace, setCfdireplace]=useState<string>();
+    const [cancelmotive, setCancelMotive]=useState<string>(cancelOptions[0].value);
+    const [uuid, setUuid]=useState<string>();
+    // const [company, setCompany] = useState<ISatCompany>();
 
     const handleEliminar = async () => {
       if (!comentario.trim()) {
@@ -792,25 +880,63 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
         return;
       }
 
-      const data={
-        condition: [{
-          glossary:"678ecf6ec5f08e8a0f36d5dd", 
-          user
-        }],
-        notes: comentario
-      }
+      const rescompany=await Promise.all([
+        getCompanyTAXDATAFULL(company, token)
+      ]);
 
-      // Tu lógica de eliminación
-      const res = await insertConditionInInvoice(token, id, data);
-      // console.log('respuesta => ', res);
-      if(typeof(res)==='string'){
-        showToastMessageError(res);
+      if(typeof(rescompany)==='string'){
+        showToastMessageError(rescompany);
       }else{
-        showToastMessage("Factura cancelada exitosamente!!!");
-        updateView();
-        onClose();
+        // console.log('Company rescompany => ', res[0][0]);
+        // setCompany(rescompany[0][0]);
+        const taxcompany:ISatCompany=rescompany[0][0];
+
+        const requestModel= {
+          // versionCode: "4.0",
+          // series: "F",
+          // date: new Date().toISOString().slice(0, 19),
+          // invoiceUuid: "60c52802-c369-411f-b679-5317a28a544a", // UUID de la factura
+          // invoiceUuid:"1c7de47d-9224-4dc2-a1fb-4109537bf913",
+          invoiceUuid:uuid,
+          // tin: "FUNK671228PH6", // RFC del emisor
+          tin: taxcompany.issuer.tin,
+          cancellationReasonCode: cancelmotive, // Comprobante emitido con errores con relación
+          replacementUuid: cfdireplace, // UUID de la factura que sustituye
+          taxCredentials: taxcompany.issuer.taxCredentials
+        };
+
+        // const rescancel: IResponseSatInvoice|string = await cancelFiscalApiInvoice(requestModel);
+        const rescancel = await cancelFiscalApiInvoice(requestModel);
+        if(typeof(rescancel)==='string'){
+          showToastMessageError(rescancel);
+        }else{
+          showToastMessage('Factura cancelada exitosamente...');
+        }
+
+        // const data={
+        //   condition: [{
+        //     glossary:"678ecf6ec5f08e8a0f36d5dd", 
+        //     user
+        //   }],
+        //   notes: comentario
+        // }
+
+        // Tu lógica de eliminación
+        // const res = await insertConditionInInvoice(token, id, data);
+        // // console.log('respuesta => ', res);
+        // if(typeof(res)==='string'){
+        //   showToastMessageError(res);
+        // }else{
+        //   showToastMessage("Factura cancelada exitosamente!!!");
+        //   updateView();
+        //   onClose();
+        // }
       }
     };
+
+    const handleMotive=(value:string) => {
+      setCancelMotive(value);
+    }
 
     return (
       <div className="custom-ui">
@@ -818,11 +944,12 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
           {error ? "¡Debe escribir una razon!" : "Confirmación para cancelar"}
         </h2>
 
-        <p>¿Desea cancelar la factura?</p>
+        <p className="text-left">Agregar razon</p>
 
         <textarea
           placeholder="Agregar una razon obligatoria..."
           value={comentario}
+          autoFocus
           onChange={(e) => { setComentario(e.target.value); setError(false); }}
         />
 
@@ -831,6 +958,15 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
             Por favor escriba una razon antes de continuar
           </p>
         )}
+
+        <p className="text-left mt-4">UUID</p>
+        <Input value={uuid} onChange={(e) => setUuid(e.target.value)} />
+
+        <p className="text-left">Motivo de cancelacion</p>
+        <SelectReact index={0} opts={cancelOptions} setValue={handleMotive} />
+
+        <p className="text-left mt-4">CFDI de reemplazo</p>
+        <Input value={cfdireplace} onChange={(e) => setCfdireplace(e.target.value)} />
 
         <div>
           <button className="yes" onClick={handleEliminar}>Sí</button>
@@ -841,6 +977,6 @@ const abrirDialogo = async (token:string, id:string, user:string, updateView: ()
   };
 
   confirmAlert({
-    customUI: ({ onClose }) => <DeleteModal onClose={onClose} />,
+    customUI: ({ onClose }) => <DeleteModal onClose={onClose} company={company} />,
   });
 };

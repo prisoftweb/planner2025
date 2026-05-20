@@ -165,12 +165,14 @@ export async function getAllProjectsWithConditionLV(auth_token:string) {
 
 export async function getAllProjectsWithClientAndConditionLV(auth_token:string, idc:string) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/projects/getAllProjectsWithClientAndConditionLV/${idc}/66c3c68c0600ee65ccc0dbb4`;
+  console.log('url get proyects => ', url);
   try {
     const res = await axios.get(url, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     })
+    console.log('res => ', res);
     if(res.status === 200) return res.data.data.data;
     return res.statusText;
   } catch (error) {

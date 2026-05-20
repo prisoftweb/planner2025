@@ -121,6 +121,32 @@ export async function createFiscalApiInvoice(data:Object) {
   }
 }
 
+export async function cancelFiscalApiInvoice(data:Object) {
+  console.log("PAYLOAD:", JSON.stringify(data, null, 2));
+  try {
+    const res = await fiscalApi.delete("/api/v4/invoices", {
+                        data,
+                        headers: {
+                          "Content-Type": "application/json"
+                      }});
+    console.log("Response:", res);
+    console.log('json data => ', JSON.stringify(res.data.data));
+    return res.data.data;
+  } catch (error) {
+    // console.log('Error => ', error);
+    // return "Error al crear factura";
+    if (axios.isAxiosError(error)) {
+      console.log("STATUS:", error.response?.status);
+      console.log("DATA:", error.response?.data);
+      console.log("HEADERS:", error.response?.headers);
+      return Array.isArray(error.response?.data.data)? error.response?.data.data[0]?.errorMessage : error.response?.data?.message || "Error al crear factura";
+    } else {
+      // console.log(error);
+      return "Error al cancelar factura";
+    }
+  }
+}
+
 export async function getSatUnitMeasurements() {
   try {
     const res = await fiscalApi.get("/api/v4/catalogs/SatUnitMeasurements");

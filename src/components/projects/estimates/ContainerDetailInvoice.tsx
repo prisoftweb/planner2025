@@ -7,6 +7,12 @@ import { useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
 import { createColumnHelper } from "@tanstack/react-table";
 import Table from "@/components/Table";
+import { PDFDownloadLink } from "@react-pdf/renderer"
+import { BsFileEarmarkPdf } from "react-icons/bs";
+import DownloadInvoicesReportPDF from "@/components/invoices/DownloadInvoicesReportPDF";
+import { Tooltip } from "@nextui-org/react";
+import { propsTooltip } from "@/libs/animations";
+import DownloadInvoicePDF from "./DownloadInvoicePDF";
 
 type Props = {
   project: OneProjectMin, 
@@ -40,6 +46,21 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           ): (
             <FaDollarSign className="text-green-500 w-6 h-6 cursor-pointer hover:text-green-300" onClick={() => setShowCollections(true)} />
           )}
+          
+          <PDFDownloadLink document={<DownloadInvoicePDF  />} fileName={'Factura'} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
         </div>
       </div>
 

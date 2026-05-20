@@ -168,7 +168,7 @@ export default function TableInvoicesComponent({token, user, company, optionsCan
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                  onClick={() => abrirDialogo(token, row.original.id, user, updateView, optionsCancel) }
+                  onClick={() => abrirDialogo(token, row.original.id, user, updateView) }
                 />
             </Tooltip> 
           )}      
@@ -659,7 +659,7 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCance
               <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
                 placement="right" className="text-black bg-white rounded-md border border-slate-400">
                   <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                    onClick={() => abrirDialogo(token, invoice.id, user, updateView, optionsCancel) }
+                    onClick={() => abrirDialogo(token, invoice.id, user, updateView) }
                   />
               </Tooltip> 
             )}
@@ -764,15 +764,12 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
   )
 }
 
-const abrirDialogo = async (token:string, id:string, user:string, 
-  updateView: () => void, cancelOptions:Options[]) => {
+const abrirDialogo = async (token:string, id:string, user:string, updateView: () => void) => {
 
   const DeleteModal = ({ onClose }: { onClose: () => void }) => {
     const [comentario, setComentario] = useState("");
     const [error, setError] = useState(false);
     const [flash, setFlash] = useState(false);
-    const [cfdireplace, setCfdireplace]=useState<string>();
-    const [cancelmotive, setCancelMotive]=useState<string>();
 
     const handleEliminar = async () => {
       if (!comentario.trim()) {
@@ -808,22 +805,17 @@ const abrirDialogo = async (token:string, id:string, user:string,
       }
     };
 
-    const handleMotive=(value:string) => {
-      setCancelMotive(value);
-    }
-
     return (
       <div className="custom-ui">
         <h2 style={{ color: flash ? "red" : "#111827", transition: "color 0.2s" }}>
           {error ? "¡Debe escribir una razon!" : "Confirmación para cancelar"}
         </h2>
 
-        <p className="text-left">Agregar razon</p>
+        <p>¿Desea cancelar la factura?</p>
 
         <textarea
           placeholder="Agregar una razon obligatoria..."
           value={comentario}
-          autoFocus
           onChange={(e) => { setComentario(e.target.value); setError(false); }}
         />
 
@@ -832,12 +824,6 @@ const abrirDialogo = async (token:string, id:string, user:string,
             Por favor escriba una razon antes de continuar
           </p>
         )}
-
-        <p className="text-left">Motivo de cancelacion</p>
-        <SelectReact index={0} opts={cancelOptions} setValue={handleMotive} />
-
-        <p className="text-left mt-2">CFDI de reemplazo</p>
-        <Input value={cfdireplace} onChange={(e) => setCfdireplace(e.target.value)} />
 
         <div>
           <button className="yes" onClick={handleEliminar}>Sí</button>
@@ -851,3 +837,92 @@ const abrirDialogo = async (token:string, id:string, user:string,
     customUI: ({ onClose }) => <DeleteModal onClose={onClose} />,
   });
 };
+
+// const abrirDialogo = async (token:string, id:string, user:string, 
+//   updateView: () => void, cancelOptions:Options[]) => {
+
+//   const DeleteModal = ({ onClose }: { onClose: () => void }) => {
+//     const [comentario, setComentario] = useState("");
+//     const [error, setError] = useState(false);
+//     const [flash, setFlash] = useState(false);
+//     const [cfdireplace, setCfdireplace]=useState<string>();
+//     const [cancelmotive, setCancelMotive]=useState<string>();
+
+//     const handleEliminar = async () => {
+//       if (!comentario.trim()) {
+//         // Efecto parpadeante
+//         setError(true);
+//         setFlash(true);
+//         let flashes = 0;
+//         const interval = setInterval(() => {
+//           setFlash(f => !f);
+//           flashes++;
+//           if (flashes >= 4) clearInterval(interval);
+//         }, 200);
+//         return;
+//       }
+
+//       const data={
+//         condition: [{
+//           glossary:"678ecf6ec5f08e8a0f36d5dd", 
+//           user
+//         }],
+//         notes: comentario
+//       }
+
+//       // Tu lógica de eliminación
+//       const res = await insertConditionInInvoice(token, id, data);
+//       // console.log('respuesta => ', res);
+//       if(typeof(res)==='string'){
+//         showToastMessageError(res);
+//       }else{
+//         showToastMessage("Factura cancelada exitosamente!!!");
+//         updateView();
+//         onClose();
+//       }
+//     };
+
+//     const handleMotive=(value:string) => {
+//       setCancelMotive(value);
+//     }
+
+//     return (
+//       <div className="custom-ui">
+//         <h2 style={{ color: flash ? "red" : "#111827", transition: "color 0.2s" }}>
+//           {error ? "¡Debe escribir una razon!" : "Confirmación para cancelar"}
+//         </h2>
+
+//         <p className="text-left">Agregar razon</p>
+
+//         <textarea
+//           placeholder="Agregar una razon obligatoria..."
+//           value={comentario}
+//           autoFocus
+//           onChange={(e) => { setComentario(e.target.value); setError(false); }}
+//         />
+
+//         {error && !comentario.trim() && (
+//           <p style={{ color: "red", fontSize: "0.9rem", marginTop: "5px" }}>
+//             Por favor escriba una razon antes de continuar
+//           </p>
+//         )}
+
+//         <p className="text-left">Motivo de cancelacion</p>
+//         <SelectReact index={0} opts={cancelOptions} setValue={handleMotive} />
+
+//         <p className="text-left mt-2">CFDI de reemplazo</p>
+//         <Input value={cfdireplace} onChange={(e) => setCfdireplace(e.target.value)} />
+
+//         <div>
+//           <button className="yes" onClick={handleEliminar}>Sí</button>
+//           <button className="no" onClick={onClose}>No</button>
+//         </div>
+//       </div>
+//     );
+//   };
+
+//   confirmAlert({
+//     customUI: ({ onClose }) => <DeleteModal onClose={onClose} />,
+//   });
+// };
+
