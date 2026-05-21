@@ -418,11 +418,21 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
       //   ]
       // };
 
+      // const now = new Date();
+      // const fechaConHora = new Date(`${date}T${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`);
+
+      // // Obtener ISO string
+      // const isoString = fechaConHora.toISOString().slice(0, 19);
+
+      const localString = (() => { const d = new Date(date); const now = new Date(); d.setHours(now.getHours(), now.getMinutes(), now.getSeconds()); return d.toLocaleString('sv-SE').replace(' ', 'T'); })();
+      // console.log(localString);
+
       const invoice = {
         versionCode: "4.0",
         series: "F",
         // date: "2026-05-01T14:56:40Z",
-        date: new Date(date).toISOString().slice(0, 19),
+        // date: new Date(date).toISOString().slice(0, 19),
+        date: localString,
         // paymentFormCode: "01",
         paymentFormCode: formPaid,
         // paymentMethodCode: "PUE",

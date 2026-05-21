@@ -51,8 +51,11 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
     fetchCompany();
   }, []);
 
-  console.log('client => ', client);
-  console.log('company => ', company);
+  // console.log('client => ', client);
+  // console.log('company => ', company);
+
+  const localString = (() => { const d = new Date(date); const now = new Date(); d.setHours(now.getHours(), now.getMinutes(), now.getSeconds()); return d.toLocaleString('sv-SE').replace(' ', 'T'); })();
+  
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between gap-x-3 gap-y-3 border-b border-slate-500 pb-3">
@@ -108,7 +111,8 @@ export default function ConfirmSatInvoiceComponent({client, date, folio, concept
         <div className="text-right mt-2 lg:mt-0">
           {/* <p className="text-slate-500 font-extrabold">FACTURA</p> */}
           <p className="text-blue-500 font-bold">Factura No: {folio}</p>
-          <p className="text-sm">{date?.substring(8, 10)} de {months[new Date(date).getMonth()]} {date?.substring(0, 4)} {new Date(date)?.toISOString().substring(11, 19)}</p>
+          {/* <p className="text-sm">{date?.substring(8, 10)} de {months[new Date(date).getMonth()]} {date?.substring(0, 4)} {new Date(date)?.toISOString().substring(11, 19)}</p> */}
+          <p className="text-sm">{date?.substring(8, 10)} de {months[new Date(date).getMonth()]} {date?.substring(0, 4)} {localString.substring(11, 19)}</p>
           {/* <p className="text-sm">{new Date(date)?.toISOString().substring(11)}</p> */}
           {/*<p className="text-sm">{invoice.paymentMethod}</p>
           <p className="text-sm">{invoice.paymentWay}</p> */}

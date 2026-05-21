@@ -79,7 +79,8 @@ export interface IInvoiceTable {
   nameProject?: string
   client?: string
   subtotal?:number,
-  vat?:number
+  vat?:number,
+  uuid:string
 }
 
 export interface IInvoiceByProject {

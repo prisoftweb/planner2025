@@ -383,7 +383,8 @@ export default function TableInvoicesComponent({token, user, company, optionsCan
   //                 </div>
   //               </div>
       
-  let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
+  // let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 xl:order-1">
+  let filterElemnts =<div className="lg:flex gap-x-4 justify-end items-center mt-3 md:mt-0 flex-wrap 2xl:flex-nowrap">
                           <div className="flex gap-x-4 gap-y-2 justify-end items-center flex-wrap sm:flex-nowrap">
                             <ChipStatus id="67d20cb359865f640af92638" addStatus={addStatus} removeStatus={deleteStatus} title="Emitida" />
                             <ChipStatus id="67be2eb9b2df60407a559542" addStatus={addStatus} removeStatus={deleteStatus} title="Vencida" />
@@ -583,7 +584,8 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
       nameProject: inv.project.title,
       client: inv.client.name,
       subtotal:inv.cost.subtotal?? 0,
-      vat:inv.cost.iva?? 0
+      vat:inv.cost.iva?? 0,
+      uuid: inv.taxfolio
     })
   });
 

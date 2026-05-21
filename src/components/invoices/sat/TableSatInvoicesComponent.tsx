@@ -258,7 +258,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                  onClick={() => abrirDialogo(token, row.original.id, user, updateView, optionsCancel, company) }
+                  onClick={() => abrirDialogo(token, row.original.id, user, updateView, optionsCancel, company, row.original.uuid) }
                 />
             </Tooltip> 
           )}      
@@ -616,7 +616,8 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
       nameProject: inv.project.title,
       client: inv.client.name,
       subtotal:inv.cost.subtotal?? 0,
-      vat:inv.cost.iva?? 0
+      vat:inv.cost.iva?? 0,
+      uuid: inv.taxfolio
     })
   });
 
@@ -678,7 +679,7 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCance
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
-                  onClick={() => abrirDialogo(token, invoice.id, user, updateView, optionsCancel, company) }
+                  onClick={() => abrirDialogo(token, invoice.id, user, updateView, optionsCancel, company, invoice.uuid) }
                 />
             </Tooltip> 
           )}
@@ -855,7 +856,7 @@ const ChipStatus = ({ addStatus, id, removeStatus, title}:
 // };
 
 const abrirDialogo = async (token:string, id:string, user:string, 
-  updateView: () => void, cancelOptions:Options[], company:string) => {
+  updateView: () => void, cancelOptions:Options[], company:string, uuid:string) => {
 
   const DeleteModal = ({ onClose, company }: { onClose: () => void, company:string }) => {
     const [comentario, setComentario] = useState("");
@@ -863,7 +864,7 @@ const abrirDialogo = async (token:string, id:string, user:string,
     const [flash, setFlash] = useState(false);
     const [cfdireplace, setCfdireplace]=useState<string>();
     const [cancelmotive, setCancelMotive]=useState<string>(cancelOptions[0].value);
-    const [uuid, setUuid]=useState<string>();
+    // const [uuid, setUuid]=useState<string>();
     // const [company, setCompany] = useState<ISatCompany>();
 
     const handleEliminar = async () => {
@@ -913,24 +914,24 @@ const abrirDialogo = async (token:string, id:string, user:string,
           showToastMessage('Factura cancelada exitosamente...');
         }
 
-        // const data={
-        //   condition: [{
-        //     glossary:"678ecf6ec5f08e8a0f36d5dd", 
-        //     user
-        //   }],
-        //   notes: comentario
-        // }
+        const data={
+          condition: [{
+            glossary:"678ecf6ec5f08e8a0f36d5dd", 
+            user
+          }],
+          notes: comentario
+        }
 
         // Tu lógica de eliminación
-        // const res = await insertConditionInInvoice(token, id, data);
-        // // console.log('respuesta => ', res);
-        // if(typeof(res)==='string'){
-        //   showToastMessageError(res);
-        // }else{
-        //   showToastMessage("Factura cancelada exitosamente!!!");
-        //   updateView();
-        //   onClose();
-        // }
+        const res = await insertConditionInInvoice(token, id, data);
+        // console.log('respuesta => ', res);
+        if(typeof(res)==='string'){
+          showToastMessageError(res);
+        }else{
+          showToastMessage("Factura cancelada exitosamente!!!");
+          updateView();
+          onClose();
+        }
       }
     };
 
@@ -959,8 +960,8 @@ const abrirDialogo = async (token:string, id:string, user:string,
           </p>
         )}
 
-        <p className="text-left mt-4">UUID</p>
-        <Input value={uuid} onChange={(e) => setUuid(e.target.value)} />
+        {/*<p className="text-left mt-4">UUID</p>
+        <Input value={uuid} onChange={(e) => setUuid(e.target.value)} /> */}
 
         <p className="text-left">Motivo de cancelacion</p>
         <SelectReact index={0} opts={cancelOptions} setValue={handleMotive} />

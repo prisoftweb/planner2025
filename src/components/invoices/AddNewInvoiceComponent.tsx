@@ -174,7 +174,7 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
       const newDate=new Date(newDay);
       const data = {
         folio,
-        taxfolio: taxFolio,
+        // taxfolio: taxFolio,
         date,
         useCFDI: type,
         paymentMethod: methodPaid,
@@ -209,6 +209,24 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
       }else{
         showToastMessage('Factura agregada satisfactoriamente!!');
         showForm(false);
+
+        setFolio('');
+        // setTaxFolio('');
+        setDate(new Date().toISOString().substring(0, 10));
+        setClient('');
+        setType('ADQUISICION_MERCANCIAS G01');
+        setMethodPaid('PAGO_EN_UNA_EXHIBICION PUE');
+        setFormPaid('EFECTIVO 01');
+        setConditionPayment('');
+        setOdc('');
+        setProject('');
+
+        setBandFolio(false);
+        // setBandTaxFolio(false);
+        setBandDate(false);
+        setBandOdc(false);
+        setStep(0);
+        setIsVat(true);
       }
     }
   }
