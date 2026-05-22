@@ -244,7 +244,7 @@ export default function AddNewInvoiceComponent({showForm, updateEstimates, user,
           <TooltipCloseIcon handleClose={showForm} />
         </div>
 
-        <NavInvoiceStepper index={step} setIndex={handleStep} />
+        <NavInvoiceStepper index={step} setIndex={handleStep} isSat={0} />
 
         {component}
       </form>

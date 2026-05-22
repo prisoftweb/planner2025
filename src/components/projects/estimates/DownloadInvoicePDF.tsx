@@ -1,9 +1,11 @@
-import { IInvoiceByDateAndConditionMin } from "@/interfaces/Invoices"
+import { IInvoiceByDateAndConditionMin, IInvoiceMinFull } from "@/interfaces/Invoices"
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
+import { IInvoiceFull } from "@/interfaces/Invoices"
+import { ISatCompany } from "@/interfaces/SatInvoice"
 
-export default function DownloadInvoicePDF({}: 
-  {}) {
+export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}: 
+  {invoicemin:IInvoiceMinFull, invoicefull:IInvoiceFull, satCompany:ISatCompany}) {
 
   // const orderInvoices = invoices.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
@@ -13,6 +15,8 @@ export default function DownloadInvoicePDF({}:
 
   // const months=['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
+  // console.log('company pdf => ', satCompany);
+
   return(
     <Document>
       <Page>
@@ -21,27 +25,27 @@ export default function DownloadInvoicePDF({}:
           <View style={{display: 'flex', flexDirection: 'row', gap:'5px', justifyContent: 'space-between'}}>
 
             <View>
-              <Text style={{fontSize:'15px', color:'black', fontWeight:'extrabold'}}>Peasa</Text>
-              <Text style={{fontSize:'11px', color:'gray', marginTop:'5px'}}>Grupo constructor peasa</Text>
-              <Text style={{fontSize:'11px', color:'gray'}}>PEA900JHG</Text>
+              <Text style={{fontSize:'15px', color:'black', fontWeight:'extrabold'}}>{invoicemin.client.name}</Text>
+              <Text style={{fontSize:'11px', color:'gray', marginTop:'5px'}}>{invoicemin.client.tradename}</Text>
+              <Text style={{fontSize:'11px', color:'gray'}}>{invoicemin.client.rfc}</Text>
               <Text style={{fontSize:'11px', color:'gray'}}>601- General de ley</Text>
-              <Text style={{fontSize:'11px', color:'gray'}}>Codigo postal 20290</Text>
+              <Text style={{fontSize:'11px', color:'gray'}}>Codigo postal {invoicemin.client.location.cp}</Text>
 
-              <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Proyecto: Edscha</Text>
+              <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Proyecto: {invoicemin.project.title}</Text>
             </View>
 
             <View style={{display:'flex', flexDirection:'row'}}>
               <View style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                 
-                <Text style={{fontSize:'15px', color:'black', fontWeight:'extrabold'}}>Palacios construcciones</Text>
+                <Text style={{fontSize:'15px', color:'black', fontWeight:'extrabold'}}>{invoicemin.company.name}</Text>
                 
-                <Text style={{fontSize:'11px', color:'gray', marginTop:'5px'}}>Samuel Palacios Hernandez</Text>
-                <Text style={{fontSize:'11px', color:'gray'}}>PAHS7610243</Text>
-                <Text style={{fontSize:'11px', color:'gray'}}>612-Personas fisicas</Text>
-                <Text style={{fontSize:'11px', color:'gray'}}>Lugar de expedicion 78377</Text>
+                <Text style={{fontSize:'11px', color:'gray', marginTop:'5px'}}>{satCompany.issuer.legalName}</Text>
+                <Text style={{fontSize:'11px', color:'gray'}}>{satCompany.issuer.tin}</Text>
+                <Text style={{fontSize:'11px', color:'gray'}}>{satCompany.issuer.taxRegimeCode}</Text>
+                <Text style={{fontSize:'11px', color:'gray'}}>Lugar de expedicion {satCompany.issuer.expeditionZipCode}</Text>
               </View>
 
-              <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image>
+              <Image source={invoicemin.company.logo} style={{height: '57px', width:'auto'}}></Image>
 
             </View>
 
@@ -54,41 +58,41 @@ export default function DownloadInvoicePDF({}:
               
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Uso de CFDI: </Text>
-                <Text style={{fontSize:'10px', color:'gray'}}>G03-Gastos en general</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>{invoicemin.useCFDI} </Text>
               </View>
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Forma de pago: </Text>
-                <Text style={{fontSize:'10px', color:'gray'}}>99-Por definir</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>{invoicemin.paymentWay}</Text>
               </View>
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Metodo pago: </Text>
-                <Text style={{fontSize:'10px', color:'gray'}}>PPD - Pago en parcialidades o diferido</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>{invoicemin.paymentMethod}</Text>
               </View>
               
             </View>
 
             <View>
-              <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>Folio fiscal0980909098908098098:</Text>
+              <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>{invoicemin.taxfolio}</Text>
               
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Tipo de comprobante: </Text>
-                <Text style={{fontSize:'10px', color:'gray'}}>I - ingreso</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>{invoicefull.typeofreceipts}</Text>
               </View>
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'gray'}}>Condicion de pago: </Text>
-                <Text style={{fontSize:'10px', color:'gray'}}>Contado</Text>
+                <Text style={{fontSize:'10px', color:'gray'}}>{invoicefull.termsofpayment}</Text>
               </View>
 
             </View>
 
             <View style={{display:'flex', flexDirection: 'column', alignItems:'flex-end'}}>
               <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>Factura:</Text>
-              <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>F 2876</Text>
-              <Text style={{fontSize:'11px', color:'gray', textAlign:'right'}}>Estimacion #1</Text>
-              <Text style={{fontSize:'11px', color:'gray', textAlign:'right'}}>15 de mayo de 2026</Text>
+              <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>F {invoicemin.folio}</Text>
+              <Text style={{fontSize:'11px', color:'gray', textAlign:'right'}}>{invoicemin.estimate?.name?? ''}</Text>
+              <Text style={{fontSize:'11px', color:'gray', textAlign:'right'}}>{invoicefull.sat.invoiceSignatureDate.substring(0, 10)} {invoicefull.sat.invoiceSignatureDate.substring(11, 19)}</Text>
               
             </View>
 
@@ -105,11 +109,26 @@ export default function DownloadInvoicePDF({}:
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>IMPORTE</Text>
           </View>
 
+          {invoicemin.conceptsInvoiceInfo.map((c, index:number) => (
+            <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '10px'}} key={c._id+index} >
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{c.quantity}</Text>
+              <Text style={{flex: 4, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{c.conceptEstimate.description}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{CurrencyFormatter({
+                currency: 'MXN',
+                value: c.priceConcepEstimate.cost
+              })}</Text>
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{CurrencyFormatter({
+                currency: 'MXN',
+                value: c.priceConcepEstimate.cost * c.quantity
+              })}</Text>
+            </View>
+          ))}
+
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid blue', marginTop:'15px'}}>
             <Text style={{color:'gray', textAlign:'center', fontSize:'10px'}}>SUBTOTAL</Text>
             <Text style={{color:'blue', textAlign:'center', fontSize:'10px'}}>{CurrencyFormatter({
               currency: 'MXN',
-              value: 1700
+              value: invoicemin.cost.subtotal
             })}</Text>
           </View>
 
@@ -117,7 +136,7 @@ export default function DownloadInvoicePDF({}:
             <Text style={{color:'gray', textAlign:'center', fontSize:'10px'}}>(+) IVA</Text>
             <Text style={{color:'blue', textAlign:'center', fontSize:'10px'}}>{CurrencyFormatter({
               currency: 'MXN',
-              value: 1700
+              value: invoicemin.cost.iva
             })}</Text>
           </View>
 
@@ -125,28 +144,28 @@ export default function DownloadInvoicePDF({}:
             <Text style={{color:'gray', textAlign:'center', fontSize:'10px'}}>Total</Text>
             <Text style={{color:'blue', textAlign:'center', fontSize:'10px'}}>{CurrencyFormatter({
               currency: 'MXN',
-              value: 1700
+              value: invoicemin.cost.total
             })}</Text>
           </View>
 
           <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
             <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Numero del serie CSD del SAT: </Text>
-            <Text style={{fontSize:'10px', color:'gray'}}>9294384093808409480594</Text>
+            <Text style={{fontSize:'10px', color:'gray'}}>{invoicefull.sat.satCertificateNumber}</Text>
           </View>
 
           <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
             <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Numero del serie CSD del emisor: </Text>
-            <Text style={{fontSize:'10px', color:'gray'}}>9294384093808409480594</Text>
+            <Text style={{fontSize:'10px', color:'gray'}}>{invoicefull.sat.invoiceCertificateNumber}</Text>
           </View>
 
           <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Sello digital del CFDI: </Text>
-          <Text style={{fontSize:'7px', color:'black'}}> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
+          <Text style={{fontSize:'7px', color:'black'}}> {invoicefull.sat.invoiceBase64Sello} </Text>
 
           <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Sello del SAT: </Text>
-          <Text style={{fontSize:'7px', color:'black'}}> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
+          <Text style={{fontSize:'7px', color:'black'}}> {invoicefull.sat.satBase64Sello} </Text>
 
           <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Cadena Original: </Text>
-          <Text style={{fontSize:'7px', color:'black'}}> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
+          <Text style={{fontSize:'7px', color:'black'}}> {invoicefull.sat.satBase64OriginalString} </Text>
 
         </View>
       </Page>

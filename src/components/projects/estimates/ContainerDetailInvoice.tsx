@@ -2,7 +2,8 @@
 import { OneProjectMin } from "@/interfaces/Projects"
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import { CurrencyFormatter } from "@/app/functions/Globals";
-import { IInvoiceMinFull, ICollectiosByInvoice, ITotalInvoicesByProject, IInvoiceCollectionsTable } from "@/interfaces/Invoices";
+import { IInvoiceMinFull, ICollectiosByInvoice, ITotalInvoicesByProject, 
+  IInvoiceCollectionsTable, IInvoiceFull } from "@/interfaces/Invoices";
 import { useState } from "react";
 import { FaDollarSign } from "react-icons/fa6";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -13,6 +14,12 @@ import DownloadInvoicesReportPDF from "@/components/invoices/DownloadInvoicesRep
 import { Tooltip } from "@nextui-org/react";
 import { propsTooltip } from "@/libs/animations";
 import DownloadInvoicePDF from "./DownloadInvoicePDF";
+import { getInvoice } from "@/app/api/routeInvoices";
+import { useEffect } from "react";
+import { showToastMessageError } from "@/components/Alert";
+import { getCompanyTAXDATAFULL } from "@/app/api/routeSatInvoices"
+import { ISatCompany } from "@/interfaces/SatInvoice"
+import { string } from "zod";
 
 type Props = {
   project: OneProjectMin, 
@@ -28,7 +35,37 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
   totalInvoiceProject, pageQuery}: Props) {
 
   const [showCollections, setShowCollections]=useState<boolean>(false);
+  const [invoicefull, setInvoiceFull]=useState<IInvoiceFull>();
+  const [satCompany, setSatCompany]=useState<ISatCompany>();
+
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  console.log('invlice detail => ', invoice);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res: string| IInvoiceFull = await getInvoice(token, invoice._id);
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        // console.log('json invoice => ', JSON.stringify(res));
+        setInvoiceFull(res);
+        const rescomp: ISatCompany[]| string= await getCompanyTAXDATAFULL(res.company, token);
+        if(typeof(rescomp)==='string'){
+          showToastMessageError(rescomp);
+        }else{
+          console.log('res comp => ', rescomp);
+          if(rescomp.length>0){
+            setSatCompany(rescomp[0]);
+          }else{
+            showToastMessageError('Error con la consulta de la compania');
+          }
+        }
+      }
+    }
+
+    fetch();
+  }, []);
 
   return (
     <>
@@ -47,20 +84,22 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
             <FaDollarSign className="text-green-500 w-6 h-6 cursor-pointer hover:text-green-300" onClick={() => setShowCollections(true)} />
           )}
           
-          <PDFDownloadLink document={<DownloadInvoicePDF  />} fileName={'Factura'} >
-            {({loading, url, error, blob}) => 
-              loading? (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                </Tooltip>
-              ) : (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                </Tooltip>
-              ) }
-          </PDFDownloadLink>
+          {invoicefull && satCompany && (
+            <PDFDownloadLink document={<DownloadInvoicePDF invoicemin={invoice} invoicefull={invoicefull} satCompany={satCompany} />} fileName={'Factura'} >
+              {({loading, url, error, blob}) => 
+                loading? (
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                    <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                  </Tooltip>
+                ) : (
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                    <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                  </Tooltip>
+                ) }
+            </PDFDownloadLink>
+          )}
         </div>
       </div>
 

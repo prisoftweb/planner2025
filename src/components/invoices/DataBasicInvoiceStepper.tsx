@@ -77,13 +77,13 @@ export default function DataBasicInvoiceStepper({token, client, date, setDate, s
     }else{
       setBandFolio(false);
     }
-    // if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
-    //   setBandTaxFolio(true);
-    //   validation = false;
-    //   return false;
-    // }else{
-    //   setBandTaxFolio(false);
-    // }
+    if(!taxFolio || taxFolio==='' || taxFolio.length < 30 || taxFolio.length > 40){
+      setBandTaxFolio(true);
+      validation = false;
+      return false;
+    }else{
+      setBandTaxFolio(false);
+    }
     if(!date || date===''){
       setBandDate(true);
       validation = false;
@@ -162,13 +162,13 @@ export default function DataBasicInvoiceStepper({token, client, date, setDate, s
           )}
         </div>
 
-        {/* <div className="">
+        <div className="">
           <Label htmlFor="taxfolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio fiscal</p></Label>
           <Input type="text" value={taxFolio} onChange={(e) => setTaxFolio(e.target.value)} />
           {bandTaxFolio && (
             <p className="text-red-700">Ingrese un folio fiscal valido!!!!</p>
           )}
-        </div> */}
+        </div>
         
         <div className="">
           <Label htmlFor="date"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Fecha</p></Label>

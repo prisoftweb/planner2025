@@ -1,5 +1,6 @@
 
-export default function NavInvoiceStepper({index, setIndex}: {index:number, setIndex:Function}){
+export default function NavInvoiceStepper({index, setIndex, isSat}: 
+  {index:number, setIndex:Function, isSat:number}){
   
   const changeTab = (indextab: number) => {
     setIndex(indextab);
@@ -10,8 +11,8 @@ export default function NavInvoiceStepper({index, setIndex}: {index:number, setI
       {/* <div className="max-w-xl"> */}
       <div className="w-full">
         <ol
-          className="grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 
-            border border-gray-500 text-sm  sm:grid-cols-4"
+          className={`grid grid-cols-1 divide-x divide-gray-500 overflow-hidden rounded-lg 
+            border border-gray-500 text-sm ${isSat==1? 'sm:grid-cols-4': 'sm:grid-cols-3'}`}
         >
           <li className={`flex items-center border-b sm:border-b-0 sm:border-r border-gray-300 justify-center 
             gap-1 p-4 cursor-pointer ${index === 0? 'bg-blue-500 text-white': (index > 0? 'bg-green-500 text-white': 'text-gray-500')}`}
@@ -57,22 +58,24 @@ export default function NavInvoiceStepper({index, setIndex}: {index:number, setI
             </p>
           </li>
 
-          <li 
-            onClick={() => changeTab(3)}
-          >
-            <div className={`flex items-center justify-center border-t sm:border-t-0 sm:border-l border-gray-300
-                gap-2 p-4 cursor-pointer ${index === 3? 'bg-blue-500 text-white': (index > 3? 'bg-green-500 text-white': 'text-gray-500')}`}>
+          {isSat==1 && (
+            <li 
+              onClick={() => changeTab(3)}
+            >
+              <div className={`flex items-center justify-center border-t sm:border-t-0 sm:border-l border-gray-300
+                  gap-2 p-4 cursor-pointer ${index === 3? 'bg-blue-500 text-white': (index > 3? 'bg-green-500 text-white': 'text-gray-500')}`}>
 
-              <span className="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
-                4
-              </span>
+                <span className="flex items-center justify-center w-8 h-8 border border-blue-600 rounded-full shrink-0 dark:border-blue-500">
+                  4
+                </span>
 
-              <p className="leading-none">
-                <strong className="block font-medium"> Confirmacion </strong>
-                <small className="mt-1"> </small>
-              </p>
-            </div>
-          </li>
+                <p className="leading-none">
+                  <strong className="block font-medium"> Confirmacion </strong>
+                  <small className="mt-1"> </small>
+                </p>
+              </div>
+            </li>
+          )}
         </ol>
       </div>
     </>

@@ -515,7 +515,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           folio,
           taxfolio: res.uuid,
           date,
-          useCFDI: type?? '',
+          // useCFDI: type?? '',
+          useCFDI: conditionPayment?? '',
           paymentMethod: methodPaid?? '',
           paymentWay: formPaid?? '',
           user,
@@ -540,10 +541,11 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
             unchargedbalanceamount: totalInvoice,
             partialitynumber: 0,
           }],
-          sat:res.responses[0]
+          sat:res.responses[0],
+          typeofreceipts: type?? ''
         }
         
-        console.log('invoice data => ', invoiceData);
+        // console.log('invoice data => ', invoiceData);
         const resInvoice = await createInvoice(token, invoiceData);
         if(typeof(resInvoice)==='string'){
           showToastMessageError(resInvoice);
@@ -683,7 +685,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           <TooltipCloseIcon handleClose={showForm} />
         </div>
 
-        <NavInvoiceStepper index={step} setIndex={handleStep} />
+        <NavInvoiceStepper index={step} setIndex={handleStep} isSat={1} />
 
         {component}
       </form>

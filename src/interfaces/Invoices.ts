@@ -605,3 +605,73 @@ export interface IAllTOTALPENDINGBillingByProject {
   quantity: number
   acumPendingBilling: number
 }
+
+export interface IInvoiceFull {
+  cost: {
+    subtotal: number
+    iva: number
+    total: number
+  }
+  sat: {
+    invoiceId: string
+    createdAt: string
+    invoiceSignatureDate: string
+    invoiceCertificateNumber: string
+    satCertificateNumber: string
+    invoiceBase64Sello: string
+    satBase64Sello: string
+    satBase64OriginalString: string
+    invoiceBase64QrCode: string
+  }
+  _id: string
+  folio: string
+  taxfolio: string
+  date: string
+  useCFDI: string
+  paymentWay: string
+  paymentMethod: string
+  purchaseorder: string
+  termsofpayment: string
+  ischargedfull: boolean
+  isinvoiceSAT: boolean
+  user: string
+  company: string
+  client: string
+  project: string
+  condition: {
+    glossary: string
+    user: string
+    status: boolean
+    _id: string
+    id: string
+  }[]
+  concepts: {
+    priceConcepEstimate: {
+      cost: number
+      date: string
+      user: string
+    }
+    conceptEstimate: string
+    area: string
+    section: string
+    quantity: number
+    amount: number
+    date: string
+    status: boolean
+    _id: string
+    id: string
+  }[]
+  accountreceivables: {
+    previousbalanceamount: number
+    charged: number
+    unchargedbalanceamount: number
+    partialitynumber: number
+    _id: string
+    id: string
+  }[]
+  status: boolean
+  datets: string
+  __v: number
+  id: string
+  typeofreceipts?:string
+}

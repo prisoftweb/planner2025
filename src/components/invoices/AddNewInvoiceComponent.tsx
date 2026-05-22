@@ -174,7 +174,7 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
       const newDate=new Date(newDay);
       const data = {
         folio,
-        // taxfolio: taxFolio,
+        taxfolio: taxFolio,
         date,
         useCFDI: type,
         paymentMethod: methodPaid,
@@ -258,7 +258,7 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
           <TooltipCloseIcon handleClose={showForm} />
         </div>
 
-        <NavInvoiceStepper index={step} setIndex={handleStep} />
+        <NavInvoiceStepper index={step} setIndex={handleStep} isSat={0} />
 
         {component}
       </form>
