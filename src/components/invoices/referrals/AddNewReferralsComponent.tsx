@@ -188,6 +188,7 @@ export default function AddNewReferralsComponent({showForm, user, token, company
         client,
         project,
         company,
+        typeInvoice: 'Remision',
         concepts: dataConcepts,
         cost: {
           subtotal: amount, 

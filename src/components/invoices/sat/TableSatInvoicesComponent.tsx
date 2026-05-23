@@ -254,7 +254,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
 
-          {row.original.accountreceivablesCount == 0 && (
+          {row.original.accountreceivablesCount==0 && row.original.condition.name.toLowerCase()!='cancelada' && (
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"

@@ -516,9 +516,9 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           taxfolio: res.uuid,
           date,
           // useCFDI: type?? '',
-          useCFDI: conditionPayment?? '',
-          paymentMethod: methodPaid?? '',
-          paymentWay: formPaid?? '',
+          useCFDI: (conditionPayment?? '') + '-' + (labelConditionPayment?? ''),
+          paymentMethod: (methodPaid?? '') + '-' + (labelMethodPaid?? ''),
+          paymentWay: (formPaid?? '') + '-' + (labeFormPaid?? ''),
           user,
           client,
           project,
@@ -542,19 +542,20 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
             partialitynumber: 0,
           }],
           sat:res.responses[0],
-          typeofreceipts: type?? ''
+          typeofreceipts: type?? '',
+          typeInvoice: 'Timbrada'
         }
         
-        // console.log('invoice data => ', invoiceData);
+        console.log('invoice data => ', invoiceData);
         const resInvoice = await createInvoice(token, invoiceData);
         if(typeof(resInvoice)==='string'){
           showToastMessageError(resInvoice);
         }else{
           showToastMessage('Factura agregada satisfactoriamente!!');
           showForm(false);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 1500);
         }
         // showForm(false);
       }

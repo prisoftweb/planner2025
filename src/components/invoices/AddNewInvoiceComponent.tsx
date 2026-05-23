@@ -193,6 +193,7 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
           {glossary:"67d20cb359865f640af92638", user}
         ],
         termsofpayment:conditionPayment,
+        typeInvoice: 'Factura',
         purchaseorder:odc,
         duedate:newDate.toISOString(),
         accountreceivables: [{

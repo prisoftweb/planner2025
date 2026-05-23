@@ -18,10 +18,12 @@ import { getInvoice } from "@/app/api/routeInvoices";
 import { useEffect } from "react";
 import { showToastMessageError } from "@/components/Alert";
 import { getCompanyTAXDATAFULL, getSatXML } from "@/app/api/routeSatInvoices"
+import { getCompany } from "@/app/api/routeCompany";
 import { ISatCompany, IFileXML } from "@/interfaces/SatInvoice"
 // import { string } from "zod";
 // import { BsFiletypeXml } from "react-icons/bs";
 import DownloadXMLButton from "./DownloadXMLButton";
+import { Company } from "@/interfaces/Companies";
 
 type Props = {
   project: OneProjectMin, 
@@ -38,7 +40,8 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
 
   const [showCollections, setShowCollections]=useState<boolean>(false);
   const [invoicefull, setInvoiceFull]=useState<IInvoiceFull>();
-  const [satCompany, setSatCompany]=useState<ISatCompany>();
+  // const [satCompany, setSatCompany]=useState<ISatCompany>();
+  const [satCompany, setSatCompany]=useState<Company>();
   const [xmlData, setXmlData]=useState<IFileXML>();
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
@@ -61,7 +64,8 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         // const rescomp: ISatCompany[]| string= await getCompanyTAXDATAFULL(res.company, token);
 
         const [rescomp, resXML] = await Promise.all([
-          getCompanyTAXDATAFULL(res.company, token),
+          // getCompanyTAXDATAFULL(res.company, token),
+          getCompany(token, res.company),
           getSatXML(res.sat.invoiceId)
         ]);
         
@@ -69,11 +73,12 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           showToastMessageError(rescomp);
         }else{
           console.log('res comp => ', rescomp);
-          if(rescomp.length>0){
-            setSatCompany(rescomp[0]);
-          }else{
-            showToastMessageError('Error con la consulta de la compania');
-          }
+          setSatCompany(rescomp);
+          // if(rescomp.length>0){
+          //   setSatCompany(rescomp[0]);
+          // }else{
+          //   showToastMessageError('Error con la consulta de la compania');
+          // }
         }
 
         if(typeof(resXML)==='string'){
@@ -82,20 +87,10 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           setXmlData(resXML);
         }
       }
-
-      // if(typeof(resXML)==='string'){
-      //   showToastMessageError(resXML);
-      // }else{
-      //   setXmlData(resXML);
-      // }
     }
 
     fetch();
   }, []);
-
-  // const donwloadXMl = async () => {
-  //   const res = await 
-  // }
 
   return (
     <>
@@ -115,7 +110,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           )}
           
           {invoicefull && satCompany && (
-            <PDFDownloadLink document={<DownloadInvoicePDF invoicemin={invoice} invoicefull={invoicefull} satCompany={satCompany} />} fileName={'Factura'} >
+            <PDFDownloadLink document={<DownloadInvoicePDF invoicemin={invoice} invoicefull={invoicefull} satCompany={satCompany} />} fileName={invoicefull.taxfolio} >
               {({loading, url, error, blob}) => 
                 loading? (
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
@@ -132,7 +127,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           )}
           {/* <BsFileEarmarkPdf className="w-6 h-6 text-blue-600" onClick={donwloadXMl} /> */}
           {xmlData && (
-            <DownloadXMLButton base64File={xmlData.base64File} fileName={xmlData.fileName} />
+            <DownloadXMLButton base64File={xmlData.base64File} fileName={invoicefull?.taxfolio?? xmlData.fileName} />
           )}
         </div>
       </div>
