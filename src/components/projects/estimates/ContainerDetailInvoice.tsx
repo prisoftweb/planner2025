@@ -17,9 +17,11 @@ import DownloadInvoicePDF from "./DownloadInvoicePDF";
 import { getInvoice } from "@/app/api/routeInvoices";
 import { useEffect } from "react";
 import { showToastMessageError } from "@/components/Alert";
-import { getCompanyTAXDATAFULL } from "@/app/api/routeSatInvoices"
-import { ISatCompany } from "@/interfaces/SatInvoice"
-import { string } from "zod";
+import { getCompanyTAXDATAFULL, getSatXML } from "@/app/api/routeSatInvoices"
+import { ISatCompany, IFileXML } from "@/interfaces/SatInvoice"
+// import { string } from "zod";
+// import { BsFiletypeXml } from "react-icons/bs";
+import DownloadXMLButton from "./DownloadXMLButton";
 
 type Props = {
   project: OneProjectMin, 
@@ -37,6 +39,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
   const [showCollections, setShowCollections]=useState<boolean>(false);
   const [invoicefull, setInvoiceFull]=useState<IInvoiceFull>();
   const [satCompany, setSatCompany]=useState<ISatCompany>();
+  const [xmlData, setXmlData]=useState<IFileXML>();
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
@@ -45,12 +48,23 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
   useEffect(() => {
     const fetch = async () => {
       const res: string| IInvoiceFull = await getInvoice(token, invoice._id);
+      // const [res, resXML]= await Promise.all([
+      //   getInvoice(token, invoice._id),
+      //   getSatXML('9ebbdfc5-588a-4ec4-b985-8081fe3b4505')
+      // ]);
+      
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
         // console.log('json invoice => ', JSON.stringify(res));
         setInvoiceFull(res);
-        const rescomp: ISatCompany[]| string= await getCompanyTAXDATAFULL(res.company, token);
+        // const rescomp: ISatCompany[]| string= await getCompanyTAXDATAFULL(res.company, token);
+
+        const [rescomp, resXML] = await Promise.all([
+          getCompanyTAXDATAFULL(res.company, token),
+          getSatXML(res.sat.invoiceId)
+        ]);
+        
         if(typeof(rescomp)==='string'){
           showToastMessageError(rescomp);
         }else{
@@ -61,11 +75,27 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
             showToastMessageError('Error con la consulta de la compania');
           }
         }
+
+        if(typeof(resXML)==='string'){
+          showToastMessageError(resXML);
+        }else{
+          setXmlData(resXML);
+        }
       }
+
+      // if(typeof(resXML)==='string'){
+      //   showToastMessageError(resXML);
+      // }else{
+      //   setXmlData(resXML);
+      // }
     }
 
     fetch();
   }, []);
+
+  // const donwloadXMl = async () => {
+  //   const res = await 
+  // }
 
   return (
     <>
@@ -99,6 +129,10 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
                   </Tooltip>
                 ) }
             </PDFDownloadLink>
+          )}
+          {/* <BsFileEarmarkPdf className="w-6 h-6 text-blue-600" onClick={donwloadXMl} /> */}
+          {xmlData && (
+            <DownloadXMLButton base64File={xmlData.base64File} fileName={xmlData.fileName} />
           )}
         </div>
       </div>
@@ -211,9 +245,10 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
             })}</p>
           </div>
 
-          <p className="font-extrabold text-slate-600 mt-6">NOTE</p>
-          <p className="text-slate-600 text-sm">Validar estimacion vs factura</p>
-          <p className="text-slate-600 text-sm">Validar abonos de factura completos</p>
+          <p className="font-extrabold text-slate-600 mt-6">NOTAS</p>
+          <p className="text-slate-600 text-sm">{invoice.notes}</p>
+          {/* <p className="text-slate-600 text-sm">Validar estimacion vs factura</p>
+          <p className="text-slate-600 text-sm">Validar abonos de factura completos</p> */}
         </div>
 
         {showCollections && (

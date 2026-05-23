@@ -16,6 +16,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
   // const months=['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
   // console.log('company pdf => ', satCompany);
+  console.log('invoice full => ', invoicefull);
 
   return(
     <Document>

@@ -141,3 +141,9 @@ export interface ISatCatalog {
   createdAt: string
   updatedAt: any
 }
+
+export interface IFileXML {
+  base64File: string;
+  fileName: string;
+  fileExtension: string;
+}

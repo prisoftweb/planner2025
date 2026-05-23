@@ -2,6 +2,8 @@ import axios from "axios";
 
 export async function createInvoice(auth_token:string, data: Object) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/invoices`;
+  // console.log('url => ', url);
+  // console.log('data remision => ', data);
   try {
     const res = await axios.post(url, JSON.stringify(data), {
       headers: {
@@ -9,11 +11,12 @@ export async function createInvoice(auth_token:string, data: Object) {
         'Content-Type': 'application/json'
       }
     })
-    console.log('res local invoice  => ', res);
+    // console.log('res local invoice  => ', res);
     // if(res.status===200) return res.data.data.data;
     if(res.status===201) return res.status;
     return res.statusText;
   } catch (error) {
+    // console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || error.message;
     }

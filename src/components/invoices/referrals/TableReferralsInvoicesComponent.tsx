@@ -17,7 +17,8 @@ import Link from "next/link";
 import Button from "@/components/Button";
 import SearchInTable from "@/components/SearchInTable";
 import { TbArrowNarrowLeft } from "react-icons/tb";
-import AddNewInvoiceComponent from "../AddNewInvoiceComponent";
+// import AddNewInvoiceComponent from "../AddNewInvoiceComponent";
+import AddNewReferralsComponent from "./AddNewReferralsComponent";
 import {Tooltip} from "@nextui-org/react";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import { useTableStates } from "@/app/store/tableStates";
@@ -550,10 +551,10 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
         </ContainerSideNav>
       ) } */}
       {/* se comenta mientras esta en construccion */}
-      {/* <ContainerSideNav width="w-full max-w-3xl" open={showNewInvoice}>
-        <AddNewInvoiceComponent showForm={setShowNewinvoice} token={token} user={user}
+      <ContainerSideNav width="w-full max-w-3xl" open={showNewInvoice}>
+        <AddNewReferralsComponent showForm={setShowNewinvoice} token={token} user={user}
           company={company} />
-      </ContainerSideNav> */}
+      </ContainerSideNav>
     </>
   )
 }
