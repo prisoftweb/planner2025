@@ -430,6 +430,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
       const invoice = {
         versionCode: "4.0",
         series: "F",
+        number:folio,
         // date: "2026-05-01T14:56:40Z",
         // date: new Date(date).toISOString().slice(0, 19),
         date: localString,
