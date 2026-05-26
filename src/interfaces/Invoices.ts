@@ -265,7 +265,12 @@ export interface IInvoiceMinFull {
   }
   useCFDI: string
   paymentMethod: string
-  paymentWay: string
+  paymentWay: string,
+  termsofPayment: {
+    _id:string,
+    name:string,
+    color:string
+  }
   estimate: {
     _id: string
     name: string
@@ -285,7 +290,11 @@ export interface IInvoiceMinFull {
     tradename: string
     name: string
     rfc: string
-    phone: string
+    phone: string,
+    taxregime:{
+      id:string,
+      regime:string
+    }
     location: {
       country: string
       municipy: string

@@ -216,7 +216,8 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
   useEffect(() => {
     const fetch = async() => {
       const [resfolio] = await Promise.all([
-        getFOLIONEXT(token, '65d3813c74045152c0c4377e')
+        // getFOLIONEXT(token, '65d3813c74045152c0c4377e')
+        getFOLIONEXT(token, company)
       ]);
 
       // console.log('res folio => ', resfolio);
@@ -430,7 +431,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
       const invoice = {
         versionCode: "4.0",
         series: "F",
-        number:folio,
+        // number:folio.toString(),
         // date: "2026-05-01T14:56:40Z",
         // date: new Date(date).toISOString().slice(0, 19),
         date: localString,
@@ -514,10 +515,11 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
         const invoiceData = {
           // concepts: dataConcepts,
           folio,
-          taxfolio: res.uuid,
+          taxfolio: res.uuid,///////
           date,
           // useCFDI: type?? '',
-          useCFDI: (conditionPayment?? '') + '-' + (labelConditionPayment?? ''),
+          // useCFDI: (conditionPayment?? '') + '-' + (labelConditionPayment?? ''),
+          useCFDI: (labelConditionPayment?? ''),
           paymentMethod: (methodPaid?? '') + '-' + (labelMethodPaid?? ''),
           paymentWay: (formPaid?? '') + '-' + (labeFormPaid?? ''),
           user,
@@ -554,11 +556,11 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
         }else{
           showToastMessage('Factura agregada satisfactoriamente!!');
           showForm(false);
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1500);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         }
-        // showForm(false);
+        showForm(false);
       }
       // const facturapi = new Facturapi('sk_test_tu_api_key');
 
