@@ -6,9 +6,10 @@ import { ITotalResumentPayment } from '@/interfaces/Collections';
 import { getAllTotalPaymentsResumeByProjectMin } from "@/app/api/routeCollections";
 import { ICollectionByClientMin } from "@/interfaces/Clients";
 import Chip from '../providers/Chip';
+import { Company } from "@/interfaces/Companies"
 
-export default function DownloadCollectionByClientPDF({collections, client, rfc}:
-  {collections: ICollectionByClientMin[], client:string, rfc:string}) {
+export default function DownloadCollectionByClientPDF({collections, client, rfc, company}:
+  {collections: ICollectionByClientMin[], client:string, rfc:string, company:Company}) {
 
   // const [resumenPayment, setResumenPayment] = useState<ITotalResumentPayment>();
 
@@ -34,7 +35,8 @@ export default function DownloadCollectionByClientPDF({collections, client, rfc}
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={company.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>COBRANZA PENDIENTE</Text>

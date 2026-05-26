@@ -163,13 +163,10 @@ export default function DataBasicSatInvoiceStepper({token, client, date, setDate
           </div>
         )}
 
-        <div className="">
+        {/* <div className="">
           <Label htmlFor="folio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio</p></Label>
           <Input type="text" disabled value={folio} />
-          {/* {bandFolio && (
-            <p className="text-red-700">Ingrese un folio valido!!!!</p>
-          )} */}
-        </div>
+        </div> */}
 
         {/* <div className="sm:col-span-2">
           <Label htmlFor="taxfolio"><p className="after:content-['*'] after:ml-0.5 after:text-red-500">Folio fiscal</p></Label>

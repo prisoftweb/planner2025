@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { ITableCollectionByClientMin, ICollectionByClientMin } from "@/interfaces/Clients";
 import { CurrencyFormatter, MoneyFormatter } from "@/app/functions/Globals";
@@ -10,19 +10,39 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import { propsTooltip } from "@/libs/animations";
 import DownloadCollectionByClientPDF from "./DownloadCollectionByClient";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { showToastMessageError } from "../Alert";
 
 type ClientCliProps = {
   collections: ICollectionByClientMin[],
   client:string,
-  rfc:string
+  rfc:string,
+  idc:string,
+  token:string
 }
 
-export default function ClientCollectionCli({collections, client, rfc}: ClientCliProps){
+export default function ClientCollectionCli({collections, client, rfc, idc, token}: ClientCliProps){
 
   // const [opt, setOpt] = useState<number>(1);
   // const handleOpt = (value: number) => {
   //   setOpt(value);
   // }
+  const [satCompany, setSatCompany]=useState<Company>();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const res=await getCompany(token, idc);
+
+      if(typeof(res)==='string'){
+        showToastMessageError(res);
+      }else{
+        setSatCompany(res);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const columnHelper = createColumnHelper<ITableCollectionByClientMin>();
 
@@ -87,20 +107,22 @@ export default function ClientCollectionCli({collections, client, rfc}: ClientCl
   return(
     <>
       <div className="flex justify-end">
-        <PDFDownloadLink document={<DownloadCollectionByClientPDF collections={collections} client={client} rfc={rfc} />} fileName={`Cobranza ${client}`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </Tooltip>
-            ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </Tooltip>
-            ) }
-        </PDFDownloadLink>
+        {satCompany && (
+          <PDFDownloadLink document={<DownloadCollectionByClientPDF collections={collections} client={client} rfc={rfc} company={satCompany} />} fileName={`Cobranza ${client}`} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        )}
       </div>
       <div >
         <div className="hidden md:block w-full">

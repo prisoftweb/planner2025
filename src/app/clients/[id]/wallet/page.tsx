@@ -83,7 +83,8 @@ export default async function Wallet({ params }: { params: { id: string }}){
         </div>
         <NavTab idCli={params.id} tab='4' />
         <div className="mt-5">
-          <ClientCollectionCli collections={pendindInvoices} rfc={client?.rfc?? 'sin rfc'} client={client?.name?? 'cliente'} />
+          <ClientCollectionCli collections={pendindInvoices} rfc={client?.rfc?? 'sin rfc'} client={client?.name?? 'cliente'}
+              idc={user.profile} token={token} />
         </div>
       </div>
     </>

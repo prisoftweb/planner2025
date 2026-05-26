@@ -144,14 +144,23 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         </div>
 
         <div className=" order-1 sm:order-3 sm:text-right mt-2 sm:mt-0">
-          <img src="/Palaciosconstrucciones_horizontal.png" alt="palacios"
+          {/* <img src="/Palaciosconstrucciones_horizontal.png" alt="palacios"
+            className=" h-14 md:h-24 w-auto"
+          /> */}
+          <img src={satCompany?.logo} alt="palacios"
             className=" h-14 md:h-24 w-auto"
           />
-          <p className="font-extrabold text-lg text-black">Samuel Palacios Hernandez</p>
+          {/* <p className="font-extrabold text-lg text-black">Samuel Palacios Hernandez</p>
           <p className="font-extrabold text-lg text-black">PAHS76123U25</p>
           <p className="text-sm text-slate-500">Betelgeuze #334</p>
           <p className="text-sm text-slate-500">Del Llano San Luis Potosi, S.L.P.</p>
-          <p className="text-sm text-slate-500">CP 78377 Mexico</p>
+          <p className="text-sm text-slate-500">CP 78377 Mexico</p> */}
+
+          <p className="font-extrabold text-lg text-black">{satCompany?.name}</p>
+          <p className="font-extrabold text-lg text-black">{satCompany?.tax?.rfc}</p>
+          <p className="text-sm text-slate-500">{satCompany?.location?.stret}</p>
+          <p className="text-sm text-slate-500">{satCompany?.location?.community}</p>
+          <p className="text-sm text-slate-500">CP {satCompany?.location?.cp}</p>
         </div>
       </div>
 

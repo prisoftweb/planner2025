@@ -32,7 +32,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
               <Text style={{fontSize:'15px', color:'black', fontWeight:'extrabold'}}>{invoicemin.client.tradename}</Text>
               <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>{invoicemin.client.name}</Text>
               <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>{invoicemin.client.rfc}</Text>
-              <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>{invoicemin.client?.taxregime?.regime}</Text>
+              <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', maxWidth:'240px'}}>{invoicemin.client?.taxregime?.regime}</Text>
               <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>Codigo postal {invoicemin.client.location.cp}</Text>
 
               {/* <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Proyecto: {invoicemin.project.title}</Text> */}
@@ -50,7 +50,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
                 {/* consultar compania completa */}
                 <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>{satCompany.name}</Text>
                 <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>{satCompany.tax?.rfc}</Text>
-                <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', maxWidth:'240px'}}>{satCompany.tax?.taxregime?.id} - {satCompany.tax?.taxregime?.regime} </Text>
+                <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', maxWidth:'240px'}}>{satCompany.tax?.taxregime?.regime} </Text>
                 <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>Lugar de expedicion {satCompany.location?.cp}</Text>
               </View>
 
@@ -100,7 +100,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
             <View style={{display:'flex', flexDirection: 'column', alignItems:'flex-end'}}>
               <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Factura: </Text>
-                <Text style={{fontSize:'9px', color:'#262626', fontWeight:'extralight'}}>F {invoicemin.folio}</Text>
+                <Text style={{fontSize:'9px', color:'#262626', fontWeight:'extralight'}}>{invoicemin.folio}</Text>
               </View>
               {/* <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>Factura:</Text>
               <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>F {invoicemin.folio}</Text> */}
@@ -111,7 +111,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
 
           </View>
 
-          <View style={{backgroundColor:'blue', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop:'15px'}}>
+          <View style={{backgroundColor:'#0095E1', display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop:'15px'}}>
             <Text style={{color:'white', textAlign:'center'}}>FACTURA</Text>
           </View>
 

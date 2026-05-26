@@ -213,21 +213,21 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
     return () => window.removeEventListener('scroll', handleResize);
   }, []);
 
-  useEffect(() => {
-    const fetch = async() => {
-      const [resfolio] = await Promise.all([
-        // getFOLIONEXT(token, '65d3813c74045152c0c4377e')
-        getFOLIONEXT(token, company)
-      ]);
+  // useEffect(() => {
+  //   const fetch = async() => {
+  //     const [resfolio] = await Promise.all([
+  //       // getFOLIONEXT(token, '65d3813c74045152c0c4377e')
+  //       getFOLIONEXT(token, company)
+  //     ]);
 
-      // console.log('res folio => ', resfolio);
-      setFolio(resfolio);
-    }
+  //     // console.log('res folio => ', resfolio);
+  //     setFolio(resfolio);
+  //   }
 
-    if(isNew){
-      fetch();
-    }
-  }, [isNew]);
+  //   if(isNew){
+  //     fetch();
+  //   }
+  // }, [isNew]);
 
   const validationData = () =>{
     let validation = true;
@@ -512,9 +512,15 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           amount += c.amount;
         });
 
+        const index_=res.number.indexOf('-');
+        let f='F ';
+        if(index_ > 0){
+          f+=res.number.substring(index_+1);
+        }
+
         const invoiceData = {
           // concepts: dataConcepts,
-          folio,
+          folio:f,
           taxfolio: res.uuid,///////
           date,
           // useCFDI: type?? '',
