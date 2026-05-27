@@ -18,9 +18,10 @@ interface OptionsDashboard {
 }
 
 export default function ContainerCollectionsProject({project, token, user, collections, 
-    totalInvoiceProject, resumenPayment, pageQuery }: 
+    totalInvoiceProject, resumenPayment, pageQuery, company }: 
   {project: OneProjectMin, collections:ICollectionMin[], token: string, user: string, 
-    totalInvoiceProject: ITotalInvoicesByProject[], resumenPayment:ITotalResumentPayment, pageQuery: string | undefined }) {
+    totalInvoiceProject: ITotalInvoicesByProject[], resumenPayment:ITotalResumentPayment, 
+    pageQuery: string | undefined, company:string }) {
 
   const colors = ['blue', 'red', 'green', 'orange', 'cyan', 'indigo', 'amber', 'violet', 'lime', 'fuchsia', 'blue', 'red', 'cyan', 'green', 'orange', 'indigo', 'amber', 'violet', 'lime', 'fuchsia'];
 
@@ -118,7 +119,7 @@ export default function ContainerCollectionsProject({project, token, user, colle
         <NavTabEstimates tab={2} id_p={project._id} pageQuery={pageQuery} />
       </div>
       
-      <TableCollectionsComponent project={project} token={token} pageQuery={pageQuery} />
+      <TableCollectionsComponent project={project} token={token} pageQuery={pageQuery} company={company} />
     </>
   )
 }

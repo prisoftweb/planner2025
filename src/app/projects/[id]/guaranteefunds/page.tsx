@@ -71,7 +71,7 @@ export default async function Page({ params }: { params: { id: string }}){
         <NavTabProject idPro={params.id} tab='8' />
         <NextUiProviders>
           <ProjectGuaranteeFundsContainer token={token} id={params.id} project={project}
-            user={user._id} guarantees={guarantees}
+            user={user._id} guarantees={guarantees} company={user.profile}
           />
         </NextUiProviders>
       </div>

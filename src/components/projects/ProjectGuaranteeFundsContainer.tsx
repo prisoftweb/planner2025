@@ -13,18 +13,40 @@ import { PDFDownloadLink } from "@react-pdf/renderer"
 import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import { propsTooltip } from "@/libs/animations"
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { showToastMessageError } from "../Alert"
 
 type Props = {
   project:OneProjectMin, 
   token:string, 
   id:string,
   user:string
-  guarantees: IGuaranteeByPojectMin[]
+  guarantees: IGuaranteeByPojectMin[],
+  company:string
 }
 
-export default function ProjectGuaranteeFundsContainer({project, token, id, user, guarantees}: Props){
+export default function ProjectGuaranteeFundsContainer({project, token, id, user, guarantees, company}: Props){
 
   const {updateOneProjectStore} = useOneProjectsStore();
+
+  const [satCompany, setSatCompany]=useState<Company>();
+ 
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
   
   useEffect(() => {
     updateOneProjectStore(project);
@@ -161,20 +183,22 @@ export default function ProjectGuaranteeFundsContainer({project, token, id, user
     <>
       {/* <div className="flex w-full max-w-2xl justify-end items-center p-3"> */}
       <div className="flex w-full justify-end items-center p-3">
-        <PDFDownloadLink document={<DownloadGuaranteeByProjectPDF project={project} token={token} guarantees={guarantees} />} fileName={'Fondo de garantia - '+project.title} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </Tooltip>
-            ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </Tooltip>
-            ) }
-        </PDFDownloadLink>
+        {satCompany && (
+          <PDFDownloadLink document={<DownloadGuaranteeByProjectPDF project={project} token={token} guarantees={guarantees} satCompany={satCompany} />} fileName={'Fondo de garantia - '+project.title} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        )}
       </div>
       {/* <div className={`flex w-full`}>
         <Table columns={columns} data={data} placeH="Buscar fondo de garantia" typeTable="guaranteefunds" />

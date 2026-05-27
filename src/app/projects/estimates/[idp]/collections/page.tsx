@@ -108,7 +108,8 @@ export default async function Page({ params, searchParams }:
       <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
         <ContainerCollectionsProject project={project} collections={collections} token={token} user={user._id} 
-          totalInvoiceProject={totalInvoicesProject} resumenPayment={totalPaymentsResumen} pageQuery={searchParams.page} />
+          totalInvoiceProject={totalInvoicesProject} resumenPayment={totalPaymentsResumen} 
+          pageQuery={searchParams.page} company={user.profile} />
       </div>
     </>
   )

@@ -551,7 +551,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
             partialitynumber: 0,
           }],
           sat:res.responses[0],
-          typeofreceipts: type?? '',
+          typeofreceipts: type?? '' + (type=='I'? '- Ingreso': ''),
           typeInvoice: 'Timbrada'
         }
         

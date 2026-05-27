@@ -2,13 +2,15 @@ import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { OneProjectMin } from "@/interfaces/Projects"
 import { IGuaranteeByPojectMin } from "@/interfaces/Guarantee"
+import { Company } from "@/interfaces/Companies"
 
 type GuaranteeProps={
   guarantees: IGuaranteeByPojectMin[], 
-  project:OneProjectMin, token:string
+  project:OneProjectMin, token:string,
+  satCompany:Company
 }
 
-export default function DownloadGuaranteeByProjectPDF({guarantees, project, token}: GuaranteeProps) {
+export default function DownloadGuaranteeByProjectPDF({guarantees, project, token, satCompany}: GuaranteeProps) {
 
   let total = 0;
   let totalVat = 0;
@@ -31,7 +33,8 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>ESTADO DE CUENTA DE FONDO DE GARANTIA</Text>

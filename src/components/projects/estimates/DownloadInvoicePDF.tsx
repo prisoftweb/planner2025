@@ -21,6 +21,16 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
 
   console.log('company => ', satCompany);
 
+  const folio= invoicefull.folio[0].toLowerCase()==='f'? invoicefull.folio: 'F '+invoicefull.folio; 
+
+  let usecfdi= invoicefull.useCFDI;
+
+  // console.log('usecfdi1 => ', invoicefull.useCFDI.substring(0, 3));
+  // console.log('usecfdi2 => ', invoicefull.useCFDI.substring(4, 7));
+  if(invoicefull.useCFDI.substring(0, 3)===invoicefull.useCFDI.substring(4, 7)){
+    usecfdi=invoicefull.useCFDI.substring(4);
+  }
+
   return(
     <Document>
       <Page>
@@ -48,7 +58,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
                 <Text style={{fontSize:'15px', color:'black', fontWeight:'extrabold'}}>{satCompany.tradename}</Text>
                 {/* name */}
                 {/* consultar compania completa */}
-                <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>{satCompany.name}</Text>
+                <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>{satCompany.tax.name}</Text>
                 <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>{satCompany.tax?.rfc}</Text>
                 <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold', maxWidth:'240px'}}>{satCompany.tax?.taxregime?.regime} </Text>
                 <Text style={{fontSize:'11px', color:'black', fontWeight:'extrabold'}}>Lugar de expedicion {satCompany.location?.cp}</Text>
@@ -67,7 +77,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
               
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Uso de CFDI: </Text>
-                <Text style={{fontSize:'9px', color:'#262626', fontWeight:'extralight'}}>{invoicemin.useCFDI} </Text>
+                <Text style={{fontSize:'9px', color:'#262626', fontWeight:'extralight'}}>{usecfdi} </Text>
               </View>
 
               <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
@@ -100,7 +110,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
             <View style={{display:'flex', flexDirection: 'column', alignItems:'flex-end'}}>
               <View style={{display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
                 <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Factura: </Text>
-                <Text style={{fontSize:'9px', color:'#262626', fontWeight:'extralight'}}>{invoicemin.folio}</Text>
+                <Text style={{fontSize:'9px', color:'#262626', fontWeight:'extralight'}}>{folio}</Text>
               </View>
               {/* <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>Factura:</Text>
               <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>F {invoicemin.folio}</Text> */}
@@ -119,7 +129,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>CANTIDAD</Text>
             <Text style={{flex: 4, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>DESCRIPCION</Text>
             <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>PRECIO</Text>
-            <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>IMPORTE</Text>
+            <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold', textAlign:'right'}}>IMPORTE</Text>
           </View>
 
           {invoicemin.conceptsInvoiceInfo.map((c, index:number) => (
@@ -130,14 +140,14 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
                 currency: 'MXN',
                 value: c.priceConcepEstimate.cost
               })}</Text>
-              <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold'}}>{CurrencyFormatter({
+              <Text style={{flex: 1, fontSize: '7px', padding: '2px', fontWeight: 'bold', textAlign:'right'}}>{CurrencyFormatter({
                 currency: 'MXN',
                 value: c.priceConcepEstimate.cost * c.quantity
               })}</Text>
             </View>
           ))}
 
-          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid blue', marginTop:'15px'}}>
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid #0095E1', marginTop:'15px'}}>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>SUBTOTAL</Text>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>{CurrencyFormatter({
               currency: 'MXN',
@@ -145,7 +155,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
             })}</Text>
           </View>
 
-          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid blue', marginTop:'5px'}}>
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid #0095E1', marginTop:'5px'}}>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>(+) IVA</Text>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>{CurrencyFormatter({
               currency: 'MXN',
@@ -153,15 +163,15 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
             })}</Text>
           </View>
 
-          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid blue', marginTop:'5px'}}>
-            <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>Total</Text>
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', borderTop:'1px solid #0095E1', marginTop:'5px'}}>
+            <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>TOTAL</Text>
             <Text style={{color:'black', textAlign:'center', fontSize:'10px', fontWeight:'extrabold'}}>{CurrencyFormatter({
               currency: 'MXN',
               value: invoicemin.cost.total
             })}</Text>
           </View>
 
-          <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
+          <View style={{marginTop:'15px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
             <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Numero del serie CSD del SAT: </Text>
             <Text style={{fontSize:'7px', color:'#262626'}}>{invoicefull.sat.satCertificateNumber}</Text>
           </View>

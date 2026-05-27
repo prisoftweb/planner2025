@@ -1,11 +1,12 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ITotalAccountReceivablesByClientResumen } from '@/interfaces/Invoices';
+import { Company } from '@/interfaces/Companies';
 
 export default function DownloadPendingCollectionsByClientPDF({collections, token, pendingBilling, pendingPayment, 
-    totalProjects, date}:
+    totalProjects, date, satCompany}:
   {collections: ITotalAccountReceivablesByClientResumen[], token:string, pendingBilling?: number, 
-    pendingPayment?: number, totalProjects?: number, date?: string}) {
+    pendingPayment?: number, totalProjects?: number, date?: string, satCompany:Company}) {
 
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   const currentDate = new Date(date || '');
@@ -21,7 +22,8 @@ export default function DownloadPendingCollectionsByClientPDF({collections, toke
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>COBRANZA PENDIENTE</Text>

@@ -80,7 +80,8 @@ export interface IInvoiceTable {
   client?: string
   subtotal?:number,
   vat?:number,
-  uuid:string
+  uuid:string,
+  typeInvoice?: string 
 }
 
 export interface IInvoiceByProject {
@@ -527,7 +528,8 @@ export interface IInvoiceByDateAndConditionMin {
   accountreceivables: any[]
   accountreceivablesCount: number
   status: boolean
-  fullyCharged?: number
+  fullyCharged?: number,
+  typeInvoice:string
 }
 
 

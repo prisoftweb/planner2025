@@ -16,14 +16,30 @@ import {Tooltip} from "@nextui-org/react";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import { propsTooltip } from "@/libs/animations";
 
-export default function TableCollectionsComponent({token, project, pageQuery}:
-  {token:string, project:OneProjectMin, pageQuery: string | undefined}) {
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+
+export default function TableCollectionsComponent({token, project, pageQuery, company}:
+  {token:string, project:OneProjectMin, pageQuery: string | undefined, company:string}) {
 
   const [collections, setCollections] = useState<ICollectionMin[]>([]);
+  const [satCompany, setSatCompany]=useState<Company>();
 
   useEffect(() => {
     const fetch = async() => {
-      const res = await getCollectionsByProjectMin(token, project._id);
+      // const res = await getCollectionsByProjectMin(token, project._id);
+      const [rescomp, res] = await Promise.all([
+        getCompany(token, company),
+        getCollectionsByProjectMin(token, project._id)
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        // console.log('res comp => ', rescomp);
+        setSatCompany(rescomp);
+      }
+
       if(typeof(res)==='string'){
         showToastMessageError(res);
       }else{
@@ -157,20 +173,23 @@ export default function TableCollectionsComponent({token, project, pageQuery}:
   return (
     <>
       <div className="flex w-full justify-end items-center p-3">
-        <PDFDownloadLink document={<DownloadCollectionsByProjectPDF project={project} token={token} collections={collections} />} fileName={'Cobros - '+project.title} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </Tooltip>
-            ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </Tooltip>
-            ) }
-        </PDFDownloadLink>
+        {satCompany && (
+          <PDFDownloadLink document={<DownloadCollectionsByProjectPDF project={project} token={token} 
+              collections={collections} satCompany={satCompany} />} fileName={'Cobros - '+project.title} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        )}
       </div>
       <div className="hidden md:block w-full">
         <Table columns={columns} data={data} placeH="buscar cobro" />

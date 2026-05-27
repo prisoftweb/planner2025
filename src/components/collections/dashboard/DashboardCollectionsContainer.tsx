@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
@@ -29,6 +29,8 @@ import DownloadPendingCollectionsPDF from "./DownloadPendingCollectionsPDF";
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadPendingCollectionsByClientPDF from "./DownloadPendingCollectionsByClientPDF";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
 export interface DataProjectsByType {
   client: string
@@ -86,13 +88,14 @@ type DataPendingProject = {
 }
 
 export default function DashboardCollectionsContainer({token, user, totalClients, totalProjects, totalPay, 
-  totalPen, resC, toalPrjRes, toalCliRes, totalEstimatesPen, totalEstimatesCli, totalPendingBillingByPrj}: 
+  totalPen, resC, toalPrjRes, toalCliRes, totalEstimatesPen, totalEstimatesCli, totalPendingBillingByPrj, company}: 
   {token:string, user:string, totalProjects: ITotalInvoicesByProjectDashboardCollection[], 
     totalClients: ITotalInvoiceByClient[], totalPay: ITotalPaymentByDateAndStatus[], 
     totalPen: ITotalPendingByDateAndStatus[], resC: IAmountTotalGuaranteesByDateAndStatus, 
     toalPrjRes: IAllTOTALPENDINGPAYMENTSByProject[], toalCliRes: ITotalAccountReceivablesByClientResumen[], 
     totalEstimatesPen: IAllsProjectsMINAndNEConditionANDNoExistsEstimate[], 
-    totalEstimatesCli: ITotalEstimatesPendingByClient[], totalPendingBillingByPrj: IAllTOTALPENDINGBillingByProject[]}) {
+    totalEstimatesCli: ITotalEstimatesPendingByClient[], totalPendingBillingByPrj: IAllTOTALPENDINGBillingByProject[], 
+    company:string}) {
 
   const [totalCollectionsProjects, setTotalCollectionsProjects]=useState<ITotalInvoicesByProjectDashboardCollection[]>(totalProjects);
   const [totalCollectionsClients, setTotalCollectionsClients]=useState<ITotalInvoiceByClient[]>(totalClients);
@@ -103,6 +106,8 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const [totalEstimatesPendingCli, setTotalEstimatesPendingCli] = useState<ITotalEstimatesPendingByClient[]>(totalEstimatesCli);
   const [totalPendingBillingPjr, setTotalPendingBillingPjr] = useState<IAllTOTALPENDINGBillingByProject[]>(totalPendingBillingByPrj);
 
+  const [satCompany, setSatCompany]=useState<Company>();
+
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
@@ -111,6 +116,22 @@ export default function DashboardCollectionsContainer({token, user, totalClients
   const handleDate = (dateI: Date, dateF: Date) => {
     updateDashboard(getDate(dateI), getDate(dateF));
   }
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const updateDashboard = async (dateI:string, dateF:string) => {
 
@@ -125,7 +146,7 @@ export default function DashboardCollectionsContainer({token, user, totalClients
       getAllsProjectsMINAndNEConditionANDNoExistsEstimateAndAccountReceivablesRESUMEN(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
       getTotalEstimatesPendingByClient(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
       getAllTOTALPENDINGPAYMENTSByProjectMINRESUME(token, new Date(new Date().getFullYear(), 0, 1).toISOString(), new Date().toISOString()), 
-      getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date()))
+      getAllTOTALPENDINGBillingANDPENDINGEstimatesByProjectACUMULATED(token, getDate(new Date(new Date().getFullYear(), 0, 1)), getDate(new Date())),
     ]);
 
     if(typeof(totprj)==='string'){
@@ -264,37 +285,42 @@ export default function DashboardCollectionsContainer({token, user, totalClients
         </div>
         <div className="flex items-center gap-x-3 justify-end">
           {filterElemnts}
-          <PDFDownloadLink document={<DownloadPendingCollectionsPDF collections={totalAccountByPrjRes} token={token} 
-                pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
-                pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
-                date={rangeDate?.to?.toISOString().substring(0, 10) || ''} 
-                totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
-              fileName={`Cobranza pendiente por proyecto ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
-            {({loading, url, error, blob}) => 
-              loading? (
-                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-              ) : (
-                <TooltipContainerIcon label="Descargar PDF">
-                  <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                </TooltipContainerIcon>
-              ) }
-          </PDFDownloadLink>
+          {satCompany && (
+            <PDFDownloadLink document={<DownloadPendingCollectionsPDF collections={totalAccountByPrjRes} token={token} 
+                  pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
+                  pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
+                  date={rangeDate?.to?.toISOString().substring(0, 10) || ''} satCompany={satCompany} 
+                  totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
+                fileName={`Cobranza pendiente por proyecto ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
+              {({loading, url, error, blob}) => 
+                loading? (
+                  <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                ) : (
+                  <TooltipContainerIcon label="Descargar PDF">
+                    <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                  </TooltipContainerIcon>
+                ) }
+            </PDFDownloadLink>
+          )}
 
-          <PDFDownloadLink document={<DownloadPendingCollectionsByClientPDF collections={totalAccountByCliRes} token={token} 
-                pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
-                pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
-                date={rangeDate?.to?.toISOString().substring(0, 10) || ''} 
-                totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
-              fileName={`Cobranza pendiente por cliente ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
-            {({loading, url, error, blob}) => 
-              loading? (
-                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-              ) : (
-                <TooltipContainerIcon label="Descargar PDF">
-                  <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-                </TooltipContainerIcon>
-              ) }
-          </PDFDownloadLink>
+          {satCompany && (
+            <PDFDownloadLink document={<DownloadPendingCollectionsByClientPDF collections={totalAccountByCliRes} 
+              token={token} satCompany={satCompany} 
+                  pendingBilling={totalPendingBillingPjr.length > 0? totalPendingBillingPjr[0].acumPendingBilling: 0} 
+                  pendingPayment={totalPending.length > 0? totalPending[0].total: 0} 
+                  date={rangeDate?.to?.toISOString().substring(0, 10) || ''} 
+                  totalProjects={totalPaymentByDate.length > 0? totalPaymentByDate[0].total: 0} />} 
+                fileName={`Cobranza pendiente por cliente ${rangeDate.from?.toISOString().substring(0, 10)}-${rangeDate.to?.toISOString().substring(0, 10)}`} >
+              {({loading, url, error, blob}) => 
+                loading? (
+                  <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+                ) : (
+                  <TooltipContainerIcon label="Descargar PDF">
+                    <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+                  </TooltipContainerIcon>
+                ) }
+            </PDFDownloadLink>
+          )}
         </div>
       </div>
 

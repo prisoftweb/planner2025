@@ -40,6 +40,12 @@ import { Options } from "@/interfaces/Common";
 // import 'react-confirm-alert/src/react-confirm-alert.css';
 // import SelectReact from "@/components/SelectReact";
 
+import { BsFiletypeXml } from "react-icons/bs";
+import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
+import { TbFileInvoice } from "react-icons/tb";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+
 export default function TableReferralsInvoicesComponent({token, user, company, optionsCancel}: 
   {token:string, user:string, company:string, optionsCancel:Options[]}) {
 
@@ -53,6 +59,7 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
 
   const [widthPage, setWidthPage] = useState<number>(900);
   const [statuses, setStatuses]=useState<string[]>([]);
+  const [satCompany, setSatCompany]=useState<Company>();
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -62,6 +69,22 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
   const handleShowForm = (value:boolean) => {
     setShowNewCollection(value);
   }
+
+  useEffect(() => {
+      const fetch = async () => {
+        const [rescomp] = await Promise.all([
+          getCompany(token, company),
+        ]);
+        
+        if(typeof(rescomp)==='string'){
+          showToastMessageError(rescomp);
+        }else{
+          setSatCompany(rescomp);
+        }
+      }
+  
+      fetch();
+    }, []);
 
   const handleResize = () => {
     setWidthPage(Math.max(
@@ -161,11 +184,13 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
             checked={row.getIsSelected()}
             onChange={row.getToggleSelectedHandler()}
           />
-          < RemoveElement id={ row.original.idEstimates? `${row.original.id}/${row.original.idEstimates}`: `${row.original.id}`} 
+          {row.original.typeInvoice !== 'Timbrada' && (
+            < RemoveElement id={ row.original.idEstimates? `${row.original.id}/${row.original.idEstimates}`: `${row.original.id}`} 
                       name={row.original.estimate ?? row.original.folio} remove={removeInvoice} 
                       removeElement={delInvoice} token={token} />
+          )}
 
-          {row.original.accountreceivablesCount == 0 && (
+          {row.original.accountreceivablesCount==0 && row.original.condition.name.toLowerCase()!='cancelada' && row.original.typeInvoice !== 'Remision' && (
             <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Cancelar' 
               placement="right" className="text-black bg-white rounded-md border border-slate-400">
                 <FaXmark className="h-6 w-6 text-red-500 hover:bg-blue-100 cursor-pointer hover:text-red-300"
@@ -203,6 +228,27 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
                   setShowNewCollection(true);
                 }}/>
               )}
+            </Tooltip>
+          )}
+
+          {row.original.typeInvoice=='Timbrada' && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Timbrada' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <BsFiletypeXml className="w-6 h-6 text-green-600" />
+            </Tooltip>
+          )}
+
+          {row.original.typeInvoice=='Factura' && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Factura' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <LiaFileInvoiceDollarSolid className="w-6 h-6 text-green-600" />
+            </Tooltip>
+          )}
+
+          {row.original.typeInvoice=='Remision' && (
+            <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Remision' 
+              placement="right" className="text-black bg-white rounded-md border border-slate-400">
+                <TbFileInvoice className="w-6 h-6 text-green-600" />
             </Tooltip>
           )}
         </div>
@@ -462,7 +508,7 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
               </div>
             </TooltipContainerIcon>
           </Link>
-          <p className="text-xl ml-4 font-medium">Facturas</p>
+          <p className="text-xl ml-4 font-medium">Remisiones</p>
           <div className="flex-1 flex justify-end sm:hidden">
             <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
           </div>
@@ -472,20 +518,22 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
             <div className="flex-1 flex justify-end">
               <SearchInTable placeH={"Buscar factura.."} />
             </div>
-            <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} />} fileName={'Facturacion'} >
-              {({loading, url, error, blob}) => 
-                loading? (
-                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                    <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                  </Tooltip>
-                ) : (
-                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                    <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                  </Tooltip>
-                ) }
-            </PDFDownloadLink>
+            {satCompany && (
+              <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} satCompany={satCompany} />} fileName={'Facturacion'} >
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    </Tooltip>
+                  ) }
+              </PDFDownloadLink>
+            )}
             <div className="hidden sm:flex justify-end">
               <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
             </div>
@@ -512,20 +560,22 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {filterElemnts}
-              <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} />} fileName={'Facturacion'} >
-                {({loading, url, error, blob}) => 
-                  loading? (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                    </Tooltip>
-                  ) : (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                    </Tooltip>
-                  ) }
-              </PDFDownloadLink>
+              {satCompany && (
+                <PDFDownloadLink document={<DownloadInvoicesReportPDF fechaFin={rangeDate?.to} fechaIni={rangeDate?.from} invoices={invoices} satCompany={satCompany} />} fileName={'Facturacion'} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </Tooltip>
+                    ) }
+                </PDFDownloadLink>
+              )}
               <Button onClick={() => setShowNewinvoice(true)}>Nueva</Button>
             </div>
           </div>
@@ -587,7 +637,8 @@ function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
       client: inv.client.name,
       subtotal:inv.cost.subtotal?? 0,
       vat:inv.cost.iva?? 0,
-      uuid: inv.taxfolio
+      uuid: inv.taxfolio,
+      typeInvoice: inv.typeInvoice?? 'Remision'
     })
   });
 

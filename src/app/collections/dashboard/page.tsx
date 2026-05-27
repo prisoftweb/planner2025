@@ -146,7 +146,7 @@ export default async function Page() {
       <Navigation user={user} token={token} />
       <div className="p-2 sm:p-3 md-p-5 lg:p-10">
         <DashboardCollectionsContainer 
-          token={token} toalPrjRes={totalPrjRes}
+          token={token} toalPrjRes={totalPrjRes} company={user.profile}
           user={user._id} resC={resCobrar[0]} totalEstimatesCli={totalPendEstimatesCli}
           totalProjects={totalProjects} totalPen={totalPending}
           totalClients={totalClients} totalPay={totalPaymentByDate}

@@ -27,6 +27,8 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import { propsTooltip } from "@/libs/animations";
 import DownloadCollectionPDF from "./DownloadCollectionPDF";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
 export default function TableCollectionsComponent({token, user, collectionsParam, totalParam, totalRecoveredP, company}: 
   {token:string, user:string, collectionsParam:ICollectionMin[], totalParam:ITotalAmountCollections, 
@@ -40,6 +42,8 @@ export default function TableCollectionsComponent({token, user, collectionsParam
   const [totalRecovered, setTotalRecovered]=useState<ITotalAmountRecoveredCollections>(totalRecoveredP);
   const [statuses, setStatuses]=useState<string[]>([]);
 
+  const [satCompany, setSatCompany]=useState<Company>();
+
   const {search} = useTableStates();
   
   const [widthPage, setWidthPage] = useState<number>(900);
@@ -48,6 +52,24 @@ export default function TableCollectionsComponent({token, user, collectionsParam
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        // getCompanyTAXDATAFULL(res.company, token),
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        // console.log('res comp => ', rescomp);
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const handleResize = () => {
     setWidthPage(Math.max(
@@ -241,21 +263,23 @@ export default function TableCollectionsComponent({token, user, collectionsParam
             <div className="flex-1 flex justify-end">
               <SearchInTable placeH={"Buscar cobro.."} />
             </div>
-            <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
-                        fechaIni={rangeDate?.from} totalCollections={totalRecovered} />} fileName={'Cobranza'} >
-              {({loading, url, error, blob}) => 
-                loading? (
-                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                    <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                  </Tooltip>
-                ) : (
-                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                    <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                  </Tooltip>
-                ) }
-            </PDFDownloadLink>
+            {satCompany && (
+              <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
+                          fechaIni={rangeDate?.from} totalCollections={totalRecovered} satCompany={satCompany} />} fileName={'Cobranza'} >
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    </Tooltip>
+                  ) }
+              </PDFDownloadLink>
+            )}
             <div className="hidden sm:flex justify-end">
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
@@ -282,21 +306,23 @@ export default function TableCollectionsComponent({token, user, collectionsParam
           <div className={''}>
             <div className="flex gap-x-4 gap-y-4 justify-end items-center">
               {filterElemnts}
-              <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
-                          fechaIni={rangeDate?.from} totalCollections={totalRecovered} />} fileName={'Cobranza'} >
-                {({loading, url, error, blob}) => 
-                  loading? (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                    </Tooltip>
-                  ) : (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                    </Tooltip>
-                  ) }
-              </PDFDownloadLink>
+              {satCompany && (
+                <PDFDownloadLink document={<DownloadCollectionPDF collections={data} fechaFin={rangeDate?.to} 
+                            fechaIni={rangeDate?.from} totalCollections={totalRecovered} satCompany={satCompany} />} fileName={'Cobranza'} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </Tooltip>
+                    ) }
+                </PDFDownloadLink>
+              )}
               <Button onClick={() => setShowNewCollection(true)}>Nuevo</Button>
             </div>
           </div>

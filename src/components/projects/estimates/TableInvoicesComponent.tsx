@@ -19,6 +19,8 @@ import DownloadInvoicesByProjectPDF from "@/components/invoices/DownloadInvoices
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ContainerSideNav from "@/components/ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
 export default function TableInvoicesComponent({token, project, user, pageQuery, resumenInvoice, company}: 
   {token:string, project:OneProjectMin, user:string, pageQuery:string | undefined, 
@@ -28,6 +30,24 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
   const [selInvoice, setSelInvoice]=useState<IInvoiceTable>();
   const [showNewCollection, setShowNewCollection]=useState<boolean>(false);
   const refEstimate = useRef('');
+
+  const [satCompany, setSatCompany]=useState<Company>();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const handleShowForm = (value:boolean) => {
     setShowNewCollection(value);
@@ -234,21 +254,23 @@ export default function TableInvoicesComponent({token, project, user, pageQuery,
   return (
     <>
       <div className="flex justify-end p-3">
-        <PDFDownloadLink document={<DownloadInvoicesByProjectPDF invoices={invoices} project={project}
-                                      resumenInvoice={resumenInvoice} token={token} />} fileName={'Estado de cuenta - ' + project.title} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </Tooltip>
-            ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </Tooltip>
-            ) }
-        </PDFDownloadLink>
+        {satCompany && (
+          <PDFDownloadLink document={<DownloadInvoicesByProjectPDF invoices={invoices} project={project} satCompany={satCompany}
+                                        resumenInvoice={resumenInvoice} token={token} />} fileName={'Estado de cuenta - ' + project.title} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        )}
       </div>
       
       <div className="hidden md:block w-full">
