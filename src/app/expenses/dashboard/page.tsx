@@ -125,7 +125,7 @@ export default async function Page() {
             label: 'TODOS',
             value: 'TODOS'
           }].concat(projects)} costsResumen={costsResumen} costsResumenType={costsResumenType}
-          costsCat={costsCategory} costsCon={costsConcept} />
+          costsCat={costsCategory} costsCon={costsConcept} company={user.profile} />
     </>
   )
 }

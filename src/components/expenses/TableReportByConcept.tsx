@@ -12,16 +12,36 @@ import { useTableStates } from "@/app/store/tableStates";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { showToastMessageError } from "../Alert";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
-export default function TableReportByConcept({token}: {token:string}){
+export default function TableReportByConcept({token, company}: {token:string, company:string}){
   
   const columnHelper = createColumnHelper<ReportByCostcenter>();
   const [data, setData] = useState<ReportByCostcenter[]>([]);
+
+  const [satCompany, setSatCompany]=useState<Company>();
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const fetch = async (dateIni:string, dateFinal:string) => {
     const res = await getAllCostsGroupByCOSTOCENTERConceptByDate(token, dateIni, dateFinal);
@@ -149,8 +169,8 @@ export default function TableReportByConcept({token}: {token:string}){
             locale={es}
           />
         </div>
-        {data.length > 0 && (
-          <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={data} dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} />} 
+        {data.length > 0 && satCompany && (
+          <PDFDownloadLink document={<ReportCostByCostCenter costsCostCenter={data} dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} satCompany={satCompany} />} 
               fileName={`Resumen de costos por Centro de costos`} >
             {({loading, url, error, blob}) => 
               loading? (

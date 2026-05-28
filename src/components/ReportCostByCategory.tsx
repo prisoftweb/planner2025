@@ -2,9 +2,10 @@ import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportByCostcenterCategory } from '@/interfaces/CostCenter'
 import { useMemo } from 'react';
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostByCategory({costsCostCenter, dateFinal, dateIni}: 
-  {costsCostCenter: ReportByCostcenterCategory[], dateIni:Date, dateFinal: Date}){
+export default function ReportCostByCategory({costsCostCenter, dateFinal, dateIni, satCompany}: 
+  {costsCostCenter: ReportByCostcenterCategory[], dateIni:Date, dateFinal: Date, satCompany:Company}){
 
   const total=useMemo(() => costsCostCenter.reduce((accum, item) => accum+=item?.totalCost?? 0, 0), costsCostCenter);
   
@@ -50,7 +51,8 @@ export default function ReportCostByCategory({costsCostCenter, dateFinal, dateIn
       <Page>
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.title, {textAlign:'right'}]}>Resumen de costos por Categorias</Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>De {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} a {dateFinal.getDate()} de {months[dateFinal.getMonth()]} de {dateFinal.getFullYear()} </Text>

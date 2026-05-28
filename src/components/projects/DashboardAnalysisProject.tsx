@@ -22,6 +22,9 @@ import { BsFileEarmarkPdf } from "react-icons/bs";
 import DownloadProjectAnalisysPDF from "./DownloadProjectAnalisysPDF"
 import { propsTooltip } from "@/libs/animations";
 
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+
 interface OptionsDashboard {
   label: string,
   costo: number
@@ -33,7 +36,8 @@ interface OptionsBarChart {
   backgroundColor: string,
 }
 
-export default function DashboardAnalysisProject({token, id, project}: {token:string, id: string, project:OneProjectMin}){
+export default function DashboardAnalysisProject({token, id, project, company}: 
+  {token:string, id: string, project:OneProjectMin, company:string}){
   
   const {oneProjectStore} = useOneProjectsStore();
   const [budgetedControl, setBudgetedControl] = useState<ProjectByBudgetedControl>();
@@ -41,6 +45,24 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
   const [costoCenters, setCostoCenters] = useState<ProjectCostoCenters[]>([]);
   const [costoCentersCat, setCostoCentersCat] = useState<ProjectCostoCentersCategory[]>([]);
   const [showTotal, setShowTotal] = useState<boolean>(false);
+
+  const [satCompany, setSatCompany]=useState<Company>();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   useEffect(() => {
     const fetch = async () => {
@@ -199,8 +221,8 @@ export default function DashboardAnalysisProject({token, id, project}: {token:st
           </div>
         </div>
 
-        {budgetedControl && (
-          <PDFDownloadLink document={<DownloadProjectAnalisysPDF project={project}
+        {budgetedControl && satCompany && (
+          <PDFDownloadLink document={<DownloadProjectAnalisysPDF project={project} satCompany={satCompany}
                                       token={token} contractualControl={contractualControl}
                                       budgetedControl={budgetedControl} />} fileName={'Analisis - ' + project.title} >
             {({loading, url, error, blob}) => 

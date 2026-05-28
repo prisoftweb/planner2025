@@ -22,11 +22,12 @@ type DashBoardContainerProps = {
   costsResumen:CostsGroupByResumen[], 
   costsResumenType:CostsGroupResumenByType[], 
   costsCat: CostsByConceptAndCategory[], 
-  costsCon: CostsByConceptAndCategory[]
+  costsCon: CostsByConceptAndCategory[],
+  company:string
 }
 
 export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, 
-            projects, costsResumen, costsResumenType, costsCat, costsCon}: DashBoardContainerProps ) {
+            projects, costsResumen, costsResumenType, costsCat, costsCon, company}: DashBoardContainerProps ) {
   
   const [costsByConcept, setCostsByConcept] = useState<OptionsDashboard[]>(costsConcepts);
   const [costsByCategory, setCostsByCategory] = useState<OptionsDashboard[]>(costsCategories);
@@ -116,7 +117,7 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
 
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
-      <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} 
+      <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} company={company} token={token}
         costsResumenType={costsByResumenType} dataCostsCatagory={dataCostsCategory} dataCostsConcept={dataCostsConcept} />
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className="bg-white border border-slate-300 py-5">

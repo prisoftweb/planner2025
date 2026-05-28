@@ -26,11 +26,12 @@ interface Props {
   expenses:Expense[], 
   isFilter:boolean, 
   setIsFilter:(value: boolean) => void, 
-  isViewReports: boolean
+  isViewReports: boolean,
+  company: string,
 }
 
 export default function TableHistoryExpenses({data, token, expenses, 
-  isFilter, setIsFilter, isViewReports}:Props){
+  isFilter, setIsFilter, isViewReports, company}:Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
 
@@ -488,7 +489,7 @@ export default function TableHistoryExpenses({data, token, expenses,
       <div className="flex justify-end my-5">
         {isFilter && (
           <ContainerSideNav width="w-full max-w-[550px]">
-            <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} 
+            <Filtering showForm={setIsFilter} FilterData={filterData} maxAmount={maxAmount} company={company} token={token}
                         minAmount={minAmount} expensesFiltered={filteredExpenses} isViewReports={isViewReports} 
                       />
           </ContainerSideNav>

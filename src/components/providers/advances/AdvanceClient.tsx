@@ -15,8 +15,8 @@ import SumaryAdvanceProvider from "./SumaryAdvanceProvider";
 import TableInvoicesAndCreditNotes from "./TableInvoicesAndCreditNotes"
 import { ProviderMin } from "@/interfaces/Providers"
 
-export default function AdvanceClient({token, user, id, provider, advance}: 
-  { token:string, id:string, user:string, provider:ProviderMin, advance:OneExpense}){
+export default function AdvanceClient({token, user, id, provider, advance, company}: 
+  { token:string, id:string, user:string, provider:ProviderMin, advance:OneExpense, company:string }) {
 
   const {updateCurrentExpense} = useNewExpense();
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function AdvanceClient({token, user, id, provider, advance}:
     (opt===2? (<div className="mt-3 w-full flex space-x-2 flex-wrap 2xl:flex-nowrap" >
                 <div className="w-full max-w-[1800px] bg-white rounded-lg shadow-md pl-2 px-3" style={{borderColor:'#F8FAFC'}}>
                   <TableInvoicesAndCreditNotes provider={provider} token={token} user={user} advance={advance}
-                      ida={advance._id} pending={advance.advancesToSuppliers?.currentbalance?? 0} />
+                      ida={advance._id} pending={advance.advancesToSuppliers?.currentbalance?? 0} company={company} />
                 </div>
               </div>): //max w-md antes abajo
               <div className="mt-3 w-full max-w-lg bg-white rounded-lg shadow-md pl-2 px-3" 

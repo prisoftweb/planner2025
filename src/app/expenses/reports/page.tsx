@@ -17,7 +17,7 @@ export default function Page(){
         <HeaderImage image="/img/costs/costs.svg" previousPage="/" title="REPORTES DE COSTOS">
           <></>
         </HeaderImage>
-        <ContainerReportsPage token={token} />
+        <ContainerReportsPage token={token} company={user.profile} />
       </div>
     </>
   )

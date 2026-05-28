@@ -3,7 +3,7 @@ import { OneProjectMin } from "@/interfaces/Projects"
 import Button from "@/components/Button";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import { ProgressCircle } from "@tremor/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import Chip from "@/components/providers/Chip";
 import DonutChartComponent from "../dashboard/DonutChartComponent";
@@ -24,6 +24,9 @@ import DownloadEstimatesByProjectPDF from "./DownloadEstimationsByProjectPDF";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import ContainerSideNav from "@/components/ContainerSideNav";
 import { propsTooltip } from "@/libs/animations";
+
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
 interface OptionsDashboard {
   label: string,
@@ -52,6 +55,8 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const [openNewInvoice, setOpenNewInvoice] = useState<boolean>(false);
   const [selEstimate, setSelEstimate]=useState<TableEstimatesProject>();
 
+  const [satCompany, setSatCompany]=useState<Company>();
+
   const handleSelEstimate = (value: TableEstimatesProject) => {
     setSelEstimate(value);
   }
@@ -69,6 +74,22 @@ export default function ContainerStimationsProject({project, optConditions, optP
   const handleShowFormInvoice = (value: boolean) => {
     setOpenNewInvoice(value);
   }
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const updateEstimatesProject = async () => {
     let estimates: IEstimateProject[];
@@ -264,21 +285,23 @@ export default function ContainerStimationsProject({project, optConditions, optP
       </div>
 
       <div className="flex justify-end p-3">
-        <PDFDownloadLink document={<DownloadEstimatesByProjectPDF estimates={estimates} project={project}
-                                      token={token} anticipo={advance} />} fileName={'Estimaciones - ' + project.title} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </Tooltip>
-            ) : (
-              <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                  placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </Tooltip>
-            ) }
-        </PDFDownloadLink>
+        {satCompany && (
+          <PDFDownloadLink document={<DownloadEstimatesByProjectPDF estimates={estimates} project={project} satCompany={satCompany}
+                                        token={token} anticipo={advance} />} fileName={'Estimaciones - ' + project.title} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </Tooltip>
+              ) : (
+                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                </Tooltip>
+              ) }
+          </PDFDownloadLink>
+        )}
       </div>
       
       <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 

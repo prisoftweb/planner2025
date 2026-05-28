@@ -61,7 +61,7 @@ export default async function Page({ params }: { params: { id: string, ida:strin
         </div>
         {/* <NavTabAdvance tab="1" idProv={params.id} /> */}
         <AdvanceClient id={params.id} token={token} user={user._id} provider={provider}
-          advance={cost} />
+          advance={cost} company={user.profile} />
       </div>
     </>
   )

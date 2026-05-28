@@ -25,6 +25,8 @@ import DownloadReportCBPDF from "./DownloadReportCBPDF"
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { getDate } from "@/libs/dates"
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
 type Props = {
   token:string, 
@@ -70,6 +72,8 @@ export default function ContainerClient({token, optClients, optCategories,
   const [prjsCBtrue, setPrjsCBtrue] = useState<IProyectCostBen[]>(prjsCBtrueparam);
   const [selected, setSelected] = useState("Ganancia");
 
+  const [satCompany, setSatCompany]=useState<Company>();
+
   const [widthPage, setWidthPage]=useState<number>(500);
 
   const [isWide, setIsWide] = useState(false);
@@ -88,6 +92,22 @@ export default function ContainerClient({token, optClients, optCategories,
 
   useEffect(() => {
     updateProjectStore(projects);
+  }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
   }, []);
 
   useEffect(() => {
@@ -258,8 +278,8 @@ export default function ContainerClient({token, optClients, optCategories,
         value={rangeDate}
         locale={es}
       />
-      {selected==='Ganancia'? (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} 
+      {satCompany && selected==='Ganancia'? (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} satCompany={satCompany} 
             cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
             dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de ganancias por proyectos`} >
           {({loading, url, error, blob}) => 
@@ -274,23 +294,23 @@ export default function ContainerClient({token, optClients, optCategories,
             ) }
         </PDFDownloadLink>
       ): (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} 
-            cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
-            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </TooltipContainerIcon>
-            ) : (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </TooltipContainerIcon>
-            ) }
-        </PDFDownloadLink>
+        satCompany && <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} satCompany={satCompany}
+                          cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+                          dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
+                        {({loading, url, error, blob}) => 
+                          loading? (
+                            <TooltipContainerIcon label="costo beneficio">
+                              <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                            </TooltipContainerIcon>
+                          ) : (
+                            <TooltipContainerIcon label="costo beneficio">
+                              <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                            </TooltipContainerIcon>
+                          ) }
+                      </PDFDownloadLink>
       )}
-      {selected==='Ganancia'? (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} 
+      {satCompany && selected==='Ganancia'? (
+        <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} satCompany={satCompany}
             benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
             dateIni={rangeDate.from?? new Date()} order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
           {({loading, url, error, blob}) => 
@@ -305,102 +325,104 @@ export default function ContainerClient({token, optClients, optCategories,
             ) }
         </PDFDownloadLink>
       ): (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} 
-            cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
-            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </TooltipContainerIcon>
-            ) : (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-              </TooltipContainerIcon>
-            ) }
-        </PDFDownloadLink>
+        satCompany && (
+          <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} satCompany={satCompany}
+              cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+              dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <TooltipContainerIcon label="costo beneficio">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                </TooltipContainerIcon>
+              ) : (
+                <TooltipContainerIcon label="costo beneficio">
+                  <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+                </TooltipContainerIcon>
+              ) }
+          </PDFDownloadLink>
+        )
       )}
     </>
   )
 
-  const reportPDFResponsive=(
-    <>
-      <DateRangePicker 
-        className=''
-        placeholder='Seleccione un rango de fechas'
-        onValueChange={(e) => {
-          setRangeDate(e);
-          if(e.from && e.to){
-            handleDate(e.from, e.to);
-          }
-        }}
-        value={rangeDate}
-        locale={es}
-      />
-      {selected==='Ganancia'? (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} 
-            cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
-            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de ganancias por proyectos`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <TooltipContainerIcon label="Ganancia">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </TooltipContainerIcon>
-            ) : (
-              <TooltipContainerIcon label="Ganancia">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </TooltipContainerIcon>
-            ) }
-        </PDFDownloadLink>
-      ): (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} 
-            cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
-            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </TooltipContainerIcon>
-            ) : (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-              </TooltipContainerIcon>
-            ) }
-        </PDFDownloadLink>
-      )}
-      {selected==='Ganancia'? (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} 
-            benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
-            dateIni={rangeDate.from?? new Date()} order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <TooltipContainerIcon label="Ganancia">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </TooltipContainerIcon>
-            ) : (
-              <TooltipContainerIcon label="Ganancia">
-                <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-              </TooltipContainerIcon>
-            ) }
-        </PDFDownloadLink>
-      ): (
-        <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} 
-            cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
-            dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-              </TooltipContainerIcon>
-            ) : (
-              <TooltipContainerIcon label="costo beneficio">
-                <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-              </TooltipContainerIcon>
-            ) }
-        </PDFDownloadLink>
-      )}
-    </>
-  )
+  // const reportPDFResponsive=(
+  //   <>
+  //     <DateRangePicker 
+  //       className=''
+  //       placeholder='Seleccione un rango de fechas'
+  //       onValueChange={(e) => {
+  //         setRangeDate(e);
+  //         if(e.from && e.to){
+  //           handleDate(e.from, e.to);
+  //         }
+  //       }}
+  //       value={rangeDate}
+  //       locale={es}
+  //     />
+  //     {selected==='Ganancia'? (
+  //       <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} 
+  //           cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+  //           dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de ganancias por proyectos`} >
+  //         {({loading, url, error, blob}) => 
+  //           loading? (
+  //             <TooltipContainerIcon label="Ganancia">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+  //             </TooltipContainerIcon>
+  //           ) : (
+  //             <TooltipContainerIcon label="Ganancia">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+  //             </TooltipContainerIcon>
+  //           ) }
+  //       </PDFDownloadLink>
+  //     ): (
+  //       <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} 
+  //           cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+  //           dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
+  //         {({loading, url, error, blob}) => 
+  //           loading? (
+  //             <TooltipContainerIcon label="costo beneficio">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+  //             </TooltipContainerIcon>
+  //           ) : (
+  //             <TooltipContainerIcon label="costo beneficio">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+  //             </TooltipContainerIcon>
+  //           ) }
+  //       </PDFDownloadLink>
+  //     )}
+  //     {selected==='Ganancia'? (
+  //       <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} 
+  //           benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+  //           dateIni={rangeDate.from?? new Date()} order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
+  //         {({loading, url, error, blob}) => 
+  //           loading? (
+  //             <TooltipContainerIcon label="Ganancia">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+  //             </TooltipContainerIcon>
+  //           ) : (
+  //             <TooltipContainerIcon label="Ganancia">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+  //             </TooltipContainerIcon>
+  //           ) }
+  //       </PDFDownloadLink>
+  //     ): (
+  //       <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} 
+  //           cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+  //           dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
+  //         {({loading, url, error, blob}) => 
+  //           loading? (
+  //             <TooltipContainerIcon label="costo beneficio">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+  //             </TooltipContainerIcon>
+  //           ) : (
+  //             <TooltipContainerIcon label="costo beneficio">
+  //               <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+  //             </TooltipContainerIcon>
+  //           ) }
+  //       </PDFDownloadLink>
+  //     )}
+  //   </>
+  // )
 
   // return(
   //   <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
@@ -572,8 +594,8 @@ export default function ContainerClient({token, optClients, optCategories,
                 ))}
               </div>
 
-              {selected==='Ganancia'? (
-                <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} 
+              {satCompany && selected==='Ganancia'? (
+                <PDFDownloadLink document={<DownloadReportCBPDF key={'ganancia'} prjsCB={prjsCB} benTot={benTot} satCompany={satCompany} 
                     cosBen={cosBen} costTot={costTot} order={'Ganancia'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
                     dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de ganancias por proyectos`} >
                   {({loading, url, error, blob}) => 
@@ -588,23 +610,25 @@ export default function ContainerClient({token, optClients, optCategories,
                     ) }
                 </PDFDownloadLink>
               ): (
-                <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} 
-                    cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
-                    dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
-                  {({loading, url, error, blob}) => 
-                    loading? (
-                      <TooltipContainerIcon label="costo beneficio">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                      </TooltipContainerIcon>
-                    ) : (
-                      <TooltipContainerIcon label="costo beneficio">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                      </TooltipContainerIcon>
-                    ) }
-                </PDFDownloadLink>
+                satCompany && (
+                  <PDFDownloadLink document={<DownloadReportCBPDF key={'cb'} prjsCB={prjsCB} benTot={benTot} satCompany={satCompany} 
+                      cosBen={cosBen} costTot={costTot} order={'B/C'} type="POR PROYECTO" dateEnd={rangeDate.to?? new Date()}
+                      dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C por proyectos`} >
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <TooltipContainerIcon label="costo beneficio">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                        </TooltipContainerIcon>
+                      ) : (
+                        <TooltipContainerIcon label="costo beneficio">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                        </TooltipContainerIcon>
+                      ) }
+                  </PDFDownloadLink>
+                )
               )}
-              {selected==='Ganancia'? (
-                <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} 
+              {satCompany && selected==='Ganancia'? (
+                <PDFDownloadLink document={<DownloadReportCBPDF key={'gananciatot'} prjsCB={prjsCBtrue} satCompany={satCompany}
                     benTot={benTottrue} cosBen={cosBentrue} costTot={costTottrue} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
                     dateIni={rangeDate.from?? new Date()} order={'Ganancia'} />} fileName={`Relacion de ganancias general`} >
                   {({loading, url, error, blob}) => 
@@ -619,20 +643,22 @@ export default function ContainerClient({token, optClients, optCategories,
                     ) }
                 </PDFDownloadLink>
               ): (
-                <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} 
-                    cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
-                    dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
-                  {({loading, url, error, blob}) => 
-                    loading? (
-                      <TooltipContainerIcon label="costo beneficio">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                      </TooltipContainerIcon>
-                    ) : (
-                      <TooltipContainerIcon label="costo beneficio">
-                        <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
-                      </TooltipContainerIcon>
-                    ) }
-                </PDFDownloadLink>
+                satCompany && (
+                  <PDFDownloadLink document={<DownloadReportCBPDF key={'cbtot'} prjsCB={prjsCBtrue} benTot={benTottrue} satCompany={satCompany}
+                      cosBen={cosBentrue} costTot={costTottrue} order={'B/C'} type="GENERAL" dateEnd={rangeDate.to?? new Date()}
+                      dateIni={rangeDate.from?? new Date()} />} fileName={`Relacion de costo beneficio B-C general`} >
+                    {({loading, url, error, blob}) => 
+                      loading? (
+                        <TooltipContainerIcon label="costo beneficio">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                        </TooltipContainerIcon>
+                      ) : (
+                        <TooltipContainerIcon label="costo beneficio">
+                          <BsFileEarmarkPdf className="w-8 h-8 text-blue-500" />
+                        </TooltipContainerIcon>
+                      ) }
+                  </PDFDownloadLink>
+                )
               )}
 
               <div className="hidden xl:flex items-center gap-x-3 ">

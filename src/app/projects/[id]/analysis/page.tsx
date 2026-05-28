@@ -57,7 +57,7 @@ export default async function Page({ params }:
           <Selectize options={options} routePage="projects" subpath="/analysis" />
         </div>
         <NavTabProject idPro={params.id} tab='2' />
-        <ContainerProjectAnalysis id={params.id} project={project} token={token} user={user._id} />
+        <ContainerProjectAnalysis id={params.id} project={project} token={token} user={user._id} company={user.profile} />
       </div>
     </>
   )

@@ -15,6 +15,10 @@ import DownloadCostsProjectPDF from "./DownloadCostsProjectPDF"
 import SearchInTable from "../SearchInTable"
 import { useTableStates } from "@/app/store/tableStates"
 import { useMemo } from "react"
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { useState, useEffect } from "react"
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
 // import NewDonutChartComponent from "./dashboard/NewDonutChartComponent"
 
 // interface OptionsDashboard {
@@ -31,13 +35,33 @@ type Props = {
   costs: ICostsByProject[],
   costsConcepts?: DonutChartJS, 
   costsCategories?: DonutChartJS,
+  company:string
 }
 
-export default function ContainerCostsByProject({project, token, user, costs, costsCategories, costsConcepts}: Props){
+export default function ContainerCostsByProject({project, token, user, costs, costsCategories, costsConcepts, company}: Props){
 
   const columnHelper = createColumnHelper<ExpensesTable>();
 
   const queryParam= `?project=${project._id}`;
+  const [satCompany, setSatCompany]=useState<Company>();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        // getCompanyTAXDATAFULL(res.company, token),
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        // console.log('res comp => ', rescomp);
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const columns = [
       columnHelper.accessor(row => row.id, {
@@ -254,15 +278,17 @@ export default function ContainerCostsByProject({project, token, user, costs, co
       <div className="flex w-full justify-end mt-5 gap-x-2 items-center">
         <SearchInTable placeH="Buscar gasto.." />
         
-        <PDFDownloadLink document={<DownloadCostsProjectPDF costs={costs} project={project} />} 
-            fileName={`Costos detalles-${project.title}`} >
-          {({loading, url, error, blob}) => 
-            loading? (
-              <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
-            ) : (
-              <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
-            ) }
-        </PDFDownloadLink>
+        {satCompany && (
+          <PDFDownloadLink document={<DownloadCostsProjectPDF satCompany={satCompany} costs={costs} project={project} />} 
+              fileName={`Costos detalles-${project.title}`} >
+            {({loading, url, error, blob}) => 
+              loading? (
+                <BsFileEarmarkPdf className="w-6 h-6 text-slate-500" />
+              ) : (
+                <BsFileEarmarkPdf className="w-6 h-6 text-blue-500" />
+              ) }
+          </PDFDownloadLink>
+        )}
       </div> 
       
       <div className="hidden xl:block w-full">

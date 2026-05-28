@@ -2,9 +2,10 @@ import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportByProject, CostGroupByType } from '@/interfaces/ReportsOfCosts'
 import { useMemo } from 'react'
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostByProjects({reports, costsByTypes, dateFinal, dateIni}: 
-  {reports?:ReportByProject[], costsByTypes: CostGroupByType[], dateIni:Date, dateFinal: Date}){
+export default function ReportCostByProjects({reports, costsByTypes, dateFinal, dateIni, satCompany}: 
+  {reports?:ReportByProject[], costsByTypes: CostGroupByType[], dateIni:Date, dateFinal: Date, satCompany:Company}){
 
   // console.log('reportes por proyecto: ', reports);
   // console.log('costos por tipo: ', costsByTypes);
@@ -73,7 +74,8 @@ export default function ReportCostByProjects({reports, costsByTypes, dateFinal, 
       <Page>
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.title, {textAlign:'right'}]}>Resumen de costos por Tipos</Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>De {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} a {dateFinal.getDate()} de {months[dateFinal.getMonth()]} de {dateFinal.getFullYear()} </Text>

@@ -2,6 +2,7 @@ import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { Provider } from "@/interfaces/Providers";
 import { IPendingPaymentResumeProviderPDF, ITotalAcumulatedPendingPaymentResumeProviderPDF } from '@/interfaces/Payments';
+import { Company } from "@/interfaces/Companies"
 
 type groupExpirationDays = {
   vigente: number
@@ -12,8 +13,8 @@ type groupExpirationDays = {
   show?: number
 }
 
-export default function DownloadPaymentsPendingProviderPDF({provider, costs, totalAccum, user}: 
-  {provider:Provider, costs:IPendingPaymentResumeProviderPDF[], 
+export default function DownloadPaymentsPendingProviderPDF({provider, costs, totalAccum, user, satCompany}: 
+  {provider:Provider, costs:IPendingPaymentResumeProviderPDF[], satCompany:Company,
     totalAccum: ITotalAcumulatedPendingPaymentResumeProviderPDF[], user:string}) {
 
   let text = costs.length > 0 ? costs[0].groupTitleExpirationDays ?? '' : '';
@@ -44,7 +45,8 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'column', gap:'2px'}}>
                   <Text style={{fontSize:'14px', fontWeight:'bold'}}>PROGRAMACION DE PAGOS</Text>
                   <Text style={{fontSize:'10px', color:'gray'}}>Lista de facturas por pagar</Text>

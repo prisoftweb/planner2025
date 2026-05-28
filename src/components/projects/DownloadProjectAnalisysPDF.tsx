@@ -2,10 +2,11 @@ import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { OneProjectMin } from "@/interfaces/Projects"
 import { IContractualControlProject, ProjectByBudgetedControl } from '@/interfaces/DashboardProjects';
+import { Company } from "@/interfaces/Companies"
 
-export default function DownloadProjectAnalisysPDF({project, token, contractualControl, budgetedControl}:
+export default function DownloadProjectAnalisysPDF({project, token, contractualControl, budgetedControl, satCompany}:
   {project:OneProjectMin, token:string, contractualControl?: IContractualControlProject, 
-    budgetedControl:ProjectByBudgetedControl}) {
+    budgetedControl:ProjectByBudgetedControl, satCompany:Company}) {
 
   return(
     <Document>
@@ -17,7 +18,8 @@ export default function DownloadProjectAnalisysPDF({project, token, contractualC
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>ANALISIS DE PROYECTO</Text>

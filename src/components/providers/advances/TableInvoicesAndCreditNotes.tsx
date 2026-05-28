@@ -18,9 +18,11 @@ import Table from "@/components/Table";
 import { CurrencyFormatter } from "@/app/functions/Globals";
 import { IoAlert } from "react-icons/io5";
 import { OneExpense } from "@/interfaces/Expenses";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
-export default function TableInvoicesAndCreditNotes({provider, user, token, ida, pending, advance}: 
-  {provider:ProviderMin, user:string, token:string, ida:string, pending:number, advance:OneExpense}) {
+export default function TableInvoicesAndCreditNotes({provider, user, token, ida, pending, advance, company}: 
+  {provider:ProviderMin, user:string, token:string, ida:string, pending:number, advance:OneExpense, company:string}) {
 
   const [isAddInvoices, setIsAddInvoices]=useState<boolean>(false);
   const [costsRelAdvance, setCostsRelAdvance]=useState<ICostRelAdvanceInv[]>([]);
@@ -28,15 +30,36 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
   const [costsAdvance, setCostsAdvance]=useState<ICostRelAdvanceInv[]>([]);
   const [dataTable, setDatatable]=useState<ICostRelAdvanceTable[]>([]);
 
+  const [satCompany, setSatCompany]=useState<Company>();
+
   const columnHelper = createColumnHelper<ICostRelAdvanceTable>();
+
+//   useEffect(() => {
+//     const fetch = async () => {
+//       const [rescomp] = await Promise.all([
+//         // getCompanyTAXDATAFULL(res.company, token),
+//         getCompany(token, company),
+//       ]);
+      
+//       if(typeof(rescomp)==='string'){
+//         showToastMessageError(rescomp);
+//       }else{
+//         // console.log('res comp => ', rescomp);
+//         setSatCompany(rescomp);
+//       }
+//     }
+
+//     fetch();
+// }, []);
 
   useEffect(() => {
     const fetch = async() => {
-      const [res, resCosts] = await Promise.all([
+      const [res, resCosts, rescomp] = await Promise.all([
         // getAllCostsByAdvancesToSuppliersMIN(token, ida),
         getAllCostsByAdvancesToSuppliersMININVandAPP(token, ida),
         // getCostsAdvanceInvoicesCFDIs(token, ida)
-        getCostsAdvanceInvoicesCFDIsWithSTRUCT(token, ida)
+        getCostsAdvanceInvoicesCFDIsWithSTRUCT(token, ida),
+        getCompany(token, company)
       ]);
 
       if(typeof(res)==='string'){
@@ -53,6 +76,12 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
         showToastMessageError(resCosts);
       }else{
         setCostsAdvance(resCosts);
+      }
+
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
       }
     }
     fetch();
@@ -230,20 +259,22 @@ export default function TableInvoicesAndCreditNotes({provider, user, token, ida,
       </div>
       <div className="flex justify-end mr-3 mt-3">
         <div>
-          <PDFDownloadLink document={<DownloadAdvancePDF provider={provider} advance={advance} costsRelAdvance={costsAdvance} />} fileName={'Anticipo'} >
-            {({loading, url, error, blob}) => 
-              loading? (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                </Tooltip>
-              ) : (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                </Tooltip>
-              ) }
-          </PDFDownloadLink>
+          {satCompany && (
+            <PDFDownloadLink document={<DownloadAdvancePDF provider={provider} advance={advance} costsRelAdvance={costsAdvance} satCompany={satCompany} />} fileName={'Anticipo'} >
+              {({loading, url, error, blob}) => 
+                loading? (
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                    <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                  </Tooltip>
+                ) : (
+                  <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                      placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                    <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                  </Tooltip>
+                ) }
+            </PDFDownloadLink>
+          )}
         </div>
       </div>
       <div className="mt-5">

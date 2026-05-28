@@ -31,12 +31,13 @@ type Props = {
   idValidado: string, 
   handleExpensesSelected:Function, 
   isViewReports: boolean, 
-  isPending:boolean
+  isPending:boolean,
+  company: string,
 }
 
 export default function TableExpenses({data, token, expenses, 
   handleExpensesSelected, idValidado, user, isFilter, setIsFilter, 
-  isViewReports, isPending }: Props){
+  isViewReports, isPending, company }: Props){
   
   const columnHelper = createColumnHelper<ExpensesTable>();
   const refExpenses = useRef(expenses);
@@ -556,7 +557,7 @@ export default function TableExpenses({data, token, expenses,
       <div className="flex justify-end my-5">
           {isFilter && (
             <ContainerSideNav width="w-full max-w-[550px]">
-              <Filtering showForm={handleIsFilter}  
+              <Filtering showForm={handleIsFilter} company={company} token={token}
                           FilterData={filterData} maxAmount={maxAmount} 
                           minAmount={minAmount} expensesFiltered={expensesFiltered} isViewReports={isViewReports}
                         />

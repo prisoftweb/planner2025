@@ -26,6 +26,9 @@ import { propsTooltip } from "@/libs/animations"
 import DownloadPaymentsPendingProviderPDF from "./DownloadPaymentsPendingProviderPDf"
 import { UsrBack } from "@/interfaces/User"
 
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+
 type Props = {
   data:HistoryExpensesTable[], 
   token:string, 
@@ -49,6 +52,8 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   
   const [maxAmount, setMaxAmount] = useState<number>(0);
   const [minAmount, setMinAmount] = useState<number>(0);
+
+  const [satCompany, setSatCompany]=useState<Company>();
 
   const [dataReport, setDataReport]=useState<IPendingPaymentResumeProviderPDF[]>([]);
   // const [dataReport, setDataReport]=useState<IPendingPaymentResumeProviderPDF[]>([{
@@ -88,6 +93,22 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
   //   totalAcum: 5,
   // }]);
   const [totalAccum, setTotalAccum]=useState<ITotalAcumulatedPendingPaymentResumeProviderPDF[]>([]);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
   
   useEffect(() => {
     const fetch = async () => {
@@ -241,21 +262,23 @@ export default function ContainerTablePendinginvoices({data, token, expenses, us
               )}
             </div>
           </div>
-          <PDFDownloadLink document={<DownloadPaymentsPendingProviderPDF costs={dataReport} 
-                                          provider={provider} totalAccum={totalAccum} user={user.name} />} fileName={`Pendientes ${provider.name}`} >
-            {({loading, url, error, blob}) => 
-              loading? (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                </Tooltip>
-              ) : (
-                <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                    placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                  <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                </Tooltip>
-              ) }
-          </PDFDownloadLink>
+          {satCompany && (
+            <PDFDownloadLink document={<DownloadPaymentsPendingProviderPDF costs={dataReport} satCompany={satCompany}
+                                              provider={provider} totalAccum={totalAccum} user={user.name} />} fileName={`Pendientes ${provider.name}`} >
+                {({loading, url, error, blob}) => 
+                  loading? (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                    </Tooltip>
+                  ) : (
+                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                    </Tooltip>
+                  ) }
+              </PDFDownloadLink>
+          )}
         </div>
       </div>
       <TableHistoryCosts token={token} handleExpensesSelected={handleExpensesSelected}

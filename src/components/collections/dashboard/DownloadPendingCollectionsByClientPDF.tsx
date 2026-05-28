@@ -11,6 +11,7 @@ export default function DownloadPendingCollectionsByClientPDF({collections, toke
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   const currentDate = new Date(date || '');
   const formattedDate = `${currentDate.getDate()} de ${months[currentDate.getMonth()]} de ${currentDate.getFullYear()}`;
+  // este ya
 
   return(
     <Document>

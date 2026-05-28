@@ -13,6 +13,7 @@ export default function DownloadPendingCollectionsPDF({collections, token, pendi
   const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   const currentDate = new Date();
   const formattedDate = `${currentDate.getDate()} de ${months[currentDate.getMonth()]} de ${currentDate.getFullYear()}`;
+  // este ya
 
   return(
     <Document>

@@ -144,7 +144,7 @@ export default async function Page({ params }:
           <Selectize options={options} routePage="projects" subpath="/costs" />
         </div>
         <NavTabProject idPro={params.id} tab='4' />
-        <ContainerCostsByProject costs={costs} project={project} token={token} user={user._id}
+        <ContainerCostsByProject costs={costs} project={project} token={token} user={user._id} company={user.profile}
             // costsCategories={optCategories} costsConcepts={optConcepts} 
           />
       </div>

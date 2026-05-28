@@ -14,11 +14,14 @@ import ReportCostsByFilter from "../ReportCostsByFilter"
 import TooltipCloseIcon from "../tooltipIcons/TooltipCloseIcon";
 
 import { useOptionsExpense } from "@/app/store/newExpense"
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
 
 export default function Filtering({showForm, FilterData, maxAmount, minAmount, 
-                      expensesFiltered, isViewReports, }: 
+                      expensesFiltered, isViewReports, company, token }: 
   {showForm:(value: boolean) => void, FilterData:Function, maxAmount:number, minAmount:number, 
-    expensesFiltered: Expense[], isViewReports: boolean}){
+    expensesFiltered: Expense[], isViewReports: boolean, company:string, token:string}) {
 
   const {categories, conditions, costCenterOpt, projects, reportsOptions, types, providers} = useOptionsExpense();
 
@@ -37,10 +40,28 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
 
   const [isPaid, setIsPaid] = useState<number>(1);
 
+  const [satCompany, setSatCompany]=useState<Company>();
+
   const [values, setValues] = useState([
     new DateObject().setDay(4).subtract(1, "month"),
     new DateObject().setDay(4).add(1, "month")
   ])
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const handleValues = (dateValues: DateObject[]) => {
     setValues(dateValues);
@@ -316,9 +337,9 @@ export default function Filtering({showForm, FilterData, maxAmount, minAmount,
             >Generar Informe</Button>
           </div>
         )}
-        {isGeneratedReport && isViewReports? (
+        {isGeneratedReport && satCompany && isViewReports? (
           <div className="p-2 flex justify-center">
-          <PDFDownloadLink document={<ReportCostsByFilter costs={expensesFiltered} />} 
+          <PDFDownloadLink document={<ReportCostsByFilter costs={expensesFiltered} satCompany={satCompany} />} 
               fileName={`InformeCostosFiltrados`} onClick={() => setTimeout(() => {
                 setIsGeneratedReport(false);
               }, 300)} >

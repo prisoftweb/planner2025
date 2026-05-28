@@ -13,12 +13,16 @@ import { getCostByReportMin } from "@/app/api/routeReports";
 import { useOneReportStore } from "@/app/store/reportsStore";
 import { showToastMessageError } from "../Alert";
 import { propsTooltip } from "@/libs/animations";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
 export default function ProfileReport({report, send, token, user, id, dates, isSendReport=true}: 
   {report:Report, send:Function, id:string, token: string, user:UsrBack, 
     dates: DateReport[], isSendReport?:boolean}){
   const [costsReport, setCostReport] = useState<CostReport[]>([]);
   const {oneReport} = useOneReportStore();
+
+  const [satCompany, setSatCompany]=useState<Company>();
 
   const total = CurrencyFormatter({
     currency: "MXN",
@@ -41,6 +45,22 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
       setCostReport(costsRep);
     }
     fetchCosts();
+  }, []);
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, user.profile),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
   }, []);
 
   return(
@@ -126,8 +146,8 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
             <div>
               <p className="text-slate-500">Descargar</p>
               <div className="flex justify-center gap-x-5 mt-2">
-                {costsReport.length > 0 && oneReport && (
-                  <PDFDownloadLink document={<ReportPDF report={oneReport} costs={costsReport} />} fileName={oneReport.name} >
+                {costsReport.length > 0 && satCompany && oneReport && (
+                  <PDFDownloadLink document={<ReportPDF report={oneReport} costs={costsReport} satCompany={satCompany} />} fileName={oneReport.name} >
                     {({loading, url, error, blob}) => 
                       loading? (
                         <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
@@ -142,11 +162,11 @@ export default function ProfileReport({report, send, token, user, id, dates, isS
                       ) }
                   </PDFDownloadLink>
                 )}
-                {typeof(user.department)!== 'string' && (user.department.name.toLowerCase().includes('soporte') || 
+                {typeof(user.department)!== 'string' && satCompany && (user.department.name.toLowerCase().includes('soporte') || 
                     user.department.name.toLowerCase().includes('direccion') || user.department.name.toLowerCase().includes('admin')) && oneReport && (
                   <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Anexo' 
                       placement="top" className="text-blue-500 bg-white">
-                    <PDFDownloadLink document={<AttachedPDF report={oneReport} dates={dates} />} 
+                    <PDFDownloadLink document={<AttachedPDF report={oneReport} dates={dates} satCompany={satCompany} />} 
                           fileName={`FF-ANEXO-1-${oneReport.name}`} >
                       {({loading, url, error, blob}) => 
                         loading? (

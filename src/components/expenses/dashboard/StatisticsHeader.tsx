@@ -6,7 +6,7 @@ import { DateRangePicker } from '@tremor/react';
 import { es } from "date-fns/locale"
 import SelectReact from '@/components/SelectReact';
 import { Options } from '@/interfaces/Common';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { DateRangePickerValue, ProgressCircle } from '@tremor/react';
 import Label from '@/components/Label';
 import { CostsGroupByResumen, CostsGroupResumenByType } from '@/interfaces/DashboardsCosts';
@@ -17,6 +17,9 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { BsFileEarmarkPdf } from "react-icons/bs"; //Archivo PDF
 import ReportCostsCategoryAndConceptPDF from './ReportCostsCategoryAndConcept';
 import { propsTooltip } from '@/libs/animations';
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { showToastMessageError } from '@/components/Alert';
 
 type StatisticsHeaderProps = {
   handleDate: Function, 
@@ -24,18 +27,39 @@ type StatisticsHeaderProps = {
   costsResumen:CostsGroupByResumen[], 
   costsResumenType:CostsGroupResumenByType[], 
   dataCostsCatagory: CostsByConceptAndCategory[], 
-  dataCostsConcept: CostsByConceptAndCategory[]
+  dataCostsConcept: CostsByConceptAndCategory[],
+  company:string,
+  token:string
 }
 
 export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType, 
-      dataCostsCatagory, dataCostsConcept }: StatisticsHeaderProps) {
+      dataCostsCatagory, dataCostsConcept, company, token }: StatisticsHeaderProps) {
 
   const [project, setProject] = useState<string>(projects[0].value);
   const [titleProject, setTitleProject] = useState<string>(projects[0].label);
+  const [satCompany, setSatCompany]=useState<Company>();
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
     to: new Date(),
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        // getCompanyTAXDATAFULL(res.company, token),
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        // console.log('res comp => ', rescomp);
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const handleProjects = (value: string) => {
     setProject(value);
@@ -73,11 +97,11 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             </div>
             <div className='w-5'>
               <Label></Label>
-              {dataCostsCatagory && dataCostsCatagory.length > 0 && (
+              {dataCostsCatagory && dataCostsCatagory.length > 0 && satCompany && (
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                   content='categoria'
                   className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
-                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} 
+                  <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsCatagory} satCompany={satCompany}
                                                 type={true} rangeDate={rangeDate} projectTitle={titleProject} />} 
                       fileName={`InformeCostosAgrupadosPorCategoria`} >
                     {({loading, url, error, blob}) => 
@@ -92,11 +116,11 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             </div>
             <div className='w-5'>
               <Label></Label>
-              {dataCostsConcept && dataCostsConcept.length > 0 && (
+              {dataCostsConcept && dataCostsConcept.length > 0 && satCompany && (
                 <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} 
                     content='concepto' 
                     className="text-slate-900 bg-white rounded-md border border-slate-400" placement="top">
-                    <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} 
+                    <PDFDownloadLink document={<ReportCostsCategoryAndConceptPDF data={dataCostsConcept} satCompany={satCompany} 
                                                   type={false} rangeDate={rangeDate} projectTitle={titleProject} />} 
                       fileName={`InformeCostosAgrupadosPorConcepto`} >
                     {({loading, url, error, blob}) => 

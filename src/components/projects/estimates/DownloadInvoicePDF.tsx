@@ -2,7 +2,6 @@ import { IInvoiceByDateAndConditionMin, IInvoiceMinFull } from "@/interfaces/Inv
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { IInvoiceFull } from "@/interfaces/Invoices"
-import { ISatCompany } from "@/interfaces/SatInvoice"
 import { Company } from "@/interfaces/Companies"
 
 export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}: 

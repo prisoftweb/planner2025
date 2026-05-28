@@ -2,9 +2,10 @@ import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { CostsByConceptAndCategory } from '@/interfaces/DashboardsCosts';
 import { DateRangePickerValue } from '@tremor/react';
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate, projectTitle}: 
-  {data: CostsByConceptAndCategory[], type:boolean, rangeDate: DateRangePickerValue, projectTitle:string}) {
+export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate, projectTitle, satCompany}: 
+  {data: CostsByConceptAndCategory[], type:boolean, rangeDate: DateRangePickerValue, projectTitle:string, satCompany:Company}) {
   
   const style = StyleSheet.create({
     table: {
@@ -43,7 +44,8 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate,
       <Page>
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany.logo} style={{width: '130px'}} />
             <View style={{margin:'0px'}}>
               <Text style={[{fontSize: '13px', margin: '1px', color: 'black', fontWeight:'semibold'}]}>
                 Costos por {type? 'categorias':'conceptos'}

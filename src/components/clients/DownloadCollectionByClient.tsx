@@ -12,6 +12,7 @@ export default function DownloadCollectionByClientPDF({collections, client, rfc,
   {collections: ICollectionByClientMin[], client:string, rfc:string, company:Company}) {
 
   // const [resumenPayment, setResumenPayment] = useState<ITotalResumentPayment>();
+  // este ya
 
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 

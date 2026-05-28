@@ -1,8 +1,10 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ReportCostsByProjectOnly } from '@/interfaces/ReportsOfCosts';
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostsByProjectOnlyPDF({reports, dateFinal, dateIni}: {reports: ReportCostsByProjectOnly[], dateIni:Date, dateFinal: Date}){
+export default function ReportCostsByProjectOnlyPDF({reports, dateFinal, dateIni, satCompany}: 
+  {reports: ReportCostsByProjectOnly[], dateIni:Date, dateFinal: Date, satCompany:Company}){
 
   console.log('reportes para pdf', reports);
   
@@ -53,7 +55,8 @@ export default function ReportCostsByProjectOnlyPDF({reports, dateFinal, dateIni
       <Page>
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.title, {textAlign:'right'}]}>Resumen de costos por Proyecto</Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>De {dateIni.getDate()} de {months[dateIni.getMonth()]} de {dateIni.getFullYear()} a {dateFinal.getDate()} de {months[dateFinal.getMonth()]} de {dateFinal.getFullYear()} </Text>

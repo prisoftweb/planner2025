@@ -1,8 +1,9 @@
 import {Document, Page, Text, Image, View, StyleSheet} from '@react-pdf/renderer'
 import { Report, DateReport } from '@/interfaces/Reports'
 import { CurrencyFormatter } from '@/app/functions/Globals'
+import { Company } from "@/interfaces/Companies"
 
-export default function AttachedPDF({report, dates} :{report:Report, dates: DateReport[]}){
+export default function AttachedPDF({report, dates, satCompany} :{report:Report, dates: DateReport[], satCompany:Company}){
   
   const months = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MARZO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
   // const date = new Date(report.date);
@@ -51,7 +52,8 @@ export default function AttachedPDF({report, dates} :{report:Report, dates: Date
       <Page>
         <View style={{padding: '15px'}}>
           <View style={{justifyContent: 'center', marginTop: '10px'}}>
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '170px'}}></Image>
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '170px'}}></Image> */}
+            <Image src={satCompany.logo} style={{width: '170px'}}></Image>
           </View>
           <Text style={{fontSize: '20px', textAlign: 'center', fontWeight: 'bold'}}>(FF ANEXO I)</Text>
           <Text style={{fontSize: '15px', textAlign: 'center', fontWeight: 'semibold'}}> OFICIO DE ENTREGA </Text>

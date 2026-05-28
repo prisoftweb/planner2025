@@ -313,19 +313,19 @@ export default function ContainerClient({data, token, expenses, user, isHistory=
     isHistory? (
       <TableHistoryExpenses  token={token} isViewReports={isViewReports}
         expenses={expenses} isFilter={isFilter} setIsFilter={setIsFilter}
-        data={tableData}
+        data={tableData} company={user.profile}
       />
     ): isViewUser? (
       <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
         idValidado={idVal} user={user._id} isViewReports={isViewReports}
-        data={tableData} isPending={isViewUser}
+        data={tableData} isPending={isViewUser} company={user.profile}
       />
     ): (
       <TableExpenses token={token} handleExpensesSelected={handleExpensesSelected}
         expenses={expensesTable.length > 0? expensesTable: expenses} isFilter={isFilter} setIsFilter={handleFilter}
         idValidado={idVal} user={user._id} isViewReports={isViewReports}
-        data={tableData} isPending={isViewUser}
+        data={tableData} isPending={isViewUser} company={user.profile}
       />
     )
   

@@ -8,6 +8,7 @@ export default function DownloadCollectionPDF({collections, fechaFin ,fechaIni, 
     satCompany:Company}) {
 
   const orderCollections = collections.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  // este ya
 
   return(
     <Document>

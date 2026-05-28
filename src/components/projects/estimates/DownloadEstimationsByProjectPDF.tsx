@@ -4,9 +4,10 @@ import { OneProjectMin } from "@/interfaces/Projects"
 import { useState, useEffect } from 'react';
 import { IEstimateProject, TotalEstimatedByProject } from '@/interfaces/Estimate';
 import { getTotalEstimatesByProjectMin } from '@/app/api/routeEstimates';
+import { Company } from "@/interfaces/Companies"
 
-export default function DownloadEstimatesByProjectPDF({estimates, project, token, anticipo}:
-  {estimates: IEstimateProject[], project:OneProjectMin, token:string, anticipo: number}) {
+export default function DownloadEstimatesByProjectPDF({estimates, project, token, anticipo, satCompany}:
+  {estimates: IEstimateProject[], project:OneProjectMin, token:string, anticipo: number, satCompany:Company}) {
 
   const [totalEstimatedProjectState, setTotalEstimatedProjectState] = useState<TotalEstimatedByProject[]>([]);
 
@@ -39,7 +40,8 @@ export default function DownloadEstimatesByProjectPDF({estimates, project, token
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>ACUMULADO DE ESTIMACIONES</Text>

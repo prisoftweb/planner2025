@@ -20,6 +20,7 @@ export default function DownloadGuaranteeByProjectPDF({guarantees, project, toke
   guarantees.map((g) => {
     totalVat += g.cost.total || 0;
   });
+  // este ya
 
   const orderGuarantees = guarantees.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 

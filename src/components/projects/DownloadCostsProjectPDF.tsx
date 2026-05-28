@@ -2,8 +2,10 @@ import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ICostsByProject } from '@/interfaces/Projects';
 import { OneProjectMin } from '@/interfaces/Projects';
+import { Company } from "@/interfaces/Companies"
 
-export default function DownloadCostsProjectPDF({costs, project}: {costs:ICostsByProject[], project: OneProjectMin}){
+export default function DownloadCostsProjectPDF({costs, project, satCompany}: 
+  {costs:ICostsByProject[], project: OneProjectMin, satCompany:Company}){
   
   const style = StyleSheet.create({
     table: {
@@ -51,7 +53,8 @@ export default function DownloadCostsProjectPDF({costs, project}: {costs:ICostsB
       <Page>
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Resumen de costos {project.title} </Text>
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>

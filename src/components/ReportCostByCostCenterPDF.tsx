@@ -1,7 +1,8 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportCostByCostCenterPDF(){
+export default function ReportCostByCostCenterPDF({satCompany}: {satCompany:Company}){
   const style = StyleSheet.create({
     table: {
       display: 'flex',
@@ -35,7 +36,8 @@ export default function ReportCostByCostCenterPDF(){
       <Page>
         <View style={{padding: '7px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
-            <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} />
+            {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
+            <Image src={satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right'}} >
               <Text style={[style.subTitle, {textAlign:'right'}]}>Detalle de costo agrupado por centro de costos</Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 31 de mayo 2024</Text>

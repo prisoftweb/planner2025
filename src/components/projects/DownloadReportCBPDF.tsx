@@ -1,6 +1,7 @@
 import {Document, Page, Text, Image, View} from '@react-pdf/renderer'
 import { CurrencyFormatter } from '@/app/functions/Globals'
 import { IProyectCostBen, ICosBen, ICostosTotales, IBeneficiosTotales } from "@/interfaces/Projects"
+import { Company } from "@/interfaces/Companies"
 
 type Props = {
   prjsCB:IProyectCostBen[], 
@@ -10,10 +11,11 @@ type Props = {
   order:string,
   type:string,
   dateIni:Date,
-  dateEnd:Date
+  dateEnd:Date,
+  satCompany:Company
 }
 
-export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, order, type, dateEnd, dateIni}: Props) {
+export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, order, type, dateEnd, dateIni, satCompany}: Props) {
 
   const orderProjects = order==="Ganancia"? [...prjsCB].sort((a, b) => a.rentabilidad - b.rentabilidad) : [...prjsCB].sort((a, b) => a.costobeneficio - b.costobeneficio);
 
@@ -32,7 +34,8 @@ export default function DownloadReportCBPDF({benTot, cosBen, costTot, prjsCB, or
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray', width: '250px'}}>COSTO-BENEFICIO</Text>

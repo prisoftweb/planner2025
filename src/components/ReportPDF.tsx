@@ -1,9 +1,10 @@
 import {Document, Page, Text, View, StyleSheet, Image} from '@react-pdf/renderer'
 import { Report, CostReport } from '@/interfaces/Reports'
 import { CurrencyFormatter } from '@/app/functions/Globals'
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportPDF({report, costs}: 
-  {report: Report, costs: CostReport[]}){
+export default function ReportPDF({report, costs, satCompany}: 
+  {report: Report, costs: CostReport[], satCompany:Company}){
   
   const style = StyleSheet.create({
     table: {
@@ -88,7 +89,8 @@ export default function ReportPDF({report, costs}:
     <Document>
       <Page>
         <View style={style.headerPage}>
-          <Image src={'/isologo_palacios.png'} style={{width: '40px'}} />
+          {/* <Image src={'/isologo_palacios.png'} style={{width: '40px'}} /> */}
+          <Image src={satCompany.logo} style={{width: '40px'}} />
           <Text style={style.subTitle}>Informe de gastos</Text>
           <Text style={style.title}>{report.name}</Text>
         </View>

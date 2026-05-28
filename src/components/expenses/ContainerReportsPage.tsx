@@ -7,7 +7,7 @@ import TableReportByType from "./TableReportByType";
 import TableReportByCategory from "./TableReportByCategory";
 import TableReportByConcept from "./TableReportByConcept";
 
-export default function ContainerReportsPage({token}: {token:string}){
+export default function ContainerReportsPage({token, company}: {token:string, company:string}){
   
   const [option, setOption] = useState<number>(0);
 
@@ -18,16 +18,16 @@ export default function ContainerReportsPage({token}: {token:string}){
   let table = <></>;
   switch(option){
     case 0:
-      table =  <TableReportByProject token={token} />;
+      table =  <TableReportByProject token={token} company={company} />;
     break;
     case 1:
-      table =  <TableReportByType token={token} />;
+      table =  <TableReportByType token={token} company={company} />;
     break;
     case 2:
-      table =  <TableReportByCategory token={token} />;
+      table =  <TableReportByCategory token={token} company={company} />;
     break;
     case 3:
-      table = <TableReportByConcept token={token} />
+      table = <TableReportByConcept token={token} company={company} />
     break;
   }
 

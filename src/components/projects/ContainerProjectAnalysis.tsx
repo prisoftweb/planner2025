@@ -9,10 +9,11 @@ type Props = {
   project:OneProjectMin, 
   token:string, 
   id:string,
-  user:string
+  user:string,
+  company:string
 }
 
-export default function ContainerProjectAnalysis({project, token, id, user}: Props){
+export default function ContainerProjectAnalysis({project, token, id, user, company}: Props){
 
   const {updateOneProjectStore} = useOneProjectsStore();
   
@@ -23,7 +24,7 @@ export default function ContainerProjectAnalysis({project, token, id, user}: Pro
   return(
     <>
       <div className={`flex`}>
-        <DashboardAnalysisProject token={token} id={id} project={project} />
+        <DashboardAnalysisProject token={token} id={id} project={project} company={company} />
       </div>
     </>
   )

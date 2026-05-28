@@ -26,7 +26,8 @@ export default function DownloadInvoicesReportPDF({invoices, fechaFin, fechaIni,
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
                 {/* <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image> */}
-                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={'https://picsum.photos/200'} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray'}}>FACTURACION</Text>

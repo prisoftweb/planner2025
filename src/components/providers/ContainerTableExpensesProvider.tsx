@@ -24,26 +24,48 @@ import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from "@/interfaces/Payments"
 
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+
 type Props = {
   data:ExpensesTableProvider[], 
   token:string, 
   expenses:PaymentProvider[], 
   user: string, 
   provider: Provider,
-  pending: ITotalAcumulatedPendingPaymentResumeProviderPDF[]
+  pending: ITotalAcumulatedPendingPaymentResumeProviderPDF[],
+  company:string
 }
 
 export default function ContainerTableExpensesProvider({data, token, expenses, user, 
-  provider, pending}: Props) {
+  provider, pending, company}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
   const [stateExpenses, setStateExpenses] = useState<PaymentProvider[]>(expenses);
+
+  const [satCompany, setSatCompany]=useState<Company>();
 
   const [dataReport, setDataReport]=useState<IPaymentResumeProvider[]>([]);
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
     to: new Date(),
   });
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const fetch = async (dateIni:string, dateFinal:string) => {
     const res = await getAllPaymentsByProviderAndDateMIN(provider._id, token, dateIni, dateFinal);
@@ -107,10 +129,10 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
             <div className={`w-auto`}>
               <div className="flex gap-x-4 justify-end items-center">
                 <TooltipFilterIcon handleFilter={handleFilter} />
-                {dataReport.length > 0 && (
+                {dataReport.length > 0 && satCompany && (
                   <div className="flex justify-end sm:hidden">
                     <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
-                          dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()}
+                          dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} satCompany={satCompany}
                           pending={pending} />} fileName={`Pagos ${provider.name}`} >
                       {({loading, url, error, blob}) => 
                         loading? (
@@ -144,10 +166,10 @@ export default function ContainerTableExpensesProvider({data, token, expenses, u
               locale={es}
             />
           </div>
-          {dataReport.length > 0 && (
+          {dataReport.length > 0 && satCompany && (
             <div className="hidden sm:flex justify-end ">
               <PDFDownloadLink document={<DownloadPaymentsResumeProviderPDF payments={dataReport} provider={provider}
-                    dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()}
+                    dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} satCompany={satCompany}
                     pending={pending} />} fileName={`Pagos ${provider.name}`} >
                 {({loading, url, error, blob}) => 
                   loading? (

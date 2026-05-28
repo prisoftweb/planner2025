@@ -13,13 +13,33 @@ import { useTableStates } from "@/app/store/tableStates";
 import { DateRangePicker, DateRangePickerValue, } from "@tremor/react";
 import { es } from "date-fns/locale"
 import { showToastMessageError } from "../Alert";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
-export default function TableReportByType({token}: {token:string}){
+export default function TableReportByType({token, company}: {token:string, company:string}){
   
   // const columnHelper = createColumnHelper<ReportByProject>();
   // const [data, setData] = useState<ReportByProject[]>([]);
   const columnHelper = createColumnHelper<CostGroupByType>();
   const [dataType, setDataType] = useState<CostGroupByType[]>([]);
+
+  const [satCompany, setSatCompany]=useState<Company>();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
 
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
     from: new Date(new Date().getFullYear(), 0, 1),
@@ -193,8 +213,8 @@ export default function TableReportByType({token}: {token:string}){
             locale={es}
           />
         </div>
-        {dataType.length > 0 && (
-          <PDFDownloadLink document={<ReportCostByProjects costsByTypes={dataType} dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} />} 
+        {dataType.length > 0 && satCompany && (
+          <PDFDownloadLink document={<ReportCostByProjects costsByTypes={dataType} dateFinal={rangeDate?.to ?? new Date()} dateIni={rangeDate?.from?? new Date()} satCompany={satCompany} />} 
               fileName={`Resumen de costos por Tipos`} >
             {({loading, url, error, blob}) => 
               loading? (

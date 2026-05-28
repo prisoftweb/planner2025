@@ -4,10 +4,11 @@ import { Provider } from "@/interfaces/Providers";
 import { IPaymentResumeProvider } from '@/interfaces/Payments';
 import { useMemo } from 'react';
 import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from '@/interfaces/Payments';
+import { Company } from "@/interfaces/Companies"
 
-export default function DownloadPaymentsResumeProviderPDF({provider, payments, dateFinal, dateIni, pending}: 
+export default function DownloadPaymentsResumeProviderPDF({provider, payments, dateFinal, dateIni, pending, satCompany}: 
   {provider:Provider, payments:IPaymentResumeProvider[], dateIni:Date, dateFinal:Date, 
-    pending: ITotalAcumulatedPendingPaymentResumeProviderPDF[]}) {
+    pending: ITotalAcumulatedPendingPaymentResumeProviderPDF[], satCompany:Company}) {
 
   const total = useMemo(() => payments.reduce((accum, element) => accum += element.payout, 0), payments);
 
@@ -26,7 +27,8 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
             <View style={{display:'flex', flexDirection:'column'}}>
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
-                <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image>
+                {/* <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image> */}
+                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'column', gap:'2px'}}>
                   <Text style={{fontSize:'14px', fontWeight:'bold'}}>RESUMEN DE PAGOS</Text>
                   <Text style={{fontSize:'10px', color:'gray'}}>Listado de pagos al proveedor</Text>
