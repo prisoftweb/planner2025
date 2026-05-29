@@ -37,7 +37,7 @@ export default function ReportCostByCostCenterPDF({satCompany}: {satCompany:Comp
         <View style={{padding: '7px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
-            <Image src={satCompany.logo} style={{width: '130px'}} />
+            <Image src={satCompany?.isologo?? satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right'}} >
               <Text style={[style.subTitle, {textAlign:'right'}]}>Detalle de costo agrupado por centro de costos</Text>
               <Text style={[style.subTitle, {textAlign:'right'}]}>Del dia 01 al 31 de mayo 2024</Text>

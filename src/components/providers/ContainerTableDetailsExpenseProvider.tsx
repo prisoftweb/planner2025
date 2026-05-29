@@ -4,7 +4,7 @@ import ArrowReturn from "../ArrowReturn"
 import IconText from "./IconText"
 import SearchInTable from "../SearchInTable"
 import { GiSettingsKnobs } from "react-icons/gi"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import TableCostsDetailProvider from "./TableCostsDetailProvider"
 import { DetailExpensesTableProvider } from "@/interfaces/Providers"
 import { CostPayment } from "@/interfaces/Payments"
@@ -21,6 +21,10 @@ import { UsrBack } from "@/interfaces/User"
 import { ProviderMin } from "@/interfaces/Providers"
 import { propsTooltip } from "@/libs/animations"
 import {ITotalAcumulatedPendingPaymentResumeProviderPDF} from "@/interfaces/Payments"
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
+
 
 type Props = {
   data:DetailExpensesTableProvider[], 
@@ -36,6 +40,24 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
   provider, payment, pending}: Props) {
 
   const [filter, setFilter] = useState<boolean>(false);
+ 
+  const [satCompany, setSatCompany]=useState<Company>();
+
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, user.profile),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
+  }, []);
   
   const handleFilter = (value: boolean) => {
     setFilter(value);
@@ -57,21 +79,23 @@ export default function ContainerTableDetailsExpenseProvider({data, token, expen
                 className="text-slate-600 w-8 h-8 cursor-pointer hover:text-slate-300"
               />
               
-              <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider}
-                                            payment={payment} user={user} pending={pending} />} fileName={`${provider.name}.pdf`} >
-                {({loading, url, error, blob}) => 
-                  loading? (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
-                    </Tooltip>
-                  ) : (
-                    <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
-                        placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
-                      <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
-                    </Tooltip>
-                  ) }
-              </PDFDownloadLink>
+              {satCompany && (
+                <PDFDownloadLink document={<ReportPaymentPDF costs={data} provider={provider} satCompany={satCompany}
+                                              payment={payment} user={user} pending={pending} />} fileName={`${provider.name}.pdf`} >
+                  {({loading, url, error, blob}) => 
+                    loading? (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
+                      </Tooltip>
+                    ) : (
+                      <Tooltip closeDelay={0} delay={100} motionProps={propsTooltip} content='Informe' 
+                          placement="right" className="text-blue-500 bg-white rounded-md border border-slate-400">
+                        <BsFileEarmarkPdf className="w-8 h-8 text-green-500" />
+                      </Tooltip>
+                    ) }
+                </PDFDownloadLink>
+              )}
             </div>
           </div>
         </div>

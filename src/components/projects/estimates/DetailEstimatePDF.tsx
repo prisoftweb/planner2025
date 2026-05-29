@@ -3,9 +3,10 @@ import { CurrencyFormatter } from '@/app/functions/Globals'
 import { ResumenEstimateProject } from '@/interfaces/Estimate';
 import { OneProjectMin } from '@/interfaces/Projects';
 import { IEstimate } from '@/interfaces/Estimate';
+import { Company } from "@/interfaces/Companies"
 
-export default function DetailEstimatePDF({resumenEstimate, project, estimate, numEstimate}:
-    {resumenEstimate: ResumenEstimateProject, project:OneProjectMin, estimate:IEstimate, numEstimate:number}){
+export default function DetailEstimatePDF({resumenEstimate, project, estimate, numEstimate, satCompany}:
+    {resumenEstimate: ResumenEstimateProject, project:OneProjectMin, estimate:IEstimate, numEstimate:number, satCompany:Company}){
   
   const style = StyleSheet.create({
     paragraph: {
@@ -44,7 +45,8 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
         <View style={{padding: '15px'}}>
           <View style={{display: 'flex', flexDirection: 'row', gap:'5px'}}>
             <View style={{width:'33%', textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center'}}>
-              <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image>
+              {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
+              <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'67px'}}></Image>
               <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                 <View>
                   <Text style={{fontSize:'11px', color:'blue'}}>{project.title}</Text>
@@ -61,8 +63,8 @@ export default function DetailEstimatePDF({resumenEstimate, project, estimate, n
             </View>
 
             <View style={{display:'flex', alignItems:'center', padding:'13px', width:'33%'}}>
-              <Image src={'/Logotipo_principal.png'} style={{width: 'auto', height:'70px'}} />
-              <Text style={{color:'#3b82f6', fontSize:'10px'}}>Samuel Palacios Hernandez</Text>
+              <Image src={satCompany.logo} style={{width: 'auto', height:'70px'}} />
+              <Text style={{color:'#3b82f6', fontSize:'10px'}}>{satCompany.tradename}</Text>
             </View>
 
             <View style={{padding:'13px', width:'33%'}}>

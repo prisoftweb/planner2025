@@ -307,7 +307,7 @@ export default function ContainerStimationsProject({project, optConditions, optP
       <TableEstimatesByProject project={project} optConditions={optConditions} optProjects={optProjects} 
         estimates={estimatesData} handleFilterTable={handleFilterTable} isFilterTable={isfilterTable} 
         delEstimate={delEstimate} showNewInvoice={handleShowFormInvoice} token={token} 
-        selEstimate={handleSelEstimate} pageProject={pageProject} />
+        selEstimate={handleSelEstimate} pageProject={pageProject} company={company} />
 
       {/* {openNewStimate && (
         <ContainerSideNav width="w-full max-w-lg">

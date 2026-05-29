@@ -2,8 +2,10 @@ import Navigation from "@/components/navigation/Navigation";
 import { UsrBack } from "@/interfaces/User";
 import { cookies } from "next/headers";
 import ContainerNewCode from "@/components/codes/ContainerNewCode";
+import { getCompany } from "@/app/api/routeCompany";
+import { Company } from "@/interfaces/Companies"
 
-export default function Home() {
+export default async function Home() {
   const cookieStore = cookies();
   
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
@@ -11,6 +13,14 @@ export default function Home() {
 
   const depto = typeof(user.department)==='string'? user.department:  user.department.name;
   const role = user.rol?.name || '';
+
+  const rescomp: string|Company = await getCompany(token, user.profile);
+  
+  // if(typeof(rescomp)==='string'){
+  //   showToastMessageError(rescomp);
+  // }else{
+  //   setSatCompany(rescomp);
+  // }
 
   return (
     <>
@@ -25,11 +35,15 @@ export default function Home() {
               || user._id === '65d3836974045152c0c4378c' ? (
             <ContainerNewCode token={token} user={user._id} company={user.profile} />
           ): (
-          <img src="/img/Palaciosconstrucciones horizontal.svg" alt="logo" 
+            typeof(rescomp)==='string'? <h1>Error al consultar logo de la compañia</h1>: <img src={rescomp.logo} alt="logo" 
             className="w-auto h-96" 
-          />)}
+          />
+          )}
         </div>
       </div>
     </>
   );
+  // <img src="/img/Palaciosconstrucciones horizontal.svg" alt="logo" 
+  //           className="w-auto h-96" 
+  //         />
 }

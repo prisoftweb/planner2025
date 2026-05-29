@@ -17,6 +17,8 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
 
   const period = `Del ${dateIni.getDate()} de ${months[dateIni.getMonth()]} de ${dateIni.getFullYear()} al ${dateFinal.getDate()} de ${months[dateFinal.getMonth()]} de ${dateFinal.getFullYear()}`;
 
+  // ya esta
+
   return(
     <Document>
       <Page>
@@ -28,7 +30,7 @@ export default function DownloadPaymentsResumeProviderPDF({provider, payments, d
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
                 {/* <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image> */}
-                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
+                <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'column', gap:'2px'}}>
                   <Text style={{fontSize:'14px', fontWeight:'bold'}}>RESUMEN DE PAGOS</Text>
                   <Text style={{fontSize:'10px', color:'gray'}}>Listado de pagos al proveedor</Text>

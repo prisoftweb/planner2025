@@ -10,14 +10,17 @@ import {PDFDownloadLink} from '@react-pdf/renderer'
 import { BsFileEarmarkPdf } from "react-icons/bs";
 import { GetProjectMin } from "@/app/api/routeProjects"
 import { showToastMessageError } from "@/components/Alert"
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
 
-export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstimate, showForm, 
-    token}: {prj:string, numEstimate:number, nomEstimate:string, showForm:Function, token:string}) {
+export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstimate, showForm, company, 
+    token}: {prj:string, numEstimate:number, nomEstimate:string, showForm:Function, token:string, company:string}) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [estimate, setEstimate] = useState<IEstimate>();
   const [resumenEstimateProject, setResumenEstimateProject]=useState<ResumenEstimateProject>();
 	const [project, setProject] = useState<OneProjectMin>();
+  const [satCompany, setSatCompany] = useState<Company>();
 
   useEffect(() => {
     const fetchData = async() => {
@@ -47,6 +50,18 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
       }
     }
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchCompany = async() => {
+      const res = await getCompany(token, company);
+      if(typeof(res) !== 'string'){
+        setSatCompany(res);
+      }else{
+        showToastMessageError(res);
+      }
+    }
+    fetchCompany();
   }, []);
   
   const handleResize = () => {
@@ -94,9 +109,9 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
                 <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
               </div>
             </div>
-              {resumenEstimateProject && estimate && (
+              {resumenEstimateProject && satCompany && estimate && (
                 <PDFDownloadLink document={<DetailEstimatePDF project={project} resumenEstimate={resumenEstimateProject}
-                    estimate={estimate} numEstimate={numEstimate} />} fileName={project.title} >
+                    estimate={estimate} numEstimate={numEstimate} satCompany={satCompany} />} fileName={project.title} >
                   {({loading, url, error, blob}) => 
                     loading? (
                       <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
@@ -109,8 +124,10 @@ export default function DetailEstimateWithoutInvoice({prj, numEstimate, nomEstim
         </div>
 
         <div className="bg-white p-3 flex flex-col items-center">
-          <img src="/Logotipo_principal.png" alt="logo" className="h-32 w-auto" />
-          <p className="text-blue-500">Samuel Palacios Hernandez</p>
+          {/* <img src="/Logotipo_principal.png" alt="logo" className="h-32 w-auto" />
+          <p className="text-blue-500">Samuel Palacios Hernandez</p> */}
+          <img src={satCompany?.logo} alt="logo" className="h-32 w-auto" />
+          <p className="text-blue-500">{satCompany?.name}</p>
         </div>
 
         <div className="bg-white p-3">

@@ -5,10 +5,11 @@ import { ProviderMin } from "@/interfaces/Providers"
 import { OnePayment } from '@/interfaces/Payments'
 import { UsrBack } from '@/interfaces/User'
 import { ITotalAcumulatedPendingPaymentResumeProviderPDF } from '@/interfaces/Payments'
+import { Company } from "@/interfaces/Companies"
 
-export default function ReportPaymentPDF({costs, provider, payment, user, pending}: 
+export default function ReportPaymentPDF({costs, provider, payment, user, pending, satCompany}: 
     {costs: DetailExpensesTableProvider[], provider: ProviderMin, user: UsrBack, 
-      payment: OnePayment, pending:ITotalAcumulatedPendingPaymentResumeProviderPDF[]}){
+      payment: OnePayment, pending:ITotalAcumulatedPendingPaymentResumeProviderPDF[], satCompany:Company}){
   
   const style = StyleSheet.create({
     table: {
@@ -89,11 +90,11 @@ export default function ReportPaymentPDF({costs, provider, payment, user, pendin
       <Page>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: '30px', alignItems: 'center'}}>
           <View style={{display:'flex', flexDirection: 'row', alignItems: 'center', gap: '10px'}}>
-            <Image src={'/Palaciosconstrucciones-isologo.png'} style={{width: '40px'}} />
+            <Image src={satCompany?.isologo?? satCompany.logo} style={{width: '40px'}} />
             <View>
               <Text style={{fontSize: '12px', color: 'gray'}}>DETALLE DEL PAGO</Text>
               <Text style={{fontSize: '10px', color: 'gray'}}>Listado de facturas pagadas</Text>
-              <Text style={{fontSize: '10px', color: 'gray'}}>Palacios construcciones</Text>
+              <Text style={{fontSize: '10px', color: 'gray'}}>{satCompany?.tradename?? satCompany.name}</Text>
             </View>
           </View>
           <View>

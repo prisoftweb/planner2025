@@ -56,7 +56,7 @@ export default async function Page(){
             </div>
           </div>
         </div>
-        <ContainerEstimatesWithoutInvoice estimates={estimates} token={token} user={user._id} />
+        <ContainerEstimatesWithoutInvoice estimates={estimates} token={token} user={user._id} company={user.profile} />
       </div>
     </>
   )

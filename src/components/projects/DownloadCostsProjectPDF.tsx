@@ -54,7 +54,7 @@ export default function DownloadCostsProjectPDF({costs, project, satCompany}:
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}} >
             {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
-            <Image src={satCompany.logo} style={{width: '130px'}} />
+            <Image src={satCompany?.isologo?? satCompany.logo} style={{width: '130px'}} />
             <View style={{textAlign: 'right', display: 'flex', alignItems: 'flex-end'}} >
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>Resumen de costos {project.title} </Text>
               <Text style={[style.subTitle, {textAlign:'right', fontWeight: 'bold'}]}>San luis Potosi, S.L.P. a {date.getDate()} de {months[date.getMonth()]} de {date.getFullYear()}</Text>

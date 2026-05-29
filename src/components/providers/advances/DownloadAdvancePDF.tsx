@@ -13,6 +13,8 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
 
   const costData = transformDataInvoicesInDataTable(costsRelAdvance);
 
+  // ya esta 
+
   return(
     <Document>
       <Page>
@@ -24,7 +26,7 @@ export default function DownloadAdvancePDF({provider, advance, costsRelAdvance, 
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
                 {/* <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image> */}
-                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
+                <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
               </View>
 
               {/* <View>

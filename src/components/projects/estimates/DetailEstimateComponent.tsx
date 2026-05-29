@@ -8,13 +8,18 @@ import { IEstimate, ResumenEstimateProject } from "@/interfaces/Estimate"
 import DetailEstimatePDF from "./DetailEstimatePDF"
 import {PDFDownloadLink} from '@react-pdf/renderer'
 import { BsFileEarmarkPdf } from "react-icons/bs";
+import { Company } from "@/interfaces/Companies";
+import { getCompany } from "@/app/api/routeCompany";
+import { showToastMessage, showToastMessageError } from "@/components/Alert";
 
-export default function DetailEstimateComponent({project, numEstimate, nomEstimate, showForm, 
-    token}: {project:OneProjectMin, numEstimate:number, nomEstimate:string, showForm:Function, token:string}) {
+export default function DetailEstimateComponent({project, numEstimate, nomEstimate, showForm, company, 
+    token}: {project:OneProjectMin, numEstimate:number, nomEstimate:string, showForm:Function, token:string, company:string}) {
 
   const [heightPage, setHeightPage] = useState<number>(900);
   const [estimate, setEstimate] = useState<IEstimate>();
   const [resumenEstimateProject, setResumenEstimateProject]=useState<ResumenEstimateProject>();
+
+  const [satCompany, setSatCompany]=useState<Company>();
 
   useEffect(() => {
     const fetchData = async() => {
@@ -35,6 +40,22 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
       }
     }
     fetchData();
+  }, []);
+ 
+  useEffect(() => {
+    const fetch = async () => {
+      const [rescomp] = await Promise.all([
+        getCompany(token, company),
+      ]);
+      
+      if(typeof(rescomp)==='string'){
+        showToastMessageError(rescomp);
+      }else{
+        setSatCompany(rescomp);
+      }
+    }
+
+    fetch();
   }, []);
   
   const handleResize = () => {
@@ -82,9 +103,9 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
                 <Chip label={project.category.name} color={project.category.color} darktext={project?.category?.darktext?? false} />
               </div>
             </div>
-              {resumenEstimateProject && estimate && (
+              {resumenEstimateProject && satCompany && estimate && (
                 <PDFDownloadLink document={<DetailEstimatePDF project={project} resumenEstimate={resumenEstimateProject}
-                    estimate={estimate} numEstimate={numEstimate} />} fileName={project.title} >
+                    estimate={estimate} numEstimate={numEstimate} satCompany={satCompany} />} fileName={project.title}  >
                   {({loading, url, error, blob}) => 
                     loading? (
                       <BsFileEarmarkPdf className="w-8 h-8 text-slate-500" />
@@ -97,8 +118,10 @@ export default function DetailEstimateComponent({project, numEstimate, nomEstima
         </div>
 
         <div className="bg-white p-3 flex flex-col items-center">
-          <img src="/Logotipo_principal.png" alt="logo" className="h-32 w-auto" />
-          <p className="text-blue-500">Samuel Palacios Hernandez</p>
+          {/* <img src="/Logotipo_principal.png" alt="logo" className="h-32 w-auto" />
+          <p className="text-blue-500">Samuel Palacios Hernandez</p> */}
+          <img src={satCompany?.logo} alt="logo" className="h-32 w-auto" />
+          <p className="text-blue-500">{satCompany?.name}</p>
         </div>
 
         <div className="bg-white p-3">

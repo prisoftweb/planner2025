@@ -63,34 +63,48 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
         setInvoiceFull(res);
         // const rescomp: ISatCompany[]| string= await getCompanyTAXDATAFULL(res.company, token);
 
-        const [rescomp, resXML] = await Promise.all([
-          // getCompanyTAXDATAFULL(res.company, token),
-          getCompany(token, res.company),
-          getSatXML(res.sat.invoiceId)
-        ]);
+        console.log('res invoice => ', res);
+
+        // const [rescomp, resXML] = await Promise.all([
+        //   // getCompanyTAXDATAFULL(res.company, token),
+        //   getCompany(token, res.company),
+        //   getSatXML(res.sat.invoiceId)
+        // ]);
+
+        const rescomp = await getCompany(token, res.company);
         
         if(typeof(rescomp)==='string'){
           showToastMessageError(rescomp);
+          console.log('res error comp => ', rescomp);
         }else{
           console.log('res comp => ', rescomp);
           setSatCompany(rescomp);
-          // if(rescomp.length>0){
-          //   setSatCompany(rescomp[0]);
-          // }else{
-          //   showToastMessageError('Error con la consulta de la compania');
-          // }
         }
 
-        if(typeof(resXML)==='string'){
-          showToastMessageError(resXML);
-        }else{
-          setXmlData(resXML);
+        if(res?.sat?.invoiceId){
+          const resXML = await getSatXML(res.sat.invoiceId);
+
+          if(typeof(resXML)==='string'){
+            showToastMessageError(resXML);
+            console.log('res error xml => ', resXML);
+          }else{
+            console.log('res xml => ', resXML);
+            setXmlData(resXML);
+          }
         }
+
+        // if(typeof(resXML)==='string'){
+        //   showToastMessageError(resXML);
+        // }else{
+        //   setXmlData(resXML);
+        // }
       }
     }
 
     fetch();
   }, []);
+
+  console.log('sat comp => ', satCompany);
 
   return (
     <>
@@ -147,7 +161,7 @@ export default function ContainerDetailInvoice({project, token, user, invoice, c
           {/* <img src="/Palaciosconstrucciones_horizontal.png" alt="palacios"
             className=" h-14 md:h-24 w-auto"
           /> */}
-          <img src={satCompany?.logo} alt="palacios"
+          <img src={satCompany?.logo} alt={satCompany?.name}
             className=" h-14 md:h-24 w-auto"
           />
           {/* <p className="font-extrabold text-lg text-black">Samuel Palacios Hernandez</p>

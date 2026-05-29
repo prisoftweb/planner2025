@@ -38,7 +38,7 @@ export default function DownloadInvoicesByProjectPDF({invoices, project, resumen
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'auto'}}></Image> */}
-                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
+                <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'row', gap:'9px'}}>
                   <View>
                     <Text style={{fontSize:'15px', color:'gray'}}>ESTADO DE CUENTA</Text>

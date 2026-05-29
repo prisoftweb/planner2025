@@ -34,6 +34,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
   let total = 0;
 
   // console.log('costs pdf => ', costs);
+  // ya esta 
 
   return(
     <Document>
@@ -46,7 +47,7 @@ export default function DownloadPaymentsPendingProviderPDF({provider, costs, tot
               <View style={{display:'flex', flexDirection:'row', alignItems:'center', gap:'5px'}}>
                 {/* <Image source={'/isologo_palacios.png'} style={{height: '57px', width:'67px'}}></Image> */}
                 {/* <Image source={'/Palaciosconstrucciones-isologo.png'} style={{height: '57px', width:'auto'}}></Image> */}
-                <Image source={satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
+                <Image source={satCompany?.isologo?? satCompany.logo} style={{height: '57px', width:'auto'}}></Image>
                 <View style={{display:'flex', flexDirection:'column', gap:'2px'}}>
                   <Text style={{fontSize:'14px', fontWeight:'bold'}}>PROGRAMACION DE PAGOS</Text>
                   <Text style={{fontSize:'10px', color:'gray'}}>Lista de facturas por pagar</Text>

@@ -2,8 +2,8 @@
 import { IEstimateMin } from "@/interfaces/Estimate";
 import TableEstimatesWithoutInovice from "./TableEstimatesWithoutInvoice";
 
-export default function ContainerEstimatesWithoutInvoice({ estimates, token, user }: 
-  {estimates:IEstimateMin[], token: string, user: string }) {
+export default function ContainerEstimatesWithoutInvoice({ estimates, token, user, company }: 
+  {estimates:IEstimateMin[], token: string, user: string, company:string }) {
 
   const delEstimate = () => {
     setTimeout(() => {
@@ -13,7 +13,7 @@ export default function ContainerEstimatesWithoutInvoice({ estimates, token, use
 
   return (
     <>
-      <TableEstimatesWithoutInovice estimates={estimates} delEstimate={delEstimate} token={token} />
+      <TableEstimatesWithoutInovice estimates={estimates} delEstimate={delEstimate} token={token} company={company} />
     </>
   )
 }

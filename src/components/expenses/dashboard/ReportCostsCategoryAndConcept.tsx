@@ -45,7 +45,7 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate,
         <View style={{paddingVertical: '30px', paddingLeft: '30px'}}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}} >
             {/* <Image src={'/Palaciosconstrucciones_horizontal.png'} style={{width: '130px'}} /> */}
-            <Image src={satCompany.logo} style={{width: '130px'}} />
+            <Image src={satCompany?.isologo?? satCompany.logo} style={{width: '130px'}} />
             <View style={{margin:'0px'}}>
               <Text style={[{fontSize: '13px', margin: '1px', color: 'black', fontWeight:'semibold'}]}>
                 Costos por {type? 'categorias':'conceptos'}

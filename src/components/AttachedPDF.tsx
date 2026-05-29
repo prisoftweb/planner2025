@@ -46,7 +46,7 @@ export default function AttachedPDF({report, dates, satCompany} :{report:Report,
       fontSize: '11px',
     }
   })
-  
+  console.log('comp -> ', satCompany);
   return(
     <Document>
       <Page>
@@ -101,7 +101,7 @@ export default function AttachedPDF({report, dates, satCompany} :{report:Report,
                 GASTOS EFECTUADOS EN OPERACIONES DEL PROYECTO DE
                 <Text style={style.textBlue}> {report.project.title}</Text>
                 <Text> A FAVOR DE LA EMPRESA </Text>
-                <Text style={style.textBlue}>PALACIOS CONSTRUCCIONES</Text>
+                <Text style={style.textBlue}>{satCompany.tradename}</Text>
                 <Text> Y QUE FUI ASIGNADO PARA REALIZAR LAS SIGUIENTES ACTIVIDADES: </Text>
             </Text>
           </View>

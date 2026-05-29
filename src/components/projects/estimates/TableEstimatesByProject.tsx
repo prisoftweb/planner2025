@@ -30,11 +30,12 @@ type Props = {
   token:string, 
   showNewInvoice:Function, 
   selEstimate:Function 
-  pageProject: string | undefined
+  pageProject: string | undefined,
+  company:string
 }
 
 export default function TableEstimatesByProject({project, optConditions, optProjects, estimates, handleFilterTable, 
-  isFilterTable, delEstimate, token, showNewInvoice, selEstimate, pageProject }: Props) {
+  isFilterTable, delEstimate, token, showNewInvoice, selEstimate, pageProject, company }: Props) {
 
   const [filterEstimates, setFilterEstimates] = useState<IEstimateProject[]>(estimates);
   const [isFilter, setIsFilter] = useState<boolean>(false);
@@ -268,7 +269,7 @@ export default function TableEstimatesByProject({project, optConditions, optProj
         </div>
       )}
       {isShowDetailEstimate && <DetailEstimateComponent project={project} nomEstimate={refEstimate.current} 
-                                    numEstimate={1} showForm={handleIsShowDetailEstimate} token={token} />}
+                                    numEstimate={1} showForm={handleIsShowDetailEstimate} token={token} company={company} />}
     </>
   )
 }

@@ -90,7 +90,7 @@ export default function ReportPDF({report, costs, satCompany}:
       <Page>
         <View style={style.headerPage}>
           {/* <Image src={'/isologo_palacios.png'} style={{width: '40px'}} /> */}
-          <Image src={satCompany.logo} style={{width: '40px'}} />
+          <Image src={satCompany?.isologo?? satCompany.logo} style={{width: '40px'}} />
           <Text style={style.subTitle}>Informe de gastos</Text>
           <Text style={style.title}>{report.name}</Text>
         </View>

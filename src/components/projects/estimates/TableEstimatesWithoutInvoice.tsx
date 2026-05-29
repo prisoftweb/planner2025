@@ -13,8 +13,8 @@ import { BsFilePdfFill } from "react-icons/bs";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
 import { Badge } from "@mui/material";
 
-export default function TableEstimatesWithoutInovice({estimates, delEstimate, token }: 
-  {estimates:IEstimateMin[], delEstimate:Function, token:string}) {
+export default function TableEstimatesWithoutInovice({estimates, delEstimate, token, company }: 
+  {estimates:IEstimateMin[], delEstimate:Function, token:string, company:string}) {
 
   const [showForm, setShowForm] = useState<boolean>(false);
   const [project, setProject] = useState<string>('');
@@ -209,7 +209,7 @@ export default function TableEstimatesWithoutInovice({estimates, delEstimate, to
       </div>
       
       {showForm && <DetailEstimateWithoutInvoice prj={project} nomEstimate={idEstimate} 
-                      numEstimate={1} showForm={handleShowForm} token={token} />}
+                      numEstimate={1} showForm={handleShowForm} token={token} company={company} />}
     </>
   )
 }

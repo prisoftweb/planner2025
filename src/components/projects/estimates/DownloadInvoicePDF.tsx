@@ -114,7 +114,7 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
               {/* <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>Factura:</Text>
               <Text style={{fontSize:'11px', color:'gray', fontWeight:'extrabold', textAlign:'right'}}>F {invoicemin.folio}</Text> */}
               <Text style={{fontSize:'10px', color:'black', textAlign:'right'}}>{invoicemin.estimate?.name?? ''}</Text>
-              <Text style={{fontSize:'10px', color:'black', textAlign:'right'}}>{invoicefull.sat.invoiceSignatureDate.substring(0, 10)} {invoicefull.sat.invoiceSignatureDate.substring(11, 19)}</Text>
+              <Text style={{fontSize:'10px', color:'black', textAlign:'right'}}>{invoicefull?.sat?.invoiceSignatureDate?.substring(0, 10)} {invoicefull?.sat?.invoiceSignatureDate?.substring(11, 19)}</Text>
               
             </View>
 
@@ -172,22 +172,22 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
 
           <View style={{marginTop:'15px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
             <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Numero del serie CSD del SAT: </Text>
-            <Text style={{fontSize:'7px', color:'#262626'}}>{invoicefull.sat.satCertificateNumber}</Text>
+            <Text style={{fontSize:'7px', color:'#262626'}}>{invoicefull?.sat?.satCertificateNumber}</Text>
           </View>
 
           <View style={{marginTop:'5px', display:'flex', flexDirection:'row', justifyContent:'flex-start', alignItems:'center'}}>
             <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold'}}>Numero del serie CSD del emisor: </Text>
-            <Text style={{fontSize:'7px', color:'#262626'}}>{invoicefull.sat.invoiceCertificateNumber}</Text>
+            <Text style={{fontSize:'7px', color:'#262626'}}>{invoicefull?.sat?.invoiceCertificateNumber}</Text>
           </View>
 
           <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Sello digital del CFDI: </Text>
-          <Text style={{fontSize:'7px', color:'#262626'}}> {invoicefull.sat.invoiceBase64Sello} </Text>
+          <Text style={{fontSize:'7px', color:'#262626'}}> {invoicefull?.sat?.invoiceBase64Sello} </Text>
 
           <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Sello del SAT: </Text>
-          <Text style={{fontSize:'7px', color:'#262626'}}> {invoicefull.sat.satBase64Sello} </Text>
+          <Text style={{fontSize:'7px', color:'#262626'}}> {invoicefull?.sat?.satBase64Sello} </Text>
 
           <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Cadena Original: </Text>
-          <Text style={{fontSize:'7px', color:'#262626'}}> {invoicefull.sat.satBase64OriginalString} </Text>
+          <Text style={{fontSize:'7px', color:'#262626'}}> {invoicefull?.sat?.satBase64OriginalString} </Text>
 
         </View>
       </Page>
