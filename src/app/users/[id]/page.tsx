@@ -8,6 +8,7 @@ import Selectize from "@/components/Selectize";
 import { UsrBack } from "@/interfaces/User";
 import { Options } from "@/interfaces/Common";
 import ArrowReturn from "@/components/ArrowReturn";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: 
   { params: { id: string }, searchParams: { tab: string, opt: string } }){
@@ -26,14 +27,16 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={userLog} token={token} />
-          <h1 className="text-center text-red-500">{user}</h1>
+          <ComponentError page={`/users/${params.id}`} message={user} />
+          {/* <h1 className="text-center text-red-500">{user}</h1> */}
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={userLog} token={token} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1>
+        <ComponentError page={`/users/${params.id}`} message="Ocurrio un error al obtener datos del usuario!!" />
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos del usuario!!</h1> */}
       </>
     )
   }
@@ -44,14 +47,16 @@ export default async function Page({ params, searchParams }:
       return(
         <>
           <Navigation user={userLog} token={token} />
-          <h1 className="text-center text-red-500">{users}</h1>
+          <ComponentError page={`/users/${params.id}`} message={users} />
+          {/* <h1 className="text-center text-red-500">{users}</h1> */}
         </>
       )
   } catch (error) {
     return(
       <>
         <Navigation user={userLog} token={token} />
-        <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1>
+        <ComponentError page={`/users/${params.id}`} message="Ocurrio un error al obtener datos de los usuarios!!" />
+        {/* <h1 className="text-center text-red-500">Ocurrio un error al obtener datos de los usuarios!!</h1> */}
       </>
     ) 
   }
@@ -97,10 +102,6 @@ export default async function Page({ params, searchParams }:
           </div>
           <Selectize options={options} routePage="users" subpath="" />
         </div>
-        {/* <div className="mt-3">
-          <NavTab idUser={params.id} tab={searchParams.tab} />
-        </div>
-        {res} */}
       </div>
     </>
   )

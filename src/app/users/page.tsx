@@ -7,6 +7,7 @@ import WithOut from "@/components/WithOut";
 import ButtonNewUser from "@/components/users/ButtonNewUser";
 import { getRolesLV } from "../api/routeRoles";
 import UsersConstext from "@/components/users/UsersContext";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Users() {  
 
@@ -25,9 +26,10 @@ export default async function Users() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <ComponentError page="/users" message={users} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{users}</h1>
-        </div>
+        </div> */}
       </>
     )
   }
@@ -36,9 +38,10 @@ export default async function Users() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <ComponentError page="/users" message={optionsRoles} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{optionsRoles}</h1>
-        </div>
+        </div> */}
       </>
     )
   }
@@ -47,9 +50,10 @@ export default async function Users() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <ComponentError page="/users" message={departments} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-center text-red-500">{departments}</h1>
-        </div>
+        </div> */}
       </>
     )
   }

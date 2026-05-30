@@ -1,5 +1,3 @@
-import TabUser from "@/components/users/TabUsers";
-import NavTab from "@/components/users/NavTab";
 import Navigation from "@/components/navigation/Navigation";
 import { getUser, getUsers } from "@/app/api/routeUser";
 import { cookies } from "next/headers";
@@ -8,6 +6,7 @@ import { Options } from "@/interfaces/Common";
 import HeaderImage from "@/components/HeaderImage";
 import ContainerProfileUser from "@/components/users/ContainerProfileUser";
 import { UsrBack } from "@/interfaces/User";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: { params: { id: string }, searchParams: { opt: string } }){
   
@@ -25,7 +24,8 @@ export default async function Page({ params, searchParams }: { params: { id: str
     return(
       <>
         {/* <Navigation user={user} token={token} /> */}
-        <h1 className="text-center text-red-500">{user}</h1>
+        {/* <h1 className="text-center text-red-500">{user}</h1> */}
+        <ComponentError page={`/users/${params.id}`} message={user} refresh={true} />
       </>
     )
   }
@@ -34,7 +34,8 @@ export default async function Page({ params, searchParams }: { params: { id: str
     return(
       <>
         <Navigation user={user} token={token} />
-        <h1 className="text-center text-red-500">{users}</h1>
+        {/* <h1 className="text-center text-red-500">{users}</h1> */}
+        <ComponentError page={`/users/${params.id}`} message={users} />
       </>
     )
   }

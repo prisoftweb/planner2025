@@ -76,6 +76,15 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
     photo = user.photo;
   }
 
+  // console.log('Company Profiles:', companyProfiles);
+  let logo='/img/default.jpg';
+  if(Array.isArray(companyProfiles) && companyProfiles.length > 0){
+    const index = companyProfiles.findIndex(profile => profile._id === user.profile);
+    if(index !== -1){
+      logo = companyProfiles[index].isologo || logo;
+    }
+  }
+
   if(user){
     id = user._id;
   }
@@ -95,14 +104,14 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
     router.push('/login');
   }
 
-  const firstName = user.name.substring(0, user.name.indexOf(' '));
+  // const firstName = user.name.substring(0, user.name.indexOf(' '));
   
   return(
     <>
       <nav className="bg-black h-16 fixed top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between p-2 print:hidden">
         <Bars3Icon width={40} height={40} className="md:hidden cursor-pointer ml-2 rounded-md p-1 bg-slate-500 text-white print:hidden" onClick={toggleNavBar} />
         <Link href={'/'}>
-          <Image src={'/nuevoIcono.jpg'} alt="logo" width={50} height={50} className="rounded-md" priority />
+          <Image src={logo} alt="logo" width={50} height={50} className="rounded-md" priority />
         </Link>
         <div className="w-1/12 md:w-9/12 flex justify-end print:hidden">
           <div className="hidden w-full text-white md:flex justify-between print:hidden ">
@@ -152,7 +161,7 @@ export default function Navigation({user, token}: {user:UsrBack, token:string}){
               </div>
             ): (
               <>
-                <Link href={`/users/${id}?tab=1&&opt=1`} className="py-1 hover:text-gray-900 hover:bg-gray-200 print:hidden">
+                <Link href={`/users/${id}/profile?opt=1`} className="py-1 hover:text-gray-900 hover:bg-gray-200 print:hidden">
                   <div className="flex p-2 items-center print:hidden">
                     <UserIcon className="w-4 h-4 mr-2 text-slate-500 print:hidden" />
                     Editar Perfil

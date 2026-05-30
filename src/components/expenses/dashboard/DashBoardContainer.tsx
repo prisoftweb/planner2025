@@ -115,6 +115,8 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
     categoriesConcepts.push(cc.label);
   });
 
+  console.log('dataCostsCategory => ', dataCostsCategory);
+
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} company={company} token={token}

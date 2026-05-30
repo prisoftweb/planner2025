@@ -6,6 +6,7 @@ import NavTabAccount from "@/components/workspace/NavTabAccount";
 import { getWorkSpacesMin } from "@/app/api/routeWorkspace";
 import WorkSpaceCompaniesCli from "@/components/workspace/companies/WorkSpaceCompaniesCli";
 import { getCompaniesByWorkSpace } from "@/app/api/routeCompany";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
   
@@ -23,9 +24,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <ComponentError page="/workspace/config" message={workSpaces} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{workSpaces}</h1>
-        </div>
+        </div> */}
       </>
     )
   
@@ -35,9 +37,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <ComponentError page="/workspace/config" message={companies} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{companies}</h1>
-        </div>
+        </div> */}
       </>
     )
 

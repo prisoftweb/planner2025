@@ -3,12 +3,10 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import WithOut from "@/components/WithOut";
 import { Workflow } from "@/interfaces/Workflows";
-// import ButtonNew from "@/components/workflows/ButtonNew";
-// import Header from "@/components/Header";
 import { getWorkFlows } from "../api/routeWorkflows";
 import { WorkflowTable } from "@/interfaces/Workflows";
-// import TableWorkflows from "@/components/workflows/TableWorkflows";
 import ContainerWorkFlows, {ContainerButtonWorkFlow} from "@/components/workflows/ContainerWorkFlows";
+import ComponentError from "@/components/ComponentError";
 
 export default async function page() {
   const cookieStore = cookies();
@@ -20,16 +18,24 @@ export default async function page() {
     workflows = await getWorkFlows(token);
     if(typeof(workflows) ==='string'){
       return (
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-          <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
-        </div>
+        <>
+          <Navigation user={user} token={token} />
+          <ComponentError page="/workflows" message={workflows} />
+        </>
+        // <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        //   <h1 className="text-red-500 text-xl text-center">{workflows}</h1>
+        // </div>
       )
     }
   } catch (error) {
     return(
-      <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
-        <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar workflows!!</h1>
-      </div>
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/workflows" message="Ocurrio un error al consultar workflows!!" />
+      </>
+      // <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+      //   <h1 className="text-red-500 text-xl text-center">Ocurrio un error al consultar workflows!!</h1>
+      // </div>
     )
   }
 

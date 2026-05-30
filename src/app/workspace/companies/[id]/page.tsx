@@ -3,10 +3,9 @@ import { UsrBack } from "@/interfaces/User";
 import Navigation from "@/components/navigation/Navigation";
 import { getCompany } from "@/app/api/routeCompany";
 import Header from "@/components/HeaderPage";
-import NavTabAccount from "@/components/workspace/NavTabAccount";
-import WorkSpaceCli from "@/components/workspace/WorkSpaceCli";
 import { Company } from "@/interfaces/Companies";
 import CompanyProfileCli from "@/components/workspace/companies/CompanyProfileCli";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({params}: {params:{id:string}}) {
   
@@ -20,9 +19,10 @@ export default async function Page({params}: {params:{id:string}}) {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10">
+        <ComponentError page="/workspace/config" message={company} />
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10">
           <h1 className="text-lg text-red-500 text-center">{company}</h1>
-        </div>
+        </div> */}
       </>
     )
 
@@ -34,8 +34,6 @@ export default async function Page({params}: {params:{id:string}}) {
           <></>
         </Header>
         <CompanyProfileCli token={token} companyParam={company} />
-        {/* <NavTabAccount idWS="" tab="1" /> */}
-        {/* <WorkSpaceCli id="" token={token} workspaceParam={company} /> */}
       </div>
     </>
   )

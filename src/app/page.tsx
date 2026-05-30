@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import ContainerNewCode from "@/components/codes/ContainerNewCode";
 import { getCompany } from "@/app/api/routeCompany";
 import { Company } from "@/interfaces/Companies"
+import ComponentError from "@/components/ComponentError";
 
 export default async function Home() {
   const cookieStore = cookies();
@@ -15,12 +16,18 @@ export default async function Home() {
   const role = user.rol?.name || '';
 
   const rescomp: string|Company = await getCompany(token, user.profile);
+  // const rescomp='Error al consultar logo de la compañia';
   
-  // if(typeof(rescomp)==='string'){
-  //   showToastMessageError(rescomp);
-  // }else{
-  //   setSatCompany(rescomp);
-  // }
+  if(typeof(rescomp)==='string'){
+    return (
+      <>
+        {role.toLowerCase().includes('invitado')? <></>: (
+          <Navigation user={user} token={token} />
+        )}
+        <ComponentError page="/" message={rescomp} />
+      </>
+    )
+  }
 
   return (
     <>

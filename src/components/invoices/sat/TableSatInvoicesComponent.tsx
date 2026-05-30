@@ -364,7 +364,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'folio',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{row.original.folio}</p>
       ),
     }),
@@ -373,7 +373,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'proyecto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{row.original.nameProject}</p>
       ),
     }),
@@ -382,7 +382,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'cliente',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{row.original.client}</p>
       ),
     }),
@@ -391,7 +391,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'cdfi',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{row.original.usecfdi}</p>
       ),
     }),
@@ -400,7 +400,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'estimacion',
       cell: ({row}) => (
         <p className="py-2 font-semibold cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{row.original.estimate}</p>
       )
     }),
@@ -416,7 +416,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'fecha',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{row.original.fecha.substring(0, 10)}</p>
       ),
     }),
@@ -425,7 +425,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'monto',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.amount
@@ -437,7 +437,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'cobrado',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.charged
@@ -449,7 +449,7 @@ export default function TableSatInvoicesComponent({token, user, company, options
       id: 'pendiente',
       cell: ({row}) => (
         <p className="cursor-pointer"
-        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=invoices`)}
+        onClick={() => window.location.replace(`/projects/estimates/${row.original.project}/invoice/${row.original.id}?page=satinvoices`)}
         >{CurrencyFormatter({
           currency: 'MXN',
           value: row.original.unchargedbalanceamount
@@ -721,7 +721,7 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCance
         focus:bg-blue-gray-50 focus:bg-opacity-80 focus:text-blue-gray-900 active:bg-blue-gray-50 
         active:bg-opacity-80 active:text-blue-gray-900 border-b border-slate-300 
         bg-white`}
-      // onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=invoices`)}
+      // onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=satinvoices`)}
     >
       <div className="flex items-center w-full ">
         <div className="grid mr-4 place-items-center">
@@ -771,7 +771,7 @@ const CardInvoice = ({invoice, token, delInvoice, updateView, user, optionsCance
           )}
         </div>
         <div className="w-full"
-          onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=invoices`)}
+          onClick={() => window.location.replace(`/projects/estimates/${invoice.project}/invoice/${invoice.id}?page=satinvoices`)}
         >
           <div className="flex gap-x-3 w-full justify-between items-center p-3">
             <div>
