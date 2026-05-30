@@ -523,6 +523,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
           folio:f,
           taxfolio: res.uuid,///////
           date,
+          series: "F",
           // useCFDI: type?? '',
           // useCFDI: (conditionPayment?? '') + '-' + (labelConditionPayment?? ''),
           useCFDI: (labelConditionPayment?? ''),
@@ -675,7 +676,7 @@ export default function AddNewSatInvoiceComponent({showForm, user, token, isNew,
                                   handleLabelType={handleLabelType} handleLabelConditionPayment={handleLabelConditionPayment}
                                   handleLabelCondicionPayment={handleLabelCondicionPayment} />: 
                                     (step==2? <ConceptsSatInvoiceStepperComponent nextStep={handleStep} handleAddConcept={handleAddNewConcept}
-                                      token={token} user={user} conceptsInvoice={conceptsInvoice} 
+                                      token={token} user={user} conceptsInvoice={conceptsInvoice} company={company}
                                       discount={discount} handleDiscount={handleDiscount} handleVat={handleVat} vat={vat} /> :
                                         <ConfirmSatInvoiceComponent client={satClient} concepts={conceptsInvoice} date={date}
                                               folio={folio} iva={vatT} subtotal={subtotalInvoice} 

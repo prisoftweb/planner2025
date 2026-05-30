@@ -175,6 +175,7 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
       const data = {
         folio,
         taxfolio: taxFolio,
+        series: "F",
         date,
         useCFDI: type,
         paymentMethod: methodPaid,

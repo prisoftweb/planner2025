@@ -30,6 +30,7 @@ type DataBasicProps={
   handleVat: (value: string) => void,
   vat: string,
   discount:string,
+  company:string
 }
 
 type TableConceptsInvoice = {
@@ -42,11 +43,11 @@ type TableConceptsInvoice = {
   Importe: number
 }
 
-export default function ConceptsSatInvoiceStepperComponent({token, nextStep, 
+export default function ConceptsSatInvoiceStepperComponent({token, nextStep, company, 
   user, handleAddConcept, conceptsInvoice, handleDiscount, handleVat, discount, vat}: DataBasicProps) {
 
   // const [conceptsInvoice, setConceptsInvoice]=useState<IConceptsInvoice[]>([]);  
-  // const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
+  const [showNewConcept, setShowNewConcept]=useState<boolean>(false);
   const [concepts, setConcepts] = useState<IConceptEstimateMin[]>([]);
   const [conceptSel, setConceptSel] = useState<IConceptEstimateMin | undefined>();
   const [prices, setPrices] = useState<PriceConcept[]>([]);
@@ -169,15 +170,31 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
   //   setShowNewConcept(false);
   // }
 
+  const fetchConcepts = async () => {
+    let con: IConceptEstimateMin[];
+    try {
+      con = await getConceptsMin(token);
+      if(typeof(con) === "string"){
+        showToastMessageError(con);
+      }else{
+        setConcepts(con);
+      }
+    } catch (error) {
+      showToastMessageError('Ocurrio un error al obtener los conceptos');
+      return <h1 className="text-center text-red-500">Ocurrio un error al obtener los conceptos!!</h1>  
+    }
+  }
+
   const handleAddNewConcept = (concept: any) => {
     // setConceptsInvoice((prev) => [...prev, concept]);
     // setShowNewConcept(false);
+    fetchConcepts();
     handleAddConcept(concept);
   }
 
-  // const handleShowNewConcept = (value:boolean) => {
-  //   setShowNewConcept(value);
-  // }
+  const handleShowNewConcept = (value:boolean) => {
+    setShowNewConcept(value);
+  }
 
   useEffect(() => {
     const fetchCocnepts = async () => {
@@ -278,9 +295,9 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
 
   return (
     <div>
-      {/* <div className="my-2">
+      <div className="my-2">
         <Button type="button" onClick={() => setShowNewConcept(true)}>Agregar Concepto</Button>
-      </div> */}
+      </div>
       
       <div className="hidden md:block w-full">
         <Table columns={columns} data={data} placeH="Buscar concepto" />
@@ -422,8 +439,8 @@ export default function ConceptsSatInvoiceStepperComponent({token, nextStep,
         {/* <Button type="button" onClick={() => saveInvoice(conceptsInvoice)}>Guardar</Button> */}
         <Button type="button" onClick={() => nextStep(3)}>Siguiente</Button>
       </div>
-      {/* {showNewConcept && <AddNewConceptInInvoice showForm={handleShowNewConcept} token={token} 
-                            updateConcepts={handleAddNewConcept} user={user} />} */}
+      {showNewConcept && <AddNewConceptInInvoice showForm={handleShowNewConcept} token={token} 
+                            updateConcepts={handleAddNewConcept} user={user} company={company} />}
     </div>
   )
 }

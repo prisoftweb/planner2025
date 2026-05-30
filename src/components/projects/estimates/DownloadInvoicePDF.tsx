@@ -189,6 +189,8 @@ export default function DownloadInvoicePDF({invoicemin, invoicefull, satCompany}
           <Text style={{fontSize:'10px', color:'black', fontWeight:'extrabold', marginTop:'5px'}}>Cadena Original: </Text>
           <Text style={{fontSize:'7px', color:'#262626'}}> {invoicefull?.sat?.satBase64OriginalString} </Text>
 
+          <View style={{borderTop:'1px solid #0095E1', marginTop:'15px'}}></View>
+          <Text style={{fontSize:'7px', color:'#262626', marginTop:'5px'}}> Este documento es una representación impresa de un CFDI. </Text>
         </View>
       </Page>
     </Document>
