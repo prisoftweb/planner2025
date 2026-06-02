@@ -18,7 +18,8 @@ type DashBoardContainerProps = {
   costsConcepts: OptionsDashboard[], 
   costsCategories: OptionsDashboard[], 
   costsDays: OptionsDashboard[], 
-  projects:Options[], 
+  projects:Options[],
+  categories:Options[], 
   costsResumen:CostsGroupByResumen[], 
   costsResumenType:CostsGroupResumenByType[], 
   costsCat: CostsByConceptAndCategory[], 
@@ -27,7 +28,7 @@ type DashBoardContainerProps = {
 }
 
 export default function DashBoardContainer({token, costsCategories, costsConcepts, costsDays, 
-            projects, costsResumen, costsResumenType, costsCat, costsCon, company}: DashBoardContainerProps ) {
+            projects, costsResumen, costsResumenType, costsCat, costsCon, company, categories}: DashBoardContainerProps ) {
   
   const [costsByConcept, setCostsByConcept] = useState<OptionsDashboard[]>(costsConcepts);
   const [costsByCategory, setCostsByCategory] = useState<OptionsDashboard[]>(costsCategories);
@@ -38,13 +39,13 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   const [dataCostsCategory, setDataCostsCategory ] = useState<CostsByConceptAndCategory[]>(costsCat);
   const [dataCostsConcept, setDataCostsConcept ] = useState<CostsByConceptAndCategory[]>(costsCon);
 
-  const fetchData = async (dateS: string, dateE: string, project:string) => {
+  const fetchData = async (dateS: string, dateE: string, project:string, cats:string[]) => {
     const [costsCategory, costsConcept, costsDays, costsRes, costsResType] = await Promise.all([
-      GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project),
-      GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project),
-      GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project),
-      GetAllCostsGroupByRESUMEN(token, dateS, dateE, project),
-      GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project),
+      GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByDAYAndProject(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByRESUMEN(token, dateS, dateE, project, cats),
+      GetAllCostsGroupByTYPERESUMEN(token, dateS, dateE, project, cats),
     ]);
     
     if(typeof(costsCategory)==='string'){
@@ -120,7 +121,7 @@ export default function DashBoardContainer({token, costsCategories, costsConcept
   return (
     <div className="p-2 sm:p-3 md-p-5 lg:p-10">
       <StatisticsHeader handleDate={fetchData} projects={projects} costsResumen={costsByResumen} company={company} token={token}
-        costsResumenType={costsByResumenType} dataCostsCatagory={dataCostsCategory} dataCostsConcept={dataCostsConcept} />
+        costsResumenType={costsByResumenType} dataCostsCatagory={dataCostsCategory} dataCostsConcept={dataCostsConcept} categories={categories} />
       <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className="bg-white border border-slate-300 py-5">
           <div className="flex mb-3 gap-x-2 justify-between border-b border-slate-300 px-5 pb-2">

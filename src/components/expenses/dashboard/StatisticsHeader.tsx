@@ -20,10 +20,13 @@ import { propsTooltip } from '@/libs/animations';
 import { Company } from "@/interfaces/Companies";
 import { getCompany } from "@/app/api/routeCompany";
 import { showToastMessageError } from '@/components/Alert';
+import { getDate } from '@/libs/dates';
+import SelectMultipleReact from '@/components/SelectMultipleReact';
 
 type StatisticsHeaderProps = {
   handleDate: Function, 
-  projects:Options[], 
+  projects:Options[],
+  categories:Options[], 
   costsResumen:CostsGroupByResumen[], 
   costsResumenType:CostsGroupResumenByType[], 
   dataCostsCatagory: CostsByConceptAndCategory[], 
@@ -33,9 +36,10 @@ type StatisticsHeaderProps = {
 }
 
 export default function StatisticsHeader({handleDate, projects, costsResumen, costsResumenType, 
-      dataCostsCatagory, dataCostsConcept, company, token }: StatisticsHeaderProps) {
+      dataCostsCatagory, dataCostsConcept, company, token, categories }: StatisticsHeaderProps) {
 
   const [project, setProject] = useState<string>(projects[0].value);
+  const [arrCategories, setArrCategories] = useState<string[]>([]);
   const [titleProject, setTitleProject] = useState<string>(projects[0].label);
   const [satCompany, setSatCompany]=useState<Company>();
   const [rangeDate, setRangeDate] = useState<DateRangePickerValue>({
@@ -68,9 +72,20 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
       setTitleProject(selectedProject.label);
     }
     if(rangeDate?.from && rangeDate.to){
-      handleDate(rangeDate.from, rangeDate.to, value);
+      // handleDate(rangeDate.from, rangeDate.to, value);
+      handleDate(getDate(rangeDate.from), getDate(rangeDate.to), value, arrCategories);
     }
   };
+
+  const handleCategories = (value: string[]) => {
+    setArrCategories(value);
+    
+    if(rangeDate?.from && rangeDate.to){
+      // handleDate(rangeDate.from, rangeDate.to, value);
+      handleDate(getDate(rangeDate.from), getDate(rangeDate.to), project, value);
+    }
+  };
+
   return (
     <div>
       <div>
@@ -83,7 +98,8 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
               onValueChange={(e) => {
                 setRangeDate(e);
                 if(e.from && e.to){
-                  handleDate(e.from.toDateString(), e.to.toDateString(), project);
+                  // handleDate(e.from.toDateString(), e.to.toDateString(), project);
+                  handleDate(getDate(e.from), getDate(e.to), project, arrCategories);
                 }
               }}
               value={rangeDate}
@@ -94,6 +110,11 @@ export default function StatisticsHeader({handleDate, projects, costsResumen, co
             <div className='w-80 sm:w-56'>
               <Label htmlFor='project'>Proyecto</Label>
               <SelectReact index={0} opts={projects} setValue={handleProjects} />
+            </div>
+            <div className='w-80 sm:w-56'>
+              <Label htmlFor='category'>Categoria</Label>
+              {/* <SelectReact index={0} opts={categories} setValue={handleProjects} /> */}
+              <SelectMultipleReact opts={categories} setValue={handleCategories} index={-1} />
             </div>
             <div className='w-5'>
               <Label></Label>

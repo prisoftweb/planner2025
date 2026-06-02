@@ -617,20 +617,26 @@ export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLY(auth_token:strin
   }
 }
 
-export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+export async function GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERCATEGORYONLY/${dateStart}/${dateEnd}/${project}`;
+  console.log('URL category => ', url);
+  console.log('categories => ', categories);
   try {
-    const res = await axios.post(url, {}, {
+    const res = await axios.post(url, {
+      category: categories
+    }, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
     
     if(res.status===200) {
+      console.log('res category => ', res.data.data.stats);
       return res.data.data.stats;
     }
     return res.statusText
   } catch (error) {
+    console.log('error => ', error);
     if(axios.isAxiosError(error)){
       return error.response?.data.message || 'Error al consultar costos por centro de costos categoria!!';
     }
@@ -659,12 +665,14 @@ export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLY(auth_token:string
   }
 }
 
-export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+export async function GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-groupByCOSTOCENTERONLY/${getDate(new Date(dateStart))}/${getDate(new Date(dateEnd))}/${project}`;
-  console.log('URL => ', url);
-  console.log('auth_token => ', auth_token);
+  // console.log('URL => ', url);
+  // console.log('auth_token => ', auth_token);
   try {
-    const res = await axios.post(url, {}, {
+    const res = await axios.post(url, {
+      category: categories
+    }, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
@@ -704,10 +712,12 @@ export async function GetAllCostsGroupByDAY(auth_token:string, dateStart:string,
   }
 }
 
-export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByDAY/${dateStart}/${dateEnd}/${project}`;
   try {
-    const res = await axios.post(url, {}, {
+    const res = await axios.post(url, {
+      category: categories
+    }, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
@@ -725,16 +735,20 @@ export async function GetAllCostsGroupByDAYAndProject(auth_token:string, dateSta
   }
 }
 
-export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMEN/${dateStart}/${dateEnd}/${project}`;
+  // console.log('URL resumen => ', url);
   try {
-    const res = await axios.post(url, {}, {
+    const res = await axios.post(url, {
+      category: categories
+    }, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }
     });
     
     if(res.status===200) {
+      console.log('res resumen => ', res.data.data.stats);
       return res.data.data.stats;
     }
     return res.statusText
@@ -746,10 +760,12 @@ export async function GetAllCostsGroupByRESUMEN(auth_token:string, dateStart:str
   }
 }
 
-export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string) {
+export async function GetAllCostsGroupByTYPERESUMEN(auth_token:string, dateStart:string, dateEnd:string, project:string, categories:string[]) {
   const url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/costs/getAllCosts-GroupByRESUMENTYPE/${dateStart}/${dateEnd}/${project}`;
   try {
-    const res = await axios.post(url, {}, {
+    const res = await axios.post(url, {
+      category: categories
+    }, {
       headers: {
         'Authorization': `Bearer ${auth_token}`
       }

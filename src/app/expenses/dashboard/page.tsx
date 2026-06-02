@@ -4,7 +4,7 @@ import { UsrBack } from "@/interfaces/User";
 import DashBoardContainer from "@/components/expenses/dashboard/DashBoardContainer";
 import { GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject, GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject, 
   GetAllCostsGroupByDAYAndProject, GetAllCostsGroupByRESUMEN, GetAllCostsGroupByTYPERESUMEN } from "@/app/api/routeCost"
-import { getProjectsLV } from "@/app/api/routeProjects";
+import { getProjectsLV, getAllCostoCentersCategorysLV } from "@/app/api/routeProjects";
 
 interface OptionsDashboard {
   label: string,
@@ -17,13 +17,14 @@ export default async function Page() {
   const token = cookieStore.get('token')?.value || '';
   const user: UsrBack = JSON.parse(cookieStore.get('user')?.value ||'');
   
-  const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects] = await Promise.all([
-    GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS'),
-    GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS'),
-    GetAllCostsGroupByDAYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS'),
-    GetAllCostsGroupByRESUMEN(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS'),
-    GetAllCostsGroupByTYPERESUMEN(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS'),
-    getProjectsLV(token)
+  const [costsCategory, costsConcept, costsDays, costsResumen, costsResumenType, projects, categories] = await Promise.all([
+    GetAllCostsGroupByCOSTOCENTERCATEGORYONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
+    GetAllCostsGroupByCOSTOCENTERCONCEPTONLYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
+    GetAllCostsGroupByDAYAndProject(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
+    GetAllCostsGroupByRESUMEN(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
+    GetAllCostsGroupByTYPERESUMEN(token, new Date(new Date().getFullYear(), new Date().getMonth(), 1).toDateString(), new Date().toDateString(), 'TODOS', []),
+    getProjectsLV(token),
+    getAllCostoCentersCategorysLV(token)
   ]);
   
   if(typeof(costsCategory)==='string'){
@@ -125,7 +126,7 @@ export default async function Page() {
             label: 'TODOS',
             value: 'TODOS'
           }].concat(projects)} costsResumen={costsResumen} costsResumenType={costsResumenType}
-          costsCat={costsCategory} costsCon={costsConcept} company={user.profile} />
+          costsCat={costsCategory} costsCon={costsConcept} company={user.profile} categories={categories} />
     </>
   )
 }

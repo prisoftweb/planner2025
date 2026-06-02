@@ -35,8 +35,8 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate,
     },
   })
 
-  // const totalCosts = data.reduce((acc, curr) => acc + curr.totalCost, 0);
-  const totalCosts = data.reduce((acc, curr) => acc + curr.subtotalCost, 0);
+  const totalCosts = data.reduce((acc, curr) => acc + curr.totalCost, 0);
+  // const totalCosts = data.reduce((acc, curr) => acc + curr.subtotalCost, 0);
 
   const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
   const currentDate = new Date();
@@ -89,8 +89,8 @@ export default function ReportCostsCategoryAndConceptPDF({data, type, rangeDate,
                 <View style={[style.element, {flex: 1}]}><Text >{cost.costocenter.account}</Text></View>
                 <View style={[style.element, {flex: 1}]}><Text>{CurrencyFormatter({
                   currency: 'MXN',
-                  // value: cost.totalCost
-                  value: cost.subtotalCost
+                  value: cost.totalCost
+                  // value: cost.subtotalCost
                 })}</Text></View>                
               </View>
             ) )}
