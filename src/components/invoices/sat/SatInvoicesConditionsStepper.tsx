@@ -42,7 +42,7 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
 
   const [optConditionsPayment, setoptConditionsPayment]=useState<Options[]>([]);
   const [catalogPaymentMethod, setCatalogPaymentMethod]=useState<Options[]>([]);
-  const [satMethodPayment, setSatMethodPayment]=useState<IMethodPayment[]>([]);
+  // const [satMethodPayment, setSatMethodPayment]=useState<IMethodPayment[]>([]);
   const [catalogCFDI, setCatalogCFDI]=useState<Options[]>([]);
   const [catalogFormPayment, setCatalogFormPayment]=useState<Options[]>([]);
   const [optCondicionesPayment, setoptCondicionesPayment]=useState<Options[]>([]);
@@ -72,7 +72,7 @@ export default function SatInvoicesConditionsStepper({token, nextStep, handleFor
       if(typeof(fiscalMetPay)=='string'){
         showToastMessageError(fiscalMetPay);
       }else{
-        setSatMethodPayment(fiscalMetPay);
+        // setSatMethodPayment(fiscalMetPay);
         console.log('fiscal met pay:', fiscalMetPay);
         const auxMet:Options[]=fiscalMetPay.map( (m: IMethodPayment) => ({
           value: m.id,

@@ -6,6 +6,7 @@ import { Options } from "@/interfaces/Common";
 import { getGlossaries } from "../api/routeGlossary";
 
 import CatalogClient from "@/components/status/CatalogClient";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -21,9 +22,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{catalogs}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/status" message={catalogs} />
       </>
     )
   }
@@ -32,9 +34,10 @@ export default async function Page() {
     return(
       <>
         <Navigation user={user} token={token} />
-        <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
+        {/* <div className="p-2 sm:p-3 md-p-5 lg:p-10 w-full">
           <h1 className="text-red-500 text-center text-lg">{glosaries}</h1>
-        </div>
+        </div> */}
+        <ComponentError page="/status" message={glosaries} />
       </>
     )
   }

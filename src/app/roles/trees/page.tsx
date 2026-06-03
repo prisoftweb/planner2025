@@ -12,6 +12,7 @@ import SearchInTable from "@/components/SearchInTable";
 import Link from "next/link";
 import { TbArrowNarrowLeft } from "react-icons/tb";
 import TooltipContainerIcon from "@/components/tooltipIcons/TooltipContainerIcon";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page() {
   const cookieStore = cookies();
@@ -26,7 +27,13 @@ export default async function Page() {
   ]);
   
   if(typeof(trees) === 'string'){
-    return <h1 className="text-center text-red-500">{trees}</h1>
+    // return <h1 className="text-center text-red-500">{trees}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/trees" message={trees} />
+      </>
+    )
   }
 
   const data: TreeTable[] = [];
@@ -74,15 +81,33 @@ export default async function Page() {
   })
 
   if(typeof(resources) === 'string'){
-    return <h1 className="text-center text-red-500">{resources}</h1>
+    // return <h1 className="text-center text-red-500">{resources}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/trees" message={resources} />
+      </>
+    )
   }
 
   if(typeof(routes) === 'string'){
-    return <h1 className="text-center text-red-500">{routes}</h1>
+    // return <h1 className="text-center text-red-500">{routes}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/trees" message={routes} />
+      </>
+    )
   }
 
   if(typeof(components) === 'string'){
-    return <h1 className="text-center text-red-500">{components}</h1>
+    // return <h1 className="text-center text-red-500">{components}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/trees" message={components} />
+      </>
+    )
   }
 
   let optionsResource: Options[] = [];

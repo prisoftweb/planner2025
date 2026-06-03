@@ -7,6 +7,7 @@ import RoleProfile from "@/components/roles/RoleProfile";
 import { getRole, getRolesLV, getTree } from "@/app/api/routeRoles";
 import { Tree } from "@/interfaces/Roles";
 import PermissionResource from "@/components/roles/PermissionResource";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page({ params, searchParams }: 
               { params: { id: string }, searchParams: { rs: string}}){
@@ -22,11 +23,23 @@ export default async function Page({ params, searchParams }:
   ]);
   
   if(typeof(rol) === 'string'){
-    <h1 className="text-center text-lg text-red-500">{rol}</h1>
+    // <h1 className="text-center text-lg text-red-500">{rol}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/role" message={rol} />
+      </>
+    )
   }
   
   if(typeof(options) === 'string'){
-    <h1 className="text-center text-lg text-red-500">{options}</h1>
+    // <h1 className="text-center text-lg text-red-500">{options}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/role" message={options} />
+      </>
+    )
   }
 
   //660af0683b237344454ad085

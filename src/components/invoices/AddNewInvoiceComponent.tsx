@@ -205,7 +205,10 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
         }]
       }
 
+      console.log('data new invoice => ', data);
+
       const resInvoice = await createInvoice(token, data);
+      // const resInvoice=2;
       if(typeof(resInvoice)==='string'){
         showToastMessageError(resInvoice);
       }else{
@@ -213,12 +216,15 @@ export default function AddNewInvoiceComponent({showForm, user, token, company}:
         showForm(false);
 
         setFolio('');
-        // setTaxFolio('');
+        setTaxFolio('');
         setDate(new Date().toISOString().substring(0, 10));
         setClient('');
-        setType('ADQUISICION_MERCANCIAS G01');
-        setMethodPaid('PAGO_EN_UNA_EXHIBICION PUE');
-        setFormPaid('EFECTIVO 01');
+        // setType('ADQUISICION_MERCANCIAS G01');
+        // setMethodPaid('PAGO_EN_UNA_EXHIBICION PUE');
+        // setFormPaid('EFECTIVO 01');
+        setType('');
+        setMethodPaid('');
+        setFormPaid('');
         setConditionPayment('');
         setOdc('');
         setProject('');

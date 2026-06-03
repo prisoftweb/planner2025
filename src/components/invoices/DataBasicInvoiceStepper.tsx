@@ -6,7 +6,7 @@ import { getClientsLV } from "@/app/api/routeClients";
 import { Options } from "@/interfaces/Common";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
-import { getAllProjectsWithConditionLV } from "@/app/api/routeProjects";
+import { getAllProjectsWithConditionLV, getAllProjectsWithClientAndConditionLV } from "@/app/api/routeProjects";
 
 type DataBasicProps={
   token:string,
@@ -39,9 +39,35 @@ export default function DataBasicInvoiceStepper({token, client, date, setDate, s
   const [optClients, setOptClients]=useState<Options[]>([]);
   const [optProjects, setOptProjects]=useState<Options[]>([]);
 
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     const clients = await getClientsLV(token);
+  //     if(typeof(clients)==='string'){
+  //       showToastMessageError(clients);
+  //     }else{
+  //       setOptClients(clients);
+  //       if(!client || client ===''){
+  //         setClient(clients[0].value);
+  //       }
+  //     }
+
+  //     const projs = await getAllProjectsWithConditionLV(token);
+  //     if(typeof(projs)==='string'){
+  //       showToastMessageError(projs);
+  //     }else{
+  //       setOptProjects(projs);
+  //       setProject(projs[0].value);
+  //     }
+  //   }
+  //   fetch();
+  // }, []);
+
   useEffect(() => {
     const fetch = async () => {
-      const clients = await getClientsLV(token);
+      const [clients] = await Promise.all([
+        getClientsLV(token)
+      ]);
+      
       if(typeof(clients)==='string'){
         showToastMessageError(clients);
       }else{
@@ -49,18 +75,31 @@ export default function DataBasicInvoiceStepper({token, client, date, setDate, s
         if(!client || client ===''){
           setClient(clients[0].value);
         }
+
+        if(client || clients.length > 0)
+        {
+          handleChangeClient(!client || client ===''? clients[0].value: client);
+        }
       }
 
-      const projs = await getAllProjectsWithConditionLV(token);
-      if(typeof(projs)==='string'){
-        showToastMessageError(projs);
-      }else{
-        setOptProjects(projs);
-        setProject(projs[0].value);
-      }
     }
     fetch();
   }, []);
+
+  const handleChangeClient = async (value:string) => {
+    console.log("change client: ", value);
+    setClient(value);
+    const projs = await getAllProjectsWithClientAndConditionLV(token, value);
+    if(typeof(projs)==='string'){
+      showToastMessageError(projs);
+    }else{
+      console.log("projs: ", projs);
+      setOptProjects(projs);
+      if(projs.length > 0){
+        setProject(projs[0].value);
+      }
+    }
+  }
 
   let indexCLi = 0;
   if(optClients.length > 0){
@@ -139,7 +178,8 @@ export default function DataBasicInvoiceStepper({token, client, date, setDate, s
                 </label>
               </div>
             </div>
-            <SelectReact index={indexCLi} opts={optClients} setValue={setClient} disabled={!editClient} />
+            {/* <SelectReact index={indexCLi} opts={optClients} setValue={setClient} disabled={!editClient} /> */}
+            <SelectReact index={indexCLi} opts={optClients} setValue={handleChangeClient} disabled={!editClient} />
           </div>
         )}
 

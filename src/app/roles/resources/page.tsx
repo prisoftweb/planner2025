@@ -9,6 +9,7 @@ import { Resource, ResourceTable } from "@/interfaces/Roles";
 import TableResource from "@/components/roles/TableResource";
 // import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -20,7 +21,13 @@ export default async function Page(){
   resources = await getResources(token);
   
   if(typeof(resources) === 'string'){
-    return <h1 className="text-center text-red-500">{resources}</h1>
+    // return <h1 className="text-center text-red-500">{resources}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/resources" message={resources} />
+      </>
+    )
   }
   
   if(!resources || resources.length <= 0){

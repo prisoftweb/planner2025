@@ -10,6 +10,8 @@ import { getRoutes } from "@/app/api/routeRoles";
 import TableResource from "@/components/roles/TableResource";
 import { ResponsiveHeader as Header } from "@/components/Header";
 
+import ComponentError from "@/components/ComponentError";
+
 export default async function Page(){
   const cookieStore = cookies();
   const token = cookieStore.get('token')?.value || '';
@@ -20,7 +22,13 @@ export default async function Page(){
   routes = await getRoutes(token);
   
   if(typeof(routes) === 'string'){
-    return <h1 className="text-center text-red-500">{routes}</h1>
+    // return <h1 className="text-center text-red-500">{routes}</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/trees" message={routes} />
+      </>
+    )
   }
   
   if(!routes || routes.length <= 0){

@@ -9,6 +9,7 @@ import { Role, RoleTable } from "@/interfaces/Roles";
 import TableRole from "@/components/roles/TableRole";
 // import Header from "@/components/Header";
 import { ResponsiveHeader as Header } from "@/components/Header";
+import ComponentError from "@/components/ComponentError";
 
 export default async function Page(){
   const cookieStore = cookies();
@@ -19,7 +20,13 @@ export default async function Page(){
   try {
     roles = await getRoles(token);
   } catch (error) {
-    return <h1>Ocurrio un error al obtener roles!!</h1>
+    // return <h1>Ocurrio un error al obtener roles!!</h1>
+    return(
+      <>
+        <Navigation user={user} token={token} />
+        <ComponentError page="/roles/role" message="Ocurrio un error al obtener roles!!" />
+      </>
+    )
   }
 
   if(!roles || roles.length <= 0){

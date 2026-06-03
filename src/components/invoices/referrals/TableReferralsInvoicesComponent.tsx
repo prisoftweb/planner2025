@@ -612,6 +612,7 @@ export default function TableReferralsInvoicesComponent({token, user, company, o
 function InvoiceDataToTableData(invoicess:IInvoiceByDateAndConditionMin[]){
   const table: IInvoiceTable[] = [];
 
+  console.log('invoices => ', invoicess);
   invoicess.map((inv) => {
     const aux = inv.useCFDI + '/' + inv.paymentMethod + '/' + inv.paymentWay;
     

@@ -151,7 +151,8 @@ export default function DataBasicReferralStepper({token, client, date, setDate, 
       // const clients = await getClientsLV(token);
 
       const [clients] = await Promise.all([
-        getAllClientsTaxProfileLV(token),
+        // getAllClientsTaxProfileLV(token),
+        getClientsLV(token)
       ]);
       
       if(typeof(clients)==='string'){
@@ -186,8 +187,11 @@ export default function DataBasicReferralStepper({token, client, date, setDate, 
     if(typeof(projs)==='string'){
       showToastMessageError(projs);
     }else{
+      console.log("projs: ", projs);
       setOptProjects(projs);
-      setProject(projs[0].value);
+      if(projs.length > 0){
+        setProject(projs[0].value);
+      }
     }
   }
 
@@ -242,7 +246,8 @@ export default function DataBasicReferralStepper({token, client, date, setDate, 
                 </label>
               </div>
             </div>
-            <SelectReact index={indexCLi} opts={optClients} setValue={setClient} disabled={!editClient} />
+            {/* <SelectReact index={indexCLi} opts={optClients} setValue={setClient} disabled={!editClient} /> */}
+            <SelectReact index={indexCLi} opts={optClients} setValue={handleChangeClient} disabled={!editClient} />
           </div>
         )}
 
